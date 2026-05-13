@@ -1967,41 +1967,275 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tracking_events_driver_id_fkey"
+            foreignKeyName: "tracking_events_driver_id_fkey1"
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_driver_id_fkey"
+            foreignKeyName: "tracking_events_driver_id_fkey1"
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers_safe_view"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "lalamove_orders"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders_operator_view"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders_safe_view"
             referencedColumns: ["id"]
           },
         ]
+      }
+      tracking_events_y2026m05: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m06: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m07: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m08: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m09: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m10: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
       }
       user_devices: {
         Row: {
