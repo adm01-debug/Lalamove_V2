@@ -1,0 +1,136 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import type { Alert, AlertType } from '@/types';
+import { toast } from 'sonner';
+import { useAlertsRealtime } from './useRealtimeSubscriptions';
+import type { Database } from '@/integrations/supabase/types';
+
+type AlertRow = Database['public']['Tables']['alerts']['Row'];
+type AlertSeverity = Database['public']['Enums']['alert_severity'];
+type AlertTypeEnum = Database['public']['Enums']['alert_type'];
+
+async function fetchActiveAlerts(): Promise<Alert[]> {
+  const { data, error } = await supabase
+    .from('alerts')
+    .select('*')
+    .eq('is_dismissed', false)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    console.error('Error fetching alerts:', error);
+    throw error;
+  }
+
+  return (data || []).map((alert: AlertRow): Alert => ({
+    id: alert.id,
+    type: alert.type as AlertType,
+    severity: alert.severity as Alert['severity'],
+    title: alert.title,
+    message: alert.message,
+    orderId: alert.order_id ?? undefined,
+    driverId: alert.driver_id ?? undefined,
+    isRead: alert.is_read ?? false,
+    createdAt: new Date(alert.created_at),
+  }));
+}
+
+export function useActiveAlerts() {
+  // Use centralized realtime subscription
+  useAlertsRealtime();
+
+  const query = useQuery({
+    queryKey: ['active-alerts'],
+    queryFn: fetchActiveAlerts,
+    refetchInterval: 30000,
+    staleTime: 10000,
+  });
+
+  return query;
+}
+
+export function useAlertActions() {
+  const queryClient = useQueryClient();
+
+  const dismissMutation = useMutation({
+    mutationFn: async (alertId: string) => {
+      const { error } = await supabase
+        .from('alerts')
+        .update({ is_dismissed: true })
+        .eq('id', alertId);
+
+      if (error) throw error;
+    },
+    onMutate: async (alertId) => {
+      // Optimistic update
+      await queryClient.cancelQueries({ queryKey: ['active-alerts'] });
+      const previousAlerts = queryClient.getQueryData<Alert[]>(['active-alerts']);
+      
+      queryClient.setQueryData<Alert[]>(['active-alerts'], (old = []) => {
+        return old.filter(a => a.id !== alertId);
+      });
+
+      return { previousAlerts };
+    },
+    onError: (error, alertId, context) => {
+      // Rollback on error
+      if (context?.previousAlerts) {
+        queryClient.setQueryData(['active-alerts'], context.previousAlerts);
+      }
+      console.error('Error dismissing alert:', error);
+      toast.error('Falha ao dispensar alerta.');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+    },
+  });
+
+  const markAsReadMutation = useMutation({
+    mutationFn: async (alertId: string) => {
+      const { error } = await supabase
+        .from('alerts')
+        .update({ is_read: true })
+        .eq('id', alertId);
+
+      if (error) throw error;
+    },
+    onMutate: async (alertId) => {
+      // Optimistic update
+      await queryClient.cancelQueries({ queryKey: ['active-alerts'] });
+      const previousAlerts = queryClient.getQueryData<Alert[]>(['active-alerts']);
+      
+      queryClient.setQueryData<Alert[]>(['active-alerts'], (old = []) => {
+        return old.map(a => a.id === alertId ? { ...a, isRead: true } : a);
+      });
+
+      return { previousAlerts };
+    },
+    onError: (_error, _alertId, context) => {
+      if (context?.previousAlerts) {
+        queryClient.setQueryData(['active-alerts'], context.previousAlerts);
+      }
+    },
+  });
+
+  const markAllAsReadMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase
+        .from('alerts')
+        .update({ is_read: true })
+        .eq('is_dismissed', false)
+        .eq('is_read', false);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['active-alerts'] });
+      toast.success('Todos os alertas marcados como lidos.');
+    },
+    onError: (error) => {
+      console.error('Error marking all as read:', error);
+      toast.error('Falha ao marcar alertas como lidos.');
+    },
+  });
+
+  return { dismissMutation, markAsReadMutation, markAllAsReadMutation };
+}

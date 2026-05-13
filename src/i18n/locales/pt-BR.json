@@ -1,0 +1,279 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "refresh": "Atualizar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "yes": "Sim",
+    "no": "Não",
+    "all": "Todos",
+    "none": "Nenhum",
+    "select": "Selecionar",
+    "actions": "Ações",
+    "status": "Status",
+    "date": "Data",
+    "time": "Hora",
+    "name": "Nome",
+    "description": "Descrição",
+    "type": "Tipo",
+    "priority": "Prioridade",
+    "settings": "Configurações",
+    "help": "Ajuda",
+    "logout": "Sair",
+    "profile": "Perfil"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Bem-vindo de volta!",
+    "overview": "Visão Geral",
+    "pendingApprovals": "Aprovações Pendentes",
+    "activeAlerts": "Alertas Ativos",
+    "todayDeliveries": "Entregas Hoje",
+    "avgRiskScore": "Risco Médio",
+    "approvedToday": "Aprovados Hoje",
+    "rejectedToday": "Rejeitados Hoje",
+    "recentOrders": "Pedidos Recentes",
+    "quickActions": "Ações Rápidas",
+    "systemHealth": "Saúde do Sistema",
+    "performanceMetrics": "Métricas de Performance",
+    "kpi": {
+      "pending": "Pendentes",
+      "approved": "Aprovados",
+      "rejected": "Rejeitados",
+      "alerts": "Alertas"
+    }
+  },
+  "approvals": {
+    "title": "Aprovações",
+    "queue": "Fila de Aprovações",
+    "pending": "Pendente",
+    "approved": "Aprovado",
+    "rejected": "Rejeitado",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "riskScore": "Pontuação de Risco",
+    "riskFactors": "Fatores de Risco",
+    "driverInfo": "Informações do Motorista",
+    "orderInfo": "Informações do Pedido",
+    "notes": "Observações",
+    "addNote": "Adicionar Observação",
+    "reviewedBy": "Revisado por",
+    "reviewedAt": "Revisado em",
+    "waitingTime": "Tempo de Espera",
+    "bulkApprove": "Aprovar em Lote",
+    "bulkReject": "Rejeitar em Lote",
+    "swipeApprove": "Deslize para aprovar",
+    "swipeReject": "Deslize para rejeitar",
+    "noApprovals": "Nenhuma aprovação pendente",
+    "urgency": {
+      "low": "Baixa",
+      "medium": "Média",
+      "high": "Alta",
+      "urgent": "Urgente",
+      "critical": "Crítico"
+    }
+  },
+  "alerts": {
+    "title": "Alertas",
+    "active": "Ativos",
+    "dismissed": "Dispensados",
+    "dismiss": "Dispensar",
+    "dismissAll": "Dispensar Todos",
+    "markRead": "Marcar como Lido",
+    "severity": {
+      "info": "Informação",
+      "warning": "Aviso",
+      "critical": "Crítico"
+    },
+    "types": {
+      "driver_blocked": "Motorista Bloqueado",
+      "route_deviation": "Desvio de Rota",
+      "driver_stopped": "Motorista Parado",
+      "late_delivery": "Entrega Atrasada",
+      "approval_required": "Aprovação Necessária",
+      "order_cancelled": "Pedido Cancelado"
+    },
+    "noAlerts": "Nenhum alerta ativo"
+  },
+  "drivers": {
+    "title": "Motoristas",
+    "list": "Lista de Motoristas",
+    "profile": "Perfil do Motorista",
+    "status": {
+      "approved": "Aprovado",
+      "pending": "Pendente",
+      "blocked": "Bloqueado",
+      "whitelist": "Lista Branca",
+      "blacklist": "Lista Negra"
+    },
+    "vehicle": {
+      "motorcycle": "Moto",
+      "car": "Carro",
+      "van": "Van",
+      "truck": "Caminhão"
+    },
+    "metrics": {
+      "totalDeliveries": "Total de Entregas",
+      "completedDeliveries": "Entregas Concluídas",
+      "failedDeliveries": "Entregas Falhas",
+      "successRate": "Taxa de Sucesso",
+      "rating": "Avaliação",
+      "avgDelay": "Atraso Médio"
+    },
+    "actions": {
+      "block": "Bloquear",
+      "unblock": "Desbloquear",
+      "whitelist": "Adicionar à Lista Branca",
+      "blacklist": "Adicionar à Lista Negra",
+      "evaluate": "Avaliar"
+    },
+    "noDrivers": "Nenhum motorista encontrado"
+  },
+  "orders": {
+    "title": "Pedidos",
+    "list": "Lista de Pedidos",
+    "details": "Detalhes do Pedido",
+    "status": {
+      "pending": "Pendente",
+      "matched": "Atribuído",
+      "ongoing": "Em Andamento",
+      "picked_up": "Coletado",
+      "completed": "Concluído",
+      "cancelled": "Cancelado",
+      "rejected": "Rejeitado",
+      "expired": "Expirado"
+    },
+    "info": {
+      "customer": "Cliente",
+      "pickup": "Coleta",
+      "delivery": "Entrega",
+      "driver": "Motorista",
+      "cost": "Custo",
+      "distance": "Distância",
+      "duration": "Duração",
+      "scheduled": "Agendado"
+    },
+    "noOrders": "Nenhum pedido encontrado"
+  },
+  "map": {
+    "title": "Mapa ao Vivo",
+    "tracking": "Rastreamento",
+    "heatmap": "Mapa de Calor",
+    "routes": "Rotas",
+    "drivers": "Motoristas",
+    "deliveries": "Entregas",
+    "realtime": "Tempo Real"
+  },
+  "reports": {
+    "title": "Relatórios",
+    "generate": "Gerar Relatório",
+    "download": "Baixar",
+    "period": "Período",
+    "types": {
+      "daily": "Diário",
+      "weekly": "Semanal",
+      "monthly": "Mensal",
+      "custom": "Personalizado"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "general": "Geral",
+    "notifications": "Notificações",
+    "security": "Segurança",
+    "appearance": "Aparência",
+    "language": "Idioma",
+    "theme": {
+      "title": "Tema",
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema"
+    },
+    "sounds": "Sons",
+    "alerts": "Alertas",
+    "mfa": "Autenticação de Dois Fatores",
+    "devices": "Dispositivos",
+    "passkeys": "Chaves de Acesso"
+  },
+  "auth": {
+    "login": "Entrar",
+    "logout": "Sair",
+    "register": "Cadastrar",
+    "forgotPassword": "Esqueceu a Senha?",
+    "resetPassword": "Redefinir Senha",
+    "email": "E-mail",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "rememberMe": "Lembrar-me",
+    "loginSuccess": "Login realizado com sucesso!",
+    "logoutSuccess": "Logout realizado com sucesso!",
+    "invalidCredentials": "Credenciais inválidas"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "network": "Erro de conexão. Verifique sua internet.",
+    "notFound": "Página não encontrada",
+    "unauthorized": "Acesso não autorizado",
+    "forbidden": "Acesso negado",
+    "serverError": "Erro no servidor",
+    "validation": "Dados inválidos"
+  },
+  "offline": {
+    "title": "Você está offline",
+    "message": "Algumas funcionalidades podem estar limitadas.",
+    "retry": "Tentar novamente",
+    "cached": "Usando dados em cache"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "empty": "Nenhuma notificação",
+    "markAllRead": "Marcar todas como lidas",
+    "settings": "Configurações de Notificação"
+  },
+  "achievements": {
+    "title": "Conquistas",
+    "unlocked": "Conquista Desbloqueada!",
+    "points": "pontos",
+    "list": {
+      "first_approval": "Primeira Aprovação",
+      "speed_demon": "Velocista",
+      "streak_master": "Mestre da Sequência",
+      "early_bird": "Madrugador",
+      "night_owl": "Coruja Noturna",
+      "centurion": "Centurião",
+      "risk_master": "Mestre do Risco",
+      "zero_inbox": "Caixa Zero",
+      "bulk_processor": "Processador em Lote",
+      "perfect_week": "Semana Perfeita"
+    }
+  },
+  "hints": {
+    "swipeActions": "Deslize para a esquerda ou direita para ações rápidas",
+    "keyboardShortcuts": "Use atalhos de teclado para navegar mais rápido",
+    "bulkActions": "Selecione múltiplos itens para ações em lote",
+    "filters": "Use filtros para encontrar o que precisa rapidamente"
+  },
+  "time": {
+    "now": "Agora",
+    "seconds": "segundos",
+    "minutes": "minutos",
+    "hours": "horas",
+    "days": "dias",
+    "weeks": "semanas",
+    "months": "meses",
+    "ago": "atrás"
+  }
+}
