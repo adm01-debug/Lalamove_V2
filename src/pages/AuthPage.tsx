@@ -36,7 +36,7 @@ export function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
   const [isPasswordBreached, setIsPasswordBreached] = useState(false);
-  const [countdown, _] = useState(0);
+  const [countdown, setCountdown] = useState(0);
 
   // Countdown timer for lockout
   useEffect(() => {
