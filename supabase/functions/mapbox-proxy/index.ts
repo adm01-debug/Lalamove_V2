@@ -357,8 +357,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error('Mapbox proxy error:', error);
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    return new Response(JSON.stringify({ error: msg }), {
+    return new Response(JSON.stringify({ error: 'Internal server error during Mapbox proxy request' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

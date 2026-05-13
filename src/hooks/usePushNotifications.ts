@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/utils/logger';
+
 
 export type NotificationPermission = 'default' | 'granted' | 'denied';
 export type AlertSeverity = 'CRITICAL' | 'WARNING' | 'INFO';
@@ -107,7 +109,7 @@ export const showNotification = (options: NotificationOptions): Notification | n
 
   const settings = getPushSettings();
   if (!settings.enabled) {
-    console.log('Push notifications disabled by user');
+    logger.log('Push notifications disabled by user');
     return null;
   }
 
@@ -123,7 +125,7 @@ export const showNotification = (options: NotificationOptions): Notification | n
       
       // Only block non-critical notifications during quiet hours
       if (isQuiet && options.data?.priority !== 'CRITICAL') {
-        console.log('Notification blocked during quiet hours');
+        logger.log('Notification blocked during quiet hours');
         return null;
       }
     }
@@ -136,7 +138,7 @@ export const showNotification = (options: NotificationOptions): Notification | n
     const typePrefs = JSON.parse(localStorage.getItem('notification_type_preferences') || '{}');
     const notificationType = options.data?.notificationType as string;
     if (notificationType && typePrefs[notificationType] === false) {
-      console.log(`Notification type ${notificationType} is disabled`);
+      logger.log(`Notification type ${notificationType} is disabled`);
       return null;
     }
   } catch {

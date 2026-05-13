@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
+
 
 interface ServiceWorkerState {
   isSupported: boolean;
@@ -60,7 +62,7 @@ export function useServiceWorker() {
           scope: '/',
         });
 
-        if (import.meta.env.DEV) console.log('[SW Hook] Service worker registered:', registration);
+        if (import.meta.env.DEV) logger.log('[SW Hook] Service worker registered:', registration);
 
         setState(prev => ({
           ...prev,
@@ -74,7 +76,7 @@ export function useServiceWorker() {
           if (newWorker) {
             newWorker.addEventListener('statechange', () => {
               if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                if (import.meta.env.DEV) console.log('[SW Hook] New version available');
+                if (import.meta.env.DEV) logger.log('[SW Hook] New version available');
                 setWaitingWorker(newWorker);
                 setState(prev => ({ ...prev, hasUpdate: true }));
 

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 
 const corsHeaders = {
@@ -666,10 +667,9 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Lalamove API error:', error);
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: 'Internal server error occurred while processing Lalamove request' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

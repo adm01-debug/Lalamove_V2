@@ -14,6 +14,8 @@ import { toast } from 'sonner';
 import { playAlertSound, enableAudioOnInteraction } from '@/utils/alertSounds';
 import { showNotification, showCriticalAlertNotification, getNotificationPermission, getPushSettings } from '@/hooks/usePushNotifications';
 import { isInQuietHours, isTypeEnabled } from '@/components/notifications/NotificationPreferences';
+import { logger } from '@/utils/logger';
+
 
 type TableName = 'alerts' | 'driver_approval_queue' | 'driver_incidents' | 'lalamove_orders' | 'active_tracking';
 type EventType = 'INSERT' | 'UPDATE' | 'DELETE' | '*';
@@ -54,7 +56,7 @@ export function useRealtimeManager() {
   useEffect(() => {
     enableAudioOnInteraction();
 
-    if (import.meta.env.DEV) console.log('[RealtimeManager] Initializing consolidated channel...');
+    if (import.meta.env.DEV) logger.log('[RealtimeManager] Initializing consolidated channel...');
 
     const channel = supabase
       .channel('consolidated-realtime', {
@@ -124,13 +126,13 @@ export function useRealtimeManager() {
         }
       )
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[RealtimeManager] Channel status:', status);
+        if (import.meta.env.DEV) logger.log('[RealtimeManager] Channel status:', status);
       });
 
     channelRef.current = channel;
 
     return () => {
-      if (import.meta.env.DEV) console.log('[RealtimeManager] Cleaning up consolidated channel');
+      if (import.meta.env.DEV) logger.log('[RealtimeManager] Cleaning up consolidated channel');
       supabase.removeChannel(channel);
       channelRef.current = null;
     };
@@ -146,7 +148,7 @@ export function useAlertsRealtime() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('[AlertsRealtime] Setting up alerts subscription...');
+    if (import.meta.env.DEV) logger.log('[AlertsRealtime] Setting up alerts subscription...');
     enableAudioOnInteraction();
 
     const channel = supabase
@@ -155,7 +157,7 @@ export function useAlertsRealtime() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'alerts' },
         (payload) => {
-          if (import.meta.env.DEV) console.log('[AlertsRealtime] New alert received:', payload);
+          if (import.meta.env.DEV) logger.log('[AlertsRealtime] New alert received:', payload);
           
           const newAlert = payload.new as {
             id: string;
@@ -246,11 +248,11 @@ export function useAlertsRealtime() {
         }
       )
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[AlertsRealtime] Subscription status:', status);
+        if (import.meta.env.DEV) logger.log('[AlertsRealtime] Subscription status:', status);
       });
 
     return () => {
-      if (import.meta.env.DEV) console.log('[AlertsRealtime] Cleaning up subscription');
+      if (import.meta.env.DEV) logger.log('[AlertsRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [queryClient]);
@@ -263,7 +265,7 @@ export function useApprovalsRealtime() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('[ApprovalsRealtime] Setting up approvals subscription...');
+    if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] Setting up approvals subscription...');
     enableAudioOnInteraction();
 
     const channel = supabase
@@ -272,7 +274,7 @@ export function useApprovalsRealtime() {
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'driver_approval_queue' },
         (payload) => {
-          if (import.meta.env.DEV) console.log('[ApprovalsRealtime] New approval received:', payload);
+          if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] New approval received:', payload);
           
           const newApproval = payload.new as {
             driver_name?: string;
@@ -336,11 +338,11 @@ export function useApprovalsRealtime() {
         }
       )
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[ApprovalsRealtime] Subscription status:', status);
+        if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] Subscription status:', status);
       });
 
     return () => {
-      if (import.meta.env.DEV) console.log('[ApprovalsRealtime] Cleaning up subscription');
+      if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [queryClient]);
@@ -351,7 +353,7 @@ export function useApprovalsRealtime() {
  */
 export function useSidebarCountsRealtime(onUpdate: () => void) {
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('[SidebarRealtime] Setting up counts subscription...');
+    if (import.meta.env.DEV) logger.log('[SidebarRealtime] Setting up counts subscription...');
 
     const channel = supabase
       .channel('sidebar-counts-consolidated')
@@ -359,11 +361,11 @@ export function useSidebarCountsRealtime(onUpdate: () => void) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_approval_queue' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_incidents' }, onUpdate)
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[SidebarRealtime] Subscription status:', status);
+        if (import.meta.env.DEV) logger.log('[SidebarRealtime] Subscription status:', status);
       });
 
     return () => {
-      if (import.meta.env.DEV) console.log('[SidebarRealtime] Cleaning up subscription');
+      if (import.meta.env.DEV) logger.log('[SidebarRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [onUpdate]);
@@ -374,7 +376,7 @@ export function useSidebarCountsRealtime(onUpdate: () => void) {
  */
 export function useSLAMetricsRealtime(onUpdate: () => void) {
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('[SLARealtime] Setting up SLA subscription...');
+    if (import.meta.env.DEV) logger.log('[SLARealtime] Setting up SLA subscription...');
 
     const channel = supabase
       .channel('sla-metrics-consolidated')
@@ -382,11 +384,11 @@ export function useSLAMetricsRealtime(onUpdate: () => void) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'active_tracking' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate)
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[SLARealtime] Subscription status:', status);
+        if (import.meta.env.DEV) logger.log('[SLARealtime] Subscription status:', status);
       });
 
     return () => {
-      if (import.meta.env.DEV) console.log('[SLARealtime] Cleaning up subscription');
+      if (import.meta.env.DEV) logger.log('[SLARealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [onUpdate]);
@@ -397,7 +399,7 @@ export function useSLAMetricsRealtime(onUpdate: () => void) {
  */
 export function useLiveMapRealtime(onUpdate: (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => void) {
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('[LiveMapRealtime] Setting up tracking subscription...');
+    if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Setting up tracking subscription...');
 
     const channel = supabase
       .channel('live-map-consolidated')
@@ -407,11 +409,11 @@ export function useLiveMapRealtime(onUpdate: (payload: RealtimePostgresChangesPa
         onUpdate
       )
       .subscribe((status) => {
-        if (import.meta.env.DEV) console.log('[LiveMapRealtime] Subscription status:', status);
+        if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Subscription status:', status);
       });
 
     return () => {
-      if (import.meta.env.DEV) console.log('[LiveMapRealtime] Cleaning up subscription');
+      if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [onUpdate]);
