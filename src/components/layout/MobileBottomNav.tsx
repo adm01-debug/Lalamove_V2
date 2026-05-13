@@ -100,7 +100,6 @@ export function MobileBottomNav() {
     }
     navigate(path);
     setMoreOpen(false);
-    setQuickActionsOpen(false);
   }, [navigate]);
 
   // Group more menu items by category

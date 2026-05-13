@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { 
   Volume2, VolumeX, Play, Bell, BellRing, AlertTriangle, 
   AlertCircle, Info, ChevronDown, RotateCcw, Smartphone,
-  Check, Zap
+  Check, Zap, Shield
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
