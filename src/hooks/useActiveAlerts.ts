@@ -96,7 +96,6 @@ export function useAlertActions() {
       if (error) throw error;
     },
     onMutate: async (alertId) => {
-      // Optimistic update
       await queryClient.cancelQueries({ queryKey: ['active-alerts'] });
       const previousAlerts = queryClient.getQueryData<Alert[]>(['active-alerts']);
       
