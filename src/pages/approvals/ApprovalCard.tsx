@@ -35,14 +35,14 @@ export function ApprovalCard({ approval, onApprove, onReject, onWhitelist, onBla
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
             <motion.div className="relative flex-shrink-0" whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 400 }}>
-              {approval.driver.photoUrl ? <img src={approval.driver.photoUrl} alt={approval.driver.name} className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover border-2 border-border/50 shadow-lg" /> : <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary/20 via-accent/20 to-info/20 flex items-center justify-center border border-primary/20"><User className="w-6 h-6 sm:w-7 sm:h-7 text-primary" /></div>}
+              {approval.driver?.photoUrl ? <img src={approval.driver.photoUrl} alt={approval.driver.name} className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl object-cover border-2 border-border/50 shadow-lg" /> : <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary/20 via-accent/20 to-info/20 flex items-center justify-center border border-primary/20"><User className="w-6 h-6 sm:w-7 sm:h-7 text-primary" /></div>}
               <motion.div className="absolute -bottom-1 -right-1 p-1 rounded-lg bg-warning border-2 border-background shadow-lg" animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 2 }}><Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-warning-foreground" /></motion.div>
             </motion.div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">{approval.driver.name}</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">{approval.driver?.name}</h3>
               <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-muted-foreground flex-wrap">
-                <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" /><span className="truncate">{approval.driver.vehicleType}</span>
-                {approval.driver.vehiclePlate && <><span className="text-border hidden sm:inline">•</span><span className="font-mono bg-secondary/50 px-1.5 py-0.5 rounded text-xs">{approval.driver.vehiclePlate}</span></>}
+                <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" /><span className="truncate">{approval.driver?.vehicleType}</span>
+                {approval.driver?.vehiclePlate && <><span className="text-border hidden sm:inline">•</span><span className="font-mono bg-secondary/50 px-1.5 py-0.5 rounded text-xs">{approval.driver.vehiclePlate}</span></>}
               </div>
             </div>
           </div>
@@ -56,10 +56,10 @@ export function ApprovalCard({ approval, onApprove, onReject, onWhitelist, onBla
       <CardContent className="p-3 sm:p-4 space-y-3 sm:space-y-4">
         <div className="grid grid-cols-4 gap-2 sm:gap-3">
           {[
-            { value: approval.driver.totalDeliveries, label: 'Total', fullLabel: 'Total entregas', color: 'info' },
-            { value: approval.driver.completedDeliveries, label: 'Feitas', fullLabel: 'Completadas', color: 'success' },
-            { value: approval.driver.rating.toFixed(1), label: 'Nota', fullLabel: 'Avaliação', color: 'warning', icon: Star },
-            { value: `${approval.driver.totalDeliveries > 0 ? ((approval.driver.completedDeliveries / approval.driver.totalDeliveries) * 100).toFixed(0) : 0}%`, label: 'Taxa', fullLabel: 'Taxa sucesso', color: 'accent' }
+            { value: approval.driver?.totalDeliveries, label: 'Total', fullLabel: 'Total entregas', color: 'info' },
+            { value: approval.driver?.completedDeliveries, label: 'Feitas', fullLabel: 'Completadas', color: 'success' },
+            { value: approval.driver?.rating?.toFixed(1), label: 'Nota', fullLabel: 'Avaliação', color: 'warning', icon: Star },
+            { value: `${(approval.driver?.totalDeliveries ?? 0) > 0 ? (((approval.driver?.completedDeliveries ?? 0) / (approval.driver?.totalDeliveries ?? 1)) * 100).toFixed(0) : 0}%`, label: 'Taxa', fullLabel: 'Taxa sucesso', color: 'accent' }
           ].map((stat, idx) => (
             <motion.div key={stat.label} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: idx * 0.05 }} className={cn("text-center p-2 sm:p-3 rounded-lg sm:rounded-xl border backdrop-blur-sm", `bg-${stat.color}/10 border-${stat.color}/20`)}>
               <div className="flex items-center justify-center gap-0.5 sm:gap-1">
@@ -126,7 +126,7 @@ export function HistoryCard({ approval }: { approval: DriverApproval }) {
             <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border", isApproved ? "bg-success/10 border-success/30" : "bg-destructive/10 border-destructive/30")}>
               {isApproved ? <CheckCircle2 className="w-5 h-5 text-success" /> : <XCircle className="w-5 h-5 text-destructive" />}
             </div>
-            <div><p className="font-medium text-foreground">{approval.driver.name}</p><p className="text-sm text-muted-foreground font-mono">{approval.order?.lalamoveId || 'Pedido não disponível'}</p></div>
+            <div><p className="font-medium text-foreground">{approval.driver?.name}</p><p className="text-sm text-muted-foreground font-mono">{approval.order?.lalamoveId || 'Pedido não disponível'}</p></div>
           </div>
           <div className="text-right">
             <Badge variant={isApproved ? 'success' : 'destructive'} className="shadow-sm">{isApproved ? 'Aprovado' : 'Rejeitado'}</Badge>
