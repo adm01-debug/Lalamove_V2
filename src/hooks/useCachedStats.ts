@@ -56,7 +56,7 @@ export interface TopDriver {
  * 
  * @example
  * const { data: stats } = useCachedStats();
- * console.log(stats.driverStats, stats.deliveryMetrics);
+ * logger.log(stats.driverStats, stats.deliveryMetrics);
  */
 export function useCachedStats() {
   // Driver stats

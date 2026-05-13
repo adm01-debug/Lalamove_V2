@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { onCLS, onLCP, onFCP, onTTFB, onINP, type Metric } from 'web-vitals';
+import { logger } from '@/utils/logger';
+
 
 type MetricHandler = (metric: Metric) => void;
 
@@ -60,15 +62,15 @@ const createMetricHandler = (config: WebVitalsConfig): MetricHandler => {
       const formattedValue = formatMetricValue(name, value);
       const emoji = rating === 'good' ? '✅' : rating === 'needs-improvement' ? '⚠️' : '❌';
       
-      console.log(
+      logger.log(
         `%c[Web Vitals] ${emoji} ${name}: ${formattedValue} (${rating})`,
         `color: ${rating === 'good' ? '#10b981' : rating === 'needs-improvement' ? '#f59e0b' : '#ef4444'}; font-weight: bold;`
       );
       
       // Log additional details
-      console.log(`  ID: ${id}`);
+      logger.log(`  ID: ${id}`);
       if (metric.entries.length > 0) {
-        console.log(`  Entries:`, metric.entries);
+        logger.log(`  Entries:`, metric.entries);
       }
     }
     
@@ -134,7 +136,7 @@ const reportMetricToAnalytics = async (metric: Metric, config: WebVitalsConfig) 
   
   // Log to console in a structured format for log aggregation
   if (import.meta.env.PROD) {
-    console.log(JSON.stringify({
+    logger.log(JSON.stringify({
       type: 'web-vitals',
       ...payload,
     }));
@@ -155,7 +157,7 @@ export const initWebVitals = (customConfig: Partial<WebVitalsConfig> = {}) => {
   onTTFB(handler);
   
   if (config.debug) {
-    console.log('%c[Web Vitals] Monitoring initialized', 'color: #8b5cf6; font-weight: bold;');
+    logger.log('%c[Web Vitals] Monitoring initialized', 'color: #8b5cf6; font-weight: bold;');
   }
   
   return {

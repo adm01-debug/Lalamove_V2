@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
+
 
 interface SecurityNotification {
   title: string;
@@ -60,7 +62,7 @@ export function useSecurityPushNotifications() {
   // Show a notification
   const showNotification = useCallback((notification: SecurityNotification) => {
     if (!isSupported || permission !== 'granted') {
-      if (import.meta.env.DEV) console.log('Notifications not available or not permitted');
+      if (import.meta.env.DEV) logger.log('Notifications not available or not permitted');
       return;
     }
 
@@ -111,7 +113,7 @@ export function useSecurityPushNotifications() {
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          if (import.meta.env.DEV) console.log('New device alert:', payload);
+          if (import.meta.env.DEV) logger.log('New device alert:', payload);
           showNotification({
             title: '🔐 Novo Dispositivo Detectado',
             body: 'Um login foi feito de um dispositivo desconhecido. Verifique se foi você.',
@@ -133,7 +135,7 @@ export function useSecurityPushNotifications() {
           table: 'blocked_ips',
         },
         (payload) => {
-          if (import.meta.env.DEV) console.log('New blocked IP:', payload);
+          if (import.meta.env.DEV) logger.log('New blocked IP:', payload);
           showNotification({
             title: '🚫 IP Bloqueado',
             body: `Um IP foi bloqueado: ${payload.new.ip_address}. Motivo: ${payload.new.reason}`,
@@ -157,7 +159,7 @@ export function useSecurityPushNotifications() {
         },
         (payload) => {
           if (!payload.new.success) {
-            if (import.meta.env.DEV) console.log('Failed login attempt:', payload);
+            if (import.meta.env.DEV) logger.log('Failed login attempt:', payload);
             showNotification({
               title: '⚠️ Tentativa de Login Falha',
               body: `Uma tentativa de login falhou para sua conta. IP: ${payload.new.ip_address}`,
