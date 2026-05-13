@@ -18,6 +18,14 @@ export interface UAPIResponse<T = unknown> {
   session?: ProxySession;
 }
 
+export interface UAPIUserData {
+  nickname?: string;
+  real_name?: string;
+  email?: string;
+  balance_fen?: number;
+  [key: string]: unknown;
+}
+
 export interface ProxySession {
   id: string;
   tokenPreview: string;
@@ -60,8 +68,8 @@ async function proxyPost<T = unknown>(method: string, args: unknown = {}, extraP
 export const uapi = {
   getStatus: () => proxyFetch<ProxySession>('status'),
   testConnection: () => proxyFetch('test'),
-  getUserInfo: () => proxyFetch('user'),
-  getWalletBalance: () => proxyFetch('wallet'),
+  getUserInfo: () => proxyFetch<UAPIUserData>('user'),
+  getWalletBalance: () => proxyFetch<UAPIUserData>('wallet'),
   getOrders: (page = 1, size = 10) =>
     proxyFetch('orders', { page: String(page), size: String(size) }),
   getVehicles: () => proxyFetch('vehicles'),
