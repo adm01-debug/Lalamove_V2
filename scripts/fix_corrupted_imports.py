@@ -16,8 +16,17 @@ def fix_file(file_path):
     
     # Encontra o ponto de inserção: após o primeiro bloco de comentários ou no topo
     insert_idx = 0
+    in_block_comment = False
     for i, line in enumerate(new_lines):
-        if line.strip() and not line.strip().startswith('//') and not line.strip().startswith('/*'):
+        stripped = line.strip()
+        if stripped.startswith('/*'):
+            in_block_comment = True
+            continue
+        if in_block_comment:
+            if stripped.endswith('*/'):
+                in_block_comment = False
+            continue
+        if stripped and not stripped.startswith('//'):
             insert_idx = i
             break
     
