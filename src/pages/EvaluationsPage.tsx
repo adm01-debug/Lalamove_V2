@@ -117,7 +117,7 @@ export function EvaluationsPage() {
 
   const filteredEvaluations = useMemo(() => {
     const evaluationsToFilter = searchTerm.trim() 
-      ? evaluationSearchResults.map(r => ({ ...r.item, _matches: r.matches }))
+      ? evaluationSearchResults.map(r => ({ ...r.item, _matches: r.matches as any }))
       : evaluations;
     
     return evaluationsToFilter.filter(evaluation => {
@@ -345,11 +345,7 @@ export function EvaluationsPage() {
                       </TableCell>
                       <TableCell className="font-medium">
                         {searchTerm.trim() && (evaluation as WithMatches<typeof evaluation>)._matches ? (
-                          <HighlightText 
-                            text={evaluation.drivers?.name || 'Desconhecido'} 
-                            matches={(evaluation as WithMatches<typeof evaluation>)._matches} 
-                            matchKey="drivers.name" 
-                          />
+                            <HighlightText text={evaluation.drivers?.name || 'Desconhecido'} matches={(evaluation as WithMatches<typeof evaluation>)._matches as any} matchKey="drivers.name" />
                         ) : (
                           evaluation.drivers?.name || 'Desconhecido'
                         )}

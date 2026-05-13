@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bell, BellOff, BellRing, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

@@ -50,7 +50,7 @@ export function OrdersPage() {
   const filteredOrders = useMemo(() => {
     if (!orders) return [];
     const ordersToFilter = searchQuery.trim()
-      ? searchResults.map(r => ({ ...r.item, _matches: r.matches }))
+      ? searchResults.map(r => ({ ...r.item, _matches: r.matches as any }))
       : orders;
     return ordersToFilter.filter(order => statusFilter === 'ALL' || order.status === statusFilter);
   }, [orders, searchResults, searchQuery, statusFilter]);

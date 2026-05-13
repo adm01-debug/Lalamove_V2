@@ -265,7 +265,7 @@ export function CircularMetric({
   className,
 }: CircularMetricProps) {
   const percentage = Math.min((value / maxValue) * 100, 100);
-  const colors = colorMap[color];
+  // colors removed
   
   const sizeMap = {
     sm: 48,

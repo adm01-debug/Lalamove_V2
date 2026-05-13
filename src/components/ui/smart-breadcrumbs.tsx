@@ -122,7 +122,7 @@ function CompactBreadcrumbs({ breadcrumbs, sectionInfo, isFav, onToggleFavorite 
   );
 }
 
-export const MobileBreadcrumbs = forwardRef<HTMLElement, { className?: string }>(function MobileBreadcrumbs({ className }, ref) {
+export const MobileBreadcrumbs = forwardRef<HTMLElement, { className?: string }>(function MobileBreadcrumbs({ className }, _ref) {
   const location = useLocation();
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/").filter(Boolean);

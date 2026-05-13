@@ -25,12 +25,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+// Badge removed
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { useSoundSettings, type AlertPriority } from '@/hooks/useSoundSettings';
+import { useSoundSettings } from '@/hooks/useSoundSettings';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { SoundSettingsPanel } from './SoundSettingsPanel';
 import { motion, AnimatePresence } from 'framer-motion';

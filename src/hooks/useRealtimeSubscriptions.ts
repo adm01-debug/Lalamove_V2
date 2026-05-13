@@ -26,8 +26,7 @@ interface SubscriptionCallback {
   callback: (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => void;
 }
 
-// Singleton to track active subscriptions globally
-const activeSubscriptions = new Map<string, Set<string>>();
+// No singleton logic here currently used
 
 /**
  * Core Realtime Manager Hook

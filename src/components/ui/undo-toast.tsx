@@ -1,6 +1,6 @@
 import * as React from "react";
 import { toast } from "sonner";
-import { Undo2, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Undo2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface UndoableAction<T> {

@@ -1,4 +1,3 @@
-import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Clock, Star, Filter, Loader2, ArrowRight, Calendar, Tag, Command, Hash } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";

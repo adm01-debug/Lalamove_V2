@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Minus, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface SparklineProps {
   data: number[];
