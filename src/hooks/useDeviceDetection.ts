@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import { logger } from '@/utils/logger';
 
 // Simple device fingerprint generator
 function generateFingerprint(): string {
@@ -102,14 +103,14 @@ export function useDeviceDetection() {
       });
 
       if (error) {
-        console.error('Device check error:', error);
+        logger.error('Device check error:', error);
         return;
       }
 
       // New device detected and registered - no action needed
       void data;
     } catch (error) {
-      console.error('Error in device detection:', error);
+      logger.error('Error in device detection:', error);
     }
   }, [user?.id, user?.email]);
 

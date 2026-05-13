@@ -16,6 +16,7 @@ import { TelemetryCharts } from "@/components/admin/telemetry/TelemetryCharts";
 import { toast } from "sonner";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
+import { logger } from '@/utils/logger';
 
 interface TelemetryRow {
   id: string;
@@ -183,7 +184,7 @@ export default function AdminTelemetriaPage() {
       toast.success("PDF exportado com sucesso");
     } catch (err) {
       toast.error("Erro ao gerar PDF");
-      console.error(err);
+      logger.error(err);
     }
   };
 

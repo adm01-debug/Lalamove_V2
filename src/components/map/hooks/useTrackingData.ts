@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { VehicleFilter, StatusFilter } from '../types';
+import { logger } from '@/utils/logger';
 
 export interface TrackingData {
   id: string;
@@ -51,7 +52,7 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
         `);
 
       if (error) {
-        console.error('Error fetching tracking data:', error);
+        logger.error('Error fetching tracking data:', error);
         return;
       }
 

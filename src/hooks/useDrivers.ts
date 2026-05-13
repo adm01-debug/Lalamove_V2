@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Database } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 type DriverRow = Database['public']['Tables']['drivers']['Row'];
 type DriverStatus = Database['public']['Enums']['driver_status'];
@@ -39,7 +40,7 @@ async function fetchDrivers(): Promise<DriverWithIncidents[]> {
     .order('created_at', { ascending: false });
 
   if (driversError) {
-    console.error('Error fetching drivers:', driversError);
+    logger.error('Error fetching drivers:', driversError);
     throw driversError;
   }
 
@@ -50,7 +51,7 @@ async function fetchDrivers(): Promise<DriverWithIncidents[]> {
     .eq('resolved', false);
 
   if (incidentError) {
-    console.error('Error fetching incidents:', incidentError);
+    logger.error('Error fetching incidents:', incidentError);
   }
 
   // Count incidents per driver
@@ -93,7 +94,7 @@ async function fetchDriverById(id: string): Promise<DriverWithIncidents | null> 
     .maybeSingle();
 
   if (error) {
-    console.error('Error fetching driver:', error);
+    logger.error('Error fetching driver:', error);
     throw error;
   }
 
@@ -152,7 +153,7 @@ async function updateDriver(id: string, input: UpdateDriverInput): Promise<void>
     .eq('id', id);
 
   if (error) {
-    console.error('Error updating driver:', error);
+    logger.error('Error updating driver:', error);
     throw error;
   }
 }
@@ -261,7 +262,7 @@ export function useUpdateDriver() {
       toast.success('Motorista atualizado com sucesso.');
     },
     onError: (error) => {
-      console.error('Error updating driver:', error);
+      logger.error('Error updating driver:', error);
       toast.error('Falha ao atualizar motorista.');
     },
   });
@@ -278,7 +279,7 @@ export function useAddToWhitelist() {
       toast.success('Motorista adicionado à whitelist.');
     },
     onError: (error) => {
-      console.error('Error adding to whitelist:', error);
+      logger.error('Error adding to whitelist:', error);
       toast.error('Falha ao adicionar à whitelist.');
     },
   });
@@ -294,7 +295,7 @@ export function useRemoveFromWhitelist() {
       toast.success('Motorista removido da whitelist.');
     },
     onError: (error) => {
-      console.error('Error removing from whitelist:', error);
+      logger.error('Error removing from whitelist:', error);
       toast.error('Falha ao remover da whitelist.');
     },
   });
@@ -311,7 +312,7 @@ export function useAddToBlacklist() {
       toast.success('Motorista adicionado à blacklist.');
     },
     onError: (error) => {
-      console.error('Error adding to blacklist:', error);
+      logger.error('Error adding to blacklist:', error);
       toast.error('Falha ao adicionar à blacklist.');
     },
   });
@@ -327,7 +328,7 @@ export function useRemoveFromBlacklist() {
       toast.success('Motorista removido da blacklist.');
     },
     onError: (error) => {
-      console.error('Error removing from blacklist:', error);
+      logger.error('Error removing from blacklist:', error);
       toast.error('Falha ao remover da blacklist.');
     },
   });
@@ -345,7 +346,7 @@ export function useApproveDriver() {
       toast.success('Motorista aprovado.');
     },
     onError: (error) => {
-      console.error('Error approving driver:', error);
+      logger.error('Error approving driver:', error);
       toast.error('Falha ao aprovar motorista.');
     },
   });
@@ -362,7 +363,7 @@ export function useBlockDriver() {
       toast.success('Motorista bloqueado.');
     },
     onError: (error) => {
-      console.error('Error blocking driver:', error);
+      logger.error('Error blocking driver:', error);
       toast.error('Falha ao bloquear motorista.');
     },
   });

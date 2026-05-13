@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export interface HeatmapPoint {
   latitude: number;
@@ -27,7 +28,7 @@ async function fetchHeatmapData(days: number): Promise<{
     .gte('created_at', startDate.toISOString());
 
   if (error) {
-    console.error('Error fetching heatmap data:', error);
+    logger.error('Error fetching heatmap data:', error);
     throw error;
   }
 

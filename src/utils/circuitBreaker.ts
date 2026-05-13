@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 /**
  * Circuit Breaker Pattern Utility
  * Previne falhas em cascata ao lidar com integrações instáveis.
@@ -50,7 +51,7 @@ export async function withCircuitBreaker<T>(
     
     if (circuit.failures >= failureThreshold) {
       circuit.state = 'OPEN';
-      console.error(`Circuit Breaker [${name}] OPENED due to repeated failures.`);
+      logger.error(`Circuit Breaker [${name}] OPENED due to repeated failures.`);
     }
     
     throw error;

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export interface TrackingEvent {
   id: string;
@@ -50,7 +51,7 @@ export function useTrackingHistory(): UseTrackingHistoryReturn {
 
       setHistory(data || []);
     } catch (err) {
-      console.error('Error fetching tracking history:', err);
+      logger.error('Error fetching tracking history:', err);
       setError('Erro ao buscar histórico de rastreamento');
       setHistory([]);
     } finally {

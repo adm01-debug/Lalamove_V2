@@ -4,6 +4,7 @@ import type { Alert, AlertType } from '@/types';
 import { toast } from 'sonner';
 import { useAlertsRealtime } from './useRealtimeSubscriptions';
 import type { Database } from '@/integrations/supabase/types';
+import { logger } from '@/utils/logger';
 
 type AlertRow = Database['public']['Tables']['alerts']['Row'];
 type AlertSeverity = Database['public']['Enums']['alert_severity'];
@@ -18,7 +19,7 @@ async function fetchActiveAlerts(): Promise<Alert[]> {
     .limit(20);
 
   if (error) {
-    console.error('Error fetching alerts:', error);
+    logger.error('Error fetching alerts:', error);
     throw error;
   }
 
@@ -77,7 +78,7 @@ export function useAlertActions() {
       if (context?.previousAlerts) {
         queryClient.setQueryData(['active-alerts'], context.previousAlerts);
       }
-      console.error('Error dismissing alert:', error);
+      logger.error('Error dismissing alert:', error);
       toast.error('Falha ao dispensar alerta.');
     },
     onSettled: () => {
@@ -127,7 +128,7 @@ export function useAlertActions() {
       toast.success('Todos os alertas marcados como lidos.');
     },
     onError: (error) => {
-      console.error('Error marking all as read:', error);
+      logger.error('Error marking all as read:', error);
       toast.error('Falha ao marcar alertas como lidos.');
     },
   });

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, differenceInMinutes } from 'date-fns';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { logger } from '@/utils/logger';
 
 export interface DeliveryStats {
   totalDeliveries: number;
@@ -175,7 +176,7 @@ export function useReportData(period: string) {
           .slice(0, 10)
       );
     } catch (error) {
-      console.error('Error fetching report data:', error);
+      logger.error('Error fetching report data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

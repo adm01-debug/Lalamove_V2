@@ -9,6 +9,7 @@ import {
   Package, User, AlertTriangle, CheckCircle, MapPin, TrendingUp, FileText, Settings,
 } from "lucide-react";
 import React from "react";
+import { logger } from '@/utils/logger';
 
 export interface SearchResult {
   id: string;
@@ -138,7 +139,7 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
         searchResults.push(...pageFuse.search(searchQuery).map(r => r.item));
       }
       setResults(searchResults);
-    } catch (error) { console.error("Search error:", error); } finally { setIsLoading(false); }
+    } catch (error) { logger.error("Search error:", error); } finally { setIsLoading(false); }
   }, [activeTab]);
 
   useEffect(() => { searchDatabase(debouncedQuery); }, [debouncedQuery, searchDatabase]);

@@ -29,6 +29,7 @@ import { Order, OrderStatus } from '@/types';
 import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 interface OrderDetailModalProps {
   order: Order | null;
@@ -227,7 +228,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
           recommendation: result.evaluation.recommendation,
         });
       } catch (error) {
-        console.error('Failed to evaluate driver:', error);
+        logger.error('Failed to evaluate driver:', error);
       }
     };
 

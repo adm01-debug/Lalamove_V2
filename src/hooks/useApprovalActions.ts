@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { DriverApproval } from '@/types';
 import { toast } from 'sonner';
 import { showUndoToast } from './useGlobalUndo';
+import { logger } from '@/utils/logger';
 
 export function useApprovalActions() {
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ export function useApprovalActions() {
         queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });
       });
     },
-    onError: (error, _, context) => { rollback(context); console.error('Error approving:', error); },
+    onError: (error, _, context) => { rollback(context); logger.error('Error approving:', error); },
   });
 
   const rejectMutation = useMutation({
@@ -69,7 +70,7 @@ export function useApprovalActions() {
         queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });
       });
     },
-    onError: (error, _, context) => { rollback(context); console.error('Error rejecting:', error); },
+    onError: (error, _, context) => { rollback(context); logger.error('Error rejecting:', error); },
   });
 
   const whitelistMutation = useMutation({
@@ -84,7 +85,7 @@ export function useApprovalActions() {
       if (driverError) throw driverError;
     },
     onSuccess: () => { invalidateAll(); toast.success('Motorista na Whitelist', { description: 'Aprovado automaticamente em pedidos futuros.' }); },
-    onError: (error) => { console.error('Error whitelisting:', error); toast.error('Falha ao adicionar à whitelist.'); },
+    onError: (error) => { logger.error('Error whitelisting:', error); toast.error('Falha ao adicionar à whitelist.'); },
   });
 
   const blacklistMutation = useMutation({
@@ -99,7 +100,7 @@ export function useApprovalActions() {
       if (driverError) throw driverError;
     },
     onSuccess: () => { invalidateAll(); toast.error('Motorista na Blacklist', { description: 'Motorista bloqueado permanentemente.' }); },
-    onError: (error) => { console.error('Error blacklisting:', error); toast.error('Falha ao adicionar à blacklist.'); },
+    onError: (error) => { logger.error('Error blacklisting:', error); toast.error('Falha ao adicionar à blacklist.'); },
   });
 
   return { approveMutation, rejectMutation, whitelistMutation, blacklistMutation };

@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export type HealthStatus = 'ok' | 'degraded' | 'down' | 'unknown';
 
@@ -33,7 +34,7 @@ export async function checkDatabase(): Promise<ComponentHealth> {
     const { error } = await supabase.from('drivers').select('id').limit(1);
     const latency = performance.now() - startTime;
     if (error) {
-      console.error('Database health check failed', error.message);
+      logger.error('Database health check failed', error.message);
       return { status: 'down', latency, message: error.message, lastChecked: new Date().toISOString() };
     }
     return { status: latency > 1000 ? 'degraded' : 'ok', latency, lastChecked: new Date().toISOString() };

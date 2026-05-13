@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { 
+import { logger } from '@/utils/logger';
   AlertTriangle, 
   RefreshCw, 
   Home, 
@@ -51,7 +52,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error in React component", {
+    logger.error("Uncaught error in React component", {
       errorId: this.state.errorId,
       errorName: error.name,
       errorMessage: error.message,
@@ -104,7 +105,7 @@ ${errorInfo?.componentStack || "N/A"}
       this.setState({ copied: true });
       setTimeout(() => this.setState({ copied: false }), 2000);
     } catch (err) {
-      console.error("Failed to copy error:", err);
+      logger.error("Failed to copy error:", err);
     }
   };
 

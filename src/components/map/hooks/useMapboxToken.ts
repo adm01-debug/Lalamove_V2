@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export function useMapboxToken() {
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);
@@ -16,7 +17,7 @@ export function useMapboxToken() {
           setError('Token Mapbox não configurado');
         }
       } catch (err) {
-        console.error('Error fetching Mapbox token:', err);
+        logger.error('Error fetching Mapbox token:', err);
         setError('Erro ao buscar token do Mapbox');
       }
     };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 export interface AlertSettings {
   stopped_alert_enabled: boolean;
@@ -58,7 +59,7 @@ export function useAlertSettings() {
 
       setSettings(newSettings);
     } catch (error) {
-      console.error('Error fetching settings:', error);
+      logger.error('Error fetching settings:', error);
       toast.error('Erro ao carregar configurações');
     } finally {
       setLoading(false);
@@ -123,7 +124,7 @@ export function useAlertSettings() {
       toast.success('Configurações salvas com sucesso!');
       setHasChanges(false);
     } catch (error) {
-      console.error('Error saving settings:', error);
+      logger.error('Error saving settings:', error);
       toast.error('Erro ao salvar configurações');
     } finally {
       setSaving(false);

@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 import {
+import { logger } from '@/utils/logger';
   LayoutDashboard, Package, Users, Map, Bell, Settings,
   Shield, BarChart3, Truck, Flame, Activity, Scale,
   Webhook, Briefcase, AlertTriangle, History, ClipboardCheck,
@@ -194,7 +195,7 @@ export function useCommandPaletteSearch() {
         const { data: approvals } = await supabase.from('driver_approval_queue').select('id, driver_name, driver_id, status, risk_score, requested_at').eq('status', 'PENDING').or(`driver_name.ilike.${searchTerm}`).limit(3);
         approvals?.forEach(approval => results.push({ id: approval.id, type: 'approval', title: approval.driver_name || 'Motorista', subtitle: `Risco: ${approval.risk_score}`, badge: { label: 'PENDENTE', variant: 'secondary' }, path: `/approvals?highlight=${approval.id}`, timestamp: approval.requested_at }));
         setSearchResults(results);
-      } catch (error) { console.error('Search error:', error); } finally { setIsSearching(false); }
+      } catch (error) { logger.error('Search error:', error); } finally { setIsSearching(false); }
     };
     searchDatabase();
   }, [debouncedQuery]);
