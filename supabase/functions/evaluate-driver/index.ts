@@ -768,9 +768,8 @@ serve(async (req) => {
 
   } catch (error: unknown) {
     console.error('[evaluate-driver] Error:', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
-      JSON.stringify({ error: 'Erro interno', details: message }),
+      JSON.stringify({ error: 'Internal server error occurred during driver evaluation' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
