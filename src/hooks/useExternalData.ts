@@ -13,7 +13,7 @@ export interface ExternalRecord {
   phone?: string;
   email?: string;
   type?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface AddressSearchResult extends ExternalRecord {
