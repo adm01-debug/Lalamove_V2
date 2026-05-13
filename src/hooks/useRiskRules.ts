@@ -11,7 +11,7 @@ export interface RiskRule {
     value: number;
   };
   score_impact: number;
-  is_active: boolean;
+  is_active: boolean | null;
   created_at: string;
   updated_at: string;
 }

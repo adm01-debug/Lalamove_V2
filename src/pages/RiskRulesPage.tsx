@@ -84,7 +84,7 @@ export function RiskRulesPage() {
       description: rule.description || '',
       condition: rule.condition,
       score_impact: rule.score_impact,
-      is_active: rule.is_active
+      is_active: rule.is_active ?? undefined
     });
     setIsDialogOpen(true);
   };
@@ -298,7 +298,7 @@ export function RiskRulesPage() {
 
                   <div className="flex items-center gap-2 shrink-0">
                     <Switch
-                      checked={rule.is_active}
+                      checked={rule.is_active ?? false}
                       onCheckedChange={() => handleToggleActive(rule)}
                       disabled={updateMutation.isPending}
                     />

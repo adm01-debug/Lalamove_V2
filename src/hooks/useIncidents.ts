@@ -243,17 +243,17 @@ async function recalculateDriverRiskScore(driverId: string): Promise<void> {
   let baseScore = 5; // Start at medium
 
   // Adjust for experience
-  if (driver.total_deliveries === 0) {
+  if ((driver.total_deliveries ?? 0) === 0) {
     baseScore += 2;
-  } else if (driver.total_deliveries < 10) {
+  } else if ((driver.total_deliveries ?? 0) < 10) {
     baseScore += 1;
-  } else if (driver.total_deliveries > 100) {
+  } else if ((driver.total_deliveries ?? 0) > 100) {
     baseScore -= 1;
   }
 
   // Adjust for success rate
-  const successRate = driver.total_deliveries > 0
-    ? (driver.completed_deliveries / driver.total_deliveries) * 100
+  const successRate = (driver.total_deliveries ?? 0) > 0
+    ? ((driver.completed_deliveries ?? 0) / (driver.total_deliveries ?? 0)) * 100
     : 100;
   
   if (successRate < 85) {
@@ -265,11 +265,11 @@ async function recalculateDriverRiskScore(driverId: string): Promise<void> {
   }
 
   // Adjust for rating
-  if (driver.rating < 3) {
+  if ((driver.rating ?? 0) < 3) {
     baseScore += 2;
-  } else if (driver.rating < 4) {
+  } else if ((driver.rating ?? 0) < 4) {
     baseScore += 1;
-  } else if (driver.rating >= 4.8) {
+  } else if ((driver.rating ?? 0) >= 4.8) {
     baseScore -= 1;
   }
 
