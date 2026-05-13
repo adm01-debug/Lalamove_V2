@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/utils/logger';
+import { useState, useEffect, useCallback } from 'react';
 
 export type ThemeMode = 'light' | 'dark' | 'auto' | 'scheduled';
 

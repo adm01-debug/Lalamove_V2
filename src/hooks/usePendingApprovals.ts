@@ -1,7 +1,7 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { DriverApproval, Order, Driver, VehicleType, DriverStatus, OrderStatus } from '@/types';
-import { logger } from '@/utils/logger';
 
 export { useApprovalActions } from './useApprovalActions';
 

@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/utils/logger';
 
 export function useMapboxToken() {
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);

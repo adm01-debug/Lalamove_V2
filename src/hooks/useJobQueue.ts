@@ -3,9 +3,9 @@
 // Usa driver_evaluations como proxy para jobs de avaliação
 // Usa bitrix24_sync como proxy para jobs de sincronização
 
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/utils/logger';
 
 interface QueueStatistics {
   totalPending: number;

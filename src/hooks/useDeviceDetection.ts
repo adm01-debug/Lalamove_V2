@@ -1,7 +1,7 @@
+import { logger } from '@/utils/logger';
 import { useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
-import { logger } from '@/utils/logger';
 
 // Simple device fingerprint generator
 function generateFingerprint(): string {

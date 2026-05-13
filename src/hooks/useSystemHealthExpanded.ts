@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import {
-import { logger } from '@/utils/logger';
   type SystemHealth,
   type ComponentHealth,
   checkDatabase,

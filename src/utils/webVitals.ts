@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { onCLS, onLCP, onFCP, onTTFB, onINP, type Metric } from 'web-vitals';
-import { logger } from '@/utils/logger';
 
 
 type MetricHandler = (metric: Metric) => void;

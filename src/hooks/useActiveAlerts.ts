@@ -1,10 +1,10 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Alert, AlertType } from '@/types';
 import { toast } from 'sonner';
 import { useAlertsRealtime } from './useRealtimeSubscriptions';
 import type { Database } from '@/integrations/supabase/types';
-import { logger } from '@/utils/logger';
 
 type AlertRow = Database['public']['Tables']['alerts']['Row'];
 type AlertSeverity = Database['public']['Enums']['alert_severity'];

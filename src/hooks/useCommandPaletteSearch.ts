@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -6,7 +7,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 import {
-import { logger } from '@/utils/logger';
   LayoutDashboard, Package, Users, Map, Bell, Settings,
   Shield, BarChart3, Truck, Flame, Activity, Scale,
   Webhook, Briefcase, AlertTriangle, History, ClipboardCheck,

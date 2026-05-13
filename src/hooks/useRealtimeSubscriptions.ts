@@ -1,4 +1,5 @@
 /**
+import { logger } from '@/utils/logger';
  * Centralized Realtime Subscriptions Manager
  * 
  * This hook consolidates all Supabase Realtime subscriptions into a single
@@ -14,7 +15,6 @@ import { toast } from 'sonner';
 import { playAlertSound, enableAudioOnInteraction } from '@/utils/alertSounds';
 import { showNotification, showCriticalAlertNotification, getNotificationPermission, getPushSettings } from '@/hooks/usePushNotifications';
 import { isInQuietHours, isTypeEnabled } from '@/components/notifications/NotificationPreferences';
-import { logger } from '@/utils/logger';
 
 
 type TableName = 'alerts' | 'driver_approval_queue' | 'driver_incidents' | 'lalamove_orders' | 'active_tracking';

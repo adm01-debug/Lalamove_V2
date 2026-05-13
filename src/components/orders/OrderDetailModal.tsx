@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, forwardRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import {
@@ -29,7 +30,6 @@ import { Order, OrderStatus } from '@/types';
 import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/utils/logger';
 
 interface OrderDetailModalProps {
   order: Order | null;

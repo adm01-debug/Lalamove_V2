@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import {
   Bell,
@@ -33,7 +34,6 @@ import { useSoundSettings, type AlertPriority } from '@/hooks/useSoundSettings';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { SoundSettingsPanel } from './SoundSettingsPanel';
 import { motion, AnimatePresence } from 'framer-motion';
-import { logger } from '@/utils/logger';
 
 const NOTIFICATION_TYPES = [
   {

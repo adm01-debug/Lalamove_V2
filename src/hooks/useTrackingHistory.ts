@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/utils/logger';
 
 export interface TrackingEvent {
   id: string;

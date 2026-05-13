@@ -1,9 +1,9 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, differenceInMinutes } from 'date-fns';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { logger } from '@/utils/logger';
 
 export interface DeliveryStats {
   totalDeliveries: number;

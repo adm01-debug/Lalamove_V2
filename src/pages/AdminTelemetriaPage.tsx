@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState } from "react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +17,6 @@ import { TelemetryCharts } from "@/components/admin/telemetry/TelemetryCharts";
 import { toast } from "sonner";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { logger } from '@/utils/logger';
 
 interface TelemetryRow {
   id: string;

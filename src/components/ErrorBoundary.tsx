@@ -1,7 +1,7 @@
+import { logger } from '@/utils/logger';
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { 
-import { logger } from '@/utils/logger';
   AlertTriangle, 
   RefreshCw, 
   Home, 

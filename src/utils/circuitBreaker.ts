@@ -1,5 +1,5 @@
-import { logger } from '@/utils/logger';
 /**
+import { logger } from '@/utils/logger';
  * Circuit Breaker Pattern Utility
  * Previne falhas em cascata ao lidar com integrações instáveis.
  */

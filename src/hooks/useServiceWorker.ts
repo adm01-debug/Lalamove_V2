@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { logger } from '@/utils/logger';
 
 
 interface ServiceWorkerState {

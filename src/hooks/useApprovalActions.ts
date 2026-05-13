@@ -1,9 +1,9 @@
+import { logger } from '@/utils/logger';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { DriverApproval } from '@/types';
 import { toast } from 'sonner';
 import { showUndoToast } from './useGlobalUndo';
-import { logger } from '@/utils/logger';
 
 export function useApprovalActions() {
   const queryClient = useQueryClient();

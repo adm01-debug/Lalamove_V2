@@ -1,5 +1,5 @@
-import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/utils/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 export type HealthStatus = 'ok' | 'degraded' | 'down' | 'unknown';
 

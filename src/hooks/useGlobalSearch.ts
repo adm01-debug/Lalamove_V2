@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from 'fuse.js';
@@ -9,7 +10,6 @@ import {
   Package, User, AlertTriangle, CheckCircle, MapPin, TrendingUp, FileText, Settings,
 } from "lucide-react";
 import React from "react";
-import { logger } from '@/utils/logger';
 
 export interface SearchResult {
   id: string;

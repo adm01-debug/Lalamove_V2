@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { openDB, IDBPDatabase } from 'idb';
 import { useCallback, useEffect, useState } from 'react';
-import { logger } from '@/utils/logger';
 
 // Database value type
 interface OfflineItem {

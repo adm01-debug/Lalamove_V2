@@ -1,8 +1,8 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import type { Database } from '@/integrations/supabase/types';
-import { logger } from '@/utils/logger';
 
 type DriverRow = Database['public']['Tables']['drivers']['Row'];
 type DriverStatus = Database['public']['Enums']['driver_status'];

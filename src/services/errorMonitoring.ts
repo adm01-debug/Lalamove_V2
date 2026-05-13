@@ -1,5 +1,5 @@
-import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/utils/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ErrorPayload {
   errorId: string;
