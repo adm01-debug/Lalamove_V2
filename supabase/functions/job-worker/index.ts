@@ -305,19 +305,11 @@ Deno.serve(async (req: Request) => {
     );
     
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const errorStack = error instanceof Error ? error.stack : undefined;
-    
-    logger('error', 'Job worker error', {
-      error: errorMessage,
-      stack: errorStack
-    });
-    
+    console.error('Job worker error:', error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: errorMessage,
-        stack: errorStack
+        error: 'Internal server error in job worker'
       }),
       {
         status: 500,

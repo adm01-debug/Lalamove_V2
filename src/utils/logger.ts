@@ -1,21 +1,22 @@
-import { logger } from '@/utils/logger';
 const isDev = import.meta.env.DEV;
 
-export const logger = {
+const loggerObj = {
   log: (...args: any[]) => {
-    if (isDev) logger.log(...args);
+    if (isDev) console.log(...args);
   },
   warn: (...args: any[]) => {
     if (isDev) console.warn(...args);
   },
   error: (...args: any[]) => {
-    // Erros sempre são logados, mas idealmente enviados para um serviço como Sentry
+    // Erros sempre são logados
     console.error(...args);
   },
   info: (...args: any[]) => {
-    if (isDev) logger.info(...args);
+    if (isDev) console.info(...args);
   },
   debug: (...args: any[]) => {
-    if (isDev) logger.debug(...args);
+    if (isDev) console.debug(...args);
   },
 };
+
+export const logger = loggerObj;
