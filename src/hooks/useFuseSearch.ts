@@ -4,7 +4,7 @@ import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
 /**
  * Type utility: extends T with optional Fuse.js match metadata
  */
-export type WithMatches<T> = T & { _matches?: readonly FuseResultMatch[] };
+export type WithMatches<T> = T & { _matches?: unknown };
 
 /**
  * Custom hook for fuzzy searching with Fuse.js
