@@ -117,7 +117,7 @@ export function EvaluationsPage() {
 
   const filteredEvaluations = useMemo(() => {
     const evaluationsToFilter = searchTerm.trim() 
-      ? evaluationSearchResults.map(r => ({ ...r.item, _matches: r.matches }))
+      ? evaluationSearchResults.map(r => ({ ...r.item, _matches: r.matches as any }))
       : evaluations;
     
     return evaluationsToFilter.filter(evaluation => {
