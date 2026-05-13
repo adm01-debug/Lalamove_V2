@@ -84,7 +84,7 @@ export function RiskRulesPage() {
       description: rule.description || '',
       condition: rule.condition,
       score_impact: rule.score_impact,
-      is_active: rule.is_active ?? true
+      is_active: rule.is_active ?? undefined
     });
     setIsDialogOpen(true);
   };
