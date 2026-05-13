@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -25,7 +26,23 @@ serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-    const { action, message, orderId } = await req.json();
+    const requestSchema = z.object({
+      action: z.enum(['analyze-routes', 'analyze-order', 'analyze-drivers', 'analyze-alerts']),
+      message: z.string().optional(),
+      orderId: z.string().uuid().optional(),
+    });
+
+    const body = await req.json();
+    const result = requestSchema.safeParse(body);
+
+    if (!result.success) {
+      return new Response(JSON.stringify({ error: 'Invalid request payload', details: result.error.format() }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { action, message, orderId } = result.data;
 
     let contextData = '';
 
@@ -189,7 +206,7 @@ ${contextData}`;
   } catch (error) {
     console.error('Error in route-analyzer:', error);
     return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : 'Unknown error occurred' 
+      error: 'An internal error occurred during analysis' 
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
