@@ -158,7 +158,7 @@ export function IncidentsPage() {
                         <div className="flex items-center gap-2 min-w-0">
                           <div className={cn("p-1.5 rounded-lg shrink-0", severity.bg, severity.border)}><TypeIcon className={cn("w-4 h-4", severity.color)} /></div>
                           <div className="min-w-0">
-                            <p className="font-medium text-sm truncate">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.driverName} matches={(incident as WithMatches<typeof incident>)._matches} matchKey="driverName" /> : incident.driverName}</p>
+                            <p className="font-medium text-sm truncate">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.driverName || ''} matches={(incident as WithMatches<typeof incident>)._matches} matchKey="driverName" /> : incident.driverName}</p>
                             <p className="text-xs text-muted-foreground">{typeLabels[incident.type] || incident.type}</p>
                           </div>
                         </div>

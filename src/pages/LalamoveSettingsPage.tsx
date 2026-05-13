@@ -364,7 +364,7 @@ export default function LalamoveSettingsPage() {
           ) : vehiclesData?.body?.data ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(Array.isArray(vehiclesData.body.data) ? vehiclesData.body.data : Object.entries(vehiclesData.body.data)).map((item: any, i: number) => {
-                const vehicle = Array.isArray(vehiclesData.body.data) ? item : { key: item[0], ...item[1] };
+                const vehicle = Array.isArray(vehiclesData?.body?.data) ? item : { key: item[0], ...item[1] };
                 const name = vehicle.name || vehicle.vehicle_type_name || vehicle.key || `Veículo ${i + 1}`;
                 const id = vehicle.id || vehicle.vehicle_type_id || vehicle.key || i;
                 return (
@@ -401,7 +401,7 @@ export default function LalamoveSettingsPage() {
           ) : serviceAreasData?.body?.data ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {(Array.isArray(serviceAreasData.body.data) ? serviceAreasData.body.data : Object.entries(serviceAreasData.body.data)).map((item: any, i: number) => {
-                const area = Array.isArray(serviceAreasData.body.data) ? item : { key: item[0], ...item[1] };
+                const area = Array.isArray(serviceAreasData?.body?.data) ? item : { key: item[0], ...item[1] };
                 const name = area.name || area.city_name || area.key || `Área ${i + 1}`;
                 const id = area.id || area.city_id || area.key || i;
                 return (
