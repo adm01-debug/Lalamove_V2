@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -50,7 +51,7 @@ async function fetchIncidents(): Promise<Incident[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching incidents:', error);
+    logger.error('Error fetching incidents:', error);
     throw error;
   }
 
@@ -79,7 +80,7 @@ async function fetchIncidentsByDriver(driverId: string): Promise<Incident[]> {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching driver incidents:', error);
+    logger.error('Error fetching driver incidents:', error);
     throw error;
   }
 
@@ -107,7 +108,7 @@ async function createIncident(input: CreateIncidentInput): Promise<Incident> {
     .single();
 
   if (error) {
-    console.error('Error creating incident:', error);
+    logger.error('Error creating incident:', error);
     throw error;
   }
 
@@ -145,7 +146,7 @@ async function updateIncident(id: string, input: UpdateIncidentInput): Promise<v
     .single();
 
   if (error) {
-    console.error('Error updating incident:', error);
+    logger.error('Error updating incident:', error);
     throw error;
   }
 
@@ -169,7 +170,7 @@ async function deleteIncident(id: string): Promise<void> {
     .eq('id', id);
 
   if (error) {
-    console.error('Error deleting incident:', error);
+    logger.error('Error deleting incident:', error);
     throw error;
   }
 
@@ -192,7 +193,7 @@ async function resolveIncident(id: string, notes: string): Promise<void> {
     .single();
 
   if (error) {
-    console.error('Error resolving incident:', error);
+    logger.error('Error resolving incident:', error);
     throw error;
   }
 
@@ -212,7 +213,7 @@ async function recalculateDriverRiskScore(driverId: string): Promise<void> {
     .eq('resolved', false);
 
   if (incError) {
-    console.error('Error fetching incidents for recalc:', incError);
+    logger.error('Error fetching incidents for recalc:', incError);
     return;
   }
 
@@ -321,7 +322,7 @@ export function useCreateIncident() {
       toast.success('Incidente registrado com sucesso.');
     },
     onError: (error) => {
-      console.error('Error creating incident:', error);
+      logger.error('Error creating incident:', error);
       toast.error('Falha ao registrar incidente.');
     },
   });
@@ -339,7 +340,7 @@ export function useUpdateIncident() {
       toast.success('Incidente atualizado com sucesso.');
     },
     onError: (error) => {
-      console.error('Error updating incident:', error);
+      logger.error('Error updating incident:', error);
       toast.error('Falha ao atualizar incidente.');
     },
   });
@@ -356,7 +357,7 @@ export function useDeleteIncident() {
       toast.success('Incidente excluído com sucesso.');
     },
     onError: (error) => {
-      console.error('Error deleting incident:', error);
+      logger.error('Error deleting incident:', error);
       toast.error('Falha ao excluir incidente.');
     },
   });
@@ -374,7 +375,7 @@ export function useResolveIncident() {
       toast.success('Incidente resolvido com sucesso.');
     },
     onError: (error) => {
-      console.error('Error resolving incident:', error);
+      logger.error('Error resolving incident:', error);
       toast.error('Falha ao resolver incidente.');
     },
   });

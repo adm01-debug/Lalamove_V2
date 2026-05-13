@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, forwardRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import {
@@ -227,7 +228,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
           recommendation: result.evaluation.recommendation,
         });
       } catch (error) {
-        console.error('Failed to evaluate driver:', error);
+        logger.error('Failed to evaluate driver:', error);
       }
     };
 

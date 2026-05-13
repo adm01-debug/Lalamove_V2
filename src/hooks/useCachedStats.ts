@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/utils/logger';
 
 // ============================================================================
 // TYPES
@@ -98,7 +98,7 @@ export function useDriverStatsCache() {
         .limit(100);
       
       if (error) {
-        console.error('Error fetching driver stats:', error);
+        logger.error('Error fetching driver stats:', error);
         throw error;
       }
       
@@ -140,7 +140,7 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.error('Error fetching delivery metrics:', error);
+        logger.error('Error fetching delivery metrics:', error);
         throw error;
       }
       
@@ -205,7 +205,7 @@ export function useHourlyMetricsCache(hoursBack: number = 24) {
         .order('created_at', { ascending: false });
       
       if (error) {
-        console.error('Error fetching hourly metrics:', error);
+        logger.error('Error fetching hourly metrics:', error);
         throw error;
       }
       
@@ -264,7 +264,7 @@ export function useTopDrivers(
         .limit(limit);
       
       if (error) {
-        console.error('Error fetching top drivers:', error);
+        logger.error('Error fetching top drivers:', error);
         throw error;
       }
       

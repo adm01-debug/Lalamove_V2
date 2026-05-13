@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState } from "react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -183,7 +184,7 @@ export default function AdminTelemetriaPage() {
       toast.success("PDF exportado com sucesso");
     } catch (err) {
       toast.error("Erro ao gerar PDF");
-      console.error(err);
+      logger.error(err);
     }
   };
 

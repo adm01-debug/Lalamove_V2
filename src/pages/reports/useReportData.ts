@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, differenceInMinutes } from 'date-fns';
@@ -175,7 +176,7 @@ export function useReportData(period: string) {
           .slice(0, 10)
       );
     } catch (error) {
-      console.error('Error fetching report data:', error);
+      logger.error('Error fetching report data:', error);
     } finally {
       setLoading(false);
       setRefreshing(false);

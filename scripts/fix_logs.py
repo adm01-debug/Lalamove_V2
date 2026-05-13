@@ -2,33 +2,40 @@ import os
 import re
 
 def process_file(file_path):
+    # Ignora o próprio logger
+    if 'logger.ts' in file_path:
+        return
+
     with open(file_path, 'r') as f:
         content = f.read()
 
-    # Se não tem console.log nem logger.log, ignora
-    if 'console.log' not in content and 'logger.log' not in content:
+    # Busca qualquer console.log/warn/error/debug/info
+    console_pattern = r'console\.(log|warn|error|debug|info)'
+    if not re.search(console_pattern, content):
         return
 
-    # Substitui console.log por logger.log
-    new_content = content.replace('console.log', 'logger.log')
-    new_content = new_content.replace('console.debug', 'logger.debug')
-    new_content = new_content.replace('console.info', 'logger.info')
+    # Substitui console. por logger.
+    new_content = re.sub(console_pattern, r'logger.\1', content)
     
-    # Adiciona import se logger.log for usado e o import não existir
-    if 'logger.' in new_content and 'from \'@/utils/logger\'' not in new_content and 'from "@/utils/logger"' not in new_content:
-        # Tenta inserir após o último import
-        import_stmt = "import { logger } from '@/utils/logger';\n"
-        last_import = -1
+    # Verifica se o import já existe
+    import_pattern = r'from [\'"]@/utils/logger[\'"]'
+    if not re.search(import_pattern, new_content):
+        # Tenta inserir após o último import existente
         lines = new_content.split('\n')
+        last_import_idx = -1
         for i, line in enumerate(lines):
-            if line.startswith('import '):
-                last_import = i
+            if line.strip().startswith('import '):
+                last_import_idx = i
         
-        if last_import != -1:
-            lines.insert(last_import + 1, import_stmt)
+        import_stmt = "import { logger } from '@/utils/logger';"
+        
+        if last_import_idx != -1:
+            # Insere após o último import
+            lines.insert(last_import_idx + 1, import_stmt)
             new_content = '\n'.join(lines)
         else:
-            new_content = import_stmt + new_content
+            # Insere no topo
+            new_content = import_stmt + '\n' + new_content
 
     if new_content != content:
         with open(file_path, 'w') as f:

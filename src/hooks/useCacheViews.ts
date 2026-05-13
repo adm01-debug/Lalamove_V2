@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -138,7 +139,7 @@ export function useRefreshCache() {
       }
     },
     onError: (error: Error) => {
-      console.error('Error in refresh mutation:', error);
+      logger.error('Error in refresh mutation:', error);
       toast.error('Erro ao atualizar cache');
     },
   });

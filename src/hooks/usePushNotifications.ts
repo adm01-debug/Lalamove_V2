@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/utils/logger';
+import { useState, useEffect, useCallback } from 'react';
 
 
 export type NotificationPermission = 'default' | 'granted' | 'denied';
@@ -44,7 +44,7 @@ export const getPushSettings = (): PushSettings => {
       return { ...defaultSettings, ...JSON.parse(stored) };
     }
   } catch (error) {
-    console.error('Error reading push settings:', error);
+    logger.error('Error reading push settings:', error);
   }
   return defaultSettings;
 };
@@ -55,7 +55,7 @@ export const savePushSettings = (settings: PushSettings): void => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     window.dispatchEvent(new CustomEvent('pushSettingsChanged', { detail: settings }));
   } catch (error) {
-    console.error('Error saving push settings:', error);
+    logger.error('Error saving push settings:', error);
   }
 };
 
@@ -73,7 +73,7 @@ export const getNotificationPermission = (): NotificationPermission => {
 // Request notification permission
 export const requestNotificationPermission = async (): Promise<NotificationPermission> => {
   if (!isNotificationSupported()) {
-    console.warn('Notifications not supported in this browser');
+    logger.warn('Notifications not supported in this browser');
     return 'denied';
   }
 
@@ -81,7 +81,7 @@ export const requestNotificationPermission = async (): Promise<NotificationPermi
     const permission = await Notification.requestPermission();
     return permission as NotificationPermission;
   } catch (error) {
-    console.error('Error requesting notification permission:', error);
+    logger.error('Error requesting notification permission:', error);
     return 'denied';
   }
 };
@@ -98,12 +98,12 @@ const vibrationPatterns: Record<string, number[]> = {
 // Show a notification with enhanced options
 export const showNotification = (options: NotificationOptions): Notification | null => {
   if (!isNotificationSupported()) {
-    console.warn('Notifications not supported');
+    logger.warn('Notifications not supported');
     return null;
   }
 
   if (Notification.permission !== 'granted') {
-    console.warn('Notification permission not granted');
+    logger.warn('Notification permission not granted');
     return null;
   }
 
@@ -192,7 +192,7 @@ export const showNotification = (options: NotificationOptions): Notification | n
 
     return notification;
   } catch (error) {
-    console.error('Error showing notification:', error);
+    logger.error('Error showing notification:', error);
     return null;
   }
 };
@@ -283,7 +283,7 @@ export const usePushNotifications = () => {
 
   const sendTestNotification = useCallback(() => {
     if (permission !== 'granted') {
-      console.warn('Permission not granted for test notification');
+      logger.warn('Permission not granted for test notification');
       return null;
     }
 

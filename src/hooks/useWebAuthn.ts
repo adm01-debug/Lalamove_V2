@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -196,7 +197,7 @@ export function useWebAuthn() {
       toast.success('Passkey registrada com sucesso!');
     },
     onError: (error: Error) => {
-      console.error('Registration error:', error);
+      logger.error('Registration error:', error);
       if (error.name === 'NotAllowedError') {
         toast.error('Registro cancelado pelo usuário');
       } else if (error.name === 'InvalidStateError') {
@@ -292,7 +293,7 @@ export function useWebAuthn() {
       toast.success('Autenticação biométrica bem-sucedida!');
     },
     onError: (error: Error) => {
-      console.error('Authentication error:', error);
+      logger.error('Authentication error:', error);
       if (error.name === 'NotAllowedError') {
         toast.error('Autenticação cancelada pelo usuário');
       } else {

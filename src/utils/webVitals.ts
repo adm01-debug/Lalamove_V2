@@ -1,6 +1,6 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { onCLS, onLCP, onFCP, onTTFB, onINP, type Metric } from 'web-vitals';
-import { logger } from '@/utils/logger';
 
 
 type MetricHandler = (metric: Metric) => void;
@@ -130,7 +130,7 @@ const reportMetricToAnalytics = async (metric: Metric, config: WebVitalsConfig) 
         });
       }
     } catch (error) {
-      console.error('[Web Vitals] Failed to report metric:', error);
+      logger.error('[Web Vitals] Failed to report metric:', error);
     }
   }
   

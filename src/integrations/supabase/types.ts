@@ -1070,6 +1070,36 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_enabled: boolean
+          name: string
+          rules: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_enabled?: boolean
+          name: string
+          rules?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_enabled?: boolean
+          name?: string
+          rules?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       geo_blocks: {
         Row: {
           block_type: string
@@ -1898,6 +1928,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_test_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          operation: string
+          role_tested: string
+          success: boolean
+          table_name: string
+          test_name: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          operation: string
+          role_tested: string
+          success: boolean
+          table_name: string
+          test_name: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          operation?: string
+          role_tested?: string
+          success?: boolean
+          table_name?: string
+          test_name?: string
+        }
+        Relationships: []
+      }
       tracking_events: {
         Row: {
           created_at: string
@@ -1937,41 +2000,275 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tracking_events_driver_id_fkey"
+            foreignKeyName: "tracking_events_driver_id_fkey1"
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_driver_id_fkey"
+            foreignKeyName: "tracking_events_driver_id_fkey1"
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers_safe_view"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "lalamove_orders"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders_operator_view"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tracking_events_order_id_fkey"
+            foreignKeyName: "tracking_events_order_id_fkey1"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders_safe_view"
             referencedColumns: ["id"]
           },
         ]
+      }
+      tracking_events_y2026m05: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m06: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m07: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m08: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m09: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m10: {
+        Row: {
+          created_at: string
+          driver_id: string
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id: string
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string
+          speed?: number | null
+        }
+        Relationships: []
       }
       user_devices: {
         Row: {
@@ -2627,6 +2924,7 @@ export type Database = {
       }
       run_daily_cleanup: { Args: never; Returns: Json }
       run_daily_cleanup_with_logging: { Args: never; Returns: undefined }
+      run_rls_security_audit: { Args: never; Returns: Json }
       use_reset_token: {
         Args: { p_ip_address?: unknown; p_token_hash: string }
         Returns: boolean

@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -21,7 +22,7 @@ export function useLoginLockout() {
       });
 
       if (error) {
-        console.error('Error checking lockout:', error);
+        logger.error('Error checking lockout:', error);
         return { isLocked: false, remainingSeconds: 0, attemptCount: 0 };
       }
 
@@ -35,7 +36,7 @@ export function useLoginLockout() {
       setLockoutStatus(status);
       return status;
     } catch (err) {
-      console.error('Error checking lockout:', err);
+      logger.error('Error checking lockout:', err);
       return { isLocked: false, remainingSeconds: 0, attemptCount: 0 };
     }
   }, []);
@@ -48,7 +49,7 @@ export function useLoginLockout() {
       });
 
       if (error) {
-        console.error('Error recording failed attempt:', error);
+        logger.error('Error recording failed attempt:', error);
         return { isLocked: false, remainingSeconds: 0, attemptCount: 0 };
       }
 
@@ -62,7 +63,7 @@ export function useLoginLockout() {
       setLockoutStatus(status);
       return status;
     } catch (err) {
-      console.error('Error recording failed attempt:', err);
+      logger.error('Error recording failed attempt:', err);
       return { isLocked: false, remainingSeconds: 0, attemptCount: 0 };
     }
   }, []);
@@ -74,7 +75,7 @@ export function useLoginLockout() {
       });
       setLockoutStatus({ isLocked: false, remainingSeconds: 0, attemptCount: 0 });
     } catch (err) {
-      console.error('Error clearing attempts:', err);
+      logger.error('Error clearing attempts:', err);
     }
   }, []);
 

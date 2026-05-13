@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { DriverApproval, Order, Driver, VehicleType, DriverStatus, OrderStatus } from '@/types';
@@ -95,7 +96,7 @@ async function fetchPendingApprovals(): Promise<DriverApproval[]> {
   const { data, error } = await supabase
     .from('driver_approval_queue').select(SELECT_QUERY)
     .eq('status', 'PENDING').order('requested_at', { ascending: false }).limit(50);
-  if (error) { console.error('Error fetching approvals:', error); throw error; }
+  if (error) { logger.error('Error fetching approvals:', error); throw error; }
   return mapApprovalData(data || []);
 }
 
@@ -103,7 +104,7 @@ async function fetchApprovalHistory(): Promise<DriverApproval[]> {
   const { data, error } = await supabase
     .from('driver_approval_queue').select(SELECT_QUERY)
     .in('status', ['APPROVED', 'REJECTED']).order('reviewed_at', { ascending: false }).limit(50);
-  if (error) { console.error('Error fetching approval history:', error); throw error; }
+  if (error) { logger.error('Error fetching approval history:', error); throw error; }
   return mapApprovalData(data || []);
 }
 

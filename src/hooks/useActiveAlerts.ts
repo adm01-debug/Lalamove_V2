@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Alert, AlertType } from '@/types';
@@ -18,7 +19,7 @@ async function fetchActiveAlerts(): Promise<Alert[]> {
     .limit(20);
 
   if (error) {
-    console.error('Error fetching alerts:', error);
+    logger.error('Error fetching alerts:', error);
     throw error;
   }
 
@@ -77,7 +78,7 @@ export function useAlertActions() {
       if (context?.previousAlerts) {
         queryClient.setQueryData(['active-alerts'], context.previousAlerts);
       }
-      console.error('Error dismissing alert:', error);
+      logger.error('Error dismissing alert:', error);
       toast.error('Falha ao dispensar alerta.');
     },
     onSettled: () => {
@@ -127,7 +128,7 @@ export function useAlertActions() {
       toast.success('Todos os alertas marcados como lidos.');
     },
     onError: (error) => {
-      console.error('Error marking all as read:', error);
+      logger.error('Error marking all as read:', error);
       toast.error('Falha ao marcar alertas como lidos.');
     },
   });

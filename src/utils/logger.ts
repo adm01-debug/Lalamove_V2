@@ -8,7 +8,7 @@ const loggerObj = {
     if (isDev) console.warn(...args);
   },
   error: (...args: any[]) => {
-    // Erros sempre são logados
+    // Erros sempre são logados em produção para facilitar debug remoto
     console.error(...args);
   },
   info: (...args: any[]) => {

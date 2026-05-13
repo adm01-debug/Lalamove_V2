@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect, useCallback } from 'react';
 
 const STORAGE_KEY = 'sound_settings';
@@ -61,7 +62,7 @@ export const getSoundSettings = (): SoundSettings => {
       };
     }
   } catch (error) {
-    console.error('Error reading sound settings:', error);
+    logger.error('Error reading sound settings:', error);
   }
   return defaultSettings;
 };
@@ -73,7 +74,7 @@ export const saveSoundSettings = (settings: SoundSettings): void => {
     // Dispatch custom event for other components to listen
     window.dispatchEvent(new CustomEvent('soundSettingsChanged', { detail: settings }));
   } catch (error) {
-    console.error('Error saving sound settings:', error);
+    logger.error('Error saving sound settings:', error);
   }
 };
 

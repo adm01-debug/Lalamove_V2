@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import {
   Bell,
@@ -89,7 +90,7 @@ const getQuietHours = (): QuietHours => {
     const stored = localStorage.getItem(QUIET_HOURS_KEY);
     if (stored) return JSON.parse(stored);
   } catch (e) {
-    console.error('Error reading quiet hours:', e);
+    logger.error('Error reading quiet hours:', e);
   }
   return { enabled: false, startHour: 22, endHour: 7 };
 };
@@ -105,7 +106,7 @@ const getTypePreferences = (): TypePreferences => {
     const stored = localStorage.getItem(TYPE_PREFS_KEY);
     if (stored) return JSON.parse(stored);
   } catch (e) {
-    console.error('Error reading type preferences:', e);
+    logger.error('Error reading type preferences:', e);
   }
   const defaults: TypePreferences = {};
   NOTIFICATION_TYPES.forEach(t => {

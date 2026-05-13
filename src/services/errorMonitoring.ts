@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { supabase } from '@/integrations/supabase/client';
 
 interface ErrorPayload {
@@ -132,7 +133,7 @@ async function sendError(payload: ErrorPayload): Promise<void> {
     const userId = session?.session?.user?.id ?? null;
     await rpcInsertError(payload, fingerprint, userId);
   } catch (err) {
-    console.warn('[ErrorMonitoring] Failed to send error:', err);
+    logger.warn('[ErrorMonitoring] Failed to send error:', err);
   }
 }
 
@@ -195,7 +196,7 @@ export function initErrorMonitoring(): () => void {
   window.addEventListener('error', handleError);
   window.addEventListener('unhandledrejection', handleRejection);
 
-  console.info('[ErrorMonitoring] Initialized — capturing unhandled errors and rejections');
+  logger.info('[ErrorMonitoring] Initialized — capturing unhandled errors and rejections');
 
   return () => {
     window.removeEventListener('error', handleError);

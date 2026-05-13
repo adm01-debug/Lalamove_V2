@@ -5,6 +5,7 @@
  * manageable system, preventing duplicate channels and optimizing performance.
  */
 
+import { logger } from '@/utils/logger';
 import { useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,7 +15,6 @@ import { toast } from 'sonner';
 import { playAlertSound, enableAudioOnInteraction } from '@/utils/alertSounds';
 import { showNotification, showCriticalAlertNotification, getNotificationPermission, getPushSettings } from '@/hooks/usePushNotifications';
 import { isInQuietHours, isTypeEnabled } from '@/components/notifications/NotificationPreferences';
-import { logger } from '@/utils/logger';
 
 
 type TableName = 'alerts' | 'driver_approval_queue' | 'driver_incidents' | 'lalamove_orders' | 'active_tracking';

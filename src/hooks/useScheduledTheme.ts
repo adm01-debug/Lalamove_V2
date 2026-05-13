@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect, useCallback } from 'react';
 
 export type ThemeMode = 'light' | 'dark' | 'auto' | 'scheduled';
@@ -28,7 +29,7 @@ const getStoredTheme = (): ThemeState => {
       return JSON.parse(stored);
     }
   } catch (e) {
-    console.error('Error reading theme settings:', e);
+    logger.error('Error reading theme settings:', e);
   }
   return { mode: 'auto', schedule: defaultSchedule };
 };

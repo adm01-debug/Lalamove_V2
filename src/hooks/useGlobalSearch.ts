@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Fuse from 'fuse.js';
@@ -138,7 +139,7 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
         searchResults.push(...pageFuse.search(searchQuery).map(r => r.item));
       }
       setResults(searchResults);
-    } catch (error) { console.error("Search error:", error); } finally { setIsLoading(false); }
+    } catch (error) { logger.error("Search error:", error); } finally { setIsLoading(false); }
   }, [activeTab]);
 
   useEffect(() => { searchDatabase(debouncedQuery); }, [debouncedQuery, searchDatabase]);

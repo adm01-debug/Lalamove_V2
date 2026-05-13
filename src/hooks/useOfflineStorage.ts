@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { openDB, IDBPDatabase } from 'idb';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -269,7 +270,7 @@ export class OfflineSyncManager {
             });
           }
         } catch (error) {
-          console.error('Error syncing action:', error);
+          logger.error('Error syncing action:', error);
           // Increment retry count
           await db.put('pendingActions', {
             ...action,
@@ -280,7 +281,7 @@ export class OfflineSyncManager {
 
       this.notify('synced');
     } catch (error) {
-      console.error('Error during sync:', error);
+      logger.error('Error during sync:', error);
       this.notify('error');
     } finally {
       this.syncInProgress = false;

@@ -3,6 +3,7 @@
 // Usa driver_evaluations como proxy para jobs de avaliação
 // Usa bitrix24_sync como proxy para jobs de sincronização
 
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -252,7 +253,7 @@ export const useAddJob = () => {
     }
 
     // Para outros tipos, retornamos um ID simulado
-    console.warn(`Job type "${type}" adicionado (simulado - sem tabela dedicada)`);
+    logger.warn(`Job type "${type}" adicionado (simulado - sem tabela dedicada)`);
     return `simulated-${Date.now()}`;
   };
 
@@ -302,7 +303,7 @@ export const useRetryJob = () => {
       return;
     }
 
-    console.warn(`Job ${jobId} não encontrado para retry`);
+    logger.warn(`Job ${jobId} não encontrado para retry`);
   };
 
   return { retryJob };
@@ -314,7 +315,7 @@ export const useRetryJob = () => {
  */
 export const useDeleteJob = () => {
   const deleteJob = async (jobId: string): Promise<void> => {
-    console.warn(`Delete de job ${jobId} ignorado (jobs são registros históricos)`);
+    logger.warn(`Delete de job ${jobId} ignorado (jobs são registros históricos)`);
     // Não deletamos registros de webhook_events, evaluations ou syncs
     // Eles são registros históricos importantes
   };

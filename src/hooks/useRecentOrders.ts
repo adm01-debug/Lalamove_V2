@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Order } from '@/types';
@@ -29,7 +30,7 @@ async function fetchOrders(page: number): Promise<OrdersResult> {
     .range(from, to);
 
   if (error) {
-    console.error('Error fetching orders:', error);
+    logger.error('Error fetching orders:', error);
     throw error;
   }
 

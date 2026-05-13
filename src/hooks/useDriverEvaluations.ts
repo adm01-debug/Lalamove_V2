@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -173,7 +174,7 @@ export function useCreateEvaluation() {
       });
     },
     onError: (error) => {
-      console.error('Error creating evaluation:', error);
+      logger.error('Error creating evaluation:', error);
       toast.error('Falha ao registrar avaliação.');
     },
   });

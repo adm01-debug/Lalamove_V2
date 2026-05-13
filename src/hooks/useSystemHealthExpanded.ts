@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import {
   type SystemHealth,
@@ -20,7 +21,7 @@ export const useSystemHealthExpanded = (refetchInterval = 30000) => {
   return useQuery({
     queryKey: ['system-health-expanded'],
     queryFn: async (): Promise<SystemHealth> => {
-      console.debug('Running system health check');
+      logger.debug('Running system health check');
       
       const [
         database, edgeFunctions, realtime, cache, queue,

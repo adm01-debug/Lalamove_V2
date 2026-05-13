@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -141,7 +142,7 @@ export function usePredictiveAnalysis() {
       setPredictions(newPredictions);
       setLastUpdated(new Date());
     } catch (err) {
-      console.error("Prediction error:", err);
+      logger.error("Prediction error:", err);
       setError("Erro ao gerar predições. Tente novamente.");
     } finally {
       setIsLoading(false);
