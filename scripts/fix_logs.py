@@ -9,10 +9,12 @@ def process_file(file_path):
     if 'console.log' not in content and 'logger.log' not in content:
         return
 
-    # Substitui console.log por logger.log
+    # Substitui console.* por logger.*
     new_content = content.replace('console.log', 'logger.log')
     new_content = new_content.replace('console.debug', 'logger.debug')
     new_content = new_content.replace('console.info', 'logger.info')
+    new_content = new_content.replace('console.warn', 'logger.warn')
+    new_content = new_content.replace('console.error', 'logger.error')
     
     # Adiciona import se logger.log for usado e o import não existir
     if 'logger.' in new_content and 'from \'@/utils/logger\'' not in new_content and 'from "@/utils/logger"' not in new_content:
