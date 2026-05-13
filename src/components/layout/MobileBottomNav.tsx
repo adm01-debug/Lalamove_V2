@@ -7,12 +7,10 @@ import {
   Bell, 
   Map,
   MoreHorizontal,
-  Plus,
   Search,
   X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useActiveAlerts } from '@/hooks/useActiveAlerts';
 import { useApprovalStats } from '@/hooks/usePendingApprovals';
@@ -67,7 +65,7 @@ export function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const [moreOpen, setMoreOpen] = useState(false);
-  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
+  // quickActionsOpen removed
   const { getPrefetchProps } = usePrefetch();
   
   // Fetch counts
@@ -79,7 +77,7 @@ export function MobileBottomNav() {
   const pendingApprovalsCount = approvalStats?.pending || 0;
   
   // Total badge count for "More" menu
-  const totalBadges = pendingApprovalsCount + unreadAlertsCount;
+  // totalBadges removed
   
   // Main navigation items (max 5 for bottom nav)
   const mainNavItems: NavItem[] = [

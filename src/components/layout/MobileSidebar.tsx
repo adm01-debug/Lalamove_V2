@@ -215,7 +215,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
     );
   };
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (_: string) => {
     onOpenChange(false);
   };
 

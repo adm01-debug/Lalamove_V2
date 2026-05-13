@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Volume2, VolumeX, Play, Bell, BellRing, AlertTriangle, 
   AlertCircle, Info, ChevronDown, RotateCcw, Smartphone,
-  Check, Zap, Shield
+  Check, Zap
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
+// Separator removed
 import { 
   Select,
   SelectContent,
@@ -186,7 +186,6 @@ const PriorityToneSelector = ({
 
 export const SoundSettingsPanel = () => {
   const {
-    settings,
     isEnabled,
     volume,
     priorityTones,

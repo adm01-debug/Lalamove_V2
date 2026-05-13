@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu, X } from 'lucide-react';
+import { Bell, User, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
@@ -72,7 +72,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   const { mode, setMode, isDark } = useTheme();
   const { data: alerts = [], isLoading: alertsLoading } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation } = useAlertActions();
-  const isMobile = useIsMobile();
+  // isMobile removed
 
   const unreadCount = alerts.filter(a => !a.isRead).length;
 
