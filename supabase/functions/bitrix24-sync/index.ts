@@ -322,9 +322,8 @@ serve(async (req) => {
     }
   } catch (error: unknown) {
     console.error("Bitrix24 sync error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: "An internal error occurred during Bitrix24 synchronization" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
