@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -483,14 +484,23 @@ serve(async (req) => {
   }
 
   try {
-    const { driverId, orderId, triggeredBy = 'WEBHOOK' } = await req.json();
+    const evaluationSchema = z.object({
+      driverId: z.string().uuid().or(z.string()),
+      orderId: z.string().uuid().optional().nullable(),
+      triggeredBy: z.enum(['WEBHOOK', 'MANUAL', 'SYSTEM']).default('WEBHOOK'),
+    });
 
-    if (!driverId) {
+    const rawBody = await req.json();
+    const parseResult = evaluationSchema.safeParse(rawBody);
+
+    if (!parseResult.success) {
       return new Response(
-        JSON.stringify({ error: 'driverId é obrigatório' }),
+        JSON.stringify({ error: 'Invalid request payload', details: parseResult.error.format() }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    const { driverId, orderId, triggeredBy } = parseResult.data;
 
     console.log(`[evaluate-driver] Starting evaluation for driver ${driverId}, order ${orderId}, triggered by ${triggeredBy}`);
 
