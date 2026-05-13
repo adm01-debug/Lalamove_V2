@@ -48,7 +48,7 @@ export function useServiceWorker() {
             registration: null,
           }));
         } catch (error) {
-          console.error('[SW Hook] Preview cache cleanup failed:', error);
+          logger.error('[SW Hook] Preview cache cleanup failed:', error);
         }
       };
 
@@ -100,7 +100,7 @@ export function useServiceWorker() {
         }
 
       } catch (error) {
-        console.error('[SW Hook] Registration failed:', error);
+        logger.error('[SW Hook] Registration failed:', error);
       }
     };
 
@@ -211,7 +211,7 @@ export function useServiceWorker() {
 
       return true;
     } catch (error) {
-      console.error('[SW Hook] Failed to queue offline action:', error);
+      logger.error('[SW Hook] Failed to queue offline action:', error);
       return false;
     }
   }, [state.registration]);

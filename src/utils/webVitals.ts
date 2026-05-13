@@ -130,7 +130,7 @@ const reportMetricToAnalytics = async (metric: Metric, config: WebVitalsConfig) 
         });
       }
     } catch (error) {
-      console.error('[Web Vitals] Failed to report metric:', error);
+      logger.error('[Web Vitals] Failed to report metric:', error);
     }
   }
   

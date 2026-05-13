@@ -53,7 +53,7 @@ export function useSecurityPushNotifications() {
       
       return false;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      logger.error('Error requesting notification permission:', error);
       toast.error('Erro ao solicitar permissão de notificação');
       return false;
     }
@@ -93,7 +93,7 @@ export function useSecurityPushNotifications() {
       // Auto-close after 10 seconds
       setTimeout(() => notif.close(), 10000);
     } catch (error) {
-      console.error('Error showing notification:', error);
+      logger.error('Error showing notification:', error);
     }
   }, [isSupported, permission]);
 
