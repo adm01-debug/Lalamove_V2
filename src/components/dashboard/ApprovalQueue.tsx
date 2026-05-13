@@ -28,7 +28,7 @@ function getRiskBg(score: number): string {
   return 'bg-success/20';
 }
 
-function formatTimeAgo(date: Date): string {
+function formatTimeAgoValue(date: Date): string {
   const minutes = Math.floor((Date.now() - date.getTime()) / 60000);
   if (minutes < 1) return 'Agora';
   if (minutes < 60) return `${minutes}min`;
