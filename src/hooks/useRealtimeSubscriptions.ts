@@ -10,7 +10,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import { Alert, ApprovalPriority } from '@/types';
+import { Alert } from '@/types';
 import { toast } from 'sonner';
 import { playAlertSound, enableAudioOnInteraction } from '@/utils/alertSounds';
 import { showNotification, showCriticalAlertNotification, getNotificationPermission, getPushSettings } from '@/hooks/usePushNotifications';
@@ -26,8 +26,7 @@ interface SubscriptionCallback {
   callback: (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => void;
 }
 
-// Singleton to track active subscriptions globally
-const activeSubscriptions = new Map<string, Set<string>>();
+// No singleton logic here currently used
 
 /**
  * Core Realtime Manager Hook

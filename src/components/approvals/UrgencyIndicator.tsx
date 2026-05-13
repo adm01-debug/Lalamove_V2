@@ -1,13 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { 
   Clock, 
   AlertTriangle, 
   Flame, 
-  Zap, 
   Timer,
   AlertOctagon,
-  Bell
+  Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';

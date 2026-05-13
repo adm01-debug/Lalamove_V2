@@ -7,11 +7,11 @@ interface RiskScoreGaugeProps {
   className?: string;
 }
 
-function getRiskLevel(score: number): { label: string; color: string; bgColor: string } {
-  if (score >= 8) return { label: 'Crítico', color: 'text-destructive', bgColor: 'bg-destructive' };
-  if (score >= 6) return { label: 'Alto', color: 'text-warning', bgColor: 'bg-warning' };
-  if (score >= 4) return { label: 'Médio', color: 'text-muted-foreground', bgColor: 'bg-muted-foreground' };
-  return { label: 'Baixo', color: 'text-success', bgColor: 'bg-success' };
+function getRiskLevel(score: number): { label: string; color: string } {
+  if (score >= 8) return { label: 'Crítico', color: 'text-destructive' };
+  if (score >= 6) return { label: 'Alto', color: 'text-warning' };
+  if (score >= 4) return { label: 'Médio', color: 'text-muted-foreground' };
+  return { label: 'Baixo', color: 'text-success' };
 }
 
 const sizeStyles = {
@@ -21,7 +21,7 @@ const sizeStyles = {
 };
 
 export function RiskScoreGauge({ score, size = 'md', showLabel = true, className }: RiskScoreGaugeProps) {
-  const { label, color, bgColor } = getRiskLevel(score);
+  const { label, color } = getRiskLevel(score);
   const styles = sizeStyles[size];
   
   // Calculate the stroke dasharray for the circle
