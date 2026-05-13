@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw } from 'lucide-react';
+import { CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw, X, AlertCircle, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
