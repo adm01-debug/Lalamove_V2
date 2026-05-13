@@ -1,11 +1,11 @@
 /**
-import { logger } from '@/utils/logger';
  * Centralized Realtime Subscriptions Manager
  * 
  * This hook consolidates all Supabase Realtime subscriptions into a single
  * manageable system, preventing duplicate channels and optimizing performance.
  */
 
+import { logger } from '@/utils/logger';
 import { useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

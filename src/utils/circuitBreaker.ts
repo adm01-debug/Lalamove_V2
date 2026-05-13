@@ -1,9 +1,9 @@
 /**
-import { logger } from '@/utils/logger';
  * Circuit Breaker Pattern Utility
  * Previne falhas em cascata ao lidar com integrações instáveis.
  */
 
+import { logger } from '@/utils/logger';
 interface CircuitBreakerOptions {
   failureThreshold: number; // Número de falhas antes de abrir o circuito
   cooldownPeriod: number;    // Tempo em ms para esperar antes de tentar novamente (half-open)
