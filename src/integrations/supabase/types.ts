@@ -1928,6 +1928,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_test_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          operation: string
+          role_tested: string
+          success: boolean
+          table_name: string
+          test_name: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          operation: string
+          role_tested: string
+          success: boolean
+          table_name: string
+          test_name: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          operation?: string
+          role_tested?: string
+          success?: boolean
+          table_name?: string
+          test_name?: string
+        }
+        Relationships: []
+      }
       tracking_events: {
         Row: {
           created_at: string
@@ -2891,6 +2924,7 @@ export type Database = {
       }
       run_daily_cleanup: { Args: never; Returns: Json }
       run_daily_cleanup_with_logging: { Args: never; Returns: undefined }
+      run_rls_security_audit: { Args: never; Returns: Json }
       use_reset_token: {
         Args: { p_ip_address?: unknown; p_token_hash: string }
         Returns: boolean
