@@ -56,7 +56,7 @@ export function useUpdateToken() {
   });
 }
 
-export function useUAPICall<T = any>(method: string, args?: any, extraParams?: Record<string, string>) {
+export function useUAPICall<T = unknown>(method: string, args?: unknown, extraParams?: Record<string, string>) {
   return useQuery({
     queryKey: ['uapi', 'call', method, args, extraParams],
     queryFn: () => uapi.call<T>(method, args, extraParams),

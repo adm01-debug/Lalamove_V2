@@ -1,15 +1,28 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
+export interface DataRefreshOptions {
+  autoRefreshInterval?: number;
+  onError?: (error: Error) => void;
+  pauseWhenHidden?: boolean;
+  retryOnError?: boolean;
+  maxRetries?: number;
+}
+
+export interface DataRefreshResult {
+  lastUpdated: Date | null;
+  isRefreshing: boolean;
+  refresh: () => Promise<void>;
+  error: string | null;
+  paused: boolean;
+  setPaused: (paused: boolean) => void;
+  refreshCount: number;
+  averageRefreshTime: number | undefined;
+}
+
 export function useDataRefresh(
   refreshFn: () => Promise<void>,
-  options?: {
-    autoRefreshInterval?: number;
-    onError?: (error: Error) => void;
-    pauseWhenHidden?: boolean;
-    retryOnError?: boolean;
-    maxRetries?: number;
-  }
-) {
+  options?: DataRefreshOptions
+): DataRefreshResult {
   const {
     autoRefreshInterval,
     onError,

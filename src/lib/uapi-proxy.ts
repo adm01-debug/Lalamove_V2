@@ -1,7 +1,7 @@
 const PROXY_BASE = 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/lalamove-uapi-proxy';
 const PROXY_KEY = 'promo-lalamove-2026';
 
-export interface UAPIResponse<T = any> {
+export interface UAPIResponse<T = unknown> {
   ok?: boolean;
   method: string;
   httpCode: number;
@@ -18,6 +18,14 @@ export interface UAPIResponse<T = any> {
   session?: ProxySession;
 }
 
+export interface UAPIUserData {
+  nickname?: string;
+  real_name?: string;
+  email?: string;
+  balance_fen?: number;
+  [key: string]: unknown;
+}
+
 export interface ProxySession {
   id: string;
   tokenPreview: string;
@@ -31,7 +39,7 @@ export interface ProxySession {
   created_at: string;
 }
 
-async function proxyFetch<T = any>(action: string, params: Record<string, string> = {}): Promise<UAPIResponse<T>> {
+async function proxyFetch<T = unknown>(action: string, params: Record<string, string> = {}): Promise<UAPIResponse<T>> {
   const url = new URL(PROXY_BASE);
   url.searchParams.set('key', PROXY_KEY);
   url.searchParams.set('action', action);
@@ -43,7 +51,7 @@ async function proxyFetch<T = any>(action: string, params: Record<string, string
   return resp.json();
 }
 
-async function proxyPost<T = any>(method: string, args: any = {}, extraParams: Record<string, string> = {}): Promise<UAPIResponse<T>> {
+async function proxyPost<T = unknown>(method: string, args: unknown = {}, extraParams: Record<string, string> = {}): Promise<UAPIResponse<T>> {
   const url = new URL(PROXY_BASE);
   url.searchParams.set('key', PROXY_KEY);
   url.searchParams.set('action', 'call');
@@ -60,13 +68,13 @@ async function proxyPost<T = any>(method: string, args: any = {}, extraParams: R
 export const uapi = {
   getStatus: () => proxyFetch<ProxySession>('status'),
   testConnection: () => proxyFetch('test'),
-  getUserInfo: () => proxyFetch('user'),
-  getWalletBalance: () => proxyFetch('wallet'),
+  getUserInfo: () => proxyFetch<UAPIUserData>('user'),
+  getWalletBalance: () => proxyFetch<UAPIUserData>('wallet'),
   getOrders: (page = 1, size = 10) =>
     proxyFetch('orders', { page: String(page), size: String(size) }),
   getVehicles: () => proxyFetch('vehicles'),
   getServiceAreas: () => proxyFetch('service_areas'),
-  call: <T = any>(method: string, args?: any, extraParams?: Record<string, string>) =>
+  call: <T = unknown>(method: string, args?: unknown, extraParams?: Record<string, string>) =>
     proxyPost<T>(method, args, extraParams),
   updateToken: (token: string, xSignJs?: string, xFingerprint?: string) => {
     const params: Record<string, string> = { token };
