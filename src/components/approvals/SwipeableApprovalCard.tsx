@@ -26,7 +26,7 @@ interface SwipeableApprovalCardProps {
   onReject: (approval: DriverApproval, notes?: string) => void;
   onWhitelist: (approval: DriverApproval) => void;
   onBlacklist: (approval: DriverApproval, reason?: string) => void;
-  onExpand?: (approval: DriverApproval) => void;
+  // onExpand removed
   isProcessing?: boolean;
   className?: string;
 }
@@ -37,7 +37,6 @@ export function SwipeableApprovalCard({
   onReject,
   onWhitelist,
   onBlacklist,
-  onExpand,
   isProcessing = false,
   className
 }: SwipeableApprovalCardProps) {
@@ -59,7 +58,7 @@ export function SwipeableApprovalCard({
     setSwipeState('idle');
   }, []);
 
-  const handleDrag = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDrag = useCallback((_: unknown, info: PanInfo) => {
     if (info.offset.x > 30) {
       setSwipeState('swiping-right');
     } else if (info.offset.x < -30) {
@@ -69,7 +68,7 @@ export function SwipeableApprovalCard({
     }
   }, []);
 
-  const handleDragEnd = useCallback((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
 

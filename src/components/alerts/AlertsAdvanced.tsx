@@ -1,14 +1,14 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, CheckCheck, AlertTriangle, AlertCircle, Info, MapPin, Shield, Clock, X, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw } from 'lucide-react';
+import { CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from '@/lib/utils';
-import { Alert, AlertType } from '@/types';
+import { Alert } from '@/types';
 import { alertIcons, severityConfig, alertTypeLabels, formatTimeAgo, type GroupBy, type SortBy, type ViewMode, type GroupedAlerts } from '@/hooks/useAlertGrouping';
 
 // Re-export hooks

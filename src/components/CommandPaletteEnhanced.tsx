@@ -2,7 +2,7 @@ import { forwardRef, useCallback } from 'react';
 import {
   CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator,
 } from '@/components/ui/command';
-import { Package, Users, Bell, Shield, Search, Star, Clock, X, Zap, Loader2, ArrowRight, Command, Keyboard } from 'lucide-react';
+import { Package, Users, Bell, Shield, Search, Star, Clock, X, Zap, Loader2, ArrowRight, Command } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
