@@ -325,7 +325,7 @@ describe('Edge Cases', () => {
 
   it('handles null approvals in high-risk count', () => {
     const approvals: Array<{ riskScore: number }> | null = null;
-    const count = (approvals ?? []).filter(a => a.riskScore >= 70).length;
+    const count = (approvals ?? []).filter(a => (a as any).riskScore >= 70).length;
     expect(count).toBe(0);
   });
 

@@ -187,7 +187,7 @@ export function MetricCard({
         {targetProgress !== null && (
           <div className="mt-4 pt-4 border-t border-border/30">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="text-muted-foreground font-medium">{target.label}</span>
+              <span className="text-muted-foreground font-medium">{target?.label}</span>
               <span className={cn(
                 "font-bold",
                 targetProgress >= 100 ? "text-success" : "text-foreground"

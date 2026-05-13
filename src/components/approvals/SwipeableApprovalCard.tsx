@@ -248,7 +248,7 @@ function CardInner({
           {/* Driver Info */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="relative flex-shrink-0">
-              {approval.driver.photoUrl ? (
+              {approval.driver?.photoUrl ? (
                 <img 
                   src={approval.driver.photoUrl} 
                   alt={approval.driver.name} 
@@ -267,11 +267,11 @@ function CardInner({
             </div>
             
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold text-foreground truncate">{approval.driver.name}</h3>
+              <h3 className="font-semibold text-foreground truncate">{approval.driver?.name}</h3>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Truck className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>{approval.driver.vehicleType}</span>
-                {approval.driver.vehiclePlate && (
+                <span>{approval.driver?.vehicleType}</span>
+                {approval.driver?.vehiclePlate && (
                   <span className="font-mono bg-secondary/50 px-1.5 py-0.5 rounded">
                     {approval.driver.vehiclePlate}
                   </span>
@@ -295,10 +295,10 @@ function CardInner({
         {/* Quick Stats */}
         <div className="grid grid-cols-4 gap-2">
           {[
-            { value: approval.driver.totalDeliveries, label: 'Total' },
-            { value: approval.driver.completedDeliveries, label: 'Feitas' },
-            { value: approval.driver.rating.toFixed(1), label: 'Nota', icon: Star },
-            { value: `${approval.driver.totalDeliveries > 0 ? ((approval.driver.completedDeliveries / approval.driver.totalDeliveries) * 100).toFixed(0) : 0}%`, label: 'Taxa' },
+            { value: approval.driver?.totalDeliveries, label: 'Total' },
+            { value: approval.driver?.completedDeliveries, label: 'Feitas' },
+            { value: approval.driver?.rating?.toFixed(1), label: 'Nota', icon: Star },
+            { value: `${(approval.driver?.totalDeliveries ?? 0) > 0 ? (((approval.driver?.completedDeliveries ?? 0) / (approval.driver?.totalDeliveries ?? 1)) * 100).toFixed(0) : 0}%`, label: 'Taxa' },
           ].map((stat) => (
             <div key={stat.label} className="text-center p-2 rounded-lg bg-secondary/30 border border-border/30">
               <div className="flex items-center justify-center gap-0.5">
@@ -453,7 +453,7 @@ export function CompactApprovalCard({
     >
       {/* Avatar */}
       <div className="relative flex-shrink-0">
-        {approval.driver.photoUrl ? (
+        {approval.driver?.photoUrl ? (
           <img 
             src={approval.driver.photoUrl} 
             alt={approval.driver.name} 
@@ -468,7 +468,7 @@ export function CompactApprovalCard({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm text-foreground truncate">{approval.driver.name}</p>
+        <p className="font-medium text-sm text-foreground truncate">{approval.driver?.name}</p>
         <div className="flex items-center gap-2">
           <UrgencyIndicator requestedAt={approval.requestedAt} variant="compact" className="text-[10px] px-1.5 py-0.5" />
           <span className="text-[10px] text-muted-foreground">Score: {approval.riskScore.toFixed(1)}</span>
