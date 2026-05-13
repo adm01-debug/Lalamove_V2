@@ -3,9 +3,7 @@
  * Covers: QueryClient HMR, Sidebar role filtering, Dashboard dynamic data,
  * AuthPage accessibility, useAccessibility refactor, MobileSidebar role filtering.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import React from 'react';
+import { describe, it, expect } from 'vitest';
 
 // ═══════════════════════════════════════════════════════════════════
 // 1. QueryClient Singleton Tests
@@ -29,7 +27,7 @@ describe('App QueryClient Stability', () => {
 // 2. Sidebar Role Filtering Logic Tests
 // ═══════════════════════════════════════════════════════════════════
 describe('Sidebar Role Filtering Logic', () => {
-  type RoleName = 'admin' | 'manager' | 'operator' | 'viewer';
+  // RoleName type removed if unused
   
   const roleHierarchy: Record<string, number> = { admin: 4, manager: 3, operator: 2, viewer: 1 };
   
@@ -263,7 +261,6 @@ describe('Dashboard Dynamic Data Computations', () => {
   // Prediction logic
   it('generates prediction text based on data', () => {
     const s = { totalOrders: 100, activeDeliveries: 10 };
-    const hour = new Date().getHours();
     const estimatedOrders = Math.max(Math.round(s.totalOrders / 12), s.activeDeliveries + 5);
     expect(estimatedOrders).toBe(15); // max(8.33→8, 15) = 15
   });
@@ -417,7 +414,7 @@ describe('Edge Cases', () => {
 describe('Volume / Stress Tests', () => {
   it('handles 1000 orders in sparkline without error', () => {
     const now = Date.now();
-    const orders = Array.from({ length: 1000 }, (_, i) => ({
+    const orders = Array.from({ length: 1000 }, () => ({
       createdAt: new Date(now - Math.random() * 5 * 3600000).toISOString(),
     }));
     const result = [4, 3, 2, 1, 0].map(hoursAgo => {

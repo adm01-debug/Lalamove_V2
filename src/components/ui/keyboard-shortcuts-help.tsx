@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useMemo, forwardRef } from 'react';
+import { useState, useEffect, useMemo, forwardRef } from 'react';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
-import { HighlightText } from '@/components/ui/highlight-match';
+// HighlightText removed
 import { motion, AnimatePresence } from 'framer-motion';
-import { Keyboard, Command, Search, X } from 'lucide-react';
+import { Command, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+// Badge removed
 import {
   Dialog,
   DialogContent,
