@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, forwardRef } from 'react';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 // HighlightText removed
 import { motion, AnimatePresence } from 'framer-motion';
-import { Command, Search, X } from 'lucide-react';
+import { Command, Search, X, Keyboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 // Badge removed
