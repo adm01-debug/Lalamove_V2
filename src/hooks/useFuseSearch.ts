@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
+import Fuse, { IFuseOptions, FuseResult, FuseResultMatch } from 'fuse.js';
 
 /**
  * Type utility: extends T with optional Fuse.js match metadata
  */
-export type WithMatches<T> = T & { _matches?: unknown };
+export type WithMatches<T> = T & { _matches?: readonly FuseResultMatch[] };
 
 /**
  * Custom hook for fuzzy searching with Fuse.js
