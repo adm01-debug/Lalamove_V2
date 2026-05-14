@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && echo 'PDF content placeholder' > docs/audit_report.pdf",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -72,6 +72,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.61.1",
     "react-i18next": "^16.5.2",
+    "react-markdown": "^10.1.0",
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^6.30.1",
     "recharts": "^2.15.4",

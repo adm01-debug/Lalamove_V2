@@ -12,21 +12,33 @@
 
 ## 📋 Índice
 
-- [Visão Geral](#-visão-geral)
-- [Arquitetura](#-arquitetura)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [🏆 Relatório de Auditoria](#-relatório-de-auditoria)
+- [🎯 Visão Geral](#-visão-geral)
+- [🏗 Arquitetura](#-arquitetura)
+- [🛠 Stack Tecnológico](#-stack-tecnológico)
+- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
 - [Instalação e Configuração](#-instalação-e-configuração)
-- [Banco de Dados](#-banco-de-dados)
-- [Edge Functions](#-edge-functions)
-- [Componentes](#-componentes)
-- [Hooks Customizados](#-hooks-customizados)
-- [Serviços](#-serviços)
-- [Páginas](#-páginas)
-- [Funcionalidades Principais](#-funcionalidades-principais)
-- [Integrações](#-integrações)
-- [Variáveis de Ambiente](#-variáveis-de-ambiente)
-- [Deploy](#-deploy)
+- [🗄️ Banco de Dados](#-banco-de-dados)
+- [⚡ Edge Functions](#-edge-functions)
+- [🧩 Componentes](#-componentes)
+- [🪝 Hooks Customizados](#-hooks-customizados)
+- [📡 Serviços](#-serviços)
+- [📄 Páginas](#-páginas)
+- [🚀 Funcionalidades Principais](#-funcionalidades-principais)
+- [🔗 Integrações](#-integrações)
+- [🔐 Variáveis de Ambiente](#-variáveis-de-ambiente)
+- [🚢 Deploy](#-deploy)
+
+---
+
+## 🏆 Relatório de Auditoria
+
+O sistema passa por auditorias regulares para garantir os mais altos padrões de segurança e performance.
+
+- **[Versão Markdown](docs/audit_report.md)**: Relatório técnico completo e detalhado.
+- **[Versão PDF (Geração via CI)](docs/audit_report.pdf)**: Versão formatada para exportação e apresentações executivas.
+
+> *Nota: O PDF é gerado automaticamente a partir do Markdown durante o processo de build.*
 
 ---
 
