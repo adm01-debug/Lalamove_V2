@@ -75,13 +75,13 @@ O sistema **Lalamove Guardian** apresenta uma maturidade técnica elevada, com a
 
 | Funcionalidade | Arquivo(s) de Sustentação | Path / Evidência |
 |----------------|--------------------------|------------------|
-| **Segurança Webhook** | `lalamove-webhook/index.ts` | Validação HMAC (Linhas 110-136) |
-| **Cálculo de Risco** | `evaluate-driver/index.ts` | `RiskCalculatorService.calculate()` |
-| **Mapa Realtime** | `LiveMap.tsx` | `supabase.channel('active_tracking')` |
-| **Fila de Aprovação** | `ApprovalsPage.tsx` | Hook `usePendingApprovals` |
-| **Integração CRM** | `bitrix24-sync/index.ts` | Sincronização via `BITRIX24_WEBHOOK_URL` |
-| **Cache de Dados** | `cache_system_complete.sql` | Materialized Views + Triggers de Refresh |
-| **Notificações** | `send-notification/index.ts` | Dispatcher multi-canal (Slack, Push, Email) |
+| **Segurança Webhook** | `supabase/functions/lalamove-webhook/index.ts` | Validação HMAC e IP Trusted Patterns |
+| **Cálculo de Risco** | `supabase/functions/evaluate-driver/index.ts` | Orquestração do Risk Engine |
+| **Mapa Realtime** | `src/components/map/LiveMap.tsx` | Assinatura de canais via `supabase.channel` |
+| **Fila de Aprovação** | `src/pages/ApprovalsPage.tsx` | Hook `usePendingApprovals` + Realtime |
+| **Integração CRM** | `supabase/functions/bitrix24-sync/index.ts` | Sincronização de Deals via Cron |
+| **Cache de Dados** | `supabase/migrations/*cache_system*` | Materialized Views e Triggers de Refresh |
+| **Notificações** | `supabase/functions/send-notification/index.ts` | Dispatcher Multi-canal (Resend, Slack, Push) |
 
 ---
 
