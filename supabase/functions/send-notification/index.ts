@@ -141,10 +141,9 @@ serve(async (req) => {
     );
     
   } catch (error: unknown) {
-    console.error("Notification error:", error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error("Notification Internal Error:", error);
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({ error: 'Internal server error during notification dispatch' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
