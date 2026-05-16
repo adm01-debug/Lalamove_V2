@@ -273,7 +273,6 @@ export function TrendIndicator({
       role="status"
       aria-label={`${label ? label + ': ' : ''}${isPositive ? 'Aumento' : isNegative ? 'Queda' : 'Estável'} de ${formatValue()}`}
     >
-    >
       {showIcon && (
         <>
           {isPositive && <ArrowUpRight className={iconSizes[size]} />}
