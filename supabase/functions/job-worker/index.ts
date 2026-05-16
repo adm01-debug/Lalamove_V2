@@ -300,14 +300,14 @@ Deno.serve(async (req: Request) => {
     // Processar job
     const result = await processJob(jobPayload);
     
-    // Retornar resultado
+    const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
     return new Response(
       JSON.stringify(result),
       {
         status: result.success ? 200 : 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins[0]
         }
       }
     );
