@@ -44,7 +44,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Zap className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Edge Functions</h3>
-          <Badge variant={health?.functions === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.functions === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status das Edge Functions: ${health?.functions === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.functions === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
