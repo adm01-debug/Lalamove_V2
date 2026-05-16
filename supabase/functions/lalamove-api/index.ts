@@ -75,7 +75,7 @@ async function lalamoveRequest(
   const url = `${baseUrl}${path}`;
   const headers = await getAuthHeaders(method, path, body);
 
-  console.log(`Lalamove API: ${method} ${url}`);
+  logger.log(`Lalamove API: ${method} ${url}`);
 
   try {
     const response = await fetch(url, {
@@ -98,9 +98,9 @@ async function lalamoveRequest(
     }
 
     const responseText = await response.text();
-    console.log(`Response status: ${response.status}`);
+    logger.log(`Response status: ${response.status}`);
     if (response.status >= 400) {
-      console.log(`Error response body: ${responseText.substring(0, 500)}`);
+      logger.log(`Error response body: ${responseText.substring(0, 500)}`);
     }
 
     if (!response.ok) {
@@ -121,7 +121,7 @@ async function lalamoveRequest(
     const data = responseText ? JSON.parse(responseText) : {};
     return { data, status: response.status, rateLimits };
   } catch (error) {
-    console.error('Lalamove API request failed:', error);
+    logger.error('Lalamove API request failed:', error);
     return { 
       error: error instanceof Error ? error.message : 'Unknown error',
       status: 500 
@@ -301,7 +301,7 @@ async function syncOrderToDatabase(
     .single();
 
   if (error) {
-    console.error('Error updating order:', error);
+    logger.error('Error updating order:', error);
     return null;
   }
 
@@ -387,7 +387,7 @@ async function upsertOrderToDatabase(
     .single();
 
   if (error) {
-    console.error('Error upserting order:', error);
+    logger.error('Error upserting order:', error);
     return null;
   }
 
@@ -403,7 +403,7 @@ async function syncActiveOrders(supabase: any): Promise<{ synced: number; errors
     .in('status', ['ASSIGNING_DRIVER', 'PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'DELIVERING']);
 
   if (error || !activeOrders) {
-    console.error('Error fetching active orders:', error);
+    logger.error('Error fetching active orders:', error);
     return { synced: 0, errors: [] };
   }
 
@@ -678,7 +678,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Lalamove API error:', error);
+    logger.error('Lalamove API error:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error occurred while processing Lalamove request' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
