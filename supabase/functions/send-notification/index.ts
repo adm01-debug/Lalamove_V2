@@ -146,7 +146,7 @@ serve(async (req) => {
   } catch (error: unknown) {
     logger.error("Notification Internal Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error during notification dispatch' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
