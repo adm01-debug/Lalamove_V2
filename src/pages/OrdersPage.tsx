@@ -167,13 +167,18 @@ export function OrdersPage() {
             { icon: CheckCircle2, value: stats.completed, label: 'Concluídos', variant: 'success' as const },
             { icon: XCircle, value: stats.cancelled, label: 'Cancelados', variant: 'destructive' as const },
           ].map((stat, index) => (
-            <Card key={stat.label} variant="glass" hover="lift" className="animate-fade-up overflow-hidden" style={{ animationDelay: `${index * 75}ms` }}>
-              <div className={cn("absolute inset-0 opacity-20",
-                stat.variant === 'primary' && "bg-gradient-to-br from-primary/30 to-accent/10",
-                stat.variant === 'success' && "bg-gradient-to-br from-success/30 to-emerald/10",
-                stat.variant === 'warning' && "bg-gradient-to-br from-warning/30 to-amber/10",
-                stat.variant === 'destructive' && "bg-gradient-to-br from-destructive/30 to-rose/10"
-              )} />
+            <Card 
+              key={stat.label} 
+              variant={
+                stat.variant === 'primary' ? 'gradientPrimary' :
+                stat.variant === 'success' ? 'gradientSuccess' :
+                stat.variant === 'warning' ? 'gradientWarning' :
+                'gradientDestructive'
+              }
+              hover="lift" 
+              className="animate-fade-up overflow-hidden" 
+              style={{ animationDelay: `${index * 75}ms` }}
+            >
               <CardContent className="p-3 sm:p-4 relative">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className={cn("p-2 sm:p-2.5 rounded-lg sm:rounded-xl shadow-lg",
