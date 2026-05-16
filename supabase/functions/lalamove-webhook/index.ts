@@ -3,9 +3,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 import { encode } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-lalamove-signature, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
