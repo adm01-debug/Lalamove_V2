@@ -314,16 +314,17 @@ Deno.serve(async (req: Request) => {
     
   } catch (error) {
     logger.error('Job worker error:', error);
+    const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
     return new Response(
       JSON.stringify({
         success: false,
-        error: 'Internal server error in job worker'
+        error: 'Internal server error'
       }),
       {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins[0]
         }
       }
     );
