@@ -14,7 +14,6 @@ import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 import { HintProvider } from "@/components/ui/contextual-hints";
 import { PageLoader } from "@/components/ui/page-loader";
 import { AchievementsProvider } from "@/hooks/useAchievementsSystem";
-
 import { AnimatePresence } from 'framer-motion';
 
 // Lazy loaded pages - Auth
@@ -103,93 +102,105 @@ function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-const App = () => {
+const AppContent = () => {
   const queryClient = getQueryClient();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AchievementsProvider>
-          <TooltipProvider>
-            <HintProvider>
-              <BrowserRouter>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AchievementsProvider>
+            <TooltipProvider>
+              <HintProvider>
                 <Toaster />
                 <DeviceDetector />
                 <CommandPaletteEnhanced />
                 <OfflineIndicator />
                 <InstallPrompt />
                 <KeyboardShortcutsHelp />
-              <AnimatePresence mode="wait">
-              <Routes location={location} key={location.pathname}>
-                {/* Public auth routes */}
-                <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />
-                <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
-                <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
-                <Route path="/mfa-verify" element={<SuspenseWrapper><MFAVerifyPage /></SuspenseWrapper>} />
-                <Route path="/unauthorized" element={<SuspenseWrapper><UnauthorizedPage /></SuspenseWrapper>} />
-                
-                {/* Protected routes with layout */}
-                <Route element={<AppLayout />}>
-                  {/* Dashboard */}
-                  <Route path="/" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
-                  <Route path="/dashboard" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
-                  
-                  {/* Security routes - Admin only */}
-                  <Route path="/security" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><SecurityDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/roles" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><RolesPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/permissions" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><PermissionsPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/ip-whitelist" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><IPWhitelistPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/rate-limiting" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><RateLimitDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/geo-blocking" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><GeoBlockingPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/password-reset-approvals" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><PasswordResetApprovalsPage /></SuspenseWrapper></ProtectedRoute>} />
-                  
-                  {/* Admin pages - Manager+ */}
-                  <Route path="/system-health" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SystemHealthPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/system-health-expanded" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SystemHealthExpandedPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/cache-status" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheStatusPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/cache-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/performance" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><PerformanceDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/job-queue" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><JobQueuePage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/error-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ErrorMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
-                  <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
-                  {/* Existing routes */}
-                  <Route path="/orders" element={<SuspenseWrapper><OrdersPage /></SuspenseWrapper>} />
-                  <Route path="/drivers" element={<SuspenseWrapper><DriversPage /></SuspenseWrapper>} />
-                  <Route path="/approvals" element={<SuspenseWrapper><ApprovalsPage /></SuspenseWrapper>} />
-                  <Route path="/incidents" element={<SuspenseWrapper><IncidentsPage /></SuspenseWrapper>} />
-                  <Route path="/metrics" element={<SuspenseWrapper><MetricsPage /></SuspenseWrapper>} />
-                  <Route path="/delivery-metrics" element={<SuspenseWrapper><DeliveryMetricsPage /></SuspenseWrapper>} />
-                  <Route path="/alerts" element={<SuspenseWrapper><AlertsPage /></SuspenseWrapper>} />
-                  <Route path="/alert-configurations" element={<SuspenseWrapper><AlertConfigurationsPage /></SuspenseWrapper>} />
-                  <Route path="/notification-history" element={<SuspenseWrapper><NotificationHistoryPage /></SuspenseWrapper>} />
-                  <Route path="/map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
-                  <Route path="/live-map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
-                  <Route path="/heatmap" element={<SuspenseWrapper><HeatmapPage /></SuspenseWrapper>} />
-                  <Route path="/sla" element={<SuspenseWrapper><SLADashboardPage /></SuspenseWrapper>} />
-                  <Route path="/risk-rules" element={<SuspenseWrapper><RiskRulesPage /></SuspenseWrapper>} />
-                  <Route path="/evaluations" element={<SuspenseWrapper><EvaluationsPage /></SuspenseWrapper>} />
-                  <Route path="/webhooks" element={<SuspenseWrapper><WebhooksPage /></SuspenseWrapper>} />
-                  <Route path="/bitrix24" element={<SuspenseWrapper><Bitrix24Page /></SuspenseWrapper>} />
-                  <Route path="/settings/uapi" element={<SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper>} />
-                  <Route path="/settings/lalamove" element={<SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper>} />
-                  <Route path="/reports" element={<SuspenseWrapper><ReportsPage /></SuspenseWrapper>} />
-                  <Route path="/settings" element={<SuspenseWrapper><SettingsPage /></SuspenseWrapper>} />
-                  <Route path="/preferences" element={<SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper>} />
-                  <Route path="/analytics" element={<SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper>} />
-                  <Route path="/external-data" element={<SuspenseWrapper><ExternalDataPage /></SuspenseWrapper>} />
-                  <Route path="/map-tools" element={<SuspenseWrapper><MapToolsPage /></SuspenseWrapper>} />
-                </Route>
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              </AnimatePresence>
-            </BrowserRouter>
-          </HintProvider>
-        </TooltipProvider>
-      </AchievementsProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-</ErrorBoundary>
+                <AnimatePresence mode="wait" initial={false}>
+                  <Routes location={location} key={location.pathname}>
+                    {/* Public auth routes */}
+                    <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />
+                    <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
+                    <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
+                    <Route path="/mfa-verify" element={<SuspenseWrapper><MFAVerifyPage /></SuspenseWrapper>} />
+                    <Route path="/unauthorized" element={<SuspenseWrapper><UnauthorizedPage /></SuspenseWrapper>} />
+                    
+                    {/* Protected routes with layout */}
+                    <Route element={<AppLayout />}>
+                      {/* Dashboard */}
+                      <Route path="/" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
+                      <Route path="/dashboard" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
+                      
+                      {/* Security routes - Admin only */}
+                      <Route path="/security" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><SecurityDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/roles" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><RolesPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/permissions" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><PermissionsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/ip-whitelist" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><IPWhitelistPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/rate-limiting" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><RateLimitDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/geo-blocking" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><GeoBlockingPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/password-reset-approvals" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><PasswordResetApprovalsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      
+                      {/* Admin pages - Manager+ */}
+                      <Route path="/system-health" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SystemHealthPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/system-health-expanded" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SystemHealthExpandedPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/cache-status" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheStatusPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/cache-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/performance" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><PerformanceDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/job-queue" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><JobQueuePage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/error-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ErrorMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
+                      {/* Existing routes */}
+                      <Route path="/orders" element={<SuspenseWrapper><OrdersPage /></SuspenseWrapper>} />
+                      <Route path="/drivers" element={<SuspenseWrapper><DriversPage /></SuspenseWrapper>} />
+                      <Route path="/approvals" element={<SuspenseWrapper><ApprovalsPage /></SuspenseWrapper>} />
+                      <Route path="/incidents" element={<SuspenseWrapper><IncidentsPage /></SuspenseWrapper>} />
+                      <Route path="/metrics" element={<SuspenseWrapper><MetricsPage /></SuspenseWrapper>} />
+                      <Route path="/delivery-metrics" element={<SuspenseWrapper><DeliveryMetricsPage /></SuspenseWrapper>} />
+                      <Route path="/alerts" element={<SuspenseWrapper><AlertsPage /></SuspenseWrapper>} />
+                      <Route path="/alert-configurations" element={<SuspenseWrapper><AlertConfigurationsPage /></SuspenseWrapper>} />
+                      <Route path="/notification-history" element={<SuspenseWrapper><NotificationHistoryPage /></SuspenseWrapper>} />
+                      <Route path="/map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
+                      <Route path="/live-map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
+                      <Route path="/heatmap" element={<SuspenseWrapper><HeatmapPage /></SuspenseWrapper>} />
+                      <Route path="/sla" element={<SuspenseWrapper><SLADashboardPage /></SuspenseWrapper>} />
+                      <Route path="/risk-rules" element={<SuspenseWrapper><RiskRulesPage /></SuspenseWrapper>} />
+                      <Route path="/evaluations" element={<SuspenseWrapper><EvaluationsPage /></SuspenseWrapper>} />
+                      <Route path="/webhooks" element={<SuspenseWrapper><WebhooksPage /></SuspenseWrapper>} />
+                      <Route path="/bitrix24" element={<SuspenseWrapper><Bitrix24Page /></SuspenseWrapper>} />
+                      <Route path="/settings/uapi" element={<SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper>} />
+                      <Route path="/settings/lalamove" element={<SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper>} />
+                      <Route path="/reports" element={<SuspenseWrapper><ReportsPage /></SuspenseWrapper>} />
+                      <Route path="/settings" element={<SuspenseWrapper><SettingsPage /></SuspenseWrapper>} />
+                      <Route path="/preferences" element={<SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper>} />
+                      <Route path="/analytics" element={<SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper>} />
+                      <Route path="/external-data" element={<SuspenseWrapper><ExternalDataPage /></SuspenseWrapper>} />
+                      <Route path="/map-tools" element={<SuspenseWrapper><MapToolsPage /></SuspenseWrapper>} />
+                    </Route>
+                    
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AnimatePresence>
+              </HintProvider>
+            </TooltipProvider>
+          </AchievementsProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 };
 
