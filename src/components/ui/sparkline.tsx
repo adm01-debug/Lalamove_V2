@@ -270,6 +270,9 @@ export function TrendIndicator({
         isNegative && `bg-${colorNegative}/15 text-${colorNegative}`,
         className
       )}
+      role="status"
+      aria-label={`${label ? label + ': ' : ''}${isPositive ? 'Aumento' : isNegative ? 'Queda' : 'Estável'} de ${formatValue()}`}
+    >
     >
       {showIcon && (
         <>
