@@ -491,7 +491,14 @@ serve(async (req) => {
       driverId: z.string().uuid().or(z.string()),
       orderId: z.string().uuid().optional().nullable(),
       triggeredBy: z.enum(['WEBHOOK', 'MANUAL', 'SYSTEM']).default('WEBHOOK'),
-    });
+      driverName: z.string().optional().nullable(),
+      totalDeliveries: z.number().optional().nullable(),
+      completedDeliveries: z.number().optional().nullable(),
+      failedDeliveries: z.number().optional().nullable(),
+      cancelledDeliveries: z.number().optional().nullable(),
+      avgDelayMinutes: z.number().optional().nullable(),
+      rating: z.number().optional().nullable(),
+    }).passthrough();
 
     const rawBody = await req.json();
     const parseResult = evaluationSchema.safeParse(rawBody);
