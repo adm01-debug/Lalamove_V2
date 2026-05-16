@@ -16,7 +16,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Activity className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Frontend</h3>
-          <Badge variant={health?.frontend === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.frontend === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Frontend: ${health?.frontend === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.frontend === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
