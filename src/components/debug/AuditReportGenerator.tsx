@@ -13,7 +13,7 @@ const AuditReportGenerator = () => {
     setIsGenerating(true);
     try {
       // Logic to generate PDF from markdown or current view
-      console.log("Generating PDF from audit_report.md...");
+      logger.log("Generating PDF from audit_report.md...");
       // In this environment, we can't easily generate a real PDF and save it back to the filesystem
       // but we could use a library if it were installed.
       alert("PDF generation triggered. In a CI environment, this would use a tool like 'md-to-pdf'.");
