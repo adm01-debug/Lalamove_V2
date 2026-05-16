@@ -190,7 +190,23 @@ serve(async (req) => {
       );
     }
     
-    const payload = JSON.parse(rawBody);
+    const webhookSchema = z.object({
+      event: z.string(),
+      orderId: z.string().optional().nullable(),
+      timestamp: z.string().optional().nullable(),
+      data: z.any().optional(),
+    }).passthrough();
+
+    const parseResult = webhookSchema.safeParse(JSON.parse(rawBody));
+    if (!parseResult.success) {
+      console.error(`[Webhook] Invalid payload:`, parseResult.error.format());
+      return new Response(
+        JSON.stringify({ error: 'Invalid payload format' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const payload = parseResult.data;
     console.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
