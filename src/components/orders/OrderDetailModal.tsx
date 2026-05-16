@@ -431,7 +431,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                   Provas de Entrega
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {stopsData.map((stop: any) => {
+                  {(stopsData as Stop[]).map((stop) => {
                     if (!stop.pod_image_url) return null;
                     return (
                       <div key={stop.id} className="space-y-1.5">
