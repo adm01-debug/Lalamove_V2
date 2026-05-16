@@ -165,7 +165,7 @@ serve(async (req) => {
   
   if (!rateLimit.allowed) {
     return new Response(
-      JSON.stringify({ error: "Rate limit exceeded", retryAfter: rateLimit.resetIn, blocked: rateLimit.blocked }),
+      JSON.stringify({ error: "Rate limit exceeded" }),
       { status: 429, headers: { ...rateLimitHeaders, "Content-Type": "application/json", "Retry-After": rateLimit.resetIn.toString() } }
     );
   }
