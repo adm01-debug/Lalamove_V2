@@ -54,7 +54,7 @@ function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: an
     ...metadata
   };
   
-  console.log(JSON.stringify(logEntry));
+  logger.log(JSON.stringify(logEntry));
 }
 
 // ============================================================================
@@ -307,7 +307,7 @@ Deno.serve(async (req: Request) => {
     );
     
   } catch (error) {
-    console.error('Job worker error:', error);
+    logger.error('Job worker error:', error);
     return new Response(
       JSON.stringify({
         success: false,
