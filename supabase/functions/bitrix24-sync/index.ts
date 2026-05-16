@@ -150,7 +150,10 @@ serve(async (req) => {
       }
 
       case "sync_order": {
-        const { orderId, dealId } = params;
+        const { orderId, dealId } = z.object({
+          orderId: z.string().uuid(),
+          dealId: z.union([z.string(), z.number()])
+        }).parse(params);
         
         const { data: tokenData } = await supabase
           .from("bitrix24_tokens")
