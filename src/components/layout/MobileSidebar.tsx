@@ -6,15 +6,18 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  ChevronDown, Gauge, Database, Lock, Zap, Sparkles, Bug
+  ChevronDown, Gauge, Database, Lock, Zap, Sparkles, Bug, ArrowLeft
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { BounceBadge } from '@/components/ui/micro-interactions';
+import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { BackButton } from '@/components/ui/back-button';
 
 interface MenuItem {
   id: string;
@@ -122,6 +125,7 @@ interface MobileSidebarProps {
 
 export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [openCategories, setOpenCategories] = useState<string[]>(['main']);
   const [unreadAlerts, setUnreadAlerts] = useState(0);
@@ -223,8 +227,9 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="w-[85vw] max-w-[320px] p-0 bg-background/95 backdrop-blur-xl">
         {/* Header */}
-        <SheetHeader className="p-4 border-b border-border/30">
+        <SheetHeader className="p-4 border-b border-border/30 relative">
           <div className="flex items-center gap-3">
+            <BackButton variant="ghost" size="icon" className="md:hidden" />
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-accent/20 border border-primary/20">
               <Truck className="w-5 h-5 text-primary" />
             </div>
@@ -309,12 +314,10 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
                             </span>
                             
                             {showBadge && (
-                              <Badge 
-                                variant={item.badgeType === 'alerts' ? 'destructive' : item.badgeType === 'approvals' ? 'default' : 'secondary'}
-                                className="text-[10px] px-1.5 py-0.5"
-                              >
-                                {badgeCount > 99 ? '99+' : badgeCount}
-                              </Badge>
+                                <BounceBadge 
+                                  count={badgeCount}
+                                  variant={item.badgeType === 'alerts' ? 'destructive' : item.badgeType === 'approvals' ? 'warning' : 'default'}
+                                />
                             )}
                           </Link>
                         );

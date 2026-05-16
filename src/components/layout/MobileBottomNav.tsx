@@ -8,7 +8,8 @@ import {
   Map,
   MoreHorizontal,
   Search,
-  X
+  X,
+  ArrowLeft
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -79,9 +80,13 @@ export function MobileBottomNav() {
   // Total badge count for "More" menu
   // totalBadges removed
   
+  const isRoot = location.pathname === '/' || location.pathname === '/dashboard';
+
   // Main navigation items (max 5 for bottom nav)
   const mainNavItems: NavItem[] = [
-    { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/' },
+    isRoot 
+      ? { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/' }
+      : { id: 'back', label: 'Voltar', icon: ArrowLeft, path: '#back' },
     { id: 'orders', label: 'Pedidos', icon: Package, path: '/orders' },
     { id: 'approvals', label: 'Aprovações', icon: Shield, path: '/approvals', badge: pendingApprovalsCount, critical: pendingApprovalsCount >= 5 },
     { id: 'alerts', label: 'Alertas', icon: Bell, path: '/alerts', badge: unreadAlertsCount, critical: criticalAlertsCount > 0 },
@@ -96,6 +101,14 @@ export function MobileBottomNav() {
   const handleNavigation = useCallback((path: string) => {
     if (path === '#more') {
       setMoreOpen(true);
+      return;
+    }
+    if (path === '#back') {
+      if (window.history.length > 1) {
+        navigate(-1);
+      } else {
+        navigate('/');
+      }
       return;
     }
     navigate(path);
