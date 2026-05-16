@@ -371,11 +371,22 @@ export function AlertsPage() {
               >
                 <CardContent className="p-2 sm:p-4">
                   <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3">
-                    <div className={cn("p-1.5 sm:p-2.5 rounded-lg border flex-shrink-0", stat.bg, stat.border)}>
-                      <stat.icon className={cn("w-3.5 h-3.5 sm:w-5 sm:h-5", stat.color)} />
+                    <div className={cn(
+                      "p-1.5 sm:p-2.5 rounded-lg border flex-shrink-0 transition-colors",
+                      severityFilter === stat.key 
+                        ? "bg-white/20 border-white/10" 
+                        : cn(stat.bg, stat.border)
+                    )}>
+                      <stat.icon className={cn(
+                        "w-3.5 h-3.5 sm:w-5 sm:h-5", 
+                        severityFilter === stat.key ? "text-white" : stat.color
+                      )} />
                     </div>
                     <div className="text-center sm:text-left">
-                      <p className={cn("text-lg sm:text-2xl font-bold", stat.color)}>{stat.value}</p>
+                      <p className={cn(
+                        "text-lg sm:text-2xl font-bold", 
+                        severityFilter === stat.key ? "text-white" : stat.color
+                      )}>{stat.value}</p>
                       <p className="text-[9px] sm:text-xs text-muted-foreground">
                         <span className="sm:hidden">{stat.label}</span>
                         <span className="hidden sm:inline">{stat.fullLabel}</span>
