@@ -33,6 +33,26 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    const deviceAlertSchema = z.object({
+      userId: z.string().uuid().or(z.string()),
+      userEmail: z.string().email(),
+      deviceFingerprint: z.string(),
+      ipAddress: z.string(),
+      userAgent: z.string(),
+      browser: z.string().optional().nullable(),
+      os: z.string().optional().nullable(),
+      locationCity: z.string().optional().nullable(),
+      locationCountry: z.string().optional().nullable(),
+    });
+
+    const bodyResult = deviceAlertSchema.safeParse(await req.json().catch(() => ({})));
+    if (!bodyResult.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const {
       userId,
       userEmail,
@@ -43,7 +63,7 @@ const handler = async (req: Request): Promise<Response> => {
       os,
       locationCity,
       locationCountry,
-    }: NewDeviceAlertRequest = await req.json();
+    } = bodyResult.data;
 
     logger.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
 
