@@ -680,7 +680,7 @@ serve(async (req) => {
   } catch (error) {
     logger.error('Lalamove API error:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error occurred while processing Lalamove request' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
