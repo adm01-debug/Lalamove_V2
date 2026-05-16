@@ -1,9 +1,12 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -43,7 +46,7 @@ serve(async (req) => {
     const bodyResult = notificationSchema.safeParse(await req.json().catch(() => ({})));
     
     if (!bodyResult.success) {
-      console.error("[Notification] Invalid request body:", bodyResult.error.format());
+      logger.error("[Notification] Invalid request body:", bodyResult.error.format());
       return new Response(
         JSON.stringify({ error: 'Invalid request body' }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -52,7 +55,7 @@ serve(async (req) => {
 
     const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = bodyResult.data;
     
-    console.log(`[Notification] Sending ${severity} alert: ${type}`);
+    logger.log(`[Notification] Sending ${severity} alert: ${type}`);
     
     // Get alert configurations for this type
     const { data: configs } = await supabase
@@ -62,7 +65,7 @@ serve(async (req) => {
       .eq('is_enabled', true);
     
     if (!configs || configs.length === 0) {
-      console.log(`[Notification] No active configurations for: ${type}`);
+      logger.log(`[Notification] No active configurations for: ${type}`);
       return new Response(
         JSON.stringify({ success: true, message: 'No notification channels configured' }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -133,7 +136,7 @@ serve(async (req) => {
     const successCount = results.filter(r => r.success).length;
     const failCount = results.filter(r => !r.success).length;
     
-    console.log(`[Notification] Done: ${successCount} sent, ${failCount} failed`);
+    logger.log(`[Notification] Done: ${successCount} sent, ${failCount} failed`);
     
     return new Response(
       JSON.stringify({ success: true, results, summary: { sent: successCount, failed: failCount } }),
@@ -141,9 +144,9 @@ serve(async (req) => {
     );
     
   } catch (error: unknown) {
-    console.error("Notification Internal Error:", error);
+    logger.error("Notification Internal Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error during notification dispatch' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
@@ -169,7 +172,7 @@ async function recordNotificationLog(
       error_message: errorMessage,
     });
   } catch (e) {
-    console.error('Failed to record notification:', e);
+    logger.error('Failed to record notification:', e);
   }
 }
 
@@ -208,7 +211,7 @@ async function sendWhatsApp(
   const instanceName = Deno.env.get("EVOLUTION_INSTANCE_NAME") || "lalamove";
   
   if (!evolutionUrl || !evolutionKey) {
-    console.log('[WhatsApp] Evolution API not configured');
+    logger.log('[WhatsApp] Evolution API not configured');
     return { success: false, error: 'Evolution API not configured' };
   }
   
@@ -231,10 +234,10 @@ async function sendWhatsApp(
       throw new Error(`Evolution API error: ${response.statusText}`);
     }
     
-    console.log(`[WhatsApp] Sent to ${formattedNumber}`);
+    logger.log(`[WhatsApp] Sent to ${formattedNumber}`);
     return { success: true };
   } catch (error: any) {
-    console.error('[WhatsApp] Error:', error);
+    logger.error('[WhatsApp] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
 }
@@ -251,7 +254,7 @@ async function sendEmail(
   const resendKey = Deno.env.get("RESEND_API_KEY");
   
   if (!resendKey) {
-    console.log('[Email] Resend API not configured');
+    logger.log('[Email] Resend API not configured');
     return { success: false, error: 'Resend API not configured' };
   }
   
@@ -292,10 +295,10 @@ async function sendEmail(
       throw new Error(`Resend error: ${response.statusText}`);
     }
     
-    console.log(`[Email] Sent to ${email}`);
+    logger.log(`[Email] Sent to ${email}`);
     return { success: true };
   } catch (error: any) {
-    console.error('[Email] Error:', error);
+    logger.error('[Email] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
 }
@@ -315,7 +318,7 @@ async function sendSlack(
   }
   
   if (!url) {
-    console.log('[Slack] Webhook URL not configured');
+    logger.log('[Slack] Webhook URL not configured');
     return { success: false, error: 'Slack webhook not configured' };
   }
   
@@ -351,10 +354,10 @@ async function sendSlack(
       throw new Error(`Slack error: ${response.statusText}`);
     }
     
-    console.log('[Slack] Message sent');
+    logger.log('[Slack] Message sent');
     return { success: true };
   } catch (error: any) {
-    console.error('[Slack] Error:', error);
+    logger.error('[Slack] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
 }
@@ -407,10 +410,10 @@ async function sendBitrix24Task(
       throw new Error(`Bitrix24 error: ${response.statusText}`);
     }
     
-    console.log('[Bitrix24] Task created');
+    logger.log('[Bitrix24] Task created');
     return { success: true };
   } catch (error: any) {
-    console.error('[Bitrix24] Error:', error);
+    logger.error('[Bitrix24] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
 }
@@ -435,10 +438,10 @@ async function sendN8NWebhook(
       throw new Error(`N8N error: ${response.statusText}`);
     }
     
-    console.log('[N8N] Webhook sent');
+    logger.log('[N8N] Webhook sent');
     return { success: true };
   } catch (error: any) {
-    console.error('[N8N] Error:', error);
+    logger.error('[N8N] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
 }

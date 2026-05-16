@@ -1,9 +1,12 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': allowedOrigins[0],
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
@@ -488,7 +491,14 @@ serve(async (req) => {
       driverId: z.string().uuid().or(z.string()),
       orderId: z.string().uuid().optional().nullable(),
       triggeredBy: z.enum(['WEBHOOK', 'MANUAL', 'SYSTEM']).default('WEBHOOK'),
-    });
+      driverName: z.string().optional().nullable(),
+      totalDeliveries: z.number().optional().nullable(),
+      completedDeliveries: z.number().optional().nullable(),
+      failedDeliveries: z.number().optional().nullable(),
+      cancelledDeliveries: z.number().optional().nullable(),
+      avgDelayMinutes: z.number().optional().nullable(),
+      rating: z.number().optional().nullable(),
+    }).passthrough();
 
     const rawBody = await req.json();
     const parseResult = evaluationSchema.safeParse(rawBody);
@@ -502,7 +512,7 @@ serve(async (req) => {
 
     const { driverId, orderId, triggeredBy } = parseResult.data;
 
-    console.log(`[evaluate-driver] Starting evaluation for driver ${driverId}, order ${orderId}, triggered by ${triggeredBy}`);
+    logger.log(`[evaluate-driver] Starting evaluation for driver ${driverId}, order ${orderId}, triggered by ${triggeredBy}`);
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -516,7 +526,7 @@ serve(async (req) => {
       .maybeSingle();
 
     if (driverError) {
-      console.error('[evaluate-driver] Error fetching driver:', driverError);
+      logger.error('[evaluate-driver] Error fetching driver:', driverError);
       return new Response(
         JSON.stringify({ error: 'Erro ao buscar motorista', details: driverError }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -526,13 +536,13 @@ serve(async (req) => {
     // If driver doesn't exist, create a new one
     let evaluatedDriver = driver as Driver;
     if (!driver) {
-      console.log('[evaluate-driver] Driver not found, creating new driver record');
+      logger.log('[evaluate-driver] Driver not found, creating new driver record');
       
       const { data: newDriver, error: createError } = await supabase
         .from('drivers')
         .insert({
           id: driverId,
-          name: 'Motorista Novo',
+          name: parseResult.data.driverName || 'Motorista Novo',
           status: 'PENDING_APPROVAL',
           vehicle_type: 'MOTORCYCLE',
           total_deliveries: 0,
@@ -546,7 +556,7 @@ serve(async (req) => {
         .single();
 
       if (createError) {
-        console.error('[evaluate-driver] Error creating driver:', createError);
+        logger.error('[evaluate-driver] Error creating driver:', createError);
         return new Response(
           JSON.stringify({ error: 'Erro ao criar motorista', details: createError }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -556,11 +566,11 @@ serve(async (req) => {
       evaluatedDriver = newDriver as Driver;
     }
 
-    console.log(`[evaluate-driver] Driver: ${evaluatedDriver.name}, status: ${evaluatedDriver.status}, whitelisted: ${evaluatedDriver.whitelisted}, blacklisted: ${evaluatedDriver.blacklisted}`);
+    logger.log(`[evaluate-driver] Driver: ${evaluatedDriver.name}, status: ${evaluatedDriver.status}, whitelisted: ${evaluatedDriver.whitelisted}, blacklisted: ${evaluatedDriver.blacklisted}`);
 
     // Check blacklist first
     if (evaluatedDriver.blacklisted || evaluatedDriver.status === 'BLACKLIST') {
-      console.log('[evaluate-driver] Driver is BLACKLISTED - auto-blocking');
+      logger.log('[evaluate-driver] Driver is BLACKLISTED - auto-blocking');
       
       const result: EvaluationResult = {
         approved: false,
@@ -595,7 +605,7 @@ serve(async (req) => {
 
     // Check whitelist - auto approve
     if (evaluatedDriver.whitelisted || evaluatedDriver.status === 'WHITELIST') {
-      console.log('[evaluate-driver] Driver is WHITELISTED - auto-approving');
+      logger.log('[evaluate-driver] Driver is WHITELISTED - auto-approving');
       
       const result: EvaluationResult = {
         approved: true,
@@ -637,18 +647,29 @@ serve(async (req) => {
       (i: { severity: string }) => i.severity === 'CRITICAL' || i.severity === 'HIGH'
     );
 
-    console.log(`[evaluate-driver] Found ${(orders || []).length} orders, ${incidentCount} unresolved incidents (${hasCriticalIncidents ? 'HAS' : 'NO'} critical)`);
+    logger.log(`[evaluate-driver] Found ${(orders || []).length} orders, ${incidentCount} unresolved incidents (${hasCriticalIncidents ? 'HAS' : 'NO'} critical)`);
 
-    // Calculate stats - prefer from orders if available, else from driver record
+    // Calculate stats - prefer manual payload, then from orders if available, else from driver record
     let stats: DriverStats;
-    if (orders && orders.length > 0) {
+    if (parseResult.data.totalDeliveries !== undefined && parseResult.data.totalDeliveries !== null) {
+      stats = {
+        totalDeliveries: parseResult.data.totalDeliveries || 0,
+        completedDeliveries: parseResult.data.completedDeliveries || 0,
+        failedDeliveries: parseResult.data.failedDeliveries || 0,
+        cancelledDeliveries: parseResult.data.cancelledDeliveries || 0,
+        successRate: parseResult.data.totalDeliveries ? ((parseResult.data.completedDeliveries || 0) / parseResult.data.totalDeliveries) * 100 : 0,
+        failureRate: parseResult.data.totalDeliveries ? ((parseResult.data.failedDeliveries || 0) / parseResult.data.totalDeliveries) * 100 : 0,
+        incidentCount: incidentCount,
+        avgDelayMinutes: parseResult.data.avgDelayMinutes || 0
+      };
+    } else if (orders && orders.length > 0) {
       stats = calculateStatsFromOrders(orders);
     } else {
       stats = calculateStatsFromDriver(evaluatedDriver);
     }
     stats.incidentCount = incidentCount;
 
-    console.log(`[evaluate-driver] Stats: deliveries=${stats.totalDeliveries}, completed=${stats.completedDeliveries}, failed=${stats.failedDeliveries}, failureRate=${stats.failureRate.toFixed(1)}%`);
+    logger.log(`[evaluate-driver] Stats: deliveries=${stats.totalDeliveries}, completed=${stats.completedDeliveries}, failed=${stats.failedDeliveries}, failureRate=${stats.failureRate.toFixed(1)}%`);
 
     // Fetch and apply active risk rules
     const { data: rules } = await supabase
@@ -664,10 +685,10 @@ serve(async (req) => {
         if (evaluateCondition(evaluatedDriver, incidentCount, rule as RiskRule)) {
           ruleBonus += (rule as RiskRule).score_impact;
           ruleFactors.push(`Regra "${rule.name}": +${rule.score_impact} pontos`);
-          console.log(`[evaluate-driver] Rule "${rule.name}" matched, impact: ${rule.score_impact}`);
+          logger.log(`[evaluate-driver] Rule "${rule.name}" matched, impact: ${rule.score_impact}`);
         }
       } catch (e) {
-        console.error(`[evaluate-driver] Error evaluating rule ${rule.name}:`, e);
+        logger.error(`[evaluate-driver] Error evaluating rule ${rule.name}:`, e);
       }
     }
 
@@ -676,7 +697,7 @@ serve(async (req) => {
       stats,
       incidentCount,
       hasCriticalIncidents,
-      evaluatedDriver.rating || 5
+      parseResult.data.rating ?? evaluatedDriver.rating ?? 5
     );
 
     // Add rule bonus to score
@@ -694,7 +715,7 @@ serve(async (req) => {
       riskAnalysis.reasons.push(...ruleFactors);
     }
 
-    console.log(`[evaluate-driver] Risk analysis: score=${riskAnalysis.score}, level=${riskAnalysis.level}, factors=${riskAnalysis.factors.length}`);
+    logger.log(`[evaluate-driver] Risk analysis: score=${riskAnalysis.score}, level=${riskAnalysis.level}, factors=${riskAnalysis.factors.length}`);
 
     // Make decision
     const result = makeDecision(riskAnalysis, stats);
@@ -718,7 +739,7 @@ serve(async (req) => {
 
     // Handle actions based on decision
     if (result.autoBlocked) {
-      console.log('[evaluate-driver] AUTO-BLOCKING driver');
+      logger.log('[evaluate-driver] AUTO-BLOCKING driver');
       
       await supabase
         .from('drivers')
@@ -735,7 +756,7 @@ serve(async (req) => {
         metadata: { riskFactors: result.riskFactors, riskReasons: result.riskReasons }
       });
     } else if (result.requiresManualApproval && orderId) {
-      console.log('[evaluate-driver] Creating MANUAL APPROVAL request');
+      logger.log('[evaluate-driver] Creating MANUAL APPROVAL request');
       
       await supabase.from('driver_approval_queue').insert({
         driver_id: driverId,
@@ -759,7 +780,7 @@ serve(async (req) => {
       });
     }
 
-    console.log(`[evaluate-driver] Evaluation complete: approved=${result.approved}, requiresManual=${result.requiresManualApproval}, blocked=${result.autoBlocked}`);
+    logger.log(`[evaluate-driver] Evaluation complete: approved=${result.approved}, requiresManual=${result.requiresManualApproval}, blocked=${result.autoBlocked}`);
 
     return new Response(
       JSON.stringify(result),
@@ -767,9 +788,9 @@ serve(async (req) => {
     );
 
   } catch (error: unknown) {
-    console.error('[evaluate-driver] Error:', error);
+    logger.error('[evaluate-driver] Error:', error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error occurred during driver evaluation' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
@@ -806,8 +827,8 @@ async function saveEvaluation(
       recommendation: result.recommendation,
       action_required: result.actionRequired || null
     }]);
-    console.log('[evaluate-driver] Evaluation saved to database');
+    logger.log('[evaluate-driver] Evaluation saved to database');
   } catch (e) {
-    console.error('[evaluate-driver] Error saving evaluation:', e);
+    logger.error('[evaluate-driver] Error saving evaluation:', e);
   }
 }

@@ -5,9 +5,12 @@
 // Deve ser chamada periodicamente (ex: a cada hora via cron job externo)
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { logger } from '../_shared/logger.ts';
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': allowedOrigins[0],
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
@@ -31,7 +34,7 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  console.log('[rotate-tokens] Starting token rotation check');
+  logger.log('[rotate-tokens] Starting token rotation check');
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -49,12 +52,12 @@ Deno.serve(async (req) => {
       .lt('expires_at', expirationThreshold.toISOString());
 
     if (fetchError) {
-      console.error('[rotate-tokens] Error fetching tokens:', fetchError);
+      logger.error('[rotate-tokens] Error fetching tokens:', fetchError);
       throw fetchError;
     }
 
     if (!tokens || tokens.length === 0) {
-      console.log('[rotate-tokens] No tokens need rotation');
+      logger.log('[rotate-tokens] No tokens need rotation');
       return new Response(
         JSON.stringify({ 
           success: true, 
@@ -65,13 +68,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log(`[rotate-tokens] Found ${tokens.length} tokens to rotate`);
+    logger.log(`[rotate-tokens] Found ${tokens.length} tokens to rotate`);
 
     const results: { domain: string; success: boolean; error?: string }[] = [];
 
     for (const token of tokens as BitrixToken[]) {
       try {
-        console.log(`[rotate-tokens] Rotating token for domain: ${token.domain}`);
+        logger.log(`[rotate-tokens] Rotating token for domain: ${token.domain}`);
 
         // Chamar API Bitrix24 para refresh
         const refreshUrl = `https://${token.domain}/oauth/token/`;
@@ -90,7 +93,7 @@ Deno.serve(async (req) => {
 
         if (!refreshResponse.ok) {
           const errorText = await refreshResponse.text();
-          console.error(`[rotate-tokens] Refresh failed for ${token.domain}:`, errorText);
+          logger.error(`[rotate-tokens] Refresh failed for ${token.domain}:`, errorText);
           results.push({ domain: token.domain, success: false, error: errorText });
           continue;
         }
@@ -113,17 +116,17 @@ Deno.serve(async (req) => {
           .eq('id', token.id);
 
         if (updateError) {
-          console.error(`[rotate-tokens] Update failed for ${token.domain}:`, updateError);
+          logger.error(`[rotate-tokens] Update failed for ${token.domain}:`, updateError);
           results.push({ domain: token.domain, success: false, error: updateError.message });
           continue;
         }
 
-        console.log(`[rotate-tokens] Successfully rotated token for ${token.domain}`);
+        logger.log(`[rotate-tokens] Successfully rotated token for ${token.domain}`);
         results.push({ domain: token.domain, success: true });
 
       } catch (tokenError) {
         const errorMessage = tokenError instanceof Error ? tokenError.message : 'Unknown error';
-        console.error(`[rotate-tokens] Error processing ${token.domain}:`, tokenError);
+        logger.error(`[rotate-tokens] Error processing ${token.domain}:`, tokenError);
         results.push({ domain: token.domain, success: false, error: errorMessage });
       }
     }
@@ -131,7 +134,7 @@ Deno.serve(async (req) => {
     const successCount = results.filter(r => r.success).length;
     const failureCount = results.filter(r => !r.success).length;
 
-    console.log(`[rotate-tokens] Rotation complete. Success: ${successCount}, Failed: ${failureCount}`);
+    logger.log(`[rotate-tokens] Rotation complete. Success: ${successCount}, Failed: ${failureCount}`);
 
     return new Response(
       JSON.stringify({
@@ -145,12 +148,12 @@ Deno.serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('[rotate-tokens] Fatal error:', error);
+    logger.error('[rotate-tokens] Fatal error:', error);
     
     return new Response(
       JSON.stringify({
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: 'Internal server error',
       }),
       { 
         status: 500,

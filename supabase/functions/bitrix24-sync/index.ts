@@ -1,8 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -23,7 +27,21 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { action, ...params } = await req.json();
+    let rawBody;
+    try {
+      rawBody = await req.json();
+    } catch {
+      rawBody = {};
+    }
+    const bodyResult = z.record(z.any()).safeParse(rawBody);
+    if (!bodyResult.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { action, ...params } = bodyResult.data;
 
     switch (action) {
       case "get_auth_url": {
@@ -47,9 +65,11 @@ serve(async (req) => {
       }
 
       case "oauth_callback": {
+        // This action should probably be handled differently (it's a GET usually)
+        // But let's keep it for now and handle it safely
         const url = new URL(req.url);
         const code = url.searchParams.get("code");
-        const domain = url.searchParams.get("domain") || params.domain;
+        const domain = url.searchParams.get("domain") || (params && params.domain);
         
         if (!code) {
           return new Response("Authorization code missing", { status: 400 });
@@ -136,7 +156,10 @@ serve(async (req) => {
       }
 
       case "sync_order": {
-        const { orderId, dealId } = params;
+        const { orderId, dealId } = z.object({
+          orderId: z.string().uuid(),
+          dealId: z.union([z.string(), z.number()])
+        }).parse(params);
         
         const { data: tokenData } = await supabase
           .from("bitrix24_tokens")
@@ -321,9 +344,9 @@ serve(async (req) => {
         );
     }
   } catch (error: unknown) {
-    console.error("Bitrix24 sync error:", error);
+    logger.error("Bitrix24 sync error:", error);
     return new Response(
-      JSON.stringify({ error: "An internal error occurred during Bitrix24 synchronization" }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

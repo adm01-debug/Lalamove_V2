@@ -10,6 +10,34 @@ import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
 
+interface Transaction {
+  id: string;
+  description?: string;
+  remark?: string;
+  flow_type_name?: string;
+  created_at?: string;
+  create_time?: number;
+  amount_fen?: number;
+  amount?: number;
+  balance_fen?: number;
+}
+
+interface Vehicle {
+  id?: string | number;
+  vehicle_type_id?: string | number;
+  name?: string;
+  vehicle_type_name?: string;
+  key?: string | number;
+}
+
+interface ServiceArea {
+  id?: string | number;
+  city_id?: string | number;
+  name?: string;
+  city_name?: string;
+  key?: string | number;
+}
+
 export default function LalamoveSettingsPage() {
   const { data: status, isLoading: statusLoading } = useLalamoveStatus();
   const { data: user } = useLalamoveUser();
@@ -289,15 +317,15 @@ export default function LalamoveSettingsPage() {
             </div>
           ) : transactions.length > 0 ? (
             <div className="space-y-2">
-              {transactions.map((tx: any, i: number) => (
+              {(transactions as Transaction[]).map((tx, i) => (
                 <div key={tx.id || i} className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-foreground truncate">
                       {tx.description || tx.remark || tx.flow_type_name || 'Transação'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.created_at || tx.create_time
-                        ? new Date(tx.created_at || tx.create_time * 1000).toLocaleString('pt-BR')
+                      {tx.created_at || tx.create_time !== undefined
+                        ? new Date(tx.created_at || (tx.create_time || 0) * 1000).toLocaleString('pt-BR')
                         : '—'}
                     </p>
                   </div>
@@ -363,8 +391,8 @@ export default function LalamoveSettingsPage() {
             </div>
           ) : vehiclesData?.body?.data ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {(Array.isArray(vehiclesData?.body?.data) ? (vehiclesData.body.data as any[]) : Object.entries(vehiclesData?.body?.data || {})).map((item: any, i: number) => {
-                const vehicle = Array.isArray(vehiclesData?.body?.data) ? item : { key: item[0], ...item[1] };
+              {(Array.isArray(vehiclesData?.body?.data) ? (vehiclesData.body.data as Vehicle[]) : Object.entries(vehiclesData?.body?.data || {})).map((item, i) => {
+                const vehicle = Array.isArray(vehiclesData?.body?.data) ? (item as Vehicle) : { key: (item as [string, Vehicle])[0], ...(item as [string, Vehicle])[1] };
                 const name = vehicle.name || vehicle.vehicle_type_name || vehicle.key || `Veículo ${i + 1}`;
                 const id = vehicle.id || vehicle.vehicle_type_id || vehicle.key || i;
                 return (
@@ -400,8 +428,8 @@ export default function LalamoveSettingsPage() {
             </div>
           ) : serviceAreasData?.body?.data ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {(Array.isArray(serviceAreasData?.body?.data) ? (serviceAreasData.body.data as any[]) : Object.entries(serviceAreasData?.body?.data || {})).map((item: any, i: number) => {
-                const area = Array.isArray(serviceAreasData?.body?.data) ? item : { key: item[0], ...item[1] };
+              {(Array.isArray(serviceAreasData?.body?.data) ? (serviceAreasData.body.data as ServiceArea[]) : Object.entries(serviceAreasData?.body?.data || {})).map((item, i) => {
+                const area = Array.isArray(serviceAreasData?.body?.data) ? (item as ServiceArea) : { key: (item as [string, ServiceArea])[0], ...(item as [string, ServiceArea])[1] };
                 const name = area.name || area.city_name || area.key || `Área ${i + 1}`;
                 const id = area.id || area.city_id || area.key || i;
                 return (

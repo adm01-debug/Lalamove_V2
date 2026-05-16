@@ -1,11 +1,13 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { logger } from "../_shared/logger.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -31,6 +33,26 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    const deviceAlertSchema = z.object({
+      userId: z.string().uuid().or(z.string()),
+      userEmail: z.string().email(),
+      deviceFingerprint: z.string(),
+      ipAddress: z.string(),
+      userAgent: z.string(),
+      browser: z.string().optional().nullable(),
+      os: z.string().optional().nullable(),
+      locationCity: z.string().optional().nullable(),
+      locationCountry: z.string().optional().nullable(),
+    });
+
+    const bodyResult = deviceAlertSchema.safeParse(await req.json().catch(() => ({})));
+    if (!bodyResult.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const {
       userId,
       userEmail,
@@ -41,9 +63,9 @@ const handler = async (req: Request): Promise<Response> => {
       os,
       locationCity,
       locationCountry,
-    }: NewDeviceAlertRequest = await req.json();
+    } = bodyResult.data;
 
-    console.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
+    logger.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
 
     // Check if device is known
     const { data: isKnown } = await supabase.rpc("is_known_device", {
@@ -52,7 +74,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (isKnown) {
-      console.log("Device is known, updating last seen");
+      logger.log("Device is known, updating last seen");
       
       // Update last seen
       await supabase
@@ -70,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("New device detected, registering and sending alert");
+    logger.log("New device detected, registering and sending alert");
 
     // Register new device
     const { data: newDevice, error: deviceError } = await supabase
@@ -90,7 +112,7 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (deviceError) {
-      console.error("Error registering device:", deviceError);
+      logger.error("Error registering device:", deviceError);
       throw deviceError;
     }
 
@@ -104,7 +126,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (alertError) {
-      console.error("Error creating alert record:", alertError);
+      logger.error("Error creating alert record:", alertError);
     }
 
     // Send email notification
@@ -205,7 +227,7 @@ const handler = async (req: Request): Promise<Response> => {
         html: emailHtml,
       });
 
-      console.log("Email sent successfully:", emailResponse);
+      logger.log("Email sent successfully:", emailResponse);
 
       // Update alert record
       await supabase
@@ -214,7 +236,7 @@ const handler = async (req: Request): Promise<Response> => {
         .eq("device_id", newDevice.id);
 
     } catch (emailError) {
-      console.error("Error sending email:", emailError);
+      logger.error("Error sending email:", emailError);
     }
 
     // Log auth event
@@ -243,9 +265,9 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
   } catch (error: any) {
-    console.error("Error in new-device-alert function:", error);
+    logger.error("Error in new-device-alert function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }

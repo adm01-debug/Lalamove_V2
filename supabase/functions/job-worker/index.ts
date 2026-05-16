@@ -6,6 +6,8 @@
 // ============================================================================
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { logger } from '../_shared/logger.ts';
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 // ============================================================================
 // TIPOS
@@ -43,7 +45,7 @@ function createSupabaseClient() {
   );
 }
 
-function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: any) {
+function internalLogger(level: 'info' | 'warn' | 'error', message: string, metadata?: any) {
   const timestamp = new Date().toISOString();
   const logEntry = {
     timestamp,
@@ -52,7 +54,13 @@ function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: an
     ...metadata
   };
   
-  console.log(JSON.stringify(logEntry));
+  if (level === 'error') {
+    logger.error(JSON.stringify(logEntry));
+  } else if (level === 'warn') {
+    logger.warn(JSON.stringify(logEntry));
+  } else {
+    logger.info(JSON.stringify(logEntry));
+  }
 }
 
 // ============================================================================
@@ -60,7 +68,7 @@ function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: an
 // ============================================================================
 
 async function processWebhook(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing webhook job', { payload });
+  internalLogger('info', 'Processing webhook job', { payload });
   
   // Chamar Edge Function evaluate-driver
   const { data, error } = await supabase.functions.invoke('evaluate-driver', {
@@ -73,7 +81,7 @@ async function processWebhook(supabase: any, payload: any): Promise<any> {
 }
 
 async function processNotification(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing notification job', { payload });
+  internalLogger('info', 'Processing notification job', { payload });
   
   // Chamar Edge Function send-notification
   const { data, error } = await supabase.functions.invoke('send-notification', {
@@ -86,7 +94,7 @@ async function processNotification(supabase: any, payload: any): Promise<any> {
 }
 
 async function processEvaluation(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing evaluation job', { payload });
+  internalLogger('info', 'Processing evaluation job', { payload });
   
   // Chamar Edge Function evaluate-driver
   const { data, error } = await supabase.functions.invoke('evaluate-driver', {
@@ -103,7 +111,7 @@ async function processEvaluation(supabase: any, payload: any): Promise<any> {
 }
 
 async function processBitrixSync(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing Bitrix24 sync job', { payload });
+  internalLogger('info', 'Processing Bitrix24 sync job', { payload });
   
   // Chamar Edge Function bitrix24-sync
   const { data, error } = await supabase.functions.invoke('bitrix24-sync', {
@@ -116,7 +124,7 @@ async function processBitrixSync(supabase: any, payload: any): Promise<any> {
 }
 
 async function processEmail(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing email job', { payload });
+  internalLogger('info', 'Processing email job', { payload });
   
   // Chamar Edge Function send-email (se existir)
   const { data, error } = await supabase.functions.invoke('send-email', {
@@ -129,7 +137,7 @@ async function processEmail(supabase: any, payload: any): Promise<any> {
 }
 
 async function processWhatsApp(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing WhatsApp job', { payload });
+  internalLogger('info', 'Processing WhatsApp job', { payload });
   
   // Chamar Edge Function send-whatsapp (se existir)
   const { data, error } = await supabase.functions.invoke('send-whatsapp', {
@@ -142,7 +150,7 @@ async function processWhatsApp(supabase: any, payload: any): Promise<any> {
 }
 
 async function processSlack(supabase: any, payload: any): Promise<any> {
-  logger('info', 'Processing Slack job', { payload });
+  internalLogger('info', 'Processing Slack job', { payload });
   
   // Chamar Edge Function send-slack (se existir)
   const { data, error } = await supabase.functions.invoke('send-slack', {
@@ -162,7 +170,7 @@ async function processJob(jobPayload: JobPayload): Promise<JobResult> {
   const startTime = Date.now();
   const supabase = createSupabaseClient();
   
-  logger('info', 'Starting job processing', {
+  internalLogger('info', 'Starting job processing', {
     jobId: jobPayload.jobId,
     type: jobPayload.type
   });
@@ -206,7 +214,7 @@ async function processJob(jobPayload: JobPayload): Promise<JobResult> {
     
     const duration = Date.now() - startTime;
     
-    logger('info', 'Job completed successfully', {
+    internalLogger('info', 'Job completed successfully', {
       jobId: jobPayload.jobId,
       type: jobPayload.type,
       duration_ms: duration
@@ -229,7 +237,7 @@ async function processJob(jobPayload: JobPayload): Promise<JobResult> {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorStack = error instanceof Error ? error.stack : undefined;
     
-    logger('error', 'Job failed', {
+    internalLogger('error', 'Job failed', {
       jobId: jobPayload.jobId,
       type: jobPayload.type,
       error: errorMessage,
@@ -284,7 +292,7 @@ Deno.serve(async (req: Request) => {
       throw new Error('Invalid job payload: missing required fields');
     }
     
-    logger('info', 'Job worker invoked', {
+    internalLogger('info', 'Job worker invoked', {
       jobId: jobPayload.jobId,
       type: jobPayload.type
     });
@@ -292,30 +300,31 @@ Deno.serve(async (req: Request) => {
     // Processar job
     const result = await processJob(jobPayload);
     
-    // Retornar resultado
+    const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
     return new Response(
       JSON.stringify(result),
       {
         status: result.success ? 200 : 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins[0]
         }
       }
     );
     
   } catch (error) {
-    console.error('Job worker error:', error);
+    logger.error('Job worker error:', error);
+    const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
     return new Response(
       JSON.stringify({
         success: false,
-        error: 'Internal server error in job worker'
+        error: 'Internal server error'
       }),
       {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': allowedOrigins[0]
         }
       }
     );

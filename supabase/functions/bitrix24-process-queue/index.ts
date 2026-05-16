@@ -1,8 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -16,7 +19,7 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    console.log("Processing Bitrix24 sync queue...");
+    logger.log("Processing Bitrix24 sync queue...");
 
     // Get pending sync records
     const { data: pendingSyncs, error: fetchError } = await supabase
@@ -26,19 +29,19 @@ serve(async (req) => {
       .limit(10);
 
     if (fetchError) {
-      console.error("Error fetching pending syncs:", fetchError);
+      logger.error("Error fetching pending syncs:", fetchError);
       throw fetchError;
     }
 
     if (!pendingSyncs || pendingSyncs.length === 0) {
-      console.log("No pending syncs found");
+      logger.log("No pending syncs found");
       return new Response(
         JSON.stringify({ processed: 0, message: "No pending syncs" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.log(`Found ${pendingSyncs.length} pending syncs`);
+    logger.log(`Found ${pendingSyncs.length} pending syncs`);
 
     // Get Bitrix24 token
     const { data: tokenData, error: tokenError } = await supabase
@@ -48,7 +51,7 @@ serve(async (req) => {
       .maybeSingle();
 
     if (tokenError || !tokenData) {
-      console.error("No Bitrix24 token found, marking syncs as error");
+      logger.error("No Bitrix24 token found, marking syncs as error");
       
       // Mark all as error - no token configured
       for (const sync of pendingSyncs) {
@@ -69,13 +72,13 @@ serve(async (req) => {
 
     // Check if token needs refresh
     if (new Date(tokenData.expires_at) < new Date()) {
-      console.log("Token expired, refreshing...");
+      logger.log("Token expired, refreshing...");
       
       const clientId = Deno.env.get("BITRIX24_CLIENT_ID");
       const clientSecret = Deno.env.get("BITRIX24_CLIENT_SECRET");
 
       if (!clientId || !clientSecret) {
-        console.error("Missing Bitrix24 credentials");
+        logger.error("Missing Bitrix24 credentials");
         return new Response(
           JSON.stringify({ error: "Missing Bitrix24 credentials" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -96,7 +99,7 @@ serve(async (req) => {
       const tokens = await tokenResponse.json();
       
       if (tokens.error) {
-        console.error("Token refresh failed:", tokens.error);
+        logger.error("Token refresh failed:", tokens.error);
         return new Response(
           JSON.stringify({ error: "Token refresh failed" }),
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -131,7 +134,7 @@ serve(async (req) => {
       try {
         const order = sync.lalamove_orders;
         if (!order) {
-          console.log(`No order found for sync ${sync.id}`);
+          logger.log(`No order found for sync ${sync.id}`);
           await supabase
             .from("bitrix24_sync")
             .update({ sync_status: "error", last_error: "Order not found" })
@@ -140,7 +143,7 @@ serve(async (req) => {
           continue;
         }
 
-        console.log(`Processing sync for order ${order.lalamove_id}, deal ${sync.deal_id}`);
+        logger.log(`Processing sync for order ${order.lalamove_id}, deal ${sync.deal_id}`);
 
         const dealFields: Record<string, unknown> = {
           STAGE_ID: stageMap.get(order.status) || "NEW",
@@ -176,7 +179,7 @@ serve(async (req) => {
         );
 
         const updateResult = await updateResponse.json();
-        console.log(`Deal update result:`, updateResult);
+        logger.log(`Deal update result:`, updateResult);
 
         // Create activity for status change
         const activityResponse = await fetch(
@@ -200,7 +203,7 @@ serve(async (req) => {
         );
 
         const activityResult = await activityResponse.json();
-        console.log(`Activity create result:`, activityResult);
+        logger.log(`Activity create result:`, activityResult);
 
         // Update sync record
         await supabase
@@ -226,7 +229,7 @@ serve(async (req) => {
 
         processed++;
       } catch (syncError) {
-        console.error(`Error processing sync ${sync.id}:`, syncError);
+        logger.error(`Error processing sync ${sync.id}:`, syncError);
         
         await supabase
           .from("bitrix24_sync")
@@ -240,17 +243,17 @@ serve(async (req) => {
       }
     }
 
-    console.log(`Processed ${processed} syncs, ${errors} errors`);
+    logger.log(`Processed ${processed} syncs, ${errors} errors`);
 
     return new Response(
       JSON.stringify({ processed, errors, total: pendingSyncs.length }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Queue processing error:", error);
+    logger.error("Queue processing error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

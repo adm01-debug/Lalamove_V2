@@ -3,9 +3,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 import { encode } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { logger } from "../_shared/logger.ts";
+
+const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": allowedOrigins[0],
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-lalamove-signature, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
@@ -113,7 +116,7 @@ async function validateHmacSignature(
 ): Promise<{ valid: boolean; reason?: string }> {
   if (!signature) return { valid: false, reason: 'Missing signature header' };
   if (!secret) {
-    console.warn('[Webhook] LALAMOVE_API_SECRET not configured, skipping signature validation');
+    logger.warn('[Webhook] LALAMOVE_API_SECRET not configured, skipping signature validation');
     return { valid: true, reason: 'Secret not configured, validation skipped' };
   }
   
@@ -127,11 +130,11 @@ async function validateHmacSignature(
     const signatureToCompare = signature.toLowerCase().replace(/^sha256=/, '');
     const isValid = computedSignature.toLowerCase() === signatureToCompare;
     
-    if (!isValid) console.log(`[Webhook] Signature mismatch. Expected: ${computedSignature}, Received: ${signatureToCompare}`);
+    if (!isValid) logger.log(`[Webhook] Signature mismatch. Expected: ${computedSignature}, Received: ${signatureToCompare}`);
     return { valid: isValid, reason: isValid ? 'Signature valid' : 'Signature mismatch' };
   } catch (error: unknown) {
     const errorMsg = error instanceof Error ? error.message : String(error);
-    console.error('[Webhook] HMAC validation error:', errorMsg);
+    logger.error('[Webhook] HMAC validation error:', errorMsg);
     return { valid: false, reason: `Validation error: ${errorMsg}` };
   }
 }
@@ -144,9 +147,9 @@ serve(async (req) => {
   const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
   
   if (!isIpTrusted(clientIp)) {
-    console.warn(`[Webhook] BLOCKED - Unauthorized IP: ${clientIp}`);
+    logger.warn(`[Webhook] BLOCKED - Unauthorized IP: ${clientIp}`);
     return new Response(
-      JSON.stringify({ error: "Access denied", message: "Your IP address is not authorized", ip: clientIp }),
+      JSON.stringify({ error: "Access denied" }),
       { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
@@ -162,7 +165,7 @@ serve(async (req) => {
   
   if (!rateLimit.allowed) {
     return new Response(
-      JSON.stringify({ error: "Rate limit exceeded", retryAfter: rateLimit.resetIn, blocked: rateLimit.blocked }),
+      JSON.stringify({ error: "Rate limit exceeded" }),
       { status: 429, headers: { ...rateLimitHeaders, "Content-Type": "application/json", "Retry-After": rateLimit.resetIn.toString() } }
     );
   }
@@ -177,7 +180,7 @@ serve(async (req) => {
     const hmacResult = await validateHmacSignature(rawBody, signature, lalamoveSecret || '');
     
     if (!hmacResult.valid && lalamoveSecret) {
-      console.warn(`[Webhook] HMAC validation failed: ${hmacResult.reason}`);
+      logger.warn(`[Webhook] HMAC validation failed: ${hmacResult.reason}`);
       await supabase.from('webhook_events').insert({
         event_type: 'SIGNATURE_INVALID',
         raw_payload: { body: rawBody.substring(0, 1000), signature, reason: hmacResult.reason },
@@ -185,7 +188,7 @@ serve(async (req) => {
         error_message: hmacResult.reason,
       });
       return new Response(
-        JSON.stringify({ error: 'Invalid signature', reason: hmacResult.reason }),
+        JSON.stringify({ error: 'Invalid signature' }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -199,7 +202,7 @@ serve(async (req) => {
 
     const parseResult = webhookSchema.safeParse(JSON.parse(rawBody));
     if (!parseResult.success) {
-      console.error(`[Webhook] Invalid payload:`, parseResult.error.format());
+      logger.error(`[Webhook] Invalid payload:`, parseResult.error.format());
       return new Response(
         JSON.stringify({ error: 'Invalid payload format' }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -207,7 +210,7 @@ serve(async (req) => {
     }
 
     const payload = parseResult.data;
-    console.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
+    logger.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
     const lalamoveOrderId: string | null = payload.orderId || null;
@@ -242,7 +245,7 @@ serve(async (req) => {
         order_id: orderUuid, status: newStatus, old_status: oldStatus,
         change_reason: `Webhook: ${eventType}`, metadata: metadata || {},
       });
-      console.log(`[Webhook] Order ${orderUuid} status: ${oldStatus} -> ${newStatus}`);
+      logger.log(`[Webhook] Order ${orderUuid} status: ${oldStatus} -> ${newStatus}`);
     }
     
     async function sendNotification(type: string, title: string, message: string, severity: string, driverId?: string, orderId?: string) {
@@ -260,7 +263,7 @@ serve(async (req) => {
             body: JSON.stringify({ alertId: (alert as AlertRecord).id, type, severity, title, message, driverId, orderId }),
           });
         } catch (e) {
-          console.error('[Webhook] Notification dispatch failed:', e);
+          logger.error('[Webhook] Notification dispatch failed:', e);
         }
       }
     }
@@ -271,7 +274,7 @@ serve(async (req) => {
       case 'DRIVER_CHANGED': {
         const driverData = payload.data || {};
         const lalamoveDriverId = driverData.driverId || driverData.driver_id;
-        console.log(`[Webhook] Processing ${eventType} for driver: ${lalamoveDriverId}, order: ${lalamoveOrderId}`);
+        logger.log(`[Webhook] Processing ${eventType} for driver: ${lalamoveDriverId}, order: ${lalamoveOrderId}`);
         
         if (lalamoveDriverId) {
           const orderUuid = lalamoveOrderId ? await getOrderUuid(lalamoveOrderId) : null;
@@ -288,8 +291,8 @@ serve(async (req) => {
           if (existing) {
             const driver = existing as DriverRecord;
             driverId = driver.id;
-            console.log(`[Webhook] Found existing driver: ${driver.name} (ID: ${driverId})`);
-            console.log(`[Webhook] Current stats - Risk: ${driver.risk_score}, Level: ${driver.risk_level}, Deliveries: ${driver.total_deliveries}, Status: ${driver.status}`);
+            logger.log(`[Webhook] Found existing driver: ${driver.name} (ID: ${driverId})`);
+            logger.log(`[Webhook] Current stats - Risk: ${driver.risk_score}, Level: ${driver.risk_level}, Deliveries: ${driver.total_deliveries}, Status: ${driver.status}`);
           } else {
             isNewDriver = true;
             const { data: newDriver, error: createError } = await supabase
@@ -307,21 +310,21 @@ serve(async (req) => {
               .single();
             
             if (createError) {
-              console.error(`[Webhook] Failed to create driver: ${createError.message}`);
+              logger.error(`[Webhook] Failed to create driver: ${createError.message}`);
               throw createError;
             }
             
             driverId = (newDriver as OrderIdRecord).id;
-            console.log(`[Webhook] Created NEW driver: ${driverData.driverName || 'Unknown'} (ID: ${driverId})`);
+            logger.log(`[Webhook] Created NEW driver: ${driverData.driverName || 'Unknown'} (ID: ${driverId})`);
           }
           
           if (orderUuid) {
             await supabase.from('lalamove_orders').update({ driver_id: driverId, status: 'MATCHED' }).eq('id', orderUuid);
-            console.log(`[Webhook] Linked driver ${driverId} to order ${orderUuid}`);
+            logger.log(`[Webhook] Linked driver ${driverId} to order ${orderUuid}`);
           }
           
           // Evaluate driver
-          console.log(`[Webhook] Starting driver evaluation...`);
+          logger.log(`[Webhook] Starting driver evaluation...`);
           const evalStartTime = Date.now();
           
           try {
@@ -336,17 +339,17 @@ serve(async (req) => {
             
             const evalDuration = Date.now() - evalStartTime;
             const evalResultText = await evalResponse.text();
-            console.log(`[Webhook] Evaluation completed in ${evalDuration}ms (HTTP ${evalResponse.status})`);
+            logger.log(`[Webhook] Evaluation completed in ${evalDuration}ms (HTTP ${evalResponse.status})`);
             
             if (evalResponse.ok) {
               try {
                 const evalResult = JSON.parse(evalResultText);
-                console.log(`[Webhook] ===== EVALUATION: ${evalResult.driver?.name || 'Unknown'} =====`);
-                console.log(`[Webhook] Approved: ${evalResult.evaluation?.approved}, Score: ${evalResult.evaluation?.riskAnalysis?.score?.toFixed(2)}, Level: ${evalResult.evaluation?.riskAnalysis?.level}`);
+                logger.log(`[Webhook] ===== EVALUATION: ${evalResult.driver?.name || 'Unknown'} =====`);
+                logger.log(`[Webhook] Approved: ${evalResult.evaluation?.approved}, Score: ${evalResult.evaluation?.riskAnalysis?.score?.toFixed(2)}, Level: ${evalResult.evaluation?.riskAnalysis?.level}`);
                 
                 if (evalResult.evaluation?.riskAnalysis?.factors?.length > 0) {
                   for (const factor of evalResult.evaluation.riskAnalysis.factors) {
-                    console.log(`[Webhook]   - ${factor.name}: ${factor.score?.toFixed(2)} (weight: ${factor.weight})`);
+                    logger.log(`[Webhook]   - ${factor.name}: ${factor.score?.toFixed(2)} (weight: ${factor.weight})`);
                   }
                 }
                 
@@ -360,13 +363,13 @@ serve(async (req) => {
                     'WARNING', driverId, orderUuid || undefined);
                 }
               } catch (parseError) {
-                console.error(`[Webhook] Failed to parse evaluation: ${parseError}`);
+                logger.error(`[Webhook] Failed to parse evaluation: ${parseError}`);
               }
             } else {
-              console.error(`[Webhook] Evaluation failed: ${evalResultText.substring(0, 500)}`);
+              logger.error(`[Webhook] Evaluation failed: ${evalResultText.substring(0, 500)}`);
             }
           } catch (evalError) {
-            console.error(`[Webhook] Evaluation request failed: ${evalError}`);
+            logger.error(`[Webhook] Evaluation request failed: ${evalError}`);
           }
         }
         break;
@@ -380,7 +383,7 @@ serve(async (req) => {
             const mappedStatus = statusMapping[newLalamoveStatus?.toUpperCase()] || 'ON_GOING';
             await updateOrderStatus(orderUuid, mappedStatus, { lalamove_status: newLalamoveStatus, timestamp: payload.timestamp });
           } else {
-            console.log(`[Webhook] Order ${lalamoveOrderId} not found in database`);
+            logger.log(`[Webhook] Order ${lalamoveOrderId} not found in database`);
           }
         }
         break;
@@ -419,7 +422,7 @@ serve(async (req) => {
                 }).eq('id', orderData.driver_id);
               }
             }
-            console.log(`[Webhook] Order ${lalamoveOrderId} completed`);
+            logger.log(`[Webhook] Order ${lalamoveOrderId} completed`);
           }
         }
         break;
@@ -440,7 +443,7 @@ serve(async (req) => {
               `Pedido ${lalamoveOrderId} para ${orderData?.customer_name || 'cliente'} cancelado. Motivo: ${reason}`,
               'WARNING', orderData?.driver_id || undefined, orderUuid);
             
-            console.log(`[Webhook] Order ${lalamoveOrderId} cancelled: ${reason}`);
+            logger.log(`[Webhook] Order ${lalamoveOrderId} cancelled: ${reason}`);
           }
         }
         break;
@@ -494,7 +497,7 @@ serve(async (req) => {
       }
       
       default:
-        console.log(`[Webhook] Unhandled event type: ${eventType}`);
+        logger.log(`[Webhook] Unhandled event type: ${eventType}`);
     }
     
     // Mark processed
@@ -509,7 +512,7 @@ serve(async (req) => {
     
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error("[Webhook] Internal Error:", errorMessage);
+    logger.error("[Webhook] Internal Error:", errorMessage);
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
