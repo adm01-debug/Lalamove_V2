@@ -181,6 +181,15 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // forwardRef aqui evita warnings quando este modal está dentro de animações/layout
+interface Stop {
+  id: string;
+  order_id: string;
+  stop_index: number;
+  pod_image_url?: string;
+  pod_delivered_at?: string;
+  pod_status?: string;
+}
+
 export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps>(
   function OrderDetailModal({ order, open, onOpenChange }, ref) {
     const evaluateDriver = useEvaluateDriver();
