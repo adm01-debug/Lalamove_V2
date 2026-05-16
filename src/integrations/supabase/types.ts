@@ -2890,6 +2890,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_aal2: { Args: never; Returns: boolean }
       is_country_blocked: { Args: { _country_code: string }; Returns: boolean }
       is_ip_blocked: { Args: { p_ip_address: unknown }; Returns: boolean }
       is_ip_whitelisted: { Args: { _ip_address: unknown }; Returns: boolean }
