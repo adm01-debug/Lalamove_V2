@@ -29,8 +29,28 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
     
-    const body: NotificationRequest = await req.json();
-    const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = body;
+    const notificationSchema = z.object({
+      alert_id: z.string().uuid().or(z.string()),
+      type: z.string(),
+      severity: z.enum(['INFO', 'WARNING', 'CRITICAL']),
+      title: z.string(),
+      message: z.string(),
+      order_id: z.string().optional().nullable(),
+      driver_id: z.string().optional().nullable(),
+      metadata: z.record(z.any()).optional().nullable(),
+    });
+
+    const bodyResult = notificationSchema.safeParse(await req.json().catch(() => ({})));
+    
+    if (!bodyResult.success) {
+      console.error("[Notification] Invalid request body:", bodyResult.error.format());
+      return new Response(
+        JSON.stringify({ error: 'Invalid request body' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = bodyResult.data;
     
     console.log(`[Notification] Sending ${severity} alert: ${type}`);
     
