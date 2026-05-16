@@ -1,8 +1,8 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { DeviceDetector } from "@/components/auth/DeviceDetector";
@@ -14,6 +14,8 @@ import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 import { HintProvider } from "@/components/ui/contextual-hints";
 import { PageLoader } from "@/components/ui/page-loader";
 import { AchievementsProvider } from "@/hooks/useAchievementsSystem";
+
+import { AnimatePresence } from 'framer-motion';
 
 // Lazy loaded pages - Auth
 const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
@@ -117,7 +119,8 @@ const App = () => {
                 <OfflineIndicator />
                 <InstallPrompt />
                 <KeyboardShortcutsHelp />
-              <Routes>
+              <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
                 {/* Public auth routes */}
                 <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />
                 <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
@@ -179,6 +182,7 @@ const App = () => {
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              </AnimatePresence>
             </BrowserRouter>
           </HintProvider>
         </TooltipProvider>

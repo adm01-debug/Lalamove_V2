@@ -1,4 +1,4 @@
-import { Bell, User, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu, Search, LogOut } from 'lucide-react';
+import { Bell, User, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu, Search, LogOut, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
@@ -13,6 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SmartBreadcrumbs, MobileBreadcrumbs } from '@/components/ui/smart-breadcrumbs';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LanguageSelector } from '@/components/ui/language-selector';
+import { BackButton } from '@/components/ui/back-button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,7 +92,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   };
 
   return (
-    <header className="relative flex flex-col border-b border-border/50 bg-background/60 backdrop-blur-xl safe-area-top">
+    <header className="relative flex flex-col border-b border-border/50 bg-background/60 backdrop-blur-xl safe-area-top sticky top-0 z-50">
       {/* Gradient line at top */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
@@ -112,7 +113,11 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
             </Button>
           )}
 
-          {/* Title Section */}
+          {/* Back Button & Title Section */}
+          <div className="flex items-center gap-2 md:gap-4 min-w-0">
+            <div className="hidden md:block">
+              <BackButton variant="ghost" size="icon" />
+            </div>
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -130,7 +135,8 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
                 <p className="text-xs md:text-sm text-muted-foreground truncate hidden sm:block">{subtitle}</p>
               )}
             </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Right section: Actions */}
