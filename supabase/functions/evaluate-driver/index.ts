@@ -697,7 +697,7 @@ serve(async (req) => {
       stats,
       incidentCount,
       hasCriticalIncidents,
-      evaluatedDriver.rating || 5
+      parseResult.data.rating ?? evaluatedDriver.rating ?? 5
     );
 
     // Add rule bonus to score
