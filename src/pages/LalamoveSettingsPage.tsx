@@ -324,7 +324,7 @@ export default function LalamoveSettingsPage() {
                       {tx.description || tx.remark || tx.flow_type_name || 'Transação'}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.created_at || tx.create_time
+                      {tx.created_at || (tx.create_time !== undefined)
                         ? new Date(tx.created_at || tx.create_time * 1000).toLocaleString('pt-BR')
                         : '—'}
                     </p>
