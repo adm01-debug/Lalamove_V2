@@ -188,7 +188,7 @@ serve(async (req) => {
         error_message: hmacResult.reason,
       });
       return new Response(
-        JSON.stringify({ error: 'Invalid signature', reason: hmacResult.reason }),
+        JSON.stringify({ error: 'Invalid signature' }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
