@@ -30,7 +30,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Database className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Database</h3>
-          <Badge variant={health?.database === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.database === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Banco de Dados: ${health?.database === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.database === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
