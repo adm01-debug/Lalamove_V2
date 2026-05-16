@@ -356,13 +356,18 @@ export function AlertsPage() {
           {statsCards.map((stat) => (
             <motion.div key={stat.key} variants={itemVariants}>
               <Card 
-                variant="glass"
+                variant={severityFilter === stat.key 
+                  ? (stat.key === 'CRITICAL' ? 'gradientDestructive' : 
+                     stat.key === 'WARNING' ? 'gradientWarning' : 
+                     stat.key === 'INFO' ? 'gradientSuccess' : 'gradientPrimary')
+                  : 'glass'
+                }
                 hover="lift"
                 className={cn(
                   "cursor-pointer transition-all duration-300 touch-manipulation active:scale-[0.98]",
-                  severityFilter === stat.key && `ring-2 ring-offset-2 ring-offset-background ${stat.key === 'ALL' ? 'ring-primary' : stat.key === 'CRITICAL' ? 'ring-destructive' : stat.key === 'WARNING' ? 'ring-warning' : 'ring-info'}`
+                  severityFilter === stat.key && "ring-2 ring-offset-2 ring-offset-background"
                 )}
-                onClick={() => setSeverityFilter(stat.key as typeof severityFilter)}
+                onClick={() => setSeverityFilter(stat.key)}
               >
                 <CardContent className="p-2 sm:p-4">
                   <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3">
