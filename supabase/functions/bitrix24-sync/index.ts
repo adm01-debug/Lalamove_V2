@@ -27,7 +27,15 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { action, ...params } = await req.json();
+    const bodyResult = z.record(z.any()).safeParse(await req.json().catch(() => ({})));
+    if (!bodyResult.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { action, ...params } = bodyResult.data;
 
     switch (action) {
       case "get_auth_url": {
