@@ -59,9 +59,11 @@ serve(async (req) => {
       }
 
       case "oauth_callback": {
+        // This action should probably be handled differently (it's a GET usually)
+        // But let's keep it for now and handle it safely
         const url = new URL(req.url);
         const code = url.searchParams.get("code");
-        const domain = url.searchParams.get("domain") || params.domain;
+        const domain = url.searchParams.get("domain") || (params && params.domain);
         
         if (!code) {
           return new Response("Authorization code missing", { status: 400 });
