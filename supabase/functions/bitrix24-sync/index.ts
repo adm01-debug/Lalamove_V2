@@ -27,7 +27,12 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const rawBody = await req.json().catch(() => ({}));
+    let rawBody;
+    try {
+      rawBody = await req.json();
+    } catch {
+      rawBody = {};
+    }
     const bodyResult = z.record(z.any()).safeParse(rawBody);
     if (!bodyResult.success) {
       return new Response(
