@@ -313,7 +313,16 @@ export function AppLayout() {
           onMenuClick={() => setMobileSidebarOpen(true)}
         />
         <main id="main-content" className={cn("flex-1 overflow-y-auto", isMobile && "pb-20")} tabIndex={-1}>
-          <Outlet />
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="min-h-full"
+          >
+            <Outlet />
+          </motion.div>
         </main>
       </div>
 
