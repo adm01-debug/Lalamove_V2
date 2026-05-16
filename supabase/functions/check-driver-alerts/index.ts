@@ -33,7 +33,7 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    console.log('Checking for driver alerts...');
+    logger.log('Checking for driver alerts...');
 
     // Fetch alert configurations from database
     const { data: configsData, error: configError } = await supabase
@@ -41,7 +41,7 @@ serve(async (req) => {
       .select('alert_type, is_enabled, config');
 
     if (configError) {
-      console.error('Error fetching alert configs:', configError);
+      logger.error('Error fetching alert configs:', configError);
     }
 
     // Parse configurations
@@ -59,7 +59,7 @@ serve(async (req) => {
     const STOPPED_CRITICAL_MINUTES = stoppedConfig.config?.critical_minutes || DEFAULT_STOPPED_CRITICAL_MINUTES;
     const OFF_ROUTE_ALERT_ENABLED = routeConfig.is_enabled !== false;
 
-    console.log('Alert config:', { 
+    logger.log('Alert config:', { 
       STOPPED_ALERT_ENABLED, 
       STOPPED_WARNING_MINUTES, 
       STOPPED_CRITICAL_MINUTES,
@@ -76,11 +76,11 @@ serve(async (req) => {
       `);
 
     if (trackingError) {
-      console.error('Error fetching tracking data:', trackingError);
+      logger.error('Error fetching tracking data:', trackingError);
       throw trackingError;
     }
 
-    console.log(`Checking ${trackingData?.length || 0} active deliveries for alerts`);
+    logger.log(`Checking ${trackingData?.length || 0} active deliveries for alerts`);
 
     const alertsToCreate: Array<{
       type: string;
@@ -125,7 +125,7 @@ serve(async (req) => {
 
           // Only create if no alert exists OR if severity needs to be escalated
           if (!existingAlert) {
-            console.log(`Creating DRIVER_STOPPED alert for ${driverName} - stopped for ${stoppedMinutes} minutes (${newSeverity})`);
+            logger.log(`Creating DRIVER_STOPPED alert for ${driverName} - stopped for ${stoppedMinutes} minutes (${newSeverity})`);
             
             alertsToCreate.push({
               type: 'DRIVER_STOPPED',
@@ -147,7 +147,7 @@ serve(async (req) => {
             });
           } else if (existingAlert.severity === 'WARNING' && shouldBeCritical) {
             // Escalate to critical
-            console.log(`Escalating DRIVER_STOPPED alert to CRITICAL for ${driverName}`);
+            logger.log(`Escalating DRIVER_STOPPED alert to CRITICAL for ${driverName}`);
             await supabase
               .from('alerts')
               .update({
@@ -173,7 +173,7 @@ serve(async (req) => {
           .limit(1);
 
         if (!existingAlerts || existingAlerts.length === 0) {
-          console.log(`Creating ROUTE_DEVIATION alert for ${driverName}`);
+          logger.log(`Creating ROUTE_DEVIATION alert for ${driverName}`);
           
           alertsToCreate.push({
             type: 'ROUTE_DEVIATION',
@@ -208,7 +208,7 @@ serve(async (req) => {
           .eq('is_dismissed', false);
 
         if (dismissError) {
-          console.error('Error dismissing DRIVER_STOPPED alerts:', dismissError);
+          logger.error('Error dismissing DRIVER_STOPPED alerts:', dismissError);
         }
       }
 
@@ -223,7 +223,7 @@ serve(async (req) => {
           .eq('is_dismissed', false);
 
         if (dismissError) {
-          console.error('Error dismissing ROUTE_DEVIATION alerts:', dismissError);
+          logger.error('Error dismissing ROUTE_DEVIATION alerts:', dismissError);
         }
       }
     }
@@ -236,9 +236,9 @@ serve(async (req) => {
         .select();
 
       if (insertError) {
-        console.error('Error inserting alerts:', insertError);
+        logger.error('Error inserting alerts:', insertError);
       } else {
-        console.log(`Created ${insertedAlerts?.length || 0} new alerts`);
+        logger.log(`Created ${insertedAlerts?.length || 0} new alerts`);
       }
     }
 
@@ -248,7 +248,7 @@ serve(async (req) => {
       .select('*', { count: 'exact', head: true })
       .eq('is_dismissed', false);
 
-    console.log(`Check complete. Active alerts: ${activeAlertsCount}`);
+    logger.log(`Check complete. Active alerts: ${activeAlertsCount}`);
 
     return new Response(
       JSON.stringify({ 
@@ -267,7 +267,7 @@ serve(async (req) => {
     );
 
   } catch (error: unknown) {
-    console.error('Alert check error:', error);
+    logger.error('Alert check error:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error occurred during driver alerts check' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
