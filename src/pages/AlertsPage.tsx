@@ -96,11 +96,42 @@ export function AlertsPage() {
   const { data: alerts = [], isLoading, isFetching } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation, markAllAsReadMutation } = useAlertActions();
   
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const severityFilter = (searchParams.get('severity') as 'ALL' | 'CRITICAL' | 'WARNING' | 'INFO') || 'ALL';
+  const groupBy = (searchParams.get('groupBy') as GroupBy) || 'severity';
+  const sortBy = (searchParams.get('sortBy') as SortBy) || 'newest';
+  const viewMode = (searchParams.get('viewMode') as ViewMode) || 'list';
+
+  const setSeverityFilter = useCallback((severity: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (severity !== 'ALL') newParams.set('severity', severity);
+    else newParams.delete('severity');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setGroupBy = useCallback((val: GroupBy) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'severity') newParams.set('groupBy', val);
+    else newParams.delete('groupBy');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setSortBy = useCallback((val: SortBy) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'newest') newParams.set('sortBy', val);
+    else newParams.delete('sortBy');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setViewMode = useCallback((val: ViewMode) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'list') newParams.set('viewMode', val);
+    else newParams.delete('viewMode');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [severityFilter, setSeverityFilter] = useState<'ALL' | 'CRITICAL' | 'WARNING' | 'INFO'>('ALL');
-  const [groupBy, setGroupBy] = useState<GroupBy>('severity');
-  const [sortBy, setSortBy] = useState<SortBy>('newest');
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set(['CRITICAL', 'WARNING', 'INFO']));
   const [detailAlert, setDetailAlert] = useState<Alert | null>(null);
