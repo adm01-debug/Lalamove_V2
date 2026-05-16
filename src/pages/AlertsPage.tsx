@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -95,11 +96,42 @@ export function AlertsPage() {
   const { data: alerts = [], isLoading, isFetching } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation, markAllAsReadMutation } = useAlertActions();
   
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const severityFilter = (searchParams.get('severity') as 'ALL' | 'CRITICAL' | 'WARNING' | 'INFO') || 'ALL';
+  const groupBy = (searchParams.get('groupBy') as GroupBy) || 'severity';
+  const sortBy = (searchParams.get('sortBy') as SortBy) || 'newest';
+  const viewMode = (searchParams.get('viewMode') as ViewMode) || 'list';
+
+  const setSeverityFilter = useCallback((severity: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (severity !== 'ALL') newParams.set('severity', severity);
+    else newParams.delete('severity');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setGroupBy = useCallback((val: GroupBy) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'severity') newParams.set('groupBy', val);
+    else newParams.delete('groupBy');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setSortBy = useCallback((val: SortBy) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'newest') newParams.set('sortBy', val);
+    else newParams.delete('sortBy');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setViewMode = useCallback((val: ViewMode) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val !== 'list') newParams.set('viewMode', val);
+    else newParams.delete('viewMode');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [severityFilter, setSeverityFilter] = useState<'ALL' | 'CRITICAL' | 'WARNING' | 'INFO'>('ALL');
-  const [groupBy, setGroupBy] = useState<GroupBy>('severity');
-  const [sortBy, setSortBy] = useState<SortBy>('newest');
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set(['CRITICAL', 'WARNING', 'INFO']));
   const [detailAlert, setDetailAlert] = useState<Alert | null>(null);
@@ -324,21 +356,37 @@ export function AlertsPage() {
           {statsCards.map((stat) => (
             <motion.div key={stat.key} variants={itemVariants}>
               <Card 
-                variant="glass"
+                variant={severityFilter === stat.key 
+                  ? (stat.key === 'CRITICAL' ? 'gradientDestructive' : 
+                     stat.key === 'WARNING' ? 'gradientWarning' : 
+                     stat.key === 'INFO' ? 'gradientSuccess' : 'gradientPrimary')
+                  : 'glass'
+                }
                 hover="lift"
                 className={cn(
                   "cursor-pointer transition-all duration-300 touch-manipulation active:scale-[0.98]",
-                  severityFilter === stat.key && `ring-2 ring-offset-2 ring-offset-background ${stat.key === 'ALL' ? 'ring-primary' : stat.key === 'CRITICAL' ? 'ring-destructive' : stat.key === 'WARNING' ? 'ring-warning' : 'ring-info'}`
+                  severityFilter === stat.key && "ring-2 ring-offset-2 ring-offset-background"
                 )}
-                onClick={() => setSeverityFilter(stat.key as typeof severityFilter)}
+                onClick={() => setSeverityFilter(stat.key)}
               >
                 <CardContent className="p-2 sm:p-4">
                   <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3">
-                    <div className={cn("p-1.5 sm:p-2.5 rounded-lg border flex-shrink-0", stat.bg, stat.border)}>
-                      <stat.icon className={cn("w-3.5 h-3.5 sm:w-5 sm:h-5", stat.color)} />
+                    <div className={cn(
+                      "p-1.5 sm:p-2.5 rounded-lg border flex-shrink-0 transition-colors",
+                      severityFilter === stat.key 
+                        ? "bg-white/20 border-white/10" 
+                        : cn(stat.bg, stat.border)
+                    )}>
+                      <stat.icon className={cn(
+                        "w-3.5 h-3.5 sm:w-5 sm:h-5", 
+                        severityFilter === stat.key ? "text-white" : stat.color
+                      )} />
                     </div>
                     <div className="text-center sm:text-left">
-                      <p className={cn("text-lg sm:text-2xl font-bold", stat.color)}>{stat.value}</p>
+                      <p className={cn(
+                        "text-lg sm:text-2xl font-bold", 
+                        severityFilter === stat.key ? "text-white" : stat.color
+                      )}>{stat.value}</p>
                       <p className="text-[9px] sm:text-xs text-muted-foreground">
                         <span className="sm:hidden">{stat.label}</span>
                         <span className="hidden sm:inline">{stat.fullLabel}</span>

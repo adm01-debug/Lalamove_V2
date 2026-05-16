@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,15 +24,55 @@ import { SearchInputWithHelp } from '@/components/ui/search-help-tooltip';
 import { OrderCard, statusConfig } from './orders/OrderCard';
 
 export function OrdersPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<OrderStatus | 'ALL'>('ALL');
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const q = searchParams.get('q') || '';
+  const statusFilter = (searchParams.get('status') as OrderStatus | 'ALL') || 'ALL';
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
+  const [searchQuery, setSearchQuery] = useState(q);
+  
+  // Sync local search to URL with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newParams = new URLSearchParams(searchParams);
+      if (searchQuery) {
+        if (newParams.get('q') !== searchQuery) {
+          newParams.set('q', searchQuery);
+          newParams.set('page', '1');
+          setSearchParams(newParams, { replace: true });
+        }
+      } else if (newParams.has('q')) {
+        newParams.delete('q');
+        newParams.set('page', '1');
+        setSearchParams(newParams, { replace: true });
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery, setSearchParams, searchParams]);
+
+  const setStatusFilter = useCallback((status: OrderStatus | 'ALL') => {
+    const newParams = new URLSearchParams(searchParams);
+    if (status !== 'ALL') newParams.set('status', status);
+    else newParams.delete('status');
+    newParams.set('page', '1');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setCurrentPage = useCallback((updater: number | ((prev: number) => number)) => {
+    const nextItem = typeof updater === 'function' ? updater(currentPage) : updater;
+    const newParams = new URLSearchParams(searchParams);
+    if (nextItem > 1) newParams.set('page', nextItem.toString());
+    else newParams.delete('page');
+    setSearchParams(newParams);
+  }, [currentPage, searchParams, setSearchParams]);
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [fetchDialogOpen, setFetchDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [newOrderDialogOpen, setNewOrderDialogOpen] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const queryClient = useQueryClient();
   const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage);
@@ -126,13 +167,18 @@ export function OrdersPage() {
             { icon: CheckCircle2, value: stats.completed, label: 'Concluídos', variant: 'success' as const },
             { icon: XCircle, value: stats.cancelled, label: 'Cancelados', variant: 'destructive' as const },
           ].map((stat, index) => (
-            <Card key={stat.label} variant="glass" hover="lift" className="animate-fade-up overflow-hidden" style={{ animationDelay: `${index * 75}ms` }}>
-              <div className={cn("absolute inset-0 opacity-20",
-                stat.variant === 'primary' && "bg-gradient-to-br from-primary/30 to-accent/10",
-                stat.variant === 'success' && "bg-gradient-to-br from-success/30 to-emerald/10",
-                stat.variant === 'warning' && "bg-gradient-to-br from-warning/30 to-amber/10",
-                stat.variant === 'destructive' && "bg-gradient-to-br from-destructive/30 to-rose/10"
-              )} />
+            <Card 
+              key={stat.label} 
+              variant={
+                stat.variant === 'primary' ? 'gradientPrimary' :
+                stat.variant === 'success' ? 'gradientSuccess' :
+                stat.variant === 'warning' ? 'gradientWarning' :
+                'gradientDestructive'
+              }
+              hover="lift" 
+              className="animate-fade-up overflow-hidden" 
+              style={{ animationDelay: `${index * 75}ms` }}
+            >
               <CardContent className="p-3 sm:p-4 relative">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className={cn("p-2 sm:p-2.5 rounded-lg sm:rounded-xl shadow-lg",

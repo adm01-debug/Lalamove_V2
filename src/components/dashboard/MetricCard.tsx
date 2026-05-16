@@ -95,14 +95,23 @@ export function MetricCard({
     <Card
       variant="glass"
       hover={onClick ? "lift" : "none"}
+      role={onClick ? "button" : "region"}
+      aria-label={`${label}: ${value}${comparison ? `, ${comparison}` : ''}${trend !== undefined ? `, tendência de ${trend >= 0 ? 'alta' : 'queda'} de ${Math.abs(trend)}%` : ''}`}
       className={cn(
         "relative overflow-hidden animate-fade-up group",
-        onClick && "cursor-pointer",
+        onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none",
         isLarge && "col-span-2",
         className
       )}
       style={{ animationDelay: `${index * 75}ms` }}
       onClick={onClick}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      } : undefined}
     >
       {/* Background gradient */}
       <div className={cn(

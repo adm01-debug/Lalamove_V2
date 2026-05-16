@@ -16,7 +16,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Activity className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Frontend</h3>
-          <Badge variant={health?.frontend === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.frontend === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Frontend: ${health?.frontend === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.frontend === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
@@ -27,7 +30,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Database className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Database</h3>
-          <Badge variant={health?.database === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.database === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Banco de Dados: ${health?.database === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.database === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
@@ -38,7 +44,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Zap className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Edge Functions</h3>
-          <Badge variant={health?.functions === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.functions === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status das Edge Functions: ${health?.functions === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.functions === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
@@ -49,7 +58,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Wifi className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Realtime</h3>
-          <Badge variant={health?.realtime === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.realtime === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Realtime: ${health?.realtime === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.realtime === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">

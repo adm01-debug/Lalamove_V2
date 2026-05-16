@@ -103,6 +103,7 @@ export function useAlertConfigurations() {
   return useQuery({
     queryKey: ['alert-configurations'],
     queryFn: fetchAlertConfigurations,
+    staleTime: 60 * 60 * 1000, // 1 hour
   });
 }
 
