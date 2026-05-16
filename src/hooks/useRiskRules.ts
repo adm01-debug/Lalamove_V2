@@ -91,6 +91,7 @@ export function useRiskRules() {
   return useQuery({
     queryKey: ['risk-rules'],
     queryFn: fetchRiskRules,
+    staleTime: 60 * 60 * 1000, // 1 hour
   });
 }
 
