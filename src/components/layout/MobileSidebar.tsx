@@ -125,6 +125,7 @@ interface MobileSidebarProps {
 
 export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [openCategories, setOpenCategories] = useState<string[]>(['main']);
   const [unreadAlerts, setUnreadAlerts] = useState(0);
