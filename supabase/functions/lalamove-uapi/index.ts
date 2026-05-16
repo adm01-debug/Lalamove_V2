@@ -84,7 +84,7 @@ async function getActiveToken(supabase: any): Promise<{
     .rpc('get_active_uapi_token');
 
   if (error || !session || session.length === 0) {
-    console.error('No active UAPI session found:', error);
+    logger.error('No active UAPI session found:', error);
     return null;
   }
 
@@ -101,7 +101,7 @@ async function getActiveToken(supabase: any): Promise<{
   }
 
   // Token is 20-24h old, try refresh
-  console.log('Token needs refresh, attempting refresh_token...');
+  logger.log('Token needs refresh, attempting refresh_token...');
   const refreshResult = await refreshUapiToken(s.access_token, s.refresh_token);
   
   if (refreshResult) {
@@ -128,7 +128,7 @@ async function getActiveToken(supabase: any): Promise<{
   }
 
   // Refresh failed but token might still work (< 24h)
-  console.warn('Token refresh failed, using existing token');
+  logger.warn('Token refresh failed, using existing token');
   return {
     accessToken: s.access_token,
     refreshToken: s.refresh_token,
@@ -155,7 +155,7 @@ async function refreshUapiToken(
     const data = await response.json();
     
     if (data.ret !== 0) {
-      console.error('Token refresh failed:', data);
+      logger.error('Token refresh failed:', data);
       return null;
     }
 
@@ -164,7 +164,7 @@ async function refreshUapiToken(
       newRefreshToken: data.data.raw?.refresh_token || currentRefreshToken,
     };
   } catch (error) {
-    console.error('Token refresh error:', error);
+    logger.error('Token refresh error:', error);
     return null;
   }
 }
@@ -178,7 +178,7 @@ async function uapiRequest(
   const url = buildUapiUrl(method);
   const body = buildUapiBody(token, args);
 
-  console.log(`UAPI Request: ${method}`);
+  logger.log(`UAPI Request: ${method}`);
 
   const response = await fetch(url, {
     method: 'POST',
@@ -189,7 +189,7 @@ async function uapiRequest(
   const result = await response.json();
   
   if (result.ret !== 0) {
-    console.error(`UAPI ${method} error:`, result);
+    logger.error(`UAPI ${method} error:`, result);
   }
 
   return result;
@@ -753,7 +753,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('UAPI Error:', error);
+    logger.error('UAPI Error:', error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
