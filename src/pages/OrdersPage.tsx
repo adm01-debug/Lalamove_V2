@@ -24,15 +24,55 @@ import { SearchInputWithHelp } from '@/components/ui/search-help-tooltip';
 import { OrderCard, statusConfig } from './orders/OrderCard';
 
 export function OrdersPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<OrderStatus | 'ALL'>('ALL');
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const q = searchParams.get('q') || '';
+  const statusFilter = (searchParams.get('status') as OrderStatus | 'ALL') || 'ALL';
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
+  const [searchQuery, setSearchQuery] = useState(q);
+  
+  // Sync local search to URL with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newParams = new URLSearchParams(searchParams);
+      if (searchQuery) {
+        if (newParams.get('q') !== searchQuery) {
+          newParams.set('q', searchQuery);
+          newParams.set('page', '1');
+          setSearchParams(newParams, { replace: true });
+        }
+      } else if (newParams.has('q')) {
+        newParams.delete('q');
+        newParams.set('page', '1');
+        setSearchParams(newParams, { replace: true });
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery, setSearchParams, searchParams]);
+
+  const setStatusFilter = useCallback((status: OrderStatus | 'ALL') => {
+    const newParams = new URLSearchParams(searchParams);
+    if (status !== 'ALL') newParams.set('status', status);
+    else newParams.delete('status');
+    newParams.set('page', '1');
+    setSearchParams(newParams);
+  }, [searchParams, setSearchParams]);
+
+  const setCurrentPage = useCallback((updater: number | ((prev: number) => number)) => {
+    const nextItem = typeof updater === 'function' ? updater(currentPage) : updater;
+    const newParams = new URLSearchParams(searchParams);
+    if (nextItem > 1) newParams.set('page', nextItem.toString());
+    else newParams.delete('page');
+    setSearchParams(newParams);
+  }, [currentPage, searchParams, setSearchParams]);
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [fetchDialogOpen, setFetchDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [newOrderDialogOpen, setNewOrderDialogOpen] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const queryClient = useQueryClient();
   const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage);
