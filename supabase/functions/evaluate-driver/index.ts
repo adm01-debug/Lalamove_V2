@@ -542,7 +542,7 @@ serve(async (req) => {
         .from('drivers')
         .insert({
           id: driverId,
-          name: 'Motorista Novo',
+          name: parseResult.data.driverName || 'Motorista Novo',
           status: 'PENDING_APPROVAL',
           vehicle_type: 'MOTORCYCLE',
           total_deliveries: 0,
