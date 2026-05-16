@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { menuCategories, roleHierarchy, getRoleDisplayName, getRoleColor, type MenuItem } from './sidebar-config';
+import { BounceBadge } from '@/components/ui/micro-interactions';
 
 export function Sidebar() {
   const location = useLocation();
@@ -77,7 +78,7 @@ export function Sidebar() {
         {active && <motion.div layoutId="activeIndicator" className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-primary" transition={{ type: "spring", stiffness: 380, damping: 30 }} />}
         <div className={cn("w-7 h-7 rounded-md flex items-center justify-center transition-all", active ? "bg-primary/20" : "bg-secondary/50 group-hover:bg-secondary")}><item.icon className="w-4 h-4" /></div>
         <AnimatePresence>{!collapsed && <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 text-sm font-medium truncate">{item.label}</motion.span>}</AnimatePresence>
-        {!collapsed && badgeCount > 0 && <span className={cn("px-1.5 py-0.5 text-[10px] font-bold rounded-full", item.badgeType === 'alerts' ? "bg-destructive/20 text-destructive" : item.badgeType === 'approvals' ? "bg-warning/20 text-warning" : "bg-accent/20 text-accent")}>{badgeCount > 99 ? '99+' : badgeCount}</span>}
+        {!collapsed && badgeCount > 0 && <BounceBadge count={badgeCount} variant={item.badgeType === 'alerts' ? 'destructive' : item.badgeType === 'approvals' ? 'warning' : 'default'} />}
         {collapsed && badgeCount > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] font-bold rounded-full bg-destructive text-white">{badgeCount > 9 ? '9+' : badgeCount}</span>}
       </Link>
     );
