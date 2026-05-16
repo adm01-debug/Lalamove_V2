@@ -317,7 +317,7 @@ export default function LalamoveSettingsPage() {
             </div>
           ) : transactions.length > 0 ? (
             <div className="space-y-2">
-              {transactions.map((tx: any, i: number) => (
+              {(transactions as Transaction[]).map((tx, i) => (
                 <div key={tx.id || i} className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-foreground truncate">
