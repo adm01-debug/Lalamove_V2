@@ -67,6 +67,8 @@ export function Sparkline({
       className={cn("w-full overflow-visible", className)}
       style={{ height: `${height}px` }}
       preserveAspectRatio="none"
+      role="img"
+      aria-label={`Gráfico de tendência com ${data.length} pontos. Valor mínimo: ${min}, valor máximo: ${max}. Tendência: ${trend >= 0 ? 'alta' : 'queda'}.`}
     >
       {/* Gradient definitions */}
       <defs>
