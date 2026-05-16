@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
 import { FileDown, Download } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 // This is a placeholder for a script that would generate the PDF from Markdown
 // In a real environment, you might use a library like 'jspdf' or a backend service
