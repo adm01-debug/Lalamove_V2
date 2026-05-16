@@ -45,7 +45,7 @@ function createSupabaseClient() {
   );
 }
 
-function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: any) {
+function internalLogger(level: 'info' | 'warn' | 'error', message: string, metadata?: any) {
   const timestamp = new Date().toISOString();
   const logEntry = {
     timestamp,
@@ -54,7 +54,13 @@ function logger(level: 'info' | 'warn' | 'error', message: string, metadata?: an
     ...metadata
   };
   
-  logger.log(JSON.stringify(logEntry));
+  if (level === 'error') {
+    logger.error(JSON.stringify(logEntry));
+  } else if (level === 'warn') {
+    logger.warn(JSON.stringify(logEntry));
+  } else {
+    logger.info(JSON.stringify(logEntry));
+  }
 }
 
 // ============================================================================
