@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 import { encode } from "https://deno.land/std@0.190.0/encoding/hex.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -189,7 +190,23 @@ serve(async (req) => {
       );
     }
     
-    const payload = JSON.parse(rawBody);
+    const webhookSchema = z.object({
+      event: z.string(),
+      orderId: z.string().optional().nullable(),
+      timestamp: z.string().optional().nullable(),
+      data: z.any().optional(),
+    }).passthrough();
+
+    const parseResult = webhookSchema.safeParse(JSON.parse(rawBody));
+    if (!parseResult.success) {
+      console.error(`[Webhook] Invalid payload:`, parseResult.error.format());
+      return new Response(
+        JSON.stringify({ error: 'Invalid payload format' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const payload = parseResult.data;
     console.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
@@ -492,9 +509,9 @@ serve(async (req) => {
     
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error("[Webhook] Error:", errorMessage);
+    console.error("[Webhook] Internal Error:", errorMessage);
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

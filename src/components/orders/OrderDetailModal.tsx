@@ -181,6 +181,15 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // forwardRef aqui evita warnings quando este modal está dentro de animações/layout
+interface Stop {
+  id: string;
+  order_id: string;
+  stop_index: number;
+  pod_image_url?: string;
+  pod_delivered_at?: string;
+  pod_status?: string;
+}
+
 export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps>(
   function OrderDetailModal({ order, open, onOpenChange }, ref) {
     const evaluateDriver = useEvaluateDriver();
@@ -415,14 +424,14 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
             )}
 
             {/* POD/POP - Provas de Entrega */}
-            {stopsData && stopsData.length > 0 && stopsData.some((s: any) => s.pod_image_url) && (
+            {stopsData && stopsData.length > 0 && (stopsData as Stop[]).some((s) => s.pod_image_url) && (
               <div className="glass-card p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                   <Camera className="w-4 h-4" />
                   Provas de Entrega
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {stopsData.map((stop: any) => {
+                  {(stopsData as Stop[]).map((stop) => {
                     if (!stop.pod_image_url) return null;
                     return (
                       <div key={stop.id} className="space-y-1.5">

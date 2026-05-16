@@ -4,8 +4,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 export interface TrackingEvent {
   id: string;
-  order_id: string;
-  driver_id: string;
+  order_id: string | null;
+  driver_id: string | null;
   latitude: number;
   longitude: number;
   heading: number | null;

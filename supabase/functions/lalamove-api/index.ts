@@ -440,7 +440,16 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const rawBody = req.method !== 'GET' ? await req.json().catch(() => ({})) : {};
+    const bodyResult = z.record(z.any()).safeParse(req.method !== 'GET' ? await req.json().catch(() => ({})) : {});
+    
+    if (!bodyResult.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid request body' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const rawBody = bodyResult.data;
     // Accept action from query string OR body
     const action = url.searchParams.get('action') || rawBody.action || null;
     const body = rawBody.action ? (({ action: _a, ...rest }: Record<string, unknown>) => rest)(rawBody) : rawBody;

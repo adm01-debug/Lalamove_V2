@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,8 +29,28 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
     
-    const body: NotificationRequest = await req.json();
-    const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = body;
+    const notificationSchema = z.object({
+      alert_id: z.string().uuid().or(z.string()),
+      type: z.string(),
+      severity: z.enum(['INFO', 'WARNING', 'CRITICAL']),
+      title: z.string(),
+      message: z.string(),
+      order_id: z.string().optional().nullable(),
+      driver_id: z.string().optional().nullable(),
+      metadata: z.record(z.any()).optional().nullable(),
+    });
+
+    const bodyResult = notificationSchema.safeParse(await req.json().catch(() => ({})));
+    
+    if (!bodyResult.success) {
+      console.error("[Notification] Invalid request body:", bodyResult.error.format());
+      return new Response(
+        JSON.stringify({ error: 'Invalid request body' }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = bodyResult.data;
     
     console.log(`[Notification] Sending ${severity} alert: ${type}`);
     
@@ -120,10 +141,9 @@ serve(async (req) => {
     );
     
   } catch (error: unknown) {
-    console.error("Notification error:", error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error("Notification Internal Error:", error);
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({ error: 'Internal server error during notification dispatch' }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

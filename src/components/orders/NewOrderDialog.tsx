@@ -129,10 +129,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       });
       setStep('quoted');
       toast.success('Cotação recebida!');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro na cotação';
+      setError(msg);
       setStep('form');
-      toast.error('Erro na cotação', { description: err.message });
+      toast.error('Erro na cotação', { description: msg });
     }
   };
 
@@ -183,10 +184,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         onOpenChange(false);
         onSuccess();
       }, 1500);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro ao criar pedido';
+      setError(msg);
       setStep('quoted'); // Go back to quoted step to retry
-      toast.error('Erro ao criar pedido', { description: err.message });
+      toast.error('Erro ao criar pedido', { description: msg });
     }
   };
 
