@@ -149,7 +149,7 @@ serve(async (req) => {
   if (!isIpTrusted(clientIp)) {
     logger.warn(`[Webhook] BLOCKED - Unauthorized IP: ${clientIp}`);
     return new Response(
-      JSON.stringify({ error: "Access denied", message: "Your IP address is not authorized", ip: clientIp }),
+      JSON.stringify({ error: "Access denied" }),
       { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
