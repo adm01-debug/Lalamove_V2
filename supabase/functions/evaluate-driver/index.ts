@@ -649,9 +649,20 @@ serve(async (req) => {
 
     logger.log(`[evaluate-driver] Found ${(orders || []).length} orders, ${incidentCount} unresolved incidents (${hasCriticalIncidents ? 'HAS' : 'NO'} critical)`);
 
-    // Calculate stats - prefer from orders if available, else from driver record
+    // Calculate stats - prefer manual payload, then from orders if available, else from driver record
     let stats: DriverStats;
-    if (orders && orders.length > 0) {
+    if (parseResult.data.totalDeliveries !== undefined && parseResult.data.totalDeliveries !== null) {
+      stats = {
+        totalDeliveries: parseResult.data.totalDeliveries || 0,
+        completedDeliveries: parseResult.data.completedDeliveries || 0,
+        failedDeliveries: parseResult.data.failedDeliveries || 0,
+        cancelledDeliveries: parseResult.data.cancelledDeliveries || 0,
+        successRate: parseResult.data.totalDeliveries ? ((parseResult.data.completedDeliveries || 0) / parseResult.data.totalDeliveries) * 100 : 0,
+        failureRate: parseResult.data.totalDeliveries ? ((parseResult.data.failedDeliveries || 0) / parseResult.data.totalDeliveries) * 100 : 0,
+        incidentCount: incidentCount,
+        avgDelayMinutes: parseResult.data.avgDelayMinutes || 0
+      };
+    } else if (orders && orders.length > 0) {
       stats = calculateStatsFromOrders(orders);
     } else {
       stats = calculateStatsFromDriver(evaluatedDriver);
