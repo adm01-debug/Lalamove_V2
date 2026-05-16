@@ -105,6 +105,13 @@ export function MetricCard({
       )}
       style={{ animationDelay: `${index * 75}ms` }}
       onClick={onClick}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      } : undefined}
     >
       {/* Background gradient */}
       <div className={cn(
