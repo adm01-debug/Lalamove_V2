@@ -424,7 +424,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
             )}
 
             {/* POD/POP - Provas de Entrega */}
-            {stopsData && stopsData.length > 0 && stopsData.some((s: any) => s.pod_image_url) && (
+            {stopsData && stopsData.length > 0 && (stopsData as Stop[]).some((s) => s.pod_image_url) && (
               <div className="glass-card p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                   <Camera className="w-4 h-4" />
