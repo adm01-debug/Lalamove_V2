@@ -27,7 +27,8 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const bodyResult = z.record(z.any()).safeParse(await req.json().catch(() => ({})));
+    const rawBody = await req.json().catch(() => ({}));
+    const bodyResult = z.record(z.any()).safeParse(rawBody);
     if (!bodyResult.success) {
       return new Response(
         JSON.stringify({ error: "Invalid request body" }),
