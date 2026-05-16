@@ -45,7 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
       locationCountry,
     }: NewDeviceAlertRequest = await req.json();
 
-    console.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
+    logger.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
 
     // Check if device is known
     const { data: isKnown } = await supabase.rpc("is_known_device", {
@@ -54,7 +54,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (isKnown) {
-      console.log("Device is known, updating last seen");
+      logger.log("Device is known, updating last seen");
       
       // Update last seen
       await supabase
@@ -72,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log("New device detected, registering and sending alert");
+    logger.log("New device detected, registering and sending alert");
 
     // Register new device
     const { data: newDevice, error: deviceError } = await supabase
@@ -92,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (deviceError) {
-      console.error("Error registering device:", deviceError);
+      logger.error("Error registering device:", deviceError);
       throw deviceError;
     }
 
@@ -106,7 +106,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (alertError) {
-      console.error("Error creating alert record:", alertError);
+      logger.error("Error creating alert record:", alertError);
     }
 
     // Send email notification
@@ -207,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
         html: emailHtml,
       });
 
-      console.log("Email sent successfully:", emailResponse);
+      logger.log("Email sent successfully:", emailResponse);
 
       // Update alert record
       await supabase
@@ -216,7 +216,7 @@ const handler = async (req: Request): Promise<Response> => {
         .eq("device_id", newDevice.id);
 
     } catch (emailError) {
-      console.error("Error sending email:", emailError);
+      logger.error("Error sending email:", emailError);
     }
 
     // Log auth event
@@ -245,7 +245,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
   } catch (error: any) {
-    console.error("Error in new-device-alert function:", error);
+    logger.error("Error in new-device-alert function:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
