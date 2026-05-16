@@ -58,7 +58,10 @@ export const SystemHealthPage = () => {
         <Card className="p-4">
           <Wifi className="h-8 w-8 mb-2" />
           <h3 className="font-semibold">Realtime</h3>
-          <Badge variant={health?.realtime === 'ok' ? 'default' : 'destructive'}>
+          <Badge 
+            variant={health?.realtime === 'ok' ? 'default' : 'destructive'}
+            aria-label={`Status do Realtime: ${health?.realtime === 'ok' ? 'Operacional' : 'Fora do ar'}`}
+          >
             {health?.realtime === 'ok' ? '✅ OK' : '❌ DOWN'}
           </Badge>
           <p className="text-sm text-muted-foreground mt-2">
