@@ -10,6 +10,34 @@ import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
 
+interface Transaction {
+  id: string;
+  description?: string;
+  remark?: string;
+  flow_type_name?: string;
+  created_at?: string;
+  create_time?: number;
+  amount_fen?: number;
+  amount?: number;
+  balance_fen?: number;
+}
+
+interface Vehicle {
+  id?: string | number;
+  vehicle_type_id?: string | number;
+  name?: string;
+  vehicle_type_name?: string;
+  key?: string | number;
+}
+
+interface ServiceArea {
+  id?: string | number;
+  city_id?: string | number;
+  name?: string;
+  city_name?: string;
+  key?: string | number;
+}
+
 export default function LalamoveSettingsPage() {
   const { data: status, isLoading: statusLoading } = useLalamoveStatus();
   const { data: user } = useLalamoveUser();
