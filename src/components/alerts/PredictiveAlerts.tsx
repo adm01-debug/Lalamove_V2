@@ -50,7 +50,7 @@ interface PredictiveAlertsProps {
 }
 
 export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps>(function PredictiveAlerts({ className, maxItems = 5 }, ref) {
-  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis();
+  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis() as any;
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (isLoading) {
