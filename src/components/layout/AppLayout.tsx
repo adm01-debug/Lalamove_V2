@@ -6,7 +6,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileSidebar } from '@/components/layout/MobileSidebar';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Header } from '@/components/layout/Header';
-import { useAccessibility, SkipLink } from '@/hooks/useAccessibility';
+import { useAccessibility, SkipLink, useAnnounce } from '@/hooks/useAccessibility';
 import { useContextualHints } from '@/hooks/useContextualHints';
 import { FloatingActionButton, FloatingActionButtonRef } from '@/components/ui/floating-action-button';
 import { KeyboardShortcutsModal } from '@/components/ui/keyboard-shortcuts-modal';
@@ -76,6 +76,7 @@ export function AppLayout() {
   // Initialize accessibility and contextual hints
   useAccessibility();
   useContextualHints();
+  const { announce } = useAnnounce();
 
   // Enable audio on first user interaction (required by browsers)
   useEffect(() => {
@@ -170,6 +171,7 @@ export function AppLayout() {
       if (navigationShortcuts[key]) {
         e.preventDefault();
         navigate(navigationShortcuts[key]);
+        announce(`Navegando para ${pageConfig[navigationShortcuts[key]]?.title || navigationShortcuts[key]}`);
         setGKeyPressed(false);
         if (gKeyTimeoutRef.current) {
           clearTimeout(gKeyTimeoutRef.current);
@@ -199,6 +201,7 @@ export function AppLayout() {
     if (e.key === '?' || (e.shiftKey && e.code === 'Slash')) {
       e.preventDefault();
       setShortcutsModalOpen(true);
+      announce('Abrindo guia de atalhos do teclado', 'polite');
       return;
     }
     
@@ -312,7 +315,13 @@ export function AppLayout() {
           subtitle={config.subtitle} 
           onMenuClick={() => setMobileSidebarOpen(true)}
         />
-        <main id="main-content" className={cn("flex-1 overflow-y-auto", isMobile && "pb-20")} tabIndex={-1}>
+        <main 
+          id="main-content" 
+          className={cn("flex-1 overflow-y-auto", isMobile && "pb-20")} 
+          tabIndex={-1}
+          role="main"
+          aria-label={config.title ? `Conteúdo principal: ${config.title}` : 'Conteúdo principal'}
+        >
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 10 }}

@@ -97,7 +97,11 @@ export function Sidebar() {
   );
 
   return (
-    <aside className={cn("relative flex flex-col h-screen border-r border-border/30 transition-all duration-300", collapsed ? "w-20" : "w-64")}>
+    <aside 
+      className={cn("relative flex flex-col h-screen border-r border-border/30 transition-all duration-300", collapsed ? "w-20" : "w-64")}
+      aria-expanded={!collapsed}
+      aria-label="Menu lateral de navegação"
+    >
       <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-accent/5 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary/30 via-accent/20 to-info/30" />
