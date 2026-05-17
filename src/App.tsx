@@ -110,6 +110,8 @@ const AppContent = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  const isAuthPage = location.pathname.startsWith('/auth');
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -122,8 +124,8 @@ const AppContent = () => {
                 <CommandPaletteEnhanced />
                 <OfflineIndicator />
                 <InstallPrompt />
-                <KeyboardShortcutsHelp />
-                <AnimatePresence mode="wait" initial={false}>
+                {!isAuthPage && <KeyboardShortcutsHelp />}
+                <AnimatePresence mode="wait">
                   <Routes location={location} key={location.pathname}>
                     {/* Public auth routes */}
                     <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />

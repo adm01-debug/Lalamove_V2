@@ -84,9 +84,12 @@ export function MobileBottomNav() {
 
   // Main navigation items (max 5 for bottom nav)
   const mainNavItems: NavItem[] = [
-    isRoot 
-      ? { id: 'dashboard', label: 'Home', icon: LayoutDashboard, path: '/' }
-      : { id: 'back', label: 'Voltar', icon: ArrowLeft, path: '#back' },
+    { 
+      id: isRoot ? 'dashboard' : 'back', 
+      label: isRoot ? 'Home' : 'Voltar', 
+      icon: isRoot ? LayoutDashboard : ArrowLeft, 
+      path: isRoot ? '/' : '#back' 
+    },
     { id: 'orders', label: 'Pedidos', icon: Package, path: '/orders' },
     { id: 'approvals', label: 'Aprovações', icon: Shield, path: '/approvals', badge: pendingApprovalsCount, critical: pendingApprovalsCount >= 5 },
     { id: 'alerts', label: 'Alertas', icon: Bell, path: '/alerts', badge: unreadAlertsCount, critical: criticalAlertsCount > 0 },

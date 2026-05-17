@@ -1,4 +1,5 @@
 import { Bell, User, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu, Search, LogOut, ArrowLeft } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
@@ -70,6 +71,7 @@ const getSeverityConfig = (severity: string) => {
 
 export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   const { user, signOut } = useAuth();
+  const location = useLocation();
   const { mode, setMode, isDark } = useTheme();
   const { data: alerts = [], isLoading: alertsLoading } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation } = useAlertActions();
@@ -115,9 +117,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
 
           {/* Back Button & Title Section */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0">
-            <div className="hidden md:block">
-              <BackButton variant="ghost" size="icon" />
-            </div>
+            <BackButton variant="ghost" size="icon" className="h-10 w-10" />
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -409,10 +409,12 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
         <SmartBreadcrumbs showQuickActions showFavorites showRecent />
       </div>
       
-      {/* Mobile Breadcrumbs */}
-      <div className="px-3 pb-2 md:hidden">
-        <MobileBreadcrumbs />
-      </div>
+      {/* Mobile Breadcrumbs - only on deep pages */}
+      {location.pathname !== '/' && location.pathname !== '/dashboard' && (
+        <div className="px-3 pb-2 md:hidden">
+          <MobileBreadcrumbs />
+        </div>
+      )}
     </header>
   );
 }
