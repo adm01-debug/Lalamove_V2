@@ -124,7 +124,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
 
       <CardContent className="space-y-3">
         <AnimatePresence mode="popLayout">
-          {displayPredictions.map((prediction, index) => {
+          {displayPredictions.map((prediction: PredictiveAlertExtended, index: number) => {
             const config = typeConfig[prediction.type] || typeConfig.sla_breach;
             const impact = impactConfig[prediction.impact];
             const Icon = config.icon;
