@@ -13,8 +13,7 @@ import {
   User, 
   Truck, 
   DollarSign, 
-  Navigation,
-  CheckSquare
+  Navigation
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -46,8 +45,9 @@ const vehicleIcons: Record<string, string> = {
   TRUCK: '🚛',
 };
 
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+function formatTime(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatCurrency(value: number, currency: string): string {
@@ -74,7 +74,7 @@ function OrderCard({
       hover="lift"
       className={cn(
         "overflow-hidden cursor-pointer active:scale-[0.98] transition-all touch-manipulation relative",
-        isSelected && "ring-2 ring-primary border-primary/50 bg-primary/5"
+        isSelected && "ring-2 ring-primary border-primary/50 bg-primary/5 shadow-lg"
       )}
       onClick={() => onViewDetails?.(order)}
     >
@@ -365,10 +365,36 @@ function OrderPreviewCard({ order, status }: { order: Order; status: { label: st
 
 export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function OrdersTable({ orders, onViewDetails }, ref) {
   const isMobile = useIsMobile();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const handleToggleSelect = (id: string, checked: boolean) => {
+    const newSelected = new Set(selectedIds);
+    if (checked) {
+      newSelected.add(id);
+    } else {
+      newSelected.delete(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleToggleAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(orders.map(o => o.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const selectedOrders = useMemo(() => 
+    orders.filter(o => selectedIds.has(o.id)),
+    [orders, selectedIds]
+  );
+
+  const isAllSelected = orders.length > 0 && selectedIds.size === orders.length;
 
   if (orders.length === 0) {
     return (
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="glass-card rounded-xl overflow-hidden" ref={ref}>
         <div className="p-3 sm:p-4 border-b border-border">
           <h3 className="font-semibold text-foreground flex items-center gap-2 text-sm sm:text-base">
             <Package className="w-4 h-4" />
@@ -384,20 +410,33 @@ export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function
   }
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden relative" ref={ref}>
       <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-foreground flex items-center gap-2 text-sm sm:text-base">
           <Package className="w-4 h-4" />
           <span className="hidden xs:inline">Pedidos Recentes</span>
           <span className="xs:hidden">Pedidos</span>
         </h3>
-        <Badge variant="secondary" size="sm">{orders.length}</Badge>
+        <div className="flex items-center gap-2">
+          {selectedIds.size > 0 && (
+            <Badge variant="primary" size="sm" className="animate-in zoom-in">
+              {selectedIds.size} selecionado(s)
+            </Badge>
+          )}
+          <Badge variant="secondary" size="sm">{orders.length}</Badge>
+        </div>
       </div>
       
       {isMobile ? (
         <div className="p-2 sm:p-3 space-y-2 sm:space-y-3">
           {orders.slice(0, 5).map((order) => (
-            <OrderCard key={order.id} order={order} onViewDetails={onViewDetails} />
+            <OrderCard 
+              key={order.id} 
+              order={order} 
+              onViewDetails={onViewDetails}
+              isSelected={selectedIds.has(order.id)}
+              onSelect={(checked) => handleToggleSelect(order.id, checked)}
+            />
           ))}
           {orders.length > 5 && (
             <Button variant="ghost" className="w-full text-muted-foreground text-sm h-10">
@@ -407,8 +446,20 @@ export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function
           )}
         </div>
       ) : (
-        <OrdersTableDesktop orders={orders} onViewDetails={onViewDetails} />
+        <OrdersTableDesktop 
+          orders={orders} 
+          onViewDetails={onViewDetails} 
+          selectedIds={selectedIds}
+          onToggleSelect={handleToggleSelect}
+          onToggleAll={handleToggleAll}
+          isAllSelected={isAllSelected}
+        />
       )}
+
+      <BatchActionsToolbar 
+        selectedOrders={selectedOrders}
+        onClear={() => setSelectedIds(new Set())}
+      />
     </div>
   );
 });
