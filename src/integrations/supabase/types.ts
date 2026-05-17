@@ -1175,6 +1175,7 @@ export type Database = {
       lalamove_orders: {
         Row: {
           actual_delivery: string | null
+          auto_notify_supplier: boolean | null
           bitrix24_deal_id: number | null
           cost_center: string | null
           created_at: string
@@ -1202,10 +1203,15 @@ export type Database = {
           pickup_address: string
           pickup_latitude: number | null
           pickup_longitude: number | null
+          pod_received: boolean | null
           quotation_id: string | null
+          requires_pod: boolean | null
+          route_deviation_threshold_minutes: number | null
           scheduled_at: string
           share_link: string | null
+          stalled_threshold_minutes: number | null
           status: Database["public"]["Enums"]["order_status"]
+          supplier_contact: string | null
           tags: string[] | null
           total_cost: number
           updated_at: string
@@ -1213,6 +1219,7 @@ export type Database = {
         }
         Insert: {
           actual_delivery?: string | null
+          auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
           cost_center?: string | null
           created_at?: string
@@ -1240,10 +1247,15 @@ export type Database = {
           pickup_address: string
           pickup_latitude?: number | null
           pickup_longitude?: number | null
+          pod_received?: boolean | null
           quotation_id?: string | null
+          requires_pod?: boolean | null
+          route_deviation_threshold_minutes?: number | null
           scheduled_at?: string
           share_link?: string | null
+          stalled_threshold_minutes?: number | null
           status?: Database["public"]["Enums"]["order_status"]
+          supplier_contact?: string | null
           tags?: string[] | null
           total_cost?: number
           updated_at?: string
@@ -1251,6 +1263,7 @@ export type Database = {
         }
         Update: {
           actual_delivery?: string | null
+          auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
           cost_center?: string | null
           created_at?: string
@@ -1278,10 +1291,15 @@ export type Database = {
           pickup_address?: string
           pickup_latitude?: number | null
           pickup_longitude?: number | null
+          pod_received?: boolean | null
           quotation_id?: string | null
+          requires_pod?: boolean | null
+          route_deviation_threshold_minutes?: number | null
           scheduled_at?: string
           share_link?: string | null
+          stalled_threshold_minutes?: number | null
           status?: Database["public"]["Enums"]["order_status"]
+          supplier_contact?: string | null
           tags?: string[] | null
           total_cost?: number
           updated_at?: string

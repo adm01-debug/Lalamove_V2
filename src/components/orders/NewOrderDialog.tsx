@@ -61,9 +61,14 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     isPODEnabled: true,
     internalOrderId: '',
     internalNotes: '',
+    // Guardian fields
+    autoNotifySupplier: false,
+    supplierContact: '',
+    stalledThreshold: 15,
+    requiresPod: true,
   });
 
-  const updateField = (field: string, value: string | boolean | string[]) => {
+  const updateField = (field: string, value: string | boolean | string[] | number) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
@@ -163,6 +168,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           serviceType: form.vehicleType,
           metadata: {
             ...(form.internalOrderId.trim() && { internalOrderId: form.internalOrderId.trim() }),
+            // Guardian Metadata
+            autoNotifySupplier: form.autoNotifySupplier,
+            supplierContact: form.supplierContact.trim(),
+            stalledThresholdMinutes: form.stalledThreshold,
+            requiresPod: form.requiresPod
           },
         },
       });
@@ -209,16 +219,20 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       isPODEnabled: true,
       internalOrderId: '',
       internalNotes: '',
+      autoNotifySupplier: false,
+      supplierContact: '',
+      stalledThreshold: 15,
+      requiresPod: true,
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (step !== 'quoting' && step !== 'creating') { onOpenChange(v); if (!v) resetForm(); } }}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Package className="w-5 h-5 text-primary" />
-            Novo Pedido Lalamove
+            <Zap className="w-5 h-5 text-primary animate-pulse" />
+            Novo Pedido (Lalamove Guardian)
           </DialogTitle>
           <DialogDescription>
             {step === 'form' && 'Preencha os dados para solicitar uma cotação.'}
@@ -430,15 +444,6 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </div>
             </div>
 
-            {/* POD */}
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox
-                checked={form.isPODEnabled}
-                onCheckedChange={(v) => updateField('isPODEnabled', !!v)}
-              />
-              Habilitar Prova de Entrega (POD)
-            </label>
-
             {/* Internal fields */}
             <div className="space-y-2">
               <Label className="text-xs">ID Interno (opcional)</Label>
@@ -447,6 +452,68 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 value={form.internalOrderId}
                 onChange={e => updateField('internalOrderId', e.target.value)}
               />
+            </div>
+
+            {/* Guardian System Settings */}
+            <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4 animate-fade-up">
+              <div className="flex items-center gap-2 text-sm font-bold text-primary">
+                <Zap className="w-4 h-4" />
+                LALAMOVE GUARDIAN
+              </div>
+              
+              <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-background/50 border border-border/50">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Notificar Fornecedor</Label>
+                    <p className="text-[10px] text-muted-foreground">Aviso automático via WhatsApp/Bitrix</p>
+                  </div>
+                  <Checkbox 
+                    checked={form.autoNotifySupplier}
+                    onCheckedChange={(v) => updateField('autoNotifySupplier', !!v)}
+                  />
+                </div>
+
+                {form.autoNotifySupplier && (
+                  <div className="space-y-1 animate-in slide-in-from-top-1 duration-200">
+                    <Label className="text-xs">Contato Fornecedor (WhatsApp)</Label>
+                    <Input 
+                      placeholder="+55 11 9..."
+                      value={form.supplierContact}
+                      onChange={e => updateField('supplierContact', e.target.value)}
+                      className="h-8 text-xs"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-background/50 border border-border/50">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Foto Obrigatória (POD)</Label>
+                    <p className="text-[10px] text-muted-foreground">Alerta crítico se não houver foto</p>
+                  </div>
+                  <Checkbox 
+                    checked={form.requiresPod}
+                    onCheckedChange={(v) => updateField('requiresPod', !!v)}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs">Alerta Motorista Parado (minutos)</Label>
+                  <Select 
+                    value={form.stalledThreshold.toString()} 
+                    onValueChange={(v) => updateField('stalledThreshold', parseInt(v))}
+                  >
+                    <SelectTrigger className="h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">5 minutos (Rígido)</SelectItem>
+                      <SelectItem value="10">10 minutos (Padrão)</SelectItem>
+                      <SelectItem value="15">15 minutos (Flexível)</SelectItem>
+                      <SelectItem value="30">30 minutos (Longo)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
 
             {error && (
