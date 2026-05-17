@@ -171,6 +171,7 @@ export function AppLayout() {
       if (navigationShortcuts[key]) {
         e.preventDefault();
         navigate(navigationShortcuts[key]);
+        announce(`Navegando para ${pageConfig[navigationShortcuts[key]]?.title || navigationShortcuts[key]}`);
         setGKeyPressed(false);
         if (gKeyTimeoutRef.current) {
           clearTimeout(gKeyTimeoutRef.current);
