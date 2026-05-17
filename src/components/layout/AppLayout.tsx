@@ -312,7 +312,13 @@ export function AppLayout() {
           subtitle={config.subtitle} 
           onMenuClick={() => setMobileSidebarOpen(true)}
         />
-        <main id="main-content" className={cn("flex-1 overflow-y-auto", isMobile && "pb-20")} tabIndex={-1}>
+        <main 
+          id="main-content" 
+          className={cn("flex-1 overflow-y-auto", isMobile && "pb-20")} 
+          tabIndex={-1}
+          role="main"
+          aria-label={config.title ? `Conteúdo principal: ${config.title}` : 'Conteúdo principal'}
+        >
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 10 }}
