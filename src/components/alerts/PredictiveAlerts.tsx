@@ -2,7 +2,7 @@ import { useState, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Clock, Zap, RefreshCw, ChevronRight, Info, Sparkles,
-  Target, Truck, Users, MapPin, AlertTriangle
+  Target, Truck, Users, MapPin, AlertTriangle, Eye
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ const typeConfig: Record<string, { icon: typeof Brain; color: string; bg: string
   sla_breach: { icon: Target, color: "text-warning", bg: "bg-warning/10" },
   capacity_issue: { icon: Truck, color: "text-accent", bg: "bg-accent/10" },
   area_hotspot: { icon: MapPin, color: "text-destructive", bg: "bg-destructive/10" },
+  driver_stopped: { icon: AlertTriangle, color: "text-destructive", bg: "bg-destructive/10 animate-pulse" },
+  route_deviation: { icon: MapPin, color: "text-destructive", bg: "bg-destructive/10" },
 };
 
 const impactConfig: Record<string, { label: string; color: string }> = {
@@ -28,6 +30,19 @@ const impactConfig: Record<string, { label: string; color: string }> = {
   critical: { label: "Crítico", color: "bg-destructive/10 text-destructive" },
 };
 
+interface PredictiveAlertExtended {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  probability: number;
+  impact: string;
+  timeframe: string;
+  recommendation: string;
+  lalamoveOrderId?: string;
+  dataPoints?: Array<{ label: string; value: string | number }>;
+}
+
 interface PredictiveAlertsProps {
   className?: string;
   compact?: boolean;
@@ -35,7 +50,7 @@ interface PredictiveAlertsProps {
 }
 
 export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps>(function PredictiveAlerts({ className, maxItems = 5 }, ref) {
-  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis();
+  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis() as any;
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (isLoading) {
@@ -109,7 +124,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
 
       <CardContent className="space-y-3">
         <AnimatePresence mode="popLayout">
-          {displayPredictions.map((prediction, index) => {
+          {displayPredictions.map((prediction: PredictiveAlertExtended, index: number) => {
             const config = typeConfig[prediction.type] || typeConfig.sla_breach;
             const impact = impactConfig[prediction.impact];
             const Icon = config.icon;
@@ -158,13 +173,27 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
                             </div>
                             {prediction.dataPoints && prediction.dataPoints.length > 0 && (
                               <div className="grid grid-cols-2 gap-2 mt-3">
-                                {prediction.dataPoints.map((point, i) => (
+                                {prediction.dataPoints.map((point: any, i: number) => (
                                   <div key={i} className="bg-background/50 rounded-lg p-2">
                                     <p className="text-xs text-muted-foreground">{point.label}</p>
                                     <p className="text-sm font-medium">{point.value}</p>
                                   </div>
                                 ))}
                               </div>
+                            )}
+                            {prediction.lalamoveOrderId && (
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full mt-3 gap-2 border-primary/20 hover:bg-primary/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.location.href = `/orders?search=${prediction.lalamoveOrderId}`;
+                                }}
+                              >
+                                <Eye className="w-4 h-4" />
+                                Ver Detalhes do Pedido
+                              </Button>
                             )}
                           </div>
                         </motion.div>
