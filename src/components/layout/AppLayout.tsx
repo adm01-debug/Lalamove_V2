@@ -6,7 +6,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileSidebar } from '@/components/layout/MobileSidebar';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
 import { Header } from '@/components/layout/Header';
-import { useAccessibility, SkipLink } from '@/hooks/useAccessibility';
+import { useAccessibility, SkipLink, useAnnounce } from '@/hooks/useAccessibility';
 import { useContextualHints } from '@/hooks/useContextualHints';
 import { FloatingActionButton, FloatingActionButtonRef } from '@/components/ui/floating-action-button';
 import { KeyboardShortcutsModal } from '@/components/ui/keyboard-shortcuts-modal';
