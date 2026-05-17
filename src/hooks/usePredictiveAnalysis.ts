@@ -31,12 +31,35 @@ async function fetchAnalysisData(): Promise<AnalysisData> {
   const [driversResult, approvalsResult, ordersResult, incidentsResult] = await Promise.all([
     supabase.from("drivers").select("id, risk_score, risk_level, failure_rate").or("risk_level.eq.high,risk_level.eq.critical").limit(50),
     supabase.from("driver_approval_queue").select("id, risk_score").eq("status", "PENDING").limit(50),
-    supabase.from("lalamove_orders").select("id, status, delay_minutes, created_at").in("status", ["ON_GOING", "PICKED_UP", "MATCHED"]).limit(100),
+    supabase.from("lalamove_orders").select("*").in("status", ["ON_GOING", "PICKED_UP", "MATCHED"]).limit(100),
     supabase.from("driver_incidents").select("id, severity, created_at").eq("resolved", false).gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()).limit(50),
   ]);
 
   const orders = ordersResult.data || [];
   const avgDelay = orders.length > 0 ? orders.reduce((acc, o) => acc + (o.delay_minutes || 0), 0) / orders.length : 0;
+
+  // Analisar motoristas parados (usando os novos campos do sistema Guardian)
+  const stalledThreshold = 15; // 15 minutos parado
+  const stalledDrivers = orders
+    .filter(o => o.status === 'ON_GOING' && o.delay_minutes >= stalledThreshold)
+    .map(o => ({
+      id: o.driver_id || 'unknown',
+      driverName: o.driver_name || 'Motorista',
+      minutes: o.delay_minutes,
+      orderId: o.id,
+      lalamoveId: o.lalamove_id || o.id
+    }));
+
+  // Analisar desvios de rota
+  const offRouteDrivers = orders
+    .filter(o => o.status === 'ON_GOING' && (o.route_deviation_meters || 0) > 500)
+    .map(o => ({
+      id: o.driver_id || 'unknown',
+      driverName: o.driver_name || 'Motorista',
+      deviation: o.route_deviation_meters,
+      orderId: o.id,
+      lalamoveId: o.lalamove_id || o.id
+    }));
 
   return {
     driversAtRisk: (driversResult.data || []).length,
@@ -45,6 +68,8 @@ async function fetchAnalysisData(): Promise<AnalysisData> {
     recentIncidents: (incidentsResult.data || []).length,
     avgDeliveryTime: avgDelay,
     slaCompliance: avgDelay < 15 ? 95 : avgDelay < 30 ? 85 : 70,
+    stalledDrivers,
+    offRouteDrivers
   };
 }
 
