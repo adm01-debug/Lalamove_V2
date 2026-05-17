@@ -181,6 +181,20 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
                                 ))}
                               </div>
                             )}
+                            {prediction.lalamoveOrderId && (
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="w-full mt-3 gap-2 border-primary/20 hover:bg-primary/10"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.location.href = `/orders?search=${prediction.lalamoveOrderId}`;
+                                }}
+                              >
+                                <Eye className="w-4 h-4" />
+                                Ver Detalhes do Pedido
+                              </Button>
+                            )}
                           </div>
                         </motion.div>
                       )}
