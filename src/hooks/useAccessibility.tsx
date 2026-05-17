@@ -12,8 +12,23 @@ export function useAccessibility() {
     // Add navigation aria-label to sidebar if missing
     const sidebar = document.querySelector('aside');
     if (sidebar && !sidebar.hasAttribute('aria-label')) {
-      sidebar.setAttribute('aria-label', 'Menu principal');
+      sidebar.setAttribute('aria-label', 'Menu lateral de navegação');
     }
+
+    // Add aria-label to main landmark if missing
+    const main = document.getElementById('main-content');
+    if (main && !main.hasAttribute('aria-label')) {
+      main.setAttribute('aria-label', 'Conteúdo principal');
+    }
+
+    // Ensure all buttons have descriptive labels
+    document.querySelectorAll('button:not([aria-label])').forEach(btn => {
+      if (!btn.textContent?.trim() && btn.querySelector('svg')) {
+        const svg = btn.querySelector('svg');
+        const title = svg?.getAttribute('title') || 'Botão de ação';
+        btn.setAttribute('aria-label', title);
+      }
+    });
 
     // Ensure all images have alt text
     document.querySelectorAll('img:not([alt])').forEach(img => {
