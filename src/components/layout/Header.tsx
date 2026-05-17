@@ -1,4 +1,5 @@
 import { Bell, User, Sun, Moon, Monitor, Check, Sparkles, AlertTriangle, Clock, CheckCircle, XCircle, ChevronRight, Trash2, Menu, Search, LogOut, ArrowLeft } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
