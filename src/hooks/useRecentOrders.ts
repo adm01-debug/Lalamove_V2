@@ -1,5 +1,5 @@
 import { logger } from '@/utils/logger';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Order } from '@/types';
 
@@ -81,6 +81,7 @@ export function useRecentOrders(page = 1, status?: any, query?: string) {
   return useQuery({
     queryKey: ['recent-orders', page, status, query],
     queryFn: () => fetchOrders(page, status, query),
+    placeholderData: keepPreviousData,
     refetchInterval: 30000,
     staleTime: 10000,
   });

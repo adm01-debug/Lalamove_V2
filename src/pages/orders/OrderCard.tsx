@@ -101,12 +101,18 @@ export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCar
 
           {order.driverName && (
             <div className="flex items-center gap-2 py-2.5 px-3 rounded-xl bg-secondary/50 border border-border/30">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-accent/20 flex items-center justify-center text-xs font-semibold text-primary">
-                {order.driverName.split(' ').map(n => n[0]).join('')}
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/30 to-accent/20 flex items-center justify-center text-xs font-semibold text-primary overflow-hidden">
+                {order.driverName.split(' ').map(n => n[0]).join('').slice(0, 2)}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground">{order.driverName}</p>
-                <p className="text-xs text-muted-foreground">{order.driverPhone}</p>
+                <p className="text-sm font-medium text-foreground truncate">
+                  {searchQuery.trim() && (order as WithMatches<typeof order>)._matches ? (
+                    <HighlightText text={order.driverName} matches={(order as WithMatches<typeof order>)._matches as any} matchKey="driverName" />
+                  ) : (
+                    order.driverName
+                  )}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">{order.driverPhone}</p>
               </div>
             </div>
           )}
