@@ -13,7 +13,7 @@ interface OrdersResult {
   totalPages: number;
 }
 
-async function fetchOrders(page: number, status?: string, query?: string): Promise<OrdersResult> {
+async function fetchOrders(page: number, status?: any, query?: string): Promise<OrdersResult> {
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
@@ -77,7 +77,7 @@ async function fetchOrders(page: number, status?: string, query?: string): Promi
   };
 }
 
-export function useRecentOrders(page = 1, status?: string, query?: string) {
+export function useRecentOrders(page = 1, status?: any, query?: string) {
   return useQuery({
     queryKey: ['recent-orders', page, status, query],
     queryFn: () => fetchOrders(page, status, query),
