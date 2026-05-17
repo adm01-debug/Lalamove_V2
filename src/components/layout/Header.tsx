@@ -115,9 +115,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
 
           {/* Back Button & Title Section */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0">
-            <div className="hidden md:block">
-              <BackButton variant="ghost" size="icon" />
-            </div>
+            <BackButton variant="ghost" size="icon" className="h-10 w-10" />
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
