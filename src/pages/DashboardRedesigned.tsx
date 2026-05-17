@@ -25,6 +25,7 @@ import { DashboardHeroSection, WelcomeBanner } from '@/components/dashboard/Dash
 import { UAPIStatusCards } from '@/components/dashboard/UAPIStatusCards';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { LiveRegion } from '@/components/ui/accessible-card';
+import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { useRecentOrders } from '@/hooks/useRecentOrders';
 import { usePendingApprovals, useApprovalActions } from '@/hooks/usePendingApprovals';
