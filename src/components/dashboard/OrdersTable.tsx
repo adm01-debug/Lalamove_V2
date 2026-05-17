@@ -55,17 +55,37 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // Mobile card view for orders
-function OrderCard({ order, onViewDetails }: { order: Order; onViewDetails?: (order: Order) => void }) {
+function OrderCard({ 
+  order, 
+  onViewDetails, 
+  isSelected, 
+  onSelect 
+}: { 
+  order: Order; 
+  onViewDetails?: (order: Order) => void;
+  isSelected: boolean;
+  onSelect: (checked: boolean) => void;
+}) {
   const status = statusConfig[order.status] || { label: order.status, variant: 'muted' as const };
   
   return (
     <Card 
       variant="glass" 
       hover="lift"
-      className="overflow-hidden cursor-pointer active:scale-[0.98] transition-transform touch-manipulation"
+      className={cn(
+        "overflow-hidden cursor-pointer active:scale-[0.98] transition-all touch-manipulation relative",
+        isSelected && "ring-2 ring-primary border-primary/50 bg-primary/5"
+      )}
       onClick={() => onViewDetails?.(order)}
     >
-      <CardContent className="p-3 sm:p-4">
+      <div className="absolute top-3 left-3 z-10" onClick={(e) => e.stopPropagation()}>
+        <Checkbox 
+          checked={isSelected} 
+          onCheckedChange={(checked) => onSelect(checked as boolean)}
+          className="rounded-md border-primary/20 data-[state=checked]:bg-primary"
+        />
+      </div>
+      <CardContent className="p-3 sm:p-4 pl-10 sm:pl-12">
         <div className="flex items-start justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <span className="text-xl sm:text-2xl flex-shrink-0">{vehicleIcons[order.vehicleType]}</span>
