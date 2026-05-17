@@ -219,16 +219,20 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       isPODEnabled: true,
       internalOrderId: '',
       internalNotes: '',
+      autoNotifySupplier: false,
+      supplierContact: '',
+      stalledThreshold: 15,
+      requiresPod: true,
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (step !== 'quoting' && step !== 'creating') { onOpenChange(v); if (!v) resetForm(); } }}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Package className="w-5 h-5 text-primary" />
-            Novo Pedido Lalamove
+            <Zap className="w-5 h-5 text-primary animate-pulse" />
+            Novo Pedido (Lalamove Guardian)
           </DialogTitle>
           <DialogDescription>
             {step === 'form' && 'Preencha os dados para solicitar uma cotação.'}
