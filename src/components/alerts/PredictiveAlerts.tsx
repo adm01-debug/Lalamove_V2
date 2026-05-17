@@ -173,7 +173,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
                             </div>
                             {prediction.dataPoints && prediction.dataPoints.length > 0 && (
                               <div className="grid grid-cols-2 gap-2 mt-3">
-                                {prediction.dataPoints.map((point, i) => (
+                                {prediction.dataPoints.map((point: any, i: number) => (
                                   <div key={i} className="bg-background/50 rounded-lg p-2">
                                     <p className="text-xs text-muted-foreground">{point.label}</p>
                                     <p className="text-sm font-medium">{point.value}</p>
