@@ -68,7 +68,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     requiresPod: true,
   });
 
-  const updateField = (field: string, value: string | boolean | string[]) => {
+  const updateField = (field: string, value: string | boolean | string[] | number) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
