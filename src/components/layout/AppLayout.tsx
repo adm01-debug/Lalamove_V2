@@ -199,6 +199,7 @@ export function AppLayout() {
     if (e.key === '?' || (e.shiftKey && e.code === 'Slash')) {
       e.preventDefault();
       setShortcutsModalOpen(true);
+      announce('Abrindo guia de atalhos do teclado', 'polite');
       return;
     }
     
