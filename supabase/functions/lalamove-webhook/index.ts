@@ -319,8 +319,32 @@ serve(async (req) => {
           }
           
           if (orderUuid) {
-            await supabase.from('lalamove_orders').update({ driver_id: driverId, status: 'MATCHED' }).eq('id', orderUuid);
+            const { data: orderData } = await supabase
+              .from('lalamove_orders')
+              .update({ driver_id: driverId, status: 'MATCHED' })
+              .eq('id', orderUuid)
+              .select('auto_notify_supplier, supplier_contact, customer_name, internal_order_id, pickup_address')
+              .single();
+            
             logger.log(`[Webhook] Linked driver ${driverId} to order ${orderUuid}`);
+
+            // GUARDIAN: Automate supplier notification
+            if (orderData?.auto_notify_supplier && orderData?.supplier_contact) {
+              logger.log(`[Guardian] Automating notification to supplier: ${orderData.supplier_contact}`);
+              try {
+                // Call Bitrix24 or direct Notification service
+                await supabase.functions.invoke('send-notification', {
+                  body: {
+                    type: 'SUPPLIER_ALERT',
+                    recipient: orderData.supplier_contact,
+                    message: `Olá! O motorista ${driverData.driverName || 'da Lalamove'} foi designado para a coleta do pedido ${orderData.internal_order_id || orderUuid}. Ele está a caminho de ${orderData.pickup_address}.`,
+                    metadata: { orderId: orderUuid, driverName: driverData.driverName }
+                  }
+                });
+              } catch (notifyError) {
+                logger.error(`[Guardian] Failed to notify supplier: ${notifyError}`);
+              }
+            }
           }
           
           // Evaluate driver
