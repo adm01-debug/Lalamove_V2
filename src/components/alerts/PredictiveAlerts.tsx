@@ -30,6 +30,19 @@ const impactConfig: Record<string, { label: string; color: string }> = {
   critical: { label: "Crítico", color: "bg-destructive/10 text-destructive" },
 };
 
+interface PredictiveAlertExtended extends any {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  probability: number;
+  impact: string;
+  timeframe: string;
+  recommendation: string;
+  lalamoveOrderId?: string;
+  dataPoints?: Array<{ label: string; value: string | number }>;
+}
+
 interface PredictiveAlertsProps {
   className?: string;
   compact?: boolean;
