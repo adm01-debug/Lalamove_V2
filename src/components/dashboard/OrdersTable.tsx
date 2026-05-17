@@ -419,7 +419,7 @@ export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function
         </h3>
         <div className="flex items-center gap-2">
           {selectedIds.size > 0 && (
-            <Badge variant="primary" size="sm" className="animate-in zoom-in">
+            <Badge variant="glow" size="sm" className="animate-in zoom-in">
               {selectedIds.size} selecionado(s)
             </Badge>
           )}
