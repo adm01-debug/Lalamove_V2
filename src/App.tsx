@@ -110,6 +110,8 @@ const AppContent = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  const isAuthPage = location.pathname.startsWith('/auth');
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
