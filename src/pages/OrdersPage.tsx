@@ -75,8 +75,8 @@ export function OrdersPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const queryClient = useQueryClient();
-  const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage);
-  const orders = ordersData?.orders;
+  const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);
+  const orders = ordersData?.orders || [];
   const totalPages = ordersData?.totalPages ?? 1;
   const totalCount = ordersData?.totalCount ?? 0;
 
@@ -90,11 +90,15 @@ export function OrdersPage() {
 
   const filteredOrders = useMemo(() => {
     if (!orders) return [];
-    const ordersToFilter = searchQuery.trim()
-      ? searchResults.map(r => ({ ...r.item, _matches: r.matches as any }))
-      : orders;
-    return ordersToFilter.filter(order => statusFilter === 'ALL' || order.status === statusFilter);
-  }, [orders, searchResults, searchQuery, statusFilter]);
+    
+    // If we have a search query, we still use Fuse for local highlighting and refinement if needed,
+    // but the primary filtering is now done at the database level.
+    if (searchQuery.trim()) {
+      return searchResults.map(r => ({ ...r.item, _matches: r.matches as any }));
+    }
+    
+    return orders;
+  }, [orders, searchResults, searchQuery]);
 
   const stats = useMemo(() => ({
     total: totalCount,
