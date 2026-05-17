@@ -2,7 +2,7 @@ import { useState, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Clock, Zap, RefreshCw, ChevronRight, Info, Sparkles,
-  Target, Truck, Users, MapPin, AlertTriangle
+  Target, Truck, Users, MapPin, AlertTriangle, Eye
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
