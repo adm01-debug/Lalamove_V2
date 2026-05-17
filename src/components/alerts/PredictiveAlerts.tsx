@@ -19,6 +19,8 @@ const typeConfig: Record<string, { icon: typeof Brain; color: string; bg: string
   sla_breach: { icon: Target, color: "text-warning", bg: "bg-warning/10" },
   capacity_issue: { icon: Truck, color: "text-accent", bg: "bg-accent/10" },
   area_hotspot: { icon: MapPin, color: "text-destructive", bg: "bg-destructive/10" },
+  driver_stopped: { icon: AlertTriangle, color: "text-destructive", bg: "bg-destructive/10 animate-pulse" },
+  route_deviation: { icon: MapPin, color: "text-destructive", bg: "bg-destructive/10" },
 };
 
 const impactConfig: Record<string, { label: string; color: string }> = {
