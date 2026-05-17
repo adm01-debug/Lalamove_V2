@@ -70,6 +70,7 @@ const getSeverityConfig = (severity: string) => {
 
 export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
   const { user, signOut } = useAuth();
+  const location = useLocation();
   const { mode, setMode, isDark } = useTheme();
   const { data: alerts = [], isLoading: alertsLoading } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation } = useAlertActions();
