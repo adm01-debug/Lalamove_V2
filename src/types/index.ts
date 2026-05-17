@@ -17,6 +17,12 @@ export interface Order {
   totalCost: number;
   currency: string;
   tags: string[];
+  supplier_contact?: string;
+  auto_notify_supplier?: boolean;
+  stalled_threshold_minutes?: number;
+  route_deviation_threshold_meters?: number;
+  pod_required?: boolean;
+  pod_url?: string;
   createdAt: Date;
   updatedAt: Date;
 }
