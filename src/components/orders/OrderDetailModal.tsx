@@ -1,5 +1,5 @@
 import { logger } from '@/utils/logger';
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import {
   Dialog,
@@ -374,6 +374,58 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Guardian Intelligence Section */}
+            {(order.status === 'ON_GOING' || (order.pod_required && !order.pod_url)) && (
+              <div className="glass-card p-4 rounded-lg border-primary/20 bg-primary/5 animate-in zoom-in-95 duration-300">
+                <h3 className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  Guardian Intelligence
+                </h3>
+                <div className="space-y-3">
+                  {order.status === 'ON_GOING' && (
+                    <div className="flex items-start gap-3 p-2 rounded bg-background/50 border border-border/50">
+                      <div className="p-2 rounded-full bg-warning/20">
+                        <Clock className="w-4 h-4 text-warning" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">Monitoramento de Parada</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Motorista monitorado com limite de {order.stalled_threshold_minutes || 15} min. 
+                          {order.auto_notify_supplier ? " Notificação automática de fornecedor ativa." : " Notificação manual configurada."}
+                        </p>
+                      </div>
+                      <Badge variant="outline" className="text-[10px] uppercase tracking-wider">Ativo</Badge>
+                    </div>
+                  )}
+                  {order.pod_required && !order.pod_url && (
+                    <div className="flex items-start gap-3 p-2 rounded bg-background/50 border border-border/50">
+                      <div className="p-2 rounded-full bg-destructive/20">
+                        <Camera className="w-4 h-4 text-destructive" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">Falta Prova de Entrega (POD)</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Este pedido exige comprovação fotográfica. Alerta Guardian disparado para o motorista.
+                        </p>
+                      </div>
+                      <Badge variant="destructive" className="animate-pulse">Crítico</Badge>
+                    </div>
+                  )}
+                  {order.supplier_contact && (
+                    <div className="flex items-center justify-between p-2 rounded bg-secondary/20">
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-xs font-medium">Fornecedor: {order.supplier_contact}</span>
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-6 text-[10px] px-2" onClick={() => toast.info(`Contatando fornecedor: ${order.supplier_contact}`)}>
+                        Contatar via WhatsApp
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
