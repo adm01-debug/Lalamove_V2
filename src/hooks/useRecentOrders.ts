@@ -13,11 +13,11 @@ interface OrdersResult {
   totalPages: number;
 }
 
-async function fetchOrders(page: number): Promise<OrdersResult> {
+async function fetchOrders(page: number, status?: string, query?: string): Promise<OrdersResult> {
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
-  const { data, error, count } = await supabase
+  let supabaseQuery = supabase
     .from('lalamove_orders')
     .select(`
       *,
@@ -25,7 +25,17 @@ async function fetchOrders(page: number): Promise<OrdersResult> {
         name,
         phone
       )
-    `, { count: 'exact' })
+    `, { count: 'exact' });
+
+  if (status && status !== 'ALL') {
+    supabaseQuery = supabaseQuery.eq('status', status);
+  }
+
+  if (query && query.trim()) {
+    supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`);
+  }
+
+  const { data, error, count } = await supabaseQuery
     .order('created_at', { ascending: false })
     .range(from, to);
 
