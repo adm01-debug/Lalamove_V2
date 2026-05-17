@@ -123,7 +123,7 @@ const AppContent = () => {
                 <OfflineIndicator />
                 <InstallPrompt />
                 <KeyboardShortcutsHelp />
-                <AnimatePresence mode="wait" initial={false}>
+                <AnimatePresence mode="wait">
                   <Routes location={location} key={location.pathname}>
                     {/* Public auth routes */}
                     <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />
