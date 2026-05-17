@@ -67,10 +67,10 @@ async function fetchOrders(page: number): Promise<OrdersResult> {
   };
 }
 
-export function useRecentOrders(page = 1) {
+export function useRecentOrders(page = 1, status?: string, query?: string) {
   return useQuery({
-    queryKey: ['recent-orders', page],
-    queryFn: () => fetchOrders(page),
+    queryKey: ['recent-orders', page, status, query],
+    queryFn: () => fetchOrders(page, status, query),
     refetchInterval: 30000,
     staleTime: 10000,
   });
