@@ -1,12 +1,24 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState, useMemo } from 'react';
 import { Order } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Eye, MapPin, Clock, ChevronRight, Package, User, Truck, DollarSign, Navigation } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { 
+  Eye, 
+  MapPin, 
+  Clock, 
+  ChevronRight, 
+  Package, 
+  User, 
+  Truck, 
+  DollarSign, 
+  Navigation
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { HoverPreview } from '@/components/ui/hover-preview';
+import { BatchActionsToolbar } from './BatchActionsToolbar';
 
 interface OrdersTableProps {
   orders: Order[];
@@ -33,8 +45,9 @@ const vehicleIcons: Record<string, string> = {
   TRUCK: '🚛',
 };
 
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+function formatTime(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatCurrency(value: number, currency: string): string {
@@ -42,17 +55,37 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // Mobile card view for orders
-function OrderCard({ order, onViewDetails }: { order: Order; onViewDetails?: (order: Order) => void }) {
+function OrderCard({ 
+  order, 
+  onViewDetails, 
+  isSelected, 
+  onSelect 
+}: { 
+  order: Order; 
+  onViewDetails?: (order: Order) => void;
+  isSelected: boolean;
+  onSelect: (checked: boolean) => void;
+}) {
   const status = statusConfig[order.status] || { label: order.status, variant: 'muted' as const };
   
   return (
     <Card 
       variant="glass" 
       hover="lift"
-      className="overflow-hidden cursor-pointer active:scale-[0.98] transition-transform touch-manipulation"
+      className={cn(
+        "overflow-hidden cursor-pointer active:scale-[0.98] transition-all touch-manipulation relative",
+        isSelected && "ring-2 ring-primary border-primary/50 bg-primary/5 shadow-lg"
+      )}
       onClick={() => onViewDetails?.(order)}
     >
-      <CardContent className="p-3 sm:p-4">
+      <div className="absolute top-3 left-3 z-10" onClick={(e) => e.stopPropagation()}>
+        <Checkbox 
+          checked={isSelected} 
+          onCheckedChange={(checked) => onSelect(checked as boolean)}
+          className="rounded-md border-primary/20 data-[state=checked]:bg-primary"
+        />
+      </div>
+      <CardContent className="p-3 sm:p-4 pl-10 sm:pl-12">
         <div className="flex items-start justify-between gap-2 sm:gap-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <span className="text-xl sm:text-2xl flex-shrink-0">{vehicleIcons[order.vehicleType]}</span>
@@ -100,12 +133,33 @@ function OrderCard({ order, onViewDetails }: { order: Order; onViewDetails?: (or
 }
 
 // Desktop table view
-function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
+interface DesktopProps extends OrdersTableProps {
+  selectedIds: Set<string>;
+  onToggleSelect: (id: string, checked: boolean) => void;
+  onToggleAll: (checked: boolean) => void;
+  isAllSelected: boolean;
+}
+
+function OrdersTableDesktop({ 
+  orders, 
+  onViewDetails, 
+  selectedIds, 
+  onToggleSelect, 
+  onToggleAll,
+  isAllSelected
+}: DesktopProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="border-b border-border bg-secondary/30">
+            <th className="p-4 w-[40px]">
+              <Checkbox 
+                checked={isAllSelected}
+                onCheckedChange={(checked) => onToggleAll(checked as boolean)}
+                className="rounded-md border-primary/20"
+              />
+            </th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground">Pedido</th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground">Status</th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground hidden lg:table-cell">Motorista</th>
@@ -118,6 +172,7 @@ function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
         <tbody>
           {orders.map((order, index) => {
             const status = statusConfig[order.status] || { label: order.status, variant: 'muted' as const };
+            const isSelected = selectedIds.has(order.id);
             return (
               <HoverPreview
                 key={order.id}
@@ -128,9 +183,18 @@ function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
                   <tr 
                     className={cn(
                       "border-b border-border/50 hover:bg-secondary/20 transition-colors animate-fade-in cursor-pointer",
+                      isSelected && "bg-primary/5 hover:bg-primary/10"
                     )}
                     style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => onToggleSelect(order.id, !isSelected)}
                   >
+                    <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                      <Checkbox 
+                        checked={isSelected}
+                        onCheckedChange={(checked) => onToggleSelect(order.id, checked as boolean)}
+                        className="rounded-md border-primary/20"
+                      />
+                    </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <span className="text-xl">{vehicleIcons[order.vehicleType]}</span>
@@ -301,10 +365,36 @@ function OrderPreviewCard({ order, status }: { order: Order; status: { label: st
 
 export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function OrdersTable({ orders, onViewDetails }, ref) {
   const isMobile = useIsMobile();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const handleToggleSelect = (id: string, checked: boolean) => {
+    const newSelected = new Set(selectedIds);
+    if (checked) {
+      newSelected.add(id);
+    } else {
+      newSelected.delete(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleToggleAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(orders.map(o => o.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const selectedOrders = useMemo(() => 
+    orders.filter(o => selectedIds.has(o.id)),
+    [orders, selectedIds]
+  );
+
+  const isAllSelected = orders.length > 0 && selectedIds.size === orders.length;
 
   if (orders.length === 0) {
     return (
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="glass-card rounded-xl overflow-hidden" ref={ref}>
         <div className="p-3 sm:p-4 border-b border-border">
           <h3 className="font-semibold text-foreground flex items-center gap-2 text-sm sm:text-base">
             <Package className="w-4 h-4" />
@@ -320,20 +410,33 @@ export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function
   }
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden relative" ref={ref}>
       <div className="p-3 sm:p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-foreground flex items-center gap-2 text-sm sm:text-base">
           <Package className="w-4 h-4" />
           <span className="hidden xs:inline">Pedidos Recentes</span>
           <span className="xs:hidden">Pedidos</span>
         </h3>
-        <Badge variant="secondary" size="sm">{orders.length}</Badge>
+        <div className="flex items-center gap-2">
+          {selectedIds.size > 0 && (
+            <Badge variant="glow" size="sm" className="animate-in zoom-in">
+              {selectedIds.size} selecionado(s)
+            </Badge>
+          )}
+          <Badge variant="secondary" size="sm">{orders.length}</Badge>
+        </div>
       </div>
       
       {isMobile ? (
         <div className="p-2 sm:p-3 space-y-2 sm:space-y-3">
           {orders.slice(0, 5).map((order) => (
-            <OrderCard key={order.id} order={order} onViewDetails={onViewDetails} />
+            <OrderCard 
+              key={order.id} 
+              order={order} 
+              onViewDetails={onViewDetails}
+              isSelected={selectedIds.has(order.id)}
+              onSelect={(checked) => handleToggleSelect(order.id, checked)}
+            />
           ))}
           {orders.length > 5 && (
             <Button variant="ghost" className="w-full text-muted-foreground text-sm h-10">
@@ -343,8 +446,20 @@ export const OrdersTable = forwardRef<HTMLDivElement, OrdersTableProps>(function
           )}
         </div>
       ) : (
-        <OrdersTableDesktop orders={orders} onViewDetails={onViewDetails} />
+        <OrdersTableDesktop 
+          orders={orders} 
+          onViewDetails={onViewDetails} 
+          selectedIds={selectedIds}
+          onToggleSelect={handleToggleSelect}
+          onToggleAll={handleToggleAll}
+          isAllSelected={isAllSelected}
+        />
       )}
+
+      <BatchActionsToolbar 
+        selectedOrders={selectedOrders}
+        onClear={() => setSelectedIds(new Set())}
+      />
     </div>
   );
 });
