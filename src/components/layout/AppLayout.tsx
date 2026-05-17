@@ -76,6 +76,7 @@ export function AppLayout() {
   // Initialize accessibility and contextual hints
   useAccessibility();
   useContextualHints();
+  const { announce } = useAnnounce();
 
   // Enable audio on first user interaction (required by browsers)
   useEffect(() => {
