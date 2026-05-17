@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export interface PredictiveAlert {
   id: string;
-  type: "driver_risk" | "delivery_delay" | "sla_breach" | "capacity_issue" | "area_hotspot";
+  type: "driver_risk" | "delivery_delay" | "sla_breach" | "capacity_issue" | "area_hotspot" | "driver_stopped" | "route_deviation";
   title: string;
   description: string;
   probability: number;
