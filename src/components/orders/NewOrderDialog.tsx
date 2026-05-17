@@ -61,6 +61,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     isPODEnabled: true,
     internalOrderId: '',
     internalNotes: '',
+    // Guardian fields
+    autoNotifySupplier: false,
+    supplierContact: '',
+    stalledThreshold: 15,
+    requiresPod: true,
   });
 
   const updateField = (field: string, value: string | boolean | string[]) => {
