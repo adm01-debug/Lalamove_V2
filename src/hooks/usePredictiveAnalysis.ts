@@ -13,6 +13,7 @@ export interface PredictiveAlert {
   recommendation: string;
   affectedEntities?: string[];
   dataPoints?: { label: string; value: string | number }[];
+  lalamoveOrderId?: string;
 }
 
 interface AnalysisData {
@@ -22,6 +23,8 @@ interface AnalysisData {
   recentIncidents: number;
   avgDeliveryTime: number;
   slaCompliance: number;
+  stalledDrivers: Array<{ id: string; driverName: string; minutes: number; orderId: string; lalamoveId: string }>;
+  offRouteDrivers: Array<{ id: string; driverName: string; deviation: number; orderId: string; lalamoveId: string }>;
 }
 
 async function fetchAnalysisData(): Promise<AnalysisData> {
