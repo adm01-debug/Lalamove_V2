@@ -407,10 +407,12 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
         <SmartBreadcrumbs showQuickActions showFavorites showRecent />
       </div>
       
-      {/* Mobile Breadcrumbs */}
-      <div className="px-3 pb-2 md:hidden">
-        <MobileBreadcrumbs />
-      </div>
+      {/* Mobile Breadcrumbs - only on deep pages */}
+      {location.pathname !== '/' && location.pathname !== '/dashboard' && (
+        <div className="px-3 pb-2 md:hidden">
+          <MobileBreadcrumbs />
+        </div>
+      )}
     </header>
   );
 }
