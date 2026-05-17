@@ -137,6 +137,25 @@ function generatePredictions(data: AnalysisData): PredictiveAlert[] {
     });
   }
 
+  if (data.stalledDrivers.length > 0) {
+    const mainStalled = data.stalledDrivers[0];
+    alerts.push({
+      id: `pred-stalled-${mainStalled.orderId}`,
+      type: "driver_stopped",
+      title: "Motorista Imobilizado Detectado",
+      description: `Motorista no pedido ${mainStalled.lalamoveId} está parado há ${mainStalled.minutes} min.`,
+      probability: 90,
+      impact: mainStalled.minutes > 30 ? "high" : "medium",
+      timeframe: "Imediato",
+      recommendation: "Entre em contato com o motorista para verificar problemas técnicos ou de segurança.",
+      lalamoveOrderId: mainStalled.orderId,
+      dataPoints: [
+        { label: "Tempo Parado", value: `${mainStalled.minutes} min` },
+        { label: "Pedido", value: mainStalled.lalamoveId }
+      ],
+    } as any);
+  }
+
   if (alerts.length === 0) {
     alerts.push({
       id: "pred-healthy", type: "sla_breach",
