@@ -124,7 +124,7 @@ serve(async (req) => {
         if (stoppedMinutes >= warningThreshold) {
           const { data: existingAlerts } = await supabase
             .from('alerts')
-            .select('id, severity')
+            .select('id, severity, metadata')
             .eq('driver_id', driver.id)
             .eq('order_id', order.id)
             .eq('type', 'DRIVER_STOPPED')
@@ -136,7 +136,7 @@ serve(async (req) => {
           const newSeverity = shouldBeCritical ? 'CRITICAL' : 'WARNING';
 
           if (!existingAlert) {
-            alertsToCreate.push({
+            const alertData = {
               type: 'DRIVER_STOPPED',
               severity: newSeverity,
               title: `Motorista parado há ${stoppedMinutes} minutos`,
@@ -144,7 +144,25 @@ serve(async (req) => {
               driver_id: driver.id,
               order_id: order.id,
               metadata: { stopped_minutes: stoppedMinutes, threshold: warningThreshold }
-            });
+            };
+            
+            const { data: newAlert } = await supabase.from('alerts').insert(alertData).select().single();
+            
+            // Guardian: Auto-notify supplier if configured
+            if (newAlert && order.auto_notify_supplier && order.supplier_contact) {
+              logger.log(`[Guardian] Auto-notifying supplier ${order.supplier_contact} for order ${order.id}`);
+              await supabase.functions.invoke('send-notification', {
+                body: {
+                  alert_id: newAlert.id,
+                  type: 'SUPPLIER_DELAY_NOTICE',
+                  severity: 'WARNING',
+                  title: 'Aviso de Atraso na Coleta/Entrega',
+                  message: `Olá, informamos que o motorista ${driverName} está parado há ${stoppedMinutes}min próximo à sua região. Estamos monitorando.`,
+                  order_id: order.id,
+                  metadata: { contact: order.supplier_contact, channel: 'whatsapp' }
+                }
+              });
+            }
           } else if (existingAlert.severity === 'WARNING' && shouldBeCritical) {
             await supabase.from('alerts').update({
               severity: 'CRITICAL',
@@ -221,7 +239,7 @@ serve(async (req) => {
       }
     }
 
-    // Insert new alerts
+    // Insert remaining new alerts (not handled individually above)
     if (alertsToCreate.length > 0) {
       await supabase.from('alerts').insert(alertsToCreate);
     }

@@ -1,4 +1,4 @@
-import { forwardRef, useState, useMemo } from 'react';
+import { forwardRef, useState, useMemo, useEffect } from 'react';
 import { Order } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,17 @@ const statusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   CANCELLED: { label: 'Cancelado', variant: 'destructive' },
   REJECTED: { label: 'Rejeitado', variant: 'destructive' },
   EXPIRED: { label: 'Expirado', variant: 'muted' },
+};
+
+// Guardian: Check for stalled drivers (> 15 min) or missing PODs
+const getGuardianAlert = (order: Order) => {
+  if (order.status === 'ON_GOING' && order.stalled_threshold_minutes && order.stalled_threshold_minutes > 15) {
+    return { label: 'Motorista Parado', variant: 'glow-destructive' as BadgeVariant };
+  }
+  if (order.status === 'COMPLETED' && order.pod_required && !order.pod_url) {
+    return { label: 'Falta POD', variant: 'glow-warning' as BadgeVariant };
+  }
+  return null;
 };
 
 const vehicleIcons: Record<string, string> = {
@@ -94,9 +105,16 @@ function OrderCard({
                 <p className="font-mono text-xs sm:text-sm font-medium text-foreground truncate max-w-[100px] sm:max-w-none">
                   {order.internalOrderId || order.lalamoveId}
                 </p>
-                <Badge variant={status.variant} size="sm" dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'} className="text-[10px] sm:text-xs">
-                  {status.label}
-                </Badge>
+                <div className="flex gap-1">
+                  <Badge variant={status.variant} size="sm" dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'} className="text-[10px] sm:text-xs">
+                    {status.label}
+                  </Badge>
+                  {getGuardianAlert(order) && (
+                    <Badge variant={getGuardianAlert(order)!.variant} size="sm" pulse className="text-[10px] sm:text-xs">
+                      {getGuardianAlert(order)!.label}
+                    </Badge>
+                  )}
+                </div>
               </div>
               <p className="text-[11px] sm:text-xs text-muted-foreground truncate mt-0.5">
                 {order.customerName}
@@ -207,9 +225,16 @@ function OrdersTableDesktop({
                       </div>
                     </td>
                     <td className="p-4">
-                      <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
-                        {status.label}
-                      </Badge>
+                      <div className="flex flex-col gap-1 items-start">
+                        <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
+                          {status.label}
+                        </Badge>
+                        {getGuardianAlert(order) && (
+                          <Badge variant={getGuardianAlert(order)!.variant} size="sm" pulse className="animate-in fade-in slide-in-from-top-1">
+                            {getGuardianAlert(order)!.label}
+                          </Badge>
+                        )}
+                      </div>
                     </td>
                     <td className="p-4 hidden lg:table-cell">
                       {order.driverName ? (
