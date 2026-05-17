@@ -168,6 +168,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           serviceType: form.vehicleType,
           metadata: {
             ...(form.internalOrderId.trim() && { internalOrderId: form.internalOrderId.trim() }),
+            // Guardian Metadata
+            autoNotifySupplier: form.autoNotifySupplier,
+            supplierContact: form.supplierContact.trim(),
+            stalledThresholdMinutes: form.stalledThreshold,
+            requiresPod: form.requiresPod
           },
         },
       });
