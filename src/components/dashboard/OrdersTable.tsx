@@ -133,12 +133,33 @@ function OrderCard({
 }
 
 // Desktop table view
-function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
+interface DesktopProps extends OrdersTableProps {
+  selectedIds: Set<string>;
+  onToggleSelect: (id: string, checked: boolean) => void;
+  onToggleAll: (checked: boolean) => void;
+  isAllSelected: boolean;
+}
+
+function OrdersTableDesktop({ 
+  orders, 
+  onViewDetails, 
+  selectedIds, 
+  onToggleSelect, 
+  onToggleAll,
+  isAllSelected
+}: DesktopProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="border-b border-border bg-secondary/30">
+            <th className="p-4 w-[40px]">
+              <Checkbox 
+                checked={isAllSelected}
+                onCheckedChange={(checked) => onToggleAll(checked as boolean)}
+                className="rounded-md border-primary/20"
+              />
+            </th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground">Pedido</th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground">Status</th>
             <th className="text-left p-4 text-sm font-medium text-muted-foreground hidden lg:table-cell">Motorista</th>
@@ -151,6 +172,7 @@ function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
         <tbody>
           {orders.map((order, index) => {
             const status = statusConfig[order.status] || { label: order.status, variant: 'muted' as const };
+            const isSelected = selectedIds.has(order.id);
             return (
               <HoverPreview
                 key={order.id}
@@ -161,9 +183,18 @@ function OrdersTableDesktop({ orders, onViewDetails }: OrdersTableProps) {
                   <tr 
                     className={cn(
                       "border-b border-border/50 hover:bg-secondary/20 transition-colors animate-fade-in cursor-pointer",
+                      isSelected && "bg-primary/5 hover:bg-primary/10"
                     )}
                     style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => onToggleSelect(order.id, !isSelected)}
                   >
+                    <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                      <Checkbox 
+                        checked={isSelected}
+                        onCheckedChange={(checked) => onToggleSelect(order.id, checked as boolean)}
+                        className="rounded-md border-primary/20"
+                      />
+                    </td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <span className="text-xl">{vehicleIcons[order.vehicleType]}</span>
