@@ -30,7 +30,7 @@ const impactConfig: Record<string, { label: string; color: string }> = {
   critical: { label: "Crítico", color: "bg-destructive/10 text-destructive" },
 };
 
-interface PredictiveAlertExtended extends any {
+interface PredictiveAlertExtended {
   id: string;
   type: string;
   title: string;
