@@ -1,12 +1,25 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState, useMemo } from 'react';
 import { Order } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Eye, MapPin, Clock, ChevronRight, Package, User, Truck, DollarSign, Navigation } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { 
+  Eye, 
+  MapPin, 
+  Clock, 
+  ChevronRight, 
+  Package, 
+  User, 
+  Truck, 
+  DollarSign, 
+  Navigation,
+  CheckSquare
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { HoverPreview } from '@/components/ui/hover-preview';
+import { BatchActionsToolbar } from './BatchActionsToolbar';
 
 interface OrdersTableProps {
   orders: Order[];
