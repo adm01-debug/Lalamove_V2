@@ -62,23 +62,30 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose }:
                   </div>
                 </div>
 
-                <ScrollArea className="h-60 pr-4">
+                <ScrollArea className="h-64 pr-4">
                   <div className="space-y-3 relative">
-                    <div className="absolute left-2.5 top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary/50 via-primary/10 to-transparent" />
+                    <div className="absolute left-2.5 top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary/60 via-primary/20 to-transparent" />
                     
-                    {history.slice(0, 50).map((event, i) => (
+                    {history.slice(0, 100).map((event, i) => (
                       <div key={event.id} className="relative pl-8 group">
-                        <div className="absolute left-1.5 top-1.5 w-2.5 h-2.5 rounded-full border-2 border-primary bg-background group-hover:scale-125 transition-transform z-10" />
-                        <div className="bg-white/5 p-2 rounded-lg border border-white/5 group-hover:bg-white/10 transition-colors">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-[10px] font-black font-mono text-primary/80">
+                        <div className={`absolute left-1.5 top-1.5 w-2.5 h-2.5 rounded-full border-2 bg-background group-hover:scale-150 transition-all z-10 ${
+                          event.speed && event.speed > 60 ? 'border-destructive' : 'border-primary'
+                        }`} />
+                        <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 group-hover:bg-white/10 transition-all group-hover:border-primary/20">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-[10px] font-black font-mono text-primary/90 flex items-center gap-1.5">
+                              <Clock className="w-2.5 h-2.5" />
                               {new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                             </span>
-                            {i === 0 && <span className="text-[8px] font-black bg-primary/20 text-primary px-1.5 py-0.5 rounded uppercase">Início</span>}
+                            {event.speed !== null && (
+                              <span className={`text-[9px] font-black font-mono ${event.speed > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                {event.speed} KM/H
+                              </span>
+                            )}
                           </div>
-                          <div className="flex items-center gap-2 text-[9px] text-muted-foreground font-medium">
-                            <MapPin className="w-2.5 h-2.5" />
-                            <span className="truncate">{event.latitude.toFixed(5)}, {event.longitude.toFixed(5)}</span>
+                          <div className="flex items-center gap-2 text-[9px] text-muted-foreground font-mono bg-black/20 p-1 rounded">
+                            <MapPin className="w-2.5 h-2.5 text-primary/60" />
+                            <span className="truncate">{event.latitude.toFixed(6)}, {event.longitude.toFixed(6)}</span>
                           </div>
                         </div>
                       </div>

@@ -39,14 +39,14 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
       <!-- Ghost Pulse -->
       <div class="marker-pulse" style="position:absolute;inset:-10px;border-radius:50%;background:${pulseColor}30;animation:${animation};z-index:-1;"></div>
       
-      <!-- Main Marker -->
+      <!-- Main Marker Stage 7: Backdrop filter and dynamic shadows -->
       <div class="marker-core-wrapper" style="position:relative;display:flex;flex-direction:column;align-items:center;">
-        <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${statusColor}dd);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px ${statusColor}60, 0 0 0 ${isSelected ? '4px' : '2px'} rgba(255,255,255,0.9);border:2.5px solid white;font-size:24px;transform:${isSelected ? 'scale(1.15)' : 'scale(1)'};transition:all 0.4s ease;overflow:hidden;">
+        <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${statusColor}dd);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px ${statusColor}80, 0 0 0 ${isSelected ? '6px' : '3px'} rgba(255,255,255,0.95);border:2.5px solid white;font-size:24px;transform:${isSelected ? 'scale(1.2)' : 'scale(1)'};transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);overflow:hidden;backdrop-filter:blur(4px);">
           <div style="transform: rotate(${heading}deg); transition: transform 0.4s ease;">${icon}</div>
           
-          <!-- Speed Overlay (Small) -->
-          <div style="position:absolute;bottom:0;width:100%;background:rgba(0,0,0,0.6);font-size:8px;color:white;text-align:center;font-weight:800;letter-spacing:-0.5px;padding-bottom:2px;">
-            ${speed}KM/H
+          <!-- Speed Overlay (Stage 5: High Precision HUD) -->
+          <div style="position:absolute;bottom:0;width:100%;background:rgba(0,0,0,0.8);font-size:9px;color:white;text-align:center;font-weight:900;letter-spacing:-0.5px;padding-bottom:2px;font-family:monospace;border-top:1px solid rgba(255,255,255,0.2);">
+            ${speed}<span style="font-size:7px;opacity:0.7;margin-left:1px;">KM/H</span>
           </div>
         </div>
 
