@@ -70,6 +70,8 @@ export function LiveMap({
   const [stoppedAlerts, setStoppedAlerts] = useState<Map<string, number>>(new Map()); // id -> start timestamp
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
+  const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
+  const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number }>>(new Map());
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
@@ -297,14 +299,14 @@ export function LiveMap({
       
       const center: [number, number] = [selectedTracking.current_longitude, selectedTracking.current_latitude];
       
-      // Auto-fit to keep driver and destination visible if close
-      if (selectedTracking.order?.delivery_longitude) {
+      // Auto-fit to keep driver and destination visible if close (Requested: Auto Zoom)
+      if (autoZoomEnabled && selectedTracking.order?.delivery_longitude) {
         const dest: [number, number] = [selectedTracking.order.delivery_longitude, selectedTracking.order.delivery_latitude!];
         const bounds = new mapboxgl.LngLatBounds().extend(center).extend(dest);
         
         // Only fit if they are somewhat close to keep zoom relevant
         const dist = Math.sqrt(Math.pow(center[0]-dest[0], 2) + Math.pow(center[1]-dest[1], 2));
-        if (dist < 0.05) { // ~5km
+        if (dist < 0.05) { // ~5km - Keep corridor visible
           map.current.fitBounds(bounds, { padding: 120, maxZoom: 17, duration: 1000 });
           return;
         }
@@ -365,10 +367,63 @@ export function LiveMap({
         marker.remove(); 
         driverMarkers.current.delete(id); 
         markerPositions.current.delete(id);
+        
+        // Cleanup alerts
+        setStoppedAlerts(prev => {
+          const next = new Map(prev);
+          next.delete(id);
+          return next;
+        });
       }
     });
     
     trackingData.forEach((tracking) => {
+      // Logic for Route Deviation Detection (>500m)
+      const isOnRoute = tracking.is_on_route !== false;
+      const isDeviated = !isOnRoute; 
+      
+      setOffRouteAlerts(prev => {
+        const next = new Set(prev);
+        if (isDeviated) next.add(tracking.id);
+        else next.delete(tracking.id);
+        return next;
+      });
+
+      // Logic for Stopped Driver Alert (>15min)
+      if (tracking.speed === 0) {
+        setStoppedAlerts(prev => {
+          if (!prev.has(tracking.id)) {
+            const next = new Map(prev);
+            next.set(tracking.id, Date.now());
+            return next;
+          }
+          return prev;
+        });
+      } else {
+        setStoppedAlerts(prev => {
+          if (prev.has(tracking.id)) {
+            const next = new Map(prev);
+            next.delete(tracking.id);
+            return next;
+          }
+          return prev;
+        });
+      }
+
+      // Dynamic ETA Comparison
+      if (tracking.eta_minutes) {
+        setEtaIndicator(prev => {
+          const existing = prev.get(tracking.id);
+          const next = new Map(prev);
+          if (!existing) {
+            next.set(tracking.id, { original: tracking.eta_minutes || 0, current: tracking.eta_minutes || 0 });
+          } else {
+            next.set(tracking.id, { ...existing, current: tracking.eta_minutes || 0 });
+          }
+          return next;
+        });
+      }
+
       const isSelected = tracking.id === selectedId;
       const isOtherInFocus = focusMode && selectedId && !isSelected;
       
@@ -690,7 +745,8 @@ export function LiveMap({
       <MapHUD 
         selectedTracking={selectedTracking} 
         offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
-        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? (Date.now() - stoppedAlerts.get(selectedId)!) / 1000 : undefined}
+        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
+        etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
       />
       
       <MapLegend vehicleCounts={vehicleCounts} />
@@ -722,6 +778,11 @@ export function LiveMap({
             setShowHistoryFor(null);
             clearHistory();
             clearHistoryFromMap();
+          }}
+          onPlaybackUpdate={(lat, lng, heading) => {
+            if (map.current) {
+              map.current.easeTo({ center: [lng, lat], bearing: heading, duration: 300 });
+            }
           }}
         />
       )}

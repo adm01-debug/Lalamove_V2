@@ -19,9 +19,10 @@ interface MapHUDProps {
   selectedTracking: TrackingData | null;
   offRoute?: boolean;
   stoppedTime?: number; // seconds
+  etaOriginal?: number;
 }
 
-export function MapHUD({ selectedTracking, offRoute, stoppedTime }: MapHUDProps) {
+export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal }: MapHUDProps) {
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
@@ -116,13 +117,23 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime }: MapHUDProps)
               <motion.div 
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
-                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex items-center gap-3"
+                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex items-center gap-3 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
               >
-                <AlertTriangle className="w-5 h-5 text-destructive animate-bounce" />
+                <div className="relative">
+                  <AlertTriangle className="w-5 h-5 text-destructive animate-bounce" />
+                  <div className="absolute inset-0 bg-destructive blur-sm opacity-20 animate-pulse" />
+                </div>
                 <div className="flex-1">
-                  <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico</span>
+                    {stoppedTime && stoppedTime > 900 && (
+                      <Badge variant="destructive" className="h-4 text-[8px] animate-pulse">
+                        {Math.floor(stoppedTime / 60)}:{(stoppedTime % 60).toString().padStart(2, '0')}
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-[11px] font-medium text-foreground">
-                    {offRoute ? "Desvio de rota detectado (>500m)" : `Motorista parado há ${Math.floor(stoppedTime! / 60)} min`}
+                    {offRoute ? "DESVIO DE ROTA DETECTADO (>500M)" : `MOTORISTA PARADO HÁ ${Math.floor(stoppedTime! / 60)} MIN`}
                   </p>
                 </div>
               </motion.div>
@@ -171,8 +182,13 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime }: MapHUDProps)
                 <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
                   <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
-                  {selectedTracking.eta_minutes && selectedTracking.eta_minutes > 15 && (
-                    <Badge variant="destructive" className="ml-2 text-[8px] h-4 px-1 animate-pulse">ATRASADO</Badge>
+                  {selectedTracking.eta_minutes && etaOriginal && selectedTracking.eta_minutes > etaOriginal && (
+                    <div className="flex flex-col ml-2">
+                      <Badge variant="destructive" className="text-[8px] h-4 px-1 animate-pulse">
+                        +{selectedTracking.eta_minutes - etaOriginal}M ATRASO
+                      </Badge>
+                      <span className="text-[7px] font-bold text-muted-foreground uppercase">Original: {etaOriginal}m</span>
+                    </div>
                   )}
                 </div>
               </div>
