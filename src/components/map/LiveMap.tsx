@@ -45,9 +45,10 @@ export function LiveMap({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const driverMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
+  const markerPositions = useRef<Map<string, { current: [number, number], target: [number, number] }>>(new Map());
   const pointMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const routeLines = useRef<Set<string>>(new Set());
-  const ghostTrails = useRef<Map<string, string>>(new Map());
+  const animationFrameRef = useRef<number | null>(null);
   
   const historyLineRef = useRef<string | null>(null);
   const historyMarkersRef = useRef<mapboxgl.Marker[]>([]);
