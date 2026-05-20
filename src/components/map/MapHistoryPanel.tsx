@@ -65,7 +65,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                     </Button>
                   </div>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <input 
                     type="range" 
                     min="0" 
@@ -79,11 +79,12 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                         onPlaybackUpdate(event.latitude, event.longitude, event.heading || 0);
                       }
                     }}
-                    className="w-full h-1 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary"
+                    className="w-full h-1.5 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-primary/80 transition-all"
                   />
-                  <div className="flex justify-between text-[8px] font-mono text-muted-foreground">
-                    <span>{new Date(history[0].created_at).toLocaleTimeString()}</span>
-                    <span>{new Date(history[history.length-1].created_at).toLocaleTimeString()}</span>
+                  <div className="flex justify-between text-[9px] font-black font-mono text-muted-foreground bg-black/20 px-2 py-0.5 rounded">
+                    <span>{new Date(history[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span className="text-primary italic">EVENTO {playbackIndex + 1}/{history.length}</span>
+                    <span>{new Date(history[history.length-1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                 </div>
               </div>
