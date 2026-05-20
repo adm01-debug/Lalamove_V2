@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Loader2, Target, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, TrafficCone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
 import { getDirections } from '@/hooks/useMapbox';
@@ -11,8 +11,17 @@ import { MapSearchPanel } from './MapSearchPanel';
 import { MapHistoryPanel } from './MapHistoryPanel';
 import { MapLegend } from './MapLegend';
 import { MapHUD } from './MapHUD';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
+} from "@/components/ui/dropdown-menu";
 import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
 import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup } from './markerFactories';
+
 
 export type { VehicleFilter, StatusFilter };
 
