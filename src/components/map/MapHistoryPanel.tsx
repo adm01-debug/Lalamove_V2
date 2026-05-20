@@ -18,6 +18,25 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
 
+  // Auto-playback logic (Requested Feature)
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (playbackActive && history.length > 0) {
+      interval = setInterval(() => {
+        setPlaybackIndex(prev => {
+          const next = (prev + 1) % history.length;
+          const event = history[next];
+          if (event && onPlaybackUpdate) {
+            onPlaybackUpdate(event.latitude, event.longitude, event.heading || 0);
+          }
+          if (next === history.length - 1) setPlaybackActive(false);
+          return next;
+        });
+      }, 800);
+    }
+    return () => clearInterval(interval);
+  }, [playbackActive, history, onPlaybackUpdate]);
+
   if (!show) return null;
 
   return (
