@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download } from 'lucide-react';
+import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download, FileText } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
