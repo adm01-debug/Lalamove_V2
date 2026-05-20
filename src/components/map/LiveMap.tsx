@@ -219,13 +219,19 @@ export function LiveMap({
   }, [showTraffic]);
 
 
-  // Following logic
+  // Following logic with Magnetic Zoom
   useEffect(() => {
     if (isFollowing && selectedTracking && map.current) {
+      const speed = selectedTracking.speed || 0;
+      // Magnetic Zoom: slower = closer, faster = wider
+      // Range: speed 0 -> zoom 18, speed 80 -> zoom 14
+      const targetZoom = Math.max(14, Math.min(18, 18 - (speed / 20)));
+      
       map.current.easeTo({
         center: [selectedTracking.current_longitude, selectedTracking.current_latitude],
         duration: 1000,
-        zoom: Math.max(map.current.getZoom(), 15)
+        zoom: targetZoom,
+        pitch: speed > 30 ? 60 : 45, // More pitch at higher speeds for a "cockpit" view
       });
     }
   }, [isFollowing, selectedTracking]);
