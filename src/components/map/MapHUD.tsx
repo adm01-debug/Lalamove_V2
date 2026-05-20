@@ -20,9 +20,10 @@ interface MapHUDProps {
   offRoute?: boolean;
   stoppedTime?: number; // seconds
   etaOriginal?: number;
+  offRouteThreshold?: number;
 }
 
-export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal }: MapHUDProps) {
+export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal, offRouteThreshold = 500 }: MapHUDProps) {
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
@@ -135,7 +136,7 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal }:
                       )}
                     </div>
                     <p className="text-[11px] font-black text-foreground tracking-tight leading-tight uppercase italic">
-                      {offRoute ? "DESVIO DE ROTA CRÍTICO (>500M)" : `MOTORISTA PARADO HÁ ${Math.floor(stoppedTime! / 60)} MINUTOS`}
+                      {offRoute ? `DESVIO DE ROTA CRÍTICO (>${offRouteThreshold}M)` : `MOTORISTA PARADO HÁ ${Math.floor(stoppedTime! / 60)} MINUTOS`}
                     </p>
                   </div>
                 </div>
@@ -217,12 +218,18 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal }:
                 <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
                   <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
-                  {selectedTracking.eta_minutes && etaOriginal && selectedTracking.eta_minutes > etaOriginal && (
+                  {selectedTracking.eta_minutes && etaOriginal && (
                     <div className="flex flex-col ml-2">
-                      <Badge variant="destructive" className="text-[8px] h-4 px-1 animate-pulse">
-                        +{selectedTracking.eta_minutes - etaOriginal}M ATRASO
+                      <Badge variant={selectedTracking.eta_minutes > etaOriginal ? "destructive" : "success"} className="text-[8px] h-4 px-1 animate-pulse">
+                        {selectedTracking.eta_minutes > etaOriginal ? `+${selectedTracking.eta_minutes - etaOriginal}M ATRASO` : `${selectedTracking.eta_minutes - etaOriginal}M ADIANTO`}
+                        {selectedTracking.eta_minutes > etaOriginal ? ' ↗' : ' ↘'}
                       </Badge>
-                      <span className="text-[7px] font-bold text-muted-foreground uppercase">Original: {etaOriginal}m</span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[7px] font-bold text-muted-foreground uppercase">Ref: {etaOriginal}m</span>
+                        <span className={`text-[7px] font-black ${selectedTracking.eta_minutes > etaOriginal ? 'text-destructive' : 'text-success'}`}>
+                          ({Math.round(((selectedTracking.eta_minutes - etaOriginal) / etaOriginal) * 100)}%)
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>

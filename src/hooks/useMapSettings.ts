@@ -12,13 +12,13 @@ interface MapSettingsState {
 
 export const useMapSettings = create<MapSettingsState>()(
   persist(
-    (set) => ({
+    (set: any) => ({
       offRouteThreshold: 500,
       stoppedThreshold: 15,
       geofenceRadius: 300,
-      setOffRouteThreshold: (value) => set({ offRouteThreshold: value }),
-      setStoppedThreshold: (value) => set({ stoppedThreshold: value }),
-      setGeofenceRadius: (value) => set({ geofenceRadius: value }),
+      setOffRouteThreshold: (value: number) => set({ offRouteThreshold: value }),
+      setStoppedThreshold: (value: number) => set({ stoppedThreshold: value }),
+      setGeofenceRadius: (value: number) => set({ geofenceRadius: value }),
     }),
     {
       name: 'map-settings-storage',
