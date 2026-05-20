@@ -233,7 +233,7 @@ export function MapHUD({
                   {selectedTracking.eta_minutes && etaOriginal && (
                     <div className="flex flex-col ml-2">
                       <Badge variant={selectedTracking.eta_minutes > etaOriginal ? "destructive" : "success"} className="text-[8px] h-4 px-1 animate-pulse">
-                        {selectedTracking.eta_minutes > etaOriginal ? `+${selectedTracking.eta_minutes - etaOriginal}M ATRASO` : `${selectedTracking.eta_minutes - etaOriginal}M ADIANTO`}
+                        {selectedTracking.eta_minutes > etaOriginal ? `+${selectedTracking.eta_minutes - etaOriginal}M ATRASO` : `${etaOriginal - selectedTracking.eta_minutes}M ADIANTO`}
                         {trend === 'worsening' ? ' ↗' : trend === 'improving' ? ' ↘' : ''}
                       </Badge>
                       <div className="flex items-center gap-1">
@@ -241,7 +241,7 @@ export function MapHUD({
                           Trend: {trend === 'improving' ? 'MELHORANDO' : trend === 'worsening' ? 'PIORANDO' : 'ESTÁVEL'}
                         </span>
                         <span className={`text-[7px] font-black ${selectedTracking.eta_minutes > etaOriginal ? 'text-destructive' : 'text-success'}`}>
-                          ({Math.round(((selectedTracking.eta_minutes - etaOriginal) / etaOriginal) * 100)}%)
+                          ({Math.abs(Math.round(((selectedTracking.eta_minutes - etaOriginal) / etaOriginal) * 100))}%)
                         </span>
                       </div>
                     </div>

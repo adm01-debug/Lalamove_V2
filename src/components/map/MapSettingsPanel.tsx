@@ -45,7 +45,7 @@ export function MapSettingsPanel({ show, onClose }: MapSettingsPanelProps) {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
                   <Ruler className="w-3 h-3" />
-                  Desvio de Rota
+                  Desvio de Rota (m)
                 </div>
                 <span className="text-[10px] font-black text-primary font-mono">{offRouteThreshold}M</span>
               </div>
@@ -62,7 +62,7 @@ export function MapSettingsPanel({ show, onClose }: MapSettingsPanelProps) {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
                   <Clock className="w-3 h-3" />
-                  Alerta Parado
+                  Tempo de Parada (min)
                 </div>
                 <span className="text-[10px] font-black text-primary font-mono">{stoppedThreshold}MIN</span>
               </div>
@@ -79,14 +79,14 @@ export function MapSettingsPanel({ show, onClose }: MapSettingsPanelProps) {
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
                   <ShieldCheck className="w-3 h-3" />
-                  Raio Geofence
+                  Raio Geofence Entrega (m)
                 </div>
                 <span className="text-[10px] font-black text-primary font-mono">{geofenceRadius}M</span>
               </div>
               <Slider 
                 value={[geofenceRadius]} 
                 min={50} 
-                max={1000} 
+                max={2000} 
                 step={50} 
                 onValueChange={(val) => setGeofenceRadius(val[0])}
               />
@@ -94,7 +94,7 @@ export function MapSettingsPanel({ show, onClose }: MapSettingsPanelProps) {
           </div>
           
           <div className="pt-2 border-t border-white/5 text-[8px] font-bold text-muted-foreground text-center uppercase tracking-widest">
-            Alterações aplicadas em tempo real
+            Ajustes de Precisão Guardian 10/10
           </div>
         </div>
       </motion.div>
