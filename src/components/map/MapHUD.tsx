@@ -115,28 +115,63 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal }:
             {/* Requested Feature: Route Deviation & Stopped Alerts */}
             {(offRoute || (stoppedTime && stoppedTime > 900)) && (
               <motion.div 
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex items-center gap-3 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
+                initial={{ height: 0, opacity: 0, y: -10 }}
+                animate={{ height: 'auto', opacity: 1, y: 0 }}
+                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex flex-col gap-2 shadow-[0_0_20px_rgba(239,68,68,0.3)] relative overflow-hidden"
               >
-                <div className="relative">
-                  <AlertTriangle className="w-5 h-5 text-destructive animate-bounce" />
-                  <div className="absolute inset-0 bg-destructive blur-sm opacity-20 animate-pulse" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico</span>
-                    {stoppedTime && stoppedTime > 900 && (
-                      <Badge variant="destructive" className="h-4 text-[8px] animate-pulse">
-                        {Math.floor(stoppedTime / 60)}:{(stoppedTime % 60).toString().padStart(2, '0')}
-                      </Badge>
-                    )}
+                <div className="absolute inset-0 bg-destructive/5 animate-pulse" />
+                <div className="flex items-center gap-3 relative z-10">
+                  <div className="relative">
+                    <AlertTriangle className="w-5 h-5 text-destructive animate-bounce" />
+                    <div className="absolute inset-0 bg-destructive blur-sm opacity-20 animate-pulse" />
                   </div>
-                  <p className="text-[11px] font-medium text-foreground">
-                    {offRoute ? "DESVIO DE ROTA DETECTADO (>500M)" : `MOTORISTA PARADO HÁ ${Math.floor(stoppedTime! / 60)} MIN`}
-                  </p>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico Guardian</span>
+                      {stoppedTime && stoppedTime > 900 && (
+                        <Badge variant="destructive" className="h-4 text-[8px] animate-pulse px-1 font-mono">
+                          {Math.floor(stoppedTime / 60)}:{(stoppedTime % 60).toString().padStart(2, '0')}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-[11px] font-black text-foreground tracking-tight leading-tight uppercase italic">
+                      {offRoute ? "DESVIO DE ROTA CRÍTICO (>500M)" : `MOTORISTA PARADO HÁ ${Math.floor(stoppedTime! / 60)} MINUTOS`}
+                    </p>
+                  </div>
                 </div>
+                {offRoute && (
+                  <div className="text-[9px] font-bold text-destructive/80 uppercase tracking-widest pl-8 relative z-10 italic">
+                    Protocolo de segurança ativado
+                  </div>
+                )}
               </motion.div>
+            )}
+
+            {/* Geofence Detection (Stage 13) */}
+            {selectedTracking.order?.delivery_latitude && (
+              (() => {
+                const dist = Math.sqrt(
+                  Math.pow(selectedTracking.current_latitude - selectedTracking.order.delivery_latitude, 2) + 
+                  Math.pow(selectedTracking.current_longitude - selectedTracking.order.delivery_longitude!, 2)
+                );
+                const isNear = dist < 0.003; // Approx 300m
+                
+                return isNear && (
+                  <motion.div 
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="bg-success/20 border border-success/30 rounded-lg p-2.5 flex items-center gap-3"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-success/30 flex items-center justify-center animate-pulse">
+                      <Shield className="w-4 h-4 text-success" />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-black text-success uppercase block">Geofence de Entrega</span>
+                      <p className="text-[10px] font-bold text-foreground">MOTORISTA DENTRO DO RAIO DE ENTREGA</p>
+                    </div>
+                  </motion.div>
+                );
+              })()
             )}
 
             {/* Status Narrative (Stage 9: Excellence Insight) */}

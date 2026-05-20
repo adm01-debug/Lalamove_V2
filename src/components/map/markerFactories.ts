@@ -88,10 +88,28 @@ export function createDeliveryMarkerElement(tracking: TrackingData): HTMLDivElem
   const locationName = tracking.order?.delivery_address?.split(',')[0] || 'Entrega';
   el.innerHTML = `
     <div style="position:relative;cursor:pointer;">
+      <!-- Delivery Geofence Visual (Stage 13) -->
+      <div class="delivery-geofence-pulse" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:rgba(244,63,94,0.1);border:2px dashed rgba(244,63,94,0.3);border-radius:50%;z-index:-1;animation:geofence-pulse 4s infinite;"></div>
+      
       <div style="width:36px;height:36px;background:linear-gradient(135deg,#f43f5e,#e11d48);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(244,63,94,0.4);border:2px solid white;">
         <span style="transform:rotate(45deg);font-size:16px;">📍</span>
       </div>
       <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:#f43f5e;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
+    </div>`;
+  return el;
+}
+
+export function createStoppedMarkerElement(tracking: TrackingData, durationMin: number): HTMLDivElement {
+  const el = document.createElement('div');
+  el.className = 'stopped-warning-marker';
+  el.innerHTML = `
+    <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+      <div style="width:40px;height:40px;background:#ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(239,68,68,0.6);border:3px solid white;animation:marker-bounce 1s infinite alternate;">
+        <span style="font-size:20px;">🛑</span>
+      </div>
+      <div style="background:#ef4444;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:900;margin-top:4px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+        PARADO +${durationMin}M
+      </div>
     </div>`;
   return el;
 }

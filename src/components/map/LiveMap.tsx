@@ -24,7 +24,7 @@ import {
   DropdownMenuLabel
 } from "@/components/ui/dropdown-menu";
 import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
-import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup } from './markerFactories';
+import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement } from './markerFactories';
 
 
 export type { VehicleFilter, StatusFilter };
@@ -56,6 +56,7 @@ export function LiveMap({
   
   const historyLineRef = useRef<string | null>(null);
   const historyMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  const playbackMarkerRef = useRef<mapboxgl.Marker | null>(null);
   
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -302,12 +303,25 @@ export function LiveMap({
       // Auto-fit to keep driver and destination visible if close (Requested: Auto Zoom)
       if (autoZoomEnabled && selectedTracking.order?.delivery_longitude) {
         const dest: [number, number] = [selectedTracking.order.delivery_longitude, selectedTracking.order.delivery_latitude!];
-        const bounds = new mapboxgl.LngLatBounds().extend(center).extend(dest);
         
-        // Only fit if they are somewhat close to keep zoom relevant
+        // Calculate dynamic padding based on distance
         const dist = Math.sqrt(Math.pow(center[0]-dest[0], 2) + Math.pow(center[1]-dest[1], 2));
-        if (dist < 0.05) { // ~5km - Keep corridor visible
-          map.current.fitBounds(bounds, { padding: 120, maxZoom: 17, duration: 1000 });
+        
+        if (dist < 0.08) { // ~8km - Keep corridor visible
+          const bounds = new mapboxgl.LngLatBounds().extend(center).extend(dest);
+          
+          // Calculate ideal bearing to align route vertically for better "corridor" view
+          const y = Math.sin(dest[0] - center[0]) * Math.cos(dest[1]);
+          const x = Math.cos(center[1]) * Math.sin(dest[1]) - Math.sin(center[1]) * Math.cos(dest[1]) * Math.cos(dest[0] - center[0]);
+          const bearing = (Math.atan2(y, x) * 180 / Math.PI);
+
+          map.current.fitBounds(bounds, { 
+            padding: { top: 150, bottom: 150, left: 100, right: 100 }, 
+            maxZoom: 17, 
+            duration: 1500,
+            pitch: 45,
+            bearing: dist < 0.02 ? bearing : 0 // Only auto-rotate if very close
+          });
           return;
         }
       }
@@ -579,12 +593,37 @@ export function LiveMap({
         if (!stoppedAlerts.has(tracking.id)) {
           setStoppedAlerts(prev => new Map(prev).set(tracking.id, Date.now()));
         }
+        
+        const startTime = stoppedAlerts.get(tracking.id);
+        const durationMin = startTime ? Math.floor((Date.now() - startTime) / 60000) : 0;
+        
+        if (durationMin >= 15) {
+          const stoppedMarkerId = `stopped-${tracking.id}`;
+          if (!pointMarkers.current.has(stoppedMarkerId)) {
+            const el = createStoppedMarkerElement(tracking, durationMin);
+            const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+              .setLngLat([tracking.current_longitude, tracking.current_latitude])
+              .addTo(map.current!);
+            pointMarkers.current.set(stoppedMarkerId, marker);
+          } else {
+            const marker = pointMarkers.current.get(stoppedMarkerId);
+            if (marker) {
+              const el = createStoppedMarkerElement(tracking, durationMin);
+              marker.getElement().innerHTML = el.innerHTML;
+            }
+          }
+        }
       } else if (stoppedAlerts.has(tracking.id)) {
         setStoppedAlerts(prev => {
           const next = new Map(prev);
           next.delete(tracking.id);
           return next;
         });
+        const stoppedMarkerId = `stopped-${tracking.id}`;
+        if (pointMarkers.current.has(stoppedMarkerId)) {
+          pointMarkers.current.get(stoppedMarkerId)?.remove();
+          pointMarkers.current.delete(stoppedMarkerId);
+        }
       }
     });
 
@@ -665,6 +704,15 @@ export function LiveMap({
           0% { transform: scale(1); opacity: 0.9; }
           50% { transform: scale(1.2); opacity: 0.4; background: rgba(239, 68, 68, 0.5); }
           100% { transform: scale(1.4); opacity: 0; }
+        }
+        @keyframes geofence-pulse {
+          0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+          50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.1; }
+          100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+        }
+        @keyframes marker-bounce {
+          from { transform: translateY(0); }
+          to { transform: translateY(-8px); }
         }
         .mapboxgl-popup-content { background: transparent !important; padding: 0 !important; box-shadow: none !important; }
         .mapboxgl-popup-tip { display: none !important; }
@@ -778,11 +826,36 @@ export function LiveMap({
             setShowHistoryFor(null);
             clearHistory();
             clearHistoryFromMap();
+            if (playbackMarkerRef.current) {
+              playbackMarkerRef.current.remove();
+              playbackMarkerRef.current = null;
+            }
           }}
           onPlaybackUpdate={(lat, lng, heading) => {
-            if (map.current) {
-              map.current.easeTo({ center: [lng, lat], bearing: heading, duration: 300 });
+            if (!map.current) return;
+            
+            // Create or update playback marker (Requested: Trajectory Playback Mode)
+            if (!playbackMarkerRef.current) {
+              const el = document.createElement('div');
+              el.innerHTML = `
+                <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+                  <div style="width:30px;height:30px;background:#8b5cf6;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(139,92,246,0.6);border:2px solid white;">
+                    <span style="font-size:14px;transform:rotate(${heading}deg);">🛸</span>
+                  </div>
+                  <div style="background:#8b5cf6;color:white;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:900;margin-top:2px;">HISTÓRICO</div>
+                </div>
+              `;
+              playbackMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                .setLngLat([lng, lat])
+                .addTo(map.current);
+            } else {
+              playbackMarkerRef.current.setLngLat([lng, lat]);
+              const el = playbackMarkerRef.current.getElement();
+              const icon = el.querySelector('span');
+              if (icon) icon.style.transform = `rotate(${heading}deg)`;
             }
+
+            map.current.easeTo({ center: [lng, lat], duration: 400, zoom: 16 });
           }}
         />
       )}
