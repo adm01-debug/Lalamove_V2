@@ -4,7 +4,7 @@ import type { TrackingData } from './hooks/useTrackingData';
 
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false): HTMLDivElement {
   const el = document.createElement('div');
-  el.className = `live-map-driver-marker ${isSelected ? 'is-selected' : ''}`;
+  el.className = `live-map-driver-marker group ${isSelected ? 'is-selected' : ''}`;
   const vehicleType = tracking.driver?.vehicle_type || 'MOTORCYCLE';
   const baseColor = vehicleColors[vehicleType] || '#00d9ff';
   
@@ -16,29 +16,54 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
     statusColor = '#f59e0b';
     pulseColor = '#f59e0b';
     animation = 'pulse-warning 3s infinite';
-  } else if (!tracking.is_on_route) {
+  } else if (tracking.is_on_route === false) {
     statusColor = '#ef4444';
     pulseColor = '#ef4444';
     animation = 'pulse-critical 1.5s infinite';
   }
 
   const icon = vehicleIcons[vehicleType] || '🚗';
+  const speed = tracking.speed || 0;
+  const heading = tracking.heading || 0;
+
+  // Predictive Arrow Length based on speed
+  const arrowLength = Math.min(speed * 0.8, 60);
 
   el.innerHTML = `
-    <div class="driver-marker-container" style="position:relative;cursor:pointer;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);z-index:${isSelected ? 100 : 1}">
-      <div class="marker-pulse" style="position:absolute;inset:-8px;border-radius:50%;background:${pulseColor}30;animation:${animation};z-index:-1;"></div>
-      <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${statusColor}dd);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px ${statusColor}60, 0 0 0 ${isSelected ? '4px' : '2px'} rgba(255,255,255,0.8);border:2px solid white;font-size:24px;transform:${isSelected ? 'scale(1.1)' : 'scale(1)'};transition:transform 0.3s ease;">
-        ${icon}
-      </div>
-      <div class="marker-label" style="position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);color:white;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.2);opacity:${isSelected ? 1 : 0.9};">
-        ${tracking.driver?.name?.split(' ')[0] || 'Motorista'}
+    <div class="driver-marker-container" style="position:relative;cursor:pointer;transition:all 0.5s cubic-bezier(0.23, 1, 0.32, 1);z-index:${isSelected ? 100 : 1}">
+      <!-- Predictive Path Arrow -->
+      ${speed > 5 ? `
+      <div class="predictive-arrow" style="position:absolute;top:50%;left:50%;width:2px;height:${arrowLength}px;background:linear-gradient(to top, transparent, ${statusColor});transform-origin:top;transform:translateX(-50%) rotate(${heading + 180}deg);opacity:0.6;filter:blur(1px);"></div>
+      ` : ''}
+      
+      <!-- Ghost Pulse -->
+      <div class="marker-pulse" style="position:absolute;inset:-10px;border-radius:50%;background:${pulseColor}30;animation:${animation};z-index:-1;"></div>
+      
+      <!-- Main Marker -->
+      <div class="marker-core-wrapper" style="position:relative;display:flex;flex-direction:column;align-items:center;">
+        <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${statusColor}dd);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px ${statusColor}60, 0 0 0 ${isSelected ? '4px' : '2px'} rgba(255,255,255,0.9);border:2.5px solid white;font-size:24px;transform:${isSelected ? 'scale(1.15)' : 'scale(1)'};transition:all 0.4s ease;overflow:hidden;">
+          <div style="transform: rotate(${heading}deg); transition: transform 0.4s ease;">${icon}</div>
+          
+          <!-- Speed Overlay (Small) -->
+          <div style="position:absolute;bottom:0;width:100%;background:rgba(0,0,0,0.6);font-size:8px;color:white;text-align:center;font-weight:800;letter-spacing:-0.5px;padding-bottom:2px;">
+            ${speed}KM/H
+          </div>
+        </div>
+
+        <!-- Label with Status Indicator -->
+        <div class="marker-label-container" style="margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div class="marker-label" style="background:rgba(15,23,42,0.9);backdrop-filter:blur(8px);color:white;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);transition:all 0.3s ease;">
+            ${tracking.driver?.name?.split(' ')[0].toUpperCase() || 'DRIVER'}
+          </div>
+          ${tracking.is_stopped ? `
+            <div style="font-size:9px;color:#f59e0b;font-weight:900;background:rgba(245,158,11,0.1);padding:1px 6px;border-radius:4px;border:1px solid rgba(245,158,11,0.2);">PARADO</div>
+          ` : ''}
+          ${tracking.is_on_route === false ? `
+            <div style="font-size:9px;color:#ef4444;font-weight:900;background:rgba(239,68,68,0.1);padding:1px 6px;border-radius:4px;border:1px solid rgba(239,68,68,0.2);">FORA DE ROTA</div>
+          ` : ''}
+        </div>
       </div>
     </div>`;
-
-  if (tracking.heading) {
-    const core = el.querySelector('.marker-core') as HTMLElement;
-    if (core) core.style.transform += ` rotate(${tracking.heading}deg)`;
-  }
   
   return el;
 }

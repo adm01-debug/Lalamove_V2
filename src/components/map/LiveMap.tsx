@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, TrafficCone } from 'lucide-react';
+import { 
+  Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, 
+  TrafficCone, Crosshair, Zap, Shield, Maximize2 
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
 import { getDirections } from '@/hooks/useMapbox';
@@ -45,9 +48,10 @@ export function LiveMap({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const driverMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
+  const markerPositions = useRef<Map<string, { current: [number, number], target: [number, number] }>>(new Map());
   const pointMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const routeLines = useRef<Set<string>>(new Set());
-  const ghostTrails = useRef<Map<string, string>>(new Map());
+  const animationFrameRef = useRef<number | null>(null);
   
   const historyLineRef = useRef<string | null>(null);
   const historyMarkersRef = useRef<mapboxgl.Marker[]>([]);
@@ -55,6 +59,7 @@ export function LiveMap({
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const [showTraffic, setShowTraffic] = useState(true);
   const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
@@ -136,7 +141,6 @@ export function LiveMap({
       }
 
       if (showTraffic && map.current) {
-        // Add traffic layer if it doesn't exist
         if (!map.current.getSource('mapbox-traffic')) {
           map.current.addSource('mapbox-traffic', {
             type: 'vector',
@@ -180,6 +184,32 @@ export function LiveMap({
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle]);
 
+  // Animation loop for smooth movement
+  useEffect(() => {
+    const animate = () => {
+      if (!map.current) return;
+
+      markerPositions.current.forEach((pos, id) => {
+        const marker = driverMarkers.current.get(id);
+        if (!marker) return;
+
+        const lerpFactor = 0.05;
+        const newLng = pos.current[0] + (pos.target[0] - pos.current[0]) * lerpFactor;
+        const newLat = pos.current[1] + (pos.target[1] - pos.current[1]) * lerpFactor;
+        
+        pos.current = [newLng, newLat];
+        marker.setLngLat(pos.current);
+      });
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, []);
+
   // Toggle traffic
   useEffect(() => {
     if (!map.current || !map.current.isStyleLoaded()) return;
@@ -191,13 +221,19 @@ export function LiveMap({
   }, [showTraffic]);
 
 
-  // Following logic
+  // Following logic with Magnetic Zoom and Auto-Rotation
   useEffect(() => {
     if (isFollowing && selectedTracking && map.current) {
+      const speed = selectedTracking.speed || 0;
+      const heading = selectedTracking.heading || 0;
+      const targetZoom = Math.max(14, Math.min(18, 18 - (speed / 20)));
+      
       map.current.easeTo({
         center: [selectedTracking.current_longitude, selectedTracking.current_latitude],
         duration: 1000,
-        zoom: Math.max(map.current.getZoom(), 15)
+        zoom: targetZoom,
+        pitch: speed > 30 ? 60 : 45,
+        bearing: heading,
       });
     }
   }, [isFollowing, selectedTracking]);
@@ -243,22 +279,48 @@ export function LiveMap({
 
     // Cleanup logic
     driverMarkers.current.forEach((marker, id) => {
-      if (!currentIds.has(id)) { marker.remove(); driverMarkers.current.delete(id); }
+      if (!currentIds.has(id)) { 
+        marker.remove(); 
+        driverMarkers.current.delete(id); 
+        markerPositions.current.delete(id);
+      }
     });
     
     trackingData.forEach((tracking) => {
       const isSelected = tracking.id === selectedId;
+      const isOtherInFocus = focusMode && selectedId && !isSelected;
       
       // Driver marker
       const existingDriverMarker = driverMarkers.current.get(tracking.id);
+      const targetPos: [number, number] = [tracking.current_longitude, tracking.current_latitude];
+
       if (existingDriverMarker) {
-        existingDriverMarker.setLngLat([tracking.current_longitude, tracking.current_latitude]);
+        const pos = markerPositions.current.get(tracking.id);
+        if (pos) {
+          pos.target = targetPos;
+        } else {
+          markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
+        }
+        
+        const el = createDriverMarkerElement(tracking, isSelected);
+        existingDriverMarker.getElement().innerHTML = el.innerHTML;
+        existingDriverMarker.getElement().className = el.className;
+        
+        existingDriverMarker.getElement().style.opacity = isOtherInFocus ? '0.15' : '1';
+        existingDriverMarker.getElement().style.filter = isOtherInFocus ? 'grayscale(0.8) blur(1px)' : 'none';
+        existingDriverMarker.getElement().style.pointerEvents = isOtherInFocus ? 'none' : 'auto';
+
+        if (existingDriverMarker.getPopup()?.isOpen()) {
+          existingDriverMarker.setPopup(createDriverPopup(tracking));
+        }
       } else {
         const el = createDriverMarkerElement(tracking, isSelected);
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
-          .setLngLat([tracking.current_longitude, tracking.current_latitude])
+          .setLngLat(targetPos)
           .setPopup(createDriverPopup(tracking))
           .addTo(map.current!);
+        
+        markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
         
         marker.getElement().addEventListener('click', () => {
           setSelectedId(tracking.id);
@@ -277,6 +339,10 @@ export function LiveMap({
             .addTo(map.current!);
           pointMarkers.current.set(pickupId, marker);
         }
+        const pMarker = pointMarkers.current.get(pickupId);
+        if (pMarker) {
+          pMarker.getElement().style.opacity = isOtherInFocus ? '0.1' : '1';
+        }
       }
 
       if (tracking.order?.delivery_latitude && tracking.order?.delivery_longitude) {
@@ -287,6 +353,10 @@ export function LiveMap({
             .setLngLat([tracking.order.delivery_longitude, tracking.order.delivery_latitude])
             .addTo(map.current!);
           pointMarkers.current.set(deliveryId, marker);
+        }
+        const dMarker = pointMarkers.current.get(deliveryId);
+        if (dMarker) {
+          dMarker.getElement().style.opacity = isOtherInFocus ? '0.1' : '1';
         }
       }
 
@@ -312,14 +382,39 @@ export function LiveMap({
               if (!map.current || !map.current.isStyleLoaded() || map.current.getSource(sourceId)) return;
               const routeGeometry = route?.geometry || { type: 'LineString', coordinates: waypoints };
               map.current.addSource(sourceId, { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: routeGeometry as GeoJSON.Geometry } });
-              map.current.addLayer({ id: sourceId, type: 'line', source: sourceId, layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': color, 'line-width': 4, 'line-opacity': 0.7 } });
+              map.current.addLayer({ 
+                id: sourceId, 
+                type: 'line', 
+                source: sourceId, 
+                layout: { 'line-join': 'round', 'line-cap': 'round' }, 
+                paint: { 
+                  'line-color': color, 
+                  'line-width': isSelected ? 6 : 4, 
+                  'line-opacity': isOtherInFocus ? 0.05 : 0.7 
+                } 
+              });
             })
             .catch(() => {
               if (!map.current?.isStyleLoaded() || map.current?.getSource(sourceId)) return;
               map.current?.addSource(sourceId, { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: waypoints } } });
-              map.current?.addLayer({ id: sourceId, type: 'line', source: sourceId, layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': color, 'line-width': 3, 'line-opacity': 0.6, 'line-dasharray': [2, 2] } });
+              map.current?.addLayer({ 
+                id: sourceId, 
+                type: 'line', 
+                source: sourceId, 
+                layout: { 'line-join': 'round', 'line-cap': 'round' }, 
+                paint: { 
+                  'line-color': color, 
+                  'line-width': 3, 
+                  'line-opacity': isOtherInFocus ? 0.05 : 0.6, 
+                  'line-dasharray': [2, 2] 
+                } 
+              });
             });
         }
+      } else if (routeLines.current.has(tracking.id) && map.current?.getLayer(`route-${tracking.id}`)) {
+        // Dynamic visibility/opacity update for route lines
+        map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
+        map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
       }
     });
 
@@ -329,7 +424,7 @@ export function LiveMap({
       trackingData.forEach(t => bounds.extend([t.current_longitude, t.current_latitude]));
       if (!bounds.isEmpty()) map.current.fitBounds(bounds, { padding: 100, maxZoom: 14 });
     }
-  }, [trackingData, loading, selectedId]);
+  }, [trackingData, loading, selectedId, focusMode]);
 
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
@@ -412,15 +507,27 @@ export function LiveMap({
           </DropdownMenu>
 
           {selectedId && (
-            <Button 
-              variant={isFollowing ? "default" : "secondary"} 
-              size="sm"
-              className="shadow-xl glass-card border-primary/20"
-              onClick={() => setIsFollowing(!isFollowing)}
-            >
-              {isFollowing ? <Target className="w-4 h-4 mr-2 animate-pulse text-primary" /> : <Target className="w-4 h-4 mr-2" />}
-              {isFollowing ? 'Seguindo' : 'Focar Motorista'}
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant={isFollowing ? "default" : "secondary"} 
+                size="sm"
+                className="shadow-xl glass-card border-primary/20"
+                onClick={() => setIsFollowing(!isFollowing)}
+              >
+                {isFollowing ? <Crosshair className="w-4 h-4 mr-2 animate-pulse text-primary" /> : <Target className="w-4 h-4 mr-2" />}
+                {isFollowing ? 'Seguindo' : 'Focar'}
+              </Button>
+
+              <Button 
+                variant={focusMode ? "default" : "secondary"} 
+                size="sm"
+                className="shadow-xl glass-card border-primary/20"
+                onClick={() => setFocusMode(!focusMode)}
+              >
+                {focusMode ? <Shield className="w-4 h-4 mr-2 text-primary" /> : <Maximize2 className="w-4 h-4 mr-2" />}
+                {focusMode ? 'Modo Foco Ativo' : 'Modo Foco'}
+              </Button>
+            </div>
           )}
         </div>
 
@@ -430,7 +537,11 @@ export function LiveMap({
               variant="destructive" 
               size="sm"
               className="shadow-xl glass-card animate-in slide-in-from-left-5"
-              onClick={() => setSelectedId(null)}
+              onClick={() => {
+                setSelectedId(null);
+                setIsFollowing(false);
+                setFocusMode(false);
+              }}
             >
               <EyeOff className="w-4 h-4 mr-2" />
               Limpar Seleção
@@ -439,15 +550,17 @@ export function LiveMap({
         )}
       </div>
 
-
-      {showHistoryFor && (
-        <MapHistoryPanel
-          driverName={showHistoryFor.driverName}
-          history={history}
-          historyLoading={historyLoading}
-          onClose={() => { clearHistoryFromMap(); clearHistory(); setShowHistoryFor(null); }}
-        />
-      )}
+      <MapHistoryPanel 
+        show={!!showHistoryFor} 
+        driverName={showHistoryFor?.driverName || ''}
+        history={history}
+        loading={historyLoading}
+        onClose={() => {
+          setShowHistoryFor(null);
+          clearHistory();
+          clearHistoryFromMap();
+        }}
+      />
     </div>
   );
 }
