@@ -340,28 +340,58 @@ export function LiveMap({
       <MapHUD selectedTracking={selectedTracking} />
 
       {/* Floating Controls */}
-      <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-2">
+      <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-3">
+        <div className="flex gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="sm" className="shadow-xl glass-card border-primary/20">
+                <Layers className="w-4 h-4 mr-2" /> Camadas
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="glass-card border-primary/20 bg-background/80 backdrop-blur-md">
+              <DropdownMenuLabel>Visualização</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setMapStyle('dark-v11')}>
+                <MapIcon className="w-4 h-4 mr-2" /> Modo Escuro
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setMapStyle('satellite-streets-v12')}>
+                <MapIcon className="w-4 h-4 mr-2" /> Satélite
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setShowTraffic(!showTraffic)}>
+                <TrafficCone className={`w-4 h-4 mr-2 ${showTraffic ? 'text-primary' : ''}`} /> 
+                {showTraffic ? 'Ocultar Trânsito' : 'Mostrar Trânsito'}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {selectedId && (
+            <Button 
+              variant={isFollowing ? "default" : "secondary"} 
+              size="sm"
+              className="shadow-xl glass-card border-primary/20"
+              onClick={() => setIsFollowing(!isFollowing)}
+            >
+              {isFollowing ? <Target className="w-4 h-4 mr-2 animate-pulse text-primary" /> : <Target className="w-4 h-4 mr-2" />}
+              {isFollowing ? 'Seguindo' : 'Focar Motorista'}
+            </Button>
+          )}
+        </div>
+
         {selectedId && (
-          <Button 
-            variant={isFollowing ? "default" : "secondary"} 
-            size="sm"
-            className="shadow-xl glass-card border-primary/20"
-            onClick={() => setIsFollowing(!isFollowing)}
-          >
-            {isFollowing ? <Target className="w-4 h-4 mr-2 animate-pulse text-primary" /> : <Target className="w-4 h-4 mr-2" />}
-            {isFollowing ? 'Seguindo' : 'Focar Motorista'}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="destructive" 
+              size="sm"
+              className="shadow-xl glass-card animate-in slide-in-from-left-5"
+              onClick={() => setSelectedId(null)}
+            >
+              <EyeOff className="w-4 h-4 mr-2" />
+              Limpar Seleção
+            </Button>
+          </div>
         )}
-        <Button 
-          variant="secondary" 
-          size="sm"
-          className="shadow-xl glass-card"
-          onClick={() => setSelectedId(null)}
-        >
-          <EyeOff className="w-4 h-4 mr-2" />
-          Limpar Seleção
-        </Button>
       </div>
+
 
       {showHistoryFor && (
         <MapHistoryPanel
