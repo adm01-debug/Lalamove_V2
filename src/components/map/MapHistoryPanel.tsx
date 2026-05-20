@@ -11,6 +11,7 @@ interface MapHistoryPanelProps {
   history: TrackingEvent[];
   loading: boolean;
   onClose: () => void;
+  onPlaybackUpdate?: (lat: number, lng: number, heading: number) => void;
 }
 
 export function MapHistoryPanel({ show, driverName, history, loading, onClose }: MapHistoryPanelProps) {
@@ -73,12 +74,9 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose }:
                     onChange={(e) => {
                       const idx = parseInt(e.target.value);
                       setPlaybackIndex(idx);
-                      // Custom event to update map marker position during playback
                       const event = history[idx];
-                      if (event) {
-                        window.dispatchEvent(new CustomEvent('map-playback-update', { 
-                          detail: { lat: event.latitude, lng: event.longitude, heading: event.heading } 
-                        }));
+                      if (event && onPlaybackUpdate) {
+                        onPlaybackUpdate(event.latitude, event.longitude, event.heading || 0);
                       }
                     }}
                     className="w-full h-1 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary"
