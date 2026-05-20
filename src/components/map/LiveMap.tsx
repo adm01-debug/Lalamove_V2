@@ -55,11 +55,14 @@ export function LiveMap({
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(true);
+  const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
   const { history, loading: historyLoading, fetchHistory, clearHistory } = useTrackingHistory();
+
 
   const selectedTracking = useMemo(() => 
     trackingData.find(t => t.id === selectedId) || null
