@@ -268,14 +268,24 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                   </div>
                 </ScrollArea>
                 
-                <Button 
-                  variant="outline" 
-                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
-                  onClick={exportToCSV}
-                >
-                  <Download className="w-3 h-3 mr-2" />
-                  Exportar Trajetória (CSV)
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
+                    onClick={exportToCSV}
+                  >
+                    <Download className="w-3 h-3 mr-1.5" />
+                    CSV
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
+                    onClick={exportToPDF}
+                  >
+                    <FileText className="w-3 h-3 mr-1.5" />
+                    PDF
+                  </Button>
+                </div>
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-10 gap-2 opacity-50">
