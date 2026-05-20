@@ -572,7 +572,7 @@ export function LiveMap({
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
         
-        // Stage 11: Route Deviation Detection (>500m)
+        // Stage 11: Route Deviation Detection (using setting)
         if (isSelected && !tracking.is_stopped) {
           const source = map.current.getSource(`route-${tracking.id}`) as mapboxgl.GeoJSONSource;
           // In a real app, we'd calculate distance to the nearest point on the line
