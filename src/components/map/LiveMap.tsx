@@ -548,6 +548,7 @@ export function LiveMap({
         }
       } else {
         const el = createDriverMarkerElement(tracking, isSelected);
+        if (offRouteAlerts.has(tracking.id)) el.classList.add('deviated-marker');
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
           .setLngLat(targetPos)
           .setPopup(createDriverPopup(tracking))
