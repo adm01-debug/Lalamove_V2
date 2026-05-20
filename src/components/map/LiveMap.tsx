@@ -75,7 +75,7 @@ export function LiveMap({
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
-  const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number }>>(new Map());
+  const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius } = useMapSettings();
 
@@ -506,15 +506,26 @@ export function LiveMap({
         });
       }
 
-      // Dynamic ETA Comparison
-      if (tracking.eta_minutes) {
+      // Dynamic ETA Comparison with Trend Analysis
+      if (tracking.eta_minutes !== undefined) {
         setEtaIndicator(prev => {
           const existing = prev.get(tracking.id);
           const next = new Map(prev);
+          const newEta = tracking.eta_minutes || 0;
+          
           if (!existing) {
-            next.set(tracking.id, { original: tracking.eta_minutes || 0, current: tracking.eta_minutes || 0 });
-          } else {
-            next.set(tracking.id, { ...existing, current: tracking.eta_minutes || 0 });
+            next.set(tracking.id, { 
+              original: newEta, 
+              current: newEta, 
+              trend: 'stable' 
+            });
+          } else if (existing.current !== newEta) {
+            const trend = newEta < existing.current ? 'improving' : 'worsening';
+            next.set(tracking.id, { 
+              ...existing, 
+              current: newEta, 
+              trend 
+            });
           }
           return next;
         });
@@ -897,6 +908,7 @@ export function LiveMap({
         offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
         stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
         etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
+        trend={selectedId ? etaIndicator.get(selectedId)?.trend : 'stable'}
         offRouteThreshold={offRouteThreshold}
         geofenceRadius={geofenceRadius}
         stoppedThreshold={stoppedThreshold}

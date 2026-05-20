@@ -23,6 +23,7 @@ interface MapHUDProps {
   offRouteThreshold?: number;
   geofenceRadius?: number;
   stoppedThreshold?: number;
+  trend?: 'improving' | 'worsening' | 'stable';
 }
 
 export function MapHUD({ 
@@ -32,7 +33,8 @@ export function MapHUD({
   etaOriginal, 
   offRouteThreshold = 500,
   geofenceRadius = 300,
-  stoppedThreshold = 15
+  stoppedThreshold = 15,
+  trend = 'stable'
 }: MapHUDProps) {
   if (!selectedTracking) return null;
 
@@ -232,10 +234,12 @@ export function MapHUD({
                     <div className="flex flex-col ml-2">
                       <Badge variant={selectedTracking.eta_minutes > etaOriginal ? "destructive" : "success"} className="text-[8px] h-4 px-1 animate-pulse">
                         {selectedTracking.eta_minutes > etaOriginal ? `+${selectedTracking.eta_minutes - etaOriginal}M ATRASO` : `${selectedTracking.eta_minutes - etaOriginal}M ADIANTO`}
-                        {selectedTracking.eta_minutes > etaOriginal ? ' ↗' : ' ↘'}
+                        {trend === 'worsening' ? ' ↗' : trend === 'improving' ? ' ↘' : ''}
                       </Badge>
                       <div className="flex items-center gap-1">
-                        <span className="text-[7px] font-bold text-muted-foreground uppercase">Ref: {etaOriginal}m</span>
+                        <span className={`text-[7px] font-black uppercase ${trend === 'improving' ? 'text-success' : trend === 'worsening' ? 'text-destructive' : 'text-muted-foreground'}`}>
+                          Trend: {trend === 'improving' ? 'MELHORANDO' : trend === 'worsening' ? 'PIORANDO' : 'ESTÁVEL'}
+                        </span>
                         <span className={`text-[7px] font-black ${selectedTracking.eta_minutes > etaOriginal ? 'text-destructive' : 'text-success'}`}>
                           ({Math.round(((selectedTracking.eta_minutes - etaOriginal) / etaOriginal) * 100)}%)
                         </span>
