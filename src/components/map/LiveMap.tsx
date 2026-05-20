@@ -56,6 +56,7 @@ export function LiveMap({
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const [showTraffic, setShowTraffic] = useState(true);
   const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
