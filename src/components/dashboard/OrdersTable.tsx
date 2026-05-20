@@ -40,13 +40,13 @@ const statusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   EXPIRED: { label: 'Expirado', variant: 'muted' },
 };
 
-// Guardian: Check for stalled drivers (> 15 min), route deviation (> 500m), or missing PODs
+// Guardian: Check for stalled drivers (> 15 min), route deviation (> 15 min delay), or missing PODs
 const getGuardianAlert = (order: Order) => {
   if (order.status === 'ON_GOING') {
     if (order.stalled_threshold_minutes && order.stalled_threshold_minutes > 15) {
       return { label: 'Motorista Parado', variant: 'glow-destructive' as BadgeVariant };
     }
-    if (order.route_deviation_threshold_meters && order.route_deviation_threshold_meters > 500) {
+    if (order.route_deviation_threshold_minutes && order.route_deviation_threshold_minutes > 15) {
       return { label: 'Desvio de Rota', variant: 'glow-destructive' as BadgeVariant };
     }
   }
