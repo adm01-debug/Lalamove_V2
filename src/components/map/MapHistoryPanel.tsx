@@ -14,7 +14,7 @@ interface MapHistoryPanelProps {
   onPlaybackUpdate?: (lat: number, lng: number, heading: number) => void;
 }
 
-export function MapHistoryPanel({ show, driverName, history, loading, onClose }: MapHistoryPanelProps) {
+export function MapHistoryPanel({ show, driverName, history, loading, onClose, onPlaybackUpdate }: MapHistoryPanelProps) {
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
 
