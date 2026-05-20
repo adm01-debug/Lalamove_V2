@@ -68,6 +68,37 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
     document.body.removeChild(link);
   };
 
+  const exportToPDF = () => {
+    if (history.length === 0) return;
+
+    const doc = new jsPDF();
+    const tableColumn = ["Data/Hora", "Lat", "Lng", "Vel (km/h)", "Tipo"];
+    const tableRows = history.map(e => [
+      new Date(e.created_at).toLocaleString('pt-BR'),
+      e.latitude.toFixed(6),
+      e.longitude.toFixed(6),
+      e.speed || 0,
+      e.event_type || 'TRACK'
+    ]);
+
+    doc.setFontSize(18);
+    doc.text(`Relatório de Trajetória - ${driverName}`, 14, 20);
+    
+    doc.setFontSize(10);
+    doc.text(`Gerado em: ${new Date().toLocaleString()}`, 14, 30);
+    doc.text(`Total de eventos: ${history.length}`, 14, 35);
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 45,
+      theme: 'grid',
+      headStyles: { fillColor: [139, 92, 246] }
+    });
+
+    doc.save(`trajetoria_${driverName.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`);
+  };
+
   if (!show) return null;
 
   return (
