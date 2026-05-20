@@ -4,7 +4,7 @@ import { Slider } from '@/components/ui/slider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMapSettings } from '@/hooks/useMapSettings';
 import { useState } from 'react';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 
 interface MapSettingsPanelProps {
   show: boolean;
@@ -25,22 +25,19 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
   } = useMapSettings();
   
   const [saving, setSaving] = useState(false);
-  const { toast } = useToast();
 
   const handleSave = async () => {
     setSaving(true);
     await saveContextSettings(activeContext);
     setSaving(false);
-    toast({
-      title: "Configurações Persistidas",
+    toast.success("Configurações Persistidas", {
       description: `Limites salvos para o contexto: ${activeContext}`,
     });
   };
 
   const handleReload = async () => {
     await loadContextSettings(activeContext);
-    toast({
-      title: "Configurações Carregadas",
+    toast.success("Configurações Carregadas", {
       description: "Valores restaurados do servidor.",
     });
   };
