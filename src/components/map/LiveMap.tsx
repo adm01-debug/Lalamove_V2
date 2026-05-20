@@ -810,6 +810,7 @@ export function LiveMap({
         stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
         etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
         offRouteThreshold={offRouteThreshold}
+        geofenceRadius={geofenceRadius}
       />
       
       <MapLegend vehicleCounts={vehicleCounts} />

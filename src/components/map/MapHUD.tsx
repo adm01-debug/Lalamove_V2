@@ -21,9 +21,17 @@ interface MapHUDProps {
   stoppedTime?: number; // seconds
   etaOriginal?: number;
   offRouteThreshold?: number;
+  geofenceRadius?: number;
 }
 
-export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal, offRouteThreshold = 500 }: MapHUDProps) {
+export function MapHUD({ 
+  selectedTracking, 
+  offRoute, 
+  stoppedTime, 
+  etaOriginal, 
+  offRouteThreshold = 500,
+  geofenceRadius = 300
+}: MapHUDProps) {
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
@@ -155,7 +163,7 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime, etaOriginal, o
                   Math.pow(selectedTracking.current_latitude - selectedTracking.order.delivery_latitude, 2) + 
                   Math.pow(selectedTracking.current_longitude - selectedTracking.order.delivery_longitude!, 2)
                 );
-                const isNear = dist < 0.003; // Approx 300m
+                const isNear = dist < (geofenceRadius / 100000);
                 
                 return isNear && (
                   <motion.div 
