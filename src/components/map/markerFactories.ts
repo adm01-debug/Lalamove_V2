@@ -114,7 +114,11 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
         <div><div style="font-size:10px;color:#888;">VELOCIDADE</div><div style="font-size:14px;font-weight:700;">${speed}</div></div>
         <div><div style="font-size:10px;color:#888;">ETA</div><div style="font-size:14px;font-weight:700;color:#00d9ff;">${eta}</div></div>
       </div>
-      <button onclick="window.dispatchEvent(new CustomEvent('show-driver-history',{detail:{driverId:'${tracking.driver_id}',orderId:'${tracking.order_id}',driverName:'${driverName}'}}))" style="width:100%;margin-top:12px;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📍 Ver Trajeto Percorrido</button>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="window.dispatchEvent(new CustomEvent('show-driver-history',{detail:{driverId:'${tracking.driver_id}',orderId:'${tracking.order_id}',driverName:'${driverName}'}}))" style="flex:1;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📍 Trajeto</button>
+        <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=${tracking.current_latitude},${tracking.current_longitude}', '_blank')" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🌐 Google</button>
+      </div>
+
     </div>
   `);
 }
