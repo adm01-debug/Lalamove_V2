@@ -537,7 +537,7 @@ export function LiveMap({
         
         const el = createDriverMarkerElement(tracking, isSelected);
         existingDriverMarker.getElement().innerHTML = el.innerHTML;
-        existingDriverMarker.getElement().className = el.className;
+        existingDriverMarker.getElement().className = el.className + (offRouteAlerts.has(tracking.id) ? ' deviated-marker' : '');
         
         existingDriverMarker.getElement().style.opacity = isOtherInFocus ? '0.15' : '1';
         existingDriverMarker.getElement().style.filter = isOtherInFocus ? 'grayscale(0.8) blur(1px)' : 'none';
