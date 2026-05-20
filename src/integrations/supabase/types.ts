@@ -1546,6 +1546,39 @@ export type Database = {
         }
         Relationships: []
       }
+      map_settings_overrides: {
+        Row: {
+          context_key: string
+          created_at: string | null
+          geofence_radius: number | null
+          id: string
+          off_route_threshold: number | null
+          stopped_threshold: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context_key: string
+          created_at?: string | null
+          geofence_radius?: number | null
+          id?: string
+          off_route_threshold?: number | null
+          stopped_threshold?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context_key?: string
+          created_at?: string | null
+          geofence_radius?: number | null
+          id?: string
+          off_route_threshold?: number | null
+          stopped_threshold?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       mfa_sessions: {
         Row: {
           created_at: string | null
