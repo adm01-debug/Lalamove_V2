@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { 
   Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, 
-  TrafficCone, Crosshair, Zap, Shield, Maximize2 
+  TrafficCone, Crosshair, Zap, Shield, Maximize2, Activity,
+  Cloud, Wind, MapPin, Compass
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
@@ -442,7 +443,44 @@ export function LiveMap({
   );
 
   return (
-    <div className={`relative rounded-xl overflow-hidden border border-border/50 shadow-2xl ${className}`}>
+    <div className={`relative rounded-xl overflow-hidden border border-border/50 shadow-2xl group/map-container ${className}`}>
+      {/* Top Left HUD - Global Metrics */}
+      <div className="absolute top-6 left-6 z-20 flex flex-col gap-3 pointer-events-none">
+        <div className="bg-background/40 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl pointer-events-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Activity className="w-5 h-5 text-primary animate-pulse" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-primary/60 uppercase tracking-widest">Global Status</p>
+              <h4 className="text-sm font-black text-foreground tracking-tighter uppercase italic">Control Center</h4>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Active</p>
+              <p className="text-xl font-black italic">{trackingData.length}</p>
+            </div>
+            <div>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Alerts</p>
+              <p className="text-xl font-black italic text-destructive">03</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-background/40 backdrop-blur-xl border border-white/10 p-3 rounded-xl shadow-2xl pointer-events-auto flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Cloud className="w-4 h-4 text-sky-400" />
+            <span className="text-[11px] font-black italic tracking-tighter">24°C</span>
+          </div>
+          <div className="w-px h-4 bg-white/10" />
+          <div className="flex items-center gap-2">
+            <Wind className="w-4 h-4 text-slate-300" />
+            <span className="text-[11px] font-black italic tracking-tighter">12 KM/H</span>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @keyframes pulse-glow {
           0% { transform: scale(0.95); opacity: 0.8; }
