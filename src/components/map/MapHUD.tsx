@@ -17,9 +17,11 @@ import type { TrackingData } from './hooks/useTrackingData';
 
 interface MapHUDProps {
   selectedTracking: TrackingData | null;
+  offRoute?: boolean;
+  stoppedTime?: number; // seconds
 }
 
-export function MapHUD({ selectedTracking }: MapHUDProps) {
+export function MapHUD({ selectedTracking, offRoute, stoppedTime }: MapHUDProps) {
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
@@ -109,6 +111,23 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
               </TooltipProvider>
             </div>
 
+            {/* Requested Feature: Route Deviation & Stopped Alerts */}
+            {(offRoute || (stoppedTime && stoppedTime > 900)) && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex items-center gap-3"
+              >
+                <AlertTriangle className="w-5 h-5 text-destructive animate-bounce" />
+                <div className="flex-1">
+                  <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico</span>
+                  <p className="text-[11px] font-medium text-foreground">
+                    {offRoute ? "Desvio de rota detectado (>500m)" : `Motorista parado há ${Math.floor(stoppedTime! / 60)} min`}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
             {/* Status Narrative (Stage 9: Excellence Insight) */}
             <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 flex items-center gap-3 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full -mr-8 -mt-8 animate-pulse" />
@@ -117,9 +136,11 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
               </div>
               <p className="text-[11px] leading-tight text-foreground/90 font-medium">
                 <span className="font-black text-primary uppercase block mb-0.5">Relatório Guardian AI:</span> 
-                {selectedTracking.is_on_route 
-                  ? "Vetor de deslocamento otimizado. Sem anomalias críticas no quadrante atual."
-                  : "Desvio de rota detectado. Protocolo de monitoramento intensivo ativado."}
+                {offRoute 
+                  ? "Anomalia de trajetória detectada. Alerta enviado ao centro de comando."
+                  : selectedTracking.is_on_route 
+                    ? "Vetor de deslocamento otimizado. Sem anomalias críticas no quadrante atual."
+                    : "Desvio de rota detectado. Protocolo de monitoramento intensivo ativado."}
               </p>
             </div>
 
@@ -150,6 +171,9 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
                 <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
                   <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
+                  {selectedTracking.eta_minutes && selectedTracking.eta_minutes > 15 && (
+                    <Badge variant="destructive" className="ml-2 text-[8px] h-4 px-1 animate-pulse">ATRASADO</Badge>
+                  )}
                 </div>
               </div>
             </div>

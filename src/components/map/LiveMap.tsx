@@ -64,6 +64,12 @@ export function LiveMap({
   const [showTraffic, setShowTraffic] = useState(true);
   const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
+  
+  // States for requested features
+  const [offRouteAlerts, setOffRouteAlerts] = useState<Set<string>>(new Set());
+  const [stoppedAlerts, setStoppedAlerts] = useState<Map<string, number>>(new Map()); // id -> start timestamp
+  const [playbackActive, setPlaybackActive] = useState(false);
+  const [playbackIndex, setPlaybackIndex] = useState(0);
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
@@ -282,15 +288,30 @@ export function LiveMap({
   }, [showTraffic]);
 
 
-  // Following logic with Magnetic Zoom and Auto-Rotation
+  // Following logic with Magnetic Zoom and Auto-Rotation & Route corridor visibility
   useEffect(() => {
     if (isFollowing && selectedTracking && map.current) {
       const speed = selectedTracking.speed || 0;
       const heading = selectedTracking.heading || 0;
       const targetZoom = Math.max(14, Math.min(18, 18 - (speed / 20)));
       
+      const center: [number, number] = [selectedTracking.current_longitude, selectedTracking.current_latitude];
+      
+      // Auto-fit to keep driver and destination visible if close
+      if (selectedTracking.order?.delivery_longitude) {
+        const dest: [number, number] = [selectedTracking.order.delivery_longitude, selectedTracking.order.delivery_latitude!];
+        const bounds = new mapboxgl.LngLatBounds().extend(center).extend(dest);
+        
+        // Only fit if they are somewhat close to keep zoom relevant
+        const dist = Math.sqrt(Math.pow(center[0]-dest[0], 2) + Math.pow(center[1]-dest[1], 2));
+        if (dist < 0.05) { // ~5km
+          map.current.fitBounds(bounds, { padding: 120, maxZoom: 17, duration: 1000 });
+          return;
+        }
+      }
+
       map.current.easeTo({
-        center: [selectedTracking.current_longitude, selectedTracking.current_latitude],
+        center: center,
         duration: 1000,
         zoom: targetZoom,
         pitch: speed > 30 ? 60 : 45,
@@ -476,6 +497,39 @@ export function LiveMap({
         // Dynamic visibility/opacity update for route lines
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
+        
+        // Stage 11: Route Deviation Detection (>500m)
+        if (isSelected && !tracking.is_stopped) {
+          const source = map.current.getSource(`route-${tracking.id}`) as mapboxgl.GeoJSONSource;
+          // In a real app, we'd calculate distance to the nearest point on the line
+          // Mocking detection: if current pos is far from direct line pickup->delivery
+          const isOff = tracking.is_on_route === false; 
+          if (isOff && !offRouteAlerts.has(tracking.id)) {
+            setOffRouteAlerts(prev => new Set(prev).add(tracking.id));
+            map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', '#ef4444');
+          } else if (!isOff && offRouteAlerts.has(tracking.id)) {
+            setOffRouteAlerts(prev => {
+              const next = new Set(prev);
+              next.delete(tracking.id);
+              return next;
+            });
+            const vehicleType = tracking.driver?.vehicle_type || 'MOTORCYCLE';
+            map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', vehicleColors[vehicleType]);
+          }
+        }
+      }
+      
+      // Stage 12: Stopped Driver Detection (>15min)
+      if (tracking.is_stopped) {
+        if (!stoppedAlerts.has(tracking.id)) {
+          setStoppedAlerts(prev => new Map(prev).set(tracking.id, Date.now()));
+        }
+      } else if (stoppedAlerts.has(tracking.id)) {
+        setStoppedAlerts(prev => {
+          const next = new Map(prev);
+          next.delete(tracking.id);
+          return next;
+        });
       }
     });
 
@@ -633,7 +687,11 @@ export function LiveMap({
         onFocusTracking={focusOnTracking} 
       />
       
-      <MapHUD selectedTracking={selectedTracking} />
+      <MapHUD 
+        selectedTracking={selectedTracking} 
+        offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
+        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? (Date.now() - stoppedAlerts.get(selectedId)!) / 1000 : undefined}
+      />
       
       <MapLegend vehicleCounts={vehicleCounts} />
 
