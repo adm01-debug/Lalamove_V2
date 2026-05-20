@@ -180,41 +180,33 @@ export function LiveMap({
       map.current?.remove();
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle]);
-240: 
-241:   // Animation loop for smooth movement
-242:   useEffect(() => {
-243:     const animate = () => {
-244:       if (!map.current) return;
-245: 
-246:       markerPositions.current.forEach((pos, id) => {
-247:         const marker = driverMarkers.current.get(id);
-248:         if (!marker) return;
-249: 
-250:         // Smoothly move current towards target (lerp)
-251:         const lerpFactor = 0.05; // Adjust for speed of interpolation
-252:         const newLng = pos.current[0] + (pos.target[0] - pos.current[0]) * lerpFactor;
-253:         const newLat = pos.current[1] + (pos.target[1] - pos.current[1]) * lerpFactor;
-254:         
-255:         pos.current = [newLng, newLat];
-256:         marker.setLngLat(pos.current);
-257: 
-258:         // Update Ghost Trail
-259:         const sourceId = `ghost-trail-${id}`;
-260:         if (map.current.getSource(sourceId)) {
-261:           const source = map.current.getSource(sourceId) as mapboxgl.GeoJSONSource;
-262:           // We could keep a history here for a longer trail, but for now just current and target
-263:           // source.setData(...)
-264:         }
-265:       });
-266: 
-267:       animationFrameRef.current = requestAnimationFrame(animate);
-268:     };
-269: 
-270:     animationFrameRef.current = requestAnimationFrame(animate);
-271:     return () => {
-272:       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-273:     };
-274:   }, []);
+
+  // Animation loop for smooth movement
+  useEffect(() => {
+    const animate = () => {
+      if (!map.current) return;
+
+      markerPositions.current.forEach((pos, id) => {
+        const marker = driverMarkers.current.get(id);
+        if (!marker) return;
+
+        // Smoothly move current towards target (lerp)
+        const lerpFactor = 0.05; // Adjust for speed of interpolation
+        const newLng = pos.current[0] + (pos.target[0] - pos.current[0]) * lerpFactor;
+        const newLat = pos.current[1] + (pos.target[1] - pos.current[1]) * lerpFactor;
+        
+        pos.current = [newLng, newLat];
+        marker.setLngLat(pos.current);
+      });
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, []);
 
   // Toggle traffic
   useEffect(() => {
