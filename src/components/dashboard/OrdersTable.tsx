@@ -13,12 +13,14 @@ import {
   User, 
   Truck, 
   DollarSign, 
-  Navigation
+  Navigation,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { HoverPreview } from '@/components/ui/hover-preview';
 import { BatchActionsToolbar } from './BatchActionsToolbar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface OrdersTableProps {
   orders: Order[];
@@ -38,10 +40,15 @@ const statusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
   EXPIRED: { label: 'Expirado', variant: 'muted' },
 };
 
-// Guardian: Check for stalled drivers (> 15 min) or missing PODs
+// Guardian: Check for stalled drivers (> 15 min), route deviation (> 500m), or missing PODs
 const getGuardianAlert = (order: Order) => {
-  if (order.status === 'ON_GOING' && order.stalled_threshold_minutes && order.stalled_threshold_minutes > 15) {
-    return { label: 'Motorista Parado', variant: 'glow-destructive' as BadgeVariant };
+  if (order.status === 'ON_GOING') {
+    if (order.stalled_threshold_minutes && order.stalled_threshold_minutes > 15) {
+      return { label: 'Motorista Parado', variant: 'glow-destructive' as BadgeVariant };
+    }
+    if (order.route_deviation_threshold_meters && order.route_deviation_threshold_meters > 500) {
+      return { label: 'Desvio de Rota', variant: 'glow-destructive' as BadgeVariant };
+    }
   }
   if (order.status === 'COMPLETED' && order.pod_required && !order.pod_url) {
     return { label: 'Falta POD', variant: 'glow-warning' as BadgeVariant };
@@ -226,9 +233,21 @@ function OrdersTableDesktop({
                     </td>
                     <td className="p-4">
                       <div className="flex flex-col gap-1 items-start">
-                        <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
-                          {status.label}
-                        </Badge>
+                        <div className="flex gap-1 items-center">
+                          <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
+                            {status.label}
+                          </Badge>
+                          {order.auto_notify_supplier && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge variant="outline" size="sm" className="px-1 border-primary/20 text-primary">
+                                  <MessageSquare className="w-3 h-3" />
+                                </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent>Notificação Automática Ativa</TooltipContent>
+                            </Tooltip>
+                          )}
+                        </div>
                         {getGuardianAlert(order) && (
                           <Badge variant={getGuardianAlert(order)!.variant} size="sm" pulse className="animate-in fade-in slide-in-from-top-1">
                             {getGuardianAlert(order)!.label}

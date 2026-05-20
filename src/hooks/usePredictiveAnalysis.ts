@@ -49,12 +49,12 @@ async function fetchAnalysisData(): Promise<AnalysisData> {
       lalamoveId: (o.lalamove_id as string) || o.id
     }));
 
-  // Analisar desvios de rota (usando internal_notes ou outro campo se disponível, ou mockando se não houver coluna)
+  // Analisar desvios de rota (Guardian: Desvio de rota > 500m)
   const offRouteDrivers = orders
-    .filter(o => o.status === 'ON_GOING' && (o.delay_minutes || 0) > 30) // Fallback simples para motoristas muito atrasados
+    .filter(o => o.status === 'ON_GOING' && o.route_deviation_threshold_meters && o.route_deviation_threshold_meters > 500)
     .map(o => ({
       id: (o.driver_id as string) || 'unknown',
-      deviation: 0,
+      deviation: o.route_deviation_threshold_meters || 0,
       orderId: o.id,
       lalamoveId: (o.lalamove_id as string) || o.id
     }));
@@ -152,6 +152,25 @@ function generatePredictions(data: AnalysisData): PredictiveAlert[] {
       dataPoints: [
         { label: "Tempo Parado", value: `${mainStalled.minutes} min` },
         { label: "Pedido", value: mainStalled.lalamoveId }
+      ],
+    } as any);
+  }
+
+  if (data.offRouteDrivers.length > 0) {
+    const mainOffRoute = data.offRouteDrivers[0];
+    alerts.push({
+      id: `pred-offroute-${mainOffRoute.orderId}`,
+      type: "route_deviation",
+      title: "Desvio de Rota Crítico",
+      description: `Motorista no pedido ${mainOffRoute.lalamoveId} desviou ${mainOffRoute.deviation}m da rota prevista.`,
+      probability: 95,
+      impact: "critical",
+      timeframe: "Imediato",
+      recommendation: "O motorista saiu significativamente da rota. Verifique a segurança e o motivo do desvio.",
+      lalamoveOrderId: mainOffRoute.orderId,
+      dataPoints: [
+        { label: "Desvio", value: `${mainOffRoute.deviation}m` },
+        { label: "Pedido", value: mainOffRoute.lalamoveId }
       ],
     } as any);
   }
