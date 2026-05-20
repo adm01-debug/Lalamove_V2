@@ -687,7 +687,11 @@ export function LiveMap({
         onFocusTracking={focusOnTracking} 
       />
       
-      <MapHUD selectedTracking={selectedTracking} />
+      <MapHUD 
+        selectedTracking={selectedTracking} 
+        offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
+        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? (Date.now() - stoppedAlerts.get(selectedId)!) / 1000 : undefined}
+      />
       
       <MapLegend vehicleCounts={vehicleCounts} />
 

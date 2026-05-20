@@ -13,6 +13,9 @@ interface MapHistoryPanelProps {
 }
 
 export function MapHistoryPanel({ show, driverName, history, loading, onClose }: MapHistoryPanelProps) {
+  const [playbackActive, setPlaybackActive] = useState(false);
+  const [playbackIndex, setPlaybackIndex] = useState(0);
+
   if (!show) return null;
 
   return (
@@ -21,7 +24,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose }:
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-        className="absolute bottom-6 right-6 z-30 w-80 glass-card bg-background/60 backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden rounded-xl"
+        className="absolute bottom-6 right-6 z-30 w-85 glass-card bg-background/60 backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden rounded-xl"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-primary/50" />
         
@@ -44,6 +47,49 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose }:
           </div>
 
           <div className="space-y-4">
+            {/* Playback Controls (Requested Feature) */}
+            {!loading && history.length > 0 && (
+              <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-primary">Simulação de Trajetória</span>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="secondary" 
+                      className="h-7 px-3 text-[9px] font-black uppercase bg-primary/20 hover:bg-primary/30"
+                      onClick={() => setPlaybackActive(!playbackActive)}
+                    >
+                      {playbackActive ? 'Pausar' : 'Reproduzir'}
+                    </Button>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <input 
+                    type="range" 
+                    min="0" 
+                    max={history.length - 1} 
+                    value={playbackIndex} 
+                    onChange={(e) => {
+                      const idx = parseInt(e.target.value);
+                      setPlaybackIndex(idx);
+                      // Custom event to update map marker position during playback
+                      const event = history[idx];
+                      if (event) {
+                        window.dispatchEvent(new CustomEvent('map-playback-update', { 
+                          detail: { lat: event.latitude, lng: event.longitude, heading: event.heading } 
+                        }));
+                      }
+                    }}
+                    className="w-full h-1 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary"
+                  />
+                  <div className="flex justify-between text-[8px] font-mono text-muted-foreground">
+                    <span>{new Date(history[0].created_at).toLocaleTimeString()}</span>
+                    <span>{new Date(history[history.length-1].created_at).toLocaleTimeString()}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {loading ? (
               <div className="flex flex-col items-center justify-center py-10 gap-3">
                 <Loader2 className="w-6 h-6 animate-spin text-primary" />

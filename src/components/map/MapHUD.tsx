@@ -171,6 +171,9 @@ export function MapHUD({ selectedTracking, offRoute, stoppedTime }: MapHUDProps)
                 <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
                   <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
+                  {selectedTracking.eta_minutes && selectedTracking.eta_minutes > 15 && (
+                    <Badge variant="destructive" className="ml-2 text-[8px] h-4 px-1 animate-pulse">ATRASADO</Badge>
+                  )}
                 </div>
               </div>
             </div>
