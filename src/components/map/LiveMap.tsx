@@ -96,6 +96,7 @@ export function LiveMap({
           'type': 'geojson',
           'data': {
             'type': 'Feature',
+            'properties': { 'name': 'Área de Alto Risco' },
             'geometry': {
               'type': 'Polygon',
               'coordinates': [[
@@ -107,6 +108,7 @@ export function LiveMap({
               ]]
             }
           }
+
         });
 
         map.current.addLayer({
