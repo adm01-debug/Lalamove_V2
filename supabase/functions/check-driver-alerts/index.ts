@@ -143,7 +143,12 @@ serve(async (req) => {
               message: `${driverName} está parado há ${stoppedMinutes} minutos durante a entrega ${orderIdDisplay}. Threshold: ${warningThreshold}min.`,
               driver_id: driver.id,
               order_id: order.id,
-              metadata: { stopped_minutes: stoppedMinutes, threshold: warningThreshold }
+              metadata: { 
+                stopped_minutes: stoppedMinutes, 
+                threshold: warningThreshold,
+                guardian_triggered: true,
+                auto_resolved: false
+              }
             };
             
             const { data: newAlert } = await supabase.from('alerts').insert(alertData).select().single();
@@ -156,8 +161,8 @@ serve(async (req) => {
                   alert_id: newAlert.id,
                   type: 'SUPPLIER_DELAY_NOTICE',
                   severity: 'WARNING',
-                  title: 'Aviso de Atraso na Coleta/Entrega',
-                  message: `Olá, informamos que o motorista ${driverName} está parado há ${stoppedMinutes}min próximo à sua região. Estamos monitorando.`,
+                  title: 'Aviso de Atraso Guardian',
+                  message: `[Guardian] Olá, o motorista ${driverName} está parado há ${stoppedMinutes}min próximo à região de coleta/entrega. Pedido: ${orderIdDisplay}.`,
                   order_id: order.id,
                   metadata: { contact: order.supplier_contact, channel: 'whatsapp' }
                 }

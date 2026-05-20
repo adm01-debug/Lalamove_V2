@@ -42,7 +42,7 @@ const statusConfig: Record<string, { label: string; variant: BadgeVariant }> = {
 
 // Guardian: Check for stalled drivers (> 15 min), route deviation (> 15 min delay), or missing PODs
 const getGuardianAlert = (order: Order) => {
-  if (order.status === 'ON_GOING') {
+  if (order.status === 'ON_GOING' || order.status === 'PICKED_UP') {
     if (order.stalled_threshold_minutes && order.stalled_threshold_minutes > 15) {
       return { label: 'Motorista Parado', variant: 'glow-destructive' as BadgeVariant };
     }

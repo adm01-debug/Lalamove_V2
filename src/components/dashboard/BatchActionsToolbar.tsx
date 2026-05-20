@@ -86,7 +86,7 @@ export function BatchActionsToolbar({ selectedOrders, onClear, onStatusUpdate }:
               onClick={handleWhatsAppBatch}
             >
               <MessageSquare className="w-4 h-4 text-green-500" />
-              <span className="hidden xs:inline">Notificar</span>
+              <span className="hidden xs:inline">WhatsApp</span>
             </Button>
 
             <Button 
