@@ -22,6 +22,7 @@ interface MapHUDProps {
   etaOriginal?: number;
   offRouteThreshold?: number;
   geofenceRadius?: number;
+  stoppedThreshold?: number;
 }
 
 export function MapHUD({ 
@@ -30,7 +31,8 @@ export function MapHUD({
   stoppedTime, 
   etaOriginal, 
   offRouteThreshold = 500,
-  geofenceRadius = 300
+  geofenceRadius = 300,
+  stoppedThreshold = 15
 }: MapHUDProps) {
   if (!selectedTracking) return null;
 
@@ -122,7 +124,7 @@ export function MapHUD({
             </div>
 
             {/* Requested Feature: Route Deviation & Stopped Alerts */}
-            {(offRoute || (stoppedTime && stoppedTime > 900)) && (
+            {(offRoute || (stoppedTime && stoppedTime > (stoppedThreshold * 60))) && (
               <motion.div 
                 initial={{ height: 0, opacity: 0, y: -10 }}
                 animate={{ height: 'auto', opacity: 1, y: 0 }}
@@ -137,7 +139,7 @@ export function MapHUD({
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-destructive uppercase block">Alerta Crítico Guardian</span>
-                      {stoppedTime && stoppedTime > 900 && (
+                      {stoppedTime && stoppedTime > (stoppedThreshold * 60) && (
                         <Badge variant="destructive" className="h-4 text-[8px] animate-pulse px-1 font-mono">
                           {Math.floor(stoppedTime / 60)}:{(stoppedTime % 60).toString().padStart(2, '0')}
                         </Badge>

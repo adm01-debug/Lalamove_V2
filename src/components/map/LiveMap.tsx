@@ -397,7 +397,7 @@ export function LiveMap({
     });
     
     trackingData.forEach((tracking) => {
-      // Logic for Route Deviation Detection (>500m)
+      // Logic for Route Deviation Detection (using setting)
       const isOnRoute = tracking.is_on_route !== false;
       const isDeviated = !isOnRoute; 
       
@@ -407,6 +407,7 @@ export function LiveMap({
         else next.delete(tracking.id);
         return next;
       });
+
 
       // Logic for Stopped Driver Alert (using setting)
       if (tracking.speed === 0) {
@@ -593,7 +594,7 @@ export function LiveMap({
         }
       }
       
-      // Stage 12: Stopped Driver Detection (>15min)
+      // Stage 12: Stopped Driver Detection (using settings)
       if (tracking.is_stopped) {
         if (!stoppedAlerts.has(tracking.id)) {
           setStoppedAlerts(prev => new Map(prev).set(tracking.id, Date.now()));
@@ -811,6 +812,7 @@ export function LiveMap({
         etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
         offRouteThreshold={offRouteThreshold}
         geofenceRadius={geofenceRadius}
+        stoppedThreshold={stoppedThreshold}
       />
       
       <MapLegend vehicleCounts={vehicleCounts} />
