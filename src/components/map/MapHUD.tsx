@@ -109,43 +109,47 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
               </TooltipProvider>
             </div>
 
-            {/* Status Narrative (Excellence Step) */}
-            <div className="bg-primary/5 border border-primary/10 rounded-lg p-2 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Navigation className="w-4 h-4 text-primary" />
+            {/* Status Narrative (Stage 9: Excellence Insight) */}
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 flex items-center gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full -mr-8 -mt-8 animate-pulse" />
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 border border-primary/30">
+                <Navigation className="w-5 h-5 text-primary" />
               </div>
-              <p className="text-[11px] leading-tight text-foreground/80">
-                <span className="font-black text-primary uppercase">Contexto:</span> Motorista em deslocamento constante. Tráfego {Math.random() > 0.5 ? 'Intenso' : 'Moderado'} detectado à frente.
+              <p className="text-[11px] leading-tight text-foreground/90 font-medium">
+                <span className="font-black text-primary uppercase block mb-0.5">Relatório Guardian AI:</span> 
+                {selectedTracking.is_on_route 
+                  ? "Vetor de deslocamento otimizado. Sem anomalias críticas no quadrante atual."
+                  : "Desvio de rota detectado. Protocolo de monitoramento intensivo ativado."}
               </p>
             </div>
 
-            {/* Telemetry Grid */}
+            {/* Telemetry Grid (Stage 5: High Precision HUD) */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-secondary/30 p-3 rounded-lg border border-border/50 relative overflow-hidden group">
-                <div className="absolute -right-2 -bottom-2 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Zap className="w-12 h-12" />
+              <div className="bg-secondary/40 p-4 rounded-xl border border-white/10 relative overflow-hidden group hover:border-primary/50 transition-colors">
+                <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Zap className="w-16 h-16" />
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                  <Zap className="w-3 h-3 text-yellow-500" />
-                  <span className="text-[10px] font-black tracking-tighter uppercase">Velocidade</span>
+                  <Zap className="w-3.5 h-3.5 text-yellow-500" />
+                  <span className="text-[10px] font-black tracking-widest uppercase opacity-70">Velocidade</span>
                 </div>
-                <div className="text-2xl font-black italic flex items-baseline gap-1">
+                <div className="text-3xl font-black italic flex items-baseline gap-1 text-foreground">
                   {selectedTracking.speed || 0} 
-                  <span className="text-[10px] font-bold not-italic opacity-40">KM/H</span>
+                  <span className="text-[11px] font-bold not-italic opacity-40">KM/H</span>
                 </div>
               </div>
               
-              <div className="bg-secondary/30 p-3 rounded-lg border border-border/50 relative overflow-hidden group">
-                <div className="absolute -right-2 -bottom-2 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Clock className="w-12 h-12" />
+              <div className="bg-secondary/40 p-4 rounded-xl border border-white/10 relative overflow-hidden group hover:border-primary/50 transition-colors">
+                <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Clock className="w-16 h-16" />
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                  <Clock className="w-3 h-3 text-primary" />
-                  <span className="text-[10px] font-black tracking-tighter uppercase">Estimativa</span>
+                  <Clock className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-[10px] font-black tracking-widest uppercase opacity-70">Estimativa</span>
                 </div>
-                <div className="text-2xl font-black italic text-primary flex items-baseline gap-1">
+                <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
-                  <span className="text-[10px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
+                  <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
                 </div>
               </div>
             </div>
