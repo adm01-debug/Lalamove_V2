@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { 
   Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, 
   TrafficCone, Crosshair, Zap, Shield, Maximize2, Activity,
-  Cloud, Wind, MapPin, Compass
+  Cloud, Wind, MapPin, Compass, Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
@@ -23,6 +23,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel
 } from "@/components/ui/dropdown-menu";
+import { useMapSettings } from '@/hooks/useMapSettings';
+import { MapSettingsPanel } from './MapSettingsPanel';
 import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
 import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement } from './markerFactories';
 
@@ -65,6 +67,7 @@ export function LiveMap({
   const [showTraffic, setShowTraffic] = useState(true);
   const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
   
   // States for requested features
   const [offRouteAlerts, setOffRouteAlerts] = useState<Set<string>>(new Set());
@@ -73,6 +76,8 @@ export function LiveMap({
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number }>>(new Map());
+  
+  const { offRouteThreshold, stoppedThreshold, geofenceRadius } = useMapSettings();
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
@@ -403,7 +408,7 @@ export function LiveMap({
         return next;
       });
 
-      // Logic for Stopped Driver Alert (>15min)
+      // Logic for Stopped Driver Alert (using setting)
       if (tracking.speed === 0) {
         setStoppedAlerts(prev => {
           if (!prev.has(tracking.id)) {
@@ -567,7 +572,7 @@ export function LiveMap({
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
         
-        // Stage 11: Route Deviation Detection (>500m)
+        // Stage 11: Route Deviation Detection (using setting)
         if (isSelected && !tracking.is_stopped) {
           const source = map.current.getSource(`route-${tracking.id}`) as mapboxgl.GeoJSONSource;
           // In a real app, we'd calculate distance to the nearest point on the line
@@ -597,7 +602,7 @@ export function LiveMap({
         const startTime = stoppedAlerts.get(tracking.id);
         const durationMin = startTime ? Math.floor((Date.now() - startTime) / 60000) : 0;
         
-        if (durationMin >= 15) {
+        if (durationMin >= stoppedThreshold) {
           const stoppedMarkerId = `stopped-${tracking.id}`;
           if (!pointMarkers.current.has(stoppedMarkerId)) {
             const el = createStoppedMarkerElement(tracking, durationMin);
@@ -725,6 +730,15 @@ export function LiveMap({
           <Button 
             variant="ghost" 
             size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${showSettings ? 'text-primary bg-primary/10' : 'text-muted-foreground'} hover:bg-white/5`}
+            onClick={() => setShowSettings(!showSettings)}
+          >
+            <Settings className="w-5 h-5" />
+          </Button>
+          <div className="w-px h-6 bg-white/10 mx-1" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
             className={`h-10 w-10 rounded-full transition-all duration-300 ${mapStyle === 'dark-v11' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110' : 'hover:bg-white/5'}`}
             onClick={() => setMapStyle('dark-v11')}
           >
@@ -795,9 +809,13 @@ export function LiveMap({
         offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
         stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
         etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
+        offRouteThreshold={offRouteThreshold}
+        geofenceRadius={geofenceRadius}
       />
       
       <MapLegend vehicleCounts={vehicleCounts} />
+      
+      <MapSettingsPanel show={showSettings} onClose={() => setShowSettings(false)} />
 
       {/* Loading Overlay */}
       {loading && (

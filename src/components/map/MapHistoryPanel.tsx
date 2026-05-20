@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { History, X, Loader2, MapPin, Clock } from 'lucide-react';
+import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,6 +17,7 @@ interface MapHistoryPanelProps {
 export function MapHistoryPanel({ show, driverName, history, loading, onClose, onPlaybackUpdate }: MapHistoryPanelProps) {
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(800);
 
   // Auto-playback logic (Requested Feature)
   useEffect(() => {
@@ -32,10 +33,38 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
           if (next === history.length - 1) setPlaybackActive(false);
           return next;
         });
-      }, 800);
+      }, playbackSpeed);
     }
     return () => clearInterval(interval);
   }, [playbackActive, history, onPlaybackUpdate]);
+
+  const exportToCSV = () => {
+    if (history.length === 0) return;
+    
+    const headers = ['ID', 'Data/Hora', 'Latitude', 'Longitude', 'Velocidade', 'Heading', 'Evento'];
+    const csvContent = [
+      headers.join(','),
+      ...history.map(e => [
+        e.id,
+        new Date(e.created_at).toISOString(),
+        e.latitude,
+        e.longitude,
+        e.speed || 0,
+        e.heading || 0,
+        e.event_type || 'TRACK'
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `trajetoria_${driverName.replace(/\s+/g, '_')}_${new Date().getTime()}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   if (!show) return null;
 
@@ -73,15 +102,57 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
               <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase tracking-widest text-primary">Simulação de Trajetória</span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="h-7 w-7 p-0"
+                      onClick={() => {
+                        const next = Math.max(0, playbackIndex - 1);
+                        setPlaybackIndex(next);
+                        const event = history[next];
+                        if (event && onPlaybackUpdate) onPlaybackUpdate(event.latitude, event.longitude, event.heading || 0);
+                      }}
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </Button>
                     <Button 
                       size="sm" 
                       variant="secondary" 
                       className="h-7 px-3 text-[9px] font-black uppercase bg-primary/20 hover:bg-primary/30"
                       onClick={() => setPlaybackActive(!playbackActive)}
                     >
-                      {playbackActive ? 'Pausar' : 'Reproduzir'}
+                      {playbackActive ? <Pause className="w-3 h-3 mr-1" /> : <Play className="w-3 h-3 mr-1" />}
+                      {playbackActive ? 'Pausar' : 'Play'}
                     </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="h-7 w-7 p-0"
+                      onClick={() => {
+                        const next = Math.min(history.length - 1, playbackIndex + 1);
+                        setPlaybackIndex(next);
+                        const event = history[next];
+                        if (event && onPlaybackUpdate) onPlaybackUpdate(event.latitude, event.longitude, event.heading || 0);
+                      }}
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-[8px] font-bold text-muted-foreground uppercase">Velocidade:</span>
+                  <div className="flex gap-1">
+                    {[2000, 800, 200].map((speed, i) => (
+                      <button 
+                        key={speed}
+                        onClick={() => setPlaybackSpeed(speed)}
+                        className={`text-[8px] px-1.5 py-0.5 rounded border ${playbackSpeed === speed ? 'bg-primary border-primary text-white' : 'border-white/10 text-muted-foreground'}`}
+                      >
+                        {i === 0 ? '0.5x' : i === 1 ? '1x' : '4x'}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -164,8 +235,13 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                   </div>
                 </ScrollArea>
                 
-                <Button variant="outline" className="w-full h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10">
-                  Exportar Telemetria (CSV)
+                <Button 
+                  variant="outline" 
+                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
+                  onClick={exportToCSV}
+                >
+                  <Download className="w-3 h-3 mr-2" />
+                  Exportar Trajetória (CSV)
                 </Button>
               </>
             ) : (
