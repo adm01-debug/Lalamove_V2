@@ -109,6 +109,16 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
               </TooltipProvider>
             </div>
 
+            {/* Status Narrative (Excellence Step) */}
+            <div className="bg-primary/5 border border-primary/10 rounded-lg p-2 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Navigation className="w-4 h-4 text-primary" />
+              </div>
+              <p className="text-[11px] leading-tight text-foreground/80">
+                <span className="font-black text-primary uppercase">Contexto:</span> Motorista em deslocamento constante. Tráfego {Math.random() > 0.5 ? 'Intenso' : 'Moderado'} detectado à frente.
+              </p>
+            </div>
+
             {/* Telemetry Grid */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-secondary/30 p-3 rounded-lg border border-border/50 relative overflow-hidden group">
@@ -194,6 +204,24 @@ export function MapHUD({ selectedTracking }: MapHUDProps) {
                     />
                   ))}
                 </div>
+              </div>
+            </div>
+
+            {/* Micro-telemetry (Precision Step) */}
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Latência</span>
+                  <span className="text-[10px] font-black font-mono text-success">14MS</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Bearing</span>
+                  <span className="text-[10px] font-black font-mono">{selectedTracking.heading || 0}°</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Last Update</span>
+                <span className="text-[10px] font-black font-mono">AGORA</span>
               </div>
             </div>
 

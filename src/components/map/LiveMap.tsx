@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { 
   Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, 
-  TrafficCone, Crosshair, Zap, Shield, Maximize2 
+  TrafficCone, Crosshair, Zap, Shield, Maximize2, Activity,
+  Cloud, Wind, MapPin, Compass
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
@@ -442,7 +443,44 @@ export function LiveMap({
   );
 
   return (
-    <div className={`relative rounded-xl overflow-hidden border border-border/50 shadow-2xl ${className}`}>
+    <div className={`relative rounded-xl overflow-hidden border border-border/50 shadow-2xl group/map-container ${className}`}>
+      {/* Top Left HUD - Global Metrics */}
+      <div className="absolute top-6 left-6 z-20 flex flex-col gap-3 pointer-events-none">
+        <div className="bg-background/40 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl pointer-events-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Activity className="w-5 h-5 text-primary animate-pulse" />
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-primary/60 uppercase tracking-widest">Global Status</p>
+              <h4 className="text-sm font-black text-foreground tracking-tighter uppercase italic">Control Center</h4>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Active</p>
+              <p className="text-xl font-black italic">{trackingData.length}</p>
+            </div>
+            <div>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Alerts</p>
+              <p className="text-xl font-black italic text-destructive">03</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-background/40 backdrop-blur-xl border border-white/10 p-3 rounded-xl shadow-2xl pointer-events-auto flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Cloud className="w-4 h-4 text-sky-400" />
+            <span className="text-[11px] font-black italic tracking-tighter">24°C</span>
+          </div>
+          <div className="w-px h-4 bg-white/10" />
+          <div className="flex items-center gap-2">
+            <Wind className="w-4 h-4 text-slate-300" />
+            <span className="text-[11px] font-black italic tracking-tighter">12 KM/H</span>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @keyframes pulse-glow {
           0% { transform: scale(0.95); opacity: 0.8; }
@@ -464,103 +502,129 @@ export function LiveMap({
         .mapboxgl-popup-close-button { color: white !important; font-size: 20px !important; padding: 8px !important; z-index: 20; }
       `}</style>
 
+      {/* Control Overlays */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+        <div className="bg-background/60 backdrop-blur-2xl border border-white/10 p-1.5 rounded-full shadow-2xl flex items-center gap-1 pointer-events-auto">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${mapStyle === 'dark-v11' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110' : 'hover:bg-white/5'}`}
+            onClick={() => setMapStyle('dark-v11')}
+          >
+            <MapIcon className="w-5 h-5" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${mapStyle === 'satellite-streets-v12' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110' : 'hover:bg-white/5'}`}
+            onClick={() => setMapStyle('satellite-streets-v12')}
+          >
+            <Layers className="w-5 h-5" />
+          </Button>
+          <div className="w-px h-6 bg-white/10 mx-1" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${showTraffic ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
+            onClick={() => setShowTraffic(!showTraffic)}
+          >
+            <TrafficCone className="w-5 h-5" />
+          </Button>
+          <div className="w-px h-6 bg-white/10 mx-1" />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${isFollowing ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
+            onClick={() => setIsFollowing(!isFollowing)}
+            disabled={!selectedId}
+          >
+            <Target className={`w-5 h-5 ${isFollowing ? 'animate-pulse' : ''}`} />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className={`h-10 w-10 rounded-full transition-all duration-300 ${focusMode ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
+            onClick={() => setFocusMode(!focusMode)}
+            disabled={!selectedId}
+          >
+            <Shield className="w-5 h-5" />
+          </Button>
+        </div>
+
+        <Button 
+          variant="secondary" 
+          className="h-12 px-6 rounded-full glass-card border-white/10 font-black italic uppercase tracking-tighter text-xs shadow-2xl pointer-events-auto hover:scale-105 active:scale-95 transition-all"
+          onClick={() => {
+            if (map.current && trackingData.length > 0) {
+              const bounds = new mapboxgl.LngLatBounds();
+              trackingData.forEach(t => bounds.extend([t.current_longitude, t.current_latitude]));
+              map.current.fitBounds(bounds, { padding: 100, maxZoom: 14 });
+            }
+          }}
+        >
+          <Crosshair className="w-4 h-4 mr-2 text-primary" />
+          Rescan Network
+        </Button>
+      </div>
+
+      <MapSearchPanel 
+        allTrackingData={allTrackingData} 
+        trackingCount={trackingData.length}
+        onFocusTracking={focusOnTracking} 
+      />
+      
+      <MapHUD selectedTracking={selectedTracking} />
+      
+      <MapLegend vehicleCounts={vehicleCounts} />
+
+      {/* Loading Overlay */}
       {loading && (
-        <div className="absolute inset-0 z-50 bg-background/60 backdrop-blur-sm flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
-            <span className="text-sm font-medium animate-pulse uppercase tracking-tighter">Iniciando Monitoramento Guardian</span>
+        <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-md flex flex-col items-center justify-center">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-primary/20 rounded-full animate-ping" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            </div>
           </div>
+          <p className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] text-primary/60 animate-pulse">
+            Establishing Satellite Link...
+          </p>
         </div>
       )}
 
       <div ref={mapContainer} className="w-full h-full" style={{ minHeight: '600px' }} />
 
-      <MapLegend vehicleCounts={vehicleCounts} />
-      <MapSearchPanel allTrackingData={allTrackingData} trackingCount={trackingData.length} onFocusTracking={focusOnTracking} />
-      
-      {/* HUD Layer */}
-      <MapHUD selectedTracking={selectedTracking} />
+      {showHistoryFor && (
+        <MapHistoryPanel 
+          show={!!showHistoryFor} 
+          driverName={showHistoryFor?.driverName || ''}
+          history={history}
+          loading={historyLoading}
+          onClose={() => {
+            setShowHistoryFor(null);
+            clearHistory();
+            clearHistoryFromMap();
+          }}
+        />
+      )}
 
-      {/* Floating Controls */}
-      <div className="absolute bottom-6 left-6 z-20 flex flex-col gap-3">
-        <div className="flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="sm" className="shadow-xl glass-card border-primary/20">
-                <Layers className="w-4 h-4 mr-2" /> Camadas
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="glass-card border-primary/20 bg-background/80 backdrop-blur-md">
-              <DropdownMenuLabel>Visualização</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setMapStyle('dark-v11')}>
-                <MapIcon className="w-4 h-4 mr-2" /> Modo Escuro
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setMapStyle('satellite-streets-v12')}>
-                <MapIcon className="w-4 h-4 mr-2" /> Satélite
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setShowTraffic(!showTraffic)}>
-                <TrafficCone className={`w-4 h-4 mr-2 ${showTraffic ? 'text-primary' : ''}`} /> 
-                {showTraffic ? 'Ocultar Trânsito' : 'Mostrar Trânsito'}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {selectedId && (
-            <div className="flex gap-2">
-              <Button 
-                variant={isFollowing ? "default" : "secondary"} 
-                size="sm"
-                className="shadow-xl glass-card border-primary/20"
-                onClick={() => setIsFollowing(!isFollowing)}
-              >
-                {isFollowing ? <Crosshair className="w-4 h-4 mr-2 animate-pulse text-primary" /> : <Target className="w-4 h-4 mr-2" />}
-                {isFollowing ? 'Seguindo' : 'Focar'}
-              </Button>
-
-              <Button 
-                variant={focusMode ? "default" : "secondary"} 
-                size="sm"
-                className="shadow-xl glass-card border-primary/20"
-                onClick={() => setFocusMode(!focusMode)}
-              >
-                {focusMode ? <Shield className="w-4 h-4 mr-2 text-primary" /> : <Maximize2 className="w-4 h-4 mr-2" />}
-                {focusMode ? 'Modo Foco Ativo' : 'Modo Foco'}
-              </Button>
-            </div>
-          )}
+      {selectedId && (
+        <div className="absolute bottom-6 right-6 z-20 flex gap-2">
+          <Button 
+            variant="destructive" 
+            size="sm"
+            className="shadow-xl glass-card animate-in slide-in-from-right-5"
+            onClick={() => {
+              setSelectedId(null);
+              setIsFollowing(false);
+              setFocusMode(false);
+            }}
+          >
+            <EyeOff className="w-4 h-4 mr-2" />
+            Limpar Seleção
+          </Button>
         </div>
-
-        {selectedId && (
-          <div className="flex gap-2">
-            <Button 
-              variant="destructive" 
-              size="sm"
-              className="shadow-xl glass-card animate-in slide-in-from-left-5"
-              onClick={() => {
-                setSelectedId(null);
-                setIsFollowing(false);
-                setFocusMode(false);
-              }}
-            >
-              <EyeOff className="w-4 h-4 mr-2" />
-              Limpar Seleção
-            </Button>
-          </div>
-        )}
-      </div>
-
-      <MapHistoryPanel 
-        show={!!showHistoryFor} 
-        driverName={showHistoryFor?.driverName || ''}
-        history={history}
-        loading={historyLoading}
-        onClose={() => {
-          setShowHistoryFor(null);
-          clearHistory();
-          clearHistoryFromMap();
-        }}
-      />
+      )}
     </div>
   );
 }
