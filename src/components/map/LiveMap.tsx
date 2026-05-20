@@ -88,6 +88,51 @@ export function LiveMap({
     }
 
     map.current.on('style.load', () => {
+      if (!map.current) return;
+      
+      // Step 6: Mock Risk Area (Geofencing)
+      if (!map.current.getSource('risk-zone')) {
+        map.current.addSource('risk-zone', {
+          'type': 'geojson',
+          'data': {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [[
+                [-46.666, -23.570],
+                [-46.640, -23.570],
+                [-46.640, -23.550],
+                [-46.666, -23.550],
+                [-46.666, -23.570]
+              ]]
+            }
+          }
+        });
+
+        map.current.addLayer({
+          'id': 'risk-zone-fill',
+          'type': 'fill',
+          'source': 'risk-zone',
+          'layout': {},
+          'paint': {
+            'fill-color': '#ef4444',
+            'fill-opacity': 0.15
+          }
+        });
+
+        map.current.addLayer({
+          'id': 'risk-zone-outline',
+          'type': 'line',
+          'source': 'risk-zone',
+          'layout': {},
+          'paint': {
+            'line-color': '#ef4444',
+            'line-width': 2,
+            'line-dasharray': [2, 1]
+          }
+        });
+      }
+
       if (showTraffic && map.current) {
         // Add traffic layer if it doesn't exist
         if (!map.current.getSource('mapbox-traffic')) {
