@@ -745,7 +745,8 @@ export function LiveMap({
       <MapHUD 
         selectedTracking={selectedTracking} 
         offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
-        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? (Date.now() - stoppedAlerts.get(selectedId)!) / 1000 : undefined}
+        stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
+        etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
       />
       
       <MapLegend vehicleCounts={vehicleCounts} />
@@ -777,6 +778,11 @@ export function LiveMap({
             setShowHistoryFor(null);
             clearHistory();
             clearHistoryFromMap();
+          }}
+          onPlaybackUpdate={(lat, lng, heading) => {
+            if (map.current) {
+              map.current.easeTo({ center: [lng, lat], bearing: heading, duration: 300 });
+            }
           }}
         />
       )}
