@@ -1,4 +1,5 @@
 import { vehicleIcons, vehicleColors } from './types';
+import { motion } from 'framer-motion';
 
 interface MapLegendProps {
   vehicleCounts: Record<string, number>;
@@ -7,49 +8,72 @@ interface MapLegendProps {
 export function MapLegend({ vehicleCounts }: MapLegendProps) {
   return (
     <>
-      {/* Vehicle type legend */}
-      <div className="absolute bottom-4 left-4 glass-card px-4 py-3 rounded-lg">
-        <div className="text-xs text-muted-foreground mb-2 font-medium">Veículos em trânsito</div>
-        <div className="flex flex-wrap items-center gap-3">
+      {/* Status Indicators Legend (Top Right) */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="absolute top-6 left-1/2 -translate-x-1/2 z-10 glass-card px-4 py-2 rounded-full border-primary/20 bg-background/40 backdrop-blur-xl shadow-xl flex items-center gap-6"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Operacional</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-warning shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Parado</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Fora de Rota</span>
+        </div>
+      </motion.div>
+
+      {/* Fleet Stats Legend (Bottom Left) */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="absolute bottom-28 left-6 z-10 glass-card p-4 rounded-xl border-primary/20 bg-background/40 backdrop-blur-xl shadow-2xl min-w-[160px]"
+      >
+        <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-3 border-b border-white/5 pb-2">Frota Ativa</div>
+        <div className="space-y-3">
           {Object.entries(vehicleCounts).map(([type, count]) => (
-            <div key={type} className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full" style={{ background: vehicleColors[type] || '#00d9ff' }} />
-              <span className="text-xs text-foreground">{vehicleIcons[type]} {count}</span>
+            <div key={type} className="flex items-center justify-between group">
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-lg border border-white/5 group-hover:scale-110 transition-transform" 
+                  style={{ background: `${vehicleColors[type] || '#00d9ff'}15` }}
+                >
+                  {vehicleIcons[type]}
+                </div>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                  {type === 'MOTORCYCLE' ? 'Motos' : type === 'CAR' ? 'Carros' : type === 'VAN' ? 'Vans' : type === 'TRUCK' ? 'Caminhões' : type}
+                </span>
+              </div>
+              <span className="text-sm font-black italic text-primary">{count}</span>
             </div>
           ))}
           {Object.keys(vehicleCounts).length === 0 && (
-            <span className="text-xs text-muted-foreground">Nenhum veículo</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase italic opacity-50">Nenhum veículo em operação</span>
           )}
         </div>
-        <div className="flex items-center gap-4 mt-2 pt-2 border-t border-border/50">
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm">📦</span>
-            <span className="text-xs text-muted-foreground">Coleta</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-sm">📍</span>
-            <span className="text-xs text-muted-foreground">Entrega</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Status legend */}
-      <div className="absolute top-4 right-16 glass-card px-3 py-2 rounded-lg">
-        <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-primary" />
-            <span className="text-muted-foreground">Trânsito</span>
+        <div className="mt-4 pt-3 border-t border-white/5 space-y-2">
+          <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 bg-success/20 rounded flex items-center justify-center text-[10px]">📦</div>
+              <span>COLETAS</span>
+            </div>
+            <span className="text-success">OK</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-warning" />
-            <span className="text-muted-foreground">Parado</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-destructive" />
-            <span className="text-muted-foreground">Fora da rota</span>
+          <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 bg-destructive/20 rounded flex items-center justify-center text-[10px]">📍</div>
+              <span>ENTREGAS</span>
+            </div>
+            <span className="text-destructive">LIVE</span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
