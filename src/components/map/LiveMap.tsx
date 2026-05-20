@@ -796,6 +796,16 @@ export function LiveMap({
           from { transform: translateY(0); }
           to { transform: translateY(-8px); }
         }
+        @keyframes marker-pulse-red {
+          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+          70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .deviated-marker {
+          animation: marker-pulse-red 1.5s infinite !important;
+          border: 2px solid #ef4444 !important;
+          border-radius: 50%;
+        }
         .mapboxgl-popup-content { background: transparent !important; padding: 0 !important; box-shadow: none !important; }
         .mapboxgl-popup-tip { display: none !important; }
         .mapboxgl-popup-close-button { color: white !important; font-size: 20px !important; padding: 8px !important; z-index: 20; }
