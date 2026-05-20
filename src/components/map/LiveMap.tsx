@@ -279,14 +279,35 @@ export function LiveMap({
       
       // Driver marker
       const existingDriverMarker = driverMarkers.current.get(tracking.id);
+      const targetPos: [number, number] = [tracking.current_longitude, tracking.current_latitude];
+
       if (existingDriverMarker) {
-        existingDriverMarker.setLngLat([tracking.current_longitude, tracking.current_latitude]);
+        // Update target position for animation loop
+        const pos = markerPositions.current.get(tracking.id);
+        if (pos) {
+          pos.target = targetPos;
+        } else {
+          markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
+        }
+        
+        // Refresh marker content if needed (speed, status might have changed)
+        // For performance, we only do this when data actually changes, but for simplicity:
+        const el = createDriverMarkerElement(tracking, isSelected);
+        existingDriverMarker.getElement().innerHTML = el.innerHTML;
+        existingDriverMarker.getElement().className = el.className;
+        
+        // Update popup if open
+        if (existingDriverMarker.getPopup()?.isOpen()) {
+          existingDriverMarker.setPopup(createDriverPopup(tracking));
+        }
       } else {
         const el = createDriverMarkerElement(tracking, isSelected);
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
-          .setLngLat([tracking.current_longitude, tracking.current_latitude])
+          .setLngLat(targetPos)
           .setPopup(createDriverPopup(tracking))
           .addTo(map.current!);
+        
+        markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
         
         marker.getElement().addEventListener('click', () => {
           setSelectedId(tracking.id);
