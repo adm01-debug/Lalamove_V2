@@ -243,6 +243,35 @@ export function LiveMap({
           });
         }
       }
+
+      // Add Geofence Source
+      if (!map.current.getSource('geofence')) {
+        map.current.addSource('geofence', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: [] }
+        });
+
+        map.current.addLayer({
+          id: 'geofence-fill',
+          type: 'fill',
+          source: 'geofence',
+          paint: {
+            'fill-color': '#10b981',
+            'fill-opacity': 0.1
+          }
+        });
+
+        map.current.addLayer({
+          id: 'geofence-outline',
+          type: 'line',
+          source: 'geofence',
+          paint: {
+            'line-color': '#10b981',
+            'line-width': 2,
+            'line-dasharray': [2, 1]
+          }
+        });
+      }
     });
 
     map.current.on('load', () => {
@@ -255,6 +284,11 @@ export function LiveMap({
       pointMarkers.current.forEach(marker => marker.remove());
       pointMarkers.current.clear();
       routeLines.current.clear();
+      if (map.current) {
+        if (map.current.getLayer('geofence-fill')) map.current.removeLayer('geofence-fill');
+        if (map.current.getLayer('geofence-outline')) map.current.removeLayer('geofence-outline');
+        if (map.current.getSource('geofence')) map.current.removeSource('geofence');
+      }
       map.current?.remove();
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle]);
@@ -339,7 +373,49 @@ export function LiveMap({
         bearing: heading,
       });
     }
-  }, [isFollowing, selectedTracking]);
+  }, [isFollowing, selectedTracking, autoZoomEnabled]);
+
+  // Update Geofence visualizer
+  useEffect(() => {
+    if (!map.current || !map.current.isStyleLoaded()) return;
+    
+    const source = map.current.getSource('geofence') as mapboxgl.GeoJSONSource;
+    if (!source) return;
+
+    if (selectedTracking?.order?.delivery_latitude && selectedTracking?.order?.delivery_longitude) {
+      const center = [selectedTracking.order.delivery_longitude, selectedTracking.order.delivery_latitude];
+      
+      // Create a circle polygon
+      const points = 64;
+      const coords = [];
+      const kmRadius = geofenceRadius / 1000;
+      const distanceX = kmRadius / (111.32 * Math.cos(center[1] * Math.PI / 180));
+      const distanceY = kmRadius / 110.574;
+
+      for (let i = 0; i < points; i++) {
+        const theta = (i / points) * (2 * Math.PI);
+        const x = distanceX * Math.cos(theta);
+        const y = distanceY * Math.sin(theta);
+        coords.push([center[0] + x, center[1] + y]);
+      }
+      coords.push(coords[0]);
+
+      source.setData({
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [coords]
+        },
+        properties: {}
+      });
+      
+      map.current.setLayoutProperty('geofence-fill', 'visibility', 'visible');
+      map.current.setLayoutProperty('geofence-outline', 'visibility', 'visible');
+    } else {
+      map.current.setLayoutProperty('geofence-fill', 'visibility', 'none');
+      map.current.setLayoutProperty('geofence-outline', 'visibility', 'none');
+    }
+  }, [selectedTracking, geofenceRadius]);
 
   // Focus on search result
   const focusOnTracking = useCallback((tracking: TrackingData) => {
@@ -461,7 +537,7 @@ export function LiveMap({
         
         const el = createDriverMarkerElement(tracking, isSelected);
         existingDriverMarker.getElement().innerHTML = el.innerHTML;
-        existingDriverMarker.getElement().className = el.className;
+        existingDriverMarker.getElement().className = el.className + (offRouteAlerts.has(tracking.id) ? ' deviated-marker' : '');
         
         existingDriverMarker.getElement().style.opacity = isOtherInFocus ? '0.15' : '1';
         existingDriverMarker.getElement().style.filter = isOtherInFocus ? 'grayscale(0.8) blur(1px)' : 'none';
@@ -472,6 +548,7 @@ export function LiveMap({
         }
       } else {
         const el = createDriverMarkerElement(tracking, isSelected);
+        if (offRouteAlerts.has(tracking.id)) el.classList.add('deviated-marker');
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
           .setLngLat(targetPos)
           .setPopup(createDriverPopup(tracking))
@@ -719,6 +796,16 @@ export function LiveMap({
         @keyframes marker-bounce {
           from { transform: translateY(0); }
           to { transform: translateY(-8px); }
+        }
+        @keyframes marker-pulse-red {
+          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+          70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .deviated-marker {
+          animation: marker-pulse-red 1.5s infinite !important;
+          border: 2px solid #ef4444 !important;
+          border-radius: 50%;
         }
         .mapboxgl-popup-content { background: transparent !important; padding: 0 !important; box-shadow: none !important; }
         .mapboxgl-popup-tip { display: none !important; }

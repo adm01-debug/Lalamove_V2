@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download } from 'lucide-react';
+import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download, FileText } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -64,6 +66,37 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const exportToPDF = () => {
+    if (history.length === 0) return;
+
+    const doc = new jsPDF();
+    const tableColumn = ["Data/Hora", "Lat", "Lng", "Vel (km/h)", "Tipo"];
+    const tableRows = history.map(e => [
+      new Date(e.created_at).toLocaleString('pt-BR'),
+      e.latitude.toFixed(6),
+      e.longitude.toFixed(6),
+      e.speed || 0,
+      e.event_type || 'TRACK'
+    ]);
+
+    doc.setFontSize(18);
+    doc.text(`Relatório de Trajetória - ${driverName}`, 14, 20);
+    
+    doc.setFontSize(10);
+    doc.text(`Gerado em: ${new Date().toLocaleString()}`, 14, 30);
+    doc.text(`Total de eventos: ${history.length}`, 14, 35);
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 45,
+      theme: 'grid',
+      headStyles: { fillColor: [139, 92, 246] }
+    });
+
+    doc.save(`trajetoria_${driverName.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`);
   };
 
   if (!show) return null;
@@ -235,14 +268,24 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                   </div>
                 </ScrollArea>
                 
-                <Button 
-                  variant="outline" 
-                  className="w-full h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
-                  onClick={exportToCSV}
-                >
-                  <Download className="w-3 h-3 mr-2" />
-                  Exportar Trajetória (CSV)
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
+                    onClick={exportToCSV}
+                  >
+                    <Download className="w-3 h-3 mr-1.5" />
+                    CSV
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-8 text-[10px] font-black uppercase tracking-widest bg-white/5 border-white/10 hover:bg-white/10"
+                    onClick={exportToPDF}
+                  >
+                    <FileText className="w-3 h-3 mr-1.5" />
+                    PDF
+                  </Button>
+                </div>
               </>
             ) : (
               <div className="flex flex-col items-center justify-center py-10 gap-2 opacity-50">
