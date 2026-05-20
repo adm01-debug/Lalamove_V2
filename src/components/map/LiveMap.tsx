@@ -75,7 +75,7 @@ export function LiveMap({
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
+      style: `mapbox://styles/mapbox/${mapStyle}`,
       center: initialCenter,
       zoom: initialZoom,
       pitch: 45,
@@ -86,6 +86,38 @@ export function LiveMap({
       map.current.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
       map.current.addControl(new mapboxgl.FullscreenControl(), 'top-right');
     }
+
+    map.current.on('style.load', () => {
+      if (showTraffic && map.current) {
+        // Add traffic layer if it doesn't exist
+        if (!map.current.getSource('mapbox-traffic')) {
+          map.current.addSource('mapbox-traffic', {
+            type: 'vector',
+            url: 'mapbox://mapbox.mapbox-traffic-v1'
+          });
+          map.current.addLayer({
+            id: 'traffic-layer',
+            type: 'line',
+            source: 'mapbox-traffic',
+            'source-layer': 'traffic',
+            paint: {
+              'line-width': 1.5,
+              'line-color': [
+                'interpolate',
+                ['linear'],
+                ['get', 'congestion'],
+                0, '#00ff00',
+                25, '#ffff00',
+                50, '#ff9900',
+                75, '#ff0000',
+                100, '#880000'
+              ],
+              'line-opacity': 0.6
+            }
+          });
+        }
+      }
+    });
 
     map.current.on('load', () => {
       setLoading(false);
@@ -99,7 +131,18 @@ export function LiveMap({
       routeLines.current.clear();
       map.current?.remove();
     };
-  }, [mapboxToken, initialCenter, initialZoom, showControls]);
+  }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle]);
+
+  // Toggle traffic
+  useEffect(() => {
+    if (!map.current || !map.current.isStyleLoaded()) return;
+    if (showTraffic) {
+      if (map.current.getLayer('traffic-layer')) map.current.setLayoutProperty('traffic-layer', 'visibility', 'visible');
+    } else {
+      if (map.current.getLayer('traffic-layer')) map.current.setLayoutProperty('traffic-layer', 'visibility', 'none');
+    }
+  }, [showTraffic]);
+
 
   // Following logic
   useEffect(() => {
