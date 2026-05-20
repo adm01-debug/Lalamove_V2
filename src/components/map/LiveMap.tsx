@@ -239,6 +239,9 @@ export function LiveMap({
                 100, '#880000'
               ],
               'line-opacity': 0.6
+            }
+          });
+        }
       }
 
       // Add Geofence Source
@@ -268,9 +271,6 @@ export function LiveMap({
             'line-dasharray': [2, 1]
           }
         });
-      }
-    });
-        }
       }
     });
 
