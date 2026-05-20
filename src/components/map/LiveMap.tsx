@@ -56,6 +56,7 @@ export function LiveMap({
   
   const historyLineRef = useRef<string | null>(null);
   const historyMarkersRef = useRef<mapboxgl.Marker[]>([]);
+  const playbackMarkerRef = useRef<mapboxgl.Marker | null>(null);
   
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -825,11 +826,36 @@ export function LiveMap({
             setShowHistoryFor(null);
             clearHistory();
             clearHistoryFromMap();
+            if (playbackMarkerRef.current) {
+              playbackMarkerRef.current.remove();
+              playbackMarkerRef.current = null;
+            }
           }}
           onPlaybackUpdate={(lat, lng, heading) => {
-            if (map.current) {
-              map.current.easeTo({ center: [lng, lat], bearing: heading, duration: 300 });
+            if (!map.current) return;
+            
+            // Create or update playback marker (Requested: Trajectory Playback Mode)
+            if (!playbackMarkerRef.current) {
+              const el = document.createElement('div');
+              el.innerHTML = `
+                <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+                  <div style="width:30px;height:30px;background:#8b5cf6;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(139,92,246,0.6);border:2px solid white;">
+                    <span style="font-size:14px;transform:rotate(${heading}deg);">🛸</span>
+                  </div>
+                  <div style="background:#8b5cf6;color:white;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:900;margin-top:2px;">HISTÓRICO</div>
+                </div>
+              `;
+              playbackMarkerRef.current = new mapboxgl.Marker({ element: el, anchor: 'center' })
+                .setLngLat([lng, lat])
+                .addTo(map.current);
+            } else {
+              playbackMarkerRef.current.setLngLat([lng, lat]);
+              const el = playbackMarkerRef.current.getElement();
+              const icon = el.querySelector('span');
+              if (icon) icon.style.transform = `rotate(${heading}deg)`;
             }
+
+            map.current.easeTo({ center: [lng, lat], duration: 400, zoom: 16 });
           }}
         />
       )}
