@@ -84,6 +84,10 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                 step={50} 
                 onValueChange={(val) => setOffRouteThreshold(val[0])}
               />
+              <div className="flex justify-between text-[8px] text-muted-foreground font-mono">
+                <span>100M</span>
+                <span>2000M</span>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -101,6 +105,10 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                 step={1} 
                 onValueChange={(val) => setStoppedThreshold(val[0])}
               />
+              <div className="flex justify-between text-[8px] text-muted-foreground font-mono">
+                <span>5MIN</span>
+                <span>60MIN</span>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -118,6 +126,10 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                 step={50} 
                 onValueChange={(val) => setGeofenceRadius(val[0])}
               />
+              <div className="flex justify-between text-[8px] text-muted-foreground font-mono">
+                <span>50M</span>
+                <span>2000M</span>
+              </div>
             </div>
           </div>
           
