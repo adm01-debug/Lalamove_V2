@@ -1,4 +1,4 @@
-import { Settings, X, Ruler, Clock, ShieldCheck, Save, RefreshCw } from 'lucide-react';
+import { Settings, X, Ruler, Clock, ShieldCheck, Save, RefreshCw, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -165,7 +165,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
               onClick={handleReset}
               title="Resetar para Padrão"
             >
-              <RefreshCw className="w-3 h-3 rotate-180" />
+              <RotateCcw className="w-3 h-3" />
             </Button>
           </div>
 
