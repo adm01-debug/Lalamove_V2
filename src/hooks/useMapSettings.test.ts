@@ -1,25 +1,18 @@
-import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useMapSettings } from './useMapSettings';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { supabase } from '@/integrations/supabase/client';
 
 // Mock Supabase
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     auth: {
-      getUser: vi.fn(() => Promise.resolve({ data: { user: { id: 'test-user' } } })),
+      getUser: vi.fn(),
     },
     from: vi.fn(() => ({
-      upsert: vi.fn(() => Promise.resolve({ error: null })),
+      upsert: vi.fn(),
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          maybeSingle: vi.fn(() => Promise.resolve({ 
-            data: { 
-              off_route_threshold: 1000, 
-              stopped_threshold: 30, 
-              geofence_radius: 500 
-            }, 
-            error: null 
-          })),
+          maybeSingle: vi.fn(),
         })),
       })),
     })),
@@ -28,37 +21,80 @@ vi.mock('@/integrations/supabase/client', () => ({
 
 describe('useMapSettings Persistence', () => {
   beforeEach(() => {
-    const { result } = renderHook(() => useMapSettings());
-    act(() => {
-      result.current.setOffRouteThreshold(500);
-      result.current.setStoppedThreshold(15);
-      result.current.setGeofenceRadius(300);
-    });
+    vi.clearAllMocks();
+    useMapSettings.getState().resetToDefaults();
   });
 
-  it('should persist settings by context', async () => {
-    const { result } = renderHook(() => useMapSettings());
-    
-    act(() => {
-      result.current.setOffRouteThreshold(800);
-    });
-
-    await act(async () => {
-      await result.current.saveContextSettings('driver:123');
-    });
-
-    expect(result.current.offRouteThreshold).toBe(800);
+  it('should load default values initially', () => {
+    const state = useMapSettings.getState();
+    expect(state.offRouteThreshold).toBe(500);
+    expect(state.stoppedThreshold).toBe(15);
+    expect(state.geofenceRadius).toBe(300);
   });
 
-  it('should load settings from context', async () => {
-    const { result } = renderHook(() => useMapSettings());
-    
-    await act(async () => {
-      await result.current.loadContextSettings('region:south');
+  it('should update state when setters are called', () => {
+    const state = useMapSettings.getState();
+    state.setOffRouteThreshold(1000);
+    state.setStoppedThreshold(30);
+    state.setGeofenceRadius(500);
+
+    const updatedState = useMapSettings.getState();
+    expect(updatedState.offRouteThreshold).toBe(1000);
+    expect(updatedState.stoppedThreshold).toBe(30);
+    expect(updatedState.geofenceRadius).toBe(500);
+  });
+
+  it('should load settings from supabase for a specific context', async () => {
+    const mockData = {
+      off_route_threshold: 800,
+      stopped_threshold: 20,
+      geofence_radius: 400,
+    };
+
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: mockData, error: null }),
     });
 
-    expect(result.current.offRouteThreshold).toBe(1000);
-    expect(result.current.stoppedThreshold).toBe(30);
-    expect(result.current.geofenceRadius).toBe(500);
+    await useMapSettings.getState().loadContextSettings('test-context');
+
+    const state = useMapSettings.getState();
+    expect(state.offRouteThreshold).toBe(800);
+    expect(state.stoppedThreshold).toBe(20);
+    expect(state.geofenceRadius).toBe(400);
+  });
+
+  it('should persist settings to supabase', async () => {
+    const mockUser = { id: 'user-123' };
+    (supabase.auth.getUser as any).mockResolvedValue({ data: { user: mockUser }, error: null });
+    
+    const upsertMock = vi.fn().mockResolvedValue({ error: null });
+    (supabase.from as any).mockReturnValue({
+      upsert: upsertMock,
+    });
+
+    const state = useMapSettings.getState();
+    state.setOffRouteThreshold(750);
+    
+    await state.saveContextSettings('new-context');
+
+    expect(upsertMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        context_key: 'new-context',
+        off_route_threshold: 750,
+        user_id: 'user-123',
+      }),
+      { onConflict: 'user_id,context_key' }
+    );
+  });
+
+  it('should reset to defaults when resetToDefaults is called', () => {
+    const state = useMapSettings.getState();
+    state.setOffRouteThreshold(2000);
+    state.resetToDefaults();
+    
+    const resetState = useMapSettings.getState();
+    expect(resetState.offRouteThreshold).toBe(500);
   });
 });
