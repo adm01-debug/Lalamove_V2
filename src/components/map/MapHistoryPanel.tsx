@@ -214,9 +214,9 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                     className="w-full h-1.5 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-primary/80 transition-all"
                   />
                   <div className="flex justify-between text-[9px] font-black font-mono text-muted-foreground bg-black/20 px-2 py-0.5 rounded">
-                    <span>{new Date(history[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{history[0]?.created_at ? new Date(history[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}</span>
                     <span className="text-primary italic">EVENTO {playbackIndex + 1}/{history.length}</span>
-                    <span>{new Date(history[history.length-1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{history[history.length-1]?.created_at ? new Date(history[history.length-1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}</span>
                   </div>
                 </div>
               </div>
@@ -253,7 +253,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                           <div className="flex items-center justify-between mb-1.5">
                             <span className="text-[10px] font-black font-mono text-primary/90 flex items-center gap-1.5">
                               <Clock className="w-2.5 h-2.5" />
-                              {new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                               {event.created_at ? new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'N/A'}
                             </span>
                             {event.speed !== null && (
                               <span className={`text-[9px] font-black font-mono ${event.speed > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>

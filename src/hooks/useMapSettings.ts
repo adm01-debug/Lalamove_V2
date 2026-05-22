@@ -21,6 +21,7 @@ interface MapSettingsState {
   // Context-specific actions
   saveContextSettings: (contextKey: string) => Promise<void>;
   loadContextSettings: (contextKey: string) => Promise<void>;
+  resetToDefaults: () => void;
 }
 
 export const useMapSettings = create<MapSettingsState>()(
@@ -75,7 +76,13 @@ export const useMapSettings = create<MapSettingsState>()(
             geofenceRadius: data.geofence_radius ?? 300,
           });
         }
-      }
+      },
+
+      resetToDefaults: () => set({
+        offRouteThreshold: 500,
+        stoppedThreshold: 15,
+        geofenceRadius: 300,
+      }),
     }),
     {
       name: 'map-settings-storage',

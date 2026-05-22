@@ -21,7 +21,8 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
     setStoppedThreshold,
     setGeofenceRadius,
     saveContextSettings,
-    loadContextSettings
+    loadContextSettings,
+    resetToDefaults
   } = useMapSettings();
   
   const [saving, setSaving] = useState(false);
@@ -40,6 +41,15 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
     toast.success("Configurações Carregadas", {
       description: "Valores restaurados do servidor.",
     });
+  };
+  
+  const handleReset = () => {
+    if (window.confirm("Deseja resetar para os valores padrão do Guardian?")) {
+      resetToDefaults();
+      toast.success("Valores Restaurados", {
+        description: "Os limites foram resetados para o padrão de fábrica.",
+      });
+    }
   };
 
   if (!show) return null;
@@ -148,6 +158,14 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
               onClick={handleReload}
             >
               <RefreshCw className="w-3 h-3" />
+            </Button>
+            <Button 
+              variant="outline"
+              className="h-8 w-8 p-0 border-destructive/20 text-destructive hover:bg-destructive/10"
+              onClick={handleReset}
+              title="Resetar para Padrão"
+            >
+              <RefreshCw className="w-3 h-3 rotate-180" />
             </Button>
           </div>
 
