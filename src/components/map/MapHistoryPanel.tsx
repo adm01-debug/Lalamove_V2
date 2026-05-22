@@ -74,26 +74,28 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
     const doc = new jsPDF();
     const tableColumn = ["Data/Hora", "Lat", "Lng", "Vel (km/h)", "Tipo"];
     const tableRows = history.map(e => [
-      new Date(e.created_at).toLocaleString('pt-BR'),
-      e.latitude.toFixed(6),
-      e.longitude.toFixed(6),
-      e.speed || 0,
+      e.created_at ? new Date(e.created_at).toLocaleString('pt-BR') : 'N/A',
+      e.latitude?.toFixed(6) || '0',
+      e.longitude?.toFixed(6) || '0',
+      e.speed ?? 0,
       e.event_type || 'TRACK'
     ]);
 
     // Statistics Calculation (Excelência 10/10)
-    const maxSpeed = Math.max(...history.map(e => e.speed || 0));
-    const avgSpeed = history.reduce((acc, e) => acc + (e.speed || 0), 0) / history.length;
-    const startTime = new Date(history[0].created_at);
-    const endTime = new Date(history[history.length - 1].created_at);
-    const durationMin = Math.floor((endTime.getTime() - startTime.getTime()) / 60000);
+    const validSpeeds = history.map(e => e.speed ?? 0);
+    const maxSpeed = history.length > 0 ? Math.max(...validSpeeds) : 0;
+    const avgSpeed = history.length > 0 ? validSpeeds.reduce((acc, s) => acc + s, 0) / history.length : 0;
+    
+    const startTime = history[0]?.created_at ? new Date(history[0].created_at) : null;
+    const endTime = history[history.length - 1]?.created_at ? new Date(history[history.length - 1].created_at) : null;
+    const durationMin = (startTime && endTime) ? Math.floor((endTime.getTime() - startTime.getTime()) / 60000) : 0;
 
     doc.setFontSize(18);
     doc.text(`Relatório de Trajetória - ${driverName}`, 14, 20);
     
     doc.setFontSize(10);
     doc.text(`Gerado em: ${new Date().toLocaleString()}`, 14, 30);
-    doc.text(`Período: ${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()} (${durationMin} min)`, 14, 35);
+    doc.text(`Período: ${startTime ? startTime.toLocaleTimeString() : 'N/A'} - ${endTime ? endTime.toLocaleTimeString() : 'N/A'} (${durationMin} min)`, 14, 35);
     doc.text(`Velocidade Máxima: ${maxSpeed} km/h | Média: ${avgSpeed.toFixed(1)} km/h`, 14, 40);
     doc.text(`Total de eventos: ${history.length}`, 14, 45);
 
@@ -201,8 +203,9 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                   <input 
                     type="range" 
                     min="0" 
-                    max={history.length - 1} 
+                    max={Math.max(0, history.length - 1)} 
                     value={playbackIndex} 
+                    disabled={history.length <= 1}
                     onChange={(e) => {
                       const idx = parseInt(e.target.value);
                       setPlaybackIndex(idx);
@@ -214,9 +217,9 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                     className="w-full h-1.5 bg-primary/20 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-primary/80 transition-all"
                   />
                   <div className="flex justify-between text-[9px] font-black font-mono text-muted-foreground bg-black/20 px-2 py-0.5 rounded">
-                    <span>{new Date(history[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{history[0]?.created_at ? new Date(history[0].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}</span>
                     <span className="text-primary italic">EVENTO {playbackIndex + 1}/{history.length}</span>
-                    <span>{new Date(history[history.length-1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span>{history[history.length-1]?.created_at ? new Date(history[history.length-1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}</span>
                   </div>
                 </div>
               </div>
@@ -253,7 +256,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                           <div className="flex items-center justify-between mb-1.5">
                             <span className="text-[10px] font-black font-mono text-primary/90 flex items-center gap-1.5">
                               <Clock className="w-2.5 h-2.5" />
-                              {new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                               {event.created_at ? new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'N/A'}
                             </span>
                             {event.speed !== null && (
                               <span className={`text-[9px] font-black font-mono ${event.speed > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>
