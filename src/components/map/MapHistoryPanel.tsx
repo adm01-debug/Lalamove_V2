@@ -41,16 +41,16 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
   }, [playbackActive, history, onPlaybackUpdate]);
 
   const exportToCSV = () => {
-    if (history.length === 0) return;
+    if (!history || history.length === 0) return;
     
     const headers = ['ID', 'Data/Hora', 'Latitude', 'Longitude', 'Velocidade', 'Heading', 'Evento'];
     const csvContent = [
       headers.join(','),
       ...history.map(e => [
         e.id,
-        new Date(e.created_at).toISOString(),
-        e.latitude,
-        e.longitude,
+        e.created_at ? new Date(e.created_at).toISOString() : 'N/A',
+        e.latitude || 0,
+        e.longitude || 0,
         e.speed || 0,
         e.heading || 0,
         e.event_type || 'TRACK'
@@ -69,14 +69,14 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
   };
 
   const exportToPDF = () => {
-    if (history.length === 0) return;
+    if (!history || history.length === 0) return;
 
     const doc = new jsPDF();
     const tableColumn = ["Data/Hora", "Lat", "Lng", "Vel (km/h)", "Tipo"];
     const tableRows = history.map(e => [
       e.created_at ? new Date(e.created_at).toLocaleString('pt-BR') : 'N/A',
-      e.latitude?.toFixed(6) || '0',
-      e.longitude?.toFixed(6) || '0',
+      typeof e.latitude === 'number' ? e.latitude.toFixed(6) : '0',
+      typeof e.longitude === 'number' ? e.longitude.toFixed(6) : '0',
       e.speed ?? 0,
       e.event_type || 'TRACK'
     ]);
@@ -250,7 +250,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                     {history.slice(0, 100).map((event, i) => (
                       <div key={event.id} className="relative pl-8 group">
                         <div className={`absolute left-1.5 top-1.5 w-2.5 h-2.5 rounded-full border-2 bg-background group-hover:scale-150 transition-all z-10 ${
-                          event.speed && event.speed > 60 ? 'border-destructive' : 'border-primary'
+                          (event.speed !== undefined && event.speed !== null && event.speed > 60) ? 'border-destructive' : 'border-primary'
                         }`} />
                         <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 group-hover:bg-white/10 transition-all group-hover:border-primary/20">
                           <div className="flex items-center justify-between mb-1.5">
@@ -258,7 +258,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                               <Clock className="w-2.5 h-2.5" />
                                {event.created_at ? new Date(event.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'N/A'}
                             </span>
-                            {event.speed !== null && (
+                            {(event.speed !== undefined && event.speed !== null) && (
                               <span className={`text-[9px] font-black font-mono ${event.speed > 60 ? 'text-destructive' : 'text-muted-foreground'}`}>
                                 {event.speed} KM/H
                               </span>
@@ -266,7 +266,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                           </div>
                           <div className="flex items-center gap-2 text-[9px] text-muted-foreground font-mono bg-black/20 p-1 rounded">
                             <MapPin className="w-2.5 h-2.5 text-primary/60" />
-                            <span className="truncate">{event.latitude.toFixed(6)}, {event.longitude.toFixed(6)}</span>
+                            <span className="truncate">{typeof event.latitude === 'number' ? event.latitude.toFixed(6) : '0.000000'}, {typeof event.longitude === 'number' ? event.longitude.toFixed(6) : '0.000000'}</span>
                           </div>
                         </div>
                       </div>
