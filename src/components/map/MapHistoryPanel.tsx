@@ -81,17 +81,26 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
       e.event_type || 'TRACK'
     ]);
 
+    // Statistics Calculation (Excelência 10/10)
+    const maxSpeed = Math.max(...history.map(e => e.speed || 0));
+    const avgSpeed = history.reduce((acc, e) => acc + (e.speed || 0), 0) / history.length;
+    const startTime = new Date(history[0].created_at);
+    const endTime = new Date(history[history.length - 1].created_at);
+    const durationMin = Math.floor((endTime.getTime() - startTime.getTime()) / 60000);
+
     doc.setFontSize(18);
     doc.text(`Relatório de Trajetória - ${driverName}`, 14, 20);
     
     doc.setFontSize(10);
     doc.text(`Gerado em: ${new Date().toLocaleString()}`, 14, 30);
-    doc.text(`Total de eventos: ${history.length}`, 14, 35);
+    doc.text(`Período: ${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()} (${durationMin} min)`, 14, 35);
+    doc.text(`Velocidade Máxima: ${maxSpeed} km/h | Média: ${avgSpeed.toFixed(1)} km/h`, 14, 40);
+    doc.text(`Total de eventos: ${history.length}`, 14, 45);
 
     autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
-      startY: 45,
+      startY: 55,
       theme: 'grid',
       headStyles: { fillColor: [139, 92, 246] }
     });
@@ -177,13 +186,13 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                 <div className="flex items-center justify-between px-1">
                   <span className="text-[8px] font-bold text-muted-foreground uppercase">Velocidade:</span>
                   <div className="flex gap-1">
-                    {[2000, 800, 200].map((speed, i) => (
+                    {[2000, 800, 200, 100].map((speed, i) => (
                       <button 
                         key={speed}
                         onClick={() => setPlaybackSpeed(speed)}
                         className={`text-[8px] px-1.5 py-0.5 rounded border ${playbackSpeed === speed ? 'bg-primary border-primary text-white' : 'border-white/10 text-muted-foreground'}`}
                       >
-                        {i === 0 ? '0.5x' : i === 1 ? '1x' : '4x'}
+                        {i === 0 ? '0.5x' : i === 1 ? '1x' : i === 2 ? '4x' : '8x'}
                       </button>
                     ))}
                   </div>
