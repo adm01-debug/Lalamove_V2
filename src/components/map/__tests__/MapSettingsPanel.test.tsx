@@ -85,18 +85,14 @@ describe('MapSettingsPanel Integration', () => {
       createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
     );
     
-    // Test sliders using mock input
     const sliders = getAllByTestId('mock-slider');
     
-    // Change Off Route Threshold
     fireEvent.change(sliders[0], { target: { value: '1000' } });
     expect(mockSetOffRouteThreshold).toHaveBeenCalledWith(1000);
 
-    // Change Stopped Threshold
     fireEvent.change(sliders[1], { target: { value: '30' } });
     expect(mockSetStoppedThreshold).toHaveBeenCalledWith(30);
 
-    // Change Geofence Radius
     fireEvent.change(sliders[2], { target: { value: '500' } });
     expect(mockSetGeofenceRadius).toHaveBeenCalledWith(500);
   });
@@ -120,12 +116,25 @@ describe('MapSettingsPanel Integration', () => {
     });
   });
 
-  it('handles reset action with confirmation', async () => {
+  it('handles individual reset buttons', async () => {
     const { getByTitle } = render(
       createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
     );
     
-    const resetButton = getByTitle('Resetar para Padrão');
+    const resetOffRoute = getByTitle('Resetar Desvio');
+    fireEvent.click(resetOffRoute);
+    
+    expect(global.window.confirm).toHaveBeenCalled();
+    expect(mockSetOffRouteThreshold).toHaveBeenCalledWith(500);
+    expect(toast.success).toHaveBeenCalledWith('Valor Restaurado', expect.anything());
+  });
+
+  it('handles global reset action with confirmation', async () => {
+    const { getByTitle } = render(
+      createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
+    );
+    
+    const resetButton = getByTitle('Resetar Tudo');
     fireEvent.click(resetButton);
     
     expect(global.window.confirm).toHaveBeenCalledWith(expect.stringContaining('Deseja resetar'));
@@ -133,38 +142,38 @@ describe('MapSettingsPanel Integration', () => {
     expect(toast.success).toHaveBeenCalledWith('Valores Restaurados', expect.anything());
   });
 
-  it('handles reset cancellation', async () => {
-    (global.window.confirm as any).mockReturnValue(false);
-    
-    const { getByTitle } = render(
-      createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
+  it('auto-reloads when activeContext changes', async () => {
+    const { rerender } = render(
+      createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'context-1' })
     );
     
-    const resetButton = getByTitle('Resetar para Padrão');
-    fireEvent.click(resetButton);
+    expect(mockLoadContextSettings).toHaveBeenCalledWith('context-1');
     
-    expect(mockResetToDefaults).not.toHaveBeenCalled();
+    // Switch context
+    rerender(createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'context-2' }));
+    
+    await waitFor(() => {
+      expect(mockLoadContextSettings).toHaveBeenCalledWith('context-2');
+    });
   });
 
-  it('handles context reload', async () => {
-    const { container } = render(
-      createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'context:custom' })
+  it('handles rapid context switching without mixing state', async () => {
+    const { rerender } = render(
+      createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'driver:A' })
     );
     
-    // The reload button has RefreshCw icon
-    const buttons = container.querySelectorAll('button');
-    const reloadButton = Array.from(buttons).find(b => b.querySelector('svg.lucide-refresh-cw'));
+    expect(mockLoadContextSettings).toHaveBeenCalledWith('driver:A');
     
-    if (reloadButton) {
-      fireEvent.click(reloadButton);
-      expect(mockLoadContextSettings).toHaveBeenCalledWith('context:custom');
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('Configurações Carregadas', expect.anything());
-      });
-    }
+    // Rapidly switch
+    rerender(createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'delivery:B' }));
+    rerender(createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'driver:C' }));
+    
+    await waitFor(() => {
+      expect(mockLoadContextSettings).toHaveBeenLastCalledWith('driver:C');
+    });
   });
 
-  it('handles failure during save', async () => {
+  it('handles failure during save with consistent error message', async () => {
     mockSaveContextSettings.mockRejectedValue(new Error('Save Failed'));
     
     const { getByText } = render(
@@ -175,7 +184,27 @@ describe('MapSettingsPanel Integration', () => {
     fireEvent.click(saveButton);
     
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Erro ao Salvar', expect.anything());
+      expect(toast.error).toHaveBeenCalledWith('Erro ao Salvar', expect.objectContaining({
+        description: expect.stringContaining('Falha na comunicação')
+      }));
+    });
+  });
+
+  it('handles load failure with fallback notice', async () => {
+    mockLoadContextSettings.mockRejectedValue(new Error('Load Failed'));
+    
+    const { getByTitle } = render(
+      createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'faulty:context' })
+    );
+    
+    const reloadButton = getByTitle('Recarregar do Servidor');
+    fireEvent.click(reloadButton);
+    
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Erro ao Carregar', expect.objectContaining({
+        description: expect.stringContaining('segurança')
+      }));
     });
   });
 });
+
