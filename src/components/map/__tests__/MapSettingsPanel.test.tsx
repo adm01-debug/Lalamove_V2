@@ -12,6 +12,19 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
     disconnect: vi.fn(),
 }));
 
+// Mock the Slider component to avoid ResizeObserver and complex interactions
+vi.mock('@/components/ui/slider', () => ({
+  Slider: ({ onValueChange, value, min, max }: any) => 
+    createElement('input', {
+      type: 'range',
+      min,
+      max,
+      value: value[0],
+      'data-testid': 'mock-slider',
+      onChange: (e: any) => onValueChange([parseInt(e.target.value, 10)])
+    })
+}));
+
 // Mock the hook
 vi.mock('@/hooks/useMapSettings', () => ({
   useMapSettings: vi.fn(),
@@ -64,20 +77,20 @@ describe('MapSettingsPanel Integration', () => {
       createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
     );
     
-    // Sliders in Radix are div role="slider"
-    const sliders = getAllByRole('slider');
+    // Test sliders using mock input
+    const sliders = getAllByTestId('mock-slider');
     
-    // Test Off Route Threshold slider
-    fireEvent.keyDown(sliders[0], { key: 'ArrowRight' });
-    expect(mockSetOffRouteThreshold).toHaveBeenCalled();
+    // Change Off Route Threshold
+    fireEvent.change(sliders[0], { target: { value: '1000' } });
+    expect(mockSetOffRouteThreshold).toHaveBeenCalledWith(1000);
 
-    // Test Stopped Threshold slider
-    fireEvent.keyDown(sliders[1], { key: 'ArrowRight' });
-    expect(mockSetStoppedThreshold).toHaveBeenCalled();
+    // Change Stopped Threshold
+    fireEvent.change(sliders[1], { target: { value: '30' } });
+    expect(mockSetStoppedThreshold).toHaveBeenCalledWith(30);
 
-    // Test Geofence Radius slider
-    fireEvent.keyDown(sliders[2], { key: 'ArrowRight' });
-    expect(mockSetGeofenceRadius).toHaveBeenCalled();
+    // Change Geofence Radius
+    fireEvent.change(sliders[2], { target: { value: '500' } });
+    expect(mockSetGeofenceRadius).toHaveBeenCalledWith(500);
   });
 
   it('handles save action with loading state', async () => {
