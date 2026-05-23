@@ -28,19 +28,32 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
-    setSaving(true);
-    await saveContextSettings(activeContext);
-    setSaving(false);
-    toast.success("Configurações Persistidas", {
-      description: `Limites salvos para o contexto: ${activeContext}`,
-    });
+    try {
+      setSaving(true);
+      await saveContextSettings(activeContext);
+      toast.success("Configurações Persistidas", {
+        description: `Limites salvos para o contexto: ${activeContext}`,
+      });
+    } catch (error) {
+      toast.error("Erro ao Salvar", {
+        description: "Falha na comunicação com o servidor Guardian.",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleReload = async () => {
-    await loadContextSettings(activeContext);
-    toast.success("Configurações Carregadas", {
-      description: "Valores restaurados do servidor.",
-    });
+    try {
+      await loadContextSettings(activeContext);
+      toast.success("Configurações Carregadas", {
+        description: "Valores restaurados do servidor.",
+      });
+    } catch (error) {
+      toast.error("Erro ao Carregar", {
+        description: "Usando padrões locais por segurança.",
+      });
+    }
   };
   
   const handleReset = () => {
