@@ -5,6 +5,13 @@ import { useMapSettings } from '@/hooks/useMapSettings';
 import { toast } from 'sonner';
 import { createElement } from 'react';
 
+// Mock ResizeObserver for Radix components
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+}));
+
 // Mock the hook
 vi.mock('@/hooks/useMapSettings', () => ({
   useMapSettings: vi.fn(),

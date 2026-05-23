@@ -115,8 +115,8 @@ describe('useMapSettings Persistence', () => {
     await useMapSettings.getState().loadContextSettings('empty-context');
 
     const state = useMapSettings.getState();
-    // In current implementation, if no data, it keeps existing or falls back inside loadContextSettings
-    // Looking at useMapSettings.ts:74, it uses ?? 500, etc.
+    // Since we fixed loadContextSettings to call resetToDefaults when no data is found,
+    // this should now correctly return 500.
     expect(state.offRouteThreshold).toBe(500);
   });
 
