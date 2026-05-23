@@ -37,44 +37,62 @@ export const useMapSettings = create<MapSettingsState>()(
       setGeofenceRadius: (value: number) => set({ geofenceRadius: value }),
 
       saveContextSettings: async (contextKey: string) => {
-        const { offRouteThreshold, stoppedThreshold, geofenceRadius } = get();
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) return;
+        try {
+          const { offRouteThreshold, stoppedThreshold, geofenceRadius } = get();
+          const { data: { user }, error: authError } = await supabase.auth.getUser();
+          
+          if (authError) throw authError;
+          if (!user) throw new Error('User not authenticated');
 
-        const { error } = await supabase
-          .from('map_settings_overrides')
-          .upsert({
-            user_id: user.id,
-            context_key: contextKey,
-            off_route_threshold: offRouteThreshold,
-            stopped_threshold: stoppedThreshold,
-            geofence_radius: geofenceRadius
-          }, { onConflict: 'user_id,context_key' });
+          const { error } = await supabase
+            .from('map_settings_overrides')
+            .upsert({
+              user_id: user.id,
+              context_key: contextKey,
+              off_route_threshold: offRouteThreshold,
+              stopped_threshold: stoppedThreshold,
+              geofence_radius: geofenceRadius
+            }, { onConflict: 'user_id,context_key' });
 
-        if (!error) {
+          if (error) throw error;
+
           set(state => ({
             contextSettings: {
               ...state.contextSettings,
               [contextKey]: { offRouteThreshold, stoppedThreshold, geofenceRadius }
             }
           }));
+        } catch (error) {
+          console.error('Error saving context settings:', error);
+          throw error;
         }
       },
 
       loadContextSettings: async (contextKey: string) => {
-        const { data, error } = await supabase
-          .from('map_settings_overrides')
-          .select('*')
-          .eq('context_key', contextKey)
-          .maybeSingle();
+        try {
+          const { data, error } = await supabase
+            .from('map_settings_overrides')
+            .select('*')
+            .eq('context_key', contextKey)
+            .maybeSingle();
 
-        if (data && !error) {
-          set({
-            offRouteThreshold: data.off_route_threshold ?? 500,
-            stoppedThreshold: data.stopped_threshold ?? 15,
-            geofenceRadius: data.geofence_radius ?? 300,
-          });
+          if (error) throw error;
+
+          if (data) {
+            set({
+              offRouteThreshold: data.off_route_threshold ?? 500,
+              stoppedThreshold: data.stopped_threshold ?? 15,
+              geofenceRadius: data.geofence_radius ?? 300,
+            });
+          } else {
+            // Fallback to defaults if no specific context found
+            get().resetToDefaults();
+          }
+        } catch (error) {
+          console.error('Error loading context settings:', error);
+          // Fallback on error
+          get().resetToDefaults();
+          throw error;
         }
       },
 

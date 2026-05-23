@@ -115,8 +115,8 @@ describe('useMapSettings Persistence', () => {
     await useMapSettings.getState().loadContextSettings('empty-context');
 
     const state = useMapSettings.getState();
-    // In current implementation, if no data, it keeps existing or falls back inside loadContextSettings
-    // Looking at useMapSettings.ts:74, it uses ?? 500, etc.
+    // Since we fixed loadContextSettings to call resetToDefaults when no data is found,
+    // this should now correctly return 500.
     expect(state.offRouteThreshold).toBe(500);
   });
 
@@ -127,5 +127,30 @@ describe('useMapSettings Persistence', () => {
     
     const resetState = useMapSettings.getState();
     expect(resetState.offRouteThreshold).toBe(500);
+  });
+
+  it('should handle supabase errors during save', async () => {
+    const mockUser = { id: 'user-123' };
+    (supabase.auth.getUser as any).mockResolvedValue({ data: { user: mockUser }, error: null });
+    
+    (supabase.from as any).mockReturnValue({
+      upsert: vi.fn().mockResolvedValue({ error: new Error('DB Error') }),
+    });
+
+    await expect(useMapSettings.getState().saveContextSettings('error-context')).rejects.toThrow('DB Error');
+  });
+
+  it('should fallback to defaults and throw when supabase fails to load', async () => {
+    (supabase.from as any).mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: new Error('Read Error') }),
+    });
+
+    useMapSettings.getState().setOffRouteThreshold(1200);
+
+    await expect(useMapSettings.getState().loadContextSettings('error-context')).rejects.toThrow('Read Error');
+    
+    expect(useMapSettings.getState().offRouteThreshold).toBe(500);
   });
 });
