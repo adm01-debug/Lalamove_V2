@@ -6,11 +6,11 @@ import { toast } from 'sonner';
 import { createElement } from 'react';
 
 // Mock ResizeObserver for Radix components
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-}));
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
 // Mock the Slider component to avoid ResizeObserver and complex interactions
 vi.mock('@/components/ui/slider', () => ({
@@ -23,6 +23,14 @@ vi.mock('@/components/ui/slider', () => ({
       'data-testid': 'mock-slider',
       onChange: (e: any) => onValueChange([parseInt(e.target.value, 10)])
     })
+}));
+
+// Mock framer-motion to avoid animation issues in tests
+vi.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, ...props }: any) => createElement('div', props, children),
+  },
+  AnimatePresence: ({ children }: any) => children,
 }));
 
 // Mock the hook
@@ -73,7 +81,7 @@ describe('MapSettingsPanel Integration', () => {
   });
 
   it('updates sliders correctly', () => {
-    const { getAllByRole } = render(
+    const { getAllByTestId } = render(
       createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
     );
     
@@ -139,12 +147,12 @@ describe('MapSettingsPanel Integration', () => {
   });
 
   it('handles context reload', async () => {
-    const { getByRole } = render(
+    const { container } = render(
       createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'context:custom' })
     );
     
     // The reload button has RefreshCw icon
-    const buttons = document.querySelectorAll('button');
+    const buttons = container.querySelectorAll('button');
     const reloadButton = Array.from(buttons).find(b => b.querySelector('svg.lucide-refresh-cw'));
     
     if (reloadButton) {
@@ -154,5 +162,20 @@ describe('MapSettingsPanel Integration', () => {
         expect(toast.success).toHaveBeenCalledWith('Configurações Carregadas', expect.anything());
       });
     }
+  });
+
+  it('handles failure during save', async () => {
+    mockSaveContextSettings.mockRejectedValue(new Error('Save Failed'));
+    
+    const { getByText } = render(
+      createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
+    );
+    
+    const saveButton = getByText('Salvar no Perfil');
+    fireEvent.click(saveButton);
+    
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Erro ao Salvar', expect.anything());
+    });
   });
 });
