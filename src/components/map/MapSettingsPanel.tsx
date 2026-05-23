@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMapSettings } from '@/hooks/useMapSettings';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
 interface MapSettingsPanelProps {
@@ -26,6 +26,24 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
   } = useMapSettings();
   
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Auto-load settings when context changes
+  useEffect(() => {
+    if (show && activeContext) {
+      const loadData = async () => {
+        setLoading(true);
+        try {
+          await loadContextSettings(activeContext);
+        } catch (error) {
+          // Error handled in loadContextSettings (fallbacks to defaults)
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadData();
+    }
+  }, [activeContext, show, loadContextSettings]);
 
   const handleSave = async () => {
     try {
@@ -45,6 +63,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
 
   const handleReload = async () => {
     try {
+      setLoading(true);
       await loadContextSettings(activeContext);
       toast.success("Configurações Carregadas", {
         description: "Valores restaurados do servidor.",
@@ -53,6 +72,8 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
       toast.error("Erro ao Carregar", {
         description: "Usando padrões locais por segurança.",
       });
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -61,6 +82,18 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
       resetToDefaults();
       toast.success("Valores Restaurados", {
         description: "Os limites foram resetados para o padrão de fábrica.",
+      });
+    }
+  };
+
+  const handleResetItem = (item: 'threshold' | 'stop' | 'geofence') => {
+    if (window.confirm(`Deseja resetar este item para o padrão?`)) {
+      if (item === 'threshold') setOffRouteThreshold(500);
+      if (item === 'stop') setStoppedThreshold(15);
+      if (item === 'geofence') setGeofenceRadius(300);
+      
+      toast.success("Valor Restaurado", {
+        description: "O limite individual foi resetado.",
       });
     }
   };
@@ -86,9 +119,12 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
             </Button>
           </div>
 
-          <div className="bg-primary/5 rounded-lg p-2 border border-primary/10 mb-4">
-            <div className="text-[8px] font-black uppercase text-primary/60 tracking-tighter">Contexto Ativo</div>
-            <div className="text-[10px] font-bold truncate uppercase">{activeContext}</div>
+          <div className="bg-primary/5 rounded-lg p-2 border border-primary/10 mb-4 flex justify-between items-center">
+            <div>
+              <div className="text-[8px] font-black uppercase text-primary/60 tracking-tighter">Contexto Ativo</div>
+              <div className="text-[10px] font-bold truncate uppercase max-w-[150px]">{activeContext}</div>
+            </div>
+            {loading && <RefreshCw className="w-3 h-3 animate-spin text-primary" />}
           </div>
 
           <div className="space-y-4">
@@ -98,7 +134,18 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                   <Ruler className="w-3 h-3" />
                   Desvio de Rota (m)
                 </div>
-                <span className="text-[10px] font-black text-primary font-mono">{offRouteThreshold}M</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black text-primary font-mono">{offRouteThreshold}M</span>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-4 w-4 hover:text-destructive" 
+                    onClick={() => handleResetItem('threshold')}
+                    title="Resetar Desvio"
+                  >
+                    <RotateCcw className="w-2.5 h-2.5" />
+                  </Button>
+                </div>
               </div>
               <Slider 
                 value={[offRouteThreshold]} 
@@ -119,7 +166,18 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                   <Clock className="w-3 h-3" />
                   Tempo de Parada (min)
                 </div>
-                <span className="text-[10px] font-black text-primary font-mono">{stoppedThreshold}MIN</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black text-primary font-mono">{stoppedThreshold}MIN</span>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-4 w-4 hover:text-destructive" 
+                    onClick={() => handleResetItem('stop')}
+                    title="Resetar Parada"
+                  >
+                    <RotateCcw className="w-2.5 h-2.5" />
+                  </Button>
+                </div>
               </div>
               <Slider 
                 value={[stoppedThreshold]} 
@@ -140,7 +198,18 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                   <ShieldCheck className="w-3 h-3" />
                   Raio Geofence Entrega (m)
                 </div>
-                <span className="text-[10px] font-black text-primary font-mono">{geofenceRadius}M</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black text-primary font-mono">{geofenceRadius}M</span>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-4 w-4 hover:text-destructive" 
+                    onClick={() => handleResetItem('geofence')}
+                    title="Resetar Geofence"
+                  >
+                    <RotateCcw className="w-2.5 h-2.5" />
+                  </Button>
+                </div>
               </div>
               <Slider 
                 value={[geofenceRadius]} 
@@ -160,7 +229,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
             <Button 
               className="flex-1 h-8 text-[9px] font-black uppercase tracking-widest gap-2"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || loading}
             >
               <Save className="w-3 h-3" />
               {saving ? 'Salvando...' : 'Salvar no Perfil'}
@@ -169,14 +238,16 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
               variant="outline"
               className="h-8 w-8 p-0 border-primary/20"
               onClick={handleReload}
+              disabled={loading}
+              title="Recarregar do Servidor"
             >
-              <RefreshCw className="w-3 h-3" />
+              <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
             </Button>
             <Button 
               variant="outline"
               className="h-8 w-8 p-0 border-destructive/20 text-destructive hover:bg-destructive/10"
               onClick={handleReset}
-              title="Resetar para Padrão"
+              title="Resetar Tudo"
             >
               <RotateCcw className="w-3 h-3" />
             </Button>
@@ -190,4 +261,5 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
     </AnimatePresence>
   );
 }
+
 
