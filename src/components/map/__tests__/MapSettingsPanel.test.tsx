@@ -101,7 +101,6 @@ describe('MapSettingsPanel Integration', () => {
   });
 
   it('handles save action with loading state', async () => {
-    // Setup a delayed save
     let resolveSave: any;
     const savePromise = new Promise(resolve => { resolveSave = resolve; });
     mockSaveContextSettings.mockReturnValue(savePromise);
@@ -165,6 +164,26 @@ describe('MapSettingsPanel Integration', () => {
     });
   });
 
+  it('handles rapid context switching without mixing state', async () => {
+    let result: any;
+    await act(async () => {
+      result = render(
+        createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'driver:A' })
+      );
+    });
+    
+    expect(mockLoadContextSettings).toHaveBeenCalledWith('driver:A');
+    
+    await act(async () => {
+      result.rerender(createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'delivery:B' }));
+      result.rerender(createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'driver:C' }));
+    });
+    
+    await waitFor(() => {
+      expect(mockLoadContextSettings).toHaveBeenLastCalledWith('driver:C');
+    });
+  });
+
   it('handles failure during save with consistent error message', async () => {
     mockSaveContextSettings.mockRejectedValue(new Error('Save Failed'));
     
@@ -205,40 +224,3 @@ describe('MapSettingsPanel Integration', () => {
     });
   });
 });
-
-
-  it('handles failure during save with consistent error message', async () => {
-    mockSaveContextSettings.mockRejectedValue(new Error('Save Failed'));
-    
-    const { getByText } = render(
-      createElement(MapSettingsPanel, { show: true, onClose: vi.fn() })
-    );
-    
-    const saveButton = getByText('Salvar no Perfil');
-    fireEvent.click(saveButton);
-    
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Erro ao Salvar', expect.objectContaining({
-        description: expect.stringContaining('Falha na comunicação')
-      }));
-    });
-  });
-
-  it('handles load failure with fallback notice', async () => {
-    mockLoadContextSettings.mockRejectedValue(new Error('Load Failed'));
-    
-    const { getByTitle } = render(
-      createElement(MapSettingsPanel, { show: true, onClose: vi.fn(), activeContext: 'faulty:context' })
-    );
-    
-    const reloadButton = getByTitle('Recarregar do Servidor');
-    fireEvent.click(reloadButton);
-    
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Erro ao Carregar', expect.objectContaining({
-        description: expect.stringContaining('segurança')
-      }));
-    });
-  });
-});
-
