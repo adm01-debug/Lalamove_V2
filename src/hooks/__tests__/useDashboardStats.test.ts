@@ -68,8 +68,9 @@ describe('useDashboardStats', () => {
     expect(stats.pendingApprovals).toBe(0);
     expect(stats.alertsCount).toBe(0);
     expect(stats.activeDrivers).toBe(0);
-    expect(stats.avgDeliveryTime).toBe(45); // fallback
-    expect(stats.onTimeRate).toBe(95); // fallback
+    // With no deliveries the dashboard must report real zeros, not fabricated defaults.
+    expect(stats.avgDeliveryTime).toBe(0);
+    expect(stats.onTimeRate).toBe(0);
   });
 
   it('deve calcular onTimeRate corretamente com dados de entrega', async () => {

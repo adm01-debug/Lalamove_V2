@@ -693,12 +693,13 @@ serve(async (req) => {
         break;
 
       // --- Bulk Import ---
-      case 'bulk-import':
+      case 'bulk-import': {
         const importResult = await bulkImportOrders(supabase, accessToken, body);
         return new Response(
           JSON.stringify({ success: true, ...importResult, tokenRefreshed: wasRefreshed }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
+      }
 
       // --- Force Token Refresh ---
       case 'refresh-token': {

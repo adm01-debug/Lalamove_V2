@@ -266,9 +266,11 @@ describe('Dashboard Dynamic Data Computations', () => {
   });
 
   it('computes prediction confidence based on volume', () => {
-    expect(100 > 50 ? 85 : 100 > 10 ? 65 : 40).toBe(85);
-    expect(30 > 50 ? 85 : 30 > 10 ? 65 : 40).toBe(65);
-    expect(5 > 50 ? 85 : 5 > 10 ? 65 : 40).toBe(40);
+    const confidenceForVolume = (volume: number) =>
+      volume > 50 ? 85 : volume > 10 ? 65 : 40;
+    expect(confidenceForVolume(100)).toBe(85);
+    expect(confidenceForVolume(30)).toBe(65);
+    expect(confidenceForVolume(5)).toBe(40);
   });
 });
 

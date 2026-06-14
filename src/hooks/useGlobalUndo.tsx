@@ -10,7 +10,7 @@ interface UndoableAction {
 }
 
 // Simple store without zustand (to avoid adding dependency)
-let pendingActionsMap = new Map<string, UndoableAction>();
+const pendingActionsMap = new Map<string, UndoableAction>();
 
 export function showUndoToast(
   actionId: string,
