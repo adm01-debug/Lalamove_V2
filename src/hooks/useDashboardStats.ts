@@ -109,8 +109,8 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
     completedToday: completedTodayResult.count ?? 0,
     pendingApprovals: pendingApprovalsResult.count ?? 0,
     alertsCount: alertsResult.count ?? 0,
-    avgDeliveryTime: avgDeliveryTime || 45, // fallback default
-    onTimeRate: onTimeRate || 95, // fallback default
+    avgDeliveryTime, // real computed average (0 when there are no deliveries)
+    onTimeRate, // real on-time percentage (0 when there are no deliveries)
     activeDrivers: activeDriversResult.count ?? 0,
   };
 }

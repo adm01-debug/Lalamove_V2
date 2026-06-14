@@ -28,16 +28,16 @@ export default function SecurityDashboardPage() {
 
   // Calcular score de segurança
   const calculateSecurityScore = () => {
-    let score = 0;
     const checks = {
       mfaEnabled: isMFAEnabled ? 20 : 0,
       hasPasskeys: hasPasskeys ? 15 : 0,
       hasRole: (userRoles?.length || 0) > 0 ? 15 : 0,
       noBlockedActivity: rateLimitStats.blockedRequests === 0 ? 20 : 10,
       recentLoginSuccess: authStats.successful > authStats.failed ? 15 : 5,
-      activeMonitoring: true ? 15 : 0,
+      // Monitoring counts only when auth events are actually being recorded.
+      activeMonitoring: authStats.total > 0 ? 15 : 0,
     };
-    
+
     return Object.values(checks).reduce((a, b) => a + b, 0);
   };
 
