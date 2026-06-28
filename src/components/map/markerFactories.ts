@@ -1,5 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { vehicleIcons, vehicleColors } from './types';
+import { statusColor } from '@/lib/statusPalette';
 import type { TrackingData } from './hooks/useTrackingData';
 
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false): HTMLDivElement {
@@ -13,12 +14,12 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
   let animation = 'pulse-glow 2s infinite';
   
   if (tracking.is_stopped) {
-    statusColor = '#f59e0b';
-    pulseColor = '#f59e0b';
+    statusColor = statusColor_attention;
+    pulseColor = statusColor_attention;
     animation = 'pulse-warning 3s infinite';
   } else if (tracking.is_on_route === false) {
-    statusColor = '#ef4444';
-    pulseColor = '#ef4444';
+    statusColor = statusColor_critical;
+    pulseColor = statusColor_critical;
     animation = 'pulse-critical 1.5s infinite';
   }
 
