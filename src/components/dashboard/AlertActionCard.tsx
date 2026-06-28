@@ -37,11 +37,11 @@ const severityStyles = {
     pulse: false
   },
   info: {
-    bg: 'bg-primary/10',
-    border: 'border-primary/50',
-    iconBg: 'bg-primary/20',
-    iconColor: 'text-primary',
-    glow: 'shadow-lg shadow-primary/20',
+    bg: 'bg-info/10',
+    border: 'border-info/50',
+    iconBg: 'bg-info/20',
+    iconColor: 'text-info',
+    glow: 'shadow-lg shadow-info/20',
     pulse: false
   }
 };
