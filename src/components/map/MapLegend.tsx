@@ -15,18 +15,19 @@ export function MapLegend({ vehicleCounts }: MapLegendProps) {
         animate={{ opacity: 1, y: 0 }}
         className="absolute top-6 left-1/2 -translate-x-1/2 z-10 glass-card px-4 py-2 rounded-full border-primary/20 bg-background/40 backdrop-blur-xl shadow-xl flex items-center gap-6"
       >
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Operacional</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-warning shadow-[0_0_8px_rgba(245,158,11,0.8)] animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Parado</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-destructive shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">Fora de Rota</span>
-        </div>
+        {(['operational', 'attention', 'critical'] as const).map((level) => {
+          const status = STATUS_PALETTE[level];
+          return (
+            <div key={level} className="flex items-center gap-2">
+              <div
+                className={`w-2 h-2 rounded-full ${status.bg.replace('/15', '')} ${status.glow} ${level !== 'operational' ? 'animate-pulse' : ''}`}
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">
+                {status.label}
+              </span>
+            </div>
+          );
+        })}
       </motion.div>
 
       {/* Fleet Stats Legend (Bottom Left) */}
