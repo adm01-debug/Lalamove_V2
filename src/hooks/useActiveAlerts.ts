@@ -5,6 +5,7 @@ import type { Alert, AlertType } from '@/types';
 import { toast } from 'sonner';
 import { useAlertsRealtime } from './useRealtimeSubscriptions';
 import type { Database } from '@/integrations/supabase/types';
+import { useAuth } from '@/hooks/useAuth';
 
 type AlertRow = Database['public']['Tables']['alerts']['Row'];
 type AlertSeverity = Database['public']['Enums']['alert_severity'];
@@ -37,12 +38,16 @@ async function fetchActiveAlerts(): Promise<Alert[]> {
 }
 
 export function useActiveAlerts() {
+  const { user } = useAuth();
+  const isAuthenticated = Boolean(user);
+
   // Use centralized realtime subscription
-  useAlertsRealtime();
+  useAlertsRealtime(isAuthenticated);
 
   const query = useQuery({
     queryKey: ['active-alerts'],
     queryFn: fetchActiveAlerts,
+    enabled: isAuthenticated,
     refetchInterval: 30000,
     staleTime: 10000,
   });

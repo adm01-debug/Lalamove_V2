@@ -38,8 +38,29 @@
     
     <meta name="twitter:image" content="/og-image.png">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <!-- PWA Manifest: carregado apenas fora do preview/editor para evitar 401 do proxy -->
+    <script>
+      (() => {
+        const hostname = window.location.hostname;
+        const isPreviewHost =
+          window.self !== window.top ||
+          hostname.startsWith('id-preview--') ||
+          hostname.startsWith('preview--') ||
+          hostname === 'lovableproject.com' ||
+          hostname.endsWith('.lovableproject.com') ||
+          hostname === 'lovableproject-dev.com' ||
+          hostname.endsWith('.lovableproject-dev.com') ||
+          hostname === 'beta.lovable.dev' ||
+          hostname.endsWith('.beta.lovable.dev');
+
+        if (!isPreviewHost) {
+          const manifest = document.createElement('link');
+          manifest.rel = 'manifest';
+          manifest.href = '/manifest.json';
+          document.head.appendChild(manifest);
+        }
+      })();
+    </script>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -92,17 +113,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    
-    <!-- Register Service Worker -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('[App] Service Worker registered'))
-            .catch(err => console.error('[App] SW registration failed:', err));
-        });
-      }
-    </script>
     
     <!-- Accessibility: No-JS fallback -->
     <noscript>

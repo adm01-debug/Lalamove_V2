@@ -19,6 +19,7 @@ import { isInQuietHours, isTypeEnabled } from '@/components/notifications/Notifi
 
 type TableName = 'alerts' | 'driver_approval_queue' | 'driver_incidents' | 'lalamove_orders' | 'active_tracking';
 type EventType = 'INSERT' | 'UPDATE' | 'DELETE' | '*';
+const REALTIME_SUBSCRIBE_DELAY_MS = import.meta.env.DEV ? 100 : 0;
 
 interface SubscriptionCallback {
   table: TableName;
@@ -123,14 +124,21 @@ export function useRealtimeManager() {
           subscribersRef.current.get(key)?.forEach(sub => sub.callback(payload));
           subscribersRef.current.get(allKey)?.forEach(sub => sub.callback(payload));
         }
-      )
-      .subscribe((status) => {
+      );
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[RealtimeManager] Channel status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     channelRef.current = channel;
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[RealtimeManager] Cleaning up consolidated channel');
       supabase.removeChannel(channel);
       channelRef.current = null;
@@ -143,10 +151,12 @@ export function useRealtimeManager() {
 /**
  * Hook for Alert subscriptions with built-in notification handling
  */
-export function useAlertsRealtime() {
+export function useAlertsRealtime(enabled = true) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    if (!enabled) return;
+
     if (import.meta.env.DEV) logger.log('[AlertsRealtime] Setting up alerts subscription...');
     enableAudioOnInteraction();
 
@@ -245,16 +255,23 @@ export function useAlertsRealtime() {
             );
           }
         }
-      )
-      .subscribe((status) => {
+      );
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[AlertsRealtime] Subscription status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[AlertsRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [enabled, queryClient]);
 }
 
 /**
@@ -335,12 +352,19 @@ export function useApprovalsRealtime() {
             queryClient.invalidateQueries({ queryKey: ['approval-stats'] });
           }
         }
-      )
-      .subscribe((status) => {
+      );
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] Subscription status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[ApprovalsRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
@@ -358,12 +382,19 @@ export function useSidebarCountsRealtime(onUpdate: () => void) {
       .channel('sidebar-counts-consolidated')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_approval_queue' }, onUpdate)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_incidents' }, onUpdate)
-      .subscribe((status) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_incidents' }, onUpdate);
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[SidebarRealtime] Subscription status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[SidebarRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
@@ -381,12 +412,19 @@ export function useSLAMetricsRealtime(onUpdate: () => void) {
       .channel('sla-metrics-consolidated')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'lalamove_orders' }, onUpdate)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'active_tracking' }, onUpdate)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate)
-      .subscribe((status) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, onUpdate);
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[SLARealtime] Subscription status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[SLARealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
@@ -406,12 +444,19 @@ export function useLiveMapRealtime(onUpdate: (payload: RealtimePostgresChangesPa
         'postgres_changes',
         { event: '*', schema: 'public', table: 'active_tracking' },
         onUpdate
-      )
-      .subscribe((status) => {
+      );
+
+    let disposed = false;
+    const subscriptionTimer = window.setTimeout(() => {
+      if (disposed) return;
+      channel.subscribe((status) => {
         if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Subscription status:', status);
       });
+    }, REALTIME_SUBSCRIBE_DELAY_MS);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(subscriptionTimer);
       if (import.meta.env.DEV) logger.log('[LiveMapRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };

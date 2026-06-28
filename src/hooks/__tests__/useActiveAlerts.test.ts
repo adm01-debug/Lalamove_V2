@@ -32,6 +32,17 @@ vi.mock('../useRealtimeSubscriptions', () => ({
   useAlertsRealtime: vi.fn(),
 }));
 
+vi.mock('@/hooks/useAuth', () => ({
+  useAuth: () => ({
+    user: { id: 'user-1' },
+    session: null,
+    loading: false,
+    signIn: vi.fn(),
+    signUp: vi.fn(),
+    signOut: vi.fn(),
+  }),
+}));
+
 import { supabase } from '@/integrations/supabase/client';
 
 function createWrapper() {
