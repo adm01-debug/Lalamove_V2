@@ -1,6 +1,62 @@
 // Lalamove Guardian Service Worker
-const CACHE_NAME = 'lalamove-guardian-v2';
-const RUNTIME_CACHE = 'runtime-cache-v2';
+const CACHE_NAME = 'lalamove-guardian-v3';
+const RUNTIME_CACHE = 'runtime-cache-v3';
+const MANAGED_CACHES = [CACHE_NAME, RUNTIME_CACHE, 'pending-actions'];
+
+const isPreviewOrDevHost = () => {
+  const hostname = self.location.hostname;
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.startsWith('id-preview--') ||
+    hostname.startsWith('preview--') ||
+    hostname === 'lovableproject.com' ||
+    hostname.endsWith('.lovableproject.com') ||
+    hostname === 'lovableproject-dev.com' ||
+    hostname.endsWith('.lovableproject-dev.com') ||
+    hostname === 'beta.lovable.dev' ||
+    hostname.endsWith('.beta.lovable.dev')
+  );
+};
+
+const shouldBypassRequest = (request, url) => {
+  if (request.method !== 'GET') return true;
+
+  return (
+    url.pathname === '/auth' ||
+    url.pathname.startsWith('/auth/') ||
+    url.pathname.startsWith('/~oauth') ||
+    url.pathname.startsWith('/api/auth') ||
+    url.pathname.includes('/auth/v1/') ||
+    url.searchParams.has('__lovable_token') ||
+    request.headers.has('authorization')
+  );
+};
+
+const buildSyntheticResponse = (request) => {
+  if (request.mode === 'navigate') {
+    return new Response('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Offline</title></head><body><main><h1>Aplicativo offline</h1><p>Reconecte-se para continuar.</p></main></body></html>', {
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
+  }
+
+  return new Response('', {
+    status: 503,
+    statusText: 'Service Unavailable',
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+};
+
+const cleanupManagedCaches = async () => {
+  const cacheNames = await caches.keys();
+  await Promise.allSettled(
+    cacheNames
+      .filter((name) => MANAGED_CACHES.includes(name) || name.startsWith('lalamove-guardian-') || name.startsWith('runtime-cache-'))
+      .map((name) => caches.delete(name))
+  );
+};
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -18,30 +74,30 @@ const CACHE_STRATEGIES = {
       const networkResponse = await fetch(request);
       if (networkResponse.ok) {
         const cache = await caches.open(cacheName);
-        cache.put(request, networkResponse.clone());
+        await cache.put(request, networkResponse.clone());
       }
       return networkResponse;
     } catch (error) {
-      const cachedResponse = await caches.match(request);
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      // Graceful fallback: for navigations, serve the cached app shell so the
-      // SPA can boot and handle routing itself instead of surfacing a hard
-      // network error (which appears as an uncaught "Failed to fetch").
-      if (request.mode === 'navigate') {
-        const shell = await caches.match('/index.html') || await caches.match('/');
-        if (shell) {
-          return shell;
+      try {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+          return cachedResponse;
         }
+
+        // Graceful fallback: for navigations, serve the cached app shell so the
+        // SPA can boot and handle routing itself instead of surfacing a hard
+        // network error (which appears as an uncaught "Failed to fetch").
+        if (request.mode === 'navigate') {
+          const shell = await caches.match('/index.html') || await caches.match('/');
+          if (shell) {
+            return shell;
+          }
+        }
+
+        return buildSyntheticResponse(request);
+      } catch (cacheError) {
+        return buildSyntheticResponse(request);
       }
-      // Never reject: return a synthetic offline response to avoid uncaught
-      // promise rejections inside the fetch handler.
-      return new Response('', {
-        status: 503,
-        statusText: 'Service Unavailable',
-        headers: { 'Content-Type': 'text/plain' },
-      });
     }
   },
 
@@ -60,7 +116,7 @@ const CACHE_STRATEGIES = {
       }
       return networkResponse;
     } catch (error) {
-      throw error;
+      return buildSyntheticResponse(request);
     }
   },
 
@@ -76,17 +132,20 @@ const CACHE_STRATEGIES = {
       return networkResponse;
     }).catch(() => null);
 
-    return cachedResponse || fetchPromise;
+    return cachedResponse || fetchPromise || buildSyntheticResponse(request);
   },
 };
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing Service Worker...');
+  if (isPreviewOrDevHost()) {
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[SW] Caching static assets');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => self.skipWaiting())
@@ -95,14 +154,28 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating Service Worker...');
+  if (isPreviewOrDevHost()) {
+    event.waitUntil(
+      (async () => {
+        try {
+          await cleanupManagedCaches();
+          await self.clients.claim();
+          const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+          await Promise.allSettled(clients.map((client) => client.navigate(client.url)));
+        } finally {
+          await self.registration.unregister();
+        }
+      })()
+    );
+    return;
+  }
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
           .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
           .map((name) => {
-            console.log('[SW] Deleting old cache:', name);
             return caches.delete(name);
           })
       );
@@ -114,6 +187,10 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  if (isPreviewOrDevHost() || shouldBypassRequest(request, url)) {
+    return;
+  }
 
   // Skip non-GET requests
   if (request.method !== 'GET') {
@@ -166,8 +243,6 @@ self.addEventListener('fetch', (event) => {
 
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync:', event.tag);
-  
   if (event.tag === 'sync-pending-actions') {
     event.waitUntil(syncPendingActions());
   }
@@ -202,8 +277,6 @@ async function syncPendingActions() {
 
 // Push notifications
 self.addEventListener('push', (event) => {
-  console.log('[SW] Push received:', event);
-  
   let data = { title: 'Nova Notificação', body: 'Você tem uma nova notificação' };
   
   if (event.data) {
@@ -234,7 +307,6 @@ self.addEventListener('push', (event) => {
 
 // Notification click handler
 self.addEventListener('notificationclick', (event) => {
-  console.log('[SW] Notification click:', event.action);
   event.notification.close();
 
   if (event.action === 'dismiss') {
@@ -264,21 +336,21 @@ self.addEventListener('notificationclick', (event) => {
 
 // Message handler for communication with main thread
 self.addEventListener('message', (event) => {
-  console.log('[SW] Message received:', event.data);
-  
-  if (event.data.type === 'SKIP_WAITING') {
+  if (event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
   
-  if (event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_NAME });
+  if (event.data?.type === 'GET_VERSION') {
+    event.ports[0]?.postMessage({ version: CACHE_NAME });
   }
   
-  if (event.data.type === 'CLEAR_CACHE') {
-    caches.keys().then((names) => {
-      return Promise.all(names.map((name) => caches.delete(name)));
+  if (event.data?.type === 'CLEAR_CACHE') {
+    cleanupManagedCaches().then(() => {
+      event.ports[0]?.postMessage({ success: true });
+    }).catch(() => {
+      event.ports[0]?.postMessage({ success: false });
     }).then(() => {
-      event.ports[0].postMessage({ success: true });
+      return undefined;
     });
   }
 });
