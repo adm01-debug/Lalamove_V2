@@ -26,9 +26,25 @@ const CACHE_STRATEGIES = {
       if (cachedResponse) {
         return cachedResponse;
       }
-      throw error;
+      // Graceful fallback: for navigations, serve the cached app shell so the
+      // SPA can boot and handle routing itself instead of surfacing a hard
+      // network error (which appears as an uncaught "Failed to fetch").
+      if (request.mode === 'navigate') {
+        const shell = await caches.match('/index.html') || await caches.match('/');
+        if (shell) {
+          return shell;
+        }
+      }
+      // Never reject: return a synthetic offline response to avoid uncaught
+      // promise rejections inside the fetch handler.
+      return new Response('', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain' },
+      });
     }
   },
+
 
   // Cache first, fall back to network
   cacheFirst: async (request, cacheName = CACHE_NAME) => {
