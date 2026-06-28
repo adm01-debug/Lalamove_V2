@@ -93,17 +93,6 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Register Service Worker -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('[App] Service Worker registered'))
-            .catch(err => console.error('[App] SW registration failed:', err));
-        });
-      }
-    </script>
-    
     <!-- Accessibility: No-JS fallback -->
     <noscript>
       <div style="padding: 20px; text-align: center; font-family: system-ui, sans-serif;">
