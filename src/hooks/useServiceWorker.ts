@@ -11,6 +11,34 @@ interface ServiceWorkerState {
   registration: ServiceWorkerRegistration | null;
 }
 
+function shouldDisableAppServiceWorker(): boolean {
+  if (!('serviceWorker' in navigator)) return true;
+  if (!import.meta.env.PROD) return true;
+
+  const { hostname, search } = window.location;
+  const isEmbeddedPreview = window.self !== window.top;
+
+  return (
+    search.includes('__lovable_token=') ||
+    search.includes('sw=off') ||
+    isEmbeddedPreview ||
+    hostname.startsWith('id-preview--') ||
+    hostname.startsWith('preview--') ||
+    hostname === 'lovableproject.com' ||
+    hostname.endsWith('.lovableproject.com') ||
+    hostname === 'lovableproject-dev.com' ||
+    hostname.endsWith('.lovableproject-dev.com') ||
+    hostname === 'beta.lovable.dev' ||
+    hostname.endsWith('.beta.lovable.dev')
+  );
+}
+
+function isAppServiceWorker(registration: ServiceWorkerRegistration): boolean {
+  return registration.active?.scriptURL.endsWith('/sw.js') === true ||
+    registration.installing?.scriptURL.endsWith('/sw.js') === true ||
+    registration.waiting?.scriptURL.endsWith('/sw.js') === true;
+}
+
 export function useServiceWorker() {
   const [state, setState] = useState<ServiceWorkerState>({
     isSupported: 'serviceWorker' in navigator,
@@ -26,20 +54,20 @@ export function useServiceWorker() {
   useEffect(() => {
     if (!state.isSupported) return;
 
-    const isLovablePreview =
-      window.location.search.includes('__lovable_token=') ||
-      window.location.hostname.includes('lovableproject.com') ||
-      window.location.hostname.includes('id-preview--');
-
-    // In preview, always unregister SW and clear caches to prevent old JS bundles
-    if (isLovablePreview) {
+    // In dev/preview/editor frames, always unregister the app-shell SW and clear
+    // only its caches. This prevents stale chunks and fetch proxy failures.
+    if (shouldDisableAppServiceWorker()) {
       const cleanupPreviewCaching = async () => {
         try {
           const registrations = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map((registration) => registration.unregister()));
+          await Promise.all(registrations.filter(isAppServiceWorker).map((registration) => registration.unregister()));
 
           const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map((name) => caches.delete(name)));
+          await Promise.all(
+            cacheNames
+              .filter((name) => name.startsWith('lalamove-guardian-') || name.startsWith('runtime-cache-') || name === 'pending-actions')
+              .map((name) => caches.delete(name))
+          );
 
           setState((prev) => ({
             ...prev,
@@ -61,8 +89,6 @@ export function useServiceWorker() {
         const registration = await navigator.serviceWorker.register('/sw.js', {
           scope: '/',
         });
-
-        if (import.meta.env.DEV) logger.log('[SW Hook] Service worker registered:', registration);
 
         setState(prev => ({
           ...prev,
