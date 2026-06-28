@@ -37,11 +37,11 @@ const severityStyles = {
     pulse: false
   },
   info: {
-    bg: 'bg-primary/10',
-    border: 'border-primary/50',
-    iconBg: 'bg-primary/20',
-    iconColor: 'text-primary',
-    glow: 'shadow-lg shadow-primary/20',
+    bg: 'bg-info/10',
+    border: 'border-info/50',
+    iconBg: 'bg-info/20',
+    iconColor: 'text-info',
+    glow: 'shadow-lg shadow-info/20',
     pulse: false
   }
 };
@@ -120,7 +120,7 @@ export function AlertActionCard({
           "w-full font-semibold",
           severity === 'critical' && "bg-destructive hover:bg-destructive/90",
           severity === 'warning' && "bg-warning hover:bg-warning/90",
-          severity === 'info' && "bg-primary hover:bg-primary/90"
+          severity === 'info' && "bg-info hover:bg-info/90"
         )}
         size="lg"
       >
