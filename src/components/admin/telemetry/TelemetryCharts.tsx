@@ -147,7 +147,7 @@ export function TelemetryCharts({ rows, timeFilter }: Props) {
               <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
               <XAxis dataKey="time" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} tickFormatter={formatMs} />
-              <Tooltip formatter={(v: number) => formatMs(v)} />
+              <Tooltip formatter={(v) => formatMs(Number(v))} />
               <Legend iconSize={10} wrapperStyle={{ fontSize: 11 }} />
               <Area
                 type="monotone"
@@ -182,7 +182,7 @@ export function TelemetryCharts({ rows, timeFilter }: Props) {
                 <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
                 <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={100} />
-                <Tooltip formatter={(v: number) => [`${v} alertas`, "Quantidade"]} />
+                <Tooltip formatter={(v) => [`${Number(v)} alertas`, "Quantidade"]} />
                 <Bar dataKey="count" fill="hsl(var(--destructive))" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
