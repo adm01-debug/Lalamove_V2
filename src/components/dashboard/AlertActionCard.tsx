@@ -120,7 +120,7 @@ export function AlertActionCard({
           "w-full font-semibold",
           severity === 'critical' && "bg-destructive hover:bg-destructive/90",
           severity === 'warning' && "bg-warning hover:bg-warning/90",
-          severity === 'info' && "bg-primary hover:bg-primary/90"
+          severity === 'info' && "bg-info hover:bg-info/90"
         )}
         size="lg"
       >
