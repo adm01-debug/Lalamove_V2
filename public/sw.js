@@ -267,11 +267,11 @@ async function syncPendingActions() {
           await cache.delete(request);
         }
       } catch (error) {
-        console.error('[SW] Failed to sync action:', error);
+        // Keep queued action for the next sync attempt.
       }
     }
   } catch (error) {
-    console.error('[SW] Sync failed:', error);
+    // Background sync is best-effort; failures must not surface as console noise.
   }
 }
 
