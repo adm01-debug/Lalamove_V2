@@ -1,5 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { vehicleIcons, vehicleColors } from './types';
+import { statusColor as statusHsl } from '@/lib/statusPalette';
 import type { TrackingData } from './hooks/useTrackingData';
 
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false): HTMLDivElement {
@@ -13,12 +14,12 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
   let animation = 'pulse-glow 2s infinite';
   
   if (tracking.is_stopped) {
-    statusColor = '#f59e0b';
-    pulseColor = '#f59e0b';
+    statusColor = statusHsl('attention');
+    pulseColor = statusHsl('attention');
     animation = 'pulse-warning 3s infinite';
   } else if (tracking.is_on_route === false) {
-    statusColor = '#ef4444';
-    pulseColor = '#ef4444';
+    statusColor = statusHsl('critical');
+    pulseColor = statusHsl('critical');
     animation = 'pulse-critical 1.5s infinite';
   }
 
@@ -56,10 +57,10 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
             ${tracking.driver?.name?.split(' ')[0].toUpperCase() || 'DRIVER'}
           </div>
           ${tracking.is_stopped ? `
-            <div style="font-size:9px;color:#f59e0b;font-weight:900;background:rgba(245,158,11,0.1);padding:1px 6px;border-radius:4px;border:1px solid rgba(245,158,11,0.2);">PARADO</div>
+            <div style="font-size:9px;color:${statusHsl('attention')};font-weight:900;background:${statusHsl('attention',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('attention',0.2)};">PARADO</div>
           ` : ''}
           ${tracking.is_on_route === false ? `
-            <div style="font-size:9px;color:#ef4444;font-weight:900;background:rgba(239,68,68,0.1);padding:1px 6px;border-radius:4px;border:1px solid rgba(239,68,68,0.2);">FORA DE ROTA</div>
+            <div style="font-size:9px;color:${statusHsl('critical')};font-weight:900;background:${statusHsl('critical',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('critical',0.2)};">FORA DE ROTA</div>
           ` : ''}
         </div>
       </div>
@@ -104,10 +105,10 @@ export function createStoppedMarkerElement(tracking: TrackingData, durationMin: 
   el.className = 'stopped-warning-marker';
   el.innerHTML = `
     <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
-      <div style="width:40px;height:40px;background:#ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(239,68,68,0.6);border:3px solid white;animation:marker-bounce 1s infinite alternate;">
+      <div style="width:40px;height:40px;background:${statusHsl('critical')};border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px ${statusHsl('critical',0.6)};border:3px solid white;animation:marker-bounce 1s infinite alternate;">
         <span style="font-size:20px;">🛑</span>
       </div>
-      <div style="background:#ef4444;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:900;margin-top:4px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+      <div style="background:${statusHsl('critical')};color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:900;margin-top:4px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
         PARADO +${durationMin}M
       </div>
     </div>`;
@@ -125,9 +126,9 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
   const eta = tracking.eta_minutes ? `${tracking.eta_minutes} min` : '-';
 
   let statusText = 'Em trânsito';
-  let statusColor = '#00d9ff';
-  if (tracking.is_stopped) { statusText = 'Parado'; statusColor = '#f59e0b'; }
-  else if (!tracking.is_on_route) { statusText = 'Fora da rota'; statusColor = '#ef4444'; }
+  let statusColor = statusHsl('operational');
+  if (tracking.is_stopped) { statusText = 'Parado'; statusColor = statusHsl('attention'); }
+  else if (!tracking.is_on_route) { statusText = 'Fora da rota'; statusColor = statusHsl('critical'); }
 
   return new mapboxgl.Popup({ offset: 30, closeButton: true, className: 'custom-popup' }).setHTML(`
     <div style="background:linear-gradient(145deg,#1a1a2e,#16162a);color:white;padding:16px;border-radius:12px;min-width:280px;font-family:system-ui;box-shadow:0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);">
