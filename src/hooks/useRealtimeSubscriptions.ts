@@ -151,10 +151,12 @@ export function useRealtimeManager() {
 /**
  * Hook for Alert subscriptions with built-in notification handling
  */
-export function useAlertsRealtime() {
+export function useAlertsRealtime(enabled = true) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    if (!enabled) return;
+
     if (import.meta.env.DEV) logger.log('[AlertsRealtime] Setting up alerts subscription...');
     enableAudioOnInteraction();
 
@@ -269,7 +271,7 @@ export function useAlertsRealtime() {
       if (import.meta.env.DEV) logger.log('[AlertsRealtime] Cleaning up subscription');
       supabase.removeChannel(channel);
     };
-  }, [queryClient]);
+  }, [enabled, queryClient]);
 }
 
 /**
