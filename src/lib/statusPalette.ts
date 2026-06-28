@@ -56,3 +56,15 @@ export const STATUS_PALETTE: Record<StatusLevel, StatusToken> = {
     glow: 'glow-info',
   },
 } as const;
+
+/**
+ * Retorna uma cor de status como `hsl(var(--token) / alpha)`, utilizável tanto
+ * em classes quanto em estilos inline (ex.: marcadores Mapbox renderizados via
+ * innerHTML). Mantém a escala semântica como fonte única, respeitando dark mode.
+ */
+export function statusColor(level: StatusLevel, alpha = 1): string {
+  const token = STATUS_PALETTE[level].token;
+  return alpha >= 1
+    ? `hsl(var(--${token}))`
+    : `hsl(var(--${token}) / ${alpha})`;
+}
