@@ -10,6 +10,8 @@ export interface ClusterInfo {
   critical: number;
   attention: number;
   operational: number;
+  /** Contagem por tipo de veículo (ex.: { MOTORCYCLE: 4, CAR: 2 }). */
+  byVehicle?: Record<string, number>;
 }
 
 /**
@@ -17,9 +19,10 @@ export interface ClusterInfo {
  * A cor dominante prioriza severidade (crítico > atenção > operacional) para
  * comunicar risco antes mesmo de o operador ampliar o mapa. O tamanho escala
  * suavemente com a contagem, mantendo legibilidade sem poluir o mapa.
+ * Um rodapé com badges por tipo de veículo dá composição da frota no grupo.
  */
 export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
-  const { count, critical, attention } = info;
+  const { count, critical, attention, byVehicle } = info;
   const level: StatusLevel = critical > 0 ? 'critical' : attention > 0 ? 'attention' : 'operational';
   const color = statusHsl(level);
   const glyph = statusGlyph(level);
@@ -29,18 +32,40 @@ export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
   const size = Math.round(Math.min(72, 40 + Math.log2(count + 1) * 8));
   const fontSize = count > 99 ? 15 : 18;
 
+  // Badges por tipo de veículo: ordenados por volume, limitados a 3 para não poluir.
+  const vehicleEntries = Object.entries(byVehicle ?? {})
+    .filter(([, n]) => n > 0)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+  const vehicleA11y = vehicleEntries.length
+    ? ' — ' + vehicleEntries.map(([type, n]) => `${n} ${type.toLowerCase()}`).join(', ')
+    : '';
+
+  const badgesHtml = vehicleEntries.length
+    ? `<div aria-hidden="true" style="display:flex;gap:3px;margin-top:5px;flex-wrap:wrap;justify-content:center;max-width:96px;">
+        ${vehicleEntries.map(([type, n]) => `
+          <span style="display:inline-flex;align-items:center;gap:2px;background:rgba(15,23,42,0.92);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:9px;border:1px solid rgba(255,255,255,0.18);line-height:1.4;box-shadow:0 2px 6px rgba(0,0,0,0.3);">
+            <span style="font-size:10px;">${vehicleIcons[type] || '🚗'}</span>${n}
+          </span>`).join('')}
+      </div>`
+    : '';
+
   const el = document.createElement('div');
   el.className = 'live-map-cluster-marker';
   el.innerHTML = `
-    <div role="img" aria-label="${a11y}" title="${a11y}" style="position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-      <div style="position:absolute;inset:-8px;border-radius:50%;background:${statusHsl(level, 0.22)};animation:pulse-glow 2.5s infinite;z-index:-1;"></div>
-      <div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,${color},${statusHsl(level, 0.85)});display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;border:3px solid rgba(255,255,255,0.95);box-shadow:0 8px 28px ${statusHsl(level, 0.5)};font-family:system-ui;line-height:1;">
-        <span style="font-size:${fontSize}px;letter-spacing:-0.5px;">${count}</span>
-        ${critical > 0 || attention > 0 ? `<span aria-hidden="true" style="font-size:10px;opacity:0.9;margin-top:1px;">${glyph}</span>` : ''}
+    <div role="img" aria-label="${a11y}${vehicleA11y}" title="${a11y}${vehicleA11y}" style="position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:-8px;border-radius:50%;background:${statusHsl(level, 0.22)};animation:pulse-glow 2.5s infinite;z-index:-1;"></div>
+        <div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,${color},${statusHsl(level, 0.85)});display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;border:3px solid rgba(255,255,255,0.95);box-shadow:0 8px 28px ${statusHsl(level, 0.5)};font-family:system-ui;line-height:1;">
+          <span style="font-size:${fontSize}px;letter-spacing:-0.5px;">${count}</span>
+          ${critical > 0 || attention > 0 ? `<span aria-hidden="true" style="font-size:10px;opacity:0.9;margin-top:1px;">${glyph}</span>` : ''}
+        </div>
       </div>
+      ${badgesHtml}
     </div>`;
   return el;
 }
+
 
 
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false, density: MarkerDensity = 'comfortable'): HTMLDivElement {
