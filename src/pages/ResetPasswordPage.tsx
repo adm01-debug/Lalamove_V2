@@ -165,6 +165,7 @@ export default function ResetPasswordPage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md"
       >
+        <h1 className="sr-only">Criar nova senha</h1>
         <Card className="glass-card">
           <CardHeader className="text-center">
             <div className="mx-auto p-3 rounded-full bg-primary/10 w-fit mb-4">
