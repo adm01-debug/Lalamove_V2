@@ -294,6 +294,8 @@ function OrdersTableDesktop({
                       <Button 
                         variant="ghost" 
                         size="icon"
+                        aria-label="Ver detalhes do pedido"
+                        className="min-h-11 min-w-11 md:h-10 md:w-10"
                         onClick={(e) => {
                           e.stopPropagation();
                           onViewDetails?.(order);
