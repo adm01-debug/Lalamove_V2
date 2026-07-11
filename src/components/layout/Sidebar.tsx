@@ -62,7 +62,20 @@ export function Sidebar() {
     menuCategories.forEach(cat => { if (cat.items.some(item => isActive(item.path))) setOpenCategories(prev => prev.includes(cat.id) ? prev : [...prev, cat.id]); });
   }, [location.pathname]);
 
-  const getBadgeCount = (badgeType?: string) => badgeType === 'alerts' ? unreadAlerts : badgeType === 'approvals' ? pendingApprovals : badgeType === 'incidents' ? openIncidents : 0;
+  // Mapas de configuração — evitam ternários aninhados
+  const badgeCounts: Record<string, number> = {
+    alerts: unreadAlerts,
+    approvals: pendingApprovals,
+    incidents: openIncidents,
+  };
+  const badgeVariants: Record<string, 'destructive' | 'warning' | 'default'> = {
+    alerts: 'destructive',
+    approvals: 'warning',
+    incidents: 'default',
+  };
+  const getBadgeCount = (badgeType?: string) => (badgeType ? badgeCounts[badgeType] ?? 0 : 0);
+  const getBadgeVariant = (badgeType?: string) => (badgeType ? badgeVariants[badgeType] ?? 'default' : 'default');
+
   const toggleCategory = (id: string) => setOpenCategories(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   const userRoleLevel = roleHierarchy[userRole ?? ''] ?? 0;
   const hasRequiredRole = (required?: 'admin' | 'manager') => !required || userRoleLevel >= roleHierarchy[required];
@@ -73,16 +86,24 @@ export function Sidebar() {
     const active = isActive(item.path);
     const badgeCount = getBadgeCount(item.badgeType);
     const prefetchProps = getPrefetchProps(item.path);
-    return (
-      <Link key={item.id} to={item.path} {...prefetchProps} className={cn("flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative", active ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground")}>
+    const link = (
+      <Link key={item.id} to={item.path} {...prefetchProps} aria-current={active ? 'page' : undefined} aria-label={collapsed ? `${item.label}${badgeCount > 0 ? ` (${badgeCount})` : ''}` : undefined} className={cn("flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative", active ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground")}>
         {active && <motion.div layoutId="activeIndicator" className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-primary" transition={{ type: "spring", stiffness: 380, damping: 30 }} />}
         <div className={cn("w-7 h-7 rounded-md flex items-center justify-center transition-all", active ? "bg-primary/20" : "bg-secondary/50 group-hover:bg-secondary")}><item.icon className="w-4 h-4" /></div>
         <AnimatePresence>{!collapsed && <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 text-sm font-medium truncate">{item.label}</motion.span>}</AnimatePresence>
-        {!collapsed && badgeCount > 0 && <BounceBadge count={badgeCount} variant={item.badgeType === 'alerts' ? 'destructive' : item.badgeType === 'approvals' ? 'warning' : 'default'} />}
+        {!collapsed && badgeCount > 0 && <BounceBadge count={badgeCount} variant={getBadgeVariant(item.badgeType)} />}
         {collapsed && badgeCount > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[9px] font-bold rounded-full bg-destructive text-white">{badgeCount > 9 ? '9+' : badgeCount}</span>}
       </Link>
     );
+    if (!collapsed) return link;
+    return (
+      <Tooltip key={item.id}>
+        <TooltipTrigger asChild>{link}</TooltipTrigger>
+        <TooltipContent side="right"><p>{item.label}{badgeCount > 0 ? ` · ${badgeCount}` : ''}</p></TooltipContent>
+      </Tooltip>
+    );
   };
+
 
   const UserDropdownContent = () => (
     <>
@@ -161,7 +182,7 @@ export function Sidebar() {
         <div className="p-3 border-t border-border/30">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} className="w-full justify-center bg-secondary/30 hover:bg-secondary/50 rounded-lg">
+              <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} aria-label={collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'} className="w-full justify-center bg-secondary/30 hover:bg-secondary/50 rounded-lg">
                 <motion.div animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.3 }}><ChevronLeft className="w-4 h-4" /></motion.div>
                 <AnimatePresence>{!collapsed && <motion.span initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "auto" }} exit={{ opacity: 0, width: 0 }} className="ml-2 text-sm">Recolher</motion.span>}</AnimatePresence>
               </Button>
