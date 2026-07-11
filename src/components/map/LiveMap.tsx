@@ -789,6 +789,7 @@ export function LiveMap({
     const cells = new Map<string, {
       lngSum: number; latSum: number; count: number;
       critical: number; attention: number; operational: number;
+      byVehicle: Record<string, number>;
       bounds: mapboxgl.LngLatBounds;
     }>();
 
@@ -797,6 +798,7 @@ export function LiveMap({
       const cell = cells.get(key) ?? {
         lngSum: 0, latSum: 0, count: 0,
         critical: 0, attention: 0, operational: 0,
+        byVehicle: {} as Record<string, number>,
         bounds: new mapboxgl.LngLatBounds(),
       };
       cell.lngSum += t.current_longitude;
@@ -805,9 +807,12 @@ export function LiveMap({
       if (t.is_on_route === false) cell.critical += 1;
       else if (t.is_stopped) cell.attention += 1;
       else cell.operational += 1;
+      const vType = t.driver?.vehicle_type || 'MOTORCYCLE';
+      cell.byVehicle[vType] = (cell.byVehicle[vType] || 0) + 1;
       cell.bounds.extend([t.current_longitude, t.current_latitude]);
       cells.set(key, cell);
     });
+
 
     const activeKeys = new Set(cells.keys());
     clusterMarkers.current.forEach((marker, key) => {
