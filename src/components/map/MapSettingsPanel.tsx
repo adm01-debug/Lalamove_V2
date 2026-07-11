@@ -17,9 +17,11 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
     offRouteThreshold, 
     stoppedThreshold, 
     geofenceRadius,
+    markerDensity,
     setOffRouteThreshold,
     setStoppedThreshold,
     setGeofenceRadius,
+    setMarkerDensity,
     saveContextSettings,
     loadContextSettings,
     resetToDefaults
@@ -226,7 +228,36 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                 <span>2000M</span>
               </div>
             </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase">
+                <Settings className="w-3 h-3" />
+                Densidade dos Marcadores
+              </div>
+              <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Densidade dos marcadores">
+                {([
+                  { value: 'comfortable', label: 'Confortável' },
+                  { value: 'compact', label: 'Compacto' },
+                ] as const).map(({ value, label }) => (
+                  <Button
+                    key={value}
+                    type="button"
+                    role="radio"
+                    aria-checked={markerDensity === value}
+                    variant={markerDensity === value ? 'default' : 'outline'}
+                    className="h-7 text-[9px] font-black uppercase tracking-widest"
+                    onClick={() => setMarkerDensity(value)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+              <p className="text-[8px] text-muted-foreground leading-tight">
+                O modo compacto reduz rótulos e o tamanho dos ícones para melhor leitura com muitos motoristas.
+              </p>
+            </div>
           </div>
+
           
           <div className="flex gap-2 pt-2">
             <Button 

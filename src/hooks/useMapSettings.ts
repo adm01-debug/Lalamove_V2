@@ -2,10 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@/integrations/supabase/client';
 
+export type MarkerDensity = 'comfortable' | 'compact';
+
 interface MapSettingsState {
   offRouteThreshold: number; // meters
   stoppedThreshold: number; // minutes
   geofenceRadius: number; // meters
+  markerDensity: MarkerDensity; // visual density of driver markers
+  
   
   // Persistence by context (region/type)
   contextSettings: Record<string, {
@@ -14,6 +18,7 @@ interface MapSettingsState {
     geofenceRadius?: number;
   }>;
 
+  setMarkerDensity: (value: MarkerDensity) => void;
   setOffRouteThreshold: (value: number) => void;
   setStoppedThreshold: (value: number) => void;
   setGeofenceRadius: (value: number) => void;
@@ -30,11 +35,13 @@ export const useMapSettings = create<MapSettingsState>()(
       offRouteThreshold: 500,
       stoppedThreshold: 15,
       geofenceRadius: 300,
+      markerDensity: 'comfortable',
       contextSettings: {},
 
       setOffRouteThreshold: (value: number) => set({ offRouteThreshold: value }),
       setStoppedThreshold: (value: number) => set({ stoppedThreshold: value }),
       setGeofenceRadius: (value: number) => set({ geofenceRadius: value }),
+      setMarkerDensity: (value: MarkerDensity) => set({ markerDensity: value }),
 
       saveContextSettings: async (contextKey: string) => {
         try {
