@@ -79,6 +79,17 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
 
   const unreadCount = alerts.filter(a => !a.isRead).length;
 
+  // Detecta plataforma para exibir o símbolo de atalho correto (⌘ no macOS, Ctrl nos demais).
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+  const shortcutSymbol = isMac ? '⌘' : 'Ctrl+';
+
+  // Abre a paleta de comandos (busca global + navegação) via o mesmo atalho Ctrl/Cmd+K.
+  const openCommandPalette = () => {
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'k', ctrlKey: !isMac, metaKey: isMac, bubbles: true }),
+    );
+  };
+
   const handleSignOut = async () => {
     await signOut();
     toast.success('Logout realizado com sucesso');
