@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Truck, Mail, Lock, Loader2, Eye, EyeOff, ShieldAlert } from 'lucide-react';
+import { Truck, Mail, Lock, Loader2, Eye, EyeOff, ShieldAlert, Radar, Navigation, Activity, ShieldCheck, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { PasskeyLoginButton } from '@/components/auth/PasskeyLoginButton';
