@@ -756,11 +756,103 @@ export function LiveMap({
     }
   }, [trackingData, loading, selectedId, focusMode, markerDensity, isFarZoom]);
 
+  // Clustering real por grade em zoom muito distante:
+  // agrega motoristas em bolhas com contagem e cor por severidade dominante,
+  // ocultando marcadores individuais para eliminar sobreposição massiva.
+  useEffect(() => {
+    if (!map.current || loading) return;
+
+    const clearClusters = () => {
+      clusterMarkers.current.forEach(marker => marker.remove());
+      clusterMarkers.current.clear();
+    };
+
+    const setDriverVisibility = (visible: boolean) => {
+      driverMarkers.current.forEach(marker => {
+        marker.getElement().style.display = visible ? '' : 'none';
+      });
+      pointMarkers.current.forEach(marker => {
+        marker.getElement().style.display = visible ? '' : 'none';
+      });
+    };
+
+    if (!isVeryFarZoom) {
+      clearClusters();
+      setDriverVisibility(true);
+      return;
+    }
+
+    // Oculta marcadores individuais e agrega por célula de grade (~cellSize graus).
+    setDriverVisibility(false);
+
+    const cellSize = 0.06; // ~6km — granularidade equilibrada para visão macro.
+    const cells = new Map<string, {
+      lngSum: number; latSum: number; count: number;
+      critical: number; attention: number; operational: number;
+      bounds: mapboxgl.LngLatBounds;
+    }>();
+
+    trackingData.forEach(t => {
+      const key = `${Math.floor(t.current_longitude / cellSize)}:${Math.floor(t.current_latitude / cellSize)}`;
+      const cell = cells.get(key) ?? {
+        lngSum: 0, latSum: 0, count: 0,
+        critical: 0, attention: 0, operational: 0,
+        bounds: new mapboxgl.LngLatBounds(),
+      };
+      cell.lngSum += t.current_longitude;
+      cell.latSum += t.current_latitude;
+      cell.count += 1;
+      if (t.is_on_route === false) cell.critical += 1;
+      else if (t.is_stopped) cell.attention += 1;
+      else cell.operational += 1;
+      cell.bounds.extend([t.current_longitude, t.current_latitude]);
+      cells.set(key, cell);
+    });
+
+    const activeKeys = new Set(cells.keys());
+    clusterMarkers.current.forEach((marker, key) => {
+      if (!activeKeys.has(key)) {
+        marker.remove();
+        clusterMarkers.current.delete(key);
+      }
+    });
+
+    cells.forEach((cell, key) => {
+      const center: [number, number] = [cell.lngSum / cell.count, cell.latSum / cell.count];
+      const el = createClusterMarkerElement({
+        count: cell.count,
+        critical: cell.critical,
+        attention: cell.attention,
+        operational: cell.operational,
+      });
+      el.addEventListener('click', () => {
+        if (!map.current) return;
+        if (cell.bounds.isEmpty()) {
+          map.current.flyTo({ center, zoom: VERY_FAR_ZOOM_THRESHOLD + 2, duration: 900 });
+        } else {
+          map.current.fitBounds(cell.bounds, { padding: 120, maxZoom: 14, duration: 900 });
+        }
+      });
+
+      const existing = clusterMarkers.current.get(key);
+      if (existing) {
+        existing.getElement().innerHTML = el.innerHTML;
+        existing.setLngLat(center);
+      } else {
+        const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+          .setLngLat(center)
+          .addTo(map.current!);
+        clusterMarkers.current.set(key, marker);
+      }
+    });
+  }, [trackingData, loading, isVeryFarZoom]);
+
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>), [trackingData]);
+
 
   if (error) return (
     <div className={`relative rounded-xl overflow-hidden bg-secondary/30 flex items-center justify-center ${className}`}>
