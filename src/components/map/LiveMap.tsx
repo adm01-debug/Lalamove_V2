@@ -54,6 +54,7 @@ export function LiveMap({
   const driverMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const markerPositions = useRef<Map<string, { current: [number, number], target: [number, number] }>>(new Map());
   const pointMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
+  const clusterMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const routeLines = useRef<Set<string>>(new Set());
   const animationFrameRef = useRef<number | null>(null);
   
