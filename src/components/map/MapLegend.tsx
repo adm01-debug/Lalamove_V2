@@ -1,6 +1,6 @@
 import { vehicleIcons, vehicleColors } from './types';
 import { motion } from 'framer-motion';
-import { STATUS_PALETTE } from '@/lib/statusPalette';
+import { STATUS_PALETTE, STATUS_GLYPH } from '@/lib/statusPalette';
 
 interface MapLegendProps {
   vehicleCounts: Record<string, number>;
