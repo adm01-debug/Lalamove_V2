@@ -305,6 +305,8 @@ export function LiveMap({
       driverMarkers.current.clear();
       pointMarkers.current.forEach(marker => marker.remove());
       pointMarkers.current.clear();
+      clusterMarkers.current.forEach(marker => marker.remove());
+      clusterMarkers.current.clear();
       routeLines.current.clear();
       if (map.current) {
         if (map.current.getLayer('geofence-fill')) map.current.removeLayer('geofence-fill');
