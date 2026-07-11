@@ -2168,6 +2168,123 @@ export type Database = {
         }
         Relationships: []
       }
+      tracking_events_y2026m07: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m08: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m09: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
       user_devices: {
         Row: {
           browser: string | null
@@ -2755,6 +2872,10 @@ export type Database = {
       cleanup_old_cron_logs: { Args: never; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: number }
       clear_login_attempts: { Args: { p_email: string }; Returns: undefined }
+      ensure_tracking_events_partition: {
+        Args: { p_month: string }
+        Returns: string
+      }
       get_active_uapi_token: {
         Args: never
         Returns: {
@@ -2804,6 +2925,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      provision_tracking_partitions: { Args: never; Returns: Json }
       record_failed_login: {
         Args: { p_email: string; p_ip_address?: unknown }
         Returns: {
