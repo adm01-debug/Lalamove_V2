@@ -5,6 +5,44 @@ import type { TrackingData } from './hooks/useTrackingData';
 
 export type MarkerDensity = 'comfortable' | 'compact';
 
+export interface ClusterInfo {
+  count: number;
+  critical: number;
+  attention: number;
+  operational: number;
+}
+
+/**
+ * Cria o elemento visual de um cluster agregado (usado em zoom muito distante).
+ * A cor dominante prioriza severidade (crítico > atenção > operacional) para
+ * comunicar risco antes mesmo de o operador ampliar o mapa. O tamanho escala
+ * suavemente com a contagem, mantendo legibilidade sem poluir o mapa.
+ */
+export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
+  const { count, critical, attention } = info;
+  const level: StatusLevel = critical > 0 ? 'critical' : attention > 0 ? 'attention' : 'operational';
+  const color = statusHsl(level);
+  const glyph = statusGlyph(level);
+  const a11y = `${count} entregas agrupadas — ${STATUS_A11Y_LABEL[level]}`;
+
+  // Escala logarítmica limitada para evitar bolhas gigantes com muitos itens.
+  const size = Math.round(Math.min(72, 40 + Math.log2(count + 1) * 8));
+  const fontSize = count > 99 ? 15 : 18;
+
+  const el = document.createElement('div');
+  el.className = 'live-map-cluster-marker';
+  el.innerHTML = `
+    <div role="img" aria-label="${a11y}" title="${a11y}" style="position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;inset:-8px;border-radius:50%;background:${statusHsl(level, 0.22)};animation:pulse-glow 2.5s infinite;z-index:-1;"></div>
+      <div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,${color},${statusHsl(level, 0.85)});display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;border:3px solid rgba(255,255,255,0.95);box-shadow:0 8px 28px ${statusHsl(level, 0.5)};font-family:system-ui;line-height:1;">
+        <span style="font-size:${fontSize}px;letter-spacing:-0.5px;">${count}</span>
+        ${critical > 0 || attention > 0 ? `<span aria-hidden="true" style="font-size:10px;opacity:0.9;margin-top:1px;">${glyph}</span>` : ''}
+      </div>
+    </div>`;
+  return el;
+}
+
+
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false, density: MarkerDensity = 'comfortable'): HTMLDivElement {
   const isCompact = density === 'compact';
   const coreSize = isCompact ? 38 : 52;

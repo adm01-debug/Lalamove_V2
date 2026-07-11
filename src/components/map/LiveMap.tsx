@@ -26,7 +26,7 @@ import {
 import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
-import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement } from './markerFactories';
+import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement, createClusterMarkerElement } from './markerFactories';
 import { statusColor as statusHsl } from '@/lib/statusPalette';
 
 
@@ -54,6 +54,7 @@ export function LiveMap({
   const driverMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const markerPositions = useRef<Map<string, { current: [number, number], target: [number, number] }>>(new Map());
   const pointMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
+  const clusterMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const routeLines = useRef<Set<string>>(new Set());
   const animationFrameRef = useRef<number | null>(null);
   
@@ -80,6 +81,9 @@ export function LiveMap({
   // (reduz poluição visual / colisão de rótulos — clustering leve, sem alterar dados).
   const [isFarZoom, setIsFarZoom] = useState(false);
   const FAR_ZOOM_THRESHOLD = 11.5;
+  // Clustering real: em zoom muito distante, agrega motoristas em bolhas com contagem.
+  const [isVeryFarZoom, setIsVeryFarZoom] = useState(false);
+  const VERY_FAR_ZOOM_THRESHOLD = 9.5;
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
@@ -287,8 +291,11 @@ export function LiveMap({
     // evitando re-renders excessivos durante o gesto de zoom.
     const handleZoom = () => {
       if (!map.current) return;
-      const far = map.current.getZoom() < FAR_ZOOM_THRESHOLD;
+      const zoom = map.current.getZoom();
+      const far = zoom < FAR_ZOOM_THRESHOLD;
+      const veryFar = zoom < VERY_FAR_ZOOM_THRESHOLD;
       setIsFarZoom(prev => (prev === far ? prev : far));
+      setIsVeryFarZoom(prev => (prev === veryFar ? prev : veryFar));
     };
     map.current.on('zoomend', handleZoom);
     handleZoom();
@@ -298,6 +305,8 @@ export function LiveMap({
       driverMarkers.current.clear();
       pointMarkers.current.forEach(marker => marker.remove());
       pointMarkers.current.clear();
+      clusterMarkers.current.forEach(marker => marker.remove());
+      clusterMarkers.current.clear();
       routeLines.current.clear();
       if (map.current) {
         if (map.current.getLayer('geofence-fill')) map.current.removeLayer('geofence-fill');
@@ -747,11 +756,103 @@ export function LiveMap({
     }
   }, [trackingData, loading, selectedId, focusMode, markerDensity, isFarZoom]);
 
+  // Clustering real por grade em zoom muito distante:
+  // agrega motoristas em bolhas com contagem e cor por severidade dominante,
+  // ocultando marcadores individuais para eliminar sobreposição massiva.
+  useEffect(() => {
+    if (!map.current || loading) return;
+
+    const clearClusters = () => {
+      clusterMarkers.current.forEach(marker => marker.remove());
+      clusterMarkers.current.clear();
+    };
+
+    const setDriverVisibility = (visible: boolean) => {
+      driverMarkers.current.forEach(marker => {
+        marker.getElement().style.display = visible ? '' : 'none';
+      });
+      pointMarkers.current.forEach(marker => {
+        marker.getElement().style.display = visible ? '' : 'none';
+      });
+    };
+
+    if (!isVeryFarZoom) {
+      clearClusters();
+      setDriverVisibility(true);
+      return;
+    }
+
+    // Oculta marcadores individuais e agrega por célula de grade (~cellSize graus).
+    setDriverVisibility(false);
+
+    const cellSize = 0.06; // ~6km — granularidade equilibrada para visão macro.
+    const cells = new Map<string, {
+      lngSum: number; latSum: number; count: number;
+      critical: number; attention: number; operational: number;
+      bounds: mapboxgl.LngLatBounds;
+    }>();
+
+    trackingData.forEach(t => {
+      const key = `${Math.floor(t.current_longitude / cellSize)}:${Math.floor(t.current_latitude / cellSize)}`;
+      const cell = cells.get(key) ?? {
+        lngSum: 0, latSum: 0, count: 0,
+        critical: 0, attention: 0, operational: 0,
+        bounds: new mapboxgl.LngLatBounds(),
+      };
+      cell.lngSum += t.current_longitude;
+      cell.latSum += t.current_latitude;
+      cell.count += 1;
+      if (t.is_on_route === false) cell.critical += 1;
+      else if (t.is_stopped) cell.attention += 1;
+      else cell.operational += 1;
+      cell.bounds.extend([t.current_longitude, t.current_latitude]);
+      cells.set(key, cell);
+    });
+
+    const activeKeys = new Set(cells.keys());
+    clusterMarkers.current.forEach((marker, key) => {
+      if (!activeKeys.has(key)) {
+        marker.remove();
+        clusterMarkers.current.delete(key);
+      }
+    });
+
+    cells.forEach((cell, key) => {
+      const center: [number, number] = [cell.lngSum / cell.count, cell.latSum / cell.count];
+      const el = createClusterMarkerElement({
+        count: cell.count,
+        critical: cell.critical,
+        attention: cell.attention,
+        operational: cell.operational,
+      });
+      el.addEventListener('click', () => {
+        if (!map.current) return;
+        if (cell.bounds.isEmpty()) {
+          map.current.flyTo({ center, zoom: VERY_FAR_ZOOM_THRESHOLD + 2, duration: 900 });
+        } else {
+          map.current.fitBounds(cell.bounds, { padding: 120, maxZoom: 14, duration: 900 });
+        }
+      });
+
+      const existing = clusterMarkers.current.get(key);
+      if (existing) {
+        existing.getElement().innerHTML = el.innerHTML;
+        existing.setLngLat(center);
+      } else {
+        const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+          .setLngLat(center)
+          .addTo(map.current!);
+        clusterMarkers.current.set(key, marker);
+      }
+    });
+  }, [trackingData, loading, isVeryFarZoom]);
+
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>), [trackingData]);
+
 
   if (error) return (
     <div className={`relative rounded-xl overflow-hidden bg-secondary/30 flex items-center justify-center ${className}`}>
