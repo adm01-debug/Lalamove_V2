@@ -97,7 +97,7 @@ export function IncidentsPage() {
               <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-gradient-to-br from-destructive/20 via-warning/20 to-primary/20 flex items-center justify-center border border-destructive/20 shadow-lg"><AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-destructive" /></div>
             </motion.div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">Incidentes</h1>
+              <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">Incidentes</h2>
               <div className="flex items-center gap-2">
                 <p className="text-xs md:text-sm text-muted-foreground">{openCount} em aberto</p>
                 <div className="md:hidden"><DataRefreshIndicator lastUpdated={lastRefreshed} isRefreshing={isRefreshing} variant="minimal" /></div>

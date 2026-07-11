@@ -147,7 +147,7 @@ export function OrdersPage() {
               </div>
             </div>
             <div className="min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight"><span className="gradient-text">Pedidos</span></h1>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight"><span className="gradient-text">Pedidos</span></h2>
               <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5 sm:gap-2"><Sparkles className="w-3 h-3 text-accent" /><span className="truncate">Gerencie entregas Lalamove</span></p>
             </div>
           </div>

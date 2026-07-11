@@ -34,7 +34,7 @@ export default function UAPISettingsPage() {
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Configurações UAPI</h1>
+        <h2 className="text-2xl font-bold text-foreground">Configurações UAPI</h2>
         <p className="text-muted-foreground">Gerenciamento da conexão com a API não-oficial da Lalamove</p>
       </div>
 

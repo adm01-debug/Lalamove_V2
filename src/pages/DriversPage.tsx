@@ -168,7 +168,7 @@ export function DriversPage() {
               <div className="relative p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/25"><Users className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" /></div>
             </div>
             <div className="min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight"><span className="gradient-text">Motoristas</span></h1>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight"><span className="gradient-text">Motoristas</span></h2>
               <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5 sm:gap-2"><Sparkles className="w-3 h-3 text-accent" /><span className="truncate">Gerenciamento e avaliação</span></p>
             </div>
           </div>

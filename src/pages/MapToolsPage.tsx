@@ -11,10 +11,10 @@ export default function MapToolsPage() {
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-5xl">
       <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Layers className="w-6 h-6 text-primary" />
           Ferramentas de Mapa
-        </h1>
+        </h2>
         <p className="text-muted-foreground">
           Todas as capacidades da API Mapbox disponíveis para logística
         </p>

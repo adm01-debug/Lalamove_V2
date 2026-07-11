@@ -304,9 +304,9 @@ export function AlertsPage() {
               </div>
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-bold">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold">
                 <span className="gradient-text">Central de Alertas</span>
-              </h1>
+              </h2>
               <p className="text-xs sm:text-sm text-muted-foreground hidden sm:flex items-center gap-1.5">
                 <Sparkles className="w-3 h-3 text-accent" />
                 Monitore eventos críticos em tempo real

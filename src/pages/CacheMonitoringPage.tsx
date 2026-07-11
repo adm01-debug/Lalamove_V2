@@ -72,7 +72,7 @@ export function CacheMonitoringPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-1">Monitoramento de Cache</h1>
+          <h2 className="text-3xl font-bold text-foreground mb-1">Monitoramento de Cache</h2>
           <p className="text-sm text-muted-foreground">Status em tempo real das tabelas monitoradas</p>
         </div>
         <Button onClick={handleRefreshAll} disabled={refreshCache.isPending} className="gap-2">

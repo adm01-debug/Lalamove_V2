@@ -189,10 +189,10 @@ export function GeoBlockingPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h2 className="text-3xl font-bold flex items-center gap-2">
             <Globe className="h-8 w-8 text-primary" />
             Bloqueio Geográfico
-          </h1>
+          </h2>
           <p className="text-muted-foreground mt-1">
             Gerencie a whitelist de países permitidos para acesso ao sistema
           </p>

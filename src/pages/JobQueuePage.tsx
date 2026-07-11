@@ -116,7 +116,7 @@ export default function JobQueuePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Fila de Jobs</h1>
+          <h2 className="text-3xl font-bold">Fila de Jobs</h2>
           <p className="text-muted-foreground">
             Monitoramento e gerenciamento da fila assíncrona
           </p>

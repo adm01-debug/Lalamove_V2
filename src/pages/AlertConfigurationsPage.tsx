@@ -26,7 +26,7 @@ export function AlertConfigurationsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight"><span className="gradient-text">Configurações</span> de Alertas</h1>
+          <h2 className="text-3xl font-bold tracking-tight"><span className="gradient-text">Configurações</span> de Alertas</h2>
           <p className="text-muted-foreground">Gerencie os canais de notificação e templates para cada tipo de alerta</p>
         </div>
         <div className="flex items-center gap-3"><Badge variant="gradient" size="lg" className="gap-1.5"><Bell className="w-4 h-4" />{configs?.filter(c => c.is_enabled).length || 0} ativos</Badge></div>

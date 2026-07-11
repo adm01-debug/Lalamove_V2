@@ -71,10 +71,10 @@ export default function ExternalDataPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Database className="w-6 h-6 text-primary" />
           Base de Dados CRM
-        </h1>
+        </h2>
         <p className="text-muted-foreground mt-1">
           Consulte empresas, clientes, fornecedores, transportadoras e contatos
         </p>

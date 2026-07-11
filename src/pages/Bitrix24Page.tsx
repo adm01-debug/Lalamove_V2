@@ -31,7 +31,7 @@ export default function Bitrix24Page() {
 
   return (
     <div className="space-y-6">
-      <div><h1 className="text-2xl font-bold text-foreground">Integração Bitrix24</h1><p className="text-muted-foreground">Sincronize pedidos Lalamove com deals do Bitrix24</p></div>
+      <div><h2 className="text-2xl font-bold text-foreground">Integração Bitrix24</h2><p className="text-muted-foreground">Sincronize pedidos Lalamove com deals do Bitrix24</p></div>
 
       <Card>
         <CardHeader><CardTitle className="flex items-center gap-2"><Link2 className="h-5 w-5" />Status da Conexão</CardTitle></CardHeader>

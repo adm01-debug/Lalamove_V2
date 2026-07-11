@@ -107,10 +107,10 @@ export default function LalamoveSettingsPage() {
   return (
     <div className="p-4 md:p-6 space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Zap className="w-6 h-6 text-primary" />
           Lalamove — Configurações
-        </h1>
+        </h2>
         <p className="text-muted-foreground">Gerenciamento das conexões com as APIs da Lalamove</p>
       </div>
 

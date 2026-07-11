@@ -186,7 +186,7 @@ export function EvaluationsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Histórico de Avaliações</h1>
+          <h2 className="text-3xl font-bold">Histórico de Avaliações</h2>
           <p className="text-muted-foreground">
             Visualize todas as avaliações automáticas de motoristas
           </p>

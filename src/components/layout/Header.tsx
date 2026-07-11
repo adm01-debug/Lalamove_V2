@@ -138,9 +138,9 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-base md:text-xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">
+              <h1 className="text-base md:text-xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">
                 {title}
-              </h2>
+              </h1>
               {subtitle && (
                 <p className="text-xs md:text-sm text-muted-foreground truncate hidden sm:block">{subtitle}</p>
               )}

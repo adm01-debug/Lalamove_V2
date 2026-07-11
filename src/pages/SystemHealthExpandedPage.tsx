@@ -118,7 +118,7 @@ export default function SystemHealthExpandedPage() {
         <div>
           <div className="flex items-center gap-3">
             {getStatusIcon(health.overall)}
-            <h1 className="text-3xl font-bold">System Health</h1>
+            <h2 className="text-3xl font-bold">System Health</h2>
             {getStatusBadge(health.overall)}
           </div>
           <p className="text-muted-foreground mt-1">

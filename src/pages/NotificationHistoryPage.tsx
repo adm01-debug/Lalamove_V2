@@ -303,7 +303,7 @@ export function NotificationHistoryPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Histórico de Notificações</h1>
+          <h2 className="text-2xl font-bold text-foreground">Histórico de Notificações</h2>
           <p className="text-muted-foreground">
             Acompanhe o status de entrega das notificações enviadas
           </p>

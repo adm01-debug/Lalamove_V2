@@ -117,10 +117,10 @@ export default function IPWhitelistPage() {
       <div className="container mx-auto p-6 space-y-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
+            <h2 className="text-3xl font-bold flex items-center gap-3">
               <div className="p-2 rounded-xl bg-success/10 border border-success/20"><Shield className="h-6 w-6 text-success" /></div>
               IP Whitelist
-            </h1>
+            </h2>
             <p className="text-muted-foreground mt-1">Gerencie IPs permitidos para acesso ao sistema</p>
           </div>
           <div className="flex gap-2">

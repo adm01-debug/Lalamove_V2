@@ -136,7 +136,7 @@ export default function RateLimitDashboardPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Rate Limiting & Proteção</h1>
+            <h2 className="text-2xl font-bold">Rate Limiting & Proteção</h2>
             <p className="text-muted-foreground">Monitore e controle o acesso à API</p>
           </div>
           <div className="flex gap-2">

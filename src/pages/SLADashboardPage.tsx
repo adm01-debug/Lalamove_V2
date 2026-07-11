@@ -84,7 +84,7 @@ export function SLADashboardPage() {
             <Activity className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Dashboard SLA</h1>
+            <h2 className="text-2xl font-bold text-foreground">Dashboard SLA</h2>
             <p className="text-sm text-muted-foreground">Métricas de performance em tempo real</p>
           </div>
         </div>

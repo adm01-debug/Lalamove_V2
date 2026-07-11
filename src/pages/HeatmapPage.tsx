@@ -85,7 +85,7 @@ export function HeatmapPage() {
             <div className="relative p-3 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 shadow-lg"><Flame className="w-6 h-6 text-white" /></div>
           </motion.div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Mapa de Calor</h1>
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Mapa de Calor</h2>
             <p className="text-sm text-muted-foreground flex items-center gap-2"><Zap className="w-3 h-3 text-primary" />Visualização em tempo real das zonas de maior atividade</p>
           </div>
         </div>

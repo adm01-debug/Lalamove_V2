@@ -48,7 +48,7 @@ export default function CacheStatusPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Cache System Status</h1>
+          <h2 className="text-3xl font-bold">Cache System Status</h2>
           <p className="text-muted-foreground">Sistema de cache com materialized views para performance otimizada</p>
         </div>
         <Button onClick={handleRefreshAll} disabled={isRefreshing} size="lg">

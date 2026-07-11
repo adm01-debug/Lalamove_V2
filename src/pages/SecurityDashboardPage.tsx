@@ -61,10 +61,10 @@ export default function SecurityDashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
             <Shield className="h-7 w-7 text-primary" />
             Central de Segurança
-          </h1>
+          </h2>
           <p className="text-muted-foreground">Monitore e gerencie a segurança do sistema</p>
         </div>
       </div>
