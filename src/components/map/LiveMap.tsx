@@ -470,6 +470,9 @@ export function LiveMap({
   useEffect(() => {
     if (!map.current || loading) return;
     const currentIds = new Set(trackingData.map(t => t.id));
+    // Em zoom afastado, colapsa marcadores para compacto (des-clutter automático).
+    const effectiveDensity = isFarZoom ? 'compact' : markerDensity;
+
 
     // Cleanup logic
     driverMarkers.current.forEach((marker, id) => {
