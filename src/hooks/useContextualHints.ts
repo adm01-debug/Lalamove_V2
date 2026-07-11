@@ -199,7 +199,7 @@ export function useContextualHints() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [location.pathname, showHint, isHintDismissed, isMobile]);
+  }, [location.pathname, showHint, isHintDismissed, isMobile, primaryRole, rolesLoading]);
 }
 
 // Export predefined page-specific hints for manual triggering
