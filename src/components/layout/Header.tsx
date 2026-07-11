@@ -141,7 +141,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
 
         {/* Right section: Actions */}
         <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
-          {/* Search - Desktop only */}
+          {/* Command Palette Trigger - Desktop only */}
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -149,16 +149,21 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
             className="relative hidden lg:block group"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-info/10 rounded-xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
-            <Input 
-              placeholder="Buscar (Ctrl+K)"
-              className="w-56 xl:w-72 pl-10 bg-secondary/30 border-border/30 rounded-xl backdrop-blur-sm focus:bg-secondary/50 focus:border-primary/30 focus:ring-2 focus:ring-primary/10 transition-all duration-200"
-              readOnly
-              onClick={() => {
-                // Trigger Ctrl+K
-                window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
-              }}
-            />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-hover:text-primary group-focus-within:text-primary transition-colors duration-200 pointer-events-none" />
+            <button
+              type="button"
+              aria-label="Abrir busca e navegação rápida (Ctrl+K)"
+              onClick={openCommandPalette}
+              className="w-56 xl:w-72 h-10 pl-10 pr-16 text-left text-sm text-muted-foreground bg-secondary/30 border border-border/30 rounded-xl backdrop-blur-sm hover:bg-secondary/50 hover:border-primary/30 focus:bg-secondary/50 focus:border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-none transition-all duration-200"
+            >
+              Buscar em tudo…
+            </button>
+            <kbd
+              aria-hidden="true"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-0.5 rounded-md border border-border/50 bg-background/60 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-muted-foreground"
+            >
+              {shortcutSymbol}K
+            </kbd>
           </motion.div>
 
           {/* Theme Dropdown */}
