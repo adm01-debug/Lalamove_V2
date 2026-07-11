@@ -291,8 +291,11 @@ export function LiveMap({
     // evitando re-renders excessivos durante o gesto de zoom.
     const handleZoom = () => {
       if (!map.current) return;
-      const far = map.current.getZoom() < FAR_ZOOM_THRESHOLD;
+      const zoom = map.current.getZoom();
+      const far = zoom < FAR_ZOOM_THRESHOLD;
+      const veryFar = zoom < VERY_FAR_ZOOM_THRESHOLD;
       setIsFarZoom(prev => (prev === far ? prev : far));
+      setIsVeryFarZoom(prev => (prev === veryFar ? prev : veryFar));
     };
     map.current.on('zoomend', handleZoom);
     handleZoom();
