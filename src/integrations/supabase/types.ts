@@ -2926,6 +2926,10 @@ export type Database = {
         }[]
       }
       provision_tracking_partitions: { Args: never; Returns: Json }
+      prune_tracking_events_partitions: {
+        Args: { p_retention_months?: number }
+        Returns: Json
+      }
       record_failed_login: {
         Args: { p_email: string; p_ip_address?: unknown }
         Returns: {
