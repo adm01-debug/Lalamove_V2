@@ -829,6 +829,7 @@ export function LiveMap({
         critical: cell.critical,
         attention: cell.attention,
         operational: cell.operational,
+        byVehicle: cell.byVehicle,
       });
       el.addEventListener('click', () => {
         if (!map.current) return;
