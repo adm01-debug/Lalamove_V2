@@ -1,6 +1,6 @@
 import { vehicleIcons, vehicleColors } from './types';
 import { motion } from 'framer-motion';
-import { STATUS_PALETTE } from '@/lib/statusPalette';
+import { STATUS_PALETTE, STATUS_GLYPH } from '@/lib/statusPalette';
 
 interface MapLegendProps {
   vehicleCounts: Record<string, number>;
@@ -19,9 +19,12 @@ export function MapLegend({ vehicleCounts }: MapLegendProps) {
           const status = STATUS_PALETTE[level];
           return (
             <div key={level} className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full ${status.bg.replace('/15', '')} ${status.glow} ${level !== 'operational' ? 'animate-pulse' : ''}`}
-              />
+              <span
+                aria-hidden="true"
+                className={`flex items-center justify-center w-3.5 h-3.5 text-[9px] leading-none font-black ${status.text} ${level !== 'operational' ? 'animate-pulse' : ''}`}
+              >
+                {STATUS_GLYPH[level]}
+              </span>
               <span className="text-[10px] font-black uppercase tracking-widest text-foreground/80">
                 {status.label}
               </span>
