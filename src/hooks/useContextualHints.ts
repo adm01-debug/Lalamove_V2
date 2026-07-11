@@ -2,6 +2,39 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useHints, commonHints } from '@/components/ui/contextual-hints';
 import { useIsMobile } from './use-mobile';
+import { usePermissions, type AppRole } from './usePermissions';
+
+/**
+ * Onboarding contextual por role (RBAC).
+ * Cada perfil recebe uma dica inicial alinhada às suas responsabilidades e
+ * permissões — evitando orientar o usuário para ações que ele não pode executar.
+ */
+const ROLE_ONBOARDING: Record<AppRole, { title: string; description: string; variant: 'feature' | 'info' | 'tip' | 'warning' }> = {
+  admin: {
+    title: 'Bem-vindo, Administrador 🛡️',
+    description: 'Você tem acesso total: gestão de usuários, roles, segurança e configurações do sistema. Comece pelo painel de Administração.',
+    variant: 'feature',
+  },
+  manager: {
+    title: 'Bem-vindo, Gestor 📊',
+    description: 'Acompanhe aprovações, avaliações de motoristas e métricas operacionais. Priorize a fila de aprovações pendentes.',
+    variant: 'feature',
+  },
+  operator: {
+    title: 'Bem-vindo, Operador 🚚',
+    description: 'Monitore entregas e o mapa em tempo real. Dados sensíveis (PII) ficam restritos ao seu perfil.',
+    variant: 'info',
+  },
+  viewer: {
+    title: 'Bem-vindo, Visualizador 👁️',
+    description: 'Seu acesso é somente leitura. Explore dashboards e relatórios sem risco de alterar dados.',
+    variant: 'tip',
+  },
+};
+
+// Prioridade de exibição quando o usuário acumula múltiplas roles.
+const ROLE_PRIORITY: AppRole[] = ['admin', 'manager', 'operator', 'viewer'];
+
 
 /**
  * Hook that shows contextual hints based on the current page and user context
@@ -10,15 +43,38 @@ export function useContextualHints() {
   const location = useLocation();
   const { showHint, isHintDismissed } = useHints();
   const isMobile = useIsMobile();
+  const { userRoles, isLoading: rolesLoading } = usePermissions();
+
+  // Role de maior privilégio do usuário (determina o onboarding contextual).
+  const primaryRole: AppRole | null = ROLE_PRIORITY.find(
+    role => userRoles?.some(r => r.role === role && r.is_active),
+  ) ?? null;
 
   useEffect(() => {
+    // Aguarda o carregamento das roles para não exibir onboarding genérico antes de conhecer o perfil.
+    if (rolesLoading) return;
+
     // Small delay to let the page render first
     const timer = setTimeout(() => {
       const path = location.pathname;
 
       // Dashboard hints
       if (path === '/' || path === '/dashboard') {
-        if (!isHintDismissed('dashboard-welcome')) {
+        // Onboarding contextual por role tem prioridade sobre o boas-vindas genérico.
+        if (primaryRole) {
+          const onboardingId = `onboarding-role-${primaryRole}`;
+          if (!isHintDismissed(onboardingId)) {
+            const config = ROLE_ONBOARDING[primaryRole];
+            showHint({
+              id: onboardingId,
+              title: config.title,
+              description: config.description,
+              variant: config.variant,
+              showOnce: true,
+              delay: 1500,
+            });
+          }
+        } else if (!isHintDismissed('dashboard-welcome')) {
           showHint({
             id: 'dashboard-welcome',
             title: 'Bem-vindo ao Dashboard! 👋',
@@ -143,7 +199,7 @@ export function useContextualHints() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [location.pathname, showHint, isHintDismissed, isMobile]);
+  }, [location.pathname, showHint, isHintDismissed, isMobile, primaryRole, rolesLoading]);
 }
 
 // Export predefined page-specific hints for manual triggering
