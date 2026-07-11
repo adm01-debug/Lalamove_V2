@@ -76,6 +76,10 @@ export function LiveMap({
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
+  // Densidade adaptativa por zoom: em visão afastada, força marcadores compactos
+  // (reduz poluição visual / colisão de rótulos — clustering leve, sem alterar dados).
+  const [isFarZoom, setIsFarZoom] = useState(false);
+  const FAR_ZOOM_THRESHOLD = 11.5;
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
