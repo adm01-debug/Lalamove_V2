@@ -79,10 +79,10 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
             ${tracking.driver?.name?.split(' ')[0].toUpperCase() || 'DRIVER'}
           </div>
           ${tracking.is_stopped ? `
-            <div style="font-size:9px;color:${statusHsl('attention')};font-weight:900;background:${statusHsl('attention',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('attention',0.2)};">PARADO</div>
+            <div style="font-size:9px;color:${statusHsl('attention')};font-weight:900;background:${statusHsl('attention',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('attention',0.2)};"><span aria-hidden="true">${statusGlyph('attention')}</span> PARADO</div>
           ` : ''}
           ${tracking.is_on_route === false ? `
-            <div style="font-size:9px;color:${statusHsl('critical')};font-weight:900;background:${statusHsl('critical',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('critical',0.2)};">FORA DE ROTA</div>
+            <div style="font-size:9px;color:${statusHsl('critical')};font-weight:900;background:${statusHsl('critical',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('critical',0.2)};"><span aria-hidden="true">${statusGlyph('critical')}</span> FORA DE ROTA</div>
           ` : ''}
         </div>
       </div>
