@@ -75,10 +75,10 @@ export function createPickupMarkerElement(tracking: TrackingData): HTMLDivElemen
   const locationName = tracking.order?.pickup_address?.split(',')[0] || 'Coleta';
   el.innerHTML = `
     <div style="position:relative;cursor:pointer;">
-      <div style="width:36px;height:36px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(16,185,129,0.4);border:2px solid white;">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,${statusHsl('operational')},${statusHsl('operational',0.85)});border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px ${statusHsl('operational',0.4)};border:2px solid white;">
         <span style="transform:rotate(45deg);font-size:16px;">📦</span>
       </div>
-      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
+      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('operational')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
     </div>`;
   return el;
 }
@@ -90,12 +90,12 @@ export function createDeliveryMarkerElement(tracking: TrackingData): HTMLDivElem
   el.innerHTML = `
     <div style="position:relative;cursor:pointer;">
       <!-- Delivery Geofence Visual (Stage 13) -->
-      <div class="delivery-geofence-pulse" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:rgba(244,63,94,0.1);border:2px dashed rgba(244,63,94,0.3);border-radius:50%;z-index:-1;animation:geofence-pulse 4s infinite;"></div>
+      <div class="delivery-geofence-pulse" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:${statusHsl('critical',0.1)};border:2px dashed ${statusHsl('critical',0.3)};border-radius:50%;z-index:-1;animation:geofence-pulse 4s infinite;"></div>
       
-      <div style="width:36px;height:36px;background:linear-gradient(135deg,#f43f5e,#e11d48);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(244,63,94,0.4);border:2px solid white;">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,${statusHsl('critical')},${statusHsl('critical',0.85)});border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px ${statusHsl('critical',0.4)};border:2px solid white;">
         <span style="transform:rotate(45deg);font-size:16px;">📍</span>
       </div>
-      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:#f43f5e;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
+      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('critical')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
     </div>`;
   return el;
 }
@@ -147,16 +147,16 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
       <div style="margin-bottom:12px;">
         <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
           <span style="font-size:14px;">📦</span>
-          <div><div style="font-size:10px;color:#10b981;font-weight:600;">COLETA</div><div style="font-size:12px;color:#ddd;">${pickupAddress}</div></div>
+          <div><div style="font-size:10px;color:${statusHsl('operational')};font-weight:600;">COLETA</div><div style="font-size:12px;color:#ddd;">${pickupAddress}</div></div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:8px;">
           <span style="font-size:14px;">📍</span>
-          <div><div style="font-size:10px;color:#f43f5e;font-weight:600;">ENTREGA</div><div style="font-size:12px;color:#ddd;">${deliveryAddress}</div></div>
+          <div><div style="font-size:10px;color:${statusHsl('critical')};font-weight:600;">ENTREGA</div><div style="font-size:12px;color:#ddd;">${deliveryAddress}</div></div>
         </div>
       </div>
       <div style="display:flex;gap:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
         <div><div style="font-size:10px;color:#888;">VELOCIDADE</div><div style="font-size:14px;font-weight:700;">${speed}</div></div>
-        <div><div style="font-size:10px;color:#888;">ETA</div><div style="font-size:14px;font-weight:700;color:#00d9ff;">${eta}</div></div>
+        <div><div style="font-size:10px;color:#888;">ETA</div><div style="font-size:14px;font-weight:700;color:${statusHsl('info')};">${eta}</div></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px;">
         <button onclick="window.dispatchEvent(new CustomEvent('show-driver-history',{detail:{driverId:'${tracking.driver_id}',orderId:'${tracking.order_id}',driverName:'${driverName}'}}))" style="flex:1;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📍 Trajeto</button>
