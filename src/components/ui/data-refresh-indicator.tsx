@@ -164,8 +164,8 @@ function FloatingVariant({ error, isRefreshing, isOnline, onRefresh, timeAgo, qu
         {showCountdown && autoRefreshInterval && !paused && <div className="mt-2"><Progress value={((autoRefreshInterval - countdown) / autoRefreshInterval) * 100} className="h-1" /></div>}
       </div>
       <div className="flex items-center gap-1">
-        {onPauseToggle && <Button variant="ghost" size="icon" onClick={onPauseToggle} className="h-8 w-8">{paused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}</Button>}
-        {onRefresh && <Button variant="ghost" size="icon" onClick={onRefresh} disabled={isRefreshing} className="h-8 w-8"><RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} /></Button>}
+        {onPauseToggle && <Button variant="ghost" size="icon" aria-label={paused ? "Retomar atualização" : "Pausar atualização"} onClick={onPauseToggle} className="h-8 w-8">{paused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}</Button>}
+        {onRefresh && <Button variant="ghost" size="icon" aria-label="Atualizar agora" onClick={onRefresh} disabled={isRefreshing} className="h-8 w-8"><RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} /></Button>}
       </div>
     </motion.div>
   );
@@ -208,7 +208,7 @@ function FullVariant({ error, isRefreshing, isOnline, onRefresh, timeAgo, qualit
         {onPauseToggle && <Button variant="ghost" size="sm" onClick={onPauseToggle} className="gap-1.5">{paused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}{paused ? "Retomar" : "Pausar"}</Button>}
         {onRefresh && <Button variant={error ? "destructive" : "outline"} size="sm" onClick={onRefresh} disabled={isRefreshing} className="gap-2"><RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />{isRefreshing ? "Atualizando..." : error ? "Tentar novamente" : "Atualizar"}</Button>}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><Settings className="w-4 h-4" /></Button></DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Configurações de atualização" className="h-8 w-8"><Settings className="w-4 h-4" /></Button></DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Configurações de sync</DropdownMenuLabel>
             <DropdownMenuSeparator />

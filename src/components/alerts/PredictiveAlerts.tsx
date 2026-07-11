@@ -112,7 +112,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
             )}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={refresh} disabled={isRefreshing}>
+                <Button variant="ghost" size="icon" aria-label="Atualizar previsões" className="h-8 w-8" onClick={refresh} disabled={isRefreshing}>
                   <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />
                 </Button>
               </TooltipTrigger>

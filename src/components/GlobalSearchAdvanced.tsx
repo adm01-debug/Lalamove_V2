@@ -31,7 +31,7 @@ export function GlobalSearchAdvanced({ open, onOpenChange }: GlobalSearchAdvance
             <Search className="w-5 h-5 text-muted-foreground shrink-0" />
             <Input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar pedidos, motoristas, alertas..." className="border-0 bg-transparent focus-visible:ring-0 text-lg" />
             {isLoading && <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />}
-            {query && !isLoading && <Button variant="ghost" size="icon" className="shrink-0" onClick={() => setQuery("")}><X className="w-4 h-4" /></Button>}
+            {query && !isLoading && <Button variant="ghost" size="icon" aria-label="Limpar busca" className="shrink-0" onClick={() => setQuery("")}><X className="w-4 h-4" /></Button>}
           </div>
           <div className="flex items-center gap-2 mt-3">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
@@ -131,7 +131,7 @@ function ResultItem({ result, isSelected, isFavorite, onSelect, onToggleFavorite
         {result.subtitle && <p className="text-xs text-muted-foreground truncate">{result.subtitle}</p>}
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}><Star className={cn("w-3.5 h-3.5", isFavorite && "fill-amber-400 text-amber-400")} /></Button>
+        <Button variant="ghost" size="icon" aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} className="h-7 w-7" onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}><Star className={cn("w-3.5 h-3.5", isFavorite && "fill-amber-400 text-amber-400")} /></Button>
         <ArrowRight className="w-4 h-4 text-muted-foreground" />
       </div>
     </div>
