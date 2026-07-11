@@ -760,8 +760,7 @@
       outline: none;
       box-shadow: none;
     }
-  }
-    
+
     button:active,
     [role="button"]:active,
     a:active {
