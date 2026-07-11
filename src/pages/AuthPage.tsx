@@ -144,25 +144,80 @@ export function AuthPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-dvh flex bg-background">
+      {/* Painel esquerdo — hero "control tower" (dark) */}
+      <aside
+        className="relative hidden lg:flex lg:w-1/2 flex-col justify-between overflow-hidden p-12 text-white"
+        style={{ background: 'radial-gradient(circle at 30% 20%, hsl(222 47% 11%), hsl(222 47% 5%))' }}
+        aria-hidden="true"
+      >
+        {/* grade decorativa */}
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              'linear-gradient(hsl(199 89% 48% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(199 89% 48% / 0.4) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
+        {/* halos */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl" style={{ background: 'hsl(199 89% 48% / 0.18)' }} />
+        <div className="absolute bottom-0 -left-20 w-80 h-80 rounded-full blur-3xl" style={{ background: 'hsl(142 71% 45% / 0.12)' }} />
+
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'hsl(199 89% 48% / 0.15)', border: '1px solid hsl(199 89% 48% / 0.3)' }}>
+            <Radar className="w-6 h-6" style={{ color: 'hsl(199 89% 48%)' }} />
+          </div>
+          <div>
+            <p className="font-bold text-lg leading-tight">Lalamove Intelligence Hub</p>
+            <p className="text-xs text-white/60">Torre de controle logística</p>
+          </div>
+        </div>
+
+        <div className="relative z-10 max-w-md space-y-6">
+          <h2 className="text-3xl font-bold leading-tight">
+            Monitore cada entrega em <span style={{ color: 'hsl(199 89% 60%)' }}>tempo real</span>.
+          </h2>
+          <p className="text-white/70 text-sm leading-relaxed">
+            Rastreamento ao vivo, triagem de motoristas e alertas inteligentes em um só painel.
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { icon: Navigation, label: 'Rastreamento ao vivo', tint: '199 89% 48%' },
+              { icon: ShieldCheck, label: 'Triagem de risco', tint: '142 71% 45%' },
+              { icon: Activity, label: 'Alertas em tempo real', tint: '38 92% 50%' },
+              { icon: MapPin, label: 'Prova de entrega', tint: '199 89% 48%' },
+            ].map(({ icon: Icon, label, tint }) => (
+              <div key={label} className="flex items-center gap-2.5 rounded-lg p-3" style={{ background: 'hsl(0 0% 100% / 0.04)', border: '1px solid hsl(0 0% 100% / 0.08)' }}>
+                <Icon className="w-4 h-4 shrink-0" style={{ color: `hsl(${tint})` }} />
+                <span className="text-xs font-medium text-white/85">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="relative z-10 text-xs text-white/40">Promo Brindes © {new Date().getFullYear()}</p>
+      </aside>
+
+      {/* Painel direito — formulário */}
+      <main className="flex-1 flex items-center justify-center p-4 lg:p-8">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-16 h-16 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
             <Truck className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold gradient-text">Lalamove Intelligence</h1>
+          <h1 className="text-2xl font-bold text-foreground">Lalamove Intelligence</h1>
           <p className="text-muted-foreground text-sm mt-1">Sistema de gestão de entregas</p>
         </div>
 
-        <Card className="glass-card border-border/50">
           <CardHeader className="text-center pb-2">
             <CardTitle>Bem-vindo</CardTitle>
             <CardDescription>Entre na sua conta ou crie uma nova</CardDescription>
