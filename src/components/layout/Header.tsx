@@ -220,6 +220,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
                 variant="ghost" 
                 size="icon" 
                 className="relative rounded-xl bg-secondary/30 border border-border/30 hover:bg-secondary/50 hover:border-primary/30 transition-all duration-200 h-10 w-10"
+                aria-label={unreadCount > 0 ? `Notificações (${unreadCount} não lidas)` : 'Notificações'}
               >
                 <Bell className="w-5 h-5 text-muted-foreground" />
                 {unreadCount > 0 && (
