@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 import { vehicleIcons, vehicleColors } from './types';
-import { statusColor as statusHsl } from '@/lib/statusPalette';
+import { statusColor as statusHsl, statusGlyph, STATUS_A11Y_LABEL, type StatusLevel } from '@/lib/statusPalette';
 import type { TrackingData } from './hooks/useTrackingData';
 
 export function createDriverMarkerElement(tracking: TrackingData, isSelected: boolean = false): HTMLDivElement {
