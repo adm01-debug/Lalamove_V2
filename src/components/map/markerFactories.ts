@@ -30,6 +30,17 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
   const glyph = statusGlyph(statusLevel);
   const statusA11y = STATUS_A11Y_LABEL[statusLevel];
 
+  // Aplica alpha de forma segura tanto em cores hex (#rrggbb) quanto hsl(...).
+  const fade = (color: string, alpha: number): string => {
+    if (color.startsWith('hsl')) {
+      return color.replace(/^hsl\(/, 'hsla(').replace(/\)$/, ` / ${alpha})`);
+    }
+    const hex = Math.round(Math.min(Math.max(alpha, 0), 1) * 255)
+      .toString(16)
+      .padStart(2, '0');
+    return `${color}${hex}`;
+  };
+
   const icon = vehicleIcons[vehicleType] || '🚗';
   const speed = tracking.speed || 0;
   const heading = tracking.heading || 0;
