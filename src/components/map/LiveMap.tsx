@@ -564,7 +564,7 @@ export function LiveMap({
           markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
         }
         
-        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
+        const el = createDriverMarkerElement(tracking, isSelected, effectiveDensity);
         existingDriverMarker.getElement().innerHTML = el.innerHTML;
         existingDriverMarker.getElement().className = el.className + (offRouteAlerts.has(tracking.id) ? ' deviated-marker' : '');
         
@@ -576,7 +576,7 @@ export function LiveMap({
           existingDriverMarker.setPopup(createDriverPopup(tracking));
         }
       } else {
-        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
+        const el = createDriverMarkerElement(tracking, isSelected, effectiveDensity);
         if (offRouteAlerts.has(tracking.id)) el.classList.add('deviated-marker');
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
           .setLngLat(targetPos)
@@ -745,7 +745,7 @@ export function LiveMap({
       trackingData.forEach(t => bounds.extend([t.current_longitude, t.current_latitude]));
       if (!bounds.isEmpty()) map.current.fitBounds(bounds, { padding: 100, maxZoom: 14 });
     }
-  }, [trackingData, loading, selectedId, focusMode, markerDensity]);
+  }, [trackingData, loading, selectedId, focusMode, markerDensity, isFarZoom]);
 
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
