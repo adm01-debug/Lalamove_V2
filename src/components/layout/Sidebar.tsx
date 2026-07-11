@@ -182,7 +182,7 @@ export function Sidebar() {
         <div className="p-3 border-t border-border/30">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} className="w-full justify-center bg-secondary/30 hover:bg-secondary/50 rounded-lg">
+              <Button variant="ghost" size="sm" onClick={() => setCollapsed(!collapsed)} aria-label={collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'} className="w-full justify-center bg-secondary/30 hover:bg-secondary/50 rounded-lg">
                 <motion.div animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.3 }}><ChevronLeft className="w-4 h-4" /></motion.div>
                 <AnimatePresence>{!collapsed && <motion.span initial={{ opacity: 0, width: 0 }} animate={{ opacity: 1, width: "auto" }} exit={{ opacity: 0, width: 0 }} className="ml-2 text-sm">Recolher</motion.span>}</AnimatePresence>
               </Button>
