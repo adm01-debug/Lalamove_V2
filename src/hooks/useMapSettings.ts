@@ -2,10 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@/integrations/supabase/client';
 
+export type MarkerDensity = 'comfortable' | 'compact';
+
 interface MapSettingsState {
   offRouteThreshold: number; // meters
   stoppedThreshold: number; // minutes
   geofenceRadius: number; // meters
+  markerDensity: MarkerDensity; // visual density of driver markers
+  
   
   // Persistence by context (region/type)
   contextSettings: Record<string, {
