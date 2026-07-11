@@ -2886,6 +2886,21 @@ export type Database = {
           user_fid: string
         }[]
       }
+      get_cron_jobs_health: {
+        Args: { p_runs_window?: number }
+        Returns: {
+          active: boolean
+          failed_runs: number
+          failure_rate: number
+          jobid: number
+          jobname: string
+          last_run_duration_ms: number
+          last_run_started: string
+          last_status: string
+          runs_considered: number
+          schedule: string
+        }[]
+      }
       get_user_permissions: {
         Args: { _user_id: string }
         Returns: {
