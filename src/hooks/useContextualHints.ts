@@ -43,15 +43,38 @@ export function useContextualHints() {
   const location = useLocation();
   const { showHint, isHintDismissed } = useHints();
   const isMobile = useIsMobile();
+  const { userRoles, isLoading: rolesLoading } = usePermissions();
+
+  // Role de maior privilégio do usuário (determina o onboarding contextual).
+  const primaryRole: AppRole | null = ROLE_PRIORITY.find(
+    role => userRoles?.some(r => r.role === role && r.is_active),
+  ) ?? null;
 
   useEffect(() => {
+    // Aguarda o carregamento das roles para não exibir onboarding genérico antes de conhecer o perfil.
+    if (rolesLoading) return;
+
     // Small delay to let the page render first
     const timer = setTimeout(() => {
       const path = location.pathname;
 
       // Dashboard hints
       if (path === '/' || path === '/dashboard') {
-        if (!isHintDismissed('dashboard-welcome')) {
+        // Onboarding contextual por role tem prioridade sobre o boas-vindas genérico.
+        if (primaryRole) {
+          const onboardingId = `onboarding-role-${primaryRole}`;
+          if (!isHintDismissed(onboardingId)) {
+            const config = ROLE_ONBOARDING[primaryRole];
+            showHint({
+              id: onboardingId,
+              title: config.title,
+              description: config.description,
+              variant: config.variant,
+              showOnce: true,
+              delay: 1500,
+            });
+          }
+        } else if (!isHintDismissed('dashboard-welcome')) {
           showHint({
             id: 'dashboard-welcome',
             title: 'Bem-vindo ao Dashboard! 👋',
