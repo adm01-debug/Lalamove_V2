@@ -130,7 +130,7 @@ export function MapHUD({
               <motion.div 
                 initial={{ height: 0, opacity: 0, y: -10 }}
                 animate={{ height: 'auto', opacity: 1, y: 0 }}
-                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex flex-col gap-2 shadow-[0_0_20px_rgba(239,68,68,0.3)] relative overflow-hidden"
+                className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex flex-col gap-2 glow-destructive relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-destructive/5 animate-pulse" />
                 <div className="flex items-center gap-3 relative z-10">
