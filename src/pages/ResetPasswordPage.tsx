@@ -91,7 +91,7 @@ export default function ResetPasswordPage() {
 
   if (isValidSession === null) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-dvh bg-background flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
 
   if (!isValidSession) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-dvh bg-background flex items-center justify-center p-4 relative overflow-hidden">
         <div className="absolute inset-0 mesh-gradient opacity-50" />
         <div className="absolute inset-0 noise" />
 
@@ -125,7 +125,7 @@ export default function ResetPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-dvh bg-background flex items-center justify-center p-4 relative overflow-hidden">
         <div className="absolute inset-0 mesh-gradient opacity-50" />
         <div className="absolute inset-0 noise" />
 
@@ -156,7 +156,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-dvh bg-background flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 mesh-gradient opacity-50" />
       <div className="absolute inset-0 noise" />
 
