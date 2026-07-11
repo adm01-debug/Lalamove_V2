@@ -12,16 +12,23 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
   let statusColor = baseColor;
   let pulseColor = baseColor;
   let animation = 'pulse-glow 2s infinite';
-  
+  let statusLevel: StatusLevel = 'operational';
+
   if (tracking.is_stopped) {
     statusColor = statusHsl('attention');
     pulseColor = statusHsl('attention');
     animation = 'pulse-warning 3s infinite';
+    statusLevel = 'attention';
   } else if (tracking.is_on_route === false) {
     statusColor = statusHsl('critical');
     pulseColor = statusHsl('critical');
     animation = 'pulse-critical 1.5s infinite';
+    statusLevel = 'critical';
   }
+
+  // Reforço color-blind-safe: forma/símbolo distinto além da cor.
+  const glyph = statusGlyph(statusLevel);
+  const statusA11y = STATUS_A11Y_LABEL[statusLevel];
 
   const icon = vehicleIcons[vehicleType] || '🚗';
   const speed = tracking.speed || 0;
