@@ -153,7 +153,7 @@ export function OrdersPage() {
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="sm:hidden"><DataRefreshIndicator lastUpdated={lastUpdated} isRefreshing={isFetching} onRefresh={handleRefresh} variant="minimal" /></div>
-            <Button variant="outline" size="icon" className="bg-secondary/50 hidden sm:flex h-9 w-9 sm:h-10 sm:w-10" onClick={handleRefresh} disabled={isFetching}><RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin")} /></Button>
+            <Button variant="outline" size="icon" aria-label="Atualizar pedidos" className="bg-secondary/50 hidden sm:flex h-9 w-9 sm:h-10 sm:w-10" onClick={handleRefresh} disabled={isFetching}><RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin")} /></Button>
             <Button variant="outline" size="sm" className="bg-secondary/50 h-9 sm:h-10 px-2.5 sm:px-4" onClick={() => setFetchDialogOpen(true)}><Search className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Buscar por ID</span></Button>
             <Button variant="outline" size="sm" className="bg-secondary/50 h-9 sm:h-10 px-2.5 sm:px-4" onClick={() => setImportDialogOpen(true)}><Upload className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Importar CSV</span></Button>
             <Button variant="outline" size="sm" className="bg-secondary/50 h-9 sm:h-10 px-2.5 sm:px-4"><Download className="w-4 h-4 sm:mr-2" /><span className="hidden sm:inline">Exportar</span></Button>

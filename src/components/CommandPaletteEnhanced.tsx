@@ -113,7 +113,7 @@ export const CommandPaletteEnhanced = forwardRef<HTMLDivElement>(function Comman
               {recentSearches.map(recent => (
                 <CommandItem key={recent.timestamp} value={`recent-${recent.query}`} onSelect={() => handleRecentSearchClick(recent.query)} className="cursor-pointer group">
                   <Search className="mr-2 h-4 w-4 text-muted-foreground" /><span className="flex-1">{recent.query}</span>
-                  <Button variant="ghost" size="icon" className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => handleRemoveRecentSearch(e, recent.query)}><X className="h-3 w-3" /></Button>
+                  <Button variant="ghost" size="icon" aria-label="Remover busca recente" className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => handleRemoveRecentSearch(e, recent.query)}><X className="h-3 w-3" /></Button>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -176,7 +176,7 @@ export const CommandPaletteEnhanced = forwardRef<HTMLDivElement>(function Comman
                   <CommandItem key={item.id} value={`nav-${item.id}-${item.label} ${item.keywords?.join(' ') || ''}`} onSelect={() => navigateTo(item.path)} className={cn("cursor-pointer group", isCurrentPage && "bg-primary/10 text-primary")}>
                     <item.icon className={cn("mr-2 h-4 w-4", isCurrentPage && "text-primary")} />
                     <span className="flex-1">{item.label}</span>
-                    <Button variant="ghost" size="icon" className={cn("h-5 w-5 transition-opacity", isFavorite ? "opacity-100" : "opacity-0 group-hover:opacity-100")} onClick={(e) => handleToggleFavorite(e, item.path)}>
+                    <Button variant="ghost" size="icon" aria-label={isFavorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} className={cn("h-5 w-5 transition-opacity", isFavorite ? "opacity-100" : "opacity-0 group-hover:opacity-100")} onClick={(e) => handleToggleFavorite(e, item.path)}>
                       <Star className={cn("h-3 w-3", isFavorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground")} />
                     </Button>
                     {item.shortcut && <kbd className="ml-1 text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{item.shortcut}</kbd>}

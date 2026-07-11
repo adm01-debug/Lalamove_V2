@@ -90,7 +90,7 @@ export function SmartBreadcrumbs({ className, showQuickActions = true, showFavor
           </div>
         )}
         <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-7 w-7"><MoreHorizontal className="w-4 h-4" /></Button></DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Mais navegação" className="h-7 w-7"><MoreHorizontal className="w-4 h-4" /></Button></DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel className="text-xs text-muted-foreground">Ações da Página</DropdownMenuLabel>
             <DropdownMenuItem onClick={handleCopyLink}><Copy className="w-4 h-4 mr-2" />Copiar Link</DropdownMenuItem>
@@ -117,7 +117,7 @@ function CompactBreadcrumbs({ breadcrumbs, sectionInfo, isFav, onToggleFavorite 
         {sectionInfo && <Badge variant="outline" className={cn("text-xs", sectionInfo.color)}>{sectionInfo.label}</Badge>}
         <span className="font-medium">{currentPage.label}</span>
       </div>
-      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleFavorite}><Star className={cn("w-4 h-4", isFav && "fill-amber-400 text-amber-400")} /></Button>
+      <Button variant="ghost" size="icon" aria-label={isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"} className="h-8 w-8" onClick={onToggleFavorite}><Star className={cn("w-4 h-4", isFav && "fill-amber-400 text-amber-400")} /></Button>
     </motion.nav>
   );
 }
@@ -134,7 +134,7 @@ export const MobileBreadcrumbs = forwardRef<HTMLElement, { className?: string }>
   const parentPath = pathSegments.length > 1 ? "/" + pathSegments.slice(0, -1).join("/") : "/";
   return (
     <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} aria-label="Navegação" className={cn("flex items-center gap-2", className)}>
-      <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => navigate(parentPath)}><ArrowLeft className="w-4 h-4" /></Button>
+      <Button variant="ghost" size="icon" aria-label="Voltar" className="h-8 w-8 shrink-0" onClick={() => navigate(parentPath)}><ArrowLeft className="w-4 h-4" /></Button>
       {sectionInfo && <Badge variant="outline" className={cn("text-xs shrink-0", sectionInfo.color)}>{sectionInfo.label}</Badge>}
       <span className="font-medium truncate">{currentPage}</span>
     </motion.nav>

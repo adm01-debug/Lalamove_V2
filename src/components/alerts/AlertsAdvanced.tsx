@@ -36,7 +36,7 @@ export function BulkActionsBar({ selectedCount, totalCount, onSelectAll, onDesel
             <Button variant="ghost" size="sm" onClick={onArchive} className="h-8 px-3 text-xs"><Archive className="w-3.5 h-3.5 mr-1.5" />Arquivar</Button>
             <Button variant="ghost" size="sm" onClick={onDismiss} className="h-8 px-3 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"><Trash2 className="w-3.5 h-3.5 mr-1.5" />Dispensar</Button>
           </div>
-          <Button variant="ghost" size="icon" onClick={onDeselectAll} className="h-8 w-8 ml-2"><X className="w-4 h-4" /></Button>
+          <Button variant="ghost" size="icon" aria-label="Limpar seleção" onClick={onDeselectAll} className="h-8 w-8 ml-2"><X className="w-4 h-4" /></Button>
         </CardContent>
       </Card>
     </motion.div>
@@ -112,8 +112,8 @@ export function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDis
         </div>
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); onViewDetails(alert); }}><Eye className="w-3.5 h-3.5" /></Button>
-        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:bg-destructive/10" onClick={(e) => { e.stopPropagation(); onDismiss(alert.id); }}><Trash2 className="w-3.5 h-3.5" /></Button>
+        <Button variant="ghost" size="icon" aria-label="Ver detalhes do alerta" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); onViewDetails(alert); }}><Eye className="w-3.5 h-3.5" /></Button>
+        <Button variant="ghost" size="icon" aria-label="Dispensar alerta" className="h-7 w-7 text-destructive hover:bg-destructive/10" onClick={(e) => { e.stopPropagation(); onDismiss(alert.id); }}><Trash2 className="w-3.5 h-3.5" /></Button>
       </div>
     </motion.div>
   );
@@ -150,11 +150,11 @@ export function AlertsToolbar({ groupBy, setGroupBy, sortBy, setSortBy, viewMode
       </div>
       <div className="flex items-center gap-1">
         <div className="flex items-center border rounded-lg p-0.5">
-          <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" className="h-7 w-7" onClick={() => setViewMode('list')}><List className="w-3.5 h-3.5" /></Button>
-          <Button variant={viewMode === 'compact' ? 'secondary' : 'ghost'} size="icon" className="h-7 w-7" onClick={() => setViewMode('compact')}><LayoutGrid className="w-3.5 h-3.5" /></Button>
+          <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" aria-label="Visualização em lista" className="h-7 w-7" onClick={() => setViewMode('list')}><List className="w-3.5 h-3.5" /></Button>
+          <Button variant={viewMode === 'compact' ? 'secondary' : 'ghost'} size="icon" aria-label="Visualização compacta" className="h-7 w-7" onClick={() => setViewMode('compact')}><LayoutGrid className="w-3.5 h-3.5" /></Button>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-muted-foreground" />}</Button>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onRefresh} disabled={isRefreshing}><RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} /></Button>
+        <Button variant="ghost" size="icon" aria-label={soundEnabled ? "Desativar som" : "Ativar som"} className="h-8 w-8" onClick={() => setSoundEnabled(!soundEnabled)}>{soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-muted-foreground" />}</Button>
+        <Button variant="ghost" size="icon" aria-label="Atualizar alertas" className="h-8 w-8" onClick={onRefresh} disabled={isRefreshing}><RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} /></Button>
       </div>
     </div>
   );

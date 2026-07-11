@@ -49,6 +49,7 @@ export function MapSearchPanel({ allTrackingData, trackingCount, onFocusTracking
             <Button
               variant="ghost"
               size="icon"
+              aria-label="Limpar busca"
               className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full hover:bg-white/10"
               onClick={() => { setLocalSearch(''); setShowSearchResults(false); }}
             >
@@ -123,7 +124,7 @@ export function MapSearchPanel({ allTrackingData, trackingCount, onFocusTracking
           </div>
         </div>
         <div className="h-8 w-px bg-white/5 mx-1" />
-        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full hover:bg-white/10">
+        <Button variant="ghost" size="icon" aria-label="Centralizar no alvo" className="w-8 h-8 rounded-full hover:bg-white/10">
           <Target className="w-4 h-4 text-muted-foreground" />
         </Button>
       </motion.div>

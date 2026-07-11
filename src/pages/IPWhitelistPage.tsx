@@ -178,8 +178,8 @@ export default function IPWhitelistPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Switch checked={entry.is_active} onCheckedChange={() => handleToggleActive(entry)} />
-                      <Button variant="ghost" size="icon" onClick={() => handleEdit(entry)}><Edit2 className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => { setSelectedEntry(entry); setShowDeleteDialog(true); }}><Trash2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" aria-label="Editar entrada" onClick={() => handleEdit(entry)}><Edit2 className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" aria-label="Excluir entrada" className="text-destructive hover:text-destructive" onClick={() => { setSelectedEntry(entry); setShowDeleteDialog(true); }}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </motion.div>
                 ))}

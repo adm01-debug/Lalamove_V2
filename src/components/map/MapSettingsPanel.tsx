@@ -114,7 +114,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
               <Settings className="w-4 h-4 text-primary" />
               <span className="text-xs font-black uppercase tracking-widest">Ajustes de Precisão</span>
             </div>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onClose}>
+            <Button variant="ghost" size="icon" aria-label="Fechar ajustes" className="h-6 w-6" onClick={onClose}>
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -142,6 +142,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                     className="h-4 w-4 hover:text-destructive" 
                     onClick={() => handleResetItem('threshold')}
                     title="Resetar Desvio"
+                    aria-label="Resetar Desvio"
                   >
                     <RotateCcw className="w-2.5 h-2.5" />
                   </Button>
@@ -174,6 +175,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                     className="h-4 w-4 hover:text-destructive" 
                     onClick={() => handleResetItem('stop')}
                     title="Resetar Parada"
+                    aria-label="Resetar Parada"
                   >
                     <RotateCcw className="w-2.5 h-2.5" />
                   </Button>
@@ -206,6 +208,7 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
                     className="h-4 w-4 hover:text-destructive" 
                     onClick={() => handleResetItem('geofence')}
                     title="Resetar Geofence"
+                    aria-label="Resetar Geofence"
                   >
                     <RotateCcw className="w-2.5 h-2.5" />
                   </Button>
