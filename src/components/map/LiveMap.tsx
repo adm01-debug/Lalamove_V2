@@ -76,6 +76,10 @@ export function LiveMap({
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
+  // Densidade adaptativa por zoom: em visão afastada, força marcadores compactos
+  // (reduz poluição visual / colisão de rótulos — clustering leve, sem alterar dados).
+  const [isFarZoom, setIsFarZoom] = useState(false);
+  const FAR_ZOOM_THRESHOLD = 11.5;
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
@@ -279,6 +283,16 @@ export function LiveMap({
       setLoading(false);
     });
 
+    // Densidade adaptativa: atualiza a banda de zoom apenas quando cruza o limiar,
+    // evitando re-renders excessivos durante o gesto de zoom.
+    const handleZoom = () => {
+      if (!map.current) return;
+      const far = map.current.getZoom() < FAR_ZOOM_THRESHOLD;
+      setIsFarZoom(prev => (prev === far ? prev : far));
+    };
+    map.current.on('zoomend', handleZoom);
+    handleZoom();
+
     return () => {
       driverMarkers.current.forEach(marker => marker.remove());
       driverMarkers.current.clear();
@@ -456,6 +470,9 @@ export function LiveMap({
   useEffect(() => {
     if (!map.current || loading) return;
     const currentIds = new Set(trackingData.map(t => t.id));
+    // Em zoom afastado, colapsa marcadores para compacto (des-clutter automático).
+    const effectiveDensity = isFarZoom ? 'compact' : markerDensity;
+
 
     // Cleanup logic
     driverMarkers.current.forEach((marker, id) => {
@@ -547,7 +564,7 @@ export function LiveMap({
           markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
         }
         
-        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
+        const el = createDriverMarkerElement(tracking, isSelected, effectiveDensity);
         existingDriverMarker.getElement().innerHTML = el.innerHTML;
         existingDriverMarker.getElement().className = el.className + (offRouteAlerts.has(tracking.id) ? ' deviated-marker' : '');
         
@@ -559,7 +576,7 @@ export function LiveMap({
           existingDriverMarker.setPopup(createDriverPopup(tracking));
         }
       } else {
-        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
+        const el = createDriverMarkerElement(tracking, isSelected, effectiveDensity);
         if (offRouteAlerts.has(tracking.id)) el.classList.add('deviated-marker');
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
           .setLngLat(targetPos)
@@ -728,7 +745,7 @@ export function LiveMap({
       trackingData.forEach(t => bounds.extend([t.current_longitude, t.current_latitude]));
       if (!bounds.isEmpty()) map.current.fitBounds(bounds, { padding: 100, maxZoom: 14 });
     }
-  }, [trackingData, loading, selectedId, focusMode, markerDensity]);
+  }, [trackingData, loading, selectedId, focusMode, markerDensity, isFarZoom]);
 
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
