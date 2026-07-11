@@ -59,7 +59,7 @@ export default function AnalyticsDashboardPage() {
           <Select value={period} onValueChange={setPeriod}><SelectTrigger className="w-[140px]"><Calendar className="w-4 h-4 mr-2" /><SelectValue /></SelectTrigger><SelectContent><SelectItem value="7">Últimos 7 dias</SelectItem><SelectItem value="14">Últimos 14 dias</SelectItem><SelectItem value="30">Últimos 30 dias</SelectItem><SelectItem value="90">Últimos 90 dias</SelectItem></SelectContent></Select>
           <Button variant="outline" onClick={() => refetch()} disabled={isRefetching} className="gap-2"><RefreshCw className={`w-4 h-4 ${isRefetching ? 'animate-spin' : ''}`} />{t('common.refresh', 'Atualizar')}</Button>
           <div className="flex gap-2">
-            {(['csv', 'json', 'pdf'] as const).map(f => (<Button key={f} variant="outline" size="icon" onClick={() => handleExport(f)} disabled={!data}>{f === 'csv' ? <FileSpreadsheet className="w-4 h-4" /> : f === 'json' ? <FileJson className="w-4 h-4" /> : <Printer className="w-4 h-4" />}</Button>))}
+            {(['csv', 'json', 'pdf'] as const).map(f => (<Button key={f} variant="outline" size="icon" aria-label={`Exportar como ${f.toUpperCase()}`} onClick={() => handleExport(f)} disabled={!data}>{f === 'csv' ? <FileSpreadsheet className="w-4 h-4" /> : f === 'json' ? <FileJson className="w-4 h-4" /> : <Printer className="w-4 h-4" />}</Button>))}
           </div>
         </div>
       </motion.div>
