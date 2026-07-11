@@ -283,6 +283,16 @@ export function LiveMap({
       setLoading(false);
     });
 
+    // Densidade adaptativa: atualiza a banda de zoom apenas quando cruza o limiar,
+    // evitando re-renders excessivos durante o gesto de zoom.
+    const handleZoom = () => {
+      if (!map.current) return;
+      const far = map.current.getZoom() < FAR_ZOOM_THRESHOLD;
+      setIsFarZoom(prev => (prev === far ? prev : far));
+    };
+    map.current.on('zoomend', handleZoom);
+    handleZoom();
+
     return () => {
       driverMarkers.current.forEach(marker => marker.remove());
       driverMarkers.current.clear();
