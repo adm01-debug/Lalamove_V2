@@ -68,3 +68,29 @@ export function statusColor(level: StatusLevel, alpha = 1): string {
     ? `hsl(var(--${token}))`
     : `hsl(var(--${token}) / ${alpha})`;
 }
+
+/**
+ * Símbolo/forma distinta por nível de status — reforço color-blind-safe.
+ *
+ * Garante que a informação de status NÃO dependa apenas da cor: cada nível
+ * possui uma forma inequívoca (círculo, pausa, triângulo de alerta, losango),
+ * reconhecível por usuários com daltonismo (protanopia/deuteranopia/tritanopia).
+ */
+export const STATUS_GLYPH: Record<StatusLevel, string> = {
+  operational: '●',
+  attention: '‖',
+  critical: '▲',
+  info: '◆',
+} as const;
+
+/** Rótulo acessível curto por nível (para aria-label / title). */
+export const STATUS_A11Y_LABEL: Record<StatusLevel, string> = {
+  operational: 'Operacional (em rota)',
+  attention: 'Atenção (parado)',
+  critical: 'Crítico (fora de rota)',
+  info: 'Informativo',
+} as const;
+
+export function statusGlyph(level: StatusLevel): string {
+  return STATUS_GLYPH[level];
+}
