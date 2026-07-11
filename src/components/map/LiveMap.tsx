@@ -78,7 +78,7 @@ export function LiveMap({
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
-  const { offRouteThreshold, stoppedThreshold, geofenceRadius } = useMapSettings();
+  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
@@ -547,7 +547,7 @@ export function LiveMap({
           markerPositions.current.set(tracking.id, { current: targetPos, target: targetPos });
         }
         
-        const el = createDriverMarkerElement(tracking, isSelected);
+        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
         existingDriverMarker.getElement().innerHTML = el.innerHTML;
         existingDriverMarker.getElement().className = el.className + (offRouteAlerts.has(tracking.id) ? ' deviated-marker' : '');
         
@@ -559,7 +559,7 @@ export function LiveMap({
           existingDriverMarker.setPopup(createDriverPopup(tracking));
         }
       } else {
-        const el = createDriverMarkerElement(tracking, isSelected);
+        const el = createDriverMarkerElement(tracking, isSelected, markerDensity);
         if (offRouteAlerts.has(tracking.id)) el.classList.add('deviated-marker');
         const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
           .setLngLat(targetPos)
@@ -728,7 +728,7 @@ export function LiveMap({
       trackingData.forEach(t => bounds.extend([t.current_longitude, t.current_latitude]));
       if (!bounds.isEmpty()) map.current.fitBounds(bounds, { padding: 100, maxZoom: 14 });
     }
-  }, [trackingData, loading, selectedId, focusMode]);
+  }, [trackingData, loading, selectedId, focusMode, markerDensity]);
 
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {
     const type = t.driver?.vehicle_type || 'MOTORCYCLE';
