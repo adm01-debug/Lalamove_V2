@@ -17,9 +17,11 @@ export function MapSettingsPanel({ show, onClose, activeContext = 'default' }: M
     offRouteThreshold, 
     stoppedThreshold, 
     geofenceRadius,
+    markerDensity,
     setOffRouteThreshold,
     setStoppedThreshold,
     setGeofenceRadius,
+    setMarkerDensity,
     saveContextSettings,
     loadContextSettings,
     resetToDefaults
