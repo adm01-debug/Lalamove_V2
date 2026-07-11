@@ -158,9 +158,9 @@ export function LiveMap({
             'fill-color': [
               'match',
               ['get', 'severity'],
-              'high', '#ef4444',
-              'medium', '#f59e0b',
-              '#3b82f6'
+              'high', statusHsl('critical'),
+              'medium', statusHsl('attention'),
+              statusHsl('info')
             ],
             'fill-opacity': 0.15
           }
@@ -174,9 +174,9 @@ export function LiveMap({
             'line-color': [
               'match',
               ['get', 'severity'],
-              'high', '#ef4444',
-              'medium', '#f59e0b',
-              '#3b82f6'
+              'high', statusHsl('critical'),
+              'medium', statusHsl('attention'),
+              statusHsl('info')
             ],
             'line-width': 2,
             'line-dasharray': [2, 1]
@@ -257,7 +257,7 @@ export function LiveMap({
           type: 'fill',
           source: 'geofence',
           paint: {
-            'fill-color': '#10b981',
+            'fill-color': statusHsl('operational'),
             'fill-opacity': 0.1
           }
         });
@@ -267,7 +267,7 @@ export function LiveMap({
           type: 'line',
           source: 'geofence',
           paint: {
-            'line-color': '#10b981',
+            'line-color': statusHsl('operational'),
             'line-width': 2,
             'line-dasharray': [2, 1]
           }
@@ -670,7 +670,7 @@ export function LiveMap({
           const isOff = tracking.is_on_route === false; 
           if (isOff && !offRouteAlerts.has(tracking.id)) {
             setOffRouteAlerts(prev => new Set(prev).add(tracking.id));
-            map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', '#ef4444');
+            map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', statusHsl('critical'));
           } else if (!isOff && offRouteAlerts.has(tracking.id)) {
             setOffRouteAlerts(prev => {
               const next = new Set(prev);
