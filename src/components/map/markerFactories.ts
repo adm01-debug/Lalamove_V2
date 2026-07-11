@@ -56,12 +56,16 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
       ` : ''}
       
       <!-- Ghost Pulse -->
-      <div class="marker-pulse" style="position:absolute;inset:-10px;border-radius:50%;background:${pulseColor}30;animation:${animation};z-index:-1;"></div>
+      <div class="marker-pulse" style="position:absolute;inset:-10px;border-radius:50%;background:${fade(pulseColor, 0.19)};animation:${animation};z-index:-1;"></div>
       
       <!-- Main Marker Stage 7: Backdrop filter and dynamic shadows -->
-      <div class="marker-core-wrapper" style="position:relative;display:flex;flex-direction:column;align-items:center;">
-        <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${statusColor}dd);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px ${statusColor}80, 0 0 0 ${isSelected ? '6px' : '3px'} rgba(255,255,255,0.95);border:2.5px solid white;font-size:24px;transform:${isSelected ? 'scale(1.2)' : 'scale(1)'};transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);overflow:hidden;backdrop-filter:blur(4px);">
+      <div class="marker-core-wrapper" style="position:relative;display:flex;flex-direction:column;align-items:center;" role="img" aria-label="${statusA11y}" title="${statusA11y}">
+        <div class="marker-core" style="width:52px;height:52px;background:linear-gradient(135deg,${statusColor},${fade(statusColor, 0.87)});border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px ${fade(statusColor, 0.5)}, 0 0 0 ${isSelected ? '6px' : '3px'} rgba(255,255,255,0.95);border:2.5px solid white;font-size:24px;transform:${isSelected ? 'scale(1.2)' : 'scale(1)'};transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);overflow:hidden;backdrop-filter:blur(4px);">
           <div style="transform: rotate(${heading}deg); transition: transform 0.4s ease;">${icon}</div>
+          ${statusLevel !== 'operational' ? `
+          <!-- Reforço color-blind-safe: símbolo de status (não depende de cor) -->
+          <div aria-hidden="true" style="position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:${statusColor};color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;line-height:1;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);z-index:2;">${glyph}</div>
+          ` : ''}
           
           <!-- Speed Overlay (Stage 5: High Precision HUD) -->
           <div style="position:absolute;bottom:0;width:100%;background:rgba(0,0,0,0.8);font-size:9px;color:white;text-align:center;font-weight:900;letter-spacing:-0.5px;padding-bottom:2px;font-family:monospace;border-top:1px solid rgba(255,255,255,0.2);">
