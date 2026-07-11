@@ -14,15 +14,35 @@ export interface ClusterInfo {
   byVehicle?: Record<string, number>;
 }
 
+/** Rótulos amigáveis (PT-BR) para os códigos de tipo de veículo da Lalamove. */
+const VEHICLE_LABELS: Record<string, string> = {
+  MOTORCYCLE: 'Moto',
+  CAR: 'Carro',
+  VAN: 'Van',
+  TRUCK: 'Caminhão',
+};
+
+/** Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /**
  * Cria o elemento visual de um cluster agregado (usado em zoom muito distante).
  * A cor dominante prioriza severidade (crítico > atenção > operacional) para
  * comunicar risco antes mesmo de o operador ampliar o mapa. O tamanho escala
  * suavemente com a contagem, mantendo legibilidade sem poluir o mapa.
- * Um rodapé com badges por tipo de veículo dá composição da frota no grupo.
+ * Um rodapé com badges por tipo de veículo dá composição da frota no grupo,
+ * e um tooltip detalhado no hover revela a decomposição completa por status
+ * e por tipo de veículo, sem exigir zoom.
  */
 export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
-  const { count, critical, attention, byVehicle } = info;
+  const { count, critical, attention, operational, byVehicle } = info;
   const level: StatusLevel = critical > 0 ? 'critical' : attention > 0 ? 'attention' : 'operational';
   const color = statusHsl(level);
   const glyph = statusGlyph(level);
@@ -33,12 +53,12 @@ export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
   const fontSize = count > 99 ? 15 : 18;
 
   // Badges por tipo de veículo: ordenados por volume, limitados a 3 para não poluir.
-  const vehicleEntries = Object.entries(byVehicle ?? {})
+  const allVehicleEntries = Object.entries(byVehicle ?? {})
     .filter(([, n]) => n > 0)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3);
+    .sort((a, b) => b[1] - a[1]);
+  const vehicleEntries = allVehicleEntries.slice(0, 3);
   const vehicleA11y = vehicleEntries.length
-    ? ' — ' + vehicleEntries.map(([type, n]) => `${n} ${type.toLowerCase()}`).join(', ')
+    ? ' — ' + vehicleEntries.map(([type, n]) => `${n} ${(VEHICLE_LABELS[type] || type).toLowerCase()}`).join(', ')
     : '';
 
   const badgesHtml = vehicleEntries.length
@@ -50,10 +70,44 @@ export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
       </div>`
     : '';
 
+  // Linhas de status para o tooltip — só exibe as que têm ocorrências.
+  const statusRows = ([
+    ['critical', critical],
+    ['attention', attention],
+    ['operational', operational],
+  ] as const)
+    .filter(([, n]) => (n ?? 0) > 0)
+    .map(([lvl, n]) => `
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:${statusHsl(lvl as StatusLevel)};flex:0 0 auto;"></span>
+        <span style="flex:1 1 auto;">${escapeHtml(STATUS_A11Y_LABEL[lvl as StatusLevel])}</span>
+        <span style="font-weight:800;">${n}</span>
+      </div>`)
+    .join('');
+
+  // Lista completa de veículos no tooltip (sem limite de 3).
+  const vehicleRows = allVehicleEntries
+    .map(([type, n]) => `
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;flex:0 0 auto;">${vehicleIcons[type] || '🚗'}</span>
+        <span style="flex:1 1 auto;">${escapeHtml(VEHICLE_LABELS[type] || type)}</span>
+        <span style="font-weight:800;">${n}</span>
+      </div>`)
+    .join('');
+
+  const tooltipHtml = `
+    <div class="live-map-cluster-tooltip" aria-hidden="true" style="position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(4px);min-width:150px;max-width:220px;background:rgba(15,23,42,0.97);color:#fff;border:1px solid rgba(255,255,255,0.14);border-radius:12px;padding:10px 12px;font-family:system-ui;font-size:11px;line-height:1.5;box-shadow:0 12px 32px rgba(0,0,0,0.45);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.16s ease,transform 0.16s ease,visibility 0.16s;z-index:200;">
+      <div style="font-weight:900;font-size:12px;margin-bottom:6px;">${count} entregas agrupadas</div>
+      ${statusRows ? `<div style="display:flex;flex-direction:column;gap:3px;">${statusRows}</div>` : ''}
+      ${vehicleRows ? `<div style="height:1px;background:rgba(255,255,255,0.12);margin:8px 0;"></div><div style="display:flex;flex-direction:column;gap:3px;">${vehicleRows}</div>` : ''}
+      <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:rgba(15,23,42,0.97);"></div>
+    </div>`;
+
   const el = document.createElement('div');
   el.className = 'live-map-cluster-marker';
   el.innerHTML = `
     <div role="img" aria-label="${a11y}${vehicleA11y}" title="${a11y}${vehicleA11y}" style="position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      ${tooltipHtml}
       <div style="position:relative;display:flex;align-items:center;justify-content:center;">
         <div style="position:absolute;inset:-8px;border-radius:50%;background:${statusHsl(level, 0.22)};animation:pulse-glow 2.5s infinite;z-index:-1;"></div>
         <div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,${color},${statusHsl(level, 0.85)});display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;border:3px solid rgba(255,255,255,0.95);box-shadow:0 8px 28px ${statusHsl(level, 0.5)};font-family:system-ui;line-height:1;">
@@ -63,6 +117,24 @@ export function createClusterMarkerElement(info: ClusterInfo): HTMLDivElement {
       </div>
       ${badgesHtml}
     </div>`;
+
+  // Toggle do tooltip no hover — anima via opacity/visibility.
+  const tooltip = el.querySelector<HTMLDivElement>('.live-map-cluster-tooltip');
+  if (tooltip) {
+    const show = () => {
+      tooltip.style.opacity = '1';
+      tooltip.style.visibility = 'visible';
+      tooltip.style.transform = 'translateX(-50%) translateY(0)';
+    };
+    const hide = () => {
+      tooltip.style.opacity = '0';
+      tooltip.style.visibility = 'hidden';
+      tooltip.style.transform = 'translateX(-50%) translateY(4px)';
+    };
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('mouseleave', hide);
+  }
+
   return el;
 }
 
