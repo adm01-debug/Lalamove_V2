@@ -81,6 +81,9 @@ export function LiveMap({
   // (reduz poluição visual / colisão de rótulos — clustering leve, sem alterar dados).
   const [isFarZoom, setIsFarZoom] = useState(false);
   const FAR_ZOOM_THRESHOLD = 11.5;
+  // Clustering real: em zoom muito distante, agrega motoristas em bolhas com contagem.
+  const [isVeryFarZoom, setIsVeryFarZoom] = useState(false);
+  const VERY_FAR_ZOOM_THRESHOLD = 9.5;
   const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
