@@ -218,6 +218,7 @@ export function AuthPage() {
           <p className="text-muted-foreground text-sm mt-1">Sistema de gestão de entregas</p>
         </div>
 
+        <Card className="glass-card border-border/50">
           <CardHeader className="text-center pb-2">
             <CardTitle>Bem-vindo</CardTitle>
             <CardDescription>Entre na sua conta ou crie uma nova</CardDescription>
@@ -406,6 +407,7 @@ export function AuthPage() {
           Promo Brindes © {new Date().getFullYear()}
         </p>
       </div>
+      </main>
     </div>
   );
 }
