@@ -318,10 +318,10 @@ export const PerformanceDashboardPage = () => {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
             <Activity className="h-6 w-6 text-primary" />
             Dashboard de Performance
-          </h1>
+          </h2>
           <p className="text-muted-foreground">
             Métricas Web Vitals em tempo real
           </p>

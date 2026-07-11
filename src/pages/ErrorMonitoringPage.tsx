@@ -207,10 +207,10 @@ export default function ErrorMonitoringPage() {
     <div className="space-y-6 p-1">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Bug className="h-6 w-6 text-destructive" />
             Monitoramento de Erros
-          </h1>
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">
             Captura contínua de erros em runtime com deduplicação e agrupamento
           </p>

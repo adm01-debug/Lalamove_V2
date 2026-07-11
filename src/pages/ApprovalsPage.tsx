@@ -51,7 +51,7 @@ export function ApprovalsPage() {
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-warning/20 via-accent/20 to-info/20 flex items-center justify-center border border-warning/20 shadow-lg shadow-warning/10"><Shield className="w-5 h-5 sm:w-6 sm:h-6 text-warning" /></div>
             </motion.div>
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">Fila de Aprovação</h1>
+              <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">Fila de Aprovação</h2>
               <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1.5 sm:gap-2"><Zap className="w-3 h-3 text-warning flex-shrink-0" /><span className="truncate">Motoristas aguardando aprovação</span></p>
             </div>
           </div>

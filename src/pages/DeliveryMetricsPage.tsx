@@ -45,7 +45,7 @@ export function DeliveryMetricsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div><h1 className="text-2xl font-bold text-foreground">Métricas de Entregas</h1><p className="text-sm text-muted-foreground">Taxa de conclusão, cancelamentos e performance</p></div>
+      <div><h2 className="text-2xl font-bold text-foreground">Métricas de Entregas</h2><p className="text-sm text-muted-foreground">Taxa de conclusão, cancelamentos e performance</p></div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

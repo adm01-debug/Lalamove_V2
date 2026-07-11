@@ -177,9 +177,9 @@ export function MetricsPage() {
               </div>
             </motion.div>
             <div className="min-w-0">
-              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">
+              <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text text-transparent truncate">
                 Dashboard de Métricas
-              </h1>
+              </h2>
               <div className="flex items-center gap-2">
                 <p className="text-xs md:text-sm text-muted-foreground truncate">
                   Visão geral do sistema

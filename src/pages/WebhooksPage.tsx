@@ -143,7 +143,7 @@ export function WebhooksPage() {
             <Webhook className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Webhooks Lalamove</h1>
+            <h2 className="text-2xl font-bold text-foreground">Webhooks Lalamove</h2>
             <p className="text-sm text-muted-foreground">
               Visualize e gerencie eventos recebidos da API Lalamove
             </p>

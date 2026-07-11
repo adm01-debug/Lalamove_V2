@@ -132,7 +132,7 @@ export default function RolesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Gerenciamento de Roles</h1>
+            <h2 className="text-2xl font-bold">Gerenciamento de Roles</h2>
             <p className="text-muted-foreground">Configure permissões e atribua roles aos usuários</p>
           </div>
           <Button onClick={() => setShowAddUserDialog(true)}>

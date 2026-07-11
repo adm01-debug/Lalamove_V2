@@ -178,7 +178,7 @@ export function RiskRulesPage() {
             <Scale className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Regras de Risco</h1>
+            <h2 className="text-2xl font-bold text-foreground">Regras de Risco</h2>
             <p className="text-sm text-muted-foreground">
               Configure as regras para cálculo automático do score de risco dos motoristas
             </p>

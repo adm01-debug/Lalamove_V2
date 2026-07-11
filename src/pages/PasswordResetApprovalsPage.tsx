@@ -84,7 +84,7 @@ export function PasswordResetApprovalsPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2"><KeyRound className="h-8 w-8 text-primary" />Aprovações de Reset de Senha</h1>
+          <h2 className="text-3xl font-bold flex items-center gap-2"><KeyRound className="h-8 w-8 text-primary" />Aprovações de Reset de Senha</h2>
           <p className="text-muted-foreground mt-1">Gerencie solicitações de redefinição de senha</p>
         </div>
         <Button variant="outline" onClick={() => refetch()}><RefreshCw className="h-4 w-4 mr-2" />Atualizar</Button>
