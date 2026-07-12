@@ -90,7 +90,7 @@ export function TimelineItem({ event, isLast, index, animated, compact }: {
               <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Mais ações" className="h-6 w-6"><MoreHorizontal className="w-3 h-3" /></Button></DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {event.relatedId && <DropdownMenuItem onClick={handleCopyId}>{copied ? <Check className="w-3 h-3 mr-2" /> : <Copy className="w-3 h-3 mr-2" />}{copied ? 'Copiado!' : `Copiar ID: ${event.relatedId.slice(0, 8)}...`}</DropdownMenuItem>}
-                  {event.actions?.map((action, i) => <DropdownMenuItem key={i} onClick={(e) => { e.stopPropagation(); action.onClick(); }} className={action.variant === 'destructive' ? 'text-destructive' : ''}>{action.icon && <action.icon className="w-3 h-3 mr-2" />}{action.label}</DropdownMenuItem>)}
+                  {event.actions?.map((action) => <DropdownMenuItem key={action.label} onClick={(e) => { e.stopPropagation(); action.onClick(); }} className={action.variant === 'destructive' ? 'text-destructive' : ''}>{action.icon && <action.icon className="w-3 h-3 mr-2" />}{action.label}</DropdownMenuItem>)}
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
