@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
   detectTrend,
+  detectSustainedReversal,
+  SUSTAINED_MIN_DAYS,
   type ContractUsageDailyPoint,
 } from "@/hooks/useContractVersionUsage";
 
@@ -54,5 +56,46 @@ describe("detectTrend — alerta de reversão de uso v1", () => {
     expect(t.insufficientData).toBe(false);
     expect(Number.isFinite(t.delta)).toBe(true);
     expect(t.rising).toBe(true);
+  });
+
+  it("expõe reversão sustentada dentro da tendência", () => {
+    const t = detectTrend(pts([1, 2, 3, 4, 5]));
+    expect(t.sustainedReversal).toBe(true);
+    expect(t.consecutiveRisingDays).toBeGreaterThanOrEqual(SUSTAINED_MIN_DAYS);
+  });
+});
+
+describe("detectSustainedReversal — regressão persistente vs ruído", () => {
+  it("marca sustentada com alta consecutiva >= SUSTAINED_MIN_DAYS", () => {
+    const r = detectSustainedReversal(pts([1, 2, 3, 4, 5]));
+    expect(r.sustainedReversal).toBe(true);
+    expect(r.consecutiveRisingDays).toBe(4);
+  });
+
+  it("exige exatamente SUSTAINED_MIN_DAYS altas consecutivas", () => {
+    const r = detectSustainedReversal(pts([1, 2, 3, 4]));
+    expect(r.consecutiveRisingDays).toBe(SUSTAINED_MIN_DAYS);
+    expect(r.sustainedReversal).toBe(true);
+  });
+
+  it("não marca pico isolado como sustentado", () => {
+    const r = detectSustainedReversal(pts([0, 0, 5, 0, 0]));
+    expect(r.sustainedReversal).toBe(false);
+    expect(r.consecutiveRisingDays).toBe(1);
+  });
+
+  it("não marca serrote (sobe/desce) como sustentado", () => {
+    const r = detectSustainedReversal(pts([1, 2, 1, 2, 1, 2]));
+    expect(r.sustainedReversal).toBe(false);
+  });
+
+  it("retorna zero para amostra curta", () => {
+    expect(detectSustainedReversal(pts([1, 2])).consecutiveRisingDays).toBe(0);
+    expect(detectSustainedReversal(pts([]).slice()).sustainedReversal).toBe(false);
+  });
+
+  it("é robusto a NaN, contabilizando só pontos finitos", () => {
+    const r = detectSustainedReversal(pts([NaN, 1, 2, 3, 4, NaN, 5]));
+    expect(r.sustainedReversal).toBe(true);
   });
 });
