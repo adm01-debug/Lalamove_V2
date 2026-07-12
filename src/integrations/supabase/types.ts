@@ -2919,6 +2919,19 @@ export type Database = {
           user_fid: string
         }[]
       }
+      get_contract_v1_sunset_readiness: {
+        Args: { p_days?: number; p_threshold?: number }
+        Returns: {
+          contracts_using_v1: string[]
+          last_v1_seen: string
+          safe_to_remove: boolean
+          threshold: number
+          total_requests: number
+          total_v1: number
+          v1_ratio: number
+          window_days: number
+        }[]
+      }
       get_cron_jobs_health: {
         Args: { p_runs_window?: number }
         Returns: {
