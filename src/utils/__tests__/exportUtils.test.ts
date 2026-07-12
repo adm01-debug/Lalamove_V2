@@ -1,5 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { exportToCSV, exportToJSON, exportToPDFText } from '../exportUtils';
+
+const mockJsonToSheet = vi.fn(() => ({}));
+const mockBookNew = vi.fn(() => ({}));
+const mockBookAppendSheet = vi.fn();
+const mockWriteFile = vi.fn();
+
+vi.mock('xlsx', () => ({
+  utils: {
+    json_to_sheet: (...args: unknown[]) => mockJsonToSheet(...(args as [])),
+    book_new: (...args: unknown[]) => mockBookNew(...(args as [])),
+    book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...(args as [])),
+  },
+  writeFile: (...args: unknown[]) => mockWriteFile(...(args as [])),
+}));
+
+import { exportToCSV, exportToJSON, exportToPDFText, exportToExcel } from '../exportUtils';
 
 describe('exportToCSV', () => {
   let createObjectURL: ReturnType<typeof vi.fn>;
@@ -198,5 +213,63 @@ describe('exportToPDFText', () => {
     expect(htmlWritten).toContain('Multi');
 
     vi.restoreAllMocks();
+  });
+});
+
+describe('exportToExcel', () => {
+  beforeEach(() => {
+    mockJsonToSheet.mockClear();
+    mockBookNew.mockClear();
+    mockBookAppendSheet.mockClear();
+    mockWriteFile.mockClear();
+  });
+
+  it('não deve gerar arquivo quando todas as abas estão vazias', () => {
+    exportToExcel([{ name: 'Vazia', rows: [] }], 'test');
+    expect(mockWriteFile).not.toHaveBeenCalled();
+    expect(mockBookAppendSheet).not.toHaveBeenCalled();
+  });
+
+  it('deve gerar workbook com extensão .xlsx', () => {
+    exportToExcel([{ name: 'Dados', rows: [{ a: 1, b: 2 }] }], 'relatorio');
+    expect(mockWriteFile).toHaveBeenCalledTimes(1);
+    const filename = mockWriteFile.mock.calls[0][1] as string;
+    expect(filename).toBe('relatorio.xlsx');
+  });
+
+  it('deve pular abas vazias mas incluir as preenchidas', () => {
+    exportToExcel(
+      [
+        { name: 'Cheia', rows: [{ x: 1 }] },
+        { name: 'Vazia', rows: [] },
+        { name: 'Cheia2', rows: [{ y: 2 }] },
+      ],
+      'test',
+    );
+    expect(mockBookAppendSheet).toHaveBeenCalledTimes(2);
+    expect(mockWriteFile).toHaveBeenCalledTimes(1);
+  });
+
+  it('deve sanitizar e truncar nomes de aba inválidos/longos (máx 31 chars)', () => {
+    exportToExcel(
+      [{ name: 'Aba/Com*Caracteres[Inválidos]:Que?São\\Muito Longos Demais', rows: [{ a: 1 }] }],
+      'test',
+    );
+    const sheetName = mockBookAppendSheet.mock.calls[0][2] as string;
+    expect(sheetName.length).toBeLessThanOrEqual(31);
+    expect(sheetName).not.toMatch(/[\\/?*[\]:]/);
+  });
+
+  it('deve calcular larguras de coluna (!cols)', () => {
+    const worksheet: Record<string, unknown> = {};
+    mockJsonToSheet.mockReturnValueOnce(worksheet);
+    exportToExcel([{ name: 'Dados', rows: [{ nome: 'Carlos Eduardo', id: 1 }] }], 'test');
+    expect(worksheet['!cols']).toBeDefined();
+    expect(Array.isArray(worksheet['!cols'])).toBe(true);
+  });
+
+  it('não deve gerar arquivo quando lista de abas está vazia', () => {
+    exportToExcel([], 'test');
+    expect(mockWriteFile).not.toHaveBeenCalled();
   });
 });
