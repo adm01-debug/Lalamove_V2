@@ -134,9 +134,9 @@ export function ConnectionQuality() {
   
   const getColor = () => {
     switch (quality) {
-      case 'good': return 'bg-green-500';
-      case 'medium': return 'bg-amber-500';
-      case 'poor': return 'bg-red-500';
+      case 'good': return 'bg-success';
+      case 'medium': return 'bg-warning';
+      case 'poor': return 'bg-destructive';
     }
   };
   
