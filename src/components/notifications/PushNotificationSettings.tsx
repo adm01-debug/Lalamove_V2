@@ -37,9 +37,9 @@ export function PushNotificationSettings() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`p-2 rounded-lg ${isEnabled ? 'bg-green-500/10' : 'bg-muted'}`}>
+            <div className={`p-2 rounded-lg ${isEnabled ? 'bg-success/10' : 'bg-muted'}`}>
               {isEnabled ? (
-                <BellRing className="h-5 w-5 text-green-500" />
+                <BellRing className="h-5 w-5 text-success" />
               ) : (
                 <Bell className="h-5 w-5 text-muted-foreground" />
               )}
