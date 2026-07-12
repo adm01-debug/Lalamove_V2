@@ -24,6 +24,7 @@ import {
 } from '@/hooks/useAdvancedReports';
 import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
+import { cn } from '@/lib/utils';
 
 const VEHICLE_LABELS: Record<string, string> = {
   MOTORCYCLE: 'Moto', CAR: 'Carro', VAN: 'Van', TRUCK: 'Caminhão', SEDAN: 'Sedan',
