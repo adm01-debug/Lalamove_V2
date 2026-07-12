@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
+import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -487,30 +489,35 @@ serve(async (req) => {
   }
 
   try {
-    const evaluationSchema = z.object({
-      driverId: z.string().uuid().or(z.string()),
-      orderId: z.string().uuid().optional().nullable(),
-      triggeredBy: z.enum(['WEBHOOK', 'MANUAL', 'SYSTEM']).default('WEBHOOK'),
-      driverName: z.string().optional().nullable(),
-      totalDeliveries: z.number().optional().nullable(),
-      completedDeliveries: z.number().optional().nullable(),
-      failedDeliveries: z.number().optional().nullable(),
-      cancelledDeliveries: z.number().optional().nullable(),
-      avgDelayMinutes: z.number().optional().nullable(),
-      rating: z.number().optional().nullable(),
-    }).passthrough();
-
-    const rawBody = await req.json();
-    const parseResult = evaluationSchema.safeParse(rawBody);
-
-    if (!parseResult.success) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid request payload', details: parseResult.error.format() }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    const contractVersion = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const { driverId, orderId, triggeredBy } = parseResult.data;
+    const contract = validateContract(
+      getSchema("evaluate-driver", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) {
+      return errorResponse(contract, corsHeaders);
+    }
+
+    const parseResult = { data: contract.data as {
+      driverId: string;
+      orderId?: string | null;
+      triggeredBy: 'WEBHOOK' | 'MANUAL' | 'SYSTEM';
+      driverName?: string | null;
+      totalDeliveries?: number | null;
+      completedDeliveries?: number | null;
+      failedDeliveries?: number | null;
+      cancelledDeliveries?: number | null;
+      avgDelayMinutes?: number | null;
+      rating?: number | null;
+    } };
+    const { driverId, triggeredBy } = parseResult.data;
+    const orderId: string | null = parseResult.data.orderId ?? null;
 
     logger.log(`[evaluate-driver] Starting evaluation for driver ${driverId}, order ${orderId}, triggered by ${triggeredBy}`);
 

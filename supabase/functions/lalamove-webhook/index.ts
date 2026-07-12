@@ -4,6 +4,8 @@ import { crypto } from "https://deno.land/std@0.190.0/crypto/mod.ts";
 import { encode } from "https://deno.land/std@0.190.0/encoding/hex.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
+import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -193,23 +195,31 @@ serve(async (req) => {
       );
     }
     
-    const webhookSchema = z.object({
-      event: z.string(),
-      orderId: z.string().optional().nullable(),
-      timestamp: z.string().optional().nullable(),
-      data: z.any().optional(),
-    }).passthrough();
-
-    const parseResult = webhookSchema.safeParse(JSON.parse(rawBody));
-    if (!parseResult.success) {
-      logger.error(`[Webhook] Invalid payload:`, parseResult.error.format());
-      return new Response(
-        JSON.stringify({ error: 'Invalid payload format' }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const contractVersion = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(
+      new Request(req.url, { method: "POST", body: rawBody }),
+      contractVersion,
+    );
+    if (!parsedBody.ok) {
+      logger.error(`[Webhook] Invalid JSON body`);
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const payload = parseResult.data;
+    const webhookSchema = (getSchema("lalamove-webhook", contractVersion) as z.ZodObject<z.ZodRawShape>).passthrough();
+    const contract = validateContract(webhookSchema, parsedBody.value, contractVersion);
+    if (!contract.ok) {
+      logger.error(`[Webhook] Invalid payload:`, contract.body.error.fields);
+      return errorResponse(contract, corsHeaders);
+    }
+
+    const payload = contract.data as {
+      event?: string;
+      orderId?: string | null;
+      timestamp?: string | null;
+      status?: string;
+      reason?: string;
+      data?: Record<string, unknown> & { status?: string; stopIndex?: number; reason?: string };
+    };
     logger.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
@@ -404,7 +414,7 @@ serve(async (req) => {
           const orderUuid = await getOrderUuid(lalamoveOrderId);
           if (orderUuid) {
             const newLalamoveStatus = payload.data?.status || payload.status;
-            const mappedStatus = statusMapping[newLalamoveStatus?.toUpperCase()] || 'ON_GOING';
+            const mappedStatus = statusMapping[(newLalamoveStatus ?? '').toUpperCase()] || 'ON_GOING';
             await updateOrderStatus(orderUuid, mappedStatus, { lalamove_status: newLalamoveStatus, timestamp: payload.timestamp });
           } else {
             logger.log(`[Webhook] Order ${lalamoveOrderId} not found in database`);
