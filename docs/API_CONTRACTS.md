@@ -56,11 +56,32 @@ if (!contract.ok) return errorResponse(contract, corsHeaders);
 
 ## Testes
 
+### 1. Contrato (em memória, sem I/O)
+
 ```bash
 deno test --allow-net supabase/functions/_shared/contract.test.ts
 ```
 
 Cobertura: payload válido, campo ausente, tipo incorreto, valor vazio, JSON malformado, compat retroativa v1→v2, resolução de versão. **34/34 passando.**
+
+### 2. Integração I/O real (chama as Edge Functions IMPLANTADAS)
+
+```bash
+deno test --allow-net --allow-env --allow-read \
+  supabase/functions/_shared/contract.integration.test.ts
+```
+
+Exercita cada função via HTTP contra o runtime real, validando:
+- **422** — campo obrigatório ausente retorna o formato único de erro;
+- **Tipos** — tipo/enum incorreto retorna 422 nomeando o campo;
+- **Compat retroativa** — o mesmo payload inválido é rejeitado de forma idêntica sob os headers `v1` e `v2` (superset estrito), e um payload v1 válido continua aceito sob `v2` (funções idempotentes/read-only);
+- **Segurança** — o gate de IP do `lalamove-webhook` precede o contrato (403 para origem não confiável);
+- **CORS** — preflight `OPTIONS` responde em todas as funções.
+
+Efeitos colaterais são evitados: funções que disparam e-mail/IA/notificações recebem **apenas** payloads inválidos (falham antes do efeito). **27/27 passando.**
+
+> No CI, roda no job `edge-integration-tests` (push na `main`), lendo `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` dos secrets do repositório.
+
 
 ## Status de integração (rollout completo)
 
