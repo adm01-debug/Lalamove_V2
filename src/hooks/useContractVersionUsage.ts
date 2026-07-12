@@ -36,6 +36,13 @@ export interface ContractUsageTrend {
   secondHalfAvg: number;
   /** Amostra insuficiente para avaliar tendência (<4 pontos válidos). */
   insufficientData: boolean;
+  /** Maior sequência de dias consecutivos com alta na proporção de v1. */
+  consecutiveRisingDays: number;
+  /**
+   * Reversão sustentada: alta consecutiva por ≥ `SUSTAINED_MIN_DAYS` dias.
+   * Distingue regressão persistente de ruído pontual (pico isolado).
+   */
+  sustainedReversal: boolean;
 }
 
 export interface ContractUsageSummary {
