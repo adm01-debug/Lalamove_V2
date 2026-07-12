@@ -159,6 +159,15 @@ export default function SLODashboardPage() {
               ))}
             </SelectContent>
           </Select>
+          <Button variant="outline" size="icon" onClick={() => handleExport('csv')} disabled={!data} aria-label="Exportar como CSV">
+            <FileSpreadsheet className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => handleExport('excel')} disabled={!data} aria-label="Exportar como Excel">
+            <SheetIcon className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => handleExport('json')} disabled={!data} aria-label="Exportar como JSON">
+            <FileJson className="w-4 h-4" />
+          </Button>
           <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Atualizar métricas">
             <RefreshCw className={cn('w-4 h-4', isFetching && 'animate-spin')} />
           </Button>
