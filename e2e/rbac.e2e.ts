@@ -64,7 +64,8 @@ test.describe('RBAC — usuário autenticado', () => {
 
     // Usuário autenticado: ou acessa (é admin) ou é redirecionado para /unauthorized.
     // Nunca deve cair na tela de login pública.
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(2000);
     await expect(page).not.toHaveURL(/\/auth/);
   });
 
@@ -74,7 +75,9 @@ test.describe('RBAC — usuário autenticado', () => {
 
     await restoreSession(page, session!);
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    // O dashboard usa realtime/polling, então "networkidle" nunca ocorre;
+    // aguardamos o menu lateral autenticado renderizar.
+    await expect(page.getByRole('link', { name: 'Dashboard' }).first()).toBeVisible({ timeout: 20_000 });
     await expect(page).not.toHaveURL(/\/auth/);
   });
 });
