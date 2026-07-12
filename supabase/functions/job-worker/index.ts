@@ -28,6 +28,8 @@ interface JobResult {
   duration_ms?: number;
 }
 
+type NotificationChannel = 'email' | 'whatsapp' | 'slack';
+
 // ============================================================================
 // HELPERS
 // ============================================================================
@@ -123,42 +125,34 @@ async function processBitrixSync(supabase: any, payload: any): Promise<any> {
   return data;
 }
 
-async function processEmail(supabase: any, payload: any): Promise<any> {
-  internalLogger('info', 'Processing email job', { payload });
-  
-  // Chamar Edge Function send-email (se existir)
-  const { data, error } = await supabase.functions.invoke('send-email', {
-    body: payload
-  });
-  
-  if (error) throw error;
-  
-  return data;
-}
+async function processChannelNotification(
+  supabase: any,
+  channel: NotificationChannel,
+  payload: any,
+): Promise<any> {
+  internalLogger('info', `Processing ${channel} notification job`, { payload });
 
-async function processWhatsApp(supabase: any, payload: any): Promise<any> {
-  internalLogger('info', 'Processing WhatsApp job', { payload });
-  
-  // Chamar Edge Function send-whatsapp (se existir)
-  const { data, error } = await supabase.functions.invoke('send-whatsapp', {
-    body: payload
-  });
-  
-  if (error) throw error;
-  
-  return data;
-}
+  const notificationBody = {
+    alert_id: payload.alert_id ?? payload.alertId ?? crypto.randomUUID(),
+    type: payload.type ?? channel,
+    severity: payload.severity ?? 'INFO',
+    title: payload.title ?? `Notificação ${channel}`,
+    message: payload.message ?? payload.body ?? '',
+    order_id: payload.order_id ?? payload.orderId,
+    driver_id: payload.driver_id ?? payload.driverId,
+    metadata: {
+      ...payload.metadata,
+      requested_channel: channel,
+      recipient: payload.recipient ?? payload.email ?? payload.phone ?? payload.channel,
+    },
+  };
 
-async function processSlack(supabase: any, payload: any): Promise<any> {
-  internalLogger('info', 'Processing Slack job', { payload });
-  
-  // Chamar Edge Function send-slack (se existir)
-  const { data, error } = await supabase.functions.invoke('send-slack', {
-    body: payload
+  const { data, error } = await supabase.functions.invoke('send-notification', {
+    body: notificationBody,
   });
-  
+
   if (error) throw error;
-  
+
   return data;
 }
 
@@ -197,15 +191,15 @@ async function processJob(jobPayload: JobPayload): Promise<JobResult> {
         break;
         
       case 'email':
-        result = await processEmail(supabase, jobPayload.payload);
+        result = await processChannelNotification(supabase, 'email', jobPayload.payload);
         break;
         
       case 'whatsapp':
-        result = await processWhatsApp(supabase, jobPayload.payload);
+        result = await processChannelNotification(supabase, 'whatsapp', jobPayload.payload);
         break;
         
       case 'slack':
-        result = await processSlack(supabase, jobPayload.payload);
+        result = await processChannelNotification(supabase, 'slack', jobPayload.payload);
         break;
         
       default:

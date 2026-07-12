@@ -20,6 +20,14 @@ export function usePasswordResetActions() {
 
   const approveMutation = useMutation({
     mutationFn: async (request: PasswordResetRequest) => {
+      if (request.status !== "pending") {
+        throw new Error("Esta solicitação já foi revisada.");
+      }
+
+      if (new Date(request.expires_at).getTime() <= Date.now()) {
+        throw new Error("Esta solicitação expirou e não pode mais ser aprovada.");
+      }
+
       const { error: updateError } = await supabase
         .from("password_reset_requests")
         .update({
@@ -27,7 +35,11 @@ export function usePasswordResetActions() {
           reviewed_at: new Date().toISOString(),
           reviewed_by: (await supabase.auth.getUser()).data.user?.id,
         })
-        .eq("id", request.id);
+        .eq("id", request.id)
+        .eq("status", "pending")
+        .gt("expires_at", new Date().toISOString())
+        .select("id")
+        .single();
       if (updateError) throw updateError;
 
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
@@ -55,7 +67,10 @@ export function usePasswordResetActions() {
           reviewed_by: (await supabase.auth.getUser()).data.user?.id,
           rejection_reason: reason,
         })
-        .eq("id", id);
+        .eq("id", id)
+        .eq("status", "pending")
+        .select("id")
+        .single();
       if (error) throw error;
     },
     onSuccess: () => {
