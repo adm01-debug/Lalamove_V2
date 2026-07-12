@@ -108,6 +108,16 @@ export default function AdvancedReportsPage() {
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
 
+  // Variação percentual total da métrica selecionada (atual vs. anterior).
+  const compareDelta = useMemo(() => {
+    const curKey = compareMetric === 'deliveries' ? 'current' : 'currentCost';
+    const prevKey = compareMetric === 'deliveries' ? 'previous' : 'previousCost';
+    const curTotal = dailyComparison.reduce((a, p) => a + p[curKey], 0);
+    const prevTotal = dailyComparison.reduce((a, p) => a + p[prevKey], 0);
+    if (prevTotal === 0) return curTotal > 0 ? 100 : 0;
+    return Math.round(((curTotal - prevTotal) / prevTotal) * 1000) / 10;
+  }, [dailyComparison, compareMetric]);
+
   const activeFilterCount = useMemo(() => {
     let n = 0;
     if (filters.status !== 'all') n++;
