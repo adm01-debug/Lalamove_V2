@@ -62,8 +62,38 @@ export interface ContractUsageSummary {
 /** Limiar (p.p.) a partir do qual uma alta é considerada relevante. */
 const TREND_RISE_THRESHOLD = 0.5;
 
+/** Dias consecutivos de alta a partir dos quais a reversão é "sustentada". */
+export const SUSTAINED_MIN_DAYS = 3;
+
 function round1(n: number): number {
   return Math.round(n * 10) / 10;
+}
+
+/**
+ * Calcula a maior sequência de dias consecutivos em que a proporção de v1
+ * subiu em relação ao dia anterior. Pontos com valores não finitos são
+ * descartados antes da análise (robustez contra dados parciais). Uma reversão
+ * é considerada "sustentada" quando essa sequência atinge `SUSTAINED_MIN_DAYS`,
+ * o que separa uma regressão real de um pico isolado (ruído).
+ */
+export function detectSustainedReversal(
+  points: ContractUsageDailyPoint[],
+): { consecutiveRisingDays: number; sustainedReversal: boolean } {
+  const valid = points.filter((p) => Number.isFinite(p.v1Ratio));
+  if (valid.length < SUSTAINED_MIN_DAYS + 1) {
+    return { consecutiveRisingDays: 0, sustainedReversal: false };
+  }
+  let streak = 0;
+  let max = 0;
+  for (let i = 1; i < valid.length; i++) {
+    if (valid[i].v1Ratio > valid[i - 1].v1Ratio) {
+      streak += 1;
+      max = Math.max(max, streak);
+    } else {
+      streak = 0;
+    }
+  }
+  return { consecutiveRisingDays: max, sustainedReversal: max >= SUSTAINED_MIN_DAYS };
 }
 
 /**
