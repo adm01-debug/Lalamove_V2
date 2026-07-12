@@ -32,23 +32,27 @@ serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-    const requestSchema = z.object({
-      action: z.enum(['analyze-routes', 'analyze-order', 'analyze-drivers', 'analyze-alerts']),
-      message: z.string().optional(),
-      orderId: z.string().uuid().optional(),
-    });
 
-    const body = await req.json();
-    const result = requestSchema.safeParse(body);
-
-    if (!result.success) {
-      return new Response(JSON.stringify({ error: 'Invalid request payload', details: result.error.format() }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const { action, message, orderId } = result.data;
+    const validation = validateContract(
+      getSchema("route-analyzer", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { action, message, orderId } = validation.data as {
+      action: "analyze-routes" | "analyze-order" | "analyze-drivers" | "analyze-alerts";
+      message?: string;
+      orderId?: string;
+    };
 
     let contextData = '';
 
