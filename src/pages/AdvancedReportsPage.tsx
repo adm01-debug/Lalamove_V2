@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
-  DollarSign, Gauge, MapPin, TrendingUp, Clock, PackageCheck,
+  DollarSign, Gauge, MapPin, TrendingUp, Clock, PackageCheck, Save, Bookmark, Trash2, User,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import {
 import {
   useAdvancedReports, DEFAULT_FILTERS, type AdvancedReportFilters,
 } from '@/hooks/useAdvancedReports';
+import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToPDFText } from '@/utils/exportUtils';
 
 const VEHICLE_LABELS: Record<string, string> = {
@@ -72,6 +73,8 @@ function KpiCard({ icon: Icon, label, value, hint }: {
 
 export default function AdvancedReportsPage() {
   const [filters, setFilters] = useState<AdvancedReportFilters>(DEFAULT_FILTERS);
+  const [presetName, setPresetName] = useState('');
+  const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
     cost, performance, geography, daily,
@@ -86,13 +89,22 @@ export default function AdvancedReportsPage() {
     if (filters.vehicleType !== 'all') n++;
     if (filters.costCenter !== 'all') n++;
     if (filters.department !== 'all') n++;
+    if (filters.driver !== 'all') n++;
     if (filters.urgency !== 'all') n++;
     if (filters.search.trim()) n++;
+    if (filters.costMin.trim()) n++;
+    if (filters.costMax.trim()) n++;
     return n;
   }, [filters]);
 
   const resetFilters = () =>
     setFilters((prev) => ({ ...DEFAULT_FILTERS, period: prev.period }));
+
+  const handleSavePreset = () => {
+    if (!presetName.trim()) return;
+    savePreset(presetName, filters);
+    setPresetName('');
+  };
 
   const handleExportCSV = () => {
     exportToCSV(
@@ -101,6 +113,7 @@ export default function AdvancedReportsPage() {
         Status: STATUS_LABELS[r.status] || r.status,
         Veiculo: VEHICLE_LABELS[r.vehicle_type || ''] || r.vehicle_type || '',
         Cliente: r.customer_name || '',
+        Motorista: r.driver?.name || '',
         Departamento: r.department || '',
         'Centro de Custo': r.cost_center || '',
         'Custo': r.total_cost ?? '',
@@ -272,15 +285,88 @@ export default function AdvancedReportsPage() {
               </SelectContent>
             </Select>
 
+            <Select value={filters.driver} onValueChange={(v) => setFilter('driver', v)}>
+              <SelectTrigger><User className="w-4 h-4 mr-2 text-primary" /><SelectValue placeholder="Motorista" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os motoristas</SelectItem>
+                {filterOptions.drivers.map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                placeholder="Custo mín."
+                value={filters.costMin}
+                onChange={(e) => setFilter('costMin', e.target.value)}
+                aria-label="Custo mínimo"
+              />
+              <span className="text-muted-foreground text-sm">—</span>
+              <Input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                placeholder="Custo máx."
+                value={filters.costMax}
+                onChange={(e) => setFilter('costMax', e.target.value)}
+                aria-label="Custo máximo"
+              />
+            </div>
+
             <Input
-              placeholder="Buscar cliente, pedido, endereço..."
+              placeholder="Buscar cliente, pedido, endereço, motorista..."
               value={filters.search}
               onChange={(e) => setFilter('search', e.target.value)}
               className="xl:col-span-2"
             />
+
+            {/* Presets de filtros persistidos */}
+            <div className="col-span-full flex flex-wrap items-center gap-2 pt-2 border-t border-border/50 mt-1">
+              <Bookmark className="w-4 h-4 text-primary shrink-0" />
+              <span className="text-sm text-muted-foreground">Presets:</span>
+              {presets.length === 0 && (
+                <span className="text-xs text-muted-foreground italic">Nenhum preset salvo</span>
+              )}
+              {presets.map((p) => (
+                <Badge key={p.id} variant="secondary" className="gap-1 pr-1">
+                  <button
+                    type="button"
+                    className="hover:underline"
+                    onClick={() => setFilters(p.filters)}
+                  >
+                    {p.name}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deletePreset(p.id)}
+                    aria-label={`Excluir preset ${p.name}`}
+                    className="rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive transition-colors"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </Badge>
+              ))}
+              <div className="flex items-center gap-2 ml-auto">
+                <Input
+                  placeholder="Nome do preset"
+                  value={presetName}
+                  onChange={(e) => setPresetName(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSavePreset(); }}
+                  className="h-8 w-40"
+                />
+                <Button variant="outline" size="sm" onClick={handleSavePreset} disabled={!presetName.trim()} className="gap-1">
+                  <Save className="w-3.5 h-3.5" /> Salvar
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
+
 
       {/* KPIs globais */}
       <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

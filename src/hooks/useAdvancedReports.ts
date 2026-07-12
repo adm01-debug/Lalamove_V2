@@ -14,8 +14,13 @@ export interface AdvancedReportFilters {
   vehicleType: string;
   costCenter: string;
   department: string;
+  driver: string;
   urgency: 'all' | 'urgent' | 'normal';
   search: string;
+  /** Custo mínimo (string vazia = sem filtro). */
+  costMin: string;
+  /** Custo máximo (string vazia = sem filtro). */
+  costMax: string;
 }
 
 export const DEFAULT_FILTERS: AdvancedReportFilters = {
@@ -24,8 +29,11 @@ export const DEFAULT_FILTERS: AdvancedReportFilters = {
   vehicleType: 'all',
   costCenter: 'all',
   department: 'all',
+  driver: 'all',
   urgency: 'all',
   search: '',
+  costMin: '',
+  costMax: '',
 };
 
 /** Linha normalizada de pedido usada internamente pelos agregadores. */
@@ -152,30 +160,44 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     const departments = new Set<string>();
     const statuses = new Set<string>();
     const vehicles = new Set<string>();
+    const drivers = new Set<string>();
     rows.forEach((r) => {
       if (r.cost_center) costCenters.add(r.cost_center);
       if (r.department) departments.add(r.department);
       if (r.status) statuses.add(r.status);
       if (r.vehicle_type) vehicles.add(r.vehicle_type);
+      if (r.driver?.name) drivers.add(r.driver.name);
     });
     return {
       costCenters: Array.from(costCenters).sort(),
       departments: Array.from(departments).sort(),
       statuses: Array.from(statuses).sort(),
       vehicles: Array.from(vehicles).sort(),
+      drivers: Array.from(drivers).sort(),
     };
   }, [rows]);
 
   // Aplicação client-side dos demais filtros avançados.
   const filtered = useMemo(() => {
     const term = filters.search.trim().toLowerCase();
+    const costMin = filters.costMin.trim() === '' ? null : Number(filters.costMin);
+    const costMax = filters.costMax.trim() === '' ? null : Number(filters.costMax);
+    const hasMin = costMin != null && Number.isFinite(costMin);
+    const hasMax = costMax != null && Number.isFinite(costMax);
     return rows.filter((r) => {
       if (filters.status !== 'all' && r.status !== filters.status) return false;
       if (filters.vehicleType !== 'all' && r.vehicle_type !== filters.vehicleType) return false;
       if (filters.costCenter !== 'all' && r.cost_center !== filters.costCenter) return false;
       if (filters.department !== 'all' && r.department !== filters.department) return false;
+      if (filters.driver !== 'all' && (r.driver?.name || '') !== filters.driver) return false;
       if (filters.urgency === 'urgent' && !r.is_urgent) return false;
       if (filters.urgency === 'normal' && r.is_urgent) return false;
+      if (hasMin || hasMax) {
+        const c = r.total_cost;
+        if (c == null) return false;
+        if (hasMin && c < (costMin as number)) return false;
+        if (hasMax && c > (costMax as number)) return false;
+      }
       if (term) {
         const hay = [
           r.customer_name,
@@ -184,6 +206,7 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
           r.delivery_address,
           r.department,
           r.cost_center,
+          r.driver?.name,
         ]
           .filter(Boolean)
           .join(' ')
