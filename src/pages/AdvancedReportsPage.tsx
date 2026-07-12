@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
-  DollarSign, Gauge, MapPin, TrendingUp, Clock, PackageCheck,
+  DollarSign, Gauge, MapPin, TrendingUp, Clock, PackageCheck, Save, Bookmark, Trash2, User,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import {
 import {
   useAdvancedReports, DEFAULT_FILTERS, type AdvancedReportFilters,
 } from '@/hooks/useAdvancedReports';
+import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToPDFText } from '@/utils/exportUtils';
 
 const VEHICLE_LABELS: Record<string, string> = {
