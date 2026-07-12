@@ -340,13 +340,27 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     };
   }, [filtered]);
 
+  // Coordenadas de entrega para reverse geocoding (regiões precisas).
+  const geoCoords = useMemo<Coord[]>(
+    () =>
+      filtered
+        .filter((r) => r.delivery_latitude != null && r.delivery_longitude != null)
+        .map((r) => ({ lat: Number(r.delivery_latitude), lng: Number(r.delivery_longitude) })),
+    [filtered],
+  );
+  const resolvedRegions = useRegionResolver(geoCoords);
+
   const geography = useMemo<GeoRow[]>(() => {
     const map = new Map<
       string,
       { count: number; cost: number; distance: number; distCount: number; delay: number; delayCount: number; onTime: number; completed: number }
     >();
     filtered.forEach((r) => {
-      const region = extractRegion(r.delivery_address);
+      const geocoded =
+        r.delivery_latitude != null && r.delivery_longitude != null
+          ? resolvedRegions[coordKey(Number(r.delivery_latitude), Number(r.delivery_longitude))]
+          : undefined;
+      const region = geocoded || extractRegion(r.delivery_address);
       const g =
         map.get(region) ||
         { count: 0, cost: 0, distance: 0, distCount: 0, delay: 0, delayCount: 0, onTime: 0, completed: 0 };
