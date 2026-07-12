@@ -146,8 +146,8 @@ export function ContractVersionUsagePanel() {
                     className="text-muted-foreground"
                   />
                   <Tooltip
-                    formatter={(value: number) => [`${value}%`, "Proporção v1"]}
-                    labelFormatter={(label: string) => formatDate(label)}
+                    formatter={(value) => [`${value as number}%`, "Proporção v1"]}
+                    labelFormatter={(label) => formatDate(String(label))}
                     contentStyle={{
                       background: "hsl(var(--popover))",
                       border: "1px solid hsl(var(--border))",
