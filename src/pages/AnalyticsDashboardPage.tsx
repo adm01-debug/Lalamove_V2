@@ -16,7 +16,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { toast } from 'sonner';
-import { exportToCSV, exportToJSON, exportToPDFText } from '@/utils/exportUtils';
+import { exportToCSV, exportToJSON, exportToPDFText, exportToExcel } from '@/utils/exportUtils';
 import { useAnalyticsData } from '@/hooks/useAnalyticsData';
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
