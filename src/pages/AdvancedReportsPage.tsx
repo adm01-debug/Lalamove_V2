@@ -73,6 +73,8 @@ function KpiCard({ icon: Icon, label, value, hint }: {
 
 export default function AdvancedReportsPage() {
   const [filters, setFilters] = useState<AdvancedReportFilters>(DEFAULT_FILTERS);
+  const [presetName, setPresetName] = useState('');
+  const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
     cost, performance, geography, daily,
@@ -87,13 +89,22 @@ export default function AdvancedReportsPage() {
     if (filters.vehicleType !== 'all') n++;
     if (filters.costCenter !== 'all') n++;
     if (filters.department !== 'all') n++;
+    if (filters.driver !== 'all') n++;
     if (filters.urgency !== 'all') n++;
     if (filters.search.trim()) n++;
+    if (filters.costMin.trim()) n++;
+    if (filters.costMax.trim()) n++;
     return n;
   }, [filters]);
 
   const resetFilters = () =>
     setFilters((prev) => ({ ...DEFAULT_FILTERS, period: prev.period }));
+
+  const handleSavePreset = () => {
+    if (!presetName.trim()) return;
+    savePreset(presetName, filters);
+    setPresetName('');
+  };
 
   const handleExportCSV = () => {
     exportToCSV(
