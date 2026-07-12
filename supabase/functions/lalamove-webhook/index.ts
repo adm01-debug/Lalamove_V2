@@ -6,6 +6,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
 import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -196,6 +197,7 @@ serve(async (req) => {
     }
     
     const contractVersion = resolveContractVersion(req);
+    trackContractUsage("lalamove-webhook", contractVersion);
     const parsedBody = await parseJsonBody(
       new Request(req.url, { method: "POST", body: rawBody }),
       contractVersion,
