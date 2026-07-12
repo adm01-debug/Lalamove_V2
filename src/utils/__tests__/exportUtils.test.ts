@@ -1,5 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { exportToCSV, exportToJSON, exportToPDFText } from '../exportUtils';
+
+const mockJsonToSheet = vi.fn(() => ({}));
+const mockBookNew = vi.fn(() => ({}));
+const mockBookAppendSheet = vi.fn();
+const mockWriteFile = vi.fn();
+
+vi.mock('xlsx', () => ({
+  utils: {
+    json_to_sheet: (...args: unknown[]) => mockJsonToSheet(...args),
+    book_new: (...args: unknown[]) => mockBookNew(...args),
+    book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...args),
+  },
+  writeFile: (...args: unknown[]) => mockWriteFile(...args),
+}));
+
+import { exportToCSV, exportToJSON, exportToPDFText, exportToExcel } from '../exportUtils';
 
 describe('exportToCSV', () => {
   let createObjectURL: ReturnType<typeof vi.fn>;
