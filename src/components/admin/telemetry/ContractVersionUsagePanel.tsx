@@ -31,6 +31,10 @@ function formatDate(iso: string): string {
 export function ContractVersionUsagePanel() {
   const [days, setDays] = useState<number>(30);
   const { data, isLoading, isError } = useContractVersionUsage(days);
+  const { data: readiness } = useContractV1SunsetReadiness(
+    days,
+    SAFE_REMOVAL_THRESHOLD,
+  );
 
   const ratioTone = useMemo(() => {
     const r = data?.overallV1Ratio ?? 0;
