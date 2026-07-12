@@ -221,7 +221,7 @@ export default function SLODashboardPage() {
                   <YAxis domain={[Math.min(90, ...chartData.map((d) => d.Disponibilidade)), 100]} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} unit="%" width={44} />
                   <RTooltip
                     contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                    formatter={(v: number) => [`${v}%`, 'Disponibilidade']}
+                    formatter={(v) => [`${v}%`, 'Disponibilidade']}
                   />
                   <Area type="monotone" dataKey="Disponibilidade" stroke="hsl(var(--success))" fill="url(#availGrad)" strokeWidth={2} />
                 </AreaChart>
