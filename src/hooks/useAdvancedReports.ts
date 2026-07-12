@@ -96,6 +96,21 @@ export interface DailyPoint {
   avgDelay: number;
 }
 
+export interface ComparisonMetrics {
+  deliveries: number;
+  totalCost: number;
+  onTimeRate: number;
+  cancellationRate: number;
+}
+
+export interface ComparisonSummary {
+  current: ComparisonMetrics;
+  previous: ComparisonMetrics;
+  /** Variação percentual (deliveries/totalCost) ou em pontos (rates). */
+  deltas: ComparisonMetrics;
+  hasPrevious: boolean;
+}
+
 const round = (n: number, d = 0) => {
   const f = 10 ** d;
   return Math.round(n * f) / f;
