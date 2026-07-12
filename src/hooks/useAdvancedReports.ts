@@ -392,7 +392,7 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 15);
-  }, [filtered]);
+  }, [filtered, resolvedRegions]);
 
   const daily = useMemo<DailyPoint[]>(() => {
     const days = parseInt(filters.period, 10) || 30;
