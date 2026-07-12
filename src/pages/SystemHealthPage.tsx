@@ -70,6 +70,14 @@ export const SystemHealthPage = () => {
           </p>
         </Card>
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Clock className="h-6 w-6" aria-hidden="true" />
+          <h3 className="text-2xl font-bold">Jobs de Manutenção (Cron)</h3>
+        </div>
+        <CronJobsHealthPanel />
+      </section>
     </div>
   );
 };
