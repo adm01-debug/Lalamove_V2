@@ -64,7 +64,7 @@ function round1(n: number): number {
  * período e a janela recente (últimos 3 vs 3 anteriores). Ignora pontos com
  * valores não finitos para robustez contra dados parciais.
  */
-function detectTrend(points: ContractUsageDailyPoint[]): ContractUsageTrend {
+export function detectTrend(points: ContractUsageDailyPoint[]): ContractUsageTrend {
   const valid = points.filter((p) => Number.isFinite(p.v1Ratio));
   if (valid.length < 4) {
     return {
