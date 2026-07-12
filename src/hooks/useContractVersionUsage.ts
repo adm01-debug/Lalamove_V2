@@ -111,6 +111,8 @@ export function detectTrend(points: ContractUsageDailyPoint[]): ContractUsageTre
       firstHalfAvg: 0,
       secondHalfAvg: 0,
       insufficientData: true,
+      consecutiveRisingDays: 0,
+      sustainedReversal: false,
     };
   }
   const avg = (arr: ContractUsageDailyPoint[]) =>
