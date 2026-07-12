@@ -25,7 +25,22 @@ serve(async (req) => {
   }
 
   try {
-    const { channel, alertType, recipients, webhookUrl }: TestRequest = await req.json();
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
+    }
+
+    const validation = validateContract(
+      getSchema("test-notification", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { channel, alertType, recipients, webhookUrl } = validation.data as TestRequest;
 
     console.log(`[Test] Testing ${channel} notification for ${alertType}`);
     
