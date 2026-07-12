@@ -61,6 +61,7 @@ const CacheMonitoringPage = lazy(() => import('./pages/CacheMonitoringPage').the
 const PerformanceDashboardPage = lazy(() => import('./pages/PerformanceDashboardPage').then(m => ({ default: m.PerformanceDashboardPage })));
 const ErrorMonitoringPage = lazy(() => import('./pages/ErrorMonitoringPage'));
 const AdminTelemetriaPage = lazy(() => import('./pages/AdminTelemetriaPage'));
+const SLODashboardPage = lazy(() => import('./pages/SLODashboardPage'));
 
 // Lazy loaded pages - Security
 const RolesPage = lazy(() => import('./pages/RolesPage'));
