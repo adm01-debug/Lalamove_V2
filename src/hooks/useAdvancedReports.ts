@@ -193,14 +193,14 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     };
   }, [rows]);
 
-  // Aplicação client-side dos demais filtros avançados.
-  const filtered = useMemo(() => {
+  // Predicado de filtros avançados reutilizável (período atual e anterior).
+  const predicate = useMemo(() => {
     const term = filters.search.trim().toLowerCase();
     const costMin = filters.costMin.trim() === '' ? null : Number(filters.costMin);
     const costMax = filters.costMax.trim() === '' ? null : Number(filters.costMax);
     const hasMin = costMin != null && Number.isFinite(costMin);
     const hasMax = costMax != null && Number.isFinite(costMax);
-    return rows.filter((r) => {
+    return (r: OrderRow): boolean => {
       if (filters.status !== 'all' && r.status !== filters.status) return false;
       if (filters.vehicleType !== 'all' && r.vehicle_type !== filters.vehicleType) return false;
       if (filters.costCenter !== 'all' && r.cost_center !== filters.costCenter) return false;
@@ -230,8 +230,11 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
         if (!hay.includes(term)) return false;
       }
       return true;
-    });
-  }, [rows, filters]);
+    };
+  }, [filters]);
+
+  const filtered = useMemo(() => rows.filter(predicate), [rows, predicate]);
+  const prevFiltered = useMemo(() => prevRows.filter(predicate), [prevRows, predicate]);
 
   const cost = useMemo<CostSummary>(() => {
     const withCost = filtered.filter((r) => typeof r.total_cost === 'number' && r.total_cost! > 0);
