@@ -85,6 +85,39 @@ export function useReportPresets() {
     load();
   }, [load]);
 
+  // Sincronização em tempo real: reflete criações/edições/exclusões feitas
+  // em outras abas ou dispositivos do mesmo usuário instantaneamente.
+  useEffect(() => {
+    let cancelled = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    (async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (cancelled || !auth.user) return;
+
+      channel = supabase
+        .channel(`report_presets:${auth.user.id}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'report_presets',
+            filter: `user_id=eq.${auth.user.id}`,
+          },
+          () => {
+            void load();
+          },
+        )
+        .subscribe();
+    })();
+
+    return () => {
+      cancelled = true;
+      if (channel) supabase.removeChannel(channel);
+    };
+  }, [load]);
+
   const savePreset = useCallback(
     async (name: string, filters: AdvancedReportFilters) => {
       const trimmed = name.trim();
