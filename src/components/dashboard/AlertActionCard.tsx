@@ -88,9 +88,9 @@ export function AlertActionCard({
       
       {/* Items */}
       <div className="space-y-2 mb-4">
-        {items.map((item, idx) => (
+        {items.map((item) => (
           <div
-            key={idx}
+            key={item.action}
             className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-colors cursor-pointer group"
             onClick={item.onClick}
           >
