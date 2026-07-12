@@ -18,9 +18,9 @@ export function PushNotificationSettings() {
 
   if (!isSupported) {
     return (
-      <Card className="border-yellow-500/20 bg-yellow-500/5">
+      <Card className="border-warning/20 bg-warning/5">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-yellow-600">
+          <CardTitle className="flex items-center gap-2 text-warning">
             <BellOff className="h-5 w-5" />
             Notificações não suportadas
           </CardTitle>
@@ -37,9 +37,9 @@ export function PushNotificationSettings() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`p-2 rounded-lg ${isEnabled ? 'bg-green-500/10' : 'bg-muted'}`}>
+            <div className={`p-2 rounded-lg ${isEnabled ? 'bg-success/10' : 'bg-muted'}`}>
               {isEnabled ? (
-                <BellRing className="h-5 w-5 text-green-500" />
+                <BellRing className="h-5 w-5 text-success" />
               ) : (
                 <Bell className="h-5 w-5 text-muted-foreground" />
               )}
@@ -70,9 +70,9 @@ export function PushNotificationSettings() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-              <CheckCircle2 className="h-5 w-5 text-green-500" />
-              <p className="text-sm text-green-700 dark:text-green-400">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-success/10 border border-success/20">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+              <p className="text-sm text-success">
                 Você receberá notificações sobre:
               </p>
             </div>

@@ -99,8 +99,8 @@ function ApprovalCard({
 
           {/* Risk Factors */}
           <div className="space-y-1">
-            {approval.riskFactors.slice(0, 2).map((factor, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-xs text-muted-foreground">
+            {approval.riskFactors.slice(0, 2).map((factor) => (
+              <div key={factor} className="flex items-center gap-2 text-xs text-muted-foreground">
                 <AlertTriangle className="w-3 h-3 text-warning" />
                 <span>{factor}</span>
               </div>

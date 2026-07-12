@@ -105,13 +105,13 @@ export default function AnalyticsDashboardPage() {
       {/* Performance & Drivers */}
       <div className="grid gap-6 lg:grid-cols-2">
         <motion.div variants={itemVariants}><Card variant="glass"><CardHeader><CardTitle>Indicadores de Performance</CardTitle></CardHeader><CardContent className="space-y-4">
-          {performanceData.map((p, i) => (<div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div><p className="font-medium text-sm">{p.metric}</p><p className="text-2xl font-bold">{p.value}</p></div>
+          {performanceData.map((p) => (<div key={p.metric} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div><p className="font-medium text-sm">{p.metric}</p><p className="text-2xl font-bold">{p.value}</p></div>
             <Badge variant={p.change >= 0 ? 'default' : 'destructive'} className="gap-1">{p.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}{Math.abs(p.change)}%</Badge>
           </div>))}
         </CardContent></Card></motion.div>
 
         <motion.div variants={itemVariants}><Card variant="glass"><CardHeader><CardTitle>Top Motoristas</CardTitle></CardHeader><CardContent className="space-y-3">
-          {driverRanking.map((d, i) => (<div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div className="flex items-center gap-3">
+          {driverRanking.map((d, i) => (<div key={d.name} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">{i + 1}</div>
             <div><p className="font-medium text-sm">{d.name}</p><p className="text-xs text-muted-foreground">{d.entregas} entregas · {d.taxa}% sucesso</p></div>
           </div><Badge variant="secondary">⭐ {d.rating.toFixed(1)}</Badge></div>))}

@@ -75,7 +75,7 @@ export function ApprovalCard({ approval, onApprove, onReject, onWhitelist, onBla
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-3 rounded-xl bg-destructive/5 border border-destructive/20">
             <p className="text-sm font-medium text-foreground flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-destructive" />Fatores de Risco</p>
             <div className="flex flex-wrap gap-2">
-              {approval.riskFactors.map((factor, index) => <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.05 }}><Badge variant="destructive" className="bg-destructive/20 text-destructive border-destructive/30">{factor}</Badge></motion.div>)}
+              {approval.riskFactors.map((factor, index) => <motion.div key={factor} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.05 }}><Badge variant="destructive" className="bg-destructive/20 text-destructive border-destructive/30">{factor}</Badge></motion.div>)}
             </div>
           </motion.div>
         )}

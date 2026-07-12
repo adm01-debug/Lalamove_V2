@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode, forwardRef } from 'react';
+import { useState, useEffect, useCallback, useRef, createContext, useContext, ReactNode, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lightbulb, ChevronRight, Sparkles, Info, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -53,6 +53,18 @@ export function HintProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Rastreia timers pendentes de exibição adiada para evitar atualização de
+  // estado após desmontagem (setState em componente desmontado / memory leak).
+  const pendingTimers = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+
+  useEffect(() => {
+    const timers = pendingTimers.current;
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+      timers.clear();
+    };
+  }, []);
+
   const showHint = useCallback((hint: Hint) => {
     if (hint.showOnce && dismissedHints.has(hint.id)) {
       return;
@@ -66,7 +78,11 @@ export function HintProvider({ children }: { children: ReactNode }) {
     };
 
     if (hint.delay) {
-      setTimeout(addHint, hint.delay);
+      const timer = setTimeout(() => {
+        pendingTimers.current.delete(timer);
+        addHint();
+      }, hint.delay);
+      pendingTimers.current.add(timer);
     } else {
       addHint();
     }

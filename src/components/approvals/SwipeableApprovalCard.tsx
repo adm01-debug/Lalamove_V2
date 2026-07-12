@@ -313,8 +313,8 @@ function CardInner({
         {approval.riskFactors.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5 text-destructive" />
-            {approval.riskFactors.slice(0, 3).map((factor, idx) => (
-              <Badge key={idx} variant="destructive" className="text-[10px] px-1.5 py-0">
+            {approval.riskFactors.slice(0, 3).map((factor) => (
+              <Badge key={factor} variant="destructive" className="text-[10px] px-1.5 py-0">
                 {factor}
               </Badge>
             ))}
