@@ -594,8 +594,24 @@ export default function AdvancedReportsPage() {
             </div>
             <Card variant="glass">
               <CardHeader className="flex-row items-center justify-between gap-4 space-y-0">
-                <CardTitle className="text-base">
+                <CardTitle className="text-base flex items-center gap-2">
                   {compareMetric === 'deliveries' ? 'Entregas' : 'Custo'} por dia — período atual vs. anterior
+                  {comparison.hasPrevious && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        'gap-1 text-xs',
+                        compareDelta > 0
+                          ? 'border-emerald-500/40 text-emerald-500'
+                          : compareDelta < 0
+                            ? 'border-rose-500/40 text-rose-500'
+                            : 'text-muted-foreground',
+                      )}
+                    >
+                      {compareDelta > 0 ? <TrendingUp className="w-3 h-3" /> : compareDelta < 0 ? <TrendingDown className="w-3 h-3" /> : <Minus className="w-3 h-3" />}
+                      {compareDelta > 0 ? '+' : ''}{compareDelta}%
+                    </Badge>
+                  )}
                 </CardTitle>
                 <div className="flex rounded-lg border border-border p-0.5">
                   <Button
