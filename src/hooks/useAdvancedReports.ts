@@ -443,6 +443,42 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     };
   }, [filtered, prevFiltered]);
 
+  // Série diária sobreposta: período atual vs. anterior alinhados por deslocamento.
+  const dailyComparison = useMemo<DailyComparisonPoint[]>(() => {
+    const days = parseInt(filters.period, 10) || 30;
+    const now = new Date();
+    // Início da janela atual (dia mais antigo do período atual).
+    const currentStart = startOfDay(subDays(now, days - 1));
+    const previousStart = startOfDay(subDays(now, days * 2 - 1));
+
+    const bucket = (set: OrderRow[], windowStart: Date) => {
+      const counts = new Array<number>(days).fill(0);
+      const costs = new Array<number>(days).fill(0);
+      const startMs = windowStart.getTime();
+      const dayMs = 24 * 60 * 60 * 1000;
+      set.forEach((r) => {
+        const idx = Math.floor((new Date(r.created_at).getTime() - startMs) / dayMs);
+        if (idx >= 0 && idx < days) {
+          counts[idx] += 1;
+          costs[idx] += r.total_cost || 0;
+        }
+      });
+      return { counts, costs };
+    };
+
+    const cur = bucket(filtered, currentStart);
+    const prev = bucket(prevFiltered, previousStart);
+
+    return Array.from({ length: days }, (_, i) => ({
+      label: `Dia ${i + 1}`,
+      current: cur.counts[i],
+      previous: prev.counts[i],
+      currentCost: round(cur.costs[i], 2),
+      previousCost: round(prev.costs[i], 2),
+    }));
+  }, [filtered, prevFiltered, filters.period]);
+
+
   return {
     loading,
     refreshing,
