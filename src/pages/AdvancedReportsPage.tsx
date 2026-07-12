@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
-  DollarSign, Gauge, MapPin, TrendingUp, TrendingDown, Minus, Clock, PackageCheck, Save, Bookmark, Trash2, User,
+  DollarSign, Gauge, MapPin, TrendingUp, TrendingDown, Minus, Clock, PackageCheck, Save, Bookmark, Trash2, User, FileSpreadsheet,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
