@@ -376,6 +376,34 @@ export default function AdvancedReportsPage() {
         <KpiCard icon={MapPin} label="Regiões atendidas" value={String(geography.length)} hint={`Custo/km ${fmtCurrency(cost.costPerKm, cost.currency)}`} />
       </motion.div>
 
+      {/* Comparação com período anterior */}
+      <motion.div variants={itemVariants}>
+        <Card variant="glass">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              Comparação vs. período anterior
+              <span className="text-xs font-normal text-muted-foreground">
+                (últimos {filters.period} dias vs. {filters.period} dias anteriores)
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {!comparison.hasPrevious ? (
+              <p className="text-sm text-muted-foreground">Sem dados no período anterior para comparar.</p>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <CompareStat label="Entregas" current={String(comparison.current.deliveries)} delta={comparison.deltas.deliveries} suffix="%" positiveIsGood />
+                <CompareStat label="Custo total" current={fmtCurrency(comparison.current.totalCost, cost.currency)} delta={comparison.deltas.totalCost} suffix="%" positiveIsGood={false} />
+                <CompareStat label="Pontualidade" current={`${comparison.current.onTimeRate}%`} delta={comparison.deltas.onTimeRate} suffix=" pts" positiveIsGood />
+                <CompareStat label="Cancelamento" current={`${comparison.current.cancellationRate}%`} delta={comparison.deltas.cancellationRate} suffix=" pts" positiveIsGood={false} />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+
       {/* Tabs */}
       <motion.div variants={itemVariants}>
         <Tabs defaultValue="cost" className="space-y-6">
