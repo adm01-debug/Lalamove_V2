@@ -96,6 +96,8 @@ garantindo formato de erro 422 único e versionamento (v1/v2):
 | new-device-alert    |    ✅     | —                                             |
 | route-analyzer      |    ✅     | —                                             |
 | test-notification   |    ✅     | —                                             |
-| check-external-api  |    ✅     | schema registrado                             |
+| check-external-api  |    ✅     | integrado à camada de contrato (I/O testado)  |
 
-Deploy realizado para: `send-notification`, `new-device-alert`, `route-analyzer`, `test-notification`.
+Deploy realizado para: `send-notification`, `new-device-alert`, `route-analyzer`, `test-notification`, `check-external-api`.
+
+Todas as 7 funções têm cobertura de I/O real em `contract.integration.test.ts` (27 testes).
