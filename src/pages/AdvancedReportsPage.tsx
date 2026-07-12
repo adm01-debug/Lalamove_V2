@@ -71,6 +71,30 @@ function KpiCard({ icon: Icon, label, value, hint }: {
   );
 }
 
+function CompareStat({ label, current, delta, suffix, positiveIsGood }: {
+  label: string; current: string; delta: number; suffix: string; positiveIsGood: boolean;
+}) {
+  const isFlat = delta === 0;
+  const isUp = delta > 0;
+  const isGood = isFlat ? true : isUp === positiveIsGood;
+  const Icon = isFlat ? Minus : isUp ? TrendingUp : TrendingDown;
+  const toneClass = isFlat
+    ? 'text-muted-foreground'
+    : isGood
+      ? 'text-success'
+      : 'text-destructive';
+  return (
+    <div className="rounded-xl border border-border/50 bg-card/40 p-4">
+      <p className="text-sm text-muted-foreground truncate">{label}</p>
+      <p className="text-xl font-bold text-foreground">{current}</p>
+      <div className={`flex items-center gap-1 text-sm font-medium ${toneClass}`}>
+        <Icon className="w-3.5 h-3.5" />
+        <span>{isUp ? '+' : ''}{delta}{suffix}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function AdvancedReportsPage() {
   const [filters, setFilters] = useState<AdvancedReportFilters>(DEFAULT_FILTERS);
   const [presetName, setPresetName] = useState('');
