@@ -1,7 +1,8 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Activity, Database, Zap, Wifi } from 'lucide-react';
+import { Activity, Database, Zap, Wifi, Clock } from 'lucide-react';
 import { useSystemHealth } from '@/hooks/useSystemHealth';
+import { CronJobsHealthPanel } from '@/components/health/CronJobsHealthPanel';
 
 export const SystemHealthPage = () => {
   const { data: health, isLoading } = useSystemHealth();
