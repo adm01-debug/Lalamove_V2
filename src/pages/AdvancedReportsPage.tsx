@@ -24,6 +24,7 @@ import {
 } from '@/hooks/useAdvancedReports';
 import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
+import { cn } from '@/lib/utils';
 
 const VEHICLE_LABELS: Record<string, string> = {
   MOTORCYCLE: 'Moto', CAR: 'Carro', VAN: 'Van', TRUCK: 'Caminhão', SEDAN: 'Sedan',
@@ -107,6 +108,16 @@ export default function AdvancedReportsPage() {
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
+
+  // Variação percentual total da métrica selecionada (atual vs. anterior).
+  const compareDelta = useMemo(() => {
+    const curKey = compareMetric === 'deliveries' ? 'current' : 'currentCost';
+    const prevKey = compareMetric === 'deliveries' ? 'previous' : 'previousCost';
+    const curTotal = dailyComparison.reduce((a, p) => a + p[curKey], 0);
+    const prevTotal = dailyComparison.reduce((a, p) => a + p[prevKey], 0);
+    if (prevTotal === 0) return curTotal > 0 ? 100 : 0;
+    return Math.round(((curTotal - prevTotal) / prevTotal) * 1000) / 10;
+  }, [dailyComparison, compareMetric]);
 
   const activeFilterCount = useMemo(() => {
     let n = 0;
@@ -584,8 +595,24 @@ export default function AdvancedReportsPage() {
             </div>
             <Card variant="glass">
               <CardHeader className="flex-row items-center justify-between gap-4 space-y-0">
-                <CardTitle className="text-base">
+                <CardTitle className="text-base flex items-center gap-2">
                   {compareMetric === 'deliveries' ? 'Entregas' : 'Custo'} por dia — período atual vs. anterior
+                  {comparison.hasPrevious && (
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        'gap-1 text-xs',
+                        compareDelta > 0
+                          ? 'border-emerald-500/40 text-emerald-500'
+                          : compareDelta < 0
+                            ? 'border-rose-500/40 text-rose-500'
+                            : 'text-muted-foreground',
+                      )}
+                    >
+                      {compareDelta > 0 ? <TrendingUp className="w-3 h-3" /> : compareDelta < 0 ? <TrendingDown className="w-3 h-3" /> : <Minus className="w-3 h-3" />}
+                      {compareDelta > 0 ? '+' : ''}{compareDelta}%
+                    </Badge>
+                  )}
                 </CardTitle>
                 <div className="flex rounded-lg border border-border p-0.5">
                   <Button
