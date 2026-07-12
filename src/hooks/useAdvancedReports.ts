@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { logger } from '@/utils/logger';
+import { useRegionResolver, coordKey, type Coord } from '@/hooks/useRegionResolver';
 
 /**
  * Filtros avançados aplicáveis ao histórico de entregas.
@@ -52,6 +53,8 @@ interface OrderRow {
   pod_received: boolean | null;
   requires_pod: boolean | null;
   delivery_address: string | null;
+  delivery_latitude: number | null;
+  delivery_longitude: number | null;
   pickup_address: string | null;
   customer_name: string | null;
   internal_order_id: string | null;
@@ -153,7 +156,7 @@ const isCompleted = (s: string) => s === 'COMPLETED';
 const isCancelled = (s: string) => s === 'CANCELLED' || s === 'REJECTED' || s === 'EXPIRED';
 
 const ORDER_SELECT =
-  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
+  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,delivery_latitude,delivery_longitude,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
 
 export function useAdvancedReports(filters: AdvancedReportFilters) {
   const [loading, setLoading] = useState(true);
@@ -337,13 +340,27 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     };
   }, [filtered]);
 
+  // Coordenadas de entrega para reverse geocoding (regiões precisas).
+  const geoCoords = useMemo<Coord[]>(
+    () =>
+      filtered
+        .filter((r) => r.delivery_latitude != null && r.delivery_longitude != null)
+        .map((r) => ({ lat: Number(r.delivery_latitude), lng: Number(r.delivery_longitude) })),
+    [filtered],
+  );
+  const resolvedRegions = useRegionResolver(geoCoords);
+
   const geography = useMemo<GeoRow[]>(() => {
     const map = new Map<
       string,
       { count: number; cost: number; distance: number; distCount: number; delay: number; delayCount: number; onTime: number; completed: number }
     >();
     filtered.forEach((r) => {
-      const region = extractRegion(r.delivery_address);
+      const geocoded =
+        r.delivery_latitude != null && r.delivery_longitude != null
+          ? resolvedRegions[coordKey(Number(r.delivery_latitude), Number(r.delivery_longitude))]
+          : undefined;
+      const region = geocoded || extractRegion(r.delivery_address);
       const g =
         map.get(region) ||
         { count: 0, cost: 0, distance: 0, distCount: 0, delay: 0, delayCount: 0, onTime: 0, completed: 0 };
@@ -375,7 +392,7 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 15);
-  }, [filtered]);
+  }, [filtered, resolvedRegions]);
 
   const daily = useMemo<DailyPoint[]>(() => {
     const days = parseInt(filters.period, 10) || 30;
