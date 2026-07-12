@@ -18,8 +18,46 @@ export type ContractVersion = "v1" | "v2";
 
 export const SUPPORTED_VERSIONS: readonly ContractVersion[] = ["v1", "v2"] as const;
 export const DEFAULT_VERSION: ContractVersion = "v1";
-/** Versões descontinuadas: ainda aceitas, mas sinalizadas via header Warning. */
-export const DEPRECATED_VERSIONS: readonly ContractVersion[] = [] as const;
+/** Versão recomendada para novas integrações e migração. */
+export const RECOMMENDED_VERSION: ContractVersion = "v2";
+
+// ── Estratégia de deprecação ─────────────────────────────────────────────────
+//
+// Ciclo de vida de uma versão de contrato:
+//   1. ATIVA        — suportada, sem avisos.
+//   2. DEPRECATED   — ainda aceita e processada normalmente, mas TODA resposta
+//                     (incluindo erros 422) sinaliza a deprecação via:
+//                       • corpo:   meta.deprecation { message, sunsetDate, ... }
+//                       • headers: `Warning: 299` (RFC 7234) e `Sunset` (RFC 8594)
+//                     Objetivo: dar visibilidade acionável ao integrador ANTES
+//                     da remoção, sem quebrar o contrato existente.
+//   3. REMOVIDA     — retirada de SUPPORTED_VERSIONS após a data de sunset;
+//                     passa a ser resolvida como UNSUPPORTED_VERSION.
+//
+// `v1` está DEPRECATED: continua funcionando até o sunset, mas todos os clientes
+// devem migrar para `v2` (superset retrocompatível). Como `v1` também é a
+// DEFAULT, requisições sem header explícito recebem o aviso — o que é
+// intencional para acelerar a migração.
+export const DEPRECATED_VERSIONS: readonly ContractVersion[] = ["v1"] as const;
+
+/** Cronograma de sunset (data ISO) por versão descontinuada. */
+export const DEPRECATION_SCHEDULE: Partial<
+  Record<ContractVersion, { sunsetDate: string }>
+> = {
+  v1: { sunsetDate: "2026-12-31" },
+};
+
+export interface DeprecationInfo {
+  version: ContractVersion;
+  deprecated: true;
+  message: string;
+  /** Data (ISO) a partir da qual a versão poderá ser removida. */
+  sunsetDate: string;
+  /** Versão para a qual o integrador deve migrar. */
+  recommendedVersion: ContractVersion;
+  /** Documentação da migração. */
+  migrationGuide: string;
+}
 
 /**
  * Resolve a versão do contrato a partir de (em ordem de precedência):
@@ -49,6 +87,28 @@ export function normalizeVersion(raw: string): ContractVersion | null {
 
 export function isDeprecated(version: ContractVersion): boolean {
   return DEPRECATED_VERSIONS.includes(version);
+}
+
+/**
+ * Retorna metadados de deprecação para uma versão, ou `null` se estiver ativa.
+ * Usado tanto no corpo (meta.deprecation) quanto nos headers de resposta.
+ */
+export function deprecationNotice(
+  version: ContractVersion,
+): DeprecationInfo | null {
+  if (!isDeprecated(version)) return null;
+  const sunsetDate = DEPRECATION_SCHEDULE[version]?.sunsetDate ?? "";
+  return {
+    version,
+    deprecated: true,
+    message:
+      `A versão de contrato '${version}' está descontinuada e será removida em ` +
+      `${sunsetDate || "data a definir"}. Migre para '${RECOMMENDED_VERSION}' ` +
+      `(superset retrocompatível) enviando o header 'x-contract-version: ${RECOMMENDED_VERSION}'.`,
+    sunsetDate,
+    recommendedVersion: RECOMMENDED_VERSION,
+    migrationGuide: "docs/API_CONTRACTS.md#versionamento-v1v2",
+  };
 }
 
 // ── Formato único de erro ─────────────────────────────────────────────────────
