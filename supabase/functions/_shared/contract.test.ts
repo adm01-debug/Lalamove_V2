@@ -247,3 +247,54 @@ Deno.test("todos os contratos definem todas as versões suportadas", () => {
     }
   }
 });
+
+// ── Estratégia de deprecação ──────────────────────────────────────────────────
+
+Deno.test("v1 está descontinuada e v2 é a recomendada", () => {
+  assert(DEPRECATED_VERSIONS.includes("v1"), "v1 deve estar em DEPRECATED_VERSIONS");
+  assert(isDeprecated("v1"));
+  assert(!isDeprecated("v2"));
+  assertEquals(RECOMMENDED_VERSION, "v2");
+});
+
+Deno.test("versão descontinuada nunca é a recomendada (invariante)", () => {
+  assert(
+    !DEPRECATED_VERSIONS.includes(RECOMMENDED_VERSION),
+    "RECOMMENDED_VERSION não pode estar descontinuada",
+  );
+});
+
+Deno.test("deprecationNotice retorna aviso acionável para v1", () => {
+  const notice = deprecationNotice("v1");
+  assertExists(notice);
+  assertEquals(notice!.version, "v1");
+  assertEquals(notice!.deprecated, true);
+  assertEquals(notice!.recommendedVersion, "v2");
+  assertEquals(notice!.sunsetDate, DEPRECATION_SCHEDULE.v1!.sunsetDate);
+  assert(notice!.message.includes("v2"), "mensagem deve orientar a migração para v2");
+  assert(notice!.message.includes(notice!.sunsetDate), "mensagem deve citar o sunset");
+});
+
+Deno.test("deprecationNotice retorna null para versão ativa (v2)", () => {
+  assertEquals(deprecationNotice("v2"), null);
+});
+
+Deno.test("erro 422 em v1 embute meta.deprecation clara", () => {
+  const result = validateContract(getSchema("evaluate-driver", "v1"), {}, "v1");
+  assert(!result.ok);
+  if (!result.ok) {
+    assertEquals(result.status, 422);
+    assertExists(result.body.meta.deprecation);
+    assertEquals(result.body.meta.deprecation!.recommendedVersion, "v2");
+    assert(result.body.meta.deprecation!.message.length > 0);
+  }
+});
+
+Deno.test("erro 422 em v2 NÃO inclui meta.deprecation", () => {
+  const result = validateContract(getSchema("evaluate-driver", "v2"), {}, "v2");
+  assert(!result.ok);
+  if (!result.ok) {
+    assertEquals(result.body.meta.deprecation, undefined);
+  }
+});
+
