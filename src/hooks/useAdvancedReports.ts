@@ -155,7 +155,7 @@ const isCompleted = (s: string) => s === 'COMPLETED';
 const isCancelled = (s: string) => s === 'CANCELLED' || s === 'REJECTED' || s === 'EXPIRED';
 
 const ORDER_SELECT =
-  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
+  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,delivery_latitude,delivery_longitude,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
 
 export function useAdvancedReports(filters: AdvancedReportFilters) {
   const [loading, setLoading] = useState(true);
