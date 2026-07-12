@@ -78,6 +78,39 @@ export function ContractVersionUsagePanel() {
           </p>
         ) : (
           <>
+            {/* Alerta automático de reversão de tendência (v1 voltando a subir) */}
+            {data.trend.rising && (
+              <div
+                role="alert"
+                className="flex items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/10 p-4"
+              >
+                <TrendingUp className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-destructive">
+                    Reversão de tendência detectada — v1 voltando a subir
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    A proporção de chamadas em v1 subiu{" "}
+                    <span className="font-medium text-foreground">
+                      +{data.trend.delta} p.p.
+                    </span>{" "}
+                    entre a 1ª metade ({data.trend.firstHalfAvg}%) e a 2ª metade
+                    ({data.trend.secondHalfAvg}%) do período
+                    {data.trend.recentDelta > 0.5 && (
+                      <>
+                        {" "}(últimos 3 dias:{" "}
+                        <span className="font-medium text-foreground">
+                          +{data.trend.recentDelta} p.p.
+                        </span>
+                        )
+                      </>
+                    )}
+                    . Investigue os integradores pendentes antes de prosseguir com o sunset.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Métricas resumo */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="rounded-lg border bg-card p-4">
