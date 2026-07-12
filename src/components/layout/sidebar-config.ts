@@ -3,7 +3,7 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  Gauge, Database, Lock, Zap, Bug
+  Gauge, Database, Lock, Zap, Bug, FileBarChart
 } from 'lucide-react';
 
 export interface MenuItem {
@@ -46,6 +46,7 @@ export const menuCategories: MenuCategory[] = [
     id: 'analytics', label: 'Analytics', icon: BarChart3,
     items: [
       { id: 'metrics', path: '/metrics', label: 'Métricas', icon: BarChart3 },
+      { id: 'advanced-reports', path: '/reports/advanced', label: 'Relatórios Avançados', icon: FileBarChart },
       { id: 'delivery-metrics', path: '/delivery-metrics', label: 'Métricas Entregas', icon: Truck },
       { id: 'sla', path: '/sla', label: 'Dashboard SLA', icon: Activity },
       { id: 'heatmap', path: '/heatmap', label: 'Mapa de Calor', icon: Flame },
