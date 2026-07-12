@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Area, AreaChart, Legend, PieChart, Pie, Cell, Line, ComposedChart,
+  Area, AreaChart, Legend, PieChart, Pie, Cell, Line, LineChart, ComposedChart,
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
@@ -101,7 +101,7 @@ export default function AdvancedReportsPage() {
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
-    cost, performance, geography, daily, comparison,
+    cost, performance, geography, daily, dailyComparison, comparison,
   } = useAdvancedReports(filters);
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
@@ -581,7 +581,32 @@ export default function AdvancedReportsPage() {
                 </CardContent>
               </Card>
             </div>
+            <Card variant="glass">
+              <CardHeader>
+                <CardTitle className="text-base">Entregas por dia — período atual vs. anterior</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!comparison.hasPrevious ? (
+                  <p className="text-sm text-muted-foreground py-12 text-center">
+                    Sem dados suficientes do período anterior para comparação.
+                  </p>
+                ) : (
+                  <ResponsiveContainer width="100%" height={320}>
+                    <LineChart data={dailyComparison}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="label" stroke="hsl(var(--muted-foreground))" fontSize={12} interval="preserveStartEnd" />
+                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
+                      <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
+                      <Legend />
+                      <Line type="monotone" dataKey="current" name="Período atual" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="previous" name="Período anterior" stroke="hsl(var(--muted-foreground))" strokeWidth={2} strokeDasharray="5 5" dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
+
 
           {/* GEOGRAFIA */}
           <TabsContent value="geography" className="space-y-6">
