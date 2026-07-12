@@ -1,6 +1,8 @@
 /**
- * Export utilities for CSV, JSON, and PDF text download
+ * Export utilities for CSV, JSON, Excel (.xlsx), and PDF text download
  */
+
+import * as XLSX from 'xlsx';
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -47,6 +49,39 @@ export function exportToJSON(data: unknown, filenameBase: string) {
   const json = JSON.stringify(data, null, 2);
   downloadFile(json, `${filenameBase}.json`, 'application/json');
 }
+
+/**
+ * Export one or more sheets to a native Excel (.xlsx) workbook.
+ * Each sheet is an array of flat objects; keys of the first row define columns.
+ */
+export function exportToExcel(
+  sheets: { name: string; rows: Record<string, unknown>[] }[],
+  filenameBase: string,
+) {
+  const workbook = XLSX.utils.book_new();
+  let added = 0;
+  sheets.forEach((sheet) => {
+    if (!sheet.rows.length) return;
+    const worksheet = XLSX.utils.json_to_sheet(sheet.rows);
+    // Larguras de coluna aproximadas com base no conteúdo.
+    const headers = Object.keys(sheet.rows[0]);
+    worksheet['!cols'] = headers.map((h) => {
+      const maxLen = sheet.rows.reduce((m, r) => {
+        const v = r[h];
+        const len = v === null || v === undefined ? 0 : String(v).length;
+        return Math.max(m, len);
+      }, h.length);
+      return { wch: Math.min(Math.max(maxLen + 2, 10), 50) };
+    });
+    // Nome de aba do Excel: máx. 31 caracteres, sem caracteres inválidos.
+    const safeName = (sheet.name || `Planilha${added + 1}`).replace(/[\\/?*[\]:]/g, ' ').slice(0, 31);
+    XLSX.utils.book_append_sheet(workbook, worksheet, safeName);
+    added += 1;
+  });
+  if (added === 0) return;
+  XLSX.writeFile(workbook, `${filenameBase}.xlsx`);
+}
+
 
 /**
  * Export a simple text-based PDF-like report (HTML rendered as printable)

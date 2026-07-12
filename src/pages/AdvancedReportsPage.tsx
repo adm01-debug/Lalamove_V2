@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
-  DollarSign, Gauge, MapPin, TrendingUp, TrendingDown, Minus, Clock, PackageCheck, Save, Bookmark, Trash2, User,
+  DollarSign, Gauge, MapPin, TrendingUp, TrendingDown, Minus, Clock, PackageCheck, Save, Bookmark, Trash2, User, FileSpreadsheet,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import {
   useAdvancedReports, DEFAULT_FILTERS, type AdvancedReportFilters,
 } from '@/hooks/useAdvancedReports';
 import { useReportPresets } from '@/hooks/useReportPresets';
-import { exportToCSV, exportToJSON, exportToPDFText } from '@/utils/exportUtils';
+import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
 
 const VEHICLE_LABELS: Record<string, string> = {
   MOTORCYCLE: 'Moto', CAR: 'Carro', VAN: 'Van', TRUCK: 'Caminhão', SEDAN: 'Sedan',
@@ -130,25 +130,55 @@ export default function AdvancedReportsPage() {
     setPresetName('');
   };
 
+  const buildDetailRows = () =>
+    filteredRows.map((r) => ({
+      Pedido: r.internal_order_id || r.lalamove_id || r.id,
+      Status: STATUS_LABELS[r.status] || r.status,
+      Veiculo: VEHICLE_LABELS[r.vehicle_type || ''] || r.vehicle_type || '',
+      Cliente: r.customer_name || '',
+      Motorista: r.driver?.name || '',
+      Departamento: r.department || '',
+      'Centro de Custo': r.cost_center || '',
+      'Custo': r.total_cost ?? '',
+      Moeda: r.currency || '',
+      'Distancia (km)': r.distance_meters ? (r.distance_meters / 1000).toFixed(1) : '',
+      'Duracao (min)': r.duration_minutes ?? '',
+      'Atraso (min)': r.delay_minutes ?? '',
+      Urgente: r.is_urgent ? 'Sim' : 'Não',
+      Entrega: r.delivery_address || '',
+      Data: new Date(r.created_at).toLocaleString('pt-BR'),
+    }));
+
   const handleExportCSV = () => {
-    exportToCSV(
-      filteredRows.map((r) => ({
-        Pedido: r.internal_order_id || r.lalamove_id || r.id,
-        Status: STATUS_LABELS[r.status] || r.status,
-        Veiculo: VEHICLE_LABELS[r.vehicle_type || ''] || r.vehicle_type || '',
-        Cliente: r.customer_name || '',
-        Motorista: r.driver?.name || '',
-        Departamento: r.department || '',
-        'Centro de Custo': r.cost_center || '',
-        'Custo': r.total_cost ?? '',
-        Moeda: r.currency || '',
-        'Distancia (km)': r.distance_meters ? (r.distance_meters / 1000).toFixed(1) : '',
-        'Duracao (min)': r.duration_minutes ?? '',
-        'Atraso (min)': r.delay_minutes ?? '',
-        Urgente: r.is_urgent ? 'Sim' : 'Não',
-        Entrega: r.delivery_address || '',
-        Data: new Date(r.created_at).toLocaleString('pt-BR'),
-      })),
+    exportToCSV(buildDetailRows(), `relatorio_avancado_${filters.period}d`);
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel(
+      [
+        { name: 'Entregas', rows: buildDetailRows() },
+        {
+          name: 'Custo por grupo',
+          rows: cost.byGroup.map((g) => ({
+            Grupo: g.label,
+            Entregas: g.count,
+            'Custo total': g.total,
+            'Custo médio': g.avg,
+            '% do total': g.percentage,
+          })),
+        },
+        {
+          name: 'Geografia',
+          rows: geography.map((g) => ({
+            Região: g.region,
+            Entregas: g.count,
+            'Custo total': g.totalCost,
+            'Distância média (km)': g.avgDistanceKm,
+            'Atraso médio (min)': g.avgDelay,
+            'Pontualidade (%)': g.onTimeRate,
+          })),
+        },
+      ],
       `relatorio_avancado_${filters.period}d`,
     );
   };
@@ -224,6 +254,9 @@ export default function AdvancedReportsPage() {
           </Button>
           <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2">
             <Download className="w-4 h-4" /> CSV
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2">
+            <FileSpreadsheet className="w-4 h-4" /> Excel
           </Button>
           <Button variant="outline" size="sm" onClick={handleExportJSON} className="gap-2">
             <Download className="w-4 h-4" /> JSON
