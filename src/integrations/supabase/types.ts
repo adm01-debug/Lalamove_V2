@@ -609,6 +609,42 @@ export type Database = {
         }
         Relationships: []
       }
+      contract_version_usage_monthly: {
+        Row: {
+          contract_name: string
+          contract_version: string
+          created_at: string
+          deprecated: boolean
+          id: string
+          last_seen_at: string | null
+          request_count: number
+          updated_at: string
+          usage_month: string
+        }
+        Insert: {
+          contract_name: string
+          contract_version: string
+          created_at?: string
+          deprecated?: boolean
+          id?: string
+          last_seen_at?: string | null
+          request_count?: number
+          updated_at?: string
+          usage_month: string
+        }
+        Update: {
+          contract_name?: string
+          contract_version?: string
+          created_at?: string
+          deprecated?: boolean
+          id?: string
+          last_seen_at?: string | null
+          request_count?: number
+          updated_at?: string
+          usage_month?: string
+        }
+        Relationships: []
+      }
       cron_job_logs: {
         Row: {
           completed_at: string | null
@@ -3015,6 +3051,10 @@ export type Database = {
           is_suspicious: boolean
           lockout_seconds: number
         }[]
+      }
+      rollup_contract_version_usage: {
+        Args: { p_retention_days?: number }
+        Returns: Json
       }
       run_daily_cleanup: { Args: never; Returns: Json }
       run_daily_cleanup_with_logging: { Args: never; Returns: undefined }
