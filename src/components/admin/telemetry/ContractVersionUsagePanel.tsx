@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
 import { useContractVersionUsage } from "@/hooks/useContractVersionUsage";
+import { useContractV1SunsetReadiness } from "@/hooks/useContractV1SunsetReadiness";
 import { cn } from "@/lib/utils";
 
 const RANGE_OPTIONS = [
