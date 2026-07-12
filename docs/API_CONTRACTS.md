@@ -69,6 +69,28 @@ Exemplo de `meta.deprecation` num 422 sob `v1`:
 
 **Como remover `v1` no sunset:** retirar `"v1"` de `SUPPORTED_VERSIONS` e `DEPRECATED_VERSIONS`, mudar `DEFAULT_VERSION` para `v2`, promover os schemas `v2` e atualizar os testes.
 
+### Telemetria de uso (rastreamento de integradores pendentes)
+
+Toda requisição às Edge Functions registra a versão de contrato utilizada, permitindo medir a **proporção de chamadas em `v1`** antes de definir a data efetiva de remoção.
+
+- **Log estruturado (sempre emitido):** cada chamada emite `{"tag":"contract_usage",...}` nos logs da função. Chamadas em versão descontinuada usam o prefixo `[DEPRECATED_CONTRACT_USAGE]` (`console.warn`) para filtragem imediata.
+- **Persistência agregada (best-effort):** `trackContractUsage()` (`_shared/telemetry.ts`) chama a RPC atômica `increment_contract_usage`, que faz upsert diário na tabela `public.contract_version_usage` por `(contract_name, contract_version, usage_date)`. É *fire-and-forget*: nunca bloqueia nem quebra a resposta ao cliente.
+- **Consulta (apenas admins):** `contract_version_usage` tem RLS restrito a `admin`. Exemplo — proporção de `v1` nos últimos 30 dias:
+
+```sql
+SELECT
+  usage_date,
+  SUM(request_count) FILTER (WHERE contract_version = 'v1')::numeric
+    / NULLIF(SUM(request_count), 0) AS v1_ratio
+FROM public.contract_version_usage
+WHERE usage_date >= current_date - INTERVAL '30 days'
+GROUP BY usage_date
+ORDER BY usage_date DESC;
+```
+
+- **Builder puro/testável:** `buildContractUsageEvent(name, version)` (em `contract.ts`) monta o evento sem I/O e é coberto por testes de contrato.
+
+
 
 
 ## Contratos cobertos
