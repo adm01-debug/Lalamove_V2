@@ -162,9 +162,15 @@ export function buildErrorBody(
   fields: ContractFieldError[],
   version: ContractVersion,
 ): ContractErrorBody {
+  const deprecation = deprecationNotice(version);
   return {
     error: { code, message, fields },
-    meta: { contractVersion: version, timestamp: new Date().toISOString() },
+    meta: {
+      contractVersion: version,
+      timestamp: new Date().toISOString(),
+      // Aviso claro embutido no próprio erro 422 para versões descontinuadas.
+      ...(deprecation ? { deprecation } : {}),
+    },
   };
 }
 
