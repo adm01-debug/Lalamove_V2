@@ -38,28 +38,33 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
     
-    const notificationSchema = z.object({
-      alert_id: z.string().uuid().or(z.string()),
-      type: z.string(),
-      severity: z.enum(['INFO', 'WARNING', 'CRITICAL']),
-      title: z.string(),
-      message: z.string(),
-      order_id: z.string().optional().nullable(),
-      driver_id: z.string().optional().nullable(),
-      metadata: z.record(z.any()).optional().nullable(),
-    });
-
-    const bodyResult = notificationSchema.safeParse(await req.json().catch(() => ({})));
-    
-    if (!bodyResult.success) {
-      logger.error("[Notification] Invalid request body:", bodyResult.error.format());
-      return new Response(
-        JSON.stringify({ error: 'Invalid request body' }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const { alert_id, type, severity, title, message, order_id, driver_id, metadata } = bodyResult.data;
+    const validation = validateContract(
+      getSchema("send-notification", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      logger.error("[Notification] Invalid request body:", validation.body.error.fields);
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { alert_id, type, severity, title, message, order_id, driver_id } =
+      validation.data as {
+        alert_id: string;
+        type: string;
+        severity: "INFO" | "WARNING" | "CRITICAL";
+        title: string;
+        message: string;
+        order_id?: string | null;
+        driver_id?: string | null;
+      };
+    const metadata = (validation.data as { metadata?: Record<string, unknown> | null }).metadata;
     
     logger.log(`[Notification] Sending ${severity} alert: ${type}`);
     
