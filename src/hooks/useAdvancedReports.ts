@@ -379,6 +379,37 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
       .reverse();
   }, [filtered, filters.period]);
 
+  // Comparação período atual vs. período anterior (mesmos filtros/tamanho).
+  const comparison = useMemo<ComparisonSummary>(() => {
+    const metricsFor = (set: OrderRow[]) => {
+      const total = set.length;
+      const completed = set.filter((r) => isCompleted(r.status));
+      const cancelled = set.filter((r) => isCancelled(r.status)).length;
+      const totalCost = set.reduce((a, r) => a + (r.total_cost || 0), 0);
+      const onTime = completed.filter((r) => (r.delay_minutes || 0) <= 0).length;
+      return {
+        deliveries: total,
+        totalCost: round(totalCost, 2),
+        onTimeRate: completed.length ? round((onTime / completed.length) * 100, 1) : 0,
+        cancellationRate: total ? round((cancelled / total) * 100, 1) : 0,
+      };
+    };
+    const cur = metricsFor(filtered);
+    const prev = metricsFor(prevFiltered);
+    const delta = (a: number, b: number) => (b === 0 ? (a > 0 ? 100 : 0) : round(((a - b) / b) * 100, 1));
+    return {
+      current: cur,
+      previous: prev,
+      deltas: {
+        deliveries: delta(cur.deliveries, prev.deliveries),
+        totalCost: delta(cur.totalCost, prev.totalCost),
+        onTimeRate: round(cur.onTimeRate - prev.onTimeRate, 1),
+        cancellationRate: round(cur.cancellationRate - prev.cancellationRate, 1),
+      },
+      hasPrevious: prevFiltered.length > 0,
+    };
+  }, [filtered, prevFiltered]);
+
   return {
     loading,
     refreshing,
@@ -389,5 +420,6 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     performance,
     geography,
     daily,
+    comparison,
   };
 }
