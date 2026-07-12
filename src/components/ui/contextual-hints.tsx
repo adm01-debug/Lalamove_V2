@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode, forwardRef } from 'react';
+import { useState, useEffect, useCallback, useRef, createContext, useContext, ReactNode, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lightbulb, ChevronRight, Sparkles, Info, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
