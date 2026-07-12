@@ -52,6 +52,8 @@ interface OrderRow {
   pod_received: boolean | null;
   requires_pod: boolean | null;
   delivery_address: string | null;
+  delivery_latitude: number | null;
+  delivery_longitude: number | null;
   pickup_address: string | null;
   customer_name: string | null;
   internal_order_id: string | null;
