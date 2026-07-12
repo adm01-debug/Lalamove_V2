@@ -98,6 +98,7 @@ function CompareStat({ label, current, delta, suffix, positiveIsGood }: {
 export default function AdvancedReportsPage() {
   const [filters, setFilters] = useState<AdvancedReportFilters>(DEFAULT_FILTERS);
   const [presetName, setPresetName] = useState('');
+  const [compareMetric, setCompareMetric] = useState<'deliveries' | 'cost'>('deliveries');
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
