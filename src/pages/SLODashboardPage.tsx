@@ -21,6 +21,8 @@ import { cn } from '@/lib/utils';
 import {
   useSLOMetrics, WINDOW_LABELS, type SLOWindow, type SLOIndicator, type SLOStatus,
 } from '@/hooks/useSLOMetrics';
+import { exportToCSV, exportToExcel, exportToJSON } from '@/utils/exportUtils';
+
 
 const STATUS_META: Record<SLOStatus, { label: string; text: string; bg: string; border: string; badge: 'default' | 'secondary' | 'destructive' }> = {
   healthy: { label: 'Saudável', text: 'text-success', bg: 'bg-success/10', border: 'border-success/30', badge: 'default' },
