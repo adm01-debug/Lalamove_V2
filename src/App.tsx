@@ -36,6 +36,7 @@ const AlertsPage = lazy(() => import('./pages/AlertsPage').then(m => ({ default:
 const LiveMapPage = lazy(() => import('./pages/LiveMapPage').then(m => ({ default: m.LiveMapPage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 const ReportsPage = lazy(() => import('./pages/ReportsPage').then(m => ({ default: m.ReportsPage })));
+const AdvancedReportsPage = lazy(() => import('./pages/AdvancedReportsPage'));
 const HeatmapPage = lazy(() => import('./pages/HeatmapPage').then(m => ({ default: m.HeatmapPage })));
 const SLADashboardPage = lazy(() => import('./pages/SLADashboardPage').then(m => ({ default: m.SLADashboardPage })));
 const RiskRulesPage = lazy(() => import('./pages/RiskRulesPage').then(m => ({ default: m.RiskRulesPage })));
@@ -181,6 +182,7 @@ const AppContent = () => {
                       <Route path="/settings/uapi" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings/lalamove" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/reports/advanced" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AdvancedReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/preferences" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/analytics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
