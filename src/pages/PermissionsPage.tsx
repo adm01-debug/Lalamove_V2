@@ -177,7 +177,7 @@ export default function PermissionsPage() {
                     <div className="mt-3"><h3 className="font-semibold">{cfg.label}</h3><p className="text-xs text-muted-foreground mt-0.5">{cfg.description}</p></div>
                     <div className="mt-3 flex items-center gap-2">
                       <div className="flex-1 h-1.5 rounded-full bg-background/50 overflow-hidden">
-                        <div className={cn("h-full rounded-full transition-all", role === 'admin' ? "bg-destructive" : role === 'manager' ? "bg-primary" : role === 'operator' ? "bg-info" : "bg-muted-foreground")} style={{ width: `${(enabled / total) * 100}%` }} />
+                        <div className={cn("h-full rounded-full transition-all", role === 'admin' ? "bg-destructive" : role === 'manager' ? "bg-primary" : role === 'operator' ? "bg-info" : "bg-muted-foreground")} style={{ width: total > 0 ? `${(enabled / total) * 100}%` : '0%' }} />
                       </div>
                       <span className="text-xs font-medium">{enabled}/{total}</span>
                     </div>
