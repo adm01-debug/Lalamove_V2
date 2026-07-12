@@ -66,17 +66,52 @@ serve(async (req) => {
         order_id?: string | null;
         driver_id?: string | null;
       };
-    const metadata = (validation.data as { metadata?: Record<string, unknown> | null }).metadata;
-    
-    logger.log(`[Notification] Sending ${severity} alert: ${type}`);
-    
+    const extra = validation.data as {
+      metadata?: Record<string, unknown> | null;
+      dedup_key?: string | null;
+      skip_dedup?: boolean | null;
+      is_escalation?: boolean | null;
+    };
+    const metadata = extra.metadata;
+    const isEscalation = extra.is_escalation === true;
+
+    logger.log(`[Notification] Sending ${severity} alert: ${type}${isEscalation ? " (ESCALATION)" : ""}`);
+
+    // ── Deduplication ──────────────────────────────────────────────────────
+    // Escalations always bypass dedup (they are intentional re-sends).
+    if (!isEscalation && extra.skip_dedup !== true) {
+      const dedupKey = extra.dedup_key ||
+        `${type}:${order_id ?? driver_id ?? "global"}:${severity}`;
+      const { data: dedupRows, error: dedupError } = await supabase.rpc(
+        "claim_alert_notification",
+        { p_dedup_key: dedupKey, p_alert_type: type, p_window_seconds: 300 },
+      );
+      if (dedupError) {
+        logger.error("[Notification] Dedup RPC failed, proceeding:", dedupError);
+      } else {
+        const claim = Array.isArray(dedupRows) ? dedupRows[0] : dedupRows;
+        if (claim && claim.should_send === false) {
+          logger.log(`[Notification] Suppressed by dedup: ${dedupKey} (x${claim.occurrence_count})`);
+          return new Response(
+            JSON.stringify({
+              success: true,
+              suppressed: true,
+              dedup_key: dedupKey,
+              occurrence_count: claim.occurrence_count,
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+      }
+    }
+
     // Get alert configurations for this type
     const { data: configs } = await supabase
       .from('alert_configurations')
       .select('*')
       .eq('alert_type', type)
       .eq('is_enabled', true);
-    
+
     if (!configs || configs.length === 0) {
       logger.log(`[Notification] No active configurations for: ${type}`);
       return new Response(
@@ -84,9 +119,36 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-    
+
     const results: Array<{ channel: string; success: boolean; error?: string }> = [];
-    
+
+    // Dispatch a single channel to a single recipient, logging the outcome.
+    const dispatch = async (
+      channel: string,
+      recipient: string,
+    ): Promise<{ success: boolean; error?: string }> => {
+      let result: { success: boolean; error?: string };
+      switch (channel) {
+        case "whatsapp":
+          result = await sendWhatsApp(recipient, severity, title, message, order_id, driver_id);
+          break;
+        case "email":
+          result = await sendEmail(recipient, severity, title, message, order_id, driver_id);
+          break;
+        case "slack":
+          result = await sendSlack(recipient, severity, title, message, order_id, driver_id);
+          break;
+        case "n8n":
+          result = await sendN8NWebhook(recipient, { type, severity, title, message, order_id, driver_id, metadata });
+          break;
+        default:
+          result = { success: false, error: `Unsupported channel: ${channel}` };
+      }
+      results.push({ channel: `${channel}:${recipient}`, ...result });
+      await recordNotificationLog(supabase, alert_id, channel, recipient, result.success, result.error);
+      return result;
+    };
+
     for (const config of configs) {
       const cfg = config as {
         notify_whatsapp?: boolean;
@@ -99,62 +161,106 @@ serve(async (req) => {
         bitrix24_user_ids?: number[];
         notify_n8n_webhook?: boolean;
         n8n_webhook_url?: string;
+        escalation_email_addresses?: string[];
+        escalation_whatsapp_numbers?: string[];
+        escalation_slack_channels?: string[];
+        fallback_channel?: string | null;
+        fallback_recipients?: string[];
       };
+
+      // On escalation, prefer escalation recipients (fall back to normal ones).
+      const whatsappNumbers = isEscalation
+        ? (cfg.escalation_whatsapp_numbers?.length ? cfg.escalation_whatsapp_numbers : (cfg.whatsapp_numbers ?? []))
+        : (cfg.whatsapp_numbers ?? []);
+      const emailAddresses = isEscalation
+        ? (cfg.escalation_email_addresses?.length ? cfg.escalation_email_addresses : (cfg.email_addresses ?? []))
+        : (cfg.email_addresses ?? []);
+      const slackChannels = isEscalation
+        ? (cfg.escalation_slack_channels?.length ? cfg.escalation_slack_channels : (cfg.slack_channels ?? []))
+        : (cfg.slack_channels ?? []);
+
+      let anyAttempted = false;
+      let anySucceeded = false;
+
       // WhatsApp
-      const whatsappNumbers = cfg.whatsapp_numbers ?? [];
       if (cfg.notify_whatsapp && whatsappNumbers.length > 0) {
         for (const number of whatsappNumbers) {
-          const result = await sendWhatsApp(number, severity, title, message, order_id, driver_id);
-          results.push({ channel: `whatsapp:${number}`, ...result });
-          await recordNotificationLog(supabase, alert_id, 'whatsapp', number, result.success, result.error);
+          anyAttempted = true;
+          const r = await dispatch("whatsapp", number);
+          anySucceeded = anySucceeded || r.success;
         }
       }
-      
+
       // Email
-      const emailAddresses = cfg.email_addresses ?? [];
       if (cfg.notify_email && emailAddresses.length > 0) {
         for (const email of emailAddresses) {
-          const result = await sendEmail(email, severity, title, message, order_id, driver_id);
-          results.push({ channel: `email:${email}`, ...result });
-          await recordNotificationLog(supabase, alert_id, 'email', email, result.success, result.error);
+          anyAttempted = true;
+          const r = await dispatch("email", email);
+          anySucceeded = anySucceeded || r.success;
         }
       }
-      
+
       // Slack
-      const slackChannels = cfg.slack_channels ?? [];
       if (cfg.notify_slack && slackChannels.length > 0) {
         for (const channel of slackChannels) {
-          const result = await sendSlack(channel, severity, title, message, order_id, driver_id);
-          results.push({ channel: `slack:${channel}`, ...result });
-          await recordNotificationLog(supabase, alert_id, 'slack', channel, result.success, result.error);
+          anyAttempted = true;
+          const r = await dispatch("slack", channel);
+          anySucceeded = anySucceeded || r.success;
         }
       }
-      
+
       // Bitrix24
       const bitrixUserIds = cfg.bitrix24_user_ids ?? [];
       if (cfg.notify_bitrix24_task && bitrixUserIds.length > 0) {
+        anyAttempted = true;
         const result = await sendBitrix24Task(supabase, bitrixUserIds, severity, title, message, order_id);
         results.push({ channel: 'bitrix24', ...result });
         await recordNotificationLog(supabase, alert_id, 'bitrix24', bitrixUserIds.join(','), result.success, result.error);
+        anySucceeded = anySucceeded || result.success;
       }
-      
+
       // N8N Webhook
       if (cfg.notify_n8n_webhook && cfg.n8n_webhook_url) {
-        const result = await sendN8NWebhook(cfg.n8n_webhook_url, { type, severity, title, message, order_id, driver_id, metadata });
-        results.push({ channel: 'n8n', ...result });
-        await recordNotificationLog(supabase, alert_id, 'n8n', cfg.n8n_webhook_url, result.success, result.error);
+        anyAttempted = true;
+        const r = await dispatch("n8n", cfg.n8n_webhook_url);
+        anySucceeded = anySucceeded || r.success;
+      }
+
+      // ── Fallback channel ────────────────────────────────────────────────
+      // When every configured channel failed (or none was configured but a
+      // fallback exists), attempt the contingency channel so alerts are not lost.
+      const needFallback = (anyAttempted && !anySucceeded) || (!anyAttempted);
+      if (needFallback && cfg.fallback_channel) {
+        const fallbackRecipients = cfg.fallback_recipients ?? [];
+        if (fallbackRecipients.length > 0) {
+          logger.log(`[Notification] Triggering fallback channel: ${cfg.fallback_channel}`);
+          for (const recipient of fallbackRecipients) {
+            await dispatch(cfg.fallback_channel, recipient);
+          }
+        } else {
+          logger.log('[Notification] Fallback channel set but no recipients configured');
+        }
       }
     }
-    
+
     const successCount = results.filter(r => r.success).length;
     const failCount = results.filter(r => !r.success).length;
-    
+
+    // Mark the alert as escalated so the escalation worker does not re-process it.
+    if (isEscalation) {
+      await supabase
+        .from('alerts')
+        .update({ escalated_at: new Date().toISOString(), escalation_level: 1 })
+        .eq('id', alert_id);
+    }
+
     logger.log(`[Notification] Done: ${successCount} sent, ${failCount} failed`);
-    
+
     return new Response(
-      JSON.stringify({ success: true, results, summary: { sent: successCount, failed: failCount } }),
+      JSON.stringify({ success: true, escalation: isEscalation, results, summary: { sent: successCount, failed: failCount } }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
+
     
   } catch (error: unknown) {
     logger.error("Notification Internal Error:", error);
