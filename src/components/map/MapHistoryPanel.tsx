@@ -81,10 +81,15 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
       e.event_type || 'TRACK'
     ]);
 
-    // Statistics Calculation (Excelência 10/10)
-    const validSpeeds = history.map(e => e.speed ?? 0);
-    const maxSpeed = history.length > 0 ? Math.max(...validSpeeds) : 0;
-    const avgSpeed = history.length > 0 ? validSpeeds.reduce((acc, s) => acc + s, 0) / history.length : 0;
+    // Estatísticas: considera apenas leituras de velocidade válidas (não-nulas),
+    // evitando que registros sem GPS puxem a média para baixo.
+    const validSpeeds = history
+      .map(e => e.speed)
+      .filter((s): s is number => typeof s === 'number');
+    const maxSpeed = validSpeeds.length > 0 ? Math.max(...validSpeeds) : 0;
+    const avgSpeed = validSpeeds.length > 0
+      ? validSpeeds.reduce((acc, s) => acc + s, 0) / validSpeeds.length
+      : 0;
     
     const startTime = history[0]?.created_at ? new Date(history[0].created_at) : null;
     const endTime = history[history.length - 1]?.created_at ? new Date(history[history.length - 1].created_at) : null;
