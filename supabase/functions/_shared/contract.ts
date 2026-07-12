@@ -220,9 +220,19 @@ export function jsonResponse(
   };
   if (version) {
     finalHeaders["x-contract-version"] = version;
-    if (isDeprecated(version)) {
+    const deprecation = deprecationNotice(version);
+    if (deprecation) {
+      // RFC 7234 (Warning) + RFC 8594 (Sunset) + Link para o guia de migração.
       finalHeaders["Warning"] =
-        `299 - "Contract version ${version} is deprecated and will be removed."`;
+        `299 - "${deprecation.message}"`;
+      if (deprecation.sunsetDate) {
+        finalHeaders["Sunset"] = new Date(
+          `${deprecation.sunsetDate}T23:59:59Z`,
+        ).toUTCString();
+      }
+      finalHeaders["Deprecation"] = "true";
+      finalHeaders["Link"] =
+        `<${deprecation.migrationGuide}>; rel="deprecation"`;
     }
   }
   return new Response(JSON.stringify(body), { status, headers: finalHeaders });
