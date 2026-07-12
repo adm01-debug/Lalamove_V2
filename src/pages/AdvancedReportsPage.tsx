@@ -113,6 +113,7 @@ export default function AdvancedReportsPage() {
         Status: STATUS_LABELS[r.status] || r.status,
         Veiculo: VEHICLE_LABELS[r.vehicle_type || ''] || r.vehicle_type || '',
         Cliente: r.customer_name || '',
+        Motorista: r.driver?.name || '',
         Departamento: r.department || '',
         'Centro de Custo': r.cost_center || '',
         'Custo': r.total_cost ?? '',
