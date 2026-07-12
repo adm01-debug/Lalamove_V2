@@ -7,11 +7,11 @@ const mockWriteFile = vi.fn();
 
 vi.mock('xlsx', () => ({
   utils: {
-    json_to_sheet: (...args: unknown[]) => mockJsonToSheet(...args),
-    book_new: (...args: unknown[]) => mockBookNew(...args),
-    book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...args),
+    json_to_sheet: (...args: unknown[]) => mockJsonToSheet(...(args as [])),
+    book_new: (...args: unknown[]) => mockBookNew(...(args as [])),
+    book_append_sheet: (...args: unknown[]) => mockBookAppendSheet(...(args as [])),
   },
-  writeFile: (...args: unknown[]) => mockWriteFile(...args),
+  writeFile: (...args: unknown[]) => mockWriteFile(...(args as [])),
 }));
 
 import { exportToCSV, exportToJSON, exportToPDFText, exportToExcel } from '../exportUtils';
