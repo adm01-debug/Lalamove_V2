@@ -137,5 +137,26 @@ export function useAlertActions() {
     },
   });
 
-  return { dismissMutation, markAsReadMutation, markAllAsReadMutation };
+  // Acknowledge an alert — stops the automatic escalation worker from
+  // re-notifying and records who acknowledged it (via RPC acknowledge_alert).
+  const acknowledgeMutation = useMutation({
+    mutationFn: async (alertId: string) => {
+      const { data, error } = await supabase.rpc('acknowledge_alert', {
+        p_alert_id: alertId,
+      });
+      if (error) throw error;
+      return data as boolean;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['active-alerts'] });
+      toast.success('Alerta reconhecido. Escalonamento cancelado.');
+    },
+    onError: (error) => {
+      logger.error('Error acknowledging alert:', error);
+      toast.error('Falha ao reconhecer alerta.');
+    },
+  });
+
+  return { dismissMutation, markAsReadMutation, markAllAsReadMutation, acknowledgeMutation };
 }
+
