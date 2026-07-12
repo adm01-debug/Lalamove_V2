@@ -43,7 +43,7 @@ async function recordRotationFailure(
     .join('\n');
 
   const { error } = await supabase.from('alerts').insert({
-    type: 'ORDER_CANCELLED',
+    type: 'INTEGRATION_FAILURE',
     severity: 'CRITICAL',
     title,
     message,
