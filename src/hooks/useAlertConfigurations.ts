@@ -25,9 +25,9 @@ export interface AlertConfiguration {
   bitrix24_user_ids: number[] | null;
   n8n_webhook_url: string | null;
   min_interval_seconds: number | null;
-  dedup_window_seconds: number | null;
-  escalation_enabled: boolean | null;
-  escalation_after_seconds: number | null;
+  dedup_window_seconds: number;
+  escalation_enabled: boolean;
+  escalation_after_seconds: number;
   escalation_email_addresses: string[] | null;
   escalation_whatsapp_numbers: string[] | null;
   escalation_slack_channels: string[] | null;
