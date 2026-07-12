@@ -105,7 +105,7 @@ export default function AnalyticsDashboardPage() {
       {/* Performance & Drivers */}
       <div className="grid gap-6 lg:grid-cols-2">
         <motion.div variants={itemVariants}><Card variant="glass"><CardHeader><CardTitle>Indicadores de Performance</CardTitle></CardHeader><CardContent className="space-y-4">
-          {performanceData.map((p, i) => (<div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div><p className="font-medium text-sm">{p.metric}</p><p className="text-2xl font-bold">{p.value}</p></div>
+          {performanceData.map((p) => (<div key={p.metric} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div><p className="font-medium text-sm">{p.metric}</p><p className="text-2xl font-bold">{p.value}</p></div>
             <Badge variant={p.change >= 0 ? 'default' : 'destructive'} className="gap-1">{p.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}{Math.abs(p.change)}%</Badge>
           </div>))}
         </CardContent></Card></motion.div>
