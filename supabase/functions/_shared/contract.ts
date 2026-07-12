@@ -128,6 +128,8 @@ export interface ContractErrorBody {
   meta: {
     contractVersion: ContractVersion;
     timestamp: string;
+    /** Presente somente quando a versão usada está descontinuada. */
+    deprecation?: DeprecationInfo;
   };
 }
 
