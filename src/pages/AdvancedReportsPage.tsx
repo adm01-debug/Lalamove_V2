@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Area, AreaChart, Legend, PieChart, Pie, Cell, Line, ComposedChart,
+  Area, AreaChart, Legend, PieChart, Pie, Cell, Line, LineChart, ComposedChart,
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
