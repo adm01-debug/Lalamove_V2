@@ -71,7 +71,7 @@ interface ReverseResult {
  * Extrai a região mais representativa de um resultado de reverse geocode.
  * Preferência: bairro → localidade → cidade. Usa o `context` como reforço.
  */
-function pickRegion(result: ReverseResult): string | null {
+export function pickRegion(result: ReverseResult): string | null {
   const features = result.features ?? [];
   if (features.length === 0) return null;
 
