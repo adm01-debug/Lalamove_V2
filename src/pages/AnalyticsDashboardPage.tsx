@@ -111,7 +111,7 @@ export default function AnalyticsDashboardPage() {
         </CardContent></Card></motion.div>
 
         <motion.div variants={itemVariants}><Card variant="glass"><CardHeader><CardTitle>Top Motoristas</CardTitle></CardHeader><CardContent className="space-y-3">
-          {driverRanking.map((d, i) => (<div key={i} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div className="flex items-center gap-3">
+          {driverRanking.map((d, i) => (<div key={d.name} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30"><div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">{i + 1}</div>
             <div><p className="font-medium text-sm">{d.name}</p><p className="text-xs text-muted-foreground">{d.entregas} entregas · {d.taxa}% sucesso</p></div>
           </div><Badge variant="secondary">⭐ {d.rating.toFixed(1)}</Badge></div>))}
