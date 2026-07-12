@@ -284,15 +284,88 @@ export default function AdvancedReportsPage() {
               </SelectContent>
             </Select>
 
+            <Select value={filters.driver} onValueChange={(v) => setFilter('driver', v)}>
+              <SelectTrigger><User className="w-4 h-4 mr-2 text-primary" /><SelectValue placeholder="Motorista" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os motoristas</SelectItem>
+                {filterOptions.drivers.map((d) => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                placeholder="Custo mín."
+                value={filters.costMin}
+                onChange={(e) => setFilter('costMin', e.target.value)}
+                aria-label="Custo mínimo"
+              />
+              <span className="text-muted-foreground text-sm">—</span>
+              <Input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                placeholder="Custo máx."
+                value={filters.costMax}
+                onChange={(e) => setFilter('costMax', e.target.value)}
+                aria-label="Custo máximo"
+              />
+            </div>
+
             <Input
-              placeholder="Buscar cliente, pedido, endereço..."
+              placeholder="Buscar cliente, pedido, endereço, motorista..."
               value={filters.search}
               onChange={(e) => setFilter('search', e.target.value)}
               className="xl:col-span-2"
             />
+
+            {/* Presets de filtros persistidos */}
+            <div className="col-span-full flex flex-wrap items-center gap-2 pt-2 border-t border-border/50 mt-1">
+              <Bookmark className="w-4 h-4 text-primary shrink-0" />
+              <span className="text-sm text-muted-foreground">Presets:</span>
+              {presets.length === 0 && (
+                <span className="text-xs text-muted-foreground italic">Nenhum preset salvo</span>
+              )}
+              {presets.map((p) => (
+                <Badge key={p.id} variant="secondary" className="gap-1 pr-1">
+                  <button
+                    type="button"
+                    className="hover:underline"
+                    onClick={() => setFilters(p.filters)}
+                  >
+                    {p.name}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deletePreset(p.id)}
+                    aria-label={`Excluir preset ${p.name}`}
+                    className="rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive transition-colors"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </Badge>
+              ))}
+              <div className="flex items-center gap-2 ml-auto">
+                <Input
+                  placeholder="Nome do preset"
+                  value={presetName}
+                  onChange={(e) => setPresetName(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSavePreset(); }}
+                  className="h-8 w-40"
+                />
+                <Button variant="outline" size="sm" onClick={handleSavePreset} disabled={!presetName.trim()} className="gap-1">
+                  <Save className="w-3.5 h-3.5" /> Salvar
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
+
 
       {/* KPIs globais */}
       <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
