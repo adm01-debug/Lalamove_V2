@@ -58,6 +58,10 @@ const sendNotificationV1 = z.object({
   order_id: z.string().optional().nullable(),
   driver_id: z.string().optional().nullable(),
   metadata: z.record(z.unknown()).optional().nullable(),
+  // Deduplication & escalation controls (multi-channel alerting)
+  dedup_key: z.string().optional().nullable(),
+  skip_dedup: z.boolean().optional().nullable(),
+  is_escalation: z.boolean().optional().nullable(),
 });
 
 const sendNotificationV2 = sendNotificationV1.extend({

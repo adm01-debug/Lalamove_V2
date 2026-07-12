@@ -131,7 +131,15 @@ export type Database = {
           config: Json | null
           created_at: string
           created_by: string | null
+          dedup_window_seconds: number
           email_addresses: string[] | null
+          escalation_after_seconds: number
+          escalation_email_addresses: string[] | null
+          escalation_enabled: boolean
+          escalation_slack_channels: string[] | null
+          escalation_whatsapp_numbers: string[] | null
+          fallback_channel: string | null
+          fallback_recipients: string[] | null
           id: string
           is_enabled: boolean | null
           message_template: string | null
@@ -158,7 +166,15 @@ export type Database = {
           config?: Json | null
           created_at?: string
           created_by?: string | null
+          dedup_window_seconds?: number
           email_addresses?: string[] | null
+          escalation_after_seconds?: number
+          escalation_email_addresses?: string[] | null
+          escalation_enabled?: boolean
+          escalation_slack_channels?: string[] | null
+          escalation_whatsapp_numbers?: string[] | null
+          fallback_channel?: string | null
+          fallback_recipients?: string[] | null
           id?: string
           is_enabled?: boolean | null
           message_template?: string | null
@@ -185,7 +201,15 @@ export type Database = {
           config?: Json | null
           created_at?: string
           created_by?: string | null
+          dedup_window_seconds?: number
           email_addresses?: string[] | null
+          escalation_after_seconds?: number
+          escalation_email_addresses?: string[] | null
+          escalation_enabled?: boolean
+          escalation_slack_channels?: string[] | null
+          escalation_whatsapp_numbers?: string[] | null
+          fallback_channel?: string | null
+          fallback_recipients?: string[] | null
           id?: string
           is_enabled?: boolean | null
           message_template?: string | null
@@ -206,10 +230,41 @@ export type Database = {
         }
         Relationships: []
       }
+      alert_dedup: {
+        Row: {
+          alert_type: Database["public"]["Enums"]["alert_type"]
+          dedup_key: string
+          first_seen_at: string
+          last_notified_at: string
+          occurrence_count: number
+          suppressed_count: number
+        }
+        Insert: {
+          alert_type: Database["public"]["Enums"]["alert_type"]
+          dedup_key: string
+          first_seen_at?: string
+          last_notified_at?: string
+          occurrence_count?: number
+          suppressed_count?: number
+        }
+        Update: {
+          alert_type?: Database["public"]["Enums"]["alert_type"]
+          dedup_key?: string
+          first_seen_at?: string
+          last_notified_at?: string
+          occurrence_count?: number
+          suppressed_count?: number
+        }
+        Relationships: []
+      }
       alerts: {
         Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
           created_at: string
           driver_id: string | null
+          escalated_at: string | null
+          escalation_level: number
           id: string
           is_dismissed: boolean | null
           is_read: boolean | null
@@ -221,8 +276,12 @@ export type Database = {
           type: Database["public"]["Enums"]["alert_type"]
         }
         Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
           created_at?: string
           driver_id?: string | null
+          escalated_at?: string | null
+          escalation_level?: number
           id?: string
           is_dismissed?: boolean | null
           is_read?: boolean | null
@@ -234,8 +293,12 @@ export type Database = {
           type: Database["public"]["Enums"]["alert_type"]
         }
         Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
           created_at?: string
           driver_id?: string | null
+          escalated_at?: string | null
+          escalation_level?: number
           id?: string
           is_dismissed?: boolean | null
           is_read?: boolean | null
@@ -2919,6 +2982,7 @@ export type Database = {
       }
     }
     Functions: {
+      acknowledge_alert: { Args: { p_alert_id: string }; Returns: boolean }
       check_login_lockout: {
         Args: { p_email: string }
         Returns: {
@@ -2935,6 +2999,18 @@ export type Database = {
           is_ip_blocked: boolean
           is_locked: boolean
           remaining_seconds: number
+        }[]
+      }
+      claim_alert_notification: {
+        Args: {
+          p_alert_type: Database["public"]["Enums"]["alert_type"]
+          p_dedup_key: string
+          p_window_seconds: number
+        }
+        Returns: {
+          occurrence_count: number
+          should_send: boolean
+          suppressed_count: number
         }[]
       }
       cleanup_expired_tokens: { Args: never; Returns: number }
@@ -2981,6 +3057,20 @@ export type Database = {
           last_status: string
           runs_considered: number
           schedule: string
+        }[]
+      }
+      get_pending_escalations: {
+        Args: never
+        Returns: {
+          alert_id: string
+          alert_type: Database["public"]["Enums"]["alert_type"]
+          created_at: string
+          driver_id: string
+          escalation_after_seconds: number
+          message: string
+          order_id: string
+          severity: Database["public"]["Enums"]["alert_severity"]
+          title: string
         }[]
       }
       get_user_permissions: {
