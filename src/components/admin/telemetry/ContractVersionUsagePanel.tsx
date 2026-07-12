@@ -7,7 +7,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid, ReferenceLine,
 } from "recharts";
-import { AlertTriangle, CheckCircle2, TrendingDown } from "lucide-react";
+import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
 import { useContractVersionUsage } from "@/hooks/useContractVersionUsage";
 import { cn } from "@/lib/utils";
 
