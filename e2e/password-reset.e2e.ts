@@ -18,17 +18,22 @@ test.describe('Fluxo de reset de senha', () => {
     await ensureSignedOut(page);
   });
 
-  test('exibe formulário de recuperação com validação de e-mail', async ({ page }) => {
+  test('exibe formulário de recuperação e valida e-mail no cliente', async ({ page }) => {
     await page.goto('/forgot-password');
 
     await expect(page.getByRole('heading', { name: 'Recuperação de senha' })).toBeVisible();
     const emailInput = page.locator('#email');
     await expect(emailInput).toBeVisible();
 
-    // E-mail inválido → erro no cliente, sem navegar.
+    // E-mail inválido: a validação de cliente (nativa + Zod) impede o envio
+    // e o usuário permanece na página de recuperação.
     await emailInput.fill('nao-e-um-email');
     await page.getByRole('button', { name: /Enviar link de recuperação/i }).click();
-    await expect(page.getByText('Por favor, insira um email válido')).toBeVisible();
+
+    const isInvalid = await emailInput.evaluate(
+      (el: HTMLInputElement) => !el.checkValidity(),
+    );
+    expect(isInvalid).toBe(true);
     await expect(page).toHaveURL(/\/forgot-password/);
   });
 
