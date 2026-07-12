@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TelemetryCharts } from "@/components/admin/telemetry/TelemetryCharts";
+import { ContractVersionUsagePanel } from "@/components/admin/telemetry/ContractVersionUsagePanel";
 import { toast } from "sonner";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
@@ -341,7 +342,11 @@ export default function AdminTelemetriaPage() {
         </Card>
       )}
 
+      {/* Deprecação de contratos — proporção de v1 */}
+      <ContractVersionUsagePanel />
+
       {/* Charts */}
+
       <TelemetryCharts rows={rows} timeFilter={timeFilter} />
 
       {/* Filters */}
