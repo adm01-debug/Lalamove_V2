@@ -1,4 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import {
+  resolveContractVersion,
+  parseJsonBody,
+  validateContract,
+  errorResponse,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
