@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   BarChart3, TrendingUp, TrendingDown, Calendar, 
   Users, Package, AlertTriangle, CheckCircle2,
-  FileSpreadsheet, FileJson, Printer, RefreshCw, Loader2
+  FileSpreadsheet, FileJson, Printer, RefreshCw, Loader2, Sheet as SheetIcon
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { toast } from 'sonner';
-import { exportToCSV, exportToJSON, exportToPDFText } from '@/utils/exportUtils';
+import { exportToCSV, exportToJSON, exportToPDFText, exportToExcel } from '@/utils/exportUtils';
 import { useAnalyticsData } from '@/hooks/useAnalyticsData';
 
 const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
@@ -27,10 +27,18 @@ export default function AnalyticsDashboardPage() {
   const [period, setPeriod] = useState('7');
   const { data, isLoading, refetch, isRefetching } = useAnalyticsData(parseInt(period));
 
-  const handleExport = (fmt: 'csv' | 'json' | 'pdf') => {
+  const handleExport = (fmt: 'csv' | 'excel' | 'json' | 'pdf') => {
     if (!data) return;
     const rows = data.chartData.map(d => ({ Data: d.date, Pedidos: d.pedidos, Entregas: d.entregas, Aprovações: d.aprovacoes, Alertas: d.alertas }));
     if (fmt === 'csv') { exportToCSV(rows, `analytics_${period}d`); toast.success('CSV exportado!'); }
+    else if (fmt === 'excel') {
+      exportToExcel([
+        { name: 'Série diária', rows },
+        { name: 'Performance', rows: data.performanceData.map(p => ({ Métrica: p.metric, Valor: p.value, 'Variação (%)': p.change })) },
+        { name: 'Top Motoristas', rows: data.driverRanking.map((d, i) => ({ Posição: i + 1, Motorista: d.name, Entregas: d.entregas, Avaliação: d.rating, 'Sucesso (%)': d.taxa })) },
+      ], `analytics_${period}d`);
+      toast.success('Excel exportado!');
+    }
     else if (fmt === 'json') { exportToJSON({ period: `${period} dias`, totals: data.totals, daily: rows, drivers: data.driverRanking }, `analytics_${period}d`); toast.success('JSON exportado!'); }
     else { exportToPDFText({ title: `Relatório de Analytics - Últimos ${period} dias`, sections: [
       { title: 'Totais', content: `Pedidos: ${data.totals.pedidos} | Entregas: ${data.totals.entregas} | Aprovações: ${data.totals.aprovacoes} | Alertas: ${data.totals.alertas}` },
@@ -59,7 +67,7 @@ export default function AnalyticsDashboardPage() {
           <Select value={period} onValueChange={setPeriod}><SelectTrigger className="w-[140px]"><Calendar className="w-4 h-4 mr-2" /><SelectValue /></SelectTrigger><SelectContent><SelectItem value="7">Últimos 7 dias</SelectItem><SelectItem value="14">Últimos 14 dias</SelectItem><SelectItem value="30">Últimos 30 dias</SelectItem><SelectItem value="90">Últimos 90 dias</SelectItem></SelectContent></Select>
           <Button variant="outline" onClick={() => refetch()} disabled={isRefetching} className="gap-2"><RefreshCw className={`w-4 h-4 ${isRefetching ? 'animate-spin' : ''}`} />{t('common.refresh', 'Atualizar')}</Button>
           <div className="flex gap-2">
-            {(['csv', 'json', 'pdf'] as const).map(f => (<Button key={f} variant="outline" size="icon" aria-label={`Exportar como ${f.toUpperCase()}`} onClick={() => handleExport(f)} disabled={!data}>{f === 'csv' ? <FileSpreadsheet className="w-4 h-4" /> : f === 'json' ? <FileJson className="w-4 h-4" /> : <Printer className="w-4 h-4" />}</Button>))}
+            {(['csv', 'excel', 'json', 'pdf'] as const).map(f => (<Button key={f} variant="outline" size="icon" aria-label={`Exportar como ${f.toUpperCase()}`} onClick={() => handleExport(f)} disabled={!data}>{f === 'csv' ? <FileSpreadsheet className="w-4 h-4" /> : f === 'excel' ? <SheetIcon className="w-4 h-4" /> : f === 'json' ? <FileJson className="w-4 h-4" /> : <Printer className="w-4 h-4" />}</Button>))}
           </div>
         </div>
       </motion.div>
