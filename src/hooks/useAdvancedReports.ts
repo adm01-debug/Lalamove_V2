@@ -489,6 +489,8 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     performance,
     geography,
     daily,
+    dailyComparison,
     comparison,
+
   };
 }
