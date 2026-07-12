@@ -96,7 +96,7 @@ export function useReportPresets() {
           const { error } = await supabase
             .from('report_presets')
             .upsert(
-              [{ user_id: auth.user.id, name: trimmed, filters }],
+              [{ user_id: auth.user.id, name: trimmed, filters: filters as unknown as Record<string, string> }],
               { onConflict: 'user_id,name' },
             );
           if (error) {
