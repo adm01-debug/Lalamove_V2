@@ -75,7 +75,7 @@ export function useContractVersionUsageMonthly(months = 12) {
         .order("usage_month", { ascending: true });
 
       if (error) throw error;
-      return aggregate((data ?? []) as MonthlyUsageRow[]);
+      return aggregateMonthly((data ?? []) as MonthlyUsageRow[]);
     },
     staleTime: 300_000,
   });
