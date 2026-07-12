@@ -97,7 +97,7 @@ export function TimelineItem({ event, isLast, index, animated, compact }: {
           </div>
         </div>
         {event.description && <p className="text-xs text-muted-foreground leading-relaxed">{event.description}</p>}
-        {event.tags && event.tags.length > 0 && <div className="flex flex-wrap gap-1">{event.tags.map((tag, i) => <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">#{tag}</Badge>)}</div>}
+        {event.tags && event.tags.length > 0 && <div className="flex flex-wrap gap-1">{event.tags.map((tag) => <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">#{tag}</Badge>)}</div>}
         {event.metadata && Object.keys(event.metadata).length > 0 && <div className="flex flex-wrap gap-2 mt-2">{Object.entries(event.metadata).map(([key, value]) => <span key={key} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-muted/50 text-xs"><span className="text-muted-foreground">{key}:</span><span className="font-medium">{value}</span></span>)}</div>}
         {event.expandedContent && (
           <>
