@@ -38,6 +38,8 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
   const [allTrackingData, setAllTrackingData] = useState<TrackingData[]>([]);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchTrackingData = async () => {
       const { data, error } = await supabase
         .from('active_tracking')
@@ -50,6 +52,9 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
             pickup_longitude, delivery_latitude, delivery_longitude
           )
         `);
+
+      // Descarta respostas de requisições obsoletas (troca de filtro / unmount).
+      if (cancelled) return;
 
       if (error) {
         logger.error('Error fetching tracking data:', error);
@@ -85,6 +90,7 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
     const interval = setInterval(fetchTrackingData, 5000);
 
     return () => {
+      cancelled = true;
       supabase.removeChannel(channel);
       clearInterval(interval);
     };
