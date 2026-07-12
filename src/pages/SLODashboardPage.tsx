@@ -244,7 +244,7 @@ export default function SLODashboardPage() {
                   <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} unit="ms" width={44} />
                   <RTooltip
                     contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }}
-                    formatter={(v: number) => [`${v}ms`, 'Latência média']}
+                    formatter={(v) => [`${v}ms`, 'Latência média']}
                   />
                   <Line type="monotone" dataKey="Latência" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
                 </LineChart>
