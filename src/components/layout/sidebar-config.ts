@@ -3,7 +3,7 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  Gauge, Database, Lock, Zap, Bug
+  Gauge, Database, Lock, Zap, Bug, FileBarChart
 } from 'lucide-react';
 
 export interface MenuItem {
