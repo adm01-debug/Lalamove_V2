@@ -414,7 +414,7 @@ serve(async (req) => {
           const orderUuid = await getOrderUuid(lalamoveOrderId);
           if (orderUuid) {
             const newLalamoveStatus = payload.data?.status || payload.status;
-            const mappedStatus = statusMapping[newLalamoveStatus?.toUpperCase()] || 'ON_GOING';
+            const mappedStatus = statusMapping[(newLalamoveStatus ?? '').toUpperCase()] || 'ON_GOING';
             await updateOrderStatus(orderUuid, mappedStatus, { lalamove_status: newLalamoveStatus, timestamp: payload.timestamp });
           } else {
             logger.log(`[Webhook] Order ${lalamoveOrderId} not found in database`);
