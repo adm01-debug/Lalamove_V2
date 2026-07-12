@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
   detectTrend,
+  detectSustainedReversal,
+  SUSTAINED_MIN_DAYS,
   type ContractUsageDailyPoint,
 } from "@/hooks/useContractVersionUsage";
 
