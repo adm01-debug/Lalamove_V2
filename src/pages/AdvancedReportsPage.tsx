@@ -316,7 +316,7 @@ export default function AdvancedReportsPage() {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                      <Tooltip formatter={(v: number) => fmtCurrency(v, cost.currency)} contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
+                      <Tooltip formatter={(v) => fmtCurrency(Number(v), cost.currency)} contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
                       <Area type="monotone" dataKey="cost" name="Custo" stroke="hsl(var(--primary))" fill="url(#costGrad)" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -330,7 +330,7 @@ export default function AdvancedReportsPage() {
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                       <YAxis type="category" dataKey="label" width={110} stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                      <Tooltip formatter={(v: number) => fmtCurrency(v, cost.currency)} contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
+                      <Tooltip formatter={(v) => fmtCurrency(Number(v), cost.currency)} contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
                       <Bar dataKey="total" name="Custo" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
