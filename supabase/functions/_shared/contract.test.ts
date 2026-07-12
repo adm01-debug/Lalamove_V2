@@ -21,6 +21,7 @@ import {
 } from "https://deno.land/std@0.224.0/assert/mod.ts";
 
 import {
+  buildContractUsageEvent,
   buildErrorBody,
   DEFAULT_VERSION,
   DEPRECATED_VERSIONS,
@@ -298,3 +299,25 @@ Deno.test("erro 422 em v2 NÃO inclui meta.deprecation", () => {
   }
 });
 
+
+// ── Telemetria de uso de versão (evento puro) ────────────────────────────────
+
+Deno.test("buildContractUsageEvent marca deprecated=true para v1", () => {
+  const ev = buildContractUsageEvent("evaluate-driver", "v1");
+  assertEquals(ev.contractName, "evaluate-driver");
+  assertEquals(ev.contractVersion, "v1");
+  assertEquals(ev.deprecated, true);
+  assertExists(ev.timestamp);
+});
+
+Deno.test("buildContractUsageEvent marca deprecated=false para v2", () => {
+  const ev = buildContractUsageEvent("evaluate-driver", "v2");
+  assertEquals(ev.deprecated, false);
+});
+
+Deno.test("buildContractUsageEvent: deprecated reflete DEPRECATED_VERSIONS", () => {
+  for (const name of ALL_CONTRACTS) {
+    const ev = buildContractUsageEvent(name, "v1");
+    assertEquals(ev.deprecated, DEPRECATED_VERSIONS.includes("v1"));
+  }
+});

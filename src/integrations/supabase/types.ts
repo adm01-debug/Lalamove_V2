@@ -576,6 +576,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contract_version_usage: {
+        Row: {
+          contract_name: string
+          contract_version: string
+          created_at: string
+          deprecated: boolean
+          id: string
+          last_seen_at: string
+          request_count: number
+          usage_date: string
+        }
+        Insert: {
+          contract_name: string
+          contract_version: string
+          created_at?: string
+          deprecated?: boolean
+          id?: string
+          last_seen_at?: string
+          request_count?: number
+          usage_date?: string
+        }
+        Update: {
+          contract_name?: string
+          contract_version?: string
+          created_at?: string
+          deprecated?: boolean
+          id?: string
+          last_seen_at?: string
+          request_count?: number
+          usage_date?: string
+        }
+        Relationships: []
+      }
       cron_job_logs: {
         Row: {
           completed_at: string | null
@@ -2923,6 +2956,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_contract_usage: {
+        Args: {
+          p_contract_name: string
+          p_contract_version: string
+          p_deprecated: boolean
+        }
+        Returns: undefined
       }
       is_aal2: { Args: never; Returns: boolean }
       is_country_blocked: { Args: { _country_code: string }; Returns: boolean }

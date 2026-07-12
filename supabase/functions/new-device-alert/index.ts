@@ -9,6 +9,7 @@ import {
   errorResponse,
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -40,6 +41,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const version = resolveContractVersion(req);
+    trackContractUsage("new-device-alert", version);
     const parsedBody = await parseJsonBody(req, version);
     if (!parsedBody.ok) {
       return errorResponse(parsedBody, corsHeaders);

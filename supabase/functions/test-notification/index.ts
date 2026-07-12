@@ -6,6 +6,7 @@ import {
   errorResponse,
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -26,6 +27,7 @@ serve(async (req) => {
 
   try {
     const version = resolveContractVersion(req);
+    trackContractUsage("test-notification", version);
     const parsedBody = await parseJsonBody(req, version);
     if (!parsedBody.ok) {
       return errorResponse(parsedBody, corsHeaders);

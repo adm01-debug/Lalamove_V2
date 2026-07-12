@@ -111,6 +111,32 @@ export function deprecationNotice(
   };
 }
 
+// ── Telemetria de uso de versão (deprecação) ─────────────────────────────────
+
+export interface ContractUsageEvent {
+  contractName: string;
+  contractVersion: ContractVersion;
+  deprecated: boolean;
+  /** ISO timestamp do evento. */
+  timestamp: string;
+}
+
+/**
+ * Constrói (de forma PURA e testável) o evento de telemetria de uso de contrato.
+ * Não executa I/O — a persistência é responsabilidade de `telemetry.ts`.
+ */
+export function buildContractUsageEvent(
+  contractName: string,
+  version: ContractVersion,
+): ContractUsageEvent {
+  return {
+    contractName,
+    contractVersion: version,
+    deprecated: isDeprecated(version),
+    timestamp: new Date().toISOString(),
+  };
+}
+
 // ── Formato único de erro ─────────────────────────────────────────────────────
 
 export interface ContractFieldError {
