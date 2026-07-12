@@ -87,6 +87,7 @@ export const menuCategories: MenuCategory[] = [
       { id: 'error-monitoring', path: '/error-monitoring', label: 'Erros Runtime', icon: Bug, requiredRole: 'manager' },
       { id: 'cache-monitoring', path: '/cache-monitoring', label: 'Cache Monitor', icon: HardDrive, requiredRole: 'manager' },
       { id: 'performance', path: '/performance', label: 'Performance', icon: Gauge, requiredRole: 'manager' },
+      { id: 'slo', path: '/slo', label: 'Dashboard SLO', icon: Activity, requiredRole: 'manager' },
       { id: 'telemetria', path: '/telemetria', label: 'Telemetria BD', icon: Activity, requiredRole: 'admin' },
       { id: 'settings', path: '/settings', label: 'Configurações', icon: Settings },
     ]

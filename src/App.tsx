@@ -61,6 +61,7 @@ const CacheMonitoringPage = lazy(() => import('./pages/CacheMonitoringPage').the
 const PerformanceDashboardPage = lazy(() => import('./pages/PerformanceDashboardPage').then(m => ({ default: m.PerformanceDashboardPage })));
 const ErrorMonitoringPage = lazy(() => import('./pages/ErrorMonitoringPage'));
 const AdminTelemetriaPage = lazy(() => import('./pages/AdminTelemetriaPage'));
+const SLODashboardPage = lazy(() => import('./pages/SLODashboardPage'));
 
 // Lazy loaded pages - Security
 const RolesPage = lazy(() => import('./pages/RolesPage'));
@@ -155,6 +156,7 @@ const AppContent = () => {
                       <Route path="/cache-status" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheStatusPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/cache-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><CacheMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/performance" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><PerformanceDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/slo" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SLODashboardPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/job-queue" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><JobQueuePage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/error-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ErrorMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
