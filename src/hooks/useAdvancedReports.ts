@@ -119,31 +119,47 @@ function extractRegion(address: string | null): string {
 const isCompleted = (s: string) => s === 'COMPLETED';
 const isCancelled = (s: string) => s === 'CANCELLED' || s === 'REJECTED' || s === 'EXPIRED';
 
+const ORDER_SELECT =
+  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
+
 export function useAdvancedReports(filters: AdvancedReportFilters) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [rows, setRows] = useState<OrderRow[]>([]);
+  const [prevRows, setPrevRows] = useState<OrderRow[]>([]);
 
   const fetchData = useCallback(async () => {
     setRefreshing(true);
     const days = parseInt(filters.period, 10) || 30;
-    const startDate = startOfDay(subDays(new Date(), days));
-    const endDate = endOfDay(new Date());
+    const now = new Date();
+    const startDate = startOfDay(subDays(now, days));
+    const endDate = endOfDay(now);
+    // Janela anterior de mesmo tamanho, imediatamente antes do período atual.
+    const prevStart = startOfDay(subDays(now, days * 2));
+    const prevEnd = endOfDay(subDays(now, days + 1));
 
     try {
-      const { data, error } = await supabase
-        .from('lalamove_orders')
-        .select(
-          'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)'
-        )
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      setRows((data as unknown as OrderRow[]) ?? []);
+      const [current, previous] = await Promise.all([
+        supabase
+          .from('lalamove_orders')
+          .select(ORDER_SELECT)
+          .gte('created_at', startDate.toISOString())
+          .lte('created_at', endDate.toISOString())
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('lalamove_orders')
+          .select(ORDER_SELECT)
+          .gte('created_at', prevStart.toISOString())
+          .lte('created_at', prevEnd.toISOString()),
+      ]);
+      if (current.error) throw current.error;
+      setRows((current.data as unknown as OrderRow[]) ?? []);
+      // Falha na janela anterior não deve quebrar o relatório principal.
+      setPrevRows(previous.error ? [] : ((previous.data as unknown as OrderRow[]) ?? []));
     } catch (err) {
       logger.error('Erro ao carregar relatórios avançados:', err);
       setRows([]);
+      setPrevRows([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
