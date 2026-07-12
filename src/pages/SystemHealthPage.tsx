@@ -1,7 +1,8 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Activity, Database, Zap, Wifi } from 'lucide-react';
+import { Activity, Database, Zap, Wifi, Clock } from 'lucide-react';
 import { useSystemHealth } from '@/hooks/useSystemHealth';
+import { CronJobsHealthPanel } from '@/components/health/CronJobsHealthPanel';
 
 export const SystemHealthPage = () => {
   const { data: health, isLoading } = useSystemHealth();
@@ -69,6 +70,14 @@ export const SystemHealthPage = () => {
           </p>
         </Card>
       </div>
+
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Clock className="h-6 w-6" aria-hidden="true" />
+          <h3 className="text-2xl font-bold">Jobs de Manutenção (Cron)</h3>
+        </div>
+        <CronJobsHealthPanel />
+      </section>
     </div>
   );
 };
