@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { 
   BarChart3, TrendingUp, TrendingDown, Calendar, 
   Users, Package, AlertTriangle, CheckCircle2,
-  FileSpreadsheet, FileJson, Printer, RefreshCw, Loader2
+  FileSpreadsheet, FileJson, Printer, RefreshCw, Loader2, Sheet as SheetIcon
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
