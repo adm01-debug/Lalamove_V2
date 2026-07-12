@@ -1,6 +1,8 @@
 /**
- * Export utilities for CSV, JSON, and PDF text download
+ * Export utilities for CSV, JSON, Excel (.xlsx), and PDF text download
  */
+
+import * as XLSX from 'xlsx';
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
