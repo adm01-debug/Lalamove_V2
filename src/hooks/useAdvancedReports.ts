@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { logger } from '@/utils/logger';
+import { useRegionResolver, coordKey, type Coord } from '@/hooks/useRegionResolver';
 
 /**
  * Filtros avançados aplicáveis ao histórico de entregas.
