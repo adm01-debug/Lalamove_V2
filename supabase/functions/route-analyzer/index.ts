@@ -1,6 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import {
+  resolveContractVersion,
+  parseJsonBody,
+  validateContract,
+  errorResponse,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -26,23 +32,27 @@ serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-    const requestSchema = z.object({
-      action: z.enum(['analyze-routes', 'analyze-order', 'analyze-drivers', 'analyze-alerts']),
-      message: z.string().optional(),
-      orderId: z.string().uuid().optional(),
-    });
 
-    const body = await req.json();
-    const result = requestSchema.safeParse(body);
-
-    if (!result.success) {
-      return new Response(JSON.stringify({ error: 'Invalid request payload', details: result.error.format() }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const { action, message, orderId } = result.data;
+    const validation = validateContract(
+      getSchema("route-analyzer", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { action, message, orderId } = validation.data as {
+      action: "analyze-routes" | "analyze-order" | "analyze-drivers" | "analyze-alerts";
+      message?: string;
+      orderId?: string;
+    };
 
     let contextData = '';
 

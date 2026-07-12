@@ -1,4 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import {
+  resolveContractVersion,
+  parseJsonBody,
+  validateContract,
+  errorResponse,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,7 +25,22 @@ serve(async (req) => {
   }
 
   try {
-    const { channel, alertType, recipients, webhookUrl }: TestRequest = await req.json();
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
+    }
+
+    const validation = validateContract(
+      getSchema("test-notification", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { channel, alertType, recipients, webhookUrl } = validation.data as TestRequest;
 
     console.log(`[Test] Testing ${channel} notification for ${alertType}`);
     

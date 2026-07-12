@@ -61,3 +61,20 @@ deno test --allow-net supabase/functions/_shared/contract.test.ts
 ```
 
 Cobertura: payload válido, campo ausente, tipo incorreto, valor vazio, JSON malformado, compat retroativa v1→v2, resolução de versão. **34/34 passando.**
+
+## Status de integração (rollout completo)
+
+Todas as Edge Functions com payload de entrada agora consomem a camada de contrato,
+garantindo formato de erro 422 único e versionamento (v1/v2):
+
+| Função              | Integrada | Observação                                    |
+| ------------------- | :-------: | --------------------------------------------- |
+| lalamove-webhook    |    ✅     | + validação HMAC                              |
+| evaluate-driver     |    ✅     | —                                             |
+| send-notification   |    ✅     | inclui `metadata` opcional no schema          |
+| new-device-alert    |    ✅     | —                                             |
+| route-analyzer      |    ✅     | —                                             |
+| test-notification   |    ✅     | —                                             |
+| check-external-api  |    ✅     | schema registrado                             |
+
+Deploy realizado para: `send-notification`, `new-device-alert`, `route-analyzer`, `test-notification`.

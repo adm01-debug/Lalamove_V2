@@ -2,7 +2,13 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { logger } from "../_shared/logger.ts";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import {
+  resolveContractVersion,
+  parseJsonBody,
+  validateContract,
+  errorResponse,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -33,24 +39,19 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const deviceAlertSchema = z.object({
-      userId: z.string().uuid().or(z.string()),
-      userEmail: z.string().email(),
-      deviceFingerprint: z.string(),
-      ipAddress: z.string(),
-      userAgent: z.string(),
-      browser: z.string().optional().nullable(),
-      os: z.string().optional().nullable(),
-      locationCity: z.string().optional().nullable(),
-      locationCountry: z.string().optional().nullable(),
-    });
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
+    }
 
-    const bodyResult = deviceAlertSchema.safeParse(await req.json().catch(() => ({})));
-    if (!bodyResult.success) {
-      return new Response(
-        JSON.stringify({ error: "Invalid request body" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const validation = validateContract(
+      getSchema("new-device-alert", version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
     }
 
     const {
@@ -63,7 +64,17 @@ const handler = async (req: Request): Promise<Response> => {
       os,
       locationCity,
       locationCountry,
-    } = bodyResult.data;
+    } = validation.data as {
+      userId: string;
+      userEmail: string;
+      deviceFingerprint: string;
+      ipAddress: string;
+      userAgent: string;
+      browser?: string | null;
+      os?: string | null;
+      locationCity?: string | null;
+      locationCountry?: string | null;
+    };
 
     logger.log(`Checking device for user ${userId}, fingerprint: ${deviceFingerprint}`);
 
