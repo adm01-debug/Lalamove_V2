@@ -1,7 +1,9 @@
 import { useState, useMemo } from 'react';
+import { toast } from 'sonner';
 import {
   Activity, Gauge, AlertTriangle, RefreshCw, TrendingUp,
   ShieldCheck, Timer, Database, Bug, Webhook, CheckCircle2, XCircle, Clock,
+  FileSpreadsheet, Sheet as SheetIcon, FileJson,
 } from 'lucide-react';
 import {
   AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip as RTooltip,
@@ -19,6 +21,8 @@ import { cn } from '@/lib/utils';
 import {
   useSLOMetrics, WINDOW_LABELS, type SLOWindow, type SLOIndicator, type SLOStatus,
 } from '@/hooks/useSLOMetrics';
+import { exportToCSV, exportToExcel, exportToJSON } from '@/utils/exportUtils';
+
 
 const STATUS_META: Record<SLOStatus, { label: string; text: string; bg: string; border: string; badge: 'default' | 'secondary' | 'destructive' }> = {
   healthy: { label: 'Saudável', text: 'text-success', bg: 'bg-success/10', border: 'border-success/30', badge: 'default' },
@@ -109,6 +113,28 @@ export default function SLODashboardPage() {
     [data],
   );
 
+  const handleExport = (fmt: 'csv' | 'excel' | 'json') => {
+    if (!data) return;
+    const base = `slo_${window}`;
+    const indicatorRows = [
+      { Indicador: 'Disponibilidade', Valor: data.availability.value, Objetivo: data.availability.target, Status: STATUS_META[data.availability.status].label, 'Budget consumido (%)': data.availability.errorBudgetConsumed, 'Budget livre (%)': data.availability.errorBudgetRemaining },
+      { Indicador: 'Latência P95 (ms)', Valor: data.latencyP95.value, Objetivo: data.latencyP95.target, Status: STATUS_META[data.latencyP95.status].label, 'Budget consumido (%)': data.latencyP95.errorBudgetConsumed, 'Budget livre (%)': data.latencyP95.errorBudgetRemaining },
+      { Indicador: 'Taxa de falhas (%)', Valor: data.failureRate.value, Objetivo: data.failureRate.target, Status: STATUS_META[data.failureRate.status].label, 'Budget consumido (%)': data.failureRate.errorBudgetConsumed, 'Budget livre (%)': data.failureRate.errorBudgetRemaining },
+    ];
+    const timelineRows = chartData;
+    if (fmt === 'csv') { exportToCSV(indicatorRows, base); toast.success('CSV exportado!'); }
+    else if (fmt === 'excel') {
+      exportToExcel([
+        { name: 'Indicadores', rows: indicatorRows },
+        { name: 'Série temporal', rows: timelineRows },
+        { name: 'Latência', rows: [{ P50: data.latency.p50, P90: data.latency.p90, P95: data.latency.p95, P99: data.latency.p99, Média: data.latency.avg, Máx: data.latency.max }] },
+        { name: 'Fontes de falha', rows: [{ 'Erros de banco': data.failureSources.databaseErrors, 'Erros de frontend': data.failureSources.frontendErrors, 'Erros de webhook': data.failureSources.webhookErrors }] },
+      ], base);
+      toast.success('Excel exportado!');
+    }
+    else { exportToJSON(data, base); toast.success('JSON exportado!'); }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 space-y-6 max-w-7xl">
       {/* Header */}
@@ -133,6 +159,15 @@ export default function SLODashboardPage() {
               ))}
             </SelectContent>
           </Select>
+          <Button variant="outline" size="icon" onClick={() => handleExport('csv')} disabled={!data} aria-label="Exportar como CSV">
+            <FileSpreadsheet className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => handleExport('excel')} disabled={!data} aria-label="Exportar como Excel">
+            <SheetIcon className="w-4 h-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => handleExport('json')} disabled={!data} aria-label="Exportar como JSON">
+            <FileJson className="w-4 h-4" />
+          </Button>
           <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Atualizar métricas">
             <RefreshCw className={cn('w-4 h-4', isFetching && 'animate-spin')} />
           </Button>
