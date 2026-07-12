@@ -138,6 +138,7 @@ function buildSummary(rows: ContractUsageRow[]): ContractUsageSummary {
       totalRequests > 0 ? Math.round((totalV1 / totalRequests) * 1000) / 10 : 0,
     lastV1Seen,
     contractsUsingV1: Array.from(contractsUsingV1).sort(),
+    trend: detectTrend(points),
   };
 }
 
