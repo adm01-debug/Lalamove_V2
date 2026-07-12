@@ -14,8 +14,13 @@ export interface AdvancedReportFilters {
   vehicleType: string;
   costCenter: string;
   department: string;
+  driver: string;
   urgency: 'all' | 'urgent' | 'normal';
   search: string;
+  /** Custo mínimo (string vazia = sem filtro). */
+  costMin: string;
+  /** Custo máximo (string vazia = sem filtro). */
+  costMax: string;
 }
 
 export const DEFAULT_FILTERS: AdvancedReportFilters = {
@@ -24,8 +29,11 @@ export const DEFAULT_FILTERS: AdvancedReportFilters = {
   vehicleType: 'all',
   costCenter: 'all',
   department: 'all',
+  driver: 'all',
   urgency: 'all',
   search: '',
+  costMin: '',
+  costMax: '',
 };
 
 /** Linha normalizada de pedido usada internamente pelos agregadores. */
