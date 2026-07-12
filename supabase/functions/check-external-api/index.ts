@@ -3,10 +3,13 @@
 // Evita expor API keys no frontend
 
 import { corsHeaders } from '../_shared/cors.ts';
-
-interface CheckRequest {
-  service: 'lalamove' | 'bitrix24' | 'evolution' | 'mapbox';
-}
+import {
+  resolveContractVersion,
+  parseJsonBody,
+  validateContract,
+  errorResponse,
+} from '../_shared/contract.ts';
+import { getSchema } from '../_shared/schemas.ts';
 
 Deno.serve(async (req) => {
   // Handle CORS
@@ -15,7 +18,22 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { service }: CheckRequest = await req.json();
+    const version = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(req, version);
+    if (!parsedBody.ok) {
+      return errorResponse(parsedBody, corsHeaders);
+    }
+
+    const validation = validateContract(
+      getSchema('check-external-api', version),
+      parsedBody.value,
+      version,
+    );
+    if (!validation.ok) {
+      return errorResponse(validation, corsHeaders);
+    }
+
+    const { service } = validation.data as { service: string };
 
     let status = 'unknown';
     let message = '';
