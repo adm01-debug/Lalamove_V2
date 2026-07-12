@@ -27,10 +27,18 @@ export default function AnalyticsDashboardPage() {
   const [period, setPeriod] = useState('7');
   const { data, isLoading, refetch, isRefetching } = useAnalyticsData(parseInt(period));
 
-  const handleExport = (fmt: 'csv' | 'json' | 'pdf') => {
+  const handleExport = (fmt: 'csv' | 'excel' | 'json' | 'pdf') => {
     if (!data) return;
     const rows = data.chartData.map(d => ({ Data: d.date, Pedidos: d.pedidos, Entregas: d.entregas, Aprovações: d.aprovacoes, Alertas: d.alertas }));
     if (fmt === 'csv') { exportToCSV(rows, `analytics_${period}d`); toast.success('CSV exportado!'); }
+    else if (fmt === 'excel') {
+      exportToExcel([
+        { name: 'Série diária', rows },
+        { name: 'Performance', rows: data.performanceData.map(p => ({ Métrica: p.metric, Valor: p.value, 'Variação (%)': p.change })) },
+        { name: 'Top Motoristas', rows: data.driverRanking.map((d, i) => ({ Posição: i + 1, Motorista: d.name, Entregas: d.entregas, Avaliação: d.rating, 'Sucesso (%)': d.taxa })) },
+      ], `analytics_${period}d`);
+      toast.success('Excel exportado!');
+    }
     else if (fmt === 'json') { exportToJSON({ period: `${period} dias`, totals: data.totals, daily: rows, drivers: data.driverRanking }, `analytics_${period}d`); toast.success('JSON exportado!'); }
     else { exportToPDFText({ title: `Relatório de Analytics - Últimos ${period} dias`, sections: [
       { title: 'Totais', content: `Pedidos: ${data.totals.pedidos} | Entregas: ${data.totals.entregas} | Aprovações: ${data.totals.aprovacoes} | Alertas: ${data.totals.alertas}` },
