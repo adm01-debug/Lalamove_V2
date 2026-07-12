@@ -70,9 +70,9 @@ export function PushNotificationSettings() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-              <CheckCircle2 className="h-5 w-5 text-green-500" />
-              <p className="text-sm text-green-700 dark:text-green-400">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-success/10 border border-success/20">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+              <p className="text-sm text-success">
                 Você receberá notificações sobre:
               </p>
             </div>
