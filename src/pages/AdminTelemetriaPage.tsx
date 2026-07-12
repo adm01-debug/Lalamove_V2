@@ -341,7 +341,11 @@ export default function AdminTelemetriaPage() {
         </Card>
       )}
 
+      {/* Deprecação de contratos — proporção de v1 */}
+      <ContractVersionUsagePanel />
+
       {/* Charts */}
+
       <TelemetryCharts rows={rows} timeFilter={timeFilter} />
 
       {/* Filters */}
