@@ -122,6 +122,8 @@ export function detectTrend(points: ContractUsageDailyPoint[]): ContractUsageTre
   const secondHalfAvg = round1(avg(valid.slice(mid)));
   const delta = round1(secondHalfAvg - firstHalfAvg);
   const recentDelta = round1(avg(valid.slice(-3)) - avg(valid.slice(-6, -3)));
+  const { consecutiveRisingDays, sustainedReversal } =
+    detectSustainedReversal(valid);
   return {
     rising: delta > TREND_RISE_THRESHOLD || recentDelta > TREND_RISE_THRESHOLD,
     delta,
@@ -129,6 +131,8 @@ export function detectTrend(points: ContractUsageDailyPoint[]): ContractUsageTre
     firstHalfAvg,
     secondHalfAvg,
     insufficientData: false,
+    consecutiveRisingDays,
+    sustainedReversal,
   };
 }
 
