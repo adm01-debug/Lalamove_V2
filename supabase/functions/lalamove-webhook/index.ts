@@ -193,23 +193,31 @@ serve(async (req) => {
       );
     }
     
-    const webhookSchema = z.object({
-      event: z.string(),
-      orderId: z.string().optional().nullable(),
-      timestamp: z.string().optional().nullable(),
-      data: z.any().optional(),
-    }).passthrough();
-
-    const parseResult = webhookSchema.safeParse(JSON.parse(rawBody));
-    if (!parseResult.success) {
-      logger.error(`[Webhook] Invalid payload:`, parseResult.error.format());
-      return new Response(
-        JSON.stringify({ error: 'Invalid payload format' }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    const contractVersion = resolveContractVersion(req);
+    const parsedBody = await parseJsonBody(
+      new Request(req.url, { method: "POST", body: rawBody }),
+      contractVersion,
+    );
+    if (!parsedBody.ok) {
+      logger.error(`[Webhook] Invalid JSON body`);
+      return errorResponse(parsedBody, corsHeaders);
     }
 
-    const payload = parseResult.data;
+    const webhookSchema = (getSchema("lalamove-webhook", contractVersion) as z.ZodObject<z.ZodRawShape>).passthrough();
+    const contract = validateContract(webhookSchema, parsedBody.value, contractVersion);
+    if (!contract.ok) {
+      logger.error(`[Webhook] Invalid payload:`, contract.body.error.fields);
+      return errorResponse(contract, corsHeaders);
+    }
+
+    const payload = contract.data as {
+      event?: string;
+      orderId?: string | null;
+      timestamp?: string | null;
+      status?: string;
+      reason?: string;
+      data?: Record<string, unknown> & { status?: string; stopIndex?: number; reason?: string };
+    };
     logger.log(`[Webhook] Received: ${payload.event} (HMAC: ${hmacResult.reason})`);
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
