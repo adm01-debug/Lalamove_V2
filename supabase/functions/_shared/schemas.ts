@@ -57,6 +57,7 @@ const sendNotificationV1 = z.object({
   message: z.string().min(1, "message é obrigatório"),
   order_id: z.string().optional().nullable(),
   driver_id: z.string().optional().nullable(),
+  metadata: z.record(z.unknown()).optional().nullable(),
 });
 
 const sendNotificationV2 = sendNotificationV1.extend({
