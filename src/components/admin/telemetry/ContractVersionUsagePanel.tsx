@@ -258,6 +258,11 @@ export function ContractVersionUsagePanel() {
               </ResponsiveContainer>
             </div>
 
+            {/* Tendência de longo prazo (série mensal consolidada) */}
+            <ContractVersionMonthlyTrend />
+
+
+
             {/* Contratos ainda em v1 */}
             {data.contractsUsingV1.length > 0 && (
               <div className="space-y-2">
