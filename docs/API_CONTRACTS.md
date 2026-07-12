@@ -33,7 +33,43 @@ Códigos: `VALIDATION_FAILED`, `INVALID_JSON`, `UNSUPPORTED_VERSION`, `UNAUTHORI
 
 - Resolução por precedência: header `x-contract-version` → query `?v=`/`?version=` → default `v1`.
 - Regra de compatibilidade: **v2 é superset de v1** (campos novos opcionais/com default). Um payload v1 válido é sempre válido em v2 — garantido por teste.
-- Descontinuação: adicionar a versão em `DEPRECATED_VERSIONS`; respostas passam a incluir header `Warning: 299`.
+- **Versão recomendada:** `v2` (`RECOMMENDED_VERSION`). Novas integrações devem enviar `x-contract-version: v2`.
+
+### Estratégia de deprecação
+
+Ciclo de vida de cada versão:
+
+1. **Ativa** — suportada, sem avisos.
+2. **Descontinuada (deprecated)** — listada em `DEPRECATED_VERSIONS`. Continua **aceita e processada normalmente**, mas toda resposta (incluindo o **erro 422**) sinaliza a deprecação:
+   - **Corpo:** `meta.deprecation` com `message`, `sunsetDate`, `recommendedVersion` e `migrationGuide`.
+   - **Headers (best-effort):** `Warning: 299`, `Sunset` (RFC 8594), `Deprecation: true` e `Link; rel="deprecation"`.
+3. **Removida** — retirada de `SUPPORTED_VERSIONS` após a data de sunset; passa a resolver como `UNSUPPORTED_VERSION`.
+
+**Estado atual:** `v1` está **descontinuada** (`DEPRECATION_SCHEDULE.v1.sunsetDate = 2026-12-31`) e permanece como default por retrocompatibilidade — logo, chamadas sem header explícito recebem o aviso, acelerando a migração para `v2`.
+
+Exemplo de `meta.deprecation` num 422 sob `v1`:
+
+```json
+{
+  "error": { "code": "VALIDATION_FAILED", "message": "...", "fields": [] },
+  "meta": {
+    "contractVersion": "v1",
+    "timestamp": "2026-07-12T00:00:00.000Z",
+    "deprecation": {
+      "version": "v1",
+      "deprecated": true,
+      "message": "A versão de contrato 'v1' está descontinuada e será removida em 2026-12-31. Migre para 'v2' ...",
+      "sunsetDate": "2026-12-31",
+      "recommendedVersion": "v2",
+      "migrationGuide": "docs/API_CONTRACTS.md#versionamento-v1v2"
+    }
+  }
+}
+```
+
+**Como remover `v1` no sunset:** retirar `"v1"` de `SUPPORTED_VERSIONS` e `DEPRECATED_VERSIONS`, mudar `DEFAULT_VERSION` para `v2`, promover os schemas `v2` e atualizar os testes.
+
+
 
 ## Contratos cobertos
 
