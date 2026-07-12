@@ -22,13 +22,13 @@ export interface MonthlyVersionUsagePoint {
   v1Ratio: number;
 }
 
-interface MonthlyUsageRow {
+export interface MonthlyUsageRow {
   contract_version: string;
   usage_month: string;
   request_count: number;
 }
 
-function aggregate(rows: MonthlyUsageRow[]): MonthlyVersionUsagePoint[] {
+export function aggregateMonthly(rows: MonthlyUsageRow[]): MonthlyVersionUsagePoint[] {
   const byMonth = new Map<string, MonthlyVersionUsagePoint>();
 
   for (const row of rows) {
@@ -75,7 +75,7 @@ export function useContractVersionUsageMonthly(months = 12) {
         .order("usage_month", { ascending: true });
 
       if (error) throw error;
-      return aggregate((data ?? []) as MonthlyUsageRow[]);
+      return aggregateMonthly((data ?? []) as MonthlyUsageRow[]);
     },
     staleTime: 300_000,
   });
