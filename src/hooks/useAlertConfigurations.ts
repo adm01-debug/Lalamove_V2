@@ -85,6 +85,14 @@ async function createAlertConfiguration(
     bitrix24_user_ids: config.bitrix24_user_ids,
     n8n_webhook_url: config.n8n_webhook_url,
     min_interval_seconds: config.min_interval_seconds,
+    dedup_window_seconds: config.dedup_window_seconds,
+    escalation_enabled: config.escalation_enabled,
+    escalation_after_seconds: config.escalation_after_seconds,
+    escalation_email_addresses: config.escalation_email_addresses,
+    escalation_whatsapp_numbers: config.escalation_whatsapp_numbers,
+    escalation_slack_channels: config.escalation_slack_channels,
+    fallback_channel: config.fallback_channel,
+    fallback_recipients: config.fallback_recipients,
     conditions: config.conditions,
   };
 
