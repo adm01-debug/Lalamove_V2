@@ -504,11 +504,20 @@ serve(async (req) => {
       return errorResponse(contract, corsHeaders);
     }
 
-    const { driverId, orderId, triggeredBy } = contract.data as {
+    const parseResult = { data: contract.data as {
       driverId: string;
       orderId?: string | null;
       triggeredBy: 'WEBHOOK' | 'MANUAL' | 'SYSTEM';
-    };
+      driverName?: string | null;
+      totalDeliveries?: number | null;
+      completedDeliveries?: number | null;
+      failedDeliveries?: number | null;
+      cancelledDeliveries?: number | null;
+      avgDelayMinutes?: number | null;
+      rating?: number | null;
+    } };
+    const { driverId, triggeredBy } = parseResult.data;
+    const orderId: string | null = parseResult.data.orderId ?? null;
 
     logger.log(`[evaluate-driver] Starting evaluation for driver ${driverId}, order ${orderId}, triggered by ${triggeredBy}`);
 
