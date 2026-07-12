@@ -255,6 +255,9 @@ export default function AdvancedReportsPage() {
           <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2">
             <Download className="w-4 h-4" /> CSV
           </Button>
+          <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2">
+            <FileSpreadsheet className="w-4 h-4" /> Excel
+          </Button>
           <Button variant="outline" size="sm" onClick={handleExportJSON} className="gap-2">
             <Download className="w-4 h-4" /> JSON
           </Button>
