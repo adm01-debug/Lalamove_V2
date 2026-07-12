@@ -96,6 +96,24 @@ export interface DailyPoint {
   avgDelay: number;
 }
 
+/**
+ * Ponto de série sobreposta: alinha o período atual e o anterior pelo
+ * mesmo deslocamento relativo (Dia 1..N), permitindo comparação visual.
+ */
+export interface DailyComparisonPoint {
+  /** Rótulo relativo do dia (ex.: "Dia 1"). */
+  label: string;
+  /** Entregas no período atual. */
+  current: number;
+  /** Entregas no período anterior (mesmo deslocamento). */
+  previous: number;
+  /** Custo no período atual. */
+  currentCost: number;
+  /** Custo no período anterior. */
+  previousCost: number;
+}
+
+
 export interface ComparisonMetrics {
   deliveries: number;
   totalCost: number;
