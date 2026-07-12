@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Calendar, RefreshCw, FileBarChart, Loader2, Download, Filter, X,
-  DollarSign, Gauge, MapPin, TrendingUp, Clock, PackageCheck, Save, Bookmark, Trash2, User,
+  DollarSign, Gauge, MapPin, TrendingUp, TrendingDown, Minus, Clock, PackageCheck, Save, Bookmark, Trash2, User,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -71,13 +71,37 @@ function KpiCard({ icon: Icon, label, value, hint }: {
   );
 }
 
+function CompareStat({ label, current, delta, suffix, positiveIsGood }: {
+  label: string; current: string; delta: number; suffix: string; positiveIsGood: boolean;
+}) {
+  const isFlat = delta === 0;
+  const isUp = delta > 0;
+  const isGood = isFlat ? true : isUp === positiveIsGood;
+  const Icon = isFlat ? Minus : isUp ? TrendingUp : TrendingDown;
+  const toneClass = isFlat
+    ? 'text-muted-foreground'
+    : isGood
+      ? 'text-success'
+      : 'text-destructive';
+  return (
+    <div className="rounded-xl border border-border/50 bg-card/40 p-4">
+      <p className="text-sm text-muted-foreground truncate">{label}</p>
+      <p className="text-xl font-bold text-foreground">{current}</p>
+      <div className={`flex items-center gap-1 text-sm font-medium ${toneClass}`}>
+        <Icon className="w-3.5 h-3.5" />
+        <span>{isUp ? '+' : ''}{delta}{suffix}</span>
+      </div>
+    </div>
+  );
+}
+
 export default function AdvancedReportsPage() {
   const [filters, setFilters] = useState<AdvancedReportFilters>(DEFAULT_FILTERS);
   const [presetName, setPresetName] = useState('');
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
-    cost, performance, geography, daily,
+    cost, performance, geography, daily, comparison,
   } = useAdvancedReports(filters);
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
@@ -375,6 +399,34 @@ export default function AdvancedReportsPage() {
         <KpiCard icon={Gauge} label="Pontualidade" value={`${performance.onTimeRate}%`} hint={`Atraso médio ${performance.avgDelay} min`} />
         <KpiCard icon={MapPin} label="Regiões atendidas" value={String(geography.length)} hint={`Custo/km ${fmtCurrency(cost.costPerKm, cost.currency)}`} />
       </motion.div>
+
+      {/* Comparação com período anterior */}
+      <motion.div variants={itemVariants}>
+        <Card variant="glass">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              Comparação vs. período anterior
+              <span className="text-xs font-normal text-muted-foreground">
+                (últimos {filters.period} dias vs. {filters.period} dias anteriores)
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {!comparison.hasPrevious ? (
+              <p className="text-sm text-muted-foreground">Sem dados no período anterior para comparar.</p>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <CompareStat label="Entregas" current={String(comparison.current.deliveries)} delta={comparison.deltas.deliveries} suffix="%" positiveIsGood />
+                <CompareStat label="Custo total" current={fmtCurrency(comparison.current.totalCost, cost.currency)} delta={comparison.deltas.totalCost} suffix="%" positiveIsGood={false} />
+                <CompareStat label="Pontualidade" current={`${comparison.current.onTimeRate}%`} delta={comparison.deltas.onTimeRate} suffix=" pts" positiveIsGood />
+                <CompareStat label="Cancelamento" current={`${comparison.current.cancellationRate}%`} delta={comparison.deltas.cancellationRate} suffix=" pts" positiveIsGood={false} />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
 
       {/* Tabs */}
       <motion.div variants={itemVariants}>

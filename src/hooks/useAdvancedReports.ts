@@ -96,6 +96,21 @@ export interface DailyPoint {
   avgDelay: number;
 }
 
+export interface ComparisonMetrics {
+  deliveries: number;
+  totalCost: number;
+  onTimeRate: number;
+  cancellationRate: number;
+}
+
+export interface ComparisonSummary {
+  current: ComparisonMetrics;
+  previous: ComparisonMetrics;
+  /** Variação percentual (deliveries/totalCost) ou em pontos (rates). */
+  deltas: ComparisonMetrics;
+  hasPrevious: boolean;
+}
+
 const round = (n: number, d = 0) => {
   const f = 10 ** d;
   return Math.round(n * f) / f;
@@ -119,31 +134,47 @@ function extractRegion(address: string | null): string {
 const isCompleted = (s: string) => s === 'COMPLETED';
 const isCancelled = (s: string) => s === 'CANCELLED' || s === 'REJECTED' || s === 'EXPIRED';
 
+const ORDER_SELECT =
+  'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)';
+
 export function useAdvancedReports(filters: AdvancedReportFilters) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [rows, setRows] = useState<OrderRow[]>([]);
+  const [prevRows, setPrevRows] = useState<OrderRow[]>([]);
 
   const fetchData = useCallback(async () => {
     setRefreshing(true);
     const days = parseInt(filters.period, 10) || 30;
-    const startDate = startOfDay(subDays(new Date(), days));
-    const endDate = endOfDay(new Date());
+    const now = new Date();
+    const startDate = startOfDay(subDays(now, days));
+    const endDate = endOfDay(now);
+    // Janela anterior de mesmo tamanho, imediatamente antes do período atual.
+    const prevStart = startOfDay(subDays(now, days * 2));
+    const prevEnd = endOfDay(subDays(now, days + 1));
 
     try {
-      const { data, error } = await supabase
-        .from('lalamove_orders')
-        .select(
-          'id,status,vehicle_type,total_cost,currency,cost_center,department,is_urgent,distance_meters,delay_minutes,duration_minutes,pod_received,requires_pod,delivery_address,pickup_address,customer_name,internal_order_id,lalamove_id,created_at,driver:drivers(name)'
-        )
-        .gte('created_at', startDate.toISOString())
-        .lte('created_at', endDate.toISOString())
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      setRows((data as unknown as OrderRow[]) ?? []);
+      const [current, previous] = await Promise.all([
+        supabase
+          .from('lalamove_orders')
+          .select(ORDER_SELECT)
+          .gte('created_at', startDate.toISOString())
+          .lte('created_at', endDate.toISOString())
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('lalamove_orders')
+          .select(ORDER_SELECT)
+          .gte('created_at', prevStart.toISOString())
+          .lte('created_at', prevEnd.toISOString()),
+      ]);
+      if (current.error) throw current.error;
+      setRows((current.data as unknown as OrderRow[]) ?? []);
+      // Falha na janela anterior não deve quebrar o relatório principal.
+      setPrevRows(previous.error ? [] : ((previous.data as unknown as OrderRow[]) ?? []));
     } catch (err) {
       logger.error('Erro ao carregar relatórios avançados:', err);
       setRows([]);
+      setPrevRows([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -177,14 +208,14 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     };
   }, [rows]);
 
-  // Aplicação client-side dos demais filtros avançados.
-  const filtered = useMemo(() => {
+  // Predicado de filtros avançados reutilizável (período atual e anterior).
+  const predicate = useMemo(() => {
     const term = filters.search.trim().toLowerCase();
     const costMin = filters.costMin.trim() === '' ? null : Number(filters.costMin);
     const costMax = filters.costMax.trim() === '' ? null : Number(filters.costMax);
     const hasMin = costMin != null && Number.isFinite(costMin);
     const hasMax = costMax != null && Number.isFinite(costMax);
-    return rows.filter((r) => {
+    return (r: OrderRow): boolean => {
       if (filters.status !== 'all' && r.status !== filters.status) return false;
       if (filters.vehicleType !== 'all' && r.vehicle_type !== filters.vehicleType) return false;
       if (filters.costCenter !== 'all' && r.cost_center !== filters.costCenter) return false;
@@ -214,8 +245,11 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
         if (!hay.includes(term)) return false;
       }
       return true;
-    });
-  }, [rows, filters]);
+    };
+  }, [filters]);
+
+  const filtered = useMemo(() => rows.filter(predicate), [rows, predicate]);
+  const prevFiltered = useMemo(() => prevRows.filter(predicate), [prevRows, predicate]);
 
   const cost = useMemo<CostSummary>(() => {
     const withCost = filtered.filter((r) => typeof r.total_cost === 'number' && r.total_cost! > 0);
@@ -360,6 +394,37 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
       .reverse();
   }, [filtered, filters.period]);
 
+  // Comparação período atual vs. período anterior (mesmos filtros/tamanho).
+  const comparison = useMemo<ComparisonSummary>(() => {
+    const metricsFor = (set: OrderRow[]) => {
+      const total = set.length;
+      const completed = set.filter((r) => isCompleted(r.status));
+      const cancelled = set.filter((r) => isCancelled(r.status)).length;
+      const totalCost = set.reduce((a, r) => a + (r.total_cost || 0), 0);
+      const onTime = completed.filter((r) => (r.delay_minutes || 0) <= 0).length;
+      return {
+        deliveries: total,
+        totalCost: round(totalCost, 2),
+        onTimeRate: completed.length ? round((onTime / completed.length) * 100, 1) : 0,
+        cancellationRate: total ? round((cancelled / total) * 100, 1) : 0,
+      };
+    };
+    const cur = metricsFor(filtered);
+    const prev = metricsFor(prevFiltered);
+    const delta = (a: number, b: number) => (b === 0 ? (a > 0 ? 100 : 0) : round(((a - b) / b) * 100, 1));
+    return {
+      current: cur,
+      previous: prev,
+      deltas: {
+        deliveries: delta(cur.deliveries, prev.deliveries),
+        totalCost: delta(cur.totalCost, prev.totalCost),
+        onTimeRate: round(cur.onTimeRate - prev.onTimeRate, 1),
+        cancellationRate: round(cur.cancellationRate - prev.cancellationRate, 1),
+      },
+      hasPrevious: prevFiltered.length > 0,
+    };
+  }, [filtered, prevFiltered]);
+
   return {
     loading,
     refreshing,
@@ -370,5 +435,6 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     performance,
     geography,
     daily,
+    comparison,
   };
 }
