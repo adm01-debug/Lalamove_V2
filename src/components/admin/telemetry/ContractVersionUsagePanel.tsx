@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
 import { useContractVersionUsage } from "@/hooks/useContractVersionUsage";
+import { useContractV1SunsetReadiness } from "@/hooks/useContractV1SunsetReadiness";
 import { cn } from "@/lib/utils";
 
 const RANGE_OPTIONS = [
@@ -30,6 +31,10 @@ function formatDate(iso: string): string {
 export function ContractVersionUsagePanel() {
   const [days, setDays] = useState<number>(30);
   const { data, isLoading, isError } = useContractVersionUsage(days);
+  const { data: readiness } = useContractV1SunsetReadiness(
+    days,
+    SAFE_REMOVAL_THRESHOLD,
+  );
 
   const ratioTone = useMemo(() => {
     const r = data?.overallV1Ratio ?? 0;
@@ -78,6 +83,46 @@ export function ContractVersionUsagePanel() {
           </p>
         ) : (
           <>
+            {/* Prontidão de sunset (calculada no servidor via RPC admin-only) */}
+            {readiness && (
+              <div
+                className={cn(
+                  "flex items-start gap-3 rounded-lg border p-4",
+                  readiness.safeToRemove
+                    ? "border-emerald-500/40 bg-emerald-500/10"
+                    : "border-amber-500/40 bg-amber-500/10",
+                )}
+              >
+                {readiness.safeToRemove ? (
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                ) : (
+                  <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+                )}
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold">
+                    {readiness.safeToRemove
+                      ? "Pronto para o sunset da v1"
+                      : "Ainda não é seguro remover a v1"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Proporção de v1 em {readiness.windowDays} dias:{" "}
+                    <span className="font-medium text-foreground">
+                      {readiness.v1Ratio}%
+                    </span>{" "}
+                    (meta ≤ {readiness.threshold}%). {readiness.totalV1} de{" "}
+                    {readiness.totalRequests} chamadas ainda usam v1
+                    {readiness.contractsUsingV1.length > 0 && (
+                      <>
+                        {" "}
+                        em: {readiness.contractsUsingV1.join(", ")}
+                      </>
+                    )}
+                    .
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Alerta automático de reversão de tendência (v1 voltando a subir) */}
             {data.trend.rising && (
               <div
