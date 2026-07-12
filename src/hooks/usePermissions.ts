@@ -140,6 +140,8 @@ export function usePermissions() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-roles'] });
+      queryClient.invalidateQueries({ queryKey: ['user-permissions'] });
+      queryClient.invalidateQueries({ queryKey: ['role-permissions'] });
       toast.success('Role atribuída com sucesso');
     },
     onError: (error: Error) => {
@@ -160,6 +162,8 @@ export function usePermissions() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-roles'] });
+      queryClient.invalidateQueries({ queryKey: ['user-permissions'] });
+      queryClient.invalidateQueries({ queryKey: ['role-permissions'] });
       toast.success('Role revogada com sucesso');
     },
     onError: (error: Error) => {
