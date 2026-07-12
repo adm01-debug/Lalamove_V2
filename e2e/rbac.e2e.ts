@@ -41,7 +41,8 @@ test.describe('RBAC — acesso não autenticado', () => {
 
   test('a página /unauthorized comunica acesso negado', async ({ page }) => {
     await page.goto('/unauthorized');
-    await expect(page.getByRole('heading', { name: 'Acesso Negado' })).toBeVisible();
+    // exact:true evita colisão com o h1 sr-only "Acesso negado" (case-insensitive).
+    await expect(page.getByRole('heading', { name: 'Acesso Negado', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: /Ir para Dashboard/i })).toBeVisible();
   });
 
