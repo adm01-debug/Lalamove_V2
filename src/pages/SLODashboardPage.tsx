@@ -113,6 +113,28 @@ export default function SLODashboardPage() {
     [data],
   );
 
+  const handleExport = (fmt: 'csv' | 'excel' | 'json') => {
+    if (!data) return;
+    const base = `slo_${window}`;
+    const indicatorRows = [
+      { Indicador: 'Disponibilidade', Valor: data.availability.value, Objetivo: data.availability.target, Status: STATUS_META[data.availability.status].label, 'Budget consumido (%)': data.availability.errorBudgetConsumed, 'Budget livre (%)': data.availability.errorBudgetRemaining },
+      { Indicador: 'Latência P95 (ms)', Valor: data.latencyP95.value, Objetivo: data.latencyP95.target, Status: STATUS_META[data.latencyP95.status].label, 'Budget consumido (%)': data.latencyP95.errorBudgetConsumed, 'Budget livre (%)': data.latencyP95.errorBudgetRemaining },
+      { Indicador: 'Taxa de falhas (%)', Valor: data.failureRate.value, Objetivo: data.failureRate.target, Status: STATUS_META[data.failureRate.status].label, 'Budget consumido (%)': data.failureRate.errorBudgetConsumed, 'Budget livre (%)': data.failureRate.errorBudgetRemaining },
+    ];
+    const timelineRows = chartData;
+    if (fmt === 'csv') { exportToCSV(indicatorRows, base); toast.success('CSV exportado!'); }
+    else if (fmt === 'excel') {
+      exportToExcel([
+        { name: 'Indicadores', rows: indicatorRows },
+        { name: 'Série temporal', rows: timelineRows },
+        { name: 'Latência', rows: [{ P50: data.latency.p50, P90: data.latency.p90, P95: data.latency.p95, P99: data.latency.p99, Média: data.latency.avg, Máx: data.latency.max }] },
+        { name: 'Fontes de falha', rows: [{ 'Erros de banco': data.failureSources.databaseErrors, 'Erros de frontend': data.failureSources.frontendErrors, 'Erros de webhook': data.failureSources.webhookErrors }] },
+      ], base);
+      toast.success('Excel exportado!');
+    }
+    else { exportToJSON(data, base); toast.success('JSON exportado!'); }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 space-y-6 max-w-7xl">
       {/* Header */}
