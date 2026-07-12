@@ -63,8 +63,28 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v1.x
-      - name: Run Edge Function contract tests
+      - name: Run Edge Function contract tests (in-memory)
         run: deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts
+
+  edge-integration-tests:
+    name: Deno Edge Function I/O Integration Tests
+    runs-on: ubuntu-latest
+    # Testes de I/O reais chamam as Edge Functions IMPLANTADAS; só rodam quando
+    # os secrets do ambiente estão disponíveis (push na main).
+    if: github.ref == 'refs/heads/main'
+    needs: contract-tests
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v1.x
+      - name: Write .env for integration tests
+        run: |
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "VITE_SUPABASE_PUBLISHABLE_KEY=${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}" >> .env
+      - name: Run Edge Function I/O integration tests
+        run: deno test --allow-net --allow-env --allow-read supabase/functions/_shared/contract.integration.test.ts
 
   deploy:
     needs: build
