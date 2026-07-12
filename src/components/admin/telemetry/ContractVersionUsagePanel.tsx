@@ -107,6 +107,13 @@ export function ContractVersionUsagePanel() {
                     )}
                     . Investigue os integradores pendentes antes de prosseguir com o sunset.
                   </p>
+                  {data.trend.sustainedReversal && (
+                    <p className="text-xs font-medium text-destructive">
+                      ⚠ Reversão sustentada: alta contínua por{" "}
+                      {data.trend.consecutiveRisingDays} dias consecutivos — sinal
+                      de regressão persistente, não ruído pontual.
+                    </p>
+                  )}
                 </div>
               </div>
             )}
