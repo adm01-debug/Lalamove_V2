@@ -101,7 +101,7 @@ export default function AdvancedReportsPage() {
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
-    cost, performance, geography, daily, comparison,
+    cost, performance, geography, daily, dailyComparison, comparison,
   } = useAdvancedReports(filters);
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
