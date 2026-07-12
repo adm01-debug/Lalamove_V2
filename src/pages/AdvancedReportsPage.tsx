@@ -583,8 +583,28 @@ export default function AdvancedReportsPage() {
               </Card>
             </div>
             <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-base">Entregas por dia — período atual vs. anterior</CardTitle>
+              <CardHeader className="flex-row items-center justify-between gap-4 space-y-0">
+                <CardTitle className="text-base">
+                  {compareMetric === 'deliveries' ? 'Entregas' : 'Custo'} por dia — período atual vs. anterior
+                </CardTitle>
+                <div className="flex rounded-lg border border-border p-0.5">
+                  <Button
+                    size="sm"
+                    variant={compareMetric === 'deliveries' ? 'default' : 'ghost'}
+                    className="h-7 px-3 text-xs"
+                    onClick={() => setCompareMetric('deliveries')}
+                  >
+                    Entregas
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant={compareMetric === 'cost' ? 'default' : 'ghost'}
+                    className="h-7 px-3 text-xs"
+                    onClick={() => setCompareMetric('cost')}
+                  >
+                    Custo
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 {!comparison.hasPrevious ? (
@@ -599,13 +619,14 @@ export default function AdvancedReportsPage() {
                       <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} allowDecimals={false} />
                       <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8 }} />
                       <Legend />
-                      <Line type="monotone" dataKey="current" name="Período atual" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                      <Line type="monotone" dataKey="previous" name="Período anterior" stroke="hsl(var(--muted-foreground))" strokeWidth={2} strokeDasharray="5 5" dot={false} />
+                      <Line type="monotone" dataKey={compareMetric === 'deliveries' ? 'current' : 'currentCost'} name="Período atual" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey={compareMetric === 'deliveries' ? 'previous' : 'previousCost'} name="Período anterior" stroke="hsl(var(--muted-foreground))" strokeWidth={2} strokeDasharray="5 5" dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 )}
               </CardContent>
             </Card>
+
           </TabsContent>
 
 
