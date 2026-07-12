@@ -159,31 +159,31 @@ const AppContent = () => {
                       <Route path="/error-monitoring" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ErrorMonitoringPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
                       {/* Existing routes */}
-                      <Route path="/orders" element={<SuspenseWrapper><OrdersPage /></SuspenseWrapper>} />
-                      <Route path="/drivers" element={<SuspenseWrapper><DriversPage /></SuspenseWrapper>} />
-                      <Route path="/approvals" element={<SuspenseWrapper><ApprovalsPage /></SuspenseWrapper>} />
-                      <Route path="/incidents" element={<SuspenseWrapper><IncidentsPage /></SuspenseWrapper>} />
-                      <Route path="/metrics" element={<SuspenseWrapper><MetricsPage /></SuspenseWrapper>} />
-                      <Route path="/delivery-metrics" element={<SuspenseWrapper><DeliveryMetricsPage /></SuspenseWrapper>} />
-                      <Route path="/alerts" element={<SuspenseWrapper><AlertsPage /></SuspenseWrapper>} />
-                      <Route path="/alert-configurations" element={<SuspenseWrapper><AlertConfigurationsPage /></SuspenseWrapper>} />
-                      <Route path="/notification-history" element={<SuspenseWrapper><NotificationHistoryPage /></SuspenseWrapper>} />
-                      <Route path="/map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
-                      <Route path="/live-map" element={<SuspenseWrapper><LiveMapPage /></SuspenseWrapper>} />
-                      <Route path="/heatmap" element={<SuspenseWrapper><HeatmapPage /></SuspenseWrapper>} />
-                      <Route path="/sla" element={<SuspenseWrapper><SLADashboardPage /></SuspenseWrapper>} />
-                      <Route path="/risk-rules" element={<SuspenseWrapper><RiskRulesPage /></SuspenseWrapper>} />
-                      <Route path="/evaluations" element={<SuspenseWrapper><EvaluationsPage /></SuspenseWrapper>} />
-                      <Route path="/webhooks" element={<SuspenseWrapper><WebhooksPage /></SuspenseWrapper>} />
-                      <Route path="/bitrix24" element={<SuspenseWrapper><Bitrix24Page /></SuspenseWrapper>} />
-                      <Route path="/settings/uapi" element={<SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper>} />
-                      <Route path="/settings/lalamove" element={<SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper>} />
-                      <Route path="/reports" element={<SuspenseWrapper><ReportsPage /></SuspenseWrapper>} />
-                      <Route path="/settings" element={<SuspenseWrapper><SettingsPage /></SuspenseWrapper>} />
-                      <Route path="/preferences" element={<SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper>} />
-                      <Route path="/analytics" element={<SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper>} />
-                      <Route path="/external-data" element={<SuspenseWrapper><ExternalDataPage /></SuspenseWrapper>} />
-                      <Route path="/map-tools" element={<SuspenseWrapper><MapToolsPage /></SuspenseWrapper>} />
+                      <Route path="/orders" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><OrdersPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/drivers" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><DriversPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/approvals" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ApprovalsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/incidents" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><IncidentsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/metrics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><MetricsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/delivery-metrics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><DeliveryMetricsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/alerts" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><AlertsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/alert-configurations" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><AlertConfigurationsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/notification-history" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><NotificationHistoryPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/map" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><LiveMapPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/live-map" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><LiveMapPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/heatmap" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><HeatmapPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/sla" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><SLADashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/risk-rules" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><RiskRulesPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/evaluations" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><EvaluationsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/webhooks" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><WebhooksPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/bitrix24" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><Bitrix24Page /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/settings/uapi" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/settings/lalamove" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/preferences" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/analytics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/external-data" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><ExternalDataPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/map-tools" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><MapToolsPage /></SuspenseWrapper></ProtectedRoute>} />
                     </Route>
                     
                     <Route path="*" element={<NotFound />} />

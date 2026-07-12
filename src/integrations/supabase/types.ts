@@ -3074,6 +3074,7 @@ export type Database = {
         | "LATE_DELIVERY"
         | "APPROVAL_REQUIRED"
         | "ORDER_CANCELLED"
+        | "INTEGRATION_FAILURE"
       app_role: "admin" | "manager" | "operator" | "viewer"
       approval_priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT" | "CRITICAL"
       approval_status: "PENDING" | "APPROVED" | "REJECTED"
@@ -3244,6 +3245,7 @@ export const Constants = {
         "LATE_DELIVERY",
         "APPROVAL_REQUIRED",
         "ORDER_CANCELLED",
+        "INTEGRATION_FAILURE",
       ],
       app_role: ["admin", "manager", "operator", "viewer"],
       approval_priority: ["LOW", "MEDIUM", "HIGH", "URGENT", "CRITICAL"],

@@ -11,6 +11,13 @@ interface ProtectedRouteProps {
   requireMFA?: boolean;
 }
 
+const roleHierarchy: Record<AppRole, number> = {
+  viewer: 1,
+  operator: 2,
+  manager: 3,
+  admin: 4,
+};
+
 export function ProtectedRoute({ 
   children, 
   requiredRole, 
@@ -44,9 +51,15 @@ export function ProtectedRoute({
     return <Navigate to="/mfa-verify" state={{ from: location }} replace />;
   }
 
-  // Role check
-  if (requiredRole && !hasRole(requiredRole)) {
-    return <Navigate to="/unauthorized" replace />;
+  // Role check with hierarchy: admin > manager > operator > viewer.
+  if (requiredRole) {
+    const hasRequiredRole = (Object.keys(roleHierarchy) as AppRole[]).some(
+      role => hasRole(role) && roleHierarchy[role] >= roleHierarchy[requiredRole],
+    );
+
+    if (!hasRequiredRole) {
+      return <Navigate to="/unauthorized" replace />;
+    }
   }
 
   // Permission check

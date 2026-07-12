@@ -28,6 +28,37 @@ interface RefreshResponse {
   expires_in: number;
 }
 
+async function recordRotationFailure(
+  supabase: ReturnType<typeof createClient>,
+  failures: Array<{ domain: string; error?: string }>,
+): Promise<void> {
+  if (failures.length === 0) return;
+
+  const title = failures.length === 1
+    ? 'Falha na rotação de token Bitrix24'
+    : 'Falhas na rotação de tokens Bitrix24';
+
+  const message = failures
+    .map(failure => `${failure.domain}: ${failure.error ?? 'erro desconhecido'}`)
+    .join('\n');
+
+  const { error } = await supabase.from('alerts').insert({
+    type: 'INTEGRATION_FAILURE',
+    severity: 'CRITICAL',
+    title,
+    message,
+    metadata: {
+      source: 'rotate-tokens',
+      failure_count: failures.length,
+      failures,
+    },
+  });
+
+  if (error) {
+    logger.error('[rotate-tokens] Failed to persist rotation alert:', error);
+  }
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -113,7 +144,8 @@ Deno.serve(async (req) => {
             expires_at: newExpiresAt.toISOString(),
             updated_at: new Date().toISOString(),
           })
-          .eq('id', token.id);
+          .eq('id', token.id)
+          .eq('refresh_token', token.refresh_token);
 
         if (updateError) {
           logger.error(`[rotate-tokens] Update failed for ${token.domain}:`, updateError);
@@ -133,6 +165,13 @@ Deno.serve(async (req) => {
 
     const successCount = results.filter(r => r.success).length;
     const failureCount = results.filter(r => !r.success).length;
+
+    await recordRotationFailure(
+      supabase,
+      results
+        .filter((result): result is { domain: string; success: false; error?: string } => !result.success)
+        .map(result => ({ domain: result.domain, error: result.error })),
+    );
 
     logger.log(`[rotate-tokens] Rotation complete. Success: ${successCount}, Failed: ${failureCount}`);
 
