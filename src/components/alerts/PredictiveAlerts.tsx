@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { usePredictiveAnalysis } from "@/hooks/usePredictiveAnalysis";
+import { usePredictiveAnalysis, type PredictiveAlert } from "@/hooks/usePredictiveAnalysis";
 
 const typeConfig: Record<string, { icon: typeof Brain; color: string; bg: string }> = {
   driver_risk: { icon: Users, color: "text-destructive", bg: "bg-destructive/10" },
