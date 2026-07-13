@@ -348,7 +348,8 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
         .map((r) => ({ lat: Number(r.delivery_latitude), lng: Number(r.delivery_longitude) })),
     [filtered],
   );
-  const resolvedRegions = useRegionResolver(geoCoords);
+  const regionResolution = useRegionResolution(geoCoords);
+  const resolvedRegions = regionResolution.regions;
 
   const geography = useMemo<GeoRow[]>(() => {
     const map = new Map<
