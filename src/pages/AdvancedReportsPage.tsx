@@ -22,6 +22,7 @@ import {
 import {
   useAdvancedReports, DEFAULT_FILTERS, type AdvancedReportFilters,
 } from '@/hooks/useAdvancedReports';
+import { GeoHeatmap } from '@/components/reports/GeoHeatmap';
 import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
 import { cn } from '@/lib/utils';
