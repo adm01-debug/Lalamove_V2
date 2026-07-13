@@ -92,6 +92,14 @@ export interface GeoRow {
   onTimeRate: number;
 }
 
+/** Ponto de entrega com métricas para ponderar o heatmap geográfico. */
+export interface WeightedGeoPoint extends Coord {
+  /** Custo total da entrega (para peso "custo"). */
+  cost: number;
+  /** Atraso em minutos, nunca negativo (para peso "atraso"). */
+  delay: number;
+}
+
 export interface DailyPoint {
   date: string;
   deliveries: number;
@@ -348,6 +356,20 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
         .map((r) => ({ lat: Number(r.delivery_latitude), lng: Number(r.delivery_longitude) })),
     [filtered],
   );
+
+  // Pontos enriquecidos com métricas para ponderar o heatmap (volume/custo/atraso).
+  const geoPoints = useMemo<WeightedGeoPoint[]>(
+    () =>
+      filtered
+        .filter((r) => r.delivery_latitude != null && r.delivery_longitude != null)
+        .map((r) => ({
+          lat: Number(r.delivery_latitude),
+          lng: Number(r.delivery_longitude),
+          cost: Number(r.total_cost) || 0,
+          delay: Math.max(0, Number(r.delay_minutes) || 0),
+        })),
+    [filtered],
+  );
   const regionResolution = useRegionResolution(geoCoords);
   const resolvedRegions = regionResolution.regions;
 
@@ -510,6 +532,6 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     dailyComparison,
     comparison,
     geoResolution: regionResolution,
-    geoPoints: geoCoords,
+    geoPoints,
   };
 }

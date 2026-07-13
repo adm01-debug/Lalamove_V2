@@ -3,11 +3,16 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 import { useMapboxToken } from '@/components/map/hooks/useMapboxToken';
-import type { Coord } from '@/hooks/useRegionResolver';
+import type { WeightedGeoPoint } from '@/hooks/useAdvancedReports';
+
+/** Métrica usada para ponderar a densidade do heatmap. */
+export type HeatmapMetric = 'volume' | 'cost' | 'delay';
 
 export interface GeoHeatmapProps {
-  /** Coordenadas de entrega válidas (lat/lng) a serem densificadas no mapa. */
-  points: Coord[];
+  /** Pontos de entrega com métricas (lat/lng + custo + atraso). */
+  points: WeightedGeoPoint[];
+  /** Métrica que define o peso de cada ponto no mapa de calor. */
+  metric?: HeatmapMetric;
   /** Altura do canvas do mapa em pixels. */
   height?: number;
 }
@@ -23,23 +28,28 @@ const POINT_LAYER = 'deliveries-point';
  * zoom, os pontos individuais passam a ser exibidos. O componente é defensivo:
  * ignora coordenadas inválidas, aguarda o token e limpa a instância no unmount.
  */
-export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
+export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatmapProps) {
   const { mapboxToken, error: tokenError } = useMapboxToken();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [ready, setReady] = useState(false);
 
-  // GeoJSON estável a partir das coordenadas válidas.
+  // GeoJSON estável a partir das coordenadas válidas, com peso normalizado (0–1)
+  // conforme a métrica escolhida. Volume atribui peso uniforme a cada entrega.
   const geojson = useMemo(() => {
-    const features = points
-      .filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng) && !(p.lat === 0 && p.lng === 0))
-      .map((p) => ({
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: [p.lng, p.lat] },
-        properties: {},
-      }));
+    const valid = points.filter(
+      (p) => Number.isFinite(p.lat) && Number.isFinite(p.lng) && !(p.lat === 0 && p.lng === 0),
+    );
+    const rawValue = (p: (typeof valid)[number]) =>
+      metric === 'cost' ? p.cost : metric === 'delay' ? p.delay : 1;
+    const max = metric === 'volume' ? 1 : Math.max(1, ...valid.map(rawValue));
+    const features = valid.map((p) => ({
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates: [p.lng, p.lat] },
+      properties: { weight: Math.min(1, rawValue(p) / max) },
+    }));
     return { type: 'FeatureCollection' as const, features };
-  }, [points]);
+  }, [points, metric]);
 
   // Inicializa o mapa uma única vez quando o token estiver disponível.
   useEffect(() => {
@@ -56,7 +66,10 @@ export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 
     map.on('load', () => {
-      map.addSource(SOURCE_ID, { type: 'geojson', data: geojson });
+      map.addSource(SOURCE_ID, {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      });
 
       map.addLayer({
         id: HEATMAP_LAYER,
@@ -64,7 +77,8 @@ export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
         source: SOURCE_ID,
         maxzoom: 15,
         paint: {
-          'heatmap-weight': 1,
+          'heatmap-weight':
+            metric === 'volume' ? 1 : ['interpolate', ['linear'], ['get', 'weight'], 0, 0, 1, 1],
           'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 15, 3],
           'heatmap-color': [
             'interpolate', ['linear'], ['heatmap-density'],
@@ -104,9 +118,9 @@ export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
       mapRef.current = null;
       setReady(false);
     };
-  }, [mapboxToken, geojson]);
+  }, [mapboxToken]);
 
-  // Atualiza os dados e reenquadra o mapa quando os pontos mudam.
+  // Atualiza os dados, o peso da métrica e reenquadra o mapa quando mudam.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
@@ -114,12 +128,22 @@ export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
     const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
     source?.setData(geojson);
 
+    if (map.getLayer(HEATMAP_LAYER)) {
+      map.setPaintProperty(
+        HEATMAP_LAYER,
+        'heatmap-weight',
+        metric === 'volume'
+          ? 1
+          : (['interpolate', ['linear'], ['get', 'weight'], 0, 0, 1, 1] as unknown as number),
+      );
+    }
+
     if (geojson.features.length > 0) {
       const bounds = new mapboxgl.LngLatBounds();
       geojson.features.forEach((f) => bounds.extend(f.geometry.coordinates as [number, number]));
       map.fitBounds(bounds, { padding: 48, maxZoom: 13, duration: 600 });
     }
-  }, [geojson, ready]);
+  }, [geojson, metric, ready]);
 
   if (tokenError) {
     return (
