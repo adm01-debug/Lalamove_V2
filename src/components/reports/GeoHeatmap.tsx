@@ -119,6 +119,50 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
         },
       });
 
+      // Popup com detalhes da entrega ao clicar num ponto.
+      const popup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true });
+      const currencyFmt = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+
+      map.on('click', POINT_LAYER, (e) => {
+        const feature = e.features?.[0];
+        if (!feature || feature.geometry.type !== 'Point') return;
+
+        const coords = feature.geometry.coordinates.slice() as [number, number];
+        const cost = Number(feature.properties?.cost ?? 0);
+        const delay = Number(feature.properties?.delay ?? 0);
+
+        // Evita saltos de longitude ao dar zoom em wrap-around.
+        while (Math.abs(e.lngLat.lng - coords[0]) > 180) {
+          coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
+        }
+
+        const delayLabel =
+          delay > 0
+            ? `<span style="color:#ef4444">+${delay} min de atraso</span>`
+            : '<span style="color:#22c55e">No prazo</span>';
+
+        popup
+          .setLngLat(coords)
+          .setHTML(
+            `<div style="font-size:12px;line-height:1.5;color:#0f172a">
+               <strong>Entrega</strong><br/>
+               Custo: ${currencyFmt.format(Number.isFinite(cost) ? cost : 0)}<br/>
+               ${delayLabel}
+             </div>`,
+          )
+          .addTo(map);
+      });
+
+      map.on('mouseenter', POINT_LAYER, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', POINT_LAYER, () => {
+        map.getCanvas().style.cursor = '';
+      });
+
       setReady(true);
     });
 
