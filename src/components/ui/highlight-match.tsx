@@ -89,12 +89,9 @@ export function HighlightMatch({
  * Helper function to extract indices for a specific key from Fuse.js matches
  */
 export function getMatchIndices(
-  matches: ReadonlyArray<{
-    key?: string;
-    indices: readonly [number, number][];
-  }> | undefined,
+  matches: readonly FuseResultMatch[] | undefined,
   key: string
-): readonly [number, number][] | undefined {
+): MatchIndices | undefined {
   if (!matches) return undefined;
   const match = matches.find(m => m.key === key);
   return match?.indices;
@@ -111,10 +108,7 @@ export function HighlightText({
   highlightClassName,
 }: {
   text: string;
-  matches?: ReadonlyArray<{
-    key?: string;
-    indices: readonly [number, number][];
-  }>;
+  matches?: readonly FuseResultMatch[];
   matchKey: string;
   className?: string;
   highlightClassName?: string;
