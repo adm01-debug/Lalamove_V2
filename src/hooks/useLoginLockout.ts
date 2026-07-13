@@ -17,8 +17,10 @@ export function useLoginLockout() {
 
   const checkLockout = useCallback(async (email: string): Promise<LockoutStatus> => {
     try {
-      const { data, error } = await supabase.rpc('check_login_lockout', {
+      // v2: além do lockout por e-mail, considera bloqueio/rate-limit por IP.
+      const { data, error } = await supabase.rpc('check_login_lockout_v2', {
         p_email: email,
+        p_ip_address: undefined,
       });
 
       if (error) {
@@ -43,9 +45,11 @@ export function useLoginLockout() {
 
   const recordFailedAttempt = useCallback(async (email: string): Promise<LockoutStatus> => {
     try {
-      const { data, error } = await supabase.rpc('record_failed_login', {
+      // v2: rate-limit progressivo + detecção de atividade suspeita por IP.
+      const { data, error } = await supabase.rpc('record_failed_login_v2', {
         p_email: email,
-        p_ip_address: null, // IP will be captured server-side if needed
+        p_ip_address: undefined, // IP capturado server-side quando disponível
+        p_user_agent: undefined,
       });
 
       if (error) {
@@ -53,11 +57,11 @@ export function useLoginLockout() {
         return { isLocked: false, remainingSeconds: 0, attemptCount: 0 };
       }
 
-      const result = data?.[0] || { is_now_locked: false, lockout_seconds: 0, total_attempts: 0 };
+      const result = data?.[0] || { is_locked: false, lockout_seconds: 0, attempt_count: 0 };
       const status: LockoutStatus = {
-        isLocked: result.is_now_locked,
+        isLocked: result.is_locked,
         remainingSeconds: result.lockout_seconds,
-        attemptCount: result.total_attempts,
+        attemptCount: result.attempt_count,
       };
 
       setLockoutStatus(status);
