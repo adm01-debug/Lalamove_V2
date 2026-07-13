@@ -120,7 +120,7 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
     };
   }, [mapboxToken]);
 
-  // Atualiza os dados e reenquadra o mapa quando os pontos mudam.
+  // Atualiza os dados, o peso da métrica e reenquadra o mapa quando mudam.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
@@ -128,12 +128,22 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
     const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
     source?.setData(geojson);
 
+    if (map.getLayer(HEATMAP_LAYER)) {
+      map.setPaintProperty(
+        HEATMAP_LAYER,
+        'heatmap-weight',
+        metric === 'volume'
+          ? 1
+          : (['interpolate', ['linear'], ['get', 'weight'], 0, 0, 1, 1] as unknown as number),
+      );
+    }
+
     if (geojson.features.length > 0) {
       const bounds = new mapboxgl.LngLatBounds();
       geojson.features.forEach((f) => bounds.extend(f.geometry.coordinates as [number, number]));
       map.fitBounds(bounds, { padding: 48, maxZoom: 13, duration: 600 });
     }
-  }, [geojson, ready]);
+  }, [geojson, metric, ready]);
 
   if (tokenError) {
     return (
