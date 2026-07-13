@@ -1977,6 +1977,27 @@ export type Database = {
         }
         Relationships: []
       }
+      region_cache: {
+        Row: {
+          coord_key: string
+          created_at: string
+          region: string
+          updated_at: string
+        }
+        Insert: {
+          coord_key: string
+          created_at?: string
+          region: string
+          updated_at?: string
+        }
+        Update: {
+          coord_key?: string
+          created_at?: string
+          region?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       report_presets: {
         Row: {
           created_at: string
