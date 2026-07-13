@@ -153,7 +153,7 @@ function generatePredictions(data: AnalysisData): PredictiveAlert[] {
         { label: "Tempo Parado", value: `${mainStalled.minutes} min` },
         { label: "Pedido", value: mainStalled.lalamoveId }
       ],
-    } as any);
+    });
   }
 
   if (data.offRouteDrivers.length > 0) {
@@ -172,7 +172,7 @@ function generatePredictions(data: AnalysisData): PredictiveAlert[] {
         { label: "Atraso de Desvio", value: `${mainOffRoute.deviation} min` },
         { label: "Pedido", value: mainOffRoute.lalamoveId }
       ],
-    } as any);
+    });
   }
 
   if (alerts.length === 0) {
