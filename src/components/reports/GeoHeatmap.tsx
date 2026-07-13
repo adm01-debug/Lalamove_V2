@@ -19,6 +19,12 @@ export interface GeoHeatmapProps {
 
 const SOURCE_ID = 'deliveries';
 const HEATMAP_LAYER = 'deliveries-heat';
+// Fonte separada com clustering para os pontos individuais/aglomerados.
+// A camada de calor continua usando a fonte não-clusterizada (SOURCE_ID),
+// pois heatmap exige pontos brutos, não agregados.
+const CLUSTER_SOURCE = 'deliveries-clustered';
+const CLUSTER_LAYER = 'deliveries-clusters';
+const CLUSTER_COUNT_LAYER = 'deliveries-cluster-count';
 const POINT_LAYER = 'deliveries-point';
 
 /** Rótulo descritivo da métrica ativa exibido na legenda. */
