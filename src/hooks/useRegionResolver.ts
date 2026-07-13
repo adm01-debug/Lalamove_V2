@@ -51,6 +51,51 @@ function writeCache(cache: RegionCache) {
   }
 }
 
+/** Máximo de chaves por consulta ao backend (evita URLs longas no filtro `in`). */
+const BACKEND_CHUNK = 100;
+
+/**
+ * Lê o cache compartilhado (L2) no backend para um conjunto de chaves.
+ * Falhas são tratadas como cache-miss silencioso — o fluxo cai para o Mapbox.
+ */
+async function readBackendCache(keys: string[]): Promise<RegionCache> {
+  const result: RegionCache = {};
+  if (keys.length === 0) return result;
+  try {
+    for (let i = 0; i < keys.length; i += BACKEND_CHUNK) {
+      const chunk = keys.slice(i, i + BACKEND_CHUNK);
+      const { data, error } = await supabase
+        .from('region_cache')
+        .select('coord_key, region')
+        .in('coord_key', chunk);
+      if (error) throw error;
+      for (const row of data ?? []) {
+        if (row.coord_key && row.region) result[row.coord_key] = row.region;
+      }
+    }
+  } catch (err) {
+    logger.error('Erro ao ler cache compartilhado de regiões:', err);
+  }
+  return result;
+}
+
+/**
+ * Grava (upsert) regiões recém-resolvidas no cache compartilhado (L2) para
+ * que outros usuários as reaproveitem. Falhas não interrompem o fluxo local.
+ */
+async function writeBackendCache(entries: RegionCache): Promise<void> {
+  const rows = Object.entries(entries).map(([coord_key, region]) => ({ coord_key, region }));
+  if (rows.length === 0) return;
+  try {
+    const { error } = await supabase
+      .from('region_cache')
+      .upsert(rows, { onConflict: 'coord_key' });
+    if (error) throw error;
+  } catch (err) {
+    logger.error('Erro ao gravar cache compartilhado de regiões:', err);
+  }
+}
+
 interface MapboxContextEntry {
   id: string;
   text: string;
