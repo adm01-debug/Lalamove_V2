@@ -19,6 +19,12 @@ export interface GeoHeatmapProps {
 
 const SOURCE_ID = 'deliveries';
 const HEATMAP_LAYER = 'deliveries-heat';
+// Fonte separada com clustering para os pontos individuais/aglomerados.
+// A camada de calor continua usando a fonte não-clusterizada (SOURCE_ID),
+// pois heatmap exige pontos brutos, não agregados.
+const CLUSTER_SOURCE = 'deliveries-clustered';
+const CLUSTER_LAYER = 'deliveries-clusters';
+const CLUSTER_COUNT_LAYER = 'deliveries-cluster-count';
 const POINT_LAYER = 'deliveries-point';
 
 /** Rótulo descritivo da métrica ativa exibido na legenda. */
@@ -82,6 +88,14 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
         data: { type: 'FeatureCollection', features: [] },
       });
 
+      map.addSource(CLUSTER_SOURCE, {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 50,
+      });
+
       map.addLayer({
         id: HEATMAP_LAYER,
         type: 'heatmap',
@@ -105,25 +119,82 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
         },
       });
 
+      // Círculos de cluster: raio/cor escalam pela quantidade de pontos.
       map.addLayer({
-        id: POINT_LAYER,
+        id: CLUSTER_LAYER,
         type: 'circle',
-        source: SOURCE_ID,
-        minzoom: 12,
+        source: CLUSTER_SOURCE,
+        filter: ['has', 'point_count'],
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 3, 16, 8],
-          'circle-color': 'rgb(239,138,98)',
+          'circle-color': [
+            'step', ['get', 'point_count'],
+            'rgb(103,169,207)', 25,
+            'rgb(253,219,199)', 100,
+            'rgb(239,138,98)', 500,
+            'rgb(178,24,43)',
+          ],
+          'circle-radius': [
+            'step', ['get', 'point_count'],
+            14, 25, 18, 100, 24, 500, 30,
+          ],
+          'circle-opacity': 0.85,
           'circle-stroke-color': '#fff',
-          'circle-stroke-width': 1,
-          'circle-opacity': ['interpolate', ['linear'], ['zoom'], 12, 0, 14, 0.8],
+          'circle-stroke-width': 1.5,
         },
       });
 
-      // Popup com detalhes da entrega ao clicar num ponto.
+      map.addLayer({
+        id: CLUSTER_COUNT_LAYER,
+        type: 'symbol',
+        source: CLUSTER_SOURCE,
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': ['get', 'point_count_abbreviated'],
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12,
+        },
+        paint: { 'text-color': '#0f172a' },
+      });
+
+      map.addLayer({
+        id: POINT_LAYER,
+        type: 'circle',
+        source: CLUSTER_SOURCE,
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 4, 16, 8],
+          'circle-color': 'rgb(239,138,98)',
+          'circle-stroke-color': '#fff',
+          'circle-stroke-width': 1,
+          'circle-opacity': 0.9,
+        },
+      });
+
+      // Popup com detalhes da entrega ao clicar num ponto individual.
       const popup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true });
       const currencyFmt = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
+      });
+
+      // Zoom ao clicar num cluster, expandindo-o.
+      map.on('click', CLUSTER_LAYER, (e) => {
+        const feature = map.queryRenderedFeatures(e.point, { layers: [CLUSTER_LAYER] })[0];
+        const clusterId = feature?.properties?.cluster_id;
+        if (clusterId == null || feature.geometry.type !== 'Point') return;
+        const center = feature.geometry.coordinates as [number, number];
+        const source = map.getSource(CLUSTER_SOURCE) as mapboxgl.GeoJSONSource;
+        source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err || zoom == null) return;
+          map.easeTo({ center, zoom });
+        });
+      });
+
+      map.on('mouseenter', CLUSTER_LAYER, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', CLUSTER_LAYER, () => {
+        map.getCanvas().style.cursor = '';
       });
 
       map.on('click', POINT_LAYER, (e) => {
@@ -182,6 +253,9 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
 
     const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
     source?.setData(geojson);
+
+    const clusterSource = map.getSource(CLUSTER_SOURCE) as mapboxgl.GeoJSONSource | undefined;
+    clusterSource?.setData(geojson);
 
     if (map.getLayer(HEATMAP_LAYER)) {
       map.setPaintProperty(
