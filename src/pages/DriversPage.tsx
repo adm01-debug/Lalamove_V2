@@ -69,7 +69,7 @@ export function DriversPage() {
   const driverSearchResults = useFuseSearchWithMatches(drivers || [], driverSearchKeys, searchQuery);
 
   const filteredDrivers = useMemo(() => {
-    const driversToFilter = searchQuery.trim() ? driverSearchResults.map(r => ({ ...r.item, _matches: r.matches as any })) : (drivers || []);
+    const driversToFilter = searchQuery.trim() ? driverSearchResults.map(r => ({ ...r.item, _matches: r.matches })) : (drivers || []);
     return driversToFilter.filter(driver => {
       const matchesStatus = statusFilter === 'ALL' || driver.status === statusFilter;
       const matchesRiskScore = driver.riskScore >= advancedFilters.riskScoreRange[0] && driver.riskScore <= advancedFilters.riskScoreRange[1];

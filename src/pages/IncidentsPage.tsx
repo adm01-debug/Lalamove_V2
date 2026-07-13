@@ -158,13 +158,13 @@ export function IncidentsPage() {
                         <div className="flex items-center gap-2 min-w-0">
                           <div className={cn("p-1.5 rounded-lg shrink-0", severity.bg, severity.border)}><TypeIcon className={cn("w-4 h-4", severity.color)} /></div>
                           <div className="min-w-0">
-                            <p className="font-medium text-sm truncate">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.driverName || ''} matches={(incident as WithMatches<typeof incident>)._matches as any} matchKey="driverName" /> : (incident.driverName || '')}</p>
+                            <p className="font-medium text-sm truncate">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.driverName || ''} matches={(incident as WithMatches<typeof incident>)._matches} matchKey="driverName" /> : (incident.driverName || '')}</p>
                             <p className="text-xs text-muted-foreground">{typeLabels[incident.type] || incident.type}</p>
                           </div>
                         </div>
                         <Badge variant={severity.variant} className="shadow-sm text-[10px] px-1.5 shrink-0">{severity.label}</Badge>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.description} matches={(incident as WithMatches<typeof incident>)._matches as any} matchKey="description" /> : incident.description}</p>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{searchQuery.trim() && (incident as WithMatches<typeof incident>)._matches ? <HighlightText text={incident.description} matches={(incident as WithMatches<typeof incident>)._matches} matchKey="description" /> : incident.description}</p>
                       <div className="flex items-center justify-between pt-1">
                         <div className="flex items-center gap-2">
                           <div className="flex items-center gap-1 text-[10px] text-muted-foreground"><Clock className="w-3 h-3" />{format(incident.createdAt, "dd/MM HH:mm", { locale: ptBR })}</div>
