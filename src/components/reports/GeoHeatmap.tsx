@@ -28,23 +28,28 @@ const POINT_LAYER = 'deliveries-point';
  * zoom, os pontos individuais passam a ser exibidos. O componente é defensivo:
  * ignora coordenadas inválidas, aguarda o token e limpa a instância no unmount.
  */
-export function GeoHeatmap({ points, height = 360 }: GeoHeatmapProps) {
+export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatmapProps) {
   const { mapboxToken, error: tokenError } = useMapboxToken();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [ready, setReady] = useState(false);
 
-  // GeoJSON estável a partir das coordenadas válidas.
+  // GeoJSON estável a partir das coordenadas válidas, com peso normalizado (0–1)
+  // conforme a métrica escolhida. Volume atribui peso uniforme a cada entrega.
   const geojson = useMemo(() => {
-    const features = points
-      .filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng) && !(p.lat === 0 && p.lng === 0))
-      .map((p) => ({
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: [p.lng, p.lat] },
-        properties: {},
-      }));
+    const valid = points.filter(
+      (p) => Number.isFinite(p.lat) && Number.isFinite(p.lng) && !(p.lat === 0 && p.lng === 0),
+    );
+    const rawValue = (p: (typeof valid)[number]) =>
+      metric === 'cost' ? p.cost : metric === 'delay' ? p.delay : 1;
+    const max = metric === 'volume' ? 1 : Math.max(1, ...valid.map(rawValue));
+    const features = valid.map((p) => ({
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates: [p.lng, p.lat] },
+      properties: { weight: Math.min(1, rawValue(p) / max) },
+    }));
     return { type: 'FeatureCollection' as const, features };
-  }, [points]);
+  }, [points, metric]);
 
   // Inicializa o mapa uma única vez quando o token estiver disponível.
   useEffect(() => {
