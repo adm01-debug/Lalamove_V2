@@ -66,7 +66,10 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 
     map.on('load', () => {
-      map.addSource(SOURCE_ID, { type: 'geojson', data: geojson });
+      map.addSource(SOURCE_ID, {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      });
 
       map.addLayer({
         id: HEATMAP_LAYER,
