@@ -668,6 +668,12 @@ export default function AdvancedReportsPage() {
               </div>
             )}
             <Card variant="glass">
+              <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Mapa de calor das entregas</CardTitle></CardHeader>
+              <CardContent>
+                <GeoHeatmap points={geoPoints} height={360} />
+              </CardContent>
+            </Card>
+            <Card variant="glass">
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Entregas por região</CardTitle></CardHeader>
 
               <CardContent>
