@@ -53,7 +53,11 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
     const features = valid.map((p) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [p.lng, p.lat] },
-      properties: { weight: Math.min(1, rawValue(p) / max) },
+      properties: {
+        weight: Math.min(1, rawValue(p) / max),
+        cost: p.cost,
+        delay: p.delay,
+      },
     }));
     return { type: 'FeatureCollection' as const, features };
   }, [points, metric]);
