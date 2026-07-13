@@ -140,6 +140,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
 
     let cancelled = false;
     pending.forEach(([key]) => inFlight.current.add(key));
+    setActiveCount((n) => n + pending.length);
 
     (async () => {
       const resolved: RegionCache = {};
@@ -164,6 +165,8 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
         );
       }
 
+      setActiveCount((n) => Math.max(0, n - pending.length));
+
       if (cancelled || Object.keys(resolved).length === 0) return;
       setRegions((prev) => {
         const next = { ...prev, ...resolved };
@@ -178,5 +181,17 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
     };
   }, [uniqueCoords, regions]);
 
-  return regions;
+  return useMemo<RegionResolution>(() => {
+    let resolvedCount = 0;
+    for (const key of uniqueCoords.keys()) {
+      if (regions[key]) resolvedCount += 1;
+    }
+    const total = uniqueCoords.size;
+    return {
+      regions,
+      total,
+      pending: Math.max(0, total - resolvedCount),
+      isResolving: activeCount > 0,
+    };
+  }, [regions, uniqueCoords, activeCount]);
 }
