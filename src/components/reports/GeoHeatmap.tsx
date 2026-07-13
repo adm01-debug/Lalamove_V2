@@ -254,6 +254,9 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
     const source = map.getSource(SOURCE_ID) as mapboxgl.GeoJSONSource | undefined;
     source?.setData(geojson);
 
+    const clusterSource = map.getSource(CLUSTER_SOURCE) as mapboxgl.GeoJSONSource | undefined;
+    clusterSource?.setData(geojson);
+
     if (map.getLayer(HEATMAP_LAYER)) {
       map.setPaintProperty(
         HEATMAP_LAYER,
