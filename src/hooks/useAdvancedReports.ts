@@ -92,6 +92,14 @@ export interface GeoRow {
   onTimeRate: number;
 }
 
+/** Ponto de entrega com métricas para ponderar o heatmap geográfico. */
+export interface WeightedGeoPoint extends Coord {
+  /** Custo total da entrega (para peso "custo"). */
+  cost: number;
+  /** Atraso em minutos, nunca negativo (para peso "atraso"). */
+  delay: number;
+}
+
 export interface DailyPoint {
   date: string;
   deliveries: number;
