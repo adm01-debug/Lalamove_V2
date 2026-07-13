@@ -509,6 +509,8 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     daily,
     dailyComparison,
     comparison,
+    geoResolution: regionResolution,
+
 
   };
 }
