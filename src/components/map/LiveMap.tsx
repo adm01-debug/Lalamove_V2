@@ -27,6 +27,7 @@ import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
 import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement, createClusterMarkerElement } from './markerFactories';
+import { setupMapLayers } from './mapLayers';
 import { statusColor as statusHsl } from '@/lib/statusPalette';
 
 
