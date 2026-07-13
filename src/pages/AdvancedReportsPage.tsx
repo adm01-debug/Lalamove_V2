@@ -22,6 +22,7 @@ import {
 import {
   useAdvancedReports, DEFAULT_FILTERS, type AdvancedReportFilters,
 } from '@/hooks/useAdvancedReports';
+import { GeoHeatmap } from '@/components/reports/GeoHeatmap';
 import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
 import { cn } from '@/lib/utils';
@@ -103,7 +104,7 @@ export default function AdvancedReportsPage() {
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
-    cost, performance, geography, daily, dailyComparison, comparison, geoResolution,
+    cost, performance, geography, daily, dailyComparison, comparison, geoResolution, geoPoints,
   } = useAdvancedReports(filters);
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
@@ -667,6 +668,12 @@ export default function AdvancedReportsPage() {
                 </span>
               </div>
             )}
+            <Card variant="glass">
+              <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Mapa de calor das entregas</CardTitle></CardHeader>
+              <CardContent>
+                <GeoHeatmap points={geoPoints} height={360} />
+              </CardContent>
+            </Card>
             <Card variant="glass">
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Entregas por região</CardTitle></CardHeader>
 
