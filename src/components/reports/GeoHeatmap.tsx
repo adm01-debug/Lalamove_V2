@@ -178,6 +178,22 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
           <span>Carregando mapa de calor…</span>
         </div>
       )}
+      {ready && (
+        <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg bg-background/85 px-3 py-2 shadow-sm backdrop-blur-sm">
+          <p className="mb-1 text-[11px] font-medium text-foreground">{METRIC_LABEL[metric]}</p>
+          <div
+            className="h-2 w-32 rounded-full"
+            style={{
+              background:
+                'linear-gradient(to right, rgb(103,169,207), rgb(209,229,240), rgb(253,219,199), rgb(239,138,98), rgb(178,24,43))',
+            }}
+          />
+          <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+            <span>Menor</span>
+            <span>Maior</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
