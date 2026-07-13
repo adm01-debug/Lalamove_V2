@@ -1,9 +1,12 @@
 import React from 'react';
+import type { FuseResultMatch } from 'fuse.js';
 import { cn } from '@/lib/utils';
+
+type MatchIndices = ReadonlyArray<readonly [number, number]>;
 
 interface HighlightMatchProps {
   text: string;
-  indices?: readonly [number, number][];
+  indices?: MatchIndices;
   className?: string;
   highlightClassName?: string;
 }
