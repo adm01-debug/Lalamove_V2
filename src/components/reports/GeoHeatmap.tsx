@@ -170,18 +170,23 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
         },
       });
 
+      // Popup com detalhes da entrega ao clicar num ponto individual.
+      const popup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true });
+      const currencyFmt = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+
       // Zoom ao clicar num cluster, expandindo-o.
       map.on('click', CLUSTER_LAYER, (e) => {
         const feature = map.queryRenderedFeatures(e.point, { layers: [CLUSTER_LAYER] })[0];
         const clusterId = feature?.properties?.cluster_id;
         if (clusterId == null || feature.geometry.type !== 'Point') return;
+        const center = feature.geometry.coordinates as [number, number];
         const source = map.getSource(CLUSTER_SOURCE) as mapboxgl.GeoJSONSource;
         source.getClusterExpansionZoom(clusterId, (err, zoom) => {
           if (err || zoom == null) return;
-          map.easeTo({
-            center: feature.geometry.coordinates as [number, number],
-            zoom,
-          });
+          map.easeTo({ center, zoom });
         });
       });
 
