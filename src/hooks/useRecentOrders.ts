@@ -1,7 +1,9 @@
 import { logger } from '@/utils/logger';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Order } from '@/types';
+import { Order, OrderStatus } from '@/types';
+
+type OrderStatusFilter = OrderStatus | 'ALL';
 
 const PAGE_SIZE = 20;
 
@@ -13,7 +15,7 @@ interface OrdersResult {
   totalPages: number;
 }
 
-async function fetchOrders(page: number, status?: any, query?: string): Promise<OrdersResult> {
+async function fetchOrders(page: number, status?: OrderStatusFilter, query?: string): Promise<OrdersResult> {
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
@@ -77,7 +79,7 @@ async function fetchOrders(page: number, status?: any, query?: string): Promise<
   };
 }
 
-export function useRecentOrders(page = 1, status?: any, query?: string) {
+export function useRecentOrders(page = 1, status?: OrderStatusFilter, query?: string) {
   return useQuery({
     queryKey: ['recent-orders', page, status, query],
     queryFn: () => fetchOrders(page, status, query),
