@@ -74,7 +74,8 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
         source: SOURCE_ID,
         maxzoom: 15,
         paint: {
-          'heatmap-weight': 1,
+          'heatmap-weight':
+            metric === 'volume' ? 1 : ['interpolate', ['linear'], ['get', 'weight'], 0, 0, 1, 1],
           'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 15, 3],
           'heatmap-color': [
             'interpolate', ['linear'], ['heatmap-density'],
