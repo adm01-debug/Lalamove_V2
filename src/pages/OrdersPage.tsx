@@ -94,7 +94,7 @@ export function OrdersPage() {
     // If we have a search query, we still use Fuse for local highlighting and refinement if needed,
     // but the primary filtering is now done at the database level.
     if (searchQuery.trim()) {
-      return searchResults.map(r => ({ ...r.item, _matches: r.matches as any }));
+      return searchResults.map(r => ({ ...r.item, _matches: r.matches }));
     }
     
     return orders;

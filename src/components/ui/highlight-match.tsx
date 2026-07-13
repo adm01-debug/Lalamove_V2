@@ -1,9 +1,12 @@
 import React from 'react';
+import type { FuseResultMatch } from 'fuse.js';
 import { cn } from '@/lib/utils';
+
+type MatchIndices = ReadonlyArray<readonly [number, number]>;
 
 interface HighlightMatchProps {
   text: string;
-  indices?: readonly [number, number][];
+  indices?: MatchIndices;
   className?: string;
   highlightClassName?: string;
 }
@@ -86,12 +89,9 @@ export function HighlightMatch({
  * Helper function to extract indices for a specific key from Fuse.js matches
  */
 export function getMatchIndices(
-  matches: ReadonlyArray<{
-    key?: string;
-    indices: readonly [number, number][];
-  }> | undefined,
+  matches: readonly FuseResultMatch[] | undefined,
   key: string
-): readonly [number, number][] | undefined {
+): MatchIndices | undefined {
   if (!matches) return undefined;
   const match = matches.find(m => m.key === key);
   return match?.indices;
@@ -108,10 +108,7 @@ export function HighlightText({
   highlightClassName,
 }: {
   text: string;
-  matches?: ReadonlyArray<{
-    key?: string;
-    indices: readonly [number, number][];
-  }>;
+  matches?: readonly FuseResultMatch[];
   matchKey: string;
   className?: string;
   highlightClassName?: string;

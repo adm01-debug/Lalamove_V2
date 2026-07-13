@@ -61,7 +61,7 @@ export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCar
                 {searchQuery.trim() && (order as WithMatches<typeof order>)._matches ? (
                   <HighlightText
                     text={order.internalOrderId || order.lalamoveId}
-                    matches={(order as WithMatches<typeof order>)._matches as any}
+                    matches={(order as WithMatches<typeof order>)._matches}
                     matchKey={order.internalOrderId ? 'internalOrderId' : 'lalamoveId'}
                   />
                 ) : (
@@ -75,7 +75,7 @@ export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCar
           </div>
           <p className="text-sm text-muted-foreground">
             {searchQuery.trim() && (order as WithMatches<typeof order>)._matches ? (
-              <HighlightText text={order.customerName} matches={(order as WithMatches<typeof order>)._matches as any} matchKey="customerName" />
+              <HighlightText text={order.customerName} matches={(order as WithMatches<typeof order>)._matches} matchKey="customerName" />
             ) : (
               order.customerName
             )}
@@ -107,7 +107,7 @@ export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCar
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground truncate">
                   {searchQuery.trim() && (order as WithMatches<typeof order>)._matches ? (
-                    <HighlightText text={order.driverName} matches={(order as WithMatches<typeof order>)._matches as any} matchKey="driverName" />
+                    <HighlightText text={order.driverName} matches={(order as WithMatches<typeof order>)._matches} matchKey="driverName" />
                   ) : (
                     order.driverName
                   )}

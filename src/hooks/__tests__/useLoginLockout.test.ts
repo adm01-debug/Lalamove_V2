@@ -51,7 +51,7 @@ describe('useLoginLockout', () => {
   it('deve mapear recordFailedAttempt corretamente', async () => {
     const rpcMock = supabase.rpc as ReturnType<typeof vi.fn>;
     rpcMock.mockResolvedValue({
-      data: [{ is_now_locked: true, lockout_seconds: 300, total_attempts: 5 }],
+      data: [{ is_locked: true, lockout_seconds: 300, attempt_count: 5 }],
       error: null,
     });
 
@@ -70,7 +70,7 @@ describe('useLoginLockout', () => {
     const rpcMock = supabase.rpc as ReturnType<typeof vi.fn>;
     rpcMock
       .mockResolvedValueOnce({
-        data: [{ is_now_locked: false, lockout_seconds: 0, total_attempts: 3 }],
+        data: [{ is_locked: false, lockout_seconds: 0, attempt_count: 3 }],
         error: null,
       })
       .mockResolvedValueOnce({ data: null, error: null });
@@ -117,9 +117,9 @@ describe('useLoginLockout', () => {
       const suffix = Number(params.p_email.split('+').pop() ?? '1');
       return Promise.resolve({
         data: [{
-          is_now_locked: suffix >= 5,
+          is_locked: suffix >= 5,
           lockout_seconds: suffix >= 5 ? 300 : 0,
-          total_attempts: suffix,
+          attempt_count: suffix,
         }],
         error: null,
       });
