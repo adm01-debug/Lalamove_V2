@@ -103,7 +103,7 @@ export default function AdvancedReportsPage() {
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
     loading, refreshing, fetchData, filterOptions, filteredRows,
-    cost, performance, geography, daily, dailyComparison, comparison,
+    cost, performance, geography, daily, dailyComparison, comparison, geoResolution,
   } = useAdvancedReports(filters);
 
   const setFilter = <K extends keyof AdvancedReportFilters>(key: K, value: AdvancedReportFilters[K]) =>
@@ -659,8 +659,17 @@ export default function AdvancedReportsPage() {
 
           {/* GEOGRAFIA */}
           <TabsContent value="geography" className="space-y-6">
+            {geoResolution.isResolving && (
+              <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-4 py-2 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                <span>
+                  Resolvendo regiões precisas via geolocalização… {geoResolution.total - geoResolution.pending}/{geoResolution.total}
+                </span>
+              </div>
+            )}
             <Card variant="glass">
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Entregas por região</CardTitle></CardHeader>
+
               <CardContent>
                 <ResponsiveContainer width="100%" height={320}>
                   <BarChart data={geography} layout="vertical">

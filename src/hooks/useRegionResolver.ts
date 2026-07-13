@@ -98,8 +98,24 @@ export function pickRegion(result: ReverseResult): string | null {
   );
 }
 
+export interface RegionResolution {
+  /** Mapa de chave-de-coordenada → região resolvida. */
+  regions: RegionCache;
+  /** Total de coordenadas únicas válidas consideradas. */
+  total: number;
+  /** Quantas ainda faltam ser resolvidas (aguardando reverse geocode). */
+  pending: number;
+  /** True enquanto há coordenadas sendo resolvidas em segundo plano. */
+  isResolving: boolean;
+}
+
 export function useRegionResolver(coords: Coord[]): RegionCache {
+  return useRegionResolution(coords).regions;
+}
+
+export function useRegionResolution(coords: Coord[]): RegionResolution {
   const [regions, setRegions] = useState<RegionCache>(() => readCache());
+  const [activeCount, setActiveCount] = useState(0);
   const inFlight = useRef<Set<string>>(new Set());
 
   // Estabiliza a lista de coordenadas únicas válidas por chave.
@@ -124,6 +140,7 @@ export function useRegionResolver(coords: Coord[]): RegionCache {
 
     let cancelled = false;
     pending.forEach(([key]) => inFlight.current.add(key));
+    setActiveCount((n) => n + pending.length);
 
     (async () => {
       const resolved: RegionCache = {};
@@ -148,6 +165,8 @@ export function useRegionResolver(coords: Coord[]): RegionCache {
         );
       }
 
+      setActiveCount((n) => Math.max(0, n - pending.length));
+
       if (cancelled || Object.keys(resolved).length === 0) return;
       setRegions((prev) => {
         const next = { ...prev, ...resolved };
@@ -162,5 +181,17 @@ export function useRegionResolver(coords: Coord[]): RegionCache {
     };
   }, [uniqueCoords, regions]);
 
-  return regions;
+  return useMemo<RegionResolution>(() => {
+    let resolvedCount = 0;
+    for (const key of uniqueCoords.keys()) {
+      if (regions[key]) resolvedCount += 1;
+    }
+    const total = uniqueCoords.size;
+    return {
+      regions,
+      total,
+      pending: Math.max(0, total - resolvedCount),
+      isResolving: activeCount > 0,
+    };
+  }, [regions, uniqueCoords, activeCount]);
 }

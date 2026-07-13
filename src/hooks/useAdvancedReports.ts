@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { logger } from '@/utils/logger';
-import { useRegionResolver, coordKey, type Coord } from '@/hooks/useRegionResolver';
+import { useRegionResolution, coordKey, type Coord } from '@/hooks/useRegionResolver';
 
 /**
  * Filtros avançados aplicáveis ao histórico de entregas.
@@ -348,7 +348,8 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
         .map((r) => ({ lat: Number(r.delivery_latitude), lng: Number(r.delivery_longitude) })),
     [filtered],
   );
-  const resolvedRegions = useRegionResolver(geoCoords);
+  const regionResolution = useRegionResolution(geoCoords);
+  const resolvedRegions = regionResolution.regions;
 
   const geography = useMemo<GeoRow[]>(() => {
     const map = new Map<
@@ -508,6 +509,8 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     daily,
     dailyComparison,
     comparison,
+    geoResolution: regionResolution,
+
 
   };
 }
