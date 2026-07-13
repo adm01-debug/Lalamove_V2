@@ -98,8 +98,24 @@ export function pickRegion(result: ReverseResult): string | null {
   );
 }
 
+export interface RegionResolution {
+  /** Mapa de chave-de-coordenada → região resolvida. */
+  regions: RegionCache;
+  /** Total de coordenadas únicas válidas consideradas. */
+  total: number;
+  /** Quantas ainda faltam ser resolvidas (aguardando reverse geocode). */
+  pending: number;
+  /** True enquanto há coordenadas sendo resolvidas em segundo plano. */
+  isResolving: boolean;
+}
+
 export function useRegionResolver(coords: Coord[]): RegionCache {
+  return useRegionResolution(coords).regions;
+}
+
+export function useRegionResolution(coords: Coord[]): RegionResolution {
   const [regions, setRegions] = useState<RegionCache>(() => readCache());
+  const [activeCount, setActiveCount] = useState(0);
   const inFlight = useRef<Set<string>>(new Set());
 
   // Estabiliza a lista de coordenadas únicas válidas por chave.
