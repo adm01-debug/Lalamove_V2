@@ -3,11 +3,16 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 import { useMapboxToken } from '@/components/map/hooks/useMapboxToken';
-import type { Coord } from '@/hooks/useRegionResolver';
+import type { WeightedGeoPoint } from '@/hooks/useAdvancedReports';
+
+/** Métrica usada para ponderar a densidade do heatmap. */
+export type HeatmapMetric = 'volume' | 'cost' | 'delay';
 
 export interface GeoHeatmapProps {
-  /** Coordenadas de entrega válidas (lat/lng) a serem densificadas no mapa. */
-  points: Coord[];
+  /** Pontos de entrega com métricas (lat/lng + custo + atraso). */
+  points: WeightedGeoPoint[];
+  /** Métrica que define o peso de cada ponto no mapa de calor. */
+  metric?: HeatmapMetric;
   /** Altura do canvas do mapa em pixels. */
   height?: number;
 }
