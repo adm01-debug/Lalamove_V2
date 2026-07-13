@@ -510,7 +510,6 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
     dailyComparison,
     comparison,
     geoResolution: regionResolution,
-
-
+    geoPoints: geoCoords,
   };
 }
