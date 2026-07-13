@@ -3064,6 +3064,10 @@ export type Database = {
       cleanup_expired_tokens: { Args: never; Returns: number }
       cleanup_old_cron_logs: { Args: never; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: number }
+      cleanup_old_region_cache: {
+        Args: { p_retention_days?: number }
+        Returns: number
+      }
       clear_login_attempts: { Args: { p_email: string }; Returns: undefined }
       ensure_tracking_events_partition: {
         Args: { p_month: string }
