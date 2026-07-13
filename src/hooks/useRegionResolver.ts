@@ -144,9 +144,21 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
 
     (async () => {
       const resolved: RegionCache = {};
-      for (let i = 0; i < pending.length; i += CONCURRENCY) {
+
+      // L2 — cache compartilhado no backend: reaproveita regiões já
+      // resolvidas por outros usuários antes de gastar chamadas ao Mapbox.
+      let toGeocode = pending;
+      const fromBackend = await readBackendCache(pending.map(([key]) => key));
+      if (Object.keys(fromBackend).length > 0) {
+        Object.assign(resolved, fromBackend);
+        fromBackend && Object.keys(fromBackend).forEach((key) => inFlight.current.delete(key));
+        toGeocode = pending.filter(([key]) => !fromBackend[key]);
+      }
+
+      const freshlyGeocoded: RegionCache = {};
+      for (let i = 0; i < toGeocode.length; i += CONCURRENCY) {
         if (cancelled) break;
-        const chunk = pending.slice(i, i + CONCURRENCY);
+        const chunk = toGeocode.slice(i, i + CONCURRENCY);
         await Promise.all(
           chunk.map(async ([key, c]) => {
             try {
@@ -155,7 +167,10 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
               });
               if (error) throw error;
               const region = pickRegion((data ?? {}) as ReverseResult);
-              if (region) resolved[key] = region;
+              if (region) {
+                resolved[key] = region;
+                freshlyGeocoded[key] = region;
+              }
             } catch (err) {
               logger.error('Reverse geocode falhou para', key, err);
             } finally {
@@ -163,6 +178,11 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
             }
           }),
         );
+      }
+
+      // Compartilha as regiões recém-resolvidas com os demais usuários.
+      if (Object.keys(freshlyGeocoded).length > 0) {
+        void writeBackendCache(freshlyGeocoded);
       }
 
       setActiveCount((n) => Math.max(0, n - pending.length));
