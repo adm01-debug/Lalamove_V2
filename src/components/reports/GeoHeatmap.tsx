@@ -21,6 +21,13 @@ const SOURCE_ID = 'deliveries';
 const HEATMAP_LAYER = 'deliveries-heat';
 const POINT_LAYER = 'deliveries-point';
 
+/** Rótulo descritivo da métrica ativa exibido na legenda. */
+const METRIC_LABEL: Record<HeatmapMetric, string> = {
+  volume: 'Densidade de entregas',
+  cost: 'Concentração de custo',
+  delay: 'Concentração de atraso',
+};
+
 /**
  * Heatmap geográfico interativo (Mapbox GL) das entregas.
  *
