@@ -670,9 +670,28 @@ export default function AdvancedReportsPage() {
               </div>
             )}
             <Card variant="glass">
-              <CardHeader><CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Mapa de calor das entregas</CardTitle></CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0">
+                <CardTitle className="text-base flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Mapa de calor das entregas</CardTitle>
+                <div className="flex gap-1 rounded-lg bg-muted/50 p-1">
+                  {([
+                    { key: 'volume', label: 'Volume' },
+                    { key: 'cost', label: 'Custo' },
+                    { key: 'delay', label: 'Atraso' },
+                  ] as const).map((m) => (
+                    <Button
+                      key={m.key}
+                      size="sm"
+                      variant={heatMetric === m.key ? 'default' : 'ghost'}
+                      className="h-7 px-3 text-xs"
+                      onClick={() => setHeatMetric(m.key)}
+                    >
+                      {m.label}
+                    </Button>
+                  ))}
+                </div>
+              </CardHeader>
               <CardContent>
-                <GeoHeatmap points={geoPoints} height={360} />
+                <GeoHeatmap points={geoPoints} metric={heatMetric} height={360} />
               </CardContent>
             </Card>
             <Card variant="glass">
