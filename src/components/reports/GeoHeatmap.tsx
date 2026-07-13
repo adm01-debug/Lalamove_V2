@@ -118,7 +118,7 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
       mapRef.current = null;
       setReady(false);
     };
-  }, [mapboxToken, geojson]);
+  }, [mapboxToken]);
 
   // Atualiza os dados e reenquadra o mapa quando os pontos mudam.
   useEffect(() => {
