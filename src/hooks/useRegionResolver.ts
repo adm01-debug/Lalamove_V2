@@ -51,6 +51,51 @@ function writeCache(cache: RegionCache) {
   }
 }
 
+/** Máximo de chaves por consulta ao backend (evita URLs longas no filtro `in`). */
+const BACKEND_CHUNK = 100;
+
+/**
+ * Lê o cache compartilhado (L2) no backend para um conjunto de chaves.
+ * Falhas são tratadas como cache-miss silencioso — o fluxo cai para o Mapbox.
+ */
+async function readBackendCache(keys: string[]): Promise<RegionCache> {
+  const result: RegionCache = {};
+  if (keys.length === 0) return result;
+  try {
+    for (let i = 0; i < keys.length; i += BACKEND_CHUNK) {
+      const chunk = keys.slice(i, i + BACKEND_CHUNK);
+      const { data, error } = await supabase
+        .from('region_cache')
+        .select('coord_key, region')
+        .in('coord_key', chunk);
+      if (error) throw error;
+      for (const row of data ?? []) {
+        if (row.coord_key && row.region) result[row.coord_key] = row.region;
+      }
+    }
+  } catch (err) {
+    logger.error('Erro ao ler cache compartilhado de regiões:', err);
+  }
+  return result;
+}
+
+/**
+ * Grava (upsert) regiões recém-resolvidas no cache compartilhado (L2) para
+ * que outros usuários as reaproveitem. Falhas não interrompem o fluxo local.
+ */
+async function writeBackendCache(entries: RegionCache): Promise<void> {
+  const rows = Object.entries(entries).map(([coord_key, region]) => ({ coord_key, region }));
+  if (rows.length === 0) return;
+  try {
+    const { error } = await supabase
+      .from('region_cache')
+      .upsert(rows, { onConflict: 'coord_key' });
+    if (error) throw error;
+  } catch (err) {
+    logger.error('Erro ao gravar cache compartilhado de regiões:', err);
+  }
+}
+
 interface MapboxContextEntry {
   id: string;
   text: string;
@@ -144,9 +189,21 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
 
     (async () => {
       const resolved: RegionCache = {};
-      for (let i = 0; i < pending.length; i += CONCURRENCY) {
+
+      // L2 — cache compartilhado no backend: reaproveita regiões já
+      // resolvidas por outros usuários antes de gastar chamadas ao Mapbox.
+      let toGeocode = pending;
+      const fromBackend = await readBackendCache(pending.map(([key]) => key));
+      if (Object.keys(fromBackend).length > 0) {
+        Object.assign(resolved, fromBackend);
+        fromBackend && Object.keys(fromBackend).forEach((key) => inFlight.current.delete(key));
+        toGeocode = pending.filter(([key]) => !fromBackend[key]);
+      }
+
+      const freshlyGeocoded: RegionCache = {};
+      for (let i = 0; i < toGeocode.length; i += CONCURRENCY) {
         if (cancelled) break;
-        const chunk = pending.slice(i, i + CONCURRENCY);
+        const chunk = toGeocode.slice(i, i + CONCURRENCY);
         await Promise.all(
           chunk.map(async ([key, c]) => {
             try {
@@ -155,7 +212,10 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
               });
               if (error) throw error;
               const region = pickRegion((data ?? {}) as ReverseResult);
-              if (region) resolved[key] = region;
+              if (region) {
+                resolved[key] = region;
+                freshlyGeocoded[key] = region;
+              }
             } catch (err) {
               logger.error('Reverse geocode falhou para', key, err);
             } finally {
@@ -163,6 +223,11 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
             }
           }),
         );
+      }
+
+      // Compartilha as regiões recém-resolvidas com os demais usuários.
+      if (Object.keys(freshlyGeocoded).length > 0) {
+        void writeBackendCache(freshlyGeocoded);
       }
 
       setActiveCount((n) => Math.max(0, n - pending.length));
