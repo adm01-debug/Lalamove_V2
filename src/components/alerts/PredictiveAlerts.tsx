@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { usePredictiveAnalysis } from "@/hooks/usePredictiveAnalysis";
+import { usePredictiveAnalysis, type PredictiveAlert } from "@/hooks/usePredictiveAnalysis";
 
 const typeConfig: Record<string, { icon: typeof Brain; color: string; bg: string }> = {
   driver_risk: { icon: Users, color: "text-destructive", bg: "bg-destructive/10" },
@@ -30,18 +30,8 @@ const impactConfig: Record<string, { label: string; color: string }> = {
   critical: { label: "Crítico", color: "bg-destructive/10 text-destructive" },
 };
 
-interface PredictiveAlertExtended {
-  id: string;
-  type: string;
-  title: string;
-  description: string;
-  probability: number;
-  impact: string;
-  timeframe: string;
-  recommendation: string;
-  lalamoveOrderId?: string;
-  dataPoints?: Array<{ label: string; value: string | number }>;
-}
+
+
 
 interface PredictiveAlertsProps {
   className?: string;
@@ -50,7 +40,7 @@ interface PredictiveAlertsProps {
 }
 
 export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps>(function PredictiveAlerts({ className, maxItems = 5 }, ref) {
-  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis() as any;
+  const { predictions, isLoading, isRefreshing, lastUpdated, error, refresh } = usePredictiveAnalysis();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (isLoading) {
@@ -124,7 +114,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
 
       <CardContent className="space-y-3">
         <AnimatePresence mode="popLayout">
-          {displayPredictions.map((prediction: PredictiveAlertExtended, index: number) => {
+          {displayPredictions.map((prediction: PredictiveAlert, index: number) => {
             const config = typeConfig[prediction.type] || typeConfig.sla_breach;
             const impact = impactConfig[prediction.impact];
             const Icon = config.icon;
@@ -173,7 +163,7 @@ export const PredictiveAlerts = forwardRef<HTMLDivElement, PredictiveAlertsProps
                             </div>
                             {prediction.dataPoints && prediction.dataPoints.length > 0 && (
                               <div className="grid grid-cols-2 gap-2 mt-3">
-                                {prediction.dataPoints.map((point: any, i: number) => (
+                                {prediction.dataPoints.map((point, i) => (
                                   <div key={i} className="bg-background/50 rounded-lg p-2">
                                     <p className="text-xs text-muted-foreground">{point.label}</p>
                                     <p className="text-sm font-medium">{point.value}</p>
