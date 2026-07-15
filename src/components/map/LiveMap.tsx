@@ -467,36 +467,23 @@ export function LiveMap({
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
         
-        // Stage 11: Route Deviation Detection (using setting)
+        // Route Deviation: apenas repinta a linha; estado é gerido por useMapAlerts.
         if (isSelected && !tracking.is_stopped) {
-          const source = map.current.getSource(`route-${tracking.id}`) as mapboxgl.GeoJSONSource;
-          // In a real app, we'd calculate distance to the nearest point on the line
-          // Mocking detection: if current pos is far from direct line pickup->delivery
-          const isOff = tracking.is_on_route === false; 
-          if (isOff && !offRouteAlerts.has(tracking.id)) {
-            setOffRouteAlerts(prev => new Set(prev).add(tracking.id));
+          const isOff = tracking.is_on_route === false;
+          if (isOff) {
             map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', statusHsl('critical'));
-          } else if (!isOff && offRouteAlerts.has(tracking.id)) {
-            setOffRouteAlerts(prev => {
-              const next = new Set(prev);
-              next.delete(tracking.id);
-              return next;
-            });
+          } else {
             const vehicleType = tracking.driver?.vehicle_type || 'MOTORCYCLE';
             map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', vehicleColors[vehicleType]);
           }
         }
       }
-      
-      // Stage 12: Stopped Driver Detection (using settings)
+
+      // Stopped Driver Marker — usa timestamp fornecido pelo hook para calcular duração.
       if (tracking.is_stopped) {
-        if (!stoppedAlerts.has(tracking.id)) {
-          setStoppedAlerts(prev => new Map(prev).set(tracking.id, Date.now()));
-        }
-        
         const startTime = stoppedAlerts.get(tracking.id);
         const durationMin = startTime ? Math.floor((Date.now() - startTime) / 60000) : 0;
-        
+
         if (durationMin >= stoppedThreshold) {
           const stoppedMarkerId = `stopped-${tracking.id}`;
           if (!pointMarkers.current.has(stoppedMarkerId)) {
@@ -513,12 +500,7 @@ export function LiveMap({
             }
           }
         }
-      } else if (stoppedAlerts.has(tracking.id)) {
-        setStoppedAlerts(prev => {
-          const next = new Map(prev);
-          next.delete(tracking.id);
-          return next;
-        });
+      } else {
         const stoppedMarkerId = `stopped-${tracking.id}`;
         if (pointMarkers.current.has(stoppedMarkerId)) {
           pointMarkers.current.get(stoppedMarkerId)?.remove();
