@@ -11,6 +11,7 @@ import { useTrackingHistory } from '@/hooks/useTrackingHistory';
 import { getDirections } from '@/hooks/useMapbox';
 import { useMapboxToken } from './hooks/useMapboxToken';
 import { useTrackingData, type TrackingData } from './hooks/useTrackingData';
+import { useMapAlerts } from './hooks/useMapAlerts';
 import { MapSearchPanel } from './MapSearchPanel';
 import { MapHistoryPanel } from './MapHistoryPanel';
 import { MapLegend } from './MapLegend';
@@ -73,8 +74,6 @@ export function LiveMap({
   const [showSettings, setShowSettings] = useState(false);
   
   // States for requested features
-  const [offRouteAlerts, setOffRouteAlerts] = useState<Set<string>>(new Set());
-  const [stoppedAlerts, setStoppedAlerts] = useState<Map<string, number>>(new Map()); // id -> start timestamp
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
@@ -85,12 +84,13 @@ export function LiveMap({
   // Clustering real: em zoom muito distante, agrega motoristas em bolhas com contagem.
   const [isVeryFarZoom, setIsVeryFarZoom] = useState(false);
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
-  const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
+
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
+  const { offRouteAlerts, stoppedAlerts, etaIndicator } = useMapAlerts(trackingData);
   const { history, loading: historyLoading, fetchHistory, clearHistory } = useTrackingHistory();
 
 
@@ -323,80 +323,19 @@ export function LiveMap({
     const effectiveDensity = isFarZoom ? 'compact' : markerDensity;
 
 
-    // Cleanup logic
+    // Cleanup logic — remoção de marcadores obsoletos. Estados de alerta
+    // (offRoute/stopped/eta) são geridos pelo hook useMapAlerts.
     driverMarkers.current.forEach((marker, id) => {
-      if (!currentIds.has(id)) { 
-        marker.remove(); 
-        driverMarkers.current.delete(id); 
+      if (!currentIds.has(id)) {
+        marker.remove();
+        driverMarkers.current.delete(id);
         markerPositions.current.delete(id);
-        
-        // Cleanup alerts
-        setStoppedAlerts(prev => {
-          const next = new Map(prev);
-          next.delete(id);
-          return next;
-        });
       }
     });
-    
+
     trackingData.forEach((tracking) => {
-      // Logic for Route Deviation Detection (using setting)
-      const isOnRoute = tracking.is_on_route !== false;
-      const isDeviated = !isOnRoute; 
-      
-      setOffRouteAlerts(prev => {
-        const next = new Set(prev);
-        if (isDeviated) next.add(tracking.id);
-        else next.delete(tracking.id);
-        return next;
-      });
 
 
-      // Logic for Stopped Driver Alert (using setting)
-      if (tracking.speed === 0) {
-        setStoppedAlerts(prev => {
-          if (!prev.has(tracking.id)) {
-            const next = new Map(prev);
-            next.set(tracking.id, Date.now());
-            return next;
-          }
-          return prev;
-        });
-      } else {
-        setStoppedAlerts(prev => {
-          if (prev.has(tracking.id)) {
-            const next = new Map(prev);
-            next.delete(tracking.id);
-            return next;
-          }
-          return prev;
-        });
-      }
-
-      // Dynamic ETA Comparison with Trend Analysis
-      if (tracking.eta_minutes !== undefined) {
-        setEtaIndicator(prev => {
-          const existing = prev.get(tracking.id);
-          const next = new Map(prev);
-          const newEta = tracking.eta_minutes || 0;
-          
-          if (!existing) {
-            next.set(tracking.id, { 
-              original: newEta, 
-              current: newEta, 
-              trend: 'stable' 
-            });
-          } else if (existing.current !== newEta) {
-            const trend = newEta < existing.current ? 'improving' : 'worsening';
-            next.set(tracking.id, { 
-              ...existing, 
-              current: newEta, 
-              trend 
-            });
-          }
-          return next;
-        });
-      }
 
       const isSelected = tracking.id === selectedId;
       const isOtherInFocus = focusMode && selectedId && !isSelected;
@@ -528,36 +467,23 @@ export function LiveMap({
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
         map.current.setPaintProperty(`route-${tracking.id}`, 'line-width', isSelected ? 6 : 4);
         
-        // Stage 11: Route Deviation Detection (using setting)
+        // Route Deviation: apenas repinta a linha; estado é gerido por useMapAlerts.
         if (isSelected && !tracking.is_stopped) {
-          const source = map.current.getSource(`route-${tracking.id}`) as mapboxgl.GeoJSONSource;
-          // In a real app, we'd calculate distance to the nearest point on the line
-          // Mocking detection: if current pos is far from direct line pickup->delivery
-          const isOff = tracking.is_on_route === false; 
-          if (isOff && !offRouteAlerts.has(tracking.id)) {
-            setOffRouteAlerts(prev => new Set(prev).add(tracking.id));
+          const isOff = tracking.is_on_route === false;
+          if (isOff) {
             map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', statusHsl('critical'));
-          } else if (!isOff && offRouteAlerts.has(tracking.id)) {
-            setOffRouteAlerts(prev => {
-              const next = new Set(prev);
-              next.delete(tracking.id);
-              return next;
-            });
+          } else {
             const vehicleType = tracking.driver?.vehicle_type || 'MOTORCYCLE';
             map.current.setPaintProperty(`route-${tracking.id}`, 'line-color', vehicleColors[vehicleType]);
           }
         }
       }
-      
-      // Stage 12: Stopped Driver Detection (using settings)
+
+      // Stopped Driver Marker — usa timestamp fornecido pelo hook para calcular duração.
       if (tracking.is_stopped) {
-        if (!stoppedAlerts.has(tracking.id)) {
-          setStoppedAlerts(prev => new Map(prev).set(tracking.id, Date.now()));
-        }
-        
         const startTime = stoppedAlerts.get(tracking.id);
         const durationMin = startTime ? Math.floor((Date.now() - startTime) / 60000) : 0;
-        
+
         if (durationMin >= stoppedThreshold) {
           const stoppedMarkerId = `stopped-${tracking.id}`;
           if (!pointMarkers.current.has(stoppedMarkerId)) {
@@ -574,12 +500,7 @@ export function LiveMap({
             }
           }
         }
-      } else if (stoppedAlerts.has(tracking.id)) {
-        setStoppedAlerts(prev => {
-          const next = new Map(prev);
-          next.delete(tracking.id);
-          return next;
-        });
+      } else {
         const stoppedMarkerId = `stopped-${tracking.id}`;
         if (pointMarkers.current.has(stoppedMarkerId)) {
           pointMarkers.current.get(stoppedMarkerId)?.remove();
