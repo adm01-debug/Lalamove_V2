@@ -87,9 +87,12 @@ async function writeBackendCache(entries: RegionCache): Promise<void> {
   const rows = Object.entries(entries).map(([coord_key, region]) => ({ coord_key, region }));
   if (rows.length === 0) return;
   try {
+    // ignoreDuplicates: gravamos apenas inserts. Regiões são determinísticas
+    // por coord_key — não há razão para sobrescrever, e isso permite remover
+    // a policy UPDATE `USING (true)` (endurecimento de segurança do cache L2).
     const { error } = await supabase
       .from('region_cache')
-      .upsert(rows, { onConflict: 'coord_key' });
+      .upsert(rows, { onConflict: 'coord_key', ignoreDuplicates: true });
     if (error) throw error;
   } catch (err) {
     logger.error('Erro ao gravar cache compartilhado de regiões:', err);
