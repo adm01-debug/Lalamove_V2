@@ -74,8 +74,6 @@ export function LiveMap({
   const [showSettings, setShowSettings] = useState(false);
   
   // States for requested features
-  const [offRouteAlerts, setOffRouteAlerts] = useState<Set<string>>(new Set());
-  const [stoppedAlerts, setStoppedAlerts] = useState<Map<string, number>>(new Map()); // id -> start timestamp
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [autoZoomEnabled, setAutoZoomEnabled] = useState(true);
@@ -86,7 +84,7 @@ export function LiveMap({
   // Clustering real: em zoom muito distante, agrega motoristas em bolhas com contagem.
   const [isVeryFarZoom, setIsVeryFarZoom] = useState(false);
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
-  const [etaIndicator, setEtaIndicator] = useState<Map<string, { original: number; current: number; trend: 'improving' | 'worsening' | 'stable' }>>(new Map());
+
   
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
 
