@@ -11,6 +11,7 @@ import { useTrackingHistory } from '@/hooks/useTrackingHistory';
 import { getDirections } from '@/hooks/useMapbox';
 import { useMapboxToken } from './hooks/useMapboxToken';
 import { useTrackingData, type TrackingData } from './hooks/useTrackingData';
+import { useMapAlerts } from './hooks/useMapAlerts';
 import { MapSearchPanel } from './MapSearchPanel';
 import { MapHistoryPanel } from './MapHistoryPanel';
 import { MapLegend } from './MapLegend';
