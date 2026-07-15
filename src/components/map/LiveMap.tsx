@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { 
-  Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon, 
-  TrafficCone, Crosshair, Zap, Shield, Maximize2, Activity,
-  Cloud, Wind, MapPin, Compass, Settings
+import {
+  Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon,
+  TrafficCone, Crosshair, Zap, Shield, Activity,
+  MapPin, Compass, Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
@@ -659,14 +659,23 @@ export function LiveMap({
         </div>
 
         <div className="bg-background/40 backdrop-blur-xl border border-white/10 p-3 rounded-xl shadow-2xl pointer-events-auto flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Cloud className="w-4 h-4 text-sky-400" />
-            <span className="text-[11px] font-black italic tracking-tighter">24°C</span>
+          <div className="flex items-center gap-2" title="Velocidade média da frota ativa">
+            <Zap className="w-4 h-4 text-sky-400" />
+            <span className="text-[11px] font-black italic tracking-tighter">
+              {(() => {
+                const moving = trackingData.filter(t => (t.speed ?? 0) > 0);
+                if (moving.length === 0) return '—';
+                const avg = moving.reduce((s, t) => s + (t.speed ?? 0), 0) / moving.length;
+                return `${Math.round(avg)} KM/H`;
+              })()}
+            </span>
           </div>
           <div className="w-px h-4 bg-white/10" />
-          <div className="flex items-center gap-2">
-            <Wind className="w-4 h-4 text-slate-300" />
-            <span className="text-[11px] font-black italic tracking-tighter">12 KM/H</span>
+          <div className="flex items-center gap-2" title="Motoristas parados no momento">
+            <Compass className="w-4 h-4 text-slate-300" />
+            <span className="text-[11px] font-black italic tracking-tighter">
+              {String(stoppedAlerts.size).padStart(2, '0')} PARADOS
+            </span>
           </div>
         </div>
       </div>
