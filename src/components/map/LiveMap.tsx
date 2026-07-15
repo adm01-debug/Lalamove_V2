@@ -323,80 +323,19 @@ export function LiveMap({
     const effectiveDensity = isFarZoom ? 'compact' : markerDensity;
 
 
-    // Cleanup logic
+    // Cleanup logic — remoção de marcadores obsoletos. Estados de alerta
+    // (offRoute/stopped/eta) são geridos pelo hook useMapAlerts.
     driverMarkers.current.forEach((marker, id) => {
-      if (!currentIds.has(id)) { 
-        marker.remove(); 
-        driverMarkers.current.delete(id); 
+      if (!currentIds.has(id)) {
+        marker.remove();
+        driverMarkers.current.delete(id);
         markerPositions.current.delete(id);
-        
-        // Cleanup alerts
-        setStoppedAlerts(prev => {
-          const next = new Map(prev);
-          next.delete(id);
-          return next;
-        });
       }
     });
-    
+
     trackingData.forEach((tracking) => {
-      // Logic for Route Deviation Detection (using setting)
-      const isOnRoute = tracking.is_on_route !== false;
-      const isDeviated = !isOnRoute; 
-      
-      setOffRouteAlerts(prev => {
-        const next = new Set(prev);
-        if (isDeviated) next.add(tracking.id);
-        else next.delete(tracking.id);
-        return next;
-      });
 
 
-      // Logic for Stopped Driver Alert (using setting)
-      if (tracking.speed === 0) {
-        setStoppedAlerts(prev => {
-          if (!prev.has(tracking.id)) {
-            const next = new Map(prev);
-            next.set(tracking.id, Date.now());
-            return next;
-          }
-          return prev;
-        });
-      } else {
-        setStoppedAlerts(prev => {
-          if (prev.has(tracking.id)) {
-            const next = new Map(prev);
-            next.delete(tracking.id);
-            return next;
-          }
-          return prev;
-        });
-      }
-
-      // Dynamic ETA Comparison with Trend Analysis
-      if (tracking.eta_minutes !== undefined) {
-        setEtaIndicator(prev => {
-          const existing = prev.get(tracking.id);
-          const next = new Map(prev);
-          const newEta = tracking.eta_minutes || 0;
-          
-          if (!existing) {
-            next.set(tracking.id, { 
-              original: newEta, 
-              current: newEta, 
-              trend: 'stable' 
-            });
-          } else if (existing.current !== newEta) {
-            const trend = newEta < existing.current ? 'improving' : 'worsening';
-            next.set(tracking.id, { 
-              ...existing, 
-              current: newEta, 
-              trend 
-            });
-          }
-          return next;
-        });
-      }
 
       const isSelected = tracking.id === selectedId;
       const isOtherInFocus = focusMode && selectedId && !isSelected;
