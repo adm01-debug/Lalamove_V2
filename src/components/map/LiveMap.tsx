@@ -725,12 +725,14 @@ export function LiveMap({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Active</p>
-              <p className="text-xl font-black italic">{trackingData.length}</p>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Ativos</p>
+              <p className="text-xl font-black italic">{String(trackingData.length).padStart(2, '0')}</p>
             </div>
             <div>
-              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Alerts</p>
-              <p className="text-xl font-black italic text-destructive">03</p>
+              <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1">Alertas</p>
+              <p className="text-xl font-black italic text-destructive">
+                {String(offRouteAlerts.size + stoppedAlerts.size).padStart(2, '0')}
+              </p>
             </div>
           </div>
         </div>
