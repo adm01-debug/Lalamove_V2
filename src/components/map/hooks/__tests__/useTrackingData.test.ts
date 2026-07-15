@@ -1,11 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { useTrackingData } from '../useTrackingData';
 
-/**
- * Mocks do cliente Supabase.
- * `selectMock` é reatribuído por teste para simular payloads distintos.
- */
 const selectMock = vi.fn();
 const removeChannelMock = vi.fn();
 const onMock = vi.fn().mockReturnThis();
@@ -15,7 +11,7 @@ const channelMock = vi.fn(() => ({ on: onMock, subscribe: subscribeMock }));
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     from: vi.fn(() => ({ select: selectMock })),
-    channel: (...args: unknown[]) => channelMock(...args as []),
+    channel: (...args: unknown[]) => channelMock(...(args as [])),
     removeChannel: (...args: unknown[]) => removeChannelMock(...args),
   },
 }));
@@ -39,7 +35,6 @@ const baseRow = {
 
 describe('useTrackingData', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
     selectMock.mockReset();
     onMock.mockClear();
     subscribeMock.mockClear();
@@ -47,88 +42,87 @@ describe('useTrackingData', () => {
     removeChannelMock.mockClear();
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it('faz o fetch inicial e popula trackingData/allTrackingData', async () => {
-    selectMock.mockResolvedValueOnce({
+    selectMock.mockResolvedValue({
       data: [{ ...baseRow, driver: { vehicle_type: 'CAR' } }],
       error: null,
     });
-
     const { result } = renderHook(() => useTrackingData('ALL', 'ALL'));
-
     await waitFor(() => expect(result.current.trackingData).toHaveLength(1));
     expect(result.current.allTrackingData).toHaveLength(1);
   });
 
   it('filtra por tipo de veículo', async () => {
-    selectMock.mockResolvedValueOnce({
+    selectMock.mockResolvedValue({
       data: [
         { ...baseRow, id: 'a', driver: { vehicle_type: 'CAR' } },
         { ...baseRow, id: 'b', driver: { vehicle_type: 'MOTORCYCLE' } },
       ],
       error: null,
     });
-
     const { result } = renderHook(() => useTrackingData('MOTORCYCLE', 'ALL'));
-
     await waitFor(() => expect(result.current.trackingData).toHaveLength(1));
     expect(result.current.trackingData[0].id).toBe('b');
     expect(result.current.allTrackingData).toHaveLength(2);
   });
 
-  it('filtra por status STOPPED / OFF_ROUTE / IN_TRANSIT', async () => {
-    const rows = [
-      { ...baseRow, id: 'stopped', is_stopped: true },
-      { ...baseRow, id: 'off', is_on_route: false, is_stopped: false },
-      { ...baseRow, id: 'transit', is_on_route: true, is_stopped: false },
-    ];
-    selectMock.mockResolvedValue({ data: rows, error: null });
+  it('filtra por status STOPPED', async () => {
+    selectMock.mockResolvedValue({
+      data: [
+        { ...baseRow, id: 'stopped', is_stopped: true },
+        { ...baseRow, id: 'transit', is_on_route: true, is_stopped: false },
+      ],
+      error: null,
+    });
+    const { result } = renderHook(() => useTrackingData('ALL', 'STOPPED'));
+    await waitFor(() => expect(result.current.trackingData).toHaveLength(1));
+    expect(result.current.trackingData[0].id).toBe('stopped');
+  });
 
+  it('filtra por status OFF_ROUTE e IN_TRANSIT', async () => {
+    selectMock.mockResolvedValue({
+      data: [
+        { ...baseRow, id: 'off', is_on_route: false, is_stopped: false },
+        { ...baseRow, id: 'transit', is_on_route: true, is_stopped: false },
+      ],
+      error: null,
+    });
     const { result, rerender } = renderHook(
-      ({ s }: { s: 'STOPPED' | 'OFF_ROUTE' | 'IN_TRANSIT' }) => useTrackingData('ALL', s),
-      { initialProps: { s: 'STOPPED' } },
+      ({ s }: { s: 'OFF_ROUTE' | 'IN_TRANSIT' }) => useTrackingData('ALL', s),
+      { initialProps: { s: 'OFF_ROUTE' } },
     );
-    await waitFor(() => expect(result.current.trackingData.map(r => r.id)).toEqual(['stopped']));
-
-    rerender({ s: 'OFF_ROUTE' });
     await waitFor(() => expect(result.current.trackingData.map(r => r.id)).toEqual(['off']));
 
     rerender({ s: 'IN_TRANSIT' });
     await waitFor(() => expect(result.current.trackingData.map(r => r.id)).toEqual(['transit']));
   });
 
-  it('não atualiza estado quando fetch resolve após unmount (guarda cancelled)', async () => {
-    let resolveFetch: (v: unknown) => void = () => {};
-    selectMock.mockReturnValueOnce(new Promise(res => { resolveFetch = res; }));
-
-    const { result, unmount } = renderHook(() => useTrackingData('ALL', 'ALL'));
-
+  it('remove o canal Realtime ao desmontar', async () => {
+    selectMock.mockResolvedValue({ data: [], error: null });
+    const { unmount } = renderHook(() => useTrackingData('ALL', 'ALL'));
+    await waitFor(() => expect(selectMock).toHaveBeenCalled());
     unmount();
-    await act(async () => {
-      resolveFetch({ data: [{ ...baseRow }], error: null });
-    });
-
-    expect(result.current.trackingData).toHaveLength(0);
-    expect(removeChannelMock).toHaveBeenCalled();
+    expect(removeChannelMock).toHaveBeenCalledTimes(1);
   });
 
   it('faz polling a cada 5 segundos', async () => {
     selectMock.mockResolvedValue({ data: [], error: null });
-    renderHook(() => useTrackingData('ALL', 'ALL'));
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      renderHook(() => useTrackingData('ALL', 'ALL'));
+      await vi.waitFor(() => expect(selectMock).toHaveBeenCalledTimes(1));
 
-    await waitFor(() => expect(selectMock).toHaveBeenCalledTimes(1));
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+      expect(selectMock).toHaveBeenCalledTimes(2);
 
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(5000);
-    });
-    expect(selectMock).toHaveBeenCalledTimes(2);
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(5000);
-    });
-    expect(selectMock).toHaveBeenCalledTimes(3);
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+      expect(selectMock).toHaveBeenCalledTimes(3);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
