@@ -680,45 +680,6 @@ export function LiveMap({
         </div>
       </div>
 
-      <style>{`
-        @keyframes pulse-glow {
-          0% { transform: scale(0.95); opacity: 0.8; }
-          50% { transform: scale(1.1); opacity: 0.3; }
-          100% { transform: scale(1.3); opacity: 0; }
-        }
-        @keyframes pulse-warning {
-          0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-          70% { transform: scale(1.1); opacity: 0; box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
-          100% { transform: scale(1); opacity: 0; }
-        }
-        @keyframes pulse-critical {
-          0% { transform: scale(1); opacity: 0.9; }
-          50% { transform: scale(1.2); opacity: 0.4; background: rgba(239, 68, 68, 0.5); }
-          100% { transform: scale(1.4); opacity: 0; }
-        }
-        @keyframes geofence-pulse {
-          0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
-          50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.1; }
-          100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
-        }
-        @keyframes marker-bounce {
-          from { transform: translateY(0); }
-          to { transform: translateY(-8px); }
-        }
-        @keyframes marker-pulse-red {
-          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-          70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-        .deviated-marker {
-          animation: marker-pulse-red 1.5s infinite !important;
-          border: 2px solid #ef4444 !important;
-          border-radius: 50%;
-        }
-        .mapboxgl-popup-content { background: transparent !important; padding: 0 !important; box-shadow: none !important; }
-        .mapboxgl-popup-tip { display: none !important; }
-        .mapboxgl-popup-close-button { color: white !important; font-size: 20px !important; padding: 8px !important; z-index: 20; }
-      `}</style>
 
       {/* Control Overlays */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
