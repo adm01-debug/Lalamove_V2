@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './liveMap.css';
 import {
   Loader2, Target, Eye, EyeOff, Layers, Map as MapIcon,
   TrafficCone, Crosshair, Zap, Shield, Activity,
