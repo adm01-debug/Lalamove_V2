@@ -90,6 +90,7 @@ export function LiveMap({
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
+  const { offRouteAlerts, stoppedAlerts, etaIndicator } = useMapAlerts(trackingData);
   const { history, loading: historyLoading, fetchHistory, clearHistory } = useTrackingHistory();
 
 
