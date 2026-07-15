@@ -1,0 +1,2 @@
+CREATE INDEX IF NOT EXISTS idx_alerts_sent_failed_retry ON public.alerts_sent (created_at) WHERE status = 'FAILED';
+CREATE INDEX IF NOT EXISTS idx_alerts_sent_channel_recent ON public.alerts_sent (channel, sent_at DESC);
