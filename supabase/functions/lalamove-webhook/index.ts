@@ -113,6 +113,32 @@ const statusMapping: Record<string, string> = {
   'EXPIRED': 'EXPIRED',
 };
 
+// ── Timing-Safe Comparison ──
+// Constant-time equality check to prevent timing attacks on signature comparison.
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i++) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
+// ── Replay Protection ──
+// Maximum age (in ms) of a webhook payload timestamp. Requests older than this
+// are rejected to prevent replay attacks even when the signature is valid.
+const WEBHOOK_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes
+
+function validateTimestampFreshness(timestamp: string | null | undefined): { valid: boolean; reason?: string } {
+  if (!timestamp) return { valid: true, reason: 'No timestamp provided (skipped)' };
+  const parsed = new Date(timestamp).getTime();
+  if (Number.isNaN(parsed)) return { valid: false, reason: 'Invalid timestamp format' };
+  const age = Date.now() - parsed;
+  if (age > WEBHOOK_MAX_AGE_MS) return { valid: false, reason: `Timestamp too old (${Math.round(age / 1000)}s)` };
+  if (age < -WEBHOOK_MAX_AGE_MS) return { valid: false, reason: `Timestamp in the future (${Math.round(-age / 1000)}s)` };
+  return { valid: true, reason: 'Timestamp fresh' };
+}
+
 // ── HMAC Validation ──
 async function validateHmacSignature(
   body: string, signature: string | null, secret: string
@@ -129,17 +155,24 @@ async function validateHmacSignature(
       "raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
     );
     const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, encoder.encode(body));
-    const computedSignature = new TextDecoder().decode(encode(new Uint8Array(signatureBuffer)));
-    const signatureToCompare = signature.toLowerCase().replace(/^sha256=/, '');
-    const isValid = computedSignature.toLowerCase() === signatureToCompare;
+    const computedSignature = new TextDecoder().decode(encode(new Uint8Array(signatureBuffer))).toLowerCase();
+    const signatureToCompare = signature.toLowerCase().replace(/^sha256=/, '').trim();
+    const isValid = timingSafeEqual(computedSignature, signatureToCompare);
     
-    if (!isValid) logger.log(`[Webhook] Signature mismatch. Expected: ${computedSignature}, Received: ${signatureToCompare}`);
+    if (!isValid) logger.log(`[Webhook] Signature mismatch (constant-time check failed)`);
     return { valid: isValid, reason: isValid ? 'Signature valid' : 'Signature mismatch' };
   } catch (error: unknown) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     logger.error('[Webhook] HMAC validation error:', errorMsg);
     return { valid: false, reason: `Validation error: ${errorMsg}` };
   }
+}
+
+// ── Idempotency Key ──
+// Compute a stable dedup key from body content to detect duplicate webhook deliveries.
+async function computeIdempotencyKey(body: string): Promise<string> {
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(body));
+  return new TextDecoder().decode(encode(new Uint8Array(hash)));
 }
 
 serve(async (req) => {
