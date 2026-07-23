@@ -66,6 +66,7 @@ async function fetchOrders(page: number, status?: OrderStatusFilter, query?: str
     totalCost: Number(order.total_cost),
     currency: order.currency,
     tags: order.tags ?? [],
+    shareLink: order.share_link ?? undefined,
     createdAt: new Date(order.created_at),
     updatedAt: new Date(order.updated_at),
   }));
