@@ -38,6 +38,8 @@ interface UseMapMarkersResult {
    * uma nova instância (ex.: troca de estilo) comece com estado limpo.
    */
   resetMarkers: () => void;
+  /** Alterna a exibição do popup do marker do motorista `id`, quando existir. */
+  togglePopup: (id: string) => void;
 }
 
 /**
