@@ -183,13 +183,28 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // forwardRef aqui evita warnings quando este modal está dentro de animações/layout
+interface StopProof {
+  id: string;
+  stop_id: string;
+  pod_status?: string | null;
+  pod_image_url?: string | null;
+  pod_delivered_at?: string | null;
+  pop_status?: string | null;
+  pop_image_url?: string | null;
+  pop_picked_up_at?: string | null;
+  delivery_code?: string | null;
+  delivery_code_status?: string | null;
+}
+
 interface Stop {
   id: string;
   order_id: string;
   stop_index: number;
-  pod_image_url?: string;
-  pod_delivered_at?: string;
-  pod_status?: string;
+  address?: string;
+  pod_image_url?: string | null;
+  pod_delivered_at?: string | null;
+  pod_status?: string | null;
+  lalamove_stop_proofs?: StopProof[] | null;
 }
 
 export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps>(
@@ -202,17 +217,17 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
       recommendation: string;
     } | null>(null);
 
-    // Fetch POD/POP stops data
+    // Fetch POD/POP stops data + proofs granulares (delivery code)
     const { data: stopsData } = useQuery({
       queryKey: ['order-stops', order?.id],
-      queryFn: async () => {
+      queryFn: async (): Promise<Stop[]> => {
         if (!order?.id) return [];
         const { data } = await supabase
           .from('lalamove_stops')
-          .select('*')
+          .select('*, lalamove_stop_proofs(*)')
           .eq('order_id', order.id)
           .order('stop_index');
-        return data || [];
+        return (data ?? []) as Stop[];
       },
       enabled: !!order?.id && open,
     });
