@@ -392,5 +392,5 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
     });
   }, [mapRef, trackingData, loading, isVeryFarZoom, veryFarZoomThreshold]);
 
-  return { resetMarkers };
+  return { resetMarkers, togglePopup };
 }
