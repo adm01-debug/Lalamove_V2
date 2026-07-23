@@ -166,6 +166,8 @@ const AppContent = () => {
                       <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
                       {/* Existing routes */}
                       <Route path="/orders" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><OrdersPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/contacts" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><ContactsPage /></SuspenseWrapper></ProtectedRoute>} />
+
                       <Route path="/drivers" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><DriversPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/approvals" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ApprovalsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/incidents" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><IncidentsPage /></SuspenseWrapper></ProtectedRoute>} />
