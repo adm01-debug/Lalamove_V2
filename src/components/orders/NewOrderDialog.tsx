@@ -145,6 +145,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
           ],
           ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
+          ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
           item: {
             quantity: form.itemQuantity || '1',
             weight: form.itemWeight,
