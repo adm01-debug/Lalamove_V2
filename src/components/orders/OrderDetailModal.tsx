@@ -24,6 +24,8 @@ import {
   XCircle,
   DollarSign,
   Zap,
+  KeyRound,
+  Copy,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Order, OrderStatus } from '@/types';
@@ -181,13 +183,28 @@ function formatCurrency(value: number, currency: string): string {
 }
 
 // forwardRef aqui evita warnings quando este modal está dentro de animações/layout
+interface StopProof {
+  id: string;
+  stop_id: string;
+  pod_status?: string | null;
+  pod_image_url?: string | null;
+  pod_delivered_at?: string | null;
+  pop_status?: string | null;
+  pop_image_url?: string | null;
+  pop_picked_up_at?: string | null;
+  delivery_code?: string | null;
+  delivery_code_status?: string | null;
+}
+
 interface Stop {
   id: string;
   order_id: string;
   stop_index: number;
-  pod_image_url?: string;
-  pod_delivered_at?: string;
-  pod_status?: string;
+  address?: string;
+  pod_image_url?: string | null;
+  pod_delivered_at?: string | null;
+  pod_status?: string | null;
+  lalamove_stop_proofs?: StopProof[] | null;
 }
 
 export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps>(
@@ -200,17 +217,17 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
       recommendation: string;
     } | null>(null);
 
-    // Fetch POD/POP stops data
+    // Fetch POD/POP stops data + proofs granulares (delivery code)
     const { data: stopsData } = useQuery({
       queryKey: ['order-stops', order?.id],
-      queryFn: async () => {
+      queryFn: async (): Promise<Stop[]> => {
         if (!order?.id) return [];
         const { data } = await supabase
           .from('lalamove_stops')
-          .select('*')
+          .select('*, lalamove_stop_proofs(*)')
           .eq('order_id', order.id)
           .order('stop_index');
-        return data || [];
+        return (data ?? []) as Stop[];
       },
       enabled: !!order?.id && open,
     });
@@ -475,8 +492,84 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
               </div>
             )}
 
+            {/* Delivery Codes (Lalamove v3) */}
+            {(() => {
+              const stops = (stopsData ?? []) as Stop[];
+              const codes = stops
+                .map((s) => {
+                  const proof = s.lalamove_stop_proofs?.[0];
+                  return proof?.delivery_code
+                    ? {
+                        stopId: s.id,
+                        stopIndex: s.stop_index,
+                        address: s.address,
+                        code: proof.delivery_code,
+                        status: proof.delivery_code_status,
+                      }
+                    : null;
+                })
+                .filter((v): v is NonNullable<typeof v> => v !== null);
+
+              if (codes.length === 0) return null;
+
+              return (
+                <div className="glass-card p-4 rounded-lg border-primary/20 bg-primary/5">
+                  <h3 className="text-sm font-medium text-primary mb-3 flex items-center gap-2">
+                    <KeyRound className="w-4 h-4" />
+                    Códigos de Entrega
+                  </h3>
+                  <div className="space-y-2">
+                    {codes.map((c) => (
+                      <div
+                        key={c.stopId}
+                        className="flex items-center justify-between gap-3 p-3 rounded-lg bg-background/60 border border-border/50"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" size="sm">
+                              Parada {c.stopIndex}
+                            </Badge>
+                            {c.status && (
+                              <Badge
+                                variant={c.status.toUpperCase() === 'VERIFIED' ? 'success' : 'muted'}
+                                size="sm"
+                              >
+                                {c.status}
+                              </Badge>
+                            )}
+                          </div>
+                          {c.address && (
+                            <p className="text-xs text-muted-foreground mt-1 truncate">{c.address}</p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <code className="px-3 py-1.5 rounded-md bg-primary/10 text-primary font-mono text-base font-bold tracking-widest">
+                            {c.code}
+                          </code>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            aria-label="Copiar código de entrega"
+                            onClick={() => {
+                              navigator.clipboard.writeText(c.code).then(
+                                () => toast.success('Código copiado'),
+                                () => toast.error('Não foi possível copiar'),
+                              );
+                            }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* POD/POP - Provas de Entrega */}
-            {stopsData && stopsData.length > 0 && (stopsData as Stop[]).some((s) => s.pod_image_url) && (
+            {stopsData && stopsData.length > 0 && (stopsData as Stop[]).some((s) => s.pod_image_url || s.lalamove_stop_proofs?.[0]?.pod_image_url || s.lalamove_stop_proofs?.[0]?.pop_image_url) && (
               <div className="glass-card p-4 rounded-lg">
                 <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
                   <Camera className="w-4 h-4" />
@@ -484,28 +577,42 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {(stopsData as Stop[]).map((stop) => {
-                    if (!stop.pod_image_url) return null;
+                    const proof = stop.lalamove_stop_proofs?.[0];
+                    const imgUrl = proof?.pod_image_url ?? proof?.pop_image_url ?? stop.pod_image_url;
+                    if (!imgUrl) return null;
+                    const isPickup = stop.stop_index === 0 || !!proof?.pop_image_url;
+                    const status = isPickup ? proof?.pop_status : (proof?.pod_status ?? stop.pod_status);
+                    const timestamp = isPickup
+                      ? proof?.pop_picked_up_at
+                      : (proof?.pod_delivered_at ?? stop.pod_delivered_at);
                     return (
                       <div key={stop.id} className="space-y-1.5">
                         <Badge variant="secondary" size="sm">
-                          {stop.stop_index === 0 ? 'Coleta (POP)' : `Entrega ${stop.stop_index} (POD)`}
+                          {isPickup ? 'Coleta (POP)' : `Entrega ${stop.stop_index} (POD)`}
                         </Badge>
-                        <a href={stop.pod_image_url} target="_blank" rel="noopener noreferrer">
+                        <a href={imgUrl} target="_blank" rel="noopener noreferrer">
                           <img
-                            src={stop.pod_image_url}
+                            src={imgUrl}
                             alt={`Prova - Parada ${stop.stop_index}`}
                             className="w-full h-32 object-cover rounded-lg border border-border/50 hover:opacity-80 transition-opacity cursor-pointer"
                             loading="lazy"
                           />
                         </a>
-                        {stop.pod_delivered_at && (
+                        {timestamp && (
                           <p className="text-xs text-muted-foreground">
-                            {new Date(stop.pod_delivered_at).toLocaleString('pt-BR')}
+                            {new Date(timestamp).toLocaleString('pt-BR')}
                           </p>
                         )}
-                        {stop.pod_status && (
-                          <Badge variant={stop.pod_status === 'DELIVERED' ? 'success' : 'muted'} size="sm">
-                            {stop.pod_status}
+                        {status && (
+                          <Badge
+                            variant={
+                              status.toLowerCase() === 'delivered' || status.toLowerCase() === 'picked_up'
+                                ? 'success'
+                                : 'muted'
+                            }
+                            size="sm"
+                          >
+                            {status}
                           </Badge>
                         )}
                       </div>
