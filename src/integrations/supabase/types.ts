@@ -639,6 +639,45 @@ export type Database = {
         }
         Relationships: []
       }
+      contacts: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          kind: string
+          last_used_at: string
+          name: string
+          owner_id: string
+          phone_e164: string
+          updated_at: string
+          usage_count: number
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          last_used_at?: string
+          name: string
+          owner_id: string
+          phone_e164: string
+          updated_at?: string
+          usage_count?: number
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          last_used_at?: string
+          name?: string
+          owner_id?: string
+          phone_e164?: string
+          updated_at?: string
+          usage_count?: number
+        }
+        Relationships: []
+      }
       contract_version_usage: {
         Row: {
           contract_name: string
