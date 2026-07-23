@@ -660,28 +660,75 @@ serve(async (req) => {
       }
 
       case 'ORDER_REPLACED': {
-        // Payload: { orderId (novo), data: { previousOrderId, reason } } — Etapa 4 adiciona tabela dedicada.
-        const replaceData = payload.data || {};
-        const previousOrderId = (replaceData as Record<string, unknown>).previousOrderId as string | undefined
-          ?? (replaceData as Record<string, unknown>).oldOrderId as string | undefined;
-        const reason = (replaceData as Record<string, unknown>).reason as string | undefined;
+        // Payload: { orderId (novo), data: { previousOrderId | oldOrderId, reason } }
+        // Etapa 4: registra trilha de auditoria idempotente em `lalamove_order_replacements`.
+        const replaceData = (payload.data ?? {}) as Record<string, unknown>;
+        const previousOrderId = (replaceData.previousOrderId as string | undefined)
+          ?? (replaceData.oldOrderId as string | undefined);
+        const reason = (replaceData.reason as string | undefined) ?? null;
 
-        if (previousOrderId && lalamoveOrderId) {
-          const oldUuid = await getOrderUuid(previousOrderId);
-          if (oldUuid) {
-            await supabase.from('lalamove_orders')
-              .update({ lalamove_id: lalamoveOrderId, updated_at: new Date().toISOString() })
-              .eq('id', oldUuid);
-            await supabase.from('lalamove_status_history').insert({
-              order_id: oldUuid,
-              status: 'ON_GOING',
-              change_reason: `ORDER_REPLACED: ${previousOrderId} -> ${lalamoveOrderId}`,
-              metadata: { previous_order_id: previousOrderId, new_order_id: lalamoveOrderId, reason },
-            });
-            logger.log(`[Webhook] Order replaced: ${previousOrderId} -> ${lalamoveOrderId}`);
-          } else {
-            logger.log(`[Webhook] ORDER_REPLACED: previous order ${previousOrderId} not found`);
-          }
+        if (!previousOrderId || !lalamoveOrderId) {
+          logger.log('[Webhook] ORDER_REPLACED: payload incompleto', { previousOrderId, lalamoveOrderId });
+          break;
+        }
+
+        if (previousOrderId === lalamoveOrderId) {
+          logger.log('[Webhook] ORDER_REPLACED: IDs iguais, ignorando', { lalamoveOrderId });
+          break;
+        }
+
+        // Resolve o UUID pelo ID anterior; se já foi migrado antes, tenta pelo novo (idempotência).
+        let orderUuid = await getOrderUuid(previousOrderId);
+        if (!orderUuid) {
+          orderUuid = await getOrderUuid(lalamoveOrderId);
+        }
+
+        if (!orderUuid) {
+          logger.log(`[Webhook] ORDER_REPLACED: pedido não encontrado (${previousOrderId} -> ${lalamoveOrderId})`);
+          break;
+        }
+
+        // Trilha de auditoria idempotente (unique em previous+new).
+        const { error: auditError } = await supabase
+          .from('lalamove_order_replacements')
+          .upsert(
+            {
+              order_id: orderUuid,
+              previous_lalamove_id: previousOrderId,
+              new_lalamove_id: lalamoveOrderId,
+              reason,
+              raw_payload: payload as unknown as Record<string, unknown>,
+            },
+            { onConflict: 'previous_lalamove_id,new_lalamove_id', ignoreDuplicates: true },
+          );
+
+        if (auditError) {
+          logger.error('[Webhook] ORDER_REPLACED: falha ao gravar trilha', auditError);
+        }
+
+        // Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores).
+        const { data: updated, error: updateError } = await supabase
+          .from('lalamove_orders')
+          .update({ lalamove_id: lalamoveOrderId, updated_at: new Date().toISOString() })
+          .eq('id', orderUuid)
+          .eq('lalamove_id', previousOrderId)
+          .select('id');
+
+        if (updateError) {
+          logger.error('[Webhook] ORDER_REPLACED: falha ao atualizar lalamove_id', updateError);
+        }
+
+        // Só registra no histórico quando a substituição foi efetivamente aplicada agora.
+        if (updated && updated.length > 0) {
+          await supabase.from('lalamove_status_history').insert({
+            order_id: orderUuid,
+            status: 'ON_GOING',
+            change_reason: `ORDER_REPLACED: ${previousOrderId} -> ${lalamoveOrderId}`,
+            metadata: { previous_order_id: previousOrderId, new_order_id: lalamoveOrderId, reason },
+          });
+          logger.log(`[Webhook] Order replaced: ${previousOrderId} -> ${lalamoveOrderId}`);
+        } else {
+          logger.log(`[Webhook] ORDER_REPLACED: já processado anteriormente (${previousOrderId} -> ${lalamoveOrderId})`);
         }
         break;
       }
