@@ -281,9 +281,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro ao criar pedido';
-      setError(msg);
-      setStep('quoted'); // Go back to quoted step to retry
-      toast.error('Erro ao criar pedido', { description: msg });
+      const parsed = parseOrderError(msg);
+      setError(parsed.description);
+      setServerFieldError({ field: parsed.field, message: parsed.description });
+      // Se o problema for corrigível no formulário, volta para o form; caso contrário mantém no quoted.
+      const backToForm = parsed.field === 'senderPhone' || parsed.field === 'recipientPhone' || parsed.field === 'schedule' || parsed.field === 'address';
+      setStep(backToForm ? 'form' : 'quoted');
+      toast.error(parsed.title, { description: parsed.description });
     }
   };
 
