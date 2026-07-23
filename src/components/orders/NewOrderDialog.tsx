@@ -89,6 +89,30 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
+  const { upsertContact } = useContacts();
+
+  const applyContact = (which: 'sender' | 'recipient', contact: Contact) => {
+    // Reaproveita telefone já validado (E.164) mascarado para o input BR.
+    const localDigits = contact.phone_e164.replace(/^\+55/, '');
+    const maskedPhone = maskBrazilianPhone(localDigits);
+    if (which === 'sender') {
+      setForm(prev => ({
+        ...prev,
+        senderName: contact.name,
+        senderPhone: maskedPhone,
+        ...(contact.address ? { pickupAddress: contact.address } : {}),
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        recipientName: contact.name,
+        recipientPhone: maskedPhone,
+        ...(contact.address ? { deliveryAddress: contact.address } : {}),
+      }));
+    }
+    setServerFieldError(null);
+  };
+
   const [form, setForm] = useState({
     senderName: '',
     senderPhone: '',
