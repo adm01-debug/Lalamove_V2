@@ -525,23 +525,34 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             </div>
 
 
-            {/* Special Requests */}
+            {/* Special Requests — filtrados por tipo de veículo */}
             <div className="space-y-2">
-              <Label className="text-xs font-semibold">Solicitações Especiais</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {specialRequestOptions.map(sr => (
-                  <label
-                    key={sr.value}
-                    className="flex items-center gap-2 p-2 rounded-lg border border-border/50 hover:bg-secondary/50 cursor-pointer text-sm"
-                  >
-                    <Checkbox
-                      checked={form.specialRequests.includes(sr.value)}
-                      onCheckedChange={() => toggleSpecialRequest(sr.value)}
-                    />
-                    {sr.label}
-                  </label>
-                ))}
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-semibold">Solicitações Especiais</Label>
+                <span className="text-[10px] text-muted-foreground">
+                  {availableSpecialRequests.length} disponíveis para {form.vehicleType}
+                </span>
               </div>
+              {availableSpecialRequests.length === 0 ? (
+                <p className="text-[11px] text-muted-foreground">
+                  Nenhuma solicitação especial disponível para este veículo.
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  {availableSpecialRequests.map(sr => (
+                    <label
+                      key={sr.value}
+                      className="flex items-center gap-2 p-2 rounded-lg border border-border/50 hover:bg-secondary/50 cursor-pointer text-sm"
+                    >
+                      <Checkbox
+                        checked={form.specialRequests.includes(sr.value)}
+                        onCheckedChange={() => toggleSpecialRequest(sr.value)}
+                      />
+                      {sr.label}
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Internal fields */}
