@@ -829,17 +829,80 @@ serve(async (req) => {
         break;
       }
 
-      // --- Priority Fee ---
+      // --- Priority Fee (Doc §5) — só pode aumentar, nunca reduzir. ---
       case 'priority-fee': {
-        const pfOrderId = url.searchParams.get('orderId');
-        const amount = body.amount || body.priorityFee;
-        if (!pfOrderId || !amount) {
+        const pfOrderId = url.searchParams.get('orderId') || (body.orderId as string);
+        const rawAmount = body.amount ?? body.priorityFee;
+        const reason = typeof body.reason === 'string' ? body.reason.slice(0, 200) : null;
+
+        if (!pfOrderId || rawAmount === undefined || rawAmount === null) {
           return new Response(
-            JSON.stringify({ error: 'orderId and amount are required' }),
+            JSON.stringify({ error: 'orderId e amount são obrigatórios' }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        result = await addPriorityFee(pfOrderId, String(amount));
+
+        // Validação numérica: > 0, até 2 casas decimais, teto de segurança R$500.
+        const amountNum = Number.parseFloat(String(rawAmount));
+        if (!Number.isFinite(amountNum) || amountNum <= 0 || amountNum > 500) {
+          return new Response(
+            JSON.stringify({ error: 'Valor inválido (deve ser numérico, > 0 e ≤ 500)' }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        const amountStr = amountNum.toFixed(2);
+
+        // Busca fee atual para validar aumento monotônico e auditar.
+        const { data: current } = await adminDb
+          .from('lalamove_orders')
+          .select('id, priority_fee, currency')
+          .eq('lalamove_id', pfOrderId)
+          .maybeSingle();
+
+        const previous = current?.priority_fee != null ? Number(current.priority_fee) : null;
+        if (previous !== null && amountNum <= previous) {
+          return new Response(
+            JSON.stringify({ error: `Novo valor deve ser maior que o atual (R$ ${previous.toFixed(2)})` }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        // Identifica o usuário para trilha de auditoria.
+        const pfAuthHeader = req.headers.get('Authorization') || '';
+        const pfToken = pfAuthHeader.replace(/^Bearer\s+/i, '');
+        let changedBy: string | null = null;
+        if (pfToken) {
+          const supabaseAuth = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+          const { data: u } = await supabaseAuth.auth.getUser(pfToken);
+          changedBy = u?.user?.id ?? null;
+        }
+
+        // Chamada à API oficial Lalamove.
+        result = await addPriorityFee(pfOrderId, amountStr);
+
+        // Persistência local (fire-and-forget não é aceitável aqui: precisa auditar).
+        if (current?.id) {
+          await adminDb
+            .from('lalamove_orders')
+            .update({
+              priority_fee: amountNum,
+              priority_fee_currency: current.currency || 'BRL',
+              priority_fee_updated_at: new Date().toISOString(),
+            })
+            .eq('id', current.id);
+
+          await adminDb
+            .from('lalamove_priority_fee_history')
+            .insert({
+              order_id: current.id,
+              lalamove_order_id: pfOrderId,
+              previous_fee: previous,
+              new_fee: amountNum,
+              currency: current.currency || 'BRL',
+              reason,
+              changed_by: changedBy,
+            });
+        }
         break;
       }
 

@@ -74,6 +74,7 @@ const vehicleIcons: Record<string, string> = {
 // ========== Order Actions Component ==========
 function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (open: boolean) => void }) {
   const [priorityFee, setPriorityFee] = useState('');
+  const [priorityReason, setPriorityReason] = useState('');
   const [showPriorityInput, setShowPriorityInput] = useState(false);
   const [showChangeDriver, setShowChangeDriver] = useState(false);
   const [changeDriverReason, setChangeDriverReason] = useState<string>('');
@@ -140,19 +141,25 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
   });
 
   const priorityMutation = useMutation({
-    mutationFn: async ({ orderId, amount }: { orderId: string; amount: string }) => {
+    mutationFn: async ({ orderId, amount, reason }: { orderId: string; amount: string; reason: string }) => {
       const { data, error } = await supabase.functions.invoke('lalamove-api', {
-        body: { action: 'priority-fee', orderId, amount },
+        body: { action: 'priority-fee', orderId, amount, reason: reason || undefined },
       });
       if (error) throw error;
+      if (data && typeof data === 'object' && 'error' in data && (data as { error?: string }).error) {
+        throw new Error((data as { error: string }).error);
+      }
       return data;
     },
     onSuccess: () => {
-      toast.success('Taxa prioritária adicionada!');
+      toast.success('Bônus de prioridade aplicado', {
+        description: 'A Lalamove recomputará o matching com o novo valor.',
+      });
       setPriorityFee('');
+      setPriorityReason('');
       setShowPriorityInput(false);
     },
-    onError: (err: Error) => toast.error('Erro ao adicionar taxa', { description: err.message }),
+    onError: (err: Error) => toast.error('Erro ao adicionar bônus', { description: err.message }),
   });
 
   const canCancel = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
@@ -166,32 +173,53 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
       {canAddPriority && (
         <div className="space-y-2">
           {showPriorityInput ? (
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-muted-foreground shrink-0" />
-              <Input
-                placeholder="Valor (ex: 5.00)"
-                value={priorityFee}
-                onChange={(e) => setPriorityFee(e.target.value)}
-                type="number"
-                step="0.01"
-                min="1"
-                className="w-32"
+            <div className="space-y-2 rounded-md border border-warning/40 bg-warning/5 p-3">
+              <p className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                <Zap className="w-4 h-4 text-warning" /> Bônus de prioridade (Lalamove v3)
+              </p>
+              <p className="text-xs text-muted-foreground">
+                O valor deve ser <strong>maior</strong> que o atual — a Lalamove não permite reduções.
+                Teto de segurança: R$ 500,00.
+              </p>
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4 text-muted-foreground shrink-0" />
+                <Input
+                  placeholder="Valor (ex: 5.00)"
+                  value={priorityFee}
+                  onChange={(e) => setPriorityFee(e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  max="500"
+                  inputMode="decimal"
+                  className="w-32"
+                  aria-label="Valor do bônus"
+                />
+              </div>
+              <textarea
+                value={priorityReason}
+                onChange={(e) => setPriorityReason(e.target.value.slice(0, 200))}
+                placeholder="Motivo (opcional, máx. 200 caracteres — ex.: pedido urgente do cliente)"
+                className="w-full min-h-16 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Motivo do bônus"
               />
-              <Button
-                size="sm"
-                onClick={() => priorityMutation.mutate({ orderId: order.lalamoveId, amount: priorityFee })}
-                disabled={priorityMutation.isPending || !priorityFee}
-              >
-                {priorityMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar'}
-              </Button>
-              <Button size="sm" variant="ghost" onClick={() => setShowPriorityInput(false)}>
-                Cancelar
-              </Button>
+              <div className="flex gap-2 justify-end">
+                <Button size="sm" variant="ghost" onClick={() => { setShowPriorityInput(false); setPriorityFee(''); setPriorityReason(''); }}>
+                  Cancelar
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => priorityMutation.mutate({ orderId: order.lalamoveId, amount: priorityFee, reason: priorityReason })}
+                  disabled={priorityMutation.isPending || !priorityFee || Number(priorityFee) <= 0}
+                >
+                  {priorityMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar bônus'}
+                </Button>
+              </div>
             </div>
           ) : (
             <Button variant="outline" size="sm" className="gap-2" onClick={() => setShowPriorityInput(true)}>
               <Zap className="w-4 h-4" />
-              Adicionar Taxa Prioritária
+              Adicionar bônus de prioridade
             </Button>
           )}
         </div>
