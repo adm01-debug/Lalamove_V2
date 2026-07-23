@@ -2924,6 +2924,7 @@ export type Database = {
           error_message: string | null
           event_type: string
           id: string
+          idempotency_key: string | null
           lalamove_order_id: string | null
           processed: boolean | null
           processed_at: string | null
@@ -2934,6 +2935,7 @@ export type Database = {
           error_message?: string | null
           event_type: string
           id?: string
+          idempotency_key?: string | null
           lalamove_order_id?: string | null
           processed?: boolean | null
           processed_at?: string | null
@@ -2944,6 +2946,7 @@ export type Database = {
           error_message?: string | null
           event_type?: string
           id?: string
+          idempotency_key?: string | null
           lalamove_order_id?: string | null
           processed?: boolean | null
           processed_at?: string | null
