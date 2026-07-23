@@ -106,9 +106,21 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }));
   };
 
+  // Valida janela do agendamento: 30min a 30 dias no futuro.
+  const scheduleValidation = (() => {
+    if (!form.scheduleAt) return { valid: true as const, iso: '' as string, error: '' };
+    const dt = new Date(form.scheduleAt);
+    if (Number.isNaN(dt.getTime())) return { valid: false as const, iso: '', error: 'Data/hora inválida' };
+    const diffMin = (dt.getTime() - Date.now()) / 60000;
+    if (diffMin < 30) return { valid: false as const, iso: '', error: 'Agendamento mínimo: 30 minutos à frente' };
+    if (diffMin > 30 * 24 * 60) return { valid: false as const, iso: '', error: 'Agendamento máximo: 30 dias' };
+    return { valid: true as const, iso: dt.toISOString(), error: '' };
+  })();
+
   const isValid = form.senderName.trim() && form.senderPhone.trim() &&
     form.recipientName.trim() && form.recipientPhone.trim() &&
-    form.pickupAddress.trim() && form.deliveryAddress.trim();
+    form.pickupAddress.trim() && form.deliveryAddress.trim() &&
+    scheduleValidation.valid;
 
   const formatPhone = (phone: string) => {
     const digits = phone.replace(/\D/g, '');
