@@ -13,6 +13,8 @@ import { AddressAutocomplete } from './AddressAutocomplete';
 import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
+import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
+
 
 interface NewOrderDialogProps {
   open: boolean;
@@ -84,6 +86,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [step, setStep] = useState<Step>('form');
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
   const [form, setForm] = useState({
     senderName: '',
     senderPhone: '',
@@ -112,6 +115,19 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   });
 
   const updateField = (field: string, value: string | boolean | string[] | number) => {
+    // Limpa o erro específico do servidor quando o campo relacionado é editado.
+    if (serverFieldError) {
+      const relatedByField: Record<string, OrderErrorField> = {
+        senderPhone: 'senderPhone',
+        recipientPhone: 'recipientPhone',
+        scheduleAt: 'schedule',
+        pickupAddress: 'address',
+        deliveryAddress: 'address',
+      };
+      if (relatedByField[field] === serverFieldError.field) {
+        setServerFieldError(null);
+      }
+    }
     setForm(prev => {
       const next = { ...prev, [field]: value };
       // Ao trocar o veículo, remove Special Requests incompatíveis (Lalamove v3).
@@ -216,9 +232,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       toast.success('Cotação recebida!');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro na cotação';
-      setError(msg);
+      const parsed = parseOrderError(msg);
+      setError(parsed.description);
+      setServerFieldError({ field: parsed.field, message: parsed.description });
       setStep('form');
-      toast.error('Erro na cotação', { description: msg });
+      toast.error(parsed.title, { description: parsed.description });
     }
   };
 
@@ -276,9 +294,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro ao criar pedido';
-      setError(msg);
-      setStep('quoted'); // Go back to quoted step to retry
-      toast.error('Erro ao criar pedido', { description: msg });
+      const parsed = parseOrderError(msg);
+      setError(parsed.description);
+      setServerFieldError({ field: parsed.field, message: parsed.description });
+      // Se o problema for corrigível no formulário, volta para o form; caso contrário mantém no quoted.
+      const backToForm = parsed.field === 'senderPhone' || parsed.field === 'recipientPhone' || parsed.field === 'schedule' || parsed.field === 'address';
+      setStep(backToForm ? 'form' : 'quoted');
+      toast.error(parsed.title, { description: parsed.description });
     }
   };
 
@@ -286,6 +308,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     setStep('form');
     setQuotation(null);
     setError(null);
+    setServerFieldError(null);
     setForm({
       senderName: '',
       senderPhone: '',
@@ -387,10 +410,18 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     maxLength={16}
                     value={form.senderPhone}
                     onChange={e => updateField('senderPhone', maskBrazilianPhone(e.target.value))}
-                    aria-invalid={form.senderPhone.length > 0 && !senderPhoneValidation.valid}
+                    aria-invalid={
+                      (form.senderPhone.length > 0 && !senderPhoneValidation.valid) ||
+                      serverFieldError?.field === 'senderPhone'
+                    }
                   />
                   {form.senderPhone.length > 0 && !senderPhoneValidation.valid && (
                     <p className="text-[11px] text-destructive">{senderPhoneValidation.error}</p>
+                  )}
+                  {serverFieldError?.field === 'senderPhone' && (
+                    <p className="text-[11px] text-destructive" role="alert">
+                      Servidor rejeitou este número: {serverFieldError.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -432,10 +463,18 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     maxLength={16}
                     value={form.recipientPhone}
                     onChange={e => updateField('recipientPhone', maskBrazilianPhone(e.target.value))}
-                    aria-invalid={form.recipientPhone.length > 0 && !recipientPhoneValidation.valid}
+                    aria-invalid={
+                      (form.recipientPhone.length > 0 && !recipientPhoneValidation.valid) ||
+                      serverFieldError?.field === 'recipientPhone'
+                    }
                   />
                   {form.recipientPhone.length > 0 && !recipientPhoneValidation.valid && (
                     <p className="text-[11px] text-destructive">{recipientPhoneValidation.error}</p>
+                  )}
+                  {serverFieldError?.field === 'recipientPhone' && (
+                    <p className="text-[11px] text-destructive" role="alert">
+                      Servidor rejeitou este número: {serverFieldError.message}
+                    </p>
                   )}
                 </div>
               </div>
