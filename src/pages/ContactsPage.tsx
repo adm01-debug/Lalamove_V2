@@ -41,7 +41,7 @@ const KIND_LABEL: Record<ContactKind, string> = {
 
 function formatPhoneDisplay(e164: string): string {
   if (!e164.startsWith('+55')) return e164;
-  return formatPhoneMasked(e164.slice(3));
+  return maskBrazilianPhone(e164.slice(3));
 }
 
 export default function ContactsPage() {
