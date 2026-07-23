@@ -531,7 +531,227 @@ serve(async (req) => {
         }
         break;
       }
-      
+
+      // ── Etapa 1: cobertura completa de eventos oficiais Lalamove v3 ──
+
+      case 'POD_STATUS_CHANGED': {
+        // Payload: { orderId, data: { stopId, stopIndex, status, image, deliveredAt } }
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          const podData = payload.data || {};
+          const stopStatus = (podData.status as string | undefined)?.toUpperCase() || 'PENDING';
+          const stopIndex = typeof podData.stopIndex === 'number' ? podData.stopIndex : null;
+          const stopId = (podData as Record<string, unknown>).stopId as string | undefined;
+          const imageUrl = (podData as Record<string, unknown>).image as string | undefined;
+          const deliveredAt = (podData as Record<string, unknown>).deliveredAt as string | undefined;
+
+          if (orderUuid) {
+            const updates: Record<string, unknown> = {
+              pod_status: stopStatus,
+              pod_image_url: imageUrl ?? null,
+              pod_delivered_at: deliveredAt ?? (stopStatus === 'DELIVERED' || stopStatus === 'SIGNED' ? new Date().toISOString() : null),
+            };
+            let q = supabase.from('lalamove_stops').update(updates).eq('order_id', orderUuid);
+            if (stopIndex !== null) q = q.eq('stop_index', stopIndex);
+            const { error: podErr } = await q;
+            if (podErr) logger.error(`[Webhook] POD update failed: ${podErr.message}`);
+
+            if (stopStatus === 'DELIVERED' || stopStatus === 'SIGNED') {
+              await supabase.from('lalamove_orders').update({ pod_received: true }).eq('id', orderUuid);
+            }
+
+            await supabase.from('lalamove_status_history').insert({
+              order_id: orderUuid,
+              status: stopStatus === 'FAILED' ? 'FAILED' : 'PICKED_UP',
+              change_reason: `POD_STATUS_CHANGED: ${stopStatus}`,
+              metadata: { stopId, stopIndex, image: imageUrl, deliveredAt },
+            });
+
+            if (stopStatus === 'FAILED') {
+              await sendNotification('POD_FAILED', 'Falha na Prova de Entrega',
+                `Pedido ${lalamoveOrderId} — stop ${stopIndex ?? '?'} não pôde ser entregue.`,
+                'WARNING', undefined, orderUuid);
+            }
+            logger.log(`[Webhook] POD ${stopStatus} for order ${lalamoveOrderId} stop ${stopIndex}`);
+          }
+        }
+        break;
+      }
+
+      case 'POP_STATUS_CHANGED': {
+        // Payload: { orderId, data: { stopId, stopIndex, image, pickedUpAt } }
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          const popData = payload.data || {};
+          const stopIndex = typeof popData.stopIndex === 'number' ? popData.stopIndex : 0;
+          const stopId = (popData as Record<string, unknown>).stopId as string | undefined;
+          const imageUrl = (popData as Record<string, unknown>).image as string | undefined;
+          const pickedUpAt = (popData as Record<string, unknown>).pickedUpAt as string | undefined;
+
+          if (orderUuid) {
+            // Persistimos no metadata do status_history até Etapa 2 criar tabela dedicada de proofs.
+            await supabase.from('lalamove_status_history').insert({
+              order_id: orderUuid,
+              status: 'PICKED_UP',
+              change_reason: 'POP_STATUS_CHANGED',
+              metadata: { stopId, stopIndex, pop_image_url: imageUrl, picked_up_at: pickedUpAt },
+            });
+            logger.log(`[Webhook] POP received for order ${lalamoveOrderId} stop ${stopIndex}`);
+          }
+        }
+        break;
+      }
+
+      case 'DELIVERY_CODE_STATUS_CHANGED': {
+        // Payload: { orderId, data: { code, status } } — Etapa 3 adiciona colunas dedicadas.
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          const codeData = payload.data || {};
+          const code = (codeData as Record<string, unknown>).code as string | undefined;
+          const codeStatus = ((codeData as Record<string, unknown>).status as string | undefined)?.toUpperCase();
+
+          if (orderUuid) {
+            await supabase.from('lalamove_status_history').insert({
+              order_id: orderUuid,
+              status: 'ON_GOING',
+              change_reason: `DELIVERY_CODE_STATUS_CHANGED: ${codeStatus ?? 'UNKNOWN'}`,
+              metadata: { delivery_code: code, delivery_code_status: codeStatus },
+            });
+            logger.log(`[Webhook] Delivery code ${code} status=${codeStatus} for order ${lalamoveOrderId}`);
+          }
+        }
+        break;
+      }
+
+      case 'ORDER_REPLACED': {
+        // Payload: { orderId (novo), data: { previousOrderId, reason } } — Etapa 4 adiciona tabela dedicada.
+        const replaceData = payload.data || {};
+        const previousOrderId = (replaceData as Record<string, unknown>).previousOrderId as string | undefined
+          ?? (replaceData as Record<string, unknown>).oldOrderId as string | undefined;
+        const reason = (replaceData as Record<string, unknown>).reason as string | undefined;
+
+        if (previousOrderId && lalamoveOrderId) {
+          const oldUuid = await getOrderUuid(previousOrderId);
+          if (oldUuid) {
+            await supabase.from('lalamove_orders')
+              .update({ lalamove_id: lalamoveOrderId, updated_at: new Date().toISOString() })
+              .eq('id', oldUuid);
+            await supabase.from('lalamove_status_history').insert({
+              order_id: oldUuid,
+              status: 'ON_GOING',
+              change_reason: `ORDER_REPLACED: ${previousOrderId} -> ${lalamoveOrderId}`,
+              metadata: { previous_order_id: previousOrderId, new_order_id: lalamoveOrderId, reason },
+            });
+            logger.log(`[Webhook] Order replaced: ${previousOrderId} -> ${lalamoveOrderId}`);
+          } else {
+            logger.log(`[Webhook] ORDER_REPLACED: previous order ${previousOrderId} not found`);
+          }
+        }
+        break;
+      }
+
+      case 'ORDER_EDITED': {
+        // Payload: { orderId, data: { stops?, priceBreakdown? } }
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          const editData = payload.data || {};
+          const priceBreakdown = (editData as Record<string, unknown>).priceBreakdown as Record<string, unknown> | undefined;
+
+          if (orderUuid) {
+            if (priceBreakdown?.total !== undefined) {
+              const totalNum = Number(priceBreakdown.total);
+              if (!Number.isNaN(totalNum)) {
+                await supabase.from('lalamove_orders')
+                  .update({ total_cost: totalNum, updated_at: new Date().toISOString() })
+                  .eq('id', orderUuid);
+              }
+            }
+            await supabase.from('lalamove_status_history').insert({
+              order_id: orderUuid,
+              status: 'ON_GOING',
+              change_reason: 'ORDER_EDITED',
+              metadata: { priceBreakdown, stops: (editData as Record<string, unknown>).stops },
+            });
+            logger.log(`[Webhook] Order ${lalamoveOrderId} edited`);
+          }
+        }
+        break;
+      }
+
+      case 'ORDER_CREATED': {
+        // Pedidos originados fora do app (ex.: dashboard Lalamove).
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          if (!orderUuid) {
+            const createData = payload.data || {};
+            logger.log(`[Webhook] External ORDER_CREATED ${lalamoveOrderId} — not in our DB, registering minimal record`);
+            await supabase.from('lalamove_orders').insert({
+              lalamove_id: lalamoveOrderId,
+              status: 'ASSIGNING_DRIVER',
+              pickup_address: (createData as Record<string, unknown>).pickupAddress as string ?? 'External',
+              delivery_address: (createData as Record<string, unknown>).deliveryAddress as string ?? 'External',
+              customer_name: (createData as Record<string, unknown>).customerName as string ?? 'External',
+              customer_phone: (createData as Record<string, unknown>).customerPhone as string ?? '',
+              vehicle_type: 'MOTORCYCLE',
+              quotation_id: (createData as Record<string, unknown>).quotationId as string ?? null,
+              share_link: (createData as Record<string, unknown>).shareLink as string ?? null,
+              tags: ['external'],
+              metadata: createData,
+            });
+          } else {
+            logger.log(`[Webhook] ORDER_CREATED ${lalamoveOrderId} already known internally`);
+          }
+        }
+        break;
+      }
+
+      case 'ORDER_AMOUNT_CHANGED': {
+        // Payload: { orderId, data: { priceBreakdown, priorityFee } }
+        if (lalamoveOrderId) {
+          const orderUuid = await getOrderUuid(lalamoveOrderId);
+          const amountData = payload.data || {};
+          const priceBreakdown = (amountData as Record<string, unknown>).priceBreakdown as Record<string, unknown> | undefined;
+          const priorityFee = (amountData as Record<string, unknown>).priorityFee as string | number | undefined;
+
+          if (orderUuid) {
+            if (priceBreakdown?.total !== undefined) {
+              const totalNum = Number(priceBreakdown.total);
+              if (!Number.isNaN(totalNum)) {
+                await supabase.from('lalamove_orders')
+                  .update({ total_cost: totalNum, updated_at: new Date().toISOString() })
+                  .eq('id', orderUuid);
+              }
+            }
+            await supabase.from('lalamove_status_history').insert({
+              order_id: orderUuid,
+              status: 'ON_GOING',
+              change_reason: `ORDER_AMOUNT_CHANGED (priorityFee=${priorityFee ?? 'n/a'})`,
+              metadata: { priceBreakdown, priorityFee },
+            });
+            logger.log(`[Webhook] Order ${lalamoveOrderId} amount changed. Priority fee: ${priorityFee}`);
+          }
+        }
+        break;
+      }
+
+      case 'WALLET_BALANCE_CHANGED': {
+        // Payload: { data: { balance, currency, delta, reason } } — sem orderId.
+        const walletData = payload.data || {};
+        const balance = (walletData as Record<string, unknown>).balance as string | number | undefined;
+        const currency = (walletData as Record<string, unknown>).currency as string | undefined;
+        const delta = (walletData as Record<string, unknown>).delta as string | number | undefined;
+        logger.log(`[Webhook] Wallet balance changed: ${balance} ${currency ?? ''} (delta=${delta})`);
+
+        const balanceNum = Number(balance ?? NaN);
+        // Alerta se saldo baixo (< 50 unidades da moeda)
+        if (!Number.isNaN(balanceNum) && balanceNum < 50) {
+          await sendNotification('WALLET_LOW_BALANCE', 'Saldo Lalamove Baixo',
+            `Saldo atual ${balanceNum} ${currency ?? ''}. Faça um top-up para evitar bloqueio de pedidos.`,
+            'WARNING');
+        }
+        break;
+      }
+
       default:
         logger.log(`[Webhook] Unhandled event type: ${eventType}`);
     }
