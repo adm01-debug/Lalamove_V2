@@ -83,7 +83,11 @@ export function LiveMap({
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
 
 
-  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
+  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity, preferredProvider } = useMapSettings();
+  const isGoogle2D = preferredProvider === 'google-roadmap' || preferredProvider === 'google-hybrid';
+  const isGoogle3D = preferredProvider === 'google-3d';
+  const isGoogleActive = isGoogle2D || isGoogle3D;
+  const googleMapTypeId: 'roadmap' | 'hybrid' = preferredProvider === 'google-hybrid' ? 'hybrid' : 'roadmap';
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
