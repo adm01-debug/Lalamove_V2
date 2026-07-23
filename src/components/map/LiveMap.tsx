@@ -176,6 +176,20 @@ export function LiveMap({
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers]);
 
+  // Reactive raster overlay swap (OSM/Esri) sem reinstanciar o mapa.
+  useEffect(() => {
+    if (!map.current) return;
+    const rasterProvider: RasterProvider =
+      preferredProvider === 'osm' ? 'osm'
+      : preferredProvider === 'esri-sat' ? 'esri-sat'
+      : null;
+    const apply = () => {
+      if (map.current) applyRasterOverlay(map.current, rasterProvider);
+    };
+    if (map.current.isStyleLoaded()) apply();
+    else map.current.once('style.load', apply);
+  }, [preferredProvider]);
+
 
 
   // Toggle traffic
