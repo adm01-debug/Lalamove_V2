@@ -244,21 +244,55 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
       )}
 
 
+      {/* Cancel with reason */}
+      {canCancel && showCancel && (
+        <div className="space-y-2 rounded-md border border-destructive/40 bg-destructive/5 p-3">
+          <p className="text-sm font-medium text-foreground">Motivo do cancelamento</p>
+          <Select value={cancelReason} onValueChange={setCancelReason}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione o motivo" />
+            </SelectTrigger>
+            <SelectContent>
+              {cancelReasons.map((r) => (
+                <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <textarea
+            value={cancelNotes}
+            onChange={(e) => setCancelNotes(e.target.value.slice(0, 1000))}
+            placeholder="Observações (opcional, máx. 1000 caracteres)"
+            className="w-full min-h-20 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Observações do cancelamento"
+          />
+          <div className="flex gap-2 justify-end">
+            <Button size="sm" variant="ghost" onClick={() => { setShowCancel(false); setCancelReason(''); setCancelNotes(''); }}>
+              Voltar
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={cancelMutation.isPending || !cancelReason}
+              onClick={() => cancelMutation.mutate({ orderId: order.lalamoveId, reason: cancelReason, notes: cancelNotes })}
+            >
+              {cancelMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+              Confirmar Cancelamento
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center">
         <div>
-          {canCancel && (
+          {canCancel && !showCancel && (
             <Button
               variant="destructive"
               size="sm"
               className="gap-2"
-              onClick={() => {
-                if (confirm('Tem certeza que deseja cancelar este pedido?')) {
-                  cancelMutation.mutate(order.lalamoveId);
-                }
-              }}
+              onClick={() => setShowCancel(true)}
               disabled={cancelMutation.isPending}
             >
-              {cancelMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+              <XCircle className="w-4 h-4" />
               Cancelar Pedido
             </Button>
           )}
