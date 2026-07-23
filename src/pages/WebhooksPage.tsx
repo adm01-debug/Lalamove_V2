@@ -155,6 +155,9 @@ export function WebhooksPage() {
         </Button>
       </div>
 
+      {/* Segurança de webhooks (Etapa 20) */}
+      <WebhookSecurityPanel />
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="glass-card p-4">
