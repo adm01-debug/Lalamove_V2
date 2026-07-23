@@ -39,6 +39,7 @@ import { Order, OrderStatus } from '@/types';
 import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
+import { StatusTimeline } from './StatusTimeline';
 
 interface OrderDetailModalProps {
   order: Order | null;
