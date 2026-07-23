@@ -127,10 +127,42 @@ export function useContacts() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async (input: { id: string; name?: string; address?: string | null; kind?: ContactKind }) => {
+      const { id, ...patch } = input;
+      const { data, error } = await supabase
+        .from('contacts')
+        .update(patch)
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data as Contact;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CONTACTS_QUERY_KEY });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('contacts').delete().eq('id', id);
+      if (error) throw error;
+      return id;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CONTACTS_QUERY_KEY });
+    },
+  });
+
   return {
     contacts: query.data ?? [],
     isLoading: query.isLoading,
     search,
     upsertContact: upsertMutation.mutateAsync,
+    updateContact: updateMutation.mutateAsync,
+    deleteContact: deleteMutation.mutateAsync,
+    isMutating: updateMutation.isPending || deleteMutation.isPending,
   };
 }
+

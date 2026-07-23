@@ -53,6 +53,8 @@ const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage
 const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
 const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
 const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
+const ContactsPage = lazy(() => import('./pages/ContactsPage'));
+
 
 // Lazy loaded pages - System
 const SystemHealthPage = lazy(() => import('./pages/SystemHealthPage').then(m => ({ default: m.SystemHealthPage })));
@@ -164,6 +166,8 @@ const AppContent = () => {
                       <Route path="/telemetria" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><AdminTelemetriaPage /></SuspenseWrapper></ProtectedRoute>} />
                       {/* Existing routes */}
                       <Route path="/orders" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><OrdersPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/contacts" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><ContactsPage /></SuspenseWrapper></ProtectedRoute>} />
+
                       <Route path="/drivers" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><DriversPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/approvals" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><ApprovalsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/incidents" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><IncidentsPage /></SuspenseWrapper></ProtectedRoute>} />
