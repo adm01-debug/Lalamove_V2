@@ -396,6 +396,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </div>
               <div className="space-y-1">
                 <Label className="text-xs flex items-center gap-1"><MapPin className="w-3 h-3 text-info" /> Endereço de Coleta *</Label>
+                <CepQuickFill
+                  accent="info"
+                  label="CEP da coleta"
+                  onResolved={(formatted) => updateField('pickupAddress', formatted)}
+                />
                 <AddressAutocomplete
                   value={form.pickupAddress}
                   onChange={val => updateField('pickupAddress', val)}
