@@ -250,6 +250,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       isPODEnabled: true,
       internalOrderId: '',
       internalNotes: '',
+      scheduleAt: '',
       itemQuantity: '1',
       itemWeight: 'LESS_THAN_3_KG',
       itemCategories: [],
