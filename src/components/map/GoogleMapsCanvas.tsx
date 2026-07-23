@@ -58,7 +58,7 @@ export function GoogleMapsCanvas({
   const infoRef = useRef<{ open: (m: unknown, mk: unknown) => void; setContent: (c: string) => void; close: () => void } | null>(null);
 
   const { ready, error, configured } = useGoogleMapsLoader();
-  const { trackingData } = useTrackingData({ vehicleFilter, statusFilter });
+  const { trackingData } = useTrackingData(vehicleFilter, statusFilter);
 
   // Initialize map
   useEffect(() => {
@@ -92,7 +92,7 @@ export function GoogleMapsCanvas({
       seen.add(t.id);
       const existing = markersRef.current.get(t.id);
       const position = { lat: t.current_latitude, lng: t.current_longitude };
-      const color = STATUS_COLORS[t.status] || '#6b7280';
+      const color = STATUS_COLORS[t.order?.status ?? ''] || '#6b7280';
 
       if (existing) {
         const existingWithSet = existing as unknown as { setPosition: (p: LatLngLiteral) => void; setIcon: (i: unknown) => void };
@@ -111,13 +111,13 @@ export function GoogleMapsCanvas({
             scaledSize: new gAny.Size(36, 44),
             anchor: new gAny.Point(18, 44),
           },
-          title: t.driver_name ?? 'Motorista',
+          title: t.driver?.name ?? 'Motorista',
         });
         marker.addListener('click', () => {
           if (infoRef.current) {
             const html = `<div style="font-family:system-ui;padding:4px;min-width:180px">
-              <strong>${t.driver_name ?? 'Motorista'}</strong><br/>
-              <small style="color:#666">${t.status}</small><br/>
+              <strong>${t.driver?.name ?? 'Motorista'}</strong><br/>
+              <small style="color:#666">${t.order?.status ?? ''}</small><br/>
               <button id="lm-sel-${t.id}" style="margin-top:6px;padding:4px 10px;background:${color};color:white;border:0;border-radius:4px;cursor:pointer;font-size:12px">Selecionar</button>
             </div>`;
             infoRef.current.setContent(html);

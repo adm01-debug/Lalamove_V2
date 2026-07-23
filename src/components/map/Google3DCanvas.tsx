@@ -34,7 +34,7 @@ export function Google3DCanvas({
   const markersRef = useRef<Map<string, HTMLElement>>(new Map());
   const [webglOk] = useState(isWebGL2Supported);
   const { ready, error, configured } = useGoogleMapsLoader();
-  const { trackingData } = useTrackingData({ vehicleFilter, statusFilter });
+  const { trackingData } = useTrackingData(vehicleFilter, statusFilter);
 
   useEffect(() => {
     if (!ready || !wrapperRef.current || mapElRef.current || !webglOk) return;
@@ -77,7 +77,7 @@ export function Google3DCanvas({
       let el = markersRef.current.get(t.id);
       if (!el) {
         el = document.createElement('gmp-marker-3d');
-        el.setAttribute('label', t.driver_name ?? 'Motorista');
+        el.setAttribute('label', t.driver?.name ?? 'Motorista');
         markersRef.current.set(t.id, el);
         mapElRef.current.appendChild(el);
       }
