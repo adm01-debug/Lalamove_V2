@@ -433,10 +433,17 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           <div className="space-y-4 pt-2">
             {/* Remetente */}
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-info" />
-                Remetente (Coleta)
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-info" />
+                  Remetente (Coleta)
+                </p>
+                <ContactPicker
+                  kind="sender"
+                  label="Buscar remetente"
+                  onSelect={contact => applyContact('sender', contact)}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <Label className="text-xs">Nome *</Label>
