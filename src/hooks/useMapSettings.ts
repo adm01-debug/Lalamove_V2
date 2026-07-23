@@ -4,6 +4,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 export type MarkerDensity = 'comfortable' | 'compact';
 
+export type MapProvider =
+  | 'mapbox-dark'
+  | 'mapbox-sat'
+  | 'osm'
+  | 'esri-sat'
+  | 'google-roadmap'
+  | 'google-hybrid'
+  | 'google-3d';
+
 interface MapSettingsState {
   offRouteThreshold: number; // meters
   stoppedThreshold: number; // minutes
