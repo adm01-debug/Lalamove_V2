@@ -77,6 +77,9 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
   const [showPriorityInput, setShowPriorityInput] = useState(false);
   const [showChangeDriver, setShowChangeDriver] = useState(false);
   const [changeDriverReason, setChangeDriverReason] = useState<string>('');
+  const [showCancel, setShowCancel] = useState(false);
+  const [cancelReason, setCancelReason] = useState<string>('');
+  const [cancelNotes, setCancelNotes] = useState<string>('');
 
   const changeDriverReasons: { value: string; label: string }[] = [
     { value: 'DRIVER_UNRESPONSIVE', label: 'Motorista não responde' },
@@ -84,6 +87,21 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
     { value: 'DRIVER_ASKED_CHANGE', label: 'Motorista pediu troca' },
     { value: 'DRIVER_RUDE', label: 'Motorista rude' },
     { value: 'DRIVER_ASKED_FOR_MORE_MONEY', label: 'Motorista pediu mais dinheiro' },
+  ];
+
+  const cancelReasons: { value: string; label: string }[] = [
+    { value: 'USER_REQUESTED', label: 'Solicitado pelo cliente' },
+    { value: 'INCORRECT_ORDER_DETAILS', label: 'Detalhes do pedido incorretos' },
+    { value: 'WRONG_ADDRESS', label: 'Endereço incorreto' },
+    { value: 'MISTAKEN_ORDER', label: 'Pedido criado por engano' },
+    { value: 'PRICE_TOO_HIGH', label: 'Preço muito alto' },
+    { value: 'DELIVERY_ETA_TOO_LONG', label: 'Tempo de entrega muito longo' },
+    { value: 'DRIVER_UNRESPONSIVE', label: 'Motorista não responde' },
+    { value: 'DRIVER_LATE', label: 'Motorista atrasado' },
+    { value: 'DRIVER_ASKED_CANCEL', label: 'Motorista pediu cancelamento' },
+    { value: 'DRIVER_ASKED_FOR_MORE_MONEY', label: 'Motorista pediu mais dinheiro' },
+    { value: 'NO_CAPACITY', label: 'Sem capacidade disponível' },
+    { value: 'OTHER', label: 'Outro motivo' },
   ];
 
   const changeDriverMutation = useMutation({
@@ -104,15 +122,18 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
 
 
   const cancelMutation = useMutation({
-    mutationFn: async (orderId: string) => {
+    mutationFn: async ({ orderId, reason, notes }: { orderId: string; reason: string; notes: string }) => {
       const { data, error } = await supabase.functions.invoke('lalamove-api', {
-        body: { action: 'cancel', orderId },
+        body: { action: 'cancel', orderId, reason, notes: notes || undefined },
       });
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
       toast.success('Pedido cancelado com sucesso');
+      setShowCancel(false);
+      setCancelReason('');
+      setCancelNotes('');
       onOpenChange(false);
     },
     onError: (err: Error) => toast.error('Erro ao cancelar', { description: err.message }),
