@@ -141,19 +141,25 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
   });
 
   const priorityMutation = useMutation({
-    mutationFn: async ({ orderId, amount }: { orderId: string; amount: string }) => {
+    mutationFn: async ({ orderId, amount, reason }: { orderId: string; amount: string; reason: string }) => {
       const { data, error } = await supabase.functions.invoke('lalamove-api', {
-        body: { action: 'priority-fee', orderId, amount },
+        body: { action: 'priority-fee', orderId, amount, reason: reason || undefined },
       });
       if (error) throw error;
+      if (data && typeof data === 'object' && 'error' in data && (data as { error?: string }).error) {
+        throw new Error((data as { error: string }).error);
+      }
       return data;
     },
     onSuccess: () => {
-      toast.success('Taxa prioritária adicionada!');
+      toast.success('Bônus de prioridade aplicado', {
+        description: 'A Lalamove recomputará o matching com o novo valor.',
+      });
       setPriorityFee('');
+      setPriorityReason('');
       setShowPriorityInput(false);
     },
-    onError: (err: Error) => toast.error('Erro ao adicionar taxa', { description: err.message }),
+    onError: (err: Error) => toast.error('Erro ao adicionar bônus', { description: err.message }),
   });
 
   const canCancel = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
