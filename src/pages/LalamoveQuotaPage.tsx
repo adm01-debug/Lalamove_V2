@@ -161,7 +161,7 @@ export default function LalamoveQuotaPage() {
                 />
                 <Tooltip
                   labelFormatter={(v) => format(new Date(v as string), "dd/MM 'às' HH:mm")}
-                  formatter={(value: number) => [`${value}%`, 'Uso médio']}
+                  formatter={(value) => [`${value}%`, 'Uso médio']}
                   contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
                 />
                 <Area type="monotone" dataKey="usage" stroke="hsl(var(--primary))" fill="url(#quotaFill)" />
