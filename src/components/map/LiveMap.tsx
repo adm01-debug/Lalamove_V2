@@ -28,7 +28,7 @@ import {
 import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { type VehicleFilter, type StatusFilter } from './types';
-import { setupMapLayers } from './mapLayers';
+import { setupMapLayers, applyRasterOverlay, type RasterProvider } from './mapLayers';
 import { GoogleMapsCanvas } from './GoogleMapsCanvas';
 import { Google3DCanvas } from './Google3DCanvas';
 import { MapProviderSelector } from './MapProviderSelector';
@@ -139,6 +139,12 @@ export function LiveMap({
     map.current.on('style.load', () => {
       if (!map.current) return;
       setupMapLayers(map.current, showTraffic);
+      // Reaplica overlay raster (OSM/Esri) após qualquer troca de estilo base.
+      const rasterProvider: RasterProvider =
+        preferredProvider === 'osm' ? 'osm'
+        : preferredProvider === 'esri-sat' ? 'esri-sat'
+        : null;
+      applyRasterOverlay(map.current, rasterProvider);
     });
 
 
@@ -169,6 +175,20 @@ export function LiveMap({
       map.current?.remove();
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers]);
+
+  // Reactive raster overlay swap (OSM/Esri) sem reinstanciar o mapa.
+  useEffect(() => {
+    if (!map.current) return;
+    const rasterProvider: RasterProvider =
+      preferredProvider === 'osm' ? 'osm'
+      : preferredProvider === 'esri-sat' ? 'esri-sat'
+      : null;
+    const apply = () => {
+      if (map.current) applyRasterOverlay(map.current, rasterProvider);
+    };
+    if (map.current.isStyleLoaded()) apply();
+    else map.current.once('style.load', apply);
+  }, [preferredProvider]);
 
 
 
