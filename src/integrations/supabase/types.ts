@@ -3362,6 +3362,13 @@ export type Database = {
       cleanup_expired_tokens: { Args: never; Returns: number }
       cleanup_old_cron_logs: { Args: never; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: number }
+      cleanup_old_observability_logs: {
+        Args: {
+          p_error_retention_days?: number
+          p_rate_limit_retention_days?: number
+        }
+        Returns: Json
+      }
       cleanup_old_region_cache: {
         Args: { p_retention_days?: number }
         Returns: number
