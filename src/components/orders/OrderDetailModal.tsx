@@ -788,6 +788,9 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
               </div>
             )}
 
+            {/* Timeline de Status (auditável) */}
+            <StatusTimeline orderId={order.id} />
+
             {/* Order Actions */}
             <OrderActions order={order} onOpenChange={onOpenChange} />
           </div>
