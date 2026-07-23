@@ -77,6 +77,9 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
   const [showPriorityInput, setShowPriorityInput] = useState(false);
   const [showChangeDriver, setShowChangeDriver] = useState(false);
   const [changeDriverReason, setChangeDriverReason] = useState<string>('');
+  const [showCancel, setShowCancel] = useState(false);
+  const [cancelReason, setCancelReason] = useState<string>('');
+  const [cancelNotes, setCancelNotes] = useState<string>('');
 
   const changeDriverReasons: { value: string; label: string }[] = [
     { value: 'DRIVER_UNRESPONSIVE', label: 'Motorista não responde' },
@@ -84,6 +87,21 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
     { value: 'DRIVER_ASKED_CHANGE', label: 'Motorista pediu troca' },
     { value: 'DRIVER_RUDE', label: 'Motorista rude' },
     { value: 'DRIVER_ASKED_FOR_MORE_MONEY', label: 'Motorista pediu mais dinheiro' },
+  ];
+
+  const cancelReasons: { value: string; label: string }[] = [
+    { value: 'USER_REQUESTED', label: 'Solicitado pelo cliente' },
+    { value: 'INCORRECT_ORDER_DETAILS', label: 'Detalhes do pedido incorretos' },
+    { value: 'WRONG_ADDRESS', label: 'Endereço incorreto' },
+    { value: 'MISTAKEN_ORDER', label: 'Pedido criado por engano' },
+    { value: 'PRICE_TOO_HIGH', label: 'Preço muito alto' },
+    { value: 'DELIVERY_ETA_TOO_LONG', label: 'Tempo de entrega muito longo' },
+    { value: 'DRIVER_UNRESPONSIVE', label: 'Motorista não responde' },
+    { value: 'DRIVER_LATE', label: 'Motorista atrasado' },
+    { value: 'DRIVER_ASKED_CANCEL', label: 'Motorista pediu cancelamento' },
+    { value: 'DRIVER_ASKED_FOR_MORE_MONEY', label: 'Motorista pediu mais dinheiro' },
+    { value: 'NO_CAPACITY', label: 'Sem capacidade disponível' },
+    { value: 'OTHER', label: 'Outro motivo' },
   ];
 
   const changeDriverMutation = useMutation({
@@ -104,15 +122,18 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
 
 
   const cancelMutation = useMutation({
-    mutationFn: async (orderId: string) => {
+    mutationFn: async ({ orderId, reason, notes }: { orderId: string; reason: string; notes: string }) => {
       const { data, error } = await supabase.functions.invoke('lalamove-api', {
-        body: { action: 'cancel', orderId },
+        body: { action: 'cancel', orderId, reason, notes: notes || undefined },
       });
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
       toast.success('Pedido cancelado com sucesso');
+      setShowCancel(false);
+      setCancelReason('');
+      setCancelNotes('');
       onOpenChange(false);
     },
     onError: (err: Error) => toast.error('Erro ao cancelar', { description: err.message }),
@@ -223,21 +244,55 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
       )}
 
 
+      {/* Cancel with reason */}
+      {canCancel && showCancel && (
+        <div className="space-y-2 rounded-md border border-destructive/40 bg-destructive/5 p-3">
+          <p className="text-sm font-medium text-foreground">Motivo do cancelamento</p>
+          <Select value={cancelReason} onValueChange={setCancelReason}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione o motivo" />
+            </SelectTrigger>
+            <SelectContent>
+              {cancelReasons.map((r) => (
+                <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <textarea
+            value={cancelNotes}
+            onChange={(e) => setCancelNotes(e.target.value.slice(0, 1000))}
+            placeholder="Observações (opcional, máx. 1000 caracteres)"
+            className="w-full min-h-20 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Observações do cancelamento"
+          />
+          <div className="flex gap-2 justify-end">
+            <Button size="sm" variant="ghost" onClick={() => { setShowCancel(false); setCancelReason(''); setCancelNotes(''); }}>
+              Voltar
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={cancelMutation.isPending || !cancelReason}
+              onClick={() => cancelMutation.mutate({ orderId: order.lalamoveId, reason: cancelReason, notes: cancelNotes })}
+            >
+              {cancelMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+              Confirmar Cancelamento
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center">
         <div>
-          {canCancel && (
+          {canCancel && !showCancel && (
             <Button
               variant="destructive"
               size="sm"
               className="gap-2"
-              onClick={() => {
-                if (confirm('Tem certeza que deseja cancelar este pedido?')) {
-                  cancelMutation.mutate(order.lalamoveId);
-                }
-              }}
+              onClick={() => setShowCancel(true)}
               disabled={cancelMutation.isPending}
             >
-              {cancelMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+              <XCircle className="w-4 h-4" />
               Cancelar Pedido
             </Button>
           )}

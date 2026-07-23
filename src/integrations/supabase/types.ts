@@ -1361,6 +1361,10 @@ export type Database = {
           actual_delivery: string | null
           auto_notify_supplier: boolean | null
           bitrix24_deal_id: number | null
+          cancellation_notes: string | null
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
           cost_center: string | null
           created_at: string
           currency: string
@@ -1405,6 +1409,10 @@ export type Database = {
           actual_delivery?: string | null
           auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
+          cancellation_notes?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
           cost_center?: string | null
           created_at?: string
           currency?: string
@@ -1449,6 +1457,10 @@ export type Database = {
           actual_delivery?: string | null
           auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
+          cancellation_notes?: string | null
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
           cost_center?: string | null
           created_at?: string
           currency?: string
