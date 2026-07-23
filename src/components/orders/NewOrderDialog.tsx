@@ -13,6 +13,8 @@ import { AddressAutocomplete } from './AddressAutocomplete';
 import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
+import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
+
 
 interface NewOrderDialogProps {
   open: boolean;
