@@ -173,32 +173,53 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
       {canAddPriority && (
         <div className="space-y-2">
           {showPriorityInput ? (
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-muted-foreground shrink-0" />
-              <Input
-                placeholder="Valor (ex: 5.00)"
-                value={priorityFee}
-                onChange={(e) => setPriorityFee(e.target.value)}
-                type="number"
-                step="0.01"
-                min="1"
-                className="w-32"
+            <div className="space-y-2 rounded-md border border-warning/40 bg-warning/5 p-3">
+              <p className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                <Zap className="w-4 h-4 text-warning" /> Bônus de prioridade (Lalamove v3)
+              </p>
+              <p className="text-xs text-muted-foreground">
+                O valor deve ser <strong>maior</strong> que o atual — a Lalamove não permite reduções.
+                Teto de segurança: R$ 500,00.
+              </p>
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4 text-muted-foreground shrink-0" />
+                <Input
+                  placeholder="Valor (ex: 5.00)"
+                  value={priorityFee}
+                  onChange={(e) => setPriorityFee(e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  max="500"
+                  inputMode="decimal"
+                  className="w-32"
+                  aria-label="Valor do bônus"
+                />
+              </div>
+              <textarea
+                value={priorityReason}
+                onChange={(e) => setPriorityReason(e.target.value.slice(0, 200))}
+                placeholder="Motivo (opcional, máx. 200 caracteres — ex.: pedido urgente do cliente)"
+                className="w-full min-h-16 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Motivo do bônus"
               />
-              <Button
-                size="sm"
-                onClick={() => priorityMutation.mutate({ orderId: order.lalamoveId, amount: priorityFee })}
-                disabled={priorityMutation.isPending || !priorityFee}
-              >
-                {priorityMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar'}
-              </Button>
-              <Button size="sm" variant="ghost" onClick={() => setShowPriorityInput(false)}>
-                Cancelar
-              </Button>
+              <div className="flex gap-2 justify-end">
+                <Button size="sm" variant="ghost" onClick={() => { setShowPriorityInput(false); setPriorityFee(''); setPriorityReason(''); }}>
+                  Cancelar
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => priorityMutation.mutate({ orderId: order.lalamoveId, amount: priorityFee, reason: priorityReason })}
+                  disabled={priorityMutation.isPending || !priorityFee || Number(priorityFee) <= 0}
+                >
+                  {priorityMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar bônus'}
+                </Button>
+              </div>
             </div>
           ) : (
             <Button variant="outline" size="sm" className="gap-2" onClick={() => setShowPriorityInput(true)}>
               <Zap className="w-4 h-4" />
-              Adicionar Taxa Prioritária
+              Adicionar bônus de prioridade
             </Button>
           )}
         </div>
