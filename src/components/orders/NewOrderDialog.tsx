@@ -149,16 +149,19 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     return { valid: true as const, iso: dt.toISOString(), error: '' };
   })();
 
-  const isValid = form.senderName.trim() && form.senderPhone.trim() &&
-    form.recipientName.trim() && form.recipientPhone.trim() &&
-    form.pickupAddress.trim() && form.deliveryAddress.trim() &&
-    scheduleValidation.valid;
+  // Validação E.164 dos telefones (Lalamove v3 exige celular BR válido).
+  const senderPhoneValidation = validateBrazilianPhone(form.senderPhone);
+  const recipientPhoneValidation = validateBrazilianPhone(form.recipientPhone);
 
-  const formatPhone = (phone: string) => {
-    const digits = phone.replace(/\D/g, '');
-    if (digits.startsWith('55')) return `+${digits}`;
-    return `+55${digits}`;
-  };
+  const isValid = Boolean(
+    form.senderName.trim() &&
+    form.recipientName.trim() &&
+    form.pickupAddress.trim() &&
+    form.deliveryAddress.trim() &&
+    scheduleValidation.valid &&
+    senderPhoneValidation.valid &&
+    recipientPhoneValidation.valid,
+  );
 
   // Step 1: Get quotation from Lalamove
   const handleGetQuotation = async () => {
