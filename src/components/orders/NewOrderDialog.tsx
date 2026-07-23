@@ -236,12 +236,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           sender: {
             stopId: quotation.stopIds[0],
             name: form.senderName.trim(),
-            phone: formatPhone(form.senderPhone),
+            phone: senderPhoneValidation.valid ? senderPhoneValidation.e164 : '',
           },
           recipients: [{
             stopId: quotation.stopIds[1],
             name: form.recipientName.trim(),
-            phone: formatPhone(form.recipientPhone),
+            phone: recipientPhoneValidation.valid ? recipientPhoneValidation.e164 : '',
             ...(form.remarks.trim() && { remarks: form.remarks.trim() }),
           }],
           serviceType: form.vehicleType,
