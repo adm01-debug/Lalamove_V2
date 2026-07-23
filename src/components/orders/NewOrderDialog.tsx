@@ -457,6 +457,73 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </Select>
             </div>
 
+            {/* Item Information (Lalamove v3) */}
+            <div className="space-y-3 p-3 rounded-xl border border-border/50 bg-background/50">
+              <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                <Package className="w-3.5 h-3.5 text-muted-foreground" />
+                Informações da Carga
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <Label className="text-xs">Quantidade</Label>
+                  <Input
+                    type="number"
+                    min="1"
+                    value={form.itemQuantity}
+                    onChange={e => updateField('itemQuantity', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs flex items-center gap-1"><Weight className="w-3 h-3" /> Peso</Label>
+                  <Select value={form.itemWeight} onValueChange={v => updateField('itemWeight', v)}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {weightOptions.map(w => (
+                        <SelectItem key={w.value} value={w.value}>{w.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Categorias</Label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {itemCategoryOptions.map(c => (
+                    <label key={c.value} className="flex items-center gap-2 p-1.5 rounded border border-border/50 hover:bg-secondary/50 cursor-pointer text-xs">
+                      <Checkbox
+                        checked={form.itemCategories.includes(c.value)}
+                        onCheckedChange={() => updateField('itemCategories',
+                          form.itemCategories.includes(c.value)
+                            ? form.itemCategories.filter(v => v !== c.value)
+                            : [...form.itemCategories, c.value]
+                        )}
+                      />
+                      {c.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Instruções de Manuseio</Label>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {handlingInstructionOptions.map(h => (
+                    <label key={h.value} className="flex items-center gap-2 p-1.5 rounded border border-border/50 hover:bg-secondary/50 cursor-pointer text-xs">
+                      <Checkbox
+                        checked={form.itemHandling.includes(h.value)}
+                        onCheckedChange={() => updateField('itemHandling',
+                          form.itemHandling.includes(h.value)
+                            ? form.itemHandling.filter(v => v !== h.value)
+                            : [...form.itemHandling, h.value]
+                        )}
+                      />
+                      {h.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+
             {/* Special Requests */}
             <div className="space-y-2">
               <Label className="text-xs font-semibold">Solicitações Especiais</Label>
