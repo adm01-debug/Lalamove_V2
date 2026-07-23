@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.notify_lalamove_quota_low() FROM PUBLIC, anon, authenticated;
