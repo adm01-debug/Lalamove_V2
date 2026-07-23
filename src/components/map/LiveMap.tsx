@@ -483,7 +483,41 @@ export function LiveMap({
         </div>
       )}
 
-      <div ref={mapContainer} className="w-full h-full" style={{ minHeight: '600px' }} />
+      <div ref={mapContainer} className="w-full h-full" style={{ minHeight: '600px', visibility: isGoogleActive ? 'hidden' : 'visible' }} />
+
+      {isGoogleActive && (
+        <div className="absolute inset-0 z-[5]">
+          {isGoogle3D ? (
+            <Google3DCanvas
+              initialCenter={initialCenter}
+              vehicleFilter={vehicleFilter}
+              statusFilter={statusFilter}
+              onFallback={() => useMapSettings.getState().setPreferredProvider('google-hybrid')}
+            />
+          ) : (
+            <GoogleMapsCanvas
+              initialCenter={initialCenter}
+              initialZoom={initialZoom}
+              mapTypeId={googleMapTypeId}
+              vehicleFilter={vehicleFilter}
+              statusFilter={statusFilter}
+              onSelect={setSelectedId}
+            />
+          )}
+        </div>
+      )}
+
+      {showControls && (
+        <div className="absolute top-6 right-6 z-30 pointer-events-none">
+          <MapProviderSelector
+            externalCoords={
+              trackingData.length > 0
+                ? { lat: trackingData[0].current_latitude, lng: trackingData[0].current_longitude }
+                : null
+            }
+          />
+        </div>
+      )}
 
       {showHistoryFor && (
         <MapHistoryPanel 
