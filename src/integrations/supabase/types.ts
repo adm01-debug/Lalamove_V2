@@ -1392,6 +1392,9 @@ export type Database = {
           pickup_latitude: number | null
           pickup_longitude: number | null
           pod_received: boolean | null
+          priority_fee: number | null
+          priority_fee_currency: string | null
+          priority_fee_updated_at: string | null
           quotation_id: string | null
           requires_pod: boolean | null
           route_deviation_threshold_minutes: number | null
@@ -1440,6 +1443,9 @@ export type Database = {
           pickup_latitude?: number | null
           pickup_longitude?: number | null
           pod_received?: boolean | null
+          priority_fee?: number | null
+          priority_fee_currency?: string | null
+          priority_fee_updated_at?: string | null
           quotation_id?: string | null
           requires_pod?: boolean | null
           route_deviation_threshold_minutes?: number | null
@@ -1488,6 +1494,9 @@ export type Database = {
           pickup_latitude?: number | null
           pickup_longitude?: number | null
           pod_received?: boolean | null
+          priority_fee?: number | null
+          priority_fee_currency?: string | null
+          priority_fee_updated_at?: string | null
           quotation_id?: string | null
           requires_pod?: boolean | null
           route_deviation_threshold_minutes?: number | null
@@ -1514,6 +1523,64 @@ export type Database = {
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "drivers_safe_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lalamove_priority_fee_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          currency: string
+          id: string
+          lalamove_order_id: string
+          new_fee: number
+          order_id: string
+          previous_fee: number | null
+          reason: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          lalamove_order_id: string
+          new_fee: number
+          order_id: string
+          previous_fee?: number | null
+          reason?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          lalamove_order_id?: string
+          new_fee?: number
+          order_id?: string
+          previous_fee?: number | null
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lalamove_priority_fee_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "lalamove_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_priority_fee_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_operator_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_priority_fee_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_safe_view"
             referencedColumns: ["id"]
           },
         ]
