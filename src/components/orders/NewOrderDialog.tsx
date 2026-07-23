@@ -14,6 +14,8 @@ import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
+import { ContactPicker } from './ContactPicker';
+import { useContacts, type Contact } from '@/hooks/useContacts';
 
 
 interface NewOrderDialogProps {
@@ -87,6 +89,30 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
+  const { upsertContact } = useContacts();
+
+  const applyContact = (which: 'sender' | 'recipient', contact: Contact) => {
+    // Reaproveita telefone já validado (E.164) mascarado para o input BR.
+    const localDigits = contact.phone_e164.replace(/^\+55/, '');
+    const maskedPhone = maskBrazilianPhone(localDigits);
+    if (which === 'sender') {
+      setForm(prev => ({
+        ...prev,
+        senderName: contact.name,
+        senderPhone: maskedPhone,
+        ...(contact.address ? { pickupAddress: contact.address } : {}),
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        recipientName: contact.name,
+        recipientPhone: maskedPhone,
+        ...(contact.address ? { deliveryAddress: contact.address } : {}),
+      }));
+    }
+    setServerFieldError(null);
+  };
+
   const [form, setForm] = useState({
     senderName: '',
     senderPhone: '',
@@ -285,7 +311,25 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
       setStep('done');
       toast.success('Pedido criado com sucesso na Lalamove!');
-      
+
+      // Salva/atualiza contatos reutilizáveis (dedup por telefone E.164).
+      if (senderPhoneValidation.valid && form.senderName.trim()) {
+        void upsertContact({
+          name: form.senderName.trim(),
+          phoneE164: senderPhoneValidation.e164,
+          address: form.pickupAddress.trim() || null,
+          kind: 'sender',
+        }).catch(() => {/* silencioso: não deve bloquear o fluxo do pedido */});
+      }
+      if (recipientPhoneValidation.valid && form.recipientName.trim()) {
+        void upsertContact({
+          name: form.recipientName.trim(),
+          phoneE164: recipientPhoneValidation.e164,
+          address: form.deliveryAddress.trim() || null,
+          kind: 'recipient',
+        }).catch(() => {/* silencioso */});
+      }
+
       // Reset after delay
       setTimeout(() => {
         resetForm();
@@ -389,10 +433,17 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           <div className="space-y-4 pt-2">
             {/* Remetente */}
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-info" />
-                Remetente (Coleta)
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-info" />
+                  Remetente (Coleta)
+                </p>
+                <ContactPicker
+                  kind="sender"
+                  label="Buscar remetente"
+                  onSelect={contact => applyContact('sender', contact)}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <Label className="text-xs">Nome *</Label>
@@ -442,10 +493,17 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
             {/* Destinatário */}
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-success" />
-                Destinatário (Entrega)
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-success" />
+                  Destinatário (Entrega)
+                </p>
+                <ContactPicker
+                  kind="recipient"
+                  label="Buscar destinatário"
+                  onSelect={contact => applyContact('recipient', contact)}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <Label className="text-xs">Nome *</Label>
