@@ -237,6 +237,23 @@ async function getDriver(orderId: string, driverId: string) {
   return lalamoveRequest('GET', `/orders/${orderId}/drivers/${driverId}`);
 }
 
+// DELETE /v3/orders/{orderId}/drivers/{driverId} — Change driver (Doc Section 6)
+// Valid reasons per Lalamove v3 spec
+export const CHANGE_DRIVER_REASONS = [
+  'DRIVER_UNRESPONSIVE',
+  'DRIVER_LATE',
+  'DRIVER_ASKED_CHANGE',
+  'DRIVER_RUDE',
+  'DRIVER_ASKED_FOR_MORE_MONEY',
+] as const;
+type ChangeDriverReason = typeof CHANGE_DRIVER_REASONS[number];
+
+async function changeDriver(orderId: string, driverId: string, reason: ChangeDriverReason) {
+  return lalamoveRequest('DELETE', `/orders/${orderId}/drivers/${driverId}`, {
+    data: { reason },
+  });
+}
+
 // ========== Webhook (Doc Section 7) ==========
 // PATCH /v3/webhook — set webhook URL
 async function setWebhookUrl(url: string) {
@@ -631,6 +648,49 @@ serve(async (req) => {
         break;
       }
 
+      // --- Change Driver (Doc Section 6) ---
+      case 'change-driver': {
+        const cdOrderId = url.searchParams.get('orderId') || (body.orderId as string);
+        const cdDriverId = url.searchParams.get('driverId') || (body.driverId as string);
+        const cdReason = (body.reason as string) || '';
+        if (!cdOrderId || !cdDriverId || !cdReason) {
+          return new Response(
+            JSON.stringify({ error: 'orderId, driverId and reason are required' }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        if (!CHANGE_DRIVER_REASONS.includes(cdReason as typeof CHANGE_DRIVER_REASONS[number])) {
+          return new Response(
+            JSON.stringify({
+              error: 'Invalid reason',
+              validReasons: CHANGE_DRIVER_REASONS,
+            }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        result = await changeDriver(cdOrderId, cdDriverId, cdReason as typeof CHANGE_DRIVER_REASONS[number]);
+        if (!result.error) {
+          await supabase
+            .from('lalamove_orders')
+            .update({
+              driver_id: null,
+              driver_name: null,
+              driver_phone: null,
+              driver_plate: null,
+              status: 'ASSIGNING_DRIVER',
+              updated_at: new Date().toISOString(),
+            })
+            .eq('lalamove_id', cdOrderId);
+          await supabase.from('lalamove_status_history').insert({
+            lalamove_id: cdOrderId,
+            status: 'DRIVER_CHANGED',
+            metadata: { reason: cdReason, previous_driver_id: cdDriverId },
+            changed_at: new Date().toISOString(),
+          });
+        }
+        break;
+      }
+
       // --- Webhook ---
       case 'set-webhook': {
         const webhookUrl = body.url;
@@ -660,7 +720,7 @@ serve(async (req) => {
               'quotation', 'get-quotation',
               'order', 'get-order', 'fetch-order', 'fetch-orders-bulk', 'edit-order', 'cancel',
               'priority-fee',
-              'get-driver',
+              'get-driver', 'change-driver',
               'set-webhook',
               'sync',
             ]
