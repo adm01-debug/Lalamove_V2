@@ -362,7 +362,21 @@ interface OrderRequest {
   metadata?: Record<string, string>;
 }
 
+// Regex E.164: `+` seguido de 8–15 dígitos (RFC E.164 / requisitos Lalamove v3).
+const E164_REGEX = /^\+[1-9]\d{7,14}$/;
+
+function assertE164(phone: unknown, label: string): string {
+  if (typeof phone !== 'string' || !E164_REGEX.test(phone)) {
+    throw new Error(`Telefone inválido em ${label}: esperado formato E.164 (+5511...)`);
+  }
+  return phone;
+}
+
 async function createOrder(request: OrderRequest) {
+  // Guarda server-side: mesmo com validação de UI, nunca confie no cliente.
+  assertE164(request.sender?.phone, 'sender');
+  request.recipients?.forEach((r, i) => assertE164(r?.phone, `recipients[${i}]`));
+
   const body = {
     data: {
       quotationId: request.quotationId,

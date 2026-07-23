@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AddressAutocomplete } from './AddressAutocomplete';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
+import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 
 interface NewOrderDialogProps {
   open: boolean;
@@ -148,16 +149,19 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     return { valid: true as const, iso: dt.toISOString(), error: '' };
   })();
 
-  const isValid = form.senderName.trim() && form.senderPhone.trim() &&
-    form.recipientName.trim() && form.recipientPhone.trim() &&
-    form.pickupAddress.trim() && form.deliveryAddress.trim() &&
-    scheduleValidation.valid;
+  // Validação E.164 dos telefones (Lalamove v3 exige celular BR válido).
+  const senderPhoneValidation = validateBrazilianPhone(form.senderPhone);
+  const recipientPhoneValidation = validateBrazilianPhone(form.recipientPhone);
 
-  const formatPhone = (phone: string) => {
-    const digits = phone.replace(/\D/g, '');
-    if (digits.startsWith('55')) return `+${digits}`;
-    return `+55${digits}`;
-  };
+  const isValid = Boolean(
+    form.senderName.trim() &&
+    form.recipientName.trim() &&
+    form.pickupAddress.trim() &&
+    form.deliveryAddress.trim() &&
+    scheduleValidation.valid &&
+    senderPhoneValidation.valid &&
+    recipientPhoneValidation.valid,
+  );
 
   // Step 1: Get quotation from Lalamove
   const handleGetQuotation = async () => {
@@ -232,12 +236,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           sender: {
             stopId: quotation.stopIds[0],
             name: form.senderName.trim(),
-            phone: formatPhone(form.senderPhone),
+            phone: senderPhoneValidation.valid ? senderPhoneValidation.e164 : '',
           },
           recipients: [{
             stopId: quotation.stopIds[1],
             name: form.recipientName.trim(),
-            phone: formatPhone(form.recipientPhone),
+            phone: recipientPhoneValidation.valid ? recipientPhoneValidation.e164 : '',
             ...(form.remarks.trim() && { remarks: form.remarks.trim() }),
           }],
           serviceType: form.vehicleType,
@@ -378,9 +382,15 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                   <Label className="text-xs flex items-center gap-1"><Phone className="w-3 h-3" /> Telefone *</Label>
                   <Input
                     placeholder="(11) 99999-9999"
+                    inputMode="tel"
+                    maxLength={16}
                     value={form.senderPhone}
-                    onChange={e => updateField('senderPhone', e.target.value)}
+                    onChange={e => updateField('senderPhone', maskBrazilianPhone(e.target.value))}
+                    aria-invalid={form.senderPhone.length > 0 && !senderPhoneValidation.valid}
                   />
+                  {form.senderPhone.length > 0 && !senderPhoneValidation.valid && (
+                    <p className="text-[11px] text-destructive">{senderPhoneValidation.error}</p>
+                  )}
                 </div>
               </div>
               <div className="space-y-1">
@@ -412,9 +422,15 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                   <Label className="text-xs flex items-center gap-1"><Phone className="w-3 h-3" /> Telefone *</Label>
                   <Input
                     placeholder="(11) 99999-9999"
+                    inputMode="tel"
+                    maxLength={16}
                     value={form.recipientPhone}
-                    onChange={e => updateField('recipientPhone', e.target.value)}
+                    onChange={e => updateField('recipientPhone', maskBrazilianPhone(e.target.value))}
+                    aria-invalid={form.recipientPhone.length > 0 && !recipientPhoneValidation.valid}
                   />
+                  {form.recipientPhone.length > 0 && !recipientPhoneValidation.valid && (
+                    <p className="text-[11px] text-destructive">{recipientPhoneValidation.error}</p>
+                  )}
                 </div>
               </div>
               <div className="space-y-1">
