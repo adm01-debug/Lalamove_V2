@@ -39,6 +39,7 @@ import { Order, OrderStatus } from '@/types';
 import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
+import { StatusTimeline } from './StatusTimeline';
 
 interface OrderDetailModalProps {
   order: Order | null;
@@ -786,6 +787,9 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                 </div>
               </div>
             )}
+
+            {/* Timeline de Status (auditável) */}
+            <StatusTimeline orderId={order.id} />
 
             {/* Order Actions */}
             <OrderActions order={order} onOpenChange={onOpenChange} />
