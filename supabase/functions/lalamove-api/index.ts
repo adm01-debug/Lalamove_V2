@@ -288,7 +288,42 @@ interface QuotationRequest {
   };
 }
 
+// Matriz de compatibilidade Special Requests × Service Type (Lalamove v3 BR).
+// Mantida em sincronia com src/components/orders/NewOrderDialog.tsx.
+const SPECIAL_REQUESTS_BY_SERVICE: Record<string, readonly string[]> = {
+  MOTORCYCLE: ['HELP_BUY', 'TOLL_FEE', 'DOOR_TO_DOOR', 'THERMAL_BAG_1', 'PURCHASE_SERVICE_1'],
+  CAR: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
+  MPV: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
+  VAN: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+  UV_FIORINO: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE'],
+  TRUCK175: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+  TRUCK330: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+};
+
+function sanitizeSpecialRequests(serviceType: string, requested?: string[]): {
+  clean: string[];
+  dropped: string[];
+} {
+  if (!requested?.length) return { clean: [], dropped: [] };
+  const allowed = SPECIAL_REQUESTS_BY_SERVICE[serviceType];
+  // Serviço desconhecido: repassa tal qual — a Lalamove valida.
+  if (!allowed) return { clean: requested, dropped: [] };
+  const clean: string[] = [];
+  const dropped: string[] = [];
+  for (const sr of requested) {
+    (allowed.includes(sr) ? clean : dropped).push(sr);
+  }
+  return { clean, dropped };
+}
+
 async function createQuotation(request: QuotationRequest) {
+  const { clean, dropped } = sanitizeSpecialRequests(request.serviceType, request.specialRequests);
+  if (dropped.length > 0) {
+    console.warn(
+      `[lalamove-api] Dropping incompatible specialRequests for ${request.serviceType}:`,
+      dropped
+    );
+  }
   const body = {
     data: {
       serviceType: request.serviceType,
@@ -296,7 +331,7 @@ async function createQuotation(request: QuotationRequest) {
       stops: request.stops,
       ...(request.scheduleAt && { scheduleAt: request.scheduleAt }),
       ...(request.isRouteOptimized !== undefined && { isRouteOptimized: request.isRouteOptimized }),
-      ...(request.specialRequests?.length && { specialRequests: request.specialRequests }),
+      ...(clean.length > 0 && { specialRequests: clean }),
       ...(request.item && { item: request.item }),
     }
   };
