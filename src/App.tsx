@@ -52,6 +52,7 @@ const UserPreferencesPage = lazy(() => import('./pages/UserPreferencesPage'));
 const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage'));
 const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
 const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
+const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
 
 // Lazy loaded pages - System
 const SystemHealthPage = lazy(() => import('./pages/SystemHealthPage').then(m => ({ default: m.SystemHealthPage })));
@@ -188,6 +189,7 @@ const AppContent = () => {
                       <Route path="/analytics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/external-data" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><ExternalDataPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/map-tools" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><MapToolsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/lalamove-quota" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><LalamoveQuotaPage /></SuspenseWrapper></ProtectedRoute>} />
                     </Route>
                     
                     <Route path="*" element={<NotFound />} />
