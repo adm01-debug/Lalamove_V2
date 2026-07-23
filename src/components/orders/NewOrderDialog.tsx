@@ -33,7 +33,24 @@ const specialRequestOptions = [
   { value: 'ROUND_TRIP', label: 'Ida e volta' },
   { value: 'DOOR_TO_DOOR', label: 'Porta a porta' },
 ];
+const weightOptions = [
+  { value: 'LESS_THAN_3_KG', label: '≤ 3 kg' },
+  { value: 'BETWEEN_3_KG_AND_10_KG', label: '3 – 10 kg' },
+  { value: 'BETWEEN_10_KG_AND_50_KG', label: '10 – 50 kg' },
+  { value: 'MORE_THAN_50_KG', label: '> 50 kg' },
+];
 
+const itemCategoryOptions = [
+  { value: 'FOOD_DELIVERY', label: 'Alimentos' },
+  { value: 'OFFICE_ITEM', label: 'Material de escritório' },
+  { value: 'FURNITURE', label: 'Móveis' },
+  { value: 'FRAGILE_GOODS', label: 'Frágil' },
+];
+
+const handlingInstructionOptions = [
+  { value: 'KEEP_UPRIGHT', label: 'Manter em pé' },
+  { value: 'FRAGILE', label: 'Frágil — cuidado' },
+];
 type Step = 'form' | 'quoting' | 'quoted' | 'creating' | 'done';
 
 interface QuotationResult {
