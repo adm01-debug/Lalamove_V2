@@ -79,6 +79,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     isPODEnabled: true,
     internalOrderId: '',
     internalNotes: '',
+    // Scheduled pickup (Lalamove v3: ISO-8601 UTC; janela 30min–30dias)
+    scheduleAt: '',
     // Item Information (Lalamove v3)
     itemQuantity: '1',
     itemWeight: 'LESS_THAN_3_KG',
