@@ -25,7 +25,43 @@ function formatRelative(iso: string | null): string {
 
 export function WebhookSecurityPanel() {
   const [windowHours, setWindowHours] = useState(24);
+  const [exporting, setExporting] = useState(false);
   const { data, isLoading } = useWebhookSecurityMetrics(windowHours);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const since = new Date(Date.now() - windowHours * 3600 * 1000).toISOString();
+      const { data: rows, error } = await supabase
+        .from('webhook_events')
+        .select('id, event_type, received_at, error_message, lalamove_order_id, payload')
+        .in('event_type', ['SIGNATURE_INVALID', 'REPLAY_REJECTED', 'DUPLICATE_IGNORED'])
+        .gte('received_at', since)
+        .order('received_at', { ascending: false })
+        .limit(5000);
+      if (error) throw error;
+      if (!rows || rows.length === 0) {
+        toast.info('Nenhuma rejeição de segurança na janela selecionada');
+        return;
+      }
+      const flat = rows.map((r) => ({
+        id: r.id,
+        event_type: r.event_type,
+        received_at: r.received_at,
+        lalamove_order_id: r.lalamove_order_id ?? '',
+        error_message: r.error_message ?? '',
+        payload: typeof r.payload === 'object' ? JSON.stringify(r.payload) : String(r.payload ?? ''),
+      }));
+      exportToCSV(flat, `webhook-security-${windowHours}h`);
+      toast.success(`${rows.length} evento(s) exportado(s)`);
+    } catch (err) {
+      toast.error('Falha ao exportar rejeições', {
+        description: err instanceof Error ? err.message : 'Erro desconhecido',
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const totalRejections = useMemo(
     () => (data ? data.signatureInvalid + data.replayRejected : 0),
