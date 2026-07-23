@@ -10,6 +10,7 @@ import { Loader2, MapPin, User, Phone, Package, Truck, DollarSign, Zap, CheckCir
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AddressAutocomplete } from './AddressAutocomplete';
+import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 
@@ -395,6 +396,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </div>
               <div className="space-y-1">
                 <Label className="text-xs flex items-center gap-1"><MapPin className="w-3 h-3 text-info" /> Endereço de Coleta *</Label>
+                <CepQuickFill
+                  accent="info"
+                  label="CEP da coleta"
+                  onResolved={(formatted) => updateField('pickupAddress', formatted)}
+                />
                 <AddressAutocomplete
                   value={form.pickupAddress}
                   onChange={val => updateField('pickupAddress', val)}
@@ -435,6 +441,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </div>
               <div className="space-y-1">
                 <Label className="text-xs flex items-center gap-1"><MapPin className="w-3 h-3 text-success" /> Endereço de Entrega *</Label>
+                <CepQuickFill
+                  accent="success"
+                  label="CEP da entrega"
+                  onResolved={(formatted) => updateField('deliveryAddress', formatted)}
+                />
                 <AddressAutocomplete
                   value={form.deliveryAddress}
                   onChange={val => updateField('deliveryAddress', val)}
