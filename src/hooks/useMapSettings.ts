@@ -18,6 +18,7 @@ interface MapSettingsState {
   stoppedThreshold: number; // minutes
   geofenceRadius: number; // meters
   markerDensity: MarkerDensity; // visual density of driver markers
+  preferredProvider: MapProvider;
   
   
   // Persistence by context (region/type)
@@ -28,6 +29,7 @@ interface MapSettingsState {
   }>;
 
   setMarkerDensity: (value: MarkerDensity) => void;
+  setPreferredProvider: (value: MapProvider) => void;
   setOffRouteThreshold: (value: number) => void;
   setStoppedThreshold: (value: number) => void;
   setGeofenceRadius: (value: number) => void;
