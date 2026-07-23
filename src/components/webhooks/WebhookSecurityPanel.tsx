@@ -116,6 +116,20 @@ export function WebhookSecurityPanel() {
             </Button>
           ))}
         </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleExport}
+          disabled={exporting}
+          aria-label="Exportar rejeições em CSV"
+        >
+          {exporting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
+          <span className="ml-1 hidden sm:inline">Exportar CSV</span>
+        </Button>
       </div>
 
       {isLoading ? (
