@@ -1304,6 +1304,58 @@ export type Database = {
         }
         Relationships: []
       }
+      lalamove_order_replacements: {
+        Row: {
+          created_at: string
+          id: string
+          new_lalamove_id: string
+          order_id: string
+          previous_lalamove_id: string
+          raw_payload: Json
+          reason: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          new_lalamove_id: string
+          order_id: string
+          previous_lalamove_id: string
+          raw_payload?: Json
+          reason?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          new_lalamove_id?: string
+          order_id?: string
+          previous_lalamove_id?: string
+          raw_payload?: Json
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lalamove_order_replacements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "lalamove_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_order_replacements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_operator_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_order_replacements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_safe_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lalamove_orders: {
         Row: {
           actual_delivery: string | null
