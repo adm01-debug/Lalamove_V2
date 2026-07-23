@@ -47,6 +47,14 @@ function StatCard({
 export default function LalamoveQuotaPage() {
   const { rows, summary, endpoints, timeline, isLoading, error } = useLalamoveQuota();
 
+  useEffect(() => {
+    const prev = document.title;
+    document.title = 'Quota Lalamove | Painel de Rate Limit';
+    return () => {
+      document.title = prev;
+    };
+  }, []);
+
   const currentUsagePct =
     summary.currentLimit && summary.currentRemaining !== null
       ? Number((((summary.currentLimit - summary.currentRemaining) / summary.currentLimit) * 100).toFixed(1))
@@ -61,10 +69,7 @@ export default function LalamoveQuotaPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <Helmet>
-        <title>Quota Lalamove | Painel de Rate Limit</title>
-        <meta name="description" content="Monitoramento em tempo real dos rate limits da API Lalamove v3." />
-      </Helmet>
+
 
       <header className="flex items-start justify-between flex-wrap gap-4">
         <div>
