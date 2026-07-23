@@ -79,6 +79,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     isPODEnabled: true,
     internalOrderId: '',
     internalNotes: '',
+    // Scheduled pickup (Lalamove v3: ISO-8601 UTC; janela 30min–30dias)
+    scheduleAt: '',
     // Item Information (Lalamove v3)
     itemQuantity: '1',
     itemWeight: 'LESS_THAN_3_KG',
@@ -104,9 +106,21 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }));
   };
 
+  // Valida janela do agendamento: 30min a 30 dias no futuro.
+  const scheduleValidation = (() => {
+    if (!form.scheduleAt) return { valid: true as const, iso: '' as string, error: '' };
+    const dt = new Date(form.scheduleAt);
+    if (Number.isNaN(dt.getTime())) return { valid: false as const, iso: '', error: 'Data/hora inválida' };
+    const diffMin = (dt.getTime() - Date.now()) / 60000;
+    if (diffMin < 30) return { valid: false as const, iso: '', error: 'Agendamento mínimo: 30 minutos à frente' };
+    if (diffMin > 30 * 24 * 60) return { valid: false as const, iso: '', error: 'Agendamento máximo: 30 dias' };
+    return { valid: true as const, iso: dt.toISOString(), error: '' };
+  })();
+
   const isValid = form.senderName.trim() && form.senderPhone.trim() &&
     form.recipientName.trim() && form.recipientPhone.trim() &&
-    form.pickupAddress.trim() && form.deliveryAddress.trim();
+    form.pickupAddress.trim() && form.deliveryAddress.trim() &&
+    scheduleValidation.valid;
 
   const formatPhone = (phone: string) => {
     const digits = phone.replace(/\D/g, '');
@@ -131,6 +145,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
           ],
           ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
+          ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
           item: {
             quantity: form.itemQuantity || '1',
             weight: form.itemWeight,
@@ -248,6 +263,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       isPODEnabled: true,
       internalOrderId: '',
       internalNotes: '',
+      scheduleAt: '',
       itemQuantity: '1',
       itemWeight: 'LESS_THAN_3_KG',
       itemCategories: [],
@@ -506,6 +522,27 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 onChange={e => updateField('internalOrderId', e.target.value)}
               />
             </div>
+
+            {/* Scheduled pickup (Lalamove v3: opcional; janela 30min–30dias) */}
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold">Agendamento (opcional)</Label>
+              <Input
+                type="datetime-local"
+                value={form.scheduleAt}
+                onChange={e => updateField('scheduleAt', e.target.value)}
+                min={new Date(Date.now() + 31 * 60000).toISOString().slice(0, 16)}
+                max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+              />
+              {form.scheduleAt && !scheduleValidation.valid && (
+                <p className="text-[11px] text-destructive">{scheduleValidation.error}</p>
+              )}
+              {form.scheduleAt && scheduleValidation.valid && (
+                <p className="text-[11px] text-muted-foreground">
+                  Coleta agendada para {new Date(form.scheduleAt).toLocaleString('pt-BR')} — enviado como UTC ISO-8601 à Lalamove.
+                </p>
+              )}
+            </div>
+
 
             {/* Guardian System Settings */}
             <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4 animate-fade-up">
