@@ -176,6 +176,53 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
         </div>
       )}
 
+      {/* Change Driver */}
+      {canChangeDriver && (
+        <div className="space-y-2">
+          {showChangeDriver ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <User className="w-4 h-4 text-muted-foreground shrink-0" />
+              <Select value={changeDriverReason} onValueChange={setChangeDriverReason}>
+                <SelectTrigger className="w-64">
+                  <SelectValue placeholder="Selecione o motivo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {changeDriverReasons.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => {
+                  if (!order.driverId || !changeDriverReason) return;
+                  if (confirm('Confirmar solicitação de troca de motorista?')) {
+                    changeDriverMutation.mutate({
+                      orderId: order.lalamoveId,
+                      driverId: order.driverId,
+                      reason: changeDriverReason,
+                    });
+                  }
+                }}
+                disabled={changeDriverMutation.isPending || !changeDriverReason}
+              >
+                {changeDriverMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar Troca'}
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setShowChangeDriver(false)}>
+                Cancelar
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" size="sm" className="gap-2" onClick={() => setShowChangeDriver(true)}>
+              <User className="w-4 h-4" />
+              Trocar Motorista
+            </Button>
+          )}
+        </div>
+      )}
+
+
       <div className="flex justify-between items-center">
         <div>
           {canCancel && (
