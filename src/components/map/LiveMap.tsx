@@ -29,6 +29,9 @@ import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { type VehicleFilter, type StatusFilter } from './types';
 import { setupMapLayers } from './mapLayers';
+import { GoogleMapsCanvas } from './GoogleMapsCanvas';
+import { Google3DCanvas } from './Google3DCanvas';
+import { MapProviderSelector } from './MapProviderSelector';
 
 
 export type { VehicleFilter, StatusFilter };
