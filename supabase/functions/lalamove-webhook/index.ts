@@ -259,11 +259,50 @@ serve(async (req) => {
     
     const eventType: string = payload.event?.toUpperCase() || 'UNKNOWN';
     const lalamoveOrderId: string | null = payload.orderId || null;
-    
+
+    // Replay protection: reject payloads whose timestamp is stale or futuristic.
+    const freshness = validateTimestampFreshness(payload.timestamp);
+    if (!freshness.valid) {
+      logger.warn(`[Webhook] Rejected replay: ${freshness.reason}`);
+      await supabase.from('webhook_events').insert({
+        event_type: 'REPLAY_REJECTED',
+        lalamove_order_id: lalamoveOrderId,
+        raw_payload: { event: eventType, timestamp: payload.timestamp, reason: freshness.reason },
+        processed: true,
+        error_message: freshness.reason,
+      });
+      return new Response(
+        JSON.stringify({ error: 'Stale webhook payload', reason: freshness.reason }),
+        { status: 409, headers: { ...rateLimitHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Idempotency: dedup by content hash. If the same payload was already stored
+    // and processed, return early to avoid duplicate side effects.
+    const idempotencyKey = await computeIdempotencyKey(rawBody);
+    const { data: duplicate } = await supabase
+      .from('webhook_events')
+      .select('id, processed')
+      .eq('idempotency_key', idempotencyKey)
+      .maybeSingle();
+    if (duplicate) {
+      logger.log(`[Webhook] Duplicate delivery ignored (idempotency_key=${idempotencyKey.substring(0, 12)}…)`);
+      return new Response(
+        JSON.stringify({ success: true, duplicate: true, webhookId: (duplicate as WebhookRecord).id }),
+        { status: 200, headers: { ...rateLimitHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Store webhook event
     const { data: webhook, error } = await supabase
       .from('webhook_events')
-      .insert({ event_type: eventType, lalamove_order_id: lalamoveOrderId, raw_payload: payload, processed: false })
+      .insert({
+        event_type: eventType,
+        lalamove_order_id: lalamoveOrderId,
+        raw_payload: payload,
+        processed: false,
+        idempotency_key: idempotencyKey,
+      })
       .select('id')
       .single();
     
