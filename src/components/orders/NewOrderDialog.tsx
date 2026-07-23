@@ -311,7 +311,25 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
       setStep('done');
       toast.success('Pedido criado com sucesso na Lalamove!');
-      
+
+      // Salva/atualiza contatos reutilizáveis (dedup por telefone E.164).
+      if (senderPhoneValidation.valid && form.senderName.trim()) {
+        void upsertContact({
+          name: form.senderName.trim(),
+          phoneE164: senderPhoneValidation.e164,
+          address: form.pickupAddress.trim() || null,
+          kind: 'sender',
+        }).catch(() => {/* silencioso: não deve bloquear o fluxo do pedido */});
+      }
+      if (recipientPhoneValidation.valid && form.recipientName.trim()) {
+        void upsertContact({
+          name: form.recipientName.trim(),
+          phoneE164: recipientPhoneValidation.e164,
+          address: form.deliveryAddress.trim() || null,
+          kind: 'recipient',
+        }).catch(() => {/* silencioso */});
+      }
+
       // Reset after delay
       setTimeout(() => {
         resetForm();
