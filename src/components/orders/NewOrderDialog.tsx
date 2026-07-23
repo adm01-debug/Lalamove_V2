@@ -219,9 +219,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       toast.success('Cotação recebida!');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro na cotação';
-      setError(msg);
+      const parsed = parseOrderError(msg);
+      setError(parsed.description);
+      setServerFieldError({ field: parsed.field, message: parsed.description });
       setStep('form');
-      toast.error('Erro na cotação', { description: msg });
+      toast.error(parsed.title, { description: parsed.description });
     }
   };
 
