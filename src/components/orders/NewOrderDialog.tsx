@@ -78,6 +78,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     isPODEnabled: true,
     internalOrderId: '',
     internalNotes: '',
+    // Item Information (Lalamove v3)
+    itemQuantity: '1',
+    itemWeight: 'LESS_THAN_3_KG',
+    itemCategories: [] as string[],
+    itemHandling: [] as string[],
     // Guardian fields
     autoNotifySupplier: false,
     supplierContact: '',
