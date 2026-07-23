@@ -153,13 +153,7 @@ export function LiveMap({
     handleZoom();
 
     return () => {
-      driverMarkers.current.forEach(marker => marker.remove());
-      driverMarkers.current.clear();
-      pointMarkers.current.forEach(marker => marker.remove());
-      pointMarkers.current.clear();
-      clusterMarkers.current.forEach(marker => marker.remove());
-      clusterMarkers.current.clear();
-      routeLines.current.clear();
+      resetMarkers();
       if (map.current) {
         if (map.current.getLayer('geofence-fill')) map.current.removeLayer('geofence-fill');
         if (map.current.getLayer('geofence-outline')) map.current.removeLayer('geofence-outline');
@@ -167,33 +161,9 @@ export function LiveMap({
       }
       map.current?.remove();
     };
-  }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle]);
+  }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers]);
 
-  // Animation loop for smooth movement
-  useEffect(() => {
-    const animate = () => {
-      if (!map.current) return;
 
-      markerPositions.current.forEach((pos, id) => {
-        const marker = driverMarkers.current.get(id);
-        if (!marker) return;
-
-        const lerpFactor = 0.05;
-        const newLng = pos.current[0] + (pos.target[0] - pos.current[0]) * lerpFactor;
-        const newLat = pos.current[1] + (pos.target[1] - pos.current[1]) * lerpFactor;
-        
-        pos.current = [newLng, newLat];
-        marker.setLngLat(pos.current);
-      });
-
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    animationFrameRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, []);
 
   // Toggle traffic
   useEffect(() => {
