@@ -198,6 +198,7 @@ async function lalamoveRequest(
 
       // DELETE returns 204 No Content with empty body
       if (response.status === 204) {
+        persistRateLimit({ method, endpoint, status: 204, attempts: attempt, requestId, headers: rateLimits });
         return { data: { success: true }, status: 204, rateLimits, attempts: attempt };
       }
 
@@ -233,10 +234,12 @@ async function lalamoveRequest(
           continue;
         }
 
+        persistRateLimit({ method, endpoint, status: response.status, attempts: attempt, requestId, headers: rateLimits });
         return { error: errorDetail, status: response.status, rateLimits, attempts: attempt };
       }
 
       const data = responseText ? JSON.parse(responseText) : {};
+      persistRateLimit({ method, endpoint, status: response.status, attempts: attempt, requestId, headers: rateLimits });
       return { data, status: response.status, rateLimits, attempts: attempt };
     } catch (error) {
       // Network-level failure — always retryable if attempts remain.
