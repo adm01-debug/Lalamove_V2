@@ -6,10 +6,11 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, MapPin, User, Phone, Package, Truck, DollarSign, Zap, CheckCircle2, AlertTriangle, Weight } from 'lucide-react';
+import { Loader2, MapPin, User, Phone, Package, Truck, DollarSign, Zap, CheckCircle2, AlertTriangle, Weight, Clock, RefreshCw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AddressAutocomplete } from './AddressAutocomplete';
+import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 
 interface NewOrderDialogProps {
   open: boolean;
