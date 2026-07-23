@@ -86,6 +86,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [step, setStep] = useState<Step>('form');
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
   const [form, setForm] = useState({
     senderName: '',
     senderPhone: '',
