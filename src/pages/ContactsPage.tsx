@@ -3,7 +3,7 @@
  * Lista, busca, edita (nome/endereço/tipo) e exclui contatos salvos.
  */
 import { useMemo, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 import { Pencil, Trash2, Users, Search, Loader2 } from 'lucide-react';
 import { useContacts, type Contact, type ContactKind } from '@/hooks/useContacts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
