@@ -31,6 +31,7 @@ export const menuCategories: MenuCategory[] = [
       { id: 'dashboard', path: '/', label: 'Dashboard', icon: LayoutDashboard },
       { id: 'orders', path: '/orders', label: 'Pedidos', icon: Package },
       { id: 'drivers', path: '/drivers', label: 'Motoristas', icon: Users },
+      { id: 'contacts', path: '/contacts', label: 'Contatos', icon: Contact },
     ]
   },
   {
