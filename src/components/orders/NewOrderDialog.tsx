@@ -308,6 +308,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     setStep('form');
     setQuotation(null);
     setError(null);
+    setServerFieldError(null);
     setForm({
       senderName: '',
       senderPhone: '',
