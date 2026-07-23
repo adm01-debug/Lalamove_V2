@@ -130,6 +130,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
           ],
           ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
+          item: {
+            quantity: form.itemQuantity || '1',
+            weight: form.itemWeight,
+            ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
+            ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
+          },
         },
       });
 
