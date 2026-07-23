@@ -3,11 +3,14 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Shield, ShieldAlert, ShieldCheck, Repeat, Clock, AlertTriangle } from 'lucide-react';
+import { Shield, ShieldAlert, ShieldCheck, Repeat, Clock, AlertTriangle, Download, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { useWebhookSecurityMetrics } from '@/hooks/useWebhookSecurityMetrics';
+import { supabase } from '@/integrations/supabase/client';
+import { exportToCSV } from '@/utils/exportUtils';
+import { toast } from 'sonner';
 
 const WINDOWS: Array<{ label: string; hours: number }> = [
   { label: '1h', hours: 1 },
