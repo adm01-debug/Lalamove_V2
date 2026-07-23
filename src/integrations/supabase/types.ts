@@ -1512,6 +1512,86 @@ export type Database = {
           },
         ]
       }
+      lalamove_stop_proofs: {
+        Row: {
+          created_at: string
+          delivery_code: string | null
+          delivery_code_status: string | null
+          id: string
+          order_id: string
+          pod_delivered_at: string | null
+          pod_image_url: string | null
+          pod_status: string | null
+          pop_image_url: string | null
+          pop_picked_up_at: string | null
+          pop_status: string | null
+          raw_payload: Json
+          stop_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivery_code?: string | null
+          delivery_code_status?: string | null
+          id?: string
+          order_id: string
+          pod_delivered_at?: string | null
+          pod_image_url?: string | null
+          pod_status?: string | null
+          pop_image_url?: string | null
+          pop_picked_up_at?: string | null
+          pop_status?: string | null
+          raw_payload?: Json
+          stop_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivery_code?: string | null
+          delivery_code_status?: string | null
+          id?: string
+          order_id?: string
+          pod_delivered_at?: string | null
+          pod_image_url?: string | null
+          pod_status?: string | null
+          pop_image_url?: string | null
+          pop_picked_up_at?: string | null
+          pop_status?: string | null
+          raw_payload?: Json
+          stop_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lalamove_stop_proofs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "lalamove_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_stop_proofs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_operator_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_stop_proofs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_safe_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lalamove_stop_proofs_stop_id_fkey"
+            columns: ["stop_id"]
+            isOneToOne: true
+            referencedRelation: "lalamove_stops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lalamove_stops: {
         Row: {
           address: string
