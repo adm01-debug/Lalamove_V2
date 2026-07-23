@@ -53,17 +53,11 @@ export function LiveMap({
 }: LiveMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const driverMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
-  const markerPositions = useRef<Map<string, { current: [number, number], target: [number, number] }>>(new Map());
-  const pointMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
-  const clusterMarkers = useRef<Map<string, mapboxgl.Marker>>(new Map());
-  const routeLines = useRef<Set<string>>(new Set());
-  const animationFrameRef = useRef<number | null>(null);
-  
+
   const historyLineRef = useRef<string | null>(null);
   const historyMarkersRef = useRef<mapboxgl.Marker[]>([]);
   const playbackMarkerRef = useRef<mapboxgl.Marker | null>(null);
-  
+
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -72,7 +66,7 @@ export function LiveMap({
   const [mapStyle, setMapStyle] = useState<'dark-v11' | 'satellite-streets-v12'>('dark-v11');
   const [showHistoryFor, setShowHistoryFor] = useState<{ driverId: string; orderId: string; driverName: string } | null>(null);
   const [showSettings, setShowSettings] = useState(false);
-  
+
   // States for requested features
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
@@ -85,13 +79,31 @@ export function LiveMap({
   const [isVeryFarZoom, setIsVeryFarZoom] = useState(false);
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
 
-  
+
   const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
   const { offRouteAlerts, stoppedAlerts, etaIndicator } = useMapAlerts(trackingData);
   const { history, loading: historyLoading, fetchHistory, clearHistory } = useTrackingHistory();
+
+  const { resetMarkers } = useMapMarkers({
+    mapRef: map,
+    loading,
+    trackingData,
+    selectedId,
+    onSelect: setSelectedId,
+    focusMode,
+    markerDensity,
+    isFarZoom,
+    isVeryFarZoom,
+    veryFarZoomThreshold: VERY_FAR_ZOOM_THRESHOLD,
+    offRouteAlerts,
+    stoppedAlerts,
+    stoppedThreshold,
+  });
+
+
 
 
   const selectedTracking = useMemo(() => 
