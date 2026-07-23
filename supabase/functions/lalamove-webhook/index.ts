@@ -546,15 +546,37 @@ serve(async (req) => {
           const deliveredAt = (podData as Record<string, unknown>).deliveredAt as string | undefined;
 
           if (orderUuid) {
+            const normalizedPod = ['delivered','failed','pending'].includes(stopStatus.toLowerCase())
+              ? stopStatus.toLowerCase() : 'pending';
+            const deliveredIso = deliveredAt ?? ((stopStatus === 'DELIVERED' || stopStatus === 'SIGNED') ? new Date().toISOString() : null);
             const updates: Record<string, unknown> = {
-              pod_status: stopStatus,
+              pod_status: normalizedPod,
               pod_image_url: imageUrl ?? null,
-              pod_delivered_at: deliveredAt ?? (stopStatus === 'DELIVERED' || stopStatus === 'SIGNED' ? new Date().toISOString() : null),
+              pod_delivered_at: deliveredIso,
             };
             let q = supabase.from('lalamove_stops').update(updates).eq('order_id', orderUuid);
             if (stopIndex !== null) q = q.eq('stop_index', stopIndex);
             const { error: podErr } = await q;
             if (podErr) logger.error(`[Webhook] POD update failed: ${podErr.message}`);
+
+            // Etapa 2: persistir POD granular em lalamove_stop_proofs (upsert por stop_id)
+            let stopRow: { id: string } | null = null;
+            if (stopIndex !== null) {
+              const { data: sRow } = await supabase.from('lalamove_stops')
+                .select('id').eq('order_id', orderUuid).eq('stop_index', stopIndex).maybeSingle();
+              stopRow = sRow as { id: string } | null;
+            }
+            if (stopRow?.id) {
+              const { error: proofErr } = await supabase.from('lalamove_stop_proofs').upsert({
+                stop_id: stopRow.id,
+                order_id: orderUuid,
+                pod_status: normalizedPod,
+                pod_image_url: imageUrl ?? null,
+                pod_delivered_at: deliveredIso,
+                raw_payload: payload as unknown as Record<string, unknown>,
+              }, { onConflict: 'stop_id' });
+              if (proofErr) logger.error(`[Webhook] stop_proof POD upsert failed: ${proofErr.message}`);
+            }
 
             if (stopStatus === 'DELIVERED' || stopStatus === 'SIGNED') {
               await supabase.from('lalamove_orders').update({ pod_received: true }).eq('id', orderUuid);
