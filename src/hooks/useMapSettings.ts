@@ -47,12 +47,14 @@ export const useMapSettings = create<MapSettingsState>()(
       stoppedThreshold: 15,
       geofenceRadius: 300,
       markerDensity: 'comfortable',
+      preferredProvider: 'mapbox-dark',
       contextSettings: {},
 
       setOffRouteThreshold: (value: number) => set({ offRouteThreshold: value }),
       setStoppedThreshold: (value: number) => set({ stoppedThreshold: value }),
       setGeofenceRadius: (value: number) => set({ geofenceRadius: value }),
       setMarkerDensity: (value: MarkerDensity) => set({ markerDensity: value }),
+      setPreferredProvider: (value: MapProvider) => set({ preferredProvider: value }),
 
       saveContextSettings: async (contextKey: string) => {
         try {
