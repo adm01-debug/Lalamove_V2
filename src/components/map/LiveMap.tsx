@@ -139,6 +139,12 @@ export function LiveMap({
     map.current.on('style.load', () => {
       if (!map.current) return;
       setupMapLayers(map.current, showTraffic);
+      // Reaplica overlay raster (OSM/Esri) após qualquer troca de estilo base.
+      const rasterProvider: RasterProvider =
+        preferredProvider === 'osm' ? 'osm'
+        : preferredProvider === 'esri-sat' ? 'esri-sat'
+        : null;
+      applyRasterOverlay(map.current, rasterProvider);
     });
 
 
