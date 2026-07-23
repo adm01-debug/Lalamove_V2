@@ -34,7 +34,7 @@ export function WebhookSecurityPanel() {
       const since = new Date(Date.now() - windowHours * 3600 * 1000).toISOString();
       const { data: rows, error } = await supabase
         .from('webhook_events')
-        .select('id, event_type, received_at, error_message, lalamove_order_id, payload')
+        .select('id, event_type, received_at, error_message, lalamove_order_id, raw_payload')
         .in('event_type', ['SIGNATURE_INVALID', 'REPLAY_REJECTED', 'DUPLICATE_IGNORED'])
         .gte('received_at', since)
         .order('received_at', { ascending: false })
@@ -50,7 +50,10 @@ export function WebhookSecurityPanel() {
         received_at: r.received_at,
         lalamove_order_id: r.lalamove_order_id ?? '',
         error_message: r.error_message ?? '',
-        payload: typeof r.payload === 'object' ? JSON.stringify(r.payload) : String(r.payload ?? ''),
+        raw_payload:
+          typeof r.raw_payload === 'object' && r.raw_payload !== null
+            ? JSON.stringify(r.raw_payload)
+            : String(r.raw_payload ?? ''),
       }));
       exportToCSV(flat, `webhook-security-${windowHours}h`);
       toast.success(`${rows.length} evento(s) exportado(s)`);
