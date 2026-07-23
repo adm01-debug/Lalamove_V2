@@ -58,12 +58,13 @@ export default function ContactsPage() {
     return base;
   }, [term, kindFilter, search, contacts]);
 
+  useEffect(() => {
+    document.title = 'Contatos salvos | Lalamove Intelligence Hub';
+  }, []);
+
   return (
     <>
-      <Helmet>
-        <title>Contatos salvos | Lalamove Intelligence Hub</title>
-        <meta name="description" content="Gerencie contatos reutilizáveis para pedidos: edite dados, altere tipo e remova registros." />
-      </Helmet>
+
 
       <div className="container mx-auto px-4 py-6 space-y-4">
         <header className="flex items-center gap-3">
