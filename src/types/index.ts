@@ -23,6 +23,7 @@ export interface Order {
   route_deviation_threshold_minutes?: number;
   pod_required?: boolean;
   pod_url?: string;
+  shareLink?: string;
   createdAt: Date;
   updatedAt: Date;
 }

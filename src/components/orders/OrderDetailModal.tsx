@@ -33,6 +33,7 @@ import {
   Zap,
   KeyRound,
   Copy,
+  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Order, OrderStatus } from '@/types';
@@ -438,9 +439,40 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                   <p className="text-sm text-muted-foreground mt-1">Lalamove ID: {order.lalamoveId}</p>
                 </div>
               </div>
-              <Badge variant={status.variant} className="text-sm">
-                {status.label}
-              </Badge>
+              <div className="flex items-center gap-2">
+                {order.shareLink && (
+                  <div className="flex items-center gap-1">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1.5 h-8"
+                      onClick={() => window.open(order.shareLink, '_blank', 'noopener,noreferrer')}
+                      aria-label="Abrir link de rastreio Lalamove"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" /> Rastrear
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(order.shareLink!);
+                          toast.success('Link de rastreio copiado');
+                        } catch {
+                          toast.error('Não foi possível copiar o link');
+                        }
+                      }}
+                      aria-label="Copiar link de rastreio"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                )}
+                <Badge variant={status.variant} className="text-sm">
+                  {status.label}
+                </Badge>
+              </div>
             </div>
           </DialogHeader>
 
