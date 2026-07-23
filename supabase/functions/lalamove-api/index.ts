@@ -720,7 +720,7 @@ serve(async (req) => {
               'quotation', 'get-quotation',
               'order', 'get-order', 'fetch-order', 'fetch-orders-bulk', 'edit-order', 'cancel',
               'priority-fee',
-              'get-driver',
+              'get-driver', 'change-driver',
               'set-webhook',
               'sync',
             ]
