@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AddressAutocomplete } from './AddressAutocomplete';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
+import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 
 interface NewOrderDialogProps {
   open: boolean;
