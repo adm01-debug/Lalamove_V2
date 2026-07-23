@@ -728,19 +728,53 @@ serve(async (req) => {
       }
 
       case 'cancel': {
-        const cancelOrderId = url.searchParams.get('orderId');
+        const cancelOrderId = url.searchParams.get('orderId') || body.orderId;
         if (!cancelOrderId) {
           return new Response(
             JSON.stringify({ error: 'orderId is required' }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
+
+        // Valid cancellation reasons per Lalamove v3 spec + internal audit
+        const VALID_CANCEL_REASONS = [
+          'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE',
+          'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE',
+          'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG',
+          'PRICE_TOO_HIGH', 'INCORRECT_ORDER_DETAILS', 'MISTAKEN_ORDER',
+          'WRONG_ADDRESS', 'NO_CAPACITY', 'OTHER',
+        ] as const;
+        const rawReason = typeof body.reason === 'string' ? body.reason : 'USER_REQUESTED';
+        const cancellationReason = (VALID_CANCEL_REASONS as readonly string[]).includes(rawReason)
+          ? rawReason
+          : 'OTHER';
+        const cancellationNotes = typeof body.notes === 'string' && body.notes.trim().length > 0
+          ? body.notes.trim().slice(0, 1000)
+          : null;
+
         result = await cancelOrder(cancelOrderId);
         if (!result.error) {
-          // ERRATA: cancelParty/cancelledReason don't exist in BR API
+          // Extract caller from JWT for audit trail (best-effort)
+          let cancelledBy: string | null = null;
+          try {
+            const authHeader = req.headers.get('Authorization') || '';
+            const token = authHeader.replace(/^Bearer\s+/i, '');
+            if (token) {
+              const { data: userData } = await supabase.auth.getUser(token);
+              cancelledBy = userData.user?.id ?? null;
+            }
+          } catch (_) { /* audit is best-effort */ }
+
           await supabase
             .from('lalamove_orders')
-            .update({ status: 'CANCELED', updated_at: new Date().toISOString() })
+            .update({
+              status: 'CANCELED',
+              cancellation_reason: cancellationReason,
+              cancellation_notes: cancellationNotes,
+              cancelled_by: cancelledBy,
+              cancelled_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
             .eq('lalamove_id', cancelOrderId);
         }
         break;
