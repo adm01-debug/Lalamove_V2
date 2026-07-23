@@ -74,6 +74,7 @@ const vehicleIcons: Record<string, string> = {
 // ========== Order Actions Component ==========
 function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (open: boolean) => void }) {
   const [priorityFee, setPriorityFee] = useState('');
+  const [priorityReason, setPriorityReason] = useState('');
   const [showPriorityInput, setShowPriorityInput] = useState(false);
   const [showChangeDriver, setShowChangeDriver] = useState(false);
   const [changeDriverReason, setChangeDriverReason] = useState<string>('');
