@@ -110,7 +110,15 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   });
 
   const updateField = (field: string, value: string | boolean | string[] | number) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm(prev => {
+      const next = { ...prev, [field]: value };
+      // Ao trocar o veículo, remove Special Requests incompatíveis (Lalamove v3).
+      if (field === 'vehicleType' && typeof value === 'string') {
+        const allowed = specialRequestsByVehicle[value] ?? [];
+        next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
+      }
+      return next;
+    });
   };
 
   const toggleSpecialRequest = (value: string) => {
@@ -121,6 +129,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         : [...prev.specialRequests, value],
     }));
   };
+
+  // Opções válidas de Special Requests para o veículo atualmente selecionado.
+  const availableSpecialRequests: { value: string; label: string }[] =
+    (specialRequestsByVehicle[form.vehicleType] ?? []).map(v => ({
+      value: v,
+      label: specialRequestCatalog[v] ?? v,
+    }));
 
   // Valida janela do agendamento: 30min a 30 dias no futuro.
   const scheduleValidation = (() => {
