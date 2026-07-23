@@ -273,9 +273,8 @@ export function LiveMap({
       duration: 1200,
       pitch: 60
     });
-    const marker = driverMarkers.current.get(tracking.id);
-    if (marker) marker.togglePopup();
-  }, []);
+    togglePopup(tracking.id);
+  }, [togglePopup]);
 
   // Handle show history event
   useEffect(() => {
