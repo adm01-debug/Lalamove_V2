@@ -136,6 +136,7 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
 
   const canCancel = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
   const canAddPriority = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
+  const canChangeDriver = ['MATCHED', 'ON_GOING'].includes(order.status) && !!order.driverId;
   const isTerminal = ['COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'].includes(order.status);
 
   return (
