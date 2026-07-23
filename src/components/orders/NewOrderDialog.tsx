@@ -288,61 +288,14 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
         {/* Quotation Result */}
         {step === 'quoted' && quotation && (
-          <div className="space-y-4 pt-2">
-            <div className="p-4 rounded-xl border bg-success/5 border-success/20 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Cotação</span>
-                <Badge variant="success">Aprovada</Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-success" />
-                <span className="text-2xl font-bold text-foreground">
-                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: quotation.totalFeeCurrency }).format(parseFloat(quotation.totalFee))}
-                </span>
-              </div>
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>ID Cotação: <code className="font-mono">{quotation.quotationId}</code></p>
-                {quotation.expiresAt && <p>Expira: {new Date(quotation.expiresAt).toLocaleString('pt-BR')}</p>}
-              </div>
-            </div>
-
-            {/* Summary */}
-            <div className="space-y-2 text-sm">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-info mt-0.5" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Coleta</p>
-                  <p className="text-foreground">{form.pickupAddress}</p>
-                  <p className="text-muted-foreground">{form.senderName} · {form.senderPhone}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-success mt-0.5" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Entrega</p>
-                  <p className="text-foreground">{form.deliveryAddress}</p>
-                  <p className="text-muted-foreground">{form.recipientName} · {form.recipientPhone}</p>
-                </div>
-              </div>
-            </div>
-
-            {error && (
-              <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                {error}
-              </div>
-            )}
-
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => { setStep('form'); setQuotation(null); }}>
-                Voltar
-              </Button>
-              <Button variant="gradient" onClick={handleCreateOrder}>
-                <Zap className="w-4 h-4 mr-2" />
-                Confirmar Pedido
-              </Button>
-            </div>
-          </div>
+          <QuotedStep
+            quotation={quotation}
+            form={form}
+            error={error}
+            onBack={() => { setStep('form'); setQuotation(null); setError(null); }}
+            onConfirm={handleCreateOrder}
+            onRequote={() => { setQuotation(null); setError(null); handleGetQuotation(); }}
+          />
         )}
 
         {/* Loading States */}
