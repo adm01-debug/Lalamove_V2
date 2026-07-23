@@ -592,3 +592,116 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     </Dialog>
   );
 }
+
+// ---------------------------------------------------------------------------
+// QuotedStep — displays the Lalamove quotation with a live expiry countdown.
+// A quotation typically expires in ~5 minutes; we disable "Confirmar" once
+// expired and offer a one-click re-quote using the same form payload.
+// ---------------------------------------------------------------------------
+interface QuotedStepProps {
+  quotation: QuotationResult;
+  form: {
+    pickupAddress: string;
+    deliveryAddress: string;
+    senderName: string;
+    senderPhone: string;
+    recipientName: string;
+    recipientPhone: string;
+  };
+  error: string | null;
+  onBack: () => void;
+  onConfirm: () => void;
+  onRequote: () => void;
+}
+
+function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: QuotedStepProps) {
+  const expiry = useQuotationExpiry(quotation.expiresAt);
+
+  const badgeTone = expiry.isExpired
+    ? 'bg-destructive/15 text-destructive border-destructive/30'
+    : expiry.isCritical
+      ? 'bg-warning/15 text-warning border-warning/30'
+      : 'bg-success/15 text-success border-success/30';
+
+  return (
+    <div className="space-y-4 pt-2">
+      <div className="p-4 rounded-xl border bg-success/5 border-success/20 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-muted-foreground">Cotação</span>
+          {quotation.expiresAt ? (
+            <span
+              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-xs font-medium ${badgeTone}`}
+              aria-live="polite"
+              aria-label={expiry.isExpired ? 'Cotação expirada' : `Expira em ${expiry.formatted}`}
+            >
+              <Clock className="w-3 h-3" />
+              {expiry.isExpired ? 'Expirada' : `Expira em ${expiry.formatted}`}
+            </span>
+          ) : (
+            <Badge variant="success">Aprovada</Badge>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <DollarSign className="w-5 h-5 text-success" />
+          <span className="text-2xl font-bold text-foreground">
+            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: quotation.totalFeeCurrency }).format(parseFloat(quotation.totalFee))}
+          </span>
+        </div>
+        <div className="text-xs text-muted-foreground space-y-1">
+          <p>ID Cotação: <code className="font-mono">{quotation.quotationId}</code></p>
+          {quotation.expiresAt && (
+            <p>Expira em: {new Date(quotation.expiresAt).toLocaleString('pt-BR')}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-2 text-sm">
+        <div className="flex items-start gap-2">
+          <MapPin className="w-4 h-4 text-info mt-0.5" />
+          <div>
+            <p className="text-xs text-muted-foreground">Coleta</p>
+            <p className="text-foreground">{form.pickupAddress}</p>
+            <p className="text-muted-foreground">{form.senderName} · {form.senderPhone}</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <MapPin className="w-4 h-4 text-success mt-0.5" />
+          <div>
+            <p className="text-xs text-muted-foreground">Entrega</p>
+            <p className="text-foreground">{form.deliveryAddress}</p>
+            <p className="text-muted-foreground">{form.recipientName} · {form.recipientPhone}</p>
+          </div>
+        </div>
+      </div>
+
+      {expiry.isExpired && (
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-warning text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          Esta cotação expirou. Solicite uma nova para prosseguir.
+        </div>
+      )}
+
+      {error && (
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <div className="flex justify-end gap-2 pt-2">
+        <Button variant="outline" onClick={onBack}>Voltar</Button>
+        {expiry.isExpired ? (
+          <Button variant="gradient" onClick={onRequote}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Recotar
+          </Button>
+        ) : (
+          <Button variant="gradient" onClick={onConfirm} disabled={expiry.isExpired}>
+            <Zap className="w-4 h-4 mr-2" />
+            Confirmar Pedido
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
