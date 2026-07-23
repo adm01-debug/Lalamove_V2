@@ -9,15 +9,15 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
-import { getDirections } from '@/hooks/useMapbox';
 import { useMapboxToken } from './hooks/useMapboxToken';
 import { useTrackingData, type TrackingData } from './hooks/useTrackingData';
 import { useMapAlerts } from './hooks/useMapAlerts';
+import { useMapMarkers } from './hooks/useMapMarkers';
 import { MapSearchPanel } from './MapSearchPanel';
 import { MapHistoryPanel } from './MapHistoryPanel';
 import { MapLegend } from './MapLegend';
 import { MapHUD } from './MapHUD';
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,13 +27,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
-import { vehicleIcons, vehicleColors, type VehicleFilter, type StatusFilter } from './types';
-import { createDriverMarkerElement, createPickupMarkerElement, createDeliveryMarkerElement, createDriverPopup, createStoppedMarkerElement, createClusterMarkerElement } from './markerFactories';
+import { type VehicleFilter, type StatusFilter } from './types';
 import { setupMapLayers } from './mapLayers';
-import { statusColor as statusHsl } from '@/lib/statusPalette';
 
 
 export type { VehicleFilter, StatusFilter };
+
 
 interface LiveMapProps {
   className?: string;
