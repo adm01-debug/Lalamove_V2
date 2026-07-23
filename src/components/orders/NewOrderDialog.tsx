@@ -409,10 +409,18 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     maxLength={16}
                     value={form.senderPhone}
                     onChange={e => updateField('senderPhone', maskBrazilianPhone(e.target.value))}
-                    aria-invalid={form.senderPhone.length > 0 && !senderPhoneValidation.valid}
+                    aria-invalid={
+                      (form.senderPhone.length > 0 && !senderPhoneValidation.valid) ||
+                      serverFieldError?.field === 'senderPhone'
+                    }
                   />
                   {form.senderPhone.length > 0 && !senderPhoneValidation.valid && (
                     <p className="text-[11px] text-destructive">{senderPhoneValidation.error}</p>
+                  )}
+                  {serverFieldError?.field === 'senderPhone' && (
+                    <p className="text-[11px] text-destructive" role="alert">
+                      Servidor rejeitou este número: {serverFieldError.message}
+                    </p>
                   )}
                 </div>
               </div>
