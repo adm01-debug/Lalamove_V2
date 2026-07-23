@@ -29,6 +29,9 @@ import { useMapSettings } from '@/hooks/useMapSettings';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { type VehicleFilter, type StatusFilter } from './types';
 import { setupMapLayers } from './mapLayers';
+import { GoogleMapsCanvas } from './GoogleMapsCanvas';
+import { Google3DCanvas } from './Google3DCanvas';
+import { MapProviderSelector } from './MapProviderSelector';
 
 
 export type { VehicleFilter, StatusFilter };
@@ -80,7 +83,11 @@ export function LiveMap({
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
 
 
-  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
+  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity, preferredProvider } = useMapSettings();
+  const isGoogle2D = preferredProvider === 'google-roadmap' || preferredProvider === 'google-hybrid';
+  const isGoogle3D = preferredProvider === 'google-3d';
+  const isGoogleActive = isGoogle2D || isGoogle3D;
+  const googleMapTypeId: 'roadmap' | 'hybrid' = preferredProvider === 'google-hybrid' ? 'hybrid' : 'roadmap';
 
   const { mapboxToken, error } = useMapboxToken();
   const { trackingData, allTrackingData } = useTrackingData(vehicleFilter, statusFilter);
@@ -476,7 +483,41 @@ export function LiveMap({
         </div>
       )}
 
-      <div ref={mapContainer} className="w-full h-full" style={{ minHeight: '600px' }} />
+      <div ref={mapContainer} className="w-full h-full" style={{ minHeight: '600px', visibility: isGoogleActive ? 'hidden' : 'visible' }} />
+
+      {isGoogleActive && (
+        <div className="absolute inset-0 z-[5]">
+          {isGoogle3D ? (
+            <Google3DCanvas
+              initialCenter={initialCenter}
+              vehicleFilter={vehicleFilter}
+              statusFilter={statusFilter}
+              onFallback={() => useMapSettings.getState().setPreferredProvider('google-hybrid')}
+            />
+          ) : (
+            <GoogleMapsCanvas
+              initialCenter={initialCenter}
+              initialZoom={initialZoom}
+              mapTypeId={googleMapTypeId}
+              vehicleFilter={vehicleFilter}
+              statusFilter={statusFilter}
+              onSelect={setSelectedId}
+            />
+          )}
+        </div>
+      )}
+
+      {showControls && (
+        <div className="absolute top-6 right-6 z-30 pointer-events-none">
+          <MapProviderSelector
+            externalCoords={
+              trackingData.length > 0
+                ? { lat: trackingData[0].current_latitude, lng: trackingData[0].current_longitude }
+                : null
+            }
+          />
+        </div>
+      )}
 
       {showHistoryFor && (
         <MapHistoryPanel 
