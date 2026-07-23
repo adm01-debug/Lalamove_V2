@@ -87,7 +87,7 @@ export function LiveMap({
   const { offRouteAlerts, stoppedAlerts, etaIndicator } = useMapAlerts(trackingData);
   const { history, loading: historyLoading, fetchHistory, clearHistory } = useTrackingHistory();
 
-  const { resetMarkers } = useMapMarkers({
+  const { resetMarkers, togglePopup } = useMapMarkers({
     mapRef: map,
     loading,
     trackingData,
