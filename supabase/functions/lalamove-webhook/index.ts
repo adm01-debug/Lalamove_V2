@@ -287,6 +287,12 @@ serve(async (req) => {
       .maybeSingle();
     if (duplicate) {
       logger.log(`[Webhook] Duplicate delivery ignored (idempotency_key=${idempotencyKey.substring(0, 12)}…)`);
+      await supabase.from('webhook_events').insert({
+        event_type: 'DUPLICATE_IGNORED',
+        lalamove_order_id: lalamoveOrderId,
+        raw_payload: { event: eventType, originalWebhookId: (duplicate as WebhookRecord).id, idempotencyPrefix: idempotencyKey.substring(0, 16) },
+        processed: true,
+      });
       return new Response(
         JSON.stringify({ success: true, duplicate: true, webhookId: (duplicate as WebhookRecord).id }),
         { status: 200, headers: { ...rateLimitHeaders, "Content-Type": "application/json" } }

@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { WebhookSecurityPanel } from '@/components/webhooks/WebhookSecurityPanel';
 
 export function WebhooksPage() {
   const [filters, setFilters] = useState({
@@ -154,6 +155,9 @@ export function WebhooksPage() {
           Atualizar
         </Button>
       </div>
+
+      {/* Segurança de webhooks (Etapa 20) */}
+      <WebhookSecurityPanel />
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
