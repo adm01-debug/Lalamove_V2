@@ -75,6 +75,33 @@ const vehicleIcons: Record<string, string> = {
 function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (open: boolean) => void }) {
   const [priorityFee, setPriorityFee] = useState('');
   const [showPriorityInput, setShowPriorityInput] = useState(false);
+  const [showChangeDriver, setShowChangeDriver] = useState(false);
+  const [changeDriverReason, setChangeDriverReason] = useState<string>('');
+
+  const changeDriverReasons: { value: string; label: string }[] = [
+    { value: 'DRIVER_UNRESPONSIVE', label: 'Motorista não responde' },
+    { value: 'DRIVER_LATE', label: 'Motorista atrasado' },
+    { value: 'DRIVER_ASKED_CHANGE', label: 'Motorista pediu troca' },
+    { value: 'DRIVER_RUDE', label: 'Motorista rude' },
+    { value: 'DRIVER_ASKED_FOR_MORE_MONEY', label: 'Motorista pediu mais dinheiro' },
+  ];
+
+  const changeDriverMutation = useMutation({
+    mutationFn: async ({ orderId, driverId, reason }: { orderId: string; driverId: string; reason: string }) => {
+      const { data, error } = await supabase.functions.invoke('lalamove-api', {
+        body: { action: 'change-driver', orderId, driverId, reason },
+      });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Solicitação de troca de motorista enviada');
+      setShowChangeDriver(false);
+      setChangeDriverReason('');
+    },
+    onError: (err: Error) => toast.error('Erro ao trocar motorista', { description: err.message }),
+  });
+
 
   const cancelMutation = useMutation({
     mutationFn: async (orderId: string) => {
