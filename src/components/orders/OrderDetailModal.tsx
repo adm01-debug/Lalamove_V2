@@ -24,6 +24,8 @@ import {
   XCircle,
   DollarSign,
   Zap,
+  KeyRound,
+  Copy,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Order, OrderStatus } from '@/types';
