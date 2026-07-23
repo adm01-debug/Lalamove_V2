@@ -31,7 +31,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { formatPhoneMasked } from '@/lib/phone';
+import { maskBrazilianPhone } from '@/lib/phone';
 
 const KIND_LABEL: Record<ContactKind, string> = {
   sender: 'Remetente',
