@@ -382,9 +382,15 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                   <Label className="text-xs flex items-center gap-1"><Phone className="w-3 h-3" /> Telefone *</Label>
                   <Input
                     placeholder="(11) 99999-9999"
+                    inputMode="tel"
+                    maxLength={16}
                     value={form.senderPhone}
-                    onChange={e => updateField('senderPhone', e.target.value)}
+                    onChange={e => updateField('senderPhone', maskBrazilianPhone(e.target.value))}
+                    aria-invalid={form.senderPhone.length > 0 && !senderPhoneValidation.valid}
                   />
+                  {form.senderPhone.length > 0 && !senderPhoneValidation.valid && (
+                    <p className="text-[11px] text-destructive">{senderPhoneValidation.error}</p>
+                  )}
                 </div>
               </div>
               <div className="space-y-1">
