@@ -174,3 +174,69 @@ export function setupMapLayers(map: mapboxgl.Map, showTraffic: boolean): void {
     });
   }
 }
+
+const RASTER_LAYER_ID = 'lovable-raster-overlay';
+const RASTER_SOURCE_ID = 'lovable-raster-overlay-source';
+
+export type RasterProvider = 'osm' | 'esri-sat' | null;
+
+const RASTER_TILES: Record<Exclude<RasterProvider, null>, {
+  tiles: string[];
+  attribution: string;
+  maxzoom: number;
+}> = {
+  osm: {
+    tiles: [
+      'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    ],
+    attribution: '© OpenStreetMap contributors',
+    maxzoom: 19,
+  },
+  'esri-sat': {
+    tiles: [
+      'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    ],
+    attribution: 'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP',
+    maxzoom: 19,
+  },
+};
+
+/**
+ * Aplica ou remove uma camada raster (OSM / Esri Satélite) sobrepondo o
+ * basemap Mapbox. Idempotente e seguro para reexecução em trocas de estilo.
+ * A camada é inserida antes das camadas de risco/geofence para que overlays
+ * customizados permaneçam visíveis por cima.
+ */
+export function applyRasterOverlay(map: mapboxgl.Map, provider: RasterProvider): void {
+  // Remove existing overlay first (idempotente)
+  if (map.getLayer(RASTER_LAYER_ID)) map.removeLayer(RASTER_LAYER_ID);
+  if (map.getSource(RASTER_SOURCE_ID)) map.removeSource(RASTER_SOURCE_ID);
+
+  if (!provider) return;
+  const config = RASTER_TILES[provider];
+
+  map.addSource(RASTER_SOURCE_ID, {
+    type: 'raster',
+    tiles: config.tiles,
+    tileSize: 256,
+    maxzoom: config.maxzoom,
+    attribution: config.attribution,
+  });
+
+  // Insere acima do basemap mas abaixo dos overlays personalizados quando existirem.
+  const beforeId = map.getLayer('risk-zones-fill') ? 'risk-zones-fill' : undefined;
+  map.addLayer(
+    {
+      id: RASTER_LAYER_ID,
+      type: 'raster',
+      source: RASTER_SOURCE_ID,
+      paint: {
+        'raster-opacity': 1,
+        'raster-fade-duration': 200,
+      },
+    },
+    beforeId,
+  );
+}
