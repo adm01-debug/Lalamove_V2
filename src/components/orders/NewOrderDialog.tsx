@@ -523,6 +523,27 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               />
             </div>
 
+            {/* Scheduled pickup (Lalamove v3: opcional; janela 30min–30dias) */}
+            <div className="space-y-2">
+              <Label className="text-xs font-semibold">Agendamento (opcional)</Label>
+              <Input
+                type="datetime-local"
+                value={form.scheduleAt}
+                onChange={e => updateField('scheduleAt', e.target.value)}
+                min={new Date(Date.now() + 31 * 60000).toISOString().slice(0, 16)}
+                max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+              />
+              {form.scheduleAt && !scheduleValidation.valid && (
+                <p className="text-[11px] text-destructive">{scheduleValidation.error}</p>
+              )}
+              {form.scheduleAt && scheduleValidation.valid && (
+                <p className="text-[11px] text-muted-foreground">
+                  Coleta agendada para {new Date(form.scheduleAt).toLocaleString('pt-BR')} — enviado como UTC ISO-8601 à Lalamove.
+                </p>
+              )}
+            </div>
+
+
             {/* Guardian System Settings */}
             <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4 animate-fade-up">
               <div className="flex items-center gap-2 text-sm font-bold text-primary">
