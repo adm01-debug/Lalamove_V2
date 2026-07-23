@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { WebhookSecurityPanel } from '@/components/webhooks/WebhookSecurityPanel';
 
 export function WebhooksPage() {
   const [filters, setFilters] = useState({
