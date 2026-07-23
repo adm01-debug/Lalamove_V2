@@ -52,6 +52,7 @@ const UserPreferencesPage = lazy(() => import('./pages/UserPreferencesPage'));
 const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage'));
 const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
 const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
+const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
 
 // Lazy loaded pages - System
 const SystemHealthPage = lazy(() => import('./pages/SystemHealthPage').then(m => ({ default: m.SystemHealthPage })));
