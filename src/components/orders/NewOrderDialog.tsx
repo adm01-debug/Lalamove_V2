@@ -28,12 +28,28 @@ const vehicleTypes = [
   { value: 'TRUCK175', label: '🚛 Caminhão 1.75t', description: 'Cargas até 1.750kg' },
 ];
 
-const specialRequestOptions = [
-  { value: 'HELP_BUY', label: 'Comprar no local' },
-  { value: 'TOLL_FEE', label: 'Pedágio incluso' },
-  { value: 'ROUND_TRIP', label: 'Ida e volta' },
-  { value: 'DOOR_TO_DOOR', label: 'Porta a porta' },
-];
+// Catálogo canônico de Special Requests (Lalamove v3 BR).
+const specialRequestCatalog: Record<string, string> = {
+  HELP_BUY: 'Comprar no local',
+  TOLL_FEE: 'Pedágio incluso',
+  ROUND_TRIP: 'Ida e volta',
+  DOOR_TO_DOOR: 'Porta a porta',
+  THERMAL_BAG_1: 'Bag térmica',
+  PURCHASE_SERVICE_1: 'Serviço de compra',
+  MOVING_SERVICE: 'Auxílio de mudança',
+  LOADING_SERVICE: 'Auxílio de carregamento',
+};
+
+// Matriz de compatibilidade por tipo de veículo — Lalamove v3.
+const specialRequestsByVehicle: Record<string, string[]> = {
+  MOTORCYCLE: ['HELP_BUY', 'TOLL_FEE', 'DOOR_TO_DOOR', 'THERMAL_BAG_1', 'PURCHASE_SERVICE_1'],
+  CAR: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
+  MPV: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
+  VAN: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+  UV_FIORINO: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE'],
+  TRUCK175: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+  TRUCK330: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
+};
 const weightOptions = [
   { value: 'LESS_THAN_3_KG', label: '≤ 3 kg' },
   { value: 'BETWEEN_3_KG_AND_10_KG', label: '3 – 10 kg' },
