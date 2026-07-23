@@ -3,7 +3,7 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  Gauge, Database, Lock, Zap, Bug, FileBarChart
+  Gauge, Database, Lock, Zap, Bug, FileBarChart, Contact
 } from 'lucide-react';
 
 export interface MenuItem {
@@ -31,6 +31,7 @@ export const menuCategories: MenuCategory[] = [
       { id: 'dashboard', path: '/', label: 'Dashboard', icon: LayoutDashboard },
       { id: 'orders', path: '/orders', label: 'Pedidos', icon: Package },
       { id: 'drivers', path: '/drivers', label: 'Motoristas', icon: Users },
+      { id: 'contacts', path: '/contacts', label: 'Contatos', icon: Contact },
     ]
   },
   {
