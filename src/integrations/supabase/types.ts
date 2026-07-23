@@ -1506,6 +1506,51 @@ export type Database = {
           },
         ]
       }
+      lalamove_rate_limits: {
+        Row: {
+          attempts: number
+          created_at: string
+          endpoint: string
+          id: string
+          limit_remaining: number | null
+          limit_reset_at: string | null
+          limit_total: number | null
+          method: string
+          raw_headers: Json
+          request_id: string | null
+          status: number
+          usage_ratio: number | null
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          endpoint: string
+          id?: string
+          limit_remaining?: number | null
+          limit_reset_at?: string | null
+          limit_total?: number | null
+          method: string
+          raw_headers?: Json
+          request_id?: string | null
+          status: number
+          usage_ratio?: number | null
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          endpoint?: string
+          id?: string
+          limit_remaining?: number | null
+          limit_reset_at?: string | null
+          limit_total?: number | null
+          method?: string
+          raw_headers?: Json
+          request_id?: string | null
+          status?: number
+          usage_ratio?: number | null
+        }
+        Relationships: []
+      }
       lalamove_status_history: {
         Row: {
           change_reason: string | null
