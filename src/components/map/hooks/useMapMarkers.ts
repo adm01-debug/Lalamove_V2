@@ -87,6 +87,11 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
     routeLines.current.clear();
   }, []);
 
+  const togglePopup = useCallback((id: string) => {
+    driverMarkers.current.get(id)?.togglePopup();
+  }, []);
+
+
   // Animation loop — interpolação linear suave entre posição atual e target.
   useEffect(() => {
     const animate = () => {
