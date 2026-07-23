@@ -10,10 +10,9 @@ import {
   createDeliveryMarkerElement,
   createStoppedMarkerElement,
   createClusterMarkerElement,
+  type MarkerDensity,
 } from '../markerFactories';
 import type { TrackingData } from './useTrackingData';
-
-type MarkerDensity = 'full' | 'compact';
 
 interface UseMapMarkersParams {
   /** Ref da instância ativa do Mapbox. Pode conter `null` durante remount. */
