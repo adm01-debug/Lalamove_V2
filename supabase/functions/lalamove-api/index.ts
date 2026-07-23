@@ -237,6 +237,23 @@ async function getDriver(orderId: string, driverId: string) {
   return lalamoveRequest('GET', `/orders/${orderId}/drivers/${driverId}`);
 }
 
+// DELETE /v3/orders/{orderId}/drivers/{driverId} — Change driver (Doc Section 6)
+// Valid reasons per Lalamove v3 spec
+export const CHANGE_DRIVER_REASONS = [
+  'DRIVER_UNRESPONSIVE',
+  'DRIVER_LATE',
+  'DRIVER_ASKED_CHANGE',
+  'DRIVER_RUDE',
+  'DRIVER_ASKED_FOR_MORE_MONEY',
+] as const;
+type ChangeDriverReason = typeof CHANGE_DRIVER_REASONS[number];
+
+async function changeDriver(orderId: string, driverId: string, reason: ChangeDriverReason) {
+  return lalamoveRequest('DELETE', `/orders/${orderId}/drivers/${driverId}`, {
+    data: { reason },
+  });
+}
+
 // ========== Webhook (Doc Section 7) ==========
 // PATCH /v3/webhook — set webhook URL
 async function setWebhookUrl(url: string) {
