@@ -3506,6 +3506,8 @@ export type Database = {
       run_daily_cleanup: { Args: never; Returns: Json }
       run_daily_cleanup_with_logging: { Args: never; Returns: undefined }
       run_rls_security_audit: { Args: never; Returns: Json }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       test_rls_policies: { Args: never; Returns: string[] }
       use_reset_token: {
         Args: { p_ip_address?: unknown; p_token_hash: string }
