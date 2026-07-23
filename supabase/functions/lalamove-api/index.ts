@@ -43,7 +43,12 @@ async function generateSignature(
     .join('');
 }
 
-async function getAuthHeaders(method: string, path: string, body?: object): Promise<HeadersInit> {
+async function getAuthHeaders(
+  method: string,
+  path: string,
+  body?: object,
+  requestId?: string,
+): Promise<HeadersInit> {
   const timestamp = Date.now().toString();
   const bodyString = body ? JSON.stringify(body) : '';
   const signature = await generateSignature(method, path, timestamp, bodyString);
@@ -52,7 +57,9 @@ async function getAuthHeaders(method: string, path: string, body?: object): Prom
     'Authorization': `hmac ${LALAMOVE_API_KEY}:${timestamp}:${signature}`,
     'Content-Type': 'application/json',
     'Market': LALAMOVE_MARKET,
-    'Request-ID': crypto.randomUUID(),
+    // Stable Request-ID across retries acts as an idempotency key: Lalamove
+    // deduplicates writes (POST /orders, POST /priority-fee, etc.) by this header.
+    'Request-ID': requestId ?? crypto.randomUUID(),
   };
 }
 
@@ -62,71 +69,131 @@ interface ApiResult {
   error?: string;
   status: number;
   rateLimits?: Record<string, string>;
+  attempts?: number;
 }
+
+interface RequestOptions {
+  /** Max attempts including the first call. Default 3. */
+  maxAttempts?: number;
+  /** Base delay in ms for exponential backoff. Default 500. */
+  baseDelayMs?: number;
+  /** Opt out of retries entirely (e.g. read-only paths where you prefer fast-fail). */
+  noRetry?: boolean;
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Whether an HTTP status is worth retrying.
+ * - 429: rate-limited — retry with backoff, respect any Retry-After.
+ * - 502/503/504: transient upstream — retry.
+ * - 500: sometimes transient at Lalamove; retry conservatively.
+ * Other 4xx are client errors and must not be retried (would just burn quota).
+ */
+const isRetryableStatus = (status: number): boolean =>
+  status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
 
 async function lalamoveRequest(
   method: string,
   endpoint: string,
-  body?: object
+  body?: object,
+  options: RequestOptions = {},
 ): Promise<ApiResult> {
   const path = `/v3${endpoint}`;
   // Strip /v3 from base URL if present to avoid duplication
   const baseUrl = LALAMOVE_BASE_URL.replace(/\/v3\/?$/, '');
   const url = `${baseUrl}${path}`;
-  const headers = await getAuthHeaders(method, path, body);
 
-  logger.log(`Lalamove API: ${method} ${url}`);
+  const maxAttempts = options.noRetry ? 1 : Math.max(1, options.maxAttempts ?? 3);
+  const baseDelay = Math.max(100, options.baseDelayMs ?? 500);
 
-  try {
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: body ? JSON.stringify(body) : undefined,
-    });
+  // One stable Request-ID for all attempts of this logical call → idempotency.
+  const requestId = crypto.randomUUID();
 
-    // Extract rate limit headers
-    const rateLimits: Record<string, string> = {};
-    response.headers.forEach((value, key) => {
-      if (key.startsWith('ratelimits-')) {
-        rateLimits[key] = value;
+  let lastError = '';
+  let lastStatus = 0;
+  let lastRateLimits: Record<string, string> = {};
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    // Re-sign each attempt: timestamp must be fresh (Lalamove rejects stale HMAC).
+    const headers = await getAuthHeaders(method, path, body, requestId);
+    logger.log(`Lalamove API: ${method} ${url} (attempt ${attempt}/${maxAttempts}) rid=${requestId}`);
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : undefined,
+      });
+
+      // Extract rate limit headers
+      const rateLimits: Record<string, string> = {};
+      response.headers.forEach((value, key) => {
+        if (key.startsWith('ratelimits-')) rateLimits[key] = value;
+      });
+      lastRateLimits = rateLimits;
+
+      // DELETE returns 204 No Content with empty body
+      if (response.status === 204) {
+        return { data: { success: true }, status: 204, rateLimits, attempts: attempt };
       }
-    });
 
-    // DELETE returns 204 No Content with empty body
-    if (response.status === 204) {
-      return { data: { success: true }, status: 204, rateLimits };
-    }
+      const responseText = await response.text();
+      logger.log(`Response status: ${response.status}`);
+      if (response.status >= 400) {
+        logger.log(`Error response body: ${responseText.substring(0, 500)}`);
+      }
 
-    const responseText = await response.text();
-    logger.log(`Response status: ${response.status}`);
-    if (response.status >= 400) {
-      logger.log(`Error response body: ${responseText.substring(0, 500)}`);
-    }
+      if (!response.ok) {
+        let errorDetail = responseText;
+        try {
+          const errorJson = JSON.parse(responseText);
+          if (errorJson.errors?.length) {
+            errorDetail = errorJson.errors.map((e: { id: string; message: string; detail?: string }) =>
+              `${e.id}: ${e.message}${e.detail ? ` (${e.detail})` : ''}`
+            ).join('; ');
+          }
+        } catch { /* keep raw text */ }
 
-    if (!response.ok) {
-      // Parse error structure: { errors: [{ id, message, detail? }] }
-      let errorDetail = responseText;
-      try {
-        const errorJson = JSON.parse(responseText);
-        if (errorJson.errors?.length) {
-          errorDetail = errorJson.errors.map((e: { id: string; message: string; detail?: string }) => 
-            `${e.id}: ${e.message}${e.detail ? ` (${e.detail})` : ''}`
-          ).join('; ');
+        lastError = errorDetail;
+        lastStatus = response.status;
+
+        // Retry only on transient statuses and if attempts remain.
+        if (isRetryableStatus(response.status) && attempt < maxAttempts) {
+          // Prefer Retry-After when present, else exponential + jitter.
+          const retryAfter = Number(response.headers.get('retry-after'));
+          const backoff = Number.isFinite(retryAfter) && retryAfter > 0
+            ? retryAfter * 1000
+            : baseDelay * 2 ** (attempt - 1) + Math.floor(Math.random() * 250);
+          logger.log(`Retrying after ${backoff}ms (status ${response.status})`);
+          await sleep(backoff);
+          continue;
         }
-      } catch { /* keep raw text */ }
-      
-      return { error: errorDetail, status: response.status, rateLimits };
-    }
 
-    const data = responseText ? JSON.parse(responseText) : {};
-    return { data, status: response.status, rateLimits };
-  } catch (error) {
-    logger.error('Lalamove API request failed:', error);
-    return { 
-      error: error instanceof Error ? error.message : 'Unknown error',
-      status: 500 
-    };
+        return { error: errorDetail, status: response.status, rateLimits, attempts: attempt };
+      }
+
+      const data = responseText ? JSON.parse(responseText) : {};
+      return { data, status: response.status, rateLimits, attempts: attempt };
+    } catch (error) {
+      // Network-level failure — always retryable if attempts remain.
+      lastError = error instanceof Error ? error.message : 'Unknown error';
+      lastStatus = 0;
+      logger.error(`Lalamove API request failed (attempt ${attempt}):`, error);
+      if (attempt < maxAttempts) {
+        const backoff = baseDelay * 2 ** (attempt - 1) + Math.floor(Math.random() * 250);
+        await sleep(backoff);
+        continue;
+      }
+    }
   }
+
+  return {
+    error: lastError || 'Unknown error',
+    status: lastStatus || 500,
+    rateLimits: lastRateLimits,
+    attempts: maxAttempts,
+  };
 }
 
 // ========== Cities & Services (Doc Section 2) ==========
