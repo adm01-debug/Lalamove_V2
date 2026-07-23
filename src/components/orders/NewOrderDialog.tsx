@@ -115,6 +115,19 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   });
 
   const updateField = (field: string, value: string | boolean | string[] | number) => {
+    // Limpa o erro específico do servidor quando o campo relacionado é editado.
+    if (serverFieldError) {
+      const relatedByField: Record<string, OrderErrorField> = {
+        senderPhone: 'senderPhone',
+        recipientPhone: 'recipientPhone',
+        scheduleAt: 'schedule',
+        pickupAddress: 'address',
+        deliveryAddress: 'address',
+      };
+      if (relatedByField[field] === serverFieldError.field) {
+        setServerFieldError(null);
+      }
+    }
     setForm(prev => {
       const next = { ...prev, [field]: value };
       // Ao trocar o veículo, remove Special Requests incompatíveis (Lalamove v3).
