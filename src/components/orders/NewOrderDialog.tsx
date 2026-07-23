@@ -14,6 +14,8 @@ import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
+import { ContactPicker } from './ContactPicker';
+import { useContacts, type Contact } from '@/hooks/useContacts';
 
 
 interface NewOrderDialogProps {
