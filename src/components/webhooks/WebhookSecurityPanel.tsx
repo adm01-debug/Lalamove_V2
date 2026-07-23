@@ -3,11 +3,14 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Shield, ShieldAlert, ShieldCheck, Repeat, Clock, AlertTriangle } from 'lucide-react';
+import { Shield, ShieldAlert, ShieldCheck, Repeat, Clock, AlertTriangle, Download, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { useWebhookSecurityMetrics } from '@/hooks/useWebhookSecurityMetrics';
+import { supabase } from '@/integrations/supabase/client';
+import { exportToCSV } from '@/utils/exportUtils';
+import { toast } from 'sonner';
 
 const WINDOWS: Array<{ label: string; hours: number }> = [
   { label: '1h', hours: 1 },
@@ -22,7 +25,46 @@ function formatRelative(iso: string | null): string {
 
 export function WebhookSecurityPanel() {
   const [windowHours, setWindowHours] = useState(24);
+  const [exporting, setExporting] = useState(false);
   const { data, isLoading } = useWebhookSecurityMetrics(windowHours);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const since = new Date(Date.now() - windowHours * 3600 * 1000).toISOString();
+      const { data: rows, error } = await supabase
+        .from('webhook_events')
+        .select('id, event_type, received_at, error_message, lalamove_order_id, raw_payload')
+        .in('event_type', ['SIGNATURE_INVALID', 'REPLAY_REJECTED', 'DUPLICATE_IGNORED'])
+        .gte('received_at', since)
+        .order('received_at', { ascending: false })
+        .limit(5000);
+      if (error) throw error;
+      if (!rows || rows.length === 0) {
+        toast.info('Nenhuma rejeição de segurança na janela selecionada');
+        return;
+      }
+      const flat = rows.map((r) => ({
+        id: r.id,
+        event_type: r.event_type,
+        received_at: r.received_at,
+        lalamove_order_id: r.lalamove_order_id ?? '',
+        error_message: r.error_message ?? '',
+        raw_payload:
+          typeof r.raw_payload === 'object' && r.raw_payload !== null
+            ? JSON.stringify(r.raw_payload)
+            : String(r.raw_payload ?? ''),
+      }));
+      exportToCSV(flat, `webhook-security-${windowHours}h`);
+      toast.success(`${rows.length} evento(s) exportado(s)`);
+    } catch (err) {
+      toast.error('Falha ao exportar rejeições', {
+        description: err instanceof Error ? err.message : 'Erro desconhecido',
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const totalRejections = useMemo(
     () => (data ? data.signatureInvalid + data.replayRejected : 0),
@@ -74,6 +116,20 @@ export function WebhookSecurityPanel() {
             </Button>
           ))}
         </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleExport}
+          disabled={exporting}
+          aria-label="Exportar rejeições em CSV"
+        >
+          {exporting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
+          <span className="ml-1 hidden sm:inline">Exportar CSV</span>
+        </Button>
       </div>
 
       {isLoading ? (
