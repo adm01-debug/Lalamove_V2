@@ -18,6 +18,69 @@ const LALAMOVE_MARKET = 'BR';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
+// Admin client for internal writes (telemetry, rate limits) — bypasses RLS safely.
+const adminDb = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+  auth: { persistSession: false, autoRefreshToken: false },
+});
+
+/**
+ * Persist Lalamove rate-limit headers for proactive observability.
+ * Fire-and-forget: never throws, never blocks the caller.
+ * Headers follow the IETF `ratelimits-*` family (limit / remaining / reset).
+ */
+function persistRateLimit(params: {
+  method: string;
+  endpoint: string;
+  status: number;
+  attempts: number;
+  requestId: string;
+  headers: Record<string, string>;
+}): void {
+  try {
+    const { headers } = params;
+    const limitTotal = Number(headers['ratelimits-limit']);
+    const limitRemaining = Number(headers['ratelimits-remaining']);
+    const resetRaw = headers['ratelimits-reset'];
+
+    // `reset` may come as epoch seconds or delta seconds — treat >10^9 as epoch.
+    let resetAt: string | null = null;
+    if (resetRaw) {
+      const n = Number(resetRaw);
+      if (Number.isFinite(n) && n > 0) {
+        const ms = n > 1_000_000_000 ? n * 1000 : Date.now() + n * 1000;
+        resetAt = new Date(ms).toISOString();
+      }
+    }
+
+    const usageRatio = Number.isFinite(limitTotal) && limitTotal > 0 && Number.isFinite(limitRemaining)
+      ? Number((((limitTotal - limitRemaining) / limitTotal) * 100).toFixed(2))
+      : null;
+
+    // Fire-and-forget: do not await.
+    adminDb.from('lalamove_rate_limits').insert({
+      endpoint: params.endpoint,
+      method: params.method,
+      status: params.status,
+      attempts: params.attempts,
+      limit_total: Number.isFinite(limitTotal) ? limitTotal : null,
+      limit_remaining: Number.isFinite(limitRemaining) ? limitRemaining : null,
+      limit_reset_at: resetAt,
+      usage_ratio: usageRatio,
+      request_id: params.requestId,
+      raw_headers: headers,
+    }).then(({ error }) => {
+      if (error) logger.error('persistRateLimit insert failed:', error.message);
+    });
+
+    // Early warning: alert when quota is critically low.
+    if (Number.isFinite(limitRemaining) && limitRemaining <= 10) {
+      logger.error(`⚠️ Lalamove rate-limit CRITICAL: ${limitRemaining}/${limitTotal} on ${params.method} ${params.endpoint}`);
+    }
+  } catch (err) {
+    logger.error('persistRateLimit unexpected error:', err instanceof Error ? err.message : err);
+  }
+}
+
 // ========== HMAC Authentication (Doc Section 1) ==========
 // RAW_STRING = TIMESTAMP + \r\n + METHOD + \r\n + PATH + \r\n\r\n + BODY_JSON
 // BODY_JSON = "" for GET/DELETE (but \r\n\r\n must be present)
@@ -135,6 +198,7 @@ async function lalamoveRequest(
 
       // DELETE returns 204 No Content with empty body
       if (response.status === 204) {
+        persistRateLimit({ method, endpoint, status: 204, attempts: attempt, requestId, headers: rateLimits });
         return { data: { success: true }, status: 204, rateLimits, attempts: attempt };
       }
 
@@ -170,10 +234,12 @@ async function lalamoveRequest(
           continue;
         }
 
+        persistRateLimit({ method, endpoint, status: response.status, attempts: attempt, requestId, headers: rateLimits });
         return { error: errorDetail, status: response.status, rateLimits, attempts: attempt };
       }
 
       const data = responseText ? JSON.parse(responseText) : {};
+      persistRateLimit({ method, endpoint, status: response.status, attempts: attempt, requestId, headers: rateLimits });
       return { data, status: response.status, rateLimits, attempts: attempt };
     } catch (error) {
       // Network-level failure — always retryable if attempts remain.
