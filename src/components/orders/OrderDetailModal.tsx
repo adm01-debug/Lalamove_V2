@@ -33,6 +33,7 @@ import {
   Zap,
   KeyRound,
   Copy,
+  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Order, OrderStatus } from '@/types';
