@@ -493,10 +493,17 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
             {/* Destinatário */}
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-success" />
-                Destinatário (Entrega)
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-success" />
+                  Destinatário (Entrega)
+                </p>
+                <ContactPicker
+                  kind="recipient"
+                  label="Buscar destinatário"
+                  onSelect={contact => applyContact('recipient', contact)}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <Label className="text-xs">Nome *</Label>
