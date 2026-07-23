@@ -611,7 +611,21 @@ serve(async (req) => {
           const pickedUpAt = (popData as Record<string, unknown>).pickedUpAt as string | undefined;
 
           if (orderUuid) {
-            // Persistimos no metadata do status_history até Etapa 2 criar tabela dedicada de proofs.
+            // Etapa 2: persistir POP granular em lalamove_stop_proofs
+            const { data: sRow } = await supabase.from('lalamove_stops')
+              .select('id').eq('order_id', orderUuid).eq('stop_index', stopIndex).maybeSingle();
+            if (sRow?.id) {
+              const { error: proofErr } = await supabase.from('lalamove_stop_proofs').upsert({
+                stop_id: (sRow as { id: string }).id,
+                order_id: orderUuid,
+                pop_status: 'picked_up',
+                pop_image_url: imageUrl ?? null,
+                pop_picked_up_at: pickedUpAt ?? new Date().toISOString(),
+                raw_payload: payload as unknown as Record<string, unknown>,
+              }, { onConflict: 'stop_id' });
+              if (proofErr) logger.error(`[Webhook] stop_proof POP upsert failed: ${proofErr.message}`);
+            }
+
             await supabase.from('lalamove_status_history').insert({
               order_id: orderUuid,
               status: 'PICKED_UP',
