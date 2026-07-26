@@ -24,9 +24,14 @@ export const CANCEL_ORDER_REASONS = [
   'INCORRECT_ORDER_DETAILS',
   'WRONG_ADDRESS',
   'MISTAKEN_ORDER',
+  'PRICE_TOO_HIGH',
+  'DELIVERY_ETA_TOO_LONG',
   'DRIVER_UNRESPONSIVE',
   'DRIVER_LATE',
-  'DRIVER_ASKED_CHANGE',
+  'DRIVER_ASKED_CANCEL',
+  'DRIVER_ASKED_FOR_MORE_MONEY',
+  'NO_CAPACITY',
+  'OTHER',
 ] as const;
 
 export type CancelOrderReason = (typeof CANCEL_ORDER_REASONS)[number];
@@ -37,11 +42,17 @@ const REASON_LABELS: Readonly<Record<ChangeDriverReason | CancelOrderReason, str
   DRIVER_ASKED_CHANGE: 'Motorista pediu troca',
   DRIVER_RUDE: 'Motorista rude',
   DRIVER_ASKED_FOR_MORE_MONEY: 'Motorista pediu mais dinheiro',
+  DRIVER_ASKED_CANCEL: 'Motorista pediu cancelamento',
   USER_REQUESTED: 'Solicitado pelo cliente',
   INCORRECT_ORDER_DETAILS: 'Detalhes do pedido incorretos',
   WRONG_ADDRESS: 'Endereço incorreto',
   MISTAKEN_ORDER: 'Pedido criado por engano',
+  PRICE_TOO_HIGH: 'Preço muito alto',
+  DELIVERY_ETA_TOO_LONG: 'Tempo de entrega muito longo',
+  NO_CAPACITY: 'Sem capacidade disponível',
+  OTHER: 'Outro motivo',
 };
+
 
 export interface ReasonOption {
   value: string;
