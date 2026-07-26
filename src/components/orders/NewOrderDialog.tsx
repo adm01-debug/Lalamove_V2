@@ -89,7 +89,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
+  // Etapa 10 — diferença de preço detectada na revalidação da cotação.
+  const [priceChange, setPriceChange] = useState<{ from: string; to: string } | null>(null);
+  // Guarda de idempotência contra duplo clique em "Confirmar Pedido".
+  const submittingRef = useRef(false);
   const { upsertContact } = useContacts();
+
 
   const applyContact = (which: 'sender' | 'recipient', contact: Contact) => {
     // Reaproveita telefone já validado (E.164) mascarado para o input BR.
