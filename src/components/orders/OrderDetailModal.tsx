@@ -34,6 +34,9 @@ import {
   KeyRound,
   Copy,
   ExternalLink,
+  Star,
+  Ban,
+
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Order, OrderStatus } from '@/types';
