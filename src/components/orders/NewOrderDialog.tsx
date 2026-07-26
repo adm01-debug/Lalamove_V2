@@ -16,6 +16,28 @@ import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
 import { ContactPicker } from './ContactPicker';
 import { useContacts, type Contact } from '@/hooks/useContacts';
+import {
+  SERVICE_CATALOG,
+  SPECIAL_REQUESTS_BY_SERVICE,
+  SPECIAL_REQUEST_CITY_RESTRICTIONS,
+  ITEM_WEIGHT_RANGES,
+  isServiceType,
+  serviceAcceptsItem,
+} from '@/lib/lalamoveCatalog';
+import {
+  SERVICE_EMOJI,
+  ITEM_CATEGORY_LABELS,
+  HANDLING_LABELS,
+  humanizeSpecialRequest,
+  humanizeWeightRange,
+} from '@/lib/lalamoveLabels';
+import {
+  SERVICE_TYPES,
+  ITEM_CATEGORIES,
+  HANDLING_INSTRUCTIONS,
+  type LalamoveServiceType,
+} from '@/types/lalamove';
+
 
 
 interface NewOrderDialogProps {
