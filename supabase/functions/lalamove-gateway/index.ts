@@ -28,6 +28,85 @@ const TARGETS: Record<Target, { urlEnv: string; keyEnv: string }> = {
 
 const TIMEOUT_MS = 25_000;
 
+interface RateLimitSnapshot {
+  limitTotal: number | null;
+  limitRemaining: number | null;
+  limitResetAt: string | null;
+  usageRatio: number | null;
+  raw: Record<string, string>;
+}
+
+/**
+ * Etapa 14 — a Lalamove publica limites POR ENDPOINT, no formato
+ * `ratelimits-limit-{endpoint}` / `-remaining-` / `-reset-` (Unix seconds).
+ * Extraímos o primeiro grupo encontrado e devolvemos um snapshot normalizado.
+ */
+function extractRateLimits(headers: Headers): RateLimitSnapshot | null {
+  const raw: Record<string, string> = {};
+  let total: number | null = null;
+  let remaining: number | null = null;
+  let resetAt: string | null = null;
+
+  headers.forEach((value, key) => {
+    const lower = key.toLowerCase();
+    if (!lower.startsWith('ratelimits-')) return;
+    raw[lower] = value;
+
+    const numeric = Number.parseInt(value, 10);
+    if (!Number.isFinite(numeric)) return;
+
+    if (lower.startsWith('ratelimits-limit-') && total === null) total = numeric;
+    else if (lower.startsWith('ratelimits-remaining-') && remaining === null) remaining = numeric;
+    else if (lower.startsWith('ratelimits-reset-') && resetAt === null) {
+      // Unix timestamp em segundos; toleramos milissegundos.
+      const ms = numeric > 1e11 ? numeric : numeric * 1000;
+      const date = new Date(ms);
+      resetAt = Number.isNaN(date.getTime()) ? null : date.toISOString();
+    }
+  });
+
+  if (Object.keys(raw).length === 0) return null;
+
+  const usageRatio =
+    total !== null && total > 0 && remaining !== null
+      ? Math.min(1, Math.max(0, (total - remaining) / total))
+      : null;
+
+  return { limitTotal: total, limitRemaining: remaining, limitResetAt: resetAt, usageRatio, raw };
+}
+
+/**
+ * Persistência best-effort da telemetria de rate limit. Nunca deve derrubar a
+ * requisição principal — falhas são apenas logadas.
+ */
+async function recordRateLimits(
+  snapshot: RateLimitSnapshot | null,
+  context: { endpoint: string; method: string; status: number; requestId: string },
+): Promise<void> {
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!serviceKey) return;
+  // Sem headers e sem erro: nada relevante a registrar.
+  if (!snapshot && context.status < 400) return;
+
+  try {
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, serviceKey);
+    const { error } = await admin.from('lalamove_rate_limits').insert({
+      endpoint: context.endpoint,
+      method: context.method,
+      status: context.status,
+      limit_total: snapshot?.limitTotal ?? null,
+      limit_remaining: snapshot?.limitRemaining ?? null,
+      limit_reset_at: snapshot?.limitResetAt ?? null,
+      usage_ratio: snapshot?.usageRatio ?? null,
+      request_id: context.requestId,
+      raw_headers: snapshot?.raw ?? {},
+    });
+    if (error) console.error('[lalamove-gateway] rate limit insert failed', error.message);
+  } catch (err) {
+    console.error('[lalamove-gateway] rate limit telemetry error', err);
+  }
+}
+
 function json(payload: unknown, status = 200, requestId?: string): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -126,6 +205,15 @@ Deno.serve(async (req) => {
       );
     }
     clearTimeout(timer);
+
+    // ── 5. Telemetria de rate limit (Etapa 14) ─────────────────────────────
+    const rateLimits = extractRateLimits(upstream.headers);
+    await recordRateLimits(rateLimits, {
+      endpoint: action,
+      method,
+      status: upstream.status,
+      requestId,
+    });
 
     const text = await upstream.text();
     let parsed: unknown;
