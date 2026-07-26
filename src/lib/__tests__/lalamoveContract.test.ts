@@ -95,10 +95,17 @@ const GUARDED_FILES = [
 describe('errata Lalamove — campos inexistentes não podem reaparecer', () => {
   it.each(GUARDED_FILES)('%s não referencia campos da errata', (relativePath) => {
     const source = readFileSync(join(process.cwd(), relativePath), 'utf-8');
+    // Comentários citam os campos justamente para documentar a errata; o que
+    // não pode existir é uso real — acesso (`.campo`) ou declaração (`campo:`).
+    const code = source
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/.*$/gm, '$1');
     for (const field of ERRATA_FIELDS) {
-      expect(source.includes(field)).toBe(false);
+      expect(new RegExp(`[.'"\\s]${field}\\s*[?:]`).test(code)).toBe(false);
+      expect(code.includes(`.${field}`)).toBe(false);
     }
   });
+
 
   it('o catálogo BR não contém serviceTypes fictícios', () => {
     for (const forbidden of ['MOTORCYCLE', 'MPV', 'TRUCK175']) {
