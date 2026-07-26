@@ -107,6 +107,90 @@ async function recordRateLimits(
   }
 }
 
+/**
+ * Etapa 27 — telemetria por endpoint em `query_telemetry`.
+ * Best-effort: nunca deve derrubar a requisição principal.
+ */
+async function recordQueryTelemetry(context: {
+  action: string;
+  durationMs: number;
+  status: number;
+  errorMessage?: string | null;
+}): Promise<void> {
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!serviceKey) return;
+
+  const severity =
+    context.status >= 400 ? 'error' : context.durationMs >= 3000 ? 'slow' : 'normal';
+
+  try {
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, serviceKey);
+    const { error } = await admin.from('query_telemetry').insert({
+      operation: 'lalamove',
+      table_name: 'lalamove_gateway',
+      rpc_name: context.action,
+      duration_ms: Math.max(0, Math.round(context.durationMs)),
+      severity,
+      error_message: context.errorMessage ?? null,
+    });
+    if (error) console.error('[lalamove-gateway] telemetry insert failed', error.message);
+  } catch (err) {
+    console.error('[lalamove-gateway] telemetry error', err);
+  }
+}
+
+/**
+ * Etapa 28 — alerta CRITICAL para falhas de autenticação (502 do proxy v3 e
+ * `ret=10007` da UAPI), reaproveitando a deduplicação multi-canal existente.
+ */
+async function raiseAuthFailureAlert(context: {
+  action: string;
+  target: Target;
+  detail: string;
+  requestId: string;
+}): Promise<void> {
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!serviceKey) return;
+
+  try {
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, serviceKey);
+    const dedupKey = `lalamove_auth_failure:${context.target}`;
+    const { data, error } = await admin.rpc('claim_alert_notification', {
+      p_dedup_key: dedupKey,
+      p_alert_type: 'INTEGRATION_FAILURE',
+      p_window_seconds: 900,
+    });
+    if (error) {
+      console.error('[lalamove-gateway] dedup failed', error.message);
+      return;
+    }
+    const shouldSend = Array.isArray(data) ? data[0]?.should_send : undefined;
+    if (!shouldSend) return;
+
+    await admin.from('alerts').insert({
+      type: 'INTEGRATION_FAILURE',
+      severity: 'CRITICAL',
+      title: `Falha de autenticação Lalamove (${context.target})`,
+      message: `A ação "${context.action}" falhou por autenticação: ${context.detail}. Renove o token e verifique o proxy.`,
+      metadata: {
+        subtype: 'LALAMOVE_AUTH_FAILURE',
+        target: context.target,
+        action: context.action,
+        request_id: context.requestId,
+      },
+    });
+  } catch (err) {
+    console.error('[lalamove-gateway] auth alert error', err);
+  }
+}
+
+/** Extrai o `ret` de respostas UAPI para detectar sessão expirada (10007). */
+function extractUapiRet(parsed: unknown): number | null {
+  if (!parsed || typeof parsed !== 'object') return null;
+  const ret = (parsed as Record<string, unknown>).ret;
+  return typeof ret === 'number' ? ret : null;
+}
+
 function json(payload: unknown, status = 200, requestId?: string): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -117,6 +201,7 @@ function json(payload: unknown, status = 200, requestId?: string): Response {
     },
   });
 }
+
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
