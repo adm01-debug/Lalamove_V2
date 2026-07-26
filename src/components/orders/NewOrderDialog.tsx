@@ -16,6 +16,28 @@ import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
 import { parseOrderError, type OrderErrorField } from '@/lib/orderErrors';
 import { ContactPicker } from './ContactPicker';
 import { useContacts, type Contact } from '@/hooks/useContacts';
+import {
+  SERVICE_CATALOG,
+  SPECIAL_REQUESTS_BY_SERVICE,
+  SPECIAL_REQUEST_CITY_RESTRICTIONS,
+  ITEM_WEIGHT_RANGES,
+  isServiceType,
+  serviceAcceptsItem,
+} from '@/lib/lalamoveCatalog';
+import {
+  SERVICE_EMOJI,
+  ITEM_CATEGORY_LABELS,
+  HANDLING_LABELS,
+  humanizeSpecialRequest,
+  humanizeWeightRange,
+} from '@/lib/lalamoveLabels';
+import {
+  SERVICE_TYPES,
+  ITEM_CATEGORIES,
+  HANDLING_INSTRUCTIONS,
+  type LalamoveServiceType,
+} from '@/types/lalamove';
+
 
 
 interface NewOrderDialogProps {
@@ -24,56 +46,27 @@ interface NewOrderDialogProps {
   onSuccess: () => void;
 }
 
-const vehicleTypes = [
-  { value: 'MOTORCYCLE', label: '🏍️ Moto', description: 'Entregas rápidas e pequenas' },
-  { value: 'CAR', label: '🚗 Carro', description: 'Pacotes médios' },
-  { value: 'MPV', label: '🚙 MPV', description: 'Veículo multiuso' },
-  { value: 'VAN', label: '🚐 Van', description: 'Cargas maiores' },
-  { value: 'UV_FIORINO', label: '🚚 Fiorino', description: 'Utilitário pequeno' },
-  { value: 'TRUCK330', label: '🚛 Caminhão 3.3t', description: 'Cargas até 3.300kg' },
-  { value: 'TRUCK175', label: '🚛 Caminhão 1.75t', description: 'Cargas até 1.750kg' },
-];
+// Etapa 7 — a UI passa a consumir o catálogo canônico (docs/LALAMOVE_MASTER_ANALYSIS.md).
+const vehicleTypes = SERVICE_TYPES.map(value => ({
+  value,
+  label: `${SERVICE_EMOJI[value]} ${SERVICE_CATALOG[value].label}`,
+  description:
+    `até ${SERVICE_CATALOG[value].maxWeightKg} kg` +
+    (SERVICE_CATALOG[value].cities === null
+      ? ' — todas as cidades'
+      : ` — ${SERVICE_CATALOG[value].cities!.length} cidades`),
+}));
 
-// Catálogo canônico de Special Requests (Lalamove v3 BR).
-const specialRequestCatalog: Record<string, string> = {
-  HELP_BUY: 'Comprar no local',
-  TOLL_FEE: 'Pedágio incluso',
-  ROUND_TRIP: 'Ida e volta',
-  DOOR_TO_DOOR: 'Porta a porta',
-  THERMAL_BAG_1: 'Bag térmica',
-  PURCHASE_SERVICE_1: 'Serviço de compra',
-  MOVING_SERVICE: 'Auxílio de mudança',
-  LOADING_SERVICE: 'Auxílio de carregamento',
-};
+const itemCategoryOptions = ITEM_CATEGORIES.map(value => ({
+  value,
+  label: ITEM_CATEGORY_LABELS[value],
+}));
 
-// Matriz de compatibilidade por tipo de veículo — Lalamove v3.
-const specialRequestsByVehicle: Record<string, string[]> = {
-  MOTORCYCLE: ['HELP_BUY', 'TOLL_FEE', 'DOOR_TO_DOOR', 'THERMAL_BAG_1', 'PURCHASE_SERVICE_1'],
-  CAR: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
-  MPV: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
-  VAN: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-  UV_FIORINO: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE'],
-  TRUCK175: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-  TRUCK330: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-};
-const weightOptions = [
-  { value: 'LESS_THAN_3_KG', label: '≤ 3 kg' },
-  { value: 'BETWEEN_3_KG_AND_10_KG', label: '3 – 10 kg' },
-  { value: 'BETWEEN_10_KG_AND_50_KG', label: '10 – 50 kg' },
-  { value: 'MORE_THAN_50_KG', label: '> 50 kg' },
-];
+const handlingInstructionOptions = HANDLING_INSTRUCTIONS.map(value => ({
+  value,
+  label: HANDLING_LABELS[value],
+}));
 
-const itemCategoryOptions = [
-  { value: 'FOOD_DELIVERY', label: 'Alimentos' },
-  { value: 'OFFICE_ITEM', label: 'Material de escritório' },
-  { value: 'FURNITURE', label: 'Móveis' },
-  { value: 'FRAGILE_GOODS', label: 'Frágil' },
-];
-
-const handlingInstructionOptions = [
-  { value: 'KEEP_UPRIGHT', label: 'Manter em pé' },
-  { value: 'FRAGILE', label: 'Frágil — cuidado' },
-];
 type Step = 'form' | 'quoting' | 'quoted' | 'creating' | 'done';
 
 interface QuotationResult {
@@ -125,7 +118,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     recipientPhone: '',
     pickupAddress: '',
     deliveryAddress: '',
-    vehicleType: 'MOTORCYCLE',
+    vehicleType: 'LALAGO',
     remarks: '',
     specialRequests: [] as string[],
     isPODEnabled: true,
@@ -135,7 +128,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     scheduleAt: '',
     // Item Information (Lalamove v3)
     itemQuantity: '1',
-    itemWeight: 'LESS_THAN_3_KG',
+    itemWeight: '',
     itemCategories: [] as string[],
     itemHandling: [] as string[],
     // Guardian fields
@@ -161,10 +154,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }
     setForm(prev => {
       const next = { ...prev, [field]: value };
-      // Ao trocar o veículo, remove Special Requests incompatíveis (Lalamove v3).
-      if (field === 'vehicleType' && typeof value === 'string') {
-        const allowed = specialRequestsByVehicle[value] ?? [];
+      // Ao trocar o serviço, remove Special Requests e faixas de peso incompatíveis.
+      if (field === 'vehicleType' && isServiceType(String(value))) {
+        const service = String(value) as LalamoveServiceType;
+        const allowed = SPECIAL_REQUESTS_BY_SERVICE[service];
         next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
+        const ranges = ITEM_WEIGHT_RANGES[service];
+        next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
       }
       return next;
     });
@@ -179,12 +175,27 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }));
   };
 
-  // Opções válidas de Special Requests para o veículo atualmente selecionado.
-  const availableSpecialRequests: { value: string; label: string }[] =
-    (specialRequestsByVehicle[form.vehicleType] ?? []).map(v => ({
-      value: v,
-      label: specialRequestCatalog[v] ?? v,
+  const activeService: LalamoveServiceType = isServiceType(form.vehicleType)
+    ? form.vehicleType
+    : 'LALAGO';
+
+  // Opções válidas de Special Requests para o serviço atualmente selecionado.
+  const availableSpecialRequests: { value: string; label: string; restriction: string | null }[] =
+    SPECIAL_REQUESTS_BY_SERVICE[activeService].map(code => ({
+      value: code,
+      label: humanizeSpecialRequest(code),
+      restriction: SPECIAL_REQUEST_CITY_RESTRICTIONS[code]
+        ? `Somente ${SPECIAL_REQUEST_CITY_RESTRICTIONS[code].join(', ')}`
+        : null,
     }));
+
+  // `deliveryItemSpecification` só é processado por alguns serviços (errata BR).
+  const acceptsItem = serviceAcceptsItem(activeService);
+  const weightOptions = (ITEM_WEIGHT_RANGES[activeService] ?? []).map(value => ({
+    value,
+    label: humanizeWeightRange(value),
+  }));
+
 
   // Valida janela do agendamento: 30min a 30 dias no futuro.
   const scheduleValidation = (() => {
@@ -236,12 +247,16 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         ],
         ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
         ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
-        item: {
-          quantity: form.itemQuantity || '1',
-          weight: form.itemWeight,
-          ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
-          ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
-        },
+        // Errata BR: `item` só é processado pelos serviços do catálogo.
+        ...(acceptsItem && {
+          item: {
+            quantity: form.itemQuantity || '1',
+            ...(form.itemWeight ? { weight: form.itemWeight } : {}),
+            ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
+            ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
+          },
+        }),
+
       },
     });
 
@@ -412,7 +427,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       recipientPhone: '',
       pickupAddress: '',
       deliveryAddress: '',
-      vehicleType: 'MOTORCYCLE',
+      vehicleType: 'LALAGO',
       remarks: '',
       specialRequests: [],
       isPODEnabled: true,
@@ -420,7 +435,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       internalNotes: '',
       scheduleAt: '',
       itemQuantity: '1',
-      itemWeight: 'LESS_THAN_3_KG',
+      itemWeight: '',
       itemCategories: [],
       itemHandling: [],
       autoNotifySupplier: false,
@@ -635,7 +650,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </Select>
             </div>
 
-            {/* Item Information (Lalamove v3) */}
+            {/* Item Information (Lalamove v3) — apenas serviços que aceitam `item` */}
+            {acceptsItem && (
             <div className="space-y-3 p-3 rounded-xl border border-border/50 bg-background/50">
               <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Package className="w-3.5 h-3.5 text-muted-foreground" />
@@ -654,7 +670,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 <div className="space-y-1">
                   <Label className="text-xs flex items-center gap-1"><Weight className="w-3 h-3" /> Peso</Label>
                   <Select value={form.itemWeight} onValueChange={v => updateField('itemWeight', v)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Selecione a faixa" /></SelectTrigger>
                     <SelectContent>
                       {weightOptions.map(w => (
                         <SelectItem key={w.value} value={w.value}>{w.label}</SelectItem>
@@ -700,6 +716,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 </div>
               </div>
             </div>
+            )}
 
 
             {/* Special Requests — filtrados por tipo de veículo */}
@@ -707,7 +724,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-semibold">Solicitações Especiais</Label>
                 <span className="text-[10px] text-muted-foreground">
-                  {availableSpecialRequests.length} disponíveis para {form.vehicleType}
+                  {availableSpecialRequests.length} disponíveis para {SERVICE_CATALOG[activeService].label}
                 </span>
               </div>
               {availableSpecialRequests.length === 0 ? (
@@ -725,7 +742,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                         checked={form.specialRequests.includes(sr.value)}
                         onCheckedChange={() => toggleSpecialRequest(sr.value)}
                       />
-                      {sr.label}
+                      <span className="flex flex-col">
+                        {sr.label}
+                        {sr.restriction && (
+                          <span className="text-[10px] text-muted-foreground">{sr.restriction}</span>
+                        )}
+                      </span>
                     </label>
                   ))}
                 </div>
