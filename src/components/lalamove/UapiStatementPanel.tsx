@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Receipt, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Receipt, ChevronLeft, ChevronRight, FileSpreadsheet, FileDown } from 'lucide-react';
 import { useUapiWalletStatement, UapiError } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
+import { toAccountingRows, summarizeAccountingRows } from '@/lib/uapiStatement';
+import { exportToCSV, exportToExcel } from '@/utils/exportUtils';
 
 /** Etapa 21 — extrato financeiro da carteira Lalamove. */
 export function UapiStatementPanel() {
@@ -12,6 +14,9 @@ export function UapiStatementPanel() {
   const { data, isLoading, isError, error, isFetching } = useUapiWalletStatement(page);
 
   const rows = data ?? [];
+  const accountingRows = useMemo(() => toAccountingRows(rows), [rows]);
+  const totals = useMemo(() => summarizeAccountingRows(accountingRows), [accountingRows]);
+  const fileBase = `extrato-lalamove-pagina-${page}`;
 
   return (
     <Card>
@@ -22,6 +27,7 @@ export function UapiStatementPanel() {
         </CardTitle>
         <CardDescription>Movimentações financeiras da conta Lalamove (UAPI).</CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-3">
         {isLoading && (
           <div className="space-y-2">
@@ -68,6 +74,42 @@ export function UapiStatementPanel() {
             </table>
           </div>
         )}
+
+        {accountingRows.length > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border bg-muted/40 p-3">
+            <p className="text-xs text-muted-foreground">
+              {totals.lancamentos} lançamentos · créditos R$ {totals.creditos} · débitos R$ {totals.debitos}
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => exportToCSV(accountingRows, fileBase)}
+              >
+                <FileDown className="mr-1 h-4 w-4" />
+                CSV contábil
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  exportToExcel(
+                    [
+                      { name: 'Lançamentos', rows: accountingRows },
+                      { name: 'Resumo', rows: [{ ...totals }] },
+                    ],
+                    fileBase,
+                  )
+                }
+              >
+                <FileSpreadsheet className="mr-1 h-4 w-4" />
+                Excel
+              </Button>
+            </div>
+          </div>
+        )}
+
+
 
         <div className="flex items-center justify-between">
           <Button
