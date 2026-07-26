@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Receipt, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Receipt, ChevronLeft, ChevronRight, FileSpreadsheet, FileDown } from 'lucide-react';
 import { useUapiWalletStatement, UapiError } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
+import { toAccountingRows, summarizeAccountingRows } from '@/lib/uapiStatement';
+import { exportToCSV, exportToExcel } from '@/utils/exportUtils';
 
 /** Etapa 21 — extrato financeiro da carteira Lalamove. */
 export function UapiStatementPanel() {
@@ -12,6 +14,9 @@ export function UapiStatementPanel() {
   const { data, isLoading, isError, error, isFetching } = useUapiWalletStatement(page);
 
   const rows = data ?? [];
+  const accountingRows = useMemo(() => toAccountingRows(rows), [rows]);
+  const totals = useMemo(() => summarizeAccountingRows(accountingRows), [accountingRows]);
+  const fileBase = `extrato-lalamove-pagina-${page}`;
 
   return (
     <Card>
@@ -22,6 +27,7 @@ export function UapiStatementPanel() {
         </CardTitle>
         <CardDescription>Movimentações financeiras da conta Lalamove (UAPI).</CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-3">
         {isLoading && (
           <div className="space-y-2">
