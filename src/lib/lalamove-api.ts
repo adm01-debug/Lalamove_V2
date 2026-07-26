@@ -41,25 +41,55 @@ interface GatewayPayload {
   method?: 'GET' | 'POST';
 }
 
+/**
+ * Erro tipado do gateway. Carrega o `x-request-id` para correlação ponta a
+ * ponta (frontend → Edge Function → proxy → Lalamove) — Etapa 15.
+ */
+export class LalamoveGatewayError extends Error {
+  readonly requestId: string;
+  readonly status?: number;
+
+  constructor(message: string, requestId: string, status?: number) {
+    super(message);
+    this.name = 'LalamoveGatewayError';
+    this.requestId = requestId;
+    this.status = status;
+  }
+}
+
+/** Gera um identificador de correlação por requisição. */
+function newRequestId(): string {
+  return typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `req-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export async function callLalamoveGateway<T>(payload: GatewayPayload): Promise<T> {
+  const requestId = newRequestId();
+
   const { data, error } = await supabase.functions.invoke('lalamove-gateway', {
     body: payload,
+    headers: { 'x-request-id': requestId },
   });
 
   if (error) {
-    throw new Error(error.message || 'Falha ao contatar o gateway Lalamove');
+    throw new LalamoveGatewayError(
+      error.message || 'Falha ao contatar o gateway Lalamove',
+      requestId,
+    );
   }
 
-  const result = data as (T & { error?: string }) | null;
+  const result = data as (T & { error?: string; status?: number; requestId?: string }) | null;
   if (result && typeof result === 'object' && typeof result.error === 'string') {
-    throw new Error(result.error);
+    throw new LalamoveGatewayError(result.error, result.requestId ?? requestId, result.status);
   }
   if (result === null || result === undefined) {
-    throw new Error('Resposta vazia do gateway Lalamove');
+    throw new LalamoveGatewayError('Resposta vazia do gateway Lalamove', requestId);
   }
 
   return result as T;
 }
+
 
 async function api<T = LalamoveApiResponse>(
   action: string,
