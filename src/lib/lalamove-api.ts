@@ -1,5 +1,11 @@
-const PROXY = 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/lalamove-unified';
-const KEY = 'promo-llm-unified-2026';
+import { supabase } from '@/integrations/supabase/client';
+
+/**
+ * Cliente Lalamove (proxy unificado v3 + UAPI).
+ *
+ * Etapa 19: nenhuma chave literal vive no bundle — toda chamada passa pela
+ * Edge Function autenticada `lalamove-gateway`, que injeta as credenciais.
+ */
 
 export interface LalamoveApiResponse {
   ok?: boolean;
@@ -27,28 +33,47 @@ export interface LalamoveWalletHistoryResponse extends LalamoveApiResponse {
   data?: { list?: unknown[] };
 }
 
-async function api<T = LalamoveApiResponse>(action: string, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL(PROXY);
-  url.searchParams.set('key', KEY);
-  url.searchParams.set('action', action);
-  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const resp = await fetch(url.toString());
-  if (!resp.ok) throw new Error(`Proxy error: ${resp.status}`);
-  return resp.json();
+interface GatewayPayload {
+  target: 'unified' | 'uapi';
+  action: string;
+  params?: Record<string, string>;
+  body?: unknown;
+  method?: 'GET' | 'POST';
 }
 
-async function apiPost<T = LalamoveApiResponse>(action: string, body: unknown, params: Record<string, string> = {}): Promise<T> {
-  const url = new URL(PROXY);
-  url.searchParams.set('key', KEY);
-  url.searchParams.set('action', action);
-  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-  const resp = await fetch(url.toString(), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+export async function callLalamoveGateway<T>(payload: GatewayPayload): Promise<T> {
+  const { data, error } = await supabase.functions.invoke('lalamove-gateway', {
+    body: payload,
   });
-  if (!resp.ok) throw new Error(`Proxy error: ${resp.status}`);
-  return resp.json();
+
+  if (error) {
+    throw new Error(error.message || 'Falha ao contatar o gateway Lalamove');
+  }
+
+  const result = data as (T & { error?: string }) | null;
+  if (result && typeof result === 'object' && typeof result.error === 'string') {
+    throw new Error(result.error);
+  }
+  if (result === null || result === undefined) {
+    throw new Error('Resposta vazia do gateway Lalamove');
+  }
+
+  return result as T;
+}
+
+async function api<T = LalamoveApiResponse>(
+  action: string,
+  params: Record<string, string> = {},
+): Promise<T> {
+  return callLalamoveGateway<T>({ target: 'unified', action, params, method: 'GET' });
+}
+
+async function apiPost<T = LalamoveApiResponse>(
+  action: string,
+  body: unknown,
+  params: Record<string, string> = {},
+): Promise<T> {
+  return callLalamoveGateway<T>({ target: 'unified', action, params, body, method: 'POST' });
 }
 
 export interface QuoteParams {
@@ -79,7 +104,9 @@ export const lalamove = {
   driverLocation: (orderId: string, driverId: string) =>
     api('driver_location', { order_id: orderId, driver_id: driverId }),
   v3Call: (path: string, method = 'GET', body?: unknown) =>
-    method === 'GET' ? api('v3', { path, http_method: method }) : apiPost('v3', body, { path, http_method: method }),
+    method === 'GET'
+      ? api('v3', { path, http_method: method })
+      : apiPost('v3', body, { path, http_method: method }),
 
   // UAPI
   user: () => api('user'),
