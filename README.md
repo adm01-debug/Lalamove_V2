@@ -37,6 +37,7 @@ O sistema passa por auditorias regulares para garantir os mais altos padrões de
 
 - **[Versão Markdown](docs/audit_report.md)**: Relatório técnico completo e detalhado.
 - **[Versão PDF (Geração via CI)](docs/audit_report.pdf)**: Versão formatada para exportação e apresentações executivas.
+- **[Análise Mestra Lalamove](docs/LALAMOVE_MASTER_ANALYSIS.md)**: Fonte única de verdade da integração Lalamove (v3 + UAPI), errata de produção, matriz de cobertura e roteiro de 30 etapas.
 
 > *Nota: O PDF é gerado automaticamente a partir do Markdown durante o processo de build.*
 
