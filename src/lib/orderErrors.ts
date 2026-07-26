@@ -29,6 +29,18 @@ export function parseOrderError(raw: string): ParsedOrderError {
   const msg = (raw ?? '').trim();
   const lower = msg.toLowerCase();
 
+  // 0) Código canônico ERR_* propagado pela API v3 (Etapa 5).
+  const codeMatch = msg.match(/ERR_[A-Z_]+/);
+  if (codeMatch && V3_ERROR_MAP[codeMatch[0]] && !lower.includes('telefone')) {
+    const info = V3_ERROR_MAP[codeMatch[0]];
+    return {
+      title: info.title,
+      description: info.description,
+      field: codeMatch[0] === 'ERR_INVALID_QUOTATION_ID' ? null : null,
+    };
+  }
+
+
   // 1) Falha do guard-rail server-side (assertE164).
   if (lower.includes('telefone inválido em sender')) {
     return {
