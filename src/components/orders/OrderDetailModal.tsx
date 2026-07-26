@@ -182,6 +182,29 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
 
   return (
     <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
+      {/* Bloco B — janela de operações (previne ERR_ORDER_EDIT/ERR_CANCELLATION). */}
+      {!isTerminal && (!editVerdict.allowed || !canCancel || !canAddPriority) && (
+        <div className="rounded-md border border-border/50 bg-muted/40 p-3 space-y-1">
+          <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-muted-foreground" />
+            Operações indisponíveis neste status
+          </p>
+          {!editVerdict.allowed && (
+            <p className="text-[11px] text-muted-foreground">Editar: {editVerdict.reason}</p>
+          )}
+          {!canCancel && (
+            <p className="text-[11px] text-muted-foreground">Cancelar: {cancelVerdict.reason}</p>
+          )}
+          {!canAddPriority && (
+            <p className="text-[11px] text-muted-foreground">Bônus: {priorityVerdict.reason}</p>
+          )}
+          {!canChangeDriver && (
+            <p className="text-[11px] text-muted-foreground">
+              Trocar motorista: {changeDriverVerdict.reason}
+            </p>
+          )}
+        </div>
+      )}
       {/* Priority Fee */}
       {canAddPriority && (
         <div className="space-y-2">
