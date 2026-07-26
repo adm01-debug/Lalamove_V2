@@ -41,6 +41,7 @@ import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
 import { StatusTimeline } from './StatusTimeline';
+import { evaluateOrderOperation, validatePriorityFee } from '@/lib/lalamoveOrderEdit';
 
 interface OrderDetailModalProps {
   order: Order | null;
@@ -164,13 +165,46 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
     onError: (err: Error) => toast.error('Erro ao adicionar bônus', { description: err.message }),
   });
 
-  const canCancel = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
-  const canAddPriority = ['PENDING', 'MATCHED', 'ASSIGNING_DRIVER'].includes(order.status);
-  const canChangeDriver = ['MATCHED', 'ON_GOING'].includes(order.status) && !!order.driverId;
+  // Bloco B — a janela de cada operação vem da matriz canônica (ERR_ORDER_EDIT
+  // e afins são previstos localmente, antes de gastar uma chamada na Lalamove).
+  const editContext = { status: order.status, driverId: order.driverId ?? '' };
+  const cancelVerdict = evaluateOrderOperation('cancel', editContext);
+  const priorityVerdict = evaluateOrderOperation('priorityFee', editContext);
+  const changeDriverVerdict = evaluateOrderOperation('changeDriver', editContext);
+  const editVerdict = evaluateOrderOperation('edit', editContext);
+
+  const canCancel = cancelVerdict.allowed;
+  const canAddPriority = priorityVerdict.allowed;
+  const canChangeDriver = changeDriverVerdict.allowed;
   const isTerminal = ['COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'].includes(order.status);
+
+  const priorityCheck = validatePriorityFee(priorityFee);
 
   return (
     <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
+      {/* Bloco B — janela de operações (previne ERR_ORDER_EDIT/ERR_CANCELLATION). */}
+      {!isTerminal && (!editVerdict.allowed || !canCancel || !canAddPriority) && (
+        <div className="rounded-md border border-border/50 bg-muted/40 p-3 space-y-1">
+          <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-muted-foreground" />
+            Operações indisponíveis neste status
+          </p>
+          {!editVerdict.allowed && (
+            <p className="text-[11px] text-muted-foreground">Editar: {editVerdict.reason}</p>
+          )}
+          {!canCancel && (
+            <p className="text-[11px] text-muted-foreground">Cancelar: {cancelVerdict.reason}</p>
+          )}
+          {!canAddPriority && (
+            <p className="text-[11px] text-muted-foreground">Bônus: {priorityVerdict.reason}</p>
+          )}
+          {!canChangeDriver && (
+            <p className="text-[11px] text-muted-foreground">
+              Trocar motorista: {changeDriverVerdict.reason}
+            </p>
+          )}
+        </div>
+      )}
       {/* Priority Fee */}
       {canAddPriority && (
         <div className="space-y-2">
@@ -198,6 +232,12 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
                   aria-label="Valor do bônus"
                 />
               </div>
+              {priorityFee && priorityCheck.error && (
+                <p className="text-xs text-destructive" role="alert">
+                  {priorityCheck.error}
+                </p>
+              )}
+
               <textarea
                 value={priorityReason}
                 onChange={(e) => setPriorityReason(e.target.value.slice(0, 200))}
@@ -211,8 +251,14 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => priorityMutation.mutate({ orderId: order.lalamoveId, amount: priorityFee, reason: priorityReason })}
-                  disabled={priorityMutation.isPending || !priorityFee || Number(priorityFee) <= 0}
+                  onClick={() =>
+                    priorityMutation.mutate({
+                      orderId: order.lalamoveId,
+                      amount: String(priorityCheck.amount),
+                      reason: priorityReason,
+                    })
+                  }
+                  disabled={priorityMutation.isPending || !priorityCheck.valid}
                 >
                   {priorityMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar bônus'}
                 </Button>
