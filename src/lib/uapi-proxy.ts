@@ -1,5 +1,11 @@
-const PROXY_BASE = 'https://pgxfvjmuubtbowutlide.supabase.co/functions/v1/lalamove-uapi-proxy';
-const PROXY_KEY = 'promo-lalamove-2026';
+import { callLalamoveGateway } from '@/lib/lalamove-api';
+
+/**
+ * Cliente do proxy UAPI.
+ *
+ * Etapa 19: as chamadas passam pela Edge Function `lalamove-gateway`
+ * (destino `uapi`), que injeta a chave a partir dos secrets do backend.
+ */
 
 export interface UAPIResponse<T = unknown> {
   ok?: boolean;
@@ -39,30 +45,25 @@ export interface ProxySession {
   created_at: string;
 }
 
-async function proxyFetch<T = unknown>(action: string, params: Record<string, string> = {}): Promise<UAPIResponse<T>> {
-  const url = new URL(PROXY_BASE);
-  url.searchParams.set('key', PROXY_KEY);
-  url.searchParams.set('action', action);
-  for (const [k, v] of Object.entries(params)) {
-    url.searchParams.set(k, v);
-  }
-  const resp = await fetch(url.toString());
-  if (!resp.ok) throw new Error(`Proxy error: ${resp.status}`);
-  return resp.json();
+function proxyFetch<T = unknown>(
+  action: string,
+  params: Record<string, string> = {},
+): Promise<UAPIResponse<T>> {
+  return callLalamoveGateway<UAPIResponse<T>>({ target: 'uapi', action, params, method: 'GET' });
 }
 
-async function proxyPost<T = unknown>(method: string, args: unknown = {}, extraParams: Record<string, string> = {}): Promise<UAPIResponse<T>> {
-  const url = new URL(PROXY_BASE);
-  url.searchParams.set('key', PROXY_KEY);
-  url.searchParams.set('action', 'call');
-  url.searchParams.set('method', method);
-  const resp = await fetch(url.toString(), {
+function proxyPost<T = unknown>(
+  method: string,
+  args: unknown = {},
+  extraParams: Record<string, string> = {},
+): Promise<UAPIResponse<T>> {
+  return callLalamoveGateway<UAPIResponse<T>>({
+    target: 'uapi',
+    action: 'call',
+    params: { method },
+    body: { args, extra_params: extraParams },
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ args, extra_params: extraParams }),
   });
-  if (!resp.ok) throw new Error(`Proxy error: ${resp.status}`);
-  return resp.json();
 }
 
 export const uapi = {

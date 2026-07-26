@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -89,7 +89,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const [quotation, setQuotation] = useState<QuotationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [serverFieldError, setServerFieldError] = useState<{ field: OrderErrorField; message: string } | null>(null);
+  // Etapa 10 — diferença de preço detectada na revalidação da cotação.
+  const [priceChange, setPriceChange] = useState<{ from: string; to: string } | null>(null);
+  // Guarda de idempotência contra duplo clique em "Confirmar Pedido".
+  const submittingRef = useRef(false);
   const { upsertContact } = useContacts();
+
 
   const applyContact = (which: 'sender' | 'recipient', contact: Contact) => {
     // Reaproveita telefone já validado (E.164) mascarado para o input BR.
@@ -206,54 +211,68 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     recipientPhoneValidation.valid,
   );
 
+  // Etapa 10 — margem mínima de validade antes de enviar o pedido.
+  // Cotações Lalamove v3 duram ~5 min; abaixo desta margem revalidamos.
+  const QUOTE_SAFETY_MARGIN_MS = 45_000;
+
+  const isQuotationFresh = (q: QuotationResult | null): boolean => {
+    if (!q) return false;
+    if (!q.expiresAt) return false;
+    const target = Date.parse(q.expiresAt);
+    if (Number.isNaN(target)) return false;
+    return target - Date.now() > QUOTE_SAFETY_MARGIN_MS;
+  };
+
+  // Cotação bruta — usada tanto pelo passo 1 quanto pela revalidação automática.
+  const requestQuotation = async (): Promise<QuotationResult> => {
+    const { data, error: fnError } = await supabase.functions.invoke('lalamove-api', {
+      body: {
+        action: 'quotation',
+        serviceType: form.vehicleType,
+        language: 'pt_BR',
+        stops: [
+          { coordinates: { lat: '0', lng: '0' }, address: form.pickupAddress.trim() },
+          { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
+        ],
+        ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
+        ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
+        item: {
+          quantity: form.itemQuantity || '1',
+          weight: form.itemWeight,
+          ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
+          ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
+        },
+      },
+    });
+
+    if (fnError) throw new Error(fnError.message);
+
+    const response = typeof data === 'string' ? JSON.parse(data) : data;
+    if (response.error) throw new Error(response.error);
+
+    const quotData = response.data?.data || response.data;
+    if (!quotData?.quotationId) throw new Error('Resposta inválida da cotação');
+
+    const stops = quotData.stops || [];
+    return {
+      quotationId: quotData.quotationId,
+      stopIds: stops.map((s: { stopId: string }) => s.stopId),
+      totalFee: quotData.priceBreakdown?.total || '0',
+      totalFeeCurrency: quotData.priceBreakdown?.currency || 'BRL',
+      expiresAt: quotData.expiresAt || '',
+    };
+  };
+
   // Step 1: Get quotation from Lalamove
   const handleGetQuotation = async () => {
     if (!isValid) return;
     setStep('quoting');
     setError(null);
+    setPriceChange(null);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('lalamove-api', {
-        body: {
-          action: 'quotation',
-          serviceType: form.vehicleType,
-          language: 'pt_BR',
-          stops: [
-            { coordinates: { lat: '0', lng: '0' }, address: form.pickupAddress.trim() },
-            { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
-          ],
-          ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
-          ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
-          item: {
-            quantity: form.itemQuantity || '1',
-            weight: form.itemWeight,
-            ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
-            ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
-          },
-        },
-      });
-
-      if (fnError) throw new Error(fnError.message);
-
-      const response = typeof data === 'string' ? JSON.parse(data) : data;
-
-      if (response.error) {
-        throw new Error(response.error);
-      }
-
-      const quotData = response.data?.data || response.data;
-      if (!quotData?.quotationId) {
-        throw new Error('Resposta inválida da cotação');
-      }
-
-      const stops = quotData.stops || [];
-      setQuotation({
-        quotationId: quotData.quotationId,
-        stopIds: stops.map((s: { stopId: string }) => s.stopId),
-        totalFee: quotData.priceBreakdown?.total || '0',
-        totalFeeCurrency: quotData.priceBreakdown?.currency || 'BRL',
-        expiresAt: quotData.expiresAt || '',
-      });
+      const result = await requestQuotation();
+      setQuotation(result);
       setStep('quoted');
       toast.success('Cotação recebida!');
     } catch (err: unknown) {
@@ -269,22 +288,51 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   // Step 2: Create order from quotation
   const handleCreateOrder = async () => {
     if (!quotation) return;
+    // Guarda de idempotência: evita duplo clique criando dois pedidos.
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setStep('creating');
     setError(null);
 
     try {
+      // Etapa 10 — revalidação automática da cotação antes de criar o pedido.
+      let activeQuotation = quotation;
+      if (!isQuotationFresh(activeQuotation)) {
+        const refreshed = await requestQuotation();
+        setQuotation(refreshed);
+
+        const previousFee = Number.parseFloat(activeQuotation.totalFee);
+        const newFee = Number.parseFloat(refreshed.totalFee);
+        const feeChanged =
+          Number.isFinite(previousFee) && Number.isFinite(newFee) && previousFee !== newFee;
+
+        if (feeChanged) {
+          // Preço mudou: exige confirmação explícita do novo valor.
+          setPriceChange({ from: activeQuotation.totalFee, to: refreshed.totalFee });
+          setStep('quoted');
+          toast.warning('O preço da cotação mudou', {
+            description: 'Revise o novo valor e confirme novamente para criar o pedido.',
+          });
+          submittingRef.current = false;
+          return;
+        }
+
+        setPriceChange(null);
+        activeQuotation = refreshed;
+      }
+
       const { data, error: fnError } = await supabase.functions.invoke('lalamove-api', {
         body: {
           action: 'order',
-          quotationId: quotation.quotationId,
+          quotationId: activeQuotation.quotationId,
           isPODEnabled: form.isPODEnabled,
           sender: {
-            stopId: quotation.stopIds[0],
+            stopId: activeQuotation.stopIds[0],
             name: form.senderName.trim(),
             phone: senderPhoneValidation.valid ? senderPhoneValidation.e164 : '',
           },
           recipients: [{
-            stopId: quotation.stopIds[1],
+            stopId: activeQuotation.stopIds[1],
             name: form.recipientName.trim(),
             phone: recipientPhoneValidation.valid ? recipientPhoneValidation.e164 : '',
             ...(form.remarks.trim() && { remarks: form.remarks.trim() }),
@@ -310,6 +358,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       }
 
       setStep('done');
+      setPriceChange(null);
       toast.success('Pedido criado com sucesso na Lalamove!');
 
       // Salva/atualiza contatos reutilizáveis (dedup por telefone E.164).
@@ -345,8 +394,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       const backToForm = parsed.field === 'senderPhone' || parsed.field === 'recipientPhone' || parsed.field === 'schedule' || parsed.field === 'address';
       setStep(backToForm ? 'form' : 'quoted');
       toast.error(parsed.title, { description: parsed.description });
+    } finally {
+      submittingRef.current = false;
     }
   };
+
 
   const resetForm = () => {
     setStep('form');
@@ -412,6 +464,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             quotation={quotation}
             form={form}
             error={error}
+            priceChange={priceChange}
             onBack={() => { setStep('form'); setQuotation(null); setError(null); }}
             onConfirm={handleCreateOrder}
             onRequote={() => { setQuotation(null); setError(null); handleGetQuotation(); }}
@@ -812,12 +865,14 @@ interface QuotedStepProps {
     recipientPhone: string;
   };
   error: string | null;
+  /** Diferença de preço detectada na revalidação automática (Etapa 10). */
+  priceChange: { from: string; to: string } | null;
   onBack: () => void;
   onConfirm: () => void;
   onRequote: () => void;
 }
 
-function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: QuotedStepProps) {
+function QuotedStep({ quotation, form, error, priceChange, onBack, onConfirm, onRequote }: QuotedStepProps) {
   const expiry = useQuotationExpiry(quotation.expiresAt);
 
   const badgeTone = expiry.isExpired
@@ -880,7 +935,14 @@ function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: Qu
       {expiry.isExpired && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-warning text-sm">
           <AlertTriangle className="w-4 h-4 shrink-0" />
-          Esta cotação expirou. Solicite uma nova para prosseguir.
+          Esta cotação expirou. Ao confirmar, uma nova cotação será solicitada automaticamente.
+        </div>
+      )}
+
+      {priceChange && (
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-warning text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          O preço mudou na revalidação: de {priceChange.from} para {priceChange.to}. Confirme novamente para prosseguir com o novo valor.
         </div>
       )}
 
@@ -893,17 +955,14 @@ function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: Qu
 
       <div className="flex justify-end gap-2 pt-2">
         <Button variant="outline" onClick={onBack}>Voltar</Button>
-        {expiry.isExpired ? (
-          <Button variant="gradient" onClick={onRequote}>
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Recotar
-          </Button>
-        ) : (
-          <Button variant="gradient" onClick={onConfirm} disabled={expiry.isExpired}>
-            <Zap className="w-4 h-4 mr-2" />
-            Confirmar Pedido
-          </Button>
-        )}
+        <Button variant="outline" onClick={onRequote}>
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Recotar
+        </Button>
+        <Button variant="gradient" onClick={onConfirm}>
+          <Zap className="w-4 h-4 mr-2" />
+          {expiry.isExpired ? 'Revalidar e confirmar' : 'Confirmar Pedido'}
+        </Button>
       </div>
     </div>
   );
