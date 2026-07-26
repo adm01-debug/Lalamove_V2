@@ -24,56 +24,27 @@ interface NewOrderDialogProps {
   onSuccess: () => void;
 }
 
-const vehicleTypes = [
-  { value: 'MOTORCYCLE', label: '🏍️ Moto', description: 'Entregas rápidas e pequenas' },
-  { value: 'CAR', label: '🚗 Carro', description: 'Pacotes médios' },
-  { value: 'MPV', label: '🚙 MPV', description: 'Veículo multiuso' },
-  { value: 'VAN', label: '🚐 Van', description: 'Cargas maiores' },
-  { value: 'UV_FIORINO', label: '🚚 Fiorino', description: 'Utilitário pequeno' },
-  { value: 'TRUCK330', label: '🚛 Caminhão 3.3t', description: 'Cargas até 3.300kg' },
-  { value: 'TRUCK175', label: '🚛 Caminhão 1.75t', description: 'Cargas até 1.750kg' },
-];
+// Etapa 7 — a UI passa a consumir o catálogo canônico (docs/LALAMOVE_MASTER_ANALYSIS.md).
+const vehicleTypes = SERVICE_TYPES.map(value => ({
+  value,
+  label: `${SERVICE_EMOJI[value]} ${SERVICE_CATALOG[value].label}`,
+  description:
+    `até ${SERVICE_CATALOG[value].maxWeightKg} kg` +
+    (SERVICE_CATALOG[value].cities === null
+      ? ' — todas as cidades'
+      : ` — ${SERVICE_CATALOG[value].cities!.length} cidades`),
+}));
 
-// Catálogo canônico de Special Requests (Lalamove v3 BR).
-const specialRequestCatalog: Record<string, string> = {
-  HELP_BUY: 'Comprar no local',
-  TOLL_FEE: 'Pedágio incluso',
-  ROUND_TRIP: 'Ida e volta',
-  DOOR_TO_DOOR: 'Porta a porta',
-  THERMAL_BAG_1: 'Bag térmica',
-  PURCHASE_SERVICE_1: 'Serviço de compra',
-  MOVING_SERVICE: 'Auxílio de mudança',
-  LOADING_SERVICE: 'Auxílio de carregamento',
-};
+const itemCategoryOptions = ITEM_CATEGORIES.map(value => ({
+  value,
+  label: ITEM_CATEGORY_LABELS[value],
+}));
 
-// Matriz de compatibilidade por tipo de veículo — Lalamove v3.
-const specialRequestsByVehicle: Record<string, string[]> = {
-  MOTORCYCLE: ['HELP_BUY', 'TOLL_FEE', 'DOOR_TO_DOOR', 'THERMAL_BAG_1', 'PURCHASE_SERVICE_1'],
-  CAR: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
-  MPV: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR'],
-  VAN: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-  UV_FIORINO: ['HELP_BUY', 'TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE'],
-  TRUCK175: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-  TRUCK330: ['TOLL_FEE', 'ROUND_TRIP', 'DOOR_TO_DOOR', 'MOVING_SERVICE', 'LOADING_SERVICE'],
-};
-const weightOptions = [
-  { value: 'LESS_THAN_3_KG', label: '≤ 3 kg' },
-  { value: 'BETWEEN_3_KG_AND_10_KG', label: '3 – 10 kg' },
-  { value: 'BETWEEN_10_KG_AND_50_KG', label: '10 – 50 kg' },
-  { value: 'MORE_THAN_50_KG', label: '> 50 kg' },
-];
+const handlingInstructionOptions = HANDLING_INSTRUCTIONS.map(value => ({
+  value,
+  label: HANDLING_LABELS[value],
+}));
 
-const itemCategoryOptions = [
-  { value: 'FOOD_DELIVERY', label: 'Alimentos' },
-  { value: 'OFFICE_ITEM', label: 'Material de escritório' },
-  { value: 'FURNITURE', label: 'Móveis' },
-  { value: 'FRAGILE_GOODS', label: 'Frágil' },
-];
-
-const handlingInstructionOptions = [
-  { value: 'KEEP_UPRIGHT', label: 'Manter em pé' },
-  { value: 'FRAGILE', label: 'Frágil — cuidado' },
-];
 type Step = 'form' | 'quoting' | 'quoted' | 'creating' | 'done';
 
 interface QuotationResult {
