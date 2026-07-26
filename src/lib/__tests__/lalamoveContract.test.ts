@@ -68,10 +68,11 @@ describe('contrato Lalamove — fixtures reais', () => {
     const status = normalizeOrderStatus(WEBHOOK_STATUS_EVENT.data.order.status);
     expect(status).toBe('PICKED_UP');
     const timeline = buildOrderTimeline([
-      { status: 'ASSIGNING_DRIVER', at: '2026-07-26T12:00:00Z' },
-      { status: 'ON_GOING', at: '2026-07-26T12:05:00Z' },
-      { status: WEBHOOK_STATUS_EVENT.data.order.status, at: '2026-07-26T12:20:00Z' },
+      { id: '1', status: 'ASSIGNING_DRIVER', created_at: '2026-07-26T12:00:00Z' },
+      { id: '2', status: 'ON_GOING', created_at: '2026-07-26T12:05:00Z' },
+      { id: '3', status: WEBHOOK_STATUS_EVENT.data.order.status, created_at: '2026-07-26T12:20:00Z' },
     ]);
+
     expect(timeline.stages.some((stage) => stage.state === 'current')).toBe(true);
   });
 
