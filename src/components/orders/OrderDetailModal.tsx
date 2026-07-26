@@ -113,6 +113,26 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
     onError: (err: Error) => toast.error('Erro ao trocar motorista', { description: err.message }),
   });
 
+  // Frota enterprise no contexto do pedido: o `driverId` da v3 é o mesmo
+  // identificador aceito pelas listas de favoritos/bloqueados da UAPI.
+  const fleetMutation = useFleetMutation();
+
+  const handleFleetAction = async (action: 'add' | 'block') => {
+    if (!order.driverId) return;
+    try {
+      await fleetMutation.mutateAsync({ driverFid: order.driverId, action });
+      toast.success(
+        action === 'add'
+          ? 'Motorista adicionado aos favoritos.'
+          : 'Motorista bloqueado para pedidos futuros.',
+      );
+    } catch (err) {
+      toast.error(
+        err instanceof UapiError ? err.message : 'Falha ao atualizar a frota Lalamove.',
+      );
+    }
+  };
+
 
   const cancelMutation = useMutation({
     mutationFn: async ({ orderId, reason, notes }: { orderId: string; reason: string; notes: string }) => {
