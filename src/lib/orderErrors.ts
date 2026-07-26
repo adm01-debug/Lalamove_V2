@@ -4,6 +4,8 @@
  * correspondente para o usuário corrigir.
  */
 
+import { V3_ERROR_MAP } from '@/lib/lalamoveErrors';
+
 export type OrderErrorField = 'senderPhone' | 'recipientPhone' | 'schedule' | 'address' | null;
 
 export interface ParsedOrderError {
@@ -36,7 +38,7 @@ export function parseOrderError(raw: string): ParsedOrderError {
     return {
       title: info.title,
       description: info.description,
-      field: codeMatch[0] === 'ERR_INVALID_QUOTATION_ID' ? null : null,
+      field: null,
     };
   }
 
