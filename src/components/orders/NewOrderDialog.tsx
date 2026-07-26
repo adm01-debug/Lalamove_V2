@@ -247,12 +247,16 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         ],
         ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
         ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
-        item: {
-          quantity: form.itemQuantity || '1',
-          weight: form.itemWeight,
-          ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
-          ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
-        },
+        // Errata BR: `item` só é processado pelos serviços do catálogo.
+        ...(acceptsItem && {
+          item: {
+            quantity: form.itemQuantity || '1',
+            ...(form.itemWeight ? { weight: form.itemWeight } : {}),
+            ...(form.itemCategories.length > 0 && { categories: form.itemCategories }),
+            ...(form.itemHandling.length > 0 && { handlingInstructions: form.itemHandling }),
+          },
+        }),
+
       },
     });
 
