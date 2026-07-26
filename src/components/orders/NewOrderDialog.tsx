@@ -118,7 +118,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     recipientPhone: '',
     pickupAddress: '',
     deliveryAddress: '',
-    vehicleType: 'MOTORCYCLE',
+    vehicleType: 'LALAGO',
     remarks: '',
     specialRequests: [] as string[],
     isPODEnabled: true,
@@ -128,7 +128,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     scheduleAt: '',
     // Item Information (Lalamove v3)
     itemQuantity: '1',
-    itemWeight: 'LESS_THAN_3_KG',
+    itemWeight: '',
     itemCategories: [] as string[],
     itemHandling: [] as string[],
     // Guardian fields
@@ -427,7 +427,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       recipientPhone: '',
       pickupAddress: '',
       deliveryAddress: '',
-      vehicleType: 'MOTORCYCLE',
+      vehicleType: 'LALAGO',
       remarks: '',
       specialRequests: [],
       isPODEnabled: true,
@@ -435,7 +435,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       internalNotes: '',
       scheduleAt: '',
       itemQuantity: '1',
-      itemWeight: 'LESS_THAN_3_KG',
+      itemWeight: '',
       itemCategories: [],
       itemHandling: [],
       autoNotifySupplier: false,
@@ -650,7 +650,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </Select>
             </div>
 
-            {/* Item Information (Lalamove v3) */}
+            {/* Item Information (Lalamove v3) — apenas serviços que aceitam `item` */}
+            {acceptsItem && (
             <div className="space-y-3 p-3 rounded-xl border border-border/50 bg-background/50">
               <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                 <Package className="w-3.5 h-3.5 text-muted-foreground" />
@@ -715,6 +716,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 </div>
               </div>
             </div>
+            )}
 
 
             {/* Special Requests — filtrados por tipo de veículo */}
@@ -722,7 +724,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               <div className="flex items-center justify-between">
                 <Label className="text-xs font-semibold">Solicitações Especiais</Label>
                 <span className="text-[10px] text-muted-foreground">
-                  {availableSpecialRequests.length} disponíveis para {form.vehicleType}
+                  {availableSpecialRequests.length} disponíveis para {SERVICE_CATALOG[activeService].label}
                 </span>
               </div>
               {availableSpecialRequests.length === 0 ? (
@@ -740,7 +742,12 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                         checked={form.specialRequests.includes(sr.value)}
                         onCheckedChange={() => toggleSpecialRequest(sr.value)}
                       />
-                      {sr.label}
+                      <span className="flex flex-col">
+                        {sr.label}
+                        {sr.restriction && (
+                          <span className="text-[10px] text-muted-foreground">{sr.restriction}</span>
+                        )}
+                      </span>
                     </label>
                   ))}
                 </div>
