@@ -14,26 +14,25 @@
 | 7 | Matriz de edição pós-criação | 10 | `lalamoveOrderEdit.ts` + 21 testes |
 | 8 | Cancelamento com guardas | 10 | `ERR_CANCELLATION` local |
 | 9 | Priority fee (bônus) | 10 | somente incremento, teto R$ 500, histórico |
-| 10 | Troca de motorista | 9 | guarda local; motivo ainda não padronizado |
+| 10 | Troca de motorista | 10 | guarda local + motivos canônicos em `lalamoveReasons.ts` |
 | 11 | Timeline canônica de status | 10 | `lalamoveTimeline.ts` + 17 testes |
 | 12 | Webhooks (HMAC, replay, idempotência) | 10 | SHA-256 timing-safe |
 | 13 | Eventos fora de ordem | 10 | detecção por rank de status |
 | 14 | POD / POP | 10 | provas no modal do pedido |
 | 15 | Histórico paginado por cursor | 10 | `useUapiOrderHistory` (`last_id`, dedup) |
-| 16 | Financeiro: extrato e comprovantes | 9 | UI entregue; export contábil pendente |
+| 16 | Financeiro: extrato e comprovantes | 10 | UI + export contábil CSV/Excel (`uapiStatement.ts`) |
 | 17 | Cupons com erros `qp` traduzidos | 10 | `uapiErrors.ts` (13001/27103/27104/27105) |
-| 18 | Frota (favoritos / bloqueados) | 9 | painel entregue; vínculo por pedido pendente |
+| 18 | Frota (favoritos / bloqueados) | 10 | painel + favoritar/bloquear no modal do pedido |
 | 19 | Telemetria de rate limit | 10 | `lalamove_rate_limits` + painel de quota |
 | 20 | Telemetria por endpoint | 10 | `query_telemetry` (`operation = 'lalamove'`) |
 | 21 | Alertas de falha de autenticação | 10 | `CRITICAL` dedupado em 15 min |
 | 22 | Runbook e testes de contrato | 10 | `RUNBOOK_LALAMOVE.md` + fixtures/errata |
 
-**Média: 9,8 / 10.**
+**Média: 10,0 / 10.**
 
 ## Lacunas remanescentes (conscientes)
 
 - Bulk order completo, integração e-commerce e chat MQTT5 do motorista seguem
   **fora de escopo** declarado no documento mestre.
-- Motivo padronizado na troca de motorista (dimensão 10).
-- Exportação contábil do extrato (dimensão 16).
-- Favoritar/bloquear motorista diretamente no contexto do pedido (dimensão 18).
+- Rotina de retenção de logs corrigida (`cleanup_old_audit_logs` usava uma
+  coluna inexistente e falhava a cada execução do agendador).
