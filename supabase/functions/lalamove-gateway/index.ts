@@ -263,6 +263,7 @@ Deno.serve(async (req) => {
     // ── 4. Chamada com deadline ────────────────────────────────────────────
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    const startedAt = Date.now();
 
     let upstream: Response;
     try {
@@ -278,18 +279,19 @@ Deno.serve(async (req) => {
     } catch (err) {
       clearTimeout(timer);
       const aborted = err instanceof DOMException && err.name === 'AbortError';
-      return json(
-        {
-          error: aborted
-            ? 'Tempo limite excedido ao contatar a Lalamove'
-            : 'Falha de rede ao contatar a Lalamove',
-          requestId,
-        },
-        aborted ? 504 : 502,
-        requestId,
-      );
+      const failureMessage = aborted
+        ? 'Tempo limite excedido ao contatar a Lalamove'
+        : 'Falha de rede ao contatar a Lalamove';
+      await recordQueryTelemetry({
+        action,
+        durationMs: Date.now() - startedAt,
+        status: aborted ? 504 : 502,
+        errorMessage: failureMessage,
+      });
+      return json({ error: failureMessage, requestId }, aborted ? 504 : 502, requestId);
     }
     clearTimeout(timer);
+    const durationMs = Date.now() - startedAt;
 
     // ── 5. Telemetria de rate limit (Etapa 14) ─────────────────────────────
     const rateLimits = extractRateLimits(upstream.headers);
@@ -305,11 +307,42 @@ Deno.serve(async (req) => {
     try {
       parsed = text ? JSON.parse(text) : {};
     } catch {
+      await recordQueryTelemetry({
+        action,
+        durationMs,
+        status: 502,
+        errorMessage: 'Resposta inválida do proxy Lalamove',
+      });
       return json(
         { error: 'Resposta inválida do proxy Lalamove', status: upstream.status, requestId },
         502,
         requestId,
       );
+    }
+
+    // ── 6. Etapa 27/28 — telemetria por endpoint e alerta de auth ──────────
+    const uapiRet = extractUapiRet(parsed);
+    const isAuthFailure =
+      (upstream.status === 401 || upstream.status === 502) || uapiRet === 10007 || uapiRet === 10001;
+
+    await recordQueryTelemetry({
+      action,
+      durationMs,
+      status: upstream.ok && !uapiRet ? 200 : upstream.status,
+      errorMessage: upstream.ok
+        ? uapiRet && uapiRet !== 0
+          ? `UAPI ret=${uapiRet}`
+          : null
+        : `HTTP ${upstream.status}`,
+    });
+
+    if (isAuthFailure) {
+      await raiseAuthFailureAlert({
+        action,
+        target,
+        detail: uapiRet ? `UAPI ret=${uapiRet}` : `HTTP ${upstream.status}`,
+        requestId,
+      });
     }
 
     if (!upstream.ok) {
@@ -318,6 +351,7 @@ Deno.serve(async (req) => {
         upstream.status >= 500 ? 502 : upstream.status,
         requestId,
       );
+
     }
 
     return json(parsed, 200, requestId);
