@@ -53,6 +53,8 @@ const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage
 const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
 const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
 const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
+const LalamoveOperationsPage = lazy(() => import('./pages/LalamoveOperationsPage'));
+
 const ContactsPage = lazy(() => import('./pages/ContactsPage'));
 
 
