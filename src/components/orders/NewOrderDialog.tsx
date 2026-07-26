@@ -670,7 +670,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 <div className="space-y-1">
                   <Label className="text-xs flex items-center gap-1"><Weight className="w-3 h-3" /> Peso</Label>
                   <Select value={form.itemWeight} onValueChange={v => updateField('itemWeight', v)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Selecione a faixa" /></SelectTrigger>
                     <SelectContent>
                       {weightOptions.map(w => (
                         <SelectItem key={w.value} value={w.value}>{w.label}</SelectItem>
