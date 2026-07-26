@@ -132,10 +132,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }
     setForm(prev => {
       const next = { ...prev, [field]: value };
-      // Ao trocar o veículo, remove Special Requests incompatíveis (Lalamove v3).
-      if (field === 'vehicleType' && typeof value === 'string') {
-        const allowed = specialRequestsByVehicle[value] ?? [];
+      // Ao trocar o serviço, remove Special Requests e faixas de peso incompatíveis.
+      if (field === 'vehicleType' && isServiceType(String(value))) {
+        const service = String(value) as LalamoveServiceType;
+        const allowed = SPECIAL_REQUESTS_BY_SERVICE[service];
         next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
+        const ranges = ITEM_WEIGHT_RANGES[service];
+        next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
       }
       return next;
     });
@@ -150,12 +153,27 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     }));
   };
 
-  // Opções válidas de Special Requests para o veículo atualmente selecionado.
-  const availableSpecialRequests: { value: string; label: string }[] =
-    (specialRequestsByVehicle[form.vehicleType] ?? []).map(v => ({
-      value: v,
-      label: specialRequestCatalog[v] ?? v,
+  const activeService: LalamoveServiceType = isServiceType(form.vehicleType)
+    ? form.vehicleType
+    : 'LALAGO';
+
+  // Opções válidas de Special Requests para o serviço atualmente selecionado.
+  const availableSpecialRequests: { value: string; label: string; restriction: string | null }[] =
+    SPECIAL_REQUESTS_BY_SERVICE[activeService].map(code => ({
+      value: code,
+      label: humanizeSpecialRequest(code),
+      restriction: SPECIAL_REQUEST_CITY_RESTRICTIONS[code]
+        ? `Somente ${SPECIAL_REQUEST_CITY_RESTRICTIONS[code].join(', ')}`
+        : null,
     }));
+
+  // `deliveryItemSpecification` só é processado por alguns serviços (errata BR).
+  const acceptsItem = serviceAcceptsItem(activeService);
+  const weightOptions = (ITEM_WEIGHT_RANGES[activeService] ?? []).map(value => ({
+    value,
+    label: humanizeWeightRange(value),
+  }));
+
 
   // Valida janela do agendamento: 30min a 30 dias no futuro.
   const scheduleValidation = (() => {
