@@ -209,6 +209,12 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
                   aria-label="Valor do bônus"
                 />
               </div>
+              {priorityFee && priorityCheck.error && (
+                <p className="text-xs text-destructive" role="alert">
+                  {priorityCheck.error}
+                </p>
+              )}
+
               <textarea
                 value={priorityReason}
                 onChange={(e) => setPriorityReason(e.target.value.slice(0, 200))}
