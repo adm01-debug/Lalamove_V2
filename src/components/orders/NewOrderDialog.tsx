@@ -464,6 +464,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             quotation={quotation}
             form={form}
             error={error}
+            priceChange={priceChange}
             onBack={() => { setStep('form'); setQuotation(null); setError(null); }}
             onConfirm={handleCreateOrder}
             onRequote={() => { setQuotation(null); setError(null); handleGetQuotation(); }}
@@ -864,12 +865,14 @@ interface QuotedStepProps {
     recipientPhone: string;
   };
   error: string | null;
+  /** Diferença de preço detectada na revalidação automática (Etapa 10). */
+  priceChange: { from: string; to: string } | null;
   onBack: () => void;
   onConfirm: () => void;
   onRequote: () => void;
 }
 
-function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: QuotedStepProps) {
+function QuotedStep({ quotation, form, error, priceChange, onBack, onConfirm, onRequote }: QuotedStepProps) {
   const expiry = useQuotationExpiry(quotation.expiresAt);
 
   const badgeTone = expiry.isExpired
@@ -932,7 +935,14 @@ function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: Qu
       {expiry.isExpired && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-warning text-sm">
           <AlertTriangle className="w-4 h-4 shrink-0" />
-          Esta cotação expirou. Solicite uma nova para prosseguir.
+          Esta cotação expirou. Ao confirmar, uma nova cotação será solicitada automaticamente.
+        </div>
+      )}
+
+      {priceChange && (
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-warning text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          O preço mudou na revalidação: de {priceChange.from} para {priceChange.to}. Confirme novamente para prosseguir com o novo valor.
         </div>
       )}
 
@@ -945,17 +955,14 @@ function QuotedStep({ quotation, form, error, onBack, onConfirm, onRequote }: Qu
 
       <div className="flex justify-end gap-2 pt-2">
         <Button variant="outline" onClick={onBack}>Voltar</Button>
-        {expiry.isExpired ? (
-          <Button variant="gradient" onClick={onRequote}>
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Recotar
-          </Button>
-        ) : (
-          <Button variant="gradient" onClick={onConfirm} disabled={expiry.isExpired}>
-            <Zap className="w-4 h-4 mr-2" />
-            Confirmar Pedido
-          </Button>
-        )}
+        <Button variant="outline" onClick={onRequote}>
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Recotar
+        </Button>
+        <Button variant="gradient" onClick={onConfirm}>
+          <Zap className="w-4 h-4 mr-2" />
+          {expiry.isExpired ? 'Revalidar e confirmar' : 'Confirmar Pedido'}
+        </Button>
       </div>
     </div>
   );
