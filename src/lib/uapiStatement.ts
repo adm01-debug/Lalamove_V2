@@ -16,7 +16,10 @@ export interface AccountingRow {
   valor: string;
   saldo: string;
   identificador: string;
+  /** Compatibilidade com os exportadores genéricos (CSV/Excel). */
+  [key: string]: unknown;
 }
+
 
 /** Epoch UAPI (segundos ou milissegundos) → ISO 8601; `''` quando ausente. */
 export function toIsoDate(value?: number | null): string {
