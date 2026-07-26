@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 import { Truck } from 'lucide-react';
 import { UapiOrderHistoryPanel } from '@/components/lalamove/UapiOrderHistoryPanel';
 import { UapiStatementPanel } from '@/components/lalamove/UapiStatementPanel';
@@ -11,17 +11,12 @@ import { UapiFleetPanel } from '@/components/lalamove/UapiFleetPanel';
  * cupons e frota corporativa.
  */
 export default function LalamoveOperationsPage() {
+  useEffect(() => {
+    document.title = 'Operações Lalamove | Lalamove Intelligence Hub';
+  }, []);
+
   return (
     <div className="space-y-6">
-      <Helmet>
-        <title>Operações Lalamove | Intelligence Hub</title>
-        <meta
-          name="description"
-          content="Histórico por cursor, extrato financeiro, comprovantes, cupons e frota corporativa Lalamove."
-        />
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
-
       <header className="flex items-center gap-3">
         <div className="rounded-lg bg-primary/10 p-2">
           <Truck className="h-5 w-5 text-primary" aria-hidden="true" />
@@ -33,6 +28,7 @@ export default function LalamoveOperationsPage() {
           </p>
         </div>
       </header>
+
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <UapiOrderHistoryPanel />
