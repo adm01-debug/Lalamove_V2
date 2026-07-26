@@ -32,6 +32,8 @@ export const menuCategories: MenuCategory[] = [
       { id: 'orders', path: '/orders', label: 'Pedidos', icon: Package },
       { id: 'drivers', path: '/drivers', label: 'Motoristas', icon: Users },
       { id: 'contacts', path: '/contacts', label: 'Contatos', icon: Contact },
+      { id: 'lalamove-ops', path: '/lalamove-operacoes', label: 'Operações Lalamove', icon: Package },
+
     ]
   },
   {
