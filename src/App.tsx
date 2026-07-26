@@ -196,6 +196,8 @@ const AppContent = () => {
                       <Route path="/external-data" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><ExternalDataPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/map-tools" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><MapToolsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/lalamove-quota" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><LalamoveQuotaPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/lalamove-operacoes" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><LalamoveOperationsPage /></SuspenseWrapper></ProtectedRoute>} />
+
                     </Route>
                     
                     <Route path="*" element={<NotFound />} />
