@@ -305,6 +305,34 @@ function OrderActions({ order, onOpenChange }: { order: Order; onOpenChange: (op
         </div>
       )}
 
+      {/* Frota no contexto do pedido — favoritar/bloquear o motorista atual */}
+      {order.driverId && (
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            disabled={fleetMutation.isPending}
+            onClick={() => handleFleetAction('add')}
+          >
+            <Star className="w-4 h-4" />
+            Favoritar motorista
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            disabled={fleetMutation.isPending}
+            onClick={() => handleFleetAction('block')}
+          >
+            <Ban className="w-4 h-4" />
+            Bloquear motorista
+          </Button>
+        </div>
+      )}
+
+
+
 
       {/* Cancel with reason */}
       {canCancel && showCancel && (
