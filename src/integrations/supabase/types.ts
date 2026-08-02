@@ -2760,6 +2760,45 @@ export type Database = {
         }
         Relationships: []
       }
+      tracking_events_y2026m10: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
       user_devices: {
         Row: {
           browser: string | null
