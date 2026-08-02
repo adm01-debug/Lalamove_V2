@@ -1,35 +1,100 @@
-// Edge function temporária para migração de banco.
-// Cole em: Cloud > Edge Functions > migrate-helper > View code
-// Após a migração, remova esta função.
+import { createClient } from 'npm:@supabase/supabase-js@2';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 
-const ACCESS_KEY = "8ddeb91706b2c7996507fb72b38b0e7d932b6e7b20d82099";
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-access-key",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-};
+/**
+ * migrate-helper — utilitário de diagnóstico para operações de migração.
+ *
+ * Segurança (não negociável):
+ *  - Exige JWT válido e papel `admin` (validado via RPC `has_role`).
+ *  - NUNCA retorna segredos (`SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`).
+ *    A ação legada `credentials` foi removida por ser vazamento de credenciais.
+ */
+
+type Action = 'ping' | 'schema';
+
+const ALLOWED_ACTIONS: readonly Action[] = ['ping', 'schema'] as const;
+
+function json(payload: unknown, status = 200): Response {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+function isAction(value: string): value is Action {
+  return (ALLOWED_ACTIONS as readonly string[]).includes(value);
+}
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: cors });
-  const key = req.headers.get("x-access-key");
-  if (key !== ACCESS_KEY) return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...cors, "Content-Type": "application/json" } });
-
-  const url = new URL(req.url);
-  const action = url.searchParams.get("action") || "ping";
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
 
   try {
-    if (action === "ping") {
-      return new Response(JSON.stringify({ ok: true, project_ref: Deno.env.get("SUPABASE_URL") }), { headers: { ...cors, "Content-Type": "application/json" } });
+    // ── 1. Autenticação ────────────────────────────────────────────────────
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return json({ error: 'Unauthorized' }, 401);
     }
-    if (action === "credentials") {
-      return new Response(JSON.stringify({
-        url: Deno.env.get("SUPABASE_URL"),
-        service_role: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"),
-        db_url: Deno.env.get("SUPABASE_DB_URL"),
-      }), { headers: { ...cors, "Content-Type": "application/json" } });
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
+    const userId = claimsData?.claims?.sub;
+    if (claimsError || typeof userId !== 'string') {
+      return json({ error: 'Unauthorized' }, 401);
     }
-    return new Response(JSON.stringify({ error: "unknown_action" }), { status: 400, headers: { ...cors, "Content-Type": "application/json" } });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { ...cors, "Content-Type": "application/json" } });
+
+    // ── 2. Autorização: apenas admin ───────────────────────────────────────
+    const { data: isAdmin, error: roleError } = await supabase.rpc('has_role', {
+      _user_id: userId,
+      _role: 'admin',
+    });
+    if (roleError) {
+      console.error('[migrate-helper] role check failed', roleError.message);
+      return json({ error: 'Falha ao verificar permissões' }, 500);
+    }
+    if (isAdmin !== true) {
+      return json({ error: 'Forbidden: requer papel admin' }, 403);
+    }
+
+    // ── 3. Ação ────────────────────────────────────────────────────────────
+    const raw = new URL(req.url).searchParams.get('action') ?? 'ping';
+    if (!isAction(raw)) {
+      return json({ error: 'unknown_action', allowed: ALLOWED_ACTIONS }, 400);
+    }
+
+    if (raw === 'ping') {
+      return json({
+        ok: true,
+        action: 'ping',
+        // Apenas metadados não sensíveis.
+        environment: Deno.env.get('ENVIRONMENT') ?? 'production',
+        hasServiceRole: Boolean(Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')),
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // action === 'schema' — sanidade de conectividade sem expor dados.
+    const { error: probeError } = await supabase
+      .from('user_roles')
+      .select('id', { count: 'exact', head: true });
+
+    return json({
+      ok: !probeError,
+      action: 'schema',
+      dataApiReachable: !probeError,
+      error: probeError?.message ?? null,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Erro desconhecido';
+    console.error('[migrate-helper] unexpected error', message);
+    return json({ error: 'Erro interno' }, 500);
   }
 });
