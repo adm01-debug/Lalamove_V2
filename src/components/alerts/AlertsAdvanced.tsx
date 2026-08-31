@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw, X, AlertCircle, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -79,13 +79,13 @@ interface AlertListItemProps {
   onDismiss: (id: string) => void; onViewDetails: (alert: Alert) => void; viewMode: ViewMode;
 }
 
-export function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDismiss, onViewDetails, viewMode }: AlertListItemProps) {
+export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDismiss, onViewDetails, viewMode }, ref) {
   const Icon = alertIcons[alert.type] || AlertCircle;
   const severity = severityConfig[alert.severity];
 
   if (viewMode === 'compact') {
     return (
-      <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }} className={cn("flex items-center gap-2 p-2 rounded-lg transition-all cursor-pointer hover:bg-secondary/30 active:bg-secondary/50", isSelected && "bg-primary/10 ring-1 ring-primary/30", !alert.isRead && "bg-gradient-to-r from-primary/5 to-transparent")} onClick={() => onViewDetails(alert)}>
+      <motion.div ref={ref} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }} className={cn("flex items-center gap-2 p-2 rounded-lg transition-all cursor-pointer hover:bg-secondary/30 active:bg-secondary/50", isSelected && "bg-primary/10 ring-1 ring-primary/30", !alert.isRead && "bg-gradient-to-r from-primary/5 to-transparent")} onClick={() => onViewDetails(alert)}>
         <Checkbox checked={isSelected} onCheckedChange={() => onSelect(alert.id)} onClick={(e) => e.stopPropagation()} className="h-4 w-4" />
         <div className={cn("p-1.5 rounded-md", severity.bgColor)}><Icon className={cn("w-3 h-3", severity.color)} /></div>
         <div className="flex-1 min-w-0"><p className={cn("text-xs font-medium truncate", !alert.isRead ? "text-foreground" : "text-muted-foreground")}>{alert.title}</p></div>
@@ -96,7 +96,7 @@ export function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDis
   }
 
   return (
-    <motion.div layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }} className={cn("group flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer hover:bg-secondary/20", isSelected && "bg-primary/10 ring-1 ring-primary/30 border-primary/30", !alert.isRead && "border-l-2", !alert.isRead && alert.severity === 'CRITICAL' && "border-l-destructive", !alert.isRead && alert.severity === 'WARNING' && "border-l-warning", !alert.isRead && alert.severity === 'INFO' && "border-l-info", alert.isRead && "border-border/30 opacity-70")} onClick={() => onMarkAsRead(alert.id)}>
+    <motion.div ref={ref} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -100 }} className={cn("group flex items-start gap-3 p-3 rounded-lg border transition-all cursor-pointer hover:bg-secondary/20", isSelected && "bg-primary/10 ring-1 ring-primary/30 border-primary/30", !alert.isRead && "border-l-2", !alert.isRead && alert.severity === 'CRITICAL' && "border-l-destructive", !alert.isRead && alert.severity === 'WARNING' && "border-l-warning", !alert.isRead && alert.severity === 'INFO' && "border-l-info", alert.isRead && "border-border/30 opacity-70")} onClick={() => onMarkAsRead(alert.id)}>
       <Checkbox checked={isSelected} onCheckedChange={() => onSelect(alert.id)} onClick={(e) => e.stopPropagation()} className="mt-1" />
       <div className={cn("p-2 rounded-lg shrink-0", severity.bgColor, severity.borderColor, "border")}><Icon className={cn("w-4 h-4", severity.color)} /></div>
       <div className="flex-1 min-w-0">
@@ -117,7 +117,7 @@ export function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDis
       </div>
     </motion.div>
   );
-}
+});
 
 // ============ AlertsToolbar ============
 interface AlertsToolbarProps {

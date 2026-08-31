@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme, ThemeMode } from '@/hooks/useTheme';
 import { useActiveAlerts, useAlertActions } from '@/hooks/useActiveAlerts';
+import { getDisplayName } from '@/lib/user-display';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
@@ -382,13 +383,13 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
           {/* Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="flex items-center gap-2 md:gap-3 md:pl-4 md:ml-2 md:border-l md:border-border/30 h-10 md:h-auto py-2 hover:bg-secondary/30 rounded-xl transition-all duration-200"
               >
                 <div className="text-right hidden md:block">
                   <p className="text-sm font-medium text-foreground">
-                    {user?.email?.split('@')[0] || 'Usuário'}
+                    {getDisplayName(user) ?? 'Usuário'}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {user?.email || 'user@email.com'}
@@ -401,7 +402,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl border-border/50">
               <div className="px-3 py-2 border-b border-border/30">
-                <p className="text-sm font-medium truncate">{user?.email}</p>
+                <p className="text-sm font-medium truncate">{getDisplayName(user) ?? user?.email ?? 'Usuário'}</p>
                 <div className="flex items-center gap-1.5 mt-1">
                   <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
                   <p className="text-xs text-muted-foreground">Conta ativa</p>

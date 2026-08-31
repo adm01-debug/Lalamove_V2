@@ -37,6 +37,7 @@ const pageConfig: Record<string, { title: string; subtitle?: string }> = {
   '/webhooks': { title: 'Webhooks', subtitle: 'Eventos recebidos do Lalamove' },
   '/bitrix24': { title: 'Bitrix24', subtitle: 'Integração com CRM' },
   '/settings': { title: 'Configurações', subtitle: 'Preferências do sistema' },
+  '/profile': { title: 'Meu Perfil', subtitle: 'Informações da sua conta' },
   '/delivery-metrics': { title: 'Métricas de Entrega', subtitle: 'Análise detalhada de performance' },
   '/evaluations': { title: 'Avaliações', subtitle: 'Histórico de avaliações de motoristas' },
   '/alert-configurations': { title: 'Configurações de Alertas', subtitle: 'Canais e templates de notificação' },
@@ -139,20 +140,21 @@ export function AppLayout() {
       '/heatmap': ['map', 'orders', 'drivers', 'alerts', 'settings'],
       '/sla': ['reports', 'orders', 'alerts', 'approvals', 'settings'],
       '/settings': ['orders', 'drivers', 'alerts', 'approvals', 'reports'],
+      '/profile': ['settings', 'orders', 'drivers', 'alerts', 'approvals'],
     };
 
     const actionKeys = contextMap[currentPath] || ['orders', 'approvals', 'alerts', 'drivers', 'map'];
-    
-    return actionKeys.map(key => {
-      const action = allActions[key as keyof typeof allActions];
-      return {
+
+    return actionKeys
+      .map(key => allActions[key])
+      .filter((action): action is ActionConfig => Boolean(action))
+      .map(action => ({
         icon: action.icon,
         label: action.label,
         onClick: () => navigate(action.path),
         ...(action.variant && { variant: action.variant }),
         ...(action.badgeKey && { badge: badgeCounts[action.badgeKey] }),
-      };
-    });
+      }));
   }, [location.pathname, navigate, badgeCounts]);
 
   const fabActions = getContextualActions();

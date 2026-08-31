@@ -1,11 +1,11 @@
 import { Alert } from '@/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Bell, 
-  AlertTriangle, 
-  AlertCircle, 
-  Info, 
+import {
+  Bell,
+  AlertTriangle,
+  AlertCircle,
+  Info,
   X,
   MapPin,
   Shield,
@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { SwipeableListItem, createSwipeAction } from '@/components/ui/swipeable-list';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion, AnimatePresence } from 'framer-motion';
+import { forwardRef } from 'react';
 
 interface AlertsPanelProps {
   alerts: Alert[];
@@ -61,22 +62,23 @@ function formatTimeAgoValue(date: Date): string {
 }
 
 // Alert Card Component
-function AlertCard({ 
-  alert, 
-  onDismiss,
-  showDismiss = true,
-  index = 0
-}: { 
-  alert: Alert; 
+const AlertCard = forwardRef<HTMLDivElement, {
+  alert: Alert;
   onDismiss?: () => void;
   showDismiss?: boolean;
   index?: number;
-}) {
+}>(function AlertCard({
+  alert,
+  onDismiss,
+  showDismiss = true,
+  index = 0
+}, ref) {
   const Icon = alertIcons[alert.type] || AlertCircle;
   const styles = severityStyles[alert.severity];
 
   return (
-    <motion.div 
+    <motion.div
+      ref={ref}
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20, height: 0 }}
@@ -129,7 +131,7 @@ function AlertCard({
       </div>
     </motion.div>
   );
-}
+});
 
 export function AlertsPanel({ alerts, onDismiss, onView }: AlertsPanelProps) {
   const unreadAlerts = alerts.filter(a => !a.isRead);

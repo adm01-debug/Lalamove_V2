@@ -56,9 +56,31 @@ export function HeatmapLegendPanel({ heatmapType }: { heatmapType: HeatmapType }
     <motion.div className="p-4 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 shadow-xl" whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }}>
       <div className="flex items-center gap-2 mb-3"><MapPin className="w-4 h-4 text-primary" /><span className="text-sm font-semibold">Legenda</span></div>
       <div className="space-y-2">
-        <AnimatePresence mode="wait">
-          {(heatmapType === 'pickup' || heatmapType === 'both') && <motion.div className="flex items-center gap-3" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}><div className="w-8 h-3 rounded-full bg-gradient-to-r from-cyan-500/30 via-teal-500 to-emerald-600" /><span className="text-xs font-medium">Coletas</span></motion.div>}
-          {(heatmapType === 'delivery' || heatmapType === 'both') && <motion.div className="flex items-center gap-3" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}><div className="w-8 h-3 rounded-full bg-gradient-to-r from-pink-500/30 via-purple-500 to-violet-600" /><span className="text-xs font-medium">Entregas</span></motion.div>}
+        <AnimatePresence mode="popLayout">
+          {(heatmapType === 'pickup' || heatmapType === 'both') && (
+            <motion.div
+              key="pickup"
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+            >
+              <div className="w-8 h-3 rounded-full bg-gradient-to-r from-cyan-500/30 via-teal-500 to-emerald-600" />
+              <span className="text-xs font-medium">Coletas</span>
+            </motion.div>
+          )}
+          {(heatmapType === 'delivery' || heatmapType === 'both') && (
+            <motion.div
+              key="delivery"
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+            >
+              <div className="w-8 h-3 rounded-full bg-gradient-to-r from-pink-500/30 via-purple-500 to-violet-600" />
+              <span className="text-xs font-medium">Entregas</span>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
       <div className="mt-3 pt-3 border-t border-border/50">

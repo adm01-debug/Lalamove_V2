@@ -29,11 +29,19 @@ export function HeatmapPage() {
       try {
         const { data, error } = await supabase.functions.invoke('get-mapbox-token');
         if (cancelled) return;
-        if (error) throw error;
-        if (data?.token) setMapboxToken(data.token);
-        else setError('Token Mapbox não configurado');
+        if (error) {
+          // Silently fail - map is optional
+          return;
+        }
+        // Validate token - reject placeholders and obviously invalid tokens
+        if (data?.token && !data.token.includes('placeholder') && data.token.startsWith('pk.')) {
+          setMapboxToken(data.token);
+        } else {
+          setError('Token Mapbox não configurado');
+        }
       } catch {
-        if (!cancelled) setError('Erro ao buscar token do Mapbox');
+        // Silently fail
+        if (!cancelled) setError('Token Mapbox não disponível');
       }
     };
     fetchToken();

@@ -18,9 +18,9 @@ serve(async (req) => {
       console.error('MAPBOX_ACCESS_TOKEN not configured');
       return new Response(
         JSON.stringify({ error: 'Mapbox token not configured' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       );
     }
@@ -29,18 +29,18 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ token: mapboxToken }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
   } catch (error) {
     console.error('Error fetching Mapbox token:', error);
     return new Response(
       JSON.stringify({ error: 'Internal server error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
     );
   }

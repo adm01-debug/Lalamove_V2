@@ -236,6 +236,7 @@ export function DashboardRedesigned() {
           severity="critical"
           icon={AlertTriangle}
           title="Atenção Necessária"
+          cardId="critical-attention"
           items={[
             {
               text: `${displayStats.pendingApprovals} aprovações pendentes`,
@@ -253,11 +254,12 @@ export function DashboardRedesigned() {
           primaryAction={() => navigate('/approvals')}
           primaryLabel="Revisar Agora"
         />
-        
+
         <AlertActionCard
           severity="warning"
           icon={Zap}
           title="Ação Rápida"
+          cardId="quick-action"
           items={[
             {
               text: "Pedidos próximos ao SLA",

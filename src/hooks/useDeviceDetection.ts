@@ -74,17 +74,10 @@ export function useDeviceDetection() {
       let locationCountry = '';
 
       try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        ipAddress = ipData.ip;
-
-        // Try to get location info
-        const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-        const geoData = await geoResponse.json();
-        locationCity = geoData.city || '';
-        locationCountry = geoData.country_name || '';
+        // Skip external IP geolocation APIs - they're unreliable and blocked by CORS
+        // Just send device info to the edge function
       } catch {
-        // Could not get IP/location info - silently continue
+        // silently continue
       }
 
       // Call edge function

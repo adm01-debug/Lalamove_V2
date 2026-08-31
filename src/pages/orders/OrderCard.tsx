@@ -7,6 +7,7 @@ import { Order, OrderStatus } from '@/types';
 import { cn } from '@/lib/utils';
 import { HighlightText } from '@/components/ui/highlight-match';
 import type { WithMatches } from '@/hooks/useFuseSearch';
+import { forwardRef } from 'react';
 
 const statusConfig: Record<OrderStatus, { label: string; variant: 'success' | 'warning' | 'destructive' | 'info' | 'muted' | 'live' | 'pending' }> = {
   PENDING: { label: 'Pendente', variant: 'pending' },
@@ -39,11 +40,12 @@ interface OrderCardProps {
   onViewDetails: (order: Order) => void;
 }
 
-export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCardProps) {
+export const OrderCard = forwardRef<HTMLDivElement, OrderCardProps>(function OrderCard({ order, index, searchQuery, onViewDetails }, ref) {
   const status = statusConfig[order.status];
 
   return (
     <motion.div
+      ref={ref}
       key={order.id}
       layout
       initial={{ opacity: 0, y: 20 }}
@@ -149,6 +151,6 @@ export function OrderCard({ order, index, searchQuery, onViewDetails }: OrderCar
       </Card>
     </motion.div>
   );
-}
+});
 
 export { statusConfig };

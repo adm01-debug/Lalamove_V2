@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { lalamove, type QuoteParams, type LalamoveStatusResponse, type LalamoveApiResponse, type LalamoveWalletHistoryResponse } from '@/lib/lalamove-api';
+import { isLalamoveConfigured } from '@/lib/lalamove-config';
 
 // ── Status & Test ──
 
@@ -8,6 +9,8 @@ export function useLalamoveStatus() {
     queryKey: ['llm', 'status'],
     queryFn: () => lalamove.status() as Promise<LalamoveStatusResponse>,
     refetchInterval: 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -26,6 +29,8 @@ export function useWallet() {
     queryKey: ['llm', 'wallet'],
     queryFn: lalamove.wallet,
     refetchInterval: 30_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
     select: (d: LalamoveApiResponse) => ({
       cents: (d.body?.data?.balance_fen as number) ?? 0,
       formatted: d.formatted ?? 'R$ 0,00',
@@ -38,6 +43,8 @@ export function useLalamoveUser() {
     queryKey: ['llm', 'user'],
     queryFn: lalamove.user,
     staleTime: 5 * 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
     select: (d: LalamoveApiResponse) => d.body?.data,
   });
 }
@@ -49,6 +56,8 @@ export function useCities() {
     queryKey: ['llm', 'cities'],
     queryFn: lalamove.cities,
     staleTime: 24 * 60 * 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
     select: (d: LalamoveApiResponse) => ({ all: d.body?.data, sp: d.sp_summary }),
   });
 }
@@ -67,8 +76,9 @@ export function useOrderGet(orderId: string | null) {
   return useQuery({
     queryKey: ['llm', 'order', orderId],
     queryFn: () => lalamove.orderGet(orderId!),
-    enabled: !!orderId,
+    enabled: !!orderId && isLalamoveConfigured(),
     refetchInterval: 10_000,
+    retry: false,
   });
 }
 
@@ -76,8 +86,9 @@ export function useDriverLocation(orderId: string | null, driverId: string | nul
   return useQuery({
     queryKey: ['llm', 'driver-location', orderId, driverId],
     queryFn: () => lalamove.driverLocation(orderId!, driverId!),
-    enabled: !!orderId && !!driverId,
+    enabled: !!orderId && !!driverId && isLalamoveConfigured(),
     refetchInterval: 10_000,
+    retry: false,
   });
 }
 
@@ -129,6 +140,8 @@ export function useWalletHistory(page = 1) {
     queryKey: ['llm', 'wallet-history', page],
     queryFn: () => lalamove.walletHistory(String(page)) as Promise<LalamoveWalletHistoryResponse>,
     staleTime: 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -139,6 +152,8 @@ export function useVehicles() {
     queryKey: ['llm', 'vehicles'],
     queryFn: lalamove.vehicles,
     staleTime: 24 * 60 * 60_000, // 24h
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -148,7 +163,9 @@ export function useServiceAreas() {
   return useQuery({
     queryKey: ['llm', 'service-areas'],
     queryFn: lalamove.serviceAreas,
-    staleTime: 24 * 60 * 60_000, // 24h
+    staleTime: 24 * 60 * 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -158,7 +175,8 @@ export function useV3Call(path: string | null, method = 'GET', body?: unknown) {
   return useQuery({
     queryKey: ['llm', 'v3', path, method, body],
     queryFn: () => lalamove.v3Call(path!, method, body),
-    enabled: !!path,
+    enabled: !!path && isLalamoveConfigured(),
+    retry: false,
   });
 }
 

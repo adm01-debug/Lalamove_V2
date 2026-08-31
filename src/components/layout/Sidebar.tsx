@@ -15,6 +15,7 @@ import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { menuCategories, roleHierarchy, getRoleDisplayName, getRoleColor, type MenuItem } from './sidebar-config';
 import { BounceBadge } from '@/components/ui/micro-interactions';
+import { getDisplayName, getDisplayInitials } from '@/lib/user-display';
 
 export function Sidebar() {
   const location = useLocation();
@@ -38,11 +39,7 @@ export function Sidebar() {
     fetchUserRole();
   }, [user?.id]);
 
-  const getUserInitials = () => {
-    if (!user?.email) return 'U';
-    const parts = user.email.split('@')[0].split(/[._-]/);
-    return parts.length >= 2 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
-  };
+  const getUserInitials = () => getDisplayInitials(user);
 
   const fetchCounts = useCallback(async () => {
     const { count: alertsCount } = await supabase.from('alerts').select('*', { count: 'exact', head: true }).eq('is_read', false).eq('is_dismissed', false);
@@ -107,9 +104,9 @@ export function Sidebar() {
 
   const UserDropdownContent = () => (
     <>
-      <DropdownMenuLabel><div className="flex flex-col space-y-1"><p className="text-sm font-medium">{user?.email}</p><div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-success" /><p className="text-xs text-success">Online</p></div></div></DropdownMenuLabel>
+      <DropdownMenuLabel><div className="flex flex-col space-y-1"><p className="text-sm font-medium">{getDisplayName(user) ?? user?.email ?? 'Usuário'}</p><div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-success" /><p className="text-xs text-success">Online</p></div></div></DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem onClick={() => navigate('/settings')}><User className="mr-2 h-4 w-4" />Meu Perfil</DropdownMenuItem>
+      <DropdownMenuItem onClick={() => navigate('/profile')}><User className="mr-2 h-4 w-4" />Meu Perfil</DropdownMenuItem>
       <DropdownMenuItem onClick={() => navigate('/settings')}><Settings className="mr-2 h-4 w-4" />Configurações</DropdownMenuItem>
       <DropdownMenuItem onClick={toggleTheme}>{theme === 'dark' ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}{theme === 'dark' ? 'Modo Claro' : 'Modo Escuro'}</DropdownMenuItem>
       <DropdownMenuSeparator />
@@ -167,8 +164,8 @@ export function Sidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="w-full flex items-center gap-3 p-2 rounded-xl bg-secondary/30 hover:bg-secondary/50 transition-all group">
-                    <div className="relative"><Avatar className="h-10 w-10 border-2 border-primary/20 transition-transform group-hover:scale-105"><AvatarImage src="" alt={user?.email || 'User'} /><AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">{getUserInitials()}</AvatarFallback></Avatar><motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-success border-2 border-background" /></div>
-                    <div className="flex-1 text-left min-w-0"><p className="text-sm font-medium truncate text-foreground">{user?.email?.split('@')[0] || 'Usuário'}</p><div className="flex items-center gap-1.5"><Circle className={cn("h-2 w-2 fill-current", getRoleColor(userRole))} /><p className={cn("text-xs truncate", getRoleColor(userRole))}>{getRoleDisplayName(userRole)}</p></div></div>
+                    <div className="relative"><Avatar className="h-10 w-10 border-2 border-primary/20 transition-transform group-hover:scale-105"><AvatarImage src="" alt={getDisplayName(user) ?? user?.email ?? 'User'} /><AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">{getUserInitials()}</AvatarFallback></Avatar><motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-success border-2 border-background" /></div>
+                    <div className="flex-1 text-left min-w-0"><p className="text-sm font-medium truncate text-foreground">{getDisplayName(user) ?? user?.email ?? 'Usuário'}</p><div className="flex items-center gap-1.5"><Circle className={cn("h-2 w-2 fill-current", getRoleColor(userRole))} /><p className={cn("text-xs truncate", getRoleColor(userRole))}>{getRoleDisplayName(userRole)}</p></div></div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 </DropdownMenuTrigger>

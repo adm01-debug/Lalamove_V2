@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { resolveUapiError } from '@/lib/uapiErrors';
+import { isLalamoveConfigured } from '@/lib/lalamove-config';
 
 /**
  * Camada de acesso às operações UAPI já expostas pela Edge Function
@@ -103,6 +104,8 @@ export function useUapiOrderHistory(statuses?: number[]) {
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     staleTime: 30_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -152,6 +155,8 @@ export function useUapiWalletStatement(page: number, startTime?: string, endTime
     },
     placeholderData: keepPreviousData,
     staleTime: 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -201,6 +206,8 @@ export function useUapiCoupons(page = 1) {
       return Array.isArray(list) ? (list as UapiCoupon[]) : [];
     },
     staleTime: 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 
@@ -244,6 +251,8 @@ export function useUapiFleet(kind: FleetKind, search?: string) {
       return Array.isArray(list) ? (list as UapiFleetDriver[]) : [];
     },
     staleTime: 60_000,
+    enabled: isLalamoveConfigured(),
+    retry: false,
   });
 }
 

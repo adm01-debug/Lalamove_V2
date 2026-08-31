@@ -7,6 +7,7 @@ interface AlertAction {
   count?: number;
   action: string;
   onClick: () => void;
+  id?: string;
 }
 
 interface AlertActionCardProps {
@@ -17,6 +18,7 @@ interface AlertActionCardProps {
   primaryAction: () => void;
   primaryLabel: string;
   className?: string;
+  cardId?: string;
 }
 
 const severityStyles = {
@@ -53,10 +55,11 @@ export function AlertActionCard({
   items,
   primaryAction,
   primaryLabel,
-  className
+  className,
+  cardId
 }: AlertActionCardProps) {
   const style = severityStyles[severity];
-  
+
   return (
     <div className={cn(
       "relative rounded-xl p-6 border-2 transition-all duration-300 hover:scale-[1.02]",
@@ -74,7 +77,7 @@ export function AlertActionCard({
           </span>
         </div>
       )}
-      
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <div className={cn(
@@ -85,12 +88,12 @@ export function AlertActionCard({
         </div>
         <h3 className="text-lg font-bold text-foreground">{title}</h3>
       </div>
-      
+
       {/* Items */}
       <div className="space-y-2 mb-4">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <div
-            key={item.action}
+            key={item.id ?? `${cardId ?? title}-${index}`}
             className="flex items-center justify-between p-3 rounded-lg bg-background/50 hover:bg-background/80 transition-colors cursor-pointer group"
             onClick={item.onClick}
           >

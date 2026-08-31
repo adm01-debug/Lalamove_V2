@@ -199,29 +199,29 @@ function OrdersTableDesktop({
             const status = statusConfig[order.status] || { label: order.status, variant: 'muted' as const };
             const isSelected = selectedIds.has(order.id);
             return (
-              <HoverPreview
+              <tr
                 key={order.id}
-                delay={400}
-                side="right"
-                align="start"
-                trigger={
-                  <tr 
-                    className={cn(
-                      "border-b border-border/50 hover:bg-secondary/20 transition-colors animate-fade-in cursor-pointer",
-                      isSelected && "bg-primary/5 hover:bg-primary/10"
-                    )}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                    onClick={() => onToggleSelect(order.id, !isSelected)}
-                  >
-                    <td className="p-4" onClick={(e) => e.stopPropagation()}>
-                      <Checkbox 
-                        checked={isSelected}
-                        onCheckedChange={(checked) => onToggleSelect(order.id, checked as boolean)}
-                        className="rounded-md border-primary/20"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
+                className={cn(
+                  "border-b border-border/50 hover:bg-secondary/20 transition-colors animate-fade-in cursor-pointer",
+                  isSelected && "bg-primary/5 hover:bg-primary/10"
+                )}
+                style={{ animationDelay: `${index * 50}ms` }}
+                onClick={() => onToggleSelect(order.id, !isSelected)}
+              >
+                <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                  <Checkbox
+                    checked={isSelected}
+                    onCheckedChange={(checked) => onToggleSelect(order.id, checked as boolean)}
+                    className="rounded-md border-primary/20"
+                  />
+                </td>
+                <td className="p-4">
+                  <HoverPreview
+                    delay={400}
+                    side="right"
+                    align="start"
+                    trigger={
+                      <div className="flex items-center gap-3 cursor-pointer">
                         <span className="text-xl">{vehicleIcons[order.vehicleType]}</span>
                         <div>
                           <p className="font-medium text-foreground font-mono text-sm">
@@ -230,86 +230,86 @@ function OrdersTableDesktop({
                           <p className="text-xs text-muted-foreground">{order.customerName}</p>
                         </div>
                       </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-col gap-1 items-start">
-                        <div className="flex gap-1 items-center">
-                          <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
-                            {status.label}
-                          </Badge>
-                          {order.auto_notify_supplier && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Badge variant="outline" size="sm" className="px-1 border-primary/20 text-primary">
-                                  <MessageSquare className="w-3 h-3" />
-                                </Badge>
-                              </TooltipTrigger>
-                              <TooltipContent>Notificação Automática Ativa</TooltipContent>
-                            </Tooltip>
-                          )}
-                        </div>
-                        {getGuardianAlert(order) && (
-                          <Badge variant={getGuardianAlert(order)!.variant} size="sm" pulse className="animate-in fade-in slide-in-from-top-1">
-                            {getGuardianAlert(order)!.label}
-                          </Badge>
-                        )}
-                      </div>
-                    </td>
-                    <td className="p-4 hidden lg:table-cell">
-                      {order.driverName ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-medium">
-                            {order.driverName.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                          </div>
-                          <span className="text-sm text-foreground">{order.driverName}</span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">—</span>
+                    }
+                    preview={
+                      <OrderPreviewCard order={order} status={status} />
+                    }
+                  />
+                </td>
+                <td className="p-4">
+                  <div className="flex flex-col gap-1 items-start">
+                    <div className="flex gap-1 items-center">
+                      <Badge variant={status.variant} dot={order.status === 'ON_GOING'} pulse={order.status === 'ON_GOING'}>
+                        {status.label}
+                      </Badge>
+                      {order.auto_notify_supplier && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge variant="outline" size="sm" className="px-1 border-primary/20 text-primary">
+                              <MessageSquare className="w-3 h-3" />
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent>Notificação Automática Ativa</TooltipContent>
+                        </Tooltip>
                       )}
-                    </td>
-                    <td className="p-4 hidden xl:table-cell">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate max-w-[200px]">{order.deliveryAddress}</span>
+                    </div>
+                    {getGuardianAlert(order) && (
+                      <Badge variant={getGuardianAlert(order)!.variant} size="sm" pulse className="animate-in fade-in slide-in-from-top-1">
+                        {getGuardianAlert(order)!.label}
+                      </Badge>
+                    )}
+                  </div>
+                </td>
+                <td className="p-4 hidden lg:table-cell">
+                  {order.driverName ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-medium">
+                        {order.driverName.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </div>
-                    </td>
-                    <td className="p-4">
-                      {order.estimatedDelivery ? (
-                        <div className="flex items-center gap-1.5 text-sm">
-                          <Clock className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-foreground font-medium">
-                            {formatTime(order.estimatedDelivery)}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">—</span>
-                      )}
-                    </td>
-                    <td className="p-4">
-                      <span className="text-sm font-medium text-foreground">
-                        {formatCurrency(order.totalCost, order.currency)}
+                      <span className="text-sm text-foreground">{order.driverName}</span>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">—</span>
+                  )}
+                </td>
+                <td className="p-4 hidden xl:table-cell">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <MapPin className="w-4 h-4 flex-shrink-0" />
+                    <span className="truncate max-w-[200px]">{order.deliveryAddress}</span>
+                  </div>
+                </td>
+                <td className="p-4">
+                  {order.estimatedDelivery ? (
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-foreground font-medium">
+                        {formatTime(order.estimatedDelivery)}
                       </span>
-                    </td>
-                    <td className="p-4 text-right">
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        aria-label="Ver detalhes do pedido"
-                        className="min-h-11 min-w-11 md:h-10 md:w-10"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onViewDetails?.(order);
-                        }}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                    </td>
-                  </tr>
-                }
-                preview={
-                  <OrderPreviewCard order={order} status={status} />
-                }
-              />
+                    </div>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">—</span>
+                  )}
+                </td>
+                <td className="p-4">
+                  <span className="text-sm font-medium text-foreground">
+                    {formatCurrency(order.totalCost, order.currency)}
+                  </span>
+                </td>
+                <td className="p-4 text-right">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Ver detalhes do pedido"
+                    className="min-h-11 min-w-11 md:h-10 md:w-10"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewDetails?.(order);
+                    }}
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                </td>
+              </tr>
             );
           })}
         </tbody>

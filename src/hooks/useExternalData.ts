@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { isBitrixConfigured } from '@/lib/bitrix-config';
 
 export type ExternalTable = 'companies' | 'customers' | 'suppliers' | 'carriers' | 'contacts';
 
@@ -47,6 +48,8 @@ export function useExternalList(table: ExternalTable, search?: string, page = 1,
       return data as { data: ExternalRecord[]; count: number; table: string };
     },
     staleTime: 60_000,
+    enabled: isBitrixConfigured(),
+    retry: false,
   });
 }
 
@@ -60,7 +63,8 @@ export function useExternalRecord(table: ExternalTable, id: string | null) {
       if (error) throw error;
       return data as { data: ExternalRecord };
     },
-    enabled: !!id,
+    enabled: !!id && isBitrixConfigured(),
+    retry: false,
   });
 }
 
@@ -74,8 +78,9 @@ export function useAddressSearch(search: string, enabled = true) {
       if (error) throw error;
       return data as { results: AddressSearchResult[] };
     },
-    enabled: enabled && search.length >= 2,
+    enabled: enabled && search.length >= 2 && isBitrixConfigured(),
     staleTime: 30_000,
+    retry: false,
   });
 }
 
@@ -90,6 +95,8 @@ export function useExternalStats() {
       return data as { counts: Record<string, number> };
     },
     staleTime: 5 * 60_000,
+    enabled: isBitrixConfigured(),
+    retry: false,
   });
 }
 

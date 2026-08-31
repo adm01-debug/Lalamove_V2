@@ -15,6 +15,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { forwardRef } from 'react';
 
 type DriverStatus = Database['public']['Enums']['driver_status'];
 
@@ -42,10 +43,10 @@ interface DriverCardProps {
   isApproving?: boolean;
 }
 
-export function DriverCard({
+export const DriverCard = forwardRef<HTMLDivElement, DriverCardProps>(function DriverCard({
   driver, index, leftActions, rightActions,
   onApprove, onOpenDialog, onRemoveWhitelist, onRemoveBlacklist, isApproving,
-}: DriverCardProps) {
+}, ref) {
   const status = statusConfig[driver.status];
   const StatusIcon = status.icon;
   const completionRate = driver.totalDeliveries > 0
@@ -53,7 +54,7 @@ export function DriverCard({
     : '0.0';
 
   return (
-    <motion.div key={driver.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.05 }}>
+    <motion.div ref={ref} key={driver.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.05 }}>
       <SwipeableListItem leftActions={leftActions} rightActions={rightActions} threshold={80}>
         <Card variant="glass" hover="lift" className={cn("overflow-hidden group", driver.status === 'BLACKLIST' && "border-destructive/40", driver.status === 'WHITELIST' && "border-success/40")}>
           <div className={cn("h-1 w-full",
@@ -171,4 +172,4 @@ export function DriverCard({
       </SwipeableListItem>
     </motion.div>
   );
-}
+});

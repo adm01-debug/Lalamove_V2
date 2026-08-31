@@ -50,6 +50,7 @@ const DeliveryMetricsPage = lazy(() => import('./pages/DeliveryMetricsPage').the
 const EvaluationsPage = lazy(() => import('./pages/EvaluationsPage').then(m => ({ default: m.EvaluationsPage })));
 const UserPreferencesPage = lazy(() => import('./pages/UserPreferencesPage'));
 const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
 const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
 const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
@@ -191,6 +192,7 @@ const AppContent = () => {
                       <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports/advanced" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AdvancedReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/profile" element={<ProtectedRoute><SuspenseWrapper><ProfilePage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/preferences" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/analytics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/external-data" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><ExternalDataPage /></SuspenseWrapper></ProtectedRoute>} />
