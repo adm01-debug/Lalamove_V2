@@ -1,0 +1,279 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "select": "Select",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "name": "Name",
+    "description": "Description",
+    "type": "Type",
+    "priority": "Priority",
+    "settings": "Settings",
+    "help": "Help",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back!",
+    "overview": "Overview",
+    "pendingApprovals": "Pending Approvals",
+    "activeAlerts": "Active Alerts",
+    "todayDeliveries": "Today's Deliveries",
+    "avgRiskScore": "Average Risk",
+    "approvedToday": "Approved Today",
+    "rejectedToday": "Rejected Today",
+    "recentOrders": "Recent Orders",
+    "quickActions": "Quick Actions",
+    "systemHealth": "System Health",
+    "performanceMetrics": "Performance Metrics",
+    "kpi": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "alerts": "Alerts"
+    }
+  },
+  "approvals": {
+    "title": "Approvals",
+    "queue": "Approval Queue",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "approve": "Approve",
+    "reject": "Reject",
+    "riskScore": "Risk Score",
+    "riskFactors": "Risk Factors",
+    "driverInfo": "Driver Information",
+    "orderInfo": "Order Information",
+    "notes": "Notes",
+    "addNote": "Add Note",
+    "reviewedBy": "Reviewed by",
+    "reviewedAt": "Reviewed at",
+    "waitingTime": "Waiting Time",
+    "bulkApprove": "Bulk Approve",
+    "bulkReject": "Bulk Reject",
+    "swipeApprove": "Swipe to approve",
+    "swipeReject": "Swipe to reject",
+    "noApprovals": "No pending approvals",
+    "urgency": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent",
+      "critical": "Critical"
+    }
+  },
+  "alerts": {
+    "title": "Alerts",
+    "active": "Active",
+    "dismissed": "Dismissed",
+    "dismiss": "Dismiss",
+    "dismissAll": "Dismiss All",
+    "markRead": "Mark as Read",
+    "severity": {
+      "info": "Information",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "types": {
+      "driver_blocked": "Driver Blocked",
+      "route_deviation": "Route Deviation",
+      "driver_stopped": "Driver Stopped",
+      "late_delivery": "Late Delivery",
+      "approval_required": "Approval Required",
+      "order_cancelled": "Order Cancelled"
+    },
+    "noAlerts": "No active alerts"
+  },
+  "drivers": {
+    "title": "Drivers",
+    "list": "Driver List",
+    "profile": "Driver Profile",
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending",
+      "blocked": "Blocked",
+      "whitelist": "Whitelist",
+      "blacklist": "Blacklist"
+    },
+    "vehicle": {
+      "motorcycle": "Motorcycle",
+      "car": "Car",
+      "van": "Van",
+      "truck": "Truck"
+    },
+    "metrics": {
+      "totalDeliveries": "Total Deliveries",
+      "completedDeliveries": "Completed Deliveries",
+      "failedDeliveries": "Failed Deliveries",
+      "successRate": "Success Rate",
+      "rating": "Rating",
+      "avgDelay": "Average Delay"
+    },
+    "actions": {
+      "block": "Block",
+      "unblock": "Unblock",
+      "whitelist": "Add to Whitelist",
+      "blacklist": "Add to Blacklist",
+      "evaluate": "Evaluate"
+    },
+    "noDrivers": "No drivers found"
+  },
+  "orders": {
+    "title": "Orders",
+    "list": "Order List",
+    "details": "Order Details",
+    "status": {
+      "pending": "Pending",
+      "matched": "Matched",
+      "ongoing": "Ongoing",
+      "picked_up": "Picked Up",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "rejected": "Rejected",
+      "expired": "Expired"
+    },
+    "info": {
+      "customer": "Customer",
+      "pickup": "Pickup",
+      "delivery": "Delivery",
+      "driver": "Driver",
+      "cost": "Cost",
+      "distance": "Distance",
+      "duration": "Duration",
+      "scheduled": "Scheduled"
+    },
+    "noOrders": "No orders found"
+  },
+  "map": {
+    "title": "Live Map",
+    "tracking": "Tracking",
+    "heatmap": "Heatmap",
+    "routes": "Routes",
+    "drivers": "Drivers",
+    "deliveries": "Deliveries",
+    "realtime": "Real-time"
+  },
+  "reports": {
+    "title": "Reports",
+    "generate": "Generate Report",
+    "download": "Download",
+    "period": "Period",
+    "types": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "custom": "Custom"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General",
+    "notifications": "Notifications",
+    "security": "Security",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": {
+      "title": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "sounds": "Sounds",
+    "alerts": "Alerts",
+    "mfa": "Two-Factor Authentication",
+    "devices": "Devices",
+    "passkeys": "Passkeys"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "rememberMe": "Remember me",
+    "loginSuccess": "Login successful!",
+    "logoutSuccess": "Logout successful!",
+    "invalidCredentials": "Invalid credentials"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Connection error. Check your internet.",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access denied",
+    "serverError": "Server error",
+    "validation": "Invalid data"
+  },
+  "offline": {
+    "title": "You are offline",
+    "message": "Some features may be limited.",
+    "retry": "Try again",
+    "cached": "Using cached data"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications",
+    "markAllRead": "Mark all as read",
+    "settings": "Notification Settings"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "unlocked": "Achievement Unlocked!",
+    "points": "points",
+    "list": {
+      "first_approval": "First Approval",
+      "speed_demon": "Speed Demon",
+      "streak_master": "Streak Master",
+      "early_bird": "Early Bird",
+      "night_owl": "Night Owl",
+      "centurion": "Centurion",
+      "risk_master": "Risk Master",
+      "zero_inbox": "Zero Inbox",
+      "bulk_processor": "Bulk Processor",
+      "perfect_week": "Perfect Week"
+    }
+  },
+  "hints": {
+    "swipeActions": "Swipe left or right for quick actions",
+    "keyboardShortcuts": "Use keyboard shortcuts to navigate faster",
+    "bulkActions": "Select multiple items for bulk actions",
+    "filters": "Use filters to find what you need quickly"
+  },
+  "time": {
+    "now": "Now",
+    "seconds": "seconds",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "weeks": "weeks",
+    "months": "months",
+    "ago": "ago"
+  }
+}

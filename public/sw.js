@@ -1,0 +1,356 @@
+// Lalamove Guardian Service Worker
+const CACHE_NAME = 'lalamove-guardian-v3';
+const RUNTIME_CACHE = 'runtime-cache-v3';
+const MANAGED_CACHES = [CACHE_NAME, RUNTIME_CACHE, 'pending-actions'];
+
+const isPreviewOrDevHost = () => {
+  const hostname = self.location.hostname;
+  return (
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname.startsWith('id-preview--') ||
+    hostname.startsWith('preview--') ||
+    hostname === 'lovableproject.com' ||
+    hostname.endsWith('.lovableproject.com') ||
+    hostname === 'lovableproject-dev.com' ||
+    hostname.endsWith('.lovableproject-dev.com') ||
+    hostname === 'beta.lovable.dev' ||
+    hostname.endsWith('.beta.lovable.dev')
+  );
+};
+
+const shouldBypassRequest = (request, url) => {
+  if (request.method !== 'GET') return true;
+
+  return (
+    url.pathname === '/auth' ||
+    url.pathname.startsWith('/auth/') ||
+    url.pathname.startsWith('/~oauth') ||
+    url.pathname.startsWith('/api/auth') ||
+    url.pathname.includes('/auth/v1/') ||
+    url.searchParams.has('__lovable_token') ||
+    request.headers.has('authorization')
+  );
+};
+
+const buildSyntheticResponse = (request) => {
+  if (request.mode === 'navigate') {
+    return new Response('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Offline</title></head><body><main><h1>Aplicativo offline</h1><p>Reconecte-se para continuar.</p></main></body></html>', {
+      status: 503,
+      statusText: 'Service Unavailable',
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
+  }
+
+  return new Response('', {
+    status: 503,
+    statusText: 'Service Unavailable',
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+};
+
+const cleanupManagedCaches = async () => {
+  const cacheNames = await caches.keys();
+  await Promise.allSettled(
+    cacheNames
+      .filter((name) => MANAGED_CACHES.includes(name) || name.startsWith('lalamove-guardian-') || name.startsWith('runtime-cache-'))
+      .map((name) => caches.delete(name))
+  );
+};
+
+// Assets to cache on install
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/favicon.ico',
+  '/robots.txt',
+];
+
+// Cache strategies
+const CACHE_STRATEGIES = {
+  // Network first, fall back to cache
+  networkFirst: async (request, cacheName = RUNTIME_CACHE) => {
+    try {
+      const networkResponse = await fetch(request);
+      if (networkResponse.ok) {
+        const cache = await caches.open(cacheName);
+        await cache.put(request, networkResponse.clone());
+      }
+      return networkResponse;
+    } catch (error) {
+      try {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // Graceful fallback: for navigations, serve the cached app shell so the
+        // SPA can boot and handle routing itself instead of surfacing a hard
+        // network error (which appears as an uncaught "Failed to fetch").
+        if (request.mode === 'navigate') {
+          const shell = await caches.match('/index.html') || await caches.match('/');
+          if (shell) {
+            return shell;
+          }
+        }
+
+        return buildSyntheticResponse(request);
+      } catch (cacheError) {
+        return buildSyntheticResponse(request);
+      }
+    }
+  },
+
+
+  // Cache first, fall back to network
+  cacheFirst: async (request, cacheName = CACHE_NAME) => {
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    try {
+      const networkResponse = await fetch(request);
+      if (networkResponse.ok) {
+        const cache = await caches.open(cacheName);
+        cache.put(request, networkResponse.clone());
+      }
+      return networkResponse;
+    } catch (error) {
+      return buildSyntheticResponse(request);
+    }
+  },
+
+  // Stale while revalidate
+  staleWhileRevalidate: async (request, cacheName = RUNTIME_CACHE) => {
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(request);
+    
+    const fetchPromise = fetch(request).then((networkResponse) => {
+      if (networkResponse.ok) {
+        cache.put(request, networkResponse.clone());
+      }
+      return networkResponse;
+    }).catch(() => null);
+
+    return cachedResponse || fetchPromise || buildSyntheticResponse(request);
+  },
+};
+
+// Install event - cache static assets
+self.addEventListener('install', (event) => {
+  if (isPreviewOrDevHost()) {
+    event.waitUntil(self.skipWaiting());
+    return;
+  }
+
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(STATIC_ASSETS);
+      })
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  if (isPreviewOrDevHost()) {
+    event.waitUntil(
+      (async () => {
+        try {
+          await cleanupManagedCaches();
+          await self.clients.claim();
+          const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+          await Promise.allSettled(clients.map((client) => client.navigate(client.url)));
+        } finally {
+          await self.registration.unregister();
+        }
+      })()
+    );
+    return;
+  }
+
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
+          .map((name) => {
+            return caches.delete(name);
+          })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch event - serve from cache or network
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  if (isPreviewOrDevHost() || shouldBypassRequest(request, url)) {
+    return;
+  }
+
+  // Skip non-GET requests
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  // Skip cross-origin requests except for CDN assets
+  if (url.origin !== self.location.origin) {
+    // Allow caching of CDN assets (fonts, images, etc.)
+    if (url.hostname.includes('fonts.googleapis.com') || 
+        url.hostname.includes('fonts.gstatic.com') ||
+        url.hostname.includes('cdnjs.cloudflare.com')) {
+      event.respondWith(CACHE_STRATEGIES.cacheFirst(request));
+    }
+    return;
+  }
+
+  // API requests - network first
+  if (url.pathname.startsWith('/api/') || url.pathname.includes('/rest/') || url.pathname.includes('/functions/')) {
+    event.respondWith(CACHE_STRATEGIES.networkFirst(request));
+    return;
+  }
+
+  // Always prefer fresh JS/CSS/module chunks to avoid React runtime mismatch
+  if (
+    url.pathname.startsWith('/node_modules/.vite/') ||
+    url.pathname.startsWith('/assets/') ||
+    url.pathname.startsWith('/src/') ||
+    /\.(js|mjs|css|map)$/.test(url.pathname)
+  ) {
+    event.respondWith(CACHE_STRATEGIES.networkFirst(request));
+    return;
+  }
+
+  // Images/fonts/icons - cache first
+  if (url.pathname.match(/\.(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    event.respondWith(CACHE_STRATEGIES.cacheFirst(request));
+    return;
+  }
+
+  // HTML/navigation - network first (fallback cache)
+  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(CACHE_STRATEGIES.networkFirst(request));
+    return;
+  }
+
+  // Default - network first
+  event.respondWith(CACHE_STRATEGIES.networkFirst(request));
+});
+
+// Background sync for offline actions
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-pending-actions') {
+    event.waitUntil(syncPendingActions());
+  }
+});
+
+// Handle pending actions when back online
+async function syncPendingActions() {
+  try {
+    const cache = await caches.open('pending-actions');
+    const requests = await cache.keys();
+    
+    for (const request of requests) {
+      try {
+        const cachedResponse = await cache.match(request);
+        if (cachedResponse) {
+          const data = await cachedResponse.json();
+          await fetch(data.url, {
+            method: data.method,
+            headers: data.headers,
+            body: data.body,
+          });
+          await cache.delete(request);
+        }
+      } catch (error) {
+        // Keep queued action for the next sync attempt.
+      }
+    }
+  } catch (error) {
+    // Background sync is best-effort; failures must not surface as console noise.
+  }
+}
+
+// Push notifications
+self.addEventListener('push', (event) => {
+  let data = { title: 'Nova Notificação', body: 'Você tem uma nova notificação' };
+  
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data.body = event.data.text();
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: '/favicon.ico',
+    badge: '/favicon.ico',
+    vibrate: [200, 100, 200],
+    data: data,
+    actions: [
+      { action: 'view', title: 'Ver' },
+      { action: 'dismiss', title: 'Dispensar' },
+    ],
+    requireInteraction: data.severity === 'CRITICAL',
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Notification click handler
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'dismiss') {
+    return;
+  }
+
+  const urlToOpen = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // Try to focus existing window
+        for (const client of clientList) {
+          if (client.url.includes(self.location.origin) && 'focus' in client) {
+            client.focus();
+            client.navigate(urlToOpen);
+            return;
+          }
+        }
+        // Open new window if none found
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen);
+        }
+      })
+  );
+});
+
+// Message handler for communication with main thread
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data?.type === 'GET_VERSION') {
+    event.ports[0]?.postMessage({ version: CACHE_NAME });
+  }
+  
+  if (event.data?.type === 'CLEAR_CACHE') {
+    cleanupManagedCaches().then(() => {
+      event.ports[0]?.postMessage({ success: true });
+    }).catch(() => {
+      event.ports[0]?.postMessage({ success: false });
+    }).then(() => {
+      return undefined;
+    });
+  }
+});

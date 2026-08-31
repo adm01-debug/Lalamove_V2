@@ -1,0 +1,279 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "refresh": "Actualizar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "yes": "Sí",
+    "no": "No",
+    "all": "Todos",
+    "none": "Ninguno",
+    "select": "Seleccionar",
+    "actions": "Acciones",
+    "status": "Estado",
+    "date": "Fecha",
+    "time": "Hora",
+    "name": "Nombre",
+    "description": "Descripción",
+    "type": "Tipo",
+    "priority": "Prioridad",
+    "settings": "Configuración",
+    "help": "Ayuda",
+    "logout": "Salir",
+    "profile": "Perfil"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "¡Bienvenido de nuevo!",
+    "overview": "Resumen",
+    "pendingApprovals": "Aprobaciones Pendientes",
+    "activeAlerts": "Alertas Activas",
+    "todayDeliveries": "Entregas Hoy",
+    "avgRiskScore": "Riesgo Promedio",
+    "approvedToday": "Aprobados Hoy",
+    "rejectedToday": "Rechazados Hoy",
+    "recentOrders": "Pedidos Recientes",
+    "quickActions": "Acciones Rápidas",
+    "systemHealth": "Estado del Sistema",
+    "performanceMetrics": "Métricas de Rendimiento",
+    "kpi": {
+      "pending": "Pendientes",
+      "approved": "Aprobados",
+      "rejected": "Rechazados",
+      "alerts": "Alertas"
+    }
+  },
+  "approvals": {
+    "title": "Aprobaciones",
+    "queue": "Cola de Aprobaciones",
+    "pending": "Pendiente",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "riskScore": "Puntuación de Riesgo",
+    "riskFactors": "Factores de Riesgo",
+    "driverInfo": "Información del Conductor",
+    "orderInfo": "Información del Pedido",
+    "notes": "Notas",
+    "addNote": "Agregar Nota",
+    "reviewedBy": "Revisado por",
+    "reviewedAt": "Revisado en",
+    "waitingTime": "Tiempo de Espera",
+    "bulkApprove": "Aprobar en Lote",
+    "bulkReject": "Rechazar en Lote",
+    "swipeApprove": "Desliza para aprobar",
+    "swipeReject": "Desliza para rechazar",
+    "noApprovals": "Sin aprobaciones pendientes",
+    "urgency": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "urgent": "Urgente",
+      "critical": "Crítico"
+    }
+  },
+  "alerts": {
+    "title": "Alertas",
+    "active": "Activas",
+    "dismissed": "Descartadas",
+    "dismiss": "Descartar",
+    "dismissAll": "Descartar Todas",
+    "markRead": "Marcar como Leída",
+    "severity": {
+      "info": "Información",
+      "warning": "Advertencia",
+      "critical": "Crítico"
+    },
+    "types": {
+      "driver_blocked": "Conductor Bloqueado",
+      "route_deviation": "Desvío de Ruta",
+      "driver_stopped": "Conductor Detenido",
+      "late_delivery": "Entrega Tardía",
+      "approval_required": "Aprobación Requerida",
+      "order_cancelled": "Pedido Cancelado"
+    },
+    "noAlerts": "Sin alertas activas"
+  },
+  "drivers": {
+    "title": "Conductores",
+    "list": "Lista de Conductores",
+    "profile": "Perfil del Conductor",
+    "status": {
+      "approved": "Aprobado",
+      "pending": "Pendiente",
+      "blocked": "Bloqueado",
+      "whitelist": "Lista Blanca",
+      "blacklist": "Lista Negra"
+    },
+    "vehicle": {
+      "motorcycle": "Moto",
+      "car": "Auto",
+      "van": "Furgoneta",
+      "truck": "Camión"
+    },
+    "metrics": {
+      "totalDeliveries": "Total de Entregas",
+      "completedDeliveries": "Entregas Completadas",
+      "failedDeliveries": "Entregas Fallidas",
+      "successRate": "Tasa de Éxito",
+      "rating": "Calificación",
+      "avgDelay": "Retraso Promedio"
+    },
+    "actions": {
+      "block": "Bloquear",
+      "unblock": "Desbloquear",
+      "whitelist": "Agregar a Lista Blanca",
+      "blacklist": "Agregar a Lista Negra",
+      "evaluate": "Evaluar"
+    },
+    "noDrivers": "No se encontraron conductores"
+  },
+  "orders": {
+    "title": "Pedidos",
+    "list": "Lista de Pedidos",
+    "details": "Detalles del Pedido",
+    "status": {
+      "pending": "Pendiente",
+      "matched": "Asignado",
+      "ongoing": "En Progreso",
+      "picked_up": "Recogido",
+      "completed": "Completado",
+      "cancelled": "Cancelado",
+      "rejected": "Rechazado",
+      "expired": "Expirado"
+    },
+    "info": {
+      "customer": "Cliente",
+      "pickup": "Recogida",
+      "delivery": "Entrega",
+      "driver": "Conductor",
+      "cost": "Costo",
+      "distance": "Distancia",
+      "duration": "Duración",
+      "scheduled": "Programado"
+    },
+    "noOrders": "No se encontraron pedidos"
+  },
+  "map": {
+    "title": "Mapa en Vivo",
+    "tracking": "Seguimiento",
+    "heatmap": "Mapa de Calor",
+    "routes": "Rutas",
+    "drivers": "Conductores",
+    "deliveries": "Entregas",
+    "realtime": "Tiempo Real"
+  },
+  "reports": {
+    "title": "Informes",
+    "generate": "Generar Informe",
+    "download": "Descargar",
+    "period": "Período",
+    "types": {
+      "daily": "Diario",
+      "weekly": "Semanal",
+      "monthly": "Mensual",
+      "custom": "Personalizado"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "general": "General",
+    "notifications": "Notificaciones",
+    "security": "Seguridad",
+    "appearance": "Apariencia",
+    "language": "Idioma",
+    "theme": {
+      "title": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "sounds": "Sonidos",
+    "alerts": "Alertas",
+    "mfa": "Autenticación de Dos Factores",
+    "devices": "Dispositivos",
+    "passkeys": "Llaves de Acceso"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "register": "Registrarse",
+    "forgotPassword": "¿Olvidaste tu Contraseña?",
+    "resetPassword": "Restablecer Contraseña",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "rememberMe": "Recuérdame",
+    "loginSuccess": "¡Inicio de sesión exitoso!",
+    "logoutSuccess": "¡Sesión cerrada exitosamente!",
+    "invalidCredentials": "Credenciales inválidas"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Intenta de nuevo.",
+    "network": "Error de conexión. Verifica tu internet.",
+    "notFound": "Página no encontrada",
+    "unauthorized": "Acceso no autorizado",
+    "forbidden": "Acceso denegado",
+    "serverError": "Error del servidor",
+    "validation": "Datos inválidos"
+  },
+  "offline": {
+    "title": "Estás sin conexión",
+    "message": "Algunas funciones pueden estar limitadas.",
+    "retry": "Intentar de nuevo",
+    "cached": "Usando datos en caché"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "empty": "Sin notificaciones",
+    "markAllRead": "Marcar todas como leídas",
+    "settings": "Configuración de Notificaciones"
+  },
+  "achievements": {
+    "title": "Logros",
+    "unlocked": "¡Logro Desbloqueado!",
+    "points": "puntos",
+    "list": {
+      "first_approval": "Primera Aprobación",
+      "speed_demon": "Demonio de la Velocidad",
+      "streak_master": "Maestro de la Racha",
+      "early_bird": "Madrugador",
+      "night_owl": "Búho Nocturno",
+      "centurion": "Centurión",
+      "risk_master": "Maestro del Riesgo",
+      "zero_inbox": "Bandeja Vacía",
+      "bulk_processor": "Procesador en Lote",
+      "perfect_week": "Semana Perfecta"
+    }
+  },
+  "hints": {
+    "swipeActions": "Desliza a izquierda o derecha para acciones rápidas",
+    "keyboardShortcuts": "Usa atajos de teclado para navegar más rápido",
+    "bulkActions": "Selecciona múltiples elementos para acciones en lote",
+    "filters": "Usa filtros para encontrar lo que necesitas rápidamente"
+  },
+  "time": {
+    "now": "Ahora",
+    "seconds": "segundos",
+    "minutes": "minutos",
+    "hours": "horas",
+    "days": "días",
+    "weeks": "semanas",
+    "months": "meses",
+    "ago": "atrás"
+  }
+}

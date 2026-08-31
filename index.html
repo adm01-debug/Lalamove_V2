@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Lalamove Guardian" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Lalamove Guardian" />
+    <meta name="msapplication-TileColor" content="#1a1a2e" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- App Info -->
+    <title>Lalamove Guardian - Monitoramento de Entregas</title>
+    <meta name="description" content="Sistema avançado de monitoramento e gestão de entregas Lalamove com rastreamento em tempo real, avaliação de motoristas e alertas inteligentes.">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="keywords" content="lalamove, entregas, monitoramento, rastreamento, motoristas, logística" />
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://lalamove-guardian.lovable.app" />
+    
+    <!-- Open Graph -->
+    
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lalamove-guardian.lovable.app" />
+    <meta property="og:image" content="/og-image.png">
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Lalamove Guardian" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    
+    <meta name="twitter:image" content="/og-image.png">
+    
+    <!-- PWA Manifest: carregado apenas fora do preview/editor para evitar 401 do proxy -->
+    <script>
+      (() => {
+        const hostname = window.location.hostname;
+        const isPreviewHost =
+          window.self !== window.top ||
+          hostname.startsWith('id-preview--') ||
+          hostname.startsWith('preview--') ||
+          hostname === 'lovableproject.com' ||
+          hostname.endsWith('.lovableproject.com') ||
+          hostname === 'lovableproject-dev.com' ||
+          hostname.endsWith('.lovableproject-dev.com') ||
+          hostname === 'beta.lovable.dev' ||
+          hostname.endsWith('.beta.lovable.dev');
+
+        if (!isPreviewHost) {
+          const manifest = document.createElement('link');
+          manifest.rel = 'manifest';
+          manifest.href = '/manifest.json';
+          document.head.appendChild(manifest);
+        }
+      })();
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8b5cf6" />
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" /></noscript>
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="//api.mapbox.com" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Lalamove Guardian",
+        "description": "Sistema avançado de monitoramento e gestão de entregas Lalamove",
+        "url": "https://lalamove-guardian.lovable.app",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "BRL"
+        },
+        "featureList": [
+          "Rastreamento em tempo real",
+          "Avaliação de motoristas",
+          "Alertas inteligentes",
+          "Relatórios e métricas",
+          "Integração com Bitrix24"
+        ]
+      }
+    </script>
+    <meta property="og:title" content="Lalamove Guardian - Monitoramento de Entregas">
+  <meta name="twitter:title" content="Lalamove Guardian - Monitoramento de Entregas">
+  <meta property="og:description" content="Sistema avançado de monitoramento e gestão de entregas Lalamove com rastreamento em tempo real, avaliação de motoristas e alertas inteligentes.">
+  <meta name="twitter:description" content="Sistema avançado de monitoramento e gestão de entregas Lalamove com rastreamento em tempo real, avaliação de motoristas e alertas inteligentes.">
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Accessibility: No-JS fallback -->
+    <noscript>
+      <div style="padding: 20px; text-align: center; font-family: system-ui, sans-serif;">
+        <h1>JavaScript Necessário</h1>
+        <p>Este aplicativo requer JavaScript para funcionar. Por favor, habilite o JavaScript no seu navegador.</p>
+      </div>
+    </noscript>
+  </body>
+</html>

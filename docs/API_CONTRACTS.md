@@ -1,0 +1,161 @@
+# 📑 Contratos de API — Webhooks & Edge Functions
+
+**Versão:** 1.0.0 · Camada de validação de schema + formato único de erro + versionamento.
+
+## Componentes
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `supabase/functions/_shared/contract.ts` | Helpers puros: `validateContract`, `parseJsonBody`, `errorResponse`, `resolveContractVersion`, formato único de erro. |
+| `supabase/functions/_shared/schemas.ts` | Registro central de schemas Zod versionados (`CONTRACT_REGISTRY`, `getSchema`). |
+| `supabase/functions/_shared/contract.test.ts` | Testes de contrato (34 casos). |
+
+## Formato único de erro (HTTP 422)
+
+Toda falha de validação retorna **sempre** a mesma estrutura:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "A validação do payload falhou. Verifique os campos informados.",
+    "fields": [
+      { "field": "event", "message": "event é obrigatório", "code": "too_small" }
+    ]
+  },
+  "meta": { "contractVersion": "v1", "timestamp": "2026-07-12T00:00:00.000Z" }
+}
+```
+
+Códigos: `VALIDATION_FAILED`, `INVALID_JSON`, `UNSUPPORTED_VERSION`, `UNAUTHORIZED`, `RATE_LIMITED`, `INTERNAL_ERROR`.
+
+## Versionamento (v1/v2)
+
+- Resolução por precedência: header `x-contract-version` → query `?v=`/`?version=` → default `v1`.
+- Regra de compatibilidade: **v2 é superset de v1** (campos novos opcionais/com default). Um payload v1 válido é sempre válido em v2 — garantido por teste.
+- **Versão recomendada:** `v2` (`RECOMMENDED_VERSION`). Novas integrações devem enviar `x-contract-version: v2`.
+
+### Estratégia de deprecação
+
+Ciclo de vida de cada versão:
+
+1. **Ativa** — suportada, sem avisos.
+2. **Descontinuada (deprecated)** — listada em `DEPRECATED_VERSIONS`. Continua **aceita e processada normalmente**, mas toda resposta (incluindo o **erro 422**) sinaliza a deprecação:
+   - **Corpo:** `meta.deprecation` com `message`, `sunsetDate`, `recommendedVersion` e `migrationGuide`.
+   - **Headers (best-effort):** `Warning: 299`, `Sunset` (RFC 8594), `Deprecation: true` e `Link; rel="deprecation"`.
+3. **Removida** — retirada de `SUPPORTED_VERSIONS` após a data de sunset; passa a resolver como `UNSUPPORTED_VERSION`.
+
+**Estado atual:** `v1` está **descontinuada** (`DEPRECATION_SCHEDULE.v1.sunsetDate = 2026-12-31`) e permanece como default por retrocompatibilidade — logo, chamadas sem header explícito recebem o aviso, acelerando a migração para `v2`.
+
+Exemplo de `meta.deprecation` num 422 sob `v1`:
+
+```json
+{
+  "error": { "code": "VALIDATION_FAILED", "message": "...", "fields": [] },
+  "meta": {
+    "contractVersion": "v1",
+    "timestamp": "2026-07-12T00:00:00.000Z",
+    "deprecation": {
+      "version": "v1",
+      "deprecated": true,
+      "message": "A versão de contrato 'v1' está descontinuada e será removida em 2026-12-31. Migre para 'v2' ...",
+      "sunsetDate": "2026-12-31",
+      "recommendedVersion": "v2",
+      "migrationGuide": "docs/API_CONTRACTS.md#versionamento-v1v2"
+    }
+  }
+}
+```
+
+**Como remover `v1` no sunset:** retirar `"v1"` de `SUPPORTED_VERSIONS` e `DEPRECATED_VERSIONS`, mudar `DEFAULT_VERSION` para `v2`, promover os schemas `v2` e atualizar os testes.
+
+### Telemetria de uso (rastreamento de integradores pendentes)
+
+Toda requisição às Edge Functions registra a versão de contrato utilizada, permitindo medir a **proporção de chamadas em `v1`** antes de definir a data efetiva de remoção.
+
+- **Log estruturado (sempre emitido):** cada chamada emite `{"tag":"contract_usage",...}` nos logs da função. Chamadas em versão descontinuada usam o prefixo `[DEPRECATED_CONTRACT_USAGE]` (`console.warn`) para filtragem imediata.
+- **Persistência agregada (best-effort):** `trackContractUsage()` (`_shared/telemetry.ts`) chama a RPC atômica `increment_contract_usage`, que faz upsert diário na tabela `public.contract_version_usage` por `(contract_name, contract_version, usage_date)`. É *fire-and-forget*: nunca bloqueia nem quebra a resposta ao cliente.
+- **Consulta (apenas admins):** `contract_version_usage` tem RLS restrito a `admin`. Exemplo — proporção de `v1` nos últimos 30 dias:
+
+```sql
+SELECT
+  usage_date,
+  SUM(request_count) FILTER (WHERE contract_version = 'v1')::numeric
+    / NULLIF(SUM(request_count), 0) AS v1_ratio
+FROM public.contract_version_usage
+WHERE usage_date >= current_date - INTERVAL '30 days'
+GROUP BY usage_date
+ORDER BY usage_date DESC;
+```
+
+- **Builder puro/testável:** `buildContractUsageEvent(name, version)` (em `contract.ts`) monta o evento sem I/O e é coberto por testes de contrato.
+
+
+
+
+## Contratos cobertos
+
+`lalamove-webhook`, `evaluate-driver`, `send-notification`, `new-device-alert`, `route-analyzer`, `check-external-api`, `test-notification`.
+
+## Integração numa Edge Function
+
+```ts
+import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+
+const version = resolveContractVersion(req);
+const parsed = await parseJsonBody(req, version);
+if (!parsed.ok) return errorResponse(parsed, corsHeaders);
+
+const contract = validateContract(getSchema("evaluate-driver", version), parsed.value, version);
+if (!contract.ok) return errorResponse(contract, corsHeaders);
+// contract.data está tipado e validado
+```
+
+## Testes
+
+### 1. Contrato (em memória, sem I/O)
+
+```bash
+deno test --allow-net supabase/functions/_shared/contract.test.ts
+```
+
+Cobertura: payload válido, campo ausente, tipo incorreto, valor vazio, JSON malformado, compat retroativa v1→v2, resolução de versão. **34/34 passando.**
+
+### 2. Integração I/O real (chama as Edge Functions IMPLANTADAS)
+
+```bash
+deno test --allow-net --allow-env --allow-read \
+  supabase/functions/_shared/contract.integration.test.ts
+```
+
+Exercita cada função via HTTP contra o runtime real, validando:
+- **422** — campo obrigatório ausente retorna o formato único de erro;
+- **Tipos** — tipo/enum incorreto retorna 422 nomeando o campo;
+- **Compat retroativa** — o mesmo payload inválido é rejeitado de forma idêntica sob os headers `v1` e `v2` (superset estrito), e um payload v1 válido continua aceito sob `v2` (funções idempotentes/read-only);
+- **Segurança** — o gate de IP do `lalamove-webhook` precede o contrato (403 para origem não confiável);
+- **CORS** — preflight `OPTIONS` responde em todas as funções.
+
+Efeitos colaterais são evitados: funções que disparam e-mail/IA/notificações recebem **apenas** payloads inválidos (falham antes do efeito). **27/27 passando.**
+
+> No CI, roda no job `edge-integration-tests` (push na `main`), lendo `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` dos secrets do repositório.
+
+
+## Status de integração (rollout completo)
+
+Todas as Edge Functions com payload de entrada agora consomem a camada de contrato,
+garantindo formato de erro 422 único e versionamento (v1/v2):
+
+| Função              | Integrada | Observação                                    |
+| ------------------- | :-------: | --------------------------------------------- |
+| lalamove-webhook    |    ✅     | + validação HMAC                              |
+| evaluate-driver     |    ✅     | —                                             |
+| send-notification   |    ✅     | inclui `metadata` opcional no schema          |
+| new-device-alert    |    ✅     | —                                             |
+| route-analyzer      |    ✅     | —                                             |
+| test-notification   |    ✅     | —                                             |
+| check-external-api  |    ✅     | integrado à camada de contrato (I/O testado)  |
+
+Deploy realizado para: `send-notification`, `new-device-alert`, `route-analyzer`, `test-notification`, `check-external-api`.
+
+Todas as 7 funções têm cobertura de I/O real em `contract.integration.test.ts` (27 testes).
