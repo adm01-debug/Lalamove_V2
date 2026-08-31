@@ -2006,6 +2006,36 @@ export type Database = {
         }
         Relationships: []
       }
+      mcp_diagnostics_grants: {
+        Row: {
+          created_at: string
+          granted_by: string | null
+          id: string
+          is_active: boolean
+          purpose: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          purpose: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          purpose?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mfa_sessions: {
         Row: {
           created_at: string | null
@@ -3368,6 +3398,7 @@ export type Database = {
     }
     Functions: {
       acknowledge_alert: { Args: { p_alert_id: string }; Returns: boolean }
+      can_run_db_diagnostics: { Args: { _user_id: string }; Returns: boolean }
       check_login_lockout: {
         Args: { p_email: string }
         Returns: {
@@ -3522,6 +3553,10 @@ export type Database = {
           is_valid: boolean
           user_id: string
         }[]
+      }
+      mcp_introspect: {
+        Args: { p_operation: string; p_params?: Json }
+        Returns: Json
       }
       provision_tracking_partitions: { Args: never; Returns: Json }
       prune_tracking_events_partitions: {
