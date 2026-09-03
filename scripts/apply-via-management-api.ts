@@ -59,7 +59,7 @@ ON CONFLICT (user_id, role) DO NOTHING;`;
     `CREATE POLICY "Authenticated users can insert entity versions" ON public.entity_versions FOR INSERT TO authenticated WITH CHECK (true)`,
   ];
 
-  const fullSQL = sql statements.join('; ');
+  const fullSQL = sqlStatements.join('; ');
 
   const response = await fetch(
     `https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/query`,

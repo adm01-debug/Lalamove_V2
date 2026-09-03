@@ -69,9 +69,9 @@ export function useDeviceDetection() {
       const { browser, os } = parseUserAgent(userAgent);
 
       // Get IP and location info (using a free service)
-      let ipAddress = '0.0.0.0';
-      let locationCity = '';
-      let locationCountry = '';
+      const ipAddress = '0.0.0.0';
+      const locationCity = '';
+      const locationCountry = '';
 
       try {
         // Skip external IP geolocation APIs - they're unreliable and blocked by CORS

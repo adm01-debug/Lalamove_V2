@@ -199,7 +199,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
       const fromBackend = await readBackendCache(pending.map(([key]) => key));
       if (Object.keys(fromBackend).length > 0) {
         Object.assign(resolved, fromBackend);
-        fromBackend && Object.keys(fromBackend).forEach((key) => inFlight.current.delete(key));
+        Object.keys(fromBackend).forEach((key) => inFlight.current.delete(key));
         toGeocode = pending.filter(([key]) => !fromBackend[key]);
       }
 
