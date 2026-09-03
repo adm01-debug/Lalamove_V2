@@ -33,14 +33,13 @@ describe('useMapboxToken', () => {
     expect(invokeMock).toHaveBeenCalledWith('get-mapbox-token');
   });
 
-  it('define erro quando a edge function retorna erro', async () => {
+  it('falha silenciosamente (mapbox é opcional) quando a edge function retorna erro', async () => {
     invokeMock.mockResolvedValue({ data: null, error: new Error('boom') });
 
     const { result } = renderHook(() => useMapboxToken());
 
-    await waitFor(() => {
-      expect(result.current.error).toBe('Erro ao buscar token do Mapbox');
-    });
+    await new Promise((r) => setTimeout(r, 10));
+    expect(result.current.error).toBeNull();
     expect(result.current.mapboxToken).toBeNull();
   });
 
@@ -61,7 +60,7 @@ describe('useMapboxToken', () => {
     const { result } = renderHook(() => useMapboxToken());
 
     await waitFor(() => {
-      expect(result.current.error).toBe('Erro ao buscar token do Mapbox');
+      expect(result.current.error).toBe('Token Mapbox não disponível');
     });
     expect(result.current.mapboxToken).toBeNull();
   });
