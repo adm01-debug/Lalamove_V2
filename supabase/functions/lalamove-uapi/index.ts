@@ -18,6 +18,7 @@ const APP_REVISION = '53700';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 
 // Anti-WAF headers required for UAPI
 const UAPI_HEADERS: HeadersInit = {
@@ -58,6 +59,28 @@ function buildUapiUrl(method: string, su?: string): string {
   });
   
   return `${UAPI_BASE_URL}?${params.toString()}`;
+}
+
+// Verifica se o caller tem role admin via JWT claims (app_metadata.role).
+// Retorna { error: Response } se não autorizado, { error: null } se OK.
+async function requireAdmin(req: Request): Promise<{ error: Response | null }> {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  const token = authHeader.replace('Bearer ', '');
+  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims(token);
+  if (claimsError || !claimsData?.claims) {
+    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;
+  if (role !== 'admin') {
+    return { error: new Response(JSON.stringify({ error: 'Forbidden: admin role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  return { error: null };
 }
 
 // Build UAPI body (application/x-www-form-urlencoded)
@@ -471,8 +494,12 @@ serve(async (req) => {
     // deno-lint-ignore no-explicit-any
     const body: any = rawBody.action ? (({ action: _a, ...rest }: Record<string, unknown>) => rest)(rawBody) : rawBody;
 
-    // Special action: set initial token (no auth needed from UAPI side)
+    // Special action: set initial token — requer role admin para evitar que
+    // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
     if (action === 'set-token') {
+      const adminCheck = await requireAdmin(req);
+      if (adminCheck.error) return adminCheck.error;
+
       if (!body.access_token || !body.refresh_token) {
         return new Response(
           JSON.stringify({ error: 'access_token and refresh_token are required' }),
@@ -512,8 +539,10 @@ serve(async (req) => {
       );
     }
 
-    // Special action: token status
+    // Special action: token status — protegido por admin para não expor metadados do token
     if (action === 'token-status') {
+      const adminCheck = await requireAdmin(req);
+      if (adminCheck.error) return adminCheck.error;
       const { data: session } = await supabase.rpc('get_active_uapi_token');
       if (!session || session.length === 0) {
         return new Response(
