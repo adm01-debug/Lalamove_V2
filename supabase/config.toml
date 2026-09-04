@@ -9,3 +9,9 @@ verify_jwt = false
 # via supabase.functions.invoke(), portanto nenhuma mudança de código é necessária.
 [functions.get-mapbox-token]
 verify_jwt = true
+
+# simulate-driver-movement: ferramenta de simulação de dev que escreve em
+# active_tracking e tracking_events via service_role. Deve exigir sessão válida
+# para evitar que qualquer caller externo injete dados de rastreamento falsos.
+[functions.simulate-driver-movement]
+verify_jwt = true
