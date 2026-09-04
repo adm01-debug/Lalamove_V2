@@ -178,16 +178,17 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
   }, [coords]);
 
   useEffect(() => {
+    const inFlightSet = inFlight.current;
     const pending: Array<[string, Coord]> = [];
     for (const [key, c] of uniqueCoords) {
-      if (regions[key] || inFlight.current.has(key)) continue;
+      if (regions[key] || inFlightSet.has(key)) continue;
       pending.push([key, c]);
       if (pending.length >= MAX_PER_RUN) break;
     }
     if (pending.length === 0) return;
 
     let cancelled = false;
-    pending.forEach(([key]) => inFlight.current.add(key));
+    pending.forEach(([key]) => inFlightSet.add(key));
     setActiveCount((n) => n + pending.length);
 
     (async () => {
@@ -199,7 +200,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
       const fromBackend = await readBackendCache(pending.map(([key]) => key));
       if (Object.keys(fromBackend).length > 0) {
         Object.assign(resolved, fromBackend);
-        Object.keys(fromBackend).forEach((key) => inFlight.current.delete(key));
+        Object.keys(fromBackend).forEach((key) => inFlightSet.delete(key));
         toGeocode = pending.filter(([key]) => !fromBackend[key]);
       }
 
@@ -222,7 +223,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
             } catch (err) {
               logger.error('Reverse geocode falhou para', key, err);
             } finally {
-              inFlight.current.delete(key);
+              inFlightSet.delete(key);
             }
           }),
         );
@@ -245,7 +246,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
 
     return () => {
       cancelled = true;
-      pending.forEach(([key]) => inFlight.current.delete(key));
+      pending.forEach(([key]) => inFlightSet.delete(key));
     };
   }, [uniqueCoords, regions]);
 
