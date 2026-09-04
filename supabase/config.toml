@@ -1,4 +1,29 @@
 project_id = "iecgydonctmabiijadsf"
 
+# migrate-helper: chamada manualmente em migrações sem sessão de usuário ativa.
 [functions.migrate-helper]
 verify_jwt = false
+
+# get-mapbox-token: devolve o token Mapbox ao frontend autenticado.
+# verify_jwt = true exige sessão Supabase válida; o frontend já envia o JWT
+# via supabase.functions.invoke(), portanto nenhuma mudança de código é necessária.
+[functions.get-mapbox-token]
+verify_jwt = true
+
+# simulate-driver-movement: ferramenta de simulação de dev que escreve em
+# active_tracking e tracking_events via service_role. Deve exigir sessão válida
+# para evitar que qualquer caller externo injete dados de rastreamento falsos.
+[functions.simulate-driver-movement]
+verify_jwt = true
+
+# lalamove-api: BFF principal — cria pedidos, cancela, muda motorista, define
+# webhook. Sem auth qualquer caller podia criar pedidos pagos ou redirecionar
+# todos os webhooks Lalamove. Backend calls com service_role JWT continuam OK.
+[functions.lalamove-api]
+verify_jwt = true
+
+# send-notification: dispara WhatsApp/email/Slack/Bitrix24/n8n via Evolution e
+# Resend. Sem auth qualquer caller podia spam todos os canais configurados.
+# Functions internas já chamam com service_role Bearer — JWT válido, sem quebra.
+[functions.send-notification]
+verify_jwt = true
