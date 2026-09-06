@@ -33,3 +33,11 @@ verify_jwt = true
 # caller podia exfiltrar dados de entrega e esgotar créditos da API.
 [functions.route-analyzer]
 verify_jwt = true
+
+# lalamove-uapi: proxy da UAPI Lalamove (tokens de sessão, wallet, pedidos).
+# verify_jwt = true já é o default, mas declarado aqui explicitamente porque
+# a action set-token aceita tokens de sessão externos — qualquer caller
+# autenticado sem check de role poderia sobrescrever a sessão ativa.
+# O check de role admin é feito no código da função (requireAdmin).
+[functions.lalamove-uapi]
+verify_jwt = true
