@@ -157,7 +157,7 @@ const CASES: FnCase[] = [
 for (const c of CASES) {
   if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
     console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada no ambiente da Edge Function`);
-    return;
+    continue;
   }
   Deno.test(`[I/O][${c.fn}] campo ausente → 422 formato único`, async () => {
     const { status, body } = await invoke(c.fn, c.missing);
@@ -174,7 +174,7 @@ for (const c of CASES) {
 for (const c of CASES) {
   if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
     console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada`);
-    return;
+    continue;
   }
   Deno.test(`[I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField}`, async () => {
     const { status, body } = await invoke(c.fn, c.wrongType);
@@ -194,7 +194,7 @@ for (const c of CASES) {
 for (const c of CASES) {
   if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
     console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada`);
-    return;
+    continue;
   }
   Deno.test(`[I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente`, async () => {
     const v1 = await invoke(c.fn, c.missing, { version: "v1" });
