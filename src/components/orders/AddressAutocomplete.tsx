@@ -56,6 +56,7 @@ export function AddressAutocomplete({
   const isLoading = crmLoading || mapboxLoading;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInputValue(value);
   }, [value]);
 

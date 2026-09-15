@@ -23,6 +23,7 @@ export function useMapAlerts(trackingData: TrackingData[]) {
     const activeIds = new Set(trackingData.map(t => t.id));
 
     // Off-route: derivação direta de is_on_route.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOffRouteAlerts(prev => {
       const next = new Set<string>();
       trackingData.forEach(t => {

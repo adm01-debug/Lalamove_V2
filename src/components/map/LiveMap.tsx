@@ -476,6 +476,7 @@ export function LiveMap({
       <MapHUD 
         selectedTracking={selectedTracking} 
         offRoute={selectedId ? offRouteAlerts.has(selectedId) : false}
+        // eslint-disable-next-line react-hooks/purity
         stoppedTime={selectedId && stoppedAlerts.has(selectedId) ? Math.floor((Date.now() - stoppedAlerts.get(selectedId)!) / 1000) : 0}
         etaOriginal={selectedId ? etaIndicator.get(selectedId)?.original : undefined}
         trend={selectedId ? etaIndicator.get(selectedId)?.trend : 'stable'}

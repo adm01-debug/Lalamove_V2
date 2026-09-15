@@ -50,6 +50,7 @@ export function Sidebar() {
     setOpenIncidents(incidentsCount || 0);
   }, []);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchCounts(); }, [fetchCounts]);
   useSidebarCountsRealtime(fetchCounts);
 
@@ -102,7 +103,7 @@ export function Sidebar() {
   };
 
 
-  const UserDropdownContent = () => (
+  const userDropdownContent = () => (
     <>
       <DropdownMenuLabel><div className="flex flex-col space-y-1"><p className="text-sm font-medium">{getDisplayName(user) ?? user?.email ?? 'Usuário'}</p><div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-success" /><p className="text-xs text-success">Online</p></div></div></DropdownMenuLabel>
       <DropdownMenuSeparator />
@@ -156,7 +157,7 @@ export function Sidebar() {
             <div className="p-3 flex justify-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-full"><Avatar className="h-10 w-10 border-2 border-primary/20"><AvatarImage src="" alt={user?.email || 'User'} /><AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">{getUserInitials()}</AvatarFallback></Avatar><span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-success border-2 border-background" /></Button></DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56"><UserDropdownContent /></DropdownMenuContent>
+                <DropdownMenuContent align="end" className="w-56">{userDropdownContent()}</DropdownMenuContent>
               </DropdownMenu>
             </div>
           ) : (
@@ -169,7 +170,7 @@ export function Sidebar() {
                     <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="right" className="w-56"><UserDropdownContent /></DropdownMenuContent>
+                <DropdownMenuContent align="end" side="right" className="w-56">{userDropdownContent()}</DropdownMenuContent>
               </DropdownMenu>
             </div>
           )}

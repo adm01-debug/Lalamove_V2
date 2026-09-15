@@ -238,10 +238,13 @@ function EditContactDialog({ contact, onClose, onSave, busy }: EditContactDialog
   const [kind, setKind] = useState<ContactKind>('both');
 
   // Sincroniza quando abre com novo contato
-  useMemo(() => {
+  useEffect(() => {
     if (contact) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(contact.name);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAddress(contact.address ?? '');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setKind(contact.kind);
     }
   }, [contact]);

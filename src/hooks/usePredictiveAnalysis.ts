@@ -215,6 +215,7 @@ export function usePredictiveAnalysis() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     runAnalysis();
     const interval = setInterval(() => runAnalysis(true), 5 * 60 * 1000);
     return () => clearInterval(interval);

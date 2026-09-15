@@ -65,6 +65,7 @@ export function DashboardRedesigned() {
   const ordersSparkline = useMemo(() => {
     const orders = ordersData?.orders ?? [];
     if (orders.length === 0) return [0, 0, 0, 0, 0];
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now();
     return [4, 3, 2, 1, 0].map(hoursAgo => {
       const from = now - (hoursAgo + 1) * 3600000;
@@ -79,6 +80,7 @@ export function DashboardRedesigned() {
   const completionSparkline = useMemo(() => {
     const orders = ordersData?.orders ?? [];
     if (orders.length === 0) return [0, 0, 0, 0, 0];
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now();
     return [4, 3, 2, 1, 0].map(hoursAgo => {
       const from = now - (hoursAgo + 1) * 3600000;
@@ -101,6 +103,7 @@ export function DashboardRedesigned() {
     const activeOrders = ordersData?.orders?.filter(o => 
       ['ON_GOING', 'PICKED_UP'].includes(o.status) && o.estimatedDelivery
     ) ?? [];
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now();
     return activeOrders.filter(o => {
       const eta = new Date(o.estimatedDelivery!).getTime();

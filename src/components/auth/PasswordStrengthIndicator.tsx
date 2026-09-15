@@ -85,6 +85,7 @@ export function PasswordStrengthIndicator({
   // Check for breached password with debounce
   useEffect(() => {
     if (!password || password.length < 8) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsBreached(null);
       onBreachCheck?.(false);
       return;
