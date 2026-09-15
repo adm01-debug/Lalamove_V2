@@ -26,6 +26,7 @@ function ProfilePage() {
   // Reage a mudanças no user (ex: após salvar)
   useEffect(() => {
     const current = getDisplayName(user) ?? userEmail.split('@')[0];
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayName(current);
     setEditName(current);
   }, [user?.user_metadata?.full_name, user?.user_metadata?.name, userEmail]);

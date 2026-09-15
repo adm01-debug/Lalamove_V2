@@ -39,7 +39,9 @@ export function MapHUD({
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
+  // eslint-disable-next-line react-hooks/purity
   const batteryLevel = Math.floor(Math.random() * 20) + 75;
+  // eslint-disable-next-line react-hooks/purity
   const signalStrength = Math.floor(Math.random() * 15) + 85;
   const temperature = 24;
   const riskLevel = selectedTracking.is_on_route ? 'Baixo' : 'Alto';

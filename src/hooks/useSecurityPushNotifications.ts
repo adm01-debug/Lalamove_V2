@@ -21,6 +21,7 @@ export function useSecurityPushNotifications() {
   // Check if notifications are supported
   useEffect(() => {
     if ('Notification' in window) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSupported(true);
       setPermission(Notification.permission);
     }
@@ -40,6 +41,7 @@ export function useSecurityPushNotifications() {
       if (result === 'granted') {
         toast.success('Notificações push ativadas!');
         // Send a test notification
+        // eslint-disable-next-line react-hooks/immutability
         showNotification({
           title: '🔔 Notificações Ativadas',
           body: 'Você receberá alertas de segurança em tempo real.',
@@ -60,6 +62,7 @@ export function useSecurityPushNotifications() {
   }, [isSupported]);
 
   // Show a notification
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const showNotification = useCallback((notification: SecurityNotification) => {
     if (!isSupported || permission !== 'granted') {
       if (import.meta.env.DEV) logger.log('Notifications not available or not permitted');

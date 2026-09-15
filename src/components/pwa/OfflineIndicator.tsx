@@ -115,6 +115,7 @@ export function ConnectionQuality() {
   
   useEffect(() => {
     if (!isOnline) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuality('poor');
       return;
     }

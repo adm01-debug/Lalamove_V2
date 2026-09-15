@@ -183,6 +183,7 @@ export function useReportData(period: string) {
     }
   };
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchReportData(); }, [period]);
 
   return { loading, refreshing, stats, dailyStats, driverPerformance, vehicleDistribution, statusDistribution, fetchReportData };

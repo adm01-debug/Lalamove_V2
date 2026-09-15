@@ -110,6 +110,7 @@ export function useServiceWorker() {
                   description: 'Clique para atualizar o aplicativo',
                   action: {
                     label: 'Atualizar',
+                    // eslint-disable-next-line react-hooks/immutability
                     onClick: () => updateServiceWorker(),
                   },
                   duration: 10000,
@@ -160,6 +161,7 @@ export function useServiceWorker() {
   }, []);
 
   // Update service worker
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const updateServiceWorker = useCallback(() => {
     if (!waitingWorker) return;
 

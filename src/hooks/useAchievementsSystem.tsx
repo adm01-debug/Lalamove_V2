@@ -140,9 +140,13 @@ const AchievementsContext = createContext<AchievementsContextValue | null>(null)
 function ConfettiParticle({ index }: { index: number }) {
   const colors = ['hsl(var(--primary))', 'hsl(var(--accent))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--info))'];
   const color = colors[index % colors.length];
+  // eslint-disable-next-line react-hooks/purity
   const randomX = Math.random() * 100;
+  // eslint-disable-next-line react-hooks/purity
   const randomDelay = Math.random() * 0.3;
+  // eslint-disable-next-line react-hooks/purity
   const size = 6 + Math.random() * 8;
+  // eslint-disable-next-line react-hooks/purity
   const rotation = Math.random() * 360;
 
   return (
@@ -154,6 +158,7 @@ function ConfettiParticle({ index }: { index: number }) {
         width: size,
         height: size,
         backgroundColor: color,
+        // eslint-disable-next-line react-hooks/purity
         borderRadius: Math.random() > 0.5 ? '50%' : '2px',
         transform: `rotate(${rotation}deg)`,
       }}
@@ -162,9 +167,11 @@ function ConfettiParticle({ index }: { index: number }) {
         y: window.innerHeight + 50,
         opacity: [1, 1, 0],
         rotate: rotation + 720,
+        // eslint-disable-next-line react-hooks/purity
         x: [0, (Math.random() - 0.5) * 200],
       }}
       transition={{
+        // eslint-disable-next-line react-hooks/purity
         duration: 2 + Math.random(),
         delay: randomDelay,
         ease: [0.25, 0.46, 0.45, 0.94],

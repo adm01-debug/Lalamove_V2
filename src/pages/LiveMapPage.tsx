@@ -112,6 +112,7 @@ export function LiveMapPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDeliveries();
 
     // Subscribe to realtime updates

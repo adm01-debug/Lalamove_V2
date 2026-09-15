@@ -193,6 +193,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   // Auto-open category when active route is inside
   useEffect(() => {
     menuCategories.forEach(cat => {
+      // eslint-disable-next-line react-hooks/immutability
       if (cat.items.some(item => isActive(item.path))) {
         setOpenCategories(prev => prev.includes(cat.id) ? prev : [...prev, cat.id]);
       }

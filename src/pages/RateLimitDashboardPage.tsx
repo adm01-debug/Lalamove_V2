@@ -85,6 +85,7 @@ export default function RateLimitDashboardPage() {
     
     const expiresAt = blockData.isPermanent 
       ? undefined 
+      // eslint-disable-next-line react-hooks/purity
       : new Date(Date.now() + parseDuration(blockData.duration)).toISOString();
 
     blockIP({

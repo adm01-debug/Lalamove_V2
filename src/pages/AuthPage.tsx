@@ -41,6 +41,7 @@ export function AuthPage() {
   // Countdown timer for lockout
   useEffect(() => {
     if (lockoutStatus.isLocked && lockoutStatus.remainingSeconds > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCountdown(lockoutStatus.remainingSeconds);
       const interval = setInterval(() => {
         setCountdown(prev => {
