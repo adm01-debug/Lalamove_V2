@@ -94,6 +94,8 @@ interface FnCase {
   wrongTypeField: string;
   /** payload válido idempotente/read-only; ausente = não testar aceitação I/O */
   validSafe?: unknown;
+  /** Quando true, o teste é ignorado se LOVABLE_API_KEY não está no env da edge function. */
+  needsLovableKey?: boolean;
 }
 
 const CASES: FnCase[] = [
