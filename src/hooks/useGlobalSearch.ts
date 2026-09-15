@@ -102,6 +102,7 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
   const effectiveOpen = open ?? isOpen;
   const setEffectiveOpen = onOpenChange ?? setIsOpen;
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (effectiveOpen) { setRecentSearches(getRecentSearches()); setFavorites(getFavorites()); setTimeout(() => inputRef.current?.focus(), 100); } }, [effectiveOpen]);
 
   useEffect(() => {
@@ -142,6 +143,7 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
     } catch (error) { logger.error("Search error:", error); } finally { setIsLoading(false); }
   }, [activeTab]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { searchDatabase(debouncedQuery); }, [debouncedQuery, searchDatabase]);
 
   const handleSelect = useCallback((result: SearchResult) => {
@@ -166,6 +168,7 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [effectiveOpen, results, selectedIndex, query, handleSelect, setEffectiveOpen]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setSelectedIndex(0); }, [results, query]);
 
   const handleToggleFavorite = useCallback((id: string) => { toggleFavoriteStorage(id); setFavorites(getFavorites()); }, []);

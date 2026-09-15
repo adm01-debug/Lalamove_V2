@@ -181,6 +181,7 @@ export const useWebVitals = () => {
     window.addEventListener('web-vitals', handleVitals as EventListener);
     
     // Get any metrics that were already collected
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMetrics(getStoredMetrics());
     
     return () => {

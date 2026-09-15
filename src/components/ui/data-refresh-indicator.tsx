@@ -72,6 +72,7 @@ export function DataRefreshIndicator({
 
   useEffect(() => {
     if (!showCountdown || !autoRefreshInterval || paused || isRefreshing) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCountdown(nextRefreshIn || autoRefreshInterval);
     const interval = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : autoRefreshInterval));

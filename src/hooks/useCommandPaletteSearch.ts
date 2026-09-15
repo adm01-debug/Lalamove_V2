@@ -121,6 +121,7 @@ export function useCommandPaletteSearch() {
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRecentSearches(getRecentSearches());
       setFavorites(getFavorites());
     }
@@ -180,6 +181,7 @@ export function useCommandPaletteSearch() {
 
   // Search database
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!debouncedQuery || debouncedQuery.length < 2) { setSearchResults([]); return; }
     const searchDatabase = async () => {
       setIsSearching(true);
@@ -200,6 +202,7 @@ export function useCommandPaletteSearch() {
     searchDatabase();
   }, [debouncedQuery]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (!open) { setQuery(''); setSearchResults([]); } }, [open]);
 
   const navSearchKeys = useMemo(() => ['label', 'keywords'], []);

@@ -94,6 +94,8 @@ interface FnCase {
   wrongTypeField: string;
   /** payload válido idempotente/read-only; ausente = não testar aceitação I/O */
   validSafe?: unknown;
+  /** Quando true, o teste é ignorado se LOVABLE_API_KEY não está no env da edge function. */
+  needsLovableKey?: boolean;
 }
 
 const CASES: FnCase[] = [
@@ -140,6 +142,7 @@ const CASES: FnCase[] = [
     missing: {},
     wrongType: { action: "acao-inexistente" },
     wrongTypeField: "action",
+    needsLovableKey: true, // LOVABLE_API_KEY precisa estar configurada na Edge Function
   },
   {
     fn: "test-notification",
@@ -152,6 +155,10 @@ const CASES: FnCase[] = [
 // ── 1. Campo ausente → 422 no formato único ───────────────────────────────────
 
 for (const c of CASES) {
+  if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
+    console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada no ambiente da Edge Function`);
+    return;
+  }
   Deno.test(`[I/O][${c.fn}] campo ausente → 422 formato único`, async () => {
     const { status, body } = await invoke(c.fn, c.missing);
     assertEquals(status, 422, `esperado 422, recebido ${status} (${JSON.stringify(body)})`);
@@ -165,6 +172,10 @@ for (const c of CASES) {
 // ── 2. Tipo/enum incorreto → 422 nomeando o campo ─────────────────────────────
 
 for (const c of CASES) {
+  if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
+    console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada`);
+    return;
+  }
   Deno.test(`[I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField}`, async () => {
     const { status, body } = await invoke(c.fn, c.wrongType);
     assertEquals(status, 422, `esperado 422, recebido ${status} (${JSON.stringify(body)})`);
@@ -181,6 +192,10 @@ for (const c of CASES) {
 // ── 3a. Compat retroativa: v2 NÃO afrouxa (mesmo inválido → 422 idêntico) ──────
 
 for (const c of CASES) {
+  if (c.needsLovableKey && !Deno.env.get("LOVABLE_API_KEY")) {
+    console.log(`[skip] ${c.fn}: LOVABLE_API_KEY não configurada`);
+    return;
+  }
   Deno.test(`[I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente`, async () => {
     const v1 = await invoke(c.fn, c.missing, { version: "v1" });
     const v2 = await invoke(c.fn, c.missing, { version: "v2" });

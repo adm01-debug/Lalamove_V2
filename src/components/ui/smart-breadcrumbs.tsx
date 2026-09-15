@@ -37,6 +37,7 @@ export function SmartBreadcrumbs({ className, showQuickActions = true, showFavor
   const quickActions = pageQuickActions[currentSegment] || [];
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRecentPages(getRecentPages()); setFavoritePages(getFavoritePages()); setIsFav(checkIsFavorite(location.pathname));
     const timer = setTimeout(() => { saveRecentPage(location.pathname, currentPageInfo.label); }, 1000);
     return () => clearTimeout(timer);

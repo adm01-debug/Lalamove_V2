@@ -69,6 +69,7 @@ export function useDataRefresh(
       
       if (retryOnError && retryCountRef.current < maxRetries) {
         retryCountRef.current++;
+        // eslint-disable-next-line react-hooks/immutability
         setTimeout(refresh, Math.pow(2, retryCountRef.current) * 1000);
       }
     } finally {

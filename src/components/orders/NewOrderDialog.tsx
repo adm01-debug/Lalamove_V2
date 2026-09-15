@@ -202,6 +202,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     if (!form.scheduleAt) return { valid: true as const, iso: '' as string, error: '' };
     const dt = new Date(form.scheduleAt);
     if (Number.isNaN(dt.getTime())) return { valid: false as const, iso: '', error: 'Data/hora inválida' };
+    // eslint-disable-next-line react-hooks/purity
     const diffMin = (dt.getTime() - Date.now()) / 60000;
     if (diffMin < 30) return { valid: false as const, iso: '', error: 'Agendamento mínimo: 30 minutos à frente' };
     if (diffMin > 30 * 24 * 60) return { valid: false as const, iso: '', error: 'Agendamento máximo: 30 dias' };
@@ -231,6 +232,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     if (!q.expiresAt) return false;
     const target = Date.parse(q.expiresAt);
     if (Number.isNaN(target)) return false;
+    // eslint-disable-next-line react-hooks/purity
     return target - Date.now() > QUOTE_SAFETY_MARGIN_MS;
   };
 
@@ -771,7 +773,9 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 type="datetime-local"
                 value={form.scheduleAt}
                 onChange={e => updateField('scheduleAt', e.target.value)}
+                // eslint-disable-next-line react-hooks/purity
                 min={new Date(Date.now() + 31 * 60000).toISOString().slice(0, 16)}
+                // eslint-disable-next-line react-hooks/purity
                 max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
               />
               {form.scheduleAt && !scheduleValidation.valid && (

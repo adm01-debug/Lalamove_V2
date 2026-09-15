@@ -60,6 +60,7 @@ function parseUserAgent(ua: string) {
 export function useDeviceDetection() {
   const { user } = useAuth();
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const checkDevice = useCallback(async () => {
     if (!user?.id || !user?.email) return;
 

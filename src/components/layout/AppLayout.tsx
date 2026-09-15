@@ -62,7 +62,7 @@ export function AppLayout() {
   const gKeyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Navigation shortcuts map (G + letter) - memoized to avoid re-renders
-  const navigationShortcuts = useRef<Record<string, string>>({
+  const navigationShortcuts = useMemo<Record<string, string>>(() => ({
     'd': '/',           // Dashboard
     'o': '/orders',     // Orders (Pedidos)
     'm': '/drivers',    // Motoristas
@@ -72,7 +72,7 @@ export function AppLayout() {
     'r': '/reports',    // Relatórios
     'i': '/incidents',  // Incidentes
     's': '/settings',   // Settings
-  }).current;
+  }), []);
   
   // Initialize accessibility and contextual hints
   useAccessibility();

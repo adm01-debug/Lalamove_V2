@@ -17,6 +17,12 @@ export default defineConfig({
       }
     },
     globals: true,
+    env: {
+      // client.ts instancia o supabase no import; sem env os testes de funcao
+      // pura que importam hooks quebram no import. Valores dummy so p/ testes.
+      VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL ?? "http://localhost:54321",
+      VITE_SUPABASE_PUBLISHABLE_KEY: process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "test-anon-key",
+    },
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },

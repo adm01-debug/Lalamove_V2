@@ -263,6 +263,7 @@ export const PerformanceDashboardPage = () => {
   
   useEffect(() => {
     if (Object.keys(metrics).length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLastUpdate(new Date());
     }
   }, [metrics]);

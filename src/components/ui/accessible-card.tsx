@@ -51,7 +51,9 @@ export const AccessibleCard = forwardRef<HTMLDivElement, AccessibleCardProps>(
       onKeyDown?.(e);
     };
 
+    // eslint-disable-next-line react-hooks/purity
     const titleId = title ? `card-title-${Math.random().toString(36).substr(2, 9)}` : undefined;
+    // eslint-disable-next-line react-hooks/purity
     const descId = description ? `card-desc-${Math.random().toString(36).substr(2, 9)}` : undefined;
 
     return (

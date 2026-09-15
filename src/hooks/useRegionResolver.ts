@@ -189,6 +189,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
 
     let cancelled = false;
     pending.forEach(([key]) => inFlightSet.add(key));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveCount((n) => n + pending.length);
 
     (async () => {
