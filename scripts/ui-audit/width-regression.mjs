@@ -22,7 +22,10 @@
  *   STORAGE_STATE=.auth/state.json node scripts/ui-audit/width-regression.mjs
  *
  * Exit 0 = nenhum overflow e nenhuma faixa morta. Exit 1 = problema detectado.
- * Exit 2 = entrada inválida (sem STORAGE_STATE).
+ * Exit 2 = entrada inválida (sem STORAGE_STATE) ou Chromium indisponível.
+ *
+ * `CHROMIUM_PATH` força o binário do navegador quando o do Playwright não casa
+ * com a revisão que o pacote espera.
  *
  * O módulo não executa nada ao ser importado; `main()` só roda quando o arquivo
  * é o entrypoint.
@@ -80,17 +83,58 @@ export async function medirLargura(page, url) {
     const docScrollWidth = document.documentElement.scrollWidth;
 
     const main = document.querySelector('main, [role="main"]');
+    const overflowInterno = [];
     let mainWidth = null;
     let contentWidth = null;
+    let containerMedido = null;
     if (main) {
-      mainWidth = main.clientWidth;
-      // Conteúdo = a faixa que deve preencher o main: o filho direto mais largo
-      // que participa do fluxo (overlays fixos/absolutos não contam).
-      const filhos = Array.from(main.children).filter((el) => {
-        const cs = getComputedStyle(el);
-        return cs.position !== 'fixed' && cs.position !== 'absolute' && el.clientWidth > 0;
+      /** Filhos que participam do fluxo (overlay fixo/absoluto não ocupa faixa). */
+      const emFluxo = (el) => Array.from(el.children).filter((filho) => {
+        const cs = getComputedStyle(filho);
+        return cs.position !== 'fixed' && cs.position !== 'absolute' && filho.clientWidth > 0;
       });
+      /** Largura que os filhos têm de preencher: clientWidth menos o padding do container. */
+      const larguraUtil = (el) => {
+        const cs = getComputedStyle(el);
+        return el.clientWidth - Number.parseFloat(cs.paddingLeft || 0) - Number.parseFloat(cs.paddingRight || 0);
+      };
+
+      // Desce pelos wrappers de passagem. O shell insere um wrapper de animação
+      // entre o <main> e a página (src/components/layout/AppLayout.tsx:327, o
+      // `motion.div min-h-full`): ele é um div de bloco, portanto SEMPRE tem a
+      // largura do main. Medir o filho direto do main compararia esse wrapper
+      // consigo mesmo e a faixa morta nunca apareceria. Então, enquanto o
+      // container tiver exatamente um filho em fluxo que já preenche a largura
+      // útil, esse filho passa a ser o container — e o padding dele conta.
+      let container = main;
+      for (let i = 0; i < 10; i += 1) {
+        const filhos = emFluxo(container);
+        if (filhos.length !== 1) break;
+        if (Math.abs(filhos[0].clientWidth - larguraUtil(container)) > 1) break;
+        // Nao desce para folha: sem filhos nao haveria conteudo para comparar e
+        // a medicao voltaria contentWidth=null.
+        if (emFluxo(filhos[0]).length === 0) break;
+        container = filhos[0];
+      }
+
+      mainWidth = larguraUtil(container);
+      containerMedido = `${container.tagName.toLowerCase()}${container.id ? `#${container.id}` : ''}.${container.className.toString().split(/\s+/).slice(0, 3).join('.')}`;
+      const filhos = emFluxo(container);
       if (filhos.length) contentWidth = Math.max(...filhos.map((el) => el.clientWidth));
+
+      // Overflow DENTRO do container de scroll. O <main> daqui e
+      // `overflow-y-auto` (AppLayout.tsx:322), entao conteudo largo faz o MAIN
+      // rolar na horizontal sem que document.scrollWidth passe do viewport —
+      // o predicado de documento, sozinho, nao ve esse caso.
+      for (const el of new Set([main, container])) {
+        if (el.scrollWidth > el.clientWidth + 1) {
+          overflowInterno.push({
+            onde: `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}`,
+            scrollWidth: el.scrollWidth,
+            clientWidth: el.clientWidth,
+          });
+        }
+      }
     }
 
     // Culpados do overflow (só quando há overflow)
@@ -110,7 +154,7 @@ export async function medirLargura(page, url) {
       }
     }
 
-    return { innerWidth, docScrollWidth, mainWidth, contentWidth, offenders };
+    return { innerWidth, docScrollWidth, mainWidth, contentWidth, containerMedido, overflowInterno, offenders };
   });
 
   return { ...medicao, resultado: avaliarLargura(medicao) };
@@ -154,7 +198,11 @@ export async function main() {
     process.exit(2);
   }
 
-  const browser = await chromium.launch();
+  // CHROMIUM_PATH: escape para ambiente onde o binario do Playwright nao casa
+  // com a revisao esperada pelo pacote (foi o caso no container desta porta).
+  const browser = await chromium.launch({
+    executablePath: process.env.CHROMIUM_PATH || undefined,
+  });
 
   let failures = 0;
   let medidas = 0;
@@ -167,7 +215,7 @@ export async function main() {
     for (const rota of ROTAS) {
       const url = BASE_URL + rota;
       try {
-        const { innerWidth, docScrollWidth, mainWidth, contentWidth, offenders, resultado } =
+        const { innerWidth, docScrollWidth, mainWidth, contentWidth, containerMedido, overflowInterno, offenders, resultado } =
           await medirLargura(page, url);
         medidas++;
 
@@ -184,13 +232,20 @@ export async function main() {
         if (resultado.faixaMorta) {
           console.error(`FAIXA MORTA [${label}] ${rota}`);
           console.error(
-            `  main=${mainWidth}px content=${contentWidth}px (sobra ${resultado.diferenca}px; tolerancia 1px)`,
+            `  container=${containerMedido} util=${mainWidth}px content=${contentWidth}px (sobra ${resultado.diferenca}px; tolerancia 1px)`,
           );
           console.error();
           failures++;
         }
 
-        if (!resultado.overflow && !resultado.faixaMorta) {
+        for (const o of overflowInterno) {
+          console.error(`OVERFLOW INTERNO [${label}] ${rota}`);
+          console.error(`  <${o.onde}> scrollWidth=${o.scrollWidth}px clientWidth=${o.clientWidth}px (+${o.scrollWidth - o.clientWidth}px)`);
+          console.error();
+          failures++;
+        }
+
+        if (!resultado.overflow && !resultado.faixaMorta && overflowInterno.length === 0) {
           console.log(`✓ [${label}] ${rota}`);
         }
       } catch (err) {

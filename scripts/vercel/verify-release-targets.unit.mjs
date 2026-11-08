@@ -157,6 +157,20 @@ test('bypass-token vai no header de todas as requisicoes', async () => {
   }
 });
 
+test('host inalcancavel vira NAO VERIFICADO, nao "deploy errado"', async () => {
+  const r = await verificarAlvo({
+    url: 'https://exemplo.test',
+    attempts: 2,
+    intervalMs: 0,
+    sleepImpl: async () => {},
+    fetchImpl: async () => { throw new TypeError('fetch failed'); },
+  });
+  assert.equal(r.ok, false);
+  assert.equal(r.inalcancavel, true);
+  assert.notEqual(r.protegido, true, 'rede fora nao e protecao do Vercel');
+  assert.match(resumoMarkdown(r), /NAO VERIFICADO — host inalcancavel/u);
+});
+
 test('content-type que nao e HTML reprova (nao mede a pagina errada)', async () => {
   const r = await verificarAlvo({
     url: 'https://exemplo.test',

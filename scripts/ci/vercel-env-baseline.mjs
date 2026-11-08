@@ -11,7 +11,7 @@
 // Projeto: lalamove-v2 (team juca1). A lista real vem de fora — este script NAO
 // toca a rede nem le segredo nenhum, so nomes:
 //   vercel --scope juca1 env ls lalamove-v2            # nomes, nao valores
-//   echo '["VITE_SUPABASE_URL","..."]' | node scripts/ci/vercel-env-baseline.mjs --target=production
+//   echo '["VITE_SUPABASE_URL","..."]' | node scripts/ci/vercel-env-baseline.mjs --stdin --target=production
 //      node scripts/ci/vercel-env-baseline.mjs --target=production --vars-file=vars.json
 //      node scripts/ci/vercel-env-baseline.mjs --target=production   # self-test do JSON
 
@@ -56,7 +56,11 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   let vars = null;
   if (args['vars-file']) {
     vars = JSON.parse(readFileSync(args['vars-file'], 'utf8'));
-  } else if (!process.stdin.isTTY) {
+  } else if (args.stdin) {
+    // `--stdin` EXPLICITO. No Zapp a leitura era automatica quando stdin nao era TTY,
+    // mas em runner/agente sem TTY e sem pipe (CI, subprocesso) o stdin fica aberto e
+    // o script travava para sempre em vez de rodar o self-test. Agora quem manda pipe
+    // declara: `... | node scripts/ci/vercel-env-baseline.mjs --stdin --target=production`.
     const lines = [];
     const rl = createInterface({ input: process.stdin });
     for await (const line of rl) lines.push(line);

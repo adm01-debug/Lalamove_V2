@@ -8,8 +8,9 @@
  *   node scripts/vercel/verify-release-targets.mjs --expected-entry=assets/index-9f3a1c.js
  *   node scripts/vercel/verify-release-targets.mjs            # só identifica o que está no ar
  *
- * Códigos de saída: 0 = o alvo serve o build esperado · 1 = não serve (ou não
- * respondeu) · 2 = entrada inválida · 3 = NÃO VERIFICADO (proteção do Vercel).
+ * Códigos de saída: 0 = o alvo serve o build esperado · 1 = não serve · 2 =
+ * entrada inválida · 3 = NÃO VERIFICADO (proteção do Vercel) · 4 = NÃO
+ * VERIFICADO (host inalcançável). Nunca sai 0 sem ter medido.
  *
  * PORTADO do Zapp Web V2 (`scripts/vercel/verify-release-targets.mjs`) e
  * REESCRITO na identidade do release, porque o dado que o Zapp compara não
@@ -54,6 +55,20 @@ export const TARGETS = Object.freeze({
 
 /** Erro que significa "não deu para medir", não "está errado". */
 export class ProtecaoVercelError extends Error {}
+
+/** Host inalcançável: também é "não deu para medir". */
+export class RedeIndisponivelError extends Error {}
+
+/**
+ * `fetch` falhando por rede (proxy, DNS, conexão recusada, timeout) chega como
+ * TypeError genérico. Tratar isso como "o deploy está errado" seria inventar
+ * conclusão — nesta sessão, por exemplo, o proxy de saída bloqueia
+ * `lalamove-v2*.vercel.app` (docs/agentes/deploy.md:23).
+ */
+function ehFalhaDeRede(erro) {
+  return erro instanceof TypeError
+    || /fetch failed|ENOTFOUND|ECONNREFUSED|ECONNRESET|EAI_AGAIN|timeout|aborted/iu.test(erro?.message ?? '');
+}
 
 function inteiro(name, value, { min, max }) {
   const parsed = Number(value);
@@ -201,6 +216,7 @@ export async function verificarAlvo({
   if (!Object.hasOwn(TARGETS, target)) return { ok: false, target, error: 'alvo invalido' };
   let error = 'falha desconhecida';
   let protegido = false;
+  let inalcancavel = false;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       const nonce = `${nowImpl()}-${attempt}`;
@@ -211,10 +227,12 @@ export async function verificarAlvo({
     } catch (cause) {
       error = cause instanceof Error ? cause.message : 'falha nao identificada';
       if (cause instanceof ProtecaoVercelError) { protegido = true; break; }
+      // Rede pode ser transitoria: repete, mas guarda o motivo para o veredito.
+      inalcancavel = cause instanceof RedeIndisponivelError || ehFalhaDeRede(cause);
       if (attempt < attempts) await sleepImpl(intervalMs);
     }
   }
-  return { ok: false, target, url, attempts, expectedEntry, protegido, error };
+  return { ok: false, target, url, attempts, expectedEntry, protegido, inalcancavel, error };
 }
 
 export function resumoMarkdown(result) {
@@ -232,6 +250,8 @@ export function resumoMarkdown(result) {
     lines.push(`- Cache do asset: \`${result.cache || '(ausente)'}\``, '- Resultado: OK');
   } else if (result.protegido) {
     lines.push(`- Resultado: NAO VERIFICADO — ${result.error}`);
+  } else if (result.inalcancavel) {
+    lines.push(`- Resultado: NAO VERIFICADO — host inalcancavel: ${result.error}`);
   } else {
     lines.push(`- Resultado: FALHOU — ${result.error}`);
   }
@@ -249,7 +269,8 @@ async function principal(argv = process.argv.slice(2), env = process.env) {
   console.log(summary.trimEnd());
   if (env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${summary}\n`);
   if (result.ok) return 0;
-  return result.protegido ? 3 : 1;
+  if (result.protegido) return 3;
+  return result.inalcancavel ? 4 : 1;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

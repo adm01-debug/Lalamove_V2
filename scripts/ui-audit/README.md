@@ -8,8 +8,8 @@ página paga o próprio padding** — não existe `ViewContainer` neste repo.
 |---|---|
 | `layout-guard.mjs` | Lê `src/App.tsx`, pega só as rotas dentro de `<Route element={<AppLayout />}>` e audita o `className` da raiz JSX de cada página. |
 | `root-className.mjs` | Extrator da raiz JSX (tag + className). Usado pelo guard; sem dependência externa. |
-| `width-check.mjs` | Predicado puro: overflow horizontal e "faixa morta" (conteúdo mais estreito que o `main`). |
-| `width-regression.mjs` | Mede as rotas reais em Chromium a 1280x800 e 1920x1080 e aplica o predicado. |
+| `width-check.mjs` | Predicado puro: overflow horizontal do documento e "faixa morta" (conteúdo mais estreito que o container). |
+| `width-regression.mjs` | Mede as rotas reais em Chromium a 1280x800 e 1920x1080, aplica o predicado e detecta **overflow interno** do container de scroll. |
 | `layout-guard.unit.mjs`, `width-check.unit.mjs` | Testes (`node --test`). |
 
 ## Como rodar
@@ -25,7 +25,24 @@ STORAGE_STATE=.auth/state.json node scripts/ui-audit/width-regression.mjs
 ```
 
 Variáveis: `APP_URL` ou `VITE_PORT` (padrão `http://localhost:8080`), `STORAGE_STATE` (obrigatório no
-`width-regression.mjs`; exit 2 sem ele — ele nunca mede a tela de login fingindo que mediu a página).
+`width-regression.mjs`; exit 2 sem ele — ele nunca mede a tela de login fingindo que mediu a página),
+`CHROMIUM_PATH` (força o binário do navegador quando o do Playwright não casa com a revisão que o pacote
+espera — foi o caso neste container: pacote pedindo build 1194/1234, instalado 1243).
+
+Duas adaptações do `width-regression.mjs` que **não** estavam no Zapp e sem as quais ele não mediria nada
+aqui (provado em Chromium real contra fixtures de página saudável / faixa morta / overflow):
+
+- o shell insere um wrapper de animação entre o `<main>` e a página
+  (`src/components/layout/AppLayout.tsx:327`, `motion.div min-h-full`). Ele é um `div` de bloco, logo tem
+  **sempre** a largura do `main`: medir o filho direto do `main` compararia o wrapper consigo mesmo e a
+  faixa morta nunca apareceria. O script desce pelos wrappers de passagem e desconta o padding do
+  container medido;
+- o `<main>` é `overflow-y-auto`, então conteúdo largo faz **o `main`** rolar na horizontal sem que
+  `document.scrollWidth` passe do viewport. Daí a checagem `OVERFLOW INTERNO`
+  (`container.scrollWidth > clientWidth`), que o predicado de documento não vê.
+
+Exceção conhecida: raiz de página com `max-w-*` centralizado é faixa morta **de propósito** — se alguma
+página adotar isso, declare a exceção em vez de mudar o predicado.
 
 **Secrets: nenhum.** O `storageState.json` contém token de sessão — mantenha fora do git (`.auth/` não
 está versionado) e nunca cole o conteúdo em PR ou chat.
