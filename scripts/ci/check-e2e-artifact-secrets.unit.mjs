@@ -1,7 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
-import { avaliarWorkflow, guarda, semComentarios, uploads, usaCredencial } from './check-e2e-artifact-secrets.mjs';
+import {
+  avaliarWorkflow,
+  credenciaisUsadas,
+  guarda,
+  semComentarios,
+  uploads,
+  usaCredencial,
+} from './check-e2e-artifact-secrets.mjs';
 
 const COM_CREDENCIAL_E_REPORT = `
 name: exemplo
@@ -106,21 +113,57 @@ test('reprova: sessao Supabase injetada (LOVABLE_BROWSER_*) + publicacao do repo
   assert.match(v[0], /playwright-report/);
 });
 
-test('reprova: redigir o report NAO isenta (o redator do Zapp nao foi portado)', () => {
-  const comRedacao = COM_SESSAO_INJETADA_E_REPORT.replace(
+const COM_REDACAO_COMPLETA = COM_SESSAO_INJETADA_E_REPORT.replace(
+  '      - uses: actions/upload-artifact@aaa\n        if: ${{ !cancelled() }}',
+  [
+    '      - name: redigir',
+    '        id: redigir',
+    '        run: node scripts/ci/redigir-relatorio.mjs playwright-report --segredo-env=LOVABLE_BROWSER_SUPABASE_STORAGE_KEY --segredo-env=LOVABLE_BROWSER_SUPABASE_SESSION_JSON',
     '      - uses: actions/upload-artifact@aaa',
-    [
-      '      - name: redigir',
-      '        id: redigir',
-      '        run: node scripts/ci/redigir-relatorio.mjs playwright-report',
-      '      - uses: actions/upload-artifact@aaa',
-    ].join('\n'),
+    "        if: failure() && steps.redigir.outcome == 'success'",
+  ].join('\n'),
+);
+
+test('aprova: report publicado DEPOIS de redigir as credenciais que o workflow usa', () => {
+  assert.notEqual(COM_REDACAO_COMPLETA, COM_SESSAO_INJETADA_E_REPORT, 'o fixture precisa ter mudado');
+  assert.deepEqual(avaliarWorkflow('redigido.yml', COM_REDACAO_COMPLETA), []);
+});
+
+test('credenciaisUsadas devolve so as que o workflow referencia', () => {
+  assert.deepEqual(credenciaisUsadas(COM_SESSAO_INJETADA_E_REPORT).sort(), [
+    'LOVABLE_BROWSER_SUPABASE_SESSION_JSON',
+    'LOVABLE_BROWSER_SUPABASE_STORAGE_KEY',
+  ]);
+  assert.deepEqual(credenciaisUsadas(REPORT_SEM_CREDENCIAL), []);
+});
+
+test('reprova: redacao cobre so uma das credenciais usadas', () => {
+  const soUma = COM_REDACAO_COMPLETA.replace(' --segredo-env=LOVABLE_BROWSER_SUPABASE_SESSION_JSON', '');
+  const v = avaliarWorkflow('so-uma.yml', soUma);
+  assert.equal(v.length, 1, 'sem cobrir as duas, a excecao nao vale');
+  assert.match(v[0], /redigir-relatorio\.mjs/u);
+});
+
+test('reprova: redacao existe mas o upload nao depende dela', () => {
+  const semGuarda = COM_REDACAO_COMPLETA.replace(
+    "if: failure() && steps.redigir.outcome == 'success'",
+    'if: failure()',
   );
   assert.equal(
-    avaliarWorkflow('redigido.yml', comRedacao).length,
+    avaliarWorkflow('sem-guarda.yml', semGuarda).length,
     1,
-    'sem redator portado, a unica saida e nao publicar ou tirar a credencial',
+    'se a redacao falhar, o upload publicaria o report cru',
   );
+});
+
+test('reprova: redator invocado DEPOIS do upload nao isenta', () => {
+  const linhas = COM_REDACAO_COMPLETA.split('\n');
+  const iRedator = linhas.findIndex((l) => l.includes('redigir-relatorio.mjs'));
+  const iUpload = linhas.findIndex((l) => l.includes('upload-artifact'));
+  const reordenado = [...linhas];
+  const [passoNome, passoId, passoRun] = reordenado.splice(iRedator - 2, 3);
+  reordenado.splice(iUpload, 0, passoNome, passoId, passoRun);
+  assert.equal(avaliarWorkflow('depois.yml', reordenado.join('\n')).length, 1);
 });
 
 test('test-results e e2e/.auth tambem contam como caminho sensivel', () => {
