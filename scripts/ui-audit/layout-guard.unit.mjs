@@ -128,6 +128,16 @@ test("nao cobra gutter quando a raiz e componente wrapper", () => {
   assert.equal(result.status, 0, result.output);
 });
 
+test("acha o gutter em cn() mesmo quando nao e o primeiro argumento", () => {
+  const result = runGuard({
+    "src/App.tsx": appTsx({ dentro: ["CnPage"] }),
+    "src/pages/CnPage.tsx":
+      'export function CnPage() {\n  return <div className={cn("space-y-6", "p-6")}>ok</div>;\n}\n',
+  });
+
+  assert.equal(result.status, 0, result.output);
+});
+
 test("aceita px-* e p-[...] como gutter", () => {
   const result = runGuard({
     "src/App.tsx": appTsx({ dentro: ["PxPage", "ArbPage"] }),

@@ -16,7 +16,24 @@
  */
 
 const CLASSNAME_RE =
-  /className=(?:["'`]([^"'`]+)["'`]|\{(?:cn\([^)]*?["'`]([^"'`]+)["'`]|`([^`]+)`|"([^"]+)"|'([^']+)'))/;
+  /className=(?:["'`]([^"'`]+)["'`]|\{(?:`([^`]+)`|"([^"]+)"|'([^']+)'))/;
+
+/**
+ * Argumentos de `cn(...)` a partir do '(' em `from`, respeitando parenteses
+ * aninhados (ex.: `cn("p-6", isX ? "a" : "b")`).
+ */
+function argsDoCn(tag, from) {
+  let profundidade = 0;
+  for (let i = from; i < tag.length; i += 1) {
+    const ch = tag[i];
+    if (ch === "(") profundidade += 1;
+    else if (ch === ")") {
+      profundidade -= 1;
+      if (profundidade === 0) return tag.slice(from + 1, i);
+    }
+  }
+  return null;
+}
 
 /** Recorta a tag de abertura do primeiro elemento JSX a partir de `from`. */
 function openingTagAt(source, from) {
@@ -92,10 +109,23 @@ export function extractRoots(source) {
     if (arrow !== -1 && (jsx === -1 || arrow < jsx)) continue;
     const tag = openingTagAt(body, lineStart + m.index);
     if (tag === null) continue;
-    const cls = tag.match(CLASSNAME_RE);
+    // `cn(...)` pode ter varios argumentos string/template (ex.:
+    // `cn("space-y-4", "p-6")`); pegar so o primeiro literal perdia o gutter
+    // quando ele nao era o primeiro argumento.
+    const cnMatch = tag.match(/className=\{cn\(/);
+    let className;
+    if (cnMatch) {
+      const args = argsDoCn(tag, cnMatch.index + cnMatch[0].length - 1);
+      className = args
+        ? [...args.matchAll(/["'`]([^"'`]*)["'`]/g)].map((m2) => m2[1]).join(" ")
+        : "";
+    } else {
+      const cls = tag.match(CLASSNAME_RE);
+      className = cls ? (cls[1] || cls[2] || cls[3] || cls[4] || "") : "";
+    }
     roots.push({
       tag: tag.match(/^<([A-Za-z][\w.$-]*)/)?.[1] ?? "",
-      className: cls ? (cls[1] || cls[2] || cls[3] || cls[4] || cls[5] || "") : "",
+      className,
     });
   }
   return roots;
