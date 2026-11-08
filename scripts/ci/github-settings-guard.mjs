@@ -263,7 +263,15 @@ export async function main(argv = process.argv.slice(2)) {
     return 0;
   }
 
-  const baseline = JSON.parse(readFileSync(args.baseline, 'utf8'));
+  let baseline;
+  try {
+    baseline = JSON.parse(readFileSync(args.baseline, 'utf8'));
+  } catch (erro) {
+    // Sem baseline nao ha o que conferir: fail-closed, nunca "OK".
+    console.error(`ERRO: nao foi possivel ler o baseline ${args.baseline}: ${semQuebra(erro.message)}`);
+    console.error('Gere com: GITHUB_TOKEN=... node scripts/ci/github-settings-guard.mjs --update-baseline');
+    return 2;
+  }
   const resultado = comparar(baseline, leitura.perimetro, leitura.pontosCegos);
   for (const linha of formatar(resultado)) {
     if (linha.startsWith('DIVERGENCIA')) console.error(linha);
