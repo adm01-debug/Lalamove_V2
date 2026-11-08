@@ -154,15 +154,6 @@
       "code": "TS7006",
       "message": "Parameter 'e' implicitly has an 'any' type.",
       "contextHash": "1dbc4a0fe20881164f5127e8e1a8dc7a3818bace248b88a62f7c0507de49daac"
-    },
-    {
-      "file": "src/utils/exportUtils.ts",
-      "line": 5,
-      "column": 23,
-      "severity": "error",
-      "code": "TS2307",
-      "message": "Cannot find module 'xlsx' or its corresponding type declarations.",
-      "contextHash": "c0b48d23f9189725d39b9a44af5a369792703570b939b3f361f2aa01bd4081ea"
     }
   ]
 }

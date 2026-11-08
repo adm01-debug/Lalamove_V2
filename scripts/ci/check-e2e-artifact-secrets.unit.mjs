@@ -16,7 +16,7 @@ on: [push]
 jobs:
   e2e:
     steps:
-      - run: bun run test:e2e -- --project=setup
+      - run: npx playwright test --project=setup
         env:
           E2E_TEST_EMAIL: \${{ secrets.E2E_TEST_EMAIL }}
           E2E_TEST_PASSWORD: \${{ secrets.E2E_TEST_PASSWORD }}
@@ -45,7 +45,7 @@ on: [pull_request]
 jobs:
   x:
     steps:
-      - run: bun run test:e2e
+      - run: npx playwright test
       - uses: actions/upload-artifact@aaa
         if: always()
         with:
@@ -58,7 +58,7 @@ on: [push]
 jobs:
   x:
     steps:
-      - run: bun run test:e2e -- --project=setup
+      - run: npx playwright test --project=setup
         env:
           E2E_TEST_PASSWORD: \${{ secrets.E2E_TEST_PASSWORD }}
 `;

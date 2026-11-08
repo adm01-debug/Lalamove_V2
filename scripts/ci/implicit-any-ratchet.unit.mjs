@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -146,7 +146,9 @@ test("exit de CLI desconhecido (3) falha", () => {
 });
 
 test("projeto sem erros passa (exit 0, saida vazia)", () => {
-  const root = preparar({ tsc: { status: 0 } });
+  // `baseline: 0` explicito: o baseline versionado deste repo vale 2 (medido
+  // 2026-11-08), e o que este caso exercita e tsc limpo com teto zero.
+  const root = preparar({ tsc: { status: 0 }, baseline: 0 });
   try {
     const { status, stdout } = executar(root);
     assert.equal(status, 0);
@@ -293,4 +295,13 @@ test("o tsconfig.app.json do repositorio reprova 'any' implicito (TS7006) no com
   } finally {
     rmSync(raiz, { recursive: true, force: true });
   }
+});
+
+test("o baseline versionado do repo e o numero medido (2 em 2026-11-08)", () => {
+  // Teto medido com `tsc -p tsconfig.app.json --noEmit --noImplicitAny` nas versoes
+  // do package-lock.json (TypeScript 5.8.3): TS7006 em IPWhitelistPage.tsx:90 e
+  // ResetPasswordPage.tsx:55. Se cair, baixe o teto; se subir, e divida nova.
+  const versionado = JSON.parse(readFileSync(BASELINE, "utf8"));
+  assert.equal(typeof versionado.baseline, "number");
+  assert.equal(versionado.baseline, 2);
 });

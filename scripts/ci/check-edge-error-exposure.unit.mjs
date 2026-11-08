@@ -99,7 +99,7 @@ test("resposta 500 montada à mão em VÁRIAS LINHAS é achada (webhook-diagnost
   assert.equal(achados[0].linha, 2);
 });
 
-test("resposta 500 com template em volta do .message é achada (talkx-send)", () => {
+test("resposta 500 com template em volta do .message e achada", () => {
   const achados = acharExposicoes("return new Response(JSON.stringify({ error: `claim_failed: ${claimError.message}` }), { status: 500, headers });");
   assert.equal(achados.length, 1, `esperava 1 achado, veio ${JSON.stringify(achados)}`);
   assert.equal(achados[0].padrao, ".message em resposta 5xx");

@@ -153,7 +153,7 @@ test('hasPushTriggerUnrestricted: branches-ignore em lista de bloco (nao inline)
   assert.equal(hasPushTriggerUnrestricted(workflow), true);
 });
 
-test('E28: o gatilho antigo do e2e-talkx.yml (push + branches-ignore: main) com secret privilegiado — violacao', () => {
+test('push + branches-ignore: main com secret privilegiado — violacao (caso E28 do Zapp)', () => {
   // Fixture do gatilho que a E27 removeu: era o contorno citado no comentario do proprio workflow.
   const workflow = [
     'on:',
@@ -164,7 +164,7 @@ test('E28: o gatilho antigo do e2e-talkx.yml (push + branches-ignore: main) com 
     '    steps:',
     '      - run: echo ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}',
   ].join('\n');
-  const violacoes = findPushSecretLeaks(workflow, 'e2e-talkx.yml');
+  const violacoes = findPushSecretLeaks(workflow, 'e2e.yml');
   assert.ok(violacoes.length > 0, 'o gatilho de contorno deveria reprovar');
   assert.equal(violacoes[0].secret, 'SUPABASE_SERVICE_ROLE_KEY');
 });
