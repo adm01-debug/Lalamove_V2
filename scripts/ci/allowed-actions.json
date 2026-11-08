@@ -1,0 +1,12 @@
+{
+  "_comentario": "Repositórios de GitHub Action autorizados neste repo. Lido por scripts/ci/check-workflow-pins.mjs. Acrescente owner/repo aqui (na mesma PR) antes de usar uma Action nova.",
+  "patterns": [
+    "actions/checkout",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "actions/download-artifact",
+    "actions/cache",
+    "actions/github-script",
+    "denoland/setup-deno"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "_comentario": "Fonte única das versões de toolchain literalizadas nos workflows. Lido por scripts/ci/check-workflow-pins.mjs: o valor é a string EXATA usada no YAML, para a comparação ser de igualdade e não de faixa.",
+  "node": "22",
+  "deno": "v1.x"
+}
