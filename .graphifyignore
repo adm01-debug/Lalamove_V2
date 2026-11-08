@@ -1,0 +1,24 @@
+# .graphifyignore — Lalamove V2
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+graphify-out/graph.json
+graphify-out/graph.html
+
+# Lockfile gigante: não agrega nada ao grafo
+package-lock.json
+
+# Documentação exportada (pdf/docx/html) e bundles do n8n: ruído de milhares de nós de texto
+lalamove_documentacao_completa.*
+lalamove_suplemento_v2.*
+lalamove_setup_guide.html
+lalamove_bundle_import.json
+lalamove_f0*.json
+docs/audit_report.pdf
