@@ -5,8 +5,12 @@
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL = 'https://iecgydonctmabiijadsf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY2d5ZG9uY3RtYWJpaWphZHNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU2Njk5NTYsImV4cCI6MjEwMTI0NTk1Nn0.Us06xRWbkFNb7js95Zhvw5ADAphGDFI-9dN8vXX_8HQ';
-
+// Historicamente chamada de ANON_KEY, mas o valor sempre foi o service_role (bypassa RLS) - nome mantido para nao alterar os usos abaixo.
+const SUPABASE_ANON_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!SUPABASE_ANON_KEY) {
+  console.error('Defina SUPABASE_SERVICE_ROLE_KEY no ambiente antes de rodar este script.');
+  process.exit(1);
+}
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Login
@@ -15,7 +19,7 @@ async function testPermissions() {
 
   const { data: auth, error: authError } = await supabase.auth.signInWithPassword({
     email: 'ti@promobrindes.com.br',
-    password: 'prompt-ti-2026', // senha padrão do seed
+    password: process.env.SEED_TI_PASSWORD || (() => { console.error('Defina SEED_TI_PASSWORD no ambiente antes de rodar este script.'); process.exit(1); })(), // senha do usuario de seed, nunca hardcoded
   });
 
   if (authError) {
@@ -26,7 +30,7 @@ async function testPermissions() {
     const { createClient: createClient2 } = await import('@supabase/supabase-js');
     const adminSupabase = createClient2(
       SUPABASE_URL,
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY2d5ZG9uY3RtYWJpaWphZHNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTY2OTk1NiwiZXhwIjoyMTAxMjQ1OTU2fQ.EvEAzIgWT-xh-RpzaEw2XH24ZHQn2THFJ7XaRsvP9D0',
+      SUPABASE_ANON_KEY, // reaproveita a mesma env var acima (ver comentario na declaracao)
       { auth: { persistSession: false, autoRefreshToken: false } }
     );
 

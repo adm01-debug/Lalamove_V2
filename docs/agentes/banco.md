@@ -66,19 +66,31 @@ dono), toda afirmação sobre tabelas, RLS, policies, funções, crons e ledger 
    é feito por inserção direta, como `docs/CRON_JOBS.md` registra ("o agendamento contém segredos … não via
    migração — para não vazar em remixes").
 
-## Segredos commitados — passivo conhecido (não copie o padrão)
+## Segredos commitados — código limpo em 2026-11-08, chaves ainda não rotacionadas
 
-Varredura em 2026-11-08 no HEAD `924454e`:
+Varredura em 2026-11-08 no HEAD `924454e` achou segredo hardcoded em 19 arquivos de `scripts/` (13 com o
+JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-helper`
+(`ACCESS_KEY` fixa + `verify_jwt = false`; a action `credentials` devolvia `SUPABASE_SERVICE_ROLE_KEY` e
+`SUPABASE_DB_URL` a quem soubesse a chave). A PR `claude/fix-segredos-commitados-261108-2105`:
 
-| Onde | O que |
-|---|---|
-| 13 arquivos em `scripts/` (`list-tables.ts`, `list-tables-v2.ts`, `set-user-admin.ts`, `seed-database.ts`, `seed-contacts.ts`, `check-permissions.ts`, `diagnose-rpc.ts`, `fix-admin-role-active.ts`, `fix-dashboard-via-api.ts`, `apply-dashboard-fixes.ts`, `apply-rls-via-pg.ts`, `test-after-fix.ts`, `test-user-permissions.ts`) | JWT **`service_role`** do projeto em texto puro |
-| 6 arquivos em `scripts/` (`add-security-manage.ts`, `apply-final-sql.ts`, `apply-permissions-via-api.ts`, `apply-sql-via-management-api.ts`, `ensure-admin-active.ts`, `fix-rpc-functions.ts`) | **PAT `sbp_…`** da Supabase Management API |
-| `supabase/functions/migrate-helper/index.ts:5` | `ACCESS_KEY` fixa no código e `verify_jwt = false` (`supabase/config.toml:4-5`); a action `credentials` devolve `SUPABASE_SERVICE_ROLE_KEY` e `SUPABASE_DB_URL` a quem souber a chave (o próprio arquivo diz "Após a migração, remova esta função") |
+- trocou as 22 ocorrências (19 arquivos, 2 delas com o valor sob o nome `SUPABASE_ANON_KEY` ou
+  `SUPABASE_DB_PASSWORD` — o conteúdo sempre foi o `service_role`) por leitura de `process.env` com guarda
+  (`if (!X) { console.error(...); process.exit(1); }`); também moveu para env a senha hardcoded do usuário
+  de seed em `test-user-permissions.ts`;
+- removeu `supabase/functions/migrate-helper/` e sua entrada em `supabase/config.toml`.
 
-Regras: **nunca imprima esses valores** (nem em chat, commit, PR ou relatório) — cite `arquivo:linha`.
-Rotação da `service_role` e do PAT, e remoção do `migrate-helper` da produção, são **ação do dono** (e
-quebram quem depende deles). Scripts novos leem de `process.env`, ponto.
+**Pendente, ação do dono — o código limpo não desfaz o vazamento:**
+
+1. Rotacionar o `service_role` e o PAT `sbp_…` deste projeto (quem leu o histórico do Git continua com os
+   valores antigos; só a rotação os invalida).
+2. Confirmar que `migrate-helper` foi removida **da produção** (painel Supabase ou CLI) — apagar o arquivo
+   do repo não a desimplanta, porque não há deploy automático de edge function aqui
+   (`docs/agentes/deploy.md`).
+3. Scripts que ainda forem usados precisam de `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_ACCESS_TOKEN` /
+   `SEED_TI_PASSWORD` exportados no ambiente antes de rodar.
+
+Regra para qualquer agente: **nunca imprima esses valores** (nem em chat, commit, PR ou relatório) — cite
+`arquivo:linha`. Scripts novos leem de `process.env`, ponto.
 
 ## Armadilhas já pagas
 

@@ -1,9 +1,5 @@
 project_id = "iecgydonctmabiijadsf"
 
-# migrate-helper: chamada manualmente em migrações sem sessão de usuário ativa.
-[functions.migrate-helper]
-verify_jwt = false
-
 # get-mapbox-token: devolve o token Mapbox ao frontend autenticado.
 # verify_jwt = true exige sessão Supabase válida; o frontend já envia o JWT
 # via supabase.functions.invoke(), portanto nenhuma mudança de código é necessária.
