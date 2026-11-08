@@ -67,8 +67,13 @@ export function versoesFixadas({ raiz = RAIZ, ferramentas = FERRAMENTAS } = {}) 
   }
   const doWorkflow = (campo) => {
     const achados = [...workflow.matchAll(new RegExp(`${campo}:\\s*['"]?([^'"\\s]+)`, 'gu'))].map((m) => m[1]);
-    // Varios jobs repetem o mesmo valor; se divergirem, o menor (mais antigo) manda.
-    return achados.sort((a, b) => (maisNova(a, b) ? -1 : 1)).pop() ?? null;
+    // Varios jobs repetem o mesmo valor; se divergirem, o MAIS ANTIGO manda — e ele
+    // que define o piso real do CI (um job em 22 anula o outro em 24).
+    return achados.reduce((antigo, atual) => {
+      if (antigo === null) return atual;
+      // maisNova(atual, antigo) === true <=> `antigo` e mais nova que `atual`.
+      return maisNova(atual, antigo) ? atual : antigo;
+    }, null);
   };
 
   return ferramentas.map((ferramenta) => {
