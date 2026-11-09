@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* WCAG 1.4.3: bg-primary em dark mode — 60% lightness falha 4,5:1 com texto branco */
+.dark .bg-primary {
+  background-color: hsl(217 91% 48%);
+}
+
 /* Fonts loaded via index.html <link> for non-blocking render */
 
 /* ========================================
@@ -80,9 +85,11 @@
 
     --success: 142 71% 31%;
     --success-foreground: 0 0% 100%;
+    --success-text: 142 71% 28%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
+    --warning-text: 38 92% 25%;
 
     --info: 199 89% 37%;
     --info-foreground: 0 0% 100%;
@@ -179,9 +186,11 @@
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
+    --success-text: 142 71% 55%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
+    --warning-text: 38 92% 65%;
 
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
