@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 2,
+  "command": "tsc -b --force",
+  "issues": [
+    {
+      "file": "src/components/map/hooks/useMapMarkers.ts",
+      "line": 217,
+      "column": 85,
+      "severity": "error",
+      "code": "TS2503",
+      "message": "Cannot find namespace 'GeoJSON'.",
+      "contextHash": "5cf38dbb3ecfc2b652eeaede828d555ab67392212b76892b3a810b62857e4b26"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 184,
+      "column": 42,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'geometry' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "36ba9838016f33edc6a0b95f9ad2909ae55ddd7ae5d10e877572966f304fdcc0"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 185,
+      "column": 32,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'geometry' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "585ee87d3e1152ec3ca48e992fca8dbe2cc1806a60815cb32aae637dd82751ee"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 202,
+      "column": 33,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'geometry' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "003482a6ff199f3e02f029aedeadc0f9aa3b94ef137d644bebff3ba85a31338b"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 204,
+      "column": 32,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'geometry' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "b6bc7415b0a2434b53c42f5cb118edeb1103d591439d3c3adafe2c1672a90cdc"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 183,
+      "column": 36,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'properties' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "31e9b3f3c6d1aecc254537743a3638f46dce7c0d6609c275a75c8bca34d0d10a"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 205,
+      "column": 37,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'properties' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "02e6030fc373614759abe4a1df3953523ff0bfdf42e35fe2aac36ba6a9ef76e6"
+    },
+    {
+      "file": "src/components/reports/GeoHeatmap.tsx",
+      "line": 206,
+      "column": 38,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'properties' does not exist on type 'GeoJSONFeature'.",
+      "contextHash": "ff1154cf99ae622b2f0a9cf514c14ba4f452d05cd7b745f1c80d8473c98384e5"
+    },
+    {
+      "file": "src/hooks/useAlertSettings.ts",
+      "line": 119,
+      "column": 21,
+      "severity": "error",
+      "code": "TS2345",
+      "message": "Argument of type '{ alert_type: \"DRIVER_STOPPED\"; channel: string; is_enabled: boolean; config: { warning_minutes: number; critical_minutes: number; threshold_minutes?: undefined; }; } | { alert_type: \"ROUTE_DEVIATION\"; channel: string; is_enabled: boolean; config: { ...; }; } | { ...; }' is not assignable to parameter of type 'RejectExcessProperties<{ alert_type: \"DRIVER_BLOCKED\" | \"ROUTE_DEVIATION\" | \"DRIVER_STOPPED\" | \"LATE_DELIVERY\" | \"APPROVAL_REQUIRED\" | \"ORDER_CANCELLED\" | \"INTEGRATION_FAILURE\"; bitrix24_user_ids?: number[] | ... 1 more ... | undefined; ... 30 more ...; whatsapp_numbers?: string[] | ... 1 more ... | undefined; }, { ...'. Type '{ alert_type: \"ROUTE_DEVIATION\"; channel: string; is_enabled: boolean; config: { warning_minutes?: undefined; critical_minutes?: undefined; threshold_minutes?: undefined; }; }' is not assignable to type 'RejectExcessProperties<{ alert_type: \"DRIVER_BLOCKED\" | \"ROUTE_DEVIATION\" | \"DRIVER_STOPPED\" | \"LATE_DELIVERY\" | \"APPROVAL_REQUIRED\" | \"ORDER_CANCELLED\" | \"INTEGRATION_FAILURE\"; bitrix24_user_ids?: number[] | ... 1 more ... | undefined; ... 30 more ...; whatsapp_numbers?: string[] | ... 1 more ... | undefined; }, { ...'. Type '{ alert_type: \"ROUTE_DEVIATION\"; channel: string; is_enabled: boolean; config: { warning_minutes?: undefined; critical_minutes?: undefined; threshold_minutes?: undefined; }; }' is not assignable to type 'RejectExcessProperties<{ alert_type: \"DRIVER_BLOCKED\" | \"ROUTE_DEVIATION\" | \"DRIVER_STOPPED\" | \"LATE_DELIVERY\" | \"APPROVAL_REQUIRED\" | \"ORDER_CANCELLED\" | \"INTEGRATION_FAILURE\"; bitrix24_user_ids?: number[] | ... 1 more ... | undefined; ... 30 more ...; whatsapp_numbers?: string[] | ... 1 more ... | undefined; }, { ...'. Type '{ alert_type: \"ROUTE_DEVIATION\"; channel: string; is_enabled: boolean; config: { warning_minutes?: undefined; critical_minutes?: undefined; threshold_minutes?: undefined; }; }' is not assignable to type '{ alert_type: \"DRIVER_STOPPED\"; channel: string; is_enabled: boolean; config: { warning_minutes: number; critical_minutes: number; threshold_minutes?: undefined; }; }'. Types of property 'alert_type' are incompatible. Type '\"ROUTE_DEVIATION\"' is not assignable to type '\"DRIVER_STOPPED\"'.",
+      "contextHash": "bb5550afdbb87208476a14dcd15e26903773bd53c6da44f12b9b16adfb756b43"
+    },
+    {
+      "file": "src/hooks/useIncidents.ts",
+      "line": 143,
+      "column": 13,
+      "severity": "error",
+      "code": "TS2345",
+      "message": "Argument of type 'Record<string, unknown>' is not assignable to parameter of type 'RejectExcessProperties<{ created_at?: string | undefined; description?: string | undefined; driver_id?: string | undefined; evidence_urls?: string[] | null | undefined; id?: string | undefined; metadata?: Json | undefined; ... 6 more ...; type?: \"ROUTE_DEVIATION\" | ... 5 more ... | undefined; }, Record<...>>'. Type 'Record<string, unknown>' is not assignable to type '{ [x: string]: never; }'. 'string' index signatures are incompatible. Type 'unknown' is not assignable to type 'never'.",
+      "contextHash": "e2b7f5cb1e3f5c6e4e07e15cc1c0f3e9e4dce433b6e9c92a5994928dbf69cbdc"
+    },
+    {
+      "file": "src/hooks/useRiskRules.ts",
+      "line": 72,
+      "column": 13,
+      "severity": "error",
+      "code": "TS2345",
+      "message": "Argument of type 'Record<string, unknown>' is not assignable to parameter of type 'RejectExcessProperties<{ condition?: Json | undefined; created_at?: string | undefined; description?: string | null | undefined; id?: string | undefined; is_active?: boolean | null | undefined; name?: string | undefined; score_impact?: number | undefined; updated_at?: string | undefined; }, Record<...>>'. Type 'Record<string, unknown>' is not assignable to type '{ [x: string]: never; }'. 'string' index signatures are incompatible. Type 'unknown' is not assignable to type 'never'.",
+      "contextHash": "648d3d854ca27c0890c58a946771e8a4be238476da97a5c90a798249ec66bc29"
+    },
+    {
+      "file": "src/pages/AuthPage.tsx",
+      "line": 68,
+      "column": 39,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'errors' does not exist on type 'ZodError<{ email: string; password: string; }>'.",
+      "contextHash": "8407b48f3d21230428e1c53f57b60ed60e0abc29c23c380aee5f0803e73b35f5"
+    },
+    {
+      "file": "src/pages/AuthPage.tsx",
+      "line": 78,
+      "column": 39,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'errors' does not exist on type 'ZodError<{ email: string; password: string; }>'.",
+      "contextHash": "8407b48f3d21230428e1c53f57b60ed60e0abc29c23c380aee5f0803e73b35f5"
+    },
+    {
+      "file": "src/pages/IPWhitelistPage.tsx",
+      "line": 90,
+      "column": 15,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'errors' does not exist on type 'ZodError<unknown>'.",
+      "contextHash": "52e3c16d9369be260f8468642249244e0b1264854dd61830537f70283340fe5f"
+    },
+    {
+      "file": "src/pages/IPWhitelistPage.tsx",
+      "line": 90,
+      "column": 30,
+      "severity": "error",
+      "code": "TS7006",
+      "message": "Parameter 'err' implicitly has an 'any' type.",
+      "contextHash": "52e3c16d9369be260f8468642249244e0b1264854dd61830537f70283340fe5f"
+    },
+    {
+      "file": "src/pages/ResetPasswordPage.tsx",
+      "line": 55,
+      "column": 30,
+      "severity": "error",
+      "code": "TS2339",
+      "message": "Property 'errors' does not exist on type 'ZodError<string>'.",
+      "contextHash": "1dbc4a0fe20881164f5127e8e1a8dc7a3818bace248b88a62f7c0507de49daac"
+    },
+    {
+      "file": "src/pages/ResetPasswordPage.tsx",
+      "line": 55,
+      "column": 41,
+      "severity": "error",
+      "code": "TS7006",
+      "message": "Parameter 'e' implicitly has an 'any' type.",
+      "contextHash": "1dbc4a0fe20881164f5127e8e1a8dc7a3818bace248b88a62f7c0507de49daac"
+    }
+  ]
+}

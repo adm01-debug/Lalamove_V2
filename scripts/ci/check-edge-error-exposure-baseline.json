@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "ocorrencias": [
+    {
+      "arquivo": "supabase/functions/apply-fixes/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response(JSON.stringify({ error: error.message }), {"
+    },
+    {
+      "arquivo": "supabase/functions/external-companies/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response("
+    },
+    {
+      "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response("
+    },
+    {
+      "arquivo": "supabase/functions/llm-wh/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response("
+    },
+    {
+      "arquivo": "supabase/functions/seed-fix-rls/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response("
+    },
+    {
+      "arquivo": "supabase/functions/test-notification/index.ts",
+      "padrao": ".message em resposta 5xx",
+      "trecho": "return new Response("
+    }
+  ]
+}
