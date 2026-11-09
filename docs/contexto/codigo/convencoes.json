@@ -1,0 +1,111 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "onde_ficam": {
+  "telas": [
+   "src/pages (52)"
+  ],
+  "componentes": [
+   "src/components (125)",
+   "src/pages (85)",
+   "src/hooks (3)"
+  ],
+  "hooks": [
+   "src/hooks (81)",
+   "src/components (12)",
+   "scripts/ai-context (1)"
+  ],
+  "servicos_logica": [
+   "src/lib (21)",
+   "src/utils (6)",
+   "src/integrations (4)"
+  ],
+  "testes": [
+   "guards em scripts/ (46)",
+   "co-localizado (__tests__) (37)",
+   "e2e/ (5)"
+  ],
+  "edge_functions": "supabase/functions",
+  "migrations": "supabase/migrations",
+  "scripts": [
+   "scripts/ci (28)",
+   "scripts/db-audit (20)",
+   "scripts/inventario (5)"
+  ],
+  "rotas": [
+   "src/App.tsx"
+  ],
+  "menu": [
+   "src/components/layout/MobileBottomNav.tsx",
+   "src/components/layout/sidebar-config.ts"
+  ],
+  "docs": [
+   "docs (24)",
+   "(raiz) (9)",
+   ".github (1)"
+  ]
+ },
+ "nomenclatura": {
+  "componentes": "PascalCase (72%)",
+  "hooks": "use + PascalCase",
+  "servicos": "camelCase (86%)",
+  "edge_functions": "kebab-case (100%)",
+  "tabelas": "snake_case (93%)"
+ },
+ "barrels_index": 3,
+ "extensao_componentes": [
+  ".tsx (214)"
+ ],
+ "alias_imports": {
+  "(raiz)": {
+   "@/": "src/"
+  }
+ },
+ "commits": {
+  "convencao": "conventional commits validados por scripts/ci/commit-msg-lint.mjs (sem hook commit-msg instalado)",
+  "tipos_aceitos": [
+   "build",
+   "chore",
+   "ci",
+   "docs",
+   "feat",
+   "fix",
+   "perf",
+   "refactor",
+   "revert",
+   "security",
+   "style",
+   "test"
+  ],
+  "exemplos": [
+   "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2",
+   "fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)",
+   "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)",
+   "Merge pull request #66 from adm01-debug/dependabot/npm_and_yarn/globals-17.12.0",
+   "build(deps-dev): bump globals from 15.15.0 to 17.12.0"
+  ]
+ },
+ "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
+ "codeowners": null,
+ "contributing": "docs/CONTRIBUTING.md",
+ "instrucoes_agentes": [
+  ".hermes.md",
+  "AGENTS.md",
+  "CLAUDE.md",
+  "docs/agentes/banco.md",
+  "docs/agentes/deploy.md",
+  "docs/agentes/github-ci.md",
+  "docs/agentes/lalamove-api.md",
+  "docs/agentes/mapa-repo.md",
+  "docs/agentes/regras-dominio.md"
+ ],
+ "typescript": {
+  "strict": true,
+  "noImplicitAny": true,
+  "tsconfigs": [
+   "tsconfig.app.json",
+   "tsconfig.json",
+   "tsconfig.node.json"
+  ]
+ }
+}

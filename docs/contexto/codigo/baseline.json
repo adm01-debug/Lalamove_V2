@@ -1,0 +1,827 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "git": {
+  "commit": "c8807f743288d8de36701ccfdaa45fe39dc979c2",
+  "branch": "main",
+  "data_commit": "2026-11-08T21:41:12-03:00",
+  "remote": "https://github.com/adm01-debug/Lalamove_V2",
+  "ultimos_commits": [
+   {
+    "sha": "c8807f7",
+    "data": "2026-11-08",
+    "assunto": "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2"
+   },
+   {
+    "sha": "ecce49a",
+    "data": "2026-11-08",
+    "assunto": "fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)"
+   },
+   {
+    "sha": "79b861b",
+    "data": "2026-11-08",
+    "assunto": "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)"
+   },
+   {
+    "sha": "924454e",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #66 from adm01-debug/dependabot/npm_and_yarn/globals-17.12.0"
+   },
+   {
+    "sha": "7349b3a",
+    "data": "2026-10-03",
+    "assunto": "build(deps-dev): bump globals from 15.15.0 to 17.12.0"
+   },
+   {
+    "sha": "a0ef45f",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #67 from adm01-debug/dependabot/npm_and_yarn/vitest-5.0.0"
+   },
+   {
+    "sha": "ab067fe",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #65 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-tooltip-1.2.16"
+   },
+   {
+    "sha": "4718632",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #63 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-switch-1.3.7"
+   },
+   {
+    "sha": "3045de3",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #62 from adm01-debug/dependabot/npm_and_yarn/postcss-8.5.28"
+   },
+   {
+    "sha": "e2ea5e5",
+    "data": "2026-10-03",
+    "assunto": "build(deps): bump vitest from 4.1.0 to 5.0.3"
+   },
+   {
+    "sha": "cb86846",
+    "data": "2026-10-03",
+    "assunto": "build(deps-dev): bump postcss from 8.5.26 to 8.5.28"
+   },
+   {
+    "sha": "2568c5c",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #64 from adm01-debug/dependabot/npm_and_yarn/react-is-19.3.0"
+   },
+   {
+    "sha": "a1cd676",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #61 from adm01-debug/dependabot/npm_and_yarn/eslint-10.10.0"
+   },
+   {
+    "sha": "1263122",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #60 from adm01-debug/dependabot/npm_and_yarn/axe-core/playwright-4.13.0"
+   },
+   {
+    "sha": "e6ba3c4",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #59 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-alert-dialog-1.1.23"
+   },
+   {
+    "sha": "ff31ee2",
+    "data": "2026-10-03",
+    "assunto": "Merge pull request #45 from adm01-debug/dependabot/npm_and_yarn/tailwindcss-4.3.3"
+   },
+   {
+    "sha": "a9364fe",
+    "data": "2026-09-17",
+    "assunto": "build(deps): bump @radix-ui/react-tooltip from 1.2.10 to 1.2.16"
+   },
+   {
+    "sha": "8cd6cdb",
+    "data": "2026-09-17",
+    "assunto": "build(deps): bump react-is from 19.2.8 to 19.3.0"
+   },
+   {
+    "sha": "d222277",
+    "data": "2026-09-17",
+    "assunto": "build(deps): bump @radix-ui/react-switch from 1.2.5 to 1.3.7"
+   },
+   {
+    "sha": "bad4617",
+    "data": "2026-09-17",
+    "assunto": "build(deps-dev): bump eslint from 9.39.5 to 10.10.0"
+   },
+   {
+    "sha": "4276fc4",
+    "data": "2026-09-17",
+    "assunto": "build(deps-dev): bump @axe-core/playwright from 4.11.3 to 4.13.0"
+   },
+   {
+    "sha": "bba710b",
+    "data": "2026-09-17",
+    "assunto": "build(deps): bump @radix-ui/react-alert-dialog from 1.1.16 to 1.1.23"
+   },
+   {
+    "sha": "9e04fd9",
+    "data": "2026-09-15",
+    "assunto": "Merge PR #58 — deno: return→continue (TS1108)"
+   },
+   {
+    "sha": "640078d",
+    "data": "2026-09-15",
+    "assunto": "fix(deno): return→continue no guard needsLovableKey (TS1108)"
+   },
+   {
+    "sha": "dc75ffb",
+    "data": "2026-09-15",
+    "assunto": "build(deps-dev): bump tailwindcss from 3.4.17 to 4.3.3"
+   }
+  ],
+  "arquivos_mudados_7d": 181,
+  "pastas_mais_mudadas_30d": [
+   {
+    "pasta": ".agents/skills/lalamove-v2",
+    "mudancas": 2
+   },
+   {
+    "pasta": ".gitignore",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/contexto/regras",
+    "mudancas": 2
+   },
+   {
+    "pasta": "package.json",
+    "mudancas": 2
+   },
+   {
+    "pasta": ".claude/ecc-tools.json",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".claude/homunculus/instincts",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".claude/hooks/session-start.sh",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".claude/identity.json",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".claude/settings.json",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".claude/skills/lalamove-v2",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".codex/AGENTS.md",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".codex/agents/docs-researcher.toml",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".codex/agents/explorer.toml",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".codex/agents/reviewer.toml",
+    "mudancas": 1
+   },
+   {
+    "pasta": ".codex/config.toml",
+    "mudancas": 1
+   }
+  ],
+  "arquivos_mais_mudados_90d": [
+   {
+    "arquivo": "package.json",
+    "mudancas": 19
+   },
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 18
+   },
+   {
+    "arquivo": "supabase/config.toml",
+    "mudancas": 10
+   },
+   {
+    "arquivo": ".github/workflows/ci.yml",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/hooks/useRegionResolver.ts",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "AGENTS.md",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "eslint.config.js",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "src/hooks/useDeviceDetection.ts",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "supabase/functions/migrate-helper/index.ts",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".hermes.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-via-management-api.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/auth/PasswordStrengthIndicator.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/layout/AppLayout.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/layout/MobileSidebar.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/layout/Sidebar.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/map/LiveMap.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/map/MapHUD.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/map/hooks/useMapAlerts.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/pwa/OfflineIndicator.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/ui/accessible-card.tsx",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "src/components/ui/data-refresh-indicator.tsx",
+    "mudancas": 2
+   }
+  ],
+  "autores_30d": [
+   {
+    "autor": "adm01-debug",
+    "commits": 3
+   }
+  ]
+ },
+ "contagens": {
+  "arquivos_total": 869,
+  "arquivos_codigo": 566,
+  "linhas_codigo": 109925,
+  "rotas": 54,
+  "rotas_protegidas": 46,
+  "rotas_com_mfa": 6,
+  "itens_menu": 37,
+  "modulos": 43,
+  "componentes": 214,
+  "hooks": 96,
+  "edge_functions": 26,
+  "tabelas": 76,
+  "migrations": 153,
+  "cron_jobs": 16,
+  "testes": 97,
+  "workflows": 3,
+  "scripts": 104,
+  "docs_md": 62
+ },
+ "por_pasta": {
+  "e2e/helpers": {
+   "arquivos": 1,
+   "linhas": 55
+  },
+  "e2e/login-lockout.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 177
+  },
+  "e2e/mfa.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 51
+  },
+  "e2e/password-reset.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 67
+  },
+  "e2e/rbac.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 84
+  },
+  "eslint.config.js": {
+   "arquivos": 1,
+   "linhas": 34
+  },
+  "playwright.config.ts": {
+   "arquivos": 1,
+   "linhas": 41
+  },
+  "postcss.config.js": {
+   "arquivos": 1,
+   "linhas": 7
+  },
+  "public/sw.js": {
+   "arquivos": 1,
+   "linhas": 357
+  },
+  "scripts/add-security-manage.ts": {
+   "arquivos": 1,
+   "linhas": 52
+  },
+  "scripts/ai-context": {
+   "arquivos": 3,
+   "linhas": 1543
+  },
+  "scripts/apply-dashboard-fixes.ts": {
+   "arquivos": 1,
+   "linhas": 97
+  },
+  "scripts/apply-final-sql.ts": {
+   "arquivos": 1,
+   "linhas": 58
+  },
+  "scripts/apply-permissions-via-api.ts": {
+   "arquivos": 1,
+   "linhas": 39
+  },
+  "scripts/apply-rls-fix.ts": {
+   "arquivos": 1,
+   "linhas": 111
+  },
+  "scripts/apply-rls-via-pg.ts": {
+   "arquivos": 1,
+   "linhas": 159
+  },
+  "scripts/apply-sql-via-management-api.ts": {
+   "arquivos": 1,
+   "linhas": 60
+  },
+  "scripts/apply-via-management-api.ts": {
+   "arquivos": 1,
+   "linhas": 84
+  },
+  "scripts/check-permissions.ts": {
+   "arquivos": 1,
+   "linhas": 69
+  },
+  "scripts/ci": {
+   "arquivos": 54,
+   "linhas": 11181
+  },
+  "scripts/db-audit": {
+   "arquivos": 29,
+   "linhas": 7019
+  },
+  "scripts/diagnose-rpc.ts": {
+   "arquivos": 1,
+   "linhas": 76
+  },
+  "scripts/docs": {
+   "arquivos": 1,
+   "linhas": 198
+  },
+  "scripts/ensure-admin-active.ts": {
+   "arquivos": 1,
+   "linhas": 48
+  },
+  "scripts/eslint": {
+   "arquivos": 1,
+   "linhas": 61
+  },
+  "scripts/fix-admin-role-active.ts": {
+   "arquivos": 1,
+   "linhas": 63
+  },
+  "scripts/fix-dashboard-via-api.ts": {
+   "arquivos": 1,
+   "linhas": 68
+  },
+  "scripts/fix-rpc-functions.ts": {
+   "arquivos": 1,
+   "linhas": 68
+  },
+  "scripts/generate-dashboard-sql.ts": {
+   "arquivos": 1,
+   "linhas": 22
+  },
+  "scripts/inventario": {
+   "arquivos": 4,
+   "linhas": 839
+  },
+  "scripts/lib": {
+   "arquivos": 2,
+   "linhas": 240
+  },
+  "scripts/list-tables-v2.ts": {
+   "arquivos": 1,
+   "linhas": 51
+  },
+  "scripts/list-tables.ts": {
+   "arquivos": 1,
+   "linhas": 53
+  },
+  "scripts/qa": {
+   "arquivos": 4,
+   "linhas": 992
+  },
+  "scripts/seed-contacts.ts": {
+   "arquivos": 1,
+   "linhas": 135
+  },
+  "scripts/seed-database.ts": {
+   "arquivos": 1,
+   "linhas": 528
+  },
+  "scripts/set-user-admin.ts": {
+   "arquivos": 1,
+   "linhas": 71
+  },
+  "scripts/test-after-fix.ts": {
+   "arquivos": 1,
+   "linhas": 37
+  },
+  "scripts/test-user-permissions.ts": {
+   "arquivos": 1,
+   "linhas": 69
+  },
+  "scripts/ui-audit": {
+   "arquivos": 6,
+   "linhas": 992
+  },
+  "scripts/vercel": {
+   "arquivos": 5,
+   "linhas": 1037
+  },
+  "src/App.tsx": {
+   "arquivos": 1,
+   "linhas": 226
+  },
+  "src/__tests__": {
+   "arquivos": 1,
+   "linhas": 520
+  },
+  "src/components": {
+   "arquivos": 147,
+   "linhas": 26824
+  },
+  "src/hooks": {
+   "arquivos": 101,
+   "linhas": 17196
+  },
+  "src/i18n": {
+   "arquivos": 1,
+   "linhas": 37
+  },
+  "src/integrations": {
+   "arquivos": 4,
+   "linhas": 3965
+  },
+  "src/lib": {
+   "arquivos": 31,
+   "linhas": 3106
+  },
+  "src/main.tsx": {
+   "arquivos": 1,
+   "linhas": 28
+  },
+  "src/pages": {
+   "arquivos": 86,
+   "linhas": 18121
+  },
+  "src/services": {
+   "arquivos": 1,
+   "linhas": 206
+  },
+  "src/test": {
+   "arquivos": 1,
+   "linhas": 16
+  },
+  "src/types": {
+   "arquivos": 4,
+   "linhas": 890
+  },
+  "src/utils": {
+   "arquivos": 8,
+   "linhas": 1080
+  },
+  "supabase/functions": {
+   "arquivos": 36,
+   "linhas": 10424
+  },
+  "tailwind.config.ts": {
+   "arquivos": 1,
+   "linhas": 230
+  },
+  "vite.config.ts": {
+   "arquivos": 1,
+   "linhas": 30
+  },
+  "vitest.config.ts": {
+   "arquivos": 1,
+   "linhas": 33
+  }
+ },
+ "maiores_arquivos": [
+  {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "linhas": 3820
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-api/index.ts",
+   "linhas": 1027
+  },
+  {
+   "arquivo": "scripts/db-audit/check-migration-drift.mjs",
+   "linhas": 1007
+  },
+  {
+   "arquivo": "src/components/orders/NewOrderDialog.tsx",
+   "linhas": 996
+  },
+  {
+   "arquivo": "src/components/orders/OrderDetailModal.tsx",
+   "linhas": 917
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linhas": 901
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 900
+  },
+  {
+   "arquivo": "supabase/functions/evaluate-driver/index.ts",
+   "linhas": 844
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 793
+  },
+  {
+   "arquivo": "src/pages/AdvancedReportsPage.tsx",
+   "linhas": 750
+  },
+  {
+   "arquivo": "scripts/ci/lint-ratchet.mjs",
+   "linhas": 668
+  },
+  {
+   "arquivo": "src/components/map/LiveMap.tsx",
+   "linhas": 606
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 567
+  },
+  {
+   "arquivo": "src/pages/AlertsPage.tsx",
+   "linhas": 544
+  },
+  {
+   "arquivo": "src/hooks/useAdvancedReports.ts",
+   "linhas": 539
+  },
+  {
+   "arquivo": "scripts/seed-database.ts",
+   "linhas": 528
+  },
+  {
+   "arquivo": "src/components/dashboard/OrdersTable.tsx",
+   "linhas": 511
+  },
+  {
+   "arquivo": "src/components/approvals/SwipeableApprovalCard.tsx",
+   "linhas": 501
+  },
+  {
+   "arquivo": "src/pages/AdminTelemetriaPage.tsx",
+   "linhas": 499
+  },
+  {
+   "arquivo": "src/pages/RateLimitDashboardPage.tsx",
+   "linhas": 478
+  },
+  {
+   "arquivo": "src/components/ui/micro-interactions.tsx",
+   "linhas": 476
+  },
+  {
+   "arquivo": "src/components/ui/contextual-hints.tsx",
+   "linhas": 468
+  },
+  {
+   "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
+   "linhas": 465
+  },
+  {
+   "arquivo": "src/pages/WebhooksPage.tsx",
+   "linhas": 465
+  },
+  {
+   "arquivo": "scripts/qa/medir-tipografia.cjs",
+   "linhas": 457
+  }
+ ],
+ "qualidade": {
+  "any": 79,
+  "console_log": 394,
+  "ts_ignore": 0,
+  "eslint_disable": 1,
+  "todos": 3,
+  "arquivos_acima_500_linhas": 18
+ },
+ "todos": [
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linha": 176,
+   "tipo": "TODO",
+   "texto": "|FIXME|HACK|XXX)\\b[:\\s-]*([^\\n]{0,100})/.exec(line); if (m) todos.push({ linha: ln, tipo: m[1], text"
+  },
+  {
+   "arquivo": "scripts/docs/verificar-docs-realtime.mjs",
+   "linha": 61,
+   "tipo": "XXX",
+   "texto": "|\\.\\.\\.|<[^>]+>)/;"
+  },
+  {
+   "arquivo": "src/lib/statusPalette.ts",
+   "linha": 4,
+   "tipo": "TODO",
+   "texto": "indicador de status use"
+  }
+ ],
+ "alertas": {
+  "rotas_sem_arquivo": [],
+  "rotas_sem_protecao": [
+   "/",
+   "/dashboard"
+  ],
+  "menu_visivel_sem_acesso": [
+   "Ferramentas Mapa -> /map-tools (menu: todos; rota: manager)",
+   "Base CRM -> /external-data (menu: todos; rota: manager)",
+   "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
+   "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
+   "Webhooks -> /webhooks (menu: todos; rota: manager)",
+   "Alertas -> /alerts (menu: todos; rota: operator)",
+   "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",
+   "Aprovações -> /approvals (menu: todos; rota: manager)",
+   "Avaliações -> /evaluations (menu: todos; rota: operator)",
+   "Incidentes -> /incidents (menu: todos; rota: operator)",
+   "Contatos -> /contacts (menu: todos; rota: operator)",
+   "Motoristas -> /drivers (menu: todos; rota: operator)",
+   "Operações Lalamove -> /lalamove-operacoes (menu: todos; rota: operator)",
+   "Pedidos -> /orders (menu: todos; rota: operator)"
+  ],
+  "componentes_ambiguos": [],
+  "menu_sem_destino": [],
+  "edges_orfas": [
+   "apply-fixes",
+   "escalate-alerts",
+   "external-db-bridge",
+   "lalamove-token-refresh",
+   "llm-wh",
+   "rotate-tokens",
+   "seed-fix-rls"
+  ],
+  "edges_chamadas_sem_pasta": [],
+  "edges_sem_verify_jwt": [
+   "migrate-helper"
+  ],
+  "tabelas_sem_rls": [
+   "cache_refresh_log",
+   "job_queue_processing_log"
+  ],
+  "tabelas_usadas_sem_definicao": [
+   "carriers",
+   "companies",
+   "customers",
+   "suppliers"
+  ],
+  "tabelas_com_drift_migration_vs_types": [
+   "mfa_sessions"
+  ],
+  "rpcs_sem_definicao": [
+   "exec"
+  ],
+  "componentes_orfaos": [
+   "src/components/approvals/SwipeableApprovalCard.tsx",
+   "src/components/debug/AuditReportGenerator.tsx",
+   "src/components/ui/chart.tsx",
+   "src/components/ui/hero-metric.tsx"
+  ],
+  "componentes_com_nome_duplicado": [
+   "ExtendedFAB",
+   "MiniFAB",
+   "QuickActionsPanel",
+   "SpeedDialFAB",
+   "WelcomeBanner"
+  ],
+  "scripts_orfaos": [
+   "scripts/deploy-gateway.ps1",
+   "scripts/fix_corrupted_imports.py",
+   "scripts/fix_logs.py"
+  ],
+  "scripts_soltos_na_raiz": [
+   "scripts/add-security-manage.ts",
+   "scripts/apply-dashboard-fixes.ts",
+   "scripts/apply-final-sql.ts",
+   "scripts/apply-permissions-via-api.ts",
+   "scripts/apply-rls-fix.ts",
+   "scripts/apply-rls-via-pg.ts",
+   "scripts/apply-sql-via-management-api.ts",
+   "scripts/apply-via-management-api.ts",
+   "scripts/backup.sh",
+   "scripts/check-permissions.ts",
+   "scripts/deploy-gateway.ps1",
+   "scripts/deploy.sh",
+   "scripts/diagnose-rpc.ts",
+   "scripts/ensure-admin-active.ts",
+   "scripts/fix-admin-role-active.ts",
+   "scripts/fix-dashboard-via-api.ts",
+   "scripts/fix-rpc-functions.ts",
+   "scripts/fix_corrupted_imports.py",
+   "scripts/fix_logs.py",
+   "scripts/generate-dashboard-sql.ts",
+   "scripts/health-check.sh",
+   "scripts/list-tables-v2.ts",
+   "scripts/list-tables.ts",
+   "scripts/pre-commit-secrets.sh",
+   "scripts/seed-contacts.ts",
+   "scripts/seed-database.ts",
+   "scripts/set-user-admin.ts",
+   "scripts/test-after-fix.ts",
+   "scripts/test-user-permissions.ts"
+  ],
+  "env_usadas_nao_declaradas": [
+   "DEV",
+   "PROD",
+   "VITE_APP_VERSION",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+  ],
+  "ciclos_de_import": 0,
+  "possiveis_segredos_no_codigo": [
+   "scripts/add-security-manage.ts:6",
+   "scripts/apply-dashboard-fixes.ts:14",
+   "scripts/apply-final-sql.ts:6",
+   "scripts/apply-permissions-via-api.ts:6",
+   "scripts/apply-permissions-via-api.ts:7",
+   "scripts/apply-rls-via-pg.ts:16",
+   "scripts/apply-sql-via-management-api.ts:6",
+   "scripts/check-permissions.ts:8",
+   "scripts/diagnose-rpc.ts:8",
+   "scripts/ensure-admin-active.ts:6",
+   "scripts/fix-admin-role-active.ts:8",
+   "scripts/fix-dashboard-via-api.ts:8",
+   "scripts/fix-rpc-functions.ts:6",
+   "scripts/list-tables-v2.ts:6",
+   "scripts/list-tables.ts:8",
+   "scripts/seed-contacts.ts:8",
+   "scripts/seed-database.ts:10",
+   "scripts/set-user-admin.ts:8",
+   "scripts/test-after-fix.ts:8",
+   "scripts/test-user-permissions.ts:8",
+   "scripts/test-user-permissions.ts:29"
+  ]
+ },
+ "erros_do_gerador": []
+}

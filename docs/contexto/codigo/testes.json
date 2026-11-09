@@ -1,0 +1,1172 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "frameworks": [
+  "vitest",
+  "playwright",
+  "deno test (contratos das edges)"
+ ],
+ "comandos": {
+  "unit": "npx vitest run <caminho>",
+  "typecheck": "npx tsc --noEmit -p tsconfig.app.json",
+  "lint": "npx eslint <arquivos>",
+  "e2e": "npx playwright test",
+  "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
+  "guards": "node --test scripts/ci/*.unit.mjs"
+ },
+ "total": 97,
+ "por_tipo": {
+  "contrato (deno)": 2,
+  "e2e (playwright)": 5,
+  "edge (deno)": 2,
+  "guard (node --test)": 33,
+  "unit (vitest)": 55
+ },
+ "onde_ficam": [
+  {
+   "padrao": "guards em scripts/",
+   "arquivos": 46
+  },
+  {
+   "padrao": "co-localizado (__tests__)",
+   "arquivos": 37
+  },
+  {
+   "padrao": "e2e/",
+   "arquivos": 5
+  },
+  {
+   "padrao": "co-localizado (*.test)",
+   "arquivos": 4
+  },
+  {
+   "padrao": "supabase/functions/<edge>",
+   "arquivos": 4
+  },
+  {
+   "padrao": "outro",
+   "arquivos": 1
+  }
+ ],
+ "arquivos": [
+  {
+   "arquivo": "e2e/helpers/auth.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 55,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "e2e/login-lockout.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 177,
+   "testa": [],
+   "casos": 2
+  },
+  {
+   "arquivo": "e2e/mfa.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 51,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/password-reset.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 67,
+   "testa": [],
+   "casos": 4
+  },
+  {
+   "arquivo": "e2e/rbac.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 84,
+   "testa": [],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 458,
+   "testa": [],
+   "casos": 14
+  },
+  {
+   "arquivo": "scripts/ci/a11y-button-name-ratchet.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 418,
+   "testa": [
+    "src/components/ui/button.tsx",
+    "src/components/ui/select.tsx",
+    "src/components/ui/tabs.tsx"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "scripts/ci/actions-kpi.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 119,
+   "testa": [
+    "scripts/ci/actions-kpi.mjs"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/ci/branch-podaveis.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 141,
+   "testa": [
+    "scripts/ci/branch-podaveis.mjs"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/ci/bump-toolchain.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 130,
+   "testa": [
+    "scripts/ci/bump-toolchain.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ci/bundle-budget.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 154,
+   "testa": [
+    "scripts/ci/bundle-budget.mjs"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/ci/check-bundle-secrets.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 294,
+   "testa": [
+    "scripts/ci/check-bundle-secrets.mjs"
+   ],
+   "casos": 27
+  },
+  {
+   "arquivo": "scripts/ci/check-e2e-artifact-secrets.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 183,
+   "testa": [
+    "scripts/ci/check-e2e-artifact-secrets.mjs"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "scripts/ci/check-edge-error-exposure.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 257,
+   "testa": [
+    "scripts/ci/check-edge-error-exposure.mjs"
+   ],
+   "casos": 24
+  },
+  {
+   "arquivo": "scripts/ci/check-pr-workflow-secrets.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 358,
+   "testa": [
+    "scripts/ci/check-pr-workflow-secrets.mjs"
+   ],
+   "casos": 41
+  },
+  {
+   "arquivo": "scripts/ci/check-quarantine.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 91,
+   "testa": [
+    "scripts/ci/check-quarantine.mjs"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/ci/check-test-inventory.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 70,
+   "testa": [
+    "scripts/ci/check-test-inventory.mjs"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "scripts/ci/check-workflow-pins-resolvem.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 63,
+   "testa": [
+    "scripts/ci/check-workflow-pins-resolvem.mjs"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/ci/check-workflow-pins.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 88,
+   "testa": [
+    "scripts/ci/check-workflow-pins.mjs"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/ci/commit-msg-lint.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 141,
+   "testa": [
+    "scripts/ci/commit-msg-lint.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/ci/fila-merge.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 130,
+   "testa": [
+    "scripts/ci/fila-merge.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ci/gerar-matriz-edge-tabela.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 66,
+   "testa": [
+    "scripts/ci/gerar-matriz-edge-tabela.mjs"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "scripts/ci/github-settings-guard.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 193,
+   "testa": [
+    "scripts/ci/github-settings-guard.mjs"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "scripts/ci/implicit-any-ratchet.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 308,
+   "testa": [],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/ci/issue-rotativa.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 90,
+   "testa": [
+    "scripts/ci/issue-rotativa.mjs"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/ci/lint-ratchet.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 749,
+   "testa": [
+    "scripts/ci/lint-ratchet.mjs"
+   ],
+   "casos": 36
+  },
+  {
+   "arquivo": "scripts/ci/marcador-specs.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 73,
+   "testa": [
+    "scripts/ci/marcador-specs.mjs"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/ci/redigir-relatorio.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 160,
+   "testa": [
+    "scripts/ci/redigir-relatorio.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ci/render-workflow-docs.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 84,
+   "testa": [
+    "scripts/ci/render-workflow-docs.mjs"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/ci/typecheck-ratchet.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 399,
+   "testa": [
+    "scripts/ci/typecheck-ratchet.mjs"
+   ],
+   "casos": 24
+  },
+  {
+   "arquivo": "scripts/ci/vercel-env-baseline.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 121,
+   "testa": [
+    "scripts/ci/vercel-env-baseline.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ci/workflow-invariants.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 94,
+   "testa": [
+    "scripts/ci/workflow-invariants.mjs",
+    "scripts/ci/workflow-test-support.mjs"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/db-audit/catalog-from-types.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 124,
+   "testa": [
+    "scripts/db-audit/catalog-from-types.mjs"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/db-audit/check-grants-fresh.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 158,
+   "testa": [],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/db-audit/check-manifest-fresh.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 221,
+   "testa": [
+    "scripts/db-audit/database-identity.mjs",
+    "scripts/db-audit/manifest-lib.mjs"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/db-audit/check-migration-drift.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 1323,
+   "testa": [],
+   "casos": 76
+  },
+  {
+   "arquivo": "scripts/db-audit/check-realtime-subscriptions.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 149,
+   "testa": [
+    "scripts/db-audit/check-realtime-subscriptions.mjs"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "scripts/db-audit/check-screen-permission-db-guards.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 183,
+   "testa": [],
+   "casos": 9
+  },
+  {
+   "arquivo": "scripts/db-audit/database-identity.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 159,
+   "testa": [
+    "scripts/db-audit/database-identity.mjs"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "scripts/db-audit/diff.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 59,
+   "testa": [
+    "scripts/db-audit/manifest-lib.mjs"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "scripts/db-audit/psql-environment.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 151,
+   "testa": [
+    "scripts/db-audit/psql-environment.mjs"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/db-audit/psql-safe.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 122,
+   "testa": [],
+   "casos": 7
+  },
+  {
+   "arquivo": "scripts/db-audit/register-migration.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 273,
+   "testa": [
+    "scripts/db-audit/register-migration.mjs"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "scripts/db-audit/seguranca-processo.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 122,
+   "testa": [
+    "scripts/db-audit/seguranca-processo.mjs"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/lib/seguranca-processo.test.mjs",
+   "tipo": "unit (vitest)",
+   "linhas": 139,
+   "testa": [
+    "scripts/lib/seguranca-processo.mjs"
+   ],
+   "casos": 10
+  },
+  {
+   "arquivo": "scripts/qa/contraste-auditores.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 143,
+   "testa": [
+    "scripts/qa/contraste-busca.mjs",
+    "scripts/qa/contraste-tokens.mjs"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "scripts/ui-audit/layout-guard.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 188,
+   "testa": [],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/ui-audit/width-check.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 71,
+   "testa": [
+    "scripts/ui-audit/width-check.mjs"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "scripts/vercel/ignore-build.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 148,
+   "testa": [],
+   "casos": 6
+  },
+  {
+   "arquivo": "scripts/vercel/verify-production.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 181,
+   "testa": [],
+   "casos": 11
+  },
+  {
+   "arquivo": "scripts/vercel/verify-release-targets.unit.mjs",
+   "tipo": "guard (node --test)",
+   "linhas": 184,
+   "testa": [
+    "scripts/vercel/verify-release-targets.mjs"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/__tests__/improvements-validation.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 520,
+   "testa": [],
+   "casos": 40
+  },
+  {
+   "arquivo": "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 263,
+   "testa": [
+    "src/pages/AdminTelemetriaPage.tsx"
+   ],
+   "casos": 22
+  },
+  {
+   "arquivo": "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 169,
+   "testa": [
+    "src/components/admin/telemetry/TelemetryCharts.tsx"
+   ],
+   "casos": 17
+  },
+  {
+   "arquivo": "src/components/map/__tests__/mapLayers.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 82,
+   "testa": [
+    "src/components/map/mapLayers.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/components/map/__tests__/MapSettingsPanel.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 242,
+   "testa": [
+    "src/components/map/MapSettingsPanel.tsx",
+    "src/hooks/useMapSettings.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/components/map/__tests__/markerFactories.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 153,
+   "testa": [
+    "src/components/map/hooks/useTrackingData.ts",
+    "src/components/map/markerFactories.ts"
+   ],
+   "casos": 12
+  },
+  {
+   "arquivo": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 88,
+   "testa": [
+    "src/components/map/hooks/useMapAlerts.ts",
+    "src/components/map/hooks/useTrackingData.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 81,
+   "testa": [
+    "src/components/map/hooks/useMapboxToken.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/components/map/hooks/__tests__/useTrackingData.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 129,
+   "testa": [
+    "src/components/map/hooks/useTrackingData.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useActiveAlerts.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 229,
+   "testa": [
+    "src/hooks/useActiveAlerts.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useContractVersionUsage.trend.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 102,
+   "testa": [
+    "src/hooks/useContractVersionUsage.ts"
+   ],
+   "casos": 13
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useContractVersionUsageMonthly.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 72,
+   "testa": [
+    "src/hooks/useContractVersionUsageMonthly.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useCronJobsHealth.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 62,
+   "testa": [
+    "src/hooks/useCronJobsHealth.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useDashboardStats.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 123,
+   "testa": [
+    "src/hooks/useDashboardStats.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useDeliveryMetrics.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 186,
+   "testa": [
+    "src/hooks/useDeliveryMetrics.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useDrivers.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 91,
+   "testa": [
+    "src/hooks/useDrivers.ts"
+   ],
+   "casos": 2
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useIncidents.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 92,
+   "testa": [
+    "src/hooks/useIncidents.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useLoginLockout.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 145,
+   "testa": [
+    "src/hooks/useLoginLockout.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useMapSettings.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 162,
+   "testa": [
+    "src/hooks/useMapSettings.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/hooks/__tests__/usePendingApprovals.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 217,
+   "testa": [
+    "src/hooks/usePendingApprovals.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/hooks/__tests__/usePermissions.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 193,
+   "testa": [
+    "src/hooks/usePermissions.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useRateLimiting.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 150,
+   "testa": [
+    "src/hooks/useRateLimiting.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useRecentOrders.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 204,
+   "testa": [
+    "src/hooks/useRecentOrders.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useRegionResolver.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 80,
+   "testa": [
+    "src/hooks/useRegionResolver.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useRiskRules.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 142,
+   "testa": [
+    "src/hooks/useRiskRules.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useSLAMetrics.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 140,
+   "testa": [
+    "src/hooks/useSLAMetrics.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useTrackingHistory.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 138,
+   "testa": [
+    "src/hooks/useTrackingHistory.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 5
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useWebhookEvents.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 175,
+   "testa": [
+    "src/hooks/useWebhookEvents.ts",
+    "src/integrations/supabase/client.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/lib/__tests__/lalamoveCanonical.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 129,
+   "testa": [
+    "src/lib/lalamoveCatalog.ts",
+    "src/lib/lalamoveErrors.ts",
+    "src/lib/lalamoveGuards.ts",
+    "src/types/lalamove.ts"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "src/lib/__tests__/lalamoveContract.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 122,
+   "testa": [
+    "src/lib/lalamoveOrderEdit.ts",
+    "src/lib/lalamoveTimeline.ts",
+    "src/lib/uapiErrors.ts",
+    "src/types/lalamove.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/__tests__/lalamoveOrderEdit.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 112,
+   "testa": [
+    "src/lib/lalamoveOrderEdit.ts"
+   ],
+   "casos": 18
+  },
+  {
+   "arquivo": "src/lib/__tests__/lalamoveReasons.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 97,
+   "testa": [
+    "src/lib/lalamoveReasons.ts",
+    "src/lib/uapiStatement.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/lib/__tests__/lalamoveTimeline.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 124,
+   "testa": [
+    "src/lib/lalamoveTimeline.ts"
+   ],
+   "casos": 11
+  },
+  {
+   "arquivo": "src/lib/__tests__/uapiErrors.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 27,
+   "testa": [
+    "src/lib/uapiErrors.ts"
+   ],
+   "casos": 4
+  },
+  {
+   "arquivo": "src/lib/lalamoveValidation.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 133,
+   "testa": [
+    "src/lib/lalamoveValidation.ts"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "src/lib/orderErrors.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 48,
+   "testa": [
+    "src/lib/orderErrors.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/lib/phone.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 88,
+   "testa": [
+    "src/lib/phone.ts"
+   ],
+   "casos": 7
+  },
+  {
+   "arquivo": "src/lib/utils.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 77,
+   "testa": [
+    "src/lib/utils.ts"
+   ],
+   "casos": 15
+  },
+  {
+   "arquivo": "src/test/setup.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 16,
+   "testa": [],
+   "casos": 0
+  },
+  {
+   "arquivo": "src/types/__tests__/types.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 206,
+   "testa": [
+    "src/types/index.ts"
+   ],
+   "casos": 22
+  },
+  {
+   "arquivo": "src/utils/__tests__/exportUtils.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 276,
+   "testa": [
+    "src/utils/exportUtils.ts"
+   ],
+   "casos": 19
+  },
+  {
+   "arquivo": "src/utils/__tests__/timeUtils.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 120,
+   "testa": [
+    "src/utils/timeUtils.ts"
+   ],
+   "casos": 17
+  },
+  {
+   "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
+   "tipo": "contrato (deno)",
+   "linhas": 271,
+   "testa": [
+    "supabase/functions/_shared/contract.ts",
+    "supabase/functions/_shared/schemas.ts"
+   ],
+   "casos": 6
+  },
+  {
+   "arquivo": "supabase/functions/_shared/contract.test.ts",
+   "tipo": "contrato (deno)",
+   "linhas": 324,
+   "testa": [
+    "supabase/functions/_shared/contract.ts",
+    "supabase/functions/_shared/schemas.ts"
+   ],
+   "casos": 25
+  },
+  {
+   "arquivo": "supabase/functions/external-db-bridge/index.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 404,
+   "testa": [],
+   "casos": 24
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-webhook/security.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 60,
+   "testa": [
+    "supabase/functions/lalamove-webhook/security.ts"
+   ],
+   "casos": 7
+  }
+ ],
+ "sql": [],
+ "cobertura_por_arquivo": {
+  "scripts/ci/actions-kpi.mjs": 1,
+  "scripts/ci/branch-podaveis.mjs": 1,
+  "scripts/ci/bump-toolchain.mjs": 1,
+  "scripts/ci/bundle-budget.mjs": 1,
+  "scripts/ci/check-bundle-secrets.mjs": 1,
+  "scripts/ci/check-e2e-artifact-secrets.mjs": 1,
+  "scripts/ci/check-edge-error-exposure.mjs": 1,
+  "scripts/ci/check-pr-workflow-secrets.mjs": 1,
+  "scripts/ci/check-quarantine.mjs": 1,
+  "scripts/ci/check-test-inventory.mjs": 1,
+  "scripts/ci/check-workflow-pins-resolvem.mjs": 1,
+  "scripts/ci/check-workflow-pins.mjs": 1,
+  "scripts/ci/commit-msg-lint.mjs": 1,
+  "scripts/ci/fila-merge.mjs": 1,
+  "scripts/ci/gerar-matriz-edge-tabela.mjs": 1,
+  "scripts/ci/github-settings-guard.mjs": 1,
+  "scripts/ci/issue-rotativa.mjs": 1,
+  "scripts/ci/lint-ratchet.mjs": 1,
+  "scripts/ci/marcador-specs.mjs": 1,
+  "scripts/ci/redigir-relatorio.mjs": 1,
+  "scripts/ci/render-workflow-docs.mjs": 1,
+  "scripts/ci/typecheck-ratchet.mjs": 1,
+  "scripts/ci/vercel-env-baseline.mjs": 1,
+  "scripts/ci/workflow-invariants.mjs": 1,
+  "scripts/ci/workflow-test-support.mjs": 1,
+  "scripts/db-audit/catalog-from-types.mjs": 1,
+  "scripts/db-audit/check-realtime-subscriptions.mjs": 1,
+  "scripts/db-audit/database-identity.mjs": 2,
+  "scripts/db-audit/manifest-lib.mjs": 2,
+  "scripts/db-audit/psql-environment.mjs": 1,
+  "scripts/db-audit/register-migration.mjs": 1,
+  "scripts/db-audit/seguranca-processo.mjs": 1,
+  "scripts/lib/seguranca-processo.mjs": 1,
+  "scripts/qa/contraste-busca.mjs": 1,
+  "scripts/qa/contraste-tokens.mjs": 1,
+  "scripts/ui-audit/width-check.mjs": 1,
+  "scripts/vercel/verify-release-targets.mjs": 1,
+  "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
+  "src/components/map/MapSettingsPanel.tsx": 1,
+  "src/components/map/hooks/useMapAlerts.ts": 1,
+  "src/components/map/hooks/useMapboxToken.ts": 1,
+  "src/components/map/hooks/useTrackingData.ts": 3,
+  "src/components/map/mapLayers.ts": 1,
+  "src/components/map/markerFactories.ts": 1,
+  "src/components/ui/button.tsx": 1,
+  "src/components/ui/select.tsx": 1,
+  "src/components/ui/tabs.tsx": 1,
+  "src/hooks/useActiveAlerts.ts": 1,
+  "src/hooks/useContractVersionUsage.ts": 1,
+  "src/hooks/useContractVersionUsageMonthly.ts": 1,
+  "src/hooks/useCronJobsHealth.ts": 1,
+  "src/hooks/useDashboardStats.ts": 1,
+  "src/hooks/useDeliveryMetrics.ts": 1,
+  "src/hooks/useDrivers.ts": 1,
+  "src/hooks/useIncidents.ts": 1,
+  "src/hooks/useLoginLockout.ts": 1,
+  "src/hooks/useMapSettings.ts": 2,
+  "src/hooks/usePendingApprovals.ts": 1,
+  "src/hooks/usePermissions.ts": 1,
+  "src/hooks/useRateLimiting.ts": 1,
+  "src/hooks/useRecentOrders.ts": 1,
+  "src/hooks/useRegionResolver.ts": 1,
+  "src/hooks/useRiskRules.ts": 1,
+  "src/hooks/useSLAMetrics.ts": 1,
+  "src/hooks/useTrackingHistory.ts": 1,
+  "src/hooks/useWebhookEvents.ts": 1,
+  "src/integrations/supabase/client.ts": 13,
+  "src/lib/lalamoveCatalog.ts": 1,
+  "src/lib/lalamoveErrors.ts": 1,
+  "src/lib/lalamoveGuards.ts": 1,
+  "src/lib/lalamoveOrderEdit.ts": 2,
+  "src/lib/lalamoveReasons.ts": 1,
+  "src/lib/lalamoveTimeline.ts": 2,
+  "src/lib/lalamoveValidation.ts": 1,
+  "src/lib/orderErrors.ts": 1,
+  "src/lib/phone.ts": 1,
+  "src/lib/uapiErrors.ts": 2,
+  "src/lib/uapiStatement.ts": 1,
+  "src/lib/utils.ts": 1,
+  "src/pages/AdminTelemetriaPage.tsx": 1,
+  "src/types/index.ts": 1,
+  "src/types/lalamove.ts": 2,
+  "src/utils/exportUtils.ts": 1,
+  "src/utils/timeUtils.ts": 1,
+  "supabase/functions/_shared/contract.ts": 2,
+  "supabase/functions/_shared/schemas.ts": 2,
+  "supabase/functions/lalamove-webhook/security.ts": 1
+ },
+ "sem_teste": {
+  "telas": [
+   "src/pages/AdvancedReportsPage.tsx",
+   "src/pages/AlertConfigurationsPage.tsx",
+   "src/pages/AlertsPage.tsx",
+   "src/pages/AnalyticsDashboardPage.tsx",
+   "src/pages/ApprovalsPage.tsx",
+   "src/pages/AuthPage.tsx",
+   "src/pages/Bitrix24Page.tsx",
+   "src/pages/CacheMonitoringPage.tsx",
+   "src/pages/CacheStatusPage.tsx",
+   "src/pages/ContactsPage.tsx",
+   "src/pages/DashboardRedesigned.tsx",
+   "src/pages/DeliveryMetricsPage.tsx",
+   "src/pages/DriversPage.tsx",
+   "src/pages/ErrorMonitoringPage.tsx",
+   "src/pages/EvaluationsPage.tsx",
+   "src/pages/ExternalDataPage.tsx",
+   "src/pages/ForgotPasswordPage.tsx",
+   "src/pages/GeoBlockingPage.tsx",
+   "src/pages/HeatmapPage.tsx",
+   "src/pages/IPWhitelistPage.tsx",
+   "src/pages/IncidentsPage.tsx",
+   "src/pages/JobQueuePage.tsx",
+   "src/pages/LalamoveOperationsPage.tsx",
+   "src/pages/LalamoveQuotaPage.tsx",
+   "src/pages/LalamoveSettingsPage.tsx",
+   "src/pages/LiveMapPage.tsx",
+   "src/pages/MFAVerifyPage.tsx",
+   "src/pages/MapToolsPage.tsx",
+   "src/pages/MetricsPage.tsx",
+   "src/pages/NotFound.tsx",
+   "src/pages/NotificationHistoryPage.tsx",
+   "src/pages/OrdersPage.tsx",
+   "src/pages/PasswordResetApprovalsPage.tsx",
+   "src/pages/PerformanceDashboardPage.tsx",
+   "src/pages/PermissionsPage.tsx",
+   "src/pages/ProfilePage.tsx",
+   "src/pages/RateLimitDashboardPage.tsx",
+   "src/pages/ReportsPage.tsx",
+   "src/pages/ResetPasswordPage.tsx",
+   "src/pages/RiskRulesPage.tsx",
+   "src/pages/RolesPage.tsx",
+   "src/pages/SLADashboardPage.tsx",
+   "src/pages/SLODashboardPage.tsx",
+   "src/pages/SecurityDashboardPage.tsx",
+   "src/pages/SettingsPage.tsx",
+   "src/pages/SystemHealthExpandedPage.tsx",
+   "src/pages/SystemHealthPage.tsx",
+   "src/pages/UAPISettingsPage.tsx",
+   "src/pages/UnauthorizedPage.tsx",
+   "src/pages/UserPreferencesPage.tsx",
+   "src/pages/WebhooksPage.tsx"
+  ],
+  "hooks": [
+   "scripts/ai-context/cenarios.mjs",
+   "src/components/alerts/AlertsAdvanced.tsx",
+   "src/components/ErrorBoundary.tsx",
+   "src/components/map/hooks/useGoogleMapsLoader.ts",
+   "src/components/map/hooks/useMapMarkers.ts",
+   "src/components/ui/contextual-hints.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/keyboard-shortcuts-help.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/undo-toast.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/useAccessibility.tsx",
+   "src/hooks/useAchievementsSystem.tsx",
+   "src/hooks/useAdvancedReports.ts",
+   "src/hooks/useAlertConfigurations.ts",
+   "src/hooks/useAlertGrouping.ts",
+   "src/hooks/useAlertSettings.ts",
+   "src/hooks/useAnalyticsData.ts",
+   "src/hooks/useApprovalActions.ts",
+   "src/hooks/useApprovalActionsEnhanced.ts",
+   "src/hooks/useApprovalRealtime.ts",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useAuthLogs.ts",
+   "src/hooks/useBitrix24.ts",
+   "src/hooks/useCachedStats.ts",
+   "src/hooks/useCacheViews.ts",
+   "src/hooks/useCommandPaletteSearch.ts",
+   "src/hooks/useContacts.ts",
+   "src/hooks/useContextualHints.ts",
+   "src/hooks/useContractV1SunsetReadiness.ts",
+   "src/hooks/useDataRefresh.ts",
+   "src/hooks/useDebouncedValue.ts",
+   "src/hooks/useDeliveryHeatmapData.ts",
+   "src/hooks/useDeviceDetection.ts",
+   "src/hooks/useDriverEvaluations.ts",
+   "src/hooks/useErrorLogs.ts",
+   "src/hooks/useEvaluateDriver.ts",
+   "src/hooks/useExternalData.ts",
+   "src/hooks/useFeatureFlags.ts",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/useGlobalSearch.ts",
+   "src/hooks/useGlobalUndo.tsx",
+   "src/hooks/useJobQueue.ts",
+   "src/hooks/useLalamove.ts",
+   "src/hooks/useLalamoveQuota.ts",
+   "src/hooks/useLalamoveUapi.ts",
+   "src/hooks/useMapbox.ts",
+   "src/hooks/useMetrics.ts",
+   "src/hooks/useMFA.ts",
+   "src/hooks/useNotificationHistory.ts",
+   "src/hooks/useOfflineStorage.ts",
+   "src/hooks/usePasswordResetActions.ts",
+   "src/hooks/usePredictiveAnalysis.ts",
+   "src/hooks/usePrefetch.ts",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useQuotationExpiry.ts",
+   "src/hooks/useRealtimeSubscriptions.ts",
+   "src/hooks/useReportPresets.ts",
+   "src/hooks/useRole.ts",
+   "src/hooks/useScheduledTheme.ts",
+   "src/hooks/useSecurityPushNotifications.ts",
+   "src/hooks/useServiceWorker.ts",
+   "src/hooks/useSLOMetrics.ts",
+   "src/hooks/useSoundSettings.ts",
+   "src/hooks/useSystemHealth.ts",
+   "src/hooks/useSystemHealthExpanded.ts",
+   "src/hooks/useTestNotification.ts",
+   "src/hooks/useTheme.ts",
+   "src/hooks/useUAPI.ts",
+   "src/hooks/useUserDevices.ts",
+   "src/hooks/useWebAuthn.ts",
+   "src/hooks/useWebhookSecurityMetrics.ts",
+   "src/pages/reports/useReportData.ts",
+   "src/utils/webVitals.ts"
+  ],
+  "edges": [
+   "apply-fixes",
+   "bitrix24-process-queue",
+   "bitrix24-sync",
+   "check-driver-alerts",
+   "check-external-api",
+   "escalate-alerts",
+   "evaluate-driver",
+   "external-companies",
+   "get-mapbox-token",
+   "job-worker",
+   "lalamove-api",
+   "lalamove-gateway",
+   "lalamove-token-refresh",
+   "lalamove-uapi",
+   "llm-wh",
+   "mapbox-proxy",
+   "migrate-helper",
+   "new-device-alert",
+   "rotate-tokens",
+   "route-analyzer",
+   "seed-fix-rls",
+   "send-notification",
+   "simulate-driver-movement",
+   "test-notification"
+  ],
+  "servicos": [
+   "src/services/errorMonitoring.ts"
+  ]
+ }
+}

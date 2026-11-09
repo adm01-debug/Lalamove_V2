@@ -1,0 +1,1262 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "total": 104,
+ "nota": "scripts soltos na raiz de scripts/ são legado de sessões antigas (alguns com segredo commitado) — ver AGENTS.md; automação nova vai em scripts/<nome>/ com README.",
+ "scripts": [
+  {
+   "arquivo": "scripts/add-security-manage.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica permissão security.manage via Management API",
+   "linhas": 52,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ai-context/cenarios.mjs",
+   "pasta": "scripts/ai-context",
+   "descricao": "Simulação de cenários do gerador: monta centenas de repositórios sintéticos (variantes de SQL, rotas com ProtectedRoute, menu, edge functions, workflows, arquivos corrompidos, fuzz) e confere:",
+   "linhas": 184,
+   "env": [
+    "A",
+    "LALAMOVE_API_KEY",
+    "LALAMOVE_API_SECRET",
+    "NODE_ENV",
+    "SCRIPT_ONLY",
+    "SRK",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "VITE_A",
+    "VITE_C",
+    "VITE_FEATURE_X"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "pasta": "scripts/ai-context",
+   "descricao": "Gera o contexto de código do Lalamove V2 para agentes de IA (padrão: docs/contexto/codigo/). Zero dependências, só APIs nativas do Node (>= 22). Lê o repositório e escreve JSONs + INDEX.md:",
+   "linhas": 901,
+   "env": [
+    "AI_CONTEXT_DIR",
+    "AI_CONTEXT_PUBLICACAO",
+    "AI_CONTEXT_ROOT"
+   ],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-dashboard-fixes.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica as correções do dashboard via conexão direta PostgreSQL",
+   "linhas": 97,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-final-sql.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica SQL final de correção via Management API",
+   "linhas": 58,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-permissions-via-api.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica SQL via Supabase Management API",
+   "linhas": 39,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-rls-fix.ts",
+   "pasta": "scripts",
+   "descricao": "* Script para aplicar as políticas RLS via Management API do Supabase",
+   "linhas": 111,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-rls-via-pg.ts",
+   "pasta": "scripts",
+   "descricao": "* Script para aplicar RLS via Supabase Pooler (PostgreSQL)",
+   "linhas": 159,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-sql-via-management-api.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica SQL via Supabase Management API (com DO block para tabelas opcionais)",
+   "linhas": 60,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/apply-via-management-api.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica correções via Supabase Management API",
+   "linhas": 84,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/backup.sh",
+   "pasta": "scripts",
+   "descricao": "backup.sh - Lalamove Guardian",
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/check-permissions.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica permissão security.manage via SQL",
+   "linhas": 69,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/a11y-button-name-ratchet.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Ratchet: fails CI if the count of a11y button-name violations grows above baseline. Covers three defect classes from the Y13 audit:",
+   "linhas": 307,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/actions-kpi.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* KPI de uso do GitHub Actions. Portado do Zapp Web V2 (lá E79).",
+   "linhas": 246,
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_API_URL",
+    "GITHUB_REPOSITORY",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN",
+    "JANELA_DIAS"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/branch-podaveis.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Comando pronto de poda de branches. Portado do Zapp Web V2 (lá W98).",
+   "linhas": 200,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/bump-toolchain.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Informativo: compara a versao das ferramentas que ESTE repositorio fixa com a",
+   "linhas": 173,
+   "env": [
+    "GH_TOKEN",
+    "GITHUB_STEP_SUMMARY",
+    "GITHUB_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/bundle-budget.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Guard do budget de bundle inicial. Le dist/index.html, soma o gzip de todo JS carregado no first paint (script[type=module] + link[rel=modulepreload]) e do",
+   "linhas": 199,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-agents-md-integrity.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Guard: garante que as instrucoes para agentes nao foram apagadas ou esvaziadas por outra sessao.",
+   "linhas": 122,
+   "env": [
+    "CLAUDE_MD_BASE"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-bundle-secrets.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Guarda que o bundle publicado (dist/) nao expoe o JWT service_role do Supabase. MOTIVO (incidente medido no Zapp_Web_V2 em 20/08): a variavel de ambiente errada",
+   "linhas": 180,
+   "env": [
+    "VITE_SUPABASE_"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-e2e-artifact-secrets.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Guarda: workflow que usa as credenciais de E2E nao pode publicar o report do",
+   "linhas": 185,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-edge-error-exposure.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Guarda: nenhuma Edge Function pode devolver detalhe interno (`error.message`, `error.stack`) ao cliente numa resposta 5xx.",
+   "linhas": 379,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-pr-workflow-secrets.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Secrets que podem aparecer em workflow de PR/push irrestrito: sao as duas variaveis publicas que o Vite injeta no bundle (o `.env.example` do repo as",
+   "linhas": 206,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-quarantine.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Quarentena formal da suíte E2E. Portado do Zapp Web V2.",
+   "linhas": 121,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-test-inventory.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Inventário de testes: todo teste no disco tem de ter um passo de workflow que o rode.",
+   "linhas": 229,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-workflow-pins-resolvem.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Todo pin de Action (`owner/repo@<sha40> # vX.Y.Z`) tem de ser o commit REAL da tag",
+   "linhas": 133,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-workflow-pins.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Guarda de supply chain dos workflows. Portado do Zapp Web V2 e reduzido ao que",
+   "linhas": 240,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/commit-msg-lint.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Gate de mensagem de commit: a funcao do commitlint sem dependencia nova. Este repo NAO tem hook de git instalado (sem husky no package.json), entao rode a mao:",
+   "linhas": 109,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/fila-merge.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Fila de merge serial — somente leitura. Portado do Zapp Web V2.",
+   "linhas": 246,
+   "env": [
+    "GITHUB_OUTPUT",
+    "GITHUB_REPOSITORY",
+    "GITHUB_STEP_SUMMARY",
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/gerar-matriz-edge-tabela.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Matriz edge function x tabela. Portado do Zapp Web V2.",
+   "linhas": 103,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/github-settings-guard.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Confere o perimetro do GitHub do repositorio contra o baseline versionado",
+   "linhas": 298,
+   "env": [
+    "ADMIN_READ_TOKEN",
+    "GITHUB_REPOSITORY",
+    "GITHUB_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/implicit-any-ratchet.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Ratchet: fails CI if noImplicitAny error count grows above baseline. To tighten: fix errors, update baseline.json to the new lower count.",
+   "linhas": 140,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/issue-rotativa.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Política de rotação de issue de alerta. Portado do Zapp Web V2 (lá W91/E51).",
+   "linhas": 109,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/lint-ratchet.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "S4036/CWE-427: resolve o binario para caminho absoluto a partir do PATH do processo pai, para o filho nao fazer busca por PATH. No Zapp_Web_V2 isto vem de",
+   "linhas": 668,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/marcador-specs.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Marcador de causa para o alerta da suíte E2E — dedupe de issue de bot.",
+   "linhas": 119,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/redigir-relatorio.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Redige o relatório do Playwright ANTES de ele virar artifact. Portado do Zapp Web V2 (lá E82/W06).",
+   "linhas": 420,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/render-workflow-docs.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Gera `docs/ci/README.md` a partir dos blocos `# docs:` e `# nao-e-bug:` de cada workflow.",
+   "linhas": 245,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/typecheck-ratchet.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "tsc --noEmit (sem -p/-b) e um no-op nesta config: tsconfig.json tem \"files\": [] e so \"references\" para tsconfig.app.json/tsconfig.node.json. Sem \"--build\", o",
+   "linhas": 379,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/vercel-env-baseline.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Valida a lista de variaveis de ambiente REAIS de um target da Vercel contra o baseline de politica em `vercel-env-baseline.json` (portado do Zapp_Web_V2; as",
+   "linhas": 89,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/workflow-invariants.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* scripts/ci/workflow-invariants.mjs — invariantes estáticos de `.github/workflows/ci.yml`.",
+   "linhas": 228,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/workflow-test-support.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "Leitores restritos ao formato em blocos dos workflows deste repositorio. Nao sao um parser YAML geral: formatos nao reconhecidos falham nos contratos.",
+   "linhas": 134,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/catalog-from-types.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Extrai o catalogo de objetos do schema `public` a partir de",
+   "linhas": 122,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/catalog.sql",
+   "pasta": "scripts/db-audit",
+   "descricao": null,
+   "linhas": 88,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-grants-fresh.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Confere se scripts/db-audit/grants-baseline.json ainda reflete o banco.",
+   "linhas": 111,
+   "env": [
+    "GRANTS_BASELINE_PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-manifest-fresh.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Compara supabase/schema-manifest.json com uma geracao fresca do banco oficial.",
+   "linhas": 123,
+   "env": [
+    "CATALOG_IDENTITY_PATH",
+    "DESTINO_URL",
+    "MANIFEST_PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-migration-drift.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Valida supabase/migrations e compara cada migration com",
+   "linhas": 1007,
+   "env": [
+    "DESTINO_URL",
+    "LEDGER_RETRY_DELAYS_MS",
+    "MIGRATIONS_DIR",
+    "MIGRATION_EVIDENCE_PATH",
+    "PSQL_BIN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-realtime-subscriptions.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Cruza as assinaturas Realtime do front com a publicacao `supabase_realtime`.",
+   "linhas": 338,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-remocoes-destrutivas.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Barra remocao DESTRUTIVA de objeto do banco: compara dois catalogos",
+   "linhas": 145,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/check-screen-permission-db-guards.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Lista as PERMISSOES e os PAPEIS que a tela usa para esconder acao e diz, para",
+   "linhas": 280,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/database-identity.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": null,
+   "linhas": 202,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/diff.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Diffa duas saidas v2 de manifest.sql.",
+   "linhas": 53,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/dry-run-plan.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "E63 (auditoria de GitHub Actions, 2026-10-01): o passo \"Dry-run oficial do Supabase CLI\" roda `supabase db push --include-all --skip-vault --dry-run",
+   "linhas": 172,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/grants-baseline.sql",
+   "pasta": "scripts/db-audit",
+   "descricao": null,
+   "linhas": 40,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/manifest-lib.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": null,
+   "linhas": 99,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/manifest.sql",
+   "pasta": "scripts/db-audit",
+   "descricao": null,
+   "linhas": 384,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/psql-environment.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "libpq does not expand a URI supplied through the PGDATABASE default. Callers must validate project identity/TLS before calling this transport.",
+   "linhas": 136,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/psql-safe.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Proxy transparente para psql: nunca poe a connection string no argv",
+   "linhas": 59,
+   "env": [
+    "DESTINO_URL",
+    "PSQL_BIN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/register-migration.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Registra uma migration no ledger (supabase_migrations.schema_migrations)",
+   "linhas": 341,
+   "env": [
+    "DATABASE_IDENTITY_PATH",
+    "DESTINO_URL",
+    "PSQL_BIN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/seguranca-processo.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Utilidades compartilhadas pelos scripts de auditoria/CI.",
+   "linhas": 101,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/sql-lexer.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Lexer SQL compartilhado entre check-migration-drift.mjs e",
+   "linhas": 265,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/db-audit/supabase-usage-guard.mjs",
+   "pasta": "scripts/db-audit",
+   "descricao": "* Guard de acoplamento codigo <-> banco.",
+   "linhas": 421,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/deploy-gateway.ps1",
+   "pasta": "scripts",
+   "descricao": "Deploy da Edge Function lalamove-gateway com CORS corrigido Execute este script após fazer login no Supabase CLI",
+   "linhas": 24,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/deploy.sh",
+   "pasta": "scripts",
+   "descricao": "deploy.sh - Lalamove Guardian",
+   "linhas": 41,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/diagnose-rpc.ts",
+   "pasta": "scripts",
+   "descricao": "* Diagnóstico: por que get_user_permissions retorna 0?",
+   "linhas": 76,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/docs/verificar-docs-realtime.mjs",
+   "pasta": "scripts/docs",
+   "descricao": "* Verificador da documentação e do Realtime.",
+   "linhas": 198,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ensure-admin-active.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica UPDATE direto via Management API para corrigir is_active",
+   "linhas": 48,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/eslint/no-secret-compare.js",
+   "pasta": "scripts/eslint",
+   "descricao": "* Proíbe comparação direta (`===`/`!==`) de identificadores que aludam a",
+   "linhas": 61,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/fix-admin-role-active.ts",
+   "pasta": "scripts",
+   "descricao": "* Garante que usuário tem role admin com is_active=true",
+   "linhas": 63,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/fix-dashboard-via-api.ts",
+   "pasta": "scripts",
+   "descricao": "* Aplica todas as correções do Dashboard via SQL usando API REST do Supabase",
+   "linhas": 68,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/fix-rpc-functions.ts",
+   "pasta": "scripts",
+   "descricao": "* Sobrescreve a função get_user_permissions para funcionar corretamente",
+   "linhas": 68,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/fix_corrupted_imports.py",
+   "pasta": "scripts",
+   "descricao": "Identifica o import do logger Remove o import de onde ele estiver",
+   "linhas": 49,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/fix_logs.py",
+   "pasta": "scripts",
+   "descricao": "Ignora o próprio logger Busca qualquer console.log/warn/error/debug/info",
+   "linhas": 53,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": true
+  },
+  {
+   "arquivo": "scripts/generate-dashboard-sql.ts",
+   "pasta": "scripts",
+   "descricao": "* Gera SQL consolidado para corrigir problemas do Dashboard",
+   "linhas": 22,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/graphify/setup.sh",
+   "pasta": "scripts/graphify",
+   "descricao": "Instala o graphify (grafo de conhecimento do código) e gera o grafo neste clone. Uso: npm run graph:setup   (Linux, macOS ou WSL; precisa de uv ou pipx)",
+   "linhas": 32,
+   "env": [],
+   "npm_scripts": [
+    "graph:setup"
+   ],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/health-check.sh",
+   "pasta": "scripts",
+   "descricao": "health-check.sh - Lalamove Guardian",
+   "linhas": 32,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/banco.sql",
+   "pasta": "scripts/inventario",
+   "descricao": null,
+   "linhas": 252,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-banco.mjs",
+   "pasta": "scripts/inventario",
+   "descricao": "* Inventario do banco oficial -> inventario/estado/banco.json (fonte de consulta dos agentes).",
+   "linhas": 337,
+   "env": [
+    "INVENTARIO_PERMITIR_OUTRO_PROJETO",
+    "SUPABASE_ACCESS_TOKEN",
+    "SUPABASE_API_URL",
+    "SUPABASE_PROJECT_REF"
+   ],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-repo.mjs",
+   "pasta": "scripts/inventario",
+   "descricao": "Inventario gerado do lado do repositorio (sem acesso ao banco):  - edge functions: linhas, segredos lidos (Deno.env.get), verify_jwt declarado em",
+   "linhas": 113,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/gerar-rotas.mjs",
+   "pasta": "scripts/inventario",
+   "descricao": "* Inventario das rotas do front -> inventario/estado/rotas.json (fonte de consulta dos agentes).",
+   "linhas": 307,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/inventario/mudou-conteudo.mjs",
+   "pasta": "scripts/inventario",
+   "descricao": "* O inventario mudou de verdade? Compara cada arquivo de inventario/estado/ com a versao do",
+   "linhas": 82,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "inventario-estado-semanal.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/lib/seguranca-processo.mjs",
+   "pasta": "scripts/lib",
+   "descricao": "* Utilidades compartilhadas pelos scripts de auditoria/CI.",
+   "linhas": 101,
+   "env": [
+    "PATH"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/list-tables-v2.ts",
+   "pasta": "scripts",
+   "descricao": "* Lista tabelas usando fetch direto à API REST",
+   "linhas": 51,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/list-tables.ts",
+   "pasta": "scripts",
+   "descricao": "* Lista as tabelas existentes no schema public do Supabase",
+   "linhas": 53,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/pre-commit-secrets.sh",
+   "pasta": "scripts",
+   "descricao": "============================================================================= PRE-COMMIT HOOK: Secret Detection",
+   "linhas": 137,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/qa/contraste-busca.mjs",
+   "pasta": "scripts/qa",
+   "descricao": "* Contraste WCAG das superfícies de BUSCA: a lista do command palette e o",
+   "linhas": 115,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/qa/contraste-tokens.mjs",
+   "pasta": "scripts/qa",
+   "descricao": "* Contraste WCAG dos pares de cor do design system, lidos de `src/index.css`",
+   "linhas": 277,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/qa/medir-tipografia.cjs",
+   "pasta": "scripts/qa",
+   "descricao": "* Medidor de tipografia — guard-rail de escala de fonte do Lalamove V2.",
+   "linhas": 457,
+   "env": [
+    "GIT_SHA"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/generate.py",
+   "pasta": "scripts/regras_negocio",
+   "descricao": null,
+   "linhas": 2138,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/indice.py",
+   "pasta": "scripts/regras_negocio",
+   "descricao": null,
+   "linhas": 237,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/publish.sh",
+   "pasta": "scripts/regras_negocio",
+   "descricao": "Publica docs/ai-context gerados: commit + push na branch padrão, ou PR quando a branch é protegida. Variáveis:",
+   "linhas": 195,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/regras_negocio/test_generate.py",
+   "pasta": "scripts/regras_negocio",
+   "descricao": "Regressões offline do gerador de regras; não acessam banco nem APIs de LLM.\"\"\"",
+   "linhas": 164,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/seed-contacts.ts",
+   "pasta": "scripts",
+   "descricao": "* Script para popular a tabela de Contatos com dados fictícios",
+   "linhas": 135,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/seed-database.ts",
+   "pasta": "scripts",
+   "descricao": "* Script de Seed - Popula o banco Supabase com dados fictícios",
+   "linhas": 528,
+   "env": [],
+   "npm_scripts": [
+    "seed"
+   ],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/set-user-admin.ts",
+   "pasta": "scripts",
+   "descricao": "* Garante que um usuário específico tenha role admin no banco",
+   "linhas": 71,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/snapshot.py",
+   "pasta": "scripts/supabase_snapshot",
+   "descricao": "Somente leitura no banco (sessão read-only, statement_timeout, lock_timeout). Nunca grava linhas de tabelas, valores de segredos, chaves, senhas ou DSN.",
+   "linhas": 1791,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/supabase_snapshot/test_snapshot.py",
+   "pasta": "scripts/supabase_snapshot",
+   "descricao": "Regressões offline: uma coleta parcial não pode destruir o SQL já publicado.\"\"\"",
+   "linhas": 878,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [
+    "contexto.yml"
+   ],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/test-after-fix.ts",
+   "pasta": "scripts",
+   "descricao": "* Testa novamente após o fix",
+   "linhas": 37,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/test-user-permissions.ts",
+   "pasta": "scripts",
+   "descricao": "* Testa a função get_user_permissions",
+   "linhas": 69,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ui-audit/layout-guard.mjs",
+   "pasta": "scripts/ui-audit",
+   "descricao": "* layout-guard.mjs — auditoria estatica das raizes JSX das paginas roteadas.",
+   "linhas": 269,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ui-audit/root-className.mjs",
+   "pasta": "scripts/ui-audit",
+   "descricao": "* Extrai o className da raiz JSX de um componente de view.",
+   "linhas": 141,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ui-audit/width-check.mjs",
+   "pasta": "scripts/ui-audit",
+   "descricao": "* width-check.mjs — predicado puro do teste de regressão de largura",
+   "linhas": 48,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ui-audit/width-regression.mjs",
+   "pasta": "scripts/ui-audit",
+   "descricao": "* width-regression.mjs — regressão de largura das páginas do AppLayout.",
+   "linhas": 275,
+   "env": [
+    "APP_URL",
+    "CHROMIUM_PATH",
+    "STORAGE_STATE",
+    "VITE_PORT"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/vercel/ignore-build.sh",
+   "pasta": "scripts/vercel",
+   "descricao": "Ignora o build do Vercel quando nenhum arquivo de front mudou. Contrato do Vercel: exit 1 = buildar, exit 0 = pular.",
+   "linhas": 50,
+   "env": [],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/vercel/verify-production.mjs",
+   "pasta": "scripts/vercel",
+   "descricao": "* Smoke de pós-deploy da produção (Vercel, projeto `lalamove-v2`).",
+   "linhas": 245,
+   "env": [
+    "SMOKE_BASE_URL",
+    "VERCEL_AUTOMATION_BYPASS_SECRET"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/vercel/verify-release-targets.mjs",
+   "pasta": "scripts/vercel",
+   "descricao": "* Confirma que a PRODUÇÃO está servindo o build que você espera — com repetição,",
+   "linhas": 279,
+   "env": [
+    "VERCEL_AUTOMATION_BYPASS_SECRET"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  }
+ ]
+}
