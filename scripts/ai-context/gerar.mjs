@@ -479,7 +479,15 @@ secao('banco-types', () => {
   let i = ti + 'Tables: {'.length, depth = 1, body = '';
   while (i < src.length && depth > 0) { const ch = src[i++]; if (ch === '{') depth++; if (ch === '}') depth--; if (depth > 0) body += ch; }
   const re = /(\w+):\s*\{\s*Row:\s*\{/g; let m;
-  while ((m = re.exec(body))) { let j = re.lastIndex, d2 = 1, row = ''; while (j < body.length && d2 > 0) { const ch = body[j++]; if (ch === '{') d2++; if (ch === '}') d2--; if (d2 > 0) row += ch; } const campos = []; let dd = 0, cur = ''; for (const ch of row) { if (ch === '{' || ch === '[' || ch === '(') dd++; if (ch === '}' || ch === ']' || ch === ')') dd--; if ((ch === ';' || ch === '\n') && dd === 0) { campos.push(cur); cur = ''; } else cur += ch; } campos.push(cur); tabelasTypes[m[1]] = Object.fromEntries(campos.map((cmp) => /^\s*(\w+)\??:\s*([\s\S]+?)\s*$/.exec(cmp)).filter(Boolean).map((cm) => [cm[1], cm[2].replace(/\s+/g, ' ')])); }
+  while ((m = re.exec(body))) {
+    let j = re.lastIndex, d2 = 1, row = ''; while (j < body.length && d2 > 0) { const ch = body[j++]; if (ch === '{') d2++; if (ch === '}') d2--; if (d2 > 0) row += ch; }
+    // tipo união que não cabe numa linha quebra em `campo:\n  | A\n  | null`: junta a continuação
+    // (linha começando com `|`) na linha anterior antes de repartir por campo — senão a quebra de
+    // linha é lida como fim do campo, sobra um "campo:" sem valor e a regex abaixo descarta a coluna
+    // inteira (ela passa a faltar em colunas_types e dispara um `drift` que não existe de verdade).
+    row = row.split('\n').reduce((acc, line) => { if (/^\s*\|/.test(line) && acc.length) acc[acc.length - 1] += ' ' + line.trim(); else acc.push(line); return acc; }, []).join('\n');
+    const campos = []; let dd = 0, cur = ''; for (const ch of row) { if (ch === '{' || ch === '[' || ch === '(') dd++; if (ch === '}' || ch === ']' || ch === ')') dd--; if ((ch === ';' || ch === '\n') && dd === 0) { campos.push(cur); cur = ''; } else cur += ch; } campos.push(cur); tabelasTypes[m[1]] = Object.fromEntries(campos.map((cmp) => /^\s*(\w+)\??:\s*([\s\S]+?)\s*$/.exec(cmp)).filter(Boolean).map((cm) => [cm[1], cm[2].replace(/\s+/g, ' ')]));
+  }
 });
 for (const [t, cols] of Object.entries(tabelasTypes)) T(t).colunas_types = cols;
 const EDGE_DIR = 'supabase/functions';
