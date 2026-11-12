@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c8807f743288d8de36701ccfdaa45fe39dc979c2` (2026-11-08T21:41:12-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `846ea80d25828c5b97588f7d46c738f5fff1d82f` (2026-11-08T22:44:42-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (157), JavaScript (112), Markdown (62), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (158), JavaScript (112), Markdown (62), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 869 |
+| arquivos_total | 870 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 109925 |
 | rotas | 54 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 96 |
 | edge_functions | 26 |
 | tabelas | 76 |
-| migrations | 153 |
+| migrations | 154 |
 | cron_jobs | 16 |
 | testes | 97 |
 | workflows | 3 |
@@ -265,21 +265,21 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 21 — ex.: scripts/add-security-manage.ts:6, scripts/apply-dashboard-fixes.ts:14, scripts/apply-final-sql.ts:6
 
 ## Grafo de código (graphify)
-- 6409 nós · 14237 arestas · 472 comunidades · grafo do commit `c8807f74`
-- comunidades maiores: cn (160), button.tsx (113), App.tsx (103), snapshot.py (102), react (88), ref_node_url (82), OrderDetailModal.tsx (82), dependencies (80), UserPreferencesPage.tsx (80), utils.ts (78), gerar.mjs (76), DashboardRedesigned.tsx (73)
+- 6412 nós · 14237 arestas · 459 comunidades · grafo do commit `846ea80d`
+- comunidades maiores: cn (201), lucide-react (139), button.tsx (126), snapshot.py (102), ref_node_path (102), react (100), RateLimitDashboardPage.tsx (87), dependencies (80), framer-motion (78), gerar.mjs (76), client.ts (73), check-migration-drift.mjs (70)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- package.json (19)
-- package-lock.json (18)
-- supabase/config.toml (10)
+- package.json (20)
+- package-lock.json (19)
+- supabase/config.toml (9)
 - .github/workflows/ci.yml (5)
 - src/hooks/useRegionResolver.ts (5)
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
 - eslint.config.js (3)
 - src/hooks/useDeviceDetection.ts (3)
-- supabase/functions/migrate-helper/index.ts (3)
+- src/index.css (3)
 - .hermes.md (2)
 - scripts/apply-via-management-api.ts (2)
 - src/components/auth/PasswordStrengthIndicator.tsx (2)
@@ -351,6 +351,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-08 `846ea80` fix(deps): downgrade tailwindcss de v4 para v3.4.19
+- 2026-11-08 `d0fa636` fix(ui): contraste WCAG em dark mode e badges tinted
+- 2026-11-08 `92a5411` fix(banco): habilita Realtime nas 4 tabelas de segurança
+- 2026-11-08 `0fd8bc3` fix(ui): escurece --primary de 60% para 50% para WCAG AA
 - 2026-11-08 `c8807f7` feat(scripts): porta sistema de scripts autônomos do Zapp Web V2
 - 2026-11-08 `ecce49a` fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)
 - 2026-11-08 `79b861b` chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)
@@ -362,10 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-10-03 `3045de3` Merge pull request #62 from adm01-debug/dependabot/npm_and_yarn/postcss-8.5.28
 - 2026-10-03 `e2ea5e5` build(deps): bump vitest from 4.1.0 to 5.0.3
 - 2026-10-03 `cb86846` build(deps-dev): bump postcss from 8.5.26 to 8.5.28
-- 2026-10-03 `2568c5c` Merge pull request #64 from adm01-debug/dependabot/npm_and_yarn/react-is-19.3.0
-- 2026-10-03 `a1cd676` Merge pull request #61 from adm01-debug/dependabot/npm_and_yarn/eslint-10.10.0
-- 2026-10-03 `1263122` Merge pull request #60 from adm01-debug/dependabot/npm_and_yarn/axe-core/playwright-4.13.0
-- 2026-10-03 `e6ba3c4` Merge pull request #59 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-alert-dialog-1.1.23
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

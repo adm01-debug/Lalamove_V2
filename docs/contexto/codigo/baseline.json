@@ -2,11 +2,31 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c8807f743288d8de36701ccfdaa45fe39dc979c2",
+  "commit": "846ea80d25828c5b97588f7d46c738f5fff1d82f",
   "branch": "main",
-  "data_commit": "2026-11-08T21:41:12-03:00",
+  "data_commit": "2026-11-08T22:44:42-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "846ea80",
+    "data": "2026-11-08",
+    "assunto": "fix(deps): downgrade tailwindcss de v4 para v3.4.19"
+   },
+   {
+    "sha": "d0fa636",
+    "data": "2026-11-08",
+    "assunto": "fix(ui): contraste WCAG em dark mode e badges tinted"
+   },
+   {
+    "sha": "92a5411",
+    "data": "2026-11-08",
+    "assunto": "fix(banco): habilita Realtime nas 4 tabelas de segurança"
+   },
+   {
+    "sha": "0fd8bc3",
+    "data": "2026-11-08",
+    "assunto": "fix(ui): escurece --primary de 60% para 50% para WCAG AA"
+   },
    {
     "sha": "c8807f7",
     "data": "2026-11-08",
@@ -111,30 +131,14 @@
     "sha": "4276fc4",
     "data": "2026-09-17",
     "assunto": "build(deps-dev): bump @axe-core/playwright from 4.11.3 to 4.13.0"
-   },
-   {
-    "sha": "bba710b",
-    "data": "2026-09-17",
-    "assunto": "build(deps): bump @radix-ui/react-alert-dialog from 1.1.16 to 1.1.23"
-   },
-   {
-    "sha": "9e04fd9",
-    "data": "2026-09-15",
-    "assunto": "Merge PR #58 — deno: return→continue (TS1108)"
-   },
-   {
-    "sha": "640078d",
-    "data": "2026-09-15",
-    "assunto": "fix(deno): return→continue no guard needsLovableKey (TS1108)"
-   },
-   {
-    "sha": "dc75ffb",
-    "data": "2026-09-15",
-    "assunto": "build(deps-dev): bump tailwindcss from 3.4.17 to 4.3.3"
    }
   ],
-  "arquivos_mudados_7d": 181,
+  "arquivos_mudados_7d": 184,
   "pastas_mais_mudadas_30d": [
+   {
+    "pasta": "package.json",
+    "mudancas": 3
+   },
    {
     "pasta": ".agents/skills/lalamove-v2",
     "mudancas": 2
@@ -148,7 +152,11 @@
     "mudancas": 2
    },
    {
-    "pasta": "package.json",
+    "pasta": "package-lock.json",
+    "mudancas": 2
+   },
+   {
+    "pasta": "src/index.css",
     "mudancas": 2
    },
    {
@@ -186,28 +194,20 @@
    {
     "pasta": ".codex/agents/explorer.toml",
     "mudancas": 1
-   },
-   {
-    "pasta": ".codex/agents/reviewer.toml",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".codex/config.toml",
-    "mudancas": 1
    }
   ],
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package.json",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 10
+    "mudancas": 9
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -234,7 +234,7 @@
     "mudancas": 3
    },
    {
-    "arquivo": "supabase/functions/migrate-helper/index.ts",
+    "arquivo": "src/index.css",
     "mudancas": 3
    },
    {
@@ -294,19 +294,19 @@
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/ui/data-refresh-indicator.tsx",
+    "arquivo": "src/components/ui/badge.tsx",
     "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 3
+    "commits": 7
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 869,
+  "arquivos_total": 870,
   "arquivos_codigo": 566,
   "linhas_codigo": 109925,
   "rotas": 54,
@@ -318,7 +318,7 @@
   "hooks": 96,
   "edge_functions": 26,
   "tabelas": 76,
-  "migrations": 153,
+  "migrations": 154,
   "cron_jobs": 16,
   "testes": 97,
   "workflows": 3,

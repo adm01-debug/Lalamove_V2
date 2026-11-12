@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
-   "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2",
-   "fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)",
-   "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)",
-   "Merge pull request #66 from adm01-debug/dependabot/npm_and_yarn/globals-17.12.0",
-   "build(deps-dev): bump globals from 15.15.0 to 17.12.0"
+   "fix(deps): downgrade tailwindcss de v4 para v3.4.19",
+   "fix(ui): contraste WCAG em dark mode e badges tinted",
+   "fix(banco): habilita Realtime nas 4 tabelas de segurança",
+   "fix(ui): escurece --primary de 60% para 50% para WCAG AA",
+   "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
