@@ -45,7 +45,7 @@ on:
       # só este workflow: mudança no ci.yml não precisa regerar contexto
       - '.github/workflows/contexto.yml'
   schedule:
-    - cron: '3-59/10 * * * *' # minuto 3: fora do minuto 0 (fila do GitHub) e dos outros crons do repo
+    - cron: '3 * * * *' # minuto 3: fora do minuto 0 (fila do GitHub) e dos outros crons do repo
   workflow_dispatch:
     inputs:
       graphify:
