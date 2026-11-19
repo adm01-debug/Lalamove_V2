@@ -41,3 +41,9 @@ verify_jwt = true
 # O check de role admin é feito no código da função (requireAdmin).
 [functions.lalamove-uapi]
 verify_jwt = true
+
+# mcp-query: introspecção e diagnóstico de banco para administradores.
+# verify_jwt = false porque a função valida o JWT em código (mesmo padrão
+# do migrate-helper); a autorização real é via RPC can_run_db_diagnostics.
+[functions.mcp-query]
+verify_jwt = false
