@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1ef5f30da40b2d7d726b25ed3d4289145944bc48",
+  "commit": "4767a5ed51ae5e1f09eafaedf1a7b2ba9c7426c5",
   "branch": "main",
-  "data_commit": "2026-11-20T11:09:21-03:00",
+  "data_commit": "2026-11-20T16:13:09-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "4767a5e",
+    "data": "2026-11-20",
+    "assunto": "fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded"
+   },
    {
     "sha": "1ef5f30",
     "data": "2026-11-20",
@@ -126,14 +131,9 @@
     "sha": "7349b3a",
     "data": "2026-10-03",
     "assunto": "build(deps-dev): bump globals from 15.15.0 to 17.12.0"
-   },
-   {
-    "sha": "a0ef45f",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #67 from adm01-debug/dependabot/npm_and_yarn/vitest-5.0.0"
    }
   ],
-  "arquivos_mudados_7d": 31,
+  "arquivos_mudados_7d": 32,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -172,6 +172,10 @@
     "mudancas": 2
    },
    {
+    "pasta": "scripts/seed-database.ts",
+    "mudancas": 2
+   },
+   {
     "pasta": "src/index.css",
     "mudancas": 2
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": ".claude/hooks/session-start.sh",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".claude/identity.json",
     "mudancas": 1
    }
   ],
@@ -230,12 +230,20 @@
     "mudancas": 3
    },
    {
+    "arquivo": "scripts/seed-database.ts",
+    "mudancas": 3
+   },
+   {
     "arquivo": "src/hooks/useDeviceDetection.ts",
     "mudancas": 3
    },
    {
     "arquivo": "src/index.css",
     "mudancas": 3
+   },
+   {
+    "arquivo": ".env.example",
+    "mudancas": 2
    },
    {
     "arquivo": ".github/workflows/contexto.yml",
@@ -288,20 +296,12 @@
    {
     "arquivo": "scripts/fix-admin-role-active.ts",
     "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/fix-dashboard-via-api.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/fix-rpc-functions.ts",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 13
+    "commits": 14
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 873,
   "arquivos_codigo": 566,
-  "linhas_codigo": 110177,
+  "linhas_codigo": 110180,
   "rotas": 54,
   "rotas_protegidas": 46,
   "rotas_com_mfa": 6,
@@ -472,7 +472,7 @@
   },
   "scripts/seed-database.ts": {
    "arquivos": 1,
-   "linhas": 532
+   "linhas": 535
   },
   "scripts/set-user-admin.ts": {
    "arquivos": 1,
@@ -626,7 +626,7 @@
   },
   {
    "arquivo": "scripts/seed-database.ts",
-   "linhas": 532
+   "linhas": 535
   },
   {
    "arquivo": "src/components/dashboard/OrdersTable.tsx",

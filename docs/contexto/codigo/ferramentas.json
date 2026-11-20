@@ -427,6 +427,8 @@
  "changelog_topo": "[1.5.0] - 2025-06-25",
  "env": {
   "declaradas_no_env_example": [
+   "SUPABASE_SERVICE_ROLE_KEY",
+   "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
    "VITE_SUPABASE_URL"
   ],
@@ -670,7 +672,7 @@
   "hosts_externos": [
    {
     "host": "iecgydonctmabiijadsf.supabase.co",
-    "arquivos": 11
+    "arquivos": 10
    },
    {
     "host": "api.supabase.com",

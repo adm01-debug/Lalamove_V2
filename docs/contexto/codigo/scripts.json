@@ -1135,9 +1135,10 @@
    "arquivo": "scripts/seed-database.ts",
    "pasta": "scripts",
    "descricao": "* Script de Seed - Popula o banco Supabase com dados fictícios",
-   "linhas": 532,
+   "linhas": 535,
    "env": [
-    "SUPABASE_SERVICE_ROLE_KEY"
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
    ],
    "npm_scripts": [
     "seed"

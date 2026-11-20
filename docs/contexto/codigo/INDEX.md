@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1ef5f30da40b2d7d726b25ed3d4289145944bc48` (2026-11-20T11:09:21-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `4767a5ed51ae5e1f09eafaedf1a7b2ba9c7426c5` (2026-11-20T16:13:09-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 873 |
 | arquivos_codigo | 566 |
-| linhas_codigo | 110177 |
+| linhas_codigo | 110180 |
 | rotas | 54 |
 | rotas_protegidas | 46 |
 | rotas_com_mfa | 6 |
@@ -265,7 +265,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6431 nós · 14264 arestas · 486 comunidades · grafo do commit `1ef5f30d`
+- 6431 nós · 14264 arestas · 486 comunidades · grafo do commit `4767a5ed`
 - comunidades maiores: cn (162), Button (116), snapshot.py (100), client.ts (100), badge.tsx (86), dependencies (80), ref_node_url (78), button.tsx (78), gerar.mjs (76), generate.py (75), useRealtimeSubscriptions.ts (69), seed-database.ts (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
@@ -278,13 +278,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
 - eslint.config.js (3)
+- scripts/seed-database.ts (3)
 - src/hooks/useDeviceDetection.ts (3)
 - src/index.css (3)
+- .env.example (2)
 - .github/workflows/contexto.yml (2)
 - docs/agentes/banco.md (2)
 - scripts/add-security-manage.ts (2)
-- scripts/apply-dashboard-fixes.ts (2)
-- scripts/apply-final-sql.ts (2)
 
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
@@ -351,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-20 `4767a5e` fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded
 - 2026-11-20 `1ef5f30` fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)
 - 2026-11-20 `158850e` build(deps-dev): bump vite from 7.3.5 to 8.3.8 (#77)
 - 2026-11-20 `a4e1f18` build(deps): bump input-otp from 1.4.2 to 1.5.0 (#76)
@@ -365,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-19 `8832302` ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)
 - 2026-11-19 `63987c9` fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)
 - 2026-11-19 `ebde884` fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)
-- 2026-11-14 `55a4d92` chore: contexto agendado de 10 min para 1x/hora (#87)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
