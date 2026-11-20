@@ -6,7 +6,7 @@
    "TypeScript (455)",
    "SQL (161)",
    "JavaScript (112)",
-   "Markdown (62)",
+   "Markdown (76)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -407,6 +407,10 @@
   }
  ],
  "docs_em_subpastas": [
+  {
+   "pasta": "docs/pendencias",
+   "arquivos_md": 14
+  },
   {
    "pasta": "docs/agentes",
    "arquivos_md": 6

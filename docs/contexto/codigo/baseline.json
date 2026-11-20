@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "4767a5ed51ae5e1f09eafaedf1a7b2ba9c7426c5",
+  "commit": "a8335551c761ae4f76dadf2afc4afa1349a4dfea",
   "branch": "main",
-  "data_commit": "2026-11-20T16:13:09-03:00",
+  "data_commit": "2026-11-20T16:42:57-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a833555",
+    "data": "2026-11-20",
+    "assunto": "chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)"
+   },
+   {
+    "sha": "a1b3ef3",
+    "data": "2026-11-20",
+    "assunto": "docs: backlog de pendencias do goal concluir funcionalidades"
+   },
    {
     "sha": "4767a5e",
     "data": "2026-11-20",
@@ -121,19 +131,9 @@
     "sha": "79b861b",
     "data": "2026-11-08",
     "assunto": "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)"
-   },
-   {
-    "sha": "924454e",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #66 from adm01-debug/dependabot/npm_and_yarn/globals-17.12.0"
-   },
-   {
-    "sha": "7349b3a",
-    "data": "2026-10-03",
-    "assunto": "build(deps-dev): bump globals from 15.15.0 to 17.12.0"
    }
   ],
-  "arquivos_mudados_7d": 32,
+  "arquivos_mudados_7d": 46,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -172,28 +172,28 @@
     "mudancas": 2
    },
    {
+    "pasta": "docs/pendencias/P-07-security-definer-search-path.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/pendencias/P-09-transicoes-status-sem-check.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/pendencias/_ordem.md",
+    "mudancas": 2
+   },
+   {
     "pasta": "scripts/seed-database.ts",
     "mudancas": 2
    },
    {
     "pasta": "src/index.css",
     "mudancas": 2
-   },
-   {
-    "pasta": "supabase/config.toml",
-    "mudancas": 2
-   },
-   {
-    "pasta": ".claude/ecc-tools.json",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".claude/homunculus/instincts",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".claude/hooks/session-start.sh",
-    "mudancas": 1
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -254,6 +254,22 @@
     "mudancas": 2
    },
    {
+    "arquivo": "docs/pendencias/P-07-security-definer-search-path.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/P-09-transicoes-status-sem-check.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 2
+   },
+   {
     "arquivo": "scripts/add-security-manage.ts",
     "mudancas": 2
    },
@@ -280,28 +296,12 @@
    {
     "arquivo": "scripts/apply-via-management-api.ts",
     "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/check-permissions.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/diagnose-rpc.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/ensure-admin-active.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/fix-admin-role-active.ts",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 14
+    "commits": 16
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 873,
+  "arquivos_total": 887,
   "arquivos_codigo": 566,
   "linhas_codigo": 110180,
   "rotas": 54,
@@ -327,7 +327,7 @@
   "testes": 97,
   "workflows": 3,
   "scripts": 104,
-  "docs_md": 62
+  "docs_md": 76
  },
  "por_pasta": {
   "e2e/helpers": {

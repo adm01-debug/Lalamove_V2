@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "4767a5ed51ae5e1f09eafaedf1a7b2ba9c7426c5",
+  "sha": "a8335551c761ae4f76dadf2afc4afa1349a4dfea",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-20 19:13 UTC",
-  "files_total": 868,
+  "generated_at": "2026-11-20 20:13 UTC",
+  "files_total": 882,
   "code_files": 736,
   "code_lines": 126863
  },
@@ -61108,10 +61108,44 @@
   }
  },
  "git": {
-  "sha": "4767a5ed51ae5e1f09eafaedf1a7b2ba9c7426c5",
+  "sha": "a8335551c761ae4f76dadf2afc4afa1349a4dfea",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a833555",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)",
+    "files": [
+     "docs/pendencias/P-07-security-definer-search-path.md",
+     "docs/pendencias/P-08-geo-blocks-sem-rls.md",
+     "docs/pendencias/P-09-transicoes-status-sem-check.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
+   {
+    "sha": "a1b3ef3",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "docs: backlog de pendencias do goal concluir funcionalidades",
+    "files": [
+     "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
+     "docs/pendencias/P-02-app-mobile-motoristas.md",
+     "docs/pendencias/P-03-chat-cliente-motorista.md",
+     "docs/pendencias/P-04-rotacionar-jwt-secret-painel.md",
+     "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+     "docs/pendencias/P-06-vulns-npm-restantes.md",
+     "docs/pendencias/P-07-security-definer-search-path.md",
+     "docs/pendencias/P-08-geo-blocks-sem-rls.md",
+     "docs/pendencias/P-09-transicoes-status-sem-check.md",
+     "docs/pendencias/P-10-scripts-chaves-legacy.md",
+     "docs/pendencias/README.md",
+     "docs/pendencias/_linha-de-base.md",
+     "docs/pendencias/_ordem.md",
+     "docs/pendencias/_regras-de-negocio.md"
+    ]
+   },
    {
     "sha": "4767a5e",
     "date": "2026-11-20",
@@ -61574,33 +61608,32 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #63 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-switch-1.3.7",
     "files": []
-   },
-   {
-    "sha": "3045de3",
-    "date": "2026-10-03",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #62 from adm01-debug/dependabot/npm_and_yarn/postcss-8.5.28",
-    "files": []
-   },
-   {
-    "sha": "e2ea5e5",
-    "date": "2026-10-03",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump vitest from 4.1.0 to 5.0.3",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "package-lock.json",
-    14
+    13
    ],
    [
     "package.json",
-    14
+    13
+   ],
+   [
+    "docs/pendencias/P-07-security-definer-search-path.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-08-geo-blocks-sem-rls.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-09-transicoes-status-sem-check.md",
+    2
+   ],
+   [
+    "docs/pendencias/_ordem.md",
+    2
    ],
    [
     "scripts/seed-database.ts",
@@ -61635,43 +61668,27 @@
     2
    ],
    [
-    ".env.example",
+    "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
     1
    ],
    [
-    "scripts/add-security-manage.ts",
+    "docs/pendencias/P-02-app-mobile-motoristas.md",
     1
    ],
    [
-    "scripts/apply-dashboard-fixes.ts",
+    "docs/pendencias/P-03-chat-cliente-motorista.md",
     1
    ],
    [
-    "scripts/apply-final-sql.ts",
+    "docs/pendencias/P-04-rotacionar-jwt-secret-painel.md",
     1
    ],
    [
-    "scripts/apply-permissions-via-api.ts",
+    "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
     1
    ],
    [
-    "scripts/apply-rls-via-pg.ts",
-    1
-   ],
-   [
-    "scripts/apply-sql-via-management-api.ts",
-    1
-   ],
-   [
-    "scripts/check-permissions.ts",
-    1
-   ],
-   [
-    "scripts/diagnose-rpc.ts",
-    1
-   ],
-   [
-    "scripts/ensure-admin-active.ts",
+    "docs/pendencias/P-06-vulns-npm-restantes.md",
     1
    ]
   ]
