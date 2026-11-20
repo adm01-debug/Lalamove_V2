@@ -1,7 +1,9 @@
 ﻿# P-07 · SECURITY DEFINER sem set search_path (risco de escalação)
 
-**Status:** Pendente (auditoria de segurança, sem fix)
+**Status:** OBSOLETO — verificado no banco real (2026-11-20, via PAT/PostgREST)
 **Origem:** docs/contexto/regras/11-GLOSSARIO-E-LACUNAS.md (seção segurança)
+
+> **Verificação real:** 47/47 funções SECURITY DEFINER do schema `public` têm `proconfig` com `search_path` fixado (query `pg_proc`). Nenhuma função ficou sem o `set search_path`. A lacuna do doc de contexto já foi resolvida em produção — manter este item aberto causaria retrabalho.
 
 ## Problema
 Funções SECURITY DEFINER sem `set search_path` — risco de search_path hijacking (escalação). Lista completa no doc gerado:
