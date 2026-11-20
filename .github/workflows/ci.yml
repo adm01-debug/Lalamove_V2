@@ -131,6 +131,9 @@ jobs:
         run: |
           echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
           echo "VITE_SUPABASE_PUBLISHABLE_KEY=${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}" >> .env
+          # .env.example exige estas vars (dotenv/load.ts do Deno valida presenca); o teste de integracao nao as le, so precisam existir.
+          echo "SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env
+          echo "SUPABASE_SERVICE_ROLE_KEY=dummy-not-used-by-tests" >> .env
       - name: Run Edge Function I/O integration tests
         run: deno test --allow-net --allow-env --allow-read supabase/functions/_shared/contract.integration.test.ts
 
