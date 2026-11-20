@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)",
    "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)",
    "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)",
    "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)",
-   "chore: contexto agendado de 10 min para 1x/hora (#87)",
-   "fix(deps): downgrade tailwindcss de v4 para v3.4.19"
+   "chore: contexto agendado de 10 min para 1x/hora (#87)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

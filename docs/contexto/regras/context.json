@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "8832302db77e643d64d3bfb7dafa109f402fde98",
+  "sha": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-20 00:42 UTC",
+  "generated_at": "2026-11-20 11:12 UTC",
   "files_total": 868,
   "code_files": 736,
   "code_lines": 126860
@@ -61106,10 +61106,19 @@
   }
  },
  "git": {
-  "sha": "8832302db77e643d64d3bfb7dafa109f402fde98",
+  "sha": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c86f279",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)",
+    "files": [
+     ".github/workflows/ci.yml"
+    ]
+   },
    {
     "sha": "8832302",
     "date": "2026-11-19",
@@ -61566,26 +61575,20 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "bba710b",
-    "date": "2026-09-17",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump @radix-ui/react-alert-dialog from 1.1.16 to 1.1.23",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "package.json",
-    12
+    11
    ],
    [
     "package-lock.json",
-    11
+    10
+   ],
+   [
+    ".github/workflows/ci.yml",
+    2
    ],
    [
     "AGENTS.md",
@@ -61610,10 +61613,6 @@
    [
     ".gitignore",
     2
-   ],
-   [
-    ".github/workflows/ci.yml",
-    1
    ],
    [
     "scripts/add-security-manage.ts",

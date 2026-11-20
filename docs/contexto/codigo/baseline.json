@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "8832302db77e643d64d3bfb7dafa109f402fde98",
+  "commit": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
   "branch": "main",
-  "data_commit": "2026-11-19T21:02:10-03:00",
+  "data_commit": "2026-11-20T08:00:27-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c86f279",
+    "data": "2026-11-20",
+    "assunto": "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)"
+   },
    {
     "sha": "8832302",
     "data": "2026-11-19",
@@ -126,11 +131,6 @@
     "sha": "ff31ee2",
     "data": "2026-10-03",
     "assunto": "Merge pull request #45 from adm01-debug/dependabot/npm_and_yarn/tailwindcss-4.3.3"
-   },
-   {
-    "sha": "a9364fe",
-    "data": "2026-09-17",
-    "assunto": "build(deps): bump @radix-ui/react-tooltip from 1.2.10 to 1.2.16"
    }
   ],
   "arquivos_mudados_7d": 29,
@@ -141,6 +141,10 @@
    },
    {
     "pasta": ".agents/skills/lalamove-v2",
+    "mudancas": 2
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 2
    },
    {
@@ -190,10 +194,6 @@
    {
     "pasta": ".claude/identity.json",
     "mudancas": 1
-   },
-   {
-    "pasta": ".claude/settings.json",
-    "mudancas": 1
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 5
+    "mudancas": 6
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 11
+    "commits": 12
    }
   ]
  },
