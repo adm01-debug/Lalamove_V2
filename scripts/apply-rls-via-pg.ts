@@ -13,8 +13,12 @@ const SUPABASE_DB_HOST = `db.${SUPABASE_PROJECT_REF}.supabase.co`;
 const SUPABASE_DB_PORT = 5432;
 const SUPABASE_DB_NAME = 'postgres';
 const SUPABASE_DB_USER = `postgres.${SUPABASE_PROJECT_REF}`;
-const SUPABASE_DB_PASSWORD = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY2d5ZG9uY3RtYWJpaWphZHNmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTY2OTk1NiwiZXhwIjoyMTAxMjQ1OTU2fQ.EvEAzIgWT-xh-RpzaEw2XH24ZHQn2THFJ7XaRsvP9D0';
-
+// O valor sempre foi o service_role JWT (nao uma senha de Postgres comum).
+const SUPABASE_DB_PASSWORD = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!SUPABASE_DB_PASSWORD) {
+  console.error('Defina SUPABASE_SERVICE_ROLE_KEY no ambiente antes de rodar este script.');
+  process.exit(1);
+}
 async function applyRLSPolicies() {
   console.log('🔌 Conectando ao pooler PostgreSQL do Supabase...');
 
