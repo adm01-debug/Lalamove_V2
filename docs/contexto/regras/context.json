@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
+  "sha": "811500800dccb11d0cb4e3a1ff9fc2ed5a1ffeb3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-20 11:12 UTC",
+  "generated_at": "2026-11-20 11:40 UTC",
   "files_total": 868,
   "code_files": 736,
   "code_lines": 126860
@@ -61106,10 +61106,20 @@
   }
  },
  "git": {
-  "sha": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
+  "sha": "811500800dccb11d0cb4e3a1ff9fc2ed5a1ffeb3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "8115008",
+    "date": "2026-11-20",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "c86f279",
     "date": "2026-11-20",
@@ -61561,16 +61571,6 @@
     "date": "2026-09-17",
     "author": "dependabot[bot]",
     "subject": "build(deps-dev): bump eslint from 9.39.5 to 10.10.0",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "4276fc4",
-    "date": "2026-09-17",
-    "author": "dependabot[bot]",
-    "subject": "build(deps-dev): bump @axe-core/playwright from 4.11.3 to 4.13.0",
     "files": [
      "package-lock.json",
      "package.json"

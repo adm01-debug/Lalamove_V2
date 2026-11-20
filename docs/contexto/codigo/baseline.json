@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c86f2790fe081a0476e38bfd2d6ce00518513b67",
+  "commit": "811500800dccb11d0cb4e3a1ff9fc2ed5a1ffeb3",
   "branch": "main",
-  "data_commit": "2026-11-20T08:00:27-03:00",
+  "data_commit": "2026-11-20T08:25:50-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "8115008",
+    "data": "2026-11-20",
+    "assunto": "build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)"
+   },
    {
     "sha": "c86f279",
     "data": "2026-11-20",
@@ -126,17 +131,16 @@
     "sha": "e6ba3c4",
     "data": "2026-10-03",
     "assunto": "Merge pull request #59 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-alert-dialog-1.1.23"
-   },
-   {
-    "sha": "ff31ee2",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #45 from adm01-debug/dependabot/npm_and_yarn/tailwindcss-4.3.3"
    }
   ],
-  "arquivos_mudados_7d": 29,
+  "arquivos_mudados_7d": 31,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package.json",
+    "mudancas": 4
+   },
+   {
+    "pasta": "package-lock.json",
     "mudancas": 3
    },
    {
@@ -168,10 +172,6 @@
     "mudancas": 2
    },
    {
-    "pasta": "package-lock.json",
-    "mudancas": 2
-   },
-   {
     "pasta": "src/index.css",
     "mudancas": 2
    },
@@ -199,11 +199,11 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package.json",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "arquivo": "supabase/config.toml",
@@ -302,6 +302,10 @@
    {
     "autor": "adm01-debug",
     "commits": 12
+   },
+   {
+    "autor": "dependabot[bot]",
+    "commits": 1
    }
   ]
  },
