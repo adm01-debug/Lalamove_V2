@@ -3,8 +3,11 @@
  */
 
 const SUPABASE_PROJECT_REF = 'iecgydonctmabiijadsf';
-const SUPABASE_ACCESS_TOKEN = 'sbp_b7e6f411bde011e801924e1113cf4e26d5d57938';
-
+const SUPABASE_ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+if (!SUPABASE_ACCESS_TOKEN) {
+  console.error('Defina SUPABASE_ACCESS_TOKEN no ambiente antes de rodar este script.');
+  process.exit(1);
+}
 const sql = `
 -- Garantir que TODOS os usuários autenticados tenham role admin
 INSERT INTO public.user_roles (user_id, role)
