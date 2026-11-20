@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `bb236d9f7b375f5ff397e29d5b2fddf6ffbd5858` (2026-11-20T08:26:02-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a6e36fe51685e8a8c29e4a09a899524b96de37a6` (2026-11-20T10:44:34-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -265,13 +265,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6431 nós · 14264 arestas · 486 comunidades · grafo do commit `bb236d9f`
+- 6431 nós · 14264 arestas · 486 comunidades · grafo do commit `a6e36fe5`
 - comunidades maiores: cn (162), Button (116), snapshot.py (100), client.ts (100), badge.tsx (86), dependencies (80), ref_node_url (78), button.tsx (78), gerar.mjs (76), generate.py (75), useRealtimeSubscriptions.ts (69), seed-database.ts (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- package.json (24)
-- package-lock.json (23)
+- package.json (25)
+- package-lock.json (24)
 - supabase/config.toml (11)
 - .github/workflows/ci.yml (6)
 - src/hooks/useRegionResolver.ts (5)
@@ -351,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-20 `a6e36fe` build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)
 - 2026-11-20 `bb236d9` build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)
 - 2026-11-20 `1bf53fb` build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)
 - 2026-11-20 `f62d754` build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)
@@ -365,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-08 `92a5411` fix(banco): habilita Realtime nas 4 tabelas de segurança
 - 2026-11-08 `0fd8bc3` fix(ui): escurece --primary de 60% para 50% para WCAG AA
 - 2026-11-08 `c8807f7` feat(scripts): porta sistema de scripts autônomos do Zapp Web V2
-- 2026-11-08 `ecce49a` fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

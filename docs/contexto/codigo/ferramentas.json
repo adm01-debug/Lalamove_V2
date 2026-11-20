@@ -563,7 +563,7 @@
    {
     "pacote": "web-vitals",
     "servico": "Web Vitals",
-    "versao": "^5.1.0"
+    "versao": "^6.2.3"
    },
    {
     "pacote": "xlsx",

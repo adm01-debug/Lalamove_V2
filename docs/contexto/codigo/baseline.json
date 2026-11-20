@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "bb236d9f7b375f5ff397e29d5b2fddf6ffbd5858",
+  "commit": "a6e36fe51685e8a8c29e4a09a899524b96de37a6",
   "branch": "main",
-  "data_commit": "2026-11-20T08:26:02-03:00",
+  "data_commit": "2026-11-20T10:44:34-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a6e36fe",
+    "data": "2026-11-20",
+    "assunto": "build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)"
+   },
    {
     "sha": "bb236d9",
     "data": "2026-11-20",
@@ -126,22 +131,17 @@
     "sha": "cb86846",
     "data": "2026-10-03",
     "assunto": "build(deps-dev): bump postcss from 8.5.26 to 8.5.28"
-   },
-   {
-    "sha": "2568c5c",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #64 from adm01-debug/dependabot/npm_and_yarn/react-is-19.3.0"
    }
   ],
   "arquivos_mudados_7d": 31,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package.json",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "pasta": "package-lock.json",
-    "mudancas": 6
+    "mudancas": 7
    },
    {
     "pasta": ".agents/skills/lalamove-v2",
@@ -199,11 +199,11 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package.json",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "arquivo": "supabase/config.toml",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 4
+    "commits": 5
    }
   ]
  },

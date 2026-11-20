@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "bb236d9f7b375f5ff397e29d5b2fddf6ffbd5858",
+  "sha": "a6e36fe51685e8a8c29e4a09a899524b96de37a6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-20 11:52 UTC",
+  "generated_at": "2026-11-20 13:45 UTC",
   "files_total": 868,
   "code_files": 736,
   "code_lines": 126860
@@ -61106,10 +61106,20 @@
   }
  },
  "git": {
-  "sha": "bb236d9f7b375f5ff397e29d5b2fddf6ffbd5858",
+  "sha": "a6e36fe51685e8a8c29e4a09a899524b96de37a6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a6e36fe",
+    "date": "2026-11-20",
+    "author": "dependabot[bot]",
+    "subject": "build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)",
+    "files": [
+     "package-lock.json",
+     "package.json"
+    ]
+   },
    {
     "sha": "bb236d9",
     "date": "2026-11-20",
@@ -61565,16 +61575,6 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #45 from adm01-debug/dependabot/npm_and_yarn/tailwindcss-4.3.3",
     "files": []
-   },
-   {
-    "sha": "a9364fe",
-    "date": "2026-09-17",
-    "author": "dependabot[bot]",
-    "subject": "build(deps): bump @radix-ui/react-tooltip from 1.2.10 to 1.2.16",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
