@@ -6,15 +6,18 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Configuração do Supabase
-const SUPABASE_URL = 'https://iecgydonctmabiijadsf.supabase.co';
-// Historicamente chamada de ANON_KEY, mas o valor sempre foi o service_role (bypassa RLS) - nome mantido para nao alterar os usos abaixo.
-const SUPABASE_ANON_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!SUPABASE_ANON_KEY) {
-  console.error('Defina SUPABASE_SERVICE_ROLE_KEY no ambiente antes de rodar este script.');
+// Requer: SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY em .env (ver .env.example)
+process.loadEnvFile();
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  console.error('Erro: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY no .env antes de rodar o seed.');
   process.exit(1);
 }
+
 // Cliente Supabase (com service role para bypassar RLS)
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
     persistSession: false,
     autoRefreshToken: false,
