@@ -72,6 +72,23 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+  guard-agents-md:
+    name: Guarda AGENTS.md / docs/agentes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Confere integridade das instrucoes para agentes
+        run: |
+          git fetch origin main --quiet || true
+          CLAUDE_MD_BASE=origin/main node scripts/ci/check-agents-md-integrity.mjs
+      - name: Testa o lint de mensagem de commit
+        run: node --test scripts/ci/*.unit.mjs
+
   security:
     runs-on: ubuntu-latest
     steps:
