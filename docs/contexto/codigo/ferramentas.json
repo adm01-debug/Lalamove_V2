@@ -503,7 +503,7 @@
    {
     "pacote": "papaparse",
     "servico": "CSV (papaparse)",
-    "versao": "^5.5.3"
+    "versao": "^5.7.1"
    },
    {
     "pacote": "i18next",

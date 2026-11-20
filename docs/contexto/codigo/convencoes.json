@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
-   "build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)",
-   "build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)",
-   "build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)",
-   "build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)",
-   "build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)"
+   "build(deps-dev): bump vite from 7.3.5 to 8.3.8 (#77)",
+   "build(deps): bump input-otp from 1.4.2 to 1.5.0 (#76)",
+   "build(deps): bump papaparse from 5.5.3 to 5.7.1 (#73)",
+   "build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)",
+   "build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
