@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "158850eea7c6c5a81580dacc1c6b3a7bae03fb38",
+  "commit": "1ef5f30da40b2d7d726b25ed3d4289145944bc48",
   "branch": "main",
-  "data_commit": "2026-11-20T10:45:16-03:00",
+  "data_commit": "2026-11-20T11:09:21-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1ef5f30",
+    "data": "2026-11-20",
+    "assunto": "fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)"
+   },
    {
     "sha": "158850e",
     "data": "2026-11-20",
@@ -126,22 +131,17 @@
     "sha": "a0ef45f",
     "data": "2026-10-03",
     "assunto": "Merge pull request #67 from adm01-debug/dependabot/npm_and_yarn/vitest-5.0.0"
-   },
-   {
-    "sha": "ab067fe",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #65 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-tooltip-1.2.16"
    }
   ],
   "arquivos_mudados_7d": 31,
   "pastas_mais_mudadas_30d": [
    {
-    "pasta": "package.json",
+    "pasta": "package-lock.json",
     "mudancas": 12
    },
    {
-    "pasta": "package-lock.json",
-    "mudancas": 11
+    "pasta": "package.json",
+    "mudancas": 12
    },
    {
     "pasta": ".agents/skills/lalamove-v2",
@@ -198,12 +198,12 @@
   ],
   "arquivos_mais_mudados_90d": [
    {
-    "arquivo": "package.json",
+    "arquivo": "package-lock.json",
     "mudancas": 29
    },
    {
-    "arquivo": "package-lock.json",
-    "mudancas": 28
+    "arquivo": "package.json",
+    "mudancas": 29
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 12
+    "commits": 13
    },
    {
     "autor": "dependabot[bot]",

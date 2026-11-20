@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "158850eea7c6c5a81580dacc1c6b3a7bae03fb38",
+  "sha": "1ef5f30da40b2d7d726b25ed3d4289145944bc48",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-20 13:46 UTC",
+  "generated_at": "2026-11-20 14:14 UTC",
   "files_total": 868,
   "code_files": 736,
   "code_lines": 126860
@@ -61106,10 +61106,19 @@
   }
  },
  "git": {
-  "sha": "158850eea7c6c5a81580dacc1c6b3a7bae03fb38",
+  "sha": "1ef5f30da40b2d7d726b25ed3d4289145944bc48",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1ef5f30",
+    "date": "2026-11-20",
+    "author": "adm01-debug",
+    "subject": "fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)",
+    "files": [
+     "package-lock.json"
+    ]
+   },
    {
     "sha": "158850e",
     "date": "2026-11-20",
@@ -61580,23 +61589,16 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "2568c5c",
-    "date": "2026-10-03",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #64 from adm01-debug/dependabot/npm_and_yarn/react-is-19.3.0",
-    "files": []
    }
   ],
   "hot_files": [
    [
-    "package.json",
+    "package-lock.json",
     15
    ],
    [
-    "package-lock.json",
-    14
+    "package.json",
+    15
    ],
    [
     ".github/workflows/ci.yml",
