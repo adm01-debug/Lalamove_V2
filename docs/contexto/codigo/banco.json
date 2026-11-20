@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 154,
+ "migrations": 157,
  "seeds": [],
  "avisos": [
   "12 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -112,6 +112,7 @@
   "add_job",
   "audit_driver_changes",
   "cache_status",
+  "can_run_db_diagnostics",
   "cancel_job",
   "check_login_lockout",
   "check_login_lockout_v2",
@@ -161,6 +162,7 @@
   "mark_job_completed",
   "mark_job_failed",
   "mark_job_processing",
+  "mcp_introspect",
   "monitor_queue_health",
   "notify_lalamove_quota_low",
   "notify_webhook_security_event",
@@ -305,6 +307,13 @@
    "quando": "before",
    "evento": "update",
    "tabela": "map_settings_overrides",
+   "funcao": "update_updated_at_column"
+  },
+  {
+   "nome": "trg_mcp_diagnostics_grants_updated_at",
+   "quando": "before",
+   "evento": "update",
+   "tabela": "mcp_diagnostics_grants",
    "funcao": "update_updated_at_column"
   },
   {
@@ -2391,11 +2400,6 @@
     {
      "nome": "idx_blocked_ips_expires",
      "colunas": "ip_address, expires_at",
-     "unico": false
-    },
-    {
-     "nome": "idx_blocked_ips_ip",
-     "colunas": "ip_address",
      "unico": false
     }
    ],
@@ -5577,11 +5581,6 @@
      "unico": false
     },
     {
-     "nome": "idx_orders_lalamove_id",
-     "colunas": "lalamove_id",
-     "unico": false
-    },
-    {
      "nome": "idx_orders_status",
      "colunas": "status",
      "unico": false
@@ -6886,12 +6885,69 @@
    "nao_usada": false
   },
   "mcp_diagnostics_grants": {
-   "colunas": {},
-   "rls": false,
-   "policies": [],
+   "colunas": {
+    "created_at": {
+     "tipo": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "granted_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "is_active": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "true",
+     "ref": null
+    },
+    "purpose": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamp with time zone",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "user_id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "Admins manage diagnostics grants",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    }
+   ],
    "indices": [],
    "fks": [],
-   "criada_em": null,
+   "criada_em": "20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
    "colunas_types": {
     "created_at": "string",
     "granted_by": "string | null",
@@ -6901,9 +6957,15 @@
     "updated_at": "string",
     "user_id": "string"
    },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
-   "triggers": [],
+   "triggers": [
+    "trg_mcp_diagnostics_grants_updated_at"
+   ],
    "sem_rls": false,
    "nao_usada": true
   },
@@ -7770,7 +7832,8 @@
    "usada_no_front": 1,
    "usada_em_edges": [
     "external-db-bridge",
-    "lalamove-gateway"
+    "lalamove-gateway",
+    "mcp-query"
    ],
    "triggers": [],
    "sem_rls": false,
@@ -9329,11 +9392,6 @@
      "nome": "idx_user_devices_last_seen",
      "colunas": "last_seen_at DESC",
      "unico": false
-    },
-    {
-     "nome": "idx_user_devices_user_fingerprint",
-     "colunas": "user_id, device_fingerprint",
-     "unico": false
     }
    ],
    "fks": [],
@@ -9474,11 +9532,6 @@
     }
    ],
    "indices": [
-    {
-     "nome": "idx_user_passkeys_credential_id",
-     "colunas": "credential_id",
-     "unico": false
-    },
     {
      "nome": "idx_user_passkeys_user_id",
      "colunas": "user_id",
@@ -9945,6 +9998,11 @@
    "usada_em": 1
   },
   {
+   "nome": "can_run_db_diagnostics",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
    "nome": "check_login_lockout_v2",
    "definida": true,
    "usada_em": 1
@@ -10006,6 +10064,11 @@
   },
   {
    "nome": "mark_job_failed",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
+   "nome": "mcp_introspect",
    "definida": true,
    "usada_em": 1
   },

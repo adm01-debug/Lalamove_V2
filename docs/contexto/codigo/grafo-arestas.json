@@ -2180,6 +2180,9 @@
   "supabase/functions/lalamove-webhook/security.ts": [
    "supabase/functions/_shared/logger.ts"
   ],
+  "supabase/functions/mcp-query/index.ts": [
+   "supabase/functions/_shared/cors.ts"
+  ],
   "supabase/functions/new-device-alert/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",

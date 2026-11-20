@@ -1156,7 +1156,7 @@
    "lalamove-uapi",
    "llm-wh",
    "mapbox-proxy",
-   "migrate-helper",
+   "mcp-query",
    "new-device-alert",
    "rotate-tokens",
    "route-analyzer",

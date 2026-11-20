@@ -8,8 +8,10 @@
    "arquivo": "scripts/add-security-manage.ts",
    "pasta": "scripts",
    "descricao": "* Aplica permissão security.manage via Management API",
-   "linhas": 52,
-   "env": [],
+   "linhas": 55,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -59,8 +61,10 @@
    "arquivo": "scripts/apply-dashboard-fixes.ts",
    "pasta": "scripts",
    "descricao": "* Aplica as correções do dashboard via conexão direta PostgreSQL",
-   "linhas": 97,
-   "env": [],
+   "linhas": 101,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -70,8 +74,10 @@
    "arquivo": "scripts/apply-final-sql.ts",
    "pasta": "scripts",
    "descricao": "* Aplica SQL final de correção via Management API",
-   "linhas": 58,
-   "env": [],
+   "linhas": 61,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -81,8 +87,10 @@
    "arquivo": "scripts/apply-permissions-via-api.ts",
    "pasta": "scripts",
    "descricao": "* Aplica SQL via Supabase Management API",
-   "linhas": 39,
-   "env": [],
+   "linhas": 46,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -103,8 +111,10 @@
    "arquivo": "scripts/apply-rls-via-pg.ts",
    "pasta": "scripts",
    "descricao": "* Script para aplicar RLS via Supabase Pooler (PostgreSQL)",
-   "linhas": 159,
-   "env": [],
+   "linhas": 163,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -114,8 +124,10 @@
    "arquivo": "scripts/apply-sql-via-management-api.ts",
    "pasta": "scripts",
    "descricao": "* Aplica SQL via Supabase Management API (com DO block para tabelas opcionais)",
-   "linhas": 60,
-   "env": [],
+   "linhas": 63,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -147,8 +159,10 @@
    "arquivo": "scripts/check-permissions.ts",
    "pasta": "scripts",
    "descricao": "* Aplica permissão security.manage via SQL",
-   "linhas": 69,
-   "env": [],
+   "linhas": 72,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -229,7 +243,9 @@
     "CLAUDE_MD_BASE"
    ],
    "npm_scripts": [],
-   "workflows": [],
+   "workflows": [
+    "ci.yml"
+   ],
    "solto_na_raiz_de_scripts": false,
    "orfao": false
   },
@@ -759,8 +775,10 @@
    "arquivo": "scripts/diagnose-rpc.ts",
    "pasta": "scripts",
    "descricao": "* Diagnóstico: por que get_user_permissions retorna 0?",
-   "linhas": 76,
-   "env": [],
+   "linhas": 79,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -781,8 +799,10 @@
    "arquivo": "scripts/ensure-admin-active.ts",
    "pasta": "scripts",
    "descricao": "* Aplica UPDATE direto via Management API para corrigir is_active",
-   "linhas": 48,
-   "env": [],
+   "linhas": 51,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -803,8 +823,10 @@
    "arquivo": "scripts/fix-admin-role-active.ts",
    "pasta": "scripts",
    "descricao": "* Garante que usuário tem role admin com is_active=true",
-   "linhas": 63,
-   "env": [],
+   "linhas": 66,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -814,8 +836,10 @@
    "arquivo": "scripts/fix-dashboard-via-api.ts",
    "pasta": "scripts",
    "descricao": "* Aplica todas as correções do Dashboard via SQL usando API REST do Supabase",
-   "linhas": 68,
-   "env": [],
+   "linhas": 71,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -825,8 +849,10 @@
    "arquivo": "scripts/fix-rpc-functions.ts",
    "pasta": "scripts",
    "descricao": "* Sobrescreve a função get_user_permissions para funcionar corretamente",
-   "linhas": 68,
-   "env": [],
+   "linhas": 71,
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -974,8 +1000,10 @@
    "arquivo": "scripts/list-tables-v2.ts",
    "pasta": "scripts",
    "descricao": "* Lista tabelas usando fetch direto à API REST",
-   "linhas": 51,
-   "env": [],
+   "linhas": 54,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -985,8 +1013,10 @@
    "arquivo": "scripts/list-tables.ts",
    "pasta": "scripts",
    "descricao": "* Lista as tabelas existentes no schema public do Supabase",
-   "linhas": 53,
-   "env": [],
+   "linhas": 56,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -1092,8 +1122,10 @@
    "arquivo": "scripts/seed-contacts.ts",
    "pasta": "scripts",
    "descricao": "* Script para popular a tabela de Contatos com dados fictícios",
-   "linhas": 135,
-   "env": [],
+   "linhas": 138,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -1103,8 +1135,10 @@
    "arquivo": "scripts/seed-database.ts",
    "pasta": "scripts",
    "descricao": "* Script de Seed - Popula o banco Supabase com dados fictícios",
-   "linhas": 528,
-   "env": [],
+   "linhas": 532,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [
     "seed"
    ],
@@ -1116,8 +1150,10 @@
    "arquivo": "scripts/set-user-admin.ts",
    "pasta": "scripts",
    "descricao": "* Garante que um usuário específico tenha role admin no banco",
-   "linhas": 71,
-   "env": [],
+   "linhas": 74,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -1153,8 +1189,10 @@
    "arquivo": "scripts/test-after-fix.ts",
    "pasta": "scripts",
    "descricao": "* Testa novamente após o fix",
-   "linhas": 37,
-   "env": [],
+   "linhas": 40,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
@@ -1164,8 +1202,11 @@
    "arquivo": "scripts/test-user-permissions.ts",
    "pasta": "scripts",
    "descricao": "* Testa a função get_user_permissions",
-   "linhas": 69,
-   "env": [],
+   "linhas": 73,
+   "env": [
+    "SEED_TI_PASSWORD",
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,

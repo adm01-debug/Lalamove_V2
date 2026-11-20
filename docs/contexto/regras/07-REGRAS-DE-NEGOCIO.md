@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `846ea80d25` · branch `main` · 2026-11-12 12:29 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8832302db7` · branch `main` · 2026-11-20 00:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -220,6 +220,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lalamove_priority_fee_history` | Operational roles view priority fee history | SELECT | public | permissive | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator')` |  |
 | `lalamove_priority_fee_history` | Admin/manager insert priority fee history | INSERT | public | permissive |  | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')` |
 | `contacts` | Users manage their own contacts | ALL | public | permissive | `auth.uid() = owner_id` | `auth.uid() = owner_id` |
+| `mcp_diagnostics_grants` | Admins manage diagnostics grants | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin')` | `public.has_role(auth.uid(), 'admin')` |
 | `user_roles` | Authenticated users can view roles | SELECT | authenticated | permissive | `true` |  |
 | `user_roles` | Authenticated users can insert roles | INSERT | authenticated | permissive |  | `true` |
 | `user_roles` | Authenticated users can update roles | UPDATE | authenticated | permissive | `true` |  |
@@ -562,6 +563,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_notify_lalamove_quota_low | AFTER INSERT | `lalamove_rate_limits` | `notify_lalamove_quota_low` |  |
 | trg_contacts_updated_at | BEFORE UPDATE | `contacts` | `update_updated_at_column` |  |
 | trg_notify_webhook_security_event | AFTER INSERT | `webhook_events` | `notify_webhook_security_event` |  |
+| trg_mcp_diagnostics_grants_updated_at | BEFORE UPDATE | `mcp_diagnostics_grants` | `update_updated_at_column` |  |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
@@ -572,6 +574,12 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `get_cron_jobs_health` | Acesso negado: requer papel de administrador | `supabase/migrations/20260711194632_e6def1eb-1b3c-487f-978f-b0774a8201af.sql` |
 | `get_contract_v1_sunset_readiness` | Acesso negado: requer papel de administrador | `supabase/migrations/20260712194831_1bd67c8e-482f-4a15-abfc-6f3986b33611.sql` |
 | `acknowledge_alert` | Acesso negado | `supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql` |
+| `mcp_introspect` | Acesso negado: requer papel admin ou concessão de diagnóstico | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `mcp_introspect` | Schema não permitido: % | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `mcp_introspect` | Parâmetro "table" obrigatório | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `mcp_introspect` | Parâmetro "table" obrigatório | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `mcp_introspect` | Parâmetros "table" e "column" obrigatórios | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `mcp_introspect` | Operação não permitida: % | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -1209,6 +1217,8 @@ _nenhum item encontrado_
 | `RATE_LIMIT_BLOCK_DURATION_MS` | `300000` | `supabase/functions/lalamove-webhook/index.ts` |
 | `WEBHOOK_MAX_AGE_MS` | `5` | `supabase/functions/lalamove-webhook/index.ts` |
 | `MAPBOX_BASE` | `'https://api.mapbox.com'` | `supabase/functions/mapbox-proxy/index.ts` |
+| `SLOW_MS` | `3000` | `supabase/functions/mcp-query/index.ts` |
+| `VERY_SLOW_MS` | `8000` | `supabase/functions/mcp-query/index.ts` |
 
 ### H.2 Prazos, expirações e janelas de tempo
 
@@ -1653,7 +1663,7 @@ _nenhum item encontrado_
 | Mínimo 2 coordenadas | `src/pages/map-tools/MapMatchingTab.tsx` |
 | Erro na otimização | `src/pages/map-tools/OptimizationTab.tsx` |
 | Mínimo 2 coordenadas | `src/pages/map-tools/OptimizationTab.tsx` |
-| … +64 linhas — lista completa em `context.json` | |
+| … +62 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1680,6 +1690,8 @@ _nenhum item encontrado_
 | `selectedRole` | `src/pages/RolesPage.tsx` |
 | `granted` | `src/pages/UserPreferencesPage.tsx` |
 | `admin` | `supabase/functions/lalamove-uapi/index.ts` |
+| `true` | `supabase/functions/mcp-query/index.ts` |
+| `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
 ## K. Testes como especificação (746 testes em 58 arquivos — nomes completos em `context.json`)
 
@@ -1938,5 +1950,11 @@ _nenhum item encontrado_
 | HMAC validation | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |
+| 3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe | `supabase/functions/mcp-query/index.ts` |
+| `mcp_introspect`, que aceita apenas operações de uma allowlist fixa. | `supabase/functions/mcp-query/index.ts` |
+| * Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e | `supabase/functions/mcp-query/index.ts` |
+| ── 3. Validação de entrada ────────────────────────────────────────────── | `supabase/functions/mcp-query/index.ts` |
 | Deve ser chamada periodicamente (ex: a cada hora via cron job externo) | `supabase/functions/rotate-tokens/index.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |
+| ) > 1 LIMIT 50) t; | `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql` |
+| ) > 1 LIMIT 50) t; | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |

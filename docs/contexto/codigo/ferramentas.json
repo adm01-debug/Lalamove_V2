@@ -4,7 +4,7 @@
  "stack": {
   "linguagens": [
    "TypeScript (455)",
-   "SQL (158)",
+   "SQL (161)",
    "JavaScript (112)",
    "Markdown (62)",
    "JSON (34)",
@@ -130,13 +130,16 @@
     "test",
     "e2e",
     "build",
+    "guard-agents-md",
     "security",
     "contract-tests",
     "edge-integration-tests",
     "deploy"
    ],
    "permissoes": [],
-   "scripts_usados": [],
+   "scripts_usados": [
+    "scripts/ci/check-agents-md-integrity.mjs"
+   ],
    "npm_scripts": [
     "build",
     "lint"
@@ -161,7 +164,7 @@
     "workflow_dispatch"
    ],
    "crons": [
-    "3-59/10 * * * *"
+    "3 * * * *"
    ],
    "branches": [
     "main"
@@ -240,7 +243,7 @@
   {
    "arquivo": "AGENTS.md",
    "titulo": "AGENTS.md — Lalamove V2",
-   "linhas": 135
+   "linhas": 137
   },
   {
    "arquivo": "CHANGELOG.md",
@@ -469,7 +472,6 @@
    "RESEND_API_KEY",
    "SLACK_WEBHOOK_URL",
    "SUPABASE_ANON_KEY",
-   "SUPABASE_DB_URL",
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -612,19 +614,18 @@
     "total": 3
    },
    {
-    "servico": "Manutenção/DDL",
-    "edges": [
-     "apply-fixes",
-     "migrate-helper",
-     "seed-fix-rls"
-    ],
-    "total": 3
-   },
-   {
     "servico": "Bitrix24",
     "edges": [
      "bitrix24-process-queue",
      "bitrix24-sync"
+    ],
+    "total": 2
+   },
+   {
+    "servico": "Manutenção/DDL",
+    "edges": [
+     "apply-fixes",
+     "seed-fix-rls"
     ],
     "total": 2
    },
@@ -816,7 +817,6 @@
    "RESEND_API_KEY",
    "SLACK_WEBHOOK_URL",
    "SUPABASE_ANON_KEY",
-   "SUPABASE_DB_URL",
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
@@ -825,7 +825,7 @@
    "VITE_SUPABASE_URL"
   ],
   "webhooks_recebidos": [
-   "migrate-helper"
+   "mcp-query"
   ],
   "realtime": [
    "active-tracking-changes",

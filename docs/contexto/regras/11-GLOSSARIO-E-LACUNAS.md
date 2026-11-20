@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `846ea80d25` · branch `main` · 2026-11-12 12:29 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8832302db7` · branch `main` · 2026-11-20 00:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -47,7 +47,7 @@
 | `lalamove_uapi_sessions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
 | `login_attempts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
 | `map_settings_overrides` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| `mcp_diagnostics_grants` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | types.ts |
+| `mcp_diagnostics_grants` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
 | `mfa_sessions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
 | `new_device_alerts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `orders_operator_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |

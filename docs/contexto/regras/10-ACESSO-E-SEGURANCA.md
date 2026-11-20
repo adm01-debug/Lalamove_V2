@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `846ea80d25` · branch `main` · 2026-11-12 12:29 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8832302db7` · branch `main` · 2026-11-20 00:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -56,7 +56,7 @@
 | `lalamove_uapi_sessions` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `login_attempts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) | public: has_role(auth.uid(), 'admin'::app_role) |
 | `map_settings_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
-| `mcp_diagnostics_grants` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `mcp_diagnostics_grants` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `mfa_sessions` | enabled | authenticated: auth.uid() = user_id<br>public: auth.uid() = user_id | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')<br>authenticated: auth.uid() = user_id |
 | `new_device_alerts` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') |
 | `orders_operator_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
@@ -90,7 +90,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 104 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 107 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -120,9 +120,11 @@
 - `scripts/list-tables.ts`
 - `scripts/regras_negocio/generate.py`
 - `scripts/seed-contacts.ts`
+- `scripts/seed-database.ts`
 - `scripts/set-user-admin.ts`
 - `scripts/supabase_snapshot/snapshot.py`
 - `scripts/test-after-fix.ts`
+- `scripts/test-user-permissions.ts`
 - `supabase/functions/_shared/telemetry.ts`
 - `supabase/functions/apply-fixes/index.ts`
 - `supabase/functions/bitrix24-process-queue/index.ts`
@@ -139,7 +141,6 @@
 - `supabase/functions/lalamove-uapi/index.ts`
 - `supabase/functions/lalamove-webhook/index.ts`
 - `supabase/functions/llm-wh/index.ts`
-- `supabase/functions/migrate-helper/index.ts`
 - `supabase/functions/new-device-alert/index.ts`
 - `supabase/functions/rotate-tokens/index.ts`
 - `supabase/functions/route-analyzer/index.ts`
@@ -192,6 +193,8 @@
 - `supabase/migrations/20260723174521_e57bfc01-fd6e-45e2-b2bb-a4464a64c800.sql`
 - `supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql`
 - `supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql`
+- `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql`
+- `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql`
 - `supabase/migrations/20260828000001_seed_fix_rls.sql`
 - `supabase/migrations/20260828000002_dashboard_fixes.sql`
 - `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`
@@ -201,6 +204,7 @@
 
 - `acknowledge_alert`
 - `add_job`
+- `can_run_db_diagnostics`
 - `check_login_lockout`
 - `check_login_lockout_v2`
 - `claim_alert_notification`
@@ -232,6 +236,7 @@
 - `is_known_device`
 - `is_token_valid`
 - `log_mfa_session`
+- `mcp_introspect`
 - `notify_lalamove_quota_low`
 - `notify_webhook_security_event`
 - `pause_cron_job`
@@ -252,7 +257,8 @@
 
 ## Edge functions públicas (sem JWT — qualquer um chama)
 
-- `migrate-helper`
+- `lalamove-uapi`
+- `mcp-query`
 
 ## Rotas protegidas no front
 
@@ -325,21 +331,23 @@ Middleware matcher (Next.js): nenhum
 | grant | anon | all | `public`, `public` |
 | grant | anon, authenticated, service_role | execute | `check_login_lockout_v2`, `record_failed_login_v2` |
 | grant | authenticated | all | `public`, `public` |
-| grant | authenticated | execute | `refresh_cache_view`, `is_aal2`, `log_mfa_session`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `acknowledge_alert` |
+| grant | authenticated | execute | `refresh_cache_view`, `is_aal2`, `log_mfa_session`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `acknowledge_alert`, `mcp_introspect`, `can_run_db_diagnostics` |
 | grant | authenticated | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view`, `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `lalamove_order_replacements`, `lalamove_rate_limits` |
 | grant | authenticated | select, insert | `lalamove_rate_limits`, `lalamove_priority_fee_history` |
 | grant | authenticated | select, insert, update | `region_cache` |
-| grant | authenticated | select, insert, update, delete | `report_presets`, `lalamove_stop_proofs`, `contacts` |
+| grant | authenticated | select, insert, update, delete | `report_presets`, `lalamove_stop_proofs`, `contacts`, `mcp_diagnostics_grants` |
 | grant | authenticated, anon | execute | `get_driver_stats_cached`, `get_delivery_metrics_cached`, `get_hourly_metrics_cached`, `get_top_drivers_by_metric`, `cache_status` |
 | grant | authenticated, anon | select | `mv_driver_stats`, `mv_delivery_metrics`, `mv_hourly_metrics` |
 | grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role` |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
-| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits` |
-| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +25 |
+| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants` |
+| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +27 |
+| revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
 | revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +2 |
 | revoke | PUBLIC, anon, authenticated | execute | `ensure_tracking_events_partition`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `cleanup_old_region_cache`, `check_login_lockout`, `record_failed_login`, `has_role`, `has_permission`, `is_aal2`, `get_user_roles`, `is_token_valid`, `use_reset_token`, `notify_lalamove_quota_low`, `notify_webhook_security_event`, `cleanup_old_audit_logs` |
+| revoke | anon | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | anon | all privileges | `public`, `public` |
 | revoke | anon | execute | `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `get_cron_jobs_health`, `get_active_uapi_token`, `get_user_permissions`, `get_user_roles`, `is_aal2`, `is_known_device`, `clear_login_attempts`, `clear_login_attempts`, `has_role` |
 | revoke | anon | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
@@ -425,8 +433,8 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `lalamove_rate_limits` | `created_at` |
 | `lalamove_priority_fee_history` | `created_at` |
 | `contacts` | `created_at`, `updated_at` |
-| `geo_blocks` | `created_at`, `updated_at` |
 | `mcp_diagnostics_grants` | `created_at`, `updated_at` |
+| `geo_blocks` | `created_at`, `updated_at` |
 | `tracking_events_default` | `created_at` |
 | `tracking_events_y2026m05` | `created_at` |
 | `tracking_events_y2026m06` | `created_at` |

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "846ea80d25828c5b97588f7d46c738f5fff1d82f",
+  "sha": "8832302db77e643d64d3bfb7dafa109f402fde98",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-12 12:29 UTC",
-  "files_total": 865,
-  "code_files": 733,
-  "code_lines": 126104
+  "generated_at": "2026-11-20 00:42 UTC",
+  "files_total": 868,
+  "code_files": 736,
+  "code_lines": 126860
  },
  "version": "1.3.2",
- "facts_hash": "054cf6c27ff94d77",
+ "facts_hash": "981d01bac66d9ec7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -166,7 +166,7 @@
   "languages": {
    ".ts": 231,
    ".tsx": 224,
-   ".sql": 158,
+   ".sql": 161,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -175,7 +175,8 @@
   "monorepo_packages": [],
   "supabase_config": {
    "functions_no_jwt": [
-    "migrate-helper"
+    "lalamove-uapi",
+    "mcp-query"
    ],
    "auth": {}
   },
@@ -5392,6 +5393,63 @@
     "comment": "",
     "origin": "migration"
    },
+   "mcp_diagnostics_grants": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "user_id",
+      "type": "uuid NOT NULL UNIQUE",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "purpose",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "is_active",
+      "type": "boolean NOT NULL DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "granted_by",
+      "type": "uuid",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamp with time zone NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamp with time zone NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "comment": "",
+    "origin": "migration"
+   },
    "geo_blocks": {
     "columns": [
      {
@@ -5459,63 +5517,6 @@
      },
      {
       "name": "updated_at",
-      "type": "string not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     }
-    ],
-    "constraints": [],
-    "src": "src/integrations/supabase/types.ts",
-    "comment": "",
-    "origin": "types.ts"
-   },
-   "mcp_diagnostics_grants": {
-    "columns": [
-     {
-      "name": "created_at",
-      "type": "string not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "granted_by",
-      "type": "string | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "id",
-      "type": "string not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "is_active",
-      "type": "boolean not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "purpose",
-      "type": "string not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "updated_at",
-      "type": "string not null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "user_id",
       "type": "string not null",
       "fk": "",
       "generated": "",
@@ -8918,6 +8919,16 @@
     "src": "supabase/migrations/20260723135010_e3a23b59-7351-4ad8-afaf-6c2a3af32f23.sql"
    },
    {
+    "name": "Admins manage diagnostics grants",
+    "table": "mcp_diagnostics_grants",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin')",
+    "check": "public.has_role(auth.uid(), 'admin')",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
     "name": "Authenticated users can view roles",
     "table": "user_roles",
     "cmd": "SELECT",
@@ -9201,6 +9212,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20260723173506_f797adca-6a56-4477-b962-b1a865de6238.sql"
+   },
+   {
+    "name": "trg_mcp_diagnostics_grants_updated_at",
+    "when": "BEFORE UPDATE",
+    "table": "mcp_diagnostics_grants",
+    "function": "update_updated_at_column",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
    }
   ],
   "functions": {
@@ -10249,6 +10269,58 @@
      "query_telemetry"
     ]
    },
+   "mcp_introspect": {
+    "args": "p_operation text, p_params jsonb DEFAULT '{}'::jsonb",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_schema text := COALESCE(NULLIF(p_params->>'schema',''), 'public'); v_table text := NULLIF(p_params->>'table',''); v_column text := NULLIF(p_params->>'column',''); v_filter text := NULLIF(p_params->>'filter',''); v_limit int := LEAST(GREATEST(COALESCE((p_params->>'limit')::int, 20), 1), 200); v_result jsonb; BEGIN IF NOT public.can_run_db_diagnostics(auth.uid()) THEN RAISE EXCEPTION 'Acesso negado: requer papel admin ou concessão de diagnóstico' USING ERRCODE = '42501'; END IF; IF v_schema NOT IN ('public') THEN RAISE EXCEPTION 'Schema não permitido: %', v_schema USING ERRCODE = '42501'; END IF; IF p_operation = 'connection_info' THEN SELECT jsonb_build_object( 'database', current_d …",
+    "raises": [
+     "Acesso negado: requer papel admin ou concessão de diagnóstico",
+     "Schema não permitido: %",
+     "Parâmetro \"table\" obrigatório",
+     "Parâmetro \"table\" obrigatório",
+     "Parâmetros \"table\" e \"column\" obrigatórios",
+     "Operação não permitida: %"
+    ],
+    "tables": [
+     "extensions",
+     "information_schema",
+     "pg_catalog",
+     "pg_class",
+     "pg_enum",
+     "pg_extension",
+     "pg_index",
+     "pg_locks",
+     "pg_namespace",
+     "pg_policies",
+     "pg_proc",
+     "pg_settings",
+     "pg_stat_activity",
+     "pg_stat_database",
+     "pg_stat_user_indexes",
+     "pg_stat_user_tables",
+     "pg_stats",
+     "pg_type",
+     "supabase_migrations",
+     "v_result"
+    ]
+   },
+   "can_run_db_diagnostics": {
+    "args": "_user_id uuid",
+    "returns": "boolean",
+    "lang": "sql",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "SELECT _user_id IS NOT NULL AND _user_id = auth.uid() AND ( public.has_role(_user_id, 'admin') OR EXISTS ( SELECT 1 FROM public.mcp_diagnostics_grants g WHERE g.user_id = _user_id AND g.is_active = true ) );",
+    "raises": [],
+    "tables": [
+     "mcp_diagnostics_grants"
+    ]
+   },
    "get_current_user_role": {
     "args": "",
     "returns": "TEXT",
@@ -10261,17 +10333,6 @@
     "tables": [
      "user_roles"
     ]
-   },
-   "can_run_db_diagnostics": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
    },
    "Args": {
     "args": "",
@@ -10296,17 +10357,6 @@
     "tables": []
    },
    "is_country_blocked": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
-   },
-   "mcp_introspect": {
     "args": "",
     "returns": "?",
     "lang": "",
@@ -12265,6 +12315,9 @@
    "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql",
    "supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql",
    "supabase/migrations/20260726183530_dba04ac0-388f-4e70-972f-15110f056791.sql",
+   "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
+   "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+   "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql",
    "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
@@ -12334,7 +12387,8 @@
    "lalamove_order_replacements": "enabled",
    "lalamove_rate_limits": "enabled",
    "lalamove_priority_fee_history": "enabled",
-   "contacts": "enabled"
+   "contacts": "enabled",
+   "mcp_diagnostics_grants": "enabled"
   },
   "grants": [
    {
@@ -14082,6 +14136,86 @@
     "src": "supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select, insert, update, delete",
+    "object": "mcp_diagnostics_grants",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "mcp_diagnostics_grants",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
     "kind": "grant",
     "privs": "all",
     "object": "public",
@@ -14155,6 +14289,36 @@
     "function": "acknowledge_alert",
     "msg": "Acesso negado",
     "src": "supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Acesso negado: requer papel admin ou concessão de diagnóstico",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Schema não permitido: %",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetro \"table\" obrigatório",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetro \"table\" obrigatório",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetros \"table\" e \"column\" obrigatórios",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Operação não permitida: %",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
    }
   ],
   "seed": [],
@@ -15279,7 +15443,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "lalamove_orders",
      "lalamove_uapi_sessions"
@@ -15383,25 +15547,23 @@
     "idempotency": false
    },
    {
-    "name": "migrate-helper",
-    "file": "supabase/functions/migrate-helper/index.ts",
+    "name": "mcp-query",
+    "file": "supabase/functions/mcp-query/index.ts",
     "methods": [
      "OPTIONS"
     ],
     "auth": "PÚBLICA (verify_jwt=false em config.toml)",
-    "tables": [],
+    "tables": [
+     "query_telemetry"
+    ],
     "env": [
-     "SUPABASE_DB_URL",
-     "SUPABASE_SERVICE_ROLE_KEY",
+     "SUPABASE_ANON_KEY",
      "SUPABASE_URL"
     ],
     "external": [],
     "invokes": [],
-    "doc": "Edge function temporária para migração de banco. Cole em: Cloud > Edge Functions > migrate-helper > View code Após a migração, remova esta função.",
-    "errors": [
-     "unauthorized",
-     "unknown_action"
-    ],
+    "doc": "============================================================================ mcp-query — introspecção e diagnóstico de banco para administradores. Modelo de segurança (mesmo padrão do external-db-bridge / migrate-helper): 1. Exige `Authorization: Bearer <JWT>` válido (validado em código, pois a funç …",
+    "errors": [],
     "side_effects": [],
     "webhook_events": [],
     "idempotency": false
@@ -16340,7 +16502,7 @@
    },
    {
     "kind": "GitHub Actions cron",
-    "detail": "3-59/10 * * * *",
+    "detail": "3 * * * *",
     "file": ".github/workflows/contexto.yml"
    },
    {
@@ -17501,7 +17663,7 @@
   {
    "module": "scripts",
    "files": 142,
-   "lines": 32194,
+   "lines": 32259,
    "tables": [
     "a",
     "active_tracking",
@@ -18521,7 +18683,7 @@
   {
    "module": "supabase/functions",
    "files": 36,
-   "lines": 10424,
+   "lines": 10611,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -18609,7 +18771,7 @@
     "supabase/functions/lalamove-webhook/security.ts",
     "supabase/functions/llm-wh/index.ts",
     "supabase/functions/mapbox-proxy/index.ts",
-    "supabase/functions/migrate-helper/index.ts",
+    "supabase/functions/mcp-query/index.ts",
     "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/rotate-tokens/index.ts",
     "supabase/functions/route-analyzer/index.ts",
@@ -18621,8 +18783,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 154,
-   "lines": 9713,
+   "files": 157,
+   "lines": 10217,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -19219,7 +19381,8 @@
      "src/hooks/useSLOMetrics.ts"
     ],
     "insert": [
-     "supabase/functions/external-db-bridge/index.ts"
+     "supabase/functions/external-db-bridge/index.ts",
+     "supabase/functions/mcp-query/index.ts"
     ],
     "ref": [
      "supabase/functions/lalamove-gateway/index.ts"
@@ -20000,6 +20163,9 @@
    "SCRIPT_ONLY": [
     "scripts/ai-context/cenarios.mjs"
    ],
+   "SEED_TI_PASSWORD": [
+    "scripts/test-user-permissions.ts"
+   ],
    "SLACK_WEBHOOK_URL": [
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/test-notification/index.ts"
@@ -20026,21 +20192,27 @@
     "scripts/db-audit/psql-safe.test.mjs"
    ],
    "SUPABASE_ACCESS_TOKEN": [
+    "scripts/add-security-manage.ts",
+    "scripts/apply-final-sql.ts",
+    "scripts/apply-permissions-via-api.ts",
+    "scripts/apply-sql-via-management-api.ts",
+    "scripts/ensure-admin-active.ts",
+    "scripts/fix-rpc-functions.ts",
     "scripts/inventario/gerar-banco.mjs",
     "scripts/supabase_snapshot/snapshot.py"
    ],
    "SUPABASE_ANON_KEY": [
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
-    "supabase/functions/lalamove-uapi/index.ts"
+    "supabase/functions/lalamove-uapi/index.ts",
+    "supabase/functions/mcp-query/index.ts"
    ],
    "SUPABASE_API_URL": [
     "scripts/inventario/gerar-banco.mjs"
    ],
    "SUPABASE_DB_URL": [
     "scripts/ai-context/gerar.unit.mjs",
-    "scripts/supabase_snapshot/snapshot.py",
-    "supabase/functions/migrate-helper/index.ts"
+    "scripts/supabase_snapshot/snapshot.py"
    ],
    "SUPABASE_PROJECT_REF": [
     "scripts/inventario/gerar-banco.mjs",
@@ -20049,6 +20221,19 @@
    "SUPABASE_SERVICE_ROLE_KEY": [
     "scripts/ai-context/cenarios.mjs",
     "scripts/ai-context/gerar.unit.mjs",
+    "scripts/apply-dashboard-fixes.ts",
+    "scripts/apply-rls-via-pg.ts",
+    "scripts/check-permissions.ts",
+    "scripts/diagnose-rpc.ts",
+    "scripts/fix-admin-role-active.ts",
+    "scripts/fix-dashboard-via-api.ts",
+    "scripts/list-tables-v2.ts",
+    "scripts/list-tables.ts",
+    "scripts/seed-contacts.ts",
+    "scripts/seed-database.ts",
+    "scripts/set-user-admin.ts",
+    "scripts/test-after-fix.ts",
+    "scripts/test-user-permissions.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/apply-fixes/index.ts",
     "supabase/functions/bitrix24-process-queue/index.ts",
@@ -20064,7 +20249,6 @@
     "supabase/functions/lalamove-uapi/index.ts",
     "supabase/functions/lalamove-webhook/index.ts",
     "supabase/functions/llm-wh/index.ts",
-    "supabase/functions/migrate-helper/index.ts",
     "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/rotate-tokens/index.ts",
     "supabase/functions/route-analyzer/index.ts",
@@ -20094,7 +20278,7 @@
     "supabase/functions/lalamove-uapi/index.ts",
     "supabase/functions/lalamove-webhook/index.ts",
     "supabase/functions/llm-wh/index.ts",
-    "supabase/functions/migrate-helper/index.ts",
+    "supabase/functions/mcp-query/index.ts",
     "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/rotate-tokens/index.ts",
     "supabase/functions/route-analyzer/index.ts",
@@ -20160,6 +20344,9 @@
    "acknowledge_alert": [
     "src/hooks/useActiveAlerts.ts"
    ],
+   "can_run_db_diagnostics": [
+    "supabase/functions/mcp-query/index.ts"
+   ],
    "check_login_lockout_v2": [
     "src/hooks/useLoginLockout.ts"
    ],
@@ -20220,6 +20407,9 @@
    ],
    "mark_job_failed": [
     "supabase/functions/job-worker/index.ts"
+   ],
+   "mcp_introspect": [
+    "supabase/functions/mcp-query/index.ts"
    ],
    "nome": [
     "scripts/supabase_snapshot/snapshot.py"
@@ -22210,14 +22400,6 @@
     "msg": "Unauthorized"
    },
    {
-    "file": "supabase/functions/migrate-helper/index.ts",
-    "msg": "unauthorized"
-   },
-   {
-    "file": "supabase/functions/migrate-helper/index.ts",
-    "msg": "unknown_action"
-   },
-   {
     "file": "supabase/functions/new-device-alert/index.ts",
     "msg": ");\n\n    // Register new device\n    const { data: newDevice, error: deviceError } = await supabase\n      .from("
    },
@@ -22489,6 +22671,14 @@
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
+    "value": "admin"
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "value": "true"
+   },
+   {
+    "file": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
     "value": "admin"
    }
   ],
@@ -22910,12 +23100,36 @@
     "text": "── HMAC Validation (FAIL-CLOSED) ──"
    },
    {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "text": "3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe"
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "text": "`mcp_introspect`, que aceita apenas operações de uma allowlist fixa."
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "text": "* Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e"
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "text": "── 3. Validação de entrada ──────────────────────────────────────────────"
+   },
+   {
     "file": "supabase/functions/rotate-tokens/index.ts",
     "text": "Deve ser chamada periodicamente (ex: a cada hora via cron job externo)"
    },
    {
     "file": "supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql",
     "text": "INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1;"
+   },
+   {
+    "file": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
+    "text": ") > 1 LIMIT 50) t;"
+   },
+   {
+    "file": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "text": ") > 1 LIMIT 50) t;"
    }
   ],
   "db_constraints": [
@@ -25205,6 +25419,36 @@
     "rule": "CONSTRAINT contacts_owner_phone_unique UNIQUE (owner_id, phone_e164)"
    },
    {
+    "table": "mcp_diagnostics_grants",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "mcp_diagnostics_grants",
+    "column": "user_id",
+    "rule": "obrigatório; único"
+   },
+   {
+    "table": "mcp_diagnostics_grants",
+    "column": "purpose",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "mcp_diagnostics_grants",
+    "column": "is_active",
+    "rule": "default true"
+   },
+   {
+    "table": "mcp_diagnostics_grants",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "mcp_diagnostics_grants",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
     "table": "geo_blocks",
     "column": "block_type",
     "rule": "obrigatório"
@@ -25237,36 +25481,6 @@
    {
     "table": "geo_blocks",
     "column": "updated_at",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "created_at",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "id",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "is_active",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "purpose",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "updated_at",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "mcp_diagnostics_grants",
-    "column": "user_id",
     "rule": "obrigatório"
    },
    {
@@ -25670,6 +25884,16 @@
     "file": "supabase/functions/mapbox-proxy/index.ts",
     "name": "MAPBOX_BASE",
     "value": "'https://api.mapbox.com'"
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "name": "SLOW_MS",
+    "value": "3000"
+   },
+   {
+    "file": "supabase/functions/mcp-query/index.ts",
+    "name": "VERY_SLOW_MS",
+    "value": "8000"
    }
   ],
   "transition_maps": [],
@@ -35433,6 +35657,16 @@
     "src": "supabase/migrations/20260723135010_e3a23b59-7351-4ad8-afaf-6c2a3af32f23.sql"
    },
    {
+    "name": "Admins manage diagnostics grants",
+    "table": "mcp_diagnostics_grants",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin')",
+    "check": "public.has_role(auth.uid(), 'admin')",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
     "name": "Authenticated users can view roles",
     "table": "user_roles",
     "cmd": "SELECT",
@@ -35716,6 +35950,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20260723173506_f797adca-6a56-4477-b962-b1a865de6238.sql"
+   },
+   {
+    "name": "trg_mcp_diagnostics_grants_updated_at",
+    "when": "BEFORE UPDATE",
+    "table": "mcp_diagnostics_grants",
+    "function": "update_updated_at_column",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
    }
   ],
   "db_functions": {
@@ -36764,6 +37007,58 @@
      "query_telemetry"
     ]
    },
+   "mcp_introspect": {
+    "args": "p_operation text, p_params jsonb DEFAULT '{}'::jsonb",
+    "returns": "jsonb",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_schema text := COALESCE(NULLIF(p_params->>'schema',''), 'public'); v_table text := NULLIF(p_params->>'table',''); v_column text := NULLIF(p_params->>'column',''); v_filter text := NULLIF(p_params->>'filter',''); v_limit int := LEAST(GREATEST(COALESCE((p_params->>'limit')::int, 20), 1), 200); v_result jsonb; BEGIN IF NOT public.can_run_db_diagnostics(auth.uid()) THEN RAISE EXCEPTION 'Acesso negado: requer papel admin ou concessão de diagnóstico' USING ERRCODE = '42501'; END IF; IF v_schema NOT IN ('public') THEN RAISE EXCEPTION 'Schema não permitido: %', v_schema USING ERRCODE = '42501'; END IF; IF p_operation = 'connection_info' THEN SELECT jsonb_build_object( 'database', current_d …",
+    "raises": [
+     "Acesso negado: requer papel admin ou concessão de diagnóstico",
+     "Schema não permitido: %",
+     "Parâmetro \"table\" obrigatório",
+     "Parâmetro \"table\" obrigatório",
+     "Parâmetros \"table\" e \"column\" obrigatórios",
+     "Operação não permitida: %"
+    ],
+    "tables": [
+     "extensions",
+     "information_schema",
+     "pg_catalog",
+     "pg_class",
+     "pg_enum",
+     "pg_extension",
+     "pg_index",
+     "pg_locks",
+     "pg_namespace",
+     "pg_policies",
+     "pg_proc",
+     "pg_settings",
+     "pg_stat_activity",
+     "pg_stat_database",
+     "pg_stat_user_indexes",
+     "pg_stat_user_tables",
+     "pg_stats",
+     "pg_type",
+     "supabase_migrations",
+     "v_result"
+    ]
+   },
+   "can_run_db_diagnostics": {
+    "args": "_user_id uuid",
+    "returns": "boolean",
+    "lang": "sql",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "SELECT _user_id IS NOT NULL AND _user_id = auth.uid() AND ( public.has_role(_user_id, 'admin') OR EXISTS ( SELECT 1 FROM public.mcp_diagnostics_grants g WHERE g.user_id = _user_id AND g.is_active = true ) );",
+    "raises": [],
+    "tables": [
+     "mcp_diagnostics_grants"
+    ]
+   },
    "get_current_user_role": {
     "args": "",
     "returns": "TEXT",
@@ -36776,17 +37071,6 @@
     "tables": [
      "user_roles"
     ]
-   },
-   "can_run_db_diagnostics": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
    },
    "Args": {
     "args": "",
@@ -36811,17 +37095,6 @@
     "tables": []
    },
    "is_country_blocked": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
-   },
-   "mcp_introspect": {
     "args": "",
     "returns": "?",
     "lang": "",
@@ -36938,6 +37211,36 @@
     "function": "acknowledge_alert",
     "msg": "Acesso negado",
     "src": "supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Acesso negado: requer papel admin ou concessão de diagnóstico",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Schema não permitido: %",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetro \"table\" obrigatório",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetro \"table\" obrigatório",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Parâmetros \"table\" e \"column\" obrigatórios",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "mcp_introspect",
+    "msg": "Operação não permitida: %",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
    }
   ],
   "db_generated": [],
@@ -38673,11 +38976,19 @@
     ]
    },
    "mcp_diagnostics_grants": {
-    "rls": "não encontrado",
-    "SELECT": [],
-    "INSERT": [],
-    "UPDATE": [],
-    "DELETE": []
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'admin')"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin')"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin')"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin')"
+    ]
    },
    "mfa_sessions": {
     "rls": "enabled",
@@ -39102,9 +39413,11 @@
    "scripts/list-tables.ts",
    "scripts/regras_negocio/generate.py",
    "scripts/seed-contacts.ts",
+   "scripts/seed-database.ts",
    "scripts/set-user-admin.ts",
    "scripts/supabase_snapshot/snapshot.py",
    "scripts/test-after-fix.ts",
+   "scripts/test-user-permissions.ts",
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/apply-fixes/index.ts",
    "supabase/functions/bitrix24-process-queue/index.ts",
@@ -39121,7 +39434,6 @@
    "supabase/functions/lalamove-uapi/index.ts",
    "supabase/functions/lalamove-webhook/index.ts",
    "supabase/functions/llm-wh/index.ts",
-   "supabase/functions/migrate-helper/index.ts",
    "supabase/functions/new-device-alert/index.ts",
    "supabase/functions/rotate-tokens/index.ts",
    "supabase/functions/route-analyzer/index.ts",
@@ -39174,6 +39486,8 @@
    "supabase/migrations/20260723174521_e57bfc01-fd6e-45e2-b2bb-a4464a64c800.sql",
    "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql",
    "supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql",
+   "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
+   "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
    "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
@@ -39182,6 +39496,7 @@
   "security_definer_fns": [
    "acknowledge_alert",
    "add_job",
+   "can_run_db_diagnostics",
    "check_login_lockout",
    "check_login_lockout_v2",
    "claim_alert_notification",
@@ -39213,6 +39528,7 @@
    "is_known_device",
    "is_token_valid",
    "log_mfa_session",
+   "mcp_introspect",
    "notify_lalamove_quota_low",
    "notify_webhook_security_event",
    "pause_cron_job",
@@ -39232,7 +39548,8 @@
    "use_reset_token"
   ],
   "public_functions": [
-   "migrate-helper"
+   "lalamove-uapi",
+   "mcp-query"
   ],
   "auth_config": {},
   "grants": [
@@ -40981,6 +41298,86 @@
     "src": "supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "mcp_introspect",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select, insert, update, delete",
+    "object": "mcp_diagnostics_grants",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "mcp_diagnostics_grants",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "can_run_db_diagnostics",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
     "kind": "grant",
     "privs": "all",
     "object": "public",
@@ -41979,11 +42376,11 @@
     "created_at",
     "updated_at"
    ],
-   "geo_blocks": [
+   "mcp_diagnostics_grants": [
     "created_at",
     "updated_at"
    ],
-   "mcp_diagnostics_grants": [
+   "geo_blocks": [
     "created_at",
     "updated_at"
    ],
@@ -43060,9 +43457,12 @@
   },
   "scripts/add-security-manage.ts": {
    "path": "scripts/add-security-manage.ts",
-   "lines": 52,
+   "lines": 55,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43084,7 +43484,10 @@
   },
   "scripts/apply-dashboard-fixes.ts": {
    "path": "scripts/apply-dashboard-fixes.ts",
-   "lines": 97,
+   "lines": 101,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "params": [
     {
      "name": "SUPABASE_PROJECT_REF",
@@ -43107,9 +43510,12 @@
   },
   "scripts/apply-final-sql.ts": {
    "path": "scripts/apply-final-sql.ts",
-   "lines": 58,
+   "lines": 61,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43129,9 +43535,12 @@
   },
   "scripts/apply-permissions-via-api.ts": {
    "path": "scripts/apply-permissions-via-api.ts",
-   "lines": 39,
+   "lines": 46,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43162,7 +43571,10 @@
   },
   "scripts/apply-rls-via-pg.ts": {
    "path": "scripts/apply-rls-via-pg.ts",
-   "lines": 159,
+   "lines": 163,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "params": [
     {
      "name": "SUPABASE_PROJECT_REF",
@@ -43185,9 +43597,12 @@
   },
   "scripts/apply-sql-via-management-api.ts": {
    "path": "scripts/apply-sql-via-management-api.ts",
-   "lines": 60,
+   "lines": 63,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43228,7 +43643,7 @@
   },
   "scripts/check-permissions.ts": {
    "path": "scripts/check-permissions.ts",
-   "lines": 69,
+   "lines": 72,
    "tables": [
     {
      "table": "permissions",
@@ -43253,6 +43668,9 @@
      "user_id"
     ]
    },
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "rule_comments": [
     "* Aplica permissão security.manage via SQL"
    ],
@@ -43261,7 +43679,7 @@
   },
   "scripts/diagnose-rpc.ts": {
    "path": "scripts/diagnose-rpc.ts",
-   "lines": 76,
+   "lines": 79,
    "tables": [
     {
      "table": "user_roles",
@@ -43292,6 +43710,9 @@
     "get_user_permissions",
     "has_role"
    ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "role_checks": [
     "admin"
    ],
@@ -43303,9 +43724,12 @@
   },
   "scripts/ensure-admin-active.ts": {
    "path": "scripts/ensure-admin-active.ts",
-   "lines": 48,
+   "lines": 51,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43324,7 +43748,7 @@
   },
   "scripts/fix-admin-role-active.ts": {
    "path": "scripts/fix-admin-role-active.ts",
-   "lines": 63,
+   "lines": 66,
    "tables": [
     {
      "table": "user_roles",
@@ -43345,12 +43769,15 @@
      "user_id"
     ]
    },
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Garante que usuário tem role admin com is_active=true",
    "uses_service_role": true
   },
   "scripts/fix-dashboard-via-api.ts": {
    "path": "scripts/fix-dashboard-via-api.ts",
-   "lines": 68,
+   "lines": 71,
    "tables": [
     {
      "table": "user_roles",
@@ -43359,6 +43786,9 @@
    ],
    "rpc": [
     "exec_sql"
+   ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
    ],
    "doc": "Aplica todas as correções do Dashboard via SQL usando API REST do Supabase",
    "calc_fns": [
@@ -43372,9 +43802,12 @@
   },
   "scripts/fix-rpc-functions.ts": {
    "path": "scripts/fix-rpc-functions.ts",
-   "lines": 68,
+   "lines": 71,
    "external_urls": [
     "https://api.supabase.com/v1/projects/${SUPABASE_PROJECT_REF}/database/…"
+   ],
+   "env": [
+    "SUPABASE_ACCESS_TOKEN"
    ],
    "params": [
     {
@@ -43415,13 +43848,16 @@
   },
   "scripts/list-tables-v2.ts": {
    "path": "scripts/list-tables-v2.ts",
-   "lines": 51,
+   "lines": 54,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Lista tabelas usando fetch direto à API REST",
    "uses_service_role": true
   },
   "scripts/list-tables.ts": {
    "path": "scripts/list-tables.ts",
-   "lines": 53,
+   "lines": 56,
    "tables": [
     {
      "table": "information_schema.tables",
@@ -43437,6 +43873,9 @@
    "rpc": [
     "exec_sql"
    ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Lista as tabelas existentes no schema public do Supabase",
    "pagination": [
     "100"
@@ -43445,7 +43884,7 @@
   },
   "scripts/seed-contacts.ts": {
    "path": "scripts/seed-contacts.ts",
-   "lines": 135,
+   "lines": 138,
    "tables": [
     {
      "table": "contacts",
@@ -43461,6 +43900,9 @@
      "owner_id"
     ]
    },
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Script para popular a tabela de Contatos com dados fictícios",
    "calc_fns": [
     {
@@ -43481,7 +43923,7 @@
   },
   "scripts/seed-database.ts": {
    "path": "scripts/seed-database.ts",
-   "lines": 528,
+   "lines": 532,
    "tables": [
     {
      "table": "drivers",
@@ -43535,6 +43977,9 @@
     ]
    },
    "dyn_from": 1,
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Script de Seed - Popula o banco Supabase com dados fictícios Execute via: npx tsx scripts/seed-database.ts",
    "calc_fns": [
     {
@@ -43566,11 +44011,12 @@
    ],
    "pagination": [
     "1"
-   ]
+   ],
+   "uses_service_role": true
   },
   "scripts/set-user-admin.ts": {
    "path": "scripts/set-user-admin.ts",
-   "lines": 71,
+   "lines": 74,
    "tables": [
     {
      "table": "user_roles",
@@ -43587,14 +44033,20 @@
      "user_id"
     ]
    },
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
+   ],
    "doc": "Garante que um usuário específico tenha role admin no banco",
    "uses_service_role": true
   },
   "scripts/test-after-fix.ts": {
    "path": "scripts/test-after-fix.ts",
-   "lines": 37,
+   "lines": 40,
    "rpc": [
     "get_user_permissions"
+   ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY"
    ],
    "role_checks": [
     "security",
@@ -43605,15 +44057,20 @@
   },
   "scripts/test-user-permissions.ts": {
    "path": "scripts/test-user-permissions.ts",
-   "lines": 69,
+   "lines": 73,
    "rpc": [
     "get_user_permissions"
+   ],
+   "env": [
+    "SEED_TI_PASSWORD",
+    "SUPABASE_SERVICE_ROLE_KEY"
    ],
    "role_checks": [
     "security",
     "users"
    ],
-   "doc": "Testa a função get_user_permissions"
+   "doc": "Testa a função get_user_permissions",
+   "uses_service_role": true
   },
   "scripts/ai-context/cenarios.mjs": {
    "path": "scripts/ai-context/cenarios.mjs",
@@ -59532,20 +59989,43 @@
     }
    ]
   },
-  "supabase/functions/migrate-helper/index.ts": {
-   "path": "supabase/functions/migrate-helper/index.ts",
-   "lines": 35,
+  "supabase/functions/mcp-query/index.ts": {
+   "path": "supabase/functions/mcp-query/index.ts",
+   "lines": 222,
+   "tables": [
+    {
+     "table": "query_telemetry",
+     "op": "insert"
+    }
+   ],
+   "rpc": [
+    "can_run_db_diagnostics",
+    "mcp_introspect"
+   ],
    "env": [
-    "SUPABASE_DB_URL",
-    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
-   "errors": [
-    "unauthorized",
-    "unknown_action"
+   "params": [
+    {
+     "name": "SLOW_MS",
+     "value": "3000"
+    },
+    {
+     "name": "VERY_SLOW_MS",
+     "value": "8000"
+    }
    ],
-   "doc": "Edge function temporária para migração de banco. Cole em: Cloud > Edge Functions > migrate-helper > View code Após a migração, remova esta função.",
-   "uses_service_role": true
+   "role_checks": [
+    "true"
+   ],
+   "rule_comments": [
+    "3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe",
+    "`mcp_introspect`, que aceita apenas operações de uma allowlist fixa.",
+    "* Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e",
+    "── 3. Validação de entrada ──────────────────────────────────────────────"
+   ],
+   "doc": "============================================================================ mcp-query — introspecção e diagnóstico de banco para administradores. Modelo de segurança (mesmo padrão do external-db-bridge / migrate-helper): 1. Exige `Authorization: Bearer <JWT>` válido (validado em código, pois a funç …"
   },
   "supabase/functions/new-device-alert/index.ts": {
    "path": "supabase/functions/new-device-alert/index.ts",
@@ -60573,6 +61053,29 @@
    "path": "supabase/migrations/20260726183530_dba04ac0-388f-4e70-972f-15110f056791.sql",
    "lines": 32
   },
+  "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql": {
+   "path": "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
+   "lines": 219,
+   "rule_comments": [
+    ") > 1 LIMIT 50) t;"
+   ],
+   "uses_service_role": true
+  },
+  "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql": {
+   "path": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+   "lines": 263,
+   "role_checks": [
+    "admin"
+   ],
+   "rule_comments": [
+    ") > 1 LIMIT 50) t;"
+   ],
+   "uses_service_role": true
+  },
+  "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql": {
+   "path": "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql",
+   "lines": 22
+  },
   "supabase/migrations/20260828000001_seed_fix_rls.sql": {
    "path": "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "lines": 114,
@@ -60603,10 +61106,72 @@
   }
  },
  "git": {
-  "sha": "846ea80d25828c5b97588f7d46c738f5fff1d82f",
+  "sha": "8832302db77e643d64d3bfb7dafa109f402fde98",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "8832302",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)",
+    "files": [
+     ".github/workflows/ci.yml"
+    ]
+   },
+   {
+    "sha": "63987c9",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)",
+    "files": [
+     "AGENTS.md",
+     "docs/agentes/banco.md",
+     "scripts/add-security-manage.ts",
+     "scripts/apply-dashboard-fixes.ts",
+     "scripts/apply-final-sql.ts",
+     "scripts/apply-permissions-via-api.ts",
+     "scripts/apply-rls-via-pg.ts",
+     "scripts/apply-sql-via-management-api.ts",
+     "scripts/check-permissions.ts",
+     "scripts/diagnose-rpc.ts",
+     "scripts/ensure-admin-active.ts",
+     "scripts/fix-admin-role-active.ts",
+     "scripts/fix-dashboard-via-api.ts",
+     "scripts/fix-rpc-functions.ts",
+     "scripts/list-tables-v2.ts",
+     "scripts/list-tables.ts",
+     "scripts/seed-contacts.ts",
+     "scripts/seed-database.ts",
+     "scripts/set-user-admin.ts",
+     "scripts/test-after-fix.ts",
+     "scripts/test-user-permissions.ts",
+     "supabase/config.toml",
+     "supabase/functions/migrate-helper/index.ts"
+    ]
+   },
+   {
+    "sha": "ebde884",
+    "date": "2026-11-19",
+    "author": "adm01-debug",
+    "subject": "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)",
+    "files": [
+     "supabase/config.toml",
+     "supabase/functions/mcp-query/index.ts",
+     "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
+     "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
+     "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql"
+    ]
+   },
+   {
+    "sha": "55a4d92",
+    "date": "2026-11-14",
+    "author": "adm01-debug",
+    "subject": "chore: contexto agendado de 10 min para 1x/hora (#87)",
+    "files": [
+     ".github/workflows/contexto.yml"
+    ]
+   },
    {
     "sha": "846ea80",
     "date": "2026-11-08",
@@ -61011,49 +61576,32 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "9e04fd9",
-    "date": "2026-09-15",
-    "author": "adm01-debug",
-    "subject": "Merge PR #58 — deno: return→continue (TS1108)",
-    "files": []
-   },
-   {
-    "sha": "640078d",
-    "date": "2026-09-15",
-    "author": "Joaquim (Promo Brindes)",
-    "subject": "fix(deno): return→continue no guard needsLovableKey (TS1108)",
-    "files": [
-     "supabase/functions/_shared/contract.integration.test.ts"
-    ]
-   },
-   {
-    "sha": "dc75ffb",
-    "date": "2026-09-15",
-    "author": "dependabot[bot]",
-    "subject": "build(deps-dev): bump tailwindcss from 3.4.17 to 4.3.3",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "1b8425f",
-    "date": "2026-09-15",
-    "author": "adm01-debug",
-    "subject": "Merge PR #50 — bump eslint-plugin-react-hooks 5→7.1.1 (Dependabot)",
-    "files": []
    }
   ],
   "hot_files": [
    [
     "package.json",
-    13
+    12
    ],
    [
     "package-lock.json",
-    12
+    11
+   ],
+   [
+    "AGENTS.md",
+    2
+   ],
+   [
+    "docs/agentes/banco.md",
+    2
+   ],
+   [
+    "supabase/config.toml",
+    2
+   ],
+   [
+    ".github/workflows/contexto.yml",
+    2
    ],
    [
     "src/index.css",
@@ -61064,67 +61612,51 @@
     2
    ],
    [
-    "src/components/ui/badge.tsx",
+    ".github/workflows/ci.yml",
     1
    ],
    [
-    "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql",
+    "scripts/add-security-manage.ts",
     1
    ],
    [
-    ".github/toolchain.json",
+    "scripts/apply-dashboard-fixes.ts",
     1
    ],
    [
-    ".github/workflows/contexto.yml",
+    "scripts/apply-final-sql.ts",
     1
    ],
    [
-    ".github/workflows/inventario-estado-semanal.yml",
+    "scripts/apply-permissions-via-api.ts",
     1
    ],
    [
-    "docs/ci/MATRIZ_EDGE_TABELA.md",
+    "scripts/apply-rls-via-pg.ts",
     1
    ],
    [
-    "docs/contexto/regras/manual/README.md",
+    "scripts/apply-sql-via-management-api.ts",
     1
    ],
    [
-    "docs/contexto/regras/manual/TEMPLATE-regras-de-negocio.md",
+    "scripts/check-permissions.ts",
     1
    ],
    [
-    "inventario/estado/README.md",
+    "scripts/diagnose-rpc.ts",
     1
    ],
    [
-    "inventario/estado/edges.json",
+    "scripts/ensure-admin-active.ts",
     1
    ],
    [
-    "inventario/estado/rotas.json",
+    "scripts/fix-admin-role-active.ts",
     1
    ],
    [
-    "scripts/ai-context/README.md",
-    1
-   ],
-   [
-    "scripts/ai-context/cenarios.mjs",
-    1
-   ],
-   [
-    "scripts/ai-context/gerar.mjs",
-    1
-   ],
-   [
-    "scripts/ai-context/gerar.unit.mjs",
-    1
-   ],
-   [
-    "scripts/ci/README.md",
+    "scripts/fix-dashboard-via-api.ts",
     1
    ]
   ]

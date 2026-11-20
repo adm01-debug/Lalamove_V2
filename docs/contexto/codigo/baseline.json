@@ -2,11 +2,31 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "846ea80d25828c5b97588f7d46c738f5fff1d82f",
+  "commit": "8832302db77e643d64d3bfb7dafa109f402fde98",
   "branch": "main",
-  "data_commit": "2026-11-08T22:44:42-03:00",
+  "data_commit": "2026-11-19T21:02:10-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "8832302",
+    "data": "2026-11-19",
+    "assunto": "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)"
+   },
+   {
+    "sha": "63987c9",
+    "data": "2026-11-19",
+    "assunto": "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)"
+   },
+   {
+    "sha": "ebde884",
+    "data": "2026-11-19",
+    "assunto": "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)"
+   },
+   {
+    "sha": "55a4d92",
+    "data": "2026-11-14",
+    "assunto": "chore: contexto agendado de 10 min para 1x/hora (#87)"
+   },
    {
     "sha": "846ea80",
     "data": "2026-11-08",
@@ -111,29 +131,9 @@
     "sha": "a9364fe",
     "data": "2026-09-17",
     "assunto": "build(deps): bump @radix-ui/react-tooltip from 1.2.10 to 1.2.16"
-   },
-   {
-    "sha": "8cd6cdb",
-    "data": "2026-09-17",
-    "assunto": "build(deps): bump react-is from 19.2.8 to 19.3.0"
-   },
-   {
-    "sha": "d222277",
-    "data": "2026-09-17",
-    "assunto": "build(deps): bump @radix-ui/react-switch from 1.2.5 to 1.3.7"
-   },
-   {
-    "sha": "bad4617",
-    "data": "2026-09-17",
-    "assunto": "build(deps-dev): bump eslint from 9.39.5 to 10.10.0"
-   },
-   {
-    "sha": "4276fc4",
-    "data": "2026-09-17",
-    "assunto": "build(deps-dev): bump @axe-core/playwright from 4.11.3 to 4.13.0"
    }
   ],
-  "arquivos_mudados_7d": 184,
+  "arquivos_mudados_7d": 29,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package.json",
@@ -144,7 +144,19 @@
     "mudancas": 2
    },
    {
+    "pasta": ".github/workflows/contexto.yml",
+    "mudancas": 2
+   },
+   {
     "pasta": ".gitignore",
+    "mudancas": 2
+   },
+   {
+    "pasta": "AGENTS.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/agentes/banco.md",
     "mudancas": 2
    },
    {
@@ -157,6 +169,10 @@
    },
    {
     "pasta": "src/index.css",
+    "mudancas": 2
+   },
+   {
+    "pasta": "supabase/config.toml",
     "mudancas": 2
    },
    {
@@ -178,22 +194,6 @@
    {
     "pasta": ".claude/settings.json",
     "mudancas": 1
-   },
-   {
-    "pasta": ".claude/skills/lalamove-v2",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".codex/AGENTS.md",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".codex/agents/docs-researcher.toml",
-    "mudancas": 1
-   },
-   {
-    "pasta": ".codex/agents/explorer.toml",
-    "mudancas": 1
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 9
+    "mudancas": 11
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -238,7 +238,35 @@
     "mudancas": 3
    },
    {
-    "arquivo": ".hermes.md",
+    "arquivo": ".github/workflows/contexto.yml",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/agentes/banco.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/add-security-manage.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-dashboard-fixes.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-final-sql.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-permissions-via-api.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-rls-via-pg.ts",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "scripts/apply-sql-via-management-api.ts",
     "mudancas": 2
    },
    {
@@ -246,69 +274,41 @@
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/auth/PasswordStrengthIndicator.tsx",
+    "arquivo": "scripts/check-permissions.ts",
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/layout/AppLayout.tsx",
+    "arquivo": "scripts/diagnose-rpc.ts",
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/layout/MobileSidebar.tsx",
+    "arquivo": "scripts/ensure-admin-active.ts",
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/layout/Sidebar.tsx",
+    "arquivo": "scripts/fix-admin-role-active.ts",
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
+    "arquivo": "scripts/fix-dashboard-via-api.ts",
     "mudancas": 2
    },
    {
-    "arquivo": "src/components/map/MapHUD.tsx",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/map/hooks/useMapAlerts.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/pwa/OfflineIndicator.tsx",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/ui/accessible-card.tsx",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "src/components/ui/badge.tsx",
+    "arquivo": "scripts/fix-rpc-functions.ts",
     "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 7
+    "commits": 11
    }
   ]
  },
  "contagens": {
-  "arquivos_total": 870,
+  "arquivos_total": 873,
   "arquivos_codigo": 566,
-  "linhas_codigo": 109925,
+  "linhas_codigo": 110177,
   "rotas": 54,
   "rotas_protegidas": 46,
   "rotas_com_mfa": 6,
@@ -318,7 +318,7 @@
   "hooks": 96,
   "edge_functions": 26,
   "tabelas": 76,
-  "migrations": 154,
+  "migrations": 157,
   "cron_jobs": 16,
   "testes": 97,
   "workflows": 3,
@@ -364,7 +364,7 @@
   },
   "scripts/add-security-manage.ts": {
    "arquivos": 1,
-   "linhas": 52
+   "linhas": 55
   },
   "scripts/ai-context": {
    "arquivos": 3,
@@ -372,15 +372,15 @@
   },
   "scripts/apply-dashboard-fixes.ts": {
    "arquivos": 1,
-   "linhas": 97
+   "linhas": 101
   },
   "scripts/apply-final-sql.ts": {
    "arquivos": 1,
-   "linhas": 58
+   "linhas": 61
   },
   "scripts/apply-permissions-via-api.ts": {
    "arquivos": 1,
-   "linhas": 39
+   "linhas": 46
   },
   "scripts/apply-rls-fix.ts": {
    "arquivos": 1,
@@ -388,11 +388,11 @@
   },
   "scripts/apply-rls-via-pg.ts": {
    "arquivos": 1,
-   "linhas": 159
+   "linhas": 163
   },
   "scripts/apply-sql-via-management-api.ts": {
    "arquivos": 1,
-   "linhas": 60
+   "linhas": 63
   },
   "scripts/apply-via-management-api.ts": {
    "arquivos": 1,
@@ -400,7 +400,7 @@
   },
   "scripts/check-permissions.ts": {
    "arquivos": 1,
-   "linhas": 69
+   "linhas": 72
   },
   "scripts/ci": {
    "arquivos": 54,
@@ -412,7 +412,7 @@
   },
   "scripts/diagnose-rpc.ts": {
    "arquivos": 1,
-   "linhas": 76
+   "linhas": 79
   },
   "scripts/docs": {
    "arquivos": 1,
@@ -420,7 +420,7 @@
   },
   "scripts/ensure-admin-active.ts": {
    "arquivos": 1,
-   "linhas": 48
+   "linhas": 51
   },
   "scripts/eslint": {
    "arquivos": 1,
@@ -428,15 +428,15 @@
   },
   "scripts/fix-admin-role-active.ts": {
    "arquivos": 1,
-   "linhas": 63
+   "linhas": 66
   },
   "scripts/fix-dashboard-via-api.ts": {
    "arquivos": 1,
-   "linhas": 68
+   "linhas": 71
   },
   "scripts/fix-rpc-functions.ts": {
    "arquivos": 1,
-   "linhas": 68
+   "linhas": 71
   },
   "scripts/generate-dashboard-sql.ts": {
    "arquivos": 1,
@@ -452,11 +452,11 @@
   },
   "scripts/list-tables-v2.ts": {
    "arquivos": 1,
-   "linhas": 51
+   "linhas": 54
   },
   "scripts/list-tables.ts": {
    "arquivos": 1,
-   "linhas": 53
+   "linhas": 56
   },
   "scripts/qa": {
    "arquivos": 4,
@@ -464,23 +464,23 @@
   },
   "scripts/seed-contacts.ts": {
    "arquivos": 1,
-   "linhas": 135
+   "linhas": 138
   },
   "scripts/seed-database.ts": {
    "arquivos": 1,
-   "linhas": 528
+   "linhas": 532
   },
   "scripts/set-user-admin.ts": {
    "arquivos": 1,
-   "linhas": 71
+   "linhas": 74
   },
   "scripts/test-after-fix.ts": {
    "arquivos": 1,
-   "linhas": 37
+   "linhas": 40
   },
   "scripts/test-user-permissions.ts": {
    "arquivos": 1,
-   "linhas": 69
+   "linhas": 73
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -544,7 +544,7 @@
   },
   "supabase/functions": {
    "arquivos": 36,
-   "linhas": 10424
+   "linhas": 10611
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -622,7 +622,7 @@
   },
   {
    "arquivo": "scripts/seed-database.ts",
-   "linhas": 528
+   "linhas": 532
   },
   {
    "arquivo": "src/components/dashboard/OrdersTable.tsx",
@@ -724,7 +724,7 @@
   ],
   "edges_chamadas_sem_pasta": [],
   "edges_sem_verify_jwt": [
-   "migrate-helper"
+   "mcp-query"
   ],
   "tabelas_sem_rls": [
    "cache_refresh_log",
@@ -799,29 +799,7 @@
    "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
   ],
   "ciclos_de_import": 0,
-  "possiveis_segredos_no_codigo": [
-   "scripts/add-security-manage.ts:6",
-   "scripts/apply-dashboard-fixes.ts:14",
-   "scripts/apply-final-sql.ts:6",
-   "scripts/apply-permissions-via-api.ts:6",
-   "scripts/apply-permissions-via-api.ts:7",
-   "scripts/apply-rls-via-pg.ts:16",
-   "scripts/apply-sql-via-management-api.ts:6",
-   "scripts/check-permissions.ts:8",
-   "scripts/diagnose-rpc.ts:8",
-   "scripts/ensure-admin-active.ts:6",
-   "scripts/fix-admin-role-active.ts:8",
-   "scripts/fix-dashboard-via-api.ts:8",
-   "scripts/fix-rpc-functions.ts:6",
-   "scripts/list-tables-v2.ts:6",
-   "scripts/list-tables.ts:8",
-   "scripts/seed-contacts.ts:8",
-   "scripts/seed-database.ts:10",
-   "scripts/set-user-admin.ts:8",
-   "scripts/test-after-fix.ts:8",
-   "scripts/test-user-permissions.ts:8",
-   "scripts/test-user-permissions.ts:29"
-  ]
+  "possiveis_segredos_no_codigo": []
  },
  "erros_do_gerador": []
 }

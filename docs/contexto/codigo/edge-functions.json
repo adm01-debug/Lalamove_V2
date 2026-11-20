@@ -4,7 +4,7 @@
  "pasta": "supabase/functions",
  "total": 26,
  "verify_jwt_false": [
-  "migrate-helper"
+  "mcp-query"
  ],
  "shared": [
   "supabase/functions/_shared/contract.integration.test.ts",
@@ -710,28 +710,35 @@
    "testes": 0
   },
   {
-   "nome": "migrate-helper",
-   "servico": "Manutenção/DDL",
-   "entrada": "supabase/functions/migrate-helper/index.ts",
+   "nome": "mcp-query",
+   "servico": null,
+   "entrada": "supabase/functions/mcp-query/index.ts",
    "arquivos": 1,
-   "linhas": 35,
+   "linhas": 222,
    "verify_jwt": false,
    "metodos": [
-    "OPTIONS"
+    "OPTIONS",
+    "POST"
    ],
    "assina_hmac": false,
-   "usa_service_role": true,
-   "tabelas": [],
-   "rpcs": [],
+   "usa_service_role": false,
+   "tabelas": [
+    "query_telemetry"
+   ],
+   "rpcs": [
+    "can_run_db_diagnostics",
+    "mcp_introspect"
+   ],
    "env": [
-    "SUPABASE_DB_URL",
-    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_ANON_KEY",
     "SUPABASE_URL"
    ],
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "cors.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
