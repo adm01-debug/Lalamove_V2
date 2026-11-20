@@ -1,7 +1,9 @@
 ﻿# P-09 · Validação de transições de status ausente no schema
 
-**Status:** Pendente (consistência de dados)
+**Status:** PARCIAL → OBSOLETO — verificado no banco real (2026-11-20, via PAT/PostgREST)
 **Origem:** docs/contexto/regras/11-GLOSSARIO-E-LACUNAS.md (seção lacunas)
+
+> **Verificação real:** `lalamove_orders.status` é um **enum `order_status`** com 8 valores (PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED) — o Postgres já rejeita valores inválidos, não é coluna text. O mesmo para `drivers.status` (`driver_status`: APPROVED/BLOCKED/PENDING_APPROVAL) e `driver_approval_queue.status` (`approval_status`). Colunas text sem CHECK restantes (`internal_status`, `alerts_sent`, bitrix24) estão **100% não-usadas** (todos os valores NULL/vazios nas ~50 ordens de produção) — sem dado inválido possível hoje. Nada a corrigir; transições são regra de aplicação (código), não de schema.
 
 ## Problema
 Vários status têm valores conhecidos mas NENHUM mapa de transições (CHECK/enum) no banco. Exemplos:
