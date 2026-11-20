@@ -82,6 +82,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
+          cache: 'npm'
+      - run: npm ci
       - name: Confere integridade das instrucoes para agentes
         run: |
           git fetch origin main --quiet || true
@@ -115,8 +117,8 @@ jobs:
   edge-integration-tests:
     name: Deno Edge Function I/O Integration Tests
     runs-on: ubuntu-24.04
-    # Testes de I/O reais chamam as Edge Functions IMPLANTADAS; só rodam quando
-    # os secrets do ambiente estão disponíveis (push na main).
+    # Testes de I/O reais chamam as Edge Functions IMPLANTADAS; sÃ³ rodam quando
+    # os secrets do ambiente estÃ£o disponÃ­veis (push na main).
     if: github.ref == 'refs/heads/main'
     needs: contract-tests
     steps:
@@ -139,5 +141,5 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Deploy Edge Functions
-        run: echo "Deploy automático via Lovable"
+        run: echo "Deploy automÃ¡tico via Lovable"
 
