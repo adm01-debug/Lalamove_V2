@@ -3,9 +3,16 @@
  */
 
 const SUPABASE_PROJECT_REF = 'iecgydonctmabiijadsf';
-const SUPABASE_ACCESS_TOKEN = 'sbp_b7e6f411bde011e801924e1113cf4e26d5d57938';
-const ACCESS_TOKEN = 'sbp_b7e6f411bde011e801924e1113cf4e26d5d57938';
-
+const SUPABASE_ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+if (!SUPABASE_ACCESS_TOKEN) {
+  console.error('Defina SUPABASE_ACCESS_TOKEN no ambiente antes de rodar este script.');
+  process.exit(1);
+}
+const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+if (!ACCESS_TOKEN) {
+  console.error('Defina SUPABASE_ACCESS_TOKEN no ambiente antes de rodar este script.');
+  process.exit(1);
+}
 import * as fs from 'fs';
 
 async function applySQL() {

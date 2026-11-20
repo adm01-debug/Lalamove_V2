@@ -22,9 +22,11 @@ Suplemento operacional do Hermes: `.hermes.md` (pastas de chat, cadeado do proje
   nenhuma tool "por garantia"; não gere código que não será aplicado.
 - Segredos nunca em código, commit ou resposta — só em env/secret do serviço (edge:
   `supabase secrets set` ou painel Supabase/Lovable). PAT exposto em chat → rotacionar na hora. Nunca
-  imprima nem commite `.env`, PAT `sbp_*` ou `service_role`. **Este repo já tem segredos commitados**
-  (`scripts/*.ts`, `supabase/functions/migrate-helper/index.ts`) — ver `docs/agentes/banco.md` >
-  "Segredos commitados"; não copie esse padrão e não imprima os valores.
+  imprima nem commite `.env`, PAT `sbp_*` ou `service_role`. `scripts/*.ts` já teve 19 arquivos com
+  `service_role`/PAT hardcoded, e a edge `migrate-helper` vazava `service_role`/`db_url` sem JWT — PR
+  `claude/fix-segredos-commitados-261108-2105` limpou o código; **a rotação das chaves e a confirmação de que a
+  edge saiu da produção seguem pendentes com o dono** — ver `docs/agentes/banco.md` > "Segredos
+  commitados".
 
 ## Bugs e funcionalidades
 - Diagnóstico antes de patch: logs e estado real, ponto exato (arquivo:linha), causa; várias causas → liste
