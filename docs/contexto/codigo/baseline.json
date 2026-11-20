@@ -2,11 +2,26 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "811500800dccb11d0cb4e3a1ff9fc2ed5a1ffeb3",
+  "commit": "bb236d9f7b375f5ff397e29d5b2fddf6ffbd5858",
   "branch": "main",
-  "data_commit": "2026-11-20T08:25:50-03:00",
+  "data_commit": "2026-11-20T08:26:02-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "bb236d9",
+    "data": "2026-11-20",
+    "assunto": "build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)"
+   },
+   {
+    "sha": "1bf53fb",
+    "data": "2026-11-20",
+    "assunto": "build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)"
+   },
+   {
+    "sha": "f62d754",
+    "data": "2026-11-20",
+    "assunto": "build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)"
+   },
    {
     "sha": "8115008",
     "data": "2026-11-20",
@@ -116,32 +131,17 @@
     "sha": "2568c5c",
     "data": "2026-10-03",
     "assunto": "Merge pull request #64 from adm01-debug/dependabot/npm_and_yarn/react-is-19.3.0"
-   },
-   {
-    "sha": "a1cd676",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #61 from adm01-debug/dependabot/npm_and_yarn/eslint-10.10.0"
-   },
-   {
-    "sha": "1263122",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #60 from adm01-debug/dependabot/npm_and_yarn/axe-core/playwright-4.13.0"
-   },
-   {
-    "sha": "e6ba3c4",
-    "data": "2026-10-03",
-    "assunto": "Merge pull request #59 from adm01-debug/dependabot/npm_and_yarn/radix-ui/react-alert-dialog-1.1.23"
    }
   ],
   "arquivos_mudados_7d": 31,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package.json",
-    "mudancas": 4
+    "mudancas": 7
    },
    {
     "pasta": "package-lock.json",
-    "mudancas": 3
+    "mudancas": 6
    },
    {
     "pasta": ".agents/skills/lalamove-v2",
@@ -199,11 +199,11 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package.json",
-    "mudancas": 21
+    "mudancas": 24
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 20
+    "mudancas": 23
    },
    {
     "arquivo": "supabase/config.toml",
@@ -305,7 +305,7 @@
    },
    {
     "autor": "dependabot[bot]",
-    "commits": 1
+    "commits": 4
    }
   ]
  },

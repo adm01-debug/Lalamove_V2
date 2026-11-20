@@ -82,7 +82,7 @@
    "react-resizable-panels": "^2.1.9",
    "react-router-dom": "^6.30.1",
    "react-window": "^2.2.7",
-   "recharts": "^3.8.1",
+   "recharts": "^3.10.1",
    "tailwindcss-animate": "^1.0.7",
    "vitest": "^5.0.3",
    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
@@ -553,7 +553,7 @@
    {
     "pacote": "recharts",
     "servico": "Recharts",
-    "versao": "^3.8.1"
+    "versao": "^3.10.1"
    },
    {
     "pacote": "@supabase/supabase-js",

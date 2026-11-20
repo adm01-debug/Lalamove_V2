@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)",
+   "build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)",
+   "build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)",
    "build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)",
-   "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)",
-   "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)",
-   "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)",
-   "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)"
+   "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
