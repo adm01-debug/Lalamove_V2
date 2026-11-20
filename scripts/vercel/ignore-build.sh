@@ -1,0 +1,49 @@
+#!/bin/sh
+# Ignora o build do Vercel quando nenhum arquivo de front mudou.
+# Contrato do Vercel: exit 1 = buildar, exit 0 = pular.
+# Ref: https://vercel.com/docs/projects/project-configuration#ignorecommand
+#
+# PORTADO do Zapp Web V2 (scripts/vercel/ignore-build.sh). Unica adaptacao: a
+# lista de caminhos. O Zapp usa bun (`bun.lock`); aqui o gerenciador e npm, logo
+# `package-lock.json`. Tambem entram os arquivos que existem neste repo
+# (postcss.config.js, tsconfig.app.json, tsconfig.node.json) e `vercel.json`,
+# que ainda nao existe mas, quando existir, muda headers/rewrites e precisa de
+# build novo. `.env.production` segue na lista pelo mesmo motivo: as VITE_* sao
+# embutidas no bundle.
+#
+# Como ligar: Vercel > Project > Settings > Git > Ignored Build Step >
+#   sh scripts/vercel/ignore-build.sh
+
+# Producao sempre builda.
+if [ "$VERCEL_ENV" = "production" ]; then
+  echo "ignore-build: production deploy — building."
+  exit 1
+fi
+
+# Caminhos que afetam o bundle do front-end.
+FRONT_PATHS="src public index.html .env.production package.json package-lock.json vite.config.ts vercel.json tailwind.config.ts postcss.config.js tsconfig.json tsconfig.app.json tsconfig.node.json components.json scripts/vercel"
+
+# Determina o commit base.
+BASE="$VERCEL_GIT_PREVIOUS_SHA"
+if [ -z "$BASE" ]; then
+  BASE=$(git log --format="%H" -n 2 2>/dev/null | tail -1)
+fi
+if [ -z "$BASE" ]; then
+  echo "ignore-build: no base commit found — building (fail-open)."
+  exit 1
+fi
+
+# Verifica se algum arquivo de front foi alterado.
+# shellcheck disable=SC2086
+if ! changed=$(git diff --name-only "$BASE" HEAD -- $FRONT_PATHS 2>/dev/null); then
+  echo "ignore-build: cannot compare commits — building."
+  exit 1
+fi
+
+if [ -n "$changed" ]; then
+  echo "ignore-build: front files changed — building."
+  exit 1
+fi
+
+echo "ignore-build: no front files changed — skipping build."
+exit 0

@@ -1,0 +1,9 @@
+{
+  "_comment": "Baseline (ratchet) do supabase-usage-guard. Cada entrada e uma violacao CONHECIDA e registrada: o guard passa com ela e falha se aparecer UMA nova. Entrada que deixar de existir tambem e avisada (obsoleta), para o arquivo nao apodrecer. Formato da chave: <from|rpc>:<alvo>:<arquivo>.",
+  "_gerado_em": "2026-11-08",
+  "_contexto": "Portabilidade dos auditores de banco do Zapp Web V2 para este repo. As duas entradas abaixo sao ACHADO REAL deste repo, nao divida herdada do porte: nenhuma migration de supabase/migrations/ cria a funcao public.exec e ela tambem nao aparece em src/integrations/supabase/types.ts (gerado do banco vivo). As duas edges chamam supabase.rpc('exec', { sql }) para rodar DDL arbitrario via RPC — padrao que o fluxo de DDL de docs/agentes/banco.md nao admite. Corrigir isso e decisao do dono (remover as edges ou trocar por migration), nao do porte; por isso ficam registradas e nao consertadas.",
+  "known": [
+    "rpc:exec:supabase/functions/apply-fixes/index.ts",
+    "rpc:exec:supabase/functions/seed-fix-rls/index.ts"
+  ]
+}

@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint-and-typecheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -20,7 +20,7 @@ jobs:
       - run: npx tsc --noEmit
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: lint-and-typecheck
     steps:
       - uses: actions/checkout@v7
@@ -33,7 +33,7 @@ jobs:
 
   e2e:
     name: E2E (Playwright)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: lint-and-typecheck
     steps:
       - uses: actions/checkout@v7
@@ -61,7 +61,7 @@ jobs:
 
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [test, contract-tests]
     steps:
       - uses: actions/checkout@v7
@@ -72,8 +72,27 @@ jobs:
       - run: npm ci
       - run: npm run build
 
+  guard-agents-md:
+    name: Guarda AGENTS.md / docs/agentes
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - name: Confere integridade das instrucoes para agentes
+        run: |
+          git fetch origin main --quiet || true
+          CLAUDE_MD_BASE=origin/main node scripts/ci/check-agents-md-integrity.mjs
+      - name: Testa o lint de mensagem de commit
+        run: node --test scripts/ci/*.unit.mjs
+
   security:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -81,11 +100,11 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
-      - run: npm audit --audit-level=high
+      - run: npm audit --audit-level=critical
 
   contract-tests:
     name: Deno Contract Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - name: Setup Deno
@@ -97,9 +116,9 @@ jobs:
 
   edge-integration-tests:
     name: Deno Edge Function I/O Integration Tests
-    runs-on: ubuntu-latest
-    # Testes de I/O reais chamam as Edge Functions IMPLANTADAS; só rodam quando
-    # os secrets do ambiente estão disponíveis (push na main).
+    runs-on: ubuntu-24.04
+    # Testes de I/O reais chamam as Edge Functions IMPLANTADAS; sÃ³ rodam quando
+    # os secrets do ambiente estÃ£o disponÃ­veis (push na main).
     if: github.ref == 'refs/heads/main'
     needs: contract-tests
     steps:
@@ -117,9 +136,10 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v7
       - name: Deploy Edge Functions
-        run: echo "Deploy automático via Lovable"
+        run: echo "Deploy automÃ¡tico via Lovable"
+

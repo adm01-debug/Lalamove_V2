@@ -1,0 +1,150 @@
+# Instincts do repositório adm01-debug/Lalamove_V2
+# Gerado em 2026-11-08 a partir do código no commit 924454e (padrão herdado do Zapp Web V2).
+# NOTA: complementa (não substitui) instincts curados manualmente.
+
+---
+id: lalamove-v2-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Commit Conventional
+
+## Action
+
+Use Conventional Commits em PT-BR: `<tipo>(<escopo>): <assunto>`, assunto com >= 10 caracteres e sem ponto
+final. Tipos aceitos: feat fix docs style refactor perf test build ci chore security revert.
+
+## Evidence
+
+- `scripts/ci/commit-msg-lint.mjs` (gate do padrão; sem hook instalado, rode à mão)
+- `docs/CONTRIBUTING.md` > Commit
+- Histórico da `main`: `build(deps): bump …`, `fix: …`, `feat: …`
+
+---
+id: lalamove-v2-branch-naming
+trigger: "when creating a branch"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Branch Naming
+
+## Action
+
+Branch de agente: `claude/<fix|feat|chore|infra>-<slug>-<AAMMDD-HHMM>`, sempre a partir de `main`
+atualizado. Nunca commitar em `main` (não há branch protection) nem escrever em branch alheia.
+
+## Evidence
+
+- `AGENTS.md` > Fluxo Git
+- `github_list_branches`: 25 branches, incluindo lixo de sessões antigas (`master`, `lovable-sync-*`)
+
+---
+id: lalamove-v2-naming-files
+trigger: "when creating a new file"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Naming Files
+
+## Action
+
+Página: `NomePage.tsx` em `src/pages/`. Hook: `useNome.ts` em `src/hooks/`. Componente: `PascalCase.tsx`
+na pasta do domínio. Edge function: pasta `kebab-case/index.ts` em `supabase/functions/`.
+
+## Evidence
+
+- `src/pages/` (54 arquivos `*Page.tsx`), `src/hooks/` (82 `use*.ts`), `supabase/functions/` (27 pastas)
+
+---
+id: lalamove-v2-import-alias
+trigger: "when importing modules"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Import Alias
+
+## Action
+
+Importe módulo do projeto pelo alias `@/` (ex.: `import { supabase } from "@/integrations/supabase/client"`),
+não por caminho relativo longo.
+
+## Evidence
+
+- `vite.config.ts` e `tsconfig.app.json` definem `@/* -> ./src/*`
+- `src/components/auth/ProtectedRoute.tsx` importa `@/hooks/useAuth`
+
+---
+id: lalamove-v2-export-style
+trigger: "when exporting from a module"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Export Style
+
+## Action
+
+Prefira exports nomeados.
+
+## Evidence
+
+- `export function ProtectedRoute(...)`, `export const supabase = ...`, `export type AppRole = ...`
+
+---
+id: lalamove-v2-test-placement
+trigger: "when writing tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 Test Placement
+
+## Action
+
+Teste de unidade ao lado do módulo (`__tests__/` ou `*.test.ts(x)`), rodado com
+`npx vitest run <caminho>`. E2E em `e2e/*.e2e.ts` (Playwright). Contrato de edge em Deno
+(`supabase/functions/**/*.test.ts`).
+
+## Evidence
+
+- `vitest.config.ts`: `include: ["src/**/*.{test,spec}.{ts,tsx}"]`
+- `playwright.config.ts`: `testDir: './e2e'`, `testMatch: '**/*.e2e.ts'`
+- `.github/workflows/ci.yml`: job `contract-tests` roda `deno test` em `_shared/contract.test.ts`
+
+---
+id: lalamove-v2-no-secrets-in-code
+trigger: "when handling credentials or API keys"
+confidence: 0.95
+domain: security
+source: repo-analysis
+source_repo: https://github.com/adm01-debug/Lalamove_V2
+---
+
+# Lalamove V2 No Secrets In Code
+
+## Action
+
+Nunca escreva chave em arquivo: segredo de back-end vive em secret de edge function; o front só pode ler
+`VITE_*` (público). Script novo lê de `process.env`.
+
+## Evidence
+
+- `docs/agentes/banco.md` > Segredos commitados (13 arquivos com `service_role`, 6 com PAT `sbp_…`,
+  `supabase/functions/migrate-helper/index.ts:5` com chave fixa) — passivo a corrigir, não padrão a seguir

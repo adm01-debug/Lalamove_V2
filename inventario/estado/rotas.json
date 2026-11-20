@@ -1,0 +1,3493 @@
+{
+  "format_version": 1,
+  "fonte": "scripts/inventario/gerar-rotas.mjs (le src/App.tsx, src/components/layout/sidebar-config.ts e os imports de cada pagina)",
+  "resumo": {
+    "rotas": 54,
+    "rotas_protegidas": 46,
+    "rotas_com_mfa": 6,
+    "itens_de_menu": 35,
+    "hooks_distintos": 138,
+    "problemas": 20
+  },
+  "rotas": [
+    {
+      "caminho": "*",
+      "componente": "NotFound",
+      "arquivo": "src/pages/NotFound.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 2,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/",
+      "componente": "DashboardRedesigned",
+      "arquivo": "src/pages/DashboardRedesigned.tsx",
+      "layout": "AppLayout",
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "dashboard",
+        "rotulo": "Dashboard",
+        "categoria": "main",
+        "categoria_rotulo": "Principal",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 42,
+      "hooks": [
+        {
+          "nome": "useActiveAlerts",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertActions",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertsRealtime",
+          "arquivo": "src/hooks/useRealtimeSubscriptions.ts"
+        },
+        {
+          "nome": "useAnnounce",
+          "arquivo": "src/hooks/useAccessibility.tsx"
+        },
+        {
+          "nome": "useApprovalActions",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useDashboardStats",
+          "arquivo": "src/hooks/useDashboardStats.ts"
+        },
+        {
+          "nome": "useIsMobile",
+          "arquivo": "src/hooks/use-mobile.tsx"
+        },
+        {
+          "nome": "useLalamoveStatus",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useMapAlerts",
+          "arquivo": "src/components/map/hooks/useMapAlerts.ts"
+        },
+        {
+          "nome": "useMapboxToken",
+          "arquivo": "src/components/map/hooks/useMapboxToken.ts"
+        },
+        {
+          "nome": "useMapMarkers",
+          "arquivo": "src/components/map/hooks/useMapMarkers.ts"
+        },
+        {
+          "nome": "useMapSettings",
+          "arquivo": "src/hooks/useMapSettings.ts"
+        },
+        {
+          "nome": "usePendingApprovals",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "usePredictiveAnalysis",
+          "arquivo": "src/hooks/usePredictiveAnalysis.ts"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useRecentOrders",
+          "arquivo": "src/hooks/useRecentOrders.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        },
+        {
+          "nome": "useTrackingData",
+          "arquivo": "src/components/map/hooks/useTrackingData.ts"
+        },
+        {
+          "nome": "useTrackingHistory",
+          "arquivo": "src/hooks/useTrackingHistory.ts"
+        },
+        {
+          "nome": "useWallet",
+          "arquivo": "src/hooks/useLalamove.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "lalamove-gateway",
+        "route-analyzer"
+      ],
+      "rpcs": [
+        "acknowledge_alert"
+      ],
+      "tabelas": [
+        "alerts",
+        "driver_approval_queue",
+        "driver_incidents",
+        "drivers",
+        "lalamove_orders",
+        "map_settings_overrides",
+        "tracking_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/alert-configurations",
+      "componente": "AlertConfigurationsPage",
+      "arquivo": "src/pages/AlertConfigurationsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "alert-config",
+        "rotulo": "Config. Alertas",
+        "categoria": "notifications",
+        "categoria_rotulo": "Notificações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 7,
+      "hooks": [
+        {
+          "nome": "useAlertConfigurations",
+          "arquivo": "src/hooks/useAlertConfigurations.ts"
+        },
+        {
+          "nome": "useTestNotification",
+          "arquivo": "src/hooks/useTestNotification.ts"
+        },
+        {
+          "nome": "useUpdateAlertConfiguration",
+          "arquivo": "src/hooks/useAlertConfigurations.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "test-notification"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "alert_configurations"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/alerts",
+      "componente": "AlertsPage",
+      "arquivo": "src/pages/AlertsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "alerts",
+        "rotulo": "Alertas",
+        "categoria": "notifications",
+        "categoria_rotulo": "Notificações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": "alerts"
+      },
+      "arquivos_lidos": 15,
+      "hooks": [
+        {
+          "nome": "useActiveAlerts",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertActions",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertGrouping",
+          "arquivo": "src/components/alerts/AlertsAdvanced.tsx"
+        },
+        {
+          "nome": "useAlertSelection",
+          "arquivo": "src/components/alerts/AlertsAdvanced.tsx"
+        },
+        {
+          "nome": "useAlertsRealtime",
+          "arquivo": "src/hooks/useRealtimeSubscriptions.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        },
+        {
+          "nome": "useUndoableAction",
+          "arquivo": "src/components/ui/undo-toast.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "acknowledge_alert"
+      ],
+      "tabelas": [
+        "alerts"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/analytics",
+      "componente": "AnalyticsDashboardPage",
+      "arquivo": "src/pages/AnalyticsDashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useAnalyticsData",
+          "arquivo": "src/hooks/useAnalyticsData.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "alerts",
+        "driver_approval_queue",
+        "drivers",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/approvals",
+      "componente": "ApprovalsPage",
+      "arquivo": "src/pages/ApprovalsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "approvals",
+        "rotulo": "Aprovações",
+        "categoria": "operations",
+        "categoria_rotulo": "Operações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": "approvals"
+      },
+      "arquivos_lidos": 19,
+      "hooks": [
+        {
+          "nome": "useApprovalActions",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "useApprovalHistory",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "useApprovalRealtime",
+          "arquivo": "src/hooks/useApprovalRealtime.ts"
+        },
+        {
+          "nome": "useApprovalStats",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "usePendingApprovals",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_approval_queue",
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/auth",
+      "componente": "AuthPage",
+      "arquivo": "src/pages/AuthPage.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useLoginLockout",
+          "arquivo": "src/hooks/useLoginLockout.ts"
+        },
+        {
+          "nome": "useWebAuthn",
+          "arquivo": "src/hooks/useWebAuthn.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "check_login_lockout_v2",
+        "clear_login_attempts",
+        "record_failed_login_v2"
+      ],
+      "tabelas": [
+        "auth_logs",
+        "user_passkeys",
+        "webauthn_challenges"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/bitrix24",
+      "componente": "Bitrix24Page",
+      "arquivo": "src/pages/Bitrix24Page.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": {
+        "id": "bitrix24",
+        "rotulo": "Bitrix24",
+        "categoria": "integrations",
+        "categoria_rotulo": "Integrações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useBitrix24",
+          "arquivo": "src/hooks/useBitrix24.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "bitrix24-process-queue",
+        "bitrix24-sync"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "bitrix24_stage_mappings",
+        "bitrix24_sync",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/cache-monitoring",
+      "componente": "CacheMonitoringPage",
+      "arquivo": "src/pages/CacheMonitoringPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "cache-monitoring",
+        "rotulo": "Cache Monitor",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": "manager",
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCacheStats",
+          "arquivo": "src/hooks/useCacheViews.ts"
+        },
+        {
+          "nome": "useCacheViews",
+          "arquivo": "src/hooks/useCacheViews.ts"
+        },
+        {
+          "nome": "useRefreshCache",
+          "arquivo": "src/hooks/useCacheViews.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/cache-status",
+      "componente": "CacheStatusPage",
+      "arquivo": "src/pages/CacheStatusPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCachedStats",
+          "arquivo": "src/hooks/useCachedStats.ts"
+        },
+        {
+          "nome": "useCacheStats",
+          "arquivo": "src/hooks/useCacheViews.ts"
+        },
+        {
+          "nome": "useDashboardSummary",
+          "arquivo": "src/hooks/useCachedStats.ts"
+        },
+        {
+          "nome": "useRefreshCache",
+          "arquivo": "src/hooks/useCacheViews.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "drivers",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/contacts",
+      "componente": "ContactsPage",
+      "arquivo": "src/pages/ContactsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "contacts",
+        "rotulo": "Contatos",
+        "categoria": "main",
+        "categoria_rotulo": "Principal",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useContacts",
+          "arquivo": "src/hooks/useContacts.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "contacts"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/dashboard",
+      "componente": "DashboardRedesigned",
+      "arquivo": "src/pages/DashboardRedesigned.tsx",
+      "layout": "AppLayout",
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 42,
+      "hooks": [
+        {
+          "nome": "useActiveAlerts",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertActions",
+          "arquivo": "src/hooks/useActiveAlerts.ts"
+        },
+        {
+          "nome": "useAlertsRealtime",
+          "arquivo": "src/hooks/useRealtimeSubscriptions.ts"
+        },
+        {
+          "nome": "useAnnounce",
+          "arquivo": "src/hooks/useAccessibility.tsx"
+        },
+        {
+          "nome": "useApprovalActions",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useDashboardStats",
+          "arquivo": "src/hooks/useDashboardStats.ts"
+        },
+        {
+          "nome": "useIsMobile",
+          "arquivo": "src/hooks/use-mobile.tsx"
+        },
+        {
+          "nome": "useLalamoveStatus",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useMapAlerts",
+          "arquivo": "src/components/map/hooks/useMapAlerts.ts"
+        },
+        {
+          "nome": "useMapboxToken",
+          "arquivo": "src/components/map/hooks/useMapboxToken.ts"
+        },
+        {
+          "nome": "useMapMarkers",
+          "arquivo": "src/components/map/hooks/useMapMarkers.ts"
+        },
+        {
+          "nome": "useMapSettings",
+          "arquivo": "src/hooks/useMapSettings.ts"
+        },
+        {
+          "nome": "usePendingApprovals",
+          "arquivo": "src/hooks/usePendingApprovals.ts"
+        },
+        {
+          "nome": "usePredictiveAnalysis",
+          "arquivo": "src/hooks/usePredictiveAnalysis.ts"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useRecentOrders",
+          "arquivo": "src/hooks/useRecentOrders.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        },
+        {
+          "nome": "useTrackingData",
+          "arquivo": "src/components/map/hooks/useTrackingData.ts"
+        },
+        {
+          "nome": "useTrackingHistory",
+          "arquivo": "src/hooks/useTrackingHistory.ts"
+        },
+        {
+          "nome": "useWallet",
+          "arquivo": "src/hooks/useLalamove.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "lalamove-gateway",
+        "route-analyzer"
+      ],
+      "rpcs": [
+        "acknowledge_alert"
+      ],
+      "tabelas": [
+        "alerts",
+        "driver_approval_queue",
+        "driver_incidents",
+        "drivers",
+        "lalamove_orders",
+        "map_settings_overrides",
+        "tracking_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/delivery-metrics",
+      "componente": "DeliveryMetricsPage",
+      "arquivo": "src/pages/DeliveryMetricsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "delivery-metrics",
+        "rotulo": "Métricas Entregas",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "useDeliveryMetrics",
+          "arquivo": "src/hooks/useDeliveryMetrics.ts"
+        },
+        {
+          "nome": "useDeliveryTrends",
+          "arquivo": "src/hooks/useDeliveryMetrics.ts"
+        },
+        {
+          "nome": "useDriverDeliveryStats",
+          "arquivo": "src/hooks/useDeliveryMetrics.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "drivers",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/drivers",
+      "componente": "DriversPage",
+      "arquivo": "src/pages/DriversPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "drivers",
+        "rotulo": "Motoristas",
+        "categoria": "main",
+        "categoria_rotulo": "Principal",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 15,
+      "hooks": [
+        {
+          "nome": "useAddToBlacklist",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useAddToWhitelist",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useApproveDriver",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useBlockDriver",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useDrivers",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "useRemoveFromBlacklist",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useRemoveFromWhitelist",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useUndoableAction",
+          "arquivo": "src/components/ui/undo-toast.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_incidents",
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/error-monitoring",
+      "componente": "ErrorMonitoringPage",
+      "arquivo": "src/pages/ErrorMonitoringPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "error-monitoring",
+        "rotulo": "Erros Runtime",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": "manager",
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "useErrorLogs",
+          "arquivo": "src/hooks/useErrorLogs.ts"
+        },
+        {
+          "nome": "useErrorStats",
+          "arquivo": "src/hooks/useErrorLogs.ts"
+        },
+        {
+          "nome": "useResolveError",
+          "arquivo": "src/hooks/useErrorLogs.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/evaluations",
+      "componente": "EvaluationsPage",
+      "arquivo": "src/pages/EvaluationsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "evaluations",
+        "rotulo": "Avaliações",
+        "categoria": "operations",
+        "categoria_rotulo": "Operações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_evaluations",
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/external-data",
+      "componente": "ExternalDataPage",
+      "arquivo": "src/pages/ExternalDataPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": {
+        "id": "external-data",
+        "rotulo": "Base CRM",
+        "categoria": "integrations",
+        "categoria_rotulo": "Integrações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useDebouncedValue",
+          "arquivo": "src/hooks/useDebouncedValue.ts"
+        },
+        {
+          "nome": "useExternalList",
+          "arquivo": "src/hooks/useExternalData.ts"
+        },
+        {
+          "nome": "useExternalStats",
+          "arquivo": "src/hooks/useExternalData.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "external-companies"
+      ],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/forgot-password",
+      "componente": "ForgotPasswordPage",
+      "arquivo": "src/pages/ForgotPasswordPage.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 3,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/geo-blocking",
+      "componente": "GeoBlockingPage",
+      "arquivo": "src/pages/GeoBlockingPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "geo-blocking",
+        "rotulo": "Bloqueio Geo",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "geo_blocks"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/heatmap",
+      "componente": "HeatmapPage",
+      "arquivo": "src/pages/HeatmapPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "heatmap",
+        "rotulo": "Mapa de Calor",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 8,
+      "hooks": [
+        {
+          "nome": "useDeliveryHeatmapData",
+          "arquivo": "src/hooks/useDeliveryHeatmapData.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "get-mapbox-token"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/incidents",
+      "componente": "IncidentsPage",
+      "arquivo": "src/pages/IncidentsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "incidents",
+        "rotulo": "Incidentes",
+        "categoria": "operations",
+        "categoria_rotulo": "Operações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": "incidents"
+      },
+      "arquivos_lidos": 9,
+      "hooks": [
+        {
+          "nome": "useCreateIncident",
+          "arquivo": "src/hooks/useIncidents.ts"
+        },
+        {
+          "nome": "useDeleteIncident",
+          "arquivo": "src/hooks/useIncidents.ts"
+        },
+        {
+          "nome": "useDrivers",
+          "arquivo": "src/hooks/useDrivers.ts"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "useIncidents",
+          "arquivo": "src/hooks/useIncidents.ts"
+        },
+        {
+          "nome": "useResolveIncident",
+          "arquivo": "src/hooks/useIncidents.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_incidents",
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/ip-whitelist",
+      "componente": "IPWhitelistPage",
+      "arquivo": "src/pages/IPWhitelistPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "ip-whitelist",
+        "rotulo": "IP Whitelist",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 10,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "usePermissions",
+          "arquivo": "src/hooks/usePermissions.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_permissions"
+      ],
+      "tabelas": [
+        "ip_whitelist",
+        "permissions",
+        "role_permissions",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/job-queue",
+      "componente": "JobQueuePage",
+      "arquivo": "src/pages/JobQueuePage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useDeleteJob",
+          "arquivo": "src/hooks/useJobQueue.ts"
+        },
+        {
+          "nome": "useJobQueue",
+          "arquivo": "src/hooks/useJobQueue.ts"
+        },
+        {
+          "nome": "useProcessQueue",
+          "arquivo": "src/hooks/useJobQueue.ts"
+        },
+        {
+          "nome": "useQueueStatistics",
+          "arquivo": "src/hooks/useJobQueue.ts"
+        },
+        {
+          "nome": "useRetryJob",
+          "arquivo": "src/hooks/useJobQueue.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "bitrix24_sync",
+        "driver_evaluations",
+        "webhook_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/lalamove-operacoes",
+      "componente": "LalamoveOperationsPage",
+      "arquivo": "src/pages/LalamoveOperationsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "lalamove-ops",
+        "rotulo": "Operações Lalamove",
+        "categoria": "main",
+        "categoria_rotulo": "Principal",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 13,
+      "hooks": [
+        {
+          "nome": "useDownloadReceipt",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useExchangeCoupon",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useFleetMutation",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useFleetSearch",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useUapiCoupons",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useUapiFleet",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useUapiOrderHistory",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useUapiWalletStatement",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "lalamove-uapi"
+      ],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/lalamove-quota",
+      "componente": "LalamoveQuotaPage",
+      "arquivo": "src/pages/LalamoveQuotaPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "useLalamoveQuota",
+          "arquivo": "src/hooks/useLalamoveQuota.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "lalamove_rate_limits"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/live-map",
+      "componente": "LiveMapPage",
+      "arquivo": "src/pages/LiveMapPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 25,
+      "hooks": [
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "useGoogleMapsLoader",
+          "arquivo": "src/components/map/hooks/useGoogleMapsLoader.ts"
+        },
+        {
+          "nome": "useMapAlerts",
+          "arquivo": "src/components/map/hooks/useMapAlerts.ts"
+        },
+        {
+          "nome": "useMapboxToken",
+          "arquivo": "src/components/map/hooks/useMapboxToken.ts"
+        },
+        {
+          "nome": "useMapMarkers",
+          "arquivo": "src/components/map/hooks/useMapMarkers.ts"
+        },
+        {
+          "nome": "useMapSettings",
+          "arquivo": "src/hooks/useMapSettings.ts"
+        },
+        {
+          "nome": "useTrackingData",
+          "arquivo": "src/components/map/hooks/useTrackingData.ts"
+        },
+        {
+          "nome": "useTrackingHistory",
+          "arquivo": "src/hooks/useTrackingHistory.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "get-mapbox-token",
+        "mapbox-proxy",
+        "simulate-driver-movement"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "active_tracking",
+        "map_settings_overrides",
+        "tracking_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/map",
+      "componente": "LiveMapPage",
+      "arquivo": "src/pages/LiveMapPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "map",
+        "rotulo": "Mapa ao Vivo",
+        "categoria": "operations",
+        "categoria_rotulo": "Operações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 25,
+      "hooks": [
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "useGoogleMapsLoader",
+          "arquivo": "src/components/map/hooks/useGoogleMapsLoader.ts"
+        },
+        {
+          "nome": "useMapAlerts",
+          "arquivo": "src/components/map/hooks/useMapAlerts.ts"
+        },
+        {
+          "nome": "useMapboxToken",
+          "arquivo": "src/components/map/hooks/useMapboxToken.ts"
+        },
+        {
+          "nome": "useMapMarkers",
+          "arquivo": "src/components/map/hooks/useMapMarkers.ts"
+        },
+        {
+          "nome": "useMapSettings",
+          "arquivo": "src/hooks/useMapSettings.ts"
+        },
+        {
+          "nome": "useTrackingData",
+          "arquivo": "src/components/map/hooks/useTrackingData.ts"
+        },
+        {
+          "nome": "useTrackingHistory",
+          "arquivo": "src/hooks/useTrackingHistory.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "get-mapbox-token",
+        "mapbox-proxy",
+        "simulate-driver-movement"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "active_tracking",
+        "map_settings_overrides",
+        "tracking_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/map-tools",
+      "componente": "MapToolsPage",
+      "arquivo": "src/pages/MapToolsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "map-tools",
+        "rotulo": "Ferramentas Mapa",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useMapboxDirections",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxIsochrone",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxMapMatching",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxMatrix",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxOptimization",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxStaticImage",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useMapboxTilequery",
+          "arquivo": "src/hooks/useMapbox.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "mapbox-proxy"
+      ],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/metrics",
+      "componente": "MetricsPage",
+      "arquivo": "src/pages/MetricsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "metrics",
+        "rotulo": "Métricas",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useApprovalMetrics",
+          "arquivo": "src/hooks/useMetrics.ts"
+        },
+        {
+          "nome": "useDriverMetrics",
+          "arquivo": "src/hooks/useMetrics.ts"
+        },
+        {
+          "nome": "useIncidentMetrics",
+          "arquivo": "src/hooks/useMetrics.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_approval_queue",
+        "driver_incidents",
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/mfa-verify",
+      "componente": "MFAVerifyPage",
+      "arquivo": "src/pages/MFAVerifyPage.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 7,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useMFA",
+          "arquivo": "src/hooks/useMFA.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/notification-history",
+      "componente": "NotificationHistoryPage",
+      "arquivo": "src/pages/NotificationHistoryPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "notification-history",
+        "rotulo": "Histórico",
+        "categoria": "notifications",
+        "categoria_rotulo": "Notificações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useNotificationHistory",
+          "arquivo": "src/hooks/useNotificationHistory.ts"
+        },
+        {
+          "nome": "useNotificationStats",
+          "arquivo": "src/hooks/useNotificationHistory.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "alerts_sent"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/orders",
+      "componente": "OrdersPage",
+      "arquivo": "src/pages/OrdersPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "operator",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "orders",
+        "rotulo": "Pedidos",
+        "categoria": "main",
+        "categoria_rotulo": "Principal",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 36,
+      "hooks": [
+        {
+          "nome": "useAddressSearch",
+          "arquivo": "src/hooks/useExternalData.ts"
+        },
+        {
+          "nome": "useContacts",
+          "arquivo": "src/hooks/useContacts.ts"
+        },
+        {
+          "nome": "useDebouncedValue",
+          "arquivo": "src/hooks/useDebouncedValue.ts"
+        },
+        {
+          "nome": "useEvaluateDriver",
+          "arquivo": "src/hooks/useEvaluateDriver.ts"
+        },
+        {
+          "nome": "useFleetMutation",
+          "arquivo": "src/hooks/useLalamoveUapi.ts"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "useMapboxGeocode",
+          "arquivo": "src/hooks/useMapbox.ts"
+        },
+        {
+          "nome": "useQuotationExpiry",
+          "arquivo": "src/hooks/useQuotationExpiry.ts"
+        },
+        {
+          "nome": "useRecentOrders",
+          "arquivo": "src/hooks/useRecentOrders.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "evaluate-driver",
+        "external-companies",
+        "lalamove-api",
+        "lalamove-uapi",
+        "mapbox-proxy"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "contacts",
+        "lalamove_orders",
+        "lalamove_status_history",
+        "lalamove_stops"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/password-reset-approvals",
+      "componente": "PasswordResetApprovalsPage",
+      "arquivo": "src/pages/PasswordResetApprovalsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "password-reset",
+        "rotulo": "Reset Senha",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "usePasswordResetActions",
+          "arquivo": "src/hooks/usePasswordResetActions.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "password_reset_requests"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/performance",
+      "componente": "PerformanceDashboardPage",
+      "arquivo": "src/pages/PerformanceDashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "performance",
+        "rotulo": "Performance",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": "manager",
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 4,
+      "hooks": [
+        {
+          "nome": "useWebVitals",
+          "arquivo": "src/utils/webVitals.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/permissions",
+      "componente": "PermissionsPage",
+      "arquivo": "src/pages/PermissionsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "permissions",
+        "rotulo": "Permissões",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 10,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "usePermissions",
+          "arquivo": "src/hooks/usePermissions.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_permissions"
+      ],
+      "tabelas": [
+        "permissions",
+        "role_permissions",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/preferences",
+      "componente": "UserPreferencesPage",
+      "arquivo": "src/pages/UserPreferencesPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 5,
+      "hooks": [
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useScheduledTheme",
+          "arquivo": "src/hooks/useScheduledTheme.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/profile",
+      "componente": "ProfilePage",
+      "arquivo": "src/pages/ProfilePage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/rate-limiting",
+      "componente": "RateLimitDashboardPage",
+      "arquivo": "src/pages/RateLimitDashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 10,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "usePermissions",
+          "arquivo": "src/hooks/usePermissions.ts"
+        },
+        {
+          "nome": "useRateLimiting",
+          "arquivo": "src/hooks/useRateLimiting.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_permissions"
+      ],
+      "tabelas": [
+        "blocked_ips",
+        "ip_whitelist",
+        "permissions",
+        "rate_limit_logs",
+        "role_permissions",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/reports",
+      "componente": "ReportsPage",
+      "arquivo": "src/pages/ReportsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 10,
+      "hooks": [
+        {
+          "nome": "useReportData",
+          "arquivo": "src/pages/reports/useReportData.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "driver_incidents",
+        "drivers",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/reports/advanced",
+      "componente": "AdvancedReportsPage",
+      "arquivo": "src/pages/AdvancedReportsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "advanced-reports",
+        "rotulo": "Relatórios Avançados",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useAdvancedReports",
+          "arquivo": "src/hooks/useAdvancedReports.ts"
+        },
+        {
+          "nome": "useMapboxToken",
+          "arquivo": "src/components/map/hooks/useMapboxToken.ts"
+        },
+        {
+          "nome": "useRegionResolution",
+          "arquivo": "src/hooks/useRegionResolver.ts"
+        },
+        {
+          "nome": "useReportPresets",
+          "arquivo": "src/hooks/useReportPresets.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "get-mapbox-token",
+        "mapbox-proxy"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "lalamove_orders",
+        "region_cache",
+        "report_presets"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/reset-password",
+      "componente": "ResetPasswordPage",
+      "arquivo": "src/pages/ResetPasswordPage.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 5,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/risk-rules",
+      "componente": "RiskRulesPage",
+      "arquivo": "src/pages/RiskRulesPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": {
+        "id": "risk-rules",
+        "rotulo": "Regras de Risco",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": null,
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useCreateRiskRule",
+          "arquivo": "src/hooks/useRiskRules.ts"
+        },
+        {
+          "nome": "useDeleteRiskRule",
+          "arquivo": "src/hooks/useRiskRules.ts"
+        },
+        {
+          "nome": "useRiskRules",
+          "arquivo": "src/hooks/useRiskRules.ts"
+        },
+        {
+          "nome": "useUpdateRiskRule",
+          "arquivo": "src/hooks/useRiskRules.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "risk_rules"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/roles",
+      "componente": "RolesPage",
+      "arquivo": "src/pages/RolesPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "roles",
+        "rotulo": "Roles",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 9,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useFuseSearchWithMatches",
+          "arquivo": "src/hooks/useFuseSearch.ts"
+        },
+        {
+          "nome": "usePermissions",
+          "arquivo": "src/hooks/usePermissions.ts"
+        },
+        {
+          "nome": "useRole",
+          "arquivo": "src/hooks/useRole.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_permissions"
+      ],
+      "tabelas": [
+        "permissions",
+        "role_permissions",
+        "user_roles"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/security",
+      "componente": "SecurityDashboardPage",
+      "arquivo": "src/pages/SecurityDashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "security",
+        "rotulo": "Central Segurança",
+        "categoria": "security",
+        "categoria_rotulo": "Segurança",
+        "papel": "admin",
+        "papel_categoria": "admin",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 16,
+      "hooks": [
+        {
+          "nome": "useAuth",
+          "arquivo": "src/hooks/useAuth.tsx"
+        },
+        {
+          "nome": "useAuthLogs",
+          "arquivo": "src/hooks/useAuthLogs.ts"
+        },
+        {
+          "nome": "useMFA",
+          "arquivo": "src/hooks/useMFA.ts"
+        },
+        {
+          "nome": "usePermissions",
+          "arquivo": "src/hooks/usePermissions.ts"
+        },
+        {
+          "nome": "useRateLimiting",
+          "arquivo": "src/hooks/useRateLimiting.ts"
+        },
+        {
+          "nome": "useRole",
+          "arquivo": "src/hooks/useRole.ts"
+        },
+        {
+          "nome": "useSecurityPushNotifications",
+          "arquivo": "src/hooks/useSecurityPushNotifications.ts"
+        },
+        {
+          "nome": "useWebAuthn",
+          "arquivo": "src/hooks/useWebAuthn.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_user_permissions"
+      ],
+      "tabelas": [
+        "auth_logs",
+        "blocked_ips",
+        "ip_whitelist",
+        "permissions",
+        "rate_limit_logs",
+        "role_permissions",
+        "user_passkeys",
+        "user_roles",
+        "webauthn_challenges"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/settings",
+      "componente": "SettingsPage",
+      "arquivo": "src/pages/SettingsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "settings",
+        "rotulo": "Configurações",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": null,
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 13,
+      "hooks": [
+        {
+          "nome": "useAlertSettings",
+          "arquivo": "src/hooks/useAlertSettings.ts"
+        },
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "alert_configurations"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/settings/lalamove",
+      "componente": "LalamoveSettingsPage",
+      "arquivo": "src/pages/LalamoveSettingsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": {
+        "id": "lalamove",
+        "rotulo": "Lalamove API",
+        "categoria": "integrations",
+        "categoria_rotulo": "Integrações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 7,
+      "hooks": [
+        {
+          "nome": "useLalamoveStatus",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useLalamoveUser",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useRefreshUapiToken",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useServiceAreas",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useUpdateUapiToken",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useUpdateV3Keys",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useV3CallMutation",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useVehicles",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useWallet",
+          "arquivo": "src/hooks/useLalamove.ts"
+        },
+        {
+          "nome": "useWalletHistory",
+          "arquivo": "src/hooks/useLalamove.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "lalamove-gateway"
+      ],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/settings/uapi",
+      "componente": "UAPISettingsPage",
+      "arquivo": "src/pages/UAPISettingsPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useUAPIStatus",
+          "arquivo": "src/hooks/useUAPI.ts"
+        },
+        {
+          "nome": "useUAPIUser",
+          "arquivo": "src/hooks/useUAPI.ts"
+        },
+        {
+          "nome": "useUpdateToken",
+          "arquivo": "src/hooks/useUAPI.ts"
+        },
+        {
+          "nome": "useWalletBalance",
+          "arquivo": "src/hooks/useUAPI.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "lalamove-gateway"
+      ],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/sla",
+      "componente": "SLADashboardPage",
+      "arquivo": "src/pages/SLADashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "viewer",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "sla",
+        "rotulo": "Dashboard SLA",
+        "categoria": "analytics",
+        "categoria_rotulo": "Analytics",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 12,
+      "hooks": [
+        {
+          "nome": "usePushNotifications",
+          "arquivo": "src/hooks/usePushNotifications.ts"
+        },
+        {
+          "nome": "useSLAMetrics",
+          "arquivo": "src/hooks/useSLAMetrics.ts"
+        },
+        {
+          "nome": "useSLAMetricsRealtime",
+          "arquivo": "src/hooks/useRealtimeSubscriptions.ts"
+        },
+        {
+          "nome": "useSoundSettings",
+          "arquivo": "src/hooks/useSoundSettings.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "active_tracking",
+        "alerts",
+        "driver_approval_queue",
+        "drivers",
+        "lalamove_orders"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/slo",
+      "componente": "SLODashboardPage",
+      "arquivo": "src/pages/SLODashboardPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "slo",
+        "rotulo": "Dashboard SLO",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": "manager",
+        "papel_categoria": "manager",
+        "papel_efetivo": "manager",
+        "badge": null
+      },
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useSLOMetrics",
+          "arquivo": "src/hooks/useSLOMetrics.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "query_telemetry",
+        "runtime_error_logs",
+        "webhook_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/system-health",
+      "componente": "SystemHealthPage",
+      "arquivo": "src/pages/SystemHealthPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 7,
+      "hooks": [
+        {
+          "nome": "useCronJobsHealth",
+          "arquivo": "src/hooks/useCronJobsHealth.ts"
+        },
+        {
+          "nome": "useSystemHealth",
+          "arquivo": "src/hooks/useSystemHealth.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "get-mapbox-token"
+      ],
+      "rpcs": [
+        "get_cron_jobs_health"
+      ],
+      "tabelas": [
+        "drivers"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/system-health-expanded",
+      "componente": "SystemHealthExpandedPage",
+      "arquivo": "src/pages/SystemHealthExpandedPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 6,
+      "hooks": [
+        {
+          "nome": "useSystemHealthExpanded",
+          "arquivo": "src/hooks/useSystemHealthExpanded.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [
+        "check-external-api",
+        "get-mapbox-token"
+      ],
+      "rpcs": [],
+      "tabelas": [
+        "bitrix24_sync",
+        "drivers",
+        "lalamove_orders",
+        "webhook_events"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/telemetria",
+      "componente": "AdminTelemetriaPage",
+      "arquivo": "src/pages/AdminTelemetriaPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "admin",
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": {
+        "id": "telemetria",
+        "rotulo": "Telemetria BD",
+        "categoria": "system",
+        "categoria_rotulo": "Sistema",
+        "papel": "admin",
+        "papel_categoria": "manager",
+        "papel_efetivo": "admin",
+        "badge": null
+      },
+      "arquivos_lidos": 11,
+      "hooks": [
+        {
+          "nome": "useContractV1SunsetReadiness",
+          "arquivo": "src/hooks/useContractV1SunsetReadiness.ts"
+        },
+        {
+          "nome": "useContractVersionUsage",
+          "arquivo": "src/hooks/useContractVersionUsage.ts"
+        },
+        {
+          "nome": "useContractVersionUsageMonthly",
+          "arquivo": "src/hooks/useContractVersionUsageMonthly.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [
+        "get_contract_v1_sunset_readiness"
+      ],
+      "tabelas": [
+        "contract_version_usage",
+        "contract_version_usage_monthly",
+        "query_telemetry"
+      ],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/unauthorized",
+      "componente": "UnauthorizedPage",
+      "arquivo": "src/pages/UnauthorizedPage.tsx",
+      "layout": null,
+      "protegida": false,
+      "papel": null,
+      "requer_mfa": false,
+      "redireciona": null,
+      "menu": null,
+      "arquivos_lidos": 1,
+      "hooks": [],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [],
+      "imports_quebrados": []
+    },
+    {
+      "caminho": "/webhooks",
+      "componente": "WebhooksPage",
+      "arquivo": "src/pages/WebhooksPage.tsx",
+      "layout": "AppLayout",
+      "protegida": true,
+      "papel": "manager",
+      "requer_mfa": true,
+      "redireciona": null,
+      "menu": {
+        "id": "webhooks",
+        "rotulo": "Webhooks",
+        "categoria": "integrations",
+        "categoria_rotulo": "Integrações",
+        "papel": null,
+        "papel_categoria": null,
+        "papel_efetivo": null,
+        "badge": null
+      },
+      "arquivos_lidos": 8,
+      "hooks": [
+        {
+          "nome": "useDeleteWebhook",
+          "arquivo": "src/hooks/useWebhookEvents.ts"
+        },
+        {
+          "nome": "useEventTypes",
+          "arquivo": "src/hooks/useWebhookEvents.ts"
+        },
+        {
+          "nome": "useMarkWebhookProcessed",
+          "arquivo": "src/hooks/useWebhookEvents.ts"
+        },
+        {
+          "nome": "useReprocessWebhook",
+          "arquivo": "src/hooks/useWebhookEvents.ts"
+        },
+        {
+          "nome": "useWebhookEvents",
+          "arquivo": "src/hooks/useWebhookEvents.ts"
+        },
+        {
+          "nome": "useWebhookSecurityMetrics",
+          "arquivo": "src/hooks/useWebhookSecurityMetrics.ts"
+        }
+      ],
+      "buckets": [],
+      "edges": [],
+      "rpcs": [],
+      "tabelas": [
+        "webhook_events"
+      ],
+      "imports_quebrados": []
+    }
+  ],
+  "hooks": {
+    "useActiveAlerts": {
+      "arquivo": "src/hooks/useActiveAlerts.ts",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/dashboard"
+      ]
+    },
+    "useAddToBlacklist": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useAddToWhitelist": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useAddressSearch": {
+      "arquivo": "src/hooks/useExternalData.ts",
+      "rotas": [
+        "/orders"
+      ]
+    },
+    "useAdvancedReports": {
+      "arquivo": "src/hooks/useAdvancedReports.ts",
+      "rotas": [
+        "/reports/advanced"
+      ]
+    },
+    "useAlertActions": {
+      "arquivo": "src/hooks/useActiveAlerts.ts",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/dashboard"
+      ]
+    },
+    "useAlertConfigurations": {
+      "arquivo": "src/hooks/useAlertConfigurations.ts",
+      "rotas": [
+        "/alert-configurations"
+      ]
+    },
+    "useAlertGrouping": {
+      "arquivo": "src/components/alerts/AlertsAdvanced.tsx",
+      "rotas": [
+        "/alerts"
+      ]
+    },
+    "useAlertSelection": {
+      "arquivo": "src/components/alerts/AlertsAdvanced.tsx",
+      "rotas": [
+        "/alerts"
+      ]
+    },
+    "useAlertSettings": {
+      "arquivo": "src/hooks/useAlertSettings.ts",
+      "rotas": [
+        "/settings"
+      ]
+    },
+    "useAlertsRealtime": {
+      "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/dashboard"
+      ]
+    },
+    "useAnalyticsData": {
+      "arquivo": "src/hooks/useAnalyticsData.ts",
+      "rotas": [
+        "/analytics"
+      ]
+    },
+    "useAnnounce": {
+      "arquivo": "src/hooks/useAccessibility.tsx",
+      "rotas": [
+        "/",
+        "/dashboard"
+      ]
+    },
+    "useApprovalActions": {
+      "arquivo": "src/hooks/usePendingApprovals.ts",
+      "rotas": [
+        "/",
+        "/approvals",
+        "/dashboard"
+      ]
+    },
+    "useApprovalHistory": {
+      "arquivo": "src/hooks/usePendingApprovals.ts",
+      "rotas": [
+        "/approvals"
+      ]
+    },
+    "useApprovalMetrics": {
+      "arquivo": "src/hooks/useMetrics.ts",
+      "rotas": [
+        "/metrics"
+      ]
+    },
+    "useApprovalRealtime": {
+      "arquivo": "src/hooks/useApprovalRealtime.ts",
+      "rotas": [
+        "/approvals"
+      ]
+    },
+    "useApprovalStats": {
+      "arquivo": "src/hooks/usePendingApprovals.ts",
+      "rotas": [
+        "/approvals"
+      ]
+    },
+    "useApproveDriver": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useAuth": {
+      "arquivo": "src/hooks/useAuth.tsx",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/auth",
+        "/dashboard",
+        "/ip-whitelist",
+        "/mfa-verify",
+        "/permissions",
+        "/profile",
+        "/rate-limiting",
+        "/roles",
+        "/security"
+      ]
+    },
+    "useAuthLogs": {
+      "arquivo": "src/hooks/useAuthLogs.ts",
+      "rotas": [
+        "/security"
+      ]
+    },
+    "useBitrix24": {
+      "arquivo": "src/hooks/useBitrix24.ts",
+      "rotas": [
+        "/bitrix24"
+      ]
+    },
+    "useBlockDriver": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useCacheStats": {
+      "arquivo": "src/hooks/useCacheViews.ts",
+      "rotas": [
+        "/cache-monitoring",
+        "/cache-status"
+      ]
+    },
+    "useCacheViews": {
+      "arquivo": "src/hooks/useCacheViews.ts",
+      "rotas": [
+        "/cache-monitoring"
+      ]
+    },
+    "useCachedStats": {
+      "arquivo": "src/hooks/useCachedStats.ts",
+      "rotas": [
+        "/cache-status"
+      ]
+    },
+    "useContacts": {
+      "arquivo": "src/hooks/useContacts.ts",
+      "rotas": [
+        "/contacts",
+        "/orders"
+      ]
+    },
+    "useContractV1SunsetReadiness": {
+      "arquivo": "src/hooks/useContractV1SunsetReadiness.ts",
+      "rotas": [
+        "/telemetria"
+      ]
+    },
+    "useContractVersionUsage": {
+      "arquivo": "src/hooks/useContractVersionUsage.ts",
+      "rotas": [
+        "/telemetria"
+      ]
+    },
+    "useContractVersionUsageMonthly": {
+      "arquivo": "src/hooks/useContractVersionUsageMonthly.ts",
+      "rotas": [
+        "/telemetria"
+      ]
+    },
+    "useCreateIncident": {
+      "arquivo": "src/hooks/useIncidents.ts",
+      "rotas": [
+        "/incidents"
+      ]
+    },
+    "useCreateRiskRule": {
+      "arquivo": "src/hooks/useRiskRules.ts",
+      "rotas": [
+        "/risk-rules"
+      ]
+    },
+    "useCronJobsHealth": {
+      "arquivo": "src/hooks/useCronJobsHealth.ts",
+      "rotas": [
+        "/system-health"
+      ]
+    },
+    "useDashboardStats": {
+      "arquivo": "src/hooks/useDashboardStats.ts",
+      "rotas": [
+        "/",
+        "/dashboard"
+      ]
+    },
+    "useDashboardSummary": {
+      "arquivo": "src/hooks/useCachedStats.ts",
+      "rotas": [
+        "/cache-status"
+      ]
+    },
+    "useDebouncedValue": {
+      "arquivo": "src/hooks/useDebouncedValue.ts",
+      "rotas": [
+        "/external-data",
+        "/orders"
+      ]
+    },
+    "useDeleteIncident": {
+      "arquivo": "src/hooks/useIncidents.ts",
+      "rotas": [
+        "/incidents"
+      ]
+    },
+    "useDeleteJob": {
+      "arquivo": "src/hooks/useJobQueue.ts",
+      "rotas": [
+        "/job-queue"
+      ]
+    },
+    "useDeleteRiskRule": {
+      "arquivo": "src/hooks/useRiskRules.ts",
+      "rotas": [
+        "/risk-rules"
+      ]
+    },
+    "useDeleteWebhook": {
+      "arquivo": "src/hooks/useWebhookEvents.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    },
+    "useDeliveryHeatmapData": {
+      "arquivo": "src/hooks/useDeliveryHeatmapData.ts",
+      "rotas": [
+        "/heatmap"
+      ]
+    },
+    "useDeliveryMetrics": {
+      "arquivo": "src/hooks/useDeliveryMetrics.ts",
+      "rotas": [
+        "/delivery-metrics"
+      ]
+    },
+    "useDeliveryTrends": {
+      "arquivo": "src/hooks/useDeliveryMetrics.ts",
+      "rotas": [
+        "/delivery-metrics"
+      ]
+    },
+    "useDownloadReceipt": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useDriverDeliveryStats": {
+      "arquivo": "src/hooks/useDeliveryMetrics.ts",
+      "rotas": [
+        "/delivery-metrics"
+      ]
+    },
+    "useDriverMetrics": {
+      "arquivo": "src/hooks/useMetrics.ts",
+      "rotas": [
+        "/metrics"
+      ]
+    },
+    "useDrivers": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers",
+        "/incidents"
+      ]
+    },
+    "useErrorLogs": {
+      "arquivo": "src/hooks/useErrorLogs.ts",
+      "rotas": [
+        "/error-monitoring"
+      ]
+    },
+    "useErrorStats": {
+      "arquivo": "src/hooks/useErrorLogs.ts",
+      "rotas": [
+        "/error-monitoring"
+      ]
+    },
+    "useEvaluateDriver": {
+      "arquivo": "src/hooks/useEvaluateDriver.ts",
+      "rotas": [
+        "/orders"
+      ]
+    },
+    "useEventTypes": {
+      "arquivo": "src/hooks/useWebhookEvents.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    },
+    "useExchangeCoupon": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useExternalList": {
+      "arquivo": "src/hooks/useExternalData.ts",
+      "rotas": [
+        "/external-data"
+      ]
+    },
+    "useExternalStats": {
+      "arquivo": "src/hooks/useExternalData.ts",
+      "rotas": [
+        "/external-data"
+      ]
+    },
+    "useFleetMutation": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes",
+        "/orders"
+      ]
+    },
+    "useFleetSearch": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useFuseSearchWithMatches": {
+      "arquivo": "src/hooks/useFuseSearch.ts",
+      "rotas": [
+        "/drivers",
+        "/evaluations",
+        "/geo-blocking",
+        "/incidents",
+        "/ip-whitelist",
+        "/live-map",
+        "/map",
+        "/orders",
+        "/password-reset-approvals",
+        "/permissions",
+        "/rate-limiting",
+        "/roles"
+      ]
+    },
+    "useGoogleMapsLoader": {
+      "arquivo": "src/components/map/hooks/useGoogleMapsLoader.ts",
+      "rotas": [
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useIncidentMetrics": {
+      "arquivo": "src/hooks/useMetrics.ts",
+      "rotas": [
+        "/metrics"
+      ]
+    },
+    "useIncidents": {
+      "arquivo": "src/hooks/useIncidents.ts",
+      "rotas": [
+        "/incidents"
+      ]
+    },
+    "useIsMobile": {
+      "arquivo": "src/hooks/use-mobile.tsx",
+      "rotas": [
+        "/",
+        "/dashboard"
+      ]
+    },
+    "useJobQueue": {
+      "arquivo": "src/hooks/useJobQueue.ts",
+      "rotas": [
+        "/job-queue"
+      ]
+    },
+    "useLalamoveQuota": {
+      "arquivo": "src/hooks/useLalamoveQuota.ts",
+      "rotas": [
+        "/lalamove-quota"
+      ]
+    },
+    "useLalamoveStatus": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/settings/lalamove"
+      ]
+    },
+    "useLalamoveUser": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useLoginLockout": {
+      "arquivo": "src/hooks/useLoginLockout.ts",
+      "rotas": [
+        "/auth"
+      ]
+    },
+    "useMFA": {
+      "arquivo": "src/hooks/useMFA.ts",
+      "rotas": [
+        "/mfa-verify",
+        "/security"
+      ]
+    },
+    "useMapAlerts": {
+      "arquivo": "src/components/map/hooks/useMapAlerts.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useMapMarkers": {
+      "arquivo": "src/components/map/hooks/useMapMarkers.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useMapSettings": {
+      "arquivo": "src/hooks/useMapSettings.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useMapboxDirections": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxGeocode": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/orders"
+      ]
+    },
+    "useMapboxIsochrone": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxMapMatching": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxMatrix": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxOptimization": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxStaticImage": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxTilequery": {
+      "arquivo": "src/hooks/useMapbox.ts",
+      "rotas": [
+        "/map-tools"
+      ]
+    },
+    "useMapboxToken": {
+      "arquivo": "src/components/map/hooks/useMapboxToken.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map",
+        "/reports/advanced"
+      ]
+    },
+    "useMarkWebhookProcessed": {
+      "arquivo": "src/hooks/useWebhookEvents.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    },
+    "useNotificationHistory": {
+      "arquivo": "src/hooks/useNotificationHistory.ts",
+      "rotas": [
+        "/notification-history"
+      ]
+    },
+    "useNotificationStats": {
+      "arquivo": "src/hooks/useNotificationHistory.ts",
+      "rotas": [
+        "/notification-history"
+      ]
+    },
+    "usePasswordResetActions": {
+      "arquivo": "src/hooks/usePasswordResetActions.ts",
+      "rotas": [
+        "/password-reset-approvals"
+      ]
+    },
+    "usePendingApprovals": {
+      "arquivo": "src/hooks/usePendingApprovals.ts",
+      "rotas": [
+        "/",
+        "/approvals",
+        "/dashboard"
+      ]
+    },
+    "usePermissions": {
+      "arquivo": "src/hooks/usePermissions.ts",
+      "rotas": [
+        "/ip-whitelist",
+        "/permissions",
+        "/rate-limiting",
+        "/roles",
+        "/security"
+      ]
+    },
+    "usePredictiveAnalysis": {
+      "arquivo": "src/hooks/usePredictiveAnalysis.ts",
+      "rotas": [
+        "/",
+        "/dashboard"
+      ]
+    },
+    "useProcessQueue": {
+      "arquivo": "src/hooks/useJobQueue.ts",
+      "rotas": [
+        "/job-queue"
+      ]
+    },
+    "usePushNotifications": {
+      "arquivo": "src/hooks/usePushNotifications.ts",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/approvals",
+        "/dashboard",
+        "/preferences",
+        "/settings",
+        "/sla"
+      ]
+    },
+    "useQueueStatistics": {
+      "arquivo": "src/hooks/useJobQueue.ts",
+      "rotas": [
+        "/job-queue"
+      ]
+    },
+    "useQuotationExpiry": {
+      "arquivo": "src/hooks/useQuotationExpiry.ts",
+      "rotas": [
+        "/orders"
+      ]
+    },
+    "useRateLimiting": {
+      "arquivo": "src/hooks/useRateLimiting.ts",
+      "rotas": [
+        "/rate-limiting",
+        "/security"
+      ]
+    },
+    "useRecentOrders": {
+      "arquivo": "src/hooks/useRecentOrders.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/orders"
+      ]
+    },
+    "useRefreshCache": {
+      "arquivo": "src/hooks/useCacheViews.ts",
+      "rotas": [
+        "/cache-monitoring",
+        "/cache-status"
+      ]
+    },
+    "useRefreshUapiToken": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useRegionResolution": {
+      "arquivo": "src/hooks/useRegionResolver.ts",
+      "rotas": [
+        "/reports/advanced"
+      ]
+    },
+    "useRemoveFromBlacklist": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useRemoveFromWhitelist": {
+      "arquivo": "src/hooks/useDrivers.ts",
+      "rotas": [
+        "/drivers"
+      ]
+    },
+    "useReportData": {
+      "arquivo": "src/pages/reports/useReportData.ts",
+      "rotas": [
+        "/reports"
+      ]
+    },
+    "useReportPresets": {
+      "arquivo": "src/hooks/useReportPresets.ts",
+      "rotas": [
+        "/reports/advanced"
+      ]
+    },
+    "useReprocessWebhook": {
+      "arquivo": "src/hooks/useWebhookEvents.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    },
+    "useResolveError": {
+      "arquivo": "src/hooks/useErrorLogs.ts",
+      "rotas": [
+        "/error-monitoring"
+      ]
+    },
+    "useResolveIncident": {
+      "arquivo": "src/hooks/useIncidents.ts",
+      "rotas": [
+        "/incidents"
+      ]
+    },
+    "useRetryJob": {
+      "arquivo": "src/hooks/useJobQueue.ts",
+      "rotas": [
+        "/job-queue"
+      ]
+    },
+    "useRiskRules": {
+      "arquivo": "src/hooks/useRiskRules.ts",
+      "rotas": [
+        "/risk-rules"
+      ]
+    },
+    "useRole": {
+      "arquivo": "src/hooks/useRole.ts",
+      "rotas": [
+        "/roles",
+        "/security"
+      ]
+    },
+    "useSLAMetrics": {
+      "arquivo": "src/hooks/useSLAMetrics.ts",
+      "rotas": [
+        "/sla"
+      ]
+    },
+    "useSLAMetricsRealtime": {
+      "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
+      "rotas": [
+        "/sla"
+      ]
+    },
+    "useSLOMetrics": {
+      "arquivo": "src/hooks/useSLOMetrics.ts",
+      "rotas": [
+        "/slo"
+      ]
+    },
+    "useScheduledTheme": {
+      "arquivo": "src/hooks/useScheduledTheme.ts",
+      "rotas": [
+        "/preferences"
+      ]
+    },
+    "useSecurityPushNotifications": {
+      "arquivo": "src/hooks/useSecurityPushNotifications.ts",
+      "rotas": [
+        "/security"
+      ]
+    },
+    "useServiceAreas": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useSoundSettings": {
+      "arquivo": "src/hooks/useSoundSettings.ts",
+      "rotas": [
+        "/",
+        "/alerts",
+        "/approvals",
+        "/dashboard",
+        "/preferences",
+        "/settings",
+        "/sla"
+      ]
+    },
+    "useSystemHealth": {
+      "arquivo": "src/hooks/useSystemHealth.ts",
+      "rotas": [
+        "/system-health"
+      ]
+    },
+    "useSystemHealthExpanded": {
+      "arquivo": "src/hooks/useSystemHealthExpanded.ts",
+      "rotas": [
+        "/system-health-expanded"
+      ]
+    },
+    "useTestNotification": {
+      "arquivo": "src/hooks/useTestNotification.ts",
+      "rotas": [
+        "/alert-configurations"
+      ]
+    },
+    "useTrackingData": {
+      "arquivo": "src/components/map/hooks/useTrackingData.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useTrackingHistory": {
+      "arquivo": "src/hooks/useTrackingHistory.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/live-map",
+        "/map"
+      ]
+    },
+    "useUAPIStatus": {
+      "arquivo": "src/hooks/useUAPI.ts",
+      "rotas": [
+        "/settings/uapi"
+      ]
+    },
+    "useUAPIUser": {
+      "arquivo": "src/hooks/useUAPI.ts",
+      "rotas": [
+        "/settings/uapi"
+      ]
+    },
+    "useUapiCoupons": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useUapiFleet": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useUapiOrderHistory": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useUapiWalletStatement": {
+      "arquivo": "src/hooks/useLalamoveUapi.ts",
+      "rotas": [
+        "/lalamove-operacoes"
+      ]
+    },
+    "useUndoableAction": {
+      "arquivo": "src/components/ui/undo-toast.tsx",
+      "rotas": [
+        "/alerts",
+        "/drivers"
+      ]
+    },
+    "useUpdateAlertConfiguration": {
+      "arquivo": "src/hooks/useAlertConfigurations.ts",
+      "rotas": [
+        "/alert-configurations"
+      ]
+    },
+    "useUpdateRiskRule": {
+      "arquivo": "src/hooks/useRiskRules.ts",
+      "rotas": [
+        "/risk-rules"
+      ]
+    },
+    "useUpdateToken": {
+      "arquivo": "src/hooks/useUAPI.ts",
+      "rotas": [
+        "/settings/uapi"
+      ]
+    },
+    "useUpdateUapiToken": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useUpdateV3Keys": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useV3CallMutation": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useVehicles": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useWallet": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/",
+        "/dashboard",
+        "/settings/lalamove"
+      ]
+    },
+    "useWalletBalance": {
+      "arquivo": "src/hooks/useUAPI.ts",
+      "rotas": [
+        "/settings/uapi"
+      ]
+    },
+    "useWalletHistory": {
+      "arquivo": "src/hooks/useLalamove.ts",
+      "rotas": [
+        "/settings/lalamove"
+      ]
+    },
+    "useWebAuthn": {
+      "arquivo": "src/hooks/useWebAuthn.ts",
+      "rotas": [
+        "/auth",
+        "/security"
+      ]
+    },
+    "useWebVitals": {
+      "arquivo": "src/utils/webVitals.ts",
+      "rotas": [
+        "/performance"
+      ]
+    },
+    "useWebhookEvents": {
+      "arquivo": "src/hooks/useWebhookEvents.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    },
+    "useWebhookSecurityMetrics": {
+      "arquivo": "src/hooks/useWebhookSecurityMetrics.ts",
+      "rotas": [
+        "/webhooks"
+      ]
+    }
+  },
+  "problemas": [
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/analytics",
+      "detalhe": "AnalyticsDashboardPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/cache-status",
+      "detalhe": "CacheStatusPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/dashboard",
+      "detalhe": "DashboardRedesigned so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/job-queue",
+      "detalhe": "JobQueuePage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/lalamove-quota",
+      "detalhe": "LalamoveQuotaPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/live-map",
+      "detalhe": "LiveMapPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/preferences",
+      "detalhe": "UserPreferencesPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/profile",
+      "detalhe": "ProfilePage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/rate-limiting",
+      "detalhe": "RateLimitDashboardPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/reports",
+      "detalhe": "ReportsPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/settings/uapi",
+      "detalhe": "UAPISettingsPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/system-health",
+      "detalhe": "SystemHealthPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "rota_sem_menu",
+      "id": "/system-health-expanded",
+      "detalhe": "SystemHealthExpandedPage so e alcancavel por URL ou pela command palette: sem item em src/components/layout/sidebar-config.ts"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/alert-configurations",
+      "detalhe": "menu \"Config. Alertas\" visivel para qualquer usuario logado, mas a rota exige manager (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/approvals",
+      "detalhe": "menu \"Aprovações\" visivel para qualquer usuario logado, mas a rota exige manager (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/bitrix24",
+      "detalhe": "menu \"Bitrix24\" visivel para qualquer usuario logado, mas a rota exige manager + MFA (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/external-data",
+      "detalhe": "menu \"Base CRM\" visivel para qualquer usuario logado, mas a rota exige manager + MFA (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/map-tools",
+      "detalhe": "menu \"Ferramentas Mapa\" visivel para qualquer usuario logado, mas a rota exige manager (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/settings/lalamove",
+      "detalhe": "menu \"Lalamove API\" visivel para qualquer usuario logado, mas a rota exige manager + MFA (ProtectedRoute manda para /unauthorized)"
+    },
+    {
+      "tipo": "menu_mais_permissivo_que_rota",
+      "id": "/webhooks",
+      "detalhe": "menu \"Webhooks\" visivel para qualquer usuario logado, mas a rota exige manager + MFA (ProtectedRoute manda para /unauthorized)"
+    }
+  ]
+}

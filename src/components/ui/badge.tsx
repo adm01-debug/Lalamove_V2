@@ -16,9 +16,9 @@ const badgeVariants = cva(
           "border-destructive/40 bg-destructive/15 text-destructive hover:bg-destructive/25",
         outline: "border-border text-foreground hover:bg-secondary",
         success:
-          "border-success/40 bg-success/15 text-success hover:bg-success/25",
+          "border-success/40 bg-success/15 text-[hsl(var(--success-text))] hover:bg-success/25",
         warning:
-          "border-warning/40 bg-warning/15 text-warning hover:bg-warning/25",
+          "border-warning/40 bg-warning/15 text-[hsl(var(--warning-text))] hover:bg-warning/25",
         info: "border-info/40 bg-info/15 text-info hover:bg-info/25",
         muted:
           "border-transparent bg-muted text-muted-foreground hover:bg-muted/80",
@@ -38,9 +38,9 @@ const badgeVariants = cva(
         "glow-destructive":
           "border-destructive/50 bg-destructive/20 text-destructive shadow-[0_0_10px_hsl(var(--destructive)/0.3)]",
         // Pill variants with dot
-        live: "border-success/50 bg-success/15 text-success animate-pulse",
+        live: "border-success/50 bg-success/15 text-[hsl(var(--success-text))] animate-pulse",
         pending:
-          "border-warning/50 bg-warning/15 text-warning",
+          "border-warning/50 bg-warning/15 text-[hsl(var(--warning-text))]",
         inactive: "border-muted bg-muted/50 text-muted-foreground",
       },
       size: {

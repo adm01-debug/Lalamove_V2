@@ -1,0 +1,43 @@
+{
+  "_comentario": [
+    "Perimetro do GitHub de adm01-debug/Lalamove_V2. Fonte: API do GitHub.",
+    "O github-settings-guard.mjs confere a realidade contra este arquivo; divergencia = mudanca fora de PR.",
+    "Mudou o perimetro de proposito? Atualize ESTE arquivo no mesmo PR."
+  ],
+  "medido_em": "2026-11-08",
+  "repo": {
+    "allow_auto_merge": false,
+    "allow_merge_commit": true,
+    "allow_rebase_merge": true,
+    "allow_squash_merge": true,
+    "allow_update_branch": false,
+    "archived": false,
+    "default_branch": "main",
+    "delete_branch_on_merge": false,
+    "has_issues": true,
+    "has_wiki": true,
+    "private": true,
+    "security_and_analysis": null,
+    "squash_merge_commit_message": "COMMIT_MESSAGES",
+    "squash_merge_commit_title": "COMMIT_OR_PR_TITLE",
+    "visibility": "private",
+    "web_commit_signoff_required": false
+  },
+  "branch_main": {
+    "protected": false
+  },
+  "actions": {
+    "enabled": true,
+    "allowed_actions": "all",
+    "sha_pinning_required": false
+  },
+  "rulesets_count": 0,
+  "environments": [
+    "Preview",
+    "Production",
+    "copilot"
+  ],
+  "nao_verificavel_automaticamente": {
+    "branch_protection_main": "403 em /repos/adm01-debug/Lalamove_V2/branches/main/protection: exige administration:read, que o GITHUB_TOKEN de workflow nao tem. Medido 2026-11-08: GET /branches/main responde protected=false, ou seja, main NAO tem branch protection (coerente com o AGENTS.md: sem required check, o gate e o agente)."
+  }
+}

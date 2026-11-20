@@ -1,0 +1,259 @@
+{
+  "geradoEm": "2026-11-08T22:15:59.275Z",
+  "commit": null,
+  "escalaOrigem": "padrao do Tailwind (tailwind.config.ts nao declara fontSize)",
+  "allowAbove16": [],
+  "escala": {
+    "xs": {
+      "fontSizePx": 12,
+      "lineHeightPx": 16,
+      "lineHeightDeclarado": "1rem",
+      "usos": 643
+    },
+    "sm": {
+      "fontSizePx": 14,
+      "lineHeightPx": 20,
+      "lineHeightDeclarado": "1.25rem",
+      "usos": 624
+    },
+    "base": {
+      "fontSizePx": 16,
+      "lineHeightPx": 24,
+      "lineHeightDeclarado": "1.5rem",
+      "usos": 77
+    },
+    "lg": {
+      "fontSizePx": 18,
+      "lineHeightPx": 28,
+      "lineHeightDeclarado": "1.75rem",
+      "usos": 95
+    },
+    "xl": {
+      "fontSizePx": 20,
+      "lineHeightPx": 28,
+      "lineHeightDeclarado": "1.75rem",
+      "usos": 35
+    },
+    "2xl": {
+      "fontSizePx": 24,
+      "lineHeightPx": 32,
+      "lineHeightDeclarado": "2rem",
+      "usos": 123
+    },
+    "3xl": {
+      "fontSizePx": 30,
+      "lineHeightPx": 36,
+      "lineHeightDeclarado": "2.25rem",
+      "usos": 47
+    },
+    "4xl": {
+      "fontSizePx": 36,
+      "lineHeightPx": 40,
+      "lineHeightDeclarado": "2.5rem",
+      "usos": 7
+    },
+    "5xl": {
+      "fontSizePx": 48,
+      "lineHeightPx": 48,
+      "lineHeightDeclarado": "1",
+      "usos": 2
+    },
+    "6xl": {
+      "fontSizePx": 60,
+      "lineHeightPx": 60,
+      "lineHeightDeclarado": "1",
+      "usos": 0
+    },
+    "7xl": {
+      "fontSizePx": 72,
+      "lineHeightPx": 72,
+      "lineHeightDeclarado": "1",
+      "usos": 0
+    },
+    "8xl": {
+      "fontSizePx": 96,
+      "lineHeightPx": 96,
+      "lineHeightDeclarado": "1",
+      "usos": 0
+    },
+    "9xl": {
+      "fontSizePx": 128,
+      "lineHeightPx": 128,
+      "lineHeightDeclarado": "1",
+      "usos": 0
+    }
+  },
+  "arbitrarios": {
+    "7": {
+      "fontSizePx": 7,
+      "lineHeightPx": 10.5,
+      "lineHeightOrigem": "herdado (preflight 1.5)",
+      "usos": 2,
+      "equivalenteNaEscala": null
+    },
+    "8": {
+      "fontSizePx": 8,
+      "lineHeightPx": 12,
+      "lineHeightOrigem": "herdado (preflight 1.5)",
+      "usos": 13,
+      "equivalenteNaEscala": null
+    },
+    "9": {
+      "fontSizePx": 9,
+      "lineHeightPx": 13.5,
+      "lineHeightOrigem": "herdado (preflight 1.5)",
+      "usos": 20,
+      "equivalenteNaEscala": null
+    },
+    "10": {
+      "fontSizePx": 10,
+      "lineHeightPx": 15,
+      "lineHeightOrigem": "herdado (preflight 1.5)",
+      "usos": 141,
+      "equivalenteNaEscala": null
+    },
+    "11": {
+      "fontSizePx": 11,
+      "lineHeightPx": 16.5,
+      "lineHeightOrigem": "herdado (preflight 1.5)",
+      "usos": 35,
+      "equivalenteNaEscala": null
+    }
+  },
+  "totais": {
+    "usosNomeados": 1653,
+    "usosArbitrarios": 211,
+    "arquivosAnalisados": 346,
+    "arquivosCss": 2
+  },
+  "violacoes": {
+    "meiaMedida": 0,
+    "acima16px": 0,
+    "comEquivalenteExato": 0,
+    "cssMeiaMedida": 0,
+    "cssFontFamilyLiteral": 0,
+    "tsxFontSizeInline": 20,
+    "tsxFontFamilyLiteral": 7,
+    "pesoOrfao": 0
+  },
+  "detalheViolacoes": {
+    "halfStep": [],
+    "above16": [],
+    "hasExactEquivalent": [],
+    "cssMeiaMedida": [],
+    "cssFontFamilyLiteral": [],
+    "tsxFontSizeInline": [
+      {
+        "where": "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx:60",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx:66",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/ContractVersionUsagePanel.tsx:225",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/ContractVersionUsagePanel.tsx:231",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:103",
+        "px": 10
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:104",
+        "px": 10
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:106",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:148",
+        "px": 10
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:149",
+        "px": 10
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:151",
+        "px": 11
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:183",
+        "px": 10
+      },
+      {
+        "where": "src/components/admin/telemetry/TelemetryCharts.tsx:184",
+        "px": 10
+      },
+      {
+        "where": "src/pages/AdminTelemetriaPage.tsx:179",
+        "px": 7
+      },
+      {
+        "where": "src/pages/LalamoveQuotaPage.tsx:187",
+        "px": 10
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:255",
+        "px": 11
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:256",
+        "px": 11
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:258",
+        "px": 12
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:278",
+        "px": 11
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:279",
+        "px": 11
+      },
+      {
+        "where": "src/pages/SLODashboardPage.tsx:281",
+        "px": 12
+      }
+    ],
+    "tsxFontFamilyLiteral": [
+      {
+        "where": "src/components/map/GoogleMapsCanvas.tsx:118",
+        "value": "system-ui"
+      },
+      {
+        "where": "src/components/map/markerFactories.ts:99",
+        "value": "system-ui"
+      },
+      {
+        "where": "src/components/map/markerFactories.ts:113",
+        "value": "system-ui"
+      },
+      {
+        "where": "src/components/map/markerFactories.ts:211",
+        "value": "monospace"
+      },
+      {
+        "where": "src/components/map/markerFactories.ts:296",
+        "value": "system-ui"
+      },
+      {
+        "where": "src/components/map/markerFactories.ts:306",
+        "value": "monospace"
+      },
+      {
+        "where": "src/utils/exportUtils.ts:103",
+        "value": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+      }
+    ],
+    "pesoOrfao": []
+  }
+}
