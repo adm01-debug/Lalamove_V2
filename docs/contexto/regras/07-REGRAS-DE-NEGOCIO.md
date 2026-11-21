@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `39f672ae35` · branch `main` · 2026-11-21 23:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2ae0baa10` · branch `main` · 2026-11-21 23:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1214,6 +1214,7 @@ _nenhum item encontrado_
 | `RUNTIME_CACHE` | `'runtime-cache-v3'` | `public/sw.js` |
 | `SAFE_REMOVAL_THRESHOLD` | `1` | `src/components/admin/telemetry/ContractVersionUsagePanel.tsx` |
 | `SWIPE_THRESHOLD` | `100` | `src/components/approvals/SwipeableApprovalCard.tsx` |
+| `DEFAULT_ZOOM` | `12` | `src/components/map/LiveMap.tsx` |
 | `FAR_ZOOM_THRESHOLD` | `11.5` | `src/components/map/LiveMap.tsx` |
 | `VERY_FAR_ZOOM_THRESHOLD` | `9.5` | `src/components/map/LiveMap.tsx` |
 | `QUOTE_SAFETY_MARGIN_MS` | `45` | `src/components/orders/NewOrderDialog.tsx` |
@@ -1748,7 +1749,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (852 testes em 71 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (871 testes em 74 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1793,6 +1794,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useWebhookEvents.test.ts` | 9 | useWebhookEvents · deve buscar eventos sem filtros · deve retornar lista vazia · deve propagar erro … |
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
+| `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
 | `src/hooks/__tests__/useLoginLockout.test.ts` | 8 | useLoginLockout · deve mapear checkLockout corretamente · deve retornar fallback no erro de checkLockout · deve mapear recordFailedAttempt corretamente … |
 | `src/lib/phone.test.ts` | 8 | validateBrazilianPhone — casos válidos · aceita %s (nacional cru) · aceita 55 sem + como código do país · validateBrazilianPhone — rejeições … |
@@ -1801,6 +1803,7 @@ _nenhum item encontrado_
 | `src/components/map/hooks/__tests__/useTrackingData.test.ts` | 7 | useTrackingData · faz o fetch inicial e popula trackingData/allTrackingData · filtra por tipo de veículo · filtra por status STOPPED … |
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
+| `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 6 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapboxToken.test.ts` | 6 | useMapboxToken · retorna o token quando a edge function responde com sucesso · falha silenciosamente (mapbox é opcional) quando a edge function retorna erro · define erro específico quando o token está ausente na resposta … |
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
@@ -1812,6 +1815,7 @@ _nenhum item encontrado_
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
 | `src/hooks/useGeoSearch.test.tsx` | 5 | useAddressSearchBox · busca sugestões com action autocomplete e session_token · isError fica true quando a busca de sugestões falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão … |
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
+| `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
 | `src/hooks/__tests__/useDashboardStats.test.ts` | 4 | useDashboardStats · deve retornar stats padrão quando supabase retorna zeros · deve calcular onTimeRate corretamente com dados de entrega · deve consultar 7 queries do supabase |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
@@ -1998,6 +2002,7 @@ _nenhum item encontrado_
 | - `phone` deve estar em E.164 (`+` seguido de 8–15 dígitos). | `src/lib/phone.ts` |
 | Extrai apenas dígitos, preservando o + inicial se existir. | `src/lib/phone.ts` |
 | Não altera o valor armazenado — apenas o texto visível ao usuário. | `src/lib/phone.ts` |
+| * `statusColor()` devolve `hsl(var(--token))`, que apenas o CSS resolve; passar | `src/lib/statusPalette.ts` |
 | * Garante que a informação de status NÃO dependa apenas da cor: cada nível | `src/lib/statusPalette.ts` |
 | ── Rate limit ─────────────────────────────────────────────────────────── | `src/lib/uapiErrors.ts` |
 | * `true` quando o erro indica falha de autenticação e deve gerar alerta. */ | `src/lib/uapiErrors.ts` |

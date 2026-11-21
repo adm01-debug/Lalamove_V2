@@ -22,7 +22,7 @@
   ],
   "testes": [
    "guards em scripts/ (46)",
-   "co-localizado (__tests__) (42)",
+   "co-localizado (__tests__) (45)",
    "supabase/functions/<edge> (10)"
   ],
   "edge_functions": "supabase/functions",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)",
    "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)",
    "ci: inclui os testes do roteador do gateway nos contract tests (#134)",
    "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)",
-   "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)",
-   "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)"
+   "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

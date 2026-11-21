@@ -77,6 +77,10 @@
    "importado_por": 13
   },
   {
+   "arquivo": "src/components/map/hooks/useTrackingData.ts",
+   "importado_por": 12
+  },
+  {
    "arquivo": "src/components/ui/dropdown-menu.tsx",
    "importado_por": 12
   },
@@ -91,10 +95,6 @@
   {
    "arquivo": "supabase/functions/_shared/contract.ts",
    "importado_por": 12
-  },
-  {
-   "arquivo": "src/components/map/hooks/useTrackingData.ts",
-   "importado_por": 11
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",

@@ -600,10 +600,11 @@
     "STATUS_PALETTE",
     "StatusLevel",
     "statusColor",
+    "statusColorCss",
     "statusGlyph"
    ],
    "export_default": null,
-   "linhas": 97,
+   "linhas": 133,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -616,7 +617,7 @@
    "usado_por_modulos": [
     "components/map"
    ],
-   "coberto_por_testes": 0,
+   "coberto_por_testes": 1,
    "orfao": false
   },
   {

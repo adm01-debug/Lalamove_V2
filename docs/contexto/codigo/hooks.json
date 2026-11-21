@@ -91,7 +91,7 @@
     "src/components/map/Google3DCanvas.tsx",
     "src/components/map/GoogleMapsCanvas.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/components/map/hooks/useMapAlerts.ts",
@@ -142,7 +142,7 @@
    "hooks_exportados": [
     "useMapMarkers"
    ],
-   "linhas": 414,
+   "linhas": 429,
    "dominio": "components/map",
    "tabelas": [],
    "rpcs": [],
@@ -156,7 +156,7 @@
    "usado_por_arquivos": [
     "src/components/map/LiveMap.tsx"
    ],
-   "coberto_por_testes": 1
+   "coberto_por_testes": 2
   },
   {
    "arquivo": "src/components/map/hooks/useTrackingData.ts",
@@ -187,7 +187,7 @@
     "src/components/map/hooks/useMapMarkers.ts",
     "src/components/map/markerFactories.ts"
    ],
-   "coberto_por_testes": 3
+   "coberto_por_testes": 4
   },
   {
    "arquivo": "src/components/ui/contextual-hints.tsx",

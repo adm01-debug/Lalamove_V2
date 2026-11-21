@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 110,
+ "total": 114,
  "por_tipo": {
   "contrato (deno)": 2,
-  "e2e (playwright)": 5,
+  "e2e (playwright)": 6,
   "edge (deno)": 8,
   "guard (node --test)": 33,
-  "unit (vitest)": 62
+  "unit (vitest)": 65
  },
  "onde_ficam": [
   {
@@ -29,7 +29,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 42
+   "arquivos": 45
   },
   {
    "padrao": "supabase/functions/<edge>",
@@ -41,7 +41,7 @@
   },
   {
    "padrao": "e2e/",
-   "arquivos": 5
+   "arquivos": 6
   },
   {
    "padrao": "outro",
@@ -55,6 +55,13 @@
    "linhas": 55,
    "testa": [],
    "casos": 0
+  },
+  {
+   "arquivo": "e2e/livemap-route.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 117,
+   "testa": [],
+   "casos": 4
   },
   {
    "arquivo": "e2e/login-lockout.e2e.ts",
@@ -549,6 +556,15 @@
    "casos": 2
   },
   {
+   "arquivo": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 72,
+   "testa": [
+    "src/components/map/hooks/useGoogleMapsLoader.ts"
+   ],
+   "casos": 5
+  },
+  {
    "arquivo": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 88,
@@ -566,6 +582,16 @@
     "src/components/map/hooks/useMapboxToken.ts"
    ],
    "casos": 5
+  },
+  {
+   "arquivo": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 177,
+   "testa": [
+    "src/components/map/hooks/useMapMarkers.ts",
+    "src/components/map/hooks/useTrackingData.ts"
+   ],
+   "casos": 7
   },
   {
    "arquivo": "src/components/map/hooks/__tests__/useTrackingData.test.ts",
@@ -860,6 +886,15 @@
    "casos": 11
   },
   {
+   "arquivo": "src/lib/__tests__/statusPalette.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 33,
+   "testa": [
+    "src/lib/statusPalette.ts"
+   ],
+   "casos": 4
+  },
+  {
    "arquivo": "src/lib/__tests__/uapiErrors.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 27,
@@ -1084,10 +1119,11 @@
   "scripts/vercel/verify-release-targets.mjs": 1,
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
   "src/components/map/MapSettingsPanel.tsx": 1,
+  "src/components/map/hooks/useGoogleMapsLoader.ts": 1,
   "src/components/map/hooks/useMapAlerts.ts": 1,
-  "src/components/map/hooks/useMapMarkers.ts": 1,
+  "src/components/map/hooks/useMapMarkers.ts": 2,
   "src/components/map/hooks/useMapboxToken.ts": 1,
-  "src/components/map/hooks/useTrackingData.ts": 3,
+  "src/components/map/hooks/useTrackingData.ts": 4,
   "src/components/map/mapLayers.ts": 1,
   "src/components/map/markerFactories.ts": 1,
   "src/components/ui/button.tsx": 1,
@@ -1127,6 +1163,7 @@
   "src/lib/lalamoveValidation.ts": 1,
   "src/lib/orderErrors.ts": 1,
   "src/lib/phone.ts": 1,
+  "src/lib/statusPalette.ts": 1,
   "src/lib/uapiErrors.ts": 2,
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
@@ -1206,7 +1243,6 @@
    "scripts/ai-context/cenarios.mjs",
    "src/components/alerts/AlertsAdvanced.tsx",
    "src/components/ErrorBoundary.tsx",
-   "src/components/map/hooks/useGoogleMapsLoader.ts",
    "src/components/ui/contextual-hints.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
    "src/components/ui/keyboard-shortcuts-help.tsx",

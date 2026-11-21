@@ -845,7 +845,7 @@
     "LiveMap"
    ],
    "export_default": null,
-   "linhas": 611,
+   "linhas": 630,
    "dominio": "components/map",
    "hooks_locais": [
     "useEffectiveMapProvider",

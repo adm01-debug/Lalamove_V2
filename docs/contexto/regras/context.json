@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "39f672ae358be4f777382cc6ab369d66b3180d15",
+  "sha": "c2ae0baa10201a24357ac20954e41da8c200041e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 23:06 UTC",
-  "files_total": 951,
-  "code_files": 781,
-  "code_lines": 134008
+  "generated_at": "2026-11-21 23:07 UTC",
+  "files_total": 955,
+  "code_files": 785,
+  "code_lines": 134477
  },
  "version": "1.3.2",
- "facts_hash": "91f7da76019e9333",
+ "facts_hash": "3a400a302a017f9d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 258,
+   ".ts": 262,
    ".tsx": 226,
    ".sql": 177,
    ".mjs": 107,
@@ -18826,7 +18826,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 149,
+  "components_count": 151,
   "hooks": [
    {
     "name": "useOrders",
@@ -19989,8 +19989,8 @@
   },
   {
    "module": "e2e",
-   "files": 5,
-   "lines": 434,
+   "files": 6,
+   "lines": 551,
    "tables": [],
    "exports": [
     "auth.ts: InjectedSession, getInjectedSession, restoreSession, ensureSignedOut, expectRedirectToAuth"
@@ -20001,6 +20001,7 @@
    ],
    "imports_modules": [],
    "file_list": [
+    "e2e/livemap-route.e2e.ts",
     "e2e/login-lockout.e2e.ts",
     "e2e/mfa.e2e.ts",
     "e2e/password-reset.e2e.ts",
@@ -20279,8 +20280,8 @@
   },
   {
    "module": "src/components",
-   "files": 148,
-   "lines": 26988,
+   "files": 150,
+   "lines": 27271,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20446,14 +20447,14 @@
     "src/components/map/hooks/useMapboxToken.ts",
     "src/components/map/hooks/useTrackingData.ts",
     "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
+    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
     "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
+    "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
     "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
     "src/components/map/hooks/__tests__/useTrackingData.test.ts",
     "src/components/notifications/NotificationPreferences.tsx",
     "src/components/notifications/PushNotificationSettings.tsx",
-    "src/components/notifications/SoundSettingsPanel.tsx",
-    "src/components/orders/AddressAutocomplete.tsx",
-    "src/components/orders/CepQuickFill.tsx"
+    "src/components/notifications/SoundSettingsPanel.tsx"
    ]
   },
   {
@@ -20707,8 +20708,8 @@
   },
   {
    "module": "src/lib",
-   "files": 35,
-   "lines": 3495,
+   "files": 36,
+   "lines": 3564,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -20726,7 +20727,7 @@
     "lalamoveValidation.ts: ScheduleAtValidation, validateScheduleAt, SPECIAL_REQUESTS_BY_VEHICLE, SpecialRequestValidation, validateSpecialRequests",
     "orderErrors.ts: OrderErrorField, ParsedOrderError, parseOrderError",
     "phone.ts: PhoneValidationResult, validateBrazilianPhone, maskBrazilianPhone",
-    "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, STATUS_GLYPH, STATUS_A11Y_LABEL, statusGlyph",
+    "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, statusColorCss, STATUS_GLYPH, STATUS_A11Y_LABEL",
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
     "uapiErrors.ts: UapiErrorInfo, UAPI_ERROR_MAP, resolveUapiError, isUapiAuthFailure",
     "uapiFormat.ts: formatFen, formatUapiTime",
@@ -20793,6 +20794,7 @@
     "src/lib/__tests__/lalamoveOrderEdit.test.ts",
     "src/lib/__tests__/lalamoveReasons.test.ts",
     "src/lib/__tests__/lalamoveTimeline.test.ts",
+    "src/lib/__tests__/statusPalette.test.ts",
     "src/lib/__tests__/uapiErrors.test.ts"
    ]
   },
@@ -22495,6 +22497,7 @@
     "scripts/db-audit/register-migration.mjs"
    ],
    "DEV": [
+    "src/components/map/LiveMap.tsx",
     "src/hooks/useRealtimeSubscriptions.ts",
     "src/hooks/useSecurityPushNotifications.ts",
     "src/hooks/useServiceWorker.ts",
@@ -25652,6 +25655,10 @@
    {
     "file": "src/lib/phone.ts",
     "text": "Não altera o valor armazenado — apenas o texto visível ao usuário."
+   },
+   {
+    "file": "src/lib/statusPalette.ts",
+    "text": "* `statusColor()` devolve `hsl(var(--token))`, que apenas o CSS resolve; passar"
    },
    {
     "file": "src/lib/statusPalette.ts",
@@ -28829,6 +28836,11 @@
     "file": "src/components/approvals/SwipeableApprovalCard.tsx",
     "name": "SWIPE_THRESHOLD",
     "value": "100"
+   },
+   {
+    "file": "src/components/map/LiveMap.tsx",
+    "name": "DEFAULT_ZOOM",
+    "value": "12"
    },
    {
     "file": "src/components/map/LiveMap.tsx",
@@ -34805,6 +34817,30 @@
     "name": "devolve null para valores que não são polyline válida"
    },
    {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "useGoogleMapsLoader"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "reporta não configurado quando falta a chave do conector"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "respeita a chave injetada via env do conector"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "resolve imediatamente quando window.google já existe"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "injetar o script uma vez só (singleton) e resolver pelo callback"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "rejeita e libera o singleton quando o script falha"
+   },
+   {
     "file": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
     "name": "useMapAlerts"
    },
@@ -34823,6 +34859,38 @@
    {
     "file": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
     "name": "limpa alertas de trackings que desapareceram"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "useMapMarkers"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "cria um marker por veículo quando o mapa está vivo"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "não cria markers enquanto o loading do mapa é true"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "não toca em mapa destruído (regressão do appendChild no StrictMode)"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "não toca em mapa nulo (cleanup já zerou map.current)"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "sobrevive a getCanvas() que lança (Mapbox removeu o canvas)"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "remove o marker do veículo que saiu do tracking"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    "name": "resetMarkers limpa todos os markers criados"
    },
    {
     "file": "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
@@ -36111,6 +36179,26 @@
    {
     "file": "src/lib/__tests__/lalamoveTimeline.test.ts",
     "name": "formata %s"
+   },
+   {
+    "file": "src/lib/__tests__/statusPalette.test.ts",
+    "name": "statusColorCss"
+   },
+   {
+    "file": "src/lib/__tests__/statusPalette.test.ts",
+    "name": "emite hsl legado com vírgulas para o Mapbox"
+   },
+   {
+    "file": "src/lib/__tests__/statusPalette.test.ts",
+    "name": "não emite var() — o Mapbox não resolve variáveis CSS"
+   },
+   {
+    "file": "src/lib/__tests__/statusPalette.test.ts",
+    "name": "aplica alfa com hsla"
+   },
+   {
+    "file": "src/lib/__tests__/statusPalette.test.ts",
+    "name": "mantém statusColor() com var() para uso em CSS/inline"
    },
    {
     "file": "src/lib/__tests__/uapiErrors.test.ts",
@@ -47935,6 +48023,18 @@
     "VITE_SUPABASE_URL"
    ]
   },
+  "e2e/livemap-route.e2e.ts": {
+   "path": "e2e/livemap-route.e2e.ts",
+   "lines": 117,
+   "rule_comments": [
+    "componente expõe `window.__livemap` **apenas em dev** e o teste pergunta à API",
+    "instancia: nesse caso verificamos apenas a degradação graciosa, nunca sucesso."
+   ],
+   "temporal": [
+    "timeout: 25_000,",
+    "{ timeout: 25_000 },"
+   ]
+  },
   "e2e/login-lockout.e2e.ts": {
    "path": "e2e/login-lockout.e2e.ts",
    "lines": 177,
@@ -53418,11 +53518,18 @@
   },
   "src/components/map/LiveMap.tsx": {
    "path": "src/components/map/LiveMap.tsx",
-   "lines": 611,
+   "lines": 630,
    "exports": [
     "function LiveMap"
    ],
+   "env": [
+    "DEV"
+   ],
    "params": [
+    {
+     "name": "DEFAULT_ZOOM",
+     "value": "12"
+    },
     {
      "name": "FAR_ZOOM_THRESHOLD",
      "value": "11.5"
@@ -53784,7 +53891,7 @@
   },
   "src/components/map/hooks/useMapMarkers.ts": {
    "path": "src/components/map/hooks/useMapMarkers.ts",
-   "lines": 414,
+   "lines": 429,
    "exports": [
     "function parseExpectedRoute",
     "function useMapMarkers"
@@ -53878,6 +53985,19 @@
     "devolve null para valores que não são polyline válida"
    ]
   },
+  "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts": {
+   "path": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+   "lines": 72,
+   "is_test": true,
+   "tests": [
+    "useGoogleMapsLoader",
+    "reporta não configurado quando falta a chave do conector",
+    "respeita a chave injetada via env do conector",
+    "resolve imediatamente quando window.google já existe",
+    "injetar o script uma vez só (singleton) e resolver pelo callback",
+    "rejeita e libera o singleton quando o script falha"
+   ]
+  },
   "src/components/map/hooks/__tests__/useMapAlerts.test.ts": {
    "path": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
    "lines": 88,
@@ -53888,6 +54008,25 @@
     "registra timestamp de parada e o preserva enquanto continua parado",
     "calcula tendência de ETA (improving / worsening / stable)",
     "limpa alertas de trackings que desapareceram"
+   ]
+  },
+  "src/components/map/hooks/__tests__/useMapMarkers.test.ts": {
+   "path": "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+   "lines": 177,
+   "is_test": true,
+   "errors": [
+    "Cannot read properties of undefined (reading ",
+    "Map has already been removed"
+   ],
+   "tests": [
+    "useMapMarkers",
+    "cria um marker por veículo quando o mapa está vivo",
+    "não cria markers enquanto o loading do mapa é true",
+    "não toca em mapa destruído (regressão do appendChild no StrictMode)",
+    "não toca em mapa nulo (cleanup já zerou map.current)",
+    "sobrevive a getCanvas() que lança (Mapbox removeu o canvas)",
+    "remove o marker do veículo que saiu do tracking",
+    "resetMarkers limpa todos os markers criados"
    ]
   },
   "src/components/map/hooks/__tests__/useMapboxToken.test.ts": {
@@ -60625,11 +60764,12 @@
   },
   "src/lib/statusPalette.ts": {
    "path": "src/lib/statusPalette.ts",
-   "lines": 97,
+   "lines": 133,
    "exports": [
     "type StatusLevel",
     "const STATUS_PALETTE",
     "function statusColor",
+    "function statusColorCss",
     "const STATUS_GLYPH",
     "const STATUS_A11Y_LABEL",
     "function statusGlyph"
@@ -60641,6 +60781,7 @@
     }
    ],
    "rule_comments": [
+    "* `statusColor()` devolve `hsl(var(--token))`, que apenas o CSS resolve; passar",
     "* Garante que a informação de status NÃO dependa apenas da cor: cada nível"
    ],
    "doc": "Escala semântica única de status — fonte de verdade para mapa e alertas. Reduz a diversidade de cores garantindo que TODO indicador de status use exatamente um dos quatro níveis abaixo, sempre via tokens semânticos (nunca hex hard-coded), respeitando dark mode automaticamente."
@@ -60890,6 +61031,18 @@
     "preserva status desconhecido como rótulo bruto",
     "formatDuration",
     "formata %s"
+   ]
+  },
+  "src/lib/__tests__/statusPalette.test.ts": {
+   "path": "src/lib/__tests__/statusPalette.test.ts",
+   "lines": 33,
+   "is_test": true,
+   "tests": [
+    "statusColorCss",
+    "emite hsl legado com vírgulas para o Mapbox",
+    "não emite var() — o Mapbox não resolve variáveis CSS",
+    "aplica alfa com hsla",
+    "mantém statusColor() com var() para uso em CSS/inline"
    ]
   },
   "src/lib/__tests__/uapiErrors.test.ts": {
@@ -66623,10 +66776,26 @@
   }
  },
  "git": {
-  "sha": "39f672ae358be4f777382cc6ab369d66b3180d15",
+  "sha": "c2ae0baa10201a24357ac20954e41da8c200041e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c2ae0ba",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)",
+    "files": [
+     "e2e/livemap-route.e2e.ts",
+     "src/components/map/LiveMap.tsx",
+     "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+     "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+     "src/components/map/hooks/useMapMarkers.ts",
+     "src/components/map/mapLayers.ts",
+     "src/lib/__tests__/statusPalette.test.ts",
+     "src/lib/statusPalette.ts"
+    ]
+   },
    {
     "sha": "39f672a",
     "date": "2026-11-21",
@@ -66939,15 +67108,6 @@
      "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
      "docs/planos/README.md"
     ]
-   },
-   {
-    "sha": "54fd87b",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(docs): adiciona plano Mapbox × Lalamove V2 com 100 etapas (#127)",
-    "files": [
-     "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md"
-    ]
    }
   ],
   "hot_files": [
@@ -66958,6 +67118,14 @@
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
+   ],
+   [
+    "src/components/map/LiveMap.tsx",
+    2
+   ],
+   [
+    "src/components/map/hooks/useMapMarkers.ts",
+    2
    ],
    [
     "supabase/functions/lalamove-api/index.ts",
@@ -66988,6 +67156,30 @@
     2
    ],
    [
+    "e2e/livemap-route.e2e.ts",
+    1
+   ],
+   [
+    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    1
+   ],
+   [
+    "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
+    1
+   ],
+   [
+    "src/components/map/mapLayers.ts",
+    1
+   ],
+   [
+    "src/lib/__tests__/statusPalette.test.ts",
+    1
+   ],
+   [
+    "src/lib/statusPalette.ts",
+    1
+   ],
+   [
     "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
     1
    ],
@@ -66997,38 +67189,6 @@
    ],
    [
     "supabase/migrations/20261121192500_restore_audit_log.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
-    1
-   ],
-   [
-    "src/components/map/LiveMap.tsx",
-    1
-   ],
-   [
-    "src/components/map/MapProviderSelector.tsx",
-    1
-   ],
-   [
-    "src/hooks/__tests__/useMapProviderPolicy.test.ts",
-    1
-   ],
-   [
-    "src/hooks/useMapProviderPolicy.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/failover.test.ts",
     1
    ]
   ]
