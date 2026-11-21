@@ -47,6 +47,16 @@ export const PRIMARY_SKU: Record<ProviderName, Partial<Record<GeoFunction, strin
   },
 };
 
+/**
+ * Linha ausente em `geo_settings` nao significa "desligado": significa funcao que a tabela ainda
+ * nao conhece. Sem completar com os defaults, `resolve()` cai em `off` e a acao responde 503 -
+ * foi o que aconteceria com isochrone/optimization/tilequery, que nao tem seed.
+ */
+export function mergeSettings(rows: GeoSettingRow[], defaults: GeoSettingRow[]): GeoSettingRow[] {
+  const known = new Set(rows.map((r) => r.function));
+  return [...rows, ...defaults.filter((d) => !known.has(d.function))];
+}
+
 export class ProviderResolver {
   private settings: GeoSettingRow[] | null = null;
   private budget: BudgetRow[] | null = null;

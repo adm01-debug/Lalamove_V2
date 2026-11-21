@@ -1,5 +1,5 @@
 import { assertEquals, assertRejects } from "https://deno.land/std@0.168.0/testing/asserts.ts";
-import { ProviderResolver, ResolveError } from "./resolver.ts";
+import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
 
 function make(opts: { settings: GeoSettingRow[]; budget?: BudgetRow[]; quota?: QuotaRow[]; configured?: string[] }) {
@@ -64,4 +64,20 @@ Deno.test("rateGuard: bloqueia acima do limite no mesmo minuto e libera no próx
   assertEquals(r.rateGuard("mapbox", "matrix:driving-traffic", 30), false);
   t = 61_000;
   assertEquals(r.rateGuard("mapbox", "matrix:driving-traffic", 30), true);
+});
+
+Deno.test("mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off", () => {
+  // Regressao: isochrone/optimization/tilequery nao tem seed em geo_settings. Sem o
+  // merge com os defaults o resolver devolve `off` e essas acoes respondem 503.
+  const dbRows: GeoSettingRow[] = [{ function: "route", provider: "mapbox", fallback_provider: "google", config: {} }];
+  const defaults: GeoSettingRow[] = [
+    { function: "route", provider: "mapbox", fallback_provider: "mapbox", config: {} },
+    { function: "isochrone", provider: "mapbox", fallback_provider: "google", config: {} },
+  ];
+  const merged = mergeSettings(dbRows, defaults);
+
+  assertEquals(merged.find((r) => r.function === "isochrone")?.provider, "mapbox");
+  // a linha do banco continua com prioridade sobre o default
+  assertEquals(merged.find((r) => r.function === "route")?.fallback_provider, "google");
+  assertEquals(merged.length, 2);
 });
