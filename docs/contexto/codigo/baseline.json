@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "666bc90dae6293f55bc93d366460a438204dba2e",
+  "commit": "56391deb871b67d1de7b933553721f9e78afaab4",
   "branch": "main",
-  "data_commit": "2026-11-21T13:05:32-03:00",
+  "data_commit": "2026-11-21T13:10:53-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "56391de",
+    "data": "2026-11-21",
+    "assunto": "fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)"
+   },
    {
     "sha": "666bc90",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "bb236d9",
     "data": "2026-11-20",
     "assunto": "build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)"
-   },
-   {
-    "sha": "1bf53fb",
-    "data": "2026-11-20",
-    "assunto": "build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)"
    }
   ],
   "arquivos_mudados_7d": 65,
@@ -172,6 +172,10 @@
     "mudancas": 2
    },
    {
+    "pasta": ".github/workflows/deploy-edges.yml",
+    "mudancas": 2
+   },
+   {
     "pasta": ".gitignore",
     "mudancas": 2
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/P-02-app-mobile-motoristas.md",
     "mudancas": 2
    }
   ],
@@ -266,6 +266,10 @@
     "mudancas": 2
    },
    {
+    "arquivo": ".github/workflows/deploy-edges.yml",
+    "mudancas": 2
+   },
+   {
     "arquivo": "docs/agentes/banco.md",
     "mudancas": 2
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "docs/pendencias/P-07-security-definer-search-path.md",
     "mudancas": 2
-   },
-   {
-    "arquivo": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 30
+    "commits": 31
    },
    {
     "autor": "dependabot[bot]",

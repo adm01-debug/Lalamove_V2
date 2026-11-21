@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "666bc90dae6293f55bc93d366460a438204dba2e",
+  "sha": "56391deb871b67d1de7b933553721f9e78afaab4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 16:06 UTC",
+  "generated_at": "2026-11-21 16:12 UTC",
   "files_total": 895,
   "code_files": 742,
   "code_lines": 127540
@@ -62317,10 +62317,19 @@
   }
  },
  "git": {
-  "sha": "666bc90dae6293f55bc93d366460a438204dba2e",
+  "sha": "56391deb871b67d1de7b933553721f9e78afaab4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "56391de",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)",
+    "files": [
+     ".github/workflows/deploy-edges.yml"
+    ]
+   },
    {
     "sha": "666bc90",
     "date": "2026-11-21",
@@ -62633,37 +62642,6 @@
     "files": [
      ".github/workflows/ci.yml"
     ]
-   },
-   {
-    "sha": "63987c9",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)",
-    "files": [
-     "AGENTS.md",
-     "docs/agentes/banco.md",
-     "scripts/add-security-manage.ts",
-     "scripts/apply-dashboard-fixes.ts",
-     "scripts/apply-final-sql.ts",
-     "scripts/apply-permissions-via-api.ts",
-     "scripts/apply-rls-via-pg.ts",
-     "scripts/apply-sql-via-management-api.ts",
-     "scripts/check-permissions.ts",
-     "scripts/diagnose-rpc.ts",
-     "scripts/ensure-admin-active.ts",
-     "scripts/fix-admin-role-active.ts",
-     "scripts/fix-dashboard-via-api.ts",
-     "scripts/fix-rpc-functions.ts",
-     "scripts/list-tables-v2.ts",
-     "scripts/list-tables.ts",
-     "scripts/seed-contacts.ts",
-     "scripts/seed-database.ts",
-     "scripts/set-user-admin.ts",
-     "scripts/test-after-fix.ts",
-     "scripts/test-user-permissions.ts",
-     "supabase/config.toml",
-     "supabase/functions/migrate-helper/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -62692,7 +62670,7 @@
     3
    ],
    [
-    "supabase/config.toml",
+    ".github/workflows/deploy-edges.yml",
     2
    ],
    [
@@ -62728,15 +62706,11 @@
     2
    ],
    [
-    "scripts/seed-database.ts",
-    2
-   ],
-   [
-    ".github/workflows/deploy-edges.yml",
+    "docs/EDGE_DEPLOY_PIPELINE.md",
     1
    ],
    [
-    "docs/EDGE_DEPLOY_PIPELINE.md",
+    "supabase/config.toml",
     1
    ],
    [
@@ -62745,6 +62719,10 @@
    ],
    [
     "supabase/migrations/20261122120000_baseline_order_status_values.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
     1
    ]
   ]

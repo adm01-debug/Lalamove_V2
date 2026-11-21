@@ -9,6 +9,7 @@
 | public.alerts | order_id | public.lalamove_orders | id | SET NULL | NO ACTION |
 | public.alerts_sent | alert_id | public.alerts | id | CASCADE | NO ACTION |
 | public.bitrix24_activities | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
+| public.bitrix24_spa_sync | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.bitrix24_sync | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.contacts | owner_id | auth.users | id | CASCADE | NO ACTION |
 | public.driver_approval_queue | driver_id | public.drivers | id | CASCADE | NO ACTION |
@@ -19,6 +20,7 @@
 | public.driver_incidents | order_id | public.lalamove_orders | id | SET NULL | NO ACTION |
 | public.driver_locations | tracking_id | public.active_tracking | id | CASCADE | NO ACTION |
 | public.geo_blocks | blocked_by | auth.users | id | SET NULL | NO ACTION |
+| public.job_queue | created_by | auth.users | id | NO ACTION | NO ACTION |
 | public.lalamove_order_replacements | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.lalamove_orders | cancelled_by | auth.users | id | SET NULL | NO ACTION |
 | public.lalamove_orders | driver_id | public.drivers | id | SET NULL | NO ACTION |
@@ -28,6 +30,7 @@
 | public.lalamove_stop_proofs | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.lalamove_stop_proofs | stop_id | public.lalamove_stops | id | CASCADE | NO ACTION |
 | public.lalamove_stops | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
+| public.lalamove_webhook_config | registered_by | auth.users | id | NO ACTION | NO ACTION |
 | public.map_settings_overrides | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.new_device_alerts | device_id | public.user_devices | id | CASCADE | NO ACTION |
 | public.password_reset_requests | reviewed_by | auth.users | id | SET NULL | NO ACTION |
@@ -148,6 +151,18 @@ erDiagram
         text activity_type
         text subject
         timestamp_with_time_zone created_at
+    }
+    public_bitrix24_spa_sync {
+        uuid id PK
+        uuid order_id FK
+        integer spa_id
+        integer category_id
+        text last_stage
+        timestamp_with_time_zone last_synced_at
+        text last_error
+        text sync_status
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
     }
     public_bitrix24_stage_mappings {
         uuid id PK
@@ -364,6 +379,25 @@ erDiagram
         timestamp_with_time_zone created_at
         timestamp_with_time_zone updated_at
     }
+    public_job_queue {
+        uuid id PK
+        text type
+        jsonb payload
+        text status
+        integer attempts
+        integer max_attempts
+        text error_message
+        text error_stack
+        timestamp_with_time_zone next_retry_at
+        timestamp_with_time_zone started_at
+        timestamp_with_time_zone completed_at
+        integer priority
+        text dedup_key
+        jsonb metadata
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
+        uuid created_by FK
+    }
     public_lalamove_order_replacements {
         uuid id PK
         uuid order_id FK
@@ -429,7 +463,7 @@ erDiagram
     public_lalamove_status_history {
         uuid id PK
         uuid order_id FK
-        order_status status
+        text status
         text notes
         jsonb metadata
         timestamp_with_time_zone created_at
@@ -469,6 +503,7 @@ erDiagram
         text pod_image_url
         timestamp_with_time_zone pod_delivered_at
         text remarks
+        text stop_id
     }
     public_lalamove_uapi_sessions {
         uuid id PK
@@ -482,6 +517,17 @@ erDiagram
         timestamp_with_time_zone last_refreshed_at
         text refresh_method
         boolean is_active
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
+    }
+    public_lalamove_webhook_config {
+        uuid id PK
+        text environment
+        text url
+        boolean is_active
+        timestamp_with_time_zone registered_at
+        uuid registered_by FK
+        text notes
         timestamp_with_time_zone created_at
         timestamp_with_time_zone updated_at
     }
@@ -737,6 +783,7 @@ erDiagram
     public_lalamove_orders ||--o{ public_alerts : "alerts_order_id_fkey"
     public_alerts ||--o{ public_alerts_sent : "alerts_sent_alert_id_fkey"
     public_lalamove_orders ||--o{ public_bitrix24_activities : "bitrix24_activities_order_id_fkey"
+    public_lalamove_orders ||--o{ public_bitrix24_spa_sync : "bitrix24_spa_sync_order_id_fkey"
     public_lalamove_orders ||--o{ public_bitrix24_sync : "bitrix24_sync_order_id_fkey"
     auth_users ||--o{ public_contacts : "contacts_owner_id_fkey"
     public_drivers ||--o{ public_driver_approval_queue : "driver_approval_queue_driver_id_fkey"
@@ -747,6 +794,7 @@ erDiagram
     public_lalamove_orders ||--o{ public_driver_incidents : "driver_incidents_order_id_fkey"
     public_active_tracking ||--o{ public_driver_locations : "driver_locations_tracking_id_fkey"
     auth_users ||--o{ public_geo_blocks : "geo_blocks_blocked_by_fkey"
+    auth_users ||--o{ public_job_queue : "job_queue_created_by_fkey"
     public_lalamove_orders ||--o{ public_lalamove_order_replacements : "lalamove_order_replacements_order_id_fkey"
     auth_users ||--o{ public_lalamove_orders : "lalamove_orders_cancelled_by_fkey"
     public_drivers ||--o{ public_lalamove_orders : "lalamove_orders_driver_id_fkey"
@@ -756,6 +804,7 @@ erDiagram
     public_lalamove_orders ||--o{ public_lalamove_stop_proofs : "lalamove_stop_proofs_order_id_fkey"
     public_lalamove_stops ||--o{ public_lalamove_stop_proofs : "lalamove_stop_proofs_stop_id_fkey"
     public_lalamove_orders ||--o{ public_lalamove_stops : "lalamove_stops_order_id_fkey"
+    auth_users ||--o{ public_lalamove_webhook_config : "lalamove_webhook_config_registered_by_fkey"
     auth_users ||--o{ public_map_settings_overrides : "map_settings_overrides_user_id_fkey"
     public_user_devices ||--o{ public_new_device_alerts : "new_device_alerts_device_id_fkey"
     auth_users ||--o{ public_password_reset_requests : "password_reset_requests_reviewed_by_fkey"

@@ -11,5 +11,5 @@
 | public.driver_status | enum | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST | public.driver_stats_cache.driver_status, public.drivers.status, public.drivers_safe_view.status |
 | public.incident_severity | enum | LOW, MEDIUM, HIGH, CRITICAL | public.driver_incidents.severity |
 | public.incident_type | enum | ROUTE_DEVIATION, LONG_STOP, LATE_DELIVERY, CUSTOMER_COMPLAINT, DAMAGE, OTHER | public.driver_incidents.type |
-| public.order_status | enum | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED | public.lalamove_orders.status, public.lalamove_status_history.status, public.orders_operator_view.status, public.orders_safe_view.status |
+| public.order_status | enum | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED, QUOTED, ASSIGNING_DRIVER, DELIVERING | public.lalamove_orders.status, public.orders_operator_view.status, public.orders_safe_view.status |
 | public.vehicle_type | enum | MOTORCYCLE, CAR, VAN, TRUCK | public.driver_stats_cache.vehicle_type, public.drivers.vehicle_type, public.drivers_safe_view.vehicle_type, public.lalamove_orders.vehicle_type, public.orders_operator_view.vehicle_type, public.orders_safe_view.vehicle_type |

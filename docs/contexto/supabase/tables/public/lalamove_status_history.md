@@ -20,7 +20,7 @@
 |---|---|---|---|---|---|---|
 | 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
 | 2 | `order_id` | `uuid` | não |  |  |  |
-| 3 | `status` | `order_status` | não |  |  |  |
+| 3 | `status` | `text` | não |  |  |  |
 | 4 | `notes` | `text` | sim |  |  |  |
 | 5 | `metadata` | `jsonb` | sim | `'{}'::jsonb` |  |  |
 | 6 | `created_at` | `timestamp with time zone` | não | `now()` |  |  |

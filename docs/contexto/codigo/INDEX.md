@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `666bc90dae6293f55bc93d366460a438204dba2e` (2026-11-21T13:05:32-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `56391deb871b67d1de7b933553721f9e78afaab4` (2026-11-21T13:10:53-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -265,7 +265,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6588 nós · 14417 arestas · 503 comunidades · grafo do commit `666bc90d`
+- 6588 nós · 14417 arestas · 503 comunidades · grafo do commit `56391deb`
 - comunidades maiores: lucide-react (128), snapshot.py (100), cn (97), utils.ts (97), react (84), dependencies (80), gerar.mjs (76), Header.tsx (76), generate.py (75), useRealtimeSubscriptions.ts (72), Button (71), client.ts (70)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
@@ -354,6 +354,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `56391de` fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)
 - 2026-11-21 `666bc90` infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)
 - 2026-11-21 `9f9c709` feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)
 - 2026-11-21 `18c9d83` feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)
@@ -368,7 +369,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `75b7bef` chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)
 - 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
 - 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
-- 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

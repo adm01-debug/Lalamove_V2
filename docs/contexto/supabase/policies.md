@@ -32,6 +32,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.bitrix24_activities | Authorized roles can view activities | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
 | public.bitrix24_activities | Managers can insert activities | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
 | public.bitrix24_activities | Managers can update activities | UPDATE | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
+| public.bitrix24_spa_sync | Admin manager view spa sync | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
 | public.bitrix24_stage_mappings | Admins can delete stage mappings | DELETE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.bitrix24_stage_mappings | Authorized roles can view stage mappings | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |  |
 | public.bitrix24_stage_mappings | Managers can insert stage mappings | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
@@ -92,6 +93,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.ip_whitelist | Admins can manage IP whitelist | ALL | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.ip_whitelist | Admins can update whitelist | UPDATE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.ip_whitelist | Managers can view IP whitelist | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'manager'::app_role)` |  |
+| public.job_queue | Admins view jobs | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
+| public.job_queue | Service role full access | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.lalamove_order_replacements | Admins can delete order_replacements | DELETE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.lalamove_order_replacements | Admins managers can view order_replacements | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |  |
 | public.lalamove_orders | Admins managers can view all orders | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
@@ -120,6 +123,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.lalamove_stops | Operators can insert stops | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |
 | public.lalamove_stops | Operators can view stops limited | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'operator'::app_role)` |  |
 | public.lalamove_uapi_sessions | Admins can manage UAPI sessions | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.lalamove_webhook_config | Admins manage webhook config | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
 | public.login_attempts | Admins can delete login attempts | DELETE | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.login_attempts | Admins can insert login attempts | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |
 | public.login_attempts | Admins can update login attempts | UPDATE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |

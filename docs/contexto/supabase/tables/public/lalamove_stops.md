@@ -33,6 +33,7 @@
 | 13 | `pod_image_url` | `text` | sim |  |  |  |
 | 14 | `pod_delivered_at` | `timestamp with time zone` | sim |  |  |  |
 | 15 | `remarks` | `text` | sim |  |  |  |
+| 16 | `stop_id` | `text` | sim |  |  |  |
 
 
 ## Constraints
@@ -61,6 +62,7 @@
 | idx_lalamove_stops_order_id | btree | order_id | não | sim |  | `CREATE INDEX idx_lalamove_stops_order_id ON public.lalamove_stops USING btree (order_id)` |
 | idx_stops_pod_status | btree | pod_status | não | sim | `(pod_status <> 'NOT_REQUIRED'::text)` | `CREATE INDEX idx_stops_pod_status ON public.lalamove_stops USING btree (pod_status) WHERE (pod_status <> 'NOT_REQUIRED'::text)` |
 | lalamove_stops_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX lalamove_stops_pkey ON public.lalamove_stops USING btree (id)` |
+| uq_lalamove_stops_order_stop_index | btree | order_id, stop_index | sim | sim |  | `CREATE UNIQUE INDEX uq_lalamove_stops_order_stop_index ON public.lalamove_stops USING btree (order_id, stop_index)` |
 
 
 ## Policies (RLS)

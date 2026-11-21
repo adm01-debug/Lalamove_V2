@@ -37,6 +37,9 @@ Uso e tamanho em `stats.md`.
 | public.auth_logs | idx_auth_logs_user_created | btree | user_id, created_at | não | sim | `(user_id IS NOT NULL)` |
 | public.bitrix24_activities | bitrix24_activities_pkey | btree | id | sim | sim |  |
 | public.bitrix24_activities | idx_bitrix24_activities_order_id | btree | order_id | não | sim |  |
+| public.bitrix24_spa_sync | bitrix24_spa_sync_pkey | btree | id | sim | sim |  |
+| public.bitrix24_spa_sync | idx_bitrix24_spa_sync_spa | btree | spa_id | não | sim |  |
+| public.bitrix24_spa_sync | uq_bitrix24_spa_sync_order | btree | order_id | sim | sim |  |
 | public.bitrix24_stage_mappings | bitrix24_stage_mappings_lalamove_status_key | btree | lalamove_status | sim | sim |  |
 | public.bitrix24_stage_mappings | bitrix24_stage_mappings_pkey | btree | id | sim | sim |  |
 | public.bitrix24_sync | bitrix24_sync_order_id_key | btree | order_id | sim | sim |  |
@@ -104,6 +107,12 @@ Uso e tamanho em `stats.md`.
 | public.geo_blocks | idx_geo_blocks_blocked_by | btree | blocked_by | não | sim |  |
 | public.hourly_metrics_cache | idx_hourly_metrics_cache_hour | btree | hour | sim | sim |  |
 | public.ip_whitelist | ip_whitelist_pkey | btree | id | sim | sim |  |
+| public.job_queue | idx_job_queue_monitoring | btree | type, status, created_at | não | sim |  |
+| public.job_queue | idx_job_queue_pending | btree | next_retry_at, priority | não | sim | `(status = 'PENDING'::text)` |
+| public.job_queue | idx_job_queue_status | btree | status | não | sim |  |
+| public.job_queue | idx_job_queue_type | btree | type | não | sim |  |
+| public.job_queue | job_queue_pkey | btree | id | sim | sim |  |
+| public.job_queue | uq_job_queue_dedup_open | btree | dedup_key | sim | sim | `((dedup_key IS NOT NULL) AND (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text])))` |
 | public.lalamove_order_replacements | idx_order_replacements_new_id | btree | new_lalamove_id | não | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_order_id | btree | order_id | não | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_prev_id | btree | previous_lalamove_id | não | sim |  |
@@ -114,6 +123,8 @@ Uso e tamanho em `stats.md`.
 | public.lalamove_orders | idx_lalamove_orders_cancelled_by | btree | cancelled_by | não | sim | `(cancelled_by IS NOT NULL)` |
 | public.lalamove_orders | idx_lalamove_orders_driver_status_updated | btree | driver_id, status, updated_at | não | sim |  |
 | public.lalamove_orders | idx_lalamove_orders_open_status | btree | created_at | não | sim | `(status = ANY (ARRAY['PENDING'::order_status, 'MATCHED'::order_status, 'ON_GOING'::order_status, 'PICKED_UP'::order_status]))` |
+| public.lalamove_orders | idx_lalamove_orders_source | btree | source | não | sim |  |
+| public.lalamove_orders | idx_lalamove_orders_spa_id | btree | spa_id | não | sim | `(spa_id IS NOT NULL)` |
 | public.lalamove_orders | idx_lalamove_orders_status_created | btree | status, created_at | não | sim |  |
 | public.lalamove_orders | idx_orders_bitrix24 | btree | bitrix24_deal_id | não | sim | `(bitrix24_deal_id IS NOT NULL)` |
 | public.lalamove_orders | idx_orders_cost_center | btree | cost_center | não | sim | `(cost_center IS NOT NULL)` |
@@ -143,8 +154,11 @@ Uso e tamanho em `stats.md`.
 | public.lalamove_stops | idx_lalamove_stops_order_id | btree | order_id | não | sim |  |
 | public.lalamove_stops | idx_stops_pod_status | btree | pod_status | não | sim | `(pod_status <> 'NOT_REQUIRED'::text)` |
 | public.lalamove_stops | lalamove_stops_pkey | btree | id | sim | sim |  |
+| public.lalamove_stops | uq_lalamove_stops_order_stop_index | btree | order_id, stop_index | sim | sim |  |
 | public.lalamove_uapi_sessions | idx_uapi_sessions_active | btree | is_active | sim | sim | `(is_active = true)` |
 | public.lalamove_uapi_sessions | lalamove_uapi_sessions_pkey | btree | id | sim | sim |  |
+| public.lalamove_webhook_config | lalamove_webhook_config_pkey | btree | id | sim | sim |  |
+| public.lalamove_webhook_config | uq_webhook_config_active_env | btree | environment | sim | sim | `is_active` |
 | public.login_attempts | idx_login_attempts_email | btree | email | não | sim |  |
 | public.login_attempts | idx_login_attempts_ip_last_attempt | btree | ip_address, last_attempt_at | não | sim |  |
 | public.login_attempts | idx_login_attempts_locked_until | btree | locked_until | não | sim |  |

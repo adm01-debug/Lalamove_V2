@@ -1,6 +1,6 @@
 # CONTEXTO PARA AGENTES DE IA — ÍNDICE ÚNICO
 
-> Gerado automaticamente por indice.py · 2026-11-21 16:07 UTC · HEAD `666bc90dae` · Não edite à mão.
+> Gerado automaticamente por indice.py · 2026-11-21 16:13 UTC · HEAD `56391deb87` · Não edite à mão.
 
 Um sistema, três fontes de verdade, três produtores independentes. **Leia este arquivo e vá direto à fonte certa.** Cada fato tem um dono: se duas fontes discordarem, vale o dono.
 
@@ -9,7 +9,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 | Preciso de… | Fonte (dona do fato) | Onde ler | Estado |
 |---|---|---|---|
 | Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 1 min atrás |
-| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | ok · 54 min atrás |
+| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | ok · 0 min atrás |
 | Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 0 min atrás |
 
 ## Ordem de leitura antes de qualquer tarefa ou planejamento
@@ -64,6 +64,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/public/alerts_sent.md`
 - `docs/contexto/supabase/tables/public/auth_logs.md`
 - `docs/contexto/supabase/tables/public/bitrix24_activities.md`
+- `docs/contexto/supabase/tables/public/bitrix24_spa_sync.md`
 - `docs/contexto/supabase/tables/public/bitrix24_stage_mappings.md`
 - `docs/contexto/supabase/tables/public/bitrix24_sync.md`
 - `docs/contexto/supabase/tables/public/bitrix24_tokens.md`
@@ -81,6 +82,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/public/feature_flags.md`
 - `docs/contexto/supabase/tables/public/geo_blocks.md`
 - `docs/contexto/supabase/tables/public/ip_whitelist.md`
+- `docs/contexto/supabase/tables/public/job_queue.md`
 - `docs/contexto/supabase/tables/public/lalamove_order_replacements.md`
 - `docs/contexto/supabase/tables/public/lalamove_orders.md`
 - `docs/contexto/supabase/tables/public/lalamove_priority_fee_history.md`
@@ -89,6 +91,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/public/lalamove_stop_proofs.md`
 - `docs/contexto/supabase/tables/public/lalamove_stops.md`
 - `docs/contexto/supabase/tables/public/lalamove_uapi_sessions.md`
+- `docs/contexto/supabase/tables/public/lalamove_webhook_config.md`
 - `docs/contexto/supabase/tables/public/login_attempts.md`
 - `docs/contexto/supabase/tables/public/map_settings_overrides.md`
 - `docs/contexto/supabase/tables/public/mcp_diagnostics_grants.md`
@@ -105,10 +108,7 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - `docs/contexto/supabase/tables/public/role_permissions.md`
 - `docs/contexto/supabase/tables/public/runtime_error_logs.md`
 - `docs/contexto/supabase/tables/public/security_test_logs.md`
-- `docs/contexto/supabase/tables/public/tracking_events.md`
-- `docs/contexto/supabase/tables/public/tracking_events_default.md`
-- `docs/contexto/supabase/tables/public/tracking_events_y2026m05.md`
-- … +18
+- … +21
 
 </details>
 

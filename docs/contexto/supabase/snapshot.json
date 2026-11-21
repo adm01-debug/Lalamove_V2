@@ -1341,6 +1341,136 @@
         "nullable": false,
         "position": 1,
         "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "order_id",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "spa_id",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "category_id",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_stage",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_synced_at",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_error",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'pending'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "sync_status",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 10,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
         "table": "bitrix24_stage_mappings",
         "type": "uuid"
       },
@@ -4734,6 +4864,227 @@
         "nullable": false,
         "position": 1,
         "schema": "public",
+        "table": "job_queue",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "type",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "payload",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "'PENDING'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "status",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "attempts",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "3",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "max_attempts",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "error_message",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "error_stack",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "next_retry_at",
+        "nullable": true,
+        "position": 9,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "started_at",
+        "nullable": true,
+        "position": 10,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "completed_at",
+        "nullable": true,
+        "position": 11,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "5",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "priority",
+        "nullable": false,
+        "position": 12,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "dedup_key",
+        "nullable": true,
+        "position": 13,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'{}'::jsonb",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "metadata",
+        "nullable": false,
+        "position": 14,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 15,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 16,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_by",
+        "nullable": true,
+        "position": 17,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
         "table": "lalamove_order_replacements",
         "type": "uuid"
       },
@@ -4978,7 +5329,7 @@
         "identity": null,
         "is_enum": false,
         "name": "scheduled_at",
-        "nullable": false,
+        "nullable": true,
         "position": 13,
         "schema": "public",
         "table": "lalamove_orders",
@@ -5453,6 +5804,136 @@
         "type": "timestamp with time zone"
       },
       {
+        "comment": "serviceType BR da v3 (14 valores). vehicle_type (enum de 4) passa a ser derivado deste.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "service_type",
+        "nullable": true,
+        "position": 50,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "lalamove_status",
+        "nullable": true,
+        "position": 51,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "quotation_expires_at",
+        "nullable": true,
+        "position": 52,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": "ID do motorista NA Lalamove (driverId v3 numerico ou driver_fid UAPI) — nunca o UUID da tabela drivers.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_lalamove_id",
+        "nullable": true,
+        "position": 53,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_name",
+        "nullable": true,
+        "position": 54,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_phone",
+        "nullable": true,
+        "position": 55,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_plate",
+        "nullable": true,
+        "position": 56,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'painel'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "source",
+        "nullable": true,
+        "position": 57,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "spa_id",
+        "nullable": true,
+        "position": 58,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "spa_category_id",
+        "nullable": true,
+        "position": 59,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "integer"
+      },
+      {
         "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
@@ -5756,13 +6237,13 @@
         "default": null,
         "generated": null,
         "identity": null,
-        "is_enum": true,
+        "is_enum": false,
         "name": "status",
         "nullable": false,
         "position": 3,
         "schema": "public",
         "table": "lalamove_status_history",
-        "type": "order_status"
+        "type": "text"
       },
       {
         "comment": null,
@@ -6221,6 +6702,19 @@
       },
       {
         "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "stop_id",
+        "nullable": true,
+        "position": 16,
+        "schema": "public",
+        "table": "lalamove_stops",
+        "type": "text"
+      },
+      {
+        "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -6386,6 +6880,123 @@
         "position": 13,
         "schema": "public",
         "table": "lalamove_uapi_sessions",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "'production'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "environment",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "url",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_active",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "registered_at",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "registered_by",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "notes",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
         "type": "timestamp with time zone"
       },
       {
@@ -11743,6 +12354,59 @@
       },
       {
         "columns": [
+          "order_id"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (order_id) REFERENCES lalamove_orders(id) ON DELETE CASCADE",
+        "name": "bitrix24_spa_sync_order_id_fkey",
+        "on_delete": "CASCADE",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "public",
+        "ref_table": "lalamove_orders",
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "bitrix24_spa_sync_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "sync_status"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (sync_status = ANY (ARRAY['pending'::text, 'success'::text, 'error'::text]))",
+        "name": "bitrix24_spa_sync_sync_status_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "lalamove_status"
         ],
         "deferrable": false,
@@ -12722,6 +13386,93 @@
       },
       {
         "columns": [
+          "created_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (created_by) REFERENCES auth.users(id)",
+        "name": "job_queue_created_by_fkey",
+        "on_delete": "NO ACTION",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "job_queue",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "job_queue_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "priority"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (priority >= 1 AND priority <= 10)",
+        "name": "job_queue_priority_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "status"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text, 'COMPLETED'::text, 'FAILED'::text, 'CANCELLED'::text]))",
+        "name": "job_queue_status_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "type"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (type = ANY (ARRAY['webhook'::text, 'notification'::text, 'evaluation'::text, 'bitrix_sync'::text, 'email'::text, 'whatsapp'::text, 'slack'::text, 'lalamove_sync'::text, 'pod_fetch'::text]))",
+        "name": "job_queue_type_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "job_queue",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "previous_lalamove_id",
           "new_lalamove_id"
         ],
@@ -13033,6 +13784,23 @@
         "table": "lalamove_orders",
         "type": "CHECK",
         "validated": true
+      },
+      {
+        "columns": [
+          "service_type"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (service_type IS NULL OR (service_type = ANY (ARRAY['LALAGO'::text, 'LALAPRO'::text, 'LALAGOFOUR'::text, 'CAR'::text, 'CARFOURH'::text, 'HATCHBACK'::text, 'HATCHFOURH'::text, 'UV_FIORINO'::text, 'UV_4H'::text, 'VAN'::text, 'VANFOURH'::text, 'TRUCK330'::text, 'TRUCK3_5T'::text, 'TRUCK_6H'::text]))) NOT VALID",
+        "name": "lalamove_orders_service_type_chk",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "CHECK",
+        "validated": false
       },
       {
         "columns": [
@@ -13418,6 +14186,59 @@
         "schema": "public",
         "table": "lalamove_uapi_sessions",
         "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "environment"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (environment = ANY (ARRAY['sandbox'::text, 'production'::text]))",
+        "name": "lalamove_webhook_config_environment_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "lalamove_webhook_config_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "registered_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (registered_by) REFERENCES auth.users(id)",
+        "name": "lalamove_webhook_config_registered_by_fkey",
+        "on_delete": "NO ACTION",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "lalamove_webhook_config",
+        "type": "FOREIGN KEY",
         "validated": true
       },
       {
@@ -15049,6 +15870,41 @@
         "volatility": "volatile"
       },
       {
+        "args": "p_type text, p_payload jsonb, p_priority integer, p_max_attempts integer, p_dedup_key text, p_metadata jsonb",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "5d7ffdf02bdac11e",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "add_job",
+        "owner": "postgres",
+        "returns": "uuid",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "_user_id uuid",
         "callers": {
           "code": [
@@ -15092,6 +15948,36 @@
         "security_definer": true,
         "strict": false,
         "volatility": "stable"
+      },
+      {
+        "args": "p_job_id uuid",
+        "callers": {
+          "code": [],
+          "code_total_files": 0,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "e93ab0af715426d3",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "cancel_job",
+        "owner": "postgres",
+        "returns": "boolean",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
       },
       {
         "args": "p_email text",
@@ -15340,6 +16226,45 @@
         "returns": "integer",
         "schema": "public",
         "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_days_old integer",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20251226000003_create_job_queue.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "9de809f783695bee",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "cleanup_old_jobs",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": false,
         "strict": false,
         "volatility": "volatile"
       },
@@ -15647,6 +16572,49 @@
         "volatility": "stable"
       },
       {
+        "args": "p_limit integer, p_types text[]",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20251226000003_create_job_queue.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "a8cd1ee088754541",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "get_next_jobs",
+        "owner": "postgres",
+        "returns": "SETOF job_queue",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "",
         "callers": {
           "code": [
@@ -15922,7 +16890,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 43,
+          "code_total_files": 45,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -16274,6 +17242,135 @@
         "returns": "trigger",
         "schema": "public",
         "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_job_id uuid, p_result jsonb",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/job-worker/index.ts",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "b0e00ac41a93cfd2",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "mark_job_completed",
+        "owner": "postgres",
+        "returns": "boolean",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_job_id uuid, p_error_message text, p_error_stack text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/job-worker/index.ts",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226000003_create_job_queue.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 4,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "252eb2e201f02cd7",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "mark_job_failed",
+        "owner": "postgres",
+        "returns": "boolean",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_job_id uuid",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20251226000003_create_job_queue.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "81de888aa574772b",
+        "execute_api_roles": "service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "mark_job_processing",
+        "owner": "postgres",
+        "returns": "boolean",
+        "schema": "public",
+        "security_definer": false,
         "strict": false,
         "volatility": "volatile"
       },
@@ -16999,6 +18096,51 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20251226000003_create_job_queue.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122120200_job_queue_system.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 3,
+          "cron": [],
+          "db": [],
+          "triggers": [
+            "public.job_queue.trigger_update_job_queue_updated_at"
+          ],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "53d9d9a442097d82",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": true,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "update_job_queue_updated_at",
+        "owner": "postgres",
+        "returns": "trigger",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
               "file": "supabase/migrations/20250102000001_saved_filters.sql",
               "hits": 1
             },
@@ -17506,6 +18648,18 @@
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
+          "table": "bitrix24_spa_sync"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "bitrix24_spa_sync"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
           "table": "bitrix24_stage_mappings"
         },
         {
@@ -17740,6 +18894,18 @@
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
+          "table": "job_queue"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "job_queue"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
           "table": "lalamove_order_replacements"
         },
         {
@@ -17831,6 +18997,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "lalamove_uapi_sessions"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "lalamove_webhook_config"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "lalamove_webhook_config"
         },
         {
           "grantee": "authenticated",
@@ -18855,6 +20033,48 @@
       },
       {
         "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX bitrix24_spa_sync_pkey ON public.bitrix24_spa_sync USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "bitrix24_spa_sync_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "bitrix24_spa_sync"
+      },
+      {
+        "columns": [
+          "spa_id"
+        ],
+        "definition": "CREATE INDEX idx_bitrix24_spa_sync_spa ON public.bitrix24_spa_sync USING btree (spa_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_bitrix24_spa_sync_spa",
+        "predicate": null,
+        "schema": "public",
+        "table": "bitrix24_spa_sync"
+      },
+      {
+        "columns": [
+          "order_id"
+        ],
+        "definition": "CREATE UNIQUE INDEX uq_bitrix24_spa_sync_order ON public.bitrix24_spa_sync USING btree (order_id)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "uq_bitrix24_spa_sync_order",
+        "predicate": null,
+        "schema": "public",
+        "table": "bitrix24_spa_sync"
+      },
+      {
+        "columns": [
           "lalamove_status"
         ],
         "definition": "CREATE UNIQUE INDEX bitrix24_stage_mappings_lalamove_status_key ON public.bitrix24_stage_mappings USING btree (lalamove_status)",
@@ -19813,6 +21033,93 @@
       },
       {
         "columns": [
+          "type",
+          "status",
+          "created_at"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_monitoring ON public.job_queue USING btree (type, status, created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_monitoring",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
+          "next_retry_at",
+          "priority"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_pending ON public.job_queue USING btree (next_retry_at, priority DESC) WHERE (status = 'PENDING'::text)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_pending",
+        "predicate": "(status = 'PENDING'::text)",
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
+          "status"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_status ON public.job_queue USING btree (status)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_status",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
+          "type"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_type ON public.job_queue USING btree (type)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_type",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX job_queue_pkey ON public.job_queue USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "job_queue_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
+          "dedup_key"
+        ],
+        "definition": "CREATE UNIQUE INDEX uq_job_queue_dedup_open ON public.job_queue USING btree (dedup_key) WHERE ((dedup_key IS NOT NULL) AND (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text])))",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "uq_job_queue_dedup_open",
+        "predicate": "((dedup_key IS NOT NULL) AND (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text])))",
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
           "new_lalamove_id"
         ],
         "definition": "CREATE INDEX idx_order_replacements_new_id ON public.lalamove_order_replacements USING btree (new_lalamove_id)",
@@ -19951,6 +21258,34 @@
         "method": "btree",
         "name": "idx_lalamove_orders_open_status",
         "predicate": "(status = ANY (ARRAY['PENDING'::order_status, 'MATCHED'::order_status, 'ON_GOING'::order_status, 'PICKED_UP'::order_status]))",
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "columns": [
+          "source"
+        ],
+        "definition": "CREATE INDEX idx_lalamove_orders_source ON public.lalamove_orders USING btree (source)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_lalamove_orders_source",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "columns": [
+          "spa_id"
+        ],
+        "definition": "CREATE INDEX idx_lalamove_orders_spa_id ON public.lalamove_orders USING btree (spa_id) WHERE (spa_id IS NOT NULL)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_lalamove_orders_spa_id",
+        "predicate": "(spa_id IS NOT NULL)",
         "schema": "public",
         "table": "lalamove_orders"
       },
@@ -20366,6 +21701,21 @@
       },
       {
         "columns": [
+          "order_id",
+          "stop_index"
+        ],
+        "definition": "CREATE UNIQUE INDEX uq_lalamove_stops_order_stop_index ON public.lalamove_stops USING btree (order_id, stop_index)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "uq_lalamove_stops_order_stop_index",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_stops"
+      },
+      {
+        "columns": [
           "is_active"
         ],
         "definition": "CREATE UNIQUE INDEX idx_uapi_sessions_active ON public.lalamove_uapi_sessions USING btree (is_active) WHERE (is_active = true)",
@@ -20391,6 +21741,34 @@
         "predicate": null,
         "schema": "public",
         "table": "lalamove_uapi_sessions"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX lalamove_webhook_config_pkey ON public.lalamove_webhook_config USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_webhook_config_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_webhook_config"
+      },
+      {
+        "columns": [
+          "environment"
+        ],
+        "definition": "CREATE UNIQUE INDEX uq_webhook_config_active_env ON public.lalamove_webhook_config USING btree (environment) WHERE is_active",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "uq_webhook_config_active_env",
+        "predicate": "is_active",
+        "schema": "public",
+        "table": "lalamove_webhook_config"
       },
       {
         "columns": [
@@ -21915,6 +23293,18 @@
         "severity": "MÉDIA"
       },
       {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.job_queue.job_queue_created_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['registered_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.lalamove_webhook_config.lalamove_webhook_config_registered_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.active_tracking.Admins can delete tracking",
@@ -22074,6 +23464,12 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.bitrix24_activities.Managers can update activities",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.bitrix24_spa_sync.Admin manager view spa sync",
         "severity": "BAIXA"
       },
       {
@@ -22433,6 +23829,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.job_queue.Admins view jobs",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.lalamove_order_replacements.Admins can delete order_replacements",
         "severity": "BAIXA"
       },
@@ -22596,6 +23998,12 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.lalamove_uapi_sessions.Admins can manage UAPI sessions",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.lalamove_webhook_config.Admins manage webhook config",
         "severity": "BAIXA"
       },
       {
@@ -23917,6 +25325,24 @@
         "name": "cache_system_backend",
         "statements": null,
         "version": "20261122090000"
+      },
+      {
+        "name": "baseline_order_status_values",
+        "statements": 1,
+        "statements_sha": "400b78cf83ee0c36",
+        "version": "20261122120000"
+      },
+      {
+        "name": "lalamove_integration_columns",
+        "statements": 1,
+        "statements_sha": "400b78cf83ee0c36",
+        "version": "20261122120100"
+      },
+      {
+        "name": "job_queue_system",
+        "statements": 1,
+        "statements_sha": "400b78cf83ee0c36",
+        "version": "20261122120200"
       }
     ],
     "policies": [
@@ -24241,6 +25667,18 @@
         ],
         "schema": "public",
         "table": "bitrix24_activities",
+        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Admin manager view spa sync",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "bitrix24_spa_sync",
         "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
         "with_check": null
       },
@@ -24965,6 +26403,30 @@
         "with_check": null
       },
       {
+        "cmd": "SELECT",
+        "name": "Admins view jobs",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "job_queue",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "Service role full access",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "job_queue",
+        "using": "true",
+        "with_check": "true"
+      },
+      {
         "cmd": "DELETE",
         "name": "Admins can delete order_replacements",
         "permissive": "PERMISSIVE",
@@ -25297,6 +26759,18 @@
         ],
         "schema": "public",
         "table": "lalamove_uapi_sessions",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "ALL",
+        "name": "Admins manage webhook config",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "lalamove_webhook_config",
         "using": "has_role(auth.uid(), 'admin'::app_role)",
         "with_check": "has_role(auth.uid(), 'admin'::app_role)"
       },
@@ -26771,6 +28245,21 @@
         "schema": "public"
       },
       {
+        "comment": "Sincronizacao do pedido com o SPA 1690 do Bitrix24 (crm.item.*). Substitui bitrix24_sync (modelo de deals).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "bitrix24_spa_sync",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Mapeamento de estagios entre o sistema e os funis do Bitrix24.",
         "from_extension": false,
         "is_partition": false,
@@ -27026,6 +28515,21 @@
         "schema": "public"
       },
       {
+        "comment": "Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "job_queue",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Registro de pedidos de reposicao/reescolha na Lalamove.",
         "from_extension": false,
         "is_partition": false,
@@ -27136,6 +28640,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "lalamove_uapi_sessions",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "lalamove_webhook_config",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,
@@ -27738,6 +29257,17 @@
         "timing": "BEFORE"
       },
       {
+        "definition": "CREATE TRIGGER trigger_update_job_queue_updated_at BEFORE UPDATE ON job_queue FOR EACH ROW EXECUTE FUNCTION update_job_queue_updated_at()",
+        "events": "UPDATE",
+        "function": "public.update_job_queue_updated_at",
+        "level": "ROW",
+        "name": "trigger_update_job_queue_updated_at",
+        "schema": "public",
+        "status": "enabled",
+        "table": "job_queue",
+        "timing": "BEFORE"
+      },
+      {
         "definition": "CREATE TRIGGER on_order_status_change_sync_bitrix24 AFTER UPDATE OF status ON lalamove_orders FOR EACH ROW EXECUTE FUNCTION trigger_bitrix24_sync()",
         "events": "UPDATE",
         "function": "public.trigger_bitrix24_sync",
@@ -28132,7 +29662,10 @@
           "COMPLETED",
           "CANCELLED",
           "REJECTED",
-          "EXPIRED"
+          "EXPIRED",
+          "QUOTED",
+          "ASSIGNING_DRIVER",
+          "DELIVERING"
         ]
       },
       {

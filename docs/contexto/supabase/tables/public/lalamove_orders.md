@@ -31,7 +31,7 @@
 | 10 | `delivery_longitude` | `numeric(11,8)` | sim |  |  |  |
 | 11 | `customer_name` | `text` | não |  |  |  |
 | 12 | `customer_phone` | `text` | sim |  |  |  |
-| 13 | `scheduled_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 13 | `scheduled_at` | `timestamp with time zone` | sim | `now()` |  |  |
 | 14 | `estimated_delivery` | `timestamp with time zone` | sim |  |  |  |
 | 15 | `actual_delivery` | `timestamp with time zone` | sim |  |  |  |
 | 16 | `driver_id` | `uuid` | sim |  |  |  |
@@ -68,6 +68,16 @@
 | 47 | `priority_fee` | `numeric(10,2)` | sim |  |  |  |
 | 48 | `priority_fee_currency` | `text` | sim |  |  |  |
 | 49 | `priority_fee_updated_at` | `timestamp with time zone` | sim |  |  |  |
+| 50 | `service_type` | `text` | sim |  |  | serviceType BR da v3 (14 valores). vehicle_type (enum de 4) passa a ser derivado deste. |
+| 51 | `lalamove_status` | `text` | sim |  |  |  |
+| 52 | `quotation_expires_at` | `timestamp with time zone` | sim |  |  |  |
+| 53 | `driver_lalamove_id` | `text` | sim |  |  | ID do motorista NA Lalamove (driverId v3 numerico ou driver_fid UAPI) — nunca o UUID da tabela drivers. |
+| 54 | `driver_name` | `text` | sim |  |  |  |
+| 55 | `driver_phone` | `text` | sim |  |  |  |
+| 56 | `driver_plate` | `text` | sim |  |  |  |
+| 57 | `source` | `text` | sim | `'painel'::text` |  |  |
+| 58 | `spa_id` | `integer` | sim |  |  |  |
+| 59 | `spa_category_id` | `integer` | sim |  |  |  |
 
 
 ## Constraints
@@ -88,6 +98,7 @@
 | lalamove_orders_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
 | lalamove_orders_rating_range | CHECK | `CHECK (custom_rating IS NULL OR custom_rating >= 0::numeric AND custom_rating <= 5::numeric)` |  |  | sim |
 | lalamove_orders_route_dev_threshold_nonneg | CHECK | `CHECK (route_deviation_threshold_minutes IS NULL OR route_deviation_threshold_minutes >= 0)` |  |  | sim |
+| lalamove_orders_service_type_chk | CHECK | `CHECK (service_type IS NULL OR (service_type = ANY (ARRAY['LALAGO'::text, 'LALAPRO'::text, 'LALAGOFOUR'::text, 'CAR'::text, 'CARFOURH'::text, 'HATCHBACK'::text, 'HATCHFOURH'::text, 'UV_FIORINO'::text, 'UV_4H'::text, 'VAN'::text, 'VANFOURH'::text, 'TRUCK330'::text, 'TRUCK3_5T'::text, 'TRUCK_6H'::text]))) NOT VALID` |  |  | não |
 | lalamove_orders_stalled_threshold_nonneg | CHECK | `CHECK (stalled_threshold_minutes IS NULL OR stalled_threshold_minutes >= 0)` |  |  | sim |
 | lalamove_orders_total_cost_nonneg | CHECK | `CHECK (total_cost >= 0::numeric)` |  |  | sim |
 
@@ -99,6 +110,7 @@
 | public.active_tracking | active_tracking_order_id_fkey | order_id | CASCADE |
 | public.alerts | alerts_order_id_fkey | order_id | SET NULL |
 | public.bitrix24_activities | bitrix24_activities_order_id_fkey | order_id | CASCADE |
+| public.bitrix24_spa_sync | bitrix24_spa_sync_order_id_fkey | order_id | CASCADE |
 | public.bitrix24_sync | bitrix24_sync_order_id_fkey | order_id | CASCADE |
 | public.driver_approval_queue | driver_approval_queue_order_id_fkey | order_id | CASCADE |
 | public.driver_evaluations | driver_evaluations_order_id_fkey | order_id | SET NULL |
@@ -119,6 +131,8 @@
 | idx_lalamove_orders_cancelled_by | btree | cancelled_by | não | sim | `(cancelled_by IS NOT NULL)` | `CREATE INDEX idx_lalamove_orders_cancelled_by ON public.lalamove_orders USING btree (cancelled_by) WHERE (cancelled_by IS NOT NULL)` |
 | idx_lalamove_orders_driver_status_updated | btree | driver_id, status, updated_at | não | sim |  | `CREATE INDEX idx_lalamove_orders_driver_status_updated ON public.lalamove_orders USING btree (driver_id, status, updated_at DESC)` |
 | idx_lalamove_orders_open_status | btree | created_at | não | sim | `(status = ANY (ARRAY['PENDING'::order_status, 'MATCHED'::order_status, 'ON_GOING'::order_status, 'PICKED_UP'::order_status]))` | `CREATE INDEX idx_lalamove_orders_open_status ON public.lalamove_orders USING btree (created_at DESC) WHERE (status = ANY (ARRAY['PENDING'::order_status, 'MATCHED'::order_status, 'ON_GOING'::order_status, 'PICKED_UP'::order_status]))` |
+| idx_lalamove_orders_source | btree | source | não | sim |  | `CREATE INDEX idx_lalamove_orders_source ON public.lalamove_orders USING btree (source)` |
+| idx_lalamove_orders_spa_id | btree | spa_id | não | sim | `(spa_id IS NOT NULL)` | `CREATE INDEX idx_lalamove_orders_spa_id ON public.lalamove_orders USING btree (spa_id) WHERE (spa_id IS NOT NULL)` |
 | idx_lalamove_orders_status_created | btree | status, created_at | não | sim |  | `CREATE INDEX idx_lalamove_orders_status_created ON public.lalamove_orders USING btree (status, created_at DESC)` |
 | idx_orders_bitrix24 | btree | bitrix24_deal_id | não | sim | `(bitrix24_deal_id IS NOT NULL)` | `CREATE INDEX idx_orders_bitrix24 ON public.lalamove_orders USING btree (bitrix24_deal_id) WHERE (bitrix24_deal_id IS NOT NULL)` |
 | idx_orders_cost_center | btree | cost_center | não | sim | `(cost_center IS NOT NULL)` | `CREATE INDEX idx_orders_cost_center ON public.lalamove_orders USING btree (cost_center) WHERE (cost_center IS NOT NULL)` |
