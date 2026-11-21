@@ -57,6 +57,40 @@ NÃO VERIFICADO — executar `scripts/geo/searchbox-coverage.ts` após criar `MA
 Critério de aceite: ≥ 90 % dos endereços com `accuracy ∈ {rooftop, parcel, point}` e distância ≤ 50 m do resultado Google.
 Se reprovar: `geo_settings.autocomplete.config.mapbox_mode = 'geocoding'` → Geocoding v6 `autocomplete=true`.
 
+## Estado real da camada geo (medido em 2026-11-22)
+
+| Item | Valor observado |
+|---|---|
+| Conta Mapbox | `promobrindes` (token `pk.` público do front, sem restrição de URL) |
+| `MAPBOX_SERVER_TOKEN` (`sk.`) | **ausente** — `provider-status` sinaliza, e toda chamada de servidor usa o `pk.` |
+| Provedor padrão por função | `mapbox` em todas; `fallback_provider = google` |
+| Google | sem `GOOGLE_MAPS_SERVER_KEY` — nunca ativado em produção |
+| Único caminho de código do front | `geo-gateway` (o `mapbox-proxy` ficou sem chamador após a etapa 60/61) |
+
+### Custo real × estimativa (30 dias até 2026-11-22, `geo_usage`)
+
+| Provedor | Função | SKU | Chamadas | US$ |
+|---|---|---|---|---|
+| mapbox | route | directions | 64 | 0,000000 |
+| mapbox | tiles | map_load | 35 | 0,000000 |
+| mapbox | matrix | matrix | 4 | 0,000000 |
+| mapbox | geocode | geocoding_temporary | 3 | 0,000000 |
+| mapbox | geocode | geocoding_permanent | 2 | 0,000000 |
+| mapbox | autocomplete | searchbox_session | 2 | 0,000000 |
+| google | tiles | dynamic_maps | 1 | 0,000000 |
+| mapbox | reverse | geocoding_temporary | 1 | 0,000000 |
+| mapbox | static | static_image | 1 | 0,000000 |
+| **Total** | | | **113** | **0,000000** |
+
+Todas as funções estão dentro da cota gratuita. A tabela de custo estimado abaixo segue
+válida como projeção para o regime de 30 pedidos/dia.
+
+### Retenção de coordenada (verificado)
+
+`SELECT count(*) FROM lalamove_orders WHERE geocode_provider = 'mapbox'` → **0**.
+Nenhuma coordenada temporária do Mapbox foi persistida — a coordenada gravada vem da
+cotação Lalamove (`geocode_provider='lalamove'`), como exige o termo de uso do Mapbox.
+
 ## Custo estimado em regime (30 pedidos/dia ≈ 900/mês)
 
 | SKU | Est./mês | Grátis | Custo |

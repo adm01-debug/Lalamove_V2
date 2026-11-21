@@ -7,6 +7,31 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ---
 
+## [1.6.0] - 2026-11-22
+
+### Adicionado
+- **Camada geo com Google e Mapbox selecionáveis por função**: `geo_settings` define provedor
+  principal e fallback por função (autocomplete, geocode, reverse, route, matrix, static, snap,
+  isochrone, optimization, tilequery) e o `geo-gateway` resolve a chamada, mede uso em `geo_usage`,
+  aplica cache por SKU e respeita orçamento mensal.
+- **Failover de provedor em runtime**: provedor primário fora do ar, com chave ausente ou com
+  orçamento estourado cai para o fallback sem reiniciar nada.
+- **Coordenadas reais do pedido**: a coordenada persistida vem de `stops[].coordinates` da
+  cotação Lalamove (`geocode_provider='lalamove'`), inclusive no backfill de pedidos antigos.
+- **Ferramentas de mapa (`/map-tools`) unificadas no gateway**: as 9 telas (directions, matrix,
+  isochrone, optimization, map matching, static image, tilequery, geocode, reverse) passaram a usar
+  o `geo-gateway`, com perfil `driving-traffic`/`driving`/`walking`/`cycling` respeitado.
+
+### Corrigido
+- **`/map` não quebra mais no StrictMode** e as camadas voltam a renderizar.
+- **Rodapé de atribuição Mapbox** saiu da área de scroll e aparece fixo no autocomplete.
+- **Perfil silenciosamente trocado**: `route` e `matrix` do gateway forçavam `driving-traffic`;
+  agora honram o perfil pedido pela tela.
+- **Map Matching incompleto**: `snap` devolve distância, duração e geometria corrigida.
+- **Retenção indevida**: `lalamove_orders` com `geocode_provider='mapbox'` → 0 registros.
+
+---
+
 ## [1.5.0] - 2025-06-25
 
 ### Adicionado
