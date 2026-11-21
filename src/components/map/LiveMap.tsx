@@ -8,6 +8,7 @@ import {
   MapPin, Compass, Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { countMapLoad } from '@/lib/geo-gateway';
 import { useTrackingHistory } from '@/hooks/useTrackingHistory';
 import { useMapboxToken } from './hooks/useMapboxToken';
 import { useTrackingData, type TrackingData } from './hooks/useTrackingData';
@@ -130,6 +131,7 @@ export function LiveMap({
       pitch: 45,
       antialias: true
     });
+    countMapLoad('mapbox');
 
     if (showControls) {
       map.current.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');

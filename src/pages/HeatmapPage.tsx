@@ -2,9 +2,10 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence, containerVariants, itemVariants, panelVariants } from '@/components/ui/motion';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Flame, Zap, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useMapboxToken } from '@/components/map/hooks/useMapboxToken';
+import { countMapLoad } from '@/lib/geo-gateway';
 import { useDeliveryHeatmapData, HeatmapPoint } from '@/hooks/useDeliveryHeatmapData';
 import { HeatmapFiltersPanel, HeatmapLegendPanel, HeatmapActionButtons } from './heatmap/HeatmapControls';
 import { HeatmapStatsPanel } from './heatmap/HeatmapStatsPanel';
@@ -15,8 +16,7 @@ export function HeatmapPage() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [loading, setLoading] = useState(true);
-  const [mapboxToken, setMapboxToken] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { mapboxToken, error } = useMapboxToken();
   const [days, setDays] = useState(30);
   const [heatmapType, setHeatmapType] = useState<HeatmapType>('both');
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -24,36 +24,10 @@ export function HeatmapPage() {
   const { data, isLoading: dataLoading, refetch } = useDeliveryHeatmapData(days);
 
   useEffect(() => {
-    let cancelled = false;
-    const fetchToken = async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke('get-mapbox-token');
-        if (cancelled) return;
-        if (error) {
-          // Silently fail - map is optional
-          return;
-        }
-        // Validate token - reject placeholders and obviously invalid tokens
-        if (data?.token && !data.token.includes('placeholder') && data.token.startsWith('pk.')) {
-          setMapboxToken(data.token);
-        } else {
-          setError('Token Mapbox não configurado');
-        }
-      } catch {
-        // Silently fail
-        if (!cancelled) setError('Token Mapbox não disponível');
-      }
-    };
-    fetchToken();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
     mapboxgl.accessToken = mapboxToken;
     map.current = new mapboxgl.Map({ container: mapContainer.current, style: 'mapbox://styles/mapbox/dark-v11', center: [-46.6544, -23.5629], zoom: 11, pitch: 45, bearing: -17.6 });
+    countMapLoad('mapbox');
     map.current.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
     map.current.on('load', () => setLoading(false));
     return () => { map.current?.remove(); };
