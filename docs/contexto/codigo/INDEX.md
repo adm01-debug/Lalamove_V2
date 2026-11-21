@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e6683cbe9eb79195bfce8d9ab644c4f42333c5e` (2026-11-21T20:41:34-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `5281908a84b0d36d0c53b7aba621a21c966c9e9e` (2026-11-21T20:48:30-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 969 |
 | arquivos_codigo | 603 |
-| linhas_codigo | 117741 |
+| linhas_codigo | 117779 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
 | components/orders | 0 | 0 | 8 | 30 | 6 | 5 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 41 | 0 | 5 | 39 |
+| functions | 0 | 0 | 41 | 0 | 5 | 40 |
 | hooks | 0 | 0 | 86 | 208 | 14 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 193 | 13 | 46 |
@@ -208,7 +208,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `rotate-tokens` [Segredos/token] — tabelas: alerts, bitrix24_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `route-analyzer` [Lovable AI (custo por token)] — tabelas: alerts, drivers, lalamove_orders; chamada por 1 arquivo(s) do front
 - `seed-fix-rls` [Manutenção/DDL] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens; chamada por 0 arquivo(s) do front
+- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens, order_geo_events; chamada por 0 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 1 arquivo(s) do front
 
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7466 nós · 15873 arestas · 556 comunidades · grafo do commit `3e6683cb`
-- comunidades maiores: cn (181), card.tsx (149), RateLimitDashboardPage.tsx (140), snapshot.py (102), react (99), ref_node_url (97), lucide-react (92), dependencies (80), gerar.mjs (76), client.ts (73), package.json (72), seed-database.ts (67)
+- 7468 nós · 15875 arestas · 564 comunidades · grafo do commit `5281908a`
+- comunidades maiores: cn (208), lucide-react (169), App.tsx (134), client.ts (117), ref_node_fs (111), snapshot.py (104), DashboardRedesigned.tsx (90), card.tsx (90), dependencies (80), gerar.mjs (76), package.json (72), NotificationPreferences.tsx (71)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `5281908` fix: fechar ciclo de notification_status dos eventos geo (#181)
 - 2026-11-21 `3e6683c` infra: cron horario de refresh das materialized views de cache (#180)
 - 2026-11-21 `2847da1` fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)
 - 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `339acda` feat: failover de provedor em runtime no geo-gateway (#175)
 - 2026-11-21 `fe9865a` docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)
 - 2026-11-21 `99e0b43` feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)
-- 2026-11-21 `658445d` docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

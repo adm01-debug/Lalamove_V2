@@ -935,7 +935,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 1,
-   "linhas": 625,
+   "linhas": 663,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -946,7 +946,8 @@
     "alert_configurations",
     "alerts",
     "alerts_sent",
-    "bitrix24_tokens"
+    "bitrix24_tokens",
+    "order_geo_events"
    ],
    "rpcs": [
     "claim_alert_notification"

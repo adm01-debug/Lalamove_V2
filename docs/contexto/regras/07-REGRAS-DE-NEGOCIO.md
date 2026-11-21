@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3e6683cbe9` · branch `main` · 2026-11-21 23:41 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5281908a84` · branch `main` · 2026-11-21 23:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -800,6 +800,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `approval_status` | `PENDING` | escreve | `src/integrations/supabase/types.ts` |
 | `tracking_status` | `ACTIVE` | filtra | `supabase/functions/job-worker/index.ts` |
 | `pop_status` | `picked_up` | escreve | `supabase/functions/lalamove-webhook/index.ts` |
+| `notification_status` | `queued` | filtra | `supabase/functions/send-notification/index.ts` |
 | `pod_status` | `NOT_REQUIRED` | compara | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
 
 ### E.4 Enums e listas de valores

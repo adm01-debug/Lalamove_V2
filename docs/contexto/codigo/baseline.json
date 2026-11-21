@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3e6683cbe9eb79195bfce8d9ab644c4f42333c5e",
+  "commit": "5281908a84b0d36d0c53b7aba621a21c966c9e9e",
   "branch": "main",
-  "data_commit": "2026-11-21T20:41:34-03:00",
+  "data_commit": "2026-11-21T20:48:30-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5281908",
+    "data": "2026-11-21",
+    "assunto": "fix: fechar ciclo de notification_status dos eventos geo (#181)"
+   },
    {
     "sha": "3e6683c",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "896743f",
     "data": "2026-11-21",
     "assunto": "fix(simulacao): corrige regressão que bloqueava admin/manager também (#164)"
-   },
-   {
-    "sha": "1363db8",
-    "data": "2026-11-21",
-    "assunto": "docs(banco): atualiza status de rotação de segredos (service_role já rotacionada) (#147)"
    }
   ],
   "arquivos_mudados_7d": 193,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 90
+    "commits": 91
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 969,
   "arquivos_codigo": 603,
-  "linhas_codigo": 117741,
+  "linhas_codigo": 117779,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -556,7 +556,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13476
+   "linhas": 13514
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -625,12 +625,12 @@
    "linhas": 668
   },
   {
-   "arquivo": "src/components/map/LiveMap.tsx",
-   "linhas": 657
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 663
   },
   {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 625
+   "arquivo": "src/components/map/LiveMap.tsx",
+   "linhas": 657
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",
@@ -674,7 +674,7 @@
   }
  ],
  "qualidade": {
-  "any": 109,
+  "any": 110,
   "console_log": 399,
   "ts_ignore": 0,
   "eslint_disable": 1,
