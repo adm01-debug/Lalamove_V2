@@ -117,7 +117,15 @@ jobs:
         with:
           deno-version: v1.x
       - name: Run Edge Function contract tests (in-memory)
-        run: deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts supabase/functions/lalamove-gateway/route.test.ts
+        run: |
+          deno test --allow-net --allow-env \
+            supabase/functions/_shared/contract.test.ts \
+            supabase/functions/lalamove-webhook/security.test.ts \
+            supabase/functions/lalamove-gateway/route.test.ts
+      # geo-gateway concentra cache, orcamento e rate guard: sem estes testes no CI
+      # uma regressao de custo so aparece na fatura do Mapbox.
+      - name: Run geo-gateway tests (resolver, metering, polyline, provider)
+        run: deno test --allow-all supabase/functions/geo-gateway/
 
   edge-integration-tests:
     name: Deno Edge Function I/O Integration Tests

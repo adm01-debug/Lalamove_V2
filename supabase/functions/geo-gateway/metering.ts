@@ -55,6 +55,23 @@ export async function meter(db: Db, provider: ProviderName, fn: GeoFunction, sku
 }
 
 /**
+ * Etapa 80 — latência por provedor/função em `query_telemetry` (tabela já existente,
+ * consumida por `useSLOMetrics`). `operation` carrega o provedor e `rpc_name` a função,
+ * permitindo p50/p95 por (provider, function) sem DDL. Best-effort: nunca lança.
+ */
+export async function recordLatency(db: Db, provider: ProviderName, fn: GeoFunction, durationMs: number) {
+  try {
+    await db.from("query_telemetry").insert({
+      operation: `geo:${provider}`,
+      table_name: "geo_gateway",
+      rpc_name: fn,
+      duration_ms: Math.max(0, Math.round(durationMs)),
+      severity: durationMs >= 3000 ? "slow" : "normal",
+    });
+  } catch { /* medição best-effort */ }
+}
+
+/**
  * Sessão de autocomplete: conta 1 na primeira vez que um session_token aparece (durável entre instâncias
  * via geo_cache, chave "session:<provider>:<token>", TTL 10 min).
  */

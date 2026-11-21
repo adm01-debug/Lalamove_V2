@@ -20,6 +20,7 @@
 | `evaluate-driver` | `alerts`, `driver_approval_queue`, `driver_evaluations`, `driver_incidents`, `drivers`, `lalamove_orders`, `risk_rules` |
 | `external-companies` | `carriers`, `companies`, `contacts`, `customers`, `suppliers` |
 | `external-db-bridge` | `query_telemetry` |
+| `geo-gateway` | `geo_cache`, `geo_price_list`, `geo_settings`, `geo_usage_month` |
 | `get-mapbox-token` | — |
 | `job-worker` | — |
 | `lalamove-api` | `drivers`, `lalamove_orders`, `lalamove_priority_fee_history`, `lalamove_rate_limits`, `lalamove_status_history` |
@@ -28,7 +29,6 @@
 | `lalamove-uapi` | `lalamove_orders`, `lalamove_uapi_sessions` |
 | `lalamove-webhook` | `active_tracking`, `alerts`, `driver_locations`, `drivers`, `lalamove_order_replacements`, `lalamove_orders`, `lalamove_status_history`, `lalamove_stop_proofs`, `lalamove_stops`, `tracking_events`, `webhook_events` |
 | `llm-wh` | — |
-| `mapbox-proxy` | — |
 | `mcp-query` | `query_telemetry` |
 | `new-device-alert` | `auth_logs`, `new_device_alerts`, `user_devices` |
 | `rotate-tokens` | `alerts`, `bitrix24_tokens` |
@@ -60,6 +60,10 @@
 | `driver_incidents` | `evaluate-driver` |
 | `driver_locations` | `lalamove-webhook` |
 | `drivers` | `evaluate-driver`, `lalamove-api`, `lalamove-webhook`, `route-analyzer` |
+| `geo_cache` | `geo-gateway` |
+| `geo_price_list` | `geo-gateway` |
+| `geo_settings` | `geo-gateway` |
+| `geo_usage_month` | `geo-gateway` |
 | `lalamove_order_replacements` | `lalamove-webhook` |
 | `lalamove_orders` | `bitrix24-sync`, `evaluate-driver`, `lalamove-api`, `lalamove-uapi`, `lalamove-webhook`, `route-analyzer` |
 | `lalamove_priority_fee_history` | `lalamove-api` |

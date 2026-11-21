@@ -18,7 +18,7 @@ import type { GeoFunction, GeoProvider, ProviderName, ProviderResult } from "./p
 import { callWithFailover } from "./failover.ts";
 import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
-import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, registerSession } from "./metering.ts";
+import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, recordLatency, registerSession } from "./metering.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -31,6 +31,13 @@ const ACTION_FUNCTION: Record<string, GeoFunction> = {
   "autocomplete": "autocomplete", "place-details": "autocomplete", "geocode": "geocode", "reverse": "reverse",
   "route": "route", "matrix": "matrix", "static": "static", "snap": "snap",
   "isochrone": "isochrone", "optimization": "optimization", "tilequery": "tilequery", "count-map-load": "tiles",
+};
+
+/** Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */
+const MAPBOX_RATE_API: Partial<Record<GeoFunction, string>> = {
+  autocomplete: "searchbox", geocode: "geocoding", reverse: "geocoding",
+  route: "directions", matrix: "matrix:driving", static: "static",
+  snap: "matching", isochrone: "isochrone", optimization: "optimization", tilequery: "tilequery",
 };
 
 // Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.
@@ -129,6 +136,54 @@ async function runProvider(
   }
 }
 
+/**
+ * Etapa 75: emite `GEO_BUDGET_WARNING` quando o gasto do mês cruza `alert_at_pct`.
+ * `warned_month` garante um alerta por provedor por mês — o update é condicional e
+ * atômico, então chamadas concorrentes do gateway não duplicam o alerta.
+ * Nunca lança: falha de alerta não pode derrubar a requisição de mapa.
+ */
+async function warnBudgetOnce(provider: ProviderName, budget: BudgetRow | undefined): Promise<void> {
+  if (!budget?.warn) return;
+  const month = new Date().toISOString().slice(0, 10).slice(0, 7) + "-01";
+  const { data: claimed, error: claimError } = await db
+    .from("geo_budget")
+    .update({ warned_month: month })
+    .eq("provider", provider)
+    .is("warned_month", null)
+    .select("provider");
+  // Caminho idempotente: já avisado neste mês (ou em outro) — não reemite.
+  let claimedRow = claimed?.[0];
+  if (!claimedRow && !claimError) {
+    const { data: again } = await db
+      .from("geo_budget")
+      .update({ warned_month: month })
+      .eq("provider", provider)
+      .lt("warned_month", month)
+      .select("provider");
+    claimedRow = again?.[0];
+  }
+  if (claimError || !claimedRow) return;
+
+  const { error } = await db.from("alerts").insert({
+    type: "GEO_BUDGET_WARNING",
+    severity: budget.pct >= 100 ? "CRITICAL" : "WARNING",
+    title: `Orçamento geo de ${provider} em ${budget.pct}%`,
+    message: `Gasto de US$ ${budget.spent_usd.toFixed(2)} de US$ ${budget.limit_usd.toFixed(2)} em ${provider}.` +
+      (budget.blocked
+        ? " Limite atingido: novas chamadas a este provedor falham até o próximo mês ou até o limite ser elevado."
+        : " Ao atingir 100% com hard_stop ativo, as chamadas a este provedor param."),
+    metadata: {
+      provider,
+      pct: budget.pct,
+      spent_usd: budget.spent_usd,
+      limit_usd: budget.limit_usd,
+      blocked: budget.blocked,
+      month,
+    },
+  });
+  if (error) logger.error("[geo-gateway] falha ao gravar alerta de orçamento", error.message);
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -156,7 +211,7 @@ Deno.serve(async (req) => {
         implemented: p === "mapbox",
         budget: resolver.budgetOf(p) ?? null,
       }));
-      const settings = (["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "validate", "isochrone", "optimization"] as GeoFunction[])
+      const settings = (["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "validate", "isochrone", "optimization", "tilequery"] as GeoFunction[])
         .map((fn) => ({ function: fn, ...(resolver.setting(fn) ?? { provider: "off", fallback_provider: null, config: {} }) }));
       return jsonResponse({ providers: status, settings }, 200, corsHeaders, version);
     }
@@ -173,6 +228,9 @@ Deno.serve(async (req) => {
     }
 
     const { provider: name, reason } = await resolver.resolve(fn, body.provider);
+    const provider = getProvider(name);
+    // Etapa 75: avisa o dono antes do bloqueio duro por orçamento.
+    await warnBudgetOnce(name, resolver.budgetOf(name));
     const headers: Record<string, string> = { ...corsHeaders, "X-Geo-Provider": name, "X-Geo-Resolve": reason };
 
     // ── cache ──────────────────────────────────────────────────────────────
@@ -184,7 +242,17 @@ Deno.serve(async (req) => {
       if (hit) return jsonResponse(hit, 200, { ...headers, "X-Geo-Cache": "HIT" }, version);
     }
 
+    // ── rate limit do provedor (espera a virada da janela) ─────────────────
+    // Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada
+    // (até 2s) em vez de devolver 429 na cara do operador.
+    const rateApi = MAPBOX_RATE_API[fn];
+    if (name === "mapbox" && rateApi) {
+      const limit = MAPBOX_RATE_LIMITS[rateApi] ?? 300;
+      const ok = await resolver.waitForCapacity("mapbox", rateApi, limit);
+      if (!ok) throw new GeoProviderError("GEO_RATE_LIMITED", "Limite local de chamadas atingido; tente em instantes.", 429, 60_000);
+    }
     // ── chamada ao provedor (com failover em runtime) ──────────────────────
+    const providerT0 = Date.now();
     const outcome = await callWithFailover(fn, name, {
       resolver,
       getProvider,
@@ -198,11 +266,18 @@ Deno.serve(async (req) => {
       headers["X-Geo-Fallback"] = `${outcome.fallback.from}:${outcome.fallback.code}`;
     }
 
+    // Etapa 75: avisa o dono antes do bloqueio duro por orçamento. Roda sobre o provedor
+    // que de fato atendeu — com failover o primário pode não ter sido usado.
+    await warnBudgetOnce(usedProvider, resolver.budgetOf(usedProvider));
+
     await meter(db, usedProvider, fn, result.sku, result.units);
     // A chave é derivada do provedor que respondeu: cachear a resposta do fallback sob a chave do
     // primário ficaria inalcançável e poderia servir resposta de um provedor para outro.
     const writeKey = usedProvider === name ? key : (ttl > 0 ? await cacheKey(usedProvider, fn, cacheable) : null);
     if (writeKey) await cachePut(db, writeKey, usedProvider, fn, result.data, ttl);
+    // Etapa 80: latência p50/p95 por provedor e função (best-effort, não bloqueia).
+    // Mede a tentativa inteira (inclui o tempo gasto no primário antes do failover).
+    await recordLatency(db, usedProvider, fn, Date.now() - providerT0);
     if (result.downgraded) headers["X-Geo-Downgraded"] = result.downgraded;
     headers["X-Geo-Sku"] = result.sku;
     headers["X-Geo-Cache"] = key ? "MISS" : "BYPASS";

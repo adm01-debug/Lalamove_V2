@@ -94,6 +94,9 @@ export interface GeoSnapResult {
   duration_s?: number | null;
   /** geometria do trecho encaixado, pronta para desenhar no mapa */
   polyline?: GeoPoint[];
+  /** a mesma geometria em GeoJSON, formato que a tela de conferência consome */
+  geometry?: { type: string; coordinates: [number, number][] };
+  legs?: GeoRouteLeg[];
 }
 
 // ── Requests normalizados (espelham _shared/schemas.ts) ─────────────────────
@@ -169,6 +172,8 @@ export interface SnapReq {
   points: GeoPoint[];
   timestamps?: number[];
   radius_m?: number;
+  /** perfil do Map Matching (driving | walking | cycling); ausente = driving */
+  profile?: string;
 }
 
 export interface ProviderResult<T> {

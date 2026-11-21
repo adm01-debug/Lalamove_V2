@@ -127,7 +127,8 @@ describe('useMapbox* usam o geo-gateway e traduzem o contrato normalizado', () =
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     const f = result.current.data!.features[0];
     expect(f.center).toEqual([-49.2716, -25.4296]);
-    expect(f.text).toBe('Rua XV de Novembro, 100');
+    expect(f.text).toBe('Rua XV de Novembro');
+    expect(f.address).toBe('100');
     expect(f.geometry.coordinates).toEqual([-49.2716, -25.4296]);
   });
 

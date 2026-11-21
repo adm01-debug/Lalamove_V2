@@ -10,12 +10,22 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 ## [1.6.0] - 2026-11-22
 
 ### Adicionado
-- **Camada geo com Google e Mapbox selecionáveis por função**: `geo_settings` define provedor
-  principal e fallback por função (autocomplete, geocode, reverse, route, matrix, static, snap,
-  isochrone, optimization, tilequery) e o `geo-gateway` resolve a chamada, mede uso em `geo_usage`,
-  aplica cache por SKU e respeita orçamento mensal.
+- **Camada geo com Google e Mapbox selecionáveis por função** (`geo_settings`): cada função
+  (tiles, autocomplete, geocode, reverse, route, matrix, static, snap, validate, isochrone,
+  optimization, tilequery) pode apontar para Mapbox, Google, `auto` ou `off`, sem deploy.
+- **`geo-gateway` como camada única de acesso a provedores de mapa**: resolve a chamada a partir de
+  `geo_settings`, aplica cache por SKU em `geo_cache` (header `X-Geo-Cache`), mede custo em
+  `geo_usage`/`geo_usage_month`, respeita orçamento mensal em `geo_budget` e o rate limit por token
+  (`X-Rate-Limit-Reset`).
 - **Failover de provedor em runtime**: provedor primário fora do ar, com chave ausente ou com
   orçamento estourado cai para o fallback sem reiniciar nada.
+- **Hooks de mapa em `src/hooks/useMapbox.ts`**, com `src/hooks/useGeo.ts` como barrel de
+  compatibilidade: 9 hooks + `geocodeAddress`/`getDirections`/`reverseGeocode`, sem mudar consumidores.
+- **Tela `/settings/maps`**: matriz função × provedor, painel de uso lado a lado com export CSV,
+  teste de saúde por provedor, matriz de paridade Google × Mapbox e escrita restrita a admin
+  (auditada em `audit_log`).
+- **Seletor do usuário respeita a política do admin**: `useMapProviderPolicy` esconde do dropdown os
+  provedores desligados em `geo_settings.tiles`; a preferência local não é reescrita.
 - **Coordenadas reais do pedido**: a coordenada persistida vem de `stops[].coordinates` da
   cotação Lalamove (`geocode_provider='lalamove'`), inclusive no backfill de pedidos antigos.
 - **Ferramentas de mapa (`/map-tools`) unificadas no gateway**: as 9 telas (directions, matrix,
@@ -29,6 +39,9 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
   agora honram o perfil pedido pela tela.
 - **Map Matching incompleto**: `snap` devolve distância, duração e geometria corrigida.
 - **Retenção indevida**: `lalamove_orders` com `geocode_provider='mapbox'` → 0 registros.
+
+### Removido
+- **Edge `mapbox-proxy`**: substituída pelo `geo-gateway` (todos os consumidores migrados).
 
 ---
 

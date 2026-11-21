@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Activity, DollarSign, Layers, MapPin, ShieldAlert, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Activity, DollarSign, Download, Layers, MapPin, ShieldAlert, Timer, TrendingUp, Zap, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import {
+  Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis,
+} from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,17 +14,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePermissions } from '@/hooks/usePermissions';
 import {
   useGeoBudgets,
   useGeoBudgetStatus,
   useGeoPriceList,
+  useGeoProviderHealth,
   useGeoProviderStatus,
   useGeoUsageMonth,
+  useGeoLatency,
   useUpdateGeoBudget,
   useUpdateGeoSetting,
   type GeoBudgetRow,
   type GeoFunction,
+  type GeoHealthResult,
   type GeoProviderName,
+  type GeoSettingProvider,
 } from '@/hooks/useGeoAdmin';
 
 /** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */
@@ -37,13 +45,41 @@ const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
   validate: { label: 'Validação de endereço', hint: 'Confere se o endereço existe antes de salvar' },
   isochrone: { label: 'Área de alcance', hint: 'Até onde dá para chegar em N minutos' },
   optimization: { label: 'Otimização de rota', hint: 'Melhor sequência de entregas' },
+  tilequery: { label: 'Consulta por área', hint: 'Que features existem num ponto do mapa' },
 };
 
 const PROVIDER_LABEL: Record<string, string> = {
   mapbox: 'Mapbox',
   google: 'Google Maps',
+  auto: 'Automático',
   off: 'Desligado',
 };
+
+/**
+ * Etapa 63: qual provedor realmente atende cada função. Célula desabilitada
+ * quando o provedor não oferece — evita trocar e quebrar a função.
+ * Espelha `GeoProvider.supports` do `geo-gateway` (google ainda não implementado).
+ */
+const FUNCTION_SUPPORT: Record<GeoFunction, { mapbox: boolean; google: boolean; auto: boolean }> = {
+  tiles: { mapbox: true, google: true, auto: true },
+  autocomplete: { mapbox: true, google: true, auto: true },
+  geocode: { mapbox: true, google: true, auto: true },
+  reverse: { mapbox: true, google: true, auto: true },
+  route: { mapbox: true, google: true, auto: true },
+  matrix: { mapbox: true, google: true, auto: true },
+  static: { mapbox: true, google: true, auto: true },
+  snap: { mapbox: true, google: true, auto: true },
+  validate: { mapbox: false, google: true, auto: true },
+  isochrone: { mapbox: true, google: false, auto: false },
+  optimization: { mapbox: true, google: false, auto: false },
+  tilequery: { mapbox: true, google: false, auto: false },
+};
+
+function unsupportedReason(fn: GeoFunction, value: 'mapbox' | 'google'): string | null {
+  if (FUNCTION_SUPPORT[fn][value]) return null;
+  const other = value === 'mapbox' ? 'Google Maps' : 'Mapbox';
+  return `${other} não atende "${FUNCTION_LABEL[fn].label}"`;
+}
 
 function providerLabel(value: string | null): string {
   if (!value) return '—';
@@ -54,14 +90,81 @@ function fmtMoney(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
 }
 
+/**
+ * Etapa 70 do plano Mapbox: o que muda de verdade ao trocar de provedor.
+ * Fonte: `docs/MAPBOX.md` (paridade ETA, cobertura BR, decisões M1–M10).
+ */
+const PARITY_ROWS: Array<{ tema: string; mapbox: string; google: string; impacto: 'igual' | 'mapbox' | 'google' }> = [
+  {
+    tema: 'Validação de endereço',
+    mapbox: 'Não oferece',
+    google: 'Valida e corrige o CEP antes de salvar',
+    impacto: 'google',
+  },
+  {
+    tema: 'Moto (entrega de duas rodas)',
+    mapbox: 'Perfil `driving` — não tem perfil de moto',
+    google: 'Também não tem perfil de moto',
+    impacto: 'igual',
+  },
+  {
+    tema: 'Encaixe do GPS na via (snap)',
+    mapbox: 'Incluído na franquia gratuita de Map Matching',
+    google: 'Cobra por Roads API desde a primeira chamada',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Área de alcance (isócrona)',
+    mapbox: 'Incluída, desenha o polígono em 1 chamada',
+    google: 'Sem endpoint equivalente — só simulando várias rotas',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Autocomplete',
+    mapbox: 'Cobra por sessão (várias teclas = 1 sessão)',
+    google: 'Cobra por requisição, inclusive cada tecla',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Retenção de dados',
+    mapbox: 'Chamada temporária não é gravada pelo provedor',
+    google: 'Guarda o resultado conforme o termo de uso',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'ETA e traçado de rota',
+    mapbox: 'Paridade medida contra a Lalamove em `docs/MAPBOX.md`',
+    google: 'Também tem trânsito em tempo real',
+    impacto: 'igual',
+  },
+];
+
+const PARITY_IMPACT_LABEL: Record<'igual' | 'mapbox' | 'google', string> = {
+  igual: 'Igual nos dois',
+  mapbox: 'Só no Mapbox',
+  google: 'Só no Google',
+};
+
 export default function MapsSettingsPage() {
+  const { isAdmin } = usePermissions();
+  /** Etapa 71: trocar provedor e salvar teto é só do administrador (RLS também exige admin). */
+  const canWrite = isAdmin();
   const status = useGeoProviderStatus();
   const budgets = useGeoBudgets();
   const budgetStatus = useGeoBudgetStatus();
   const priceList = useGeoPriceList();
   const usage = useGeoUsageMonth();
+  const latency = useGeoLatency(24);
   const updateSetting = useUpdateGeoSetting();
   const updateBudget = useUpdateGeoBudget();
+  const health = useGeoProviderHealth();
+  const [healthResults, setHealthResults] = useState<Record<string, GeoHealthResult>>({});
+  /** Etapa 71/paridade: o gateway informa quem está realmente implementado (Google ainda não). */
+  const googleImplemented =
+    status.data?.providers?.find((p) => p.provider === 'google')?.implemented ?? false;
+
+  /** Etapa 80: linhas de latência já ordenadas pelo hook. */
+  const latencyRows = latency.data ?? [];
 
   const settingsByFunction = useMemo(() => {
     const map = new Map<GeoFunction, { provider: string; fallback: string | null }>();
@@ -102,8 +205,8 @@ export default function MapsSettingsPage() {
     updateSetting.mutate(
       {
         function: fn,
-        provider: value as GeoProviderName | 'off',
-        fallback_provider: value === 'off' ? null : ((current?.fallback as GeoProviderName | null) ?? null),
+        provider: value as GeoSettingProvider,
+        fallback_provider: value === 'off' ? null : ((current?.fallback as GeoSettingProvider | null) ?? null),
       },
       {
         onSuccess: () => toast.success(`${FUNCTION_LABEL[fn].label}: agora usa ${providerLabel(value)}`),
@@ -137,6 +240,66 @@ export default function MapsSettingsPage() {
     return map;
   }, [usage.data]);
 
+  const runHealth = (provider: GeoProviderName) => {
+    health.mutate(provider, {
+      onSuccess: (result) => {
+        setHealthResults((prev) => ({ ...prev, [provider]: result }));
+        if (result.status === 'ok') toast.success(`${providerLabel(provider)} respondeu em ${result.latency} ms`);
+        else toast.error(`${providerLabel(provider)}: ${result.message}`);
+      },
+      onError: (err) => toast.error(`Falha no teste: ${(err as Error).message}`),
+    });
+  };
+
+  /**
+   * Etapa 68: uso por função com as séries dos dois provedores, a franquia
+   * gratuita do SKU principal e o custo estimado do mês.
+   */
+  const usageByFunction = useMemo(() => {
+    const quotaBySku = new Map<string, number>();
+    for (const row of priceList.data ?? []) {
+      if (row.free_quota_month) quotaBySku.set(`${row.provider}|${row.sku}`, row.free_quota_month);
+    }
+    const rows = new Map<
+      string,
+      { function: string; label: string; mapbox: number; google: number; quota: number; cost: number }
+    >();
+    for (const row of usage.data ?? []) {
+      const key = row.function;
+      if (!rows.has(key)) {
+        rows.set(key, {
+          function: key,
+          label: FUNCTION_LABEL[key as GeoFunction]?.label ?? key,
+          mapbox: 0,
+          google: 0,
+          quota: 0,
+          cost: 0,
+        });
+      }
+      const entry = rows.get(key)!;
+      if (row.provider === 'mapbox') entry.mapbox += Number(row.count ?? 0);
+      if (row.provider === 'google') entry.google += Number(row.count ?? 0);
+      entry.quota = Math.max(entry.quota, quotaBySku.get(`${row.provider}|${row.sku}`) ?? 0);
+      entry.cost += Number(row.est_cost_usd ?? 0);
+    }
+    return [...rows.values()].sort((a, b) => b.mapbox + b.google - (a.mapbox + a.google));
+  }, [usage.data, priceList.data]);
+
+  const exportUsageCsv = () => {
+    const header = ['funcao', 'rotulo', 'mapbox_chamadas', 'google_chamadas', 'franquia_gratis', 'custo_estimado_usd'];
+    const lines = usageByFunction.map((row) =>
+      [row.function, row.label, row.mapbox, row.google, row.quota, row.cost.toFixed(4)].join(';'),
+    );
+    const csv = [header.join(';'), ...lines].join('\n');
+    const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `geo-uso-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center gap-3">
@@ -150,6 +313,11 @@ export default function MapsSettingsPage() {
           <p className="text-sm text-muted-foreground">
             Escolha qual serviço de mapa e endereço o sistema usa. A troca vale imediatamente, sem deploy.
           </p>
+          {!canWrite && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+              Você está em modo leitura: só o administrador pode trocar provedor e editar tetos de orçamento.
+            </p>
+          )}
         </div>
       </div>
 
@@ -188,6 +356,54 @@ export default function MapsSettingsPage() {
                     </p>
                   </div>
                 </div>
+
+                {/* Teste de saúde do provedor (etapa 67) */}
+                <div className="space-y-2 border-t border-border/40 pt-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-xs text-muted-foreground">Teste real de geocodificação</p>
+                      {healthResults[p.provider] ? (
+                        <p className="text-xs">
+                          <span className="font-semibold tabular-nums">{healthResults[p.provider].latency} ms</span>
+                          {' · '}
+                          {healthResults[p.provider].details?.sku ?? '—'}
+                          {' · '}
+                          {healthResults[p.provider].details?.rate_limit_remaining != null
+                            ? `${healthResults[p.provider].details?.rate_limit_remaining} req restantes/min`
+                            : 'sem header de rate limit'}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-muted-foreground">Ainda não testado</p>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => runHealth(p.provider)}
+                      disabled={health.isPending && health.variables === p.provider}
+                    >
+                      {health.isPending && health.variables === p.provider ? (
+                        <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
+                      ) : (
+                        <Zap className="w-3.5 h-3.5 mr-1" />
+                      )}
+                      Testar {providerLabel(p.provider)}
+                    </Button>
+                  </div>
+                  {healthResults[p.provider] && (
+                    <p
+                      className={`text-xs ${
+                        healthResults[p.provider].status === 'ok'
+                          ? 'text-green-600 dark:text-green-400'
+                          : healthResults[p.provider].status === 'unknown'
+                            ? 'text-muted-foreground'
+                            : 'text-destructive'
+                      }`}
+                    >
+                      {healthResults[p.provider].message}
+                    </p>
+                  )}
+                </div>
                 {draftBudgets[p.provider] && (
                   <div className="space-y-2 border-t border-border/40 pt-3">
                     <div className="grid grid-cols-2 gap-2">
@@ -200,6 +416,7 @@ export default function MapsSettingsPage() {
                           min="0"
                           value={draftBudgets[p.provider].monthly_limit_usd}
                           onChange={(e) => patchBudget(p.provider, { monthly_limit_usd: Number(e.target.value) })}
+                          disabled={!canWrite}
                         />
                       </div>
                       <div>
@@ -211,6 +428,7 @@ export default function MapsSettingsPage() {
                           max="100"
                           value={draftBudgets[p.provider].alert_at_pct}
                           onChange={(e) => patchBudget(p.provider, { alert_at_pct: Number(e.target.value) })}
+                          disabled={!canWrite}
                         />
                       </div>
                     </div>
@@ -220,12 +438,13 @@ export default function MapsSettingsPage() {
                           id={`hard-${p.provider}`}
                           checked={draftBudgets[p.provider].hard_stop}
                           onCheckedChange={(checked) => patchBudget(p.provider, { hard_stop: checked })}
+                          disabled={!canWrite}
                         />
                         <Label htmlFor={`hard-${p.provider}`} className="text-xs">
                           Parar de chamar ao atingir o teto
                         </Label>
                       </div>
-                      <Button size="sm" onClick={() => handleSaveBudget(p.provider)} disabled={updateBudget.isPending}>
+                      <Button size="sm" onClick={() => handleSaveBudget(p.provider)} disabled={updateBudget.isPending || !canWrite}>
                         Salvar
                       </Button>
                     </div>
@@ -272,13 +491,26 @@ export default function MapsSettingsPage() {
                         <Select
                           value={current?.provider ?? 'off'}
                           onValueChange={(value) => handleChangeProvider(fn, value)}
+                          disabled={!canWrite}
                         >
                           <SelectTrigger className="h-8">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="mapbox">Mapbox</SelectItem>
-                            <SelectItem value="google">Google Maps</SelectItem>
+                            <SelectItem value="auto" disabled={!FUNCTION_SUPPORT[fn].auto}>
+                              Automático (quem tem franquia)
+                            </SelectItem>
+                            <SelectItem value="mapbox" disabled={!FUNCTION_SUPPORT[fn].mapbox}>
+                              Mapbox{unsupportedReason(fn, 'mapbox') ? ' — não atende' : ''}
+                            </SelectItem>
+                            <SelectItem value="google" disabled={!FUNCTION_SUPPORT[fn].google || !googleImplemented}>
+                              Google Maps
+                              {!googleImplemented
+                                ? ' — em implementação'
+                                : unsupportedReason(fn, 'google')
+                                  ? ' — não atende'
+                                  : ''}
+                            </SelectItem>
                             <SelectItem value="off">Desligado</SelectItem>
                           </SelectContent>
                         </Select>
@@ -338,6 +570,87 @@ export default function MapsSettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Painel de uso lado a lado (etapa 68) */}
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between gap-3">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <TrendingUp className="w-4 h-4" /> Uso lado a lado: Google × Mapbox
+            </CardTitle>
+            <CardDescription>
+              Chamadas do mês por função, com a franquia gratuita do item e o custo estimado.
+            </CardDescription>
+          </div>
+          <Button size="sm" variant="outline" onClick={exportUsageCsv} disabled={usageByFunction.length === 0}>
+            <Download className="w-3.5 h-3.5 mr-1" /> Exportar CSV
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {usage.isLoading ? (
+            <Skeleton className="h-64 w-full" />
+          ) : usageByFunction.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-8 text-center">
+              Nenhuma chamada registrada neste mês — o gráfico aparece no primeiro uso real do mapa ou do endereço.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={usageByFunction} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" interval={0} angle={-15} textAnchor="end" height={60} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
+                    <RechartsTooltip
+                      contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                      formatter={(value, name) => [Number(value ?? 0).toLocaleString('pt-BR'), String(name)]}
+                    />
+                    <Legend />
+                    <Bar dataKey="mapbox" fill="hsl(var(--primary))" name="Mapbox" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="google" fill="hsl(var(--chart-2, var(--primary)))" name="Google" radius={[3, 3, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Função</TableHead>
+                    <TableHead className="text-right">Mapbox</TableHead>
+                    <TableHead className="text-right">Google</TableHead>
+                    <TableHead className="text-right">Franquia grátis</TableHead>
+                    <TableHead className="text-right">% da franquia</TableHead>
+                    <TableHead className="text-right">Custo estimado</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {usageByFunction.map((row) => {
+                    const total = row.mapbox + row.google;
+                    const pct = row.quota > 0 ? (total / row.quota) * 100 : null;
+                    return (
+                      <TableRow key={row.function}>
+                        <TableCell>{row.label}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.mapbox.toLocaleString('pt-BR')}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.google.toLocaleString('pt-BR')}</TableCell>
+                        <TableCell className="text-right tabular-nums">
+                          {row.quota > 0 ? row.quota.toLocaleString('pt-BR') : '—'}
+                        </TableCell>
+                        <TableCell
+                          className={`text-right tabular-nums ${
+                            pct !== null && pct >= 100 ? 'text-destructive font-semibold' : pct !== null && pct >= 80 ? 'text-amber-500' : ''
+                          }`}
+                        >
+                          {pct === null ? '—' : `${pct.toFixed(1)}%`}
+                        </TableCell>
+                        <TableCell className="text-right tabular-nums">{fmtMoney(row.cost)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Uso detalhado do mês */}
       <Card>
         <CardHeader>
@@ -372,6 +685,96 @@ export default function MapsSettingsPage() {
                     <TableCell className="font-mono text-xs">{row.sku}</TableCell>
                     <TableCell className="text-right tabular-nums">{Number(row.count).toLocaleString('pt-BR')}</TableCell>
                     <TableCell className="text-right tabular-nums">{fmtMoney(Number(row.est_cost_usd ?? 0))}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Matriz de paridade (etapa 70) */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ShieldAlert className="w-4 h-4" /> O que muda ao trocar de provedor
+          </CardTitle>
+          <CardDescription>
+            Impacto real de negócio em cada função. Fonte: <code>docs/MAPBOX.md</code>.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Tema</TableHead>
+                <TableHead>Mapbox</TableHead>
+                <TableHead>Google Maps</TableHead>
+                <TableHead className="w-[130px]">Diferença</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {PARITY_ROWS.map((row) => (
+                <TableRow key={row.tema}>
+                  <TableCell className="font-medium">{row.tema}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{row.mapbox}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{row.google}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        row.impacto === 'igual' ? 'secondary' : row.impacto === 'mapbox' ? 'default' : 'outline'
+                      }
+                    >
+                      {PARITY_IMPACT_LABEL[row.impacto]}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Timer className="w-4 h-4" /> Latência por provedor e função (24 h)
+          </CardTitle>
+          <CardDescription>
+            p50 e p95 reais de cada chamada que sai do gateway, por provedor e por função. Amostra mínima de 1 chamada.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {latency.isLoading ? (
+            <Skeleton className="h-48 w-full" />
+          ) : latencyRows.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma chamada medida nas últimas 24 h. O painel começa a mostrar dados após o primeiro uso do mapa,
+              autocomplete ou rota.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Provedor</TableHead>
+                  <TableHead>Função</TableHead>
+                  <TableHead className="text-right">Chamadas</TableHead>
+                  <TableHead className="text-right">p50</TableHead>
+                  <TableHead className="text-right">p95</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {latencyRows.map((row) => (
+                  <TableRow key={`${row.provider}-${row.function}`}>
+                    <TableCell className="font-medium capitalize">{row.provider}</TableCell>
+                    <TableCell>{FUNCTION_LABEL[row.function as GeoFunction]?.label ?? row.function}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.samples}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.p50} ms</TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      <Badge variant={row.p95 >= 3000 ? 'destructive' : row.p95 >= 1000 ? 'outline' : 'secondary'}>
+                        {row.p95} ms
+                      </Badge>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

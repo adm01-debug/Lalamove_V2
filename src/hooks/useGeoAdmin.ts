@@ -3,15 +3,18 @@ import { supabase } from '@/integrations/supabase/client';
 
 export type GeoProviderName = 'mapbox' | 'google';
 
+/** Valor gravável em `geo_settings.provider` — inclui `auto` (etapa 64). */
+export type GeoSettingProvider = GeoProviderName | 'auto' | 'off';
+
 /** Funções do domínio geo (espelha o CHECK de `geo_settings.function`). */
 export type GeoFunction =
   | 'tiles' | 'autocomplete' | 'geocode' | 'reverse' | 'route'
-  | 'matrix' | 'static' | 'snap' | 'validate' | 'isochrone' | 'optimization';
+  | 'matrix' | 'static' | 'snap' | 'validate' | 'isochrone' | 'optimization' | 'tilequery';
 
 export interface GeoSettingRow {
   function: GeoFunction;
-  provider: GeoProviderName | 'off';
-  fallback_provider: GeoProviderName | null;
+  provider: GeoSettingProvider;
+  fallback_provider: GeoSettingProvider | null;
   config?: Record<string, unknown>;
   updated_at?: string;
 }
@@ -130,10 +133,77 @@ export function useGeoUsageMonth() {
   });
 }
 
+export interface GeoLatencyRow {
+  provider: string;
+  function: string;
+  samples: number;
+  p50: number;
+  p95: number;
+}
+
+function percentile(sortedAsc: number[], p: number): number {
+  if (sortedAsc.length === 0) return 0;
+  const rank = (p / 100) * (sortedAsc.length - 1);
+  const low = Math.floor(rank);
+  const high = Math.ceil(rank);
+  if (low === high) return sortedAsc[low];
+  const weight = rank - low;
+  return sortedAsc[low] * (1 - weight) + sortedAsc[high] * weight;
+}
+
+/** Agrega linhas de `query_telemetry` em p50/p95 por provedor e função. */
+export function aggregateGeoLatency(
+  rows: { operation: string | null; rpc_name: string | null; duration_ms: number | null }[],
+): GeoLatencyRow[] {
+  const groups = new Map<string, { provider: string; fn: string; durations: number[] }>();
+  for (const row of rows) {
+    if (row.duration_ms == null || !row.operation?.startsWith('geo:')) continue;
+    const provider = row.operation.slice(4);
+    const fn = row.rpc_name ?? '—';
+    const key = `${provider}|${fn}`;
+    const g = groups.get(key) ?? { provider, fn, durations: [] };
+    g.durations.push(row.duration_ms);
+    groups.set(key, g);
+  }
+
+  return Array.from(groups.values())
+    .map((g) => {
+      const sorted = [...g.durations].sort((a, b) => a - b);
+      return {
+        provider: g.provider,
+        function: g.fn,
+        samples: sorted.length,
+        p50: Math.round(percentile(sorted, 50)),
+        p95: Math.round(percentile(sorted, 95)),
+      };
+    })
+    .sort((a, b) => a.provider.localeCompare(b.provider) || a.function.localeCompare(b.function));
+}
+
+/** Etapa 80 — latência p50/p95 por provedor e função, a partir de `query_telemetry`. */
+export function useGeoLatency(hours = 24) {
+  return useQuery<GeoLatencyRow[]>({
+    queryKey: ['geo', 'latency', hours],
+    queryFn: async () => {
+      const since = new Date(Date.now() - hours * 3_600_000).toISOString();
+      const { data, error } = await supabase
+        .from('query_telemetry')
+        .select('operation, rpc_name, duration_ms')
+        .eq('table_name', 'geo_gateway')
+        .gte('created_at', since)
+        .limit(10_000);
+      if (error) throw error;
+      return aggregateGeoLatency(data ?? []);
+    },
+    refetchInterval: 120_000,
+    retry: false,
+  });
+}
+
 interface UpdateSettingArgs {
   function: GeoFunction;
-  provider: GeoProviderName | 'off';
-  fallback_provider: GeoProviderName | null;
+  provider: GeoSettingProvider;
+  fallback_provider: GeoSettingProvider | null;
 }
 
 /**
@@ -169,7 +239,6 @@ interface UpdateBudgetArgs {
   hard_stop: boolean;
   alert_at_pct: number;
 }
-
 export function useUpdateGeoBudget() {
   const qc = useQueryClient();
   return useMutation({
@@ -191,6 +260,37 @@ export function useUpdateGeoBudget() {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['geo', 'budget'] });
       void qc.invalidateQueries({ queryKey: ['geo', 'budget-status'] });
+    },
+  });
+}
+
+/** Detalhe do teste de saúde devolvido pelo `check-external-api` (etapa 67). */
+export interface GeoHealthDetails {
+  provider: string;
+  sku: string;
+  address: string;
+  http_status: number;
+  latency_ms: number;
+  rate_limit_remaining: number | null;
+  rate_limit_interval: number | null;
+}
+
+export interface GeoHealthResult {
+  status: 'ok' | 'degraded' | 'down' | 'unknown';
+  message: string;
+  latency: number;
+  details?: GeoHealthDetails;
+}
+
+/** Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */
+export function useGeoProviderHealth() {
+  return useMutation({
+    mutationFn: async (provider: GeoProviderName): Promise<GeoHealthResult> => {
+      const { data, error } = await supabase.functions.invoke('check-external-api', {
+        body: { service: provider },
+      });
+      if (error) throw error;
+      return data as GeoHealthResult;
     },
   });
 }

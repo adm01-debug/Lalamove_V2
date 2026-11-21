@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { callGeo, GeoGatewayError } from '@/lib/geo-gateway';
 
 // ── Types ──
 
@@ -7,6 +7,7 @@ export interface MapboxFeature {
   id: string;
   place_name: string;
   text: string;
+  address?: string;
   center: [number, number]; // [lng, lat]
   place_type: string[];
   geometry: { type: string; coordinates: [number, number] };
@@ -58,9 +59,7 @@ export interface MatrixResult {
  * PLANO_MAPBOX_100_ETAPAS.md, M1).
  */
 async function geoGateway<T = unknown>(body: Record<string, unknown>): Promise<T> {
-  const { data, error } = await supabase.functions.invoke('geo-gateway', { body });
-  if (error) throw error;
-  return data as T;
+  return callGeo<T>(body);
 }
 
 /** [lng, lat] → GeoPoint (o gateway trabalha com objeto, a tela com par ordenado) */
@@ -131,22 +130,37 @@ function toFeature(a: GeoAddress): MapboxFeature {
   const lng = a.location?.lng ?? 0;
   const lat = a.location?.lat ?? 0;
   const c = a.components;
-  const street = [c.street, c.number].filter(Boolean).join(', ');
   return {
     id: a.place_id ?? a.formatted,
     place_name: a.formatted,
-    text: street || c.district || c.city || a.formatted,
+    // Mapbox v5: `text` é o nome do lugar (rua/POI) e o número vai em `address`,
+    // para o picker mostrar "Rua Augusta" como título e "100" como complemento.
+    text: c.street || c.district || c.city || a.formatted,
+    ...(c.number ? { address: c.number } : {}),
     center: [lng, lat],
-    place_type: [a.precision],
+    // `precision` ('exact'/'interpolated') é qualidade do match, não tipo de lugar.
+    // O picker filtra/rotula por `place_type`, então derivamos do componente mais forte.
+    place_type: [c.street ? 'address' : c.district ? 'neighborhood' : 'place'],
     geometry: { type: 'Point', coordinates: [lng, lat] },
-    context: [c.district, c.city, c.state, c.postal_code]
-      .filter((v): v is string => !!v)
-      .map((text) => ({ id: '', text })),
+    // IDs no formato do Geocoding v5 (`neighborhood.X`, `place.Y`) — o picker usa
+    // o prefixo para agrupar e reagir ao nível escolhido.
+    context: [
+      { type: 'neighborhood', text: c.district },
+      { type: 'place', text: c.city },
+      { type: 'region', text: c.state },
+      { type: 'postcode', text: c.postal_code },
+    ]
+      .filter((e): e is { type: string; text: string } => !!e.text)
+      .map(({ type, text }) => ({ id: `${type}.${text}`, text })),
     properties: { provider: a.provider, place_id: a.place_id },
   };
 }
 
-function toDirectionsResult(route: GeoRoute): DirectionsResult {
+/**
+ * `requested` são as coordenadas pedidas (origem + paradas + destino): a `polyline`
+ * devolvida tem centenas de pontos da geometria e não permite recuperar as paradas.
+ */
+function toDirectionsResult(route: GeoRoute, requested: [number, number][] = []): DirectionsResult {
   const coordinates = route.polyline.map((p) => [p.lng, p.lat] as [number, number]);
   return {
     routes: [{
@@ -155,14 +169,22 @@ function toDirectionsResult(route: GeoRoute): DirectionsResult {
       geometry: { type: 'LineString', coordinates },
       legs: route.legs.map((l) => ({ distance: l.distance_m, duration: l.duration_s })),
     }],
-    waypoints: coordinates.length > 0
-      ? [coordinates[0], coordinates[coordinates.length - 1]].map((location) => ({ name: '', location }))
-      : [],
+    waypoints: requested.length > 0
+      ? requested.map((location) => ({ name: '', location }))
+      : coordinates.length > 0
+        ? [coordinates[0], coordinates[coordinates.length - 1]].map((location) => ({ name: '', location }))
+        : [],
   };
 }
 
 /** 404 (GEO_NOT_FOUND) é "nenhum resultado", não erro: as telas mostram estado vazio. */
 function isNotFound(e: unknown): boolean {
+  // `callGeo` normaliza para GeoGatewayError, mas o `code` só vem do corpo da edge;
+  // quando ela responde sem corpo JSON o sinal sobra na mensagem.
+  if (e instanceof GeoGatewayError) {
+    if (e.isNotFound) return true;
+    return /GEO_NOT_FOUND|não encontrado|not found/i.test(e.message);
+  }
   const msg = (e as { message?: string; context?: { status?: number } })?.message ?? '';
   return /GEO_NOT_FOUND|não encontrado|not found/i.test(msg)
     || (e as { context?: { status?: number } })?.context?.status === 404;
@@ -219,7 +241,7 @@ export function useMapboxDirections() {
     mutationFn: async (params) => {
       const body = toRouteBody(params.coordinates, params.profile);
       const route = await geoGateway<GeoRoute>({ ...body, alternatives: params.alternatives ?? false });
-      return toDirectionsResult(route);
+      return toDirectionsResult(route, params.coordinates);
     },
   });
 }
@@ -236,6 +258,7 @@ export function useMapboxMatrix() {
         action: 'matrix',
         origins: points,
         destinations: points,
+        traffic: false,
         ...(params.profile ? { profile: params.profile } : {}),
       });
       const asMatrixPoints = points.map((p, i) => ({ name: String.fromCharCode(65 + i), location: [p.lng, p.lat] as [number, number] }));
@@ -369,10 +392,9 @@ export function useMapboxMapMatching() {
 
 /** Static Map Image */
 export interface StaticImageResult {
-  image: string;
+  image: string; // data URL PNG
   width: number;
   height: number;
-  url: string;
 }
 
 export function useMapboxStaticImage() {
@@ -401,7 +423,7 @@ export function useMapboxStaticImage() {
         markers: params.markers?.map((m) => ({ lat: m.lat, lng: m.lng, color: m.color, label: m.label })),
         path: params.path ? toPoints(params.path) : undefined,
       });
-      return { image: img.image, width: img.width, height: img.height, url: img.image };
+      return { image: img.image, width: img.width, height: img.height };
     },
   });
 }
@@ -467,5 +489,5 @@ export async function getDirections(
   profile = 'driving-traffic'
 ): Promise<DirectionsRoute | null> {
   const route = await geoGateway<GeoRoute>(toRouteBody(coordinates, profile));
-  return toDirectionsResult(route).routes[0] ?? null;
+  return toDirectionsResult(route, coordinates).routes[0] ?? null;
 }

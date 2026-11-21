@@ -151,7 +151,10 @@ export class ProviderResolver {
     return null;
   }
 
-  /** Token bucket por minuto: true = pode chamar. */
+  /**
+   * Token bucket por minuto: true = pode chamar. A janela é alinhada ao minuto cheio e
+   * reinicia sozinha, então uma rajada no fim do minuto não afeta o próximo.
+   */
   rateGuard(provider: ProviderName, api: string, limitPerMin: number): boolean {
     const key = `${provider}:${api}`;
     const minute = Math.floor(this.now() / 60_000);
@@ -160,6 +163,32 @@ export class ProviderResolver {
     if (b.count >= limitPerMin) return false;
     b.count++;
     return true;
+  }
+
+  /**
+   * Etapa 76 — espera por capacidade em vez de recusar de imediato. Consulta o bucket
+   * SEM consumir (`rateGuardPeek`) e, se estiver cheio, aguarda a virada da janela
+   * (até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar
+   * esgotado após a espera — aí o provider aplica o 429 normalmente.
+   */
+  async waitForCapacity(
+    provider: ProviderName,
+    api: string,
+    limitPerMin: number,
+    maxWaitMs = 2_000,
+  ): Promise<boolean> {
+    const free = () => {
+      const b = this.buckets.get(`${provider}:${api}`);
+      const minute = Math.floor(this.now() / 60_000);
+      return !b || b.minute !== minute ? limitPerMin : limitPerMin - b.count;
+    };
+    if (free() > 0) return true;
+    if (maxWaitMs <= 0) return false;
+
+    const minute = Math.floor(this.now() / 60_000);
+    const waitMs = Math.min(maxWaitMs, (minute + 1) * 60_000 - this.now());
+    if (waitMs > 0) await new Promise((r) => setTimeout(r, waitMs));
+    return free() > 0;
   }
 }
 
