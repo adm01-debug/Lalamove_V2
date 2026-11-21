@@ -31,6 +31,15 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // docs/agentes/regras-dominio.md: "simulate-driver-movement ... existe só para
+    // dev ... Nunca rode contra produção". Checagem de role (admin/manager) não
+    // basta: grava rastreamento falso em active_tracking/tracking_events reais e
+    // aciona check-driver-alerts -> WhatsApp real ao fornecedor mesmo para admin.
+    const isDev = Deno.env.get('ENVIRONMENT') === 'development' || supabaseUrl.includes('localhost');
+    if (!isDev) {
+      return new Response(JSON.stringify({ error: 'Simulação disponível apenas em ambiente de desenvolvimento' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     const { uid, isServiceRole } = getCaller(req);
     if (!isServiceRole) {
       if (!uid) {
