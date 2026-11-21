@@ -6,6 +6,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+// Decodifica o JWT (verify_jwt=true já validou a assinatura) para checar role.
+// Sem isso, qualquer usuário autenticado (ex: requiredRole="viewer" na rota /map)
+// conseguia disparar esta função, que usa service_role e grava em active_tracking/
+// tracking_events reais, alimentando check-driver-alerts -> WhatsApp real ao fornecedor.
+function getCaller(req: Request): { uid: string | null; isServiceRole: boolean } {
+  try {
+    const token = (req.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '');
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (payload.role === 'service_role') return { uid: null, isServiceRole: true };
+    return { uid: payload.sub ?? null, isServiceRole: false };
+  } catch {
+    return { uid: null, isServiceRole: false };
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -15,6 +30,20 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { uid, isServiceRole } = getCaller(req);
+    if (!isServiceRole) {
+      if (!uid) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const [{ data: isAdmin }, { data: isManager }] = await Promise.all([
+        supabase.rpc('has_role', { _user_id: uid, _role: 'admin' }),
+        supabase.rpc('has_role', { _user_id: uid, _role: 'manager' }),
+      ]);
+      if (!isAdmin && !isManager) {
+        return new Response(JSON.stringify({ error: 'Forbidden: requires admin or manager role' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+    }
 
     console.log('Starting driver movement simulation...');
 
