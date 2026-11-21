@@ -115,6 +115,7 @@ export interface Alert {
   driverId?: string;
   isRead: boolean;
   createdAt: Date;
+  acknowledgedAt?: Date;
 }
 
 export type AlertType = 
@@ -123,7 +124,8 @@ export type AlertType =
   | 'DRIVER_STOPPED'
   | 'LATE_DELIVERY'
   | 'APPROVAL_REQUIRED'
-  | 'ORDER_CANCELLED';
+  | 'ORDER_CANCELLED'
+  | 'INTEGRATION_FAILURE';
 
 export interface TrackingPoint {
   orderId: string;

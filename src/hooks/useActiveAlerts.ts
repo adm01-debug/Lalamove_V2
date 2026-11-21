@@ -34,6 +34,7 @@ async function fetchActiveAlerts(): Promise<Alert[]> {
     driverId: alert.driver_id ?? undefined,
     isRead: alert.is_read ?? false,
     createdAt: new Date(alert.created_at),
+    acknowledgedAt: alert.acknowledged_at ? new Date(alert.acknowledged_at) : undefined,
   }));
 }
 
@@ -147,8 +148,12 @@ export function useAlertActions() {
       if (error) throw error;
       return data as boolean;
     },
-    onSuccess: () => {
+    onSuccess: (alreadyAcknowledged) => {
       queryClient.invalidateQueries({ queryKey: ['active-alerts'] });
+      if (alreadyAcknowledged === false) {
+        toast.info('Este alerta já havia sido reconhecido.');
+        return;
+      }
       toast.success('Alerta reconhecido. Escalonamento cancelado.');
     },
     onError: (error) => {

@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Bell, Clock, AlertCircle, AlertTriangle, Info, Shield, MapPin, X } from 'lucide-react';
+import { Bell, Clock, AlertCircle, AlertTriangle, Info, Shield, MapPin, PlugZap, X } from 'lucide-react';
 import { Alert, AlertType } from '@/types';
 
 export type GroupBy = 'none' | 'severity' | 'type' | 'time';
@@ -19,6 +19,7 @@ export interface GroupedAlerts {
 export const alertIcons: Record<AlertType, typeof AlertTriangle> = {
   DRIVER_BLOCKED: Shield, ROUTE_DEVIATION: MapPin, DRIVER_STOPPED: Clock,
   LATE_DELIVERY: AlertCircle, APPROVAL_REQUIRED: AlertTriangle, ORDER_CANCELLED: X,
+  INTEGRATION_FAILURE: PlugZap,
 };
 
 export const severityConfig = {
@@ -30,6 +31,7 @@ export const severityConfig = {
 export const alertTypeLabels: Record<AlertType, string> = {
   DRIVER_BLOCKED: 'Motorista Bloqueado', ROUTE_DEVIATION: 'Desvio de Rota', DRIVER_STOPPED: 'Motorista Parado',
   LATE_DELIVERY: 'Atraso na Entrega', APPROVAL_REQUIRED: 'Aprovação Necessária', ORDER_CANCELLED: 'Pedido Cancelado',
+  INTEGRATION_FAILURE: 'Falha de Integração',
 };
 
 export function formatTimeAgo(date: Date): string {

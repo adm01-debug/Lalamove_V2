@@ -1,6 +1,6 @@
 import { useState, useMemo, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw, X, AlertCircle, Clock } from 'lucide-react';
+import { BadgeCheck, CheckCheck, Eye, Trash2, ChevronDown, ListFilter, Layers, LayoutGrid, List, Archive, Volume2, VolumeX, RefreshCw, X, AlertCircle, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -76,10 +76,10 @@ export function AlertGroupHeader({ group, isOpen, onToggle, selectedCount }: Ale
 // ============ AlertListItem ============
 interface AlertListItemProps {
   alert: Alert; isSelected: boolean; onSelect: (id: string) => void; onMarkAsRead: (id: string) => void;
-  onDismiss: (id: string) => void; onViewDetails: (alert: Alert) => void; viewMode: ViewMode;
+  onDismiss: (id: string) => void; onViewDetails: (alert: Alert) => void; onAcknowledge: (id: string) => void; viewMode: ViewMode;
 }
 
-export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDismiss, onViewDetails, viewMode }, ref) {
+export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(function AlertListItem({ alert, isSelected, onSelect, onMarkAsRead, onDismiss, onViewDetails, onAcknowledge, viewMode }, ref) {
   const Icon = alertIcons[alert.type] || AlertCircle;
   const severity = severityConfig[alert.severity];
 
@@ -90,6 +90,7 @@ export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(func
         <div className={cn("p-1.5 rounded-md", severity.bgColor)}><Icon className={cn("w-3 h-3", severity.color)} /></div>
         <div className="flex-1 min-w-0"><p className={cn("text-xs font-medium truncate", !alert.isRead ? "text-foreground" : "text-muted-foreground")}>{alert.title}</p></div>
         <span className="text-[10px] text-muted-foreground shrink-0">{formatTimeAgo(alert.createdAt)}</span>
+        {alert.acknowledgedAt && <BadgeCheck className="w-3 h-3 text-success shrink-0" aria-label="Reconhecido" />}
         {!alert.isRead && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
       </motion.div>
     );
@@ -103,6 +104,7 @@ export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(func
         <div className="flex items-center gap-2 mb-1">
           <h4 className={cn("font-semibold text-sm truncate", !alert.isRead ? "text-foreground" : "text-muted-foreground")}>{alert.title}</h4>
           {!alert.isRead && <span className="w-2 h-2 rounded-full bg-primary animate-pulse shrink-0" />}
+          {alert.acknowledgedAt && <Badge variant="success" className="text-[10px] gap-1"><BadgeCheck className="w-3 h-3" />Reconhecido</Badge>}
         </div>
         <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{alert.message}</p>
         <div className="flex items-center gap-2 flex-wrap">
@@ -112,6 +114,9 @@ export const AlertListItem = forwardRef<HTMLDivElement, AlertListItemProps>(func
         </div>
       </div>
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+        {!alert.acknowledgedAt && (
+          <Button variant="ghost" size="icon" aria-label="Reconhecer alerta" title="Reconhecer (cancela o escalonamento)" className="h-7 w-7 text-success hover:bg-success/10" onClick={(e) => { e.stopPropagation(); onAcknowledge(alert.id); }}><BadgeCheck className="w-3.5 h-3.5" /></Button>
+        )}
         <Button variant="ghost" size="icon" aria-label="Ver detalhes do alerta" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); onViewDetails(alert); }}><Eye className="w-3.5 h-3.5" /></Button>
         <Button variant="ghost" size="icon" aria-label="Dispensar alerta" className="h-7 w-7 text-destructive hover:bg-destructive/10" onClick={(e) => { e.stopPropagation(); onDismiss(alert.id); }}><Trash2 className="w-3.5 h-3.5" /></Button>
       </div>
