@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Activity, DollarSign, Layers, MapPin, ShieldAlert, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Activity, DollarSign, Layers, MapPin, ShieldAlert, TrendingUp, Zap, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
@@ -15,12 +15,14 @@ import {
   useGeoBudgets,
   useGeoBudgetStatus,
   useGeoPriceList,
+  useGeoProviderHealth,
   useGeoProviderStatus,
   useGeoUsageMonth,
   useUpdateGeoBudget,
   useUpdateGeoSetting,
   type GeoBudgetRow,
   type GeoFunction,
+  type GeoHealthResult,
   type GeoProviderName,
 } from '@/hooks/useGeoAdmin';
 
@@ -62,6 +64,8 @@ export default function MapsSettingsPage() {
   const usage = useGeoUsageMonth();
   const updateSetting = useUpdateGeoSetting();
   const updateBudget = useUpdateGeoBudget();
+  const health = useGeoProviderHealth();
+  const [healthResults, setHealthResults] = useState<Record<string, GeoHealthResult>>({});
 
   const settingsByFunction = useMemo(() => {
     const map = new Map<GeoFunction, { provider: string; fallback: string | null }>();
@@ -137,6 +141,17 @@ export default function MapsSettingsPage() {
     return map;
   }, [usage.data]);
 
+  const runHealth = (provider: GeoProviderName) => {
+    health.mutate(provider, {
+      onSuccess: (result) => {
+        setHealthResults((prev) => ({ ...prev, [provider]: result }));
+        if (result.status === 'ok') toast.success(`${providerLabel(provider)} respondeu em ${result.latency} ms`);
+        else toast.error(`${providerLabel(provider)}: ${result.message}`);
+      },
+      onError: (err) => toast.error(`Falha no teste: ${(err as Error).message}`),
+    });
+  };
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center gap-3">
@@ -187,6 +202,54 @@ export default function MapsSettingsPage() {
                       {budget?.blocked ? 'Bloqueado' : budget?.warn ? 'Perto do teto' : 'Dentro do teto'}
                     </p>
                   </div>
+                </div>
+
+                {/* Teste de saúde do provedor (etapa 67) */}
+                <div className="space-y-2 border-t border-border/40 pt-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-xs text-muted-foreground">Teste real de geocodificação</p>
+                      {healthResults[p.provider] ? (
+                        <p className="text-xs">
+                          <span className="font-semibold tabular-nums">{healthResults[p.provider].latency} ms</span>
+                          {' · '}
+                          {healthResults[p.provider].details?.sku ?? '—'}
+                          {' · '}
+                          {healthResults[p.provider].details?.rate_limit_remaining != null
+                            ? `${healthResults[p.provider].details?.rate_limit_remaining} req restantes/min`
+                            : 'sem header de rate limit'}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-muted-foreground">Ainda não testado</p>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => runHealth(p.provider)}
+                      disabled={health.isPending && health.variables === p.provider}
+                    >
+                      {health.isPending && health.variables === p.provider ? (
+                        <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
+                      ) : (
+                        <Zap className="w-3.5 h-3.5 mr-1" />
+                      )}
+                      Testar {providerLabel(p.provider)}
+                    </Button>
+                  </div>
+                  {healthResults[p.provider] && (
+                    <p
+                      className={`text-xs ${
+                        healthResults[p.provider].status === 'ok'
+                          ? 'text-green-600 dark:text-green-400'
+                          : healthResults[p.provider].status === 'unknown'
+                            ? 'text-muted-foreground'
+                            : 'text-destructive'
+                      }`}
+                    >
+                      {healthResults[p.provider].message}
+                    </p>
+                  )}
                 </div>
                 {draftBudgets[p.provider] && (
                   <div className="space-y-2 border-t border-border/40 pt-3">
