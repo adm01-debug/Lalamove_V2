@@ -3,15 +3,18 @@ import { supabase } from '@/integrations/supabase/client';
 
 export type GeoProviderName = 'mapbox' | 'google';
 
+/** Valor gravável em `geo_settings.provider` — inclui `auto` (etapa 64). */
+export type GeoSettingProvider = GeoProviderName | 'auto' | 'off';
+
 /** Funções do domínio geo (espelha o CHECK de `geo_settings.function`). */
 export type GeoFunction =
   | 'tiles' | 'autocomplete' | 'geocode' | 'reverse' | 'route'
-  | 'matrix' | 'static' | 'snap' | 'validate' | 'isochrone' | 'optimization';
+  | 'matrix' | 'static' | 'snap' | 'validate' | 'isochrone' | 'optimization' | 'tilequery';
 
 export interface GeoSettingRow {
   function: GeoFunction;
-  provider: GeoProviderName | 'off';
-  fallback_provider: GeoProviderName | null;
+  provider: GeoSettingProvider;
+  fallback_provider: GeoSettingProvider | null;
   config?: Record<string, unknown>;
   updated_at?: string;
 }
@@ -132,8 +135,8 @@ export function useGeoUsageMonth() {
 
 interface UpdateSettingArgs {
   function: GeoFunction;
-  provider: GeoProviderName | 'off';
-  fallback_provider: GeoProviderName | null;
+  provider: GeoSettingProvider;
+  fallback_provider: GeoSettingProvider | null;
 }
 
 /**
