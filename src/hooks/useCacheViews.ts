@@ -1,4 +1,4 @@
-import { logger } from '@/utils/logger';
+﻿import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -33,16 +33,6 @@ export interface RefreshResult {
 }
 
 // ============================================================================
-// MOCK DATA - Fallback when RPC functions don't exist
-// ============================================================================
-
-const mockCacheStats: CacheStats[] = [
-  { view_name: 'driver_stats_cache', last_refresh: new Date().toISOString(), refresh_duration_ms: 245, row_count: 150, is_stale: false, status: 'success' },
-  { view_name: 'delivery_metrics_cache', last_refresh: new Date().toISOString(), refresh_duration_ms: 512, row_count: 3000, is_stale: false, status: 'success' },
-  { view_name: 'hourly_metrics_cache', last_refresh: new Date().toISOString(), refresh_duration_ms: 128, row_count: 24, is_stale: false, status: 'success' },
-];
-
-// ============================================================================
 // HOOKS
 // ============================================================================
 
@@ -54,8 +44,26 @@ export function useCacheStats() {
   return useQuery({
     queryKey: ['cache-stats'],
     queryFn: async (): Promise<CacheStats[]> => {
-      // Return mock data as the RPC doesn't exist yet
-      return mockCacheStats;
+      // View materializada `cache_status` criada no banco (migration
+      // 20261122090000_cache_system_backend.sql) - retorna 3 views com status real.
+      const { data, error } = await supabase
+        .from('cache_status')
+        .select('view_name, row_count, last_refresh, refresh_duration_ms, is_stale, status')
+        .order('view_name');
+
+      if (error) {
+        logger.error('Error fetching cache stats:', error);
+        throw error;
+      }
+
+      return (data || []).map((row: any) => ({
+        view_name: row.view_name,
+        last_refresh: row.last_refresh,
+        refresh_duration_ms: row.refresh_duration_ms,
+        row_count: row.row_count,
+        is_stale: row.is_stale,
+        status: row.status,
+      }));
     },
     refetchInterval: 30000, // Atualiza a cada 30 segundos
     staleTime: 20000,
@@ -70,8 +78,20 @@ export function useCacheRefreshHistory(viewName?: string) {
   return useQuery({
     queryKey: ['cache-refresh-history', viewName],
     queryFn: async () => {
-      // Return empty array as the table doesn't exist yet
-      return [];
+      // Histórico real de refreshes: filtra pelo nome da view quando informado.
+      let query = supabase
+        .from('cache_status')
+        .select('view_name, row_count, last_refresh, refresh_duration_ms, is_stale, status')
+        .order('last_refresh', { ascending: false });
+      if (viewName) {
+        query = query.eq('view_name', viewName);
+      }
+      const { data, error } = await query;
+      if (error) {
+        logger.error('Error fetching cache refresh history:', error);
+        throw error;
+      }
+      return data || [];
     },
     refetchInterval: 60000, // Atualiza a cada 1 minuto
   });
@@ -110,13 +130,20 @@ export function useRefreshCache() {
 
   return useMutation({
     mutationFn: async (viewName?: string): Promise<RefreshResult[]> => {
-      // Simulate refresh since RPC doesn't exist
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockCacheStats.map(s => ({
-        view_refreshed: s.view_name,
-        duration_ms: Math.floor(Math.random() * 500) + 100,
-        row_count: s.row_count,
-        status: 'success' as const,
+      // RPC real `refresh_cache_view` criada no banco (migration 20261122090000):
+      // sem argumento refresca as 3 views; com argumento, apenas a informada.
+      const { data, error } = await supabase.rpc('refresh_cache_view', viewName ? { p_view_name: viewName } : {});
+
+      if (error) {
+        logger.error('Error refreshing cache:', error);
+        throw error;
+      }
+
+      return (data || []).map((r: any) => ({
+        view_refreshed: r.view_refreshed,
+        duration_ms: r.duration_ms,
+        row_count: r.row_count,
+        status: r.status,
       }));
     },
     onSuccess: (data) => {

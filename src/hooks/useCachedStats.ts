@@ -1,4 +1,4 @@
-import { logger } from '@/utils/logger';
+﻿import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -90,29 +90,30 @@ export function useDriverStatsCache() {
   return useQuery({
     queryKey: ['driver-stats-cache'],
     queryFn: async (): Promise<DriverStatsCached[]> => {
-      // Fetch from drivers table as fallback since RPC doesn't exist
+      // Materialized view `driver_stats_cache` criada na migration
+      // 20261122090000_cache_system_backend.sql (adapta a RPC planejada ao schema real).
       const { data, error } = await supabase
-        .from('drivers')
-        .select('id, name, phone, total_deliveries, completed_deliveries, cancelled_deliveries, rating, last_delivery_at')
+        .from('driver_stats_cache')
+        .select('driver_id, driver_name, phone, total_deliveries, completed_deliveries, cancelled_deliveries, avg_rating, last_delivery_at, cached_at')
         .order('total_deliveries', { ascending: false })
         .limit(100);
-      
+
       if (error) {
         logger.error('Error fetching driver stats:', error);
         throw error;
       }
-      
+
       return (data || []).map(d => ({
-        id: d.id,
-        name: d.name,
+        id: d.driver_id,
+        name: d.driver_name,
         phone: d.phone || '',
         total_deliveries: d.total_deliveries || 0,
         completed_deliveries: d.completed_deliveries || 0,
         cancelled_deliveries: d.cancelled_deliveries || 0,
-        avg_rating: d.rating,
+        avg_rating: d.avg_rating,
         total_revenue: 0,
         last_delivery_at: d.last_delivery_at,
-        cached_at: new Date().toISOString(),
+        cached_at: d.cached_at,
       }));
     },
     staleTime: 5 * 60 * 1000, // Cache por 5 minutos no client
@@ -129,57 +130,35 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
   return useQuery({
     queryKey: ['delivery-metrics-cache', daysBack],
     queryFn: async (): Promise<DeliveryMetricsCached[]> => {
-      // Calculate metrics from orders table
+      // Materialized view `delivery_metrics_cache` (migration 20261122090000).
+      // Filtra os últimos `daysBack` dias por delivery_date.
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysBack);
-      
+      const startDateISO = startDate.toISOString().split('T')[0];
+
       const { data, error } = await supabase
-        .from('lalamove_orders')
-        .select('created_at, status, total_cost')
-        .gte('created_at', startDate.toISOString())
-        .order('created_at', { ascending: false });
-      
+        .from('delivery_metrics_cache')
+        .select('delivery_date, total_orders, completed_orders, cancelled_orders, in_progress_orders, total_value, avg_value, cached_at')
+        .gte('delivery_date', startDateISO)
+        .order('delivery_date', { ascending: false });
+
       if (error) {
         logger.error('Error fetching delivery metrics:', error);
         throw error;
       }
-      
-      // Group by date
-      const metricsByDate = new Map<string, DeliveryMetricsCached>();
-      
-      (data || []).forEach(order => {
-        const date = order.created_at.split('T')[0];
-        const existing = metricsByDate.get(date) || {
-          date,
-          total_orders: 0,
-          completed_orders: 0,
-          in_progress_orders: 0,
-          pending_orders: 0,
-          cancelled_orders: 0,
-          avg_value: 0,
-          total_value: 0,
-          avg_delivery_time_minutes: null,
-          cached_at: new Date().toISOString(),
-        };
-        
-        existing.total_orders++;
-        existing.total_value += order.total_cost || 0;
-        
-        if (order.status === 'COMPLETED') existing.completed_orders++;
-        if (order.status === 'ON_GOING' || order.status === 'PICKED_UP') existing.in_progress_orders++;
-        if (order.status === 'PENDING' || order.status === 'MATCHED') existing.pending_orders++;
-        if (order.status === 'CANCELLED') existing.cancelled_orders++;
-        
-        metricsByDate.set(date, existing);
-      });
-      
-      // Calculate averages
-      const metrics = Array.from(metricsByDate.values()).map(m => ({
-        ...m,
-        avg_value: m.total_orders > 0 ? m.total_value / m.total_orders : 0,
+
+      return (data || []).map(m => ({
+        date: m.delivery_date,
+        total_orders: m.total_orders,
+        completed_orders: m.completed_orders,
+        in_progress_orders: m.in_progress_orders,
+        pending_orders: 0,
+        cancelled_orders: m.cancelled_orders,
+        avg_value: m.avg_value || 0,
+        total_value: m.total_value || 0,
+        avg_delivery_time_minutes: null,
+        cached_at: m.cached_at,
       }));
-      
-      return metrics.sort((a, b) => b.date.localeCompare(a.date));
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
@@ -195,43 +174,31 @@ export function useHourlyMetricsCache(hoursBack: number = 24) {
   return useQuery({
     queryKey: ['hourly-metrics-cache', hoursBack],
     queryFn: async (): Promise<HourlyMetricsCached[]> => {
+      // Materialized view `hourly_metrics_cache` (migration 20261122090000).
+      // `hour` vem como DATE_TRUNC('hour', ...) - o PostgREST expõe timestamp;
+      // filtramos as últimas `hoursBack` horas.
       const startDate = new Date();
       startDate.setHours(startDate.getHours() - hoursBack);
-      
+      const startISO = startDate.toISOString();
+
       const { data, error } = await supabase
-        .from('lalamove_orders')
-        .select('created_at, status, total_cost')
-        .gte('created_at', startDate.toISOString())
-        .order('created_at', { ascending: false });
-      
+        .from('hourly_metrics_cache')
+        .select('hour, total_orders, completed_orders, avg_value, total_value, cached_at')
+        .gte('hour', startISO)
+        .order('hour', { ascending: false });
+
       if (error) {
         logger.error('Error fetching hourly metrics:', error);
         throw error;
       }
-      
-      // Group by hour
-      const metricsByHour = new Map<string, HourlyMetricsCached>();
-      
-      (data || []).forEach(order => {
-        const date = new Date(order.created_at);
-        const hour = `${date.toISOString().split('T')[0]}T${String(date.getHours()).padStart(2, '0')}:00:00`;
-        
-        const existing = metricsByHour.get(hour) || {
-          hour,
-          total_orders: 0,
-          completed_orders: 0,
-          avg_value: 0,
-          cached_at: new Date().toISOString(),
-        };
-        
-        existing.total_orders++;
-        if (order.status === 'COMPLETED') existing.completed_orders++;
-        existing.avg_value = (existing.avg_value * (existing.total_orders - 1) + (order.total_cost || 0)) / existing.total_orders;
-        
-        metricsByHour.set(hour, existing);
-      });
-      
-      return Array.from(metricsByHour.values()).sort((a, b) => b.hour.localeCompare(a.hour));
+
+      return (data || []).map(h => ({
+        hour: h.hour,
+        total_orders: h.total_orders,
+        completed_orders: h.completed_orders,
+        avg_value: h.avg_value || 0,
+        cached_at: h.cached_at,
+      }));
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
@@ -251,27 +218,27 @@ export function useTopDrivers(
   return useQuery({
     queryKey: ['top-drivers', metric, limit],
     queryFn: async (): Promise<TopDriver[]> => {
-      const columnMap = {
+      const columnMap: Record<'total_deliveries' | 'avg_rating' | 'total_revenue', string> = {
         total_deliveries: 'total_deliveries',
-        avg_rating: 'rating',
-        total_revenue: 'total_deliveries', // Fallback since we don't have revenue
+        avg_rating: 'avg_rating',
+        total_revenue: 'total_deliveries', // Sem coluna de receita na MV; usa entregas
       };
-      
+
       const { data, error } = await supabase
-        .from('drivers')
-        .select('id, name, total_deliveries, rating')
+        .from('driver_stats_cache')
+        .select('driver_id, driver_name, total_deliveries, avg_rating')
         .order(columnMap[metric], { ascending: false })
         .limit(limit);
-      
+
       if (error) {
         logger.error('Error fetching top drivers:', error);
         throw error;
       }
-      
+
       return (data || []).map(d => ({
-        id: d.id,
-        name: d.name,
-        metric_value: metric === 'avg_rating' ? (d.rating || 0) : (d.total_deliveries || 0),
+        id: d.driver_id,
+        name: d.driver_name,
+        metric_value: metric === 'avg_rating' ? (d.avg_rating || 0) : (d.total_deliveries || 0),
       }));
     },
     staleTime: 5 * 60 * 1000,
