@@ -53,6 +53,30 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
   if (driver && valid(driver.lat, driver.lng)) points.push([driver.lng!, driver.lat!]);
   const center: [number, number] = points[0] ?? [-46.6544, -23.5629];
 
+  /** Reaplica dados; chamado no `style.load` e a cada mudança de props. */
+  const apply = () => {
+    const m = map.current;
+    if (!m || !ready.current) return;
+
+    const set = (id: string, data: GeoJSON.FeatureCollection) => {
+      const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined;
+      src?.setData(data);
+    };
+
+    set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY);
+    set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY);
+    set('driver-point', driver && valid(driver.lat, driver.lng) ? pointFeature(driver.lng!, driver.lat!, '#38bdf8') : EMPTY);
+    setExpectedRoute(m, parseExpectedRoute(expectedRoute));
+
+    if (points.length >= 2) {
+      const bounds = points.reduce(
+        (b, p) => b.extend(p as [number, number]),
+        new mapboxgl.LngLatBounds(points[0], points[0]),
+      );
+      m.fitBounds(bounds, { padding: 48, maxZoom: 14, duration: 0 });
+    }
+  };
+
   useEffect(() => {
     if (!container.current || !mapboxToken || map.current) return;
     mapboxgl.accessToken = mapboxToken;
@@ -99,29 +123,6 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapboxToken]);
 
-  /** Reaplica dados; chamado no `style.load` e a cada mudança de props. */
-  const apply = () => {
-    const m = map.current;
-    if (!m || !ready.current) return;
-
-    const set = (id: string, data: GeoJSON.FeatureCollection) => {
-      const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined;
-      src?.setData(data);
-    };
-
-    set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY);
-    set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY);
-    set('driver-point', driver && valid(driver.lat, driver.lng) ? pointFeature(driver.lng!, driver.lat!, '#38bdf8') : EMPTY);
-    setExpectedRoute(m, parseExpectedRoute(expectedRoute));
-
-    if (points.length >= 2) {
-      const bounds = points.reduce(
-        (b, p) => b.extend(p as [number, number]),
-        new mapboxgl.LngLatBounds(points[0], points[0]),
-      );
-      m.fitBounds(bounds, { padding: 48, maxZoom: 14, duration: 0 });
-    }
-  };
 
   useEffect(() => {
     apply();
