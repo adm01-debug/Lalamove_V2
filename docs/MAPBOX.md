@@ -47,7 +47,7 @@ Setar via: `supabase secrets set MAPBOX_SERVER_TOKEN=<valor> --project-ref iecgy
 | Proxy legado | `supabase/functions/mapbox-proxy/index.ts` | ⚠️ usa `pk.` como server token; a migrar para `geo-gateway` (etapa 61) |
 | Gateway novo | `supabase/functions/geo-gateway/` | ✅ implementado em `main` (`index.ts`, `resolver.ts`, `polyline.ts`, `metering.ts`, `providers/mapbox.ts`, testes) |
 | Hook front | `src/hooks/useMapbox.ts` | ⚠️ parcial: autocomplete de endereço saiu daqui (ver `src/hooks/useGeoSearch.ts`, Search Box via `geo-gateway`); os outros 8 hooks (`useMapboxDirections/Matrix/Isochrone/Optimization/MapMatching/StaticImage/Tilequery/ReverseGeocode`) ainda chamam `mapbox-proxy` diretamente — migrar na etapa 60 |
-| Health check | `supabase/functions/check-external-api/index.ts:221` | ✅ corrigido (usava `MAPBOX_API_KEY`, secret real é `MAPBOX_ACCESS_TOKEN`) |
+| Health check | `supabase/functions/check-external-api/index.ts:221` | ✅ corrigido (usava `MAPBOX_API_KEY`; agora lê `MAPBOX_SERVER_TOKEN` com fallback para `MAPBOX_ACCESS_TOKEN`, mesma prioridade do `geo-gateway`) |
 | Seletor visual | `src/hooks/useMapSettings.ts` | ⚠️ localStorage puro; não lê `geo_settings` do banco (etapa 66) |
 
 ## Cobertura BR do Search Box (etapa 36)

@@ -218,7 +218,7 @@ async function checkEvolution(): Promise<{ status: string; message: string }> {
 
 async function checkMapbox(): Promise<{ status: string; message: string }> {
   try {
-    const MAPBOX_TOKEN = Deno.env.get('MAPBOX_ACCESS_TOKEN');
+    const MAPBOX_TOKEN = Deno.env.get('MAPBOX_SERVER_TOKEN') ?? Deno.env.get('MAPBOX_ACCESS_TOKEN');
 
     if (!MAPBOX_TOKEN) {
       return {
