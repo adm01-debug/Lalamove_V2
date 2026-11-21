@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 172,
+ "migrations": 173,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -5587,6 +5587,11 @@
      "unico": false
     },
     {
+     "nome": "idx_job_queue_created_by",
+     "colunas": "created_by",
+     "unico": false
+    },
+    {
      "nome": "idx_job_queue_failed",
      "colunas": "created_at DESC",
      "unico": false
@@ -8433,6 +8438,11 @@
     }
    ],
    "indices": [
+    {
+     "nome": "idx_order_geo_events_alert_id",
+     "colunas": "alert_id",
+     "unico": false
+    },
     {
      "nome": "idx_order_geo_events_order",
      "colunas": "order_id, triggered_at DESC",

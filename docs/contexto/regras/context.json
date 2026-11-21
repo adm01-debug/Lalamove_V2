@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680",
+  "sha": "39f672ae358be4f777382cc6ab369d66b3180d15",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 23:01 UTC",
-  "files_total": 950,
-  "code_files": 780,
-  "code_lines": 133995
+  "generated_at": "2026-11-21 23:06 UTC",
+  "files_total": 951,
+  "code_files": 781,
+  "code_lines": 134008
  },
  "version": "1.3.2",
- "facts_hash": "c59f6bca8f240ef0",
+ "facts_hash": "91f7da76019e9333",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   "languages": {
    ".ts": 258,
    ".tsx": 226,
-   ".sql": 176,
+   ".sql": 177,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -13886,6 +13886,22 @@
     "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
    },
    {
+    "name": "idx_order_geo_events_alert_id",
+    "table": "order_geo_events",
+    "columns": "alert_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261121201800_indices_alert_id_created_by.sql"
+   },
+   {
+    "name": "idx_job_queue_created_by",
+    "table": "job_queue",
+    "columns": "created_by",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261121201800_indices_alert_id_created_by.sql"
+   },
+   {
     "name": "idx_driver_stats_cache_driver_id",
     "table": "driver_stats_cache",
     "columns": "driver_id",
@@ -14287,6 +14303,7 @@
    "supabase/migrations/20261121192500_restore_audit_log.sql",
    "supabase/migrations/20261121193000_fix_escalation_pipeline.sql",
    "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+   "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
    "supabase/migrations/20261122120000_baseline_order_status_values.sql",
    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
@@ -21177,8 +21194,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 172,
-   "lines": 11769,
+   "files": 173,
+   "lines": 11782,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -66549,6 +66566,10 @@
    ],
    "uses_service_role": true
   },
+  "supabase/migrations/20261121201800_indices_alert_id_created_by.sql": {
+   "path": "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
+   "lines": 13
+  },
   "supabase/migrations/20261122090000_cache_system_backend.sql": {
    "path": "supabase/migrations/20261122090000_cache_system_backend.sql",
    "lines": 188,
@@ -66602,10 +66623,28 @@
   }
  },
  "git": {
-  "sha": "e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680",
+  "sha": "39f672ae358be4f777382cc6ab369d66b3180d15",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "39f672a",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)",
+    "files": [
+     "supabase/migrations/20261121201800_indices_alert_id_created_by.sql"
+    ]
+   },
+   {
+    "sha": "a9a3ba5",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "ci: inclui os testes do roteador do gateway nos contract tests (#134)",
+    "files": [
+     ".github/workflows/ci.yml"
+    ]
+   },
    {
     "sha": "e0ebbdb",
     "date": "2026-11-21",
@@ -66909,28 +66948,6 @@
     "files": [
      "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md"
     ]
-   },
-   {
-    "sha": "31067eb",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(ci): retry com force-with-lease restrito no push da branch contexto (#137)",
-    "files": [
-     ".github/workflows/contexto.yml"
-    ]
-   },
-   {
-    "sha": "e071c9e",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(mapas): mede carregamento de mapa e corrige atribuição Mapbox ausente (#138)",
-    "files": [
-     "src/components/map/LiveMap.tsx",
-     "src/components/reports/GeoHeatmap.tsx",
-     "src/lib/geo-gateway.test.ts",
-     "src/lib/geo-gateway.ts",
-     "src/pages/HeatmapPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -66941,10 +66958,6 @@
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
-   ],
-   [
-    "src/components/map/LiveMap.tsx",
-    2
    ],
    [
     "supabase/functions/lalamove-api/index.ts",
@@ -66963,10 +66976,6 @@
     2
    ],
    [
-    "src/lib/geo-gateway.test.ts",
-    2
-   ],
-   [
     "supabase/config.toml",
     2
    ],
@@ -66979,11 +66988,23 @@
     2
    ],
    [
+    "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
+    1
+   ],
+   [
+    ".github/workflows/ci.yml",
+    1
+   ],
+   [
     "supabase/migrations/20261121192500_restore_audit_log.sql",
     1
    ],
    [
     "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    1
+   ],
+   [
+    "src/components/map/LiveMap.tsx",
     1
    ],
    [
@@ -67008,10 +67029,6 @@
    ],
    [
     "supabase/functions/geo-gateway/failover.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/failover.ts",
     1
    ]
   ]

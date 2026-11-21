@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680` (2026-11-21T19:56:16-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `39f672ae358be4f777382cc6ab369d66b3180d15` (2026-11-21T20:04:30-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (484), SQL (176), JavaScript (112), Markdown (97), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (484), SQL (177), JavaScript (112), Markdown (97), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 955 |
+| arquivos_total | 956 |
 | arquivos_codigo | 595 |
 | linhas_codigo | 115722 |
 | rotas | 55 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 99 |
 | edge_functions | 27 |
 | tabelas | 88 |
-| migrations | 172 |
+| migrations | 173 |
 | cron_jobs | 18 |
 | testes | 110 |
 | workflows | 5 |
@@ -270,8 +270,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7352 nós · 15648 arestas · 549 comunidades · grafo do commit `e0ebbdb1`
-- comunidades maiores: cn (219), lucide-react (164), button.tsx (140), snapshot.py (102), ref_node_fs (91), dependencies (80), gerar.mjs (76), generate.py (73), package.json (73), @tanstack/react-query (72), client.ts (70), seed-database.ts (67)
+- 7357 nós · 15652 arestas · 548 comunidades · grafo do commit `39f672ae`
+- comunidades maiores: cn (200), react (135), snapshot.py (104), RateLimitDashboardPage.tsx (91), GeoBlockingPage.tsx (90), DashboardRedesigned.tsx (88), dependencies (80), ref_node_path (79), client.ts (78), gerar.mjs (76), package.json (74), @tanstack/react-query (72)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -279,7 +279,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (31)
 - supabase/config.toml (15)
 - docs/pendencias/_ordem.md (10)
-- .github/workflows/ci.yml (8)
+- .github/workflows/ci.yml (9)
 - docs/MAPBOX.md (6)
 - src/hooks/useRegionResolver.ts (6)
 - docs/pendencias/README.md (5)
@@ -365,6 +365,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `39f672a` chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)
+- 2026-11-21 `a9a3ba5` ci: inclui os testes do roteador do gateway nos contract tests (#134)
 - 2026-11-21 `e0ebbdb` fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)
 - 2026-11-21 `00e2fb7` feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)
 - 2026-11-21 `ad0ba32` fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)
@@ -378,8 +380,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `808653c` fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)
 - 2026-11-21 `7fa1073` feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)
 - 2026-11-21 `6407f62` chore(config): declara verify_jwt explicito para mapbox-proxy (#142)
-- 2026-11-21 `7c69b82` fix(geo): region_cache passa a usar reverse geocode permanente (#139)
-- 2026-11-21 `125ec8c` fix(check-external-api): corrige nome do secret do health check Mapbox (#140)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

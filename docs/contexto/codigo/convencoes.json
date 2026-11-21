@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)",
+   "ci: inclui os testes do roteador do gateway nos contract tests (#134)",
    "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)",
    "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)",
-   "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)",
-   "feat: failover de provedor em runtime no geo-gateway (#175)",
-   "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)"
+   "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

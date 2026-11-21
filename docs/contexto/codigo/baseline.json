@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680",
+  "commit": "39f672ae358be4f777382cc6ab369d66b3180d15",
   "branch": "main",
-  "data_commit": "2026-11-21T19:56:16-03:00",
+  "data_commit": "2026-11-21T20:04:30-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "39f672a",
+    "data": "2026-11-21",
+    "assunto": "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)"
+   },
+   {
+    "sha": "a9a3ba5",
+    "data": "2026-11-21",
+    "assunto": "ci: inclui os testes do roteador do gateway nos contract tests (#134)"
+   },
    {
     "sha": "e0ebbdb",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "73f0813",
     "data": "2026-11-21",
     "assunto": "ci(migrations): workflow manual para aplicar migrations na produção pela Management API (#156)"
-   },
-   {
-    "sha": "6e76232",
-    "data": "2026-11-21",
-    "assunto": "fix(simulacao): restringe simulate-driver-movement a admin/manager (#159)"
-   },
-   {
-    "sha": "2a2a3d1",
-    "data": "2026-11-21",
-    "assunto": "fix(alertas/pedidos): aviso ao fornecedor funciona ponta a ponta (#149)"
    }
   ],
-  "arquivos_mudados_7d": 172,
+  "arquivos_mudados_7d": 173,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -172,6 +172,10 @@
     "mudancas": 6
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 5
+   },
+   {
     "pasta": "docs/pendencias/README.md",
     "mudancas": 5
    },
@@ -182,10 +186,6 @@
    {
     "pasta": "supabase/functions/lalamove-gateway",
     "mudancas": 5
-   },
-   {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 4
    },
    {
     "pasta": ".env.example",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 82
+    "commits": 84
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 955,
+  "arquivos_total": 956,
   "arquivos_codigo": 595,
   "linhas_codigo": 115722,
   "rotas": 55,
@@ -322,7 +322,7 @@
   "hooks": 99,
   "edge_functions": 27,
   "tabelas": 88,
-  "migrations": 172,
+  "migrations": 173,
   "cron_jobs": 18,
   "testes": 110,
   "workflows": 5,
