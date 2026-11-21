@@ -83,3 +83,10 @@ verify_jwt = true
 # O front chama via supabase.functions.invoke() (JWT da sessão); edges internas usam service_role.
 [functions.geo-gateway]
 verify_jwt = true
+
+# mapbox-proxy: proxy legado da API Mapbox (geocoding/directions/matrix v5), ainda usado por
+# useMapbox.ts e useRegionResolver.ts. verify_jwt=true já é o default do Supabase para funções sem
+# bloco — declarado aqui explicitamente (plano Mapbox × Lalamove V2, etapa 7). Será removido quando
+# o front migrar para o geo-gateway (etapa 60/61).
+[functions.mapbox-proxy]
+verify_jwt = true
