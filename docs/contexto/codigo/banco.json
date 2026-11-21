@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 173,
+ "migrations": 175,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -488,6 +488,12 @@
    "migration": "20260712202307_d4575c89-bdd8-439f-92bc-3d5524309049.sql"
   },
   {
+   "nome": "escalate-unacknowledged-alerts",
+   "agenda": "*/5 * * * *",
+   "migration": "20261122140000_fix_crons_dispatcher.sql",
+   "chama_edge": "escalate-alerts"
+  },
+  {
    "nome": "geo-cache-prune",
    "agenda": "15 3 * * *",
    "migration": "20261122130100_geo_foundation.sql"
@@ -498,9 +504,16 @@
    "migration": "20261121194500_geo_jobs_scheduler.sql"
   },
   {
+   "nome": "lalamove_uapi_token_refresh_hourly",
+   "agenda": "17 * * * *",
+   "migration": "20261122140000_fix_crons_dispatcher.sql",
+   "chama_edge": "lalamove-token-refresh"
+  },
+  {
    "nome": "process-job-queue",
    "agenda": "* * * * *",
-   "migration": "20251226010001_configure_pg_cron.sql"
+   "migration": "20251226010001_configure_pg_cron.sql",
+   "chama_edge": "escalate-alerts"
   },
   {
    "nome": "provision-tracking-partitions",
@@ -882,9 +895,10 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 3,
+   "usada_no_front": 4,
    "usada_em_edges": [
     "check-driver-alerts",
+    "job-worker",
     "lalamove-webhook",
     "simulate-driver-movement"
    ],
@@ -1550,6 +1564,7 @@
    "usada_em_edges": [
     "check-driver-alerts",
     "evaluate-driver",
+    "geo-gateway",
     "lalamove-gateway",
     "lalamove-token-refresh",
     "lalamove-webhook",
@@ -4857,7 +4872,9 @@
     "so_no_types": []
    },
    "usada_no_front": 1,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "geo-gateway"
+   ],
    "triggers": [
     "trg_geo_budget_audit",
     "update_geo_budget_updated_at"
@@ -6557,10 +6574,11 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 13,
+   "usada_no_front": 14,
    "usada_em_edges": [
     "bitrix24-sync",
     "evaluate-driver",
+    "job-worker",
     "lalamove-api",
     "lalamove-uapi",
     "lalamove-webhook",
@@ -7408,6 +7426,7 @@
    },
    "usada_no_front": 1,
    "usada_em_edges": [
+    "job-worker",
     "lalamove-api",
     "lalamove-webhook"
    ],
@@ -9009,9 +9028,10 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 1,
+   "usada_no_front": 2,
    "usada_em_edges": [
     "external-db-bridge",
+    "geo-gateway",
     "lalamove-gateway",
     "mcp-query"
    ],

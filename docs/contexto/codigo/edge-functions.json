@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "pasta": "supabase/functions",
- "total": 27,
+ "total": 26,
  "verify_jwt_false": [
   "lalamove-webhook",
   "llm-wh",
@@ -175,7 +175,7 @@
    "servico": null,
    "entrada": "supabase/functions/check-external-api/index.ts",
    "arquivos": 1,
-   "linhas": 262,
+   "linhas": 346,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -188,6 +188,7 @@
     "BITRIX24_WEBHOOK_URL",
     "EVOLUTION_API_KEY",
     "EVOLUTION_API_URL",
+    "GOOGLE_MAPS_SERVER_KEY",
     "LALAMOVE_API_KEY",
     "LALAMOVE_API_URL",
     "MAPBOX_ACCESS_TOKEN",
@@ -197,6 +198,7 @@
    "chama_edges": [],
    "hosts_externos": [
     "api.mapbox.com",
+    "maps.googleapis.com",
     "rest.lalamove.com"
    ],
    "usa_shared": [
@@ -206,7 +208,8 @@
     "telemetry.ts"
    ],
    "chamada_pelo_front": [
-    "src/hooks/healthChecks.ts"
+    "src/hooks/healthChecks.ts",
+    "src/hooks/useGeoAdmin.ts"
    ],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
@@ -244,8 +247,8 @@
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
-   "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "chamada_por_sql_ou_cron": true,
+   "orfa": false,
    "testes": 0
   },
   {
@@ -369,7 +372,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 7,
-   "linhas": 1186,
+   "linhas": 1322,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -377,10 +380,13 @@
    "assina_hmac": false,
    "usa_service_role": true,
    "tabelas": [
+    "alerts",
+    "geo_budget",
     "geo_cache",
     "geo_price_list",
     "geo_settings",
-    "geo_usage_month"
+    "geo_usage_month",
+    "query_telemetry"
    ],
    "rpcs": [
     "geo_budget_status",
@@ -408,7 +414,6 @@
    "chamada_pelo_front": [
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
-    "src/hooks/useMapbox.ts",
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"
    ],
@@ -453,14 +458,18 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 331,
+   "linhas": 734,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
    ],
    "assina_hmac": false,
    "usa_service_role": true,
-   "tabelas": [],
+   "tabelas": [
+    "active_tracking",
+    "lalamove_orders",
+    "lalamove_stops"
+   ],
    "rpcs": [
     "mark_job_completed",
     "mark_job_failed"
@@ -605,8 +614,8 @@
    "usa_shared": [],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
-   "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "chamada_por_sql_ou_cron": true,
+   "orfa": false,
    "testes": 0
   },
   {
@@ -734,35 +743,6 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 0
-  },
-  {
-   "nome": "mapbox-proxy",
-   "servico": "Mapbox",
-   "entrada": "supabase/functions/mapbox-proxy/index.ts",
-   "arquivos": 1,
-   "linhas": 366,
-   "verify_jwt": true,
-   "metodos": [
-    "OPTIONS"
-   ],
-   "assina_hmac": false,
-   "usa_service_role": false,
-   "tabelas": [],
-   "rpcs": [],
-   "env": [
-    "MAPBOX_ACCESS_TOKEN"
-   ],
-   "buckets": [],
-   "chama_edges": [],
-   "hosts_externos": [
-    "api.mapbox.com"
-   ],
-   "usa_shared": [],
-   "chamada_pelo_front": [],
-   "chamada_por_edges": [],
-   "chamada_por_sql_ou_cron": false,
-   "orfa": true,
    "testes": 0
   },
   {

@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 485,
- "arestas": 1573,
+ "nos": 486,
+ "arestas": 1580,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -18,7 +18,7 @@
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 104
+   "importado_por": 103
   },
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -101,6 +101,10 @@
    "importado_por": 11
   },
   {
+   "arquivo": "src/hooks/usePermissions.ts",
+   "importado_por": 11
+  },
+  {
    "arquivo": "src/integrations/supabase/types.ts",
    "importado_por": 11
   },
@@ -113,7 +117,7 @@
    "importado_por": 10
   },
   {
-   "arquivo": "src/hooks/usePermissions.ts",
+   "arquivo": "src/hooks/useMapbox.ts",
    "importado_por": 10
   },
   {
@@ -122,10 +126,6 @@
   },
   {
    "arquivo": "src/components/ui/search-help-tooltip.tsx",
-   "importado_por": 9
-  },
-  {
-   "arquivo": "src/hooks/useMapbox.ts",
    "importado_por": 9
   },
   {
@@ -177,6 +177,7 @@
   "src/components/ui/hero-metric.tsx",
   "src/hooks/useApprovalActionsEnhanced.ts",
   "src/hooks/useDriverEvaluations.ts",
+  "src/hooks/useGeo.ts",
   "src/hooks/useOfflineStorage.ts",
   "src/lib/lalamoveGuards.ts",
   "src/lib/lalamoveValidation.ts",
@@ -224,19 +225,19 @@
    "importado_por": 10
   },
   {
-   "modulo": "components/approvals",
-   "depende_de": 6,
-   "importado_por": 2
-  },
-  {
    "modulo": "components/map",
    "depende_de": 5,
-   "importado_por": 3
+   "importado_por": 4
   },
   {
    "modulo": "components/orders",
-   "depende_de": 7,
+   "depende_de": 8,
    "importado_por": 1
+  },
+  {
+   "modulo": "components/approvals",
+   "depende_de": 6,
+   "importado_por": 2
   },
   {
    "modulo": "components",

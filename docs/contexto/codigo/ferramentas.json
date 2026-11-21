@@ -3,10 +3,10 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (488)",
-   "SQL (177)",
+   "TypeScript (492)",
+   "SQL (179)",
    "JavaScript (112)",
-   "Markdown (97)",
+   "Markdown (99)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -296,7 +296,7 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": "Changelog",
-   "linhas": 473
+   "linhas": 486
   },
   {
    "arquivo": "CLAUDE.md",
@@ -384,6 +384,11 @@
    "linhas": 41
   },
   {
+   "arquivo": "docs/GEO_PROVIDERS.md",
+   "titulo": "Como adicionar um provedor de mapa (HERE, TomTom, …)",
+   "linhas": 56
+  },
+  {
    "arquivo": "docs/JOB_QUEUE_SYSTEM.md",
    "titulo": "📦 Sistema de Filas Assíncronas - Job Queue",
    "linhas": 578
@@ -421,7 +426,7 @@
   {
    "arquivo": "docs/MAPBOX.md",
    "titulo": "MAPBOX — Inventário e Referência (21/11/2026)",
-   "linhas": 134
+   "linhas": 167
   },
   {
    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
@@ -442,6 +447,11 @@
    "arquivo": "docs/RUNBOOK_LALAMOVE.md",
    "titulo": "Runbook — Integração Lalamove (v3 REST + UAPI)",
    "linhas": 126
+  },
+  {
+   "arquivo": "docs/RUNBOOK_MAPBOX.md",
+   "titulo": "RUNBOOK — Mapbox (operação)",
+   "linhas": 78
   },
   {
    "arquivo": "docs/SCREENING_SYSTEM.md",
@@ -732,14 +742,6 @@
     "total": 2
    },
    {
-    "servico": "Mapbox",
-    "edges": [
-     "get-mapbox-token",
-     "mapbox-proxy"
-    ],
-    "total": 2
-   },
-   {
     "servico": "Motoristas",
     "edges": [
      "evaluate-driver",
@@ -762,6 +764,13 @@
     "total": 1
    },
    {
+    "servico": "Mapbox",
+    "edges": [
+     "get-mapbox-token"
+    ],
+    "total": 1
+   },
+   {
     "servico": "Segredos/token",
     "edges": [
      "rotate-tokens"
@@ -780,7 +789,7 @@
    },
    {
     "host": "api.mapbox.com",
-    "arquivos": 4
+    "arquivos": 3
    },
    {
     "host": "supabase.com",
@@ -796,6 +805,10 @@
    },
    {
     "host": "lalamove-v2.vercel.app",
+    "arquivos": 2
+   },
+   {
+    "host": "maps.googleapis.com",
     "arquivos": 2
    },
    {
@@ -860,10 +873,6 @@
    },
    {
     "host": "lovable.dev",
-    "arquivos": 1
-   },
-   {
-    "host": "maps.googleapis.com",
     "arquivos": 1
    },
    {

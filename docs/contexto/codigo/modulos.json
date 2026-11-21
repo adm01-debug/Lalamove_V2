@@ -901,13 +901,13 @@
   },
   {
    "modulo": "components/map",
-   "arquivos": 17,
-   "testes": 9,
-   "linhas": 3661,
+   "arquivos": 18,
+   "testes": 10,
+   "linhas": 3914,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 9,
+   "componentes": 10,
    "hooks_locais": [
     "useAllowedMapProviders",
     "useEffectiveMapProvider",
@@ -977,6 +977,7 @@
    },
    "importado_por_outros_modulos": [
     "components/dashboard",
+    "components/orders",
     "components/reports",
     "pages"
    ],
@@ -1054,7 +1055,7 @@
    "modulo": "components/orders",
    "arquivos": 8,
    "testes": 0,
-   "linhas": 2986,
+   "linhas": 3045,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1073,6 +1074,7 @@
     "useExternalStats",
     "useFleetMutation",
     "useFleetSearch",
+    "useMapMarkers",
     "useMapboxDirections",
     "useMapboxGeocode",
     "useMapboxIsochrone",
@@ -1082,7 +1084,9 @@
     "useMapboxReverseGeocode",
     "useMapboxStaticImage",
     "useMapboxTilequery",
+    "useMapboxToken",
     "useQuotationExpiry",
+    "useTrackingData",
     "useUapiCoupons",
     "useUapiFleet",
     "useUapiOrderHistory",
@@ -1093,17 +1097,22 @@
     "evaluate-driver",
     "external-companies",
     "geo-gateway",
+    "get-mapbox-token",
     "lalamove-api",
     "lalamove-uapi"
    ],
    "tabelas": [
+    "active_tracking",
     "contacts",
+    "lalamove_orders",
     "lalamove_status_history",
     "lalamove_stops"
    ],
    "rpcs": [],
    "buckets": [],
-   "canais_realtime": [],
+   "canais_realtime": [
+    "active-tracking-changes"
+   ],
    "env": [
     "DEV",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -1111,13 +1120,16 @@
    ],
    "flags": [],
    "papeis": [
-    "alert"
+    "alert",
+    "img"
    ],
    "diretos": {
     "edges": [
      "lalamove-api"
     ],
     "tabelas": [
+     "active_tracking",
+     "lalamove_orders",
      "lalamove_status_history",
      "lalamove_stops"
     ],
@@ -1128,6 +1140,7 @@
    ],
    "depende_de_modulos": [
     "components/dashboard",
+    "components/map",
     "components/ui",
     "hooks",
     "integrations/supabase",
@@ -1410,9 +1423,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 42,
+   "arquivos": 41,
    "testes": 10,
-   "linhas": 11470,
+   "linhas": 11727,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1445,6 +1458,7 @@
     "driver_incidents",
     "driver_locations",
     "drivers",
+    "geo_budget",
     "geo_cache",
     "geo_price_list",
     "geo_settings",
@@ -1546,6 +1560,7 @@
      "driver_incidents",
      "driver_locations",
      "drivers",
+     "geo_budget",
      "geo_cache",
      "geo_price_list",
      "geo_settings",
@@ -1591,9 +1606,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 85,
+   "arquivos": 86,
    "testes": 1,
-   "linhas": 14981,
+   "linhas": 15109,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1689,7 +1704,9 @@
     "useFuseSearchWithMatches",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useGlobalSearch",
@@ -1888,7 +1905,9 @@
     "useFuseSearchWithPreset",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useUpdateGeoBudget",
@@ -2382,7 +2401,7 @@
    "modulo": "lib",
    "arquivos": 22,
    "testes": 5,
-   "linhas": 2266,
+   "linhas": 2327,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2464,7 +2483,7 @@
    "modulo": "pages",
    "arquivos": 55,
    "testes": 0,
-   "linhas": 15527,
+   "linhas": 15930,
    "itens_menu": [
     "Relatórios",
     "Dashboard SLA",
@@ -2651,7 +2670,9 @@
     "useFuseSearchWithMatches",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useGlobalUndo",

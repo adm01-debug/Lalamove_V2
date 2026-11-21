@@ -2,11 +2,26 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c2ae0baa10201a24357ac20954e41da8c200041e",
+  "commit": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
   "branch": "main",
-  "data_commit": "2026-11-21T20:04:35-03:00",
+  "data_commit": "2026-11-21T20:12:28-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "06bcb9f",
+    "data": "2026-11-21",
+    "assunto": "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)"
+   },
+   {
+    "sha": "554e68b",
+    "data": "2026-11-21",
+    "assunto": "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)"
+   },
+   {
+    "sha": "e616ccf",
+    "data": "2026-11-21",
+    "assunto": "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)"
+   },
    {
     "sha": "c2ae0ba",
     "data": "2026-11-21",
@@ -116,28 +131,17 @@
     "sha": "49fc8f0",
     "data": "2026-11-21",
     "assunto": "docs: registra estado, recuperação de branches e bloqueios de 21/11 (#145)"
-   },
-   {
-    "sha": "d2c18d1",
-    "data": "2026-11-21",
-    "assunto": "fix(pedidos): aplica restrição de cidade a special request ao trocar praça (#162)"
-   },
-   {
-    "sha": "8b0f762",
-    "data": "2026-11-21",
-    "assunto": "fix(gateway): mapeia orders/call/update_token do uapi-proxy no roteador (#161)"
-   },
-   {
-    "sha": "5809039",
-    "data": "2026-11-21",
-    "assunto": "fix(webhook): payload v1 no send-notification e aviso ao responsável pela coleta no DRIVER_ASSIGNED (#157)"
    }
   ],
-  "arquivos_mudados_7d": 179,
+  "arquivos_mudados_7d": 192,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 20
+    "mudancas": 26
+   },
+   {
+    "pasta": "src/components/map",
+    "mudancas": 16
    },
    {
     "pasta": "package-lock.json",
@@ -148,19 +152,19 @@
     "mudancas": 14
    },
    {
-    "pasta": "src/components/map",
-    "mudancas": 11
-   },
-   {
     "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 6
+    "mudancas": 7
    },
    {
     "pasta": "src/components/orders",
+    "mudancas": 7
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 6
    },
    {
@@ -172,11 +176,11 @@
     "mudancas": 6
    },
    {
-    "pasta": ".github/workflows/ci.yml",
+    "pasta": "docs/pendencias/README.md",
     "mudancas": 5
    },
    {
-    "pasta": "docs/pendencias/README.md",
+    "pasta": "src/hooks/__tests__",
     "mudancas": 5
    },
    {
@@ -190,10 +194,6 @@
    {
     "pasta": "src/lib/__tests__",
     "mudancas": 4
-   },
-   {
-    "pasta": ".env.example",
-    "mudancas": 3
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -210,15 +210,19 @@
     "mudancas": 15
    },
    {
+    "arquivo": ".github/workflows/ci.yml",
+    "mudancas": 10
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 9
+    "arquivo": "docs/MAPBOX.md",
+    "mudancas": 7
    },
    {
-    "arquivo": "docs/MAPBOX.md",
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 6
    },
    {
@@ -227,10 +231,6 @@
    },
    {
     "arquivo": "docs/pendencias/README.md",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 5
    },
    {
@@ -270,6 +270,18 @@
     "mudancas": 4
    },
    {
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/resolver.ts",
+    "mudancas": 4
+   },
+   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 4
    },
@@ -284,24 +296,12 @@
    {
     "arquivo": ".github/workflows/deploy-edges.yml",
     "mudancas": 3
-   },
-   {
-    "arquivo": "docs/agentes/banco.md",
-    "mudancas": 3
-   },
-   {
-    "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
-    "mudancas": 3
-   },
-   {
-    "arquivo": "eslint.config.js",
-    "mudancas": 3
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 85
+    "commits": 88
    },
    {
     "autor": "dependabot[bot]",
@@ -310,24 +310,24 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 960,
-  "arquivos_codigo": 599,
-  "linhas_codigo": 116191,
+  "arquivos_total": 968,
+  "arquivos_codigo": 603,
+  "linhas_codigo": 117741,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
   "itens_menu": 38,
   "modulos": 43,
-  "componentes": 215,
-  "hooks": 99,
-  "edge_functions": 27,
+  "componentes": 216,
+  "hooks": 100,
+  "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 173,
-  "cron_jobs": 18,
-  "testes": 114,
+  "migrations": 175,
+  "cron_jobs": 20,
+  "testes": 117,
   "workflows": 5,
   "scripts": 105,
-  "docs_md": 97
+  "docs_md": 99
  },
  "por_pasta": {
   "e2e/helpers": {
@@ -511,12 +511,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 150,
-   "linhas": 27271
+   "arquivos": 152,
+   "linhas": 27701
   },
   "src/hooks": {
-   "arquivos": 107,
-   "linhas": 17827
+   "arquivos": 110,
+   "linhas": 18196
   },
   "src/i18n": {
    "arquivos": 1,
@@ -528,7 +528,7 @@
   },
   "src/lib": {
    "arquivos": 36,
-   "linhas": 3564
+   "linhas": 3626
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -536,7 +536,7 @@
   },
   "src/pages": {
    "arquivos": 87,
-   "linhas": 18841
+   "linhas": 19244
   },
   "src/services": {
    "arquivos": 1,
@@ -555,8 +555,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 52,
-   "linhas": 13190
+   "arquivos": 51,
+   "linhas": 13476
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -589,12 +589,12 @@
    "linhas": 1007
   },
   {
-   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 938
+   "arquivo": "src/components/orders/OrderDetailModal.tsx",
+   "linhas": 979
   },
   {
-   "arquivo": "src/components/orders/OrderDetailModal.tsx",
-   "linhas": 920
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 938
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -605,6 +605,10 @@
    "linhas": 844
   },
   {
+   "arquivo": "src/pages/MapsSettingsPage.tsx",
+   "linhas": 803
+  },
+  {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
    "linhas": 793
   },
@@ -613,12 +617,16 @@
    "linhas": 750
   },
   {
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 734
+  },
+  {
    "arquivo": "scripts/ci/lint-ratchet.mjs",
    "linhas": 668
   },
   {
    "arquivo": "src/components/map/LiveMap.tsx",
-   "linhas": 630
+   "linhas": 657
   },
   {
    "arquivo": "supabase/functions/send-notification/index.ts",
@@ -649,6 +657,10 @@
    "linhas": 499
   },
   {
+   "arquivo": "src/hooks/useMapbox.ts",
+   "linhas": 494
+  },
+  {
    "arquivo": "src/pages/RateLimitDashboardPage.tsx",
    "linhas": 478
   },
@@ -657,29 +669,17 @@
    "linhas": 476
   },
   {
-   "arquivo": "src/hooks/useMapbox.ts",
-   "linhas": 472
-  },
-  {
    "arquivo": "src/components/ui/contextual-hints.tsx",
    "linhas": 468
-  },
-  {
-   "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
-   "linhas": 465
-  },
-  {
-   "arquivo": "src/pages/WebhooksPage.tsx",
-   "linhas": 465
   }
  ],
  "qualidade": {
-  "any": 89,
+  "any": 109,
   "console_log": 399,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 3,
-  "arquivos_acima_500_linhas": 18
+  "arquivos_acima_500_linhas": 20
  },
  "todos": [
   {
@@ -728,10 +728,7 @@
   "menu_sem_destino": [],
   "edges_orfas": [
    "apply-fixes",
-   "escalate-alerts",
    "external-db-bridge",
-   "lalamove-token-refresh",
-   "mapbox-proxy",
    "rotate-tokens",
    "seed-fix-rls"
   ],

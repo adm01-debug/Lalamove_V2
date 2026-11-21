@@ -549,6 +549,12 @@
    "src/components/ui/slider.tsx",
    "src/hooks/useMapSettings.ts"
   ],
+  "src/components/map/OrderTrackingMap.tsx": [
+   "src/components/map/hooks/useMapMarkers.ts",
+   "src/components/map/hooks/useMapboxToken.ts",
+   "src/components/map/mapLayers.ts",
+   "src/lib/geo-gateway.ts"
+  ],
   "src/components/map/hooks/useMapAlerts.ts": [
    "src/components/map/hooks/useTrackingData.ts"
   ],
@@ -668,6 +674,7 @@
   ],
   "src/components/orders/OrderDetailModal.tsx": [
    "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/map/OrderTrackingMap.tsx",
    "src/components/orders/StatusTimeline.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
@@ -1053,6 +1060,9 @@
    "src/integrations/supabase/client.ts",
    "src/utils/logger.ts"
   ],
+  "src/hooks/useGeo.ts": [
+   "src/hooks/useMapbox.ts"
+  ],
   "src/hooks/useGeoAdmin.ts": [
    "src/integrations/supabase/client.ts"
   ],
@@ -1101,7 +1111,7 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useMapbox.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/lib/geo-gateway.ts"
   ],
   "src/hooks/useMetrics.ts": [
    "src/integrations/supabase/client.ts"
@@ -1646,7 +1656,8 @@
    "src/components/ui/skeleton.tsx",
    "src/components/ui/switch.tsx",
    "src/components/ui/table.tsx",
-   "src/hooks/useGeoAdmin.ts"
+   "src/hooks/useGeoAdmin.ts",
+   "src/hooks/usePermissions.ts"
   ],
   "src/pages/MetricsPage.panels.tsx": [
    "src/components/ui/badge.tsx",

@@ -1867,7 +1867,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "caminho": "/metrics",
@@ -2038,6 +2038,7 @@
     "useFleetSearch",
     "useFuseSearch",
     "useFuseSearchWithMatches",
+    "useMapMarkers",
     "useMapboxDirections",
     "useMapboxGeocode",
     "useMapboxIsochrone",
@@ -2047,6 +2048,7 @@
     "useMapboxReverseGeocode",
     "useMapboxStaticImage",
     "useMapboxTilequery",
+    "useMapboxToken",
     "useMemo",
     "useMotionValue",
     "useMotionValueEvent",
@@ -2059,6 +2061,7 @@
     "useRef",
     "useSearchParams",
     "useState",
+    "useTrackingData",
     "useTransform",
     "useTranslation",
     "useUapiCoupons",
@@ -2083,6 +2086,7 @@
     "useFleetSearch",
     "useFuseSearch",
     "useFuseSearchWithMatches",
+    "useMapMarkers",
     "useMapboxDirections",
     "useMapboxGeocode",
     "useMapboxIsochrone",
@@ -2092,15 +2096,18 @@
     "useMapboxReverseGeocode",
     "useMapboxStaticImage",
     "useMapboxTilequery",
+    "useMapboxToken",
     "usePullToRefresh",
     "useQuotationExpiry",
     "useRecentOrders",
+    "useTrackingData",
     "useUapiCoupons",
     "useUapiFleet",
     "useUapiOrderHistory",
     "useUapiWalletStatement"
    ],
    "tabelas": [
+    "active_tracking",
     "contacts",
     "lalamove_orders",
     "lalamove_status_history",
@@ -2111,15 +2118,19 @@
     "evaluate-driver",
     "external-companies",
     "geo-gateway",
+    "get-mapbox-token",
     "lalamove-api",
     "lalamove-uapi"
    ],
-   "canais_realtime": [],
+   "canais_realtime": [
+    "active-tracking-changes"
+   ],
    "flags": [],
    "papeis": [
-    "alert"
+    "alert",
+    "img"
    ],
-   "arquivos_puxados": 58
+   "arquivos_puxados": 67
   },
   {
    "caminho": "/password-reset-approvals",
@@ -2841,23 +2852,35 @@
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
+    "useAuth",
+    "useContext",
+    "useEffect",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useMemo",
     "useMutation",
+    "usePermissions",
+    "useQuery",
     "useQueryClient",
+    "useState",
     "useUpdateGeoBudget",
     "useUpdateGeoSetting"
    ],
    "hooks_locais": [
+    "useAuth",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
+    "usePermissions",
     "useUpdateGeoBudget",
     "useUpdateGeoSetting"
    ],
@@ -2865,18 +2888,27 @@
     "geo_budget",
     "geo_price_list",
     "geo_settings",
-    "geo_usage_month"
+    "geo_usage_month",
+    "permissions",
+    "query_telemetry",
+    "role_permissions",
+    "user_roles"
    ],
    "rpcs": [
-    "geo_budget_status"
+    "geo_budget_status",
+    "get_user_permissions"
    ],
    "edges": [
+    "check-external-api",
     "geo-gateway"
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 14
+   "papeis": [
+    "admin",
+    "manager"
+   ],
+   "arquivos_puxados": 17
   },
   {
    "caminho": "/settings/uapi",
@@ -3706,7 +3738,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 273
+   "arquivos_puxados": 274
   }
  ],
  "menu": [

@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2ae0baa10` · branch `main` · 2026-11-21 23:07 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `06bcb9ff15` · branch `main` · 2026-11-21 23:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -121,7 +121,7 @@
 | `ExternalTable` (TS) | companies \| customers \| suppliers \| carriers \| contacts |  | `src/hooks/useExternalData.ts` |
 | `FusePreset` (TS) | strict \| balanced \| fuzzy |  | `src/hooks/useFuseSearch.ts` |
 | `GeoProviderName` (TS) | mapbox \| google |  | `src/hooks/useGeoAdmin.ts` |
-| `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization |  | `src/hooks/useGeoAdmin.ts` |
+| `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `src/hooks/useGeoAdmin.ts` |
 | `FleetKind` (TS) | favorites \| blocked |  | `src/hooks/useLalamoveUapi.ts` |
 | `TilesProvider` (TS) | mapbox \| google \| off |  | `src/hooks/useMapProviderPolicy.ts` |
 | `MarkerDensity` (TS) | comfortable \| compact |  | `src/hooks/useMapSettings.ts` |
@@ -191,8 +191,12 @@ _nenhum item encontrado_
 | status | valor `completed` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
 | status | valor `in_progress` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
 | status | valor `all` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useAdvancedReports.ts`<br>`compara:src/pages/AdvancedReportsPage.tsx`<br>`escreve:src/hooks/useAdvancedReports.ts` |
+| status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
 | status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
+| status | valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
+| status | valor `planned` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
+| status | valor `refreshed` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `DRIVER_CHANGED` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/lalamove-api/index.ts` |
 | status | valor `string` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/lalamove-api/index.ts` |
 | status | valor `DELETED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/migrations/20251226020000_create_materialized_views_cache.sql` |
@@ -254,7 +258,6 @@ _nenhum item encontrado_
 | dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-companies/index.ts` |
 | dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-db-bridge/index.ts` |
 | segurança | função `cleanup_old_system_logs` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226000001_create_system_logs.sql` |
-| segurança | função `process_job_queue` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `get_cron_jobs_status` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `pause_cron_job` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `resume_cron_job` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |

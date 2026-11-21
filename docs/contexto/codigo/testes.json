@@ -14,22 +14,22 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 114,
+ "total": 117,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 6,
   "edge (deno)": 8,
   "guard (node --test)": 33,
-  "unit (vitest)": 65
+  "unit (vitest)": 68
  },
  "onde_ficam": [
   {
-   "padrao": "guards em scripts/",
-   "arquivos": 46
+   "padrao": "co-localizado (__tests__)",
+   "arquivos": 48
   },
   {
-   "padrao": "co-localizado (__tests__)",
-   "arquivos": 45
+   "padrao": "guards em scripts/",
+   "arquivos": 46
   },
   {
    "padrao": "supabase/functions/<edge>",
@@ -520,11 +520,11 @@
   {
    "arquivo": "src/components/map/__tests__/mapLayers.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 82,
+   "linhas": 138,
    "testa": [
     "src/components/map/mapLayers.ts"
    ],
-   "casos": 4
+   "casos": 8
   },
   {
    "arquivo": "src/components/map/__tests__/MapSettingsPanel.test.tsx",
@@ -545,6 +545,15 @@
     "src/components/map/markerFactories.ts"
    ],
    "casos": 12
+  },
+  {
+   "arquivo": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 62,
+   "testa": [
+    "src/components/map/OrderTrackingMap.tsx"
+   ],
+   "casos": 3
   },
   {
    "arquivo": "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
@@ -677,6 +686,25 @@
     "src/integrations/supabase/client.ts"
    ],
    "casos": 3
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useGeo.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 189,
+   "testa": [
+    "src/hooks/useGeo.ts",
+    "src/lib/geo-gateway.ts"
+   ],
+   "casos": 8
+  },
+  {
+   "arquivo": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 52,
+   "testa": [
+    "src/hooks/useGeoAdmin.ts"
+   ],
+   "casos": 5
   },
   {
    "arquivo": "src/hooks/__tests__/useIncidents.test.ts",
@@ -906,7 +934,7 @@
   {
    "arquivo": "src/lib/geo-gateway.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 162,
+   "linhas": 163,
    "testa": [
     "src/hooks/useMapbox.ts",
     "src/lib/geo-gateway.ts"
@@ -1043,11 +1071,11 @@
   {
    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 106,
+   "linhas": 135,
    "testa": [
     "supabase/functions/geo-gateway/resolver.ts"
    ],
-   "casos": 11
+   "casos": 13
   },
   {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
@@ -1119,6 +1147,7 @@
   "scripts/vercel/verify-release-targets.mjs": 1,
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
   "src/components/map/MapSettingsPanel.tsx": 1,
+  "src/components/map/OrderTrackingMap.tsx": 1,
   "src/components/map/hooks/useGoogleMapsLoader.ts": 1,
   "src/components/map/hooks/useMapAlerts.ts": 1,
   "src/components/map/hooks/useMapMarkers.ts": 2,
@@ -1137,6 +1166,8 @@
   "src/hooks/useDeliveryMetrics.ts": 1,
   "src/hooks/useDrivers.ts": 1,
   "src/hooks/useFeatureFlags.ts": 1,
+  "src/hooks/useGeo.ts": 1,
+  "src/hooks/useGeoAdmin.ts": 1,
   "src/hooks/useGeoSearch.ts": 1,
   "src/hooks/useIncidents.ts": 1,
   "src/hooks/useLoginLockout.ts": 1,
@@ -1153,7 +1184,7 @@
   "src/hooks/useTrackingHistory.ts": 1,
   "src/hooks/useWebhookEvents.ts": 1,
   "src/integrations/supabase/client.ts": 14,
-  "src/lib/geo-gateway.ts": 1,
+  "src/lib/geo-gateway.ts": 2,
   "src/lib/lalamoveCatalog.ts": 3,
   "src/lib/lalamoveErrors.ts": 1,
   "src/lib/lalamoveGuards.ts": 1,
@@ -1277,7 +1308,6 @@
    "src/hooks/useEvaluateDriver.ts",
    "src/hooks/useExternalData.ts",
    "src/hooks/useFuseSearch.ts",
-   "src/hooks/useGeoAdmin.ts",
    "src/hooks/useGlobalSearch.ts",
    "src/hooks/useGlobalUndo.tsx",
    "src/hooks/useJobQueue.ts",
@@ -1326,7 +1356,6 @@
    "lalamove-token-refresh",
    "lalamove-uapi",
    "llm-wh",
-   "mapbox-proxy",
    "mcp-query",
    "new-device-alert",
    "rotate-tokens",

@@ -934,7 +934,7 @@
    "arquivo": "scripts/inventario/banco.sql",
    "pasta": "scripts/inventario",
    "descricao": null,
-   "linhas": 252,
+   "linhas": 295,
    "env": [],
    "npm_scripts": [],
    "workflows": [],

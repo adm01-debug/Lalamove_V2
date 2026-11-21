@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 99,
+ "total": 100,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -129,9 +129,10 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 3,
+   "usado_por": 4,
    "usado_por_arquivos": [
     "src/components/map/LiveMap.tsx",
+    "src/components/map/OrderTrackingMap.tsx",
     "src/components/reports/GeoHeatmap.tsx",
     "src/pages/HeatmapPage.tsx"
    ],
@@ -152,9 +153,10 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
-    "src/components/map/LiveMap.tsx"
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/OrderTrackingMap.tsx"
    ],
    "coberto_por_testes": 2
   },
@@ -1293,28 +1295,46 @@
    "coberto_por_testes": 0
   },
   {
+   "arquivo": "src/hooks/useGeo.ts",
+   "hooks_exportados": [],
+   "linhas": 6,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 1
+  },
+  {
    "arquivo": "src/hooks/useGeoAdmin.ts",
    "hooks_exportados": [
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useUpdateGeoBudget",
     "useUpdateGeoSetting"
    ],
-   "linhas": 196,
+   "linhas": 296,
    "dominio": "hooks",
    "tabelas": [
     "geo_budget",
     "geo_price_list",
     "geo_settings",
-    "geo_usage_month"
+    "geo_usage_month",
+    "query_telemetry"
    ],
    "rpcs": [
     "geo_budget_status"
    ],
    "edges": [
+    "check-external-api",
     "geo-gateway"
    ],
    "hooks_internos": [
@@ -1326,7 +1346,7 @@
    "usado_por_arquivos": [
     "src/pages/MapsSettingsPage.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useGeoSearch.ts",
@@ -1599,19 +1619,18 @@
     "useMapboxStaticImage",
     "useMapboxTilequery"
    ],
-   "linhas": 472,
+   "linhas": 494,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
-   "edges": [
-    "geo-gateway"
-   ],
+   "edges": [],
    "hooks_internos": [],
    "canais_realtime": [],
-   "usado_por": 8,
+   "usado_por": 9,
    "usado_por_arquivos": [
     "src/components/map/hooks/useMapMarkers.ts",
     "src/components/orders/AddressAutocomplete.tsx",
+    "src/hooks/useGeo.ts",
     "src/pages/map-tools/IsochroneTab.tsx",
     "src/pages/map-tools/MapMatchingTab.tsx",
     "src/pages/map-tools/MatrixTab.tsx",
@@ -1841,12 +1860,13 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 9,
+   "usado_por": 10,
    "usado_por_arquivos": [
     "src/components/auth/PermissionGate.tsx",
     "src/components/auth/ProtectedRoute.tsx",
     "src/hooks/useContextualHints.ts",
     "src/hooks/useRole.ts",
+    "src/pages/MapsSettingsPage.tsx",
     "src/pages/PermissionsPage.tsx",
     "src/pages/ProfilePage.tsx",
     "src/pages/RolesPage.tsx",

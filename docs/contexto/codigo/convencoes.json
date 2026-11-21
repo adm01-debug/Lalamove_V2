@@ -6,12 +6,12 @@
    "src/pages (53)"
   ],
   "componentes": [
-   "src/components (125)",
+   "src/components (126)",
    "src/pages (86)",
    "src/hooks (3)"
   ],
   "hooks": [
-   "src/hooks (84)",
+   "src/hooks (85)",
    "src/components (12)",
    "scripts/ai-context (1)"
   ],
@@ -21,8 +21,8 @@
    "src/integrations (4)"
   ],
   "testes": [
+   "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "co-localizado (__tests__) (45)",
    "supabase/functions/<edge> (10)"
   ],
   "edge_functions": "supabase/functions",
@@ -40,7 +40,7 @@
    "src/components/layout/sidebar-config.ts"
   ],
   "docs": [
-   "docs (31)",
+   "docs (33)",
    "(raiz) (9)",
    ".github (1)"
   ]
@@ -54,7 +54,7 @@
  },
  "barrels_index": 3,
  "extensao_componentes": [
-  ".tsx (215)"
+  ".tsx (216)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)",
+   "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)",
+   "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)",
    "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)",
-   "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)",
-   "ci: inclui os testes do roteador do gateway nos contract tests (#134)",
-   "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)",
-   "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)"
+   "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

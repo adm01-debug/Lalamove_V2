@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c2ae0baa10201a24357ac20954e41da8c200041e",
+  "sha": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 23:07 UTC",
-  "files_total": 955,
-  "code_files": 785,
-  "code_lines": 134477
+  "generated_at": "2026-11-21 23:13 UTC",
+  "files_total": 963,
+  "code_files": 791,
+  "code_lines": 136276
  },
  "version": "1.3.2",
- "facts_hash": "3a400a302a017f9d",
+ "facts_hash": "1c5cfb22da725f3b",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,9 +179,9 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 262,
-   ".tsx": 226,
-   ".sql": 177,
+   ".ts": 264,
+   ".tsx": 228,
+   ".sql": 179,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -5930,7 +5930,11 @@
       "src": "supabase/migrations/20261122130100_geo_foundation.sql"
      }
     ],
-    "constraints": [],
+    "constraints": [
+     "constraint geo_settings_function_check CHECK (function IN ( 'tiles','autocomplete','geocode','reverse','route','matrix','static', 'snap','validate','isochrone','optimization','tilequery' ))",
+     "constraint geo_settings_provider_check CHECK (provider IN ('google','mapbox','auto','off'))",
+     "constraint geo_settings_fallback_provider_check CHECK (fallback_provider IN ('google','mapbox','auto','off'))"
+    ],
     "src": "supabase/migrations/20261122130100_geo_foundation.sql",
     "comment": "Provedor de mapas por funcao (google|mapbox|off) com fallback. Admin edita em /settings/maps.",
     "origin": "migration"
@@ -11078,16 +11082,21 @@
     ]
    },
    "process_job_queue": {
-    "args": "",
-    "returns": "TABLE(\n  processed INTEGER,\n  succeeded INTEGER,\n  failed INTEGER,\n  skipped INTEGER\n)",
+    "args": "p_limit integer DEFAULT 10",
+    "returns": "TABLE(processed integer, requeued integer)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "DECLARE v_job RECORD; v_processed INTEGER := 0; v_succeeded INTEGER := 0; v_failed INTEGER := 0; v_skipped INTEGER := 0; v_function_url TEXT; v_service_key TEXT; BEGIN v_function_url := current_setting('app.settings.edge_function_url', true); v_service_key := current_setting('app.settings.service_role_key', true); IF v_function_url IS NULL THEN v_function_url := current_setting('SUPABASE_URL', true) || '/functions/v1/job-worker'; END IF; RAISE NOTICE 'Starting job queue processing at %', NOW(); FOR v_job IN SELECT * FROM get_next_jobs(10) LOOP IF NOT mark_job_processing(v_job.id) THEN v_skipped := v_skipped + 1; CONTINUE; END IF; RAISE NOTICE 'Processing job % (type: %)', v_job.id, v_job.typ …",
+    "search_path": true,
+    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_key text; v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() WHERE status = 'PROCESSING' AND started_at < now() - interval '10 minutes' RETURNING 1 ) S …",
     "raises": [],
     "tables": [
-     "get_next_jobs"
+     "get_next_jobs",
+     "job_queue",
+     "stale",
+     "v_key",
+     "v_requeued",
+     "vault"
     ]
    },
    "cleanup_old_jobs": {
@@ -14096,6 +14105,12 @@
     "schedule": "1-59/5 * * * *",
     "body": "SELECT public.refresh_geo_jobs();",
     "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+   },
+   {
+    "job": "process-job-queue",
+    "schedule": "* * * * *",
+    "body": "select public.process_job_queue(10);",
+    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
    }
   ],
   "views": {
@@ -14312,8 +14327,10 @@
    "supabase/migrations/20261122130000_geo_alert_types.sql",
    "supabase/migrations/20261122130100_geo_foundation.sql",
    "supabase/migrations/20261122130200_alert_type_driver_assigned.sql",
+   "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
    "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
    "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
+   "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -16437,6 +16454,14 @@
     "objkind": "function",
     "roles": "PUBLIC, authenticated",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
    }
   ],
   "raises": [
@@ -16596,7 +16621,8 @@
    "table:geo_usage": "Uso diario de APIs de mapa por provedor/funcao/sku com custo estimado (USD).",
    "table:geo_budget": "Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso.",
    "table:geo_cache": "Cache de respostas de geocode/rota/static por hash de request (TTL por funcao).",
-   "table:order_geo_events": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada)."
+   "table:order_geo_events": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada).",
+   "column:geo_settings.provider": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -16976,7 +17002,7 @@
      "geo-gateway"
     ],
     "rpc_transitive": [],
-    "deps_count": 19
+    "deps_count": 18
    },
    {
     "path": "",
@@ -16986,15 +17012,21 @@
      "geo_budget",
      "geo_price_list",
      "geo_settings",
-     "geo_usage_month"
+     "geo_usage_month",
+     "permissions",
+     "query_telemetry",
+     "role_permissions",
+     "user_roles"
     ],
     "invokes_transitive": [
+     "check-external-api",
      "geo-gateway"
     ],
     "rpc_transitive": [
-     "geo_budget_status"
+     "geo_budget_status",
+     "get_user_permissions"
     ],
-    "deps_count": 14
+    "deps_count": 17
    },
    {
     "path": "",
@@ -17034,6 +17066,7 @@
     "file": "src/pages/OrdersPage.tsx",
     "component": "OrdersPage",
     "tables_transitive": [
+     "active_tracking",
      "contacts",
      "lalamove_orders",
      "lalamove_status_history",
@@ -17043,11 +17076,12 @@
      "evaluate-driver",
      "external-companies",
      "geo-gateway",
+     "get-mapbox-token",
      "lalamove-api",
      "lalamove-uapi"
     ],
     "rpc_transitive": [],
-    "deps_count": 58
+    "deps_count": 67
    },
    {
     "path": "",
@@ -17447,14 +17481,13 @@
      "BITRIX24_WEBHOOK_URL",
      "EVOLUTION_API_KEY",
      "EVOLUTION_API_URL",
+     "GOOGLE_MAPS_SERVER_KEY",
      "LALAMOVE_API_KEY",
      "LALAMOVE_API_URL",
      "MAPBOX_ACCESS_TOKEN",
      "MAPBOX_SERVER_TOKEN"
     ],
-    "external": [
-     "https://api.mapbox.com/geocoding/v5/mapbox.places/…"
-    ],
+    "external": [],
     "invokes": [],
     "doc": "Edge Function: check-external-api Objetivo: Verificar health de APIs externas de forma segura Evita expor API keys no frontend",
     "errors": [
@@ -17577,10 +17610,13 @@
     ],
     "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
     "tables": [
+     "alerts",
+     "geo_budget",
      "geo_cache",
      "geo_price_list",
      "geo_settings",
-     "geo_usage_month"
+     "geo_usage_month",
+     "query_telemetry"
     ],
     "env": [
      "GOOGLE_MAPS_SERVER_KEY",
@@ -17595,11 +17631,12 @@
     "errors": [
      "GEO_INVALID_INPUT",
      "GEO_NOT_CONFIGURED",
-     "GEO_NOT_SUPPORTED"
+     "GEO_NOT_SUPPORTED",
+     "GEO_RATE_LIMITED"
     ],
     "side_effects": [],
     "webhook_events": [],
-    "idempotency": false
+    "idempotency": true
    },
    {
     "name": "get-mapbox-token",
@@ -17627,7 +17664,11 @@
      "OPTIONS"
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
-    "tables": [],
+    "tables": [
+     "active_tracking",
+     "lalamove_orders",
+     "lalamove_stops"
+    ],
     "env": [
      "ALLOWED_ORIGINS",
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -17641,9 +17682,14 @@
     ],
     "doc": "============================================================================ EDGE FUNCTION: Job Worker Descrição: Processa jobs da fila de forma assíncrona Versão: 1.0.0 Data: 2025-12-26 ============================================================================",
     "errors": [
+     "${fn}: ${detail}",
      "Invalid job payload: missing required fields",
      "Missing Authorization header",
-     "Unknown job type: ${jobPayload.type}"
+     "Unknown job type: ${unknownType}",
+     "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
+     "geo_backfill exige payload.addresses[] ou payload.address",
+     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)",
+     "pod_fetch: pedido ${key} não encontrado em lalamove_orders"
     ],
     "side_effects": [
      "invoke("
@@ -17816,25 +17862,6 @@
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
-    ],
-    "external": [],
-    "invokes": [],
-    "doc": "",
-    "errors": [],
-    "side_effects": [],
-    "webhook_events": [],
-    "idempotency": false
-   },
-   {
-    "name": "mapbox-proxy",
-    "file": "supabase/functions/mapbox-proxy/index.ts",
-    "methods": [
-     "OPTIONS"
-    ],
-    "auth": "n/d",
-    "tables": [],
-    "env": [
-     "MAPBOX_ACCESS_TOKEN"
     ],
     "external": [],
     "invokes": [],
@@ -18826,7 +18853,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 151,
+  "components_count": 153,
   "hooks": [
    {
     "name": "useOrders",
@@ -19209,11 +19236,19 @@
     "file": "src/hooks/useGeoAdmin.ts"
    },
    {
+    "name": "useGeoLatency",
+    "file": "src/hooks/useGeoAdmin.ts"
+   },
+   {
     "name": "useUpdateGeoSetting",
     "file": "src/hooks/useGeoAdmin.ts"
    },
    {
     "name": "useUpdateGeoBudget",
+    "file": "src/hooks/useGeoAdmin.ts"
+   },
+   {
+    "name": "useGeoProviderHealth",
     "file": "src/hooks/useGeoAdmin.ts"
    },
    {
@@ -20027,7 +20062,7 @@
   {
    "module": "scripts",
    "files": 143,
-   "lines": 32371,
+   "lines": 32414,
    "tables": [
     "a",
     "active_tracking",
@@ -20280,13 +20315,14 @@
   },
   {
    "module": "src/components",
-   "files": 150,
-   "lines": 27271,
+   "files": 152,
+   "lines": 27701,
    "tables": [
     "active_tracking",
     "alerts",
     "driver_approval_queue",
     "driver_incidents",
+    "lalamove_orders",
     "lalamove_status_history",
     "lalamove_stops",
     "user_roles",
@@ -20435,10 +20471,12 @@
     "src/components/map/MapProviderSelector.tsx",
     "src/components/map/MapSearchPanel.tsx",
     "src/components/map/MapSettingsPanel.tsx",
+    "src/components/map/OrderTrackingMap.tsx",
     "src/components/map/mapLayers.ts",
     "src/components/map/markerFactories.ts",
     "src/components/map/types.ts",
     "src/components/map/__tests__/MapSettingsPanel.test.tsx",
+    "src/components/map/__tests__/OrderTrackingMap.test.tsx",
     "src/components/map/__tests__/mapLayers.test.ts",
     "src/components/map/__tests__/markerFactories.test.ts",
     "src/components/map/hooks/useGoogleMapsLoader.ts",
@@ -20452,15 +20490,13 @@
     "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
     "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
     "src/components/map/hooks/__tests__/useTrackingData.test.ts",
-    "src/components/notifications/NotificationPreferences.tsx",
-    "src/components/notifications/PushNotificationSettings.tsx",
-    "src/components/notifications/SoundSettingsPanel.tsx"
+    "src/components/notifications/NotificationPreferences.tsx"
    ]
   },
   {
    "module": "src/hooks",
-   "files": 107,
-   "lines": 17827,
+   "files": 110,
+   "lines": 18196,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -20544,13 +20580,14 @@
     "useExternalData.ts: ExternalTable, ExternalRecord, AddressSearchResult, useExternalList, useExternalRecord, useAddressSearch",
     "useFeatureFlags.ts: FeatureFlag, useFeatureFlags, useFeatureFlag",
     "useFuseSearch.ts: WithMatches, useFuseSearch, useFuseSearchWithMatches, FusePreset, useFuseSearchWithPreset, fuseSearch",
-    "useGeoAdmin.ts: GeoProviderName, GeoFunction, GeoSettingRow, GeoProviderStatus, GeoProviderStatusResponse, GeoBudgetRow",
+    "useGeoAdmin.ts: GeoProviderName, GeoSettingProvider, GeoFunction, GeoSettingRow, GeoProviderStatus, GeoProviderStatusResponse",
     "useGeoSearch.ts: GeoSuggestion, GeoAddress, useAddressSearchBox",
     "useGlobalSearch.ts: SearchResult, SearchFilter, RecentSearch, PAGES, typeIcons, typeColors"
    ],
    "docs": [
     "useApprovalRealtime.ts: Re-export from centralized realtime subscriptions This file is kept for backward compatibility",
     "useContacts.ts: Hook para busca e persistência de contatos reutilizáveis. Dedup por (owner_id, phone_e164) — insert-or-update via upsert.",
+    "useGeo.ts: Implementação única dos hooks de mapa. `useMapbox.ts` é o módulo que fala com o geo-gateway (camada única de provedores: cache, orçamento e `geo_settings`), e este arquivo existe para que consumidores novos importem de `@/hooks/useGeo`. Ver docs/planos/PLANO_MAPBOX_100_ETAPAS.md, etapas 60 e 83.",
     "useJobQueue.ts: Job Queue Hook - Simula fila de jobs usando dados reais das tabelas existentes Usa webhook_events como proxy para jobs de webhook Usa driver_evaluations como proxy para jobs de avaliação Usa bitrix24_sync como proxy para jobs de sincronização",
     "useRealtimeSubscriptions.ts: Centralized Realtime Subscriptions Manager This hook consolidates all Supabase Realtime subscriptions into a single manageable system, preventing duplicate channels and optimizing performance."
    ],
@@ -20615,6 +20652,7 @@
     "src/hooks/useExternalData.ts",
     "src/hooks/useFeatureFlags.ts",
     "src/hooks/useFuseSearch.ts",
+    "src/hooks/useGeo.ts",
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.test.tsx",
     "src/hooks/useGeoSearch.ts",
@@ -20655,8 +20693,7 @@
     "src/hooks/useSoundSettings.ts",
     "src/hooks/useSystemHealth.ts",
     "src/hooks/useSystemHealthExpanded.ts",
-    "src/hooks/useTestNotification.ts",
-    "src/hooks/useTheme.ts"
+    "src/hooks/useTestNotification.ts"
    ]
   },
   {
@@ -20709,12 +20746,12 @@
   {
    "module": "src/lib",
    "files": 36,
-   "lines": 3564,
+   "lines": 3626,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
     "cep.ts: CepValidation, sanitizeCep, maskCep, validateCep, ViaCepAddress, lookupCep",
-    "geo-gateway.ts: countMapLoad",
+    "geo-gateway.ts: GeoFieldError, GeoGatewayError, callGeo, countMapLoad",
     "lalamove-api.ts: LalamoveApiResponse, LalamoveStatusResponse, LalamoveWalletHistoryResponse, LalamoveGatewayError, callLalamoveGateway, QuoteParams",
     "lalamove-config.ts: isLalamoveConfigured, setLalamoveConfigured",
     "lalamoveCatalog.ts: ServiceSpec, SERVICE_CATALOG, SPECIAL_REQUESTS_BY_SERVICE, SPECIAL_REQUEST_CITY_RESTRICTIONS, ITEM_WEIGHT_RANGES, isServiceType",
@@ -20801,7 +20838,7 @@
   {
    "module": "src/pages",
    "files": 87,
-   "lines": 18841,
+   "lines": 19244,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -21064,8 +21101,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 52,
-   "lines": 13190,
+   "files": 51,
+   "lines": 13476,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21085,6 +21122,7 @@
     "driver_incidents",
     "driver_locations",
     "drivers",
+    "geo_budget",
     "geo_cache",
     "geo_price_list",
     "geo_settings",
@@ -21183,7 +21221,6 @@
     "supabase/functions/lalamove-webhook/security.test.ts",
     "supabase/functions/lalamove-webhook/security.ts",
     "supabase/functions/llm-wh/index.ts",
-    "supabase/functions/mapbox-proxy/index.ts",
     "supabase/functions/mcp-query/index.ts",
     "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/rotate-tokens/index.ts",
@@ -21196,8 +21233,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 173,
-   "lines": 11782,
+   "files": 175,
+   "lines": 11988,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21301,13 +21338,16 @@
     "select": [
      "scripts/seed-database.ts",
      "src/components/map/hooks/useTrackingData.ts",
+     "src/components/orders/OrderDetailModal.tsx",
      "src/hooks/useSLAMetrics.ts",
      "src/pages/LiveMapPage.tsx",
      "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ],
     "update": [
+     "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ]
@@ -21336,6 +21376,7 @@
      "scripts/seed-database.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/evaluate-driver/index.ts",
+     "supabase/functions/geo-gateway/index.ts",
      "supabase/functions/lalamove-gateway/index.ts",
      "supabase/functions/lalamove-token-refresh/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
@@ -21634,10 +21675,14 @@
    },
    "geo_budget": {
     "select": [
-     "src/hooks/useGeoAdmin.ts"
+     "src/hooks/useGeoAdmin.ts",
+     "supabase/functions/geo-gateway/index.ts"
     ],
     "upsert": [
      "src/hooks/useGeoAdmin.ts"
+    ],
+    "update": [
+     "supabase/functions/geo-gateway/index.ts"
     ]
    },
    "geo_cache": {
@@ -21717,6 +21762,7 @@
     "select": [
      "scripts/ai-context/gerar.unit.mjs",
      "scripts/seed-database.ts",
+     "src/components/orders/OrderDetailModal.tsx",
      "src/hooks/healthChecks.ts",
      "src/hooks/useAdvancedReports.ts",
      "src/hooks/useAnalyticsData.ts",
@@ -21732,6 +21778,7 @@
      "src/pages/reports/useReportData.ts",
      "supabase/functions/bitrix24-sync/index.ts",
      "supabase/functions/evaluate-driver/index.ts",
+     "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/route-analyzer/index.ts"
@@ -21784,6 +21831,7 @@
     "select": [
      "scripts/seed-database.ts",
      "src/components/orders/OrderDetailModal.tsx",
+     "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts"
     ],
     "upsert": [
@@ -21850,6 +21898,7 @@
    },
    "query_telemetry": {
     "select": [
+     "src/hooks/useGeoAdmin.ts",
      "src/hooks/useSLOMetrics.ts"
     ],
     "insert": [
@@ -21857,6 +21906,7 @@
      "supabase/functions/mcp-query/index.ts"
     ],
     "ref": [
+     "supabase/functions/geo-gateway/metering.ts",
      "supabase/functions/lalamove-gateway/index.ts"
     ]
    },
@@ -22065,9 +22115,15 @@
   },
   "table_cols": {
    "active_tracking": [
+    "current_latitude",
+    "current_longitude",
     "driver_id",
+    "eta_minutes",
+    "expected_route",
     "id",
-    "order_id"
+    "next_stop_index",
+    "order_id",
+    "tracking_status"
    ],
    "alert_configurations": [
     "alert_type",
@@ -22244,6 +22300,10 @@
     "id",
     "is_blocked"
    ],
+   "geo_budget": [
+    "provider",
+    "warned_month"
+   ],
    "geo_cache": [
     "expires_at",
     "key",
@@ -22298,6 +22358,7 @@
     "pickup_address",
     "pickup_latitude",
     "pickup_longitude",
+    "pod_received",
     "priority_fee",
     "scheduled_at",
     "status",
@@ -22320,7 +22381,12 @@
    ],
    "lalamove_stops": [
     "id",
+    "latitude",
+    "longitude",
     "order_id",
+    "pod_delivered_at",
+    "pod_image_url",
+    "pod_status",
     "stop_index"
    ],
    "lalamove_uapi_sessions": [
@@ -22339,7 +22405,10 @@
     "created_at",
     "duration_ms",
     "error_message",
-    "severity"
+    "operation",
+    "rpc_name",
+    "severity",
+    "table_name"
    ],
    "region_cache": [
     "coord_key",
@@ -22585,6 +22654,7 @@
    ],
    "GOOGLE_MAPS_SERVER_KEY": [
     "scripts/geo/searchbox-coverage.ts",
+    "supabase/functions/check-external-api/index.ts",
     "supabase/functions/geo-gateway/index.ts"
    ],
    "GRANTS_BASELINE_PATH": [
@@ -22649,8 +22719,7 @@
     "scripts/geo/searchbox-coverage.ts",
     "supabase/functions/check-external-api/index.ts",
     "supabase/functions/geo-gateway/index.ts",
-    "supabase/functions/get-mapbox-token/index.ts",
-    "supabase/functions/mapbox-proxy/index.ts"
+    "supabase/functions/get-mapbox-token/index.ts"
    ],
    "MAPBOX_SERVER_TOKEN": [
     "scripts/geo/searchbox-coverage.ts",
@@ -22989,7 +23058,8 @@
     "supabase/functions/job-worker/index.ts"
    ],
    "check-external-api": [
-    "src/hooks/healthChecks.ts"
+    "src/hooks/healthChecks.ts",
+    "src/hooks/useGeoAdmin.ts"
    ],
    "edge": [
     "scripts/inventario/gerar-rotas.mjs"
@@ -23004,7 +23074,6 @@
    "geo-gateway": [
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
-    "src/hooks/useMapbox.ts",
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"
    ],
@@ -23128,8 +23197,7 @@
     "supabase/functions/route-analyzer/index.ts"
    ],
    "https://api.mapbox.com": [
-    "scripts/geo/searchbox-coverage.ts",
-    "supabase/functions/check-external-api/index.ts"
+    "scripts/geo/searchbox-coverage.ts"
    ],
    "https://api.pwnedpasswords.com": [
     "src/components/auth/PasswordStrengthIndicator.tsx"
@@ -23544,7 +23612,7 @@
    {
     "file": "src/hooks/useGeoAdmin.ts",
     "name": "GeoFunction",
-    "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization"
+    "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
    },
    {
     "file": "src/hooks/useLalamoveUapi.ts",
@@ -24898,11 +24966,19 @@
    },
    {
     "file": "src/pages/MapsSettingsPage.tsx",
+    "msg": "${providerLabel(provider)}: ${result.message}"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
     "msg": "Falha ao salvar teto: ${(err as Error).message}"
    },
    {
     "file": "src/pages/MapsSettingsPage.tsx",
     "msg": "Falha ao trocar provedor: ${(err as Error).message}"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "msg": "Falha no teste: ${(err as Error).message}"
    },
    {
     "file": "src/pages/PermissionsPage.tsx",
@@ -25025,6 +25101,10 @@
     "msg": "GEO_NOT_SUPPORTED"
    },
    {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "msg": "GEO_RATE_LIMITED"
+   },
+   {
     "file": "supabase/functions/geo-gateway/resolver.ts",
     "msg": "Provedor ${forced} indisponível para ${fn}"
    },
@@ -25054,6 +25134,10 @@
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
+    "msg": "${fn}: ${detail}"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
     "msg": "Invalid job payload: missing required fields"
    },
    {
@@ -25062,7 +25146,31 @@
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
-    "msg": "Unknown job type: ${jobPayload.type}"
+    "msg": "Unknown job type: ${unknownType}"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "geo_backfill exige payload.addresses[] ou payload.address"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "pod_fetch: pedido ${key} não encontrado em lalamove_orders"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "pod_fetch: pedido ${key} sem lalamove_id — impossível consultar o provedor"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "msg": "route_plan: pedido ${payload.orderId} não encontrado em lalamove_orders"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -25537,6 +25645,10 @@
     "text": "How close the match must be to the location"
    },
    {
+    "file": "src/hooks/useGeoAdmin.ts",
+    "text": "* Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */"
+   },
+   {
     "file": "src/hooks/useGeoSearch.ts",
     "text": "retrieve (regra de cobrança por sessão do Search Box, ToS etapa 8)."
    },
@@ -25738,7 +25850,7 @@
    },
    {
     "file": "supabase/functions/check-external-api/index.ts",
-    "text": "api.mapbox.com/geocoding/v5/mapbox.places/test.json?access_token=${MAPBOX_TOKEN}&limit=1`,"
+    "text": "Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do"
    },
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
@@ -25762,11 +25874,39 @@
    },
    {
     "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "* Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
     "text": "Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância."
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "Nunca lança: falha de alerta não pode derrubar a requisição de mapa."
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "── rate limit do provedor (espera a virada da janela) ─────────────────"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada"
    },
    {
     "file": "supabase/functions/geo-gateway/metering.ts",
     "text": "* TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.ts",
+    "text": "(até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "Provedor desligado / orçamento estourado / rate limit: não é falha do job."
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego."
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -28356,6 +28496,21 @@
     "rule": "default now()"
    },
    {
+    "table": "geo_settings",
+    "column": "(tabela)",
+    "rule": "constraint geo_settings_function_check CHECK (function IN ( 'tiles','autocomplete','geocode','reverse','route','matrix','static', 'snap','validate','isochrone','optimization','tilequery' ))"
+   },
+   {
+    "table": "geo_settings",
+    "column": "(tabela)",
+    "rule": "constraint geo_settings_provider_check CHECK (provider IN ('google','mapbox','auto','off'))"
+   },
+   {
+    "table": "geo_settings",
+    "column": "(tabela)",
+    "rule": "constraint geo_settings_fallback_provider_check CHECK (fallback_provider IN ('google','mapbox','auto','off'))"
+   },
+   {
     "table": "geo_defaults",
     "column": "id",
     "rule": "PK; default true; CHECK id"
@@ -29018,6 +29173,11 @@
     "value": "30"
    },
    {
+    "file": "supabase/functions/check-external-api/index.ts",
+    "name": "HEALTH_ADDRESS",
+    "value": "'Avenida Paulista 1578, São Paulo'"
+   },
+   {
     "file": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "name": "BASE",
     "value": "\"https://api.mapbox.com\""
@@ -29091,11 +29251,6 @@
     "file": "supabase/functions/lalamove-webhook/index.ts",
     "name": "WEBHOOK_MAX_AGE_MS",
     "value": "5"
-   },
-   {
-    "file": "supabase/functions/mapbox-proxy/index.ts",
-    "name": "MAPBOX_BASE",
-    "value": "'https://api.mapbox.com'"
    },
    {
     "file": "supabase/functions/mcp-query/index.ts",
@@ -29531,6 +29686,78 @@
     "kind": "compara"
    },
    {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "Feature",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "Point",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "circle",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "circle",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "circle",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "field": "type",
+    "value": "line",
+    "kind": "escreve"
+   },
+   {
     "file": "src/components/map/mapLayers.ts",
     "field": "type",
     "value": "geojson",
@@ -29617,6 +29844,42 @@
    {
     "file": "src/components/map/mapLayers.ts",
     "field": "type",
+    "value": "line",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "line",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "geojson",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
     "value": "fill",
     "kind": "escreve"
    },
@@ -29624,6 +29887,24 @@
     "file": "src/components/map/mapLayers.ts",
     "field": "type",
     "value": "line",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "Feature",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/components/map/mapLayers.ts",
+    "field": "type",
+    "value": "LineString",
     "kind": "escreve"
    },
    {
@@ -30647,6 +30928,12 @@
     "kind": "escreve"
    },
    {
+    "file": "src/hooks/useGeoAdmin.ts",
+    "field": "status",
+    "value": "ok",
+    "kind": "escreve"
+   },
+   {
     "file": "src/hooks/useGlobalSearch.ts",
     "field": "type",
     "value": "order",
@@ -30872,6 +31159,30 @@
     "file": "src/hooks/useMapbox.ts",
     "field": "type",
     "value": "Point",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "neighborhood",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "place",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "region",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "postcode",
     "kind": "escreve"
    },
    {
@@ -31403,6 +31714,12 @@
     "kind": "escreve"
    },
    {
+    "file": "src/lib/geo-gateway.ts",
+    "field": "status",
+    "value": "number",
+    "kind": "compara"
+   },
+   {
     "file": "src/lib/lalamoveOrderEdit.ts",
     "field": "status",
     "value": "PICKED_UP",
@@ -31724,6 +32041,24 @@
     "file": "src/pages/JobQueuePage.tsx",
     "field": "status",
     "value": "FAILED",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "status",
+    "value": "ok",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "status",
+    "value": "ok",
+    "kind": "compara"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "status",
+    "value": "unknown",
     "kind": "compara"
    },
    {
@@ -32371,7 +32706,7 @@
    {
     "file": "supabase/functions/check-external-api/index.ts",
     "field": "status",
-    "value": "ok",
+    "value": "unknown",
     "kind": "escreve"
    },
    {
@@ -32384,6 +32719,24 @@
     "file": "supabase/functions/check-external-api/index.ts",
     "field": "status",
     "value": "degraded",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/check-external-api/index.ts",
+    "field": "status",
+    "value": "degraded",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/check-external-api/index.ts",
+    "field": "status",
+    "value": "ok",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/check-external-api/index.ts",
+    "field": "status",
+    "value": "ok",
     "kind": "escreve"
    },
    {
@@ -32447,10 +32800,76 @@
     "kind": "compara"
    },
    {
-    "file": "supabase/functions/job-worker/index.ts",
+    "file": "supabase/functions/geo-gateway/index.ts",
     "field": "type",
-    "value": "webhook",
+    "value": "GEO_BUDGET_WARNING",
     "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "invalid",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "planned",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "refreshed",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "tracking_status",
+    "value": "ACTIVE",
+    "kind": "filtra"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "tracking_status",
+    "value": "ACTIVE",
+    "kind": "filtra"
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -32492,6 +32911,36 @@
     "file": "supabase/functions/job-worker/index.ts",
     "field": "type",
     "value": "slack",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "type",
+    "value": "lalamove_sync",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "type",
+    "value": "pod_fetch",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "type",
+    "value": "geo_backfill",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "type",
+    "value": "route_plan",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "type",
+    "value": "eta_refresh",
     "kind": "compara"
    },
    {
@@ -32723,6 +33172,30 @@
     "name": "apply",
     "params": "",
     "body": "if (map.current) applyRasterOverlay(map.current, rasterProvider);"
+   },
+   {
+    "file": "src/components/map/LiveMap.tsx",
+    "name": "apply",
+    "params": "",
+    "body": "if (map.current) setExpectedRoute(map.current, points);"
+   },
+   {
+    "file": "src/components/map/LiveMap.tsx",
+    "name": "apply",
+    "params": "",
+    "body": "if (map.current) setDriverTrail(map.current, trail);"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "name": "valid",
+    "params": "lat?: number | null, lng?: number | null",
+    "body": "return typeof lat === 'number' && typeof lng === 'number' && Number.isFinite(lat) && Number.isFinite(lng);"
+   },
+   {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "name": "apply",
+    "params": "",
+    "body": "const m = map.current; if (!m || !ready.current) return; const set = (id: string, data: GeoJSON.FeatureCollection) => { const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined; src?.setData(data); }; set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY); set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY); set('driver-point', driver && valid(driver.lat, …"
    },
    {
     "file": "src/components/map/mapLayers.ts",
@@ -33375,6 +33848,10 @@
    {
     "file": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
     "line": "OR t.route_computed_at < now() - interval '30 minutes'"
+   },
+   {
+    "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+    "line": "AND started_at < now() - interval '10 minutes'"
    }
   ],
   "percents": [
@@ -34717,6 +35194,22 @@
     "name": "handles load failure with fallback notice"
    },
    {
+    "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "name": "OrderTrackingMap (etapa 58)"
+   },
+   {
+    "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "name": "mostra aviso quando o token do Mapbox não está disponível"
+   },
+   {
+    "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "name": "expõe a região com rótulo acessível quando há token"
+   },
+   {
+    "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "name": "não quebra sem coordenadas nem rota"
+   },
+   {
     "file": "src/components/map/__tests__/mapLayers.test.ts",
     "name": "setupMapLayers"
    },
@@ -34735,6 +35228,26 @@
    {
     "file": "src/components/map/__tests__/mapLayers.test.ts",
     "name": "define maxzoom=15 e ordem de inserção do heatmap antes de waterway-label"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLayers.test.ts",
+    "name": "cria as layers de rota contratada e rastro do motorista"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLayers.test.ts",
+    "name": "setExpectedRoute / setDriverTrail"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLayers.test.ts",
+    "name": "envia LineString com coordenadas [lng,lat] na ordem do Mapbox"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLayers.test.ts",
+    "name": "limpa a camada quando há menos de 2 pontos"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLayers.test.ts",
+    "name": "não quebra quando a source ainda não existe"
    },
    {
     "file": "src/components/map/__tests__/markerFactories.test.ts",
@@ -35175,6 +35688,66 @@
    {
     "file": "src/hooks/__tests__/useFeatureFlags.test.ts",
     "name": "cai para false quando a flag não existe (kill-switch seguro)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "useGeo"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "geocode 404 vira lista vazia (estado vazio da UI, não erro)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "directions monta origin/destination/waypoints e preserva perfil explícito"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "matrix devolve NxN com sources/destinations sintetizados na ordem das coords"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "mapMatching nunca devolve confidence nulo (evita NaN% na tela)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "static image usa o data URL devolvido pelo gateway"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "geocodeAddress imperativo devolve features e engole 404"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.test.ts",
+    "name": "getDirections imperativo devolve a rota principal"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "aggregateGeoLatency (etapa 80)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "agrupa por provedor e função e calcula p50/p95"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "separa provedores e funções diferentes"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "descarta linhas sem duração e operações que não são do geo-gateway"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "usa "
+   },
+   {
+    "file": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+    "name": "retorna lista vazia sem amostras"
    },
    {
     "file": "src/hooks/__tests__/useIncidents.test.ts",
@@ -36849,6 +37422,14 @@
     "name": "failoverFor: função sem suporte no Google (isochrone) não aceita o Google"
    },
    {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "waitForCapacity (etapa 76): espera a virada da janela em vez de recusar"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "waitForCapacity: bucket com folga libera imediatamente"
+   },
+   {
     "file": "supabase/functions/lalamove-api/coordinates.test.ts",
     "name": "stopsCoords converte as coordenadas string da Lalamove em numero"
    },
@@ -37094,10 +37675,6 @@
    },
    {
     "file": "src/hooks/useLalamoveUapi.ts",
-    "call": "invoke("
-   },
-   {
-    "file": "src/hooks/useMapbox.ts",
     "call": "invoke("
    },
    {
@@ -40117,16 +40694,21 @@
     ]
    },
    "process_job_queue": {
-    "args": "",
-    "returns": "TABLE(\n  processed INTEGER,\n  succeeded INTEGER,\n  failed INTEGER,\n  skipped INTEGER\n)",
+    "args": "p_limit integer DEFAULT 10",
+    "returns": "TABLE(processed integer, requeued integer)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "DECLARE v_job RECORD; v_processed INTEGER := 0; v_succeeded INTEGER := 0; v_failed INTEGER := 0; v_skipped INTEGER := 0; v_function_url TEXT; v_service_key TEXT; BEGIN v_function_url := current_setting('app.settings.edge_function_url', true); v_service_key := current_setting('app.settings.service_role_key', true); IF v_function_url IS NULL THEN v_function_url := current_setting('SUPABASE_URL', true) || '/functions/v1/job-worker'; END IF; RAISE NOTICE 'Starting job queue processing at %', NOW(); FOR v_job IN SELECT * FROM get_next_jobs(10) LOOP IF NOT mark_job_processing(v_job.id) THEN v_skipped := v_skipped + 1; CONTINUE; END IF; RAISE NOTICE 'Processing job % (type: %)', v_job.id, v_job.typ …",
+    "search_path": true,
+    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_key text; v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() WHERE status = 'PROCESSING' AND started_at < now() - interval '10 minutes' RETURNING 1 ) S …",
     "raises": [],
     "tables": [
-     "get_next_jobs"
+     "get_next_jobs",
+     "job_queue",
+     "stale",
+     "v_key",
+     "v_requeued",
+     "vault"
     ]
    },
    "cleanup_old_jobs": {
@@ -41351,6 +41933,10 @@
   },
   "pagination": [
    {
+    "file": "src/components/orders/OrderDetailModal.tsx",
+    "limit": "1"
+   },
+   {
     "file": "src/components/webhooks/WebhookSecurityPanel.tsx",
     "limit": "5000"
    },
@@ -41401,6 +41987,10 @@
    {
     "file": "src/hooks/useDriverEvaluations.ts",
     "limit": "100"
+   },
+   {
+    "file": "src/hooks/useGeoAdmin.ts",
+    "limit": "10"
    },
    {
     "file": "src/hooks/useGlobalSearch.ts",
@@ -41923,6 +42513,7 @@
      ],
      "Feature": [
       "escreve:src/components/map/LiveMap.tsx",
+      "escreve:src/components/map/OrderTrackingMap.tsx",
       "escreve:src/components/map/hooks/useMapMarkers.ts",
       "escreve:src/components/map/mapLayers.ts",
       "escreve:src/components/reports/GeoHeatmap.tsx",
@@ -41946,23 +42537,38 @@
      "TRUCK": [
       "compara:src/components/map/MapLegend.tsx"
      ],
-     "geojson": [
-      "escreve:src/components/map/hooks/useMapMarkers.ts",
-      "escreve:src/components/map/mapLayers.ts",
-      "escreve:src/components/reports/GeoHeatmap.tsx",
-      "escreve:src/pages/HeatmapPage.tsx"
-     ],
      "FeatureCollection": [
+      "escreve:src/components/map/OrderTrackingMap.tsx",
       "escreve:src/components/map/mapLayers.ts",
       "escreve:src/components/reports/GeoHeatmap.tsx",
       "escreve:src/hooks/useMapbox.ts",
       "escreve:src/pages/HeatmapPage.tsx"
      ],
-     "fill": [
-      "escreve:src/components/map/mapLayers.ts"
+     "Point": [
+      "compara:src/components/reports/GeoHeatmap.tsx",
+      "escreve:src/components/map/OrderTrackingMap.tsx",
+      "escreve:src/components/orders/AddressAutocomplete.tsx",
+      "escreve:src/components/reports/GeoHeatmap.tsx",
+      "escreve:src/hooks/useMapbox.ts",
+      "escreve:src/pages/HeatmapPage.tsx"
+     ],
+     "geojson": [
+      "escreve:src/components/map/OrderTrackingMap.tsx",
+      "escreve:src/components/map/hooks/useMapMarkers.ts",
+      "escreve:src/components/map/mapLayers.ts",
+      "escreve:src/components/reports/GeoHeatmap.tsx",
+      "escreve:src/pages/HeatmapPage.tsx"
+     ],
+     "circle": [
+      "escreve:src/components/map/OrderTrackingMap.tsx",
+      "escreve:src/components/reports/GeoHeatmap.tsx"
      ],
      "line": [
+      "escreve:src/components/map/OrderTrackingMap.tsx",
       "escreve:src/components/map/hooks/useMapMarkers.ts",
+      "escreve:src/components/map/mapLayers.ts"
+     ],
+     "fill": [
       "escreve:src/components/map/mapLayers.ts"
      ],
      "heatmap": [
@@ -41973,22 +42579,13 @@
      "vector": [
       "escreve:src/components/map/mapLayers.ts"
      ],
-     "raster": [
-      "escreve:src/components/map/mapLayers.ts"
-     ],
      "LineString": [
       "escreve:src/components/map/hooks/useMapMarkers.ts",
+      "escreve:src/components/map/mapLayers.ts",
       "escreve:src/hooks/useMapbox.ts"
      ],
-     "Point": [
-      "compara:src/components/reports/GeoHeatmap.tsx",
-      "escreve:src/components/orders/AddressAutocomplete.tsx",
-      "escreve:src/components/reports/GeoHeatmap.tsx",
-      "escreve:src/hooks/useMapbox.ts",
-      "escreve:src/pages/HeatmapPage.tsx"
-     ],
-     "circle": [
-      "escreve:src/components/reports/GeoHeatmap.tsx"
+     "raster": [
+      "escreve:src/components/map/mapLayers.ts"
      ],
      "symbol": [
       "escreve:src/components/reports/GeoHeatmap.tsx"
@@ -42009,8 +42606,7 @@
      ],
      "webhook": [
       "compara:supabase/functions/job-worker/index.ts",
-      "escreve:src/hooks/useJobQueue.ts",
-      "escreve:supabase/functions/job-worker/index.ts"
+      "escreve:src/hooks/useJobQueue.ts"
      ],
      "evaluation": [
       "compara:supabase/functions/job-worker/index.ts",
@@ -42019,6 +42615,18 @@
      "sync_bitrix24": [
       "compara:src/hooks/useJobQueue.ts",
       "escreve:src/hooks/useJobQueue.ts"
+     ],
+     "neighborhood": [
+      "escreve:src/hooks/useMapbox.ts"
+     ],
+     "place": [
+      "escreve:src/hooks/useMapbox.ts"
+     ],
+     "region": [
+      "escreve:src/hooks/useMapbox.ts"
+     ],
+     "postcode": [
+      "escreve:src/hooks/useMapbox.ts"
      ],
      "approve": [
       "escreve:src/hooks/useOfflineStorage.ts"
@@ -42127,6 +42735,9 @@
      "APPROVAL_REQUIRED": [
       "escreve:supabase/functions/evaluate-driver/index.ts"
      ],
+     "GEO_BUDGET_WARNING": [
+      "escreve:supabase/functions/geo-gateway/index.ts"
+     ],
      "bitrix_sync": [
       "compara:supabase/functions/job-worker/index.ts"
      ],
@@ -42137,6 +42748,21 @@
       "compara:supabase/functions/job-worker/index.ts"
      ],
      "slack": [
+      "compara:supabase/functions/job-worker/index.ts"
+     ],
+     "lalamove_sync": [
+      "compara:supabase/functions/job-worker/index.ts"
+     ],
+     "pod_fetch": [
+      "compara:supabase/functions/job-worker/index.ts"
+     ],
+     "geo_backfill": [
+      "compara:supabase/functions/job-worker/index.ts"
+     ],
+     "route_plan": [
+      "compara:supabase/functions/job-worker/index.ts"
+     ],
+     "eta_refresh": [
       "compara:supabase/functions/job-worker/index.ts"
      ],
      "INTEGRATION_FAILURE": [
@@ -42323,6 +42949,7 @@
       "escreve:supabase/functions/check-external-api/index.ts"
      ],
      "unknown": [
+      "compara:src/pages/MapsSettingsPage.tsx",
       "escreve:src/hooks/healthChecks.ts",
       "escreve:supabase/functions/check-external-api/index.ts"
      ],
@@ -42350,6 +42977,13 @@
       "compara:src/pages/reports/useReportData.ts",
       "compara:supabase/functions/evaluate-driver/index.ts"
      ],
+     "ok": [
+      "compara:src/pages/MapsSettingsPage.tsx",
+      "compara:src/pages/SystemHealthExpandedPage.tsx",
+      "escreve:src/hooks/useGeoAdmin.ts",
+      "escreve:src/hooks/useSystemHealthExpanded.ts",
+      "escreve:supabase/functions/check-external-api/index.ts"
+     ],
      "FAILED": [
       "compara:src/hooks/useJobQueue.ts",
       "compara:src/pages/JobQueuePage.tsx"
@@ -42375,10 +43009,8 @@
       "compara:src/pages/PasswordResetApprovalsPage.tsx",
       "escreve:src/hooks/usePasswordResetActions.ts"
      ],
-     "ok": [
-      "compara:src/pages/SystemHealthExpandedPage.tsx",
-      "escreve:src/hooks/useSystemHealthExpanded.ts",
-      "escreve:supabase/functions/check-external-api/index.ts"
+     "number": [
+      "compara:src/lib/geo-gateway.ts"
      ],
      "DELIVERING": [
       "compara:src/lib/lalamoveOrderEdit.ts"
@@ -42406,6 +43038,18 @@
      ],
      "healthy": [
       "compara:src/pages/SLODashboardPage.tsx"
+     ],
+     "invalid": [
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
+     "skipped": [
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
+     "planned": [
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
+     "refreshed": [
+      "escreve:supabase/functions/job-worker/index.ts"
      ],
      "CANCELED": [
       "escreve:supabase/functions/lalamove-api/index.ts"
@@ -42521,6 +43165,11 @@
     "approval_status": {
      "PENDING": [
       "escreve:src/integrations/supabase/types.ts"
+     ]
+    },
+    "tracking_status": {
+     "ACTIVE": [
+      "filtra:supabase/functions/job-worker/index.ts"
      ]
     },
     "pop_status": {
@@ -45969,6 +46618,14 @@
     "objkind": "function",
     "roles": "PUBLIC, authenticated",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "process_job_queue",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
    }
   ],
   "guards": [
@@ -47428,6 +48085,13 @@
    },
    {
     "kind": "status",
+    "msg": "valor `number` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:src/lib/geo-gateway.ts"
+    ]
+   },
+   {
+    "kind": "status",
     "msg": "valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/pages/CacheMonitoringPage.tsx"
@@ -47438,6 +48102,27 @@
     "msg": "valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/pages/IncidentsPage.tsx"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:supabase/functions/job-worker/index.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `planned` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:supabase/functions/job-worker/index.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `refreshed` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:supabase/functions/job-worker/index.ts"
     ]
    },
    {
@@ -47858,13 +48543,6 @@
     "msg": "função `cleanup_old_system_logs` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
     "where": [
      "supabase/migrations/20251226000001_create_system_logs.sql"
-    ]
-   },
-   {
-    "kind": "segurança",
-    "msg": "função `process_job_queue` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
-    "where": [
-     "supabase/migrations/20251226010001_configure_pg_cron.sql"
     ]
    },
    {
@@ -51166,7 +51844,7 @@
   },
   "scripts/inventario/banco.sql": {
    "path": "scripts/inventario/banco.sql",
-   "lines": 252,
+   "lines": 295,
    "temporal": [
     "'mais_de_7_dias', (SELECT count(*) FROM cron.job_run_details WHERE start_time <= now() - interval '7 days'),",
     "WHERE d.start_time > now() - interval '7 days'",
@@ -53518,7 +54196,7 @@
   },
   "src/components/map/LiveMap.tsx": {
    "path": "src/components/map/LiveMap.tsx",
-   "lines": 630,
+   "lines": 657,
    "exports": [
     "function LiveMap"
    ],
@@ -53559,6 +54237,16 @@
      "name": "apply",
      "params": "",
      "body": "if (map.current) applyRasterOverlay(map.current, rasterProvider);"
+    },
+    {
+     "name": "apply",
+     "params": "",
+     "body": "if (map.current) setExpectedRoute(map.current, points);"
+    },
+    {
+     "name": "apply",
+     "params": "",
+     "body": "if (map.current) setDriverTrail(map.current, trail);"
     }
    ]
   },
@@ -53636,11 +54324,96 @@
     "Erro ao Salvar"
    ]
   },
+  "src/components/map/OrderTrackingMap.tsx": {
+   "path": "src/components/map/OrderTrackingMap.tsx",
+   "lines": 149,
+   "exports": [
+    "interface OrderTrackingMapProps",
+    "function OrderTrackingMap"
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "Feature",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "Point",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "circle",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "circle",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "circle",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "line",
+     "kind": "escreve"
+    }
+   ],
+   "calc_fns": [
+    {
+     "name": "valid",
+     "params": "lat?: number | null, lng?: number | null",
+     "body": "return typeof lat === 'number' && typeof lng === 'number' && Number.isFinite(lat) && Number.isFinite(lng);"
+    },
+    {
+     "name": "apply",
+     "params": "",
+     "body": "const m = map.current; if (!m || !ready.current) return; const set = (id: string, data: GeoJSON.FeatureCollection) => { const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined; src?.setData(data); }; set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY); set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY); set('driver-point', driver && valid(driver.lat, …"
+    }
+   ]
+  },
   "src/components/map/mapLayers.ts": {
    "path": "src/components/map/mapLayers.ts",
-   "lines": 243,
+   "lines": 320,
    "exports": [
     "function setupMapLayers",
+    "interface RoutePoint",
+    "function setExpectedRoute",
+    "function setDriverTrail",
     "type RasterProvider",
     "function applyRasterOverlay"
    ],
@@ -53723,12 +54496,57 @@
     },
     {
      "field": "type",
+     "value": "line",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "line",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "geojson",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
      "value": "fill",
      "kind": "escreve"
     },
     {
      "field": "type",
      "value": "line",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "Feature",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "LineString",
      "kind": "escreve"
     },
     {
@@ -53815,16 +54633,38 @@
     "handles load failure with fallback notice"
    ]
   },
+  "src/components/map/__tests__/OrderTrackingMap.test.tsx": {
+   "path": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+   "lines": 62,
+   "is_test": true,
+   "rule_comments": [
+    "mapbox-gl não instancia em jsdom: stub mínimo da API usada pelo componente."
+   ],
+   "tests": [
+    "OrderTrackingMap (etapa 58)",
+    "mostra aviso quando o token do Mapbox não está disponível",
+    "expõe a região com rótulo acessível quando há token",
+    "não quebra sem coordenadas nem rota"
+   ]
+  },
   "src/components/map/__tests__/mapLayers.test.ts": {
    "path": "src/components/map/__tests__/mapLayers.test.ts",
-   "lines": 82,
+   "lines": 138,
    "is_test": true,
+   "rule_comments": [
+    "* Mock mínimo que captura o `setData()` do GeoJSON source. */"
+   ],
    "tests": [
     "setupMapLayers",
     "adiciona sources e layers de zonas de risco, heatmap e geofence",
     "adiciona a camada de tráfego somente quando showTraffic=true",
     "é idempotente: não recria sources já existentes",
-    "define maxzoom=15 e ordem de inserção do heatmap antes de waterway-label"
+    "define maxzoom=15 e ordem de inserção do heatmap antes de waterway-label",
+    "cria as layers de rota contratada e rastro do motorista",
+    "setExpectedRoute / setDriverTrail",
+    "envia LineString com coordenadas [lng,lat] na ordem do Mapbox",
+    "limpa a camada quando há menos de 2 pontos",
+    "não quebra quando a source ainda não existe"
    ]
   },
   "src/components/map/__tests__/markerFactories.test.ts": {
@@ -54277,7 +55117,7 @@
   },
   "src/components/orders/OrderDetailModal.tsx": {
    "path": "src/components/orders/OrderDetailModal.tsx",
-   "lines": 920,
+   "lines": 979,
    "exports": [
     "const OrderDetailModal"
    ],
@@ -54285,10 +55125,31 @@
     {
      "table": "lalamove_stops",
      "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "select"
     }
    ],
    "table_cols": {
     "lalamove_stops": [
+     "order_id"
+    ],
+    "lalamove_orders": [
+     "delivery_latitude",
+     "delivery_longitude",
+     "id",
+     "pickup_latitude",
+     "pickup_longitude"
+    ],
+    "active_tracking": [
+     "current_latitude",
+     "current_longitude",
+     "expected_route",
      "order_id"
     ]
    },
@@ -54323,6 +55184,9 @@
    ],
    "side_effects": [
     "invoke("
+   ],
+   "pagination": [
+    "1"
    ]
   },
   "src/components/orders/StatusTimeline.tsx": {
@@ -57262,11 +58126,17 @@
     "useFuseSearchWithPreset"
    ]
   },
+  "src/hooks/useGeo.ts": {
+   "path": "src/hooks/useGeo.ts",
+   "lines": 6,
+   "doc": "Implementação única dos hooks de mapa. `useMapbox.ts` é o módulo que fala com o geo-gateway (camada única de provedores: cache, orçamento e `geo_settings`), e este arquivo existe para que consumidores novos importem de `@/hooks/useGeo`. Ver docs/planos/PLANO_MAPBOX_100_ETAPAS.md, etapas 60 e 83."
+  },
   "src/hooks/useGeoAdmin.ts": {
    "path": "src/hooks/useGeoAdmin.ts",
-   "lines": 196,
+   "lines": 296,
    "exports": [
     "type GeoProviderName",
+    "type GeoSettingProvider",
     "type GeoFunction",
     "interface GeoSettingRow",
     "interface GeoProviderStatus",
@@ -57280,8 +58150,14 @@
     "function useGeoBudgetStatus",
     "function useGeoPriceList",
     "function useGeoUsageMonth",
+    "interface GeoLatencyRow",
+    "function aggregateGeoLatency",
+    "function useGeoLatency",
     "function useUpdateGeoSetting",
-    "function useUpdateGeoBudget"
+    "function useUpdateGeoBudget",
+    "interface GeoHealthDetails",
+    "interface GeoHealthResult",
+    "function useGeoProviderHealth"
    ],
    "tables": [
     {
@@ -57297,6 +58173,10 @@
      "op": "select"
     },
     {
+     "table": "query_telemetry",
+     "op": "select"
+    },
+    {
      "table": "geo_settings",
      "op": "upsert"
     },
@@ -57305,10 +58185,20 @@
      "op": "upsert"
     }
    ],
+   "table_cols": {
+    "query_telemetry": [
+     "created_at",
+     "duration_ms",
+     "operation",
+     "rpc_name",
+     "table_name"
+    ]
+   },
    "rpc": [
     "geo_budget_status"
    ],
    "invokes": [
+    "check-external-api",
     "geo-gateway"
    ],
    "enums": [
@@ -57318,8 +58208,18 @@
     },
     {
      "name": "GeoFunction",
-     "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization"
+     "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
     }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "ok",
+     "kind": "escreve"
+    }
+   ],
+   "rule_comments": [
+    "* Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */"
    ],
    "hooks": [
     "useGeoProviderStatus",
@@ -57327,11 +58227,16 @@
     "useGeoBudgetStatus",
     "useGeoPriceList",
     "useGeoUsageMonth",
+    "useGeoLatency",
     "useUpdateGeoSetting",
-    "useUpdateGeoBudget"
+    "useUpdateGeoBudget",
+    "useGeoProviderHealth"
    ],
    "side_effects": [
     "invoke("
+   ],
+   "pagination": [
+    "10"
    ]
   },
   "src/hooks/useGeoSearch.test.tsx": {
@@ -58097,7 +59002,7 @@
   },
   "src/hooks/useMapbox.ts": {
    "path": "src/hooks/useMapbox.ts",
-   "lines": 472,
+   "lines": 494,
    "exports": [
     "interface MapboxFeature",
     "interface GeocodingResult",
@@ -58123,9 +59028,6 @@
     "function geocodeAddress",
     "function getDirections"
    ],
-   "invokes": [
-    "geo-gateway"
-   ],
    "errors": [
     "Rota precisa de pelo menos 2 coordenadas"
    ],
@@ -58139,6 +59041,26 @@
     {
      "field": "type",
      "value": "Point",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "neighborhood",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "place",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "region",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "postcode",
      "kind": "escreve"
     },
     {
@@ -58187,9 +59109,6 @@
     "useMapboxMapMatching",
     "useMapboxStaticImage",
     "useMapboxTilequery"
-   ],
-   "side_effects": [
-    "invoke("
    ]
   },
   "src/hooks/useMetrics.ts": {
@@ -60053,6 +60972,35 @@
     "cai para false quando a flag não existe (kill-switch seguro)"
    ]
   },
+  "src/hooks/__tests__/useGeo.test.ts": {
+   "path": "src/hooks/__tests__/useGeo.test.ts",
+   "lines": 189,
+   "is_test": true,
+   "tests": [
+    "useGeo",
+    "geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete)",
+    "geocode 404 vira lista vazia (estado vazio da UI, não erro)",
+    "directions monta origin/destination/waypoints e preserva perfil explícito",
+    "matrix devolve NxN com sources/destinations sintetizados na ordem das coords",
+    "mapMatching nunca devolve confidence nulo (evita NaN% na tela)",
+    "static image usa o data URL devolvido pelo gateway",
+    "geocodeAddress imperativo devolve features e engole 404",
+    "getDirections imperativo devolve a rota principal"
+   ]
+  },
+  "src/hooks/__tests__/useGeoAdmin.latency.test.ts": {
+   "path": "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+   "lines": 52,
+   "is_test": true,
+   "tests": [
+    "aggregateGeoLatency (etapa 80)",
+    "agrupa por provedor e função e calcula p50/p95",
+    "separa provedores e funções diferentes",
+    "descarta linhas sem duração e operações que não são do geo-gateway",
+    "usa ",
+    "retorna lista vazia sem amostras"
+   ]
+  },
   "src/hooks/__tests__/useIncidents.test.ts": {
    "path": "src/hooks/__tests__/useIncidents.test.ts",
    "lines": 92,
@@ -60370,7 +61318,7 @@
   },
   "src/lib/geo-gateway.test.ts": {
    "path": "src/lib/geo-gateway.test.ts",
-   "lines": 162,
+   "lines": 163,
    "is_test": true,
    "tests": [
     "countMapLoad",
@@ -60388,12 +61336,22 @@
   },
   "src/lib/geo-gateway.ts": {
    "path": "src/lib/geo-gateway.ts",
-   "lines": 16,
+   "lines": 77,
    "exports": [
+    "interface GeoFieldError",
+    "class GeoGatewayError",
+    "function callGeo",
     "function countMapLoad"
    ],
    "invokes": [
     "geo-gateway"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "number",
+     "kind": "compara"
+    }
    ],
    "rule_comments": [
     "Silently fail - métrica de uso não pode travar o mapa"
@@ -61795,13 +62753,32 @@
   },
   "src/pages/MapsSettingsPage.tsx": {
    "path": "src/pages/MapsSettingsPage.tsx",
-   "lines": 400,
+   "lines": 803,
    "exports": [
     "function MapsSettingsPage"
    ],
    "errors": [
+    "${providerLabel(provider)}: ${result.message}",
     "Falha ao salvar teto: ${(err as Error).message}",
-    "Falha ao trocar provedor: ${(err as Error).message}"
+    "Falha ao trocar provedor: ${(err as Error).message}",
+    "Falha no teste: ${(err as Error).message}"
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "ok",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "ok",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "unknown",
+     "kind": "compara"
+    }
    ],
    "rule_comments": [
     "* Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */"
@@ -63854,14 +64831,12 @@
   },
   "supabase/functions/check-external-api/index.ts": {
    "path": "supabase/functions/check-external-api/index.ts",
-   "lines": 262,
-   "external_urls": [
-    "https://api.mapbox.com/geocoding/v5/mapbox.places/…"
-   ],
+   "lines": 346,
    "env": [
     "BITRIX24_WEBHOOK_URL",
     "EVOLUTION_API_KEY",
     "EVOLUTION_API_URL",
+    "GOOGLE_MAPS_SERVER_KEY",
     "LALAMOVE_API_KEY",
     "LALAMOVE_API_URL",
     "MAPBOX_ACCESS_TOKEN",
@@ -63869,6 +64844,12 @@
    ],
    "errors": [
     "Unknown service: ${service}"
+   ],
+   "params": [
+    {
+     "name": "HEALTH_ADDRESS",
+     "value": "'Avenida Paulista 1578, São Paulo'"
+    }
    ],
    "status_values": [
     {
@@ -63943,7 +64924,7 @@
     },
     {
      "field": "status",
-     "value": "ok",
+     "value": "unknown",
      "kind": "escreve"
     },
     {
@@ -63958,12 +64939,27 @@
     },
     {
      "field": "status",
+     "value": "degraded",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "ok",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "ok",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
      "value": "down",
      "kind": "escreve"
     }
    ],
    "rule_comments": [
-    "api.mapbox.com/geocoding/v5/mapbox.places/test.json?access_token=${MAPBOX_TOKEN}&limit=1`,"
+    "Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do"
    ],
    "doc": "Edge Function: check-external-api Objetivo: Verificar health de APIs externas de forma segura Evita expor API keys no frontend"
   },
@@ -64331,7 +65327,7 @@
   },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 224,
+   "lines": 299,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -64347,6 +65343,18 @@
     {
      "table": "geo_usage_month",
      "op": "select"
+    },
+    {
+     "table": "geo_budget",
+     "op": "select,update"
+    },
+    {
+     "table": "geo_budget",
+     "op": "select,update"
+    },
+    {
+     "table": "alerts",
+     "op": "insert"
     }
    ],
    "table_cols": {
@@ -64365,6 +65373,10 @@
      "count",
      "provider",
      "sku"
+    ],
+    "geo_budget": [
+     "provider",
+     "warned_month"
     ]
    },
    "rpc": [
@@ -64380,10 +65392,22 @@
    "errors": [
     "GEO_INVALID_INPUT",
     "GEO_NOT_CONFIGURED",
-    "GEO_NOT_SUPPORTED"
+    "GEO_NOT_SUPPORTED",
+    "GEO_RATE_LIMITED"
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "GEO_BUDGET_WARNING",
+     "kind": "escreve"
+    }
    ],
    "rule_comments": [
-    "Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância."
+    "* Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */",
+    "Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.",
+    "Nunca lança: falha de alerta não pode derrubar a requisição de mapa.",
+    "── rate limit do provedor (espera a virada da janela) ─────────────────",
+    "Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada"
    ],
    "doc": "Edge Function: geo-gateway Camada única de acesso a provedores de mapa (Mapbox hoje; Google quando GOOGLE_MAPS_SERVER_KEY existir). Lê geo_settings (provedor por função), respeita geo_budget, cacheia (geo_cache), mede (geo_usage) e aplica rate guard local. O front e as outras edges chamam só esta fu …",
    "uses_service_role": true
@@ -64408,7 +65432,7 @@
   },
   "supabase/functions/geo-gateway/metering.ts": {
    "path": "supabase/functions/geo-gateway/metering.ts",
-   "lines": 73,
+   "lines": 90,
    "exports": [
     "const CACHE_TTL_S",
     "function sha256",
@@ -64417,6 +65441,7 @@
     "function cacheGet",
     "function cachePut",
     "function meter",
+    "function recordLatency",
     "function registerSession"
    ],
    "tables": [
@@ -64426,6 +65451,10 @@
     },
     {
      "table": "geo_cache",
+     "op": "ref"
+    },
+    {
+     "table": "query_telemetry",
      "op": "ref"
     },
     {
@@ -64475,7 +65504,7 @@
   },
   "supabase/functions/geo-gateway/resolver.test.ts": {
    "path": "supabase/functions/geo-gateway/resolver.test.ts",
-   "lines": 106,
+   "lines": 135,
    "is_test": true,
    "tests": [
     "primário configurado é escolhido; Google sem chave cai para fallback Mapbox",
@@ -64488,12 +65517,14 @@
     "failoverFor: usa o fallback declarado, ignora o primário e exige usável",
     "failoverFor: sem alternativa configurada devolve null (erro original sobe)",
     "failoverFor: alternativa com orçamento estourado não é usada",
-    "failoverFor: função sem suporte no Google (isochrone) não aceita o Google"
+    "failoverFor: função sem suporte no Google (isochrone) não aceita o Google",
+    "waitForCapacity (etapa 76): espera a virada da janela em vez de recusar",
+    "waitForCapacity: bucket com folga libera imediatamente"
    ]
   },
   "supabase/functions/geo-gateway/resolver.ts": {
    "path": "supabase/functions/geo-gateway/resolver.ts",
-   "lines": 169,
+   "lines": 198,
    "exports": [
     "interface GeoSettingRow",
     "interface BudgetRow",
@@ -64507,11 +65538,14 @@
    "errors": [
     "Provedor ${forced} indisponível para ${fn}"
    ],
+   "rule_comments": [
+    "(até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar"
+   ],
    "doc": "Escolha do provedor por função: geo_settings (cache 60 s) + geo_budget_status() + modo auto + fallback. Rate guard local por (provider:api) com janela de 1 minuto."
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "lines": 346,
+   "lines": 356,
    "exports": [
     "const MAPBOX_RATE_LIMITS",
     "interface MapboxOptions",
@@ -64535,7 +65569,7 @@
   },
   "supabase/functions/geo-gateway/providers/types.ts": {
    "path": "supabase/functions/geo-gateway/providers/types.ts",
-   "lines": 218,
+   "lines": 223,
    "exports": [
     "type ProviderName",
     "type ProviderSetting",
@@ -64587,7 +65621,76 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 331,
+   "lines": 734,
+   "tables": [
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_stops",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_stops",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "update"
+    },
+    {
+     "table": "active_tracking",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "update"
+    }
+   ],
+   "table_cols": {
+    "lalamove_orders": [
+     "delivery_latitude",
+     "delivery_longitude",
+     "id",
+     "lalamove_id",
+     "pickup_latitude",
+     "pickup_longitude",
+     "pod_received",
+     "status"
+    ],
+    "lalamove_stops": [
+     "latitude",
+     "longitude",
+     "order_id",
+     "pod_delivered_at",
+     "pod_image_url",
+     "pod_status",
+     "stop_index"
+    ],
+    "active_tracking": [
+     "current_latitude",
+     "current_longitude",
+     "driver_id",
+     "eta_minutes",
+     "id",
+     "next_stop_index",
+     "order_id",
+     "tracking_status"
+    ]
+   },
    "rpc": [
     "mark_job_completed",
     "mark_job_failed"
@@ -64603,15 +65706,72 @@
     "SUPABASE_URL"
    ],
    "errors": [
+    "${fn}: ${detail}",
     "Invalid job payload: missing required fields",
     "Missing Authorization header",
-    "Unknown job type: ${jobPayload.type}"
+    "Unknown job type: ${unknownType}",
+    "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
+    "geo_backfill exige payload.addresses[] ou payload.address",
+    "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)",
+    "pod_fetch: pedido ${key} não encontrado em lalamove_orders",
+    "pod_fetch: pedido ${key} sem lalamove_id — impossível consultar o provedor",
+    "route_plan: pedido ${payload.orderId} não encontrado em lalamove_orders"
    ],
    "status_values": [
     {
-     "field": "type",
-     "value": "webhook",
+     "field": "status",
+     "value": "invalid",
      "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "planned",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "refreshed",
+     "kind": "escreve"
+    },
+    {
+     "field": "tracking_status",
+     "value": "ACTIVE",
+     "kind": "filtra"
+    },
+    {
+     "field": "tracking_status",
+     "value": "ACTIVE",
+     "kind": "filtra"
     },
     {
      "field": "type",
@@ -64647,9 +65807,36 @@
      "field": "type",
      "value": "slack",
      "kind": "compara"
+    },
+    {
+     "field": "type",
+     "value": "lalamove_sync",
+     "kind": "compara"
+    },
+    {
+     "field": "type",
+     "value": "pod_fetch",
+     "kind": "compara"
+    },
+    {
+     "field": "type",
+     "value": "geo_backfill",
+     "kind": "compara"
+    },
+    {
+     "field": "type",
+     "value": "route_plan",
+     "kind": "compara"
+    },
+    {
+     "field": "type",
+     "value": "eta_refresh",
+     "kind": "compara"
     }
    ],
    "rule_comments": [
+    "Provedor desligado / orçamento estourado / rate limit: não é falha do job.",
+    "Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego.",
     "Verificar autenticação (apenas service role ou autenticado)"
    ],
    "doc": "============================================================================ EDGE FUNCTION: Job Worker Descrição: Processa jobs da fila de forma assíncrona Versão: 1.0.0 Data: 2025-12-26 ============================================================================",
@@ -65507,19 +66694,6 @@
     "SUPABASE_URL"
    ],
    "uses_service_role": true
-  },
-  "supabase/functions/mapbox-proxy/index.ts": {
-   "path": "supabase/functions/mapbox-proxy/index.ts",
-   "lines": 366,
-   "env": [
-    "MAPBOX_ACCESS_TOKEN"
-   ],
-   "params": [
-    {
-     "name": "MAPBOX_BASE",
-     "value": "'https://api.mapbox.com'"
-    }
-   ]
   },
   "supabase/functions/mcp-query/index.ts": {
    "path": "supabase/functions/mcp-query/index.ts",
@@ -66762,6 +67936,13 @@
    "path": "supabase/migrations/20261122130200_alert_type_driver_assigned.sql",
    "lines": 5
   },
+  "supabase/migrations/20261122140000_fix_crons_dispatcher.sql": {
+   "path": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+   "lines": 161,
+   "temporal": [
+    "AND started_at < now() - interval '10 minutes'"
+   ]
+  },
   "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql": {
    "path": "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
    "lines": 16,
@@ -66773,13 +67954,74 @@
    "path": "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
    "lines": 70,
    "uses_service_role": true
+  },
+  "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql": {
+   "path": "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
+   "lines": 45
   }
  },
  "git": {
-  "sha": "c2ae0baa10201a24357ac20954e41da8c200041e",
+  "sha": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "06bcb9f",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "CHANGELOG.md",
+     "docs/GEO_PROVIDERS.md",
+     "docs/MAPBOX.md",
+     "docs/RUNBOOK_MAPBOX.md",
+     "docs/ci/MATRIZ_EDGE_TABELA.md",
+     "scripts/inventario/banco.sql",
+     "src/components/map/LiveMap.tsx",
+     "src/components/map/OrderTrackingMap.tsx",
+     "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+     "src/components/map/__tests__/mapLayers.test.ts",
+     "src/components/map/mapLayers.ts",
+     "src/components/orders/OrderDetailModal.tsx",
+     "src/hooks/__tests__/useGeo.test.ts",
+     "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
+     "src/hooks/useGeo.ts",
+     "src/hooks/useGeoAdmin.ts",
+     "src/hooks/useMapbox.ts",
+     "src/lib/geo-gateway.test.ts",
+     "src/lib/geo-gateway.ts",
+     "src/pages/MapsSettingsPage.tsx",
+     "supabase/functions/check-external-api/index.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/metering.ts",
+     "supabase/functions/geo-gateway/providers/mapbox.ts",
+     "supabase/functions/geo-gateway/providers/types.ts",
+     "supabase/functions/geo-gateway/resolver.test.ts",
+     "supabase/functions/geo-gateway/resolver.ts",
+     "supabase/functions/mapbox-proxy/index.ts",
+     "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql"
+    ]
+   },
+   {
+    "sha": "554e68b",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)",
+    "files": [
+     ".github/workflows/apply-migrations.yml"
+    ]
+   },
+   {
+    "sha": "e616ccf",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)",
+    "files": [
+     "supabase/functions/job-worker/index.ts",
+     "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
+    ]
+   },
    {
     "sha": "c2ae0ba",
     "date": "2026-11-21",
@@ -67074,40 +68316,6 @@
     "files": [
      "supabase/functions/simulate-driver-movement/index.ts"
     ]
-   },
-   {
-    "sha": "2a2a3d1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(alertas/pedidos): aviso ao fornecedor funciona ponta a ponta (#149)",
-    "files": [
-     "supabase/functions/check-driver-alerts/index.ts",
-     "supabase/functions/lalamove-api/index.ts"
-    ]
-   },
-   {
-    "sha": "82843c8",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(docs): backup do plano PIM/Promo Supply V2 contra perda de tokens (#151)",
-    "files": [
-     "docs/backups/plano-pim-promo-supply-v2-auditoria-261121.md",
-     "docs/backups/plano-pim-promo-supply-v2.md"
-    ]
-   },
-   {
-    "sha": "7d675c1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(planos): análise e planos de 100 etapas Google Maps e Mapbox com estado atual (#146)",
-    "files": [
-     "docs/MAPBOX.md",
-     "docs/agentes/mapa-repo.md",
-     "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-     "docs/planos/README.md"
-    ]
    }
   ],
   "hot_files": [
@@ -67116,11 +68324,71 @@
     5
    ],
    [
+    "src/components/map/LiveMap.tsx",
+    3
+   ],
+   [
+    "supabase/functions/geo-gateway/index.ts",
+    3
+   ],
+   [
+    "supabase/functions/geo-gateway/resolver.test.ts",
+    3
+   ],
+   [
+    "supabase/functions/geo-gateway/resolver.ts",
+    3
+   ],
+   [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
    ],
    [
-    "src/components/map/LiveMap.tsx",
+    ".github/workflows/ci.yml",
+    2
+   ],
+   [
+    "CHANGELOG.md",
+    2
+   ],
+   [
+    "src/components/map/mapLayers.ts",
+    2
+   ],
+   [
+    "src/components/orders/OrderDetailModal.tsx",
+    2
+   ],
+   [
+    "src/hooks/useGeoAdmin.ts",
+    2
+   ],
+   [
+    "src/hooks/useMapbox.ts",
+    2
+   ],
+   [
+    "src/lib/geo-gateway.test.ts",
+    2
+   ],
+   [
+    "src/pages/MapsSettingsPage.tsx",
+    2
+   ],
+   [
+    "supabase/functions/check-external-api/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    2
+   ],
+   [
+    "supabase/functions/geo-gateway/providers/types.ts",
+    2
+   ],
+   [
+    ".github/workflows/apply-migrations.yml",
     2
    ],
    [
@@ -67128,68 +68396,8 @@
     2
    ],
    [
-    "supabase/functions/lalamove-api/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.ts",
-    2
-   ],
-   [
     "supabase/config.toml",
     2
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.tsx",
-    2
-   ],
-   [
-    "src/pages/LiveMapPage.tsx",
-    2
-   ],
-   [
-    "e2e/livemap-route.e2e.ts",
-    1
-   ],
-   [
-    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
-    1
-   ],
-   [
-    "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
-    1
-   ],
-   [
-    "src/components/map/mapLayers.ts",
-    1
-   ],
-   [
-    "src/lib/__tests__/statusPalette.test.ts",
-    1
-   ],
-   [
-    "src/lib/statusPalette.ts",
-    1
-   ],
-   [
-    "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
-    1
-   ],
-   [
-    ".github/workflows/ci.yml",
-    1
-   ],
-   [
-    "supabase/migrations/20261121192500_restore_audit_log.sql",
-    1
    ]
   ]
  }

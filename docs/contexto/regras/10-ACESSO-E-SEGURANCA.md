@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2ae0baa10` · branch `main` · 2026-11-21 23:07 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `06bcb9ff15` · branch `main` · 2026-11-21 23:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -382,7 +382,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
-| revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +9 |
+| revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +10 |
 | revoke | PUBLIC, anon, authenticated | execute | `ensure_tracking_events_partition`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `cleanup_old_region_cache`, `check_login_lockout`, `record_failed_login`, `has_role`, `has_permission`, `is_aal2`, `get_user_roles`, `is_token_valid`, `use_reset_token`, `notify_lalamove_quota_low`, `notify_webhook_security_event`, `cleanup_old_audit_logs` |
 | revoke | PUBLIC, authenticated | execute | `geo_emit_event` |
 | revoke | anon | all | `mcp_introspect`, `can_run_db_diagnostics` |

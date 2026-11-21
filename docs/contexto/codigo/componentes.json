@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 215,
+ "total": 216,
  "orfaos": 4,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -845,7 +845,7 @@
     "LiveMap"
    ],
    "export_default": null,
-   "linhas": 630,
+   "linhas": 657,
    "dominio": "components/map",
    "hooks_locais": [
     "useEffectiveMapProvider",
@@ -946,6 +946,23 @@
    "dominio": "components/map",
    "hooks_locais": [
     "useMapSettings"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/map/OrderTrackingMap.tsx",
+   "exports": [
+    "OrderTrackingMap",
+    "OrderTrackingMapProps"
+   ],
+   "export_default": null,
+   "linhas": 149,
+   "dominio": "components/map",
+   "hooks_locais": [
+    "useMapboxToken"
    ],
    "tabelas": [],
    "edges": [],
@@ -1107,13 +1124,15 @@
     "OrderDetailModal"
    ],
    "export_default": null,
-   "linhas": 920,
+   "linhas": 979,
    "dominio": "components/orders",
    "hooks_locais": [
     "useEvaluateDriver",
     "useFleetMutation"
    ],
    "tabelas": [
+    "active_tracking",
+    "lalamove_orders",
     "lalamove_stops"
    ],
    "edges": [
@@ -2986,14 +3005,17 @@
     "MapsSettingsPage"
    ],
    "export_default": "MapsSettingsPage",
-   "linhas": 400,
+   "linhas": 803,
    "dominio": "pages",
    "hooks_locais": [
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoLatency",
     "useGeoPriceList",
+    "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
+    "usePermissions",
     "useUpdateGeoBudget",
     "useUpdateGeoSetting"
    ],
