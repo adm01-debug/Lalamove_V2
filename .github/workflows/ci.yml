@@ -117,7 +117,7 @@ jobs:
         with:
           deno-version: v1.x
       - name: Run Edge Function contract tests (in-memory)
-        run: deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts
+        run: deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts supabase/functions/lalamove-gateway/route.test.ts
 
   edge-integration-tests:
     name: Deno Edge Function I/O Integration Tests
