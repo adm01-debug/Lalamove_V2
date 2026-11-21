@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 108,
+ "total": 109,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 5,
-  "edge (deno)": 7,
+  "edge (deno)": 8,
   "guard (node --test)": 33,
   "unit (vitest)": 61
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 9
+   "arquivos": 10
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1006,6 +1006,15 @@
    "casos": 11
   },
   {
+   "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 42,
+   "testa": [
+    "supabase/functions/lalamove-api/coordinates.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "supabase/functions/lalamove-gateway/route.test.ts",
    "tipo": "edge (deno)",
    "linhas": 117,
@@ -1123,6 +1132,7 @@
   "supabase/functions/geo-gateway/providers/mapbox.ts": 1,
   "supabase/functions/geo-gateway/providers/types.ts": 2,
   "supabase/functions/geo-gateway/resolver.ts": 1,
+  "supabase/functions/lalamove-api/coordinates.ts": 1,
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1
@@ -1267,7 +1277,6 @@
    "external-companies",
    "get-mapbox-token",
    "job-worker",
-   "lalamove-api",
    "lalamove-token-refresh",
    "lalamove-uapi",
    "llm-wh",

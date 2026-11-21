@@ -490,8 +490,8 @@
    "nome": "lalamove-api",
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
-   "arquivos": 1,
-   "linhas": 1118,
+   "arquivos": 2,
+   "linhas": 1218,
    "verify_jwt": true,
    "metodos": [
     "GET",
@@ -504,7 +504,8 @@
     "lalamove_orders",
     "lalamove_priority_fee_history",
     "lalamove_rate_limits",
-    "lalamove_status_history"
+    "lalamove_status_history",
+    "lalamove_stops"
    ],
    "rpcs": [],
    "env": [
@@ -534,7 +535,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 0
+   "testes": 1
   },
   {
    "nome": "lalamove-gateway",

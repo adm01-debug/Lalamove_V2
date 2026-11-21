@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
+  "sha": "ad0ba323ec44b3bf76065eaed0c8f260e18de18b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 22:50 UTC",
-  "files_total": 944,
-  "code_files": 774,
-  "code_lines": 133607
+  "generated_at": "2026-11-21 22:55 UTC",
+  "files_total": 946,
+  "code_files": 776,
+  "code_lines": 133749
  },
  "version": "1.3.2",
- "facts_hash": "505fe2eacc2dedb1",
+ "facts_hash": "ff51b2c913ac8d38",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 254,
+   ".ts": 256,
    ".tsx": 226,
    ".sql": 174,
    ".mjs": 107,
@@ -17577,7 +17577,8 @@
      "lalamove_orders",
      "lalamove_priority_fee_history",
      "lalamove_rate_limits",
-     "lalamove_status_history"
+     "lalamove_status_history",
+     "lalamove_stops"
     ],
     "env": [
      "ALLOWED_ORIGINS",
@@ -20963,8 +20964,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 50,
-   "lines": 13048,
+   "files": 52,
+   "lines": 13190,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21019,6 +21020,7 @@
     "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, mergeSettings",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoPrecision, GeoSuggestion",
+    "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "index.ts: CHANGE_DRIVER_REASONS",
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
     "normalize.ts: normalizeLalamoveV3Payload",
@@ -21068,6 +21070,8 @@
     "supabase/functions/geo-gateway/providers/types.ts",
     "supabase/functions/get-mapbox-token/index.ts",
     "supabase/functions/job-worker/index.ts",
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    "supabase/functions/lalamove-api/coordinates.ts",
     "supabase/functions/lalamove-api/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
     "supabase/functions/lalamove-gateway/route.test.ts",
@@ -21633,6 +21637,7 @@
     ],
     "update": [
      "src/hooks/useBitrix24.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts"
     ],
@@ -21679,6 +21684,9 @@
      "scripts/seed-database.ts",
      "src/components/orders/OrderDetailModal.tsx",
      "supabase/functions/lalamove-webhook/index.ts"
+    ],
+    "upsert": [
+     "supabase/functions/lalamove-api/coordinates.ts"
     ],
     "update": [
      "supabase/functions/lalamove-webhook/index.ts"
@@ -25652,6 +25660,10 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "text": "Verificar autenticação (apenas service role ou autenticado)"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.ts",
+    "text": "Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove."
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -33339,6 +33351,10 @@
     "line": "transition={{ delay: index * 0.05 }}"
    },
    {
+    "file": "supabase/functions/lalamove-api/coordinates.ts",
+    "line": "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega."
+   },
+   {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "line": "// Randomly toggle off-route status (3% chance to go off, 20% to return)"
    },
@@ -36611,6 +36627,30 @@
    {
     "file": "supabase/functions/geo-gateway/resolver.test.ts",
     "name": "failoverFor: função sem suporte no Google (isochrone) não aceita o Google"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords converte as coordenadas string da Lalamove em numero"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords preserva a ordem das paradas (indice = stop_index)"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords anula 0,0 — placeholder que a Lalamove rejeita"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords anula coordenada invalida em vez de gravar NaN"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords tolera parada sem coordinates (nao quebra o pedido)"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords devolve lista vazia para undefined"
    },
    {
     "file": "supabase/functions/lalamove-gateway/route.test.ts",
@@ -64254,9 +64294,51 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/lalamove-api/coordinates.test.ts": {
+   "path": "supabase/functions/lalamove-api/coordinates.test.ts",
+   "lines": 42,
+   "is_test": true,
+   "tests": [
+    "stopsCoords converte as coordenadas string da Lalamove em numero",
+    "stopsCoords preserva a ordem das paradas (indice = stop_index)",
+    "stopsCoords anula 0,0 — placeholder que a Lalamove rejeita",
+    "stopsCoords anula coordenada invalida em vez de gravar NaN",
+    "stopsCoords tolera parada sem coordinates (nao quebra o pedido)",
+    "stopsCoords devolve lista vazia para undefined"
+   ]
+  },
+  "supabase/functions/lalamove-api/coordinates.ts": {
+   "path": "supabase/functions/lalamove-api/coordinates.ts",
+   "lines": 80,
+   "exports": [
+    "function stopsCoords",
+    "function persistOrderCoordinates"
+   ],
+   "tables": [
+    {
+     "table": "lalamove_orders",
+     "op": "update"
+    },
+    {
+     "table": "lalamove_stops",
+     "op": "upsert"
+    }
+   ],
+   "table_cols": {
+    "lalamove_orders": [
+     "id"
+    ]
+   },
+   "rule_comments": [
+    "Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove."
+   ],
+   "percents": [
+    "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega."
+   ]
+  },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1118,
+   "lines": 1138,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -64299,7 +64381,7 @@
     },
     {
      "table": "lalamove_orders",
-     "op": "insert"
+     "op": "insert,select"
     },
     {
      "table": "lalamove_orders",
@@ -66311,10 +66393,21 @@
   }
  },
  "git": {
-  "sha": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
+  "sha": "ad0ba323ec44b3bf76065eaed0c8f260e18de18b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "ad0ba32",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)",
+    "files": [
+     "supabase/functions/lalamove-api/coordinates.test.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/functions/lalamove-api/index.ts"
+    ]
+   },
    {
     "sha": "339acda",
     "date": "2026-11-21",
@@ -66627,17 +66720,6 @@
      ".env.example",
      "docs/MAPBOX.md"
     ]
-   },
-   {
-    "sha": "a081063",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(pedidos): filtra o veículo pela praça de coleta no novo pedido (#133)",
-    "files": [
-     "src/components/orders/NewOrderDialog.tsx",
-     "src/lib/__tests__/lalamoveCatalogCities.test.ts",
-     "src/lib/lalamoveCatalog.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -66648,6 +66730,10 @@
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
+   ],
+   [
+    "supabase/functions/lalamove-api/index.ts",
+    2
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
@@ -66678,16 +66764,16 @@
     2
    ],
    [
-    "src/components/orders/NewOrderDialog.tsx",
-    2
-   ],
-   [
-    "src/lib/lalamoveCatalog.ts",
-    2
-   ],
-   [
     "supabase/functions/check-driver-alerts/index.ts",
     2
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
+    1
    ],
    [
     "supabase/functions/geo-gateway/failover.test.ts",
@@ -66715,10 +66801,6 @@
    ],
    [
     "supabase/functions/geo-gateway/providers/types.ts",
-    1
-   ],
-   [
-    "CHANGELOG.md",
     1
    ]
   ]

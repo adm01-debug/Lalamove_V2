@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `339acda140` · branch `main` · 2026-11-21 22:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ad0ba323ec` · branch `main` · 2026-11-21 22:55 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1197,6 +1197,7 @@ _nenhum item encontrado_
 | `transition={{ delay: index * 0.05 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.1 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/pages/orders/OrderCard.tsx` |
+| `// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// Randomly toggle off-route status (3% chance to go off, 20% to return)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Randomly toggle stopped status (5% chance)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Simulate movement - move 5-15% towards destination with some randomness` | `supabase/functions/simulate-driver-movement/index.ts` |
@@ -1743,7 +1744,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (842 testes em 69 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (848 testes em 70 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1802,6 +1803,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
+| `supabase/functions/lalamove-api/coordinates.test.ts` | 6 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 5 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
 | `src/hooks/useGeoSearch.test.tsx` | 5 | useAddressSearchBox · busca sugestões com action autocomplete e session_token · isError fica true quando a busca de sugestões falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão … |
@@ -2019,6 +2021,7 @@ _nenhum item encontrado_
 | Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância. | `supabase/functions/geo-gateway/index.ts` |
 | * TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */ | `supabase/functions/geo-gateway/metering.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |
+| Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove. | `supabase/functions/lalamove-api/coordinates.ts` |
 | * Persist Lalamove rate-limit headers for proactive observability. | `supabase/functions/lalamove-api/index.ts` |
 | Headers follow the IETF `ratelimits-*` family (limit / remaining / reset). | `supabase/functions/lalamove-api/index.ts` |
 | BODY_JSON = "" for GET/DELETE (but \r\n\r\n must be present) | `supabase/functions/lalamove-api/index.ts` |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
+  "commit": "ad0ba323ec44b3bf76065eaed0c8f260e18de18b",
   "branch": "main",
-  "data_commit": "2026-11-21T19:43:11-03:00",
+  "data_commit": "2026-11-21T19:43:17-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ad0ba32",
+    "data": "2026-11-21",
+    "assunto": "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)"
+   },
    {
     "sha": "339acda",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "7d675c1",
     "data": "2026-11-21",
     "assunto": "docs(planos): análise e planos de 100 etapas Google Maps e Mapbox com estado atual (#146)"
-   },
-   {
-    "sha": "54fd87b",
-    "data": "2026-11-21",
-    "assunto": "chore(docs): adiciona plano Mapbox × Lalamove V2 com 100 etapas (#127)"
    }
   ],
-  "arquivos_mudados_7d": 165,
+  "arquivos_mudados_7d": 167,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -172,6 +172,10 @@
     "mudancas": 5
    },
    {
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 5
+   },
+   {
     "pasta": "supabase/functions/lalamove-gateway",
     "mudancas": 5
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": ".github/workflows/contexto.yml",
-    "mudancas": 3
-   },
-   {
-    "pasta": ".github/workflows/deploy-edges.yml",
     "mudancas": 3
    }
   ],
@@ -266,6 +266,10 @@
     "mudancas": 4
    },
    {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 4
+   },
+   {
     "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
     "mudancas": 4
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "scripts/seed-database.ts",
     "mudancas": 3
-   },
-   {
-    "arquivo": "src/App.tsx",
-    "mudancas": 3
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 79
+    "commits": 80
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 949,
-  "arquivos_codigo": 591,
-  "linhas_codigo": 115487,
+  "arquivos_total": 951,
+  "arquivos_codigo": 593,
+  "linhas_codigo": 115629,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 170,
   "cron_jobs": 17,
-  "testes": 108,
+  "testes": 109,
   "workflows": 5,
   "scripts": 105,
   "docs_md": 97
@@ -551,8 +551,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 50,
-   "linhas": 13048
+   "arquivos": 52,
+   "linhas": 13190
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -574,7 +574,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1118
+   "linhas": 1138
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
@@ -670,7 +670,7 @@
   }
  ],
  "qualidade": {
-  "any": 85,
+  "any": 86,
   "console_log": 399,
   "ts_ignore": 0,
   "eslint_disable": 1,

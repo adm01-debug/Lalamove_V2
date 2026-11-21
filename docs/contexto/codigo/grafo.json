@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 483,
- "arestas": 1567,
+ "nos": 484,
+ "arestas": 1569,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -70,7 +70,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/logger.ts",
-   "importado_por": 14
+   "importado_por": 15
   },
   {
    "arquivo": "src/components/ui/tooltip.tsx",
