@@ -34,6 +34,27 @@ CREATE TABLE IF NOT EXISTS public.job_queue (
   created_by     uuid REFERENCES auth.users(id)
 );
 
+-- Normalizacao para o caso em que a tabela JA existe com outro shape.
+-- Em `supabase db reset` a 20251226000003_create_job_queue.sql cria job_queue
+-- primeiro (sem dedup_key/started_at/metadata/created_by e com type IN
+-- ('webhook','notification','evaluation','sync_bitrix24','cleanup')), o
+-- CREATE TABLE IF NOT EXISTS acima vira no-op e o indice de dedup abaixo falha.
+-- Em producao a tabela nunca existiu, entao este bloco e no-op lá.
+ALTER TABLE public.job_queue
+  ADD COLUMN IF NOT EXISTS started_at  timestamptz,
+  ADD COLUMN IF NOT EXISTS dedup_key   text,
+  ADD COLUMN IF NOT EXISTS metadata    jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_by  uuid REFERENCES auth.users(id);
+
+-- Os dois CHECK precisam ser os canonicos: 'bitrix_sync' (nome usado pelas
+-- edges) e 'CANCELLED' (usado por cancel_job) nao existem nas versoes antigas.
+ALTER TABLE public.job_queue DROP CONSTRAINT IF EXISTS job_queue_type_check;
+ALTER TABLE public.job_queue ADD CONSTRAINT job_queue_type_check
+  CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch'));
+ALTER TABLE public.job_queue DROP CONSTRAINT IF EXISTS job_queue_status_check;
+ALTER TABLE public.job_queue ADD CONSTRAINT job_queue_status_check
+  CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'));
+
 CREATE INDEX IF NOT EXISTS idx_job_queue_pending    ON public.job_queue (next_retry_at, priority DESC) WHERE status = 'PENDING';
 CREATE INDEX IF NOT EXISTS idx_job_queue_status     ON public.job_queue (status);
 CREATE INDEX IF NOT EXISTS idx_job_queue_type       ON public.job_queue (type);
