@@ -270,13 +270,21 @@ export class MapboxProvider implements GeoProvider {
     const pts = req.points.slice(-100);
     if (pts.length < 2) throw new GeoProviderError("GEO_INVALID_INPUT", "Map Matching precisa de ≥ 2 pontos", 422);
     // overview=full: sem a geometria a tela não tem o que desenhar nem distância/duração
+    const snapProfile = req.profile ?? "driving";
+    if (!/^(driving|walking|cycling)$/.test(snapProfile)) {
+      throw new GeoProviderError("GEO_INVALID_INPUT", `Perfil inválido para map matching: ${snapProfile}`, 422);
+    }
     const p = new URLSearchParams({ geometries: "geojson", overview: "full", steps: "false", tidy: "true" });
     p.set("radiuses", pts.map(() => String(req.radius_m ?? 25)).join(";"));
     if (req.timestamps && req.timestamps.length === pts.length) p.set("timestamps", req.timestamps.join(";"));
     const json = await this.call<{
-      matchings?: Array<{ confidence?: number; distance?: number; duration?: number; geometry?: { coordinates?: [number, number][] } }>;
+      matchings?: Array<{
+        confidence?: number; distance?: number; duration?: number;
+        geometry?: { type: string; coordinates: [number, number][] };
+        legs?: Array<{ distance: number; duration: number }>;
+      }>;
       tracepoints?: Array<{ location: [number, number] } | null>;
-    }>("matching", `${BASE}/matching/v5/mapbox/driving/${pts.map(fmt).join(";")}?${p}`);
+    }>("matching", `${BASE}/matching/v5/mapbox/${snapProfile}/${pts.map(fmt).join(";")}?${p}`);
     const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
     const m = json.matchings?.[0];
     const geom = m?.geometry?.coordinates ?? [];
@@ -285,9 +293,11 @@ export class MapboxProvider implements GeoProvider {
         points,
         confidence: m?.confidence ?? null,
         provider: "mapbox",
-        distance_m: m?.distance != null ? Math.round(m.distance) : null,
-        duration_s: m?.duration != null ? Math.round(m.duration) : null,
+        distance_m: m?.distance != null ? Math.round(Number(m.distance)) : null,
+        duration_s: m?.duration != null ? Math.round(Number(m.duration)) : null,
         polyline: geom.map(([lng, lat]) => ({ lat, lng })),
+        geometry: m?.geometry,
+        legs: m?.legs?.map((l) => ({ distance_m: Math.round(l.distance), duration_s: Math.round(l.duration) })),
       },
       sku: "map_matching", units: 1,
     };
