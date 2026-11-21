@@ -47,8 +47,36 @@ Setar via: `supabase secrets set MAPBOX_SERVER_TOKEN=<valor> --project-ref iecgy
 | Proxy legado | `supabase/functions/mapbox-proxy/index.ts` | ⚠️ usa `pk.` como server token; a migrar para `geo-gateway` (etapa 61) |
 | Gateway novo | `supabase/functions/geo-gateway/` | ✅ implementado em `main` (`index.ts`, `resolver.ts`, `polyline.ts`, `metering.ts`, `providers/mapbox.ts`, testes) |
 | Hook front | `src/hooks/useMapbox.ts` | ⚠️ chama `mapbox-proxy` diretamente; migrar para `useGeo` (etapa 60) |
-| Health check | `supabase/functions/check-external-api/index.ts:221` | ❌ bug: usa `MAPBOX_API_KEY` em vez de `MAPBOX_ACCESS_TOKEN` → sempre retorna `unknown` |
-| Seletor visual | `src/hooks/useMapSettings.ts` | ⚠️ localStorage puro; não lê `geo_settings` do banco (etapa 66) |
+| Health check | `supabase/functions/check-external-api/index.ts` | ✅ testa Mapbox v6 (`permanent=false`) e Google v4, devolve latência/SKU/req-min (etapa 67) |
+| Seletor visual | `src/pages/MapsSettingsPage.tsx` | ✅ lê e grava `geo_settings`; modo `auto`, painel de uso, matriz de paridade, escrita só admin |
+| Seletor legado | `src/hooks/useMapSettings.ts` | ⚠️ localStorage puro; não lê `geo_settings` do banco (etapa 66) |
+
+## Estilo do mapa (etapa 59)
+
+**Decisão: manter `dark-v11` (painel) e `satellite-streets-v12` (rastreio). Não migrar para o Mapbox Standard.**
+
+Motivo: o Standard é o mesmo SKU (`map_load`) — o custo por carregamento não muda, então a troca não paga o risco de reescrever camadas customizadas (`mapLayers.ts`, `markerFactories.ts`), que hoje dependem dos estilos fixos. Reavaliar só se houver demanda visual explícita; ver também a etapa 100 (itens "para depois").
+
+## Drill de troca Google→Mapbox (etapa 72)
+
+Roteiro e o que está realmente verificado. **Estado: roteiro escrito, execução ponta a ponta BLOQUEADA** — ver pré-condição.
+
+**Pré-condição real:** o gateway **só tem o provedor Mapbox implementado**. `geo-gateway/index.ts:95-98` — `getProvider()` lança `GEO_NOT_CONFIGURED` para `google`, e `provider-status` devolve `implemented: false` para Google (`index.ts:124`). Portanto o sentido literal do drill (Google→Mapbox com pedido ativo) **não é executável** até o Bloco 2 do plano Google. O roteiro abaixo é o que será rodado quando o Google existir; os passos 1–3 e 7 já são verificáveis hoje.
+
+| Passo | O que fazer | Esperado | Status |
+|---|---|---|---|
+| 1 | `geo-gateway` action `provider-status` | `mapbox.configured=true`, `google.implemented=false` | ✅ verificado no código (`index.ts:118-127`) |
+| 2 | `/settings/maps` com usuário `manager` | troca desabilitada + aviso "modo leitura" | ✅ implementado (etapa 71); NÃO VERIFICADO em execução |
+| 3 | `/settings/maps` com usuário `admin` | troca habilitada | ✅ implementado (etapa 71); NÃO VERIFICADO em execução |
+| 4 | Trocar `route` para `off` e salvar | `resolve()` lança 503 "Função route está desligada" | ✅ verificado no código (`resolver.ts:119`); NÃO executado em produção |
+| 5 | Voltar `route` para `mapbox` | ETA/traçado voltam em ≤ 60 s (TTL do `resolver`) | ✅ verificado no código (`resolver.ts:62`); NÃO executado |
+| 6 | Conferir `audit_log` | linha `resource_type='geo_settings'` com antes/depois | ✅ trigger existe (`geo_foundation.sql:613-620`); NÃO consultado |
+| 7 | Escolher `google` em qualquer função | seleção bloqueada na UI ("em implementação") | ✅ implementado (etapa 71/paridade); NÃO VERIFICADO em execução |
+
+**Tempo esperado do ciclo de troca:** ≤ 60 s, sem deploy (TTL do `resolver`).
+**Incidentes:** não aplicável — drill não foi executado.
+
+**Para fechar a etapa 72:** (a) implementar o provedor Google no `geo-gateway` (Bloco 2 do plano Google); (b) rodar os passos 2–7 com um usuário real e preencher a coluna de resultado.
 
 ## Cobertura BR do Search Box (etapa 36)
 

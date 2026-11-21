@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePermissions } from '@/hooks/usePermissions';
 import {
   useGeoBudgets,
   useGeoBudgetStatus,
@@ -30,7 +31,8 @@ import {
   type GeoSettingProvider,
 } from '@/hooks/useGeoAdmin';
 
-/** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
+/** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */
+const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
   tiles: { label: 'Mapa (tiles)', hint: 'Carregamento do mapa no painel e no rastreio' },
   autocomplete: { label: 'Autocomplete de endereço', hint: 'Sugestões enquanto o operador digita' },
   geocode: { label: 'Geocodificação', hint: 'Endereço digitado para coordenada' },
@@ -143,6 +145,9 @@ const PARITY_IMPACT_LABEL: Record<'igual' | 'mapbox' | 'google', string> = {
 };
 
 export default function MapsSettingsPage() {
+  const { isAdmin } = usePermissions();
+  /** Etapa 71: trocar provedor e salvar teto é só do administrador (RLS também exige admin). */
+  const canWrite = isAdmin();
   const status = useGeoProviderStatus();
   const budgets = useGeoBudgets();
   const budgetStatus = useGeoBudgetStatus();
@@ -152,6 +157,9 @@ export default function MapsSettingsPage() {
   const updateBudget = useUpdateGeoBudget();
   const health = useGeoProviderHealth();
   const [healthResults, setHealthResults] = useState<Record<string, GeoHealthResult>>({});
+  /** Etapa 71/paridade: o gateway informa quem está realmente implementado (Google ainda não). */
+  const googleImplemented =
+    status.data?.providers?.find((p) => p.provider === 'google')?.implemented ?? false;
 
   const settingsByFunction = useMemo(() => {
     const map = new Map<GeoFunction, { provider: string; fallback: string | null }>();
@@ -300,6 +308,11 @@ export default function MapsSettingsPage() {
           <p className="text-sm text-muted-foreground">
             Escolha qual serviço de mapa e endereço o sistema usa. A troca vale imediatamente, sem deploy.
           </p>
+          {!canWrite && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+              Você está em modo leitura: só o administrador pode trocar provedor e editar tetos de orçamento.
+            </p>
+          )}
         </div>
       </div>
 
@@ -398,6 +411,7 @@ export default function MapsSettingsPage() {
                           min="0"
                           value={draftBudgets[p.provider].monthly_limit_usd}
                           onChange={(e) => patchBudget(p.provider, { monthly_limit_usd: Number(e.target.value) })}
+                          disabled={!canWrite}
                         />
                       </div>
                       <div>
@@ -409,6 +423,7 @@ export default function MapsSettingsPage() {
                           max="100"
                           value={draftBudgets[p.provider].alert_at_pct}
                           onChange={(e) => patchBudget(p.provider, { alert_at_pct: Number(e.target.value) })}
+                          disabled={!canWrite}
                         />
                       </div>
                     </div>
@@ -418,12 +433,13 @@ export default function MapsSettingsPage() {
                           id={`hard-${p.provider}`}
                           checked={draftBudgets[p.provider].hard_stop}
                           onCheckedChange={(checked) => patchBudget(p.provider, { hard_stop: checked })}
+                          disabled={!canWrite}
                         />
                         <Label htmlFor={`hard-${p.provider}`} className="text-xs">
                           Parar de chamar ao atingir o teto
                         </Label>
                       </div>
-                      <Button size="sm" onClick={() => handleSaveBudget(p.provider)} disabled={updateBudget.isPending}>
+                      <Button size="sm" onClick={() => handleSaveBudget(p.provider)} disabled={updateBudget.isPending || !canWrite}>
                         Salvar
                       </Button>
                     </div>
@@ -470,6 +486,7 @@ export default function MapsSettingsPage() {
                         <Select
                           value={current?.provider ?? 'off'}
                           onValueChange={(value) => handleChangeProvider(fn, value)}
+                          disabled={!canWrite}
                         >
                           <SelectTrigger className="h-8">
                             <SelectValue />
@@ -481,8 +498,13 @@ export default function MapsSettingsPage() {
                             <SelectItem value="mapbox" disabled={!FUNCTION_SUPPORT[fn].mapbox}>
                               Mapbox{unsupportedReason(fn, 'mapbox') ? ' — não atende' : ''}
                             </SelectItem>
-                            <SelectItem value="google" disabled={!FUNCTION_SUPPORT[fn].google}>
-                              Google Maps{unsupportedReason(fn, 'google') ? ' — não atende' : ''}
+                            <SelectItem value="google" disabled={!FUNCTION_SUPPORT[fn].google || !googleImplemented}>
+                              Google Maps
+                              {!googleImplemented
+                                ? ' — em implementação'
+                                : unsupportedReason(fn, 'google')
+                                  ? ' — não atende'
+                                  : ''}
                             </SelectItem>
                             <SelectItem value="off">Desligado</SelectItem>
                           </SelectContent>
