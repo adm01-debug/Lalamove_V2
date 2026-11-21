@@ -14,7 +14,8 @@ import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { MAPBOX_RATE_LIMITS, MapboxProvider } from "./providers/mapbox.ts";
 import { GeoProviderError } from "./providers/types.ts";
-import type { GeoFunction, GeoProvider, ProviderName } from "./providers/types.ts";
+import type { GeoFunction, GeoProvider, ProviderName, ProviderResult } from "./providers/types.ts";
+import { callWithFailover } from "./failover.ts";
 import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
 import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, registerSession } from "./metering.ts";
@@ -97,6 +98,37 @@ function getProvider(name: ProviderName): GeoProvider {
   throw new GeoProviderError("GEO_NOT_CONFIGURED", "Provedor Google ainda não implementado no gateway", 503);
 }
 
+/** Despacha a ação para o provedor; usado tanto na tentativa primária quanto no failover. */
+async function runProvider(
+  provider: GeoProvider,
+  name: ProviderName,
+  action: string,
+  // deno-lint-ignore no-explicit-any
+  body: any,
+): Promise<ProviderResult<unknown>> {
+  switch (action) {
+    case "autocomplete": {
+      const r = await provider.autocomplete(body);
+      if (body.session_token && await registerSession(db, name, body.session_token)) r.units = 1; // 1 por sessão
+      return r;
+    }
+    case "place-details": return await provider.placeDetails(body);
+    case "geocode": return await provider.geocode(body);
+    case "reverse": return await provider.reverse(body);
+    case "route": return await provider.route(body);
+    case "matrix": return await provider.matrix(body);
+    case "static": return await provider.staticMap(body);
+    case "snap":
+      if (!provider.snap) throw new GeoProviderError("GEO_NOT_SUPPORTED", `snap não disponível em ${name}`, 501);
+      return await provider.snap(body);
+    case "isochrone": case "optimization": case "tilequery":
+      if (!provider.raw) throw new GeoProviderError("GEO_NOT_SUPPORTED", `${action} não disponível em ${name}`, 501);
+      return await provider.raw(action, body);
+    default:
+      throw new GeoProviderError("GEO_INVALID_INPUT", `action desconhecida: ${action}`, 422);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -141,7 +173,6 @@ Deno.serve(async (req) => {
     }
 
     const { provider: name, reason } = await resolver.resolve(fn, body.provider);
-    const provider = getProvider(name);
     const headers: Record<string, string> = { ...corsHeaders, "X-Geo-Provider": name, "X-Geo-Resolve": reason };
 
     // ── cache ──────────────────────────────────────────────────────────────
@@ -153,34 +184,25 @@ Deno.serve(async (req) => {
       if (hit) return jsonResponse(hit, 200, { ...headers, "X-Geo-Cache": "HIT" }, version);
     }
 
-    // ── chamada ao provedor ────────────────────────────────────────────────
-    let result;
-    switch (action) {
-      case "autocomplete": {
-        result = await provider.autocomplete(body);
-        if (body.session_token && await registerSession(db, name, body.session_token)) result.units = 1; // 1 por sessão
-        break;
-      }
-      case "place-details": result = await provider.placeDetails(body); break;
-      case "geocode": result = await provider.geocode(body); break;
-      case "reverse": result = await provider.reverse(body); break;
-      case "route": result = await provider.route(body); break;
-      case "matrix": result = await provider.matrix(body); break;
-      case "static": result = await provider.staticMap(body); break;
-      case "snap": {
-        if (!provider.snap) throw new GeoProviderError("GEO_NOT_SUPPORTED", `snap não disponível em ${name}`, 501);
-        result = await provider.snap(body); break;
-      }
-      case "isochrone": case "optimization": case "tilequery": {
-        if (!provider.raw) throw new GeoProviderError("GEO_NOT_SUPPORTED", `${action} não disponível em ${name}`, 501);
-        result = await provider.raw(action, body); break;
-      }
-      default:
-        throw new GeoProviderError("GEO_INVALID_INPUT", `action desconhecida: ${action}`, 422);
+    // ── chamada ao provedor (com failover em runtime) ──────────────────────
+    const outcome = await callWithFailover(fn, name, {
+      resolver,
+      getProvider,
+      run: (p, pname) => runProvider(p, pname, action, body),
+      log: (msg, meta) => logger.error(msg, meta),
+    });
+    const result = outcome;
+    const usedProvider = outcome.provider;
+    if (outcome.fallback) {
+      headers["X-Geo-Provider"] = usedProvider;
+      headers["X-Geo-Fallback"] = `${outcome.fallback.from}:${outcome.fallback.code}`;
     }
 
-    await meter(db, name, fn, result.sku, result.units);
-    if (key) await cachePut(db, key, name, fn, result.data, ttl);
+    await meter(db, usedProvider, fn, result.sku, result.units);
+    // A chave é derivada do provedor que respondeu: cachear a resposta do fallback sob a chave do
+    // primário ficaria inalcançável e poderia servir resposta de um provedor para outro.
+    const writeKey = usedProvider === name ? key : (ttl > 0 ? await cacheKey(usedProvider, fn, cacheable) : null);
+    if (writeKey) await cachePut(db, writeKey, usedProvider, fn, result.data, ttl);
     if (result.downgraded) headers["X-Geo-Downgraded"] = result.downgraded;
     headers["X-Geo-Sku"] = result.sku;
     headers["X-Geo-Cache"] = key ? "MISS" : "BYPASS";

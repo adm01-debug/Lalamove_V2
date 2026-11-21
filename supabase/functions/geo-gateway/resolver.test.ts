@@ -81,3 +81,25 @@ Deno.test("mergeSettings: funcao sem linha em geo_settings usa o default e nao v
   assertEquals(merged.find((r) => r.function === "route")?.fallback_provider, "google");
   assertEquals(merged.length, 2);
 });
+
+Deno.test("failoverFor: usa o fallback declarado, ignora o primário e exige usável", async () => {
+  const r = make({ settings: [S("route", "mapbox", "google"), S("geocode", "mapbox")], configured: ["mapbox", "google"] });
+  assertEquals(await r.failoverFor("route", "mapbox"), "google");
+  assertEquals(await r.failoverFor("geocode", "mapbox"), "google");
+});
+
+Deno.test("failoverFor: sem alternativa configurada devolve null (erro original sobe)", async () => {
+  const r = make({ settings: [S("route", "mapbox", "google")], configured: ["mapbox"] });
+  assertEquals(await r.failoverFor("route", "mapbox"), null);
+});
+
+Deno.test("failoverFor: alternativa com orçamento estourado não é usada", async () => {
+  const blocked = { provider: "google", spent_usd: 60, limit_usd: 50, pct: 120, blocked: true, warn: true } as BudgetRow;
+  const r = make({ settings: [S("route", "mapbox", "google")], budget: [blocked], configured: ["mapbox", "google"] });
+  assertEquals(await r.failoverFor("route", "mapbox"), null);
+});
+
+Deno.test("failoverFor: função sem suporte no Google (isochrone) não aceita o Google", async () => {
+  const r = make({ settings: [S("isochrone", "mapbox", "google")], configured: ["mapbox", "google"] });
+  assertEquals(await r.failoverFor("isochrone", "mapbox"), null);
+});

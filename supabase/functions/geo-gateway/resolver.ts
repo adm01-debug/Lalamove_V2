@@ -131,6 +131,26 @@ export class ProviderResolver {
     );
   }
 
+  /**
+   * Provedor alternativo para failover EM RUNTIME: o primário está usável mas a chamada falhou.
+   * Candidatos: o fallback_provider declarado e, depois, o outro provedor do par — sempre
+   * exigindo que o candidato seja usável agora (configurado, com suporte à função, sem bloqueio).
+   * Retorna null quando não há para onde ir (ex.: Google sem chave) — o erro original sobe.
+   */
+  async failoverFor(fn: GeoFunction, primary: ProviderName): Promise<ProviderName | null> {
+    await this.refresh();
+    const row = this.setting(fn);
+    const declared = row?.fallback_provider;
+    const candidates: ProviderName[] = [];
+    if (declared === "mapbox" || declared === "google") candidates.push(declared);
+    for (const p of ["mapbox", "google"] as ProviderName[]) candidates.push(p);
+    for (const p of candidates) {
+      if (p === primary) continue;
+      if (this.usable(p, fn)) return p;
+    }
+    return null;
+  }
+
   /** Token bucket por minuto: true = pode chamar. */
   rateGuard(provider: ProviderName, api: string, limitPerMin: number): boolean {
     const key = `${provider}:${api}`;
