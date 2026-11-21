@@ -23,7 +23,7 @@
   "testes": [
    "guards em scripts/ (46)",
    "co-localizado (__tests__) (41)",
-   "supabase/functions/<edge> (8)"
+   "supabase/functions/<edge> (9)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: failover de provedor em runtime no geo-gateway (#175)",
+   "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)",
    "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)",
    "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)",
-   "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)",
-   "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)",
-   "feat(mapas): tela de provedores de mapa em /settings/maps (#168)"
+   "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

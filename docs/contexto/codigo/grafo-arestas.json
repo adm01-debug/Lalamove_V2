@@ -2200,12 +2200,16 @@
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
+  "supabase/functions/geo-gateway/failover.ts": [
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
   "supabase/functions/geo-gateway/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/cors.ts",
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/geo-gateway/failover.ts",
    "supabase/functions/geo-gateway/metering.ts",
    "supabase/functions/geo-gateway/providers/mapbox.ts",
    "supabase/functions/geo-gateway/providers/types.ts",

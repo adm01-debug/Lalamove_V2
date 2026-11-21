@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `99e0b43184` · branch `main` · 2026-11-21 22:25 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `339acda140` · branch `main` · 2026-11-21 22:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1743,7 +1743,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (832 testes em 68 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (842 testes em 69 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1774,6 +1774,7 @@ _nenhum item encontrado_
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
+| `supabase/functions/geo-gateway/resolver.test.ts` | 11 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
@@ -1795,12 +1796,12 @@ _nenhum item encontrado_
 | `src/components/map/hooks/__tests__/useTrackingData.test.ts` | 7 | useTrackingData · faz o fetch inicial e popula trackingData/allTrackingData · filtra por tipo de veículo · filtra por status STOPPED … |
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
-| `supabase/functions/geo-gateway/resolver.test.ts` | 7 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/components/map/hooks/__tests__/useMapboxToken.test.ts` | 6 | useMapboxToken · retorna o token quando a edge function responde com sucesso · falha silenciosamente (mapbox é opcional) quando a edge function retorna erro · define erro específico quando o token está ausente na resposta … |
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
+| `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 5 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
 | `src/hooks/useGeoSearch.test.tsx` | 5 | useAddressSearchBox · busca sugestões com action autocomplete e session_token · isError fica true quando a busca de sugestões falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão … |
@@ -2013,6 +2014,8 @@ _nenhum item encontrado_
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
+| timeout, credencial revogada, rate limit), a requisição morria em 502. Este módulo faz a segunda | `supabase/functions/geo-gateway/failover.ts` |
+| * Vale tentar outro provedor? Falha do provedor (5xx), credencial, rate limit e rede/timeout sim. */ | `supabase/functions/geo-gateway/failover.ts` |
 | Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância. | `supabase/functions/geo-gateway/index.ts` |
 | * TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */ | `supabase/functions/geo-gateway/metering.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |

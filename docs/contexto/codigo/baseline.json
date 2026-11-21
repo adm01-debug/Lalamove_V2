@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "99e0b43184ba504e4679804302a87bb6cca73382",
+  "commit": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
   "branch": "main",
-  "data_commit": "2026-11-21T19:25:05-03:00",
+  "data_commit": "2026-11-21T19:43:11-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "339acda",
+    "data": "2026-11-21",
+    "assunto": "feat: failover de provedor em runtime no geo-gateway (#175)"
+   },
+   {
+    "sha": "fe9865a",
+    "data": "2026-11-21",
+    "assunto": "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)"
+   },
    {
     "sha": "99e0b43",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "54fd87b",
     "data": "2026-11-21",
     "assunto": "chore(docs): adiciona plano Mapbox × Lalamove V2 com 100 etapas (#127)"
-   },
-   {
-    "sha": "31067eb",
-    "data": "2026-11-21",
-    "assunto": "fix(ci): retry com force-with-lease restrito no push da branch contexto (#137)"
-   },
-   {
-    "sha": "e071c9e",
-    "data": "2026-11-21",
-    "assunto": "feat(mapas): mede carregamento de mapa e corrige atribuição Mapbox ausente (#138)"
    }
   ],
-  "arquivos_mudados_7d": 163,
+  "arquivos_mudados_7d": 165,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 15
+    "mudancas": 20
    },
    {
     "pasta": "package-lock.json",
@@ -152,6 +152,10 @@
     "mudancas": 10
    },
    {
+    "pasta": "docs/MAPBOX.md",
+    "mudancas": 6
+   },
+   {
     "pasta": "src/components/orders",
     "mudancas": 6
    },
@@ -162,10 +166,6 @@
    {
     "pasta": "supabase/functions/lalamove-webhook",
     "mudancas": 6
-   },
-   {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 5
    },
    {
     "pasta": "docs/pendencias/README.md",
@@ -218,12 +218,12 @@
     "mudancas": 8
    },
    {
-    "arquivo": "src/hooks/useRegionResolver.ts",
+    "arquivo": "docs/MAPBOX.md",
     "mudancas": 6
    },
    {
-    "arquivo": "docs/MAPBOX.md",
-    "mudancas": 5
+    "arquivo": "src/hooks/useRegionResolver.ts",
+    "mudancas": 6
    },
    {
     "arquivo": "docs/pendencias/README.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 77
+    "commits": 79
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 947,
-  "arquivos_codigo": 589,
-  "linhas_codigo": 115258,
+  "arquivos_total": 949,
+  "arquivos_codigo": 591,
+  "linhas_codigo": 115487,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 170,
   "cron_jobs": 17,
-  "testes": 107,
+  "testes": 108,
   "workflows": 5,
   "scripts": 105,
   "docs_md": 97
@@ -551,8 +551,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 48,
-   "linhas": 12819
+   "arquivos": 50,
+   "linhas": 13048
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -670,7 +670,7 @@
   }
  ],
  "qualidade": {
-  "any": 84,
+  "any": 85,
   "console_log": 399,
   "ts_ignore": 0,
   "eslint_disable": 1,

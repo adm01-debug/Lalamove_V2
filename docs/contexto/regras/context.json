@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "99e0b43184ba504e4679804302a87bb6cca73382",
+  "sha": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 22:25 UTC",
-  "files_total": 942,
-  "code_files": 772,
-  "code_lines": 133378
+  "generated_at": "2026-11-21 22:50 UTC",
+  "files_total": 944,
+  "code_files": 774,
+  "code_lines": 133607
  },
  "version": "1.3.2",
- "facts_hash": "165f3f47194b5412",
+ "facts_hash": "505fe2eacc2dedb1",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 252,
+   ".ts": 254,
    ".tsx": 226,
    ".sql": 174,
    ".mjs": 107,
@@ -20963,8 +20963,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 48,
-   "lines": 12819,
+   "files": 50,
+   "lines": 13048,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21012,6 +21012,7 @@
     "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
     "telemetry.ts: trackContractUsage",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
+    "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
     "index.ts: DEFAULT_SETTINGS",
     "metering.ts: CACHE_TTL_S, sha256, stableStringify, cacheKey, cacheGet, cachePut",
     "polyline.ts: decodePolyline, encodePolyline, simplify",
@@ -21054,6 +21055,8 @@
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.test.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-gateway/failover.test.ts",
+    "supabase/functions/geo-gateway/failover.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/geo-gateway/mapbox.test.ts",
     "supabase/functions/geo-gateway/metering.ts",
@@ -25629,6 +25632,14 @@
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
     "text": "Add rule factors to reasons"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.ts",
+    "text": "timeout, credencial revogada, rate limit), a requisição morria em 502. Este módulo faz a segunda"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.ts",
+    "text": "* Vale tentar outro provedor? Falha do provedor (5xx), credencial, rate limit e rede/timeout sim. */"
    },
    {
     "file": "supabase/functions/geo-gateway/index.ts",
@@ -36482,6 +36493,30 @@
     "name": "telemetry response shape includes duration and severity"
    },
    {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "primário OK: nenhum fallback é consultado e o provedor é o primário"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "primário 5xx → fallback responde em UMA chamada e o header aponta o fallback"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "primário 5xx sem alternativo usável → erro ORIGINAL sobe"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "entrada inválida NÃO troca de provedor (a falha se repetiria no outro)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "fallback também falha → erro original sobe e a falha do fallback é registrada"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/failover.test.ts",
+    "name": "credencial revogada (GEO_NOT_CONFIGURED) e rate limit entram em failover; erro de rede também"
+   },
+   {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
     "name": "autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway)"
    },
@@ -36560,6 +36595,22 @@
    {
     "file": "supabase/functions/geo-gateway/resolver.test.ts",
     "name": "mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "failoverFor: usa o fallback declarado, ignora o primário e exige usável"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "failoverFor: sem alternativa configurada devolve null (erro original sobe)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "failoverFor: alternativa com orçamento estourado não é usada"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "failoverFor: função sem suporte no Google (isochrone) não aceita o Google"
    },
    {
     "file": "supabase/functions/lalamove-gateway/route.test.ts",
@@ -63845,9 +63896,38 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/geo-gateway/failover.test.ts": {
+   "path": "supabase/functions/geo-gateway/failover.test.ts",
+   "lines": 84,
+   "is_test": true,
+   "tests": [
+    "primário OK: nenhum fallback é consultado e o provedor é o primário",
+    "primário 5xx → fallback responde em UMA chamada e o header aponta o fallback",
+    "primário 5xx sem alternativo usável → erro ORIGINAL sobe",
+    "entrada inválida NÃO troca de provedor (a falha se repetiria no outro)",
+    "fallback também falha → erro original sobe e a falha do fallback é registrada",
+    "credencial revogada (GEO_NOT_CONFIGURED) e rate limit entram em failover; erro de rede também"
+   ]
+  },
+  "supabase/functions/geo-gateway/failover.ts": {
+   "path": "supabase/functions/geo-gateway/failover.ts",
+   "lines": 81,
+   "exports": [
+    "function isFailoverWorthy",
+    "interface FailoverResolver",
+    "interface FailoverDeps",
+    "interface FailoverOutcome",
+    "function callWithFailover"
+   ],
+   "rule_comments": [
+    "timeout, credencial revogada, rate limit), a requisição morria em 502. Este módulo faz a segunda",
+    "* Vale tentar outro provedor? Falha do provedor (5xx), credencial, rate limit e rede/timeout sim. */"
+   ],
+   "doc": "Failover em RUNTIME do geo-gateway. O resolver só troca de provedor quando o primário está INUTILIZÁVEL antes da chamada (sem chave, sem suporte, orçamento bloqueado). Quando o primário está usável mas FALHA na chamada (5xx, timeout, credencial revogada, rate limit), a requisição morria em 502. Este …"
+  },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 202,
+   "lines": 224,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -63991,7 +64071,7 @@
   },
   "supabase/functions/geo-gateway/resolver.test.ts": {
    "path": "supabase/functions/geo-gateway/resolver.test.ts",
-   "lines": 84,
+   "lines": 106,
    "is_test": true,
    "tests": [
     "primário configurado é escolhido; Google sem chave cai para fallback Mapbox",
@@ -64000,12 +64080,16 @@
     "auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável",
     "forced: usa o provedor pedido ou falha sem fallback",
     "rateGuard: bloqueia acima do limite no mesmo minuto e libera no próximo",
-    "mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off"
+    "mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off",
+    "failoverFor: usa o fallback declarado, ignora o primário e exige usável",
+    "failoverFor: sem alternativa configurada devolve null (erro original sobe)",
+    "failoverFor: alternativa com orçamento estourado não é usada",
+    "failoverFor: função sem suporte no Google (isochrone) não aceita o Google"
    ]
   },
   "supabase/functions/geo-gateway/resolver.ts": {
    "path": "supabase/functions/geo-gateway/resolver.ts",
-   "lines": 149,
+   "lines": 169,
    "exports": [
     "interface GeoSettingRow",
     "interface BudgetRow",
@@ -66227,10 +66311,32 @@
   }
  },
  "git": {
-  "sha": "99e0b43184ba504e4679804302a87bb6cca73382",
+  "sha": "339acda1404e0f1a758ac0d4083125c4bcfacca2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "339acda",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat: failover de provedor em runtime no geo-gateway (#175)",
+    "files": [
+     "supabase/functions/geo-gateway/failover.test.ts",
+     "supabase/functions/geo-gateway/failover.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/resolver.test.ts",
+     "supabase/functions/geo-gateway/resolver.ts"
+    ]
+   },
+   {
+    "sha": "fe9865a",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)",
+    "files": [
+     "docs/MAPBOX.md"
+    ]
+   },
    {
     "sha": "99e0b43",
     "date": "2026-11-21",
@@ -66532,38 +66638,28 @@
      "src/lib/__tests__/lalamoveCatalogCities.test.ts",
      "src/lib/lalamoveCatalog.ts"
     ]
-   },
-   {
-    "sha": "04fe256",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(geo): script de cobertura BR do Search Box Mapbox com 50 endereços de amostra (#131)",
-    "files": [
-     "scripts/geo/README.md",
-     "scripts/geo/enderecos.sample.csv",
-     "scripts/geo/searchbox-coverage.ts"
-    ]
-   },
-   {
-    "sha": "2f7add2",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(gateway): religa as telas de Configurações atendendo as ações pelas edges locais (#130)",
-    "files": [
-     "supabase/functions/lalamove-gateway/index.ts",
-     "supabase/functions/lalamove-gateway/route.test.ts",
-     "supabase/functions/lalamove-gateway/route.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
-    5
+    6
    ],
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
+   ],
+   [
+    "supabase/functions/geo-gateway/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/geo-gateway/resolver.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/geo-gateway/resolver.ts",
+    2
    ],
    [
     "src/lib/geo-gateway.test.ts",
@@ -66590,16 +66686,16 @@
     2
    ],
    [
-    "supabase/functions/lalamove-gateway/route.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-gateway/route.ts",
-    2
-   ],
-   [
     "supabase/functions/check-driver-alerts/index.ts",
     2
+   ],
+   [
+    "supabase/functions/geo-gateway/failover.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/geo-gateway/failover.ts",
+    1
    ],
    [
     "src/hooks/useMapbox.ts",
@@ -66607,10 +66703,6 @@
    ],
    [
     "supabase/functions/_shared/schemas.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
     1
    ],
    [
@@ -66623,14 +66715,6 @@
    ],
    [
     "supabase/functions/geo-gateway/providers/types.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.ts",
     1
    ],
    [

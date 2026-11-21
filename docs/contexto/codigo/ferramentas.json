@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (478)",
+   "TypeScript (480)",
    "SQL (174)",
    "JavaScript (112)",
    "Markdown (97)",
@@ -421,7 +421,7 @@
   {
    "arquivo": "docs/MAPBOX.md",
    "titulo": "MAPBOX — Inventário e Referência (21/11/2026)",
-   "linhas": 125
+   "linhas": 134
   },
   {
    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
