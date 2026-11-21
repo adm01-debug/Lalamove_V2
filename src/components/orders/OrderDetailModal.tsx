@@ -67,6 +67,9 @@ const statusConfig: Record<
   CANCELLED: { label: 'Cancelado', variant: 'destructive' },
   REJECTED: { label: 'Rejeitado', variant: 'destructive' },
   EXPIRED: { label: 'Expirado', variant: 'muted' },
+  QUOTED: { label: 'Cotado', variant: 'muted' },
+  ASSIGNING_DRIVER: { label: 'Atribuindo Motorista', variant: 'info' },
+  DELIVERING: { label: 'Entregando', variant: 'warning' },
 };
 
 const vehicleIcons: Record<string, string> = {

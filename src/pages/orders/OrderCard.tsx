@@ -18,6 +18,9 @@ const statusConfig: Record<OrderStatus, { label: string; variant: 'success' | 'w
   CANCELLED: { label: 'Cancelado', variant: 'destructive' },
   REJECTED: { label: 'Rejeitado', variant: 'destructive' },
   EXPIRED: { label: 'Expirado', variant: 'muted' },
+  QUOTED: { label: 'Cotado', variant: 'pending' },
+  ASSIGNING_DRIVER: { label: 'Atribuindo Motorista', variant: 'info' },
+  DELIVERING: { label: 'Entregando', variant: 'live' },
 };
 
 const vehicleIcons: Record<string, string> = {

@@ -56,7 +56,7 @@ async function fetchOrders(page: number, status?: OrderStatusFilter, query?: str
     deliveryAddress: order.delivery_address,
     customerName: order.customer_name,
     customerPhone: order.customer_phone ?? '',
-    scheduledAt: new Date(order.scheduled_at),
+    scheduledAt: order.scheduled_at ? new Date(order.scheduled_at) : new Date(),
     estimatedDelivery: order.estimated_delivery ? new Date(order.estimated_delivery) : undefined,
     actualDelivery: order.actual_delivery ? new Date(order.actual_delivery) : undefined,
     driverId: order.driver_id ?? undefined,

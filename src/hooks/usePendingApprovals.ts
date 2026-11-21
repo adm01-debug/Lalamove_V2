@@ -27,7 +27,7 @@ interface ApprovalDataRow {
   lalamove_orders: {
     id: string; lalamove_id: string; internal_order_id: string | null;
     status: string; pickup_address: string; delivery_address: string;
-    customer_name: string; customer_phone: string | null; scheduled_at: string;
+    customer_name: string; customer_phone: string | null; scheduled_at: string | null;
     estimated_delivery: string | null; vehicle_type: string; total_cost: number;
     currency: string; tags: string[] | null; created_at: string; updated_at: string;
   } | null;

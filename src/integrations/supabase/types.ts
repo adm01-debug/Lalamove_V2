@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.15"
   }
   public: {
     Tables: {
@@ -21,17 +21,28 @@ export type Database = {
           current_longitude: number
           destination_lat: number | null
           destination_lng: number | null
+          distance_to_next_stop_m: number | null
+          distance_to_route_m: number | null
           driver_id: string
           eta_minutes: number | null
+          eta_provider: string | null
+          eta_updated_at: string | null
           expected_route: Json | null
           heading: number | null
           id: string
           is_on_route: boolean | null
           is_stopped: boolean | null
           last_updated: string
+          near_stop_cycles: number
+          next_stop_index: number
+          off_route_cycles: number
           order_id: string
           origin_lat: number | null
           origin_lng: number | null
+          route_computed_at: string | null
+          route_distance_m: number | null
+          route_duration_s: number | null
+          route_provider: string | null
           speed: number | null
           stopped_since: string | null
           tracking_ended_at: string | null
@@ -44,17 +55,28 @@ export type Database = {
           current_longitude: number
           destination_lat?: number | null
           destination_lng?: number | null
+          distance_to_next_stop_m?: number | null
+          distance_to_route_m?: number | null
           driver_id: string
           eta_minutes?: number | null
+          eta_provider?: string | null
+          eta_updated_at?: string | null
           expected_route?: Json | null
           heading?: number | null
           id?: string
           is_on_route?: boolean | null
           is_stopped?: boolean | null
           last_updated?: string
+          near_stop_cycles?: number
+          next_stop_index?: number
+          off_route_cycles?: number
           order_id: string
           origin_lat?: number | null
           origin_lng?: number | null
+          route_computed_at?: string | null
+          route_distance_m?: number | null
+          route_duration_s?: number | null
+          route_provider?: string | null
           speed?: number | null
           stopped_since?: string | null
           tracking_ended_at?: string | null
@@ -67,17 +89,28 @@ export type Database = {
           current_longitude?: number
           destination_lat?: number | null
           destination_lng?: number | null
+          distance_to_next_stop_m?: number | null
+          distance_to_route_m?: number | null
           driver_id?: string
           eta_minutes?: number | null
+          eta_provider?: string | null
+          eta_updated_at?: string | null
           expected_route?: Json | null
           heading?: number | null
           id?: string
           is_on_route?: boolean | null
           is_stopped?: boolean | null
           last_updated?: string
+          near_stop_cycles?: number
+          next_stop_index?: number
+          off_route_cycles?: number
           order_id?: string
           origin_lat?: number | null
           origin_lng?: number | null
+          route_computed_at?: string | null
+          route_distance_m?: number | null
+          route_duration_s?: number | null
+          route_provider?: string | null
           speed?: number | null
           stopped_since?: string | null
           tracking_ended_at?: string | null
@@ -85,6 +118,13 @@ export type Database = {
           tracking_status?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "active_tracking_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
           {
             foreignKeyName: "active_tracking_driver_id_fkey"
             columns: ["driver_id"]
@@ -314,6 +354,13 @@ export type Database = {
             foreignKeyName: "alerts_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
+          {
+            foreignKeyName: "alerts_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -397,6 +444,42 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          action: string
+          changes: Json | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          resource_id: string
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          resource_id: string
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          resource_id?: string
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       auth_logs: {
         Row: {
           created_at: string | null
@@ -478,6 +561,67 @@ export type Database = {
           },
           {
             foreignKeyName: "bitrix24_activities_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_safe_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bitrix24_spa_sync: {
+        Row: {
+          category_id: number | null
+          created_at: string
+          id: string
+          last_error: string | null
+          last_stage: string | null
+          last_synced_at: string | null
+          order_id: string
+          spa_id: number
+          sync_status: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: number | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_stage?: string | null
+          last_synced_at?: string | null
+          order_id: string
+          spa_id: number
+          sync_status?: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: number | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_stage?: string | null
+          last_synced_at?: string | null
+          order_id?: string
+          spa_id?: number
+          sync_status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bitrix24_spa_sync_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "lalamove_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bitrix24_spa_sync_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_operator_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bitrix24_spa_sync_order_id_fkey"
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders_safe_view"
@@ -843,6 +987,13 @@ export type Database = {
             foreignKeyName: "driver_approval_queue_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
+          {
+            foreignKeyName: "driver_approval_queue_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -945,6 +1096,13 @@ export type Database = {
             foreignKeyName: "driver_evaluations_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
+          {
+            foreignKeyName: "driver_evaluations_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -1025,6 +1183,13 @@ export type Database = {
           type?: Database["public"]["Enums"]["incident_type"]
         }
         Relationships: [
+          {
+            foreignKeyName: "driver_incidents_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
           {
             foreignKeyName: "driver_incidents_driver_id_fkey"
             columns: ["driver_id"]
@@ -1310,6 +1475,189 @@ export type Database = {
         }
         Relationships: []
       }
+      geo_budget: {
+        Row: {
+          alert_at_pct: number
+          hard_stop: boolean
+          monthly_limit_usd: number
+          provider: string
+          updated_at: string
+          updated_by: string | null
+          warned_month: string | null
+        }
+        Insert: {
+          alert_at_pct?: number
+          hard_stop?: boolean
+          monthly_limit_usd?: number
+          provider: string
+          updated_at?: string
+          updated_by?: string | null
+          warned_month?: string | null
+        }
+        Update: {
+          alert_at_pct?: number
+          hard_stop?: boolean
+          monthly_limit_usd?: number
+          provider?: string
+          updated_at?: string
+          updated_by?: string | null
+          warned_month?: string | null
+        }
+        Relationships: []
+      }
+      geo_cache: {
+        Row: {
+          created_at: string
+          expires_at: string
+          function: string
+          key: string
+          provider: string
+          response: Json
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          function: string
+          key: string
+          provider: string
+          response: Json
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          function?: string
+          key?: string
+          provider?: string
+          response?: Json
+        }
+        Relationships: []
+      }
+      geo_defaults: {
+        Row: {
+          approach_eta_min: number
+          approach_radius_m: number
+          arrived_radius_m: number
+          id: boolean
+          notify_delivery_contact: boolean
+          off_route_threshold_m: number
+          quiet_hours_end: string
+          quiet_hours_start: string
+          quiet_hours_tz: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          approach_eta_min?: number
+          approach_radius_m?: number
+          arrived_radius_m?: number
+          id?: boolean
+          notify_delivery_contact?: boolean
+          off_route_threshold_m?: number
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          quiet_hours_tz?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          approach_eta_min?: number
+          approach_radius_m?: number
+          arrived_radius_m?: number
+          id?: boolean
+          notify_delivery_contact?: boolean
+          off_route_threshold_m?: number
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          quiet_hours_tz?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      geo_price_list: {
+        Row: {
+          free_quota_month: number
+          note: string | null
+          provider: string
+          sku: string
+          unit_cost_per_1000: number
+          updated_at: string
+        }
+        Insert: {
+          free_quota_month?: number
+          note?: string | null
+          provider: string
+          sku: string
+          unit_cost_per_1000: number
+          updated_at?: string
+        }
+        Update: {
+          free_quota_month?: number
+          note?: string | null
+          provider?: string
+          sku?: string
+          unit_cost_per_1000?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      geo_settings: {
+        Row: {
+          config: Json
+          fallback_provider: string | null
+          function: string
+          provider: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config?: Json
+          fallback_provider?: string | null
+          function: string
+          provider: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config?: Json
+          fallback_provider?: string | null
+          function?: string
+          provider?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      geo_usage: {
+        Row: {
+          count: number
+          day: string
+          est_cost_usd: number
+          function: string
+          provider: string
+          sku: string
+          updated_at: string
+        }
+        Insert: {
+          count?: number
+          day: string
+          est_cost_usd?: number
+          function: string
+          provider: string
+          sku: string
+          updated_at?: string
+        }
+        Update: {
+          count?: number
+          day?: string
+          est_cost_usd?: number
+          function?: string
+          provider?: string
+          sku?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ip_whitelist: {
         Row: {
           added_by: string | null
@@ -1340,6 +1688,66 @@ export type Database = {
           ip_address?: unknown
           is_active?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      job_queue: {
+        Row: {
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          dedup_key: string | null
+          error_message: string | null
+          error_stack: string | null
+          id: string
+          max_attempts: number
+          metadata: Json
+          next_retry_at: string | null
+          payload: Json
+          priority: number
+          started_at: string | null
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          dedup_key?: string | null
+          error_message?: string | null
+          error_stack?: string | null
+          id?: string
+          max_attempts?: number
+          metadata?: Json
+          next_retry_at?: string | null
+          payload: Json
+          priority?: number
+          started_at?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          dedup_key?: string | null
+          error_message?: string | null
+          error_stack?: string | null
+          id?: string
+          max_attempts?: number
+          metadata?: Json
+          next_retry_at?: string | null
+          payload?: Json
+          priority?: number
+          started_at?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1398,6 +1806,8 @@ export type Database = {
       lalamove_orders: {
         Row: {
           actual_delivery: string | null
+          approach_eta_min: number | null
+          approach_radius_m: number | null
           auto_notify_supplier: boolean | null
           bitrix24_deal_id: number | null
           cancellation_notes: string | null
@@ -1412,33 +1822,53 @@ export type Database = {
           customer_phone: string | null
           delay_minutes: number | null
           delivery_address: string
+          delivery_address_components: Json | null
           delivery_latitude: number | null
           delivery_longitude: number | null
+          delivery_place_id: string | null
           department: string | null
           distance_meters: number | null
           driver_id: string | null
+          driver_lalamove_id: string | null
+          driver_name: string | null
+          driver_phone: string | null
+          driver_plate: string | null
           duration_minutes: number | null
           estimated_delivery: string | null
+          geocode_precision: string | null
+          geocode_provider: string | null
           id: string
           internal_notes: string | null
           internal_order_id: string | null
           internal_status: string | null
           is_urgent: boolean | null
           lalamove_id: string
+          lalamove_status: string | null
           metadata: Json | null
+          notify_delivery_contact: boolean | null
           outcome: Database["public"]["Enums"]["delivery_outcome"] | null
           pickup_address: string
+          pickup_address_components: Json | null
+          pickup_contact_name: string | null
+          pickup_contact_phone: string | null
           pickup_latitude: number | null
           pickup_longitude: number | null
+          pickup_place_id: string | null
           pod_received: boolean | null
           priority_fee: number | null
           priority_fee_currency: string | null
           priority_fee_updated_at: string | null
+          quotation_expires_at: string | null
           quotation_id: string | null
+          requires_address_review: boolean
           requires_pod: boolean | null
           route_deviation_threshold_minutes: number | null
-          scheduled_at: string
+          scheduled_at: string | null
+          service_type: string | null
           share_link: string | null
+          source: string | null
+          spa_category_id: number | null
+          spa_id: number | null
           stalled_threshold_minutes: number | null
           status: Database["public"]["Enums"]["order_status"]
           supplier_contact: string | null
@@ -1449,6 +1879,8 @@ export type Database = {
         }
         Insert: {
           actual_delivery?: string | null
+          approach_eta_min?: number | null
+          approach_radius_m?: number | null
           auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
           cancellation_notes?: string | null
@@ -1463,33 +1895,53 @@ export type Database = {
           customer_phone?: string | null
           delay_minutes?: number | null
           delivery_address: string
+          delivery_address_components?: Json | null
           delivery_latitude?: number | null
           delivery_longitude?: number | null
+          delivery_place_id?: string | null
           department?: string | null
           distance_meters?: number | null
           driver_id?: string | null
+          driver_lalamove_id?: string | null
+          driver_name?: string | null
+          driver_phone?: string | null
+          driver_plate?: string | null
           duration_minutes?: number | null
           estimated_delivery?: string | null
+          geocode_precision?: string | null
+          geocode_provider?: string | null
           id?: string
           internal_notes?: string | null
           internal_order_id?: string | null
           internal_status?: string | null
           is_urgent?: boolean | null
           lalamove_id: string
+          lalamove_status?: string | null
           metadata?: Json | null
+          notify_delivery_contact?: boolean | null
           outcome?: Database["public"]["Enums"]["delivery_outcome"] | null
           pickup_address: string
+          pickup_address_components?: Json | null
+          pickup_contact_name?: string | null
+          pickup_contact_phone?: string | null
           pickup_latitude?: number | null
           pickup_longitude?: number | null
+          pickup_place_id?: string | null
           pod_received?: boolean | null
           priority_fee?: number | null
           priority_fee_currency?: string | null
           priority_fee_updated_at?: string | null
+          quotation_expires_at?: string | null
           quotation_id?: string | null
+          requires_address_review?: boolean
           requires_pod?: boolean | null
           route_deviation_threshold_minutes?: number | null
-          scheduled_at?: string
+          scheduled_at?: string | null
+          service_type?: string | null
           share_link?: string | null
+          source?: string | null
+          spa_category_id?: number | null
+          spa_id?: number | null
           stalled_threshold_minutes?: number | null
           status?: Database["public"]["Enums"]["order_status"]
           supplier_contact?: string | null
@@ -1500,6 +1952,8 @@ export type Database = {
         }
         Update: {
           actual_delivery?: string | null
+          approach_eta_min?: number | null
+          approach_radius_m?: number | null
           auto_notify_supplier?: boolean | null
           bitrix24_deal_id?: number | null
           cancellation_notes?: string | null
@@ -1514,33 +1968,53 @@ export type Database = {
           customer_phone?: string | null
           delay_minutes?: number | null
           delivery_address?: string
+          delivery_address_components?: Json | null
           delivery_latitude?: number | null
           delivery_longitude?: number | null
+          delivery_place_id?: string | null
           department?: string | null
           distance_meters?: number | null
           driver_id?: string | null
+          driver_lalamove_id?: string | null
+          driver_name?: string | null
+          driver_phone?: string | null
+          driver_plate?: string | null
           duration_minutes?: number | null
           estimated_delivery?: string | null
+          geocode_precision?: string | null
+          geocode_provider?: string | null
           id?: string
           internal_notes?: string | null
           internal_order_id?: string | null
           internal_status?: string | null
           is_urgent?: boolean | null
           lalamove_id?: string
+          lalamove_status?: string | null
           metadata?: Json | null
+          notify_delivery_contact?: boolean | null
           outcome?: Database["public"]["Enums"]["delivery_outcome"] | null
           pickup_address?: string
+          pickup_address_components?: Json | null
+          pickup_contact_name?: string | null
+          pickup_contact_phone?: string | null
           pickup_latitude?: number | null
           pickup_longitude?: number | null
+          pickup_place_id?: string | null
           pod_received?: boolean | null
           priority_fee?: number | null
           priority_fee_currency?: string | null
           priority_fee_updated_at?: string | null
+          quotation_expires_at?: string | null
           quotation_id?: string | null
+          requires_address_review?: boolean
           requires_pod?: boolean | null
           route_deviation_threshold_minutes?: number | null
-          scheduled_at?: string
+          scheduled_at?: string | null
+          service_type?: string | null
           share_link?: string | null
+          source?: string | null
+          spa_category_id?: number | null
+          spa_id?: number | null
           stalled_threshold_minutes?: number | null
           status?: Database["public"]["Enums"]["order_status"]
           supplier_contact?: string | null
@@ -1550,6 +2024,13 @@ export type Database = {
           vehicle_type?: Database["public"]["Enums"]["vehicle_type"]
         }
         Relationships: [
+          {
+            foreignKeyName: "lalamove_orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
           {
             foreignKeyName: "lalamove_orders_driver_id_fkey"
             columns: ["driver_id"]
@@ -1679,7 +2160,7 @@ export type Database = {
           notes: string | null
           old_status: string | null
           order_id: string
-          status: Database["public"]["Enums"]["order_status"]
+          status: string
         }
         Insert: {
           change_reason?: string | null
@@ -1690,7 +2171,7 @@ export type Database = {
           notes?: string | null
           old_status?: string | null
           order_id: string
-          status: Database["public"]["Enums"]["order_status"]
+          status: string
         }
         Update: {
           change_reason?: string | null
@@ -1701,7 +2182,7 @@ export type Database = {
           notes?: string | null
           old_status?: string | null
           order_id?: string
-          status?: Database["public"]["Enums"]["order_status"]
+          status?: string
         }
         Relationships: [
           {
@@ -1810,53 +2291,65 @@ export type Database = {
       lalamove_stops: {
         Row: {
           address: string
+          address_components: Json | null
           arrived_at: string | null
           completed_at: string | null
           contact_name: string | null
           contact_phone: string | null
           created_at: string
+          geocode_precision: string | null
           id: string
           latitude: number | null
           longitude: number | null
           order_id: string
+          place_id: string | null
           pod_delivered_at: string | null
           pod_image_url: string | null
           pod_status: string | null
           remarks: string | null
+          stop_id: string | null
           stop_index: number
         }
         Insert: {
           address: string
+          address_components?: Json | null
           arrived_at?: string | null
           completed_at?: string | null
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          geocode_precision?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           order_id: string
+          place_id?: string | null
           pod_delivered_at?: string | null
           pod_image_url?: string | null
           pod_status?: string | null
           remarks?: string | null
+          stop_id?: string | null
           stop_index: number
         }
         Update: {
           address?: string
+          address_components?: Json | null
           arrived_at?: string | null
           completed_at?: string | null
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          geocode_precision?: string | null
           id?: string
           latitude?: number | null
           longitude?: number | null
           order_id?: string
+          place_id?: string | null
           pod_delivered_at?: string | null
           pod_image_url?: string | null
           pod_status?: string | null
           remarks?: string | null
+          stop_id?: string | null
           stop_index?: number
         }
         Relationships: [
@@ -1928,6 +2421,42 @@ export type Database = {
           token_obtained_at?: string
           updated_at?: string | null
           user_fid?: string | null
+        }
+        Relationships: []
+      }
+      lalamove_webhook_config: {
+        Row: {
+          created_at: string
+          environment: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          registered_at: string
+          registered_by: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          environment?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          registered_at?: string
+          registered_by?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          registered_at?: string
+          registered_by?: string | null
+          updated_at?: string
+          url?: string
         }
         Relationships: []
       }
@@ -2109,6 +2638,86 @@ export type Database = {
             columns: ["device_id"]
             isOneToOne: false
             referencedRelation: "user_devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_geo_events: {
+        Row: {
+          alert_id: string | null
+          distance_m: number | null
+          driver_lat: number | null
+          driver_lng: number | null
+          eta_min: number | null
+          event_type: Database["public"]["Enums"]["alert_type"]
+          id: string
+          job_id: string | null
+          notification_status: string
+          notified_at: string | null
+          order_id: string
+          payload: Json
+          stop_index: number
+          triggered_at: string
+        }
+        Insert: {
+          alert_id?: string | null
+          distance_m?: number | null
+          driver_lat?: number | null
+          driver_lng?: number | null
+          eta_min?: number | null
+          event_type: Database["public"]["Enums"]["alert_type"]
+          id?: string
+          job_id?: string | null
+          notification_status?: string
+          notified_at?: string | null
+          order_id: string
+          payload?: Json
+          stop_index?: number
+          triggered_at?: string
+        }
+        Update: {
+          alert_id?: string | null
+          distance_m?: number | null
+          driver_lat?: number | null
+          driver_lng?: number | null
+          eta_min?: number | null
+          event_type?: Database["public"]["Enums"]["alert_type"]
+          id?: string
+          job_id?: string | null
+          notification_status?: string
+          notified_at?: string | null
+          order_id?: string
+          payload?: Json
+          stop_index?: number
+          triggered_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_geo_events_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_geo_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "lalamove_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_geo_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_operator_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_geo_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders_safe_view"
             referencedColumns: ["id"]
           },
         ]
@@ -2829,6 +3438,123 @@ export type Database = {
         }
         Relationships: []
       }
+      tracking_events_y2026m11: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2026m12: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
+      tracking_events_y2027m01: {
+        Row: {
+          created_at: string
+          driver_id: string | null
+          event_type: string | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          order_id: string | null
+          speed: number | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string | null
+          event_type?: string | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          order_id?: string | null
+          speed?: number | null
+        }
+        Relationships: []
+      }
       user_devices: {
         Row: {
           browser: string | null
@@ -3026,6 +3752,57 @@ export type Database = {
       }
     }
     Views: {
+      cache_status: {
+        Row: {
+          is_stale: boolean | null
+          last_refresh: string | null
+          refresh_duration_ms: number | null
+          row_count: number | null
+          status: string | null
+          view_name: string | null
+        }
+        Relationships: []
+      }
+      delivery_metrics_cache: {
+        Row: {
+          avg_delay_minutes: number | null
+          avg_value: number | null
+          cached_at: string | null
+          cancelled_orders: number | null
+          completed_orders: number | null
+          delivery_date: string | null
+          failed_orders: number | null
+          in_progress_orders: number | null
+          max_value: number | null
+          total_orders: number | null
+          total_value: number | null
+        }
+        Relationships: []
+      }
+      driver_stats_cache: {
+        Row: {
+          avg_rating: number | null
+          cached_at: string | null
+          cancelled_deliveries: number | null
+          completed_deliveries: number | null
+          driver_created_at: string | null
+          driver_id: string | null
+          driver_name: string | null
+          driver_status: Database["public"]["Enums"]["driver_status"] | null
+          failed_deliveries: number | null
+          is_blacklisted: boolean | null
+          is_whitelisted: boolean | null
+          lalamove_driver_id: string | null
+          last_active_at: string | null
+          last_delivery_at: string | null
+          phone: string | null
+          risk_level: string | null
+          risk_score: number | null
+          total_deliveries: number | null
+          vehicle_type: Database["public"]["Enums"]["vehicle_type"] | null
+        }
+        Relationships: []
+      }
       drivers_safe_view: {
         Row: {
           avg_delay_minutes: number | null
@@ -3128,6 +3905,27 @@ export type Database = {
           vehicle_plate?: string | null
           vehicle_type?: Database["public"]["Enums"]["vehicle_type"] | null
           whitelisted?: boolean | null
+        }
+        Relationships: []
+      }
+      geo_usage_month: {
+        Row: {
+          count: number | null
+          est_cost_usd: number | null
+          function: string | null
+          provider: string | null
+          sku: string | null
+        }
+        Relationships: []
+      }
+      hourly_metrics_cache: {
+        Row: {
+          avg_value: number | null
+          cached_at: string | null
+          completed_orders: number | null
+          hour: string | null
+          total_orders: number | null
+          total_value: number | null
         }
         Relationships: []
       }
@@ -3247,6 +4045,13 @@ export type Database = {
           vehicle_type?: Database["public"]["Enums"]["vehicle_type"] | null
         }
         Relationships: [
+          {
+            foreignKeyName: "lalamove_orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
           {
             foreignKeyName: "lalamove_orders_driver_id_fkey"
             columns: ["driver_id"]
@@ -3383,6 +4188,13 @@ export type Database = {
             foreignKeyName: "lalamove_orders_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
+            referencedRelation: "driver_stats_cache"
+            referencedColumns: ["driver_id"]
+          },
+          {
+            foreignKeyName: "lalamove_orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
             referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
@@ -3395,80 +4207,22 @@ export type Database = {
           },
         ]
       }
-      cache_status: {
-        Row: {
-          is_stale: boolean | null
-          last_refresh: string | null
-          refresh_duration_ms: number | null
-          row_count: number | null
-          status: string | null
-          view_name: string | null
-        }
-        Insert: never
-        Update: never
-        Relationships: []
-      }
-      delivery_metrics_cache: {
-        Row: {
-          avg_delay_minutes: number | null
-          avg_value: number | null
-          cached_at: string | null
-          cancelled_orders: number | null
-          completed_orders: number | null
-          delivery_date: string | null
-          failed_orders: number | null
-          in_progress_orders: number | null
-          max_value: number | null
-          total_orders: number | null
-          total_value: number | null
-        }
-        Insert: never
-        Update: never
-        Relationships: []
-      }
-      driver_stats_cache: {
-        Row: {
-          avg_rating: number | null
-          cached_at: string | null
-          cancelled_deliveries: number | null
-          completed_deliveries: number | null
-          driver_created_at: string | null
-          driver_id: string | null
-          driver_name: string | null
-          driver_status: string | null
-          failed_deliveries: number | null
-          is_blacklisted: boolean | null
-          is_whitelisted: boolean | null
-          lalamove_driver_id: string | null
-          last_active_at: string | null
-          last_delivery_at: string | null
-          phone: string | null
-          risk_level: string | null
-          risk_score: number | null
-          total_deliveries: number | null
-          vehicle_type: string | null
-        }
-        Insert: never
-        Update: never
-        Relationships: []
-      }
-      hourly_metrics_cache: {
-        Row: {
-          avg_value: number | null
-          cached_at: string | null
-          completed_orders: number | null
-          hour: string | null
-          total_orders: number | null
-          total_value: number | null
-        }
-        Insert: never
-        Update: never
-        Relationships: []
-      }
     }
     Functions: {
       acknowledge_alert: { Args: { p_alert_id: string }; Returns: boolean }
+      add_job: {
+        Args: {
+          p_dedup_key?: string
+          p_max_attempts?: number
+          p_metadata?: Json
+          p_payload: Json
+          p_priority?: number
+          p_type: string
+        }
+        Returns: string
+      }
       can_run_db_diagnostics: { Args: { _user_id: string }; Returns: boolean }
+      cancel_job: { Args: { p_job_id: string }; Returns: boolean }
       check_login_lockout: {
         Args: { p_email: string }
         Returns: {
@@ -3508,6 +4262,7 @@ export type Database = {
         Returns: Json
       }
       cleanup_old_cron_logs: { Args: never; Returns: number }
+      cleanup_old_jobs: { Args: { p_days_old?: number }; Returns: number }
       cleanup_old_login_attempts: { Args: never; Returns: number }
       cleanup_old_observability_logs: {
         Args: {
@@ -3520,19 +4275,75 @@ export type Database = {
         Args: { p_retention_days?: number }
         Returns: number
       }
-      refresh_cache_view: {
-        Args: { p_view_name?: string }
-        Returns: {
-          duration_ms: number | null
-          row_count: number | null
-          status: string | null
-          view_refreshed: string | null
-        }[]
-      }
       clear_login_attempts: { Args: { p_email: string }; Returns: undefined }
+      create_audit_log: {
+        Args: {
+          p_action: string
+          p_changes?: Json
+          p_resource_id: string
+          p_resource_type: string
+        }
+        Returns: undefined
+      }
       ensure_tracking_events_partition: {
         Args: { p_month: string }
         Returns: string
+      }
+      geo_budget_status: {
+        Args: never
+        Returns: {
+          blocked: boolean
+          limit_usd: number
+          pct: number
+          provider: string
+          spent_usd: number
+          warn: boolean
+        }[]
+      }
+      geo_emit_event: {
+        Args: {
+          p_distance_m: number
+          p_driver_id: string
+          p_enqueue: boolean
+          p_eta_min: number
+          p_event: Database["public"]["Enums"]["alert_type"]
+          p_lat: number
+          p_lng: number
+          p_message: string
+          p_metadata: Json
+          p_order_id: string
+          p_stop_index: number
+          p_title: string
+        }
+        Returns: string
+      }
+      geo_haversine_m: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
+      geo_point_to_polyline_m: {
+        Args: { plat: number; plng: number; polyline: Json }
+        Returns: number
+      }
+      geo_point_to_segment_m: {
+        Args: {
+          alat: number
+          alng: number
+          blat: number
+          blng: number
+          plat: number
+          plng: number
+        }
+        Returns: number
+      }
+      geo_usage_increment: {
+        Args: {
+          p_count?: number
+          p_function: string
+          p_provider: string
+          p_sku: string
+        }
+        Returns: undefined
       }
       get_active_uapi_token: {
         Args: never
@@ -3571,6 +4382,34 @@ export type Database = {
           runs_considered: number
           schedule: string
         }[]
+      }
+      get_next_jobs: {
+        Args: { p_limit?: number; p_types?: string[] }
+        Returns: {
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          dedup_key: string | null
+          error_message: string | null
+          error_stack: string | null
+          id: string
+          max_attempts: number
+          metadata: Json
+          next_retry_at: string | null
+          payload: Json
+          priority: number
+          started_at: string | null
+          status: string
+          type: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "job_queue"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       get_pending_escalations: {
         Args: never
@@ -3633,9 +4472,34 @@ export type Database = {
           user_id: string
         }[]
       }
+      mark_job_completed: {
+        Args: { p_job_id: string; p_result?: Json }
+        Returns: boolean
+      }
+      mark_job_failed: {
+        Args: {
+          p_error_message: string
+          p_error_stack?: string
+          p_job_id: string
+        }
+        Returns: boolean
+      }
+      mark_job_processing: { Args: { p_job_id: string }; Returns: boolean }
+      mcp_exec: { Args: { max_rows?: number; sql: string }; Returns: Json }
+      mcp_exec_many: {
+        Args: { max_rows?: number; statements: string[] }
+        Returns: Json
+      }
       mcp_introspect: {
         Args: { p_operation: string; p_params?: Json }
         Returns: Json
+      }
+      process_job_queue: {
+        Args: { p_limit?: number }
+        Returns: {
+          processed: number
+          requeued: number
+        }[]
       }
       provision_tracking_partitions: { Args: never; Returns: Json }
       prune_tracking_events_partitions: {
@@ -3657,6 +4521,22 @@ export type Database = {
           is_locked: boolean
           is_suspicious: boolean
           lockout_seconds: number
+        }[]
+      }
+      refresh_cache_view: {
+        Args: { p_view_name?: string }
+        Returns: {
+          duration_ms: number
+          row_count: number
+          status: string
+          view_refreshed: string
+        }[]
+      }
+      refresh_geo_jobs: {
+        Args: never
+        Returns: {
+          enqueued_eta: number
+          enqueued_route: number
         }[]
       }
       rollup_contract_version_usage: {
@@ -3682,6 +4562,14 @@ export type Database = {
         | "APPROVAL_REQUIRED"
         | "ORDER_CANCELLED"
         | "INTEGRATION_FAILURE"
+        | "DRIVER_APPROACHING_PICKUP"
+        | "DRIVER_ARRIVED_PICKUP"
+        | "DRIVER_APPROACHING_DELIVERY"
+        | "DRIVER_ARRIVED_DELIVERY"
+        | "ETA_DELAY"
+        | "SUPPLIER_DELAY_NOTICE"
+        | "MISSING_POD"
+        | "GEO_BUDGET_WARNING"
       app_role: "admin" | "manager" | "operator" | "viewer"
       approval_priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT" | "CRITICAL"
       approval_status: "PENDING" | "APPROVED" | "REJECTED"
@@ -3716,6 +4604,9 @@ export type Database = {
         | "CANCELLED"
         | "REJECTED"
         | "EXPIRED"
+        | "QUOTED"
+        | "ASSIGNING_DRIVER"
+        | "DELIVERING"
       vehicle_type: "MOTORCYCLE" | "CAR" | "VAN" | "TRUCK"
     }
     CompositeTypes: {
@@ -3732,12 +4623,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -3761,11 +4652,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -3786,11 +4677,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -3811,11 +4702,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -3828,11 +4719,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -3853,6 +4744,14 @@ export const Constants = {
         "APPROVAL_REQUIRED",
         "ORDER_CANCELLED",
         "INTEGRATION_FAILURE",
+        "DRIVER_APPROACHING_PICKUP",
+        "DRIVER_ARRIVED_PICKUP",
+        "DRIVER_APPROACHING_DELIVERY",
+        "DRIVER_ARRIVED_DELIVERY",
+        "ETA_DELAY",
+        "SUPPLIER_DELAY_NOTICE",
+        "MISSING_POD",
+        "GEO_BUDGET_WARNING",
       ],
       app_role: ["admin", "manager", "operator", "viewer"],
       approval_priority: ["LOW", "MEDIUM", "HIGH", "URGENT", "CRITICAL"],
@@ -3891,6 +4790,9 @@ export const Constants = {
         "CANCELLED",
         "REJECTED",
         "EXPIRED",
+        "QUOTED",
+        "ASSIGNING_DRIVER",
+        "DELIVERING",
       ],
       vehicle_type: ["MOTORCYCLE", "CAR", "VAN", "TRUCK"],
     },

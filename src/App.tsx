@@ -44,6 +44,7 @@ const WebhooksPage = lazy(() => import('./pages/WebhooksPage').then(m => ({ defa
 const Bitrix24Page = lazy(() => import('./pages/Bitrix24Page'));
 const UAPISettingsPage = lazy(() => import('./pages/UAPISettingsPage'));
 const LalamoveSettingsPage = lazy(() => import('./pages/LalamoveSettingsPage'));
+const MapsSettingsPage = lazy(() => import('./pages/MapsSettingsPage'));
 const AlertConfigurationsPage = lazy(() => import('./pages/AlertConfigurationsPage').then(m => ({ default: m.AlertConfigurationsPage })));
 const NotificationHistoryPage = lazy(() => import('./pages/NotificationHistoryPage').then(m => ({ default: m.NotificationHistoryPage })));
 const DeliveryMetricsPage = lazy(() => import('./pages/DeliveryMetricsPage').then(m => ({ default: m.DeliveryMetricsPage })));
@@ -189,6 +190,7 @@ const AppContent = () => {
                       <Route path="/bitrix24" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><Bitrix24Page /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings/uapi" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings/lalamove" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/settings/maps" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><MapsSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports/advanced" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AdvancedReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />

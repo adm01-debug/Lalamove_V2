@@ -70,6 +70,7 @@ export const menuCategories: MenuCategory[] = [
       { id: 'webhooks', path: '/webhooks', label: 'Webhooks', icon: Webhook },
       { id: 'bitrix24', path: '/bitrix24', label: 'Bitrix24', icon: Briefcase },
       { id: 'lalamove', path: '/settings/lalamove', label: 'Lalamove API', icon: Zap },
+      { id: 'maps-providers', path: '/settings/maps', label: 'Provedores de Mapa', icon: Map },
       { id: 'external-data', path: '/external-data', label: 'Base CRM', icon: Database },
     ]
   },
