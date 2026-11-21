@@ -134,14 +134,17 @@ serve(async (req) => {
       return result;
     };
 
-    // Ad-hoc recipient supplied by the caller (e.g. check-driver-alerts
-    // notifying a specific order's supplier_contact). Independent of
-    // alert_configurations, since this recipient varies per request and
-    // has no reason to live in a static per-type config row.
-    const metadataContact = typeof metadata?.contact === 'string' ? metadata.contact : undefined;
-    const metadataChannel = typeof metadata?.channel === 'string' ? metadata.channel : undefined;
-    if (metadataContact && metadataChannel) {
-      await dispatch(metadataChannel, metadataContact);
+    // Ad-hoc recipients supplied by the caller (e.g. the geo-foundation
+    // trigger notifying an order's pickup/delivery contact, or
+    // check-driver-alerts notifying a supplier). Independent of
+    // alert_configurations, since these recipients vary per request and
+    // have no reason to live in a static per-type config row.
+    // Contract: metadata.recipients = [{ channel: string, to: string, ... }]
+    const metadataRecipients = Array.isArray(metadata?.recipients) ? metadata.recipients : [];
+    for (const r of metadataRecipients) {
+      if (r && typeof r === 'object' && typeof (r as Record<string, unknown>).channel === 'string' && typeof (r as Record<string, unknown>).to === 'string') {
+        await dispatch((r as { channel: string }).channel, (r as { to: string }).to);
+      }
     }
 
     // Get alert configurations for this type

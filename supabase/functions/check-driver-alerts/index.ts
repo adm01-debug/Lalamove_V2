@@ -164,7 +164,7 @@ serve(async (req) => {
                   title: 'Aviso de Atraso Guardian',
                   message: `[Guardian] Olá, o motorista ${driverName} está parado há ${stoppedMinutes}min próximo à região de coleta/entrega. Pedido: ${orderIdDisplay}.`,
                   order_id: order.id,
-                  metadata: { contact: order.supplier_contact, channel: 'whatsapp' }
+                  metadata: { recipients: [{ role: 'supplier', channel: 'whatsapp', to: order.supplier_contact }] }
                 }
               });
             }
