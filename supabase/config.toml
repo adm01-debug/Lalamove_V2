@@ -78,8 +78,13 @@ verify_jwt = true
 [functions.bitrix24-sync]
 verify_jwt = true
 
-# geo-gateway: camada única de acesso a provedores de mapa (Mapbox/Google) — lê geo_settings, mede
-# custo em geo_usage e usa o token Mapbox de servidor. Sem auth qualquer caller gastaria a cota paga.
-# O front chama via supabase.functions.invoke() (JWT da sessão); edges internas usam service_role.
+# mapbox-proxy: proxy legado da API Mapbox. verify_jwt=true é o default do
+# Supabase, declarado aqui explicitamente para tornar a intenção visível.
+# Será removido quando geo-gateway absorver todas as actions (plano Mapbox etapa 61).
+[functions.mapbox-proxy]
+verify_jwt = true
+
+# geo-gateway: camada de abstração para Google Maps e Mapbox — roteamento por
+# função com base em geo_settings, cache, medição de custo e rate limiting.
 [functions.geo-gateway]
 verify_jwt = true
