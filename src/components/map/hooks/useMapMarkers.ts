@@ -14,6 +14,24 @@ import {
 } from '../markerFactories';
 import type { TrackingData } from './useTrackingData';
 
+/**
+ * `active_tracking.expected_route` é `jsonb`: chega como `[{lat,lng},...]` quando o job
+ * `route_plan` já rodou, mas pode ser `null` ou qualquer JSON. Devolve a polyline só
+ * quando há pelo menos 2 pontos numéricos válidos.
+ */
+export function parseExpectedRoute(value: unknown): Array<{ lat: number; lng: number }> | null {
+  if (!Array.isArray(value) || value.length < 2) return null;
+  const points: Array<{ lat: number; lng: number }> = [];
+  for (const item of value) {
+    if (!item || typeof item !== 'object') return null;
+    const { lat, lng } = item as { lat?: unknown; lng?: unknown };
+    if (typeof lat !== 'number' || typeof lng !== 'number') return null;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    points.push({ lat, lng });
+  }
+  return points;
+}
+
 interface UseMapMarkersParams {
   /** Ref da instância ativa do Mapbox. Pode conter `null` durante remount. */
   mapRef: React.MutableRefObject<mapboxgl.Map | null>;
@@ -208,45 +226,44 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
             [tracking.current_longitude, tracking.current_latitude],
             [tracking.order.delivery_longitude, tracking.order.delivery_latitude],
           ];
-          getDirections(waypoints, 'driving-traffic')
-            .then((route) => {
-              if (!mapRef.current || !mapRef.current.isStyleLoaded() || mapRef.current.getSource(sourceId)) return;
-              const routeGeometry = route?.geometry || { type: 'LineString', coordinates: waypoints };
-              mapRef.current.addSource(sourceId, {
-                type: 'geojson',
-                data: { type: 'Feature', properties: {}, geometry: routeGeometry as GeoJSON.Geometry },
-              });
-              mapRef.current.addLayer({
-                id: sourceId,
-                type: 'line',
-                source: sourceId,
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                  'line-color': color,
-                  'line-width': isSelected ? 6 : 4,
-                  'line-opacity': isOtherInFocus ? 0.05 : 0.7,
-                },
-              });
-            })
-            .catch(() => {
-              if (!mapRef.current?.isStyleLoaded() || mapRef.current?.getSource(sourceId)) return;
-              mapRef.current?.addSource(sourceId, {
-                type: 'geojson',
-                data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: waypoints } },
-              });
-              mapRef.current?.addLayer({
-                id: sourceId,
-                type: 'line',
-                source: sourceId,
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                  'line-color': color,
-                  'line-width': 3,
-                  'line-opacity': isOtherInFocus ? 0.05 : 0.6,
-                  'line-dasharray': [2, 2],
-                },
-              });
+          // Rota planejada servidor-side (job `route_plan`): zero Directions no browser.
+          const planned = parseExpectedRoute(tracking.expected_route);
+          const plannedGeometry = planned
+            ? {
+                type: 'LineString' as const,
+                coordinates: planned.map((p) => [p.lng, p.lat] as [number, number]),
+              }
+            : null;
+
+          const paintFor = (dashed: boolean) => ({
+            'line-color': color,
+            'line-width': isSelected ? 6 : 4,
+            'line-opacity': isOtherInFocus ? 0.05 : 0.7,
+            ...(dashed ? { 'line-dasharray': [2, 2] as [number, number] } : {}),
+          });
+
+          const renderRoute = (geometry: GeoJSON.Geometry, dashed = false) => {
+            if (!mapRef.current || !mapRef.current.isStyleLoaded() || mapRef.current.getSource(sourceId)) return;
+            mapRef.current.addSource(sourceId, {
+              type: 'geojson',
+              data: { type: 'Feature', properties: {}, geometry },
             });
+            mapRef.current.addLayer({
+              id: sourceId,
+              type: 'line',
+              source: sourceId,
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: paintFor(dashed),
+            });
+          };
+
+          if (plannedGeometry) {
+            renderRoute(plannedGeometry);
+          } else {
+            getDirections(waypoints, 'driving-traffic')
+              .then((route) => renderRoute((route?.geometry as GeoJSON.Geometry) || { type: 'LineString', coordinates: waypoints }))
+              .catch(() => renderRoute({ type: 'LineString', coordinates: waypoints }, true));
+          }
         }
       } else if (routeLines.current.has(tracking.id) && map.getLayer(`route-${tracking.id}`)) {
         map.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
