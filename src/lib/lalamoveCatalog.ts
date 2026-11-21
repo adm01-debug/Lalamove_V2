@@ -51,7 +51,8 @@ export const SERVICE_CATALOG: Readonly<Record<LalamoveServiceType, ServiceSpec>>
     maxWeightKg: 20,
     dimensionsM: { length: 0.3, width: 0.4, height: 0.3 },
     acceptsItem: false,
-    cities: ['BR BHZ', 'BR CWB', 'BR RIO', 'BR SAO'],
+    // Conferido contra GET /v3/cities em 2026-11-21: BHZ e CWB nao oferecem.
+    cities: ['BR RIO', 'BR SAO'],
   },
   CAR: {
     label: 'Carro',
@@ -86,14 +87,16 @@ export const SERVICE_CATALOG: Readonly<Record<LalamoveServiceType, ServiceSpec>>
     maxWeightKg: 500,
     dimensionsM: { length: 1.8, width: 1.3, height: 1.1 },
     acceptsItem: true,
-    cities: ['BR BHZ', 'BR CWB', 'BR FOR', 'BR POA', 'BR RIO', 'BR SAO', 'BR GYN', 'BR FLN', 'BR RAO', 'BR SSA'],
+    // Conferido contra GET /v3/cities em 2026-11-21 (inclui BSB e MAO).
+    cities: ['BR BHZ', 'BR BSB', 'BR CWB', 'BR FLN', 'BR FOR', 'BR GYN', 'BR MAO', 'BR POA', 'BR RAO', 'BR RIO', 'BR SAO', 'BR SSA'],
   },
   UV_4H: {
     label: 'Fiorino 4h',
     maxWeightKg: 500,
     dimensionsM: { length: 1.8, width: 1.3, height: 1.1 },
     acceptsItem: false,
-    cities: ['BR BHZ', 'BR CWB', 'BR FOR', 'BR POA', 'BR RIO', 'BR SAO', 'BR GYN', 'BR FLN', 'BR RAO', 'BR SSA'],
+    // Conferido contra GET /v3/cities em 2026-11-21: so 4 cidades.
+    cities: ['BR BHZ', 'BR BSB', 'BR RIO', 'BR SAO'],
   },
   VAN: {
     label: 'Van',
@@ -251,4 +254,28 @@ export function validateItemWeight(serviceType: LalamoveServiceType, weight: str
   return ranges.includes(weight)
     ? null
     : `Peso "${weight}" inválido para ${serviceType}. Use: ${ranges.join(', ')}.`;
+}
+
+/**
+ * Servicos realmente disponiveis numa cidade (`cities: null` = todas).
+ *
+ * A Lalamove rejeita com 422 `ERR_INVALID_FIELD` qualquer `serviceType` que a
+ * cidade de coleta nao ofereca — ex.: Curitiba aceita apenas CAR, HATCHBACK,
+ * LALAGO, TRUCK330, UV_FIORINO e VAN. Use isto para filtrar o seletor de
+ * veiculo em vez de oferecer os 14 servicos em todas as pracas.
+ */
+export function servicesForCity(city: LalamoveCityCode): LalamoveServiceType[] {
+  return (SERVICE_TYPES as readonly LalamoveServiceType[]).filter(service => {
+    const spec = SERVICE_CATALOG[service];
+    return spec.cities === null || spec.cities.includes(city);
+  });
+}
+
+/** `true` quando a cidade oferece o servico (ou o servico e nacional). */
+export function serviceAvailableInCity(
+  service: LalamoveServiceType,
+  city: LalamoveCityCode,
+): boolean {
+  const spec = SERVICE_CATALOG[service];
+  return spec.cities === null || spec.cities.includes(city);
 }
