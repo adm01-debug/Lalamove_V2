@@ -40,7 +40,9 @@ jobs:
         # Sem nome = todas as functions de supabase/functions/.
         # O CLI le supabase/config.toml e aplica o verify_jwt por function,
         # entao as flags declaradas la valem no deploy.
-        run: supabase functions deploy --project-ref "$PROJECT_REF"
+        # --yes: CLI 3.x pede confirmacao para deploy em producao e em CI
+        # nao ha terminal (run #2 falhou sem implantar nada).
+        run: supabase functions deploy --yes --project-ref "$PROJECT_REF"
 
       - name: List deployed functions
         run: supabase functions list --project-ref "$PROJECT_REF"
