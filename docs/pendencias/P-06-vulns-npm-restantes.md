@@ -1,25 +1,29 @@
 ﻿# P-06 · Vulns npm restantes após PR #91
 
-**Status:** AGUARDANDO HUMANO (fix exige bump major com `--force` — decisão do dono)
+**Status:** CONCLUÍDO (PR #99 mergeada 2026-11-21 — 0 vulns restantes)
 **Origem:** PR #91 resolveu 14 vulns (zod, undici, brace-expansion); restaram outras
 
-## Evidência (npm audit em main, 2026-11-21)
-Restam **4 vulns moderate, 0 high, 0 critical**. Todas exigem `--force` com bump major:
-| Pacote | Severidade | Tipo | Fix disponível | Major? |
-|---|---|---|---|---|
-| react-router-dom | moderate | direto | 7.18.6 | SIM (6→7) |
-| react-router | moderate | transitivo | via react-router-dom 7.18.6 | SIM |
-| @tailwindcss/typography | moderate | direto | 0.5.4 | SIM |
-| postcss-selector-parser | moderate | transitivo | via @tailwindcss/typography 0.5.4 | SIM |
+## Resolução (PR #99, commit f1218b2)
+Dono aprovou o bump major (item 2 dos próximos passos). Executado com diff mínimo:
 
-As 7 PRs dependabot que estavam paradas por `startup_failure` do GitHub já foram MERGEADAS
-(#70-#77, CI verde). O `startup_failure` cedeu.
+| Pacote | Antes | Depois | Como |
+|---|---|---|---|
+| react-router-dom | 6.30.6 | **7.18.6** | bump direto — v7 re-exporta todos os símbolos usados (BrowserRouter, Routes, Route, Link, Navigate, Outlet, useLocation, useNavigate, useSearchParams, 28 arquivos); React 18 satisfaz o peer. Zero mudança de código. |
+| react-router | 6.30.6 (transitivo) | 7.18.6 | via react-router-dom |
+| postcss-selector-parser | 6.0.10 (transitivo do typography) | **6.1.5** | `overrides` no package.json — evita o downgrade de @tailwindcss/typography para 0.5.4 que o `audit fix --force` sugeria |
+| @tailwindcss/typography | 0.5.20 | 0.5.20 (mantido) | fix do transitivo, sem tocar o direto |
 
-## Pendência
-- **Decisão do dono (bump major)**: react-router 6→7 é breaking para rotas/guards existentes
-  (`src/App.tsx`, `ProtectedRoute`); @tailwindcss/typography 0.5.4 pode alterar estilos de markdown.
-  O goal proíbe mudar comportamento de funcionalidade existente (seção 10) — por isso o item
-  fica AGUARDANDO HUMANO, não executado.
+## Evidência real
+- `npm audit` pós-fix: **found 0 vulnerabilities**
+- `npm run build`: ✓ built in 2.13s
+- `npm run lint`: 0 errors (532 warnings pré-existentes)
+- CI da PR #99: 9/9 verde (incl. Deno Contract Tests, E2E, Vercel)
+- Push pós-merge main `f1218b2`: CI/CD success
+- Deploy produção: READY/PROMOTED em `f1218b2` (Vercel dpl_GcAfuAvVghe9R6zJtP1uUcaJQk84), site HTTP 200
+
+## Histórico
+- 2026-11-21: 4 vulns moderate (0 high) exigiam `--force` + bump major → AGUARDANDO HUMANO (goal seção 10).
+- As 7 PRs dependabot paradas por `startup_failure` já foram MERGEADAS (#70-#77, CI verde).
 
 ## Regra 8
 - Merge de PRs dependabot tocando package.json/lockfile exige CI verde (não é DDL; é dependência — validar antes).
