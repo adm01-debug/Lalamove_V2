@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Activity, DollarSign, Download, Layers, MapPin, ShieldAlert, TrendingUp, Zap, Loader2 } from 'lucide-react';
+import { ArrowLeft, Activity, DollarSign, Download, Layers, MapPin, ShieldAlert, Timer, TrendingUp, Zap, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
@@ -22,6 +22,7 @@ import {
   useGeoProviderHealth,
   useGeoProviderStatus,
   useGeoUsageMonth,
+  useGeoLatency,
   useUpdateGeoBudget,
   useUpdateGeoSetting,
   type GeoBudgetRow,
@@ -153,6 +154,7 @@ export default function MapsSettingsPage() {
   const budgetStatus = useGeoBudgetStatus();
   const priceList = useGeoPriceList();
   const usage = useGeoUsageMonth();
+  const latency = useGeoLatency(24);
   const updateSetting = useUpdateGeoSetting();
   const updateBudget = useUpdateGeoBudget();
   const health = useGeoProviderHealth();
@@ -160,6 +162,9 @@ export default function MapsSettingsPage() {
   /** Etapa 71/paridade: o gateway informa quem está realmente implementado (Google ainda não). */
   const googleImplemented =
     status.data?.providers?.find((p) => p.provider === 'google')?.implemented ?? false;
+
+  /** Etapa 80: linhas de latência já ordenadas pelo hook. */
+  const latencyRows = latency.data ?? [];
 
   const settingsByFunction = useMemo(() => {
     const map = new Map<GeoFunction, { provider: string; fallback: string | null }>();
@@ -727,6 +732,54 @@ export default function MapsSettingsPage() {
               ))}
             </TableBody>
           </Table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Timer className="w-4 h-4" /> Latência por provedor e função (24 h)
+          </CardTitle>
+          <CardDescription>
+            p50 e p95 reais de cada chamada que sai do gateway, por provedor e por função. Amostra mínima de 1 chamada.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {latency.isLoading ? (
+            <Skeleton className="h-48 w-full" />
+          ) : latencyRows.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma chamada medida nas últimas 24 h. O painel começa a mostrar dados após o primeiro uso do mapa,
+              autocomplete ou rota.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Provedor</TableHead>
+                  <TableHead>Função</TableHead>
+                  <TableHead className="text-right">Chamadas</TableHead>
+                  <TableHead className="text-right">p50</TableHead>
+                  <TableHead className="text-right">p95</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {latencyRows.map((row) => (
+                  <TableRow key={`${row.provider}-${row.function}`}>
+                    <TableCell className="font-medium capitalize">{row.provider}</TableCell>
+                    <TableCell>{FUNCTION_LABEL[row.function as GeoFunction]?.label ?? row.function}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.samples}</TableCell>
+                    <TableCell className="text-right tabular-nums">{row.p50} ms</TableCell>
+                    <TableCell className="text-right tabular-nums">
+                      <Badge variant={row.p95 >= 3000 ? 'destructive' : row.p95 >= 1000 ? 'outline' : 'secondary'}>
+                        {row.p95} ms
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 

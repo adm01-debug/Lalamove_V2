@@ -133,6 +133,73 @@ export function useGeoUsageMonth() {
   });
 }
 
+export interface GeoLatencyRow {
+  provider: string;
+  function: string;
+  samples: number;
+  p50: number;
+  p95: number;
+}
+
+function percentile(sortedAsc: number[], p: number): number {
+  if (sortedAsc.length === 0) return 0;
+  const rank = (p / 100) * (sortedAsc.length - 1);
+  const low = Math.floor(rank);
+  const high = Math.ceil(rank);
+  if (low === high) return sortedAsc[low];
+  const weight = rank - low;
+  return sortedAsc[low] * (1 - weight) + sortedAsc[high] * weight;
+}
+
+/** Agrega linhas de `query_telemetry` em p50/p95 por provedor e função. */
+export function aggregateGeoLatency(
+  rows: { operation: string | null; rpc_name: string | null; duration_ms: number | null }[],
+): GeoLatencyRow[] {
+  const groups = new Map<string, { provider: string; fn: string; durations: number[] }>();
+  for (const row of rows) {
+    if (row.duration_ms == null || !row.operation?.startsWith('geo:')) continue;
+    const provider = row.operation.slice(4);
+    const fn = row.rpc_name ?? '—';
+    const key = `${provider}|${fn}`;
+    const g = groups.get(key) ?? { provider, fn, durations: [] };
+    g.durations.push(row.duration_ms);
+    groups.set(key, g);
+  }
+
+  return Array.from(groups.values())
+    .map((g) => {
+      const sorted = [...g.durations].sort((a, b) => a - b);
+      return {
+        provider: g.provider,
+        function: g.fn,
+        samples: sorted.length,
+        p50: Math.round(percentile(sorted, 50)),
+        p95: Math.round(percentile(sorted, 95)),
+      };
+    })
+    .sort((a, b) => a.provider.localeCompare(b.provider) || a.function.localeCompare(b.function));
+}
+
+/** Etapa 80 — latência p50/p95 por provedor e função, a partir de `query_telemetry`. */
+export function useGeoLatency(hours = 24) {
+  return useQuery<GeoLatencyRow[]>({
+    queryKey: ['geo', 'latency', hours],
+    queryFn: async () => {
+      const since = new Date(Date.now() - hours * 3_600_000).toISOString();
+      const { data, error } = await supabase
+        .from('query_telemetry')
+        .select('operation, rpc_name, duration_ms')
+        .eq('table_name', 'geo_gateway')
+        .gte('created_at', since)
+        .limit(10_000);
+      if (error) throw error;
+      return aggregateGeoLatency(data ?? []);
+    },
+    refetchInterval: 120_000,
+    retry: false,
+  });
+}
+
 interface UpdateSettingArgs {
   function: GeoFunction;
   provider: GeoSettingProvider;

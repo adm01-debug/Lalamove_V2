@@ -18,7 +18,7 @@ import type { GeoFunction, GeoProvider, ProviderName, ProviderResult } from "./p
 import { callWithFailover } from "./failover.ts";
 import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
-import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, registerSession } from "./metering.ts";
+import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, recordLatency, registerSession } from "./metering.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -236,6 +236,7 @@ Deno.serve(async (req) => {
     }
 
     // ── chamada ao provedor (com failover em runtime) ──────────────────────
+    const providerT0 = Date.now();
     const outcome = await callWithFailover(fn, name, {
       resolver,
       getProvider,
@@ -258,6 +259,9 @@ Deno.serve(async (req) => {
     // primário ficaria inalcançável e poderia servir resposta de um provedor para outro.
     const writeKey = usedProvider === name ? key : (ttl > 0 ? await cacheKey(usedProvider, fn, cacheable) : null);
     if (writeKey) await cachePut(db, writeKey, usedProvider, fn, result.data, ttl);
+    // Etapa 80: latência p50/p95 por provedor e função (best-effort, não bloqueia).
+    // Mede a tentativa inteira (inclui o tempo gasto no primário antes do failover).
+    await recordLatency(db, usedProvider, fn, Date.now() - providerT0);
     if (result.downgraded) headers["X-Geo-Downgraded"] = result.downgraded;
     headers["X-Geo-Sku"] = result.sku;
     headers["X-Geo-Cache"] = key ? "MISS" : "BYPASS";
