@@ -15,6 +15,7 @@ Ler quando precisar saber onde fica algo antes de buscar por texto.
 | Contratos de API e webhooks | `docs/API_CONTRACTS.md`, `docs/API_REFERENCE.md`, `docs/WEBHOOK_HANDLER.md`, `docs/LALAMOVE_API_V3.md` |
 | Fila, cache, logs, screening, cron | `docs/JOB_QUEUE_SYSTEM.md`, `docs/QUEUE_SYSTEM.md`, `docs/CACHE_SYSTEM.md`, `docs/LOGGING_AND_HEALTH.md`, `docs/SCREENING_SYSTEM.md`, `docs/CRON_JOBS.md` |
 | Decisões registradas | `docs/adr/001-rls-first-architecture.md`, `docs/adr/002-driver-locations-partitioning.md` |
+| Camada de mapas (Google Maps × Mapbox): análise, planos de 100 etapas, decisões D1–D12/M1–M10 | `docs/planos/README.md`, `docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md`, `docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md`, `docs/planos/PLANO_MAPBOX_100_ETAPAS.md`, `docs/MAPBOX.md` |
 | Histórico | `CHANGELOG.md`, `docs/LALAMOVE_MASTER_ANALYSIS.md`, `docs/LALAMOVE_SCORECARD.md`, os `lalamove_*.md/html/docx/pdf` da raiz — contexto, **não** fonte de verdade |
 
 Nenhum desses docs é gerado por script: todos foram escritos à mão em sessões anteriores e **podem estar
