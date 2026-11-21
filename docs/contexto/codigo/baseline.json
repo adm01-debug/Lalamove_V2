@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "4c030383e14a369615089f3a890ab6f458ce6d8a",
+  "commit": "f1218b2bfda7fd6c940f2a527fa87b8456192987",
   "branch": "main",
-  "data_commit": "2026-11-21T08:48:57-03:00",
+  "data_commit": "2026-11-21T09:19:16-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f1218b2",
+    "data": "2026-11-21",
+    "assunto": "fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)"
+   },
    {
     "sha": "4c03038",
     "data": "2026-11-21",
@@ -126,22 +131,17 @@
     "sha": "d0fa636",
     "data": "2026-11-08",
     "assunto": "fix(ui): contraste WCAG em dark mode e badges tinted"
-   },
-   {
-    "sha": "92a5411",
-    "data": "2026-11-08",
-    "assunto": "fix(banco): habilita Realtime nas 4 tabelas de segurança"
    }
   ],
   "arquivos_mudados_7d": 48,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "pasta": "package.json",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
@@ -199,11 +199,11 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "package-lock.json",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "arquivo": "package.json",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 20
+    "commits": 21
    },
    {
     "autor": "dependabot[bot]",

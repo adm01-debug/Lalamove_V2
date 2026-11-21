@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `4c030383e14a369615089f3a890ab6f458ce6d8a` (2026-11-21T08:48:57-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `f1218b2bfda7fd6c940f2a527fa87b8456192987` (2026-11-21T09:19:16-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -265,13 +265,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6505 nós · 14323 arestas · 499 comunidades · grafo do commit `4c030383`
-- comunidades maiores: cn (206), button.tsx (114), react (107), lucide-react (103), snapshot.py (102), ref_node_path (86), dependencies (80), @tanstack/react-query (79), gerar.mjs (76), client.ts (74), generate.py (73), UserPreferencesPage.tsx (72)
+- 6506 nós · 14324 arestas · 508 comunidades · grafo do commit `f1218b2b`
+- comunidades maiores: cn (179), button.tsx (122), client.ts (110), snapshot.py (102), ref_node_path (85), dependencies (80), gerar.mjs (76), Badge (73), DriversPage.tsx (72), useRealtimeSubscriptions.ts (70), DashboardRedesigned.tsx (67), seed-database.ts (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- package-lock.json (29)
-- package.json (29)
+- package-lock.json (30)
+- package.json (30)
 - supabase/config.toml (11)
 - .github/workflows/ci.yml (7)
 - src/hooks/useRegionResolver.ts (5)
@@ -351,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `f1218b2` fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)
 - 2026-11-21 `4c03038` chore: registra P-11 MFA descartado e consolida README do backlog (#98)
 - 2026-11-21 `75b7bef` chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)
 - 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
@@ -365,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `cbc45da` build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)
 - 2026-11-20 `a6e36fe` build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)
 - 2026-11-20 `bb236d9` build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)
-- 2026-11-20 `1bf53fb` build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
