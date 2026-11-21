@@ -1,6 +1,6 @@
 ﻿# P-03 · Chat em tempo real Cliente-Motorista (auditoria 5.2)
 
-**Status:** Pendente (não implementado)
+**Status:** ADIADO PARA V3 (decisão do dono 2026-11-21) — a V3 será concorrente do Lalamove; a V2 atual é parceira
 **Origem:** docs/audit_report.md seção 5, item 5.2 (P2)
 
 ## O que a auditoria pede
@@ -13,5 +13,6 @@ Chat em tempo real entre cliente e motorista.
 ## Impacto no negócio
 - Sem canal de comunicação em tempo real, cliente e motorista dependem de telefone externo.
 
-## Decisão
-- Confirmar com o dono se chat em tempo real é requisito atual. Se sim, é feature nova (front + tabela com RLS + realtime), projeto de escopo médio — planejar em fatia própria.
+## Decisão (2026-11-21, dono)
+- **ADIADO para a V3.** A V3 será concorrente do Lalamove (plataforma própria de motoristas); a V2 atual é parceira. No escopo V2 este item NÃO será executado.
+- Escopo definido para quando abrir a V3: chat em tempo real cliente↔motorista via Supabase Realtime (front + tabela de mensagens com RLS + publicação realtime). **Depende do P-02** (sem o motorista no app, o chat não faz sentido).
