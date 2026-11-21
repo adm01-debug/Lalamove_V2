@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Activity, DollarSign, Layers, MapPin, ShieldAlert, TrendingUp, Zap, Loader2 } from 'lucide-react';
+import { ArrowLeft, Activity, DollarSign, Download, Layers, MapPin, ShieldAlert, TrendingUp, Zap, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import {
+  Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis,
+} from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -150,6 +153,55 @@ export default function MapsSettingsPage() {
       },
       onError: (err) => toast.error(`Falha no teste: ${(err as Error).message}`),
     });
+  };
+
+  /**
+   * Etapa 68: uso por função com as séries dos dois provedores, a franquia
+   * gratuita do SKU principal e o custo estimado do mês.
+   */
+  const usageByFunction = useMemo(() => {
+    const quotaBySku = new Map<string, number>();
+    for (const row of priceList.data ?? []) {
+      if (row.free_quota_month) quotaBySku.set(`${row.provider}|${row.sku}`, row.free_quota_month);
+    }
+    const rows = new Map<
+      string,
+      { function: string; label: string; mapbox: number; google: number; quota: number; cost: number }
+    >();
+    for (const row of usage.data ?? []) {
+      const key = row.function;
+      if (!rows.has(key)) {
+        rows.set(key, {
+          function: key,
+          label: FUNCTION_LABEL[key as GeoFunction]?.label ?? key,
+          mapbox: 0,
+          google: 0,
+          quota: 0,
+          cost: 0,
+        });
+      }
+      const entry = rows.get(key)!;
+      if (row.provider === 'mapbox') entry.mapbox += Number(row.count ?? 0);
+      if (row.provider === 'google') entry.google += Number(row.count ?? 0);
+      entry.quota = Math.max(entry.quota, quotaBySku.get(`${row.provider}|${row.sku}`) ?? 0);
+      entry.cost += Number(row.est_cost_usd ?? 0);
+    }
+    return [...rows.values()].sort((a, b) => b.mapbox + b.google - (a.mapbox + a.google));
+  }, [usage.data, priceList.data]);
+
+  const exportUsageCsv = () => {
+    const header = ['funcao', 'rotulo', 'mapbox_chamadas', 'google_chamadas', 'franquia_gratis', 'custo_estimado_usd'];
+    const lines = usageByFunction.map((row) =>
+      [row.function, row.label, row.mapbox, row.google, row.quota, row.cost.toFixed(4)].join(';'),
+    );
+    const csv = [header.join(';'), ...lines].join('\n');
+    const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `geo-uso-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -397,6 +449,87 @@ export default function MapsSettingsPage() {
                 ))}
               </TableBody>
             </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Painel de uso lado a lado (etapa 68) */}
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between gap-3">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <TrendingUp className="w-4 h-4" /> Uso lado a lado: Google × Mapbox
+            </CardTitle>
+            <CardDescription>
+              Chamadas do mês por função, com a franquia gratuita do item e o custo estimado.
+            </CardDescription>
+          </div>
+          <Button size="sm" variant="outline" onClick={exportUsageCsv} disabled={usageByFunction.length === 0}>
+            <Download className="w-3.5 h-3.5 mr-1" /> Exportar CSV
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {usage.isLoading ? (
+            <Skeleton className="h-64 w-full" />
+          ) : usageByFunction.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-8 text-center">
+              Nenhuma chamada registrada neste mês — o gráfico aparece no primeiro uso real do mapa ou do endereço.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={usageByFunction} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" interval={0} angle={-15} textAnchor="end" height={60} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
+                    <RechartsTooltip
+                      contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                      formatter={(value, name) => [Number(value ?? 0).toLocaleString('pt-BR'), String(name)]}
+                    />
+                    <Legend />
+                    <Bar dataKey="mapbox" fill="hsl(var(--primary))" name="Mapbox" radius={[3, 3, 0, 0]} />
+                    <Bar dataKey="google" fill="hsl(var(--chart-2, var(--primary)))" name="Google" radius={[3, 3, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Função</TableHead>
+                    <TableHead className="text-right">Mapbox</TableHead>
+                    <TableHead className="text-right">Google</TableHead>
+                    <TableHead className="text-right">Franquia grátis</TableHead>
+                    <TableHead className="text-right">% da franquia</TableHead>
+                    <TableHead className="text-right">Custo estimado</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {usageByFunction.map((row) => {
+                    const total = row.mapbox + row.google;
+                    const pct = row.quota > 0 ? (total / row.quota) * 100 : null;
+                    return (
+                      <TableRow key={row.function}>
+                        <TableCell>{row.label}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.mapbox.toLocaleString('pt-BR')}</TableCell>
+                        <TableCell className="text-right tabular-nums">{row.google.toLocaleString('pt-BR')}</TableCell>
+                        <TableCell className="text-right tabular-nums">
+                          {row.quota > 0 ? row.quota.toLocaleString('pt-BR') : '—'}
+                        </TableCell>
+                        <TableCell
+                          className={`text-right tabular-nums ${
+                            pct !== null && pct >= 100 ? 'text-destructive font-semibold' : pct !== null && pct >= 80 ? 'text-amber-500' : ''
+                          }`}
+                        >
+                          {pct === null ? '—' : `${pct.toFixed(1)}%`}
+                        </TableCell>
+                        <TableCell className="text-right tabular-nums">{fmtMoney(row.cost)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
