@@ -105,21 +105,6 @@ serve(async (req) => {
       }
     }
 
-    // Get alert configurations for this type
-    const { data: configs } = await supabase
-      .from('alert_configurations')
-      .select('*')
-      .eq('alert_type', type)
-      .eq('is_enabled', true);
-
-    if (!configs || configs.length === 0) {
-      logger.log(`[Notification] No active configurations for: ${type}`);
-      return new Response(
-        JSON.stringify({ success: true, message: 'No notification channels configured' }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     const results: Array<{ channel: string; success: boolean; error?: string }> = [];
 
     // Dispatch a single channel to a single recipient, logging the outcome.
@@ -148,6 +133,37 @@ serve(async (req) => {
       await recordNotificationLog(supabase, alert_id, channel, recipient, result.success, result.error);
       return result;
     };
+
+    // Ad-hoc recipient supplied by the caller (e.g. check-driver-alerts
+    // notifying a specific order's supplier_contact). Independent of
+    // alert_configurations, since this recipient varies per request and
+    // has no reason to live in a static per-type config row.
+    const metadataContact = typeof metadata?.contact === 'string' ? metadata.contact : undefined;
+    const metadataChannel = typeof metadata?.channel === 'string' ? metadata.channel : undefined;
+    if (metadataContact && metadataChannel) {
+      await dispatch(metadataChannel, metadataContact);
+    }
+
+    // Get alert configurations for this type
+    const { data: configs, error: configsError } = await supabase
+      .from('alert_configurations')
+      .select('*')
+      .eq('alert_type', type)
+      .eq('is_enabled', true);
+
+    if (configsError) {
+      logger.error(`[Notification] Failed to load alert_configurations for ${type}:`, configsError);
+    }
+
+    if (!configs || configs.length === 0) {
+      logger.log(`[Notification] No active configurations for: ${type}`);
+      const successCount = results.filter(r => r.success).length;
+      const failCount = results.filter(r => !r.success).length;
+      return new Response(
+        JSON.stringify({ success: true, message: 'No notification channels configured', results, summary: { sent: successCount, failed: failCount } }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     for (const config of configs) {
       const cfg = config as {
