@@ -1,4 +1,4 @@
-﻿# Regras de negócio (resumo para executar pendências)
+# Regras de negócio (resumo para executar pendências)
 
 > Compilado da Fase 0. Fonte autoritativa: docs/agentes/regras-dominio.md e docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md.
 
@@ -18,7 +18,9 @@
 
 ## Alertas
 - check-driver-alerts gera, escalate-alerts escala, send-notification entrega (WhatsApp/e-mail/Slack/Bitrix24/n8n). Canal novo = secret novo na edge, nunca VITE_*.
-- Alerta novo sem entrada em alert_configurations nasce sem como ser desligado.
+- Alerta novo sem entrada em alert_configurations nasce sem como ser desligado nem escalado. Toda configuracao nasce com escalation_enabled=false e sem canais: escalonamento so depois de destinatario preenchido.
+- get_pending_escalations() so enfileira alertas com menos de 24h e com canal+destinatario configurado. Sem isso, ligar uma configuracao despeja o backlog historico de uma vez ou reenfileira o mesmo alerta para sempre.
+- Escalonamento depende de EVOLUTION_API_KEY / RESEND_API_KEY / SLACK_WEBHOOK_URL nas secrets da edge. Sem secret, config ligada nao entrega.
 
 ## Rastreamento
 - GPS em tracking_events particionada por mês (pg_cron: provision dia 1 00:05, prune dia 2 00:20, retenção 6 meses).
