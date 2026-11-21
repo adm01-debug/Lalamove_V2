@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `023202f673` · branch `main` · 2026-11-21 22:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `99e0b43184` · branch `main` · 2026-11-21 22:25 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -646,11 +646,11 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `FeatureCollection` | escreve | `src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
 | `type` | `GET_VERSION` | compara, escreve | `public/sw.js`<br>`src/hooks/useServiceWorker.ts` |
 | `type` | `INTEGRATION_FAILURE` | escreve | `supabase/functions/lalamove-gateway/index.ts`<br>`supabase/functions/lalamove-token-refresh/index.ts`<br>`supabase/functions/rotate-tokens/index.ts` |
-| `type` | `LineString` | escreve | `src/components/map/hooks/useMapMarkers.ts` |
+| `type` | `LineString` | escreve | `src/components/map/hooks/useMapMarkers.ts`<br>`src/hooks/useMapbox.ts` |
 | `type` | `MISSING_POD` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `MOTORCYCLE` | compara | `src/components/map/MapLegend.tsx` |
 | `type` | `Moto` | compara | `src/pages/reports/ReportDistributionTab.tsx` |
-| `type` | `Point` | compara, escreve | `src/components/orders/AddressAutocomplete.tsx`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/pages/HeatmapPage.tsx` |
+| `type` | `Point` | compara, escreve | `src/components/orders/AddressAutocomplete.tsx`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
 | `type` | `Polygon` | escreve | `src/components/map/LiveMap.tsx`<br>`src/components/map/mapLayers.ts`<br>`src/hooks/useMapbox.ts` |
 | `type` | `ROUTE_DEVIATION` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `SKIP_WAITING` | compara, escreve | `public/sw.js`<br>`src/hooks/useServiceWorker.ts` |
@@ -1228,6 +1228,7 @@ _nenhum item encontrado_
 | `MAX_RECENT` | `10` | `src/hooks/useGlobalSearch.ts` |
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useLalamoveUapi.ts` |
+| `ATTRIBUTION` | `'© Mapbox © OpenStreetMap'` | `src/hooks/useMapbox.ts` |
 | `DB_VERSION` | `1` | `src/hooks/useOfflineStorage.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useRecentOrders.ts` |
 | `PRECISION` | `3` | `src/hooks/useRegionResolver.ts` |
@@ -1611,6 +1612,7 @@ _nenhum item encontrado_
 | Factor ID não encontrado | `src/hooks/useMFA.ts` |
 | Nenhum fator MFA verificado | `src/hooks/useMFA.ts` |
 | User not authenticated | `src/hooks/useMapSettings.ts` |
+| Rota precisa de pelo menos 2 coordenadas | `src/hooks/useMapbox.ts` |
 | Erro ao aprovar:  | `src/hooks/usePasswordResetActions.ts` |
 | Erro ao rejeitar:  | `src/hooks/usePasswordResetActions.ts` |
 | Esta solicitação expirou e não pode mais ser aprovada. | `src/hooks/usePasswordResetActions.ts` |
@@ -1708,8 +1710,7 @@ _nenhum item encontrado_
 | Falha ao reprocessar webhook | `src/pages/WebhooksPage.tsx` |
 | Body JSON inválido | `src/pages/lalamove/LalamoveV3Explorer.tsx` |
 | Erro na chamada V3 | `src/pages/lalamove/LalamoveV3Explorer.tsx` |
-| Mínimo 2 coordenadas | `src/pages/map-tools/MapMatchingTab.tsx` |
-| … +77 linhas — lista completa em `context.json` | |
+| … +78 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1742,7 +1743,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (822 testes em 68 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (832 testes em 68 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1772,9 +1773,11 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
+| `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
+| `supabase/functions/geo-gateway/mapbox.test.ts` | 10 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
@@ -1787,18 +1790,17 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
 | `src/hooks/__tests__/useLoginLockout.test.ts` | 8 | useLoginLockout · deve mapear checkLockout corretamente · deve retornar fallback no erro de checkLockout · deve mapear recordFailedAttempt corretamente … |
 | `src/lib/phone.test.ts` | 8 | validateBrazilianPhone — casos válidos · aceita %s (nacional cru) · aceita 55 sem + como código do país · validateBrazilianPhone — rejeições … |
-| `supabase/functions/geo-gateway/mapbox.test.ts` | 8 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
 | `scripts/db-audit/catalog-from-types.test.mjs` | 7 | catalogoDeTypes le tabelas, views, funcoes e enums do schema public · catalogoDeTypes para no export const Constants (nao reabre Enums) · catalogoDeTypes ignora campos internos (Row/Args/Returns) como objetos · catalogoDeTypes devolve a forma esperada pelo supabase-usage-guard … |
 | `scripts/db-audit/psql-safe.test.mjs` | 7 | forwards flags/args to psql without the connection string in argv · propagates psql stdin (heredoc), stdout and stderr, and its exit code · propagates a non-zero psql exit code unchanged · derives PGHOST/PGPORT/PGUSER/PGDATABASE/PGPASSFILE from DESTINO_URL and never leaks DESTINO_URL to the child … |
 | `src/components/map/hooks/__tests__/useTrackingData.test.ts` | 7 | useTrackingData · faz o fetch inicial e popula trackingData/allTrackingData · filtra por tipo de veículo · filtra por status STOPPED … |
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
+| `supabase/functions/geo-gateway/resolver.test.ts` | 7 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/components/map/hooks/__tests__/useMapboxToken.test.ts` | 6 | useMapboxToken · retorna o token quando a edge function responde com sucesso · falha silenciosamente (mapbox é opcional) quando a edge function retorna erro · define erro específico quando o token está ausente na resposta … |
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
-| `supabase/functions/geo-gateway/resolver.test.ts` | 6 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 5 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
 | `src/hooks/useGeoSearch.test.tsx` | 5 | useAddressSearchBox · busca sugestões com action autocomplete e session_token · isError fica true quando a busca de sugestões falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão … |
@@ -1808,7 +1810,6 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
-| `src/lib/geo-gateway.test.ts` | 4 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |
 | `src/hooks/__tests__/useCronJobsHealth.test.ts` | 3 | useCronJobsHealth · deve retornar a saúde dos jobs de cron · deve propagar erro quando a RPC falha (ex.: sem permissão de admin) |

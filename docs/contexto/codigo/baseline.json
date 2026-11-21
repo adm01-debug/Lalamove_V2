@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "023202f673c20e8aed463fa14f963bd0fedffbe8",
+  "commit": "99e0b43184ba504e4679804302a87bb6cca73382",
   "branch": "main",
-  "data_commit": "2026-11-21T19:19:43-03:00",
+  "data_commit": "2026-11-21T19:25:05-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "99e0b43",
+    "data": "2026-11-21",
+    "assunto": "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)"
+   },
+   {
+    "sha": "658445d",
+    "data": "2026-11-21",
+    "assunto": "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)"
+   },
    {
     "sha": "023202f",
     "data": "2026-11-21",
@@ -121,20 +131,14 @@
     "sha": "e071c9e",
     "data": "2026-11-21",
     "assunto": "feat(mapas): mede carregamento de mapa e corrige atribuição Mapbox ausente (#138)"
-   },
-   {
-    "sha": "3dd51e4",
-    "data": "2026-11-21",
-    "assunto": "fix: send-notification despacha destinatários ad-hoc em metadata.recipients (#132)"
-   },
-   {
-    "sha": "4a4ebfc",
-    "data": "2026-11-21",
-    "assunto": "chore(docs): inventário Mapbox e secrets no .env.example (#135)"
    }
   ],
-  "arquivos_mudados_7d": 160,
+  "arquivos_mudados_7d": 163,
   "pastas_mais_mudadas_30d": [
+   {
+    "pasta": "supabase/functions/geo-gateway",
+    "mudancas": 15
+   },
    {
     "pasta": "package-lock.json",
     "mudancas": 14
@@ -148,11 +152,11 @@
     "mudancas": 10
    },
    {
-    "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 9
+    "pasta": "src/components/orders",
+    "mudancas": 6
    },
    {
-    "pasta": "src/components/orders",
+    "pasta": "supabase/config.toml",
     "mudancas": 6
    },
    {
@@ -160,11 +164,11 @@
     "mudancas": 6
    },
    {
-    "pasta": "docs/pendencias/README.md",
+    "pasta": "docs/MAPBOX.md",
     "mudancas": 5
    },
    {
-    "pasta": "supabase/config.toml",
+    "pasta": "docs/pendencias/README.md",
     "mudancas": 5
    },
    {
@@ -173,10 +177,6 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 4
-   },
-   {
-    "pasta": "docs/MAPBOX.md",
     "mudancas": 4
    },
    {
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 14
+    "mudancas": 15
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
@@ -220,6 +220,10 @@
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 6
+   },
+   {
+    "arquivo": "docs/MAPBOX.md",
+    "mudancas": 5
    },
    {
     "arquivo": "docs/pendencias/README.md",
@@ -243,10 +247,6 @@
    },
    {
     "arquivo": "AGENTS.md",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "docs/MAPBOX.md",
     "mudancas": 4
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 75
+    "commits": 77
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 946,
+  "arquivos_total": 947,
   "arquivos_codigo": 589,
-  "linhas_codigo": 114880,
+  "linhas_codigo": 115258,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -327,7 +327,7 @@
   "testes": 107,
   "workflows": 5,
   "scripts": 105,
-  "docs_md": 96
+  "docs_md": 97
  },
  "por_pasta": {
   "e2e/helpers": {
@@ -512,7 +512,7 @@
   },
   "src/hooks": {
    "arquivos": 105,
-   "linhas": 17579
+   "linhas": 17739
   },
   "src/i18n": {
    "arquivos": 1,
@@ -524,7 +524,7 @@
   },
   "src/lib": {
    "arquivos": 35,
-   "linhas": 3374
+   "linhas": 3495
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -552,7 +552,7 @@
   },
   "supabase/functions": {
    "arquivos": 48,
-   "linhas": 12722
+   "linhas": 12819
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -653,6 +653,10 @@
    "linhas": 476
   },
   {
+   "arquivo": "src/hooks/useMapbox.ts",
+   "linhas": 472
+  },
+  {
    "arquivo": "src/components/ui/contextual-hints.tsx",
    "linhas": 468
   },
@@ -663,10 +667,6 @@
   {
    "arquivo": "src/pages/WebhooksPage.tsx",
    "linhas": 465
-  },
-  {
-   "arquivo": "scripts/qa/medir-tipografia.cjs",
-   "linhas": 457
   }
  ],
  "qualidade": {
@@ -727,6 +727,7 @@
    "escalate-alerts",
    "external-db-bridge",
    "lalamove-token-refresh",
+   "mapbox-proxy",
    "rotate-tokens",
    "seed-fix-rls"
   ],

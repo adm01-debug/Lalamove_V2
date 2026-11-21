@@ -188,7 +188,6 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
-    "mapbox-proxy",
     "route-analyzer"
    ],
    "canais_realtime": [
@@ -937,7 +936,6 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
-    "mapbox-proxy",
     "route-analyzer"
    ],
    "canais_realtime": [
@@ -1681,7 +1679,6 @@
    "edges": [
     "geo-gateway",
     "get-mapbox-token",
-    "mapbox-proxy",
     "simulate-driver-movement"
    ],
    "canais_realtime": [
@@ -1777,7 +1774,6 @@
    "edges": [
     "geo-gateway",
     "get-mapbox-token",
-    "mapbox-proxy",
     "simulate-driver-movement"
    ],
    "canais_realtime": [
@@ -1838,7 +1834,7 @@
    "tabelas": [],
    "rpcs": [],
    "edges": [
-    "mapbox-proxy"
+    "geo-gateway"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -2088,8 +2084,7 @@
     "external-companies",
     "geo-gateway",
     "lalamove-api",
-    "lalamove-uapi",
-    "mapbox-proxy"
+    "lalamove-uapi"
    ],
    "canais_realtime": [],
    "flags": [],
@@ -3634,7 +3629,6 @@
     "lalamove-api",
     "lalamove-gateway",
     "lalamove-uapi",
-    "mapbox-proxy",
     "route-analyzer",
     "simulate-driver-movement",
     "test-notification"

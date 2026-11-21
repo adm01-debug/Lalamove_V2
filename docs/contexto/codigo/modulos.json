@@ -330,7 +330,6 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-gateway",
-    "mapbox-proxy",
     "route-analyzer"
    ],
    "tabelas": [
@@ -772,7 +771,6 @@
     "lalamove-api",
     "lalamove-gateway",
     "lalamove-uapi",
-    "mapbox-proxy",
     "route-analyzer",
     "simulate-driver-movement",
     "test-notification"
@@ -931,8 +929,7 @@
    ],
    "edges": [
     "geo-gateway",
-    "get-mapbox-token",
-    "mapbox-proxy"
+    "get-mapbox-token"
    ],
    "tabelas": [
     "active_tracking",
@@ -1085,8 +1082,7 @@
     "external-companies",
     "geo-gateway",
     "lalamove-api",
-    "lalamove-uapi",
-    "mapbox-proxy"
+    "lalamove-uapi"
    ],
    "tabelas": [
     "contacts",
@@ -1404,7 +1400,7 @@
    "modulo": "functions",
    "arquivos": 40,
    "testes": 8,
-   "linhas": 11201,
+   "linhas": 11247,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1585,7 +1581,7 @@
    "modulo": "hooks",
    "arquivos": 84,
    "testes": 1,
-   "linhas": 14754,
+   "linhas": 14914,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2010,7 +2006,6 @@
     "lalamove-api",
     "lalamove-gateway",
     "lalamove-uapi",
-    "mapbox-proxy",
     "new-device-alert",
     "route-analyzer",
     "simulate-driver-movement",
@@ -2132,7 +2127,6 @@
      "geo-gateway",
      "get-mapbox-token",
      "lalamove-uapi",
-     "mapbox-proxy",
      "new-device-alert",
      "test-notification"
     ],
@@ -2758,7 +2752,6 @@
     "lalamove-api",
     "lalamove-gateway",
     "lalamove-uapi",
-    "mapbox-proxy",
     "route-analyzer",
     "simulate-driver-movement",
     "test-notification"
@@ -3373,7 +3366,7 @@
    ],
    "hooks_definidos": [],
    "edges": [
-    "mapbox-proxy"
+    "geo-gateway"
    ],
    "tabelas": [],
    "rpcs": [],

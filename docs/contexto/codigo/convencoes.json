@@ -40,7 +40,7 @@
    "src/components/layout/sidebar-config.ts"
   ],
   "docs": [
-   "docs (30)",
+   "docs (31)",
    "(raiz) (9)",
    ".github (1)"
   ]
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)",
+   "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)",
    "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)",
    "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)",
-   "feat(mapas): tela de provedores de mapa em /settings/maps (#168)",
-   "fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)",
-   "feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)"
+   "feat(mapas): tela de provedores de mapa em /settings/maps (#168)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

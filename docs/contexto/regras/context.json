@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "023202f673c20e8aed463fa14f963bd0fedffbe8",
+  "sha": "99e0b43184ba504e4679804302a87bb6cca73382",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 22:20 UTC",
-  "files_total": 941,
+  "generated_at": "2026-11-21 22:25 UTC",
+  "files_total": 942,
   "code_files": 772,
-  "code_lines": 133000
+  "code_lines": 133378
  },
  "version": "1.3.2",
- "facts_hash": "1f317ccf4728c87b",
+ "facts_hash": "165f3f47194b5412",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -16691,7 +16691,6 @@
      "geo-gateway",
      "get-mapbox-token",
      "lalamove-gateway",
-     "mapbox-proxy",
      "route-analyzer"
     ],
     "rpc_transitive": [
@@ -16868,8 +16867,7 @@
     ],
     "invokes_transitive": [
      "geo-gateway",
-     "get-mapbox-token",
-     "mapbox-proxy"
+     "get-mapbox-token"
     ],
     "rpc_transitive": [],
     "deps_count": 39
@@ -16889,7 +16887,7 @@
     "component": "MapToolsPage",
     "tables_transitive": [],
     "invokes_transitive": [
-     "mapbox-proxy"
+     "geo-gateway"
     ],
     "rpc_transitive": [],
     "deps_count": 19
@@ -16960,8 +16958,7 @@
      "external-companies",
      "geo-gateway",
      "lalamove-api",
-     "lalamove-uapi",
-     "mapbox-proxy"
+     "lalamove-uapi"
     ],
     "rpc_transitive": [],
     "deps_count": 58
@@ -20363,7 +20360,7 @@
   {
    "module": "src/hooks",
    "files": 105,
-   "lines": 17579,
+   "lines": 17739,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -20612,7 +20609,7 @@
   {
    "module": "src/lib",
    "files": 35,
-   "lines": 3374,
+   "lines": 3495,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -20648,9 +20645,12 @@
    ],
    "deps": [
     "@supabase/supabase-js",
+    "@tanstack/react-query",
+    "@testing-library/react",
     "clsx",
     "node:fs",
     "node:path",
+    "react",
     "tailwind-merge",
     "vitest"
    ],
@@ -20964,7 +20964,7 @@
   {
    "module": "supabase/functions",
    "files": 48,
-   "lines": 12722,
+   "lines": 12819,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21012,9 +21012,10 @@
     "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
     "telemetry.ts: trackContractUsage",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
+    "index.ts: DEFAULT_SETTINGS",
     "metering.ts: CACHE_TTL_S, sha256, stableStringify, cacheKey, cacheGet, cachePut",
     "polyline.ts: decodePolyline, encodePolyline, simplify",
-    "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, ProviderResolver",
+    "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, mergeSettings",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoPrecision, GeoSuggestion",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -22890,6 +22891,7 @@
    "geo-gateway": [
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
+    "src/hooks/useMapbox.ts",
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"
    ],
@@ -22914,9 +22916,6 @@
    ],
    "lalamove-uapi": [
     "src/hooks/useLalamoveUapi.ts"
-   ],
-   "mapbox-proxy": [
-    "src/hooks/useMapbox.ts"
    ],
    "nada": [
     "scripts/ai-context/cenarios.mjs"
@@ -24458,6 +24457,10 @@
    {
     "file": "src/hooks/useMapSettings.ts",
     "msg": "User not authenticated"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "msg": "Rota precisa de pelo menos 2 coordenadas"
    },
    {
     "file": "src/hooks/usePasswordResetActions.ts",
@@ -28781,6 +28784,11 @@
     "value": "20"
    },
    {
+    "file": "src/hooks/useMapbox.ts",
+    "name": "ATTRIBUTION",
+    "value": "'© Mapbox © OpenStreetMap'"
+   },
+   {
     "file": "src/hooks/useOfflineStorage.ts",
     "name": "DB_VERSION",
     "value": "1"
@@ -30724,6 +30732,18 @@
    {
     "file": "src/hooks/useMapbox.ts",
     "field": "type",
+    "value": "Point",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "LineString",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
     "value": "Feature",
     "kind": "escreve"
    },
@@ -30737,6 +30757,12 @@
     "file": "src/hooks/useMapbox.ts",
     "field": "type",
     "value": "FeatureCollection",
+    "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMapbox.ts",
+    "field": "type",
+    "value": "LineString",
     "kind": "escreve"
    },
    {
@@ -35300,6 +35326,34 @@
     "name": "nunca lança quando invoke rejeita (ex.: rede fora)"
    },
    {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "useMapbox* usam o geo-gateway e traduzem o contrato normalizado"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "directions: monta origem/destino/paradas e devolve geometry GeoJSON para o mapa"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "directions: perfil pedido pela tela é repassado ao gateway"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "matrix: envia a mesma lista como origens e destinos e remapeia o nome das colunas"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "geocode: FeatureCollection com place_name/center a partir do GeoAddress do gateway"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "geocode sem resultado devolve lista vazia em vez de estourar a tela"
+   },
+   {
+    "file": "src/lib/geo-gateway.test.ts",
+    "name": "map-matching: recompõe matchings[0] com confidence, distância, duração e geometria"
+   },
+   {
     "file": "src/lib/lalamoveValidation.test.ts",
     "name": "validateScheduleAt"
    },
@@ -36445,6 +36499,14 @@
    },
    {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "route/matrix: perfil pedido pela tela chega ao Mapbox (walking/cycling) e inválido volta ao padrão"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "snap: geometria e métricas do Map Matching são expostas para a tela de conferência"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
     "name": "matrix: elementos = origens×destinos; cai para driving acima de 10 coords ou sem bucket"
    },
    {
@@ -36494,6 +36556,10 @@
    {
     "file": "supabase/functions/geo-gateway/resolver.test.ts",
     "name": "rateGuard: bloqueia acima do limite no mesmo minuto e libera no próximo"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/resolver.test.ts",
+    "name": "mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off"
    },
    {
     "file": "supabase/functions/lalamove-gateway/route.test.ts",
@@ -41597,12 +41663,14 @@
       "escreve:src/components/map/mapLayers.ts"
      ],
      "LineString": [
-      "escreve:src/components/map/hooks/useMapMarkers.ts"
+      "escreve:src/components/map/hooks/useMapMarkers.ts",
+      "escreve:src/hooks/useMapbox.ts"
      ],
      "Point": [
       "compara:src/components/reports/GeoHeatmap.tsx",
       "escreve:src/components/orders/AddressAutocomplete.tsx",
       "escreve:src/components/reports/GeoHeatmap.tsx",
+      "escreve:src/hooks/useMapbox.ts",
       "escreve:src/pages/HeatmapPage.tsx"
      ],
      "circle": [
@@ -57599,7 +57667,7 @@
   },
   "src/hooks/useMapbox.ts": {
    "path": "src/hooks/useMapbox.ts",
-   "lines": 312,
+   "lines": 472,
    "exports": [
     "interface MapboxFeature",
     "interface GeocodingResult",
@@ -57626,9 +57694,28 @@
     "function getDirections"
    ],
    "invokes": [
-    "mapbox-proxy"
+    "geo-gateway"
+   ],
+   "errors": [
+    "Rota precisa de pelo menos 2 coordenadas"
+   ],
+   "params": [
+    {
+     "name": "ATTRIBUTION",
+     "value": "'© Mapbox © OpenStreetMap'"
+    }
    ],
    "status_values": [
+    {
+     "field": "type",
+     "value": "Point",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "LineString",
+     "kind": "escreve"
+    },
     {
      "field": "type",
      "value": "Feature",
@@ -57642,6 +57729,11 @@
     {
      "field": "type",
      "value": "FeatureCollection",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "LineString",
      "kind": "escreve"
     },
     {
@@ -59837,13 +59929,20 @@
   },
   "src/lib/geo-gateway.test.ts": {
    "path": "src/lib/geo-gateway.test.ts",
-   "lines": 41,
+   "lines": 162,
    "is_test": true,
    "tests": [
     "countMapLoad",
     "chama geo-gateway com a action count-map-load e o provider informado",
     "nunca lança quando invoke retorna error (telemetria best-effort)",
-    "nunca lança quando invoke rejeita (ex.: rede fora)"
+    "nunca lança quando invoke rejeita (ex.: rede fora)",
+    "useMapbox* usam o geo-gateway e traduzem o contrato normalizado",
+    "directions: monta origem/destino/paradas e devolve geometry GeoJSON para o mapa",
+    "directions: perfil pedido pela tela é repassado ao gateway",
+    "matrix: envia a mesma lista como origens e destinos e remapeia o nome das colunas",
+    "geocode: FeatureCollection com place_name/center a partir do GeoAddress do gateway",
+    "geocode sem resultado devolve lista vazia em vez de estourar a tela",
+    "map-matching: recompõe matchings[0] com confidence, distância, duração e geometria"
    ]
   },
   "src/lib/geo-gateway.ts": {
@@ -62852,7 +62951,7 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 253,
+   "lines": 255,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
@@ -63749,6 +63848,9 @@
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
    "lines": 202,
+   "exports": [
+    "const DEFAULT_SETTINGS"
+   ],
    "tables": [
     {
      "table": "geo_settings",
@@ -63804,7 +63906,7 @@
   },
   "supabase/functions/geo-gateway/mapbox.test.ts": {
    "path": "supabase/functions/geo-gateway/mapbox.test.ts",
-   "lines": 134,
+   "lines": 169,
    "is_test": true,
    "doc": "deno test --allow-net --allow-env supabase/functions/geo-gateway/mapbox.test.ts",
    "tests": [
@@ -63812,6 +63914,8 @@
     "placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível",
     "geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6",
     "route: Directions driving-traffic, polyline6 decodificada, legs",
+    "route/matrix: perfil pedido pela tela chega ao Mapbox (walking/cycling) e inválido volta ao padrão",
+    "snap: geometria e métricas do Map Matching são expostas para a tela de conferência",
     "matrix: elementos = origens×destinos; cai para driving acima de 10 coords ou sem bucket",
     "snap: Map Matching devolve pontos encaixados e mantém o bruto onde tracepoint é null",
     "429: lê X-Rate-Limit-Reset e vira GEO_RATE_LIMITED com retryAfter; token recusado vira GEO_NOT_CONFIGURED",
@@ -63887,7 +63991,7 @@
   },
   "supabase/functions/geo-gateway/resolver.test.ts": {
    "path": "supabase/functions/geo-gateway/resolver.test.ts",
-   "lines": 68,
+   "lines": 84,
    "is_test": true,
    "tests": [
     "primário configurado é escolhido; Google sem chave cai para fallback Mapbox",
@@ -63895,18 +63999,20 @@
     "off → 503 com mensagem clara; validate só existe no Google",
     "auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável",
     "forced: usa o provedor pedido ou falha sem fallback",
-    "rateGuard: bloqueia acima do limite no mesmo minuto e libera no próximo"
+    "rateGuard: bloqueia acima do limite no mesmo minuto e libera no próximo",
+    "mergeSettings: funcao sem linha em geo_settings usa o default e nao vira off"
    ]
   },
   "supabase/functions/geo-gateway/resolver.ts": {
    "path": "supabase/functions/geo-gateway/resolver.ts",
-   "lines": 139,
+   "lines": 149,
    "exports": [
     "interface GeoSettingRow",
     "interface BudgetRow",
     "interface QuotaRow",
     "interface ResolverDeps",
     "const PRIMARY_SKU",
+    "function mergeSettings",
     "class ProviderResolver",
     "class ResolveError"
    ],
@@ -63917,7 +64023,7 @@
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "lines": 321,
+   "lines": 346,
    "exports": [
     "const MAPBOX_RATE_LIMITS",
     "interface MapboxOptions",
@@ -63941,7 +64047,7 @@
   },
   "supabase/functions/geo-gateway/providers/types.ts": {
    "path": "supabase/functions/geo-gateway/providers/types.ts",
-   "lines": 209,
+   "lines": 218,
    "exports": [
     "type ProviderName",
     "type ProviderSetting",
@@ -66121,10 +66227,39 @@
   }
  },
  "git": {
-  "sha": "023202f673c20e8aed463fa14f963bd0fedffbe8",
+  "sha": "99e0b43184ba504e4679804302a87bb6cca73382",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "99e0b43",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)",
+    "files": [
+     "src/hooks/useMapbox.ts",
+     "src/lib/geo-gateway.test.ts",
+     "supabase/config.toml",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/mapbox.test.ts",
+     "supabase/functions/geo-gateway/providers/mapbox.ts",
+     "supabase/functions/geo-gateway/providers/types.ts",
+     "supabase/functions/geo-gateway/resolver.test.ts",
+     "supabase/functions/geo-gateway/resolver.ts"
+    ]
+   },
+   {
+    "sha": "658445d",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)",
+    "files": [
+     "CHANGELOG.md",
+     "docs/GEO_PENDENCIAS.md",
+     "docs/MAPBOX.md"
+    ]
+   },
    {
     "sha": "023202f",
     "date": "2026-11-21",
@@ -66419,46 +66554,24 @@
      "supabase/functions/lalamove-gateway/route.test.ts",
      "supabase/functions/lalamove-gateway/route.ts"
     ]
-   },
-   {
-    "sha": "61f648a",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(geo): edge geo-gateway com provedor Mapbox, resolver por função, cache e medição de custo (#129)",
-    "files": [
-     "supabase/config.toml",
-     "supabase/functions/_shared/contract.test.ts",
-     "supabase/functions/_shared/schemas.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/mapbox.test.ts",
-     "supabase/functions/geo-gateway/metering.ts",
-     "supabase/functions/geo-gateway/polyline.test.ts",
-     "supabase/functions/geo-gateway/polyline.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts",
-     "supabase/functions/geo-gateway/providers/types.ts",
-     "supabase/functions/geo-gateway/resolver.test.ts",
-     "supabase/functions/geo-gateway/resolver.ts"
-    ]
-   },
-   {
-    "sha": "910f33d",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore: triagem dos 51 hooks orfaos com decisao por hook (#128)",
-    "files": [
-     "docs/pendencias/P-16-hooks-orfaos-triagem.md",
-     "docs/pendencias/_ordem.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
-    4
+    5
    ],
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
+   ],
+   [
+    "src/lib/geo-gateway.test.ts",
+    2
+   ],
+   [
+    "supabase/config.toml",
+    2
    ],
    [
     "src/components/orders/AddressAutocomplete.tsx",
@@ -66466,10 +66579,6 @@
    ],
    [
     "src/pages/LiveMapPage.tsx",
-    2
-   ],
-   [
-    "supabase/config.toml",
     2
    ],
    [
@@ -66493,43 +66602,39 @@
     2
    ],
    [
-    "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
+    "src/hooks/useMapbox.ts",
     1
    ],
    [
-    "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
+    "supabase/functions/_shared/schemas.ts",
     1
    ],
    [
-    "src/App.tsx",
+    "supabase/functions/geo-gateway/index.ts",
     1
    ],
    [
-    "src/components/layout/sidebar-config.ts",
+    "supabase/functions/geo-gateway/mapbox.test.ts",
     1
    ],
    [
-    "src/components/orders/OrderDetailModal.tsx",
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
     1
    ],
    [
-    "src/hooks/useGeoAdmin.ts",
+    "supabase/functions/geo-gateway/providers/types.ts",
     1
    ],
    [
-    "src/hooks/usePendingApprovals.ts",
+    "supabase/functions/geo-gateway/resolver.test.ts",
     1
    ],
    [
-    "src/hooks/useRecentOrders.ts",
+    "supabase/functions/geo-gateway/resolver.ts",
     1
    ],
    [
-    "src/hooks/useSLAMetrics.ts",
-    1
-   ],
-   [
-    "src/integrations/supabase/types.ts",
+    "CHANGELOG.md",
     1
    ]
   ]

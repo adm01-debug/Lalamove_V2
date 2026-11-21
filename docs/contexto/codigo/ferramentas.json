@@ -6,7 +6,7 @@
    "TypeScript (478)",
    "SQL (174)",
    "JavaScript (112)",
-   "Markdown (96)",
+   "Markdown (97)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -296,7 +296,7 @@
   {
    "arquivo": "CHANGELOG.md",
    "titulo": "Changelog",
-   "linhas": 448
+   "linhas": 473
   },
   {
    "arquivo": "CLAUDE.md",
@@ -379,6 +379,11 @@
    "linhas": 725
   },
   {
+   "arquivo": "docs/GEO_PENDENCIAS.md",
+   "titulo": "O que ficou desligado ou para depois",
+   "linhas": 41
+  },
+  {
    "arquivo": "docs/JOB_QUEUE_SYSTEM.md",
    "titulo": "📦 Sistema de Filas Assíncronas - Job Queue",
    "linhas": 578
@@ -416,7 +421,7 @@
   {
    "arquivo": "docs/MAPBOX.md",
    "titulo": "MAPBOX — Inventário e Referência (21/11/2026)",
-   "linhas": 91
+   "linhas": 125
   },
   {
    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
@@ -514,7 +519,7 @@
    "arquivos_md": 1
   }
  ],
- "changelog_topo": "[1.5.0] - 2025-06-25",
+ "changelog_topo": "[1.6.0] - 2026-11-22",
  "env": {
   "declaradas_no_env_example": [
    "SUPABASE_SERVICE_ROLE_KEY",

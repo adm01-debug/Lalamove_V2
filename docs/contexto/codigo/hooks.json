@@ -1599,12 +1599,12 @@
     "useMapboxStaticImage",
     "useMapboxTilequery"
    ],
-   "linhas": 312,
+   "linhas": 472,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
    "edges": [
-    "mapbox-proxy"
+    "geo-gateway"
    ],
    "hooks_internos": [],
    "canais_realtime": [],
@@ -1619,7 +1619,7 @@
     "src/pages/map-tools/StaticImageTab.tsx",
     "src/pages/map-tools/TilequeryTab.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useMapSettings.ts",

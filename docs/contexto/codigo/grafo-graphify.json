@@ -4,215 +4,150 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "023202f673c20e8aed463fa14f963bd0fedffbe8",
+ "commit_do_grafo": "99e0b43184ba504e4679804302a87bb6cca73382",
  "grafo_atual": true,
- "nos": 7288,
- "arestas": 15505,
- "comunidades_total": 550,
+ "nos": 7316,
+ "arestas": 15551,
+ "comunidades_total": 542,
  "relacoes": {
-  "calls": 2208,
+  "calls": 2214,
   "case_of": 41,
   "cites": 5,
-  "contains": 5752,
+  "contains": 5779,
   "defines": 9,
   "dynamic_import": 107,
   "implements": 1,
-  "imports": 3216,
-  "imports_from": 3011,
+  "imports": 3222,
+  "imports_from": 3015,
   "indexes": 220,
-  "indirect_call": 119,
+  "indirect_call": 121,
   "inherits": 11,
   "method": 126,
   "rationale_for": 34,
   "re_exports": 48,
   "reads_from": 85,
-  "references": 482,
+  "references": 483,
   "triggers": 30
  },
  "origem": {
-  "EXTRACTED": 15144,
-  "INFERRED": 361
+  "EXTRACTED": 15187,
+  "INFERRED": 364
  },
  "comunidades": [
   {
    "id": 0,
    "nome": "cn",
-   "nos": 175,
-   "callables": 98,
-   "arquivos": 47,
-   "exemplos_arquivos": [
-    "src/App.tsx",
-    "src/components/GlobalSearchAdvanced.tsx",
-    "src/components/approvals/SwipeableApprovalCard.tsx",
-    "src/components/dashboard/MetricCard.tsx",
-    "src/components/dashboard/RiskScoreGauge.tsx",
-    "src/components/drivers/AdvancedFilters.tsx",
-    "src/components/drivers/BulkActions.tsx",
-    "src/components/drivers/DriverProfileModal.tsx"
-   ]
-  },
-  {
-   "id": 1,
-   "nome": "button.tsx",
-   "nos": 147,
-   "callables": 44,
-   "arquivos": 54,
+   "nos": 225,
+   "callables": 118,
+   "arquivos": 52,
    "exemplos_arquivos": [
     "package.json",
     "src/App.tsx",
     "src/components/GlobalSearchAdvanced.tsx",
-    "src/components/auth/MFAEnroll.tsx",
-    "src/components/auth/MFAVerify.tsx",
-    "src/components/auth/PermissionGate.tsx",
-    "src/components/dashboard/AIRouteChatbot.tsx",
-    "src/components/debug/AuditReportGenerator.tsx"
+    "src/components/alerts/AlertsAdvanced.tsx",
+    "src/components/approvals/SwipeableApprovalCard.tsx",
+    "src/components/dashboard/AlertsPanel.tsx",
+    "src/components/dashboard/DashboardHeroSection.tsx",
+    "src/components/dashboard/DashboardQuickActions.tsx"
+   ]
+  },
+  {
+   "id": 1,
+   "nome": "badge.tsx",
+   "nos": 137,
+   "callables": 49,
+   "arquivos": 44,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/App.tsx",
+    "src/components/dashboard/UAPIStatusCards.tsx",
+    "src/components/notifications/PushNotificationSettings.tsx",
+    "src/components/ui/badge.tsx",
+    "src/components/ui/card.tsx",
+    "src/components/ui/data-refresh-indicator.tsx",
+    "src/components/ui/search-help-tooltip.tsx"
    ]
   },
   {
    "id": 2,
-   "nome": "ref_node_fs",
-   "nos": 114,
-   "callables": 47,
-   "arquivos": 24,
+   "nome": "lucide-react",
+   "nos": 133,
+   "callables": 52,
+   "arquivos": 44,
    "exemplos_arquivos": [
-    "node:fs",
-    "scripts/ci/a11y-button-name-ratchet.unit.mjs",
-    "scripts/ci/bump-toolchain.mjs",
-    "scripts/ci/bump-toolchain.unit.mjs",
-    "scripts/ci/commit-msg-lint.mjs",
-    "scripts/ci/commit-msg-lint.unit.mjs",
-    "scripts/ci/gerar-matriz-edge-tabela.mjs",
-    "scripts/ci/gerar-matriz-edge-tabela.unit.mjs"
+    "package.json",
+    "src/components/GlobalSearchAdvanced.tsx",
+    "src/components/auth/MFASettings.tsx",
+    "src/components/auth/PasskeySettings.tsx",
+    "src/components/debug/AuditReportGenerator.tsx",
+    "src/components/drivers/BulkActions.tsx",
+    "src/components/map/MapSearchPanel.tsx",
+    "src/components/orders/CepQuickFill.tsx"
    ]
   },
   {
    "id": 3,
    "nome": "snapshot.py",
-   "nos": 104,
+   "nos": 102,
    "callables": 79,
-   "arquivos": 3,
+   "arquivos": 1,
    "exemplos_arquivos": [
-    "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md",
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "scripts/supabase_snapshot/snapshot.py"
    ]
   },
   {
    "id": 4,
-   "nome": "App.tsx",
-   "nos": 104,
-   "callables": 26,
-   "arquivos": 25,
+   "nome": "ref_node_path",
+   "nos": 86,
+   "callables": 32,
+   "arquivos": 17,
    "exemplos_arquivos": [
-    "src/App.tsx",
-    "src/components/alerts/PredictiveAlerts.tsx",
-    "src/components/auth/MFAEnroll.tsx",
-    "src/components/auth/MFASettings.tsx",
-    "src/components/auth/MFAVerify.tsx",
-    "src/components/auth/PasskeyLoginButton.tsx",
-    "src/components/auth/PasskeySettings.tsx",
-    "src/components/map/MapHUD.tsx"
+    "scripts/ci/a11y-button-name-ratchet.unit.mjs",
+    "scripts/ci/implicit-any-ratchet.unit.mjs",
+    "scripts/db-audit/catalog-from-types.mjs",
+    "scripts/db-audit/catalog-from-types.test.mjs",
+    "scripts/db-audit/check-grants-fresh.test.mjs",
+    "scripts/db-audit/check-manifest-fresh.test.mjs",
+    "scripts/db-audit/check-realtime-subscriptions.test.mjs",
+    "scripts/db-audit/check-screen-permission-db-guards.test.mjs"
    ]
   },
   {
    "id": 5,
-   "nome": "react",
-   "nos": 103,
-   "callables": 49,
-   "arquivos": 31,
+   "nome": "AdvancedReportsPage.tsx",
+   "nos": 81,
+   "callables": 42,
+   "arquivos": 24,
    "exemplos_arquivos": [
+    "jspdf",
+    "jspdf-autotable",
     "package.json",
     "src/App.tsx",
-    "src/components/orders/FetchOrderDialog.tsx",
-    "src/components/orders/ImportCSVDialog.tsx",
-    "src/components/ui/highlight-match.tsx",
-    "src/components/ui/keyboard-shortcuts-help.tsx",
-    "src/components/ui/pull-to-refresh.tsx",
-    "src/components/ui/search-help-tooltip.tsx"
+    "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
+    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
+    "src/components/admin/telemetry/TelemetryCharts.tsx",
+    "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx"
    ]
   },
   {
    "id": 6,
-   "nome": "NewOrderDialog.tsx",
-   "nos": 100,
-   "callables": 50,
-   "arquivos": 27,
+   "nome": "framer-motion",
+   "nos": 81,
+   "callables": 29,
+   "arquivos": 25,
    "exemplos_arquivos": [
     "package.json",
-    "src/components/auth/MFASettings.tsx",
-    "src/components/auth/PasskeySettings.tsx",
-    "src/components/drivers/BulkActions.tsx",
-    "src/components/orders/ContactPicker.tsx",
-    "src/components/orders/FetchOrderDialog.tsx",
-    "src/components/orders/ImportCSVDialog.tsx",
-    "src/components/orders/NewOrderDialog.tsx"
+    "src/App.tsx",
+    "src/components/auth/PasskeyLoginButton.tsx",
+    "src/components/auth/PasswordStrengthIndicator.tsx",
+    "src/components/map/MapSettingsPanel.tsx",
+    "src/components/notifications/NotificationPreferences.tsx",
+    "src/components/notifications/SoundSettingsPanel.tsx",
+    "src/components/ui/card.tsx"
    ]
   },
   {
    "id": 7,
-   "nome": "utils.ts",
-   "nos": 99,
-   "callables": 40,
-   "arquivos": 33,
-   "exemplos_arquivos": [
-    "package.json",
-    "src/App.tsx",
-    "src/components/alerts/AlertsAdvanced.tsx",
-    "src/components/dashboard/AlertsPanel.tsx",
-    "src/components/dashboard/BatchActionsToolbar.tsx",
-    "src/components/dashboard/DashboardHeroSection.tsx",
-    "src/components/dashboard/DashboardQuickActions.tsx",
-    "src/components/dashboard/LiveMapPlaceholder.tsx"
-   ]
-  },
-  {
-   "id": 8,
-   "nome": "client.ts",
-   "nos": 97,
-   "callables": 48,
-   "arquivos": 37,
-   "exemplos_arquivos": [
-    "docs/agentes/regras-dominio.md",
-    "docs/pendencias/P-16-hooks-orfaos-triagem.md",
-    "scripts/inventario/README.md",
-    "src/components/alerts/PredictiveAlerts.tsx",
-    "src/components/auth/DeviceDetector.tsx",
-    "src/components/auth/PermissionGate.tsx",
-    "src/components/auth/ProtectedRoute.tsx",
-    "src/components/map/hooks/useMapboxToken.ts"
-   ]
-  },
-  {
-   "id": 9,
-   "nome": "generate.py",
-   "nos": 81,
-   "callables": 68,
-   "arquivos": 3,
-   "exemplos_arquivos": [
-    "scripts/fix_corrupted_imports.py",
-    "scripts/fix_logs.py",
-    "scripts/regras_negocio/generate.py"
-   ]
-  },
-  {
-   "id": 10,
-   "nome": "DashboardRedesigned.tsx",
-   "nos": 80,
-   "callables": 47,
-   "arquivos": 38,
-   "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "README.md",
-    "docs/ARCHITECTURE.md",
-    "docs/FUNCIONALIDADES_E_FERRAMENTAS.md",
-    "docs/pendencias/P-16-hooks-orfaos-triagem.md",
-    "package.json",
-    "src/components/dashboard/AIRouteChatbot.tsx",
-    "src/components/dashboard/AlertsPanel.tsx"
-   ]
-  },
-  {
-   "id": 11,
    "nome": "dependencies",
    "nos": 80,
    "callables": 0,
@@ -222,7 +157,24 @@
    ]
   },
   {
-   "id": 12,
+   "id": 8,
+   "nome": "react",
+   "nos": 79,
+   "callables": 45,
+   "arquivos": 28,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/App.tsx",
+    "src/components/auth/PermissionGate.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/dashboard/AIRouteChatbot.tsx",
+    "src/components/map/MapHistoryPanel.tsx",
+    "src/components/map/MapSearchPanel.tsx",
+    "src/components/orders/FetchOrderDialog.tsx"
+   ]
+  },
+  {
+   "id": 9,
    "nome": "gerar.mjs",
    "nos": 76,
    "callables": 13,
@@ -232,7 +184,7 @@
    ]
   },
   {
-   "id": 13,
+   "id": 10,
    "nome": "package.json",
    "nos": 75,
    "callables": 1,
@@ -246,45 +198,45 @@
    ]
   },
   {
-   "id": 14,
-   "nome": "lucide-react",
-   "nos": 71,
-   "callables": 38,
-   "arquivos": 22,
+   "id": 11,
+   "nome": "client.ts",
+   "nos": 72,
+   "callables": 37,
+   "arquivos": 26,
    "exemplos_arquivos": [
-    "jspdf",
-    "jspdf-autotable",
     "package.json",
-    "src/App.tsx",
-    "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
-    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
-    "src/components/auth/PasswordStrengthIndicator.tsx",
-    "src/components/dashboard/AlertActionCard.tsx"
+    "src/components/alerts/PredictiveAlerts.tsx",
+    "src/components/auth/DeviceDetector.tsx",
+    "src/components/map/hooks/useMapboxToken.ts",
+    "src/hooks/__tests__/useLoginLockout.test.ts",
+    "src/hooks/__tests__/useMapSettings.test.ts",
+    "src/hooks/__tests__/useTrackingHistory.test.ts",
+    "src/hooks/useAnalyticsData.ts"
    ]
   },
   {
-   "id": 15,
-   "nome": "@tanstack/react-query",
-   "nos": 71,
-   "callables": 43,
-   "arquivos": 23,
+   "id": 12,
+   "nome": "useRealtimeSubscriptions.ts",
+   "nos": 68,
+   "callables": 52,
+   "arquivos": 11,
    "exemplos_arquivos": [
-    "package.json",
-    "src/__tests__/improvements-validation.test.tsx",
-    "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
-    "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
-    "src/hooks/__tests__/useActiveAlerts.test.ts",
-    "src/hooks/__tests__/useContractVersionUsageMonthly.test.ts",
-    "src/hooks/__tests__/useCronJobsHealth.test.ts",
-    "src/hooks/__tests__/useDashboardStats.test.ts"
+    "CHANGELOG.md",
+    "src/components/notifications/NotificationPreferences.tsx",
+    "src/hooks/useApprovalRealtime.ts",
+    "src/hooks/usePushNotifications.ts",
+    "src/hooks/useRealtimeSubscriptions.ts",
+    "src/hooks/useScheduledTheme.ts",
+    "src/hooks/useSoundSettings.ts",
+    "src/pages/SettingsPage.tsx"
    ]
   },
   {
-   "id": 16,
+   "id": 13,
    "nome": "contract.ts",
-   "nos": 70,
-   "callables": 44,
-   "arquivos": 12,
+   "nos": 68,
+   "callables": 35,
+   "arquivos": 16,
    "exemplos_arquivos": [
     "docs/API_CONTRACTS.md",
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -293,96 +245,96 @@
     "supabase/functions/_shared/contract.ts",
     "supabase/functions/_shared/schemas.ts",
     "supabase/functions/_shared/telemetry.ts",
-    "supabase/functions/check-external-api/index.ts"
+    "supabase/functions/apply-fixes/index.ts"
+   ]
+  },
+  {
+   "id": 14,
+   "nome": "App.tsx",
+   "nos": 68,
+   "callables": 9,
+   "arquivos": 10,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/App.tsx",
+    "src/components/ui/alert.tsx",
+    "src/components/ui/toggle-group.tsx",
+    "src/components/ui/toggle.tsx",
+    "src/hooks/useRiskRules.ts",
+    "src/pages/CacheStatusPage.tsx",
+    "src/pages/LiveMapPage.tsx"
+   ]
+  },
+  {
+   "id": 15,
+   "nome": "DashboardRedesigned.tsx",
+   "nos": 67,
+   "callables": 36,
+   "arquivos": 31,
+   "exemplos_arquivos": [
+    "CHANGELOG.md",
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/FUNCIONALIDADES_E_FERRAMENTAS.md",
+    "src/App.tsx",
+    "src/components/dashboard/AIRouteChatbot.tsx",
+    "src/components/dashboard/AlertActionCard.tsx",
+    "src/components/dashboard/AlertsPanel.tsx"
+   ]
+  },
+  {
+   "id": 16,
+   "nome": "seed-database.ts",
+   "nos": 67,
+   "callables": 34,
+   "arquivos": 12,
+   "exemplos_arquivos": [
+    "@supabase/supabase-js",
+    "package.json",
+    "scripts/check-permissions.ts",
+    "scripts/diagnose-rpc.ts",
+    "scripts/fix-admin-role-active.ts",
+    "scripts/fix-dashboard-via-api.ts",
+    "scripts/list-tables.ts",
+    "scripts/seed-contacts.ts"
    ]
   },
   {
    "id": 17,
-   "nome": "types/index.ts",
-   "nos": 62,
-   "callables": 44,
-   "arquivos": 16,
+   "nome": "UrgencyIndicator.tsx",
+   "nos": 64,
+   "callables": 49,
+   "arquivos": 10,
    "exemplos_arquivos": [
     "docs/agentes/regras-dominio.md",
-    "src/components/alerts/AlertsAdvanced.tsx",
-    "src/components/approvals/SwipeableApprovalCard.tsx",
-    "src/components/dashboard/AlertsPanel.tsx",
+    "src/components/approvals/UrgencyIndicator.tsx",
+    "src/components/approvals/WaitingTimeCounter.tsx",
     "src/components/dashboard/ApprovalQueue.tsx",
-    "src/components/dashboard/BatchActionsToolbar.tsx",
-    "src/components/dashboard/DashboardHeroSection.tsx",
-    "src/components/orders/OrderDetailModal.tsx"
+    "src/hooks/useCacheViews.ts",
+    "src/hooks/useCachedStats.ts",
+    "src/pages/CacheMonitoringPage.tsx",
+    "src/pages/CacheStatusPage.tsx"
    ]
   },
   {
    "id": 18,
-   "nome": "useRealtimeSubscriptions.ts",
-   "nos": 60,
-   "callables": 46,
-   "arquivos": 9,
+   "nome": "@tanstack/react-query",
+   "nos": 61,
+   "callables": 29,
+   "arquivos": 20,
    "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "src/components/notifications/NotificationPreferences.tsx",
-    "src/components/notifications/SoundSettingsPanel.tsx",
-    "src/hooks/useApprovalRealtime.ts",
-    "src/hooks/usePushNotifications.ts",
-    "src/hooks/useRealtimeSubscriptions.ts",
-    "src/hooks/useSoundSettings.ts",
-    "src/pages/settings/SoundSettingsCard.tsx"
+    "package.json",
+    "src/__tests__/improvements-validation.test.tsx",
+    "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
+    "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
+    "src/hooks/__tests__/useActiveAlerts.test.ts",
+    "src/hooks/__tests__/useCronJobsHealth.test.ts",
+    "src/hooks/__tests__/useDashboardStats.test.ts",
+    "src/hooks/__tests__/useDrivers.test.ts"
    ]
   },
   {
    "id": 19,
-   "nome": "lalamove-webhook/index.ts",
-   "nos": 58,
-   "callables": 29,
-   "arquivos": 15,
-   "exemplos_arquivos": [
-    "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md",
-    "scripts/eslint/README.md",
-    "supabase/functions/apply-fixes/index.ts",
-    "supabase/functions/external-companies/index.ts",
-    "supabase/functions/external-db-bridge/index.test.ts",
-    "supabase/functions/get-mapbox-token/index.ts",
-    "supabase/functions/lalamove-webhook/index.ts",
-    "supabase/functions/lalamove-webhook/normalize.ts"
-   ]
-  },
-  {
-   "id": 20,
-   "nome": "geo-gateway/index.ts",
-   "nos": 57,
-   "callables": 39,
-   "arquivos": 8,
-   "exemplos_arquivos": [
-    "supabase/functions/_shared/cors.ts",
-    "supabase/functions/geo-gateway/index.ts",
-    "supabase/functions/geo-gateway/metering.ts",
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
-    "supabase/functions/geo-gateway/providers/types.ts",
-    "supabase/functions/geo-gateway/resolver.test.ts",
-    "supabase/functions/geo-gateway/resolver.ts",
-    "supabase/functions/mcp-query/index.ts"
-   ]
-  },
-  {
-   "id": 21,
-   "nome": "Changelog",
-   "nos": 56,
-   "callables": 15,
-   "arquivos": 9,
-   "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "README.md",
-    "scripts/eslint/no-secret-compare.js",
-    "src/hooks/useBitrix24.ts",
-    "src/hooks/useDeliveryHeatmapData.ts",
-    "src/hooks/useTestNotification.ts",
-    "src/hooks/useTrackingHistory.ts",
-    "src/pages/Bitrix24Page.tsx"
-   ]
-  },
-  {
-   "id": 22,
    "nome": "check-migration-drift.mjs",
    "nos": 55,
    "callables": 38,
@@ -395,21 +347,24 @@
    ]
   },
   {
-   "id": 23,
-   "nome": "mapbox.ts",
-   "nos": 52,
-   "callables": 44,
-   "arquivos": 5,
+   "id": 20,
+   "nome": "types/index.ts",
+   "nos": 50,
+   "callables": 39,
+   "arquivos": 16,
    "exemplos_arquivos": [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
-    "supabase/functions/geo-gateway/polyline.test.ts",
-    "supabase/functions/geo-gateway/polyline.ts",
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
-    "supabase/functions/geo-gateway/providers/types.ts"
+    "CHANGELOG.md",
+    "src/components/approvals/SwipeableApprovalCard.tsx",
+    "src/components/dashboard/ApprovalQueue.tsx",
+    "src/components/dashboard/BatchActionsToolbar.tsx",
+    "src/components/dashboard/DashboardHeroSection.tsx",
+    "src/components/orders/OrderDetailModal.tsx",
+    "src/hooks/__tests__/useRecentOrders.test.ts",
+    "src/hooks/useApprovalActions.ts"
    ]
   },
   {
-   "id": 24,
+   "id": 21,
    "nome": "motion.tsx",
    "nos": 50,
    "callables": 16,
@@ -424,7 +379,7 @@
    ]
   },
   {
-   "id": 25,
+   "id": 22,
    "nome": "actions-kpi.mjs",
    "nos": 48,
    "callables": 29,
@@ -438,7 +393,7 @@
    ]
   },
   {
-   "id": 26,
+   "id": 23,
    "nome": "lint-ratchet.mjs",
    "nos": 48,
    "callables": 45,
@@ -449,20 +404,7 @@
    ]
   },
   {
-   "id": 27,
-   "nome": "check-screen-permission-db-guards.mjs",
-   "nos": 47,
-   "callables": 20,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "scripts/db-audit/check-grants-fresh.mjs",
-    "scripts/db-audit/check-screen-permission-db-guards.mjs",
-    "scripts/db-audit/seguranca-processo.mjs",
-    "scripts/db-audit/seguranca-processo.test.mjs"
-   ]
-  },
-  {
-   "id": 28,
+   "id": 24,
    "nome": "🔍 Sistema de Screening - Lalamove Guardian",
    "nos": 46,
    "callables": 0,
@@ -472,13 +414,69 @@
    ]
   },
   {
-   "id": 29,
+   "id": 25,
+   "nome": "geo-gateway/index.ts",
+   "nos": 45,
+   "callables": 32,
+   "arquivos": 5,
+   "exemplos_arquivos": [
+    "supabase/functions/geo-gateway/index.ts",
+    "supabase/functions/geo-gateway/metering.ts",
+    "supabase/functions/geo-gateway/providers/types.ts",
+    "supabase/functions/geo-gateway/resolver.test.ts",
+    "supabase/functions/geo-gateway/resolver.ts"
+   ]
+  },
+  {
+   "id": 26,
    "nome": "🏗️ Arquitetura - Lalamove Guardian",
    "nos": 44,
    "callables": 0,
    "arquivos": 1,
    "exemplos_arquivos": [
     "docs/ARCHITECTURE.md"
+   ]
+  },
+  {
+   "id": 27,
+   "nome": "Header.tsx",
+   "nos": 43,
+   "callables": 20,
+   "arquivos": 9,
+   "exemplos_arquivos": [
+    "src/components/layout/Header.tsx",
+    "src/components/map/MapProviderSelector.tsx",
+    "src/components/ui/data-refresh-indicator.tsx",
+    "src/components/ui/dropdown-menu.tsx",
+    "src/components/ui/language-selector.tsx",
+    "src/components/ui/popover.tsx",
+    "src/components/ui/smart-breadcrumbs.tsx",
+    "src/hooks/useDataRefresh.ts"
+   ]
+  },
+  {
+   "id": 28,
+   "nome": "lalamove.ts",
+   "nos": 43,
+   "callables": 23,
+   "arquivos": 2,
+   "exemplos_arquivos": [
+    "src/lib/lalamoveLabels.ts",
+    "src/types/lalamove.ts"
+   ]
+  },
+  {
+   "id": 29,
+   "nome": "useAdvancedReports.ts",
+   "nos": 42,
+   "callables": 35,
+   "arquivos": 5,
+   "exemplos_arquivos": [
+    "src/components/reports/GeoHeatmap.tsx",
+    "src/hooks/__tests__/useRegionResolver.test.ts",
+    "src/hooks/useAdvancedReports.ts",
+    "src/hooks/useRegionResolver.ts",
+    "src/hooks/useReportPresets.ts"
    ]
   },
   {
@@ -513,17 +511,6 @@
   },
   {
    "id": 33,
-   "nome": "lalamove.ts",
-   "nos": 41,
-   "callables": 21,
-   "arquivos": 2,
-   "exemplos_arquivos": [
-    "src/lib/lalamoveLabels.ts",
-    "src/types/lalamove.ts"
-   ]
-  },
-  {
-   "id": 34,
    "nome": "register-migration.mjs",
    "nos": 40,
    "callables": 23,
@@ -538,61 +525,53 @@
    ]
   },
   {
+   "id": 34,
+   "nome": "Changelog",
+   "nos": 39,
+   "callables": 6,
+   "arquivos": 5,
+   "exemplos_arquivos": [
+    "CHANGELOG.md",
+    "README.md",
+    "src/hooks/useBitrix24.ts",
+    "src/hooks/useTrackingHistory.ts",
+    "src/pages/Bitrix24Page.tsx"
+   ]
+  },
+  {
    "id": 35,
-   "nome": "test_snapshot.py",
+   "nome": "check-manifest-fresh.mjs",
    "nos": 39,
    "callables": 17,
-   "arquivos": 3,
+   "arquivos": 7,
    "exemplos_arquivos": [
-    "scripts/regras_negocio/indice.py",
-    "scripts/regras_negocio/test_generate.py",
-    "scripts/supabase_snapshot/test_snapshot.py"
+    "scripts/db-audit/check-grants-fresh.mjs",
+    "scripts/db-audit/check-manifest-fresh.mjs",
+    "scripts/db-audit/check-screen-permission-db-guards.mjs",
+    "scripts/db-audit/diff.mjs",
+    "scripts/db-audit/manifest-lib.mjs",
+    "scripts/db-audit/seguranca-processo.mjs",
+    "scripts/db-audit/seguranca-processo.test.mjs"
    ]
   },
   {
    "id": 36,
-   "nome": "useAdvancedReports.ts",
+   "nome": "useTrackingData.ts",
    "nos": 39,
-   "callables": 34,
-   "arquivos": 5,
+   "callables": 24,
+   "arquivos": 7,
    "exemplos_arquivos": [
-    "src/components/reports/GeoHeatmap.tsx",
-    "src/hooks/__tests__/useRegionResolver.test.ts",
-    "src/hooks/useAdvancedReports.ts",
-    "src/hooks/useRegionResolver.ts",
-    "src/hooks/useReportPresets.ts"
+    "src/components/map/Google3DCanvas.tsx",
+    "src/components/map/GoogleMapsCanvas.tsx",
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/hooks/__tests__/useTrackingData.test.ts",
+    "src/components/map/hooks/useGoogleMapsLoader.ts",
+    "src/components/map/hooks/useTrackingData.ts",
+    "src/components/map/types.ts"
    ]
   },
   {
    "id": 37,
-   "nome": "useDrivers.ts",
-   "nos": 38,
-   "callables": 25,
-   "arquivos": 6,
-   "exemplos_arquivos": [
-    "CHANGELOG.md",
-    "docs/agentes/mapa-repo.md",
-    "src/components/ui/undo-toast.tsx",
-    "src/hooks/__tests__/useDrivers.test.ts",
-    "src/hooks/useDrivers.ts",
-    "src/pages/DriversPage.tsx"
-   ]
-  },
-  {
-   "id": 38,
-   "nome": "ref_node_child_process",
-   "nos": 38,
-   "callables": 20,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "scripts/ci/check-agents-md-integrity.mjs",
-    "scripts/ci/fila-merge.mjs",
-    "scripts/ci/fila-merge.unit.mjs",
-    "scripts/inventario/mudou-conteudo.mjs"
-   ]
-  },
-  {
-   "id": 39,
    "nome": "🔄 Sistema de Filas Assíncronas",
    "nos": 37,
    "callables": 0,
@@ -602,7 +581,7 @@
    ]
   },
   {
-   "id": 40,
+   "id": 38,
    "nome": "workflow-invariants.unit.mjs",
    "nos": 37,
    "callables": 21,
@@ -615,51 +594,10 @@
    ]
   },
   {
-   "id": 41,
-   "nome": "📝 Logger Aprimorado",
-   "nos": 36,
-   "callables": 0,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "docs/LOGGING_AND_HEALTH.md"
-   ]
-  },
-  {
-   "id": 42,
-   "nome": "lalamove-api/index.ts",
-   "nos": 36,
-   "callables": 27,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "supabase/functions/lalamove-api/index.ts"
-   ]
-  },
-  {
-   "id": 43,
-   "nome": "20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-   "nos": 35,
-   "callables": 0,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-   ]
-  },
-  {
-   "id": 44,
-   "nome": "micro-interactions.tsx",
-   "nos": 34,
-   "callables": 31,
-   "arquivos": 2,
-   "exemplos_arquivos": [
-    "src/components/ui/hero-metric.tsx",
-    "src/components/ui/micro-interactions.tsx"
-   ]
-  },
-  {
-   "id": 45,
+   "id": 39,
    "nome": "useAlertConfigurations.ts",
-   "nos": 33,
-   "callables": 20,
+   "nos": 36,
+   "callables": 21,
    "arquivos": 6,
    "exemplos_arquivos": [
     "CHANGELOG.md",
@@ -671,52 +609,157 @@
    ]
   },
   {
-   "id": 46,
-   "nome": "useMapMarkers.ts",
-   "nos": 32,
-   "callables": 20,
-   "arquivos": 7,
+   "id": 40,
+   "nome": "📝 Logger Aprimorado",
+   "nos": 36,
+   "callables": 0,
+   "arquivos": 1,
    "exemplos_arquivos": [
+    "docs/LOGGING_AND_HEALTH.md"
+   ]
+  },
+  {
+   "id": 41,
+   "nome": "useMapMarkers.ts",
+   "nos": 36,
+   "callables": 23,
+   "arquivos": 10,
+   "exemplos_arquivos": [
+    "src/components/map/MapHUD.tsx",
     "src/components/map/MapLegend.tsx",
+    "src/components/map/MapSearchPanel.tsx",
     "src/components/map/__tests__/markerFactories.test.ts",
     "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
     "src/components/map/hooks/useMapMarkers.ts",
-    "src/components/map/markerFactories.ts",
-    "src/components/map/types.ts",
-    "src/lib/statusPalette.ts"
+    "src/components/map/hooks/useTrackingData.ts",
+    "src/components/map/markerFactories.ts"
+   ]
+  },
+  {
+   "id": 42,
+   "nome": "lalamoveCatalog.ts",
+   "nos": 36,
+   "callables": 21,
+   "arquivos": 7,
+   "exemplos_arquivos": [
+    "src/components/orders/NewOrderDialog.tsx",
+    "src/lib/__tests__/filterValidSpecialRequests.test.ts",
+    "src/lib/__tests__/lalamoveCanonical.test.ts",
+    "src/lib/__tests__/lalamoveCatalogCities.test.ts",
+    "src/lib/lalamoveCatalog.ts",
+    "src/lib/lalamoveGuards.ts",
+    "src/types/lalamove.ts"
+   ]
+  },
+  {
+   "id": 43,
+   "nome": "driver.ts",
+   "nos": 36,
+   "callables": 18,
+   "arquivos": 2,
+   "exemplos_arquivos": [
+    "src/hooks/useDriverEvaluations.ts",
+    "src/types/driver.ts"
+   ]
+  },
+  {
+   "id": 44,
+   "nome": "lalamove-api/index.ts",
+   "nos": 36,
+   "callables": 27,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "supabase/functions/lalamove-api/index.ts"
+   ]
+  },
+  {
+   "id": 45,
+   "nome": "lalamove-webhook/index.ts",
+   "nos": 35,
+   "callables": 23,
+   "arquivos": 6,
+   "exemplos_arquivos": [
+    "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md",
+    "scripts/eslint/README.md",
+    "supabase/functions/lalamove-webhook/index.ts",
+    "supabase/functions/lalamove-webhook/normalize.ts",
+    "supabase/functions/lalamove-webhook/security.test.ts",
+    "supabase/functions/lalamove-webhook/security.ts"
+   ]
+  },
+  {
+   "id": 46,
+   "nome": "20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
+   "nos": 35,
+   "callables": 0,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
    ]
   },
   {
    "id": 47,
-   "nome": "NotificationPreferences.tsx",
-   "nos": 31,
-   "callables": 15,
-   "arquivos": 7,
+   "nome": "useMapbox.ts",
+   "nos": 34,
+   "callables": 30,
+   "arquivos": 4,
    "exemplos_arquivos": [
-    "src/components/layout/MobileSidebar.tsx",
-    "src/components/map/MapHistoryPanel.tsx",
-    "src/components/notifications/NotificationPreferences.tsx",
-    "src/components/ui/micro-interactions.tsx",
-    "src/components/ui/scroll-area.tsx",
-    "src/components/ui/sheet.tsx",
-    "src/hooks/useTrackingHistory.ts"
+    "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md",
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "src/hooks/useMapbox.ts"
    ]
   },
   {
    "id": 48,
-   "nome": "useCachedStats.ts",
-   "nos": 31,
-   "callables": 29,
-   "arquivos": 4,
+   "nome": "micro-interactions.tsx",
+   "nos": 34,
+   "callables": 31,
+   "arquivos": 2,
    "exemplos_arquivos": [
-    "src/hooks/useCacheViews.ts",
-    "src/hooks/useCachedStats.ts",
-    "src/pages/CacheMonitoringPage.tsx",
-    "src/pages/CacheStatusPage.tsx"
+    "src/components/ui/hero-metric.tsx",
+    "src/components/ui/micro-interactions.tsx"
    ]
   },
   {
    "id": 49,
+   "nome": "generate.py",
+   "nos": 32,
+   "callables": 28,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "scripts/regras_negocio/generate.py"
+   ]
+  },
+  {
+   "id": 50,
+   "nome": "useCommandPaletteSearch.ts",
+   "nos": 31,
+   "callables": 23,
+   "arquivos": 6,
+   "exemplos_arquivos": [
+    "src/components/GlobalSearchAdvanced.tsx",
+    "src/components/ui/sonner.tsx",
+    "src/hooks/useCommandPaletteSearch.ts",
+    "src/hooks/useDebouncedValue.ts",
+    "src/hooks/useGlobalSearch.ts",
+    "src/hooks/useTheme.ts"
+   ]
+  },
+  {
+   "id": 51,
+   "nome": "mapbox.ts",
+   "nos": 31,
+   "callables": 25,
+   "arquivos": 3,
+   "exemplos_arquivos": [
+    "supabase/functions/geo-gateway/index.ts",
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "supabase/functions/geo-gateway/providers/types.ts"
+   ]
+  },
+  {
+   "id": 52,
    "nome": "lalamove-uapi/index.ts",
    "nos": 31,
    "callables": 28,
@@ -726,7 +769,40 @@
    ]
   },
   {
-   "id": 50,
+   "id": 53,
+   "nome": "useJobQueue.ts",
+   "nos": 30,
+   "callables": 21,
+   "arquivos": 7,
+   "exemplos_arquivos": [
+    "docs/agentes/mapa-repo.md",
+    "docs/pendencias/P-16-hooks-orfaos-triagem.md",
+    "src/hooks/useErrorLogs.ts",
+    "src/hooks/useFuseSearch.ts",
+    "src/hooks/useJobQueue.ts",
+    "src/pages/ErrorMonitoringPage.tsx",
+    "src/pages/JobQueuePage.tsx"
+   ]
+  },
+  {
+   "id": 54,
+   "nome": "useEvaluateDriver.ts",
+   "nos": 30,
+   "callables": 15,
+   "arquivos": 10,
+   "exemplos_arquivos": [
+    "docs/pendencias/P-16-hooks-orfaos-triagem.md",
+    "docs/pendencias/_ordem.md",
+    "scripts/ui-audit/README.md",
+    "src/hooks/useAuthLogs.ts",
+    "src/hooks/useEvaluateDriver.ts",
+    "src/hooks/useFeatureFlags.ts",
+    "src/hooks/useUserDevices.ts",
+    "src/pages/LiveMapPage.tsx"
+   ]
+  },
+  {
+   "id": 55,
    "nome": "lalamove-gateway/index.ts",
    "nos": 30,
    "callables": 20,
@@ -739,38 +815,7 @@
    ]
   },
   {
-   "id": 51,
-   "nome": "GoogleMapsCanvas.tsx",
-   "nos": 30,
-   "callables": 24,
-   "arquivos": 6,
-   "exemplos_arquivos": [
-    "src/components/map/Google3DCanvas.tsx",
-    "src/components/map/GoogleMapsCanvas.tsx",
-    "src/components/map/LiveMap.tsx",
-    "src/components/map/hooks/useGoogleMapsLoader.ts",
-    "src/components/map/hooks/useTrackingData.ts",
-    "src/components/map/types.ts"
-   ]
-  },
-  {
-   "id": 52,
-   "nome": "_shared/logger.ts",
-   "nos": 30,
-   "callables": 17,
-   "arquivos": 7,
-   "exemplos_arquivos": [
-    "supabase/functions/_shared/logger.ts",
-    "supabase/functions/bitrix24-process-queue/index.ts",
-    "supabase/functions/bitrix24-sync/index.ts",
-    "supabase/functions/check-driver-alerts/index.ts",
-    "supabase/functions/escalate-alerts/index.ts",
-    "supabase/functions/job-worker/index.ts",
-    "supabase/functions/rotate-tokens/index.ts"
-   ]
-  },
-  {
-   "id": 53,
+   "id": 56,
    "nome": "20261122130100_geo_foundation.sql",
    "nos": 29,
    "callables": 0,
@@ -780,7 +825,29 @@
    ]
   },
   {
-   "id": 54,
+   "id": 57,
+   "nome": "verify-release-targets.mjs",
+   "nos": 29,
+   "callables": 18,
+   "arquivos": 3,
+   "exemplos_arquivos": [
+    "scripts/vercel/verify-production.unit.mjs",
+    "scripts/vercel/verify-release-targets.mjs",
+    "scripts/vercel/verify-release-targets.unit.mjs"
+   ]
+  },
+  {
+   "id": 58,
+   "nome": "check-screen-permission-db-guards.mjs",
+   "nos": 29,
+   "callables": 10,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "scripts/db-audit/check-screen-permission-db-guards.mjs"
+   ]
+  },
+  {
+   "id": 59,
    "nome": "contraste-auditores.unit.mjs",
    "nos": 29,
    "callables": 14,
@@ -792,30 +859,7 @@
    ]
   },
   {
-   "id": 55,
-   "nome": "seed-database.ts",
-   "nos": 29,
-   "callables": 19,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "scripts/seed-database.ts"
-   ]
-  },
-  {
-   "id": 56,
-   "nome": "lalamove-api.ts",
-   "nos": 29,
-   "callables": 24,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "src/hooks/useUAPI.ts",
-    "src/lib/lalamove-api.ts",
-    "src/lib/uapi-proxy.ts",
-    "src/pages/UAPISettingsPage.tsx"
-   ]
-  },
-  {
-   "id": 57,
+   "id": 60,
    "nome": "20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
    "nos": 29,
    "callables": 0,
@@ -825,7 +869,56 @@
    ]
   },
   {
-   "id": 58,
+   "id": 61,
+   "nome": "ref_node_fs",
+   "nos": 28,
+   "callables": 14,
+   "arquivos": 5,
+   "exemplos_arquivos": [
+    "node:fs",
+    "scripts/ci/bump-toolchain.mjs",
+    "scripts/ci/bump-toolchain.unit.mjs",
+    "scripts/ci/check-agents-md-integrity.mjs",
+    "scripts/db-audit/dry-run-plan.mjs"
+   ]
+  },
+  {
+   "id": 62,
+   "nome": "ref_node_url",
+   "nos": 28,
+   "callables": 11,
+   "arquivos": 6,
+   "exemplos_arquivos": [
+    "scripts/ci/commit-msg-lint.mjs",
+    "scripts/ci/commit-msg-lint.unit.mjs",
+    "scripts/ci/gerar-matriz-edge-tabela.mjs",
+    "scripts/ci/gerar-matriz-edge-tabela.unit.mjs",
+    "scripts/ci/vercel-env-baseline.mjs",
+    "scripts/ci/vercel-env-baseline.unit.mjs"
+   ]
+  },
+  {
+   "id": 63,
+   "nome": "Lalamove API v3 — Documentação Técnica Completa (Brasil)",
+   "nos": 27,
+   "callables": 0,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "docs/LALAMOVE_API_V3.md"
+   ]
+  },
+  {
+   "id": 64,
+   "nome": "🔬 Lalamove — Análise Mestra e Roteiro de Evolução",
+   "nos": 27,
+   "callables": 0,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "docs/LALAMOVE_MASTER_ANALYSIS.md"
+   ]
+  },
+  {
+   "id": 65,
    "nome": "20260711185011_e422dc54-64d2-4379-8882-138f7bf9abb4.sql",
    "nos": 27,
    "callables": 0,
@@ -835,7 +928,24 @@
    ]
   },
   {
-   "id": 59,
+   "id": 66,
+   "nome": "DriverProfileModal.tsx",
+   "nos": 27,
+   "callables": 13,
+   "arquivos": 10,
+   "exemplos_arquivos": [
+    "src/App.tsx",
+    "src/components/alerts/PredictiveAlerts.tsx",
+    "src/components/drivers/DriverProfileModal.tsx",
+    "src/components/drivers/DriverProfileTabs.tsx",
+    "src/components/ui/progress.tsx",
+    "src/components/ui/tabs.tsx",
+    "src/hooks/useDrivers.ts",
+    "src/pages/SLADashboardPage.tsx"
+   ]
+  },
+  {
+   "id": 67,
    "nome": "useIncidents.ts",
    "nos": 26,
    "callables": 18,
@@ -848,20 +958,7 @@
    ]
   },
   {
-   "id": 60,
-   "nome": "useMapbox.ts",
-   "nos": 26,
-   "callables": 23,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md",
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "src/hooks/useMapbox.ts",
-    "src/pages/map-tools/OptimizationTab.tsx"
-   ]
-  },
-  {
-   "id": 61,
+   "id": 68,
    "nome": "📄 Páginas e Módulos",
    "nos": 26,
    "callables": 0,
@@ -871,20 +968,7 @@
    ]
   },
   {
-   "id": 62,
-   "nome": "useLalamoveUapi.ts",
-   "nos": 26,
-   "callables": 21,
-   "arquivos": 4,
-   "exemplos_arquivos": [
-    "docs/LALAMOVE_SCORECARD.md",
-    "docs/pendencias/P-14-analise-correcoes-planejadas.md",
-    "src/components/lalamove/UapiFleetPanel.tsx",
-    "src/hooks/useLalamoveUapi.ts"
-   ]
-  },
-  {
-   "id": 63,
+   "id": 69,
    "nome": "lalamove_token_manager.py",
    "nos": 26,
    "callables": 12,
@@ -894,7 +978,33 @@
    ]
   },
   {
-   "id": 64,
+   "id": 70,
+   "nome": "🚀 Lalamove Intelligence",
+   "nos": 26,
+   "callables": 0,
+   "arquivos": 1,
+   "exemplos_arquivos": [
+    "README.md"
+   ]
+  },
+  {
+   "id": 71,
+   "nome": "CommandPaletteEnhanced.tsx",
+   "nos": 26,
+   "callables": 12,
+   "arquivos": 7,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/components/CommandPaletteEnhanced.tsx",
+    "src/components/orders/ContactPicker.tsx",
+    "src/components/ui/command.tsx",
+    "src/hooks/useCommandPaletteSearch.ts",
+    "src/hooks/useContacts.ts",
+    "src/pages/ContactsPage.tsx"
+   ]
+  },
+  {
+   "id": 72,
    "nome": "medir-tipografia.cjs",
    "nos": 26,
    "callables": 12,
@@ -906,24 +1016,7 @@
    ]
   },
   {
-   "id": 65,
-   "nome": "@supabase/supabase-js",
-   "nos": 26,
-   "callables": 8,
-   "arquivos": 10,
-   "exemplos_arquivos": [
-    "@supabase/supabase-js",
-    "package.json",
-    "scripts/check-permissions.ts",
-    "scripts/diagnose-rpc.ts",
-    "scripts/fix-admin-role-active.ts",
-    "scripts/fix-dashboard-via-api.ts",
-    "scripts/list-tables.ts",
-    "scripts/set-user-admin.ts"
-   ]
-  },
-  {
-   "id": 66,
+   "id": 73,
    "nome": "typecheck-ratchet.mjs",
    "nos": 26,
    "callables": 23,
@@ -934,7 +1027,7 @@
    ]
   },
   {
-   "id": 67,
+   "id": 74,
    "nome": ".collect",
    "nos": 26,
    "callables": 25,
@@ -944,20 +1037,19 @@
    ]
   },
   {
-   "id": 68,
+   "id": 75,
    "nome": "AddressAutocomplete",
    "nos": 25,
    "callables": 2,
-   "arquivos": 4,
+   "arquivos": 3,
    "exemplos_arquivos": [
     "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md",
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "src/components/orders/AddressAutocomplete.tsx"
    ]
   },
   {
-   "id": 69,
+   "id": 76,
    "nome": "useLalamove.ts",
    "nos": 25,
    "callables": 21,
@@ -972,7 +1064,7 @@
    ]
   },
   {
-   "id": 70,
+   "id": 77,
    "nome": "cenarios.mjs",
    "nos": 25,
    "callables": 10,
@@ -986,7 +1078,7 @@
    ]
   },
   {
-   "id": 71,
+   "id": 78,
    "nome": "check-bundle-secrets.unit.mjs",
    "nos": 25,
    "callables": 15,
@@ -997,95 +1089,13 @@
    ]
   },
   {
-   "id": 72,
+   "id": 79,
    "nome": "gerar-banco.mjs",
    "nos": 25,
    "callables": 15,
    "arquivos": 1,
    "exemplos_arquivos": [
     "scripts/inventario/gerar-banco.mjs"
-   ]
-  },
-  {
-   "id": 73,
-   "nome": "Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)",
-   "nos": 24,
-   "callables": 0,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md"
-   ]
-  },
-  {
-   "id": 74,
-   "nome": "LiveMap.tsx",
-   "nos": 24,
-   "callables": 13,
-   "arquivos": 13,
-   "exemplos_arquivos": [
-    "package.json",
-    "src/components/map/LiveMap.tsx",
-    "src/components/map/MapHUD.tsx",
-    "src/components/map/MapProviderSelector.tsx",
-    "src/components/map/MapSettingsPanel.tsx",
-    "src/components/map/__tests__/mapLayers.test.ts",
-    "src/components/map/hooks/useMapboxToken.ts",
-    "src/components/map/mapLayers.ts"
-   ]
-  },
-  {
-   "id": 75,
-   "nome": "redigir-relatorio.unit.mjs",
-   "nos": 24,
-   "callables": 16,
-   "arquivos": 2,
-   "exemplos_arquivos": [
-    "scripts/ci/redigir-relatorio.mjs",
-    "scripts/ci/redigir-relatorio.unit.mjs"
-   ]
-  },
-  {
-   "id": 76,
-   "nome": "check-realtime-subscriptions.mjs",
-   "nos": 24,
-   "callables": 18,
-   "arquivos": 3,
-   "exemplos_arquivos": [
-    "package.json",
-    "scripts/db-audit/check-realtime-subscriptions.mjs",
-    "scripts/db-audit/check-realtime-subscriptions.test.mjs"
-   ]
-  },
-  {
-   "id": 77,
-   "nome": "schemas.ts",
-   "nos": 24,
-   "callables": 6,
-   "arquivos": 3,
-   "exemplos_arquivos": [
-    "supabase/functions/_shared/contract.integration.test.ts",
-    "supabase/functions/_shared/contract.ts",
-    "supabase/functions/_shared/schemas.ts"
-   ]
-  },
-  {
-   "id": 78,
-   "nome": "has",
-   "nos": 23,
-   "callables": 15,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "scripts/ai-context/gerar.mjs"
-   ]
-  },
-  {
-   "id": 79,
-   "nome": "gerar-rotas.mjs",
-   "nos": 23,
-   "callables": 15,
-   "arquivos": 1,
-   "exemplos_arquivos": [
-    "scripts/inventario/gerar-rotas.mjs"
    ]
   }
  ],
@@ -1101,7 +1111,7 @@
    "id": "ref_react",
    "rotulo": "react",
    "arquivo": "package.json",
-   "grau": 220,
+   "grau": 221,
    "comunidade": "react"
   },
   {
@@ -1130,42 +1140,42 @@
    "rotulo": "button.tsx",
    "arquivo": "src/components/ui/button.tsx",
    "grau": 133,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_components_ui_button_button",
    "rotulo": "Button",
    "arquivo": "src/components/ui/button.tsx",
    "grau": 127,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_lib_utils",
    "rotulo": "utils.ts",
    "arquivo": "src/lib/utils.ts",
    "grau": 118,
-   "comunidade": "utils.ts"
+   "comunidade": "cn"
   },
   {
    "id": "src_components_ui_badge",
    "rotulo": "badge.tsx",
    "arquivo": "src/components/ui/badge.tsx",
    "grau": 113,
-   "comunidade": "utils.ts"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_components_ui_badge_badge",
    "rotulo": "Badge",
    "arquivo": "src/components/ui/badge.tsx",
    "grau": 109,
-   "comunidade": "utils.ts"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_components_ui_card",
    "rotulo": "card.tsx",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 109,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_integrations_supabase_client",
@@ -1193,14 +1203,14 @@
    "rotulo": "Card",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 100,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "ref_framer_motion",
    "rotulo": "framer-motion",
    "arquivo": "package.json",
    "grau": 91,
-   "comunidade": "utils.ts"
+   "comunidade": "framer-motion"
   },
   {
    "id": "scripts_supabase_snapshot_snapshot",
@@ -1221,13 +1231,13 @@
    "rotulo": "CardContent",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 89,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "ref_tanstack_react_query",
    "rotulo": "@tanstack/react-query",
    "arquivo": "package.json",
-   "grau": 83,
+   "grau": 84,
    "comunidade": "@tanstack/react-query"
   },
   {
@@ -1242,35 +1252,35 @@
    "rotulo": "sonner",
    "arquivo": "package.json",
    "grau": 80,
-   "comunidade": "button.tsx"
+   "comunidade": "framer-motion"
   },
   {
    "id": "src_components_orders_neworderdialog",
    "rotulo": "NewOrderDialog.tsx",
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
    "grau": 79,
-   "comunidade": "NewOrderDialog.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_components_ui_card_cardheader",
    "rotulo": "CardHeader",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 74,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_components_ui_card_cardtitle",
    "rotulo": "CardTitle",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 74,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "ref_node_path",
    "rotulo": "ref_node_path",
    "arquivo": null,
    "grau": 73,
-   "comunidade": "ref_node_fs"
+   "comunidade": "ref_node_path"
   },
   {
    "id": "scripts_regras_negocio_generate",
@@ -1284,14 +1294,14 @@
    "rotulo": "ref_node_url",
    "arquivo": null,
    "grau": 63,
-   "comunidade": "ref_node_fs"
+   "comunidade": "ref_node_url"
   },
   {
    "id": "src_pages_ratelimitdashboardpage",
    "rotulo": "RateLimitDashboardPage.tsx",
    "arquivo": "src/pages/RateLimitDashboardPage.tsx",
    "grau": 63,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_pages_driverspage",
@@ -1305,14 +1315,14 @@
    "rotulo": "AdvancedReportsPage.tsx",
    "arquivo": "src/pages/AdvancedReportsPage.tsx",
    "grau": 59,
-   "comunidade": "button.tsx"
+   "comunidade": "AdvancedReportsPage.tsx"
   },
   {
    "id": "src_pages_alertspage",
    "rotulo": "AlertsPage.tsx",
    "arquivo": "src/pages/AlertsPage.tsx",
    "grau": 59,
-   "comunidade": "utils.ts"
+   "comunidade": "cn"
   },
   {
    "id": "src_pages_dashboardredesigned",
@@ -1326,35 +1336,35 @@
    "rotulo": "EvaluationsPage.tsx",
    "arquivo": "src/pages/EvaluationsPage.tsx",
    "grau": 59,
-   "comunidade": "react"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_pages_rolespage",
    "rotulo": "RolesPage.tsx",
    "arquivo": "src/pages/RolesPage.tsx",
    "grau": 59,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_components_ui_card_carddescription",
    "rotulo": "CardDescription",
    "arquivo": "src/components/ui/card.tsx",
    "grau": 57,
-   "comunidade": "button.tsx"
+   "comunidade": "framer-motion"
   },
   {
    "id": "src_pages_geoblockingpage",
    "rotulo": "GeoBlockingPage.tsx",
    "arquivo": "src/pages/GeoBlockingPage.tsx",
    "grau": 56,
-   "comunidade": "NewOrderDialog.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_pages_notificationhistorypage",
    "rotulo": "NotificationHistoryPage.tsx",
    "arquivo": "src/pages/NotificationHistoryPage.tsx",
    "grau": 56,
-   "comunidade": "App.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_components_map_livemap",
@@ -1375,56 +1385,56 @@
    "rotulo": "OrderDetailModal.tsx",
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
    "grau": 53,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_pages_incidentspage",
    "rotulo": "IncidentsPage.tsx",
    "arquivo": "src/pages/IncidentsPage.tsx",
    "grau": 53,
-   "comunidade": "react"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_pages_mapssettingspage",
    "rotulo": "MapsSettingsPage.tsx",
    "arquivo": "src/pages/MapsSettingsPage.tsx",
    "grau": 53,
-   "comunidade": "button.tsx"
+   "comunidade": "badge.tsx"
   },
   {
    "id": "src_pages_userpreferencespage",
    "rotulo": "UserPreferencesPage.tsx",
    "arquivo": "src/pages/UserPreferencesPage.tsx",
    "grau": 53,
-   "comunidade": "button.tsx"
+   "comunidade": "framer-motion"
   },
   {
    "id": "src_pages_contactspage",
    "rotulo": "ContactsPage.tsx",
    "arquivo": "src/pages/ContactsPage.tsx",
    "grau": 52,
-   "comunidade": "NewOrderDialog.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_pages_alert_configurations_alertconfigcard",
    "rotulo": "AlertConfigCard.tsx",
    "arquivo": "src/pages/alert-configurations/AlertConfigCard.tsx",
    "grau": 51,
-   "comunidade": "App.tsx"
+   "comunidade": "cn"
   },
   {
    "id": "src_components_layout_sidebar",
    "rotulo": "Sidebar.tsx",
    "arquivo": "src/components/layout/Sidebar.tsx",
    "grau": 50,
-   "comunidade": "cn"
+   "comunidade": "Sidebar.tsx"
   },
   {
    "id": "src_pages_webhookspage",
    "rotulo": "WebhooksPage.tsx",
    "arquivo": "src/pages/WebhooksPage.tsx",
    "grau": 50,
-   "comunidade": "NewOrderDialog.tsx"
+   "comunidade": "lucide-react"
   },
   {
    "id": "ref_vitest",
@@ -1438,7 +1448,14 @@
    "rotulo": "NotificationPreferences.tsx",
    "arquivo": "src/components/notifications/NotificationPreferences.tsx",
    "grau": 49,
-   "comunidade": "NotificationPreferences.tsx"
+   "comunidade": "framer-motion"
+  },
+  {
+   "id": "supabase_functions_geo_gateway_index",
+   "rotulo": "geo-gateway/index.ts",
+   "arquivo": "supabase/functions/geo-gateway/index.ts",
+   "grau": 49,
+   "comunidade": "geo-gateway/index.ts"
   },
   {
    "id": "src_components_ui_motion",
@@ -1448,32 +1465,32 @@
    "comunidade": "motion.tsx"
   },
   {
-   "id": "supabase_functions_geo_gateway_index",
-   "rotulo": "geo-gateway/index.ts",
-   "arquivo": "supabase/functions/geo-gateway/index.ts",
-   "grau": 48,
-   "comunidade": "geo-gateway/index.ts"
-  },
-  {
    "id": "ref_node_assert",
    "rotulo": "ref_node_assert",
    "arquivo": null,
    "grau": 47,
-   "comunidade": "ref_node_fs"
+   "comunidade": "ref_node_path"
   },
   {
    "id": "src_components_notifications_soundsettingspanel",
    "rotulo": "SoundSettingsPanel.tsx",
    "arquivo": "src/components/notifications/SoundSettingsPanel.tsx",
    "grau": 47,
-   "comunidade": "utils.ts"
+   "comunidade": "framer-motion"
   },
   {
    "id": "src_components_ui_input",
    "rotulo": "input.tsx",
    "arquivo": "src/components/ui/input.tsx",
    "grau": 47,
-   "comunidade": "button.tsx"
+   "comunidade": "lucide-react"
+  },
+  {
+   "id": "src_hooks_usemapbox",
+   "rotulo": "useMapbox.ts",
+   "arquivo": "src/hooks/useMapbox.ts",
+   "grau": 47,
+   "comunidade": "useMapbox.ts"
   },
   {
    "id": "src_utils_logger",
@@ -1487,14 +1504,14 @@
    "rotulo": "ref_node_test",
    "arquivo": null,
    "grau": 46,
-   "comunidade": "ref_node_fs"
+   "comunidade": "ref_node_path"
   },
   {
    "id": "src_pages_admintelemetriapage",
    "rotulo": "AdminTelemetriaPage.tsx",
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",
    "grau": 46,
-   "comunidade": "lucide-react"
+   "comunidade": "AdvancedReportsPage.tsx"
   },
   {
    "id": "src_utils_logger_logger",
@@ -1502,13 +1519,6 @@
    "arquivo": "src/utils/logger.ts",
    "grau": 46,
    "comunidade": "client.ts"
-  },
-  {
-   "id": "src_components_layout_header",
-   "rotulo": "Header.tsx",
-   "arquivo": "src/components/layout/Header.tsx",
-   "grau": 45,
-   "comunidade": "cn"
   }
  ],
  "mais_chamados": [
@@ -1602,10 +1612,6 @@
   },
   {
    "simbolo": "log() (scripts/supabase_snapshot/snapshot.py)",
-   "chamadas": 9
-  },
-  {
-   "simbolo": "mapboxProxy() (src/hooks/useMapbox.ts)",
    "chamadas": 9
   },
   {
@@ -1751,6 +1757,10 @@
   {
    "simbolo": "sha() (scripts/supabase_snapshot/snapshot.py)",
    "chamadas": 5
+  },
+  {
+   "simbolo": "slug() (scripts/supabase_snapshot/snapshot.py)",
+   "chamadas": 5
   }
  ],
  "arquivos_com_mais_simbolos": [
@@ -1775,6 +1785,10 @@
    "simbolos": 36
   },
   {
+   "arquivo": "src/hooks/useMapbox.ts",
+   "simbolos": 35
+  },
+  {
    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
    "simbolos": 34
   },
@@ -1793,10 +1807,6 @@
   {
    "arquivo": "src/types/lalamove.ts",
    "simbolos": 25
-  },
-  {
-   "arquivo": "src/hooks/useMapbox.ts",
-   "simbolos": 24
   },
   {
    "arquivo": "src/hooks/useDrivers.ts",
@@ -1848,7 +1858,7 @@
   },
   {
    "arquivo": "supabase/functions/geo-gateway/resolver.ts",
-   "simbolos": 16
+   "simbolos": 17
   },
   {
    "arquivo": "scripts/ci/check-test-inventory.mjs",
@@ -1922,11 +1932,11 @@
   ".codex/AGENTS.md": "ECC for Codex CLI",
   ".github/PULL_REQUEST_TEMPLATE.md": "PULL_REQUEST_TEMPLATE.md",
   ".hermes.md": "Lalamove_V2 — Regras da Casa (Hermes) — suplemento",
-  "@supabase/supabase-js": "@supabase/supabase-js",
-  "AGENTS.md": "AGENTS.md — Lalamove V2",
-  "CHANGELOG.md": "DashboardRedesigned.tsx",
+  "@supabase/supabase-js": "seed-database.ts",
+  "AGENTS.md": "ProtectedRoute",
+  "CHANGELOG.md": "useRiskRules.ts",
   "CLAUDE.md": "CLAUDE.md",
-  "README.md": "DashboardRedesigned.tsx",
+  "README.md": "useSLAMetrics.ts",
   "SECURITY_CHECKLIST.md": "Security Checklist - Lalamove Guardian",
   "claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md": "BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)",
   "components.json": "components.json",
@@ -1935,7 +1945,7 @@
   "docs/API_REFERENCE.md": "📘 API Reference - Lalamove Guardian",
   "docs/ARCHITECTURE.md": "DashboardRedesigned.tsx",
   "docs/AUDITORIA_PRS_FECHADAS_2026-11.md": "ErrorBoundary",
-  "docs/AUDITORIA_TECNICA_2026-09.md": "useMetrics.ts",
+  "docs/AUDITORIA_TECNICA_2026-09.md": ".build",
   "docs/CACHE_SYSTEM.md": "📊 Sistema de Cache - Materialized Views",
   "docs/CONTRIBUTING.md": "🤝 Contributing - Lalamove Guardian",
   "docs/CRON_JOBS.md": "⏱️ Cron Jobs & Rotinas de Manutenção",
@@ -1943,12 +1953,13 @@
   "docs/DEPLOYMENT.md": "🚀 Deployment - Lalamove Guardian",
   "docs/EDGE_DEPLOY_PIPELINE.md": "Pipeline de deploy das edge functions — 2026-11",
   "docs/FUNCIONALIDADES_E_FERRAMENTAS.md": "DashboardRedesigned.tsx",
+  "docs/GEO_PENDENCIAS.md": "O que ficou desligado ou para depois",
   "docs/JOB_QUEUE_SYSTEM.md": "📦 Sistema de Filas Assíncronas - Job Queue",
   "docs/LALAMOVE_API_V3.md": "2. Cidades e Serviços Disponíveis no Brasil",
   "docs/LALAMOVE_FAILURE_SIMULATION.md": "Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)",
-  "docs/LALAMOVE_MASTER_ANALYSIS.md": "🔬 Lalamove — Análise Mestra e Roteiro de Evolução",
-  "docs/LALAMOVE_SCORECARD.md": "useLalamoveUapi.ts",
-  "docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md": "17. UI/UX e Design System",
+  "docs/LALAMOVE_MASTER_ANALYSIS.md": "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian",
+  "docs/LALAMOVE_SCORECARD.md": "P-14-analise-correcoes-planejadas.md",
+  "docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md": "📋 Levantamento Completo e Exaustivo de Funcionalidades",
   "docs/LOGGING_AND_HEALTH.md": "📝 Logger Aprimorado",
   "docs/MAPBOX.md": "MAPBOX — Inventário e Referência (21/11/2026)",
   "docs/MIGRATION_RECONCILIATION_2026-11.md": "Reconciliação ledger × schema × repo — 2026-11-21",
@@ -1965,8 +1976,8 @@
   "docs/agentes/deploy.md": "Deploy (Vercel + Lovable) — referência para agentes",
   "docs/agentes/github-ci.md": "GitHub (perímetro, CI, workflows) — referência para agentes",
   "docs/agentes/lalamove-api.md": "API Lalamove (v3 + UAPI) — referência para agentes",
-  "docs/agentes/mapa-repo.md": "useDrivers.ts",
-  "docs/agentes/regras-dominio.md": "types/index.ts",
+  "docs/agentes/mapa-repo.md": "useJobQueue.ts",
+  "docs/agentes/regras-dominio.md": "ProtectedRoute",
   "docs/audit_report.md": "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian",
   "docs/backups/plano-pim-promo-supply-v2-auditoria-261121.md": "Auditoria de validação — 21/11/2026",
   "docs/backups/plano-pim-promo-supply-v2.md": "Promo Supply V2 = só compras · catálogo vive no Promo Gifts V4",
@@ -1986,12 +1997,12 @@
   "docs/pendencias/P-11-mfa-webauthn.md": "P-11-mfa-webauthn.md",
   "docs/pendencias/P-12-analise-funcionalidades-planejadas.md": "P-12-analise-funcionalidades-planejadas.md",
   "docs/pendencias/P-13-comment-on-table-faltantes.md": "P-13-comment-on-table-faltantes.md",
-  "docs/pendencias/P-14-analise-correcoes-planejadas.md": "lalamoveCanonical.test.ts",
+  "docs/pendencias/P-14-analise-correcoes-planejadas.md": "P-14-analise-correcoes-planejadas.md",
   "docs/pendencias/P-15-pipeline-escalonamento-alertas.md": "useAlertConfigurations.ts",
-  "docs/pendencias/P-16-hooks-orfaos-triagem.md": "DashboardRedesigned.tsx",
+  "docs/pendencias/P-16-hooks-orfaos-triagem.md": "useAlertConfigurations.ts",
   "docs/pendencias/README.md": "pendencias/README.md",
   "docs/pendencias/_linha-de-base.md": "_linha-de-base.md",
-  "docs/pendencias/_ordem.md": "useEvaluateDriver.ts",
+  "docs/pendencias/_ordem.md": "Ordem de execução do backlog",
   "docs/pendencias/_regras-de-negocio.md": "Regras de negócio (resumo para executar pendências)",
   "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md": "lalamove-webhook/index.ts",
   "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md": "contract.ts",
@@ -2004,23 +2015,23 @@
   "e2e/rbac.e2e.ts": "auth.ts",
   "eslint.config.js": "package.json",
   "https://esm.sh/@supabase/supabase-js@2.39.3": "contract.ts",
-  "inventario/estado/README.md": "Estado real do projeto — inventário gerado",
-  "jspdf": "lucide-react",
-  "jspdf-autotable": "lucide-react",
+  "inventario/estado/README.md": "ProtectedRoute",
+  "jspdf": "AdvancedReportsPage.tsx",
+  "jspdf-autotable": "AdvancedReportsPage.tsx",
   "lalamove_cron_setup.sh": "lalamove_cron_setup.sh",
   "lalamove_n8n_integration.md": "Integração n8n ↔ Lalamove Token Manager",
   "lalamove_order_history_full.md": "Lalamove Brasil — Histórico Completo de Pedidos",
   "lalamove_token_manager.py": "lalamove_token_manager.py",
   "node:fs": "ref_node_fs",
   "node:module": "width-regression.mjs",
-  "package.json": "button.tsx",
+  "package.json": "cn",
   "playwright": "width-regression.mjs",
   "playwright.config.ts": "auth.ts",
   "postcss.config.js": "postcss.config.js",
   "public/manifest.json": "manifest.json",
   "public/sw.js": "sw.js",
   "scripts/add-security-manage.ts": "add-security-manage.ts",
-  "scripts/ai-context/README.md": "ai-context — contexto de código do Lalamove V2 para agentes de IA",
+  "scripts/ai-context/README.md": "ProtectedRoute",
   "scripts/ai-context/cenarios.mjs": "cenarios.mjs",
   "scripts/ai-context/gerar.mjs": "uniq",
   "scripts/ai-context/gerar.unit.mjs": "gerar.unit.mjs",
@@ -2040,10 +2051,10 @@
   "scripts/apply-sql-via-management-api.ts": "apply-sql-via-management-api.ts",
   "scripts/apply-via-management-api.ts": "apply-via-management-api.ts",
   "scripts/backup.sh": "backup.sh",
-  "scripts/check-permissions.ts": "@supabase/supabase-js",
+  "scripts/check-permissions.ts": "seed-database.ts",
   "scripts/ci/README.md": "workflow-invariants.unit.mjs",
   "scripts/ci/a11y-button-name-ratchet.mjs": "a11y-button-name-ratchet.mjs",
-  "scripts/ci/a11y-button-name-ratchet.unit.mjs": "ref_node_fs",
+  "scripts/ci/a11y-button-name-ratchet.unit.mjs": "ref_node_path",
   "scripts/ci/actions-kpi.mjs": "actions-kpi.mjs",
   "scripts/ci/actions-kpi.unit.mjs": "actions-kpi.mjs",
   "scripts/ci/branch-podaveis.mjs": "branch-podaveis.unit.mjs",
@@ -2052,7 +2063,7 @@
   "scripts/ci/bump-toolchain.unit.mjs": "ref_node_fs",
   "scripts/ci/bundle-budget.mjs": "bundle-budget.unit.mjs",
   "scripts/ci/bundle-budget.unit.mjs": "bundle-budget.unit.mjs",
-  "scripts/ci/check-agents-md-integrity.mjs": "ref_node_child_process",
+  "scripts/ci/check-agents-md-integrity.mjs": "ref_node_fs",
   "scripts/ci/check-bundle-secrets.mjs": "check-bundle-secrets.unit.mjs",
   "scripts/ci/check-bundle-secrets.unit.mjs": "check-bundle-secrets.unit.mjs",
   "scripts/ci/check-e2e-artifact-secrets.mjs": "check-e2e-artifact-secrets.mjs",
@@ -2069,16 +2080,16 @@
   "scripts/ci/check-workflow-pins-resolvem.unit.mjs": "check-workflow-pins-resolvem.mjs",
   "scripts/ci/check-workflow-pins.mjs": "check-workflow-pins.unit.mjs",
   "scripts/ci/check-workflow-pins.unit.mjs": "check-workflow-pins.unit.mjs",
-  "scripts/ci/commit-msg-lint.mjs": "ref_node_fs",
-  "scripts/ci/commit-msg-lint.unit.mjs": "ref_node_fs",
-  "scripts/ci/fila-merge.mjs": "ref_node_child_process",
-  "scripts/ci/fila-merge.unit.mjs": "ref_node_child_process",
-  "scripts/ci/gerar-matriz-edge-tabela.mjs": "ref_node_fs",
-  "scripts/ci/gerar-matriz-edge-tabela.unit.mjs": "ref_node_fs",
+  "scripts/ci/commit-msg-lint.mjs": "ref_node_url",
+  "scripts/ci/commit-msg-lint.unit.mjs": "ref_node_url",
+  "scripts/ci/fila-merge.mjs": "fila-merge.mjs",
+  "scripts/ci/fila-merge.unit.mjs": "fila-merge.mjs",
+  "scripts/ci/gerar-matriz-edge-tabela.mjs": "ref_node_url",
+  "scripts/ci/gerar-matriz-edge-tabela.unit.mjs": "ref_node_url",
   "scripts/ci/github-settings-guard.mjs": "github-settings-guard.mjs",
   "scripts/ci/github-settings-guard.unit.mjs": "github-settings-guard.mjs",
   "scripts/ci/implicit-any-ratchet.mjs": "implicit-any-ratchet.mjs",
-  "scripts/ci/implicit-any-ratchet.unit.mjs": "implicit-any-ratchet.unit.mjs",
+  "scripts/ci/implicit-any-ratchet.unit.mjs": "ref_node_path",
   "scripts/ci/issue-rotativa.mjs": "actions-kpi.mjs",
   "scripts/ci/issue-rotativa.unit.mjs": "actions-kpi.mjs",
   "scripts/ci/lint-ratchet.mjs": "lint-ratchet.mjs",
@@ -2092,73 +2103,73 @@
   "scripts/ci/solta.unit.mjs": "check-test-inventory.mjs",
   "scripts/ci/typecheck-ratchet.mjs": "typecheck-ratchet.mjs",
   "scripts/ci/typecheck-ratchet.unit.mjs": "typecheck-ratchet.mjs",
-  "scripts/ci/vercel-env-baseline.mjs": "ref_node_fs",
-  "scripts/ci/vercel-env-baseline.unit.mjs": "ref_node_fs",
+  "scripts/ci/vercel-env-baseline.mjs": "ref_node_url",
+  "scripts/ci/vercel-env-baseline.unit.mjs": "ref_node_url",
   "scripts/ci/workflow-invariants.mjs": "workflow-invariants.unit.mjs",
   "scripts/ci/workflow-invariants.unit.mjs": "workflow-invariants.unit.mjs",
   "scripts/ci/workflow-test-support.mjs": "workflow-invariants.unit.mjs",
   "scripts/db-audit/README.md": "scripts/db-audit — auditores de banco",
-  "scripts/db-audit/catalog-from-types.mjs": "ref_node_fs",
-  "scripts/db-audit/catalog-from-types.test.mjs": "ref_node_fs",
+  "scripts/db-audit/catalog-from-types.mjs": "ref_node_path",
+  "scripts/db-audit/catalog-from-types.test.mjs": "ref_node_path",
   "scripts/db-audit/catalog.sql": "catalog.sql",
-  "scripts/db-audit/check-grants-fresh.mjs": "check-screen-permission-db-guards.mjs",
-  "scripts/db-audit/check-grants-fresh.test.mjs": "ref_node_fs",
+  "scripts/db-audit/check-grants-fresh.mjs": "check-manifest-fresh.mjs",
+  "scripts/db-audit/check-grants-fresh.test.mjs": "ref_node_path",
   "scripts/db-audit/check-manifest-fresh.mjs": "check-manifest-fresh.mjs",
-  "scripts/db-audit/check-manifest-fresh.test.mjs": "ref_node_fs",
+  "scripts/db-audit/check-manifest-fresh.test.mjs": "ref_node_path",
   "scripts/db-audit/check-migration-drift.mjs": "check-migration-drift.mjs",
   "scripts/db-audit/check-migration-drift.test.mjs": "check-migration-drift.test.mjs",
   "scripts/db-audit/check-realtime-subscriptions.mjs": "check-realtime-subscriptions.mjs",
-  "scripts/db-audit/check-realtime-subscriptions.test.mjs": "check-realtime-subscriptions.mjs",
+  "scripts/db-audit/check-realtime-subscriptions.test.mjs": "ref_node_path",
   "scripts/db-audit/check-remocoes-destrutivas.mjs": "check-migration-drift.mjs",
-  "scripts/db-audit/check-screen-permission-db-guards.mjs": "check-screen-permission-db-guards.mjs",
-  "scripts/db-audit/check-screen-permission-db-guards.test.mjs": "ref_node_fs",
+  "scripts/db-audit/check-screen-permission-db-guards.mjs": "check-manifest-fresh.mjs",
+  "scripts/db-audit/check-screen-permission-db-guards.test.mjs": "ref_node_path",
   "scripts/db-audit/database-identity.mjs": "register-migration.mjs",
   "scripts/db-audit/database-identity.test.mjs": "register-migration.mjs",
   "scripts/db-audit/diff.mjs": "check-manifest-fresh.mjs",
-  "scripts/db-audit/diff.test.mjs": "ref_node_fs",
-  "scripts/db-audit/dry-run-plan.mjs": "dry-run-plan.mjs",
+  "scripts/db-audit/diff.test.mjs": "ref_node_path",
+  "scripts/db-audit/dry-run-plan.mjs": "ref_node_fs",
   "scripts/db-audit/grants-baseline.sql": "grants-baseline.sql",
   "scripts/db-audit/manifest-lib.mjs": "check-manifest-fresh.mjs",
   "scripts/db-audit/manifest.sql": "manifest.sql",
   "scripts/db-audit/psql-environment.mjs": "register-migration.mjs",
-  "scripts/db-audit/psql-environment.test.mjs": "ref_node_fs",
+  "scripts/db-audit/psql-environment.test.mjs": "ref_node_path",
   "scripts/db-audit/psql-safe.mjs": "register-migration.mjs",
-  "scripts/db-audit/psql-safe.test.mjs": "ref_node_fs",
+  "scripts/db-audit/psql-safe.test.mjs": "ref_node_path",
   "scripts/db-audit/register-migration.mjs": "register-migration.mjs",
   "scripts/db-audit/register-migration.test.mjs": "register-migration.mjs",
-  "scripts/db-audit/seguranca-processo.mjs": "check-screen-permission-db-guards.mjs",
-  "scripts/db-audit/seguranca-processo.test.mjs": "check-screen-permission-db-guards.mjs",
+  "scripts/db-audit/seguranca-processo.mjs": "check-manifest-fresh.mjs",
+  "scripts/db-audit/seguranca-processo.test.mjs": "check-manifest-fresh.mjs",
   "scripts/db-audit/sql-lexer.mjs": "check-migration-drift.mjs",
   "scripts/db-audit/supabase-usage-guard.mjs": "check-migration-drift.mjs",
   "scripts/deploy-gateway.ps1": "deploy-gateway.ps1",
   "scripts/deploy.sh": "deploy.sh",
-  "scripts/diagnose-rpc.ts": "@supabase/supabase-js",
+  "scripts/diagnose-rpc.ts": "seed-database.ts",
   "scripts/docs/README.md": "scripts/docs — guarda da documentação e do Realtime",
   "scripts/docs/verificar-docs-realtime.mjs": "actions-kpi.mjs",
   "scripts/ensure-admin-active.ts": "ensure-admin-active.ts",
   "scripts/eslint/README.md": "lalamove-webhook/index.ts",
-  "scripts/eslint/no-secret-compare.js": "Changelog",
-  "scripts/fix-admin-role-active.ts": "@supabase/supabase-js",
-  "scripts/fix-dashboard-via-api.ts": "@supabase/supabase-js",
+  "scripts/eslint/no-secret-compare.js": "useSLAMetrics.ts",
+  "scripts/fix-admin-role-active.ts": "seed-database.ts",
+  "scripts/fix-dashboard-via-api.ts": "seed-database.ts",
   "scripts/fix-rpc-functions.ts": "fix-rpc-functions.ts",
-  "scripts/fix_corrupted_imports.py": "generate.py",
-  "scripts/fix_logs.py": "generate.py",
+  "scripts/fix_corrupted_imports.py": "os",
+  "scripts/fix_logs.py": "os",
   "scripts/generate-dashboard-sql.ts": "medir-tipografia.cjs",
   "scripts/geo/README.md": "geo/README.md",
   "scripts/geo/searchbox-coverage.ts": "searchbox-coverage.ts",
   "scripts/graphify/setup.sh": "setup.sh",
   "scripts/health-check.sh": "health-check.sh",
-  "scripts/inventario/README.md": "client.ts",
+  "scripts/inventario/README.md": "ProtectedRoute",
   "scripts/inventario/banco.sql": "banco.sql",
   "scripts/inventario/gerar-banco.mjs": "gerar-banco.mjs",
   "scripts/inventario/gerar-repo.mjs": "gerar-repo.mjs",
   "scripts/inventario/gerar-rotas.mjs": "gerar-rotas.mjs",
-  "scripts/inventario/mudou-conteudo.mjs": "ref_node_child_process",
+  "scripts/inventario/mudou-conteudo.mjs": "mudou-conteudo.mjs",
   "scripts/lib/README.md": "scripts/lib — infraestrutura compartilhada dos scripts",
-  "scripts/lib/seguranca-processo.mjs": "ref_node_fs",
-  "scripts/lib/seguranca-processo.test.mjs": "ref_node_fs",
+  "scripts/lib/seguranca-processo.mjs": "ref_node_path",
+  "scripts/lib/seguranca-processo.test.mjs": "ref_node_path",
   "scripts/list-tables-v2.ts": "list-tables-v2.ts",
-  "scripts/list-tables.ts": "@supabase/supabase-js",
+  "scripts/list-tables.ts": "seed-database.ts",
   "scripts/pre-commit-secrets.sh": "pre-commit-secrets.sh",
   "scripts/qa/README.md": "scripts/qa — contraste WCAG e tipografia",
   "scripts/qa/contraste-auditores.unit.mjs": "contraste-auditores.unit.mjs",
@@ -2166,22 +2177,22 @@
   "scripts/qa/contraste-tokens.mjs": "contraste-auditores.unit.mjs",
   "scripts/qa/medir-tipografia.cjs": "medir-tipografia.cjs",
   "scripts/regras_negocio/README.md": "regras_negocio — regras de negócio para agentes de IA",
-  "scripts/regras_negocio/generate.py": "generate.py",
-  "scripts/regras_negocio/indice.py": "test_snapshot.py",
+  "scripts/regras_negocio/generate.py": "Path",
+  "scripts/regras_negocio/indice.py": "indice.py",
   "scripts/regras_negocio/publish.sh": "publish.sh",
   "scripts/regras_negocio/test_generate.py": "CurrentSqlSourcesTests",
-  "scripts/seed-contacts.ts": "seed-contacts.ts",
+  "scripts/seed-contacts.ts": "seed-database.ts",
   "scripts/seed-database.ts": "seed-database.ts",
-  "scripts/set-user-admin.ts": "@supabase/supabase-js",
+  "scripts/set-user-admin.ts": "seed-database.ts",
   "scripts/supabase_snapshot/README.md": "supabase-snapshot",
   "scripts/supabase_snapshot/snapshot.py": "snapshot.py",
-  "scripts/supabase_snapshot/test_snapshot.py": "SnapshotDBStatsTests",
-  "scripts/test-after-fix.ts": "@supabase/supabase-js",
-  "scripts/test-user-permissions.ts": "@supabase/supabase-js",
-  "scripts/ui-audit/README.md": "scripts/ui-audit — auditoria de layout",
+  "scripts/supabase_snapshot/test_snapshot.py": ".build",
+  "scripts/test-after-fix.ts": "seed-database.ts",
+  "scripts/test-user-permissions.ts": "seed-database.ts",
+  "scripts/ui-audit/README.md": "useEvaluateDriver.ts",
   "scripts/ui-audit/layout-guard.mjs": "layout-guard.mjs",
-  "scripts/ui-audit/layout-guard.unit.mjs": "ref_node_fs",
-  "scripts/ui-audit/pages/${n}": "ref_node_fs",
+  "scripts/ui-audit/layout-guard.unit.mjs": "ref_node_path",
+  "scripts/ui-audit/pages/${n}": "ref_node_path",
   "scripts/ui-audit/pages/Y": "layout-guard.mjs",
   "scripts/ui-audit/root-className.mjs": "layout-guard.mjs",
   "scripts/ui-audit/width-check.mjs": "width-regression.mjs",
@@ -2189,179 +2200,179 @@
   "scripts/ui-audit/width-regression.mjs": "width-regression.mjs",
   "scripts/vercel/README.md": "scripts/vercel — automação de deploy",
   "scripts/vercel/ignore-build.sh": "ignore-build.sh",
-  "scripts/vercel/ignore-build.unit.mjs": "ref_node_fs",
+  "scripts/vercel/ignore-build.unit.mjs": "ref_node_path",
   "scripts/vercel/verify-production.mjs": "verify-production.mjs",
-  "scripts/vercel/verify-production.unit.mjs": "verify-production.unit.mjs",
+  "scripts/vercel/verify-production.unit.mjs": "verify-release-targets.mjs",
   "scripts/vercel/verify-release-targets.mjs": "verify-release-targets.mjs",
   "scripts/vercel/verify-release-targets.unit.mjs": "verify-release-targets.mjs",
   "src/App.tsx": "App.tsx",
   "src/__tests__/improvements-validation.test.tsx": "@tanstack/react-query",
   "src/components/CommandPaletteEnhanced.tsx": "CommandPaletteEnhanced.tsx",
   "src/components/ErrorBoundary.tsx": "errorMonitoring.ts",
-  "src/components/GlobalSearchAdvanced.tsx": "button.tsx",
-  "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": "lucide-react",
-  "src/components/admin/telemetry/ContractVersionUsagePanel.tsx": "lucide-react",
-  "src/components/admin/telemetry/TelemetryCharts.tsx": "TelemetryCharts.tsx",
+  "src/components/GlobalSearchAdvanced.tsx": "lucide-react",
+  "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": "AdvancedReportsPage.tsx",
+  "src/components/admin/telemetry/ContractVersionUsagePanel.tsx": "AdvancedReportsPage.tsx",
+  "src/components/admin/telemetry/TelemetryCharts.tsx": "AdvancedReportsPage.tsx",
   "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx": "@tanstack/react-query",
-  "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx": "TelemetryCharts.tsx",
-  "src/components/alerts/AlertsAdvanced.tsx": "types/index.ts",
-  "src/components/alerts/PredictiveAlerts.tsx": "App.tsx",
+  "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx": "AdvancedReportsPage.tsx",
+  "src/components/alerts/AlertsAdvanced.tsx": "AlertsAdvanced.tsx",
+  "src/components/alerts/PredictiveAlerts.tsx": "DriverProfileModal.tsx",
   "src/components/approvals/SwipeableApprovalCard.tsx": "types/index.ts",
   "src/components/approvals/UrgencyIndicator.tsx": "UrgencyIndicator.tsx",
   "src/components/approvals/WaitingTimeCounter.tsx": "UrgencyIndicator.tsx",
   "src/components/auth/DeviceDetector.tsx": "client.ts",
-  "src/components/auth/MFAEnroll.tsx": "button.tsx",
-  "src/components/auth/MFASettings.tsx": "App.tsx",
-  "src/components/auth/MFAVerify.tsx": "button.tsx",
-  "src/components/auth/PasskeyLoginButton.tsx": "App.tsx",
-  "src/components/auth/PasskeySettings.tsx": "App.tsx",
-  "src/components/auth/PasswordStrengthIndicator.tsx": "lucide-react",
-  "src/components/auth/PermissionGate.tsx": "client.ts",
-  "src/components/auth/ProtectedRoute.tsx": "client.ts",
-  "src/components/dashboard/AIRouteChatbot.tsx": "button.tsx",
-  "src/components/dashboard/AlertActionCard.tsx": "lucide-react",
-  "src/components/dashboard/AlertsPanel.tsx": "types/index.ts",
+  "src/components/auth/MFAEnroll.tsx": "SecurityDashboardPage.tsx",
+  "src/components/auth/MFASettings.tsx": "SecurityDashboardPage.tsx",
+  "src/components/auth/MFAVerify.tsx": "SecurityDashboardPage.tsx",
+  "src/components/auth/PasskeyLoginButton.tsx": "framer-motion",
+  "src/components/auth/PasskeySettings.tsx": "SecurityDashboardPage.tsx",
+  "src/components/auth/PasswordStrengthIndicator.tsx": "framer-motion",
+  "src/components/auth/PermissionGate.tsx": "react",
+  "src/components/auth/ProtectedRoute.tsx": "react",
+  "src/components/dashboard/AIRouteChatbot.tsx": "react",
+  "src/components/dashboard/AlertActionCard.tsx": "DashboardRedesigned.tsx",
+  "src/components/dashboard/AlertsPanel.tsx": "AlertsAdvanced.tsx",
   "src/components/dashboard/ApprovalQueue.tsx": "types/index.ts",
   "src/components/dashboard/BatchActionsToolbar.tsx": "types/index.ts",
-  "src/components/dashboard/DashboardHeroSection.tsx": "types/index.ts",
-  "src/components/dashboard/DashboardQuickActions.tsx": "utils.ts",
+  "src/components/dashboard/DashboardHeroSection.tsx": "cn",
+  "src/components/dashboard/DashboardQuickActions.tsx": "cn",
   "src/components/dashboard/DashboardSkeleton.tsx": "DashboardRedesigned.tsx",
-  "src/components/dashboard/LiveMapPlaceholder.tsx": "utils.ts",
+  "src/components/dashboard/LiveMapPlaceholder.tsx": "cn",
   "src/components/dashboard/MetricCard.tsx": "cn",
   "src/components/dashboard/OrdersTable.tsx": "OrdersTable.tsx",
   "src/components/dashboard/RiskScoreGauge.tsx": "cn",
   "src/components/dashboard/UAPIStatusCards.tsx": "useLalamove.ts",
-  "src/components/debug/AuditReportGenerator.tsx": "button.tsx",
+  "src/components/debug/AuditReportGenerator.tsx": "lucide-react",
   "src/components/drivers/AdvancedFilters.tsx": "cn",
-  "src/components/drivers/BulkActions.tsx": "NewOrderDialog.tsx",
-  "src/components/drivers/DriverProfileModal.tsx": "cn",
-  "src/components/drivers/DriverProfileTabs.tsx": "cn",
-  "src/components/health/CronJobsHealthPanel.tsx": "lucide-react",
-  "src/components/lalamove/UapiCouponsPanel.tsx": "UapiStatementPanel.tsx",
+  "src/components/drivers/BulkActions.tsx": "lucide-react",
+  "src/components/drivers/DriverProfileModal.tsx": "DriverProfileModal.tsx",
+  "src/components/drivers/DriverProfileTabs.tsx": "DriverProfileModal.tsx",
+  "src/components/health/CronJobsHealthPanel.tsx": "CronJobsHealthPanel.tsx",
+  "src/components/lalamove/UapiCouponsPanel.tsx": "AdvancedReportsPage.tsx",
   "src/components/lalamove/UapiFleetPanel.tsx": "useLalamoveUapi.ts",
-  "src/components/lalamove/UapiOrderHistoryPanel.tsx": "UapiStatementPanel.tsx",
-  "src/components/lalamove/UapiStatementPanel.tsx": "UapiStatementPanel.tsx",
+  "src/components/lalamove/UapiOrderHistoryPanel.tsx": "AdvancedReportsPage.tsx",
+  "src/components/lalamove/UapiStatementPanel.tsx": "AdvancedReportsPage.tsx",
   "src/components/layout/AppLayout.tsx": "DashboardRedesigned.tsx",
-  "src/components/layout/Header.tsx": "cn",
-  "src/components/layout/MobileBottomNav.tsx": "DashboardRedesigned.tsx",
-  "src/components/layout/MobileSidebar.tsx": "NotificationPreferences.tsx",
-  "src/components/layout/Sidebar.tsx": "DashboardRedesigned.tsx",
-  "src/components/layout/sidebar-config.ts": "cn",
-  "src/components/map/Google3DCanvas.tsx": "GoogleMapsCanvas.tsx",
-  "src/components/map/GoogleMapsCanvas.tsx": "GoogleMapsCanvas.tsx",
-  "src/components/map/LiveMap.tsx": "GoogleMapsCanvas.tsx",
-  "src/components/map/MapHUD.tsx": "useTrackingData.ts",
-  "src/components/map/MapHistoryPanel.tsx": "NotificationPreferences.tsx",
+  "src/components/layout/Header.tsx": "Header.tsx",
+  "src/components/layout/MobileBottomNav.tsx": "cn",
+  "src/components/layout/MobileSidebar.tsx": "cn",
+  "src/components/layout/Sidebar.tsx": "Sidebar.tsx",
+  "src/components/layout/sidebar-config.ts": "Sidebar.tsx",
+  "src/components/map/Google3DCanvas.tsx": "useTrackingData.ts",
+  "src/components/map/GoogleMapsCanvas.tsx": "useTrackingData.ts",
+  "src/components/map/LiveMap.tsx": "useTrackingData.ts",
+  "src/components/map/MapHUD.tsx": "useMapMarkers.ts",
+  "src/components/map/MapHistoryPanel.tsx": "react",
   "src/components/map/MapLegend.tsx": "useMapMarkers.ts",
-  "src/components/map/MapProviderSelector.tsx": "cn",
-  "src/components/map/MapSearchPanel.tsx": "useTrackingData.ts",
-  "src/components/map/MapSettingsPanel.tsx": "utils.ts",
+  "src/components/map/MapProviderSelector.tsx": "Header.tsx",
+  "src/components/map/MapSearchPanel.tsx": "useMapMarkers.ts",
+  "src/components/map/MapSettingsPanel.tsx": "framer-motion",
   "src/components/map/__tests__/MapSettingsPanel.test.tsx": "MapSettingsPanel.test.tsx",
   "src/components/map/__tests__/mapLayers.test.ts": "LiveMap.tsx",
   "src/components/map/__tests__/markerFactories.test.ts": "useMapMarkers.ts",
   "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts": "useMapMarkers.ts",
-  "src/components/map/hooks/__tests__/useMapAlerts.test.ts": "useTrackingData.ts",
+  "src/components/map/hooks/__tests__/useMapAlerts.test.ts": "LiveMap.tsx",
   "src/components/map/hooks/__tests__/useMapboxToken.test.ts": "@tanstack/react-query",
-  "src/components/map/hooks/__tests__/useTrackingData.test.ts": "useTrackingData.test.ts",
-  "src/components/map/hooks/useGoogleMapsLoader.ts": "GoogleMapsCanvas.tsx",
-  "src/components/map/hooks/useMapAlerts.ts": "useTrackingData.ts",
+  "src/components/map/hooks/__tests__/useTrackingData.test.ts": "useTrackingData.ts",
+  "src/components/map/hooks/useGoogleMapsLoader.ts": "useTrackingData.ts",
+  "src/components/map/hooks/useMapAlerts.ts": "LiveMap.tsx",
   "src/components/map/hooks/useMapMarkers.ts": "useMapMarkers.ts",
   "src/components/map/hooks/useMapboxToken.ts": "LiveMap.tsx",
-  "src/components/map/hooks/useTrackingData.ts": "useTrackingData.ts",
+  "src/components/map/hooks/useTrackingData.ts": "useMapMarkers.ts",
   "src/components/map/mapLayers.ts": "LiveMap.tsx",
   "src/components/map/markerFactories.ts": "useMapMarkers.ts",
-  "src/components/map/types.ts": "GoogleMapsCanvas.tsx",
-  "src/components/notifications/NotificationPreferences.tsx": "NotificationPreferences.tsx",
-  "src/components/notifications/PushNotificationSettings.tsx": "App.tsx",
+  "src/components/map/types.ts": "useTrackingData.ts",
+  "src/components/notifications/NotificationPreferences.tsx": "framer-motion",
+  "src/components/notifications/PushNotificationSettings.tsx": "SecurityDashboardPage.tsx",
   "src/components/notifications/SoundSettingsPanel.tsx": "cn",
   "src/components/orders/AddressAutocomplete.tsx": "AddressAutocomplete.tsx",
   "src/components/orders/CepQuickFill.tsx": "cep.ts",
-  "src/components/orders/ContactPicker.tsx": "NewOrderDialog.tsx",
-  "src/components/orders/FetchOrderDialog.tsx": "NewOrderDialog.tsx",
-  "src/components/orders/ImportCSVDialog.tsx": "NewOrderDialog.tsx",
-  "src/components/orders/NewOrderDialog.tsx": "NewOrderDialog.tsx",
-  "src/components/orders/OrderDetailModal.tsx": "button.tsx",
+  "src/components/orders/ContactPicker.tsx": "CommandPaletteEnhanced.tsx",
+  "src/components/orders/FetchOrderDialog.tsx": "lucide-react",
+  "src/components/orders/ImportCSVDialog.tsx": "lucide-react",
+  "src/components/orders/NewOrderDialog.tsx": "lucide-react",
+  "src/components/orders/OrderDetailModal.tsx": "lucide-react",
   "src/components/orders/StatusTimeline.tsx": "StatusTimeline.tsx",
   "src/components/pwa/OfflineIndicator.tsx": "OfflineIndicator.tsx",
   "src/components/reports/GeoHeatmap.tsx": "useAdvancedReports.ts",
   "src/components/ui/accessible-card.tsx": "cn",
-  "src/components/ui/accordion.tsx": "App.tsx",
+  "src/components/ui/accordion.tsx": "cn",
   "src/components/ui/activity-timeline.tsx": "cn",
-  "src/components/ui/alert-dialog.tsx": "NewOrderDialog.tsx",
-  "src/components/ui/alert.tsx": "lucide-react",
-  "src/components/ui/avatar.tsx": "cn",
-  "src/components/ui/back-button.tsx": "App.tsx",
-  "src/components/ui/badge.tsx": "utils.ts",
+  "src/components/ui/alert-dialog.tsx": "lucide-react",
+  "src/components/ui/alert.tsx": "App.tsx",
+  "src/components/ui/avatar.tsx": "Sidebar.tsx",
+  "src/components/ui/back-button.tsx": "cn",
+  "src/components/ui/badge.tsx": "badge.tsx",
   "src/components/ui/breadcrumb-config.ts": "smart-breadcrumbs.tsx",
-  "src/components/ui/button.tsx": "button.tsx",
-  "src/components/ui/card.tsx": "button.tsx",
+  "src/components/ui/button.tsx": "lucide-react",
+  "src/components/ui/card.tsx": "badge.tsx",
   "src/components/ui/chart.tsx": "chart.tsx",
-  "src/components/ui/checkbox.tsx": "utils.ts",
-  "src/components/ui/collapsible.tsx": "utils.ts",
+  "src/components/ui/checkbox.tsx": "lucide-react",
+  "src/components/ui/collapsible.tsx": "cn",
   "src/components/ui/command.tsx": "CommandPaletteEnhanced.tsx",
   "src/components/ui/contextual-hints.tsx": "contextual-hints.tsx",
-  "src/components/ui/data-refresh-indicator.tsx": "cn",
-  "src/components/ui/dialog.tsx": "NewOrderDialog.tsx",
-  "src/components/ui/drawer.tsx": "DashboardRedesigned.tsx",
-  "src/components/ui/dropdown-menu.tsx": "cn",
+  "src/components/ui/data-refresh-indicator.tsx": "Header.tsx",
+  "src/components/ui/dialog.tsx": "lucide-react",
+  "src/components/ui/drawer.tsx": "cn",
+  "src/components/ui/dropdown-menu.tsx": "Header.tsx",
   "src/components/ui/fab-variants.tsx": "floating-action-button.tsx",
   "src/components/ui/floating-action-button.tsx": "floating-action-button.tsx",
   "src/components/ui/hero-metric.tsx": "micro-interactions.tsx",
   "src/components/ui/highlight-match.tsx": "react",
   "src/components/ui/hover-preview.tsx": "OrdersTable.tsx",
-  "src/components/ui/input.tsx": "button.tsx",
+  "src/components/ui/input.tsx": "lucide-react",
   "src/components/ui/keyboard-shortcuts-help.tsx": "react",
-  "src/components/ui/keyboard-shortcuts-modal.tsx": "NewOrderDialog.tsx",
-  "src/components/ui/label.tsx": "button.tsx",
-  "src/components/ui/language-selector.tsx": "cn",
+  "src/components/ui/keyboard-shortcuts-modal.tsx": "cn",
+  "src/components/ui/label.tsx": "framer-motion",
+  "src/components/ui/language-selector.tsx": "Header.tsx",
   "src/components/ui/micro-interactions.tsx": "micro-interactions.tsx",
   "src/components/ui/motion-variants.ts": "motion.tsx",
   "src/components/ui/motion.tsx": "motion.tsx",
   "src/components/ui/page-loader.tsx": "cn",
-  "src/components/ui/popover.tsx": "cn",
+  "src/components/ui/popover.tsx": "Header.tsx",
   "src/components/ui/prediction-card.tsx": "cn",
-  "src/components/ui/progress.tsx": "App.tsx",
-  "src/components/ui/pull-to-refresh.tsx": "react",
+  "src/components/ui/progress.tsx": "DriverProfileModal.tsx",
+  "src/components/ui/pull-to-refresh.tsx": "cn",
   "src/components/ui/radio-group.tsx": "cn",
-  "src/components/ui/scroll-area.tsx": "NotificationPreferences.tsx",
+  "src/components/ui/scroll-area.tsx": "react",
   "src/components/ui/search-help-tooltip.tsx": "react",
   "src/components/ui/select.tsx": "cn",
-  "src/components/ui/separator.tsx": "utils.ts",
-  "src/components/ui/sheet.tsx": "NotificationPreferences.tsx",
-  "src/components/ui/skeleton.tsx": "lucide-react",
-  "src/components/ui/slider.tsx": "utils.ts",
+  "src/components/ui/separator.tsx": "framer-motion",
+  "src/components/ui/sheet.tsx": "cn",
+  "src/components/ui/skeleton.tsx": "AdvancedReportsPage.tsx",
+  "src/components/ui/slider.tsx": "framer-motion",
   "src/components/ui/smart-breadcrumbs.tsx": "smart-breadcrumbs.tsx",
-  "src/components/ui/sonner.tsx": "useTheme",
+  "src/components/ui/sonner.tsx": "useCommandPaletteSearch.ts",
   "src/components/ui/sparkline.tsx": "cn",
   "src/components/ui/swipeable-list.tsx": "cn",
-  "src/components/ui/switch.tsx": "utils.ts",
+  "src/components/ui/switch.tsx": "framer-motion",
   "src/components/ui/table.tsx": "cn",
-  "src/components/ui/tabs.tsx": "button.tsx",
-  "src/components/ui/textarea.tsx": "NewOrderDialog.tsx",
+  "src/components/ui/tabs.tsx": "framer-motion",
+  "src/components/ui/textarea.tsx": "lucide-react",
   "src/components/ui/timeline-item.tsx": "cn",
-  "src/components/ui/toggle-group.tsx": "LiveMapPage.tsx",
-  "src/components/ui/toggle.tsx": "LiveMapPage.tsx",
-  "src/components/ui/tooltip.tsx": "App.tsx",
-  "src/components/ui/undo-toast.tsx": "undo-toast.tsx",
-  "src/components/webhooks/WebhookSecurityPanel.tsx": "lucide-react",
+  "src/components/ui/toggle-group.tsx": "App.tsx",
+  "src/components/ui/toggle.tsx": "App.tsx",
+  "src/components/ui/tooltip.tsx": "cn",
+  "src/components/ui/undo-toast.tsx": "cn",
+  "src/components/webhooks/WebhookSecurityPanel.tsx": "AdvancedReportsPage.tsx",
   "src/hooks/__tests__/useActiveAlerts.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useContractVersionUsage.trend.test.ts": "useContractVersionUsage.ts",
-  "src/hooks/__tests__/useContractVersionUsageMonthly.test.ts": "@tanstack/react-query",
+  "src/hooks/__tests__/useContractVersionUsageMonthly.test.ts": "useContractVersionUsageMonthly.ts",
   "src/hooks/__tests__/useCronJobsHealth.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useDashboardStats.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useDeliveryMetrics.test.ts": "useDeliveryMetrics.ts",
-  "src/hooks/__tests__/useDrivers.test.ts": "useDrivers.ts",
+  "src/hooks/__tests__/useDrivers.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useFeatureFlags.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useIncidents.test.ts": "useIncidents.ts",
   "src/hooks/__tests__/useLoginLockout.test.ts": "client.ts",
   "src/hooks/__tests__/useMapSettings.test.ts": "client.ts",
   "src/hooks/__tests__/usePendingApprovals.test.ts": "@tanstack/react-query",
-  "src/hooks/__tests__/usePermissions.test.ts": "client.ts",
+  "src/hooks/__tests__/usePermissions.test.ts": "@tanstack/react-query",
   "src/hooks/__tests__/useRateLimiting.test.ts": "@tanstack/react-query",
-  "src/hooks/__tests__/useRecentOrders.test.ts": "@tanstack/react-query",
+  "src/hooks/__tests__/useRecentOrders.test.ts": "types/index.ts",
   "src/hooks/__tests__/useRegionResolver.test.ts": "useAdvancedReports.ts",
   "src/hooks/__tests__/useRiskRules.test.ts": "useRiskRules.ts",
-  "src/hooks/__tests__/useSLAMetrics.test.ts": "@tanstack/react-query",
+  "src/hooks/__tests__/useSLAMetrics.test.ts": "useSLAMetrics.ts",
   "src/hooks/__tests__/useTrackingHistory.test.ts": "client.ts",
   "src/hooks/__tests__/useWebhookEvents.test.ts": "useWebhookEvents.ts",
   "src/hooks/healthChecks.ts": "healthChecks.ts",
@@ -2371,225 +2382,225 @@
   "src/hooks/useActiveAlerts.ts": "DashboardRedesigned.tsx",
   "src/hooks/useAdvancedReports.ts": "useAdvancedReports.ts",
   "src/hooks/useAlertConfigurations.ts": "useAlertConfigurations.ts",
-  "src/hooks/useAlertGrouping.ts": "types/index.ts",
-  "src/hooks/useAlertSettings.ts": "utils.ts",
-  "src/hooks/useAnalyticsData.ts": "useAnalyticsData.ts",
-  "src/hooks/useApprovalActions.ts": "DashboardRedesigned.tsx",
-  "src/hooks/useApprovalActionsEnhanced.ts": "useAchievementsSystem.tsx",
+  "src/hooks/useAlertGrouping.ts": "AlertsAdvanced.tsx",
+  "src/hooks/useAlertSettings.ts": "framer-motion",
+  "src/hooks/useAnalyticsData.ts": "client.ts",
+  "src/hooks/useApprovalActions.ts": "types/index.ts",
+  "src/hooks/useApprovalActionsEnhanced.ts": "types/index.ts",
   "src/hooks/useApprovalRealtime.ts": "useRealtimeSubscriptions.ts",
   "src/hooks/useAuth.tsx": "client.ts",
-  "src/hooks/useAuthLogs.ts": "client.ts",
+  "src/hooks/useAuthLogs.ts": "useEvaluateDriver.ts",
   "src/hooks/useBitrix24.ts": "Changelog",
-  "src/hooks/useCacheViews.ts": "useCachedStats.ts",
-  "src/hooks/useCachedStats.ts": "useCachedStats.ts",
+  "src/hooks/useCacheViews.ts": "UrgencyIndicator.tsx",
+  "src/hooks/useCachedStats.ts": "UrgencyIndicator.tsx",
   "src/hooks/useCommandPaletteSearch.ts": "useCommandPaletteSearch.ts",
-  "src/hooks/useContacts.ts": "NewOrderDialog.tsx",
+  "src/hooks/useContacts.ts": "CommandPaletteEnhanced.tsx",
   "src/hooks/useContextualHints.ts": "DashboardRedesigned.tsx",
-  "src/hooks/useContractV1SunsetReadiness.ts": "@tanstack/react-query",
+  "src/hooks/useContractV1SunsetReadiness.ts": "useContractV1SunsetReadiness.ts",
   "src/hooks/useContractVersionUsage.ts": "useContractVersionUsage.ts",
-  "src/hooks/useContractVersionUsageMonthly.ts": "@tanstack/react-query",
-  "src/hooks/useCronJobsHealth.ts": "lucide-react",
+  "src/hooks/useContractVersionUsageMonthly.ts": "useContractVersionUsageMonthly.ts",
+  "src/hooks/useCronJobsHealth.ts": "CronJobsHealthPanel.tsx",
   "src/hooks/useDashboardStats.ts": "@tanstack/react-query",
-  "src/hooks/useDataRefresh.ts": "cn",
+  "src/hooks/useDataRefresh.ts": "Header.tsx",
   "src/hooks/useDebouncedValue.ts": "useCommandPaletteSearch.ts",
-  "src/hooks/useDeliveryHeatmapData.ts": "Changelog",
+  "src/hooks/useDeliveryHeatmapData.ts": "client.ts",
   "src/hooks/useDeliveryMetrics.ts": "useDeliveryMetrics.ts",
   "src/hooks/useDeviceDetection.ts": "client.ts",
   "src/hooks/useDriverEvaluations.ts": "DashboardRedesigned.tsx",
-  "src/hooks/useDrivers.ts": "cn",
-  "src/hooks/useErrorLogs.ts": "useErrorLogs.ts",
+  "src/hooks/useDrivers.ts": "DriverProfileModal.tsx",
+  "src/hooks/useErrorLogs.ts": "useJobQueue.ts",
   "src/hooks/useEvaluateDriver.ts": "useEvaluateDriver.ts",
   "src/hooks/useExternalData.ts": "AddressAutocomplete.tsx",
-  "src/hooks/useFeatureFlags.ts": "client.ts",
-  "src/hooks/useFuseSearch.ts": "react",
+  "src/hooks/useFeatureFlags.ts": "useEvaluateDriver.ts",
+  "src/hooks/useFuseSearch.ts": "badge.tsx",
   "src/hooks/useGeoAdmin.ts": "useGeoAdmin.ts",
   "src/hooks/useGeoSearch.test.tsx": "@tanstack/react-query",
-  "src/hooks/useGeoSearch.ts": "@tanstack/react-query",
-  "src/hooks/useGlobalSearch.ts": "useGlobalSearch.ts",
+  "src/hooks/useGeoSearch.ts": "AddressAutocomplete.tsx",
+  "src/hooks/useGlobalSearch.ts": "useCommandPaletteSearch.ts",
   "src/hooks/useGlobalUndo.tsx": "types/index.ts",
-  "src/hooks/useIncidents.ts": "useIncidents.ts",
+  "src/hooks/useIncidents.ts": "badge.tsx",
   "src/hooks/useJobQueue.ts": "useJobQueue.ts",
-  "src/hooks/useLalamove.ts": "button.tsx",
-  "src/hooks/useLalamoveQuota.ts": "@tanstack/react-query",
+  "src/hooks/useLalamove.ts": "lucide-react",
+  "src/hooks/useLalamoveQuota.ts": "client.ts",
   "src/hooks/useLalamoveUapi.ts": "lalamoveReasons.ts",
   "src/hooks/useLoginLockout.ts": "client.ts",
-  "src/hooks/useMFA.ts": "client.ts",
+  "src/hooks/useMFA.ts": "SecurityDashboardPage.tsx",
   "src/hooks/useMapSettings.ts": "MapSettingsPanel.test.tsx",
-  "src/hooks/useMapbox.ts": "useMapbox.ts",
+  "src/hooks/useMapbox.ts": "AddressAutocomplete.tsx",
   "src/hooks/useMetrics.ts": "useMetrics.ts",
   "src/hooks/useNotificationHistory.ts": "useNotificationHistory.ts",
   "src/hooks/useOfflineStorage.ts": "useOfflineStorage.ts",
   "src/hooks/usePasswordResetActions.ts": "client.ts",
   "src/hooks/usePendingApprovals.ts": "types/index.ts",
-  "src/hooks/usePermissions.ts": "utils.ts",
+  "src/hooks/usePermissions.ts": "@tanstack/react-query",
   "src/hooks/usePredictiveAnalysis.ts": "client.ts",
-  "src/hooks/usePrefetch.ts": "DashboardRedesigned.tsx",
+  "src/hooks/usePrefetch.ts": "Sidebar.tsx",
   "src/hooks/usePushNotifications.ts": "useRealtimeSubscriptions.ts",
-  "src/hooks/useQuotationExpiry.ts": "NewOrderDialog.tsx",
+  "src/hooks/useQuotationExpiry.ts": "react",
   "src/hooks/useRateLimiting.ts": "@tanstack/react-query",
   "src/hooks/useRealtimeSubscriptions.ts": "useRealtimeSubscriptions.ts",
   "src/hooks/useRecentOrders.ts": "types/index.ts",
   "src/hooks/useRegionResolver.ts": "useAdvancedReports.ts",
   "src/hooks/useReportPresets.ts": "useAdvancedReports.ts",
-  "src/hooks/useRiskRules.ts": "NewOrderDialog.tsx",
-  "src/hooks/useRole.ts": "client.ts",
-  "src/hooks/useSLAMetrics.ts": "@tanstack/react-query",
+  "src/hooks/useRiskRules.ts": "App.tsx",
+  "src/hooks/useRole.ts": "react",
+  "src/hooks/useSLAMetrics.ts": "useSLAMetrics.ts",
   "src/hooks/useSLOMetrics.ts": "useSLOMetrics.ts",
-  "src/hooks/useScheduledTheme.ts": "useScheduledTheme.ts",
+  "src/hooks/useScheduledTheme.ts": "useRealtimeSubscriptions.ts",
   "src/hooks/useSecurityPushNotifications.ts": "client.ts",
   "src/hooks/useServiceWorker.ts": "OfflineIndicator.tsx",
   "src/hooks/useSoundSettings.ts": "useRealtimeSubscriptions.ts",
   "src/hooks/useSystemHealth.ts": "client.ts",
   "src/hooks/useSystemHealthExpanded.ts": "healthChecks.ts",
-  "src/hooks/useTestNotification.ts": "Changelog",
-  "src/hooks/useTheme.ts": "useTheme",
-  "src/hooks/useTrackingHistory.ts": "NotificationPreferences.tsx",
-  "src/hooks/useUAPI.ts": "lalamove-api.ts",
+  "src/hooks/useTestNotification.ts": "useSLAMetrics.ts",
+  "src/hooks/useTheme.ts": "Header.tsx",
+  "src/hooks/useTrackingHistory.ts": "client.ts",
+  "src/hooks/useUAPI.ts": "useUAPI.ts",
   "src/hooks/useUserDevices.ts": "client.ts",
   "src/hooks/useWebAuthn.ts": "client.ts",
   "src/hooks/useWebhookEvents.ts": "useWebhookEvents.ts",
   "src/hooks/useWebhookSecurityMetrics.ts": "useWebhookSecurityMetrics.ts",
-  "src/i18n/index.ts": "cn",
+  "src/i18n/index.ts": "i18n/index.ts",
   "src/integrations/lovable/index.ts": "lovable/index.ts",
   "src/integrations/supabase/client.ts": "client.ts",
   "src/integrations/supabase/previewAuthStorage.ts": "client.ts",
-  "src/integrations/supabase/types.ts": "useAlertConfigurations.ts",
+  "src/integrations/supabase/types.ts": "useRiskRules.ts",
   "src/lib/__tests__/filterValidSpecialRequests.test.ts": "lalamoveCatalog.ts",
-  "src/lib/__tests__/lalamoveCanonical.test.ts": "lalamoveCanonical.test.ts",
+  "src/lib/__tests__/lalamoveCanonical.test.ts": "lalamoveCatalog.ts",
   "src/lib/__tests__/lalamoveCatalogCities.test.ts": "lalamoveCatalog.ts",
   "src/lib/__tests__/lalamoveContract.test.ts": "lalamoveContract.test.ts",
   "src/lib/__tests__/lalamoveOrderEdit.test.ts": "lalamoveContract.test.ts",
   "src/lib/__tests__/lalamoveReasons.test.ts": "lalamoveReasons.ts",
-  "src/lib/__tests__/lalamoveTimeline.test.ts": "gerar-repo.mjs",
-  "src/lib/__tests__/uapiErrors.test.ts": "uapiErrors.ts",
+  "src/lib/__tests__/lalamoveTimeline.test.ts": "StatusTimeline.tsx",
+  "src/lib/__tests__/uapiErrors.test.ts": "useLalamoveUapi.ts",
   "src/lib/bitrix-config.ts": "AddressAutocomplete.tsx",
   "src/lib/cep.ts": "cep.ts",
-  "src/lib/geo-gateway.test.ts": "LiveMap.tsx",
+  "src/lib/geo-gateway.test.ts": "@tanstack/react-query",
   "src/lib/geo-gateway.ts": "LiveMap.tsx",
   "src/lib/lalamove-api.ts": "lalamove-api.ts",
   "src/lib/lalamove-config.ts": "useLalamove.ts",
   "src/lib/lalamoveCatalog.ts": "lalamoveCatalog.ts",
   "src/lib/lalamoveErrors.ts": "lalamoveErrors.ts",
-  "src/lib/lalamoveGuards.ts": "lalamoveCanonical.test.ts",
-  "src/lib/lalamoveLabels.ts": "lalamoveCatalog.ts",
+  "src/lib/lalamoveGuards.ts": "lalamoveCatalog.ts",
+  "src/lib/lalamoveLabels.ts": "lalamove.ts",
   "src/lib/lalamoveOrderEdit.ts": "lalamoveContract.test.ts",
   "src/lib/lalamoveReasons.ts": "lalamoveReasons.ts",
   "src/lib/lalamoveTimeline.ts": "StatusTimeline.tsx",
   "src/lib/lalamoveValidation.test.ts": "Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)",
   "src/lib/lalamoveValidation.ts": "Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)",
-  "src/lib/orderErrors.test.ts": "Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)",
+  "src/lib/orderErrors.test.ts": "lalamoveErrors.ts",
   "src/lib/orderErrors.ts": "lalamoveErrors.ts",
-  "src/lib/phone.test.ts": "NewOrderDialog.tsx",
-  "src/lib/phone.ts": "NewOrderDialog.tsx",
+  "src/lib/phone.test.ts": "useContacts",
+  "src/lib/phone.ts": "useContacts",
   "src/lib/statusPalette.ts": "useMapMarkers.ts",
   "src/lib/uapi-proxy.ts": "lalamove-api.ts",
-  "src/lib/uapiErrors.ts": "uapiErrors.ts",
-  "src/lib/uapiFormat.ts": "UapiStatementPanel.tsx",
+  "src/lib/uapiErrors.ts": "useLalamoveUapi.ts",
+  "src/lib/uapiFormat.ts": "AdvancedReportsPage.tsx",
   "src/lib/uapiStatement.ts": "lalamoveReasons.ts",
-  "src/lib/user-display.ts": "DashboardRedesigned.tsx",
+  "src/lib/user-display.ts": "Sidebar.tsx",
   "src/lib/utils.test.ts": "cn",
   "src/lib/utils.ts": "cn",
   "src/main.tsx": "webVitals.ts",
   "src/pages/A": "cenarios.mjs",
-  "src/pages/AdminTelemetriaPage.tsx": "lucide-react",
-  "src/pages/AdvancedReportsPage.tsx": "button.tsx",
-  "src/pages/AlertConfigurationsPage.tsx": "button.tsx",
-  "src/pages/AlertsPage.tsx": "utils.ts",
-  "src/pages/AnalyticsDashboardPage.tsx": "exportToCSV",
+  "src/pages/AdminTelemetriaPage.tsx": "AdvancedReportsPage.tsx",
+  "src/pages/AdvancedReportsPage.tsx": "AdvancedReportsPage.tsx",
+  "src/pages/AlertConfigurationsPage.tsx": "lucide-react",
+  "src/pages/AlertsPage.tsx": "cn",
+  "src/pages/AnalyticsDashboardPage.tsx": "AdvancedReportsPage.tsx",
   "src/pages/ApprovalsPage.tsx": "DashboardRedesigned.tsx",
-  "src/pages/AuthPage.tsx": "client.ts",
+  "src/pages/AuthPage.tsx": "DashboardRedesigned.tsx",
   "src/pages/B": "cenarios.mjs",
   "src/pages/Bitrix24Page.tsx": "Changelog",
-  "src/pages/CacheMonitoringPage.tsx": "useCachedStats.ts",
-  "src/pages/CacheStatusPage.tsx": "useCachedStats.ts",
-  "src/pages/ContactsPage.tsx": "NewOrderDialog.tsx",
+  "src/pages/CacheMonitoringPage.tsx": "UrgencyIndicator.tsx",
+  "src/pages/CacheStatusPage.tsx": "UrgencyIndicator.tsx",
+  "src/pages/ContactsPage.tsx": "CommandPaletteEnhanced.tsx",
   "src/pages/DashboardRedesigned.tsx": "DashboardRedesigned.tsx",
   "src/pages/DeliveryMetricsPage.tsx": "useDeliveryMetrics.ts",
   "src/pages/DriversPage.tsx": "cn",
-  "src/pages/ErrorMonitoringPage.tsx": "button.tsx",
-  "src/pages/EvaluationsPage.tsx": "react",
+  "src/pages/ErrorMonitoringPage.tsx": "lucide-react",
+  "src/pages/EvaluationsPage.tsx": "badge.tsx",
   "src/pages/ExternalDataPage.tsx": "AddressAutocomplete.tsx",
-  "src/pages/ForgotPasswordPage.tsx": "button.tsx",
-  "src/pages/GeoBlockingPage.tsx": "NewOrderDialog.tsx",
+  "src/pages/ForgotPasswordPage.tsx": "framer-motion",
+  "src/pages/GeoBlockingPage.tsx": "react",
   "src/pages/HeatmapPage.tsx": "motion.tsx",
   "src/pages/IPWhitelistPage.tsx": "react",
   "src/pages/IncidentsPage.tsx": "useIncidents.ts",
   "src/pages/JobQueuePage.tsx": "useJobQueue.ts",
-  "src/pages/LalamoveOperationsPage.tsx": "UapiStatementPanel.tsx",
-  "src/pages/LalamoveQuotaPage.tsx": "react",
-  "src/pages/LalamoveSettingsPage.tsx": "button.tsx",
-  "src/pages/LiveMapPage.tsx": "LiveMapPage.tsx",
-  "src/pages/MFAVerifyPage.tsx": "App.tsx",
-  "src/pages/MapToolsPage.tsx": "button.tsx",
+  "src/pages/LalamoveOperationsPage.tsx": "AdvancedReportsPage.tsx",
+  "src/pages/LalamoveQuotaPage.tsx": "badge.tsx",
+  "src/pages/LalamoveSettingsPage.tsx": "lucide-react",
+  "src/pages/LiveMapPage.tsx": "App.tsx",
+  "src/pages/MFAVerifyPage.tsx": "SecurityDashboardPage.tsx",
+  "src/pages/MapToolsPage.tsx": "lucide-react",
   "src/pages/MapsSettingsPage.tsx": "useGeoAdmin.ts",
-  "src/pages/MetricsPage.panels.tsx": "MetricsPage.tsx",
+  "src/pages/MetricsPage.panels.tsx": "badge.tsx",
   "src/pages/MetricsPage.tsx": "useMetrics.ts",
-  "src/pages/NotFound.tsx": "Estado real do projeto — inventário gerado",
-  "src/pages/NotificationHistoryPage.tsx": "useNotificationHistory.ts",
-  "src/pages/OrdersPage.tsx": "DashboardRedesigned.tsx",
-  "src/pages/PasswordResetApprovalsPage.tsx": "react",
-  "src/pages/PerformanceDashboardPage.tsx": "App.tsx",
-  "src/pages/PermissionsPage.tsx": "utils.ts",
-  "src/pages/ProfilePage.tsx": "client.ts",
+  "src/pages/NotFound.tsx": "ProtectedRoute",
+  "src/pages/NotificationHistoryPage.tsx": "cn",
+  "src/pages/OrdersPage.tsx": "types/index.ts",
+  "src/pages/PasswordResetApprovalsPage.tsx": "badge.tsx",
+  "src/pages/PerformanceDashboardPage.tsx": "cn",
+  "src/pages/PermissionsPage.tsx": "react",
+  "src/pages/ProfilePage.tsx": "useEvaluateDriver.ts",
   "src/pages/RateLimitDashboardPage.tsx": "react",
-  "src/pages/ReportsPage.tsx": "exportToCSV",
-  "src/pages/ResetPasswordPage.tsx": "lucide-react",
-  "src/pages/RiskRulesPage.dialogs.tsx": "NewOrderDialog.tsx",
+  "src/pages/ReportsPage.tsx": "AdvancedReportsPage.tsx",
+  "src/pages/ResetPasswordPage.tsx": "framer-motion",
+  "src/pages/RiskRulesPage.dialogs.tsx": "App.tsx",
   "src/pages/RiskRulesPage.tsx": "useRiskRules.ts",
   "src/pages/RolesPage.tsx": "react",
-  "src/pages/SLADashboardPage.tsx": "App.tsx",
+  "src/pages/SLADashboardPage.tsx": "DriverProfileModal.tsx",
   "src/pages/SLODashboardPage.tsx": "useSLOMetrics.ts",
-  "src/pages/SecurityDashboardPage.tsx": "App.tsx",
-  "src/pages/SettingsPage.tsx": "utils.ts",
+  "src/pages/SecurityDashboardPage.tsx": "SecurityDashboardPage.tsx",
+  "src/pages/SettingsPage.tsx": "useRealtimeSubscriptions.ts",
   "src/pages/SystemHealthExpandedPage.tsx": "healthChecks.ts",
   "src/pages/SystemHealthPage.tsx": "DashboardRedesigned.tsx",
-  "src/pages/UAPISettingsPage.tsx": "lalamove-api.ts",
-  "src/pages/UnauthorizedPage.tsx": "button.tsx",
-  "src/pages/UserPreferencesPage.tsx": "useScheduledTheme.ts",
+  "src/pages/UAPISettingsPage.tsx": "useUAPI.ts",
+  "src/pages/UnauthorizedPage.tsx": "badge.tsx",
+  "src/pages/UserPreferencesPage.tsx": "useRealtimeSubscriptions.ts",
   "src/pages/WebhooksPage.tsx": "useWebhookEvents.ts",
-  "src/pages/alert-configurations/AlertConfigCard.tsx": "App.tsx",
-  "src/pages/approvals/ApprovalCard.tsx": "button.tsx",
-  "src/pages/bitrix24/Bitrix24SubComponents.tsx": "react",
+  "src/pages/alert-configurations/AlertConfigCard.tsx": "cn",
+  "src/pages/approvals/ApprovalCard.tsx": "badge.tsx",
+  "src/pages/bitrix24/Bitrix24SubComponents.tsx": "badge.tsx",
   "src/pages/drivers/DriverCard.tsx": "cn",
-  "src/pages/drivers/DriverConfirmDialog.tsx": "cn",
+  "src/pages/drivers/DriverConfirmDialog.tsx": "DriverProfileModal.tsx",
   "src/pages/drivers/DriverStatsCards.tsx": "cn",
-  "src/pages/evaluations/EvaluationDetails.tsx": "react",
-  "src/pages/heatmap/HeatmapControls.tsx": "button.tsx",
-  "src/pages/heatmap/HeatmapStatsPanel.tsx": "utils.ts",
-  "src/pages/incidents/IncidentDialogs.tsx": "cn",
-  "src/pages/ip-whitelist/IPWhitelistDialogs.tsx": "NewOrderDialog.tsx",
-  "src/pages/lalamove/LalamoveV3Explorer.tsx": "button.tsx",
-  "src/pages/map-tools/CoordinateInput.tsx": "button.tsx",
-  "src/pages/map-tools/IsochroneTab.tsx": "button.tsx",
-  "src/pages/map-tools/MapMatchingTab.tsx": "button.tsx",
-  "src/pages/map-tools/MatrixTab.tsx": "button.tsx",
-  "src/pages/map-tools/OptimizationTab.tsx": "button.tsx",
-  "src/pages/map-tools/StaticImageTab.tsx": "button.tsx",
-  "src/pages/map-tools/TilequeryTab.tsx": "button.tsx",
+  "src/pages/evaluations/EvaluationDetails.tsx": "badge.tsx",
+  "src/pages/heatmap/HeatmapControls.tsx": "lucide-react",
+  "src/pages/heatmap/HeatmapStatsPanel.tsx": "cn",
+  "src/pages/incidents/IncidentDialogs.tsx": "lucide-react",
+  "src/pages/ip-whitelist/IPWhitelistDialogs.tsx": "lucide-react",
+  "src/pages/lalamove/LalamoveV3Explorer.tsx": "lucide-react",
+  "src/pages/map-tools/CoordinateInput.tsx": "lucide-react",
+  "src/pages/map-tools/IsochroneTab.tsx": "lucide-react",
+  "src/pages/map-tools/MapMatchingTab.tsx": "lucide-react",
+  "src/pages/map-tools/MatrixTab.tsx": "lucide-react",
+  "src/pages/map-tools/OptimizationTab.tsx": "lucide-react",
+  "src/pages/map-tools/StaticImageTab.tsx": "lucide-react",
+  "src/pages/map-tools/TilequeryTab.tsx": "lucide-react",
   "src/pages/orders/OrderCard.tsx": "types/index.ts",
-  "src/pages/permissions/PermissionModuleList.tsx": "utils.ts",
-  "src/pages/ratelimit/RateLimitDialogs.tsx": "button.tsx",
-  "src/pages/reports/ReportDistributionTab.tsx": "lucide-react",
-  "src/pages/reports/ReportDriversTab.tsx": "button.tsx",
-  "src/pages/reports/ReportOverviewTab.tsx": "lucide-react",
-  "src/pages/reports/ReportStatsCards.tsx": "lucide-react",
-  "src/pages/reports/useReportData.ts": "button.tsx",
-  "src/pages/settings/LateDeliveryCard.tsx": "utils.ts",
-  "src/pages/settings/PushNotificationsCard.tsx": "button.tsx",
-  "src/pages/settings/RouteDeviationCard.tsx": "utils.ts",
-  "src/pages/settings/SoundSettingsCard.tsx": "utils.ts",
-  "src/pages/settings/StoppedDriverCard.tsx": "utils.ts",
+  "src/pages/permissions/PermissionModuleList.tsx": "react",
+  "src/pages/ratelimit/RateLimitDialogs.tsx": "lucide-react",
+  "src/pages/reports/ReportDistributionTab.tsx": "badge.tsx",
+  "src/pages/reports/ReportDriversTab.tsx": "badge.tsx",
+  "src/pages/reports/ReportOverviewTab.tsx": "badge.tsx",
+  "src/pages/reports/ReportStatsCards.tsx": "badge.tsx",
+  "src/pages/reports/useReportData.ts": "badge.tsx",
+  "src/pages/settings/LateDeliveryCard.tsx": "framer-motion",
+  "src/pages/settings/PushNotificationsCard.tsx": "framer-motion",
+  "src/pages/settings/RouteDeviationCard.tsx": "framer-motion",
+  "src/pages/settings/SoundSettingsCard.tsx": "framer-motion",
+  "src/pages/settings/StoppedDriverCard.tsx": "framer-motion",
   "src/services/errorMonitoring.ts": "errorMonitoring.ts",
   "src/test/setup.ts": "package.json",
   "src/types/__tests__/types.test.ts": "types/index.ts",
   "src/types/driver.ts": "IncidentType",
   "src/types/index.ts": "types/index.ts",
   "src/types/lalamove.ts": "StatusTimeline.tsx",
-  "src/utils/__tests__/exportUtils.test.ts": "exportToCSV",
+  "src/utils/__tests__/exportUtils.test.ts": "AdvancedReportsPage.tsx",
   "src/utils/__tests__/timeUtils.test.ts": "UrgencyIndicator.tsx",
   "src/utils/alertSounds.ts": "useRealtimeSubscriptions.ts",
   "src/utils/circuitBreaker.ts": "client.ts",
-  "src/utils/exportUtils.ts": "exportToCSV",
+  "src/utils/exportUtils.ts": "AdvancedReportsPage.tsx",
   "src/utils/logger.ts": "client.ts",
   "src/utils/timeUtils.ts": "UrgencyIndicator.tsx",
   "src/utils/webVitals.ts": "webVitals.ts",
@@ -2597,31 +2608,31 @@
   "supabase/functions/_shared/contract.integration.test.ts": "schemas.ts",
   "supabase/functions/_shared/contract.test.ts": "contract.ts",
   "supabase/functions/_shared/contract.ts": "contract.ts",
-  "supabase/functions/_shared/cors.ts": "geo-gateway/index.ts",
+  "supabase/functions/_shared/cors.ts": "mcp-query/index.ts",
   "supabase/functions/_shared/logger.ts": "_shared/logger.ts",
   "supabase/functions/_shared/schemas.ts": "schemas.ts",
   "supabase/functions/_shared/telemetry.ts": "contract.ts",
-  "supabase/functions/apply-fixes/index.ts": "lalamove-webhook/index.ts",
+  "supabase/functions/apply-fixes/index.ts": "contract.ts",
   "supabase/functions/bitrix24-process-queue/index.ts": "_shared/logger.ts",
   "supabase/functions/bitrix24-sync/index.ts": "_shared/logger.ts",
   "supabase/functions/check-driver-alerts/index.ts": "_shared/logger.ts",
   "supabase/functions/check-external-api/index.ts": "contract.ts",
   "supabase/functions/escalate-alerts/index.ts": "_shared/logger.ts",
-  "supabase/functions/evaluate-driver/index.ts": "contract.ts",
-  "supabase/functions/external-companies/index.ts": "lalamove-webhook/index.ts",
-  "supabase/functions/external-db-bridge/index.test.ts": "lalamove-webhook/index.ts",
+  "supabase/functions/evaluate-driver/index.ts": "evaluate-driver/index.ts",
+  "supabase/functions/external-companies/index.ts": "external-companies/index.ts",
+  "supabase/functions/external-db-bridge/index.test.ts": "contract.ts",
   "supabase/functions/external-db-bridge/index.ts": "external-db-bridge/index.ts",
   "supabase/functions/geo-gateway/index.ts": "geo-gateway/index.ts",
-  "supabase/functions/geo-gateway/mapbox.test.ts": "mapbox.ts",
+  "supabase/functions/geo-gateway/mapbox.test.ts": "mapbox.test.ts",
   "supabase/functions/geo-gateway/metering.ts": "geo-gateway/index.ts",
-  "supabase/functions/geo-gateway/polyline.test.ts": "mapbox.ts",
-  "supabase/functions/geo-gateway/polyline.ts": "mapbox.ts",
-  "supabase/functions/geo-gateway/providers/mapbox.ts": "mapbox.ts",
-  "supabase/functions/geo-gateway/providers/types.ts": "GeoProvider",
+  "supabase/functions/geo-gateway/polyline.test.ts": "mapbox.test.ts",
+  "supabase/functions/geo-gateway/polyline.ts": "mapbox.test.ts",
+  "supabase/functions/geo-gateway/providers/mapbox.ts": "MapboxProvider",
+  "supabase/functions/geo-gateway/providers/types.ts": "mapbox.test.ts",
   "supabase/functions/geo-gateway/resolver.test.ts": "geo-gateway/index.ts",
   "supabase/functions/geo-gateway/resolver.ts": "geo-gateway/index.ts",
-  "supabase/functions/get-mapbox-token/index.ts": "lalamove-webhook/index.ts",
-  "supabase/functions/job-worker/index.ts": "_shared/logger.ts",
+  "supabase/functions/get-mapbox-token/index.ts": "contract.ts",
+  "supabase/functions/job-worker/index.ts": "job-worker/index.ts",
   "supabase/functions/lalamove-api/index.ts": "lalamove-api/index.ts",
   "supabase/functions/lalamove-gateway/index.ts": "lalamove-gateway/index.ts",
   "supabase/functions/lalamove-gateway/route.test.ts": "lalamove-gateway/index.ts",
@@ -2632,15 +2643,15 @@
   "supabase/functions/lalamove-webhook/normalize.ts": "lalamove-webhook/index.ts",
   "supabase/functions/lalamove-webhook/security.test.ts": "lalamove-webhook/index.ts",
   "supabase/functions/lalamove-webhook/security.ts": "lalamove-webhook/index.ts",
-  "supabase/functions/llm-wh/index.ts": "lalamove-webhook/index.ts",
-  "supabase/functions/mapbox-proxy/index.ts": "lalamove-webhook/index.ts",
-  "supabase/functions/mcp-query/index.ts": "geo-gateway/index.ts",
+  "supabase/functions/llm-wh/index.ts": "llm-wh/index.ts",
+  "supabase/functions/mapbox-proxy/index.ts": "contract.ts",
+  "supabase/functions/mcp-query/index.ts": "mcp-query/index.ts",
   "supabase/functions/new-device-alert/index.ts": "contract.ts",
   "supabase/functions/rotate-tokens/index.ts": "_shared/logger.ts",
   "supabase/functions/route-analyzer/index.ts": "contract.ts",
-  "supabase/functions/seed-fix-rls/index.ts": "lalamove-webhook/index.ts",
+  "supabase/functions/seed-fix-rls/index.ts": "contract.ts",
   "supabase/functions/send-notification/index.ts": "send-notification/index.ts",
-  "supabase/functions/simulate-driver-movement/index.ts": "lalamove-webhook/index.ts",
+  "supabase/functions/simulate-driver-movement/index.ts": "simulate-driver-movement/index.ts",
   "supabase/functions/test-notification/index.ts": "contract.ts",
   "supabase/migrations/20241231000000_saved_filters.sql": "20241231000000_saved_filters.sql",
   "supabase/migrations/20241231000001_entity_versions.sql": "public.entity_versions",

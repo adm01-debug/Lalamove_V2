@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `023202f673c20e8aed463fa14f963bd0fedffbe8` (2026-11-21T19:19:43-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `99e0b43184ba504e4679804302a87bb6cca73382` (2026-11-21T19:25:05-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (478), SQL (174), JavaScript (112), Markdown (96), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (478), SQL (174), JavaScript (112), Markdown (97), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 946 |
+| arquivos_total | 947 |
 | arquivos_codigo | 589 |
-| linhas_codigo | 114880 |
+| linhas_codigo | 115258 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -52,7 +52,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | testes | 107 |
 | workflows | 5 |
 | scripts | 105 |
-| docs_md | 96 |
+| docs_md | 97 |
 
 ## Onde ficam as coisas
 - telas: src/pages (53)
@@ -65,7 +65,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
-- docs: docs (30), (raiz) (9), .github (1)
+- docs: docs (31), (raiz) (9), .github (1)
 - nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (84%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/regras-dominio.md
 
@@ -73,15 +73,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | módulo | itens de menu | telas | arquivos | hooks locais | edges | tabelas |
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
-| components/dashboard | 0 | 0 | 13 | 39 | 5 | 4 |
-| components/layout | 0 | 0 | 6 | 165 | 14 | 34 |
-| components/map | 0 | 0 | 17 | 18 | 3 | 3 |
-| components/orders | 0 | 0 | 8 | 27 | 6 | 3 |
+| components/dashboard | 0 | 0 | 13 | 39 | 4 | 4 |
+| components/layout | 0 | 0 | 6 | 165 | 13 | 34 |
+| components/map | 0 | 0 | 17 | 18 | 2 | 3 |
+| components/orders | 0 | 0 | 8 | 27 | 5 | 3 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 40 | 0 | 5 | 38 |
-| hooks | 0 | 0 | 84 | 203 | 15 | 46 |
+| hooks | 0 | 0 | 84 | 203 | 14 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 188 | 14 | 46 |
+| pages | 37 | 55 | 55 | 188 | 13 | 46 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -194,7 +194,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `evaluate-driver` [Motoristas] — tabelas: alerts, driver_approval_queue, driver_evaluations, driver_incidents, drivers, lalamove_orders, risk_rules; chamada por 1 arquivo(s) do front
 - `external-companies` [Dados externos] — tabelas: carriers, companies, contacts, customers, suppliers; chamada por 1 arquivo(s) do front
 - `external-db-bridge` [Dados externos] — tabelas: query_telemetry; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `geo-gateway` — tabelas: geo_cache, geo_price_list, geo_settings, geo_usage_month; chamada por 4 arquivo(s) do front
+- `geo-gateway` — tabelas: geo_cache, geo_price_list, geo_settings, geo_usage_month; chamada por 5 arquivo(s) do front
 - `get-mapbox-token` [Mapbox] — tabelas: -; chamada por 3 arquivo(s) do front
 - `job-worker` [Fila de jobs] — tabelas: -; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lalamove-api` [Lalamove API v3] — tabelas: drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history; chamada por 4 arquivo(s) do front
@@ -203,7 +203,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions; chamada por 1 arquivo(s) do front
 - `lalamove-webhook` [Lalamove API v3] (verify_jwt=false) — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
 - `llm-wh` [Dados externos] (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
-- `mapbox-proxy` [Mapbox] — tabelas: -; chamada por 1 arquivo(s) do front
+- `mapbox-proxy` [Mapbox] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `mcp-query` (verify_jwt=false) — tabelas: query_telemetry; chamada por 0 arquivo(s) do front
 - `new-device-alert` [Notificações/Alertas] — tabelas: auth_logs, new_device_alerts, user_devices; chamada por 1 arquivo(s) do front
 - `rotate-tokens` [Segredos/token] — tabelas: alerts, bitrix24_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
@@ -253,7 +253,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - menu_visivel_sem_acesso: 15 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
-- edges_orfas: 6 — ex.: apply-fixes, escalate-alerts, external-db-bridge
+- edges_orfas: 7 — ex.: apply-fixes, escalate-alerts, external-db-bridge
 - edges_chamadas_sem_pasta: 0
 - edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 2 — ex.: cache_refresh_log, job_queue_processing_log
@@ -269,24 +269,24 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7288 nós · 15505 arestas · 550 comunidades · grafo do commit `023202f6`
-- comunidades maiores: cn (175), button.tsx (147), ref_node_fs (114), snapshot.py (104), App.tsx (104), react (103), NewOrderDialog.tsx (100), utils.ts (99), client.ts (97), generate.py (81), DashboardRedesigned.tsx (80), dependencies (80)
+- 7316 nós · 15551 arestas · 542 comunidades · grafo do commit `99e0b431`
+- comunidades maiores: cn (225), badge.tsx (137), lucide-react (133), snapshot.py (102), ref_node_path (86), AdvancedReportsPage.tsx (81), framer-motion (81), dependencies (80), react (79), gerar.mjs (76), package.json (75), client.ts (72)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
 - package.json (31)
-- supabase/config.toml (14)
+- supabase/config.toml (15)
 - docs/pendencias/_ordem.md (10)
 - .github/workflows/ci.yml (8)
 - src/hooks/useRegionResolver.ts (6)
+- docs/MAPBOX.md (5)
 - docs/pendencias/README.md (5)
 - src/components/orders/NewOrderDialog.tsx (5)
 - src/pages/LiveMapPage.tsx (5)
 - supabase/functions/lalamove-webhook/index.ts (5)
 - .env.example (4)
 - AGENTS.md (4)
-- docs/MAPBOX.md (4)
 - src/components/orders/AddressAutocomplete.tsx (4)
 - src/integrations/supabase/types.ts (4)
 
@@ -321,7 +321,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Documentos (raiz e docs/)
 - `.github/PULL_REQUEST_TEMPLATE.md` (20 linhas)
 - `AGENTS.md` — AGENTS.md — Lalamove V2 (139 linhas)
-- `CHANGELOG.md` — Changelog (448 linhas)
+- `CHANGELOG.md` — Changelog (473 linhas)
 - `CLAUDE.md` (2 linhas)
 - `README.md` — 🚀 Lalamove Intelligence (1462 linhas)
 - `SECURITY_CHECKLIST.md` — Security Checklist - Lalamove Guardian (77 linhas)
@@ -338,6 +338,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/DEPLOYMENT.md` — 🚀 Deployment - Lalamove Guardian (89 linhas)
 - `docs/EDGE_DEPLOY_PIPELINE.md` — Pipeline de deploy das edge functions — 2026-11 (49 linhas)
 - `docs/FUNCIONALIDADES_E_FERRAMENTAS.md` — 📋 Levantamento Completo de Funcionalidades e Ferramentas (725 linhas)
+- `docs/GEO_PENDENCIAS.md` — O que ficou desligado ou para depois (41 linhas)
 - `docs/JOB_QUEUE_SYSTEM.md` — 📦 Sistema de Filas Assíncronas - Job Queue (578 linhas)
 - `docs/LALAMOVE_API_V3.md` — Lalamove API v3 — Documentação Técnica Completa (Brasil) (635 linhas)
 - `docs/LALAMOVE_FAILURE_SIMULATION.md` — Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI) (70 linhas)
@@ -345,7 +346,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (91 linhas)
+- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (125 linhas)
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
@@ -360,9 +361,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove_order_history_full.md` — Lalamove Brasil — Histórico Completo de Pedidos (116 linhas)
 - `lalamove_suplemento_v2.md` — Lalamove Brasil — Suplemento Técnico v2 (772 linhas)
 - subpastas de docs/: docs/pendencias (20), docs/agentes (6), docs/planos (4), docs/adr (2), docs/backups (2), docs/contexto (2), docs/ci (1)
-- CHANGELOG topo: [1.5.0] - 2025-06-25
+- CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `99e0b43` feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)
+- 2026-11-21 `658445d` docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)
 - 2026-11-21 `023202f` fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)
 - 2026-11-21 `96b1253` fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)
 - 2026-11-21 `641034b` feat(mapas): tela de provedores de mapa em /settings/maps (#168)
@@ -376,8 +379,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `bc48a46` feat(orders): migra autocomplete de endereço para Mapbox Search Box (#150)
 - 2026-11-21 `49fc8f0` docs: registra estado, recuperação de branches e bloqueios de 21/11 (#145)
 - 2026-11-21 `d2c18d1` fix(pedidos): aplica restrição de cidade a special request ao trocar praça (#162)
-- 2026-11-21 `8b0f762` fix(gateway): mapeia orders/call/update_token do uapi-proxy no roteador (#161)
-- 2026-11-21 `5809039` fix(webhook): payload v1 no send-notification e aviso ao responsável pela coleta no DRIVER_ASSIGNED (#157)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

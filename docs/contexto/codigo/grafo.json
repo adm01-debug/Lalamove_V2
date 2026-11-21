@@ -125,6 +125,10 @@
    "importado_por": 9
   },
   {
+   "arquivo": "src/hooks/useMapbox.ts",
+   "importado_por": 9
+  },
+  {
    "arquivo": "src/components/map/types.ts",
    "importado_por": 8
   },
@@ -138,10 +142,6 @@
   },
   {
    "arquivo": "src/hooks/useDrivers.ts",
-   "importado_por": 8
-  },
-  {
-   "arquivo": "src/hooks/useMapbox.ts",
    "importado_por": 8
   },
   {

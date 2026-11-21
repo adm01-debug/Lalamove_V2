@@ -369,7 +369,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 6,
-   "linhas": 1019,
+   "linhas": 1063,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -408,6 +408,7 @@
    "chamada_pelo_front": [
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
+    "src/hooks/useMapbox.ts",
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"
    ],
@@ -757,12 +758,10 @@
     "api.mapbox.com"
    ],
    "usa_shared": [],
-   "chamada_pelo_front": [
-    "src/hooks/useMapbox.ts"
-   ],
+   "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
-   "orfa": false,
+   "orfa": true,
    "testes": 0
   },
   {
