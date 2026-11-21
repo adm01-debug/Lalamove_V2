@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
+import { persistOrderCoordinates } from './coordinates.ts';
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -511,6 +512,14 @@ async function syncOrderToDatabase(
     metadata: { source: 'api_sync' },
   });
 
+  // GET /v3/orders/{id} devolve stops[].coordinates: pedidos antigos (criados antes
+  // desta correção) ganham a coordenada no primeiro sync, sem depender de nova cotação.
+  await persistOrderCoordinates(
+    supabase,
+    updatedOrder.id as string,
+    orderData.stops as Array<Record<string, unknown>> | undefined,
+  );
+
   return updatedOrder;
 }
 
@@ -588,6 +597,10 @@ async function upsertOrderToDatabase(
   if (error) {
     logger.error('Error upserting order:', error);
     return null;
+  }
+
+  if (upsertedOrder?.id) {
+    await persistOrderCoordinates(supabase, upsertedOrder.id as string, stops);
   }
 
   return upsertedOrder;
@@ -696,7 +709,7 @@ serve(async (req) => {
           // aqui, então check-driver-alerts sempre lia null/default pra eles.
           const requestMetadata = (body as Record<string, unknown>).metadata as Record<string, unknown> | undefined;
 
-          await supabase.from('lalamove_orders').insert({
+          const { data: insertedOrder } = await supabase.from('lalamove_orders').insert({
             lalamove_id: orderData.orderId,
             quotation_id: body.quotationId,
             status: orderData.status, // ASSIGNING_DRIVER
@@ -714,7 +727,14 @@ serve(async (req) => {
             supplier_contact: requestMetadata?.supplierContact as string ?? null,
             stalled_threshold_minutes: requestMetadata?.stalledThresholdMinutes as number ?? 15,
             requires_pod: requestMetadata?.requiresPod as boolean ?? true,
-          });
+          }).select('id').single();
+
+          // As coordenadas reais vêm da resposta da Lalamove (a cotação geocodifica).
+          // Antes disto pickup_/delivery_latitude ficavam sempre NULL e o /map não
+          // desenhava os marcadores de coleta e entrega de nenhum pedido.
+          if (insertedOrder?.id) {
+            await persistOrderCoordinates(supabase, insertedOrder.id as string, stops);
+          }
         }
         break;
       }
