@@ -12,7 +12,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.orders_operator_view, public.orders_safe_view |
+| usada por views | public.delivery_metrics_cache, public.hourly_metrics_cache, public.orders_operator_view, public.orders_safe_view |
 
 
 ## Colunas

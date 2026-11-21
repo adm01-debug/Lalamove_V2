@@ -1,6 +1,114 @@
 # Views
 
 
+## public.cache_status (view)
+
+| campo | valor |
+|---|---|
+| owner | postgres |
+| security_invoker | não |
+| opções |  |
+| depende de | public.delivery_metrics_cache, public.driver_stats_cache, public.hourly_metrics_cache |
+| populada | n/a |
+| comentário | Status de cada materialized view de cache (stale/atualizada) |
+
+
+```sql
+SELECT view_name,
+    row_count,
+    last_refresh,
+    refresh_duration_ms,
+    last_refresh IS NULL OR last_refresh < (now() - '01:00:00'::interval) AS is_stale,
+        CASE
+            WHEN last_refresh IS NULL THEN 'never_refreshed'::text
+            WHEN last_refresh < (now() - '01:00:00'::interval) THEN 'stale'::text
+            ELSE 'success'::text
+        END AS status
+   FROM ( SELECT 'driver_stats_cache'::text AS view_name,
+            ( SELECT count(*) AS count
+                   FROM driver_stats_cache) AS row_count,
+            ( SELECT max(driver_stats_cache.cached_at) AS max
+                   FROM driver_stats_cache) AS last_refresh,
+            NULL::integer AS refresh_duration_ms
+        UNION ALL
+         SELECT 'delivery_metrics_cache'::text,
+            ( SELECT count(*) AS count
+                   FROM delivery_metrics_cache) AS count,
+            ( SELECT max(delivery_metrics_cache.cached_at) AS max
+                   FROM delivery_metrics_cache) AS max,
+            NULL::integer AS int4
+        UNION ALL
+         SELECT 'hourly_metrics_cache'::text,
+            ( SELECT count(*) AS count
+                   FROM hourly_metrics_cache) AS count,
+            ( SELECT max(hourly_metrics_cache.cached_at) AS max
+                   FROM hourly_metrics_cache) AS max,
+            NULL::integer AS int4) s;
+```
+
+## public.delivery_metrics_cache (materialized)
+
+| campo | valor |
+|---|---|
+| owner | postgres |
+| security_invoker | n/a |
+| opções |  |
+| depende de | public.lalamove_orders |
+| populada | sim |
+| comentário | Cache de metricas diarias de entregas |
+
+
+```sql
+SELECT date(created_at) AS delivery_date,
+    count(*) AS total_orders,
+    count(*) FILTER (WHERE status = 'COMPLETED'::order_status) AS completed_orders,
+    count(*) FILTER (WHERE status = 'CANCELLED'::order_status) AS cancelled_orders,
+    count(*) FILTER (WHERE status = ANY (ARRAY['REJECTED'::order_status, 'EXPIRED'::order_status])) AS failed_orders,
+    count(*) FILTER (WHERE status = ANY (ARRAY['ON_GOING'::order_status, 'PICKED_UP'::order_status])) AS in_progress_orders,
+    COALESCE(avg(delay_minutes), 0::numeric) AS avg_delay_minutes,
+    COALESCE(sum(total_cost), 0::numeric) AS total_value,
+    COALESCE(avg(total_cost), 0::numeric) AS avg_value,
+    COALESCE(max(total_cost), 0::numeric) AS max_value,
+    now() AS cached_at
+   FROM lalamove_orders lo
+  GROUP BY (date(created_at));
+```
+
+## public.driver_stats_cache (materialized)
+
+| campo | valor |
+|---|---|
+| owner | postgres |
+| security_invoker | n/a |
+| opções |  |
+| depende de | public.drivers |
+| populada | sim |
+| comentário | Cache de estatisticas consolidadas de motoristas |
+
+
+```sql
+SELECT id AS driver_id,
+    name AS driver_name,
+    lalamove_id AS lalamove_driver_id,
+    phone,
+    vehicle_type,
+    status AS driver_status,
+    risk_score,
+    risk_level,
+    whitelisted AS is_whitelisted,
+    blacklisted AS is_blacklisted,
+    COALESCE(total_deliveries, 0) AS total_deliveries,
+    COALESCE(completed_deliveries, 0) AS completed_deliveries,
+    COALESCE(cancelled_deliveries, 0) AS cancelled_deliveries,
+    COALESCE(failed_deliveries, 0) AS failed_deliveries,
+    COALESCE(rating, 0::numeric) AS avg_rating,
+    last_delivery_at,
+    last_active_at,
+    created_at AS driver_created_at,
+    now() AS cached_at
+   FROM drivers d;
+```
+
 ## public.drivers_safe_view (view)
 
 | campo | valor |
@@ -50,6 +158,29 @@ SELECT id,
             ELSE '***RESTRITO***'::text
         END AS phone
    FROM drivers;
+```
+
+## public.hourly_metrics_cache (materialized)
+
+| campo | valor |
+|---|---|
+| owner | postgres |
+| security_invoker | n/a |
+| opções |  |
+| depende de | public.lalamove_orders |
+| populada | sim |
+| comentário | Cache de metricas horarias de entregas |
+
+
+```sql
+SELECT date_trunc('hour'::text, created_at) AS hour,
+    count(*) AS total_orders,
+    count(*) FILTER (WHERE status = 'COMPLETED'::order_status) AS completed_orders,
+    COALESCE(avg(total_cost), 0::numeric) AS avg_value,
+    COALESCE(sum(total_cost), 0::numeric) AS total_value,
+    now() AS cached_at
+   FROM lalamove_orders lo
+  GROUP BY (date_trunc('hour'::text, created_at));
 ```
 
 ## public.orders_operator_view (view)

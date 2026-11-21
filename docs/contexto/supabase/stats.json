@@ -120,30 +120,39 @@
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-21T14:00:00.184740+00:00",
+        "end_time": "2026-11-21T14:40:00.162672+00:00",
         "jobid": 9,
         "return_message": "1 row",
-        "runid": 29110,
+        "runid": 29119,
         "seconds": 0.02,
-        "start_time": "2026-11-21T14:00:00.160419+00:00",
+        "start_time": "2026-11-21T14:40:00.141236+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-21T13:55:00.341923+00:00",
+        "end_time": "2026-11-21T14:35:00.299798+00:00",
         "jobid": 9,
         "return_message": "1 row",
-        "runid": 29109,
-        "seconds": 0.04,
-        "start_time": "2026-11-21T13:55:00.299225+00:00",
+        "runid": 29118,
+        "seconds": 0.02,
+        "start_time": "2026-11-21T14:35:00.277045+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-21T13:50:00.126947+00:00",
+        "end_time": "2026-11-21T14:30:00.111060+00:00",
         "jobid": 9,
         "return_message": "1 row",
-        "runid": 29108,
+        "runid": 29117,
         "seconds": 0.02,
-        "start_time": "2026-11-21T13:50:00.106937+00:00",
+        "start_time": "2026-11-21T14:30:00.093265+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T14:17:00.267514+00:00",
+        "jobid": 10,
+        "return_message": "1 row",
+        "runid": 29114,
+        "seconds": 0.03,
+        "start_time": "2026-11-21T14:17:00.237552+00:00",
         "status": "succeeded"
       },
       {
@@ -163,15 +172,6 @@
         "seconds": 0.01,
         "start_time": "2026-11-21T12:17:00.043265+00:00",
         "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-21T11:17:00.048526+00:00",
-        "jobid": 10,
-        "return_message": "1 row",
-        "runid": 29075,
-        "seconds": 0.01,
-        "start_time": "2026-11-21T11:17:00.036938+00:00",
-        "status": "succeeded"
       }
     ],
     "db_stats": {
@@ -189,7 +189,7 @@
       },
       "connections": [
         {
-          "n": 11,
+          "n": 4,
           "state": "idle",
           "usename": "authenticator"
         },
@@ -219,23 +219,31 @@
           "usename": "supabase_admin"
         }
       ],
-      "database_bytes": 42355859,
+      "database_bytes": 42740883,
       "queues": [],
       "schema_bytes": [
         {
-          "bytes": 4907008,
+          "bytes": 5079040,
           "schema": "public"
         }
       ],
       "storage": [],
       "top_queries": [
         {
-          "calls": 28719,
+          "calls": 28728,
           "mean_ms": 11.62,
           "query": "select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id",
           "role": "postgres",
-          "rows": 28719,
-          "total_ms": 333659
+          "rows": 28728,
+          "total_ms": 333809
+        },
+        {
+          "calls": 6,
+          "mean_ms": 35724.75,
+          "query": "SELECT table_schema AS schema, table_name AS \"table\", column_name AS \"column\", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ",
+          "role": "postgres",
+          "rows": 0,
+          "total_ms": 214348
         },
         {
           "calls": 26261,
@@ -246,14 +254,6 @@
           "total_ms": 208757
         },
         {
-          "calls": 4,
-          "mean_ms": 35692.12,
-          "query": "SELECT table_schema AS schema, table_name AS \"table\", column_name AS \"column\", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ",
-          "role": "postgres",
-          "rows": 0,
-          "total_ms": 142768
-        },
-        {
           "calls": 220,
           "mean_ms": 558.93,
           "query": "SELECT e.name, n.nspname AS schema, e.default_version, x.extversion AS installed_version, e.comment, ev.schema AS default_version_schema FROM pg_available_extensions e LEFT JOIN pg_extension x ON e.name = x.extname LEFT ",
@@ -262,28 +262,28 @@
           "total_ms": 122966
         },
         {
-          "calls": 71636,
+          "calls": 71655,
           "mean_ms": 1.05,
           "query": "WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid",
           "role": "postgres",
-          "rows": 28641,
-          "total_ms": 75314
+          "rows": 28650,
+          "total_ms": 75362
         },
         {
-          "calls": 71636,
+          "calls": 71655,
           "mean_ms": 0.88,
           "query": "WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key || ",
           "role": "postgres",
-          "rows": 28719,
-          "total_ms": 62886
+          "rows": 28728,
+          "total_ms": 62926
         },
         {
-          "calls": 85,
-          "mean_ms": 627.14,
+          "calls": 87,
+          "mean_ms": 632.51,
           "query": "SELECT name FROM pg_timezone_names",
           "role": "authenticator",
-          "rows": 101660,
-          "total_ms": 53307
+          "rows": 104052,
+          "total_ms": 55028
         },
         {
           "calls": 1395,
@@ -310,12 +310,12 @@
           "total_ms": 33870
         },
         {
-          "calls": 28719,
+          "calls": 28728,
           "mean_ms": 0.69,
           "query": "insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)",
           "role": "postgres",
-          "rows": 28719,
-          "total_ms": 19843
+          "rows": 28728,
+          "total_ms": 19847
         },
         {
           "calls": 60,
@@ -326,20 +326,20 @@
           "total_ms": 13521
         },
         {
-          "calls": 85,
-          "mean_ms": 88.75,
+          "calls": 87,
+          "mean_ms": 90.05,
           "query": "WITH -- Recursively get the base types of domains base_types AS ( WITH RECURSIVE recurse AS ( SELECT oid, typbasetype, typnamespace AS base_namespace, COALESCE(NULLIF(typbasetype, $2), oid) AS base_type FROM pg_type UNIO",
           "role": "authenticator",
-          "rows": 8423,
-          "total_ms": 7544
+          "rows": 8643,
+          "total_ms": 7835
         },
         {
-          "calls": 33395,
+          "calls": 33418,
           "mean_ms": 0.22,
           "query": "select set_config('?', $1, true), set_config('?', $2, true), set_config('?', $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('request.head",
           "role": "service_role",
-          "rows": 33395,
-          "total_ms": 7234
+          "rows": 33418,
+          "total_ms": 7235
         },
         {
           "calls": 167,
@@ -789,7 +789,7 @@
         "is_primary": false,
         "is_unique": true,
         "name": "contract_version_usage_unique",
-        "scans": 1003,
+        "scans": 1025,
         "schema": "public",
         "table": "contract_version_usage"
       },
@@ -882,6 +882,15 @@
         "scans": 0,
         "schema": "public",
         "table": "cron_job_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "idx_delivery_metrics_cache_date",
+        "scans": 1,
+        "schema": "public",
+        "table": "delivery_metrics_cache"
       },
       {
         "bytes": 16384,
@@ -1085,6 +1094,15 @@
         "bytes": 16384,
         "is_primary": false,
         "is_unique": true,
+        "name": "idx_driver_stats_cache_driver_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_stats_cache"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
         "name": "drivers_lalamove_id_key",
         "scans": 0,
         "schema": "public",
@@ -1215,6 +1233,15 @@
         "scans": 0,
         "schema": "public",
         "table": "geo_blocks"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "idx_hourly_metrics_cache_hour",
+        "scans": 1,
+        "schema": "public",
+        "table": "hourly_metrics_cache"
       },
       {
         "bytes": 8192,
@@ -2564,7 +2591,7 @@
         "last_autovacuum": null,
         "name": "lalamove_orders",
         "schema": "public",
-        "seq_scan": 704,
+        "seq_scan": 713,
         "total_bytes": 237568
       },
       {
@@ -2607,12 +2634,12 @@
         "total_bytes": 147456
       },
       {
-        "dead_rows": 22,
+        "dead_rows": 44,
         "est_rows": 75,
         "heap_bytes": 8192,
-        "idx_scan": 1017,
+        "idx_scan": 1039,
         "index_bytes": 81920,
-        "last_autoanalyze": "2026-11-21T13:17:18.751763+00:00",
+        "last_autoanalyze": "2026-11-21T14:15:21.380481+00:00",
         "last_autovacuum": "2026-11-21T13:34:19.371485+00:00",
         "name": "contract_version_usage",
         "schema": "public",
@@ -2694,7 +2721,7 @@
         "last_autovacuum": null,
         "name": "drivers",
         "schema": "public",
-        "seq_scan": 413,
+        "seq_scan": 420,
         "total_bytes": 106496
       },
       {

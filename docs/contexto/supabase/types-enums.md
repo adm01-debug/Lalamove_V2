@@ -8,8 +8,8 @@
 | public.approval_priority | enum | LOW, MEDIUM, HIGH, URGENT, CRITICAL | public.driver_approval_queue.approval_priority |
 | public.approval_status | enum | PENDING, APPROVED, REJECTED | public.driver_approval_queue.status |
 | public.delivery_outcome | enum | SUCCESS, FAILED, DAMAGED, STOLEN, LATE, WRONG_ADDRESS, CUSTOMER_UNAVAILABLE | public.lalamove_orders.outcome, public.orders_operator_view.outcome, public.orders_safe_view.outcome |
-| public.driver_status | enum | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST | public.drivers.status, public.drivers_safe_view.status |
+| public.driver_status | enum | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST | public.driver_stats_cache.driver_status, public.drivers.status, public.drivers_safe_view.status |
 | public.incident_severity | enum | LOW, MEDIUM, HIGH, CRITICAL | public.driver_incidents.severity |
 | public.incident_type | enum | ROUTE_DEVIATION, LONG_STOP, LATE_DELIVERY, CUSTOMER_COMPLAINT, DAMAGE, OTHER | public.driver_incidents.type |
 | public.order_status | enum | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED | public.lalamove_orders.status, public.lalamove_status_history.status, public.orders_operator_view.status, public.orders_safe_view.status |
-| public.vehicle_type | enum | MOTORCYCLE, CAR, VAN, TRUCK | public.drivers.vehicle_type, public.drivers_safe_view.vehicle_type, public.lalamove_orders.vehicle_type, public.orders_operator_view.vehicle_type, public.orders_safe_view.vehicle_type |
+| public.vehicle_type | enum | MOTORCYCLE, CAR, VAN, TRUCK | public.driver_stats_cache.vehicle_type, public.drivers.vehicle_type, public.drivers_safe_view.vehicle_type, public.lalamove_orders.vehicle_type, public.orders_operator_view.vehicle_type, public.orders_safe_view.vehicle_type |

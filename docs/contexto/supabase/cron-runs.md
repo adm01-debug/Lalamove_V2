@@ -65,15 +65,15 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-21 14:00:00 | succeeded | 0.02 | 1 row |
-| 2026-11-21 13:55:00 | succeeded | 0.04 | 1 row |
-| 2026-11-21 13:50:00 | succeeded | 0.02 | 1 row |
+| 2026-11-21 14:40:00 | succeeded | 0.02 | 1 row |
+| 2026-11-21 14:35:00 | succeeded | 0.02 | 1 row |
+| 2026-11-21 14:30:00 | succeeded | 0.02 | 1 row |
 
 
 ## 10 · lalamove_uapi_token_refresh_hourly
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-21 14:17:00 | succeeded | 0.03 | 1 row |
 | 2026-11-21 13:17:00 | succeeded | 0.02 | 1 row |
 | 2026-11-21 12:17:00 | succeeded | 0.01 | 1 row |
-| 2026-11-21 11:17:00 | succeeded | 0.01 | 1 row |

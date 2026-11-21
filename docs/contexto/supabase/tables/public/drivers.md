@@ -12,7 +12,7 @@
 | realtime (publication) | não |
 | replica identity | default |
 | vem de extensão | não |
-| usada por views | public.drivers_safe_view |
+| usada por views | public.driver_stats_cache, public.drivers_safe_view |
 
 
 ## Colunas

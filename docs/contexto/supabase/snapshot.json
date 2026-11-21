@@ -1749,6 +1749,84 @@
       },
       {
         "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "view_name",
+        "nullable": true,
+        "position": 1,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "row_count",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_refresh",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "refresh_duration_ms",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_stale",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "status",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "cache_status",
+        "type": "text"
+      },
+      {
+        "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -2213,6 +2291,149 @@
         "position": 9,
         "schema": "public",
         "table": "cron_job_logs",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "delivery_date",
+        "nullable": true,
+        "position": 1,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "date"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "total_orders",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "completed_orders",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cancelled_orders",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "failed_orders",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "in_progress_orders",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "avg_delay_minutes",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "total_value",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "avg_value",
+        "nullable": true,
+        "position": 9,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "max_value",
+        "nullable": true,
+        "position": 10,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cached_at",
+        "nullable": true,
+        "position": 11,
+        "schema": "public",
+        "table": "delivery_metrics_cache",
         "type": "timestamp with time zone"
       },
       {
@@ -2928,6 +3149,253 @@
         "position": 9,
         "schema": "public",
         "table": "driver_locations",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_id",
+        "nullable": true,
+        "position": 1,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_name",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "lalamove_driver_id",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "phone",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": true,
+        "name": "vehicle_type",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "vehicle_type"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": true,
+        "name": "driver_status",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "driver_status"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "risk_score",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "numeric(3,1)"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "risk_level",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_whitelisted",
+        "nullable": true,
+        "position": 9,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_blacklisted",
+        "nullable": true,
+        "position": 10,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "total_deliveries",
+        "nullable": true,
+        "position": 11,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "completed_deliveries",
+        "nullable": true,
+        "position": 12,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cancelled_deliveries",
+        "nullable": true,
+        "position": 13,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "failed_deliveries",
+        "nullable": true,
+        "position": 14,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "avg_rating",
+        "nullable": true,
+        "position": 15,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_delivery_at",
+        "nullable": true,
+        "position": 16,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_active_at",
+        "nullable": true,
+        "position": 17,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_created_at",
+        "nullable": true,
+        "position": 18,
+        "schema": "public",
+        "table": "driver_stats_cache",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cached_at",
+        "nullable": true,
+        "position": 19,
+        "schema": "public",
+        "table": "driver_stats_cache",
         "type": "timestamp with time zone"
       },
       {
@@ -4072,6 +4540,84 @@
         "position": 10,
         "schema": "public",
         "table": "geo_blocks",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "hour",
+        "nullable": true,
+        "position": 1,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "total_orders",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "completed_orders",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "avg_value",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "total_value",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
+        "type": "numeric"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cached_at",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "hourly_metrics_cache",
         "type": "timestamp with time zone"
       },
       {
@@ -11618,8 +12164,8 @@
       },
       {
         "columns": [
-          "total_deliveries",
-          "completed_deliveries"
+          "completed_deliveries",
+          "total_deliveries"
         ],
         "deferrable": false,
         "definition": "CHECK (completed_deliveries IS NULL OR total_deliveries IS NULL OR completed_deliveries <= total_deliveries)",
@@ -16058,6 +16604,41 @@
         "volatility": "volatile"
       },
       {
+        "args": "p_view_name text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20250102000002_cache_system_complete.sql",
+              "hits": 3
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": "Atualiza uma materialized view de cache ou todas",
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "eb9491cfeaf04a5d",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "refresh_cache_view",
+        "owner": "postgres",
+        "returns": "TABLE(view_refreshed text, duration_ms integer, row_count bigint, status text)",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "p_retention_days integer",
         "callers": {
           "code": [
@@ -16960,6 +17541,24 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "blocked_ips"
+        },
+        {
+          "grantee": "anon",
+          "privileges": "SELECT",
+          "schema": "public",
+          "table": "cache_status"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "cache_status"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "cache_status"
         },
         {
           "grantee": "authenticated",
@@ -18628,6 +19227,20 @@
       },
       {
         "columns": [
+          "delivery_date"
+        ],
+        "definition": "CREATE UNIQUE INDEX idx_delivery_metrics_cache_date ON public.delivery_metrics_cache USING btree (delivery_date)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_delivery_metrics_cache_date",
+        "predicate": null,
+        "schema": "public",
+        "table": "delivery_metrics_cache"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX driver_approval_queue_pkey ON public.driver_approval_queue USING btree (id)",
@@ -18940,6 +19553,20 @@
       },
       {
         "columns": [
+          "driver_id"
+        ],
+        "definition": "CREATE UNIQUE INDEX idx_driver_stats_cache_driver_id ON public.driver_stats_cache USING btree (driver_id)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_driver_stats_cache_driver_id",
+        "predicate": null,
+        "schema": "public",
+        "table": "driver_stats_cache"
+      },
+      {
+        "columns": [
           "lalamove_id"
         ],
         "definition": "CREATE UNIQUE INDEX drivers_lalamove_id_key ON public.drivers USING btree (lalamove_id)",
@@ -19147,6 +19774,20 @@
         "predicate": null,
         "schema": "public",
         "table": "geo_blocks"
+      },
+      {
+        "columns": [
+          "hour"
+        ],
+        "definition": "CREATE UNIQUE INDEX idx_hourly_metrics_cache_hour ON public.hourly_metrics_cache USING btree (hour)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_hourly_metrics_cache_hour",
+        "predicate": null,
+        "schema": "public",
+        "table": "hourly_metrics_cache"
       },
       {
         "columns": [
@@ -21254,6 +21895,12 @@
     ],
     "lints": [
       {
+        "code": "view_security_definer",
+        "detail": "View em public sem security_invoker: executa como owner e ignora RLS das tabelas base.",
+        "object": "public.cache_status",
+        "severity": "ALTA"
+      },
+      {
         "code": "no_primary_key",
         "detail": "Sem chave primária: Realtime/replicação e updates por linha ficam frágeis.",
         "object": "public.tracking_events",
@@ -22433,6 +23080,12 @@
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.refresh_cache_view(p_view_name text)",
         "severity": "INFO"
       }
     ],
@@ -27456,6 +28109,50 @@
     ],
     "views": [
       {
+        "comment": "Status de cada materialized view de cache (stale/atualizada)",
+        "definition": " SELECT view_name,\n    row_count,\n    last_refresh,\n    refresh_duration_ms,\n    last_refresh IS NULL OR last_refresh < (now() - '01:00:00'::interval) AS is_stale,\n        CASE\n            WHEN last_refresh IS NULL THEN 'never_refreshed'::text\n            WHEN last_refresh < (now() - '01:00:00'::interval) THEN 'stale'::text\n            ELSE 'success'::text\n        END AS status\n   FROM ( SELECT 'driver_stats_cache'::text AS view_name,\n            ( SELECT count(*) AS count\n                   FROM driver_stats_cache) AS row_count,\n            ( SELECT max(driver_stats_cache.cached_at) AS max\n                   FROM driver_stats_cache) AS last_refresh,\n            NULL::integer AS refresh_duration_ms\n        UNION ALL\n         SELECT 'delivery_metrics_cache'::text,\n            ( SELECT count(*) AS count\n                   FROM delivery_metrics_cache) AS count,\n            ( SELECT max(delivery_metrics_cache.cached_at) AS max\n                   FROM delivery_metrics_cache) AS max,\n            NULL::integer AS int4\n        UNION ALL\n         SELECT 'hourly_metrics_cache'::text,\n            ( SELECT count(*) AS count\n                   FROM hourly_metrics_cache) AS count,\n            ( SELECT max(hourly_metrics_cache.cached_at) AS max\n                   FROM hourly_metrics_cache) AS max,\n            NULL::integer AS int4) s;",
+        "depends_on": [
+          "public.delivery_metrics_cache",
+          "public.driver_stats_cache",
+          "public.hourly_metrics_cache"
+        ],
+        "kind": "view",
+        "name": "cache_status",
+        "options": null,
+        "owner": "postgres",
+        "populated": null,
+        "schema": "public",
+        "security_invoker": false
+      },
+      {
+        "comment": "Cache de metricas diarias de entregas",
+        "definition": " SELECT date(created_at) AS delivery_date,\n    count(*) AS total_orders,\n    count(*) FILTER (WHERE status = 'COMPLETED'::order_status) AS completed_orders,\n    count(*) FILTER (WHERE status = 'CANCELLED'::order_status) AS cancelled_orders,\n    count(*) FILTER (WHERE status = ANY (ARRAY['REJECTED'::order_status, 'EXPIRED'::order_status])) AS failed_orders,\n    count(*) FILTER (WHERE status = ANY (ARRAY['ON_GOING'::order_status, 'PICKED_UP'::order_status])) AS in_progress_orders,\n    COALESCE(avg(delay_minutes), 0::numeric) AS avg_delay_minutes,\n    COALESCE(sum(total_cost), 0::numeric) AS total_value,\n    COALESCE(avg(total_cost), 0::numeric) AS avg_value,\n    COALESCE(max(total_cost), 0::numeric) AS max_value,\n    now() AS cached_at\n   FROM lalamove_orders lo\n  GROUP BY (date(created_at));",
+        "depends_on": [
+          "public.lalamove_orders"
+        ],
+        "kind": "materialized",
+        "name": "delivery_metrics_cache",
+        "options": null,
+        "owner": "postgres",
+        "populated": true,
+        "schema": "public",
+        "security_invoker": false
+      },
+      {
+        "comment": "Cache de estatisticas consolidadas de motoristas",
+        "definition": " SELECT id AS driver_id,\n    name AS driver_name,\n    lalamove_id AS lalamove_driver_id,\n    phone,\n    vehicle_type,\n    status AS driver_status,\n    risk_score,\n    risk_level,\n    whitelisted AS is_whitelisted,\n    blacklisted AS is_blacklisted,\n    COALESCE(total_deliveries, 0) AS total_deliveries,\n    COALESCE(completed_deliveries, 0) AS completed_deliveries,\n    COALESCE(cancelled_deliveries, 0) AS cancelled_deliveries,\n    COALESCE(failed_deliveries, 0) AS failed_deliveries,\n    COALESCE(rating, 0::numeric) AS avg_rating,\n    last_delivery_at,\n    last_active_at,\n    created_at AS driver_created_at,\n    now() AS cached_at\n   FROM drivers d;",
+        "depends_on": [
+          "public.drivers"
+        ],
+        "kind": "materialized",
+        "name": "driver_stats_cache",
+        "options": null,
+        "owner": "postgres",
+        "populated": true,
+        "schema": "public",
+        "security_invoker": false
+      },
+      {
         "comment": null,
         "definition": " SELECT id,\n    name,\n    vehicle_type,\n    status,\n    rating,\n    risk_score,\n    risk_level,\n    total_deliveries,\n    completed_deliveries,\n    failed_deliveries,\n    cancelled_deliveries,\n    success_rate,\n    failure_rate,\n    avg_delay_minutes,\n    lalamove_id,\n    vehicle_plate,\n    photo_url,\n    blacklisted,\n    blacklist_reason,\n    whitelisted,\n    notes,\n    last_active_at,\n    last_delivery_at,\n    last_evaluated_at,\n    first_seen_at,\n    external_rating,\n    external_success_rate,\n    external_total_deliveries,\n    risk_reasons,\n    created_at,\n    updated_at,\n        CASE\n            WHEN has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) THEN phone\n            ELSE '***RESTRITO***'::text\n        END AS phone\n   FROM drivers;",
         "depends_on": [
@@ -27470,6 +28167,20 @@
         "populated": null,
         "schema": "public",
         "security_invoker": true
+      },
+      {
+        "comment": "Cache de metricas horarias de entregas",
+        "definition": " SELECT date_trunc('hour'::text, created_at) AS hour,\n    count(*) AS total_orders,\n    count(*) FILTER (WHERE status = 'COMPLETED'::order_status) AS completed_orders,\n    COALESCE(avg(total_cost), 0::numeric) AS avg_value,\n    COALESCE(sum(total_cost), 0::numeric) AS total_value,\n    now() AS cached_at\n   FROM lalamove_orders lo\n  GROUP BY (date_trunc('hour'::text, created_at));",
+        "depends_on": [
+          "public.lalamove_orders"
+        ],
+        "kind": "materialized",
+        "name": "hourly_metrics_cache",
+        "options": null,
+        "owner": "postgres",
+        "populated": true,
+        "schema": "public",
+        "security_invoker": false
       },
       {
         "comment": null,

@@ -63,6 +63,7 @@ Uso e tamanho em `stats.md`.
 | public.cron_job_logs | cron_job_logs_pkey | btree | id | sim | sim |  |
 | public.cron_job_logs | idx_cron_job_logs_created_at | btree | created_at | não | sim |  |
 | public.cron_job_logs | idx_cron_job_logs_job_name | btree | job_name, executed_at | não | sim |  |
+| public.delivery_metrics_cache | idx_delivery_metrics_cache_date | btree | delivery_date | sim | sim |  |
 | public.driver_approval_queue | driver_approval_queue_pkey | btree | id | sim | sim |  |
 | public.driver_approval_queue | idx_approval_priority | btree | priority | não | sim |  |
 | public.driver_approval_queue | idx_approvals_driver | btree | driver_id | não | sim |  |
@@ -85,6 +86,7 @@ Uso e tamanho em `stats.md`.
 | public.driver_locations | driver_locations_pkey | btree | id | sim | sim |  |
 | public.driver_locations | idx_driver_locations_recorded | btree | recorded_at | não | sim |  |
 | public.driver_locations | idx_driver_locations_tracking_recorded | btree | tracking_id, recorded_at | não | sim |  |
+| public.driver_stats_cache | idx_driver_stats_cache_driver_id | btree | driver_id | sim | sim |  |
 | public.drivers | drivers_lalamove_id_key | btree | lalamove_id | sim | sim |  |
 | public.drivers | drivers_pkey | btree | id | sim | sim |  |
 | public.drivers | idx_drivers_blacklisted | btree | blacklisted | não | sim | `(blacklisted = true)` |
@@ -100,6 +102,7 @@ Uso e tamanho em `stats.md`.
 | public.geo_blocks | geo_blocks_pkey | btree | id | sim | sim |  |
 | public.geo_blocks | idx_geo_blocks_active | btree | is_blocked | não | sim | `(is_blocked = true)` |
 | public.geo_blocks | idx_geo_blocks_blocked_by | btree | blocked_by | não | sim |  |
+| public.hourly_metrics_cache | idx_hourly_metrics_cache_hour | btree | hour | sim | sim |  |
 | public.ip_whitelist | ip_whitelist_pkey | btree | id | sim | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_new_id | btree | new_lalamove_id | não | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_order_id | btree | order_id | não | sim |  |
