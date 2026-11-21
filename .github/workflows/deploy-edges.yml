@@ -1,0 +1,44 @@
+name: Deploy Edge Functions
+
+# Deploy automatico das edge functions do Supabase.
+# Hoje o deploy e manual/Lovable e o config.toml nao e aplicado de forma
+# consistente — este workflow torna o main a fonte de verdade.
+#
+# Requisito: secret SUPABASE_ACCESS_TOKEN no repositorio (Personal Access
+# Token do Supabase, escopo no projeto iecgydonctmabiijadsf). O token NUNCA
+# entra no codigo — apenas em Settings > Secrets and variables > Actions.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/**'
+      - 'supabase/config.toml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-edges
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: iecgydonctmabiijadsf
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Deploy all functions
+        # Sem nome = todas as functions de supabase/functions/.
+        # O CLI le supabase/config.toml e aplica o verify_jwt por function,
+        # entao as flags declaradas la valem no deploy.
+        run: supabase functions deploy --project-ref "$PROJECT_REF"
+
+      - name: List deployed functions
+        run: supabase functions list --project-ref "$PROJECT_REF"
