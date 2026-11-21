@@ -7,10 +7,10 @@
 | ID | Título | Status |
 |---|---|---|
 | P-01 | RLS de query_telemetry grant-only (PR #92) | CONCLUÍDO (2026-11-21, merge 41ba75b) |
-| P-02 | App Mobile para Motoristas (auditoria 5.1) | AGUARDANDO HUMANO (decisão do dono) |
-| P-03 | Chat em tempo real Cliente-Motorista (auditoria 5.2) | AGUARDANDO HUMANO (decisão do dono) |
+| P-02 | App Mobile para Motoristas (auditoria 5.1) | ADIADO PARA V3 (decisão dono 2026-11-21) |
+| P-03 | Chat em tempo real Cliente-Motorista (auditoria 5.2) | ADIADO PARA V3 (decisão dono 2026-11-21) |
 | P-04 | Rotacionar JWT_SECRET no painel Supabase | AGUARDANDO HUMANO (ação do dono) |
-| P-05 | Snapshot do banco real (docs/contexto/supabase/) | AGUARDANDO HUMANO (falta SUPABASE_DB_URL) |
+| P-05 | Snapshot do banco real (docs/contexto/supabase/) | CONCLUÍDO (2026-11-21, publicado na branch contexto) |
 | P-06 | Vulns npm restantes (4 moderate, fix = bump major) | CONCLUÍDO (2026-11-21, PR #99) |
 | P-07 | SECURITY DEFINER sem set search_path | OBSOLETO (verificado: 47/47 têm search_path) |
 | P-08 | geo_blocks sem RLS | OBSOLETO (verificado: 5 policies ativas) |
@@ -34,3 +34,9 @@ Verificado byte a byte nesta sessão / sessões anteriores (evidência em _linha
 
 - Branches lovable-sync-* : único trabalho de agente nelas (fonte da edge mcp-query) já está na main e no ar; confirmar que não há PR aberta antes de apagar.
 - mcp-query-test-5888@ (usuário teste): artefato de sessão, nunca logou — deleção aprovada pelo dono (regra 8, aguardando execução).
+
+## Adiados para a V3 (decisão do dono, 2026-11-21)
+
+A **V3 será concorrente do Lalamove** (plataforma própria de motoristas); a **V2 atual é parceira** (opera via operador/parceiros). Sem escopo V2:
+- **P-02** App Mobile para Motoristas (auditoria 5.1) — ver `P-02-app-mobile-motoristas.md`.
+- **P-03** Chat em tempo real Cliente-Motorista (auditoria 5.2) — ver `P-03-chat-cliente-motorista.md`.
