@@ -7,7 +7,7 @@ import { logger } from "../_shared/logger.ts";
 import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
-import { validateHmacSignature } from "./security.ts";
+import { validateHmacSignature, validateLalamoveV3Signature } from "./security.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -143,12 +143,12 @@ serve(async (req) => {
   
   const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
   
+  // IP fora das faixas conhecidas NAO bloqueia mais: a Lalamove nao publica
+  // os ranges de saida do mercado BR e o gate de 403 derrubava o handshake de
+  // registro da URL (PATCH /v3/webhook => ERR_INVALID_RESPONSE) e todas as
+  // entregas reais. A autenticidade e garantida pela assinatura HMAC do corpo.
   if (!isIpTrusted(clientIp)) {
-    logger.warn(`[Webhook] BLOCKED - Unauthorized IP: ${clientIp}`);
-    return new Response(
-      JSON.stringify({ error: "Access denied" }),
-      { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    logger.warn(`[Webhook] IP fora das faixas conhecidas: ${clientIp} — seguindo (autenticacao via assinatura)`);
   }
   
   cleanupRateLimitStore();
@@ -170,11 +170,35 @@ serve(async (req) => {
   try {
     const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const rawBody = await req.text();
-    
-    // HMAC validation
+
+    // Handshake de registro: a Lalamove valida a URL exigindo 200 para uma
+    // requisicao SEM corpo ("send 200 even when Lalamove doesn't send anything
+    // in the body" — v3_Webhook_v1.5.pdf, p.7). Sem isso o PATCH /v3/webhook
+    // falha com ERR_INVALID_RESPONSE e nenhuma URL pode ser registrada.
+    if (!rawBody.trim()) {
+      logger.log(`[Webhook] Handshake/ping sem corpo — respondendo 200`);
+      return new Response(
+        JSON.stringify({ ok: true }),
+        { status: 200, headers: { ...rateLimitHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // HMAC validation.
+    // Formato real da Lalamove v3: a assinatura vem NO CORPO (campos
+    // timestamp/signature/data), raw = `${timestamp}\r\nPOST\r\n${path}\r\n\r\n` +
+    // JSON.stringify(data) — fonte: v3_Webhook_v1.5.pdf p.8 + sample oficial.
+    // O esquema por header x-lalamove-signature e mantido como fallback para
+    // tooling interno/testes existentes.
     const lalamoveSecret = Deno.env.get("LALAMOVE_API_SECRET");
     const signature = req.headers.get("x-lalamove-signature") || req.headers.get("X-Lalamove-Signature");
-    const hmacResult = await validateHmacSignature(rawBody, signature, lalamoveSecret || '');
+    let preParsed: Record<string, unknown> | null = null;
+    try { preParsed = JSON.parse(rawBody); } catch { preParsed = null; }
+    const webhookPaths = ['/functions/v1/lalamove-webhook', new URL(req.url).pathname];
+    const hmacResult = (preParsed && typeof preParsed === 'object' && 'signature' in preParsed)
+      ? await validateLalamoveV3Signature(
+          preParsed as { timestamp?: unknown; signature?: unknown; data?: unknown },
+          webhookPaths, lalamoveSecret || '')
+      : await validateHmacSignature(rawBody, signature, lalamoveSecret || '');
     
     if (!hmacResult.valid) {
       logger.warn(`[Webhook] HMAC validation failed: ${hmacResult.reason}`);
