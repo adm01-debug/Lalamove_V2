@@ -129,6 +129,54 @@ async function runProvider(
   }
 }
 
+/**
+ * Etapa 75: emite `GEO_BUDGET_WARNING` quando o gasto do mês cruza `alert_at_pct`.
+ * `warned_month` garante um alerta por provedor por mês — o update é condicional e
+ * atômico, então chamadas concorrentes do gateway não duplicam o alerta.
+ * Nunca lança: falha de alerta não pode derrubar a requisição de mapa.
+ */
+async function warnBudgetOnce(provider: ProviderName, budget: BudgetRow | undefined): Promise<void> {
+  if (!budget?.warn) return;
+  const month = new Date().toISOString().slice(0, 10).slice(0, 7) + "-01";
+  const { data: claimed, error: claimError } = await db
+    .from("geo_budget")
+    .update({ warned_month: month })
+    .eq("provider", provider)
+    .is("warned_month", null)
+    .select("provider");
+  // Caminho idempotente: já avisado neste mês (ou em outro) — não reemite.
+  let claimedRow = claimed?.[0];
+  if (!claimedRow && !claimError) {
+    const { data: again } = await db
+      .from("geo_budget")
+      .update({ warned_month: month })
+      .eq("provider", provider)
+      .lt("warned_month", month)
+      .select("provider");
+    claimedRow = again?.[0];
+  }
+  if (claimError || !claimedRow) return;
+
+  const { error } = await db.from("alerts").insert({
+    type: "GEO_BUDGET_WARNING",
+    severity: budget.pct >= 100 ? "CRITICAL" : "WARNING",
+    title: `Orçamento geo de ${provider} em ${budget.pct}%`,
+    message: `Gasto de US$ ${budget.spent_usd.toFixed(2)} de US$ ${budget.limit_usd.toFixed(2)} em ${provider}.` +
+      (budget.blocked
+        ? " Limite atingido: novas chamadas a este provedor falham até o próximo mês ou até o limite ser elevado."
+        : " Ao atingir 100% com hard_stop ativo, as chamadas a este provedor param."),
+    metadata: {
+      provider,
+      pct: budget.pct,
+      spent_usd: budget.spent_usd,
+      limit_usd: budget.limit_usd,
+      blocked: budget.blocked,
+      month,
+    },
+  });
+  if (error) logger.error("[geo-gateway] falha ao gravar alerta de orçamento", error.message);
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -173,6 +221,9 @@ Deno.serve(async (req) => {
     }
 
     const { provider: name, reason } = await resolver.resolve(fn, body.provider);
+    const provider = getProvider(name);
+    // Etapa 75: avisa o dono antes do bloqueio duro por orçamento.
+    await warnBudgetOnce(name, resolver.budgetOf(name));
     const headers: Record<string, string> = { ...corsHeaders, "X-Geo-Provider": name, "X-Geo-Resolve": reason };
 
     // ── cache ──────────────────────────────────────────────────────────────
@@ -197,6 +248,10 @@ Deno.serve(async (req) => {
       headers["X-Geo-Provider"] = usedProvider;
       headers["X-Geo-Fallback"] = `${outcome.fallback.from}:${outcome.fallback.code}`;
     }
+
+    // Etapa 75: avisa o dono antes do bloqueio duro por orçamento. Roda sobre o provedor
+    // que de fato atendeu — com failover o primário pode não ter sido usado.
+    await warnBudgetOnce(usedProvider, resolver.budgetOf(usedProvider));
 
     await meter(db, usedProvider, fn, result.sku, result.units);
     // A chave é derivada do provedor que respondeu: cachear a resposta do fallback sob a chave do

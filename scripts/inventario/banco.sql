@@ -247,5 +247,48 @@ SELECT jsonb_build_object(
   'lalamove', jsonb_build_object(
     'grupos', (SELECT jsonb_object_agg(g.chave, g.valor) FROM grupos g),
     'frescor', (SELECT jsonb_object_agg(f.chave, f.valor) FROM frescor f)
+  ),
+
+  -- Camada geo (Mapbox/Google): configuracao por funcao, orcamento do mes e os
+  -- precos de referencia que o geo-gateway usa para estimar custo. Sem isso o
+  -- inventario nao mostra quando uma funcao geo ficou desligada ou cara.
+  'geo', jsonb_build_object(
+    'settings', (
+      SELECT coalesce(jsonb_agg(jsonb_build_object(
+               'funcao', s.function,
+               'provedor', s.provider,
+               'fallback', s.fallback_provider,
+               'config', s.config) ORDER BY s.function), '[]'::jsonb)
+        FROM geo_settings s
+    ),
+    'orcamento', (
+      SELECT coalesce(jsonb_agg(jsonb_build_object(
+               'provedor', b.provider,
+               'limite_usd_mes', b.monthly_limit_usd,
+               'hard_stop', b.hard_stop,
+               'alerta_em_pct', b.alert_at_pct,
+               'avisado_em', to_char(b.warned_month, 'YYYY-MM-DD'),
+               'gasto_usd', st.spent_usd,
+               'pct', st.pct,
+               'bloqueado', st.blocked) ORDER BY b.provider), '[]'::jsonb)
+        FROM geo_budget b LEFT JOIN geo_budget_status() st ON st.provider = b.provider
+    ),
+    'precos', (
+      SELECT coalesce(jsonb_agg(jsonb_build_object(
+               'provedor', p.provider,
+               'sku', p.sku,
+               'usd_por_1000', p.unit_cost_per_1000,
+               'cota_gratis_mes', p.free_quota_month) ORDER BY p.provider, p.sku), '[]'::jsonb)
+        FROM geo_price_list p
+    ),
+    'uso_mes', (
+      SELECT coalesce(jsonb_agg(jsonb_build_object(
+               'provedor', u.provider,
+               'funcao', u.function,
+               'sku', u.sku,
+               'chamadas', u.count,
+               'custo_usd', u.est_cost_usd) ORDER BY u.provider, u.function, u.sku), '[]'::jsonb)
+        FROM geo_usage_month u
+    )
   )
 ) AS inventario;
