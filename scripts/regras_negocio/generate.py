@@ -919,9 +919,6 @@ def parse_sql_schema(root: Path, files: list[Path]) -> dict:
             if m:
                 kind, privs, objkind, sch, obj, roles = m.groups()
                 schema["grants"].append({"kind": kind.lower(), "privs": squash(privs).lower(), "object": tkey(sch, obj), "objkind": (objkind or "table").lower(), "roles": squash(roles), "src": src}); continue
-        for key, t in T.items():
-            c = schema["comments"].get(f"table:{key}")
-            if c: t["comment"] = c
     # Prisma
     for f in files:
         if f.name == "schema.prisma":
@@ -978,6 +975,11 @@ def parse_sql_schema(root: Path, files: list[Path]) -> dict:
                     schema["functions"].setdefault(name, {"args": "", "returns": "?", "lang": "", "src": rel(f, root), "security_definer": False, "search_path": False, "body": "", "raises": [], "tables": []})
             schema["sources"].append(rel(f, root))
             break
+    # Ligação de comments (SQL) às tabelas — depois de types.ts, para cobrir
+    # tabelas criadas só no painel (sem CREATE TABLE em migration) e particions.
+    for key, t in T.items():
+        c = schema["comments"].get(f"table:{key}")
+        if c: t["comment"] = c
     return schema
 
 

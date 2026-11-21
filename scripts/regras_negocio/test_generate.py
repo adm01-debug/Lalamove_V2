@@ -130,6 +130,42 @@ export type Database = {
         self.assertEqual(schema["tables"]["Store"]["origin"], "prisma")
         self.assertEqual(schema["tables"]["customers"]["origin"], "types.ts")
 
+    def test_comment_on_table_binds_to_types_only_table_and_partition(self):
+        # Tabelas criadas só no painel (sem CREATE TABLE em migration) entram pelo
+        # database.types.ts; o COMMENT ON TABLE das migrations deve ligar a elas.
+        self.write("supabase/migrations/20260101000000_comments.sql",
+                   "COMMENT ON TABLE public.geo_blocks IS 'Bloqueios geograficos por pais.';\n"
+                   "COMMENT ON TABLE public.tracking_events_default IS 'Particao padrao de tracking_events.';\n")
+        self.write("src/database.types.ts", """
+export type Database = {
+  public: {
+    Tables: {
+      geo_blocks: {
+        Row: {
+          id: string
+        }
+      }
+      tracking_events_default: {
+        Row: {
+          id: string
+        }
+      }
+      tracking_events_y2026m05: {
+        Row: {
+          id: string
+        }
+      }
+    }
+  }
+}
+""")
+        schema = self.schema()
+        self.assertEqual(schema["tables"]["geo_blocks"]["comment"], "Bloqueios geograficos por pais.")
+        self.assertEqual(schema["tables"]["tracking_events_default"]["comment"], "Particao padrao de tracking_events.")
+        self.assertEqual(schema["tables"]["geo_blocks"]["origin"], "types.ts")
+        # Tabela sem comment permanece vazia (lacuna legítima).
+        self.assertEqual(schema["tables"]["tracking_events_y2026m05"]["comment"], "")
+
     def test_archived_sql_is_not_current_code_but_remains_in_file_inventory(self):
         current = self.write("supabase/migrations/20260101000000_retention.sql", "SELECT now() - interval '7 days';")
         archived = self.write("supabase/migrations/_superseded/20250101000000_retention.sql", "SELECT now() - interval '365 days';")
