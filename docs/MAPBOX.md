@@ -3,6 +3,11 @@
 > Fonte canônica sobre a integração Mapbox no Lalamove V2.
 > Plano detalhado: `docs/planos/PLANO_MAPBOX_100_ETAPAS.md`
 
+## Runbook operacional
+
+Incidentes (token vazado, 429, Mapbox fora, cobertura BR, fatura): `docs/RUNBOOK_MAPBOX.md`.
+Terceiro provedor (HERE/TomTom): `docs/GEO_PROVIDERS.md`.
+
 ## Conta
 
 - **Username:** `promobrindes`
@@ -44,12 +49,12 @@ Setar via: `supabase secrets set MAPBOX_SERVER_TOKEN=<valor> --project-ref iecgy
 | Componente | Arquivo | Estado |
 |---|---|---|
 | Token front | `supabase/functions/get-mapbox-token/index.ts` | ✅ `verify_jwt=true` declarado no `config.toml` |
-| Proxy legado | `supabase/functions/mapbox-proxy/index.ts` | ⚠️ usa `pk.` como server token; a migrar para `geo-gateway` (etapa 61) |
+| Proxy legado | ~~`supabase/functions/mapbox-proxy/index.ts`~~ | ✅ **removida na etapa 61** — todo o tráfego passa pelo `geo-gateway` |
 | Gateway novo | `supabase/functions/geo-gateway/` | ✅ implementado em `main` (`index.ts`, `resolver.ts`, `polyline.ts`, `metering.ts`, `providers/mapbox.ts`, testes) |
-| Hook front | `src/hooks/useMapbox.ts` | ⚠️ chama `mapbox-proxy` diretamente; migrar para `useGeo` (etapa 60) |
+| Hook front | `src/hooks/useGeo.ts` (`useMapbox.ts` é barrel `@deprecated`) | ✅ fala com o `geo-gateway` (etapa 60) |
 | Health check | `supabase/functions/check-external-api/index.ts` | ✅ testa Mapbox v6 (`permanent=false`) e Google v4, devolve latência/SKU/req-min (etapa 67) |
 | Seletor visual | `src/pages/MapsSettingsPage.tsx` | ✅ lê e grava `geo_settings`; modo `auto`, painel de uso, matriz de paridade, escrita só admin |
-| Seletor legado | `src/hooks/useMapSettings.ts` | ⚠️ localStorage puro; não lê `geo_settings` do banco (etapa 66) |
+| Seletor do usuário | `src/hooks/useMapSettings.ts` + `useMapProviderPolicy.ts` | ✅ preferência visual em localStorage, **filtrada** por `geo_settings.tiles` (etapa 66) |
 
 ## Estilo do mapa (etapa 59)
 
