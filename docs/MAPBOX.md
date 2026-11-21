@@ -114,6 +114,13 @@ NÃO VERIFICADO — executar `scripts/geo/eta-parity.ts` após criar `MAPBOX_SER
 
 Ver `claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md` seção "Decisões embutidas".
 
+## Decisões registradas (sem implementação — etapas 10, 50, 59, 79)
+
+- **Etapa 10 — token temporário (`tk.`):** não implementar agora. `get-mapbox-token` continua devolvendo o `pk.` fixo. Um `tk.` (Tokens API, expira em 1h) reduziria exposição, mas custaria 1 chamada à Tokens API por renovação por usuário contra um limite de 100 req/min — com o volume atual (uso interno, poucos usuários simultâneos) o ganho de segurança não paga a complexidade/latência extra. Reavaliar se o `pk.` vazar de novo.
+- **Etapa 50 — trânsito futuro (`depart_at`, BETA):** não usar. Exige cadastro especial na Mapbox sem data de GA garantida. O ETA já é coberto em tempo real pela Matrix `driving-traffic` (etapa 46); não há hoje caso de uso para prever ETA de uma partida futura.
+- **Etapa 59 — estilo do mapa:** manter `dark-v11` (`LiveMap`) e `streets-v12`/`satellite-streets-v12` (demais telas) como estão. Mapbox Standard usa o mesmo SKU de map load — trocar não mudaria custo —, mas exigiria revalidar a legibilidade dos overlays customizados (`mapLayers.ts`: rota, geofence, marcadores) no estilo novo. Fica para quando houver demanda visual explícita.
+- **Etapa 79 — dependências:** confirmado em `package.json` — só `mapbox-gl` e `@types/mapbox-gl`, nenhum `@mapbox/search-js-*` ou `@mapbox/mapbox-sdk`. Toda chamada de API passa pelo `geo-gateway` no servidor, então o SDK JS da Mapbox (que embutiria o token no bundle do front) não é necessário.
+
 ## Rotação de token (Runbook — etapa 9)
 
 1. Edge `geo-admin` action `rotate-mapbox-token` cria novo `sk.` com mesmos scopes via `POST /tokens/v2/promobrindes`
