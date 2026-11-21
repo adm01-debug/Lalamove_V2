@@ -1,4 +1,5 @@
 import { logger } from '@/utils/logger';
+import { captureError } from '@/services/errorMonitoring';
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -64,13 +65,11 @@ export class ErrorBoundary extends Component<Props, State> {
     this.props.onError?.(error, errorInfo);
 
     // Send to error monitoring service
-    import('@/services/errorMonitoring').then(({ captureError }) => {
-      captureError(error, {
-        source: 'react-boundary',
-        severity: 'critical',
-        componentStack: errorInfo.componentStack ?? undefined,
-      });
-    }).catch(() => { /* silently fail */ });
+    captureError(error, {
+      source: 'react-boundary',
+      severity: 'critical',
+      componentStack: errorInfo.componentStack ?? undefined,
+    });
   }
 
   handleReload = () => {
