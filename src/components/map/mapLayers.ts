@@ -1,5 +1,5 @@
 import type mapboxgl from 'mapbox-gl';
-import { statusColor as statusHsl } from '@/lib/statusPalette';
+import { statusColorCss as statusHsl } from '@/lib/statusPalette';
 
 /**
  * Configura as fontes (sources) e camadas (layers) estáticas do mapa.

@@ -38,6 +38,11 @@ import { MapProviderSelector } from './MapProviderSelector';
 
 export type { VehicleFilter, StatusFilter };
 
+// Constantes de módulo: como default parameter, um literal `[-46.6544, -23.5629]`
+// cria nova referência a cada render e reinicializa o mapa (deps do useEffect de
+// init), que re-adicionava markers a uma instância já removida.
+const DEFAULT_CENTER: [number, number] = [-46.6544, -23.5629];
+const DEFAULT_ZOOM = 12;
 
 interface LiveMapProps {
   className?: string;
@@ -51,8 +56,8 @@ interface LiveMapProps {
 export function LiveMap({ 
   className = '', 
   showControls = true,
-  initialCenter = [-46.6544, -23.5629],
-  initialZoom = 12,
+  initialCenter = DEFAULT_CENTER,
+  initialZoom = DEFAULT_ZOOM,
   vehicleFilter = 'ALL',
   statusFilter = 'ALL',
 }: LiveMapProps) {
@@ -125,7 +130,10 @@ export function LiveMap({
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
     mapboxgl.accessToken = mapboxToken;
-    
+    // Ao recriar o mapa, os efeitos derivados (declarados antes deste) precisam
+    // aguardar o novo 'load' antes de tocar em layers/markers.
+    setLoading(true);
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: `mapbox://styles/mapbox/${mapStyle}`,
@@ -135,6 +143,11 @@ export function LiveMap({
       antialias: true
     });
     countMapLoad('mapbox');
+    // Handle de teste E2E (etapa 62): só em dev, permite ao Playwright inspecionar
+    // camadas do mapa sem depender do canvas WebGL.
+    if (import.meta.env.DEV) {
+      (window as unknown as { __livemap?: mapboxgl.Map }).__livemap = map.current;
+    }
 
     if (showControls) {
       map.current.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }), 'top-right');
@@ -172,12 +185,18 @@ export function LiveMap({
 
     return () => {
       resetMarkers();
+      if (import.meta.env.DEV) {
+        delete (window as unknown as { __livemap?: mapboxgl.Map }).__livemap;
+      }
       if (map.current) {
         if (map.current.getLayer('geofence-fill')) map.current.removeLayer('geofence-fill');
         if (map.current.getLayer('geofence-outline')) map.current.removeLayer('geofence-outline');
         if (map.current.getSource('geofence')) map.current.removeSource('geofence');
       }
       map.current?.remove();
+      // Zera a referência: hooks declarados antes deste efeito (useMapMarkers) ainda
+      // rodam no ciclo seguinte e receberiam um mapa já destruído.
+      map.current = null;
     };
   }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers]);
 

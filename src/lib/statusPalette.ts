@@ -69,6 +69,42 @@ export function statusColor(level: StatusLevel, alpha = 1): string {
     : `hsl(var(--${token}) / ${alpha})`;
 }
 
+/** Triplets HSL de fallback (tema escuro) quando a variável CSS não está legível. */
+const FALLBACK_TRIPLET: Record<StatusToken['token'], string> = {
+  success: '142 71% 45%',
+  warning: '38 92% 50%',
+  destructive: '0 72% 51%',
+  info: '199 89% 48%',
+};
+
+function readTokenTriplet(token: StatusToken['token']): string | null {
+  if (typeof document === 'undefined') return null;
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(`--${token}`)
+    .trim();
+  return value.length > 0 ? value : null;
+}
+
+/**
+ * Cor de status em formato aceito pelo Mapbox GL (`paint` properties).
+ *
+ * `statusColor()` devolve `hsl(var(--token))`, que apenas o CSS resolve; passar
+ * essa string para `addLayer`/`setPaintProperty` faz o Mapbox rejeitar a camada
+ * inteira ("Could not parse color from value"), deixando rota, rastro e geofence
+ * invisíveis. Aqui lemos a variável computada no `:root` e montamos um `hsl()`
+ * literal, preservando a paleta como fonte única de verdade.
+ */
+export function statusColorCss(level: StatusLevel, alpha = 1): string {
+  const token = STATUS_PALETTE[level].token;
+  const triplet = readTokenTriplet(token) ?? FALLBACK_TRIPLET[token];
+  // O parser de cor do Mapbox (csscolorparser) só aceita a sintaxe legada, com
+  // vírgulas: `hsl(142, 71%, 31%)`. A sintaxe moderna com espaços é rejeitada.
+  const [h = '0', s = '0%', l = '0%'] = triplet.split(/\s+/);
+  return alpha >= 1
+    ? `hsl(${h}, ${s}, ${l})`
+    : `hsla(${h}, ${s}, ${l}, ${alpha})`;
+}
+
 /**
  * Símbolo/forma distinta por nível de status — reforço color-blind-safe.
  *
