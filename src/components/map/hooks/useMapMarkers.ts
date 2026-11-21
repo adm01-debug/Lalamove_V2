@@ -208,45 +208,44 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
             [tracking.current_longitude, tracking.current_latitude],
             [tracking.order.delivery_longitude, tracking.order.delivery_latitude],
           ];
-          getDirections(waypoints, 'driving-traffic')
-            .then((route) => {
-              if (!mapRef.current || !mapRef.current.isStyleLoaded() || mapRef.current.getSource(sourceId)) return;
-              const routeGeometry = route?.geometry || { type: 'LineString', coordinates: waypoints };
-              mapRef.current.addSource(sourceId, {
-                type: 'geojson',
-                data: { type: 'Feature', properties: {}, geometry: routeGeometry as GeoJSON.Geometry },
-              });
-              mapRef.current.addLayer({
-                id: sourceId,
-                type: 'line',
-                source: sourceId,
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                  'line-color': color,
-                  'line-width': isSelected ? 6 : 4,
-                  'line-opacity': isOtherInFocus ? 0.05 : 0.7,
-                },
-              });
-            })
-            .catch(() => {
-              if (!mapRef.current?.isStyleLoaded() || mapRef.current?.getSource(sourceId)) return;
-              mapRef.current?.addSource(sourceId, {
-                type: 'geojson',
-                data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: waypoints } },
-              });
-              mapRef.current?.addLayer({
-                id: sourceId,
-                type: 'line',
-                source: sourceId,
-                layout: { 'line-join': 'round', 'line-cap': 'round' },
-                paint: {
-                  'line-color': color,
-                  'line-width': 3,
-                  'line-opacity': isOtherInFocus ? 0.05 : 0.6,
-                  'line-dasharray': [2, 2],
-                },
-              });
+          // Rota planejada servidor-side (job `route_plan`): zero Directions no browser.
+          const planned = tracking.expected_route;
+          const plannedGeometry = Array.isArray(planned) && planned.length >= 2
+            ? {
+                type: 'LineString' as const,
+                coordinates: planned.map((p) => [p.lng, p.lat] as [number, number]),
+              }
+            : null;
+
+          const paintFor = (dashed: boolean) => ({
+            'line-color': color,
+            'line-width': isSelected ? 6 : 4,
+            'line-opacity': isOtherInFocus ? 0.05 : 0.7,
+            ...(dashed ? { 'line-dasharray': [2, 2] as [number, number] } : {}),
+          });
+
+          const renderRoute = (geometry: GeoJSON.Geometry, dashed = false) => {
+            if (!mapRef.current || !mapRef.current.isStyleLoaded() || mapRef.current.getSource(sourceId)) return;
+            mapRef.current.addSource(sourceId, {
+              type: 'geojson',
+              data: { type: 'Feature', properties: {}, geometry },
             });
+            mapRef.current.addLayer({
+              id: sourceId,
+              type: 'line',
+              source: sourceId,
+              layout: { 'line-join': 'round', 'line-cap': 'round' },
+              paint: paintFor(dashed),
+            });
+          };
+
+          if (plannedGeometry) {
+            renderRoute(plannedGeometry);
+          } else {
+            getDirections(waypoints, 'driving-traffic')
+              .then((route) => renderRoute((route?.geometry as GeoJSON.Geometry) || { type: 'LineString', coordinates: waypoints }))
+              .catch(() => renderRoute({ type: 'LineString', coordinates: waypoints }, true));
+          }
         }
       } else if (routeLines.current.has(tracking.id) && map.getLayer(`route-${tracking.id}`)) {
         map.setPaintProperty(`route-${tracking.id}`, 'line-opacity', isOtherInFocus ? 0.05 : (isSelected ? 0.8 : 0.6));
