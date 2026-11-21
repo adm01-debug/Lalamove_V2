@@ -330,19 +330,28 @@ serve(async (req) => {
       logger.log(`[Webhook] Order ${orderUuid} status: ${oldStatus} -> ${newStatus}`);
     }
     
-    async function sendNotification(type: string, title: string, message: string, severity: string, driverId?: string, orderId?: string) {
-      const { data: alert } = await supabase
+    async function sendNotification(
+      type: string, title: string, message: string, severity: string, driverId?: string, orderId?: string,
+      recipients?: Array<{ role: string; channel: string; to: string }>,
+    ) {
+      const { data: alert, error: alertError } = await supabase
         .from('alerts')
         .insert({ type, severity, title, message, driver_id: driverId || null, order_id: orderId || null })
         .select('id')
         .single();
+      if (alertError) logger.error(`[Webhook] alerts insert failed (${type}):`, alertError.message);
       
       if (alert) {
         try {
+          // Contrato v1 do send-notification (_shared/schemas.ts): snake_case; metadata.recipients = ad-hoc
           await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-notification`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}` },
-            body: JSON.stringify({ alertId: (alert as AlertRecord).id, type, severity, title, message, driverId, orderId }),
+            body: JSON.stringify({
+              alert_id: (alert as AlertRecord).id, type, severity, title, message,
+              driver_id: driverId ?? null, order_id: orderId ?? null,
+              ...(recipients?.length ? { metadata: { recipients } } : {}),
+            }),
           });
         } catch (e) {
           logger.error('[Webhook] Notification dispatch failed:', e);
@@ -414,15 +423,13 @@ serve(async (req) => {
             if (orderData?.auto_notify_supplier && orderData?.supplier_contact) {
               logger.log(`[Guardian] Automating notification to supplier: ${orderData.supplier_contact}`);
               try {
-                // Call Bitrix24 or direct Notification service
-                await supabase.functions.invoke('send-notification', {
-                  body: {
-                    type: 'SUPPLIER_ALERT',
-                    recipient: orderData.supplier_contact,
-                    message: `Olá! O motorista ${driverData.driverName || 'da Lalamove'} foi designado para a coleta do pedido ${orderData.internal_order_id || orderUuid}. Ele está a caminho de ${orderData.pickup_address}.`,
-                    metadata: { orderId: orderUuid, driverName: driverData.driverName }
-                  }
-                });
+                await sendNotification(
+                  'DRIVER_ASSIGNED',
+                  'Motorista designado',
+                  `Olá! O motorista ${driverData.driverName || 'da Lalamove'} foi designado para a coleta do pedido ${orderData.internal_order_id || orderUuid}. Ele está a caminho de ${orderData.pickup_address}.`,
+                  'INFO', driverId, orderUuid,
+                  [{ role: 'supplier', channel: 'whatsapp', to: orderData.supplier_contact }],
+                );
               } catch (notifyError) {
                 logger.error(`[Guardian] Failed to notify supplier: ${notifyError}`);
               }
