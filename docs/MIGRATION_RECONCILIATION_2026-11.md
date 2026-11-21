@@ -27,38 +27,43 @@ existem no banco (marcadas aplicadas sem rodar — padrão de sync Lovable):
 
 | Objeto | Migration de origem | Existe na produção? |
 |---|---|---|
-| `job_queue` + `add_job`/`get_next_jobs`/`mark_job_*`/`cancel_job`/`cleanup_old_jobs`/`get_queue_stats` | `20251226010000_create_job_queue_system` | **não** |
-| `system_logs` | `20251226000001_create_system_logs` | **não** |
-| `audit_log` | `20251226000002_create_audit_log` | **não** |
-| `cache_views` | `20251226000004_create_cache_views` | **não** |
-| `saved_filters` | `20241231000000` / `20250102000001` | **não** |
-| `entity_versions` | `20241231000001` | **não** |
+| `job_queue` + `add_job`/`get_next_jobs`/`mark_job_*`/`cancel_job`/`cleanup_old_jobs`/`get_queue_stats` | `20251226010000_create_job_queue_system` | **recriada em 21/11** (baseline `20261122120200`, PR #107) |
+| `system_logs` | `20251226000001_create_system_logs` | não — decisão: não recriar |
+| `audit_log` | `20251226000002_create_audit_log` | não — decisão: não recriar |
+| `cache_views` | `20251226000004_create_cache_views` | não — substituída pelo cache da PR #106 |
+| `saved_filters` | `20241231000000` / `20250102000001` | não — decisão: não recriar |
+| `entity_versions` | `20241231000001` | não — decisão: não recriar |
 
-Consequência: `db reset` local **cria** esses objetos (os arquivos existem), mas a
-produção **não os tem**. Qualquer código que dependa deles (`job-worker`,
-`useJobQueue`, `JobQueuePage`, `docs/JOB_QUEUE_SYSTEM.md`) está quebrado em
-produção. O ledger **não** é um proxy confiável do schema.
-
-## Decisão
+## Decisão (fechada em 2026-11-21)
 
 1. **A fonte de verdade é o schema real, não o ledger.** Toda migration nova
    usa `IF NOT EXISTS` / `CREATE OR REPLACE` / `DROP ... IF EXISTS` para ser
    idempotente nos dois mundos.
-2. O baseline recria `job_queue` (parte 3/3) para valer em produção.
-3. `system_logs`, `audit_log`, `cache_views`, `saved_filters`, `entity_versions`:
-   avaliar se são realmente usados antes de recriar — vários parecem artefatos
-   Lovable não consumidos pelo código atual. **Pendência do dono**: decidir
-   recriar ou remover os arquivos e registrar reparo no ledger.
-4. Sem `supabase migration repair` na produção sem o dono — pode mascarar mais
+2. `job_queue` foi recriada no baseline (`20261122120200`) e **aplicada na
+   produção em 21/11** junto com `20261122120000` (enum) e `20261122120100`
+   (colunas de integração) — ledger sincronizado.
+3. **`system_logs`, `audit_log`, `cache_views`, `saved_filters`,
+   `entity_versions`: NÃO recriar.** Verificação por code search no `main`
+   (c730393): as únicas referências estão em `supabase/migrations/`, `docs/` e
+   scripts one-off de reparo (`scripts/apply-sql-via-management-api.ts`,
+   `scripts/fix-dashboard-via-api.ts`, edge `apply-fixes`) — nenhuma em `src/`
+   nem nas edge functions de produto. São artefatos Lovable sem consumidor.
+   O cache real do sistema é o da PR #106 (MVs + `cache_status` + RPC de
+   refresh), confirmado presente na produção em 21/11.
+4. **Os arquivos de migration permanecem no repo** como histórico: removê-los
+   criaria entradas de ledger sem arquivo (mais drift aparente) e mudaria o
+   comportamento do `db reset` local. Num reset local eles criam tabelas
+   vazias inócuas.
+5. Sem `supabase migration repair` na produção sem o dono — pode mascarar mais
    drift.
 
 ## Como foi medido (reproduzível)
 
 ```sql
 -- objetos reivindicados vs reais
-select to_regclass('public.job_queue');          -- null
+select to_regclass('public.job_queue');          -- agora: job_queue
 select count(*) from pg_proc pr join pg_namespace n on n.oid=pr.pronamespace
-  where n.nspname='public' and pr.proname='mark_job_completed';  -- 0
+  where n.nspname='public' and pr.proname='mark_job_completed';  -- agora: 1
 -- ledger
-select version from supabase_migrations.schema_migrations order by version;  -- 164
+select version from supabase_migrations.schema_migrations order by version;  -- 167
 ```
