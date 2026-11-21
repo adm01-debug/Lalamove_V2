@@ -7,6 +7,7 @@ import { LiveMap, VehicleFilter, StatusFilter } from '@/components/map/LiveMap';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { useFeatureFlag } from '@/hooks/useFeatureFlags';
 
 interface ActiveDelivery {
   id: string;
@@ -65,6 +66,10 @@ export function LiveMapPage() {
   const [showFilters, setShowFilters] = useState(false);
   const simulationInterval = useRef<NodeJS.Timeout | null>(null);
 
+  // Kill-switch de produto: quando `realtime_map_updates` está desligada, o mapa
+  // cai para polling de 10s em vez de abrir canal Realtime.
+  const { isEnabled: realtimeEnabled, isLoading: flagsLoading } = useFeatureFlag('realtime_map_updates');
+
   const fetchDeliveries = async () => {
     setIsRefreshing(true);
     const { data, error } = await supabase
@@ -115,7 +120,21 @@ export function LiveMapPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDeliveries();
 
-    // Subscribe to realtime updates
+    const interval = setInterval(fetchDeliveries, 10000);
+    
+    return () => {
+      clearInterval(interval);
+      if (simulationInterval.current) {
+        clearInterval(simulationInterval.current);
+      }
+    };
+  }, []);
+
+  // Canal Realtime só é aberto quando `realtime_map_updates` está habilitada.
+  // Enquanto as flags carregam não abrimos nada; o polling acima já cobre.
+  useEffect(() => {
+    if (flagsLoading || !realtimeEnabled) return;
+
     const channel = supabase
       .channel('live-map-tracking')
       .on(
@@ -131,16 +150,10 @@ export function LiveMapPage() {
       )
       .subscribe();
 
-    const interval = setInterval(fetchDeliveries, 10000);
-    
     return () => {
       supabase.removeChannel(channel);
-      clearInterval(interval);
-      if (simulationInterval.current) {
-        clearInterval(simulationInterval.current);
-      }
     };
-  }, []);
+  }, [realtimeEnabled, flagsLoading]);
 
   const getStatusInfo = (delivery: ActiveDelivery) => {
     if (delivery.is_stopped) {
@@ -160,6 +173,11 @@ export function LiveMapPage() {
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-bold text-foreground">Rastreamento em Tempo Real</h2>
             <Badge variant="success">{deliveries.length} ativas</Badge>
+            {!flagsLoading && !realtimeEnabled && (
+              <Badge variant="secondary" title="Atualização por polling a cada 10s (Realtime desativado)">
+                Polling 10s
+              </Badge>
+            )}
           </div>
           <p className="text-sm text-muted-foreground mt-1">
             Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
