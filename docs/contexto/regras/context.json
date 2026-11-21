@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "56391deb871b67d1de7b933553721f9e78afaab4",
+  "sha": "7af49d74f40cc8424e057675d63ee7caf7ce0094",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 16:12 UTC",
+  "generated_at": "2026-11-21 16:32 UTC",
   "files_total": 895,
   "code_files": 742,
-  "code_lines": 127540
+  "code_lines": 127613
  },
  "version": "1.3.2",
- "facts_hash": "12238c170b4b85bd",
+ "facts_hash": "d517e5d981c60b2e",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -19500,7 +19500,7 @@
   {
    "module": "supabase/functions",
    "files": 36,
-   "lines": 10611,
+   "lines": 10684,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -19544,7 +19544,7 @@
     "telemetry.ts: trackContractUsage",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
     "index.ts: CHANGE_DRIVER_REASONS",
-    "security.ts: timingSafeEqual, validateHmacSignature"
+    "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -23969,7 +23969,7 @@
    },
    {
     "file": "supabase/functions/lalamove-webhook/index.ts",
-    "text": "HMAC validation"
+    "text": "HMAC validation."
    },
    {
     "file": "supabase/functions/lalamove-webhook/index.ts",
@@ -23978,6 +23978,10 @@
    {
     "file": "supabase/functions/lalamove-webhook/security.ts",
     "text": "── HMAC Validation (FAIL-CLOSED) ──"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.ts",
+    "text": "── Lalamove v3 body-signature validation ──"
    },
    {
     "file": "supabase/functions/mcp-query/index.ts",
@@ -30652,6 +30656,12 @@
     "file": "supabase/functions/lalamove-webhook/security.ts",
     "name": "validateHmacSignature",
     "params": "body: string, signature: string | null, secret: string",
+    "body": "valid: boolean; reason?: string"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.ts",
+    "name": "validateLalamoveV3Signature",
+    "params": "payload: { timestamp?: unknown; signature?: unknown; data?: unknown }, paths: string[], secret: string,",
     "body": "valid: boolean; reason?: string"
    }
   ],
@@ -60803,7 +60813,7 @@
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
-   "lines": 900,
+   "lines": 924,
    "tables": [
     {
      "table": "webhook_events",
@@ -61092,7 +61102,7 @@
     }
    ],
    "rule_comments": [
-    "HMAC validation",
+    "HMAC validation.",
     "Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores)."
    ],
    "calc_fns": [
@@ -61135,19 +61145,26 @@
   },
   "supabase/functions/lalamove-webhook/security.ts": {
    "path": "supabase/functions/lalamove-webhook/security.ts",
-   "lines": 48,
+   "lines": 97,
    "exports": [
     "function timingSafeEqual",
-    "function validateHmacSignature"
+    "function validateHmacSignature",
+    "function validateLalamoveV3Signature"
    ],
    "rule_comments": [
-    "── HMAC Validation (FAIL-CLOSED) ──"
+    "── HMAC Validation (FAIL-CLOSED) ──",
+    "── Lalamove v3 body-signature validation ──"
    ],
    "doc": "HMAC signature verification for the Lalamove webhook. Extracted from index.ts so the security-critical logic is unit-testable.",
    "calc_fns": [
     {
      "name": "validateHmacSignature",
      "params": "body: string, signature: string | null, secret: string",
+     "body": "valid: boolean; reason?: string"
+    },
+    {
+     "name": "validateLalamoveV3Signature",
+     "params": "payload: { timestamp?: unknown; signature?: unknown; data?: unknown }, paths: string[], secret: string,",
      "body": "valid: boolean; reason?: string"
     }
    ]
@@ -62317,10 +62334,29 @@
   }
  },
  "git": {
-  "sha": "56391deb871b67d1de7b933553721f9e78afaab4",
+  "sha": "7af49d74f40cc8424e057675d63ee7caf7ce0094",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "7af49d7",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(webhook): handshake 200, IP gate vira log e assinatura v3 no corpo (#111)",
+    "files": [
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/lalamove-webhook/security.ts"
+    ]
+   },
+   {
+    "sha": "c730393",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(ci): --yes no functions deploy (CLI 3.2.0 pede confirmacao em producao) (#110)",
+    "files": [
+     ".github/workflows/deploy-edges.yml"
+    ]
+   },
    {
     "sha": "56391de",
     "date": "2026-11-21",
@@ -62624,24 +62660,6 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "c86f279",
-    "date": "2026-11-20",
-    "author": "adm01-debug",
-    "subject": "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)",
-    "files": [
-     ".github/workflows/ci.yml"
-    ]
-   },
-   {
-    "sha": "8832302",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)",
-    "files": [
-     ".github/workflows/ci.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -62662,16 +62680,12 @@
     5
    ],
    [
+    ".github/workflows/deploy-edges.yml",
+    3
+   ],
+   [
     "docs/pendencias/P-06-vulns-npm-restantes.md",
     3
-   ],
-   [
-    ".github/workflows/ci.yml",
-    3
-   ],
-   [
-    ".github/workflows/deploy-edges.yml",
-    2
    ],
    [
     "docs/pendencias/P-13-comment-on-table-faltantes.md",
@@ -62706,6 +62720,14 @@
     2
    ],
    [
+    "supabase/functions/lalamove-webhook/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-webhook/security.ts",
+    1
+   ],
+   [
     "docs/EDGE_DEPLOY_PIPELINE.md",
     1
    ],
@@ -62719,10 +62741,6 @@
    ],
    [
     "supabase/migrations/20261122120000_baseline_order_status_values.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
     1
    ]
   ]

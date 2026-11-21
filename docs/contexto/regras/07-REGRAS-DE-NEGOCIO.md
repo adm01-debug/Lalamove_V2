@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `56391deb87` · branch `main` · 2026-11-21 16:12 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7af49d74f4` · branch `main` · 2026-11-21 16:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1128,6 +1128,10 @@ _nenhum item encontrado_
   ```
   valid: boolean; reason?: string
   ```
+- **validateLalamoveV3Signature(payload: { timestamp?: unknown; signature?: unknown; data?: unknown }, paths: string[], secret: string,)** — `supabase/functions/lalamove-webhook/security.ts`
+  ```
+  valid: boolean; reason?: string
+  ```
 
 ### G.4 Percentuais e multiplicadores no código
 
@@ -1953,9 +1957,10 @@ _nenhum item encontrado_
 | ── 5. Telemetria de rate limit (Etapa 14) ───────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
-| HMAC validation | `supabase/functions/lalamove-webhook/index.ts` |
+| HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |
+| ── Lalamove v3 body-signature validation ── | `supabase/functions/lalamove-webhook/security.ts` |
 | 3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe | `supabase/functions/mcp-query/index.ts` |
 | `mcp_introspect`, que aceita apenas operações de uma allowlist fixa. | `supabase/functions/mcp-query/index.ts` |
 | * Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e | `supabase/functions/mcp-query/index.ts` |

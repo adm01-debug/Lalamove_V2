@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(webhook): handshake 200, IP gate vira log e assinatura v3 no corpo (#111)",
+   "fix(ci): --yes no functions deploy (CLI 3.2.0 pede confirmacao em producao) (#110)",
    "fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)",
    "infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)",
-   "feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)",
-   "feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)",
-   "fix: comments do glossario agora ligam a tabelas so do types.ts (#105)"
+   "feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

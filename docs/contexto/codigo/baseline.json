@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "56391deb871b67d1de7b933553721f9e78afaab4",
+  "commit": "7af49d74f40cc8424e057675d63ee7caf7ce0094",
   "branch": "main",
-  "data_commit": "2026-11-21T13:10:53-03:00",
+  "data_commit": "2026-11-21T13:32:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "7af49d7",
+    "data": "2026-11-21",
+    "assunto": "fix(webhook): handshake 200, IP gate vira log e assinatura v3 no corpo (#111)"
+   },
+   {
+    "sha": "c730393",
+    "data": "2026-11-21",
+    "assunto": "fix(ci): --yes no functions deploy (CLI 3.2.0 pede confirmacao em producao) (#110)"
+   },
    {
     "sha": "56391de",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "cbc45da",
     "data": "2026-11-20",
     "assunto": "build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)"
-   },
-   {
-    "sha": "a6e36fe",
-    "data": "2026-11-20",
-    "assunto": "build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)"
-   },
-   {
-    "sha": "bb236d9",
-    "data": "2026-11-20",
-    "assunto": "build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)"
    }
   ],
-  "arquivos_mudados_7d": 65,
+  "arquivos_mudados_7d": 67,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -156,6 +156,10 @@
     "mudancas": 3
    },
    {
+    "pasta": ".github/workflows/deploy-edges.yml",
+    "mudancas": 3
+   },
+   {
     "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
     "mudancas": 3
    },
@@ -169,10 +173,6 @@
    },
    {
     "pasta": ".github/workflows/contexto.yml",
-    "mudancas": 2
-   },
-   {
-    "pasta": ".github/workflows/deploy-edges.yml",
     "mudancas": 2
    },
    {
@@ -230,6 +230,10 @@
     "mudancas": 4
    },
    {
+    "arquivo": ".github/workflows/deploy-edges.yml",
+    "mudancas": 3
+   },
+   {
     "arquivo": "AGENTS.md",
     "mudancas": 3
    },
@@ -258,15 +262,15 @@
     "mudancas": 3
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 3
+   },
+   {
     "arquivo": ".env.example",
     "mudancas": 2
    },
    {
     "arquivo": ".github/workflows/contexto.yml",
-    "mudancas": 2
-   },
-   {
-    "arquivo": ".github/workflows/deploy-edges.yml",
     "mudancas": 2
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
     "mudancas": 2
-   },
-   {
-    "arquivo": "docs/pendencias/P-07-security-definer-search-path.md",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 31
+    "commits": 33
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 900,
   "arquivos_codigo": 566,
-  "linhas_codigo": 110253,
+  "linhas_codigo": 110326,
   "rotas": 54,
   "rotas_protegidas": 46,
   "rotas_com_mfa": 6,
@@ -548,7 +548,7 @@
   },
   "supabase/functions": {
    "arquivos": 36,
-   "linhas": 10611
+   "linhas": 10684
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -581,16 +581,16 @@
    "linhas": 996
   },
   {
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 924
+  },
+  {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
    "linhas": 917
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
    "linhas": 901
-  },
-  {
-   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 900
   },
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",

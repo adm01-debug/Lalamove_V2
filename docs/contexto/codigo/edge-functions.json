@@ -601,7 +601,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 2,
-   "linhas": 948,
+   "linhas": 1021,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"

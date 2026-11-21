@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `56391deb871b67d1de7b933553721f9e78afaab4` (2026-11-21T13:10:53-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7af49d74f40cc8424e057675d63ee7caf7ce0094` (2026-11-21T13:32:18-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 900 |
 | arquivos_codigo | 566 |
-| linhas_codigo | 110253 |
+| linhas_codigo | 110326 |
 | rotas | 54 |
 | rotas_protegidas | 46 |
 | rotas_com_mfa | 6 |
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6588 nós · 14417 arestas · 503 comunidades · grafo do commit `56391deb`
-- comunidades maiores: lucide-react (128), snapshot.py (100), cn (97), utils.ts (97), react (84), dependencies (80), gerar.mjs (76), Header.tsx (76), generate.py (75), useRealtimeSubscriptions.ts (72), Button (71), client.ts (70)
+- 6589 nós · 14420 arestas · 515 comunidades · grafo do commit `7af49d74`
+- comunidades maiores: cn (175), lucide-react (145), App.tsx (104), snapshot.py (102), client.ts (95), generate.py (81), AlertConfigCard.tsx (81), dependencies (80), ref_node_path (79), RateLimitDashboardPage.tsx (77), gerar.mjs (76), badge.tsx (74)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -278,13 +278,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/pendencias/README.md (5)
 - src/hooks/useRegionResolver.ts (5)
 - supabase/functions/_shared/contract.integration.test.ts (4)
+- .github/workflows/deploy-edges.yml (3)
 - AGENTS.md (3)
 - docs/pendencias/P-06-vulns-npm-restantes.md (3)
 - eslint.config.js (3)
 - scripts/seed-database.ts (3)
 - src/hooks/useDeviceDetection.ts (3)
 - src/index.css (3)
-- src/integrations/supabase/types.ts (3)
 
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
@@ -354,6 +354,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `7af49d7` fix(webhook): handshake 200, IP gate vira log e assinatura v3 no corpo (#111)
+- 2026-11-21 `c730393` fix(ci): --yes no functions deploy (CLI 3.2.0 pede confirmacao em producao) (#110)
 - 2026-11-21 `56391de` fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)
 - 2026-11-21 `666bc90` infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)
 - 2026-11-21 `9f9c709` feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)
@@ -367,8 +369,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `f1218b2` fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)
 - 2026-11-21 `4c03038` chore: registra P-11 MFA descartado e consolida README do backlog (#98)
 - 2026-11-21 `75b7bef` chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)
-- 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
-- 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
