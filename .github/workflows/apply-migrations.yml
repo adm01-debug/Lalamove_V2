@@ -12,7 +12,7 @@ on:
       files:
         description: "Arquivos em supabase/migrations/, separados por vírgula, na ordem de aplicação"
         required: true
-        default: "20261122130000_geo_alert_types.sql,20261122130100_geo_foundation.sql"
+        default: "20261122130000_geo_alert_types.sql,20261122130100_geo_foundation.sql,20261122130200_alert_type_driver_assigned.sql"
       dry_run:
         description: "true = só mostra o ledger e o tamanho dos arquivos, não aplica"
         required: false
