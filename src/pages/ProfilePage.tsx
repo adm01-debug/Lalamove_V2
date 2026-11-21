@@ -3,17 +3,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { User, Mail, Shield, Calendar, Activity, Crown, Clock, CheckCircle2, Save, Edit2, X, Loader2 } from 'lucide-react';
+import { User, Mail, Shield, Calendar, Activity, Crown, Clock, CheckCircle2, Save, Edit2, X, Loader2, Monitor, Smartphone, Trash2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { usePermissions, type AppRole } from '@/hooks/usePermissions';
+import { useAuthLogs } from '@/hooks/useAuthLogs';
+import { useUserDevices } from '@/hooks/useUserDevices';
 import { supabase } from '@/integrations/supabase/client';
 import { getDisplayName } from '@/lib/user-display';
 import { toast } from 'sonner';
+
+const ROLE_LABELS: Record<AppRole, string> = {
+  admin: 'Administrador',
+  manager: 'Gerente',
+  operator: 'Operador',
+  viewer: 'Visualizador',
+};
+
+function formatDateTime(value?: string | null) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+}
 
 function ProfilePage() {
   const { user } = useAuth();
   const userId = user?.id ?? '6758071f-faa3-4c17-9e2d-b1f1ee492608';
   const userEmail = user?.email ?? 'ti@promobrindes.com.br';
-  const totalPermissions = 28;
+
+  const { userRoles, userPermissions, isLoading: permissionsLoading } = usePermissions();
+  const { stats: authStats } = useAuthLogs({ limit: 100 });
+  const { devices, isLoading: devicesLoading, trustDevice, removeDevice, renameDevice, isRemoving } = useUserDevices();
 
   // Nome de exibição vem de user_metadata (full_name ou name) ou fallback do email
   const initialName = getDisplayName(user) ?? userEmail.split('@')[0];
@@ -182,7 +202,7 @@ function ProfilePage() {
               <Calendar className="w-4 h-4 mt-0.5 text-muted-foreground" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Conta criada em</p>
-                <p className="text-sm">28/08/2026, 14:22</p>
+                <p className="text-sm">{formatDateTime(user?.created_at)}</p>
               </div>
             </div>
 
@@ -190,7 +210,7 @@ function ProfilePage() {
               <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Último acesso</p>
-                <p className="text-sm">Agora</p>
+                <p className="text-sm">{formatDateTime(user?.last_sign_in_at)}</p>
               </div>
             </div>
           </CardContent>
@@ -206,29 +226,46 @@ function ProfilePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Badge variant="default" className="w-full justify-center py-2">
-                <Crown className="w-3 h-3 mr-1" />
-                Administrador
-              </Badge>
+              {permissionsLoading ? (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Carregando permissões...
+                </div>
+              ) : userRoles && userRoles.length > 0 ? (
+                userRoles.map((role) => (
+                  <Badge key={role.id} variant="default" className="w-full justify-center py-2">
+                    <Crown className="w-3 h-3 mr-1" />
+                    {ROLE_LABELS[role.role] ?? role.role}
+                  </Badge>
+                ))
+              ) : (
+                <Badge variant="secondary" className="w-full justify-center py-2">
+                  Nenhuma role atribuída
+                </Badge>
+              )}
             </div>
 
             <div className="pt-4 border-t border-border/50">
               <div className="flex items-center gap-2 text-sm">
                 <Activity className="w-4 h-4 text-primary" />
                 <span className="text-muted-foreground">Permissões ativas:</span>
-                <span className="font-bold text-primary">{totalPermissions}</span>
+                <span className="font-bold text-primary">
+                  {permissionsLoading ? '…' : (userPermissions?.length ?? 0)}
+                </span>
               </div>
             </div>
 
-            <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
-              <div className="flex items-center gap-2">
-                <Crown className="w-4 h-4 text-warning" />
-                <p className="text-xs font-medium text-warning">Acesso Total</p>
+            {!permissionsLoading && userRoles?.some((r) => r.role === 'admin') && (
+              <div className="p-3 rounded-lg bg-warning/10 border border-warning/20">
+                <div className="flex items-center gap-2">
+                  <Crown className="w-4 h-4 text-warning" />
+                  <p className="text-xs font-medium text-warning">Acesso Total</p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Você tem acesso completo ao sistema.
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Você tem acesso completo ao sistema.
-              </p>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -248,7 +285,7 @@ function ProfilePage() {
                 <Activity className="w-4 h-4 text-primary" />
                 <p className="text-xs text-muted-foreground">Total de Logins</p>
               </div>
-              <p className="text-2xl font-bold text-primary">142</p>
+              <p className="text-2xl font-bold text-primary">{authStats.total}</p>
             </div>
 
             <div className="p-4 rounded-lg bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
@@ -256,7 +293,9 @@ function ProfilePage() {
                 <CheckCircle2 className="w-4 h-4 text-success" />
                 <p className="text-xs text-muted-foreground">Status</p>
               </div>
-              <p className="text-2xl font-bold text-success">Ativo</p>
+              <p className="text-2xl font-bold text-success">
+                {authStats.failed > 0 ? `${authStats.failed} falha(s)` : 'Sem falhas'}
+              </p>
             </div>
 
             <div className="p-4 rounded-lg bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
@@ -264,9 +303,100 @@ function ProfilePage() {
                 <Shield className="w-4 h-4 text-warning" />
                 <p className="text-xs text-muted-foreground">Permissões</p>
               </div>
-              <p className="text-2xl font-bold text-warning">{totalPermissions}</p>
+              <p className="text-2xl font-bold text-warning">
+                {permissionsLoading ? '…' : (userPermissions?.length ?? 0)}
+              </p>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Monitor className="w-5 h-5" />
+            Dispositivos
+          </CardTitle>
+          <CardDescription>
+            Navegadores e aparelhos que acessaram sua conta
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {devicesLoading ? (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Carregando dispositivos...
+            </div>
+          ) : devices.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhum dispositivo registrado até agora.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {devices.map((device) => (
+                <div
+                  key={device.id}
+                  className="flex flex-wrap items-center gap-3 p-3 rounded-lg bg-secondary/30"
+                >
+                  <div className="p-2 rounded-lg bg-background/60">
+                    {device.os === 'Windows' || device.os === 'Linux' || device.os === 'macOS' ? (
+                      <Monitor className="w-4 h-4 text-muted-foreground" />
+                    ) : (
+                      <Smartphone className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-[12rem]">
+                    <p className="text-sm font-medium truncate">
+                      {device.device_name || device.browser || 'Dispositivo desconhecido'}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {[device.os, device.browser, device.ip_address].filter(Boolean).join(' · ')}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Visto por último em {formatDateTime(device.last_seen_at)}
+                    </p>
+                  </div>
+                  {device.is_trusted ? (
+                    <Badge variant="success" className="gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      Confiável
+                    </Badge>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => trustDevice(device.id)}
+                    >
+                      <Shield className="w-3.5 h-3.5 mr-1" />
+                      Confiar
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    disabled={isRemoving}
+                    onClick={() => renameDevice({ deviceId: device.id, name: device.os ? `${device.os} (${device.browser ?? 'navegador'})` : 'Meu dispositivo' })}
+                    aria-label="Renomear dispositivo"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-destructive hover:text-destructive"
+                    disabled={isRemoving}
+                    onClick={() => {
+                      if (!window.confirm('Remover este dispositivo da lista? Ele voltará a ser tratado como novo no próximo acesso.')) return;
+                      removeDevice(device.id);
+                    }}
+                    aria-label="Remover dispositivo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

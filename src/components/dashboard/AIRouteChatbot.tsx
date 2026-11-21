@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useFeatureFlag } from '@/hooks/useFeatureFlags';
 
 interface Message {
   id: string;
@@ -22,6 +23,9 @@ const QUICK_ACTIONS = [
 ];
 
 export function AIRouteChatbot() {
+  // Kill-switch de produto: a flag `ai_route_optimization` desliga o assistente
+  // sem precisar de deploy. Enquanto carrega, não renderiza para evitar flash.
+  const { isEnabled: aiRouteEnabled, isLoading: flagsLoading } = useFeatureFlag('ai_route_optimization');
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -106,6 +110,10 @@ export function AIRouteChatbot() {
   const handleQuickAction = (action: typeof QUICK_ACTIONS[0]) => {
     sendMessage(action.message, action.action);
   };
+
+  if (flagsLoading || !aiRouteEnabled) {
+    return null;
+  }
 
   if (!isOpen) {
     return (
