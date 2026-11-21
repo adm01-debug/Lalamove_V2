@@ -33,6 +33,13 @@ const ACTION_FUNCTION: Record<string, GeoFunction> = {
   "isochrone": "isochrone", "optimization": "optimization", "tilequery": "tilequery", "count-map-load": "tiles",
 };
 
+/** Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */
+const MAPBOX_RATE_API: Partial<Record<GeoFunction, string>> = {
+  autocomplete: "searchbox", geocode: "geocoding", reverse: "geocoding",
+  route: "directions", matrix: "matrix:driving", static: "static",
+  snap: "matching", isochrone: "isochrone", optimization: "optimization", tilequery: "tilequery",
+};
+
 // Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.
 const USER_LIMITS: Partial<Record<GeoFunction, number>> = { autocomplete: 60, tiles: 120 };
 const userBuckets = new Map<string, { minute: number; count: number }>();
@@ -235,6 +242,15 @@ Deno.serve(async (req) => {
       if (hit) return jsonResponse(hit, 200, { ...headers, "X-Geo-Cache": "HIT" }, version);
     }
 
+    // ── rate limit do provedor (espera a virada da janela) ─────────────────
+    // Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada
+    // (até 2s) em vez de devolver 429 na cara do operador.
+    const rateApi = MAPBOX_RATE_API[fn];
+    if (name === "mapbox" && rateApi) {
+      const limit = MAPBOX_RATE_LIMITS[rateApi] ?? 300;
+      const ok = await resolver.waitForCapacity("mapbox", rateApi, limit);
+      if (!ok) throw new GeoProviderError("GEO_RATE_LIMITED", "Limite local de chamadas atingido; tente em instantes.", 429, 60_000);
+    }
     // ── chamada ao provedor (com failover em runtime) ──────────────────────
     const providerT0 = Date.now();
     const outcome = await callWithFailover(fn, name, {

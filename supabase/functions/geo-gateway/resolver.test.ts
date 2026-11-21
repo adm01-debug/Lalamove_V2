@@ -103,3 +103,32 @@ Deno.test("failoverFor: função sem suporte no Google (isochrone) não aceita o
   const r = make({ settings: [S("isochrone", "mapbox", "google")], configured: ["mapbox", "google"] });
   assertEquals(await r.failoverFor("isochrone", "mapbox"), null);
 });
+
+Deno.test("waitForCapacity (etapa 76): espera a virada da janela em vez de recusar", async () => {
+  let t = 0;
+  const r = new ProviderResolver({
+    loadSettings: () => Promise.resolve([]), loadBudget: () => Promise.resolve([]), loadQuota: () => Promise.resolve([]),
+    isConfigured: () => true, supports: () => true, now: () => t,
+  });
+  // Enche o bucket do minuto corrente.
+  for (let i = 0; i < 2; i++) assertEquals(r.rateGuard("mapbox", "geocoding", 2), true);
+  assertEquals(r.rateGuard("mapbox", "geocoding", 2), false);
+
+  // maxWaitMs = 0 → não espera, devolve false (mantém o 429 como fallback).
+  assertEquals(await r.waitForCapacity("mapbox", "geocoding", 2, 0), false);
+
+  // Espera curta: nenhuma virada de janela (o relógio fake não avança) → false.
+  assertEquals(await r.waitForCapacity("mapbox", "geocoding", 2, 50), false);
+
+  // Virada da janela → libera sem consumir token.
+  t = 61_000;
+  assertEquals(await r.waitForCapacity("mapbox", "geocoding", 2, 0), true);
+});
+
+Deno.test("waitForCapacity: bucket com folga libera imediatamente", async () => {
+  const r = new ProviderResolver({
+    loadSettings: () => Promise.resolve([]), loadBudget: () => Promise.resolve([]), loadQuota: () => Promise.resolve([]),
+    isConfigured: () => true, supports: () => true, now: () => 0,
+  });
+  assertEquals(await r.waitForCapacity("mapbox", "directions", 300), true);
+});
