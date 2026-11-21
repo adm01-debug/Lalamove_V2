@@ -27,6 +27,7 @@ import {
   type GeoFunction,
   type GeoHealthResult,
   type GeoProviderName,
+  type GeoSettingProvider,
 } from '@/hooks/useGeoAdmin';
 
 /** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
@@ -41,13 +42,41 @@ import {
   validate: { label: 'Validação de endereço', hint: 'Confere se o endereço existe antes de salvar' },
   isochrone: { label: 'Área de alcance', hint: 'Até onde dá para chegar em N minutos' },
   optimization: { label: 'Otimização de rota', hint: 'Melhor sequência de entregas' },
+  tilequery: { label: 'Consulta por área', hint: 'Que features existem num ponto do mapa' },
 };
 
 const PROVIDER_LABEL: Record<string, string> = {
   mapbox: 'Mapbox',
   google: 'Google Maps',
+  auto: 'Automático',
   off: 'Desligado',
 };
+
+/**
+ * Etapa 63: qual provedor realmente atende cada função. Célula desabilitada
+ * quando o provedor não oferece — evita trocar e quebrar a função.
+ * Espelha `GeoProvider.supports` do `geo-gateway` (google ainda não implementado).
+ */
+const FUNCTION_SUPPORT: Record<GeoFunction, { mapbox: boolean; google: boolean; auto: boolean }> = {
+  tiles: { mapbox: true, google: true, auto: true },
+  autocomplete: { mapbox: true, google: true, auto: true },
+  geocode: { mapbox: true, google: true, auto: true },
+  reverse: { mapbox: true, google: true, auto: true },
+  route: { mapbox: true, google: true, auto: true },
+  matrix: { mapbox: true, google: true, auto: true },
+  static: { mapbox: true, google: true, auto: true },
+  snap: { mapbox: true, google: true, auto: true },
+  validate: { mapbox: false, google: true, auto: true },
+  isochrone: { mapbox: true, google: false, auto: false },
+  optimization: { mapbox: true, google: false, auto: false },
+  tilequery: { mapbox: true, google: false, auto: false },
+};
+
+function unsupportedReason(fn: GeoFunction, value: 'mapbox' | 'google'): string | null {
+  if (FUNCTION_SUPPORT[fn][value]) return null;
+  const other = value === 'mapbox' ? 'Google Maps' : 'Mapbox';
+  return `${other} não atende "${FUNCTION_LABEL[fn].label}"`;
+}
 
 function providerLabel(value: string | null): string {
   if (!value) return '—';
@@ -163,8 +192,8 @@ export default function MapsSettingsPage() {
     updateSetting.mutate(
       {
         function: fn,
-        provider: value as GeoProviderName | 'off',
-        fallback_provider: value === 'off' ? null : ((current?.fallback as GeoProviderName | null) ?? null),
+        provider: value as GeoSettingProvider,
+        fallback_provider: value === 'off' ? null : ((current?.fallback as GeoSettingProvider | null) ?? null),
       },
       {
         onSuccess: () => toast.success(`${FUNCTION_LABEL[fn].label}: agora usa ${providerLabel(value)}`),
@@ -446,8 +475,15 @@ export default function MapsSettingsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="mapbox">Mapbox</SelectItem>
-                            <SelectItem value="google">Google Maps</SelectItem>
+                            <SelectItem value="auto" disabled={!FUNCTION_SUPPORT[fn].auto}>
+                              Automático (quem tem franquia)
+                            </SelectItem>
+                            <SelectItem value="mapbox" disabled={!FUNCTION_SUPPORT[fn].mapbox}>
+                              Mapbox{unsupportedReason(fn, 'mapbox') ? ' — não atende' : ''}
+                            </SelectItem>
+                            <SelectItem value="google" disabled={!FUNCTION_SUPPORT[fn].google}>
+                              Google Maps{unsupportedReason(fn, 'google') ? ' — não atende' : ''}
+                            </SelectItem>
                             <SelectItem value="off">Desligado</SelectItem>
                           </SelectContent>
                         </Select>

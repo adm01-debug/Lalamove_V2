@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
         implemented: p === "mapbox",
         budget: resolver.budgetOf(p) ?? null,
       }));
-      const settings = (["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "validate", "isochrone", "optimization"] as GeoFunction[])
+      const settings = (["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "validate", "isochrone", "optimization", "tilequery"] as GeoFunction[])
         .map((fn) => ({ function: fn, ...(resolver.setting(fn) ?? { provider: "off", fallback_provider: null, config: {} }) }));
       return jsonResponse({ providers: status, settings }, 200, corsHeaders, version);
     }
