@@ -1,0 +1,81 @@
+name: Apply Migrations (manual)
+
+# Aplica arquivos de supabase/migrations/ na produção (iecgydonctmabiijadsf) pela Management API,
+# usando o mesmo SUPABASE_ACCESS_TOKEN do deploy-edges.yml — sem senha de banco, sem segredo novo.
+# Disparo manual (workflow_dispatch) pelo dono ou por agente com permissão. Cada arquivo roda em
+# requisição própria (= transação própria), o que permite ALTER TYPE ... ADD VALUE num arquivo e o
+# uso do valor no seguinte. Registra no ledger supabase_migrations.schema_migrations.
+
+on:
+  workflow_dispatch:
+    inputs:
+      files:
+        description: "Arquivos em supabase/migrations/, separados por vírgula, na ordem de aplicação"
+        required: true
+        default: "20261122130000_geo_alert_types.sql,20261122130100_geo_foundation.sql"
+      dry_run:
+        description: "true = só mostra o ledger e o tamanho dos arquivos, não aplica"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: apply-migrations
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: iecgydonctmabiijadsf
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Ledger antes
+        run: |
+          set -euo pipefail
+          jq -n '{query: "SELECT version, name FROM supabase_migrations.schema_migrations ORDER BY version DESC LIMIT 5"}' \
+            | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+                -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- \
+            | jq .
+
+      - name: Aplicar arquivos
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          set -euo pipefail
+          IFS=',' read -ra FILES <<< "${{ github.event.inputs.files }}"
+          for f in "${FILES[@]}"; do
+            f="$(echo "$f" | xargs)"
+            path="supabase/migrations/$f"
+            [ -f "$path" ] || { echo "::error::arquivo não existe: $path"; exit 1; }
+            version="${f%%_*}"
+            name="${f#*_}"; name="${name%.sql}"
+            echo "== aplicando $f ($(wc -l < "$path") linhas)"
+            jq -Rs '{query: .}' "$path" \
+              | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- \
+              | jq -c 'if type=="array" then {rows: length} else . end'
+            echo "== ledger $version $name"
+            jq -n --arg v "$version" --arg n "$name" \
+              '{query: ("INSERT INTO supabase_migrations.schema_migrations (version, name, statements) VALUES (" + ($v|@json) + ", " + ($n|@json) + ", ARRAY[]::text[]) ON CONFLICT (version) DO NOTHING")}' \
+              | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- \
+              | jq -c .
+          done
+
+      - name: Dry run — tamanho dos arquivos
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          IFS=',' read -ra FILES <<< "${{ github.event.inputs.files }}"
+          for f in "${FILES[@]}"; do wc -l "supabase/migrations/$(echo "$f" | xargs)"; done
+
+      - name: Ledger depois + verificação geo
+        run: |
+          set -euo pipefail
+          q() { jq -n --arg q "$1" '{query: $q}' | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- | jq -c .; }
+          q "SELECT version, name FROM supabase_migrations.schema_migrations ORDER BY version DESC LIMIT 5"
+          q "SELECT to_regclass('public.geo_settings') AS geo_settings, to_regclass('public.order_geo_events') AS order_geo_events, (SELECT count(*) FROM pg_enum e JOIN pg_type t ON t.oid=e.enumtypid WHERE t.typname='alert_type') AS alert_type_values"
