@@ -8,6 +8,7 @@ import { resolveContractVersion, parseJsonBody, validateContract, errorResponse 
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { validateHmacSignature, validateLalamoveV3Signature } from "./security.ts";
+import { normalizeLalamoveV3Payload } from "./normalize.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -214,10 +215,16 @@ serve(async (req) => {
       );
     }
     
+    // Normalizacao v3 -> contrato interno: a Lalamove envia eventType +
+    // data.order.orderId (payloads oficiais: v3_Webhook_v1.5.pdf p.14/18/22/24/26);
+    // o contrato interno espera event + orderId no topo. Sem isso todo evento
+    // real cairia como UNKNOWN (ou 422 no contrato) sem atualizar o pedido.
+    const contractRawBody = normalizeLalamoveV3Payload(preParsed, rawBody);
+
     const contractVersion = resolveContractVersion(req);
     trackContractUsage("lalamove-webhook", contractVersion);
     const parsedBody = await parseJsonBody(
-      new Request(req.url, { method: "POST", body: rawBody }),
+      new Request(req.url, { method: "POST", body: contractRawBody }),
       contractVersion,
     );
     if (!parsedBody.ok) {
