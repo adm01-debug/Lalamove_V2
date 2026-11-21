@@ -32,7 +32,9 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          # Pinado: "latest" resolve via API do GitHub sem token e falha com
+          # rate limit no runner (run #1). Atualizar o pin conscientemente.
+          version: 3.2.0
 
       - name: Deploy all functions
         # Sem nome = todas as functions de supabase/functions/.
