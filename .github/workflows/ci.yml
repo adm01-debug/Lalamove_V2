@@ -17,7 +17,12 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
-      - run: npx tsc --noEmit
+        # O tsconfig.json da raiz tem "files": [] e so referencia os projetos,
+        # entao `tsc --noEmit` sem -p compilava ZERO arquivo (check verde-falso:
+        # a main acumulou 24 erros de tipo sem a CI acusar). Compilar o projeto
+        # do app e o do Node explicitamente.
+      - run: npx tsc --noEmit -p tsconfig.app.json
+      - run: npx tsc --noEmit -p tsconfig.node.json
 
   test:
     runs-on: ubuntu-24.04

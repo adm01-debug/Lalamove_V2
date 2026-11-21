@@ -1,6 +1,7 @@
 import { logger } from '@/utils/logger';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import type { TablesInsert } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
 
 export interface AlertSettings {
@@ -69,7 +70,9 @@ export function useAlertSettings() {
   const saveSettings = async () => {
     setSaving(true);
     try {
-      const configs = [
+      // Tipado com o Insert gerado: supabase-js >= 2.116 recusa a uniao
+      // inferida dos tres literais (RejectExcessProperties).
+      const configs: TablesInsert<'alert_configurations'>[] = [
         {
           alert_type: 'DRIVER_STOPPED' as const,
           channel: 'in_app',

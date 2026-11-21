@@ -65,7 +65,7 @@ export function AuthPage() {
   const validateLoginForm = () => {
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
-      const firstError = result.error.errors[0];
+      const firstError = result.error.issues[0];
       toast.error(firstError.message);
       return false;
     }
@@ -75,7 +75,7 @@ export function AuthPage() {
   const validateSignupForm = () => {
     const result = signupSchema.safeParse({ email, password });
     if (!result.success) {
-      const firstError = result.error.errors[0];
+      const firstError = result.error.issues[0];
       toast.error(firstError.message);
       return false;
     }

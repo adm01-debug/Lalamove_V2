@@ -14,7 +14,8 @@ Suplemento operacional do Hermes: `.hermes.md` (pastas de chat, cadeado do proje
   ter rodado. Branch/commit/PR não provam nada — leia o código.
 - Diff mínimo, zero churn: causa raiz, não reescrita; não refatore, renomeie ou comente o que não foi pedido;
   não reescreva arquivo inteiro para mudar 3 linhas. Dependência nova ou bump major só se indispensável
-  (avise na PR) — há 10 PRs do Dependabot abertas, não empilhe mais.
+  (avise na PR). As PRs do Dependabot foram todas fechadas/incorporadas em 21/11/2026 — ver
+  `docs/AUDITORIA_PRS_FECHADAS_2026-11.md`.
 - `APROVADO` = execute o plano como descrito, sem reconfirmar.
 - Uma tarefa por vez, cada uma com sua branch/PR. Outro bug → "Próximos passos". Travou → reporte o erro
   exato e pare; não contorne regra. Releia o pedido antes de concluir.
@@ -71,13 +72,14 @@ Suplemento operacional do Hermes: `.hermes.md` (pastas de chat, cadeado do proje
 - PR sempre: título = o que muda; corpo = causa + o que foi verificado, com evidência; o template é
   `.github/PULL_REQUEST_TEMPLATE.md`.
 - Mergeie sem aprovação (squash, apague a branch à mão — `delete_branch_on_merge` está desligado) PR sua
-  pronta: CI verde, sem conflito, escopo comum (front, edge, config, docs). **Atenção:** o CI está vermelho
-  na `main` desde 2026-10-03 por `npm ci` com `ERESOLVE` (`docs/agentes/github-ci.md`) — vermelho herdado,
-  comprovado com o run da `main`, não bloqueia PR fora do perímetro de dependência; PR que mexe em
-  dependência/lockfile exige verde. **Deixe aberta e chame o dono**:
+  pronta: CI verde, sem conflito, escopo comum (front, edge, config, docs). **Atenção:** o `ERESOLVE` do `npm ci` foi resolvido e a CI
+  da `main` está verde desde 21/11/2026 (runs #466+); qualquer vermelho agora é regressão real e bloqueia
+  o merge. **Deixe aberta e chame o dono**:
   DDL/migration em produção; CI/workflows, segredos, Dockerfile; deleção de dado, arquitetura ou custo;
-  conflito com PR de outro agente. **`main` não tem branch protection nem required check** — CI vermelha
-  não impede o merge; o gate é você.
+  conflito com PR de outro agente. **A `main` tem branch protection com 7 required checks**
+  (`lint-and-typecheck`, `test`, `build`, `security`, `Deno Contract Tests`, `E2E (Playwright)`,
+  `Guarda AGENTS.md / docs/agentes`) — verificado em 21/11/2026: o merge é recusado com HTTP 405 enquanto
+  algum check não passa.
 - Conflito: rebase em `main`; `--force-with-lease` só na sua branch.
 - Merge = produção: confira o deploy e reporte (`docs/agentes/deploy.md`). CI vermelha → leia o resumo da
   falha antes de qualquer patch; do seu merge → `fix:` em branch nova na mesma sessão.

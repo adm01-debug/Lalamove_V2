@@ -2,7 +2,7 @@ import { logger } from '@/utils/logger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import type { Database } from '@/integrations/supabase/types';
+import type { Database, TablesUpdate } from '@/integrations/supabase/types';
 
 type IncidentType = Database['public']['Enums']['incident_type'];
 type IncidentSeverity = Database['public']['Enums']['incident_severity'];
@@ -132,7 +132,9 @@ async function createIncident(input: CreateIncidentInput): Promise<Incident> {
 }
 
 async function updateIncident(id: string, input: UpdateIncidentInput): Promise<void> {
-  const updateData: Record<string, unknown> = { ...input };
+  // supabase-js >= 2.116: Record<string, unknown> e rejeitado em .update()
+  // (RejectExcessProperties); usar o tipo gerado da tabela.
+  const updateData: TablesUpdate<'driver_incidents'> = { ...input };
   
   if (input.resolved) {
     updateData.resolved_at = new Date().toISOString();
