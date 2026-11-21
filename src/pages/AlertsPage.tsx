@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,8 +20,11 @@ import {
   Settings,
   Sparkles,
   ChevronRight,
+  PlugZap,
+  BadgeCheck,
   Loader2
 } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useActiveAlerts, useAlertActions } from '@/hooks/useActiveAlerts';
 import { Alert, AlertType } from '@/types';
 import { cn } from '@/lib/utils';
@@ -45,6 +48,7 @@ const alertIcons: Record<AlertType, typeof AlertTriangle> = {
   LATE_DELIVERY: AlertCircle,
   APPROVAL_REQUIRED: AlertTriangle,
   ORDER_CANCELLED: X,
+  INTEGRATION_FAILURE: PlugZap,
 };
 
 const severityStyles = {
@@ -93,8 +97,9 @@ type ViewMode = 'list' | 'compact';
 
 export function AlertsPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data: alerts = [], isLoading, isFetching } = useActiveAlerts();
-  const { dismissMutation, markAsReadMutation, markAllAsReadMutation } = useAlertActions();
+  const { dismissMutation, markAsReadMutation, markAllAsReadMutation, acknowledgeMutation } = useAlertActions();
   
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -193,6 +198,11 @@ export function AlertsPage() {
   const handleMarkAsRead = (alertId: string) => {
     markAsReadMutation.mutate(alertId);
   };
+
+  // Reconhecer para o escalonamento automatico (RPC acknowledge_alert).
+  const handleAcknowledge = useCallback((alertId: string) => {
+    acknowledgeMutation.mutate(alertId);
+  }, [acknowledgeMutation]);
 
   const handleBulkMarkAsRead = () => {
     selectedIds.forEach(id => {
@@ -496,6 +506,7 @@ export function AlertsPage() {
                                   onMarkAsRead={handleMarkAsRead}
                                   onDismiss={handleDismiss}
                                   onViewDetails={setDetailAlert}
+                                  onAcknowledge={handleAcknowledge}
                                   viewMode={viewMode}
                                 />
                               ))}
@@ -514,6 +525,7 @@ export function AlertsPage() {
               <div className="p-4 border-t border-border/30 bg-gradient-to-r from-secondary/30 to-secondary/10">
                 <Button 
                   variant="ghost" 
+                  onClick={() => navigate('/notification-history')}
                   className="w-full justify-between text-sm text-muted-foreground hover:text-foreground"
                 >
                   <span>Ver histórico completo de alertas</span>
@@ -537,6 +549,52 @@ export function AlertsPage() {
             isAllSelected={isAllSelected}
           />
         </AnimatePresence>
+
+        <Dialog open={Boolean(detailAlert)} onOpenChange={(open) => { if (!open) setDetailAlert(null); }}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 pr-6">
+                {detailAlert && (
+                  <>
+                    {(() => { const DetailIcon = alertIcons[detailAlert.type] || AlertCircle; return <DetailIcon className="w-4 h-4 shrink-0" />; })()}
+                    <span className="truncate">{detailAlert.title}</span>
+                  </>
+                )}
+              </DialogTitle>
+              <DialogDescription>Detalhes do alerta selecionado.</DialogDescription>
+            </DialogHeader>
+
+            {detailAlert && (
+              <div className="space-y-3 py-2">
+                <p className="text-sm text-muted-foreground">{detailAlert.message}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge variant={detailAlert.severity === 'CRITICAL' ? 'destructive' : detailAlert.severity === 'WARNING' ? 'warning' : 'info'}>{detailAlert.severity}</Badge>
+                  <Badge variant="secondary">{detailAlert.type}</Badge>
+                  {detailAlert.acknowledgedAt && <Badge variant="success" className="gap-1"><BadgeCheck className="w-3 h-3" />Reconhecido</Badge>}
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <span>Recebido: {detailAlert.createdAt.toLocaleString('pt-BR')}</span>
+                  {detailAlert.orderId && <span className="font-mono">Pedido: {detailAlert.orderId}</span>}
+                  {detailAlert.driverId && <span className="font-mono">Motorista: {detailAlert.driverId}</span>}
+                </div>
+              </div>
+            )}
+
+            <DialogFooter className="gap-2 sm:gap-2">
+              <Button variant="outline" onClick={() => setDetailAlert(null)}>Fechar</Button>
+              {detailAlert && !detailAlert.acknowledgedAt && (
+                <Button variant="default" onClick={() => { handleAcknowledge(detailAlert.id); setDetailAlert(null); }}>
+                  <BadgeCheck className="w-4 h-4 mr-1.5" />Reconhecer
+                </Button>
+              )}
+              {detailAlert && (
+                <Button variant="destructive" onClick={() => { handleDismiss(detailAlert.id); setDetailAlert(null); }}>
+                  <X className="w-4 h-4 mr-1.5" />Dispensar
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </PullToRefresh>
   );
