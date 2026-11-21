@@ -451,5 +451,22 @@ jobs:
             fi
           fi
           git commit --quiet -m "chore(contexto): $novos fonte(s) regerada(s) @ main ${HEAD_MAIN:0:7} [skip ci]"
-          git push --quiet "$REMOTE" "HEAD:refs/heads/$CONTEXTO_BRANCH"
-          echo "Publicado em $CONTEXTO_BRANCH: $(git rev-parse --short HEAD) (fontes novas: $novos)"
+          # A branch é 100% gerada, mas pode ter avançado depois do fetch inicial — dois runs
+          # concorrentes ou um dispatch manual. Sem isto o push morre com
+          # "! [rejected] HEAD -> contexto (fetch first)". Aqui cada tentativa relê o SHA remoto
+          # por ls-remote e publica sob force-with-lease apontado para ele: se a branch andou de
+          # novo entre a leitura e o push, o lease falha (nada é sobrescrito à toa) e tentamos de
+          # novo. Rebase não serve — os arquivos são regenerados em conjunto e conflitariam.
+          for tentativa in 1 2 3; do
+            echo "Publicando em $CONTEXTO_BRANCH (tentativa $tentativa/3)."
+            remoto=$(git ls-remote "$REMOTE" "refs/heads/$CONTEXTO_BRANCH" | cut -f1)
+            if git push --quiet --force-with-lease="refs/heads/$CONTEXTO_BRANCH:$remoto" \
+                 "$REMOTE" "HEAD:refs/heads/$CONTEXTO_BRANCH"; then
+              echo "Publicado em $CONTEXTO_BRANCH: $(git rev-parse --short HEAD) (fontes novas: $novos)"
+              exit 0
+            fi
+            echo "push rejeitado na tentativa $tentativa/3 — relendo o remoto e repetindo."
+            sleep 5
+          done
+          echo "::error::não foi possível publicar em $CONTEXTO_BRANCH após 3 tentativas"
+          exit 1
