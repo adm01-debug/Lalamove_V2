@@ -1,4 +1,4 @@
-﻿# Ordem de execução do backlog
+# Ordem de execução do backlog
 
 > Ordenado por impacto no negócio e dependência. Executar 1->N em fatia vertical (Fase 2 do goal).
 
@@ -7,7 +7,8 @@
 | # | Item | Por quê | Bloqueado por |
 |---|---|---|---|
 | 1 | P-04 Rotacionar JWT_SECRET no painel | único resíduo ativo da era pré-rotação; sem isso o gate 401 e login não se revalidam | ação do dono (sem MCP) |
-| 2 | P-10 Scripts chaves legacy | decidido: manter; nada a executar | — |
+| 2 | P-15 Pipeline de escalonamento de alertas | cron rodou 2016x sem escalar nada: lert_configurations nunca teve seed e a funcao faz INNER JOIN nela. PR #119 validada por dry-run | apply em producao (regra 8, PR #119) |
+| 3 | P-10 Scripts chaves legacy | decidido: manter; nada a executar | — |
 
 ## Itens concluídos
 - **P-01** (2026-11-21): RLS de `query_telemetry` grant-only — PR #92 mergeada (squash `41ba75b`), CI 9/9 verde no push pós-merge, deploy de produção READY. Ver `P-01-rls-query-telemetria-grant-only.md`.
