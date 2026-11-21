@@ -6,16 +6,17 @@
 
 | ID | Título | Status |
 |---|---|---|
-| P-01 | RLS de query_telemetry grant-only (PR #92) | PR aberta aguardando merge (DDL) |
-| P-02 | App Mobile para Motoristas (auditoria 5.1) | pendente / decisão do dono |
-| P-03 | Chat em tempo real Cliente-Motorista (auditoria 5.2) | pendente / decisão do dono |
-| P-04 | Rotacionar JWT_SECRET no painel Supabase | ação do dono |
-| P-05 | Snapshot do banco real (docs/contexto/supabase/) | bloqueado sem credencial |
-| P-06 | Vulns npm restantes após PR #91 | dependabot / CI do GitHub |
-| P-07 | SECURITY DEFINER sem set search_path | pendente (DDL aditivo) |
-| P-08 | geo_blocks sem RLS | pendente (DDL aditivo) |
-| P-09 | Transições de status sem CHECK no schema | pendente (DDL aditivo) |
+| P-01 | RLS de query_telemetry grant-only (PR #92) | CONCLUÍDO (2026-11-21, merge 41ba75b) |
+| P-02 | App Mobile para Motoristas (auditoria 5.1) | AGUARDANDO HUMANO (decisão do dono) |
+| P-03 | Chat em tempo real Cliente-Motorista (auditoria 5.2) | AGUARDANDO HUMANO (decisão do dono) |
+| P-04 | Rotacionar JWT_SECRET no painel Supabase | AGUARDANDO HUMANO (ação do dono) |
+| P-05 | Snapshot do banco real (docs/contexto/supabase/) | AGUARDANDO HUMANO (falta SUPABASE_DB_URL) |
+| P-06 | Vulns npm restantes (4 moderate, fix = bump major) | AGUARDANDO HUMANO (decisão do dono) |
+| P-07 | SECURITY DEFINER sem set search_path | OBSOLETO (verificado: 47/47 têm search_path) |
+| P-08 | geo_blocks sem RLS | OBSOLETO (verificado: 5 policies ativas) |
+| P-09 | Transições de status sem CHECK no schema | OBSOLETO (enums já validam) |
 | P-10 | Scripts com chaves legacy hardcoded | decidido: manter |
+| P-11 | MFA/WebAuthn (auditoria 1.2) | DESCARTADO (já implementado, evidência no código) |
 
 ## Trabalho de agentes JÁ incorporado a main (não perder, não reexecutar)
 

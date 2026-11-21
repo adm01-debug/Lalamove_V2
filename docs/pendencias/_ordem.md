@@ -16,6 +16,9 @@
 ## Itens concluídos
 - **P-01** (2026-11-21): RLS de `query_telemetry` grant-only — PR #92 mergeada (squash `41ba75b`), CI 9/9 verde no push pós-merge, deploy de produção READY. Ver `P-01-rls-query-telemetria-grant-only.md`.
 
+## Itens descartados
+- **P-11** (2026-11-21): MFA/WebAuthn (auditoria 1.2) — já implementado de ponta a ponta (hooks useMFA/useWebAuthn, componentes MFAEnroll/MFASettings/MFAVerify/Passkey*, rota `/mfa-verify`, guards `requireMFA` em rotas sensíveis). Auditoria de 14/05/2026 desatualizada. Ver `P-11-mfa-webauthn.md`.
+
 ## Itens obsoletos (2026-11-20)
 - **P-07, P-08, P-09**: marcados OBSOLETOS após verificação no banco de produção (2026-11-20). As lacunas listadas no `docs/contexto/regras/11-GLOSSARIO-E-LACUNAS.md` já estavam resolvidas no schema real (search_path 47/47, RLS de geo_blocks com 5 policies, enums de status). Os arquivos individuais guardam a evidência da verificação.
 
