@@ -120,6 +120,102 @@ const testNotificationV1 = z.object({
 
 const testNotificationV2 = testNotificationV1;
 
+// ── geo-gateway (camada de provedor de mapas: Google / Mapbox) ──────────────
+
+const geoPoint = z.object({
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+});
+const geoProvider = z.enum(["google", "mapbox"]).optional(); // força um provedor (admin/testes)
+const geoBias = geoPoint.extend({ radius_m: z.number().int().positive().max(200_000).optional() }).optional();
+
+const geoGatewayV1 = z.discriminatedUnion("action", [
+  z.object({ action: z.literal("provider-status"), provider: geoProvider }),
+  z.object({ action: z.literal("count-map-load"), provider: z.enum(["google", "mapbox"]) }),
+  z.object({
+    action: z.literal("autocomplete"),
+    input: z.string().min(1).max(256),
+    session_token: z.string().min(8).max(64).optional(),
+    bias: geoBias,
+    country: z.string().length(2).optional(),
+    language: z.string().min(2).max(5).optional(),
+    limit: z.number().int().min(1).max(10).optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("place-details"),
+    place_id: z.string().min(3).max(200),
+    session_token: z.string().min(8).max(64).optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("geocode"),
+    address: z.string().min(3).max(300).optional(),
+    structured: z.object({
+      address_line1: z.string().max(200).optional(),
+      postal_code: z.string().max(20).optional(),
+      city: z.string().max(100).optional(),
+      state: z.string().max(100).optional(),
+      country: z.string().length(2).optional(),
+    }).optional(),
+    bias: geoBias,
+    country: z.string().length(2).optional(),
+    language: z.string().min(2).max(5).optional(),
+    limit: z.number().int().min(1).max(10).optional(),
+    persist: z.boolean().optional(),
+    provider: geoProvider,
+  }), // address OU structured: o provedor devolve GEO_INVALID_INPUT quando ambos faltam
+  z.object({
+    action: z.literal("reverse"),
+    lat: z.number().min(-90).max(90),
+    lng: z.number().min(-180).max(180),
+    language: z.string().min(2).max(5).optional(),
+    persist: z.boolean().optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("route"),
+    origin: geoPoint,
+    destination: geoPoint,
+    waypoints: z.array(geoPoint).max(23).optional(),
+    traffic: z.boolean().optional(),
+    alternatives: z.boolean().optional(),
+    language: z.string().min(2).max(5).optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("matrix"),
+    origins: z.array(geoPoint).min(1).max(25),
+    destinations: z.array(geoPoint).min(1).max(25),
+    traffic: z.boolean().optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("static"),
+    width: z.number().int().min(100).max(1280).optional(),
+    height: z.number().int().min(100).max(1280).optional(),
+    markers: z.array(geoPoint.extend({ color: z.string().max(7).optional(), label: z.string().max(10).optional() })).max(10).optional(),
+    path: z.array(geoPoint).max(2000).optional(),
+    center: geoPoint.optional(),
+    zoom: z.number().min(1).max(20).optional(),
+    style: z.string().max(60).optional(),
+    provider: geoProvider,
+  }),
+  z.object({
+    action: z.literal("snap"),
+    points: z.array(geoPoint).min(2).max(100),
+    timestamps: z.array(z.number().int()).max(100).optional(),
+    radius_m: z.number().int().min(1).max(50).optional(),
+    provider: geoProvider,
+  }),
+  // Mapbox-only: pass-through validado só no essencial (a tela /map-tools já monta o body)
+  z.object({ action: z.literal("isochrone"), lat: z.number(), lng: z.number() }).passthrough(),
+  z.object({ action: z.literal("optimization"), coordinates: z.array(z.array(z.number()).length(2)).min(2).max(12) }).passthrough(),
+  z.object({ action: z.literal("tilequery"), lat: z.number(), lng: z.number() }).passthrough(),
+]);
+
+const geoGatewayV2 = geoGatewayV1;
+
 // ── Registro central de contratos ────────────────────────────────────────────
 
 export type ContractName =
@@ -129,7 +225,8 @@ export type ContractName =
   | "new-device-alert"
   | "route-analyzer"
   | "check-external-api"
-  | "test-notification";
+  | "test-notification"
+  | "geo-gateway";
 
 type VersionedSchema = Record<ContractVersion, z.ZodTypeAny>;
 
@@ -141,6 +238,7 @@ export const CONTRACT_REGISTRY: Record<ContractName, VersionedSchema> = {
   "route-analyzer": { v1: routeAnalyzerV1, v2: routeAnalyzerV2 },
   "check-external-api": { v1: checkExternalApiV1, v2: checkExternalApiV2 },
   "test-notification": { v1: testNotificationV1, v2: testNotificationV2 },
+  "geo-gateway": { v1: geoGatewayV1, v2: geoGatewayV2 },
 };
 
 /**

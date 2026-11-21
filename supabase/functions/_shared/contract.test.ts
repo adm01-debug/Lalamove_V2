@@ -66,6 +66,7 @@ const VALID_PAYLOADS: Record<ContractName, Record<string, unknown>> = {
   "route-analyzer": { action: "analyze-routes" },
   "check-external-api": { service: "lalamove" },
   "test-notification": { channel: "email", alertType: "STOP" },
+  "geo-gateway": { action: "provider-status" },
 };
 
 const ALL_CONTRACTS = Object.keys(CONTRACT_REGISTRY) as ContractName[];

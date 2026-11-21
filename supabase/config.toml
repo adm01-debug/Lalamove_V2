@@ -77,3 +77,9 @@ verify_jwt = true
 # internas/n8n com Bearer service_role.
 [functions.bitrix24-sync]
 verify_jwt = true
+
+# geo-gateway: camada única de acesso a provedores de mapa (Mapbox/Google) — lê geo_settings, mede
+# custo em geo_usage e usa o token Mapbox de servidor. Sem auth qualquer caller gastaria a cota paga.
+# O front chama via supabase.functions.invoke() (JWT da sessão); edges internas usam service_role.
+[functions.geo-gateway]
+verify_jwt = true
