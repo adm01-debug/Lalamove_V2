@@ -1,0 +1,111 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "onde_ficam": {
+  "telas": [
+   "src/pages (52)"
+  ],
+  "componentes": [
+   "src/components (125)",
+   "src/pages (85)",
+   "src/hooks (3)"
+  ],
+  "hooks": [
+   "src/hooks (82)",
+   "src/components (12)",
+   "scripts/ai-context (1)"
+  ],
+  "servicos_logica": [
+   "src/lib (22)",
+   "src/utils (6)",
+   "src/integrations (4)"
+  ],
+  "testes": [
+   "guards em scripts/ (46)",
+   "co-localizado (__tests__) (41)",
+   "supabase/functions/<edge> (8)"
+  ],
+  "edge_functions": "supabase/functions",
+  "migrations": "supabase/migrations",
+  "scripts": [
+   "scripts/ci (28)",
+   "scripts/db-audit (20)",
+   "scripts/inventario (5)"
+  ],
+  "rotas": [
+   "src/App.tsx"
+  ],
+  "menu": [
+   "src/components/layout/MobileBottomNav.tsx",
+   "src/components/layout/sidebar-config.ts"
+  ],
+  "docs": [
+   "docs (30)",
+   "(raiz) (9)",
+   ".github (1)"
+  ]
+ },
+ "nomenclatura": {
+  "componentes": "PascalCase (72%)",
+  "hooks": "use + PascalCase",
+  "servicos": "camelCase (84%)",
+  "edge_functions": "kebab-case (100%)",
+  "tabelas": "snake_case (94%)"
+ },
+ "barrels_index": 3,
+ "extensao_componentes": [
+  ".tsx (214)"
+ ],
+ "alias_imports": {
+  "(raiz)": {
+   "@/": "src/"
+  }
+ },
+ "commits": {
+  "convencao": "conventional commits validados por scripts/ci/commit-msg-lint.mjs (sem hook commit-msg instalado)",
+  "tipos_aceitos": [
+   "build",
+   "chore",
+   "ci",
+   "docs",
+   "feat",
+   "fix",
+   "perf",
+   "refactor",
+   "revert",
+   "security",
+   "style",
+   "test"
+  ],
+  "exemplos": [
+   "fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)",
+   "feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)",
+   "chore(config): declara verify_jwt explicito para mapbox-proxy (#142)",
+   "fix(geo): region_cache passa a usar reverse geocode permanente (#139)",
+   "fix(check-external-api): corrige nome do secret do health check Mapbox (#140)"
+  ]
+ },
+ "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
+ "codeowners": null,
+ "contributing": "docs/CONTRIBUTING.md",
+ "instrucoes_agentes": [
+  ".hermes.md",
+  "AGENTS.md",
+  "CLAUDE.md",
+  "docs/agentes/banco.md",
+  "docs/agentes/deploy.md",
+  "docs/agentes/github-ci.md",
+  "docs/agentes/lalamove-api.md",
+  "docs/agentes/mapa-repo.md",
+  "docs/agentes/regras-dominio.md"
+ ],
+ "typescript": {
+  "strict": true,
+  "noImplicitAny": true,
+  "tsconfigs": [
+   "tsconfig.app.json",
+   "tsconfig.json",
+   "tsconfig.node.json"
+  ]
+ }
+}

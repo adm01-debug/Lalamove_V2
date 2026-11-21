@@ -1,0 +1,2263 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "arestas": {
+  "scripts/ai-context/cenarios.mjs": [
+   "src/components/auth/ProtectedRoute.tsx",
+   "src/components/layout/AppLayout.tsx",
+   "src/types/index.ts"
+  ],
+  "scripts/ci/actions-kpi.mjs": [
+   "scripts/ci/issue-rotativa.mjs"
+  ],
+  "scripts/db-audit/check-grants-fresh.mjs": [
+   "scripts/db-audit/seguranca-processo.mjs"
+  ],
+  "scripts/db-audit/check-manifest-fresh.mjs": [
+   "scripts/db-audit/database-identity.mjs",
+   "scripts/db-audit/manifest-lib.mjs",
+   "scripts/db-audit/seguranca-processo.mjs"
+  ],
+  "scripts/db-audit/check-migration-drift.mjs": [
+   "scripts/db-audit/psql-environment.mjs",
+   "scripts/db-audit/sql-lexer.mjs"
+  ],
+  "scripts/db-audit/check-remocoes-destrutivas.mjs": [
+   "scripts/db-audit/supabase-usage-guard.mjs"
+  ],
+  "scripts/db-audit/check-screen-permission-db-guards.mjs": [
+   "scripts/db-audit/seguranca-processo.mjs"
+  ],
+  "scripts/db-audit/diff.mjs": [
+   "scripts/db-audit/manifest-lib.mjs"
+  ],
+  "scripts/db-audit/psql-safe.mjs": [
+   "scripts/db-audit/psql-environment.mjs"
+  ],
+  "scripts/db-audit/register-migration.mjs": [
+   "scripts/db-audit/database-identity.mjs",
+   "scripts/db-audit/psql-environment.mjs"
+  ],
+  "scripts/db-audit/supabase-usage-guard.mjs": [
+   "scripts/db-audit/catalog-from-types.mjs",
+   "scripts/db-audit/sql-lexer.mjs"
+  ],
+  "scripts/qa/contraste-busca.mjs": [
+   "scripts/qa/contraste-tokens.mjs"
+  ],
+  "scripts/ui-audit/layout-guard.mjs": [
+   "scripts/ui-audit/root-className.mjs"
+  ],
+  "scripts/ui-audit/width-regression.mjs": [
+   "scripts/ui-audit/width-check.mjs"
+  ],
+  "src/App.tsx": [
+   "src/components/CommandPaletteEnhanced.tsx",
+   "src/components/ErrorBoundary.tsx",
+   "src/components/auth/DeviceDetector.tsx",
+   "src/components/auth/ProtectedRoute.tsx",
+   "src/components/layout/AppLayout.tsx",
+   "src/components/pwa/OfflineIndicator.tsx",
+   "src/components/ui/contextual-hints.tsx",
+   "src/components/ui/keyboard-shortcuts-help.tsx",
+   "src/components/ui/page-loader.tsx",
+   "src/components/ui/sonner.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/useAchievementsSystem.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/pages/AdminTelemetriaPage.tsx",
+   "src/pages/AdvancedReportsPage.tsx",
+   "src/pages/AlertConfigurationsPage.tsx",
+   "src/pages/AlertsPage.tsx",
+   "src/pages/AnalyticsDashboardPage.tsx",
+   "src/pages/ApprovalsPage.tsx",
+   "src/pages/AuthPage.tsx",
+   "src/pages/Bitrix24Page.tsx",
+   "src/pages/CacheMonitoringPage.tsx",
+   "src/pages/CacheStatusPage.tsx",
+   "src/pages/ContactsPage.tsx",
+   "src/pages/DashboardRedesigned.tsx",
+   "src/pages/DeliveryMetricsPage.tsx",
+   "src/pages/DriversPage.tsx",
+   "src/pages/ErrorMonitoringPage.tsx",
+   "src/pages/EvaluationsPage.tsx",
+   "src/pages/ExternalDataPage.tsx",
+   "src/pages/ForgotPasswordPage.tsx",
+   "src/pages/GeoBlockingPage.tsx",
+   "src/pages/HeatmapPage.tsx",
+   "src/pages/IPWhitelistPage.tsx",
+   "src/pages/IncidentsPage.tsx",
+   "src/pages/JobQueuePage.tsx",
+   "src/pages/LalamoveOperationsPage.tsx",
+   "src/pages/LalamoveQuotaPage.tsx",
+   "src/pages/LalamoveSettingsPage.tsx",
+   "src/pages/LiveMapPage.tsx",
+   "src/pages/MFAVerifyPage.tsx",
+   "src/pages/MapToolsPage.tsx",
+   "src/pages/MetricsPage.tsx",
+   "src/pages/NotFound.tsx",
+   "src/pages/NotificationHistoryPage.tsx",
+   "src/pages/OrdersPage.tsx",
+   "src/pages/PasswordResetApprovalsPage.tsx",
+   "src/pages/PerformanceDashboardPage.tsx",
+   "src/pages/PermissionsPage.tsx",
+   "src/pages/ProfilePage.tsx",
+   "src/pages/RateLimitDashboardPage.tsx",
+   "src/pages/ReportsPage.tsx",
+   "src/pages/ResetPasswordPage.tsx",
+   "src/pages/RiskRulesPage.tsx",
+   "src/pages/RolesPage.tsx",
+   "src/pages/SLADashboardPage.tsx",
+   "src/pages/SLODashboardPage.tsx",
+   "src/pages/SecurityDashboardPage.tsx",
+   "src/pages/SettingsPage.tsx",
+   "src/pages/SystemHealthExpandedPage.tsx",
+   "src/pages/SystemHealthPage.tsx",
+   "src/pages/UAPISettingsPage.tsx",
+   "src/pages/UnauthorizedPage.tsx",
+   "src/pages/UserPreferencesPage.tsx",
+   "src/pages/WebhooksPage.tsx"
+  ],
+  "src/components/CommandPaletteEnhanced.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/command.tsx",
+   "src/hooks/useCommandPaletteSearch.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ErrorBoundary.tsx": [
+   "src/components/ui/button.tsx",
+   "src/services/errorMonitoring.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/components/GlobalSearchAdvanced.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useGlobalSearch.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": [
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useContractVersionUsageMonthly.ts"
+  ],
+  "src/components/admin/telemetry/ContractVersionUsagePanel.tsx": [
+   "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useContractV1SunsetReadiness.ts",
+   "src/hooks/useContractVersionUsage.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/admin/telemetry/TelemetryCharts.tsx": [
+   "src/components/ui/card.tsx"
+  ],
+  "src/components/alerts/AlertsAdvanced.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/checkbox.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/hooks/useAlertGrouping.ts",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/alerts/PredictiveAlerts.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/usePredictiveAnalysis.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/approvals/SwipeableApprovalCard.tsx": [
+   "src/components/approvals/UrgencyIndicator.tsx",
+   "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/approvals/UrgencyIndicator.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/lib/utils.ts",
+   "src/utils/timeUtils.ts"
+  ],
+  "src/components/approvals/WaitingTimeCounter.tsx": [
+   "src/lib/utils.ts",
+   "src/utils/timeUtils.ts"
+  ],
+  "src/components/auth/DeviceDetector.tsx": [
+   "src/hooks/useDeviceDetection.ts"
+  ],
+  "src/components/auth/MFAEnroll.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useMFA.ts"
+  ],
+  "src/components/auth/MFASettings.tsx": [
+   "src/components/auth/MFAEnroll.tsx",
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useMFA.ts"
+  ],
+  "src/components/auth/MFAVerify.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useMFA.ts"
+  ],
+  "src/components/auth/PasskeyLoginButton.tsx": [
+   "src/components/ui/button.tsx",
+   "src/hooks/useWebAuthn.ts"
+  ],
+  "src/components/auth/PasskeySettings.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useWebAuthn.ts"
+  ],
+  "src/components/auth/PasswordStrengthIndicator.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/auth/PermissionGate.tsx": [
+   "src/hooks/usePermissions.ts"
+  ],
+  "src/components/auth/ProtectedRoute.tsx": [
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useMFA.ts",
+   "src/hooks/usePermissions.ts"
+  ],
+  "src/components/dashboard/AIRouteChatbot.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/hooks/useFeatureFlags.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/AlertActionCard.tsx": [
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/AlertsPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/swipeable-list.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/dashboard/ApprovalQueue.tsx": [
+   "src/components/approvals/UrgencyIndicator.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/swipeable-list.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/dashboard/BatchActionsToolbar.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/types/index.ts"
+  ],
+  "src/components/dashboard/DashboardHeroSection.tsx": [
+   "src/components/dashboard/DashboardQuickActions.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/dashboard/DashboardQuickActions.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/micro-interactions.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/DashboardSkeleton.tsx": [
+   "src/components/ui/skeleton.tsx"
+  ],
+  "src/components/dashboard/LiveMapPlaceholder.tsx": [
+   "src/components/map/LiveMap.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/MetricCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/OrdersTable.tsx": [
+   "src/components/dashboard/BatchActionsToolbar.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/checkbox.tsx",
+   "src/components/ui/hover-preview.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/components/dashboard/RiskScoreGauge.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/dashboard/UAPIStatusCards.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useLalamove.ts"
+  ],
+  "src/components/debug/AuditReportGenerator.tsx": [
+   "src/components/ui/button.tsx",
+   "src/utils/logger.ts"
+  ],
+  "src/components/drivers/AdvancedFilters.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/drivers/BulkActions.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/checkbox.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/drivers/DriverProfileModal.tsx": [
+   "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/drivers/DriverProfileTabs.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/integrations/supabase/types.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/drivers/DriverProfileTabs.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/health/CronJobsHealthPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useCronJobsHealth.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/lalamove/UapiCouponsPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiFormat.ts"
+  ],
+  "src/components/lalamove/UapiFleetPanel.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useLalamoveUapi.ts"
+  ],
+  "src/components/lalamove/UapiOrderHistoryPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiFormat.ts"
+  ],
+  "src/components/lalamove/UapiStatementPanel.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiFormat.ts",
+   "src/lib/uapiStatement.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/components/layout/AppLayout.tsx": [
+   "src/components/GlobalSearchAdvanced.tsx",
+   "src/components/layout/Header.tsx",
+   "src/components/layout/MobileBottomNav.tsx",
+   "src/components/layout/MobileSidebar.tsx",
+   "src/components/layout/Sidebar.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/floating-action-button.tsx",
+   "src/components/ui/keyboard-shortcuts-modal.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/useAccessibility.tsx",
+   "src/hooks/useActiveAlerts.ts",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useContextualHints.ts",
+   "src/hooks/usePendingApprovals.ts",
+   "src/lib/utils.ts",
+   "src/utils/alertSounds.ts"
+  ],
+  "src/components/layout/Header.tsx": [
+   "src/components/ui/back-button.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/language-selector.tsx",
+   "src/components/ui/popover.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/smart-breadcrumbs.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/useActiveAlerts.ts",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useTheme.ts",
+   "src/lib/user-display.ts"
+  ],
+  "src/components/layout/MobileBottomNav.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/drawer.tsx",
+   "src/hooks/useActiveAlerts.ts",
+   "src/hooks/usePendingApprovals.ts",
+   "src/hooks/usePrefetch.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/layout/MobileSidebar.tsx": [
+   "src/components/ui/back-button.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/micro-interactions.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/sheet.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/layout/Sidebar.tsx": [
+   "src/components/layout/sidebar-config.ts",
+   "src/components/ui/avatar.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/micro-interactions.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/usePrefetch.ts",
+   "src/hooks/useRealtimeSubscriptions.ts",
+   "src/hooks/useTheme.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/user-display.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/map/Google3DCanvas.tsx": [
+   "src/components/map/hooks/useGoogleMapsLoader.ts",
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/types.ts",
+   "src/components/ui/button.tsx"
+  ],
+  "src/components/map/GoogleMapsCanvas.tsx": [
+   "src/components/map/hooks/useGoogleMapsLoader.ts",
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/types.ts"
+  ],
+  "src/components/map/LiveMap.tsx": [
+   "src/components/map/Google3DCanvas.tsx",
+   "src/components/map/GoogleMapsCanvas.tsx",
+   "src/components/map/MapHUD.tsx",
+   "src/components/map/MapHistoryPanel.tsx",
+   "src/components/map/MapLegend.tsx",
+   "src/components/map/MapProviderSelector.tsx",
+   "src/components/map/MapSearchPanel.tsx",
+   "src/components/map/MapSettingsPanel.tsx",
+   "src/components/map/hooks/useMapAlerts.ts",
+   "src/components/map/hooks/useMapMarkers.ts",
+   "src/components/map/hooks/useMapboxToken.ts",
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/liveMap.css",
+   "src/components/map/mapLayers.ts",
+   "src/components/map/types.ts",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/hooks/useMapSettings.ts",
+   "src/hooks/useTrackingHistory.ts",
+   "src/lib/geo-gateway.ts"
+  ],
+  "src/components/map/MapHUD.tsx": [
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/tooltip.tsx"
+  ],
+  "src/components/map/MapHistoryPanel.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/hooks/useTrackingHistory.ts"
+  ],
+  "src/components/map/MapLegend.tsx": [
+   "src/components/map/types.ts",
+   "src/lib/statusPalette.ts"
+  ],
+  "src/components/map/MapProviderSelector.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/hooks/useMapSettings.ts"
+  ],
+  "src/components/map/MapSearchPanel.tsx": [
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/types.ts",
+   "src/components/ui/button.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useFuseSearch.ts"
+  ],
+  "src/components/map/MapSettingsPanel.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/slider.tsx",
+   "src/hooks/useMapSettings.ts"
+  ],
+  "src/components/map/hooks/useMapAlerts.ts": [
+   "src/components/map/hooks/useTrackingData.ts"
+  ],
+  "src/components/map/hooks/useMapMarkers.ts": [
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/markerFactories.ts",
+   "src/components/map/types.ts",
+   "src/hooks/useMapbox.ts",
+   "src/lib/statusPalette.ts"
+  ],
+  "src/components/map/hooks/useMapboxToken.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/components/map/hooks/useTrackingData.ts": [
+   "src/components/map/types.ts",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/components/map/mapLayers.ts": [
+   "src/lib/statusPalette.ts"
+  ],
+  "src/components/map/markerFactories.ts": [
+   "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/types.ts",
+   "src/lib/statusPalette.ts"
+  ],
+  "src/components/notifications/NotificationPreferences.tsx": [
+   "src/components/notifications/SoundSettingsPanel.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/sheet.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useSoundSettings.ts",
+   "src/lib/utils.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/components/notifications/PushNotificationSettings.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useSecurityPushNotifications.ts"
+  ],
+  "src/components/notifications/SoundSettingsPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useSoundSettings.ts",
+   "src/lib/utils.ts",
+   "src/utils/alertSounds.ts"
+  ],
+  "src/components/orders/AddressAutocomplete.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useDebouncedValue.ts",
+   "src/hooks/useExternalData.ts",
+   "src/hooks/useGeoSearch.ts",
+   "src/hooks/useMapbox.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/orders/CepQuickFill.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/lib/cep.ts"
+  ],
+  "src/components/orders/ContactPicker.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/command.tsx",
+   "src/components/ui/popover.tsx",
+   "src/hooks/useContacts.ts",
+   "src/lib/phone.ts"
+  ],
+  "src/components/orders/FetchOrderDialog.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/components/orders/ImportCSVDialog.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/progress.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/components/orders/NewOrderDialog.tsx": [
+   "src/components/orders/AddressAutocomplete.tsx",
+   "src/components/orders/CepQuickFill.tsx",
+   "src/components/orders/ContactPicker.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/checkbox.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useContacts.ts",
+   "src/hooks/useQuotationExpiry.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/lalamoveCatalog.ts",
+   "src/lib/lalamoveLabels.ts",
+   "src/lib/orderErrors.ts",
+   "src/lib/phone.ts",
+   "src/types/lalamove.ts"
+  ],
+  "src/components/orders/OrderDetailModal.tsx": [
+   "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/orders/StatusTimeline.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useEvaluateDriver.ts",
+   "src/hooks/useLalamoveUapi.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/lalamoveOrderEdit.ts",
+   "src/lib/lalamoveReasons.ts",
+   "src/types/index.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/components/orders/StatusTimeline.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/lalamoveTimeline.ts",
+   "src/lib/utils.ts",
+   "src/types/lalamove.ts"
+  ],
+  "src/components/pwa/OfflineIndicator.tsx": [
+   "src/components/ui/button.tsx",
+   "src/hooks/useServiceWorker.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/reports/GeoHeatmap.tsx": [
+   "src/components/map/hooks/useMapboxToken.ts",
+   "src/hooks/useAdvancedReports.ts",
+   "src/lib/geo-gateway.ts"
+  ],
+  "src/components/ui/accessible-card.tsx": [
+   "src/components/ui/card.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/accordion.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/activity-timeline.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/timeline-item.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/alert-dialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/alert.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/avatar.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/back-button.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/badge.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/button.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/card.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/chart.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/checkbox.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/command.tsx": [
+   "src/components/ui/dialog.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/contextual-hints.tsx": [
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/data-refresh-indicator.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/useDataRefresh.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/dialog.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/drawer.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/dropdown-menu.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/fab-variants.tsx": [
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/floating-action-button.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/fab-variants.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/hero-metric.tsx": [
+   "src/components/ui/micro-interactions.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/highlight-match.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/hover-preview.tsx": [
+   "src/components/ui/card.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/input.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/keyboard-shortcuts-help.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/keyboard-shortcuts-modal.tsx": [
+   "src/components/ui/dialog.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/label.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/language-selector.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/i18n/index.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/micro-interactions.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/motion.tsx": [
+   "src/components/ui/motion-variants.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/page-loader.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/popover.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/prediction-card.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/progress.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/pull-to-refresh.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/radio-group.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/scroll-area.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/search-help-tooltip.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/select.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/separator.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/sheet.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/skeleton.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/slider.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/smart-breadcrumbs.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/breadcrumb-config.ts",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/sonner.tsx": [
+   "src/hooks/useTheme.ts"
+  ],
+  "src/components/ui/sparkline.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/swipeable-list.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/switch.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/table.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/tabs.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/textarea.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/timeline-item.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/toggle-group.tsx": [
+   "src/components/ui/toggle.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/toggle.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/tooltip.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/ui/undo-toast.tsx": [
+   "src/lib/utils.ts"
+  ],
+  "src/components/webhooks/WebhookSecurityPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useWebhookSecurityMetrics.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/hooks/healthChecks.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useActiveAlerts.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useRealtimeSubscriptions.ts",
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts",
+   "src/types/index.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useAdvancedReports.ts": [
+   "src/hooks/useRegionResolver.ts",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useAlertConfigurations.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts"
+  ],
+  "src/hooks/useAlertGrouping.ts": [
+   "src/types/index.ts"
+  ],
+  "src/hooks/useAlertSettings.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useAnalyticsData.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useApprovalActions.ts": [
+   "src/hooks/useGlobalUndo.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/types/index.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useApprovalActionsEnhanced.ts": [
+   "src/hooks/useAchievementsSystem.tsx",
+   "src/hooks/usePendingApprovals.ts",
+   "src/types/index.ts"
+  ],
+  "src/hooks/useApprovalRealtime.ts": [
+   "src/hooks/useRealtimeSubscriptions.ts"
+  ],
+  "src/hooks/useAuth.tsx": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useAuthLogs.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useBitrix24.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useCacheViews.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useCachedStats.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useCommandPaletteSearch.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useDebouncedValue.ts",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/useTheme.ts",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useContacts.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useContextualHints.ts": [
+   "src/components/ui/contextual-hints.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/usePermissions.ts"
+  ],
+  "src/hooks/useContractV1SunsetReadiness.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useContractVersionUsage.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useContractVersionUsageMonthly.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useCronJobsHealth.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useDashboardStats.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useDeliveryHeatmapData.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useDeliveryMetrics.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useDeviceDetection.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useDriverEvaluations.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/types/driver.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useDrivers.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useErrorLogs.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useEvaluateDriver.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useExternalData.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/lib/bitrix-config.ts"
+  ],
+  "src/hooks/useFeatureFlags.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useGeoSearch.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useGlobalSearch.ts": [
+   "src/hooks/useDebouncedValue.ts",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useIncidents.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useJobQueue.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useLalamove.ts": [
+   "src/lib/lalamove-api.ts",
+   "src/lib/lalamove-config.ts"
+  ],
+  "src/hooks/useLalamoveQuota.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useLalamoveUapi.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/lib/lalamove-config.ts",
+   "src/lib/uapiErrors.ts"
+  ],
+  "src/hooks/useLoginLockout.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useMFA.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useMapSettings.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useMapbox.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useMetrics.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useNotificationHistory.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useOfflineStorage.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/usePasswordResetActions.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/usePendingApprovals.ts": [
+   "src/hooks/useApprovalActions.ts",
+   "src/integrations/supabase/client.ts",
+   "src/types/index.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/usePermissions.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/usePredictiveAnalysis.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/usePrefetch.ts": [
+   "src/pages/AlertConfigurationsPage.tsx",
+   "src/pages/AlertsPage.tsx",
+   "src/pages/AnalyticsDashboardPage.tsx",
+   "src/pages/ApprovalsPage.tsx",
+   "src/pages/Bitrix24Page.tsx",
+   "src/pages/CacheMonitoringPage.tsx",
+   "src/pages/CacheStatusPage.tsx",
+   "src/pages/DashboardRedesigned.tsx",
+   "src/pages/DeliveryMetricsPage.tsx",
+   "src/pages/DriversPage.tsx",
+   "src/pages/EvaluationsPage.tsx",
+   "src/pages/GeoBlockingPage.tsx",
+   "src/pages/HeatmapPage.tsx",
+   "src/pages/IPWhitelistPage.tsx",
+   "src/pages/IncidentsPage.tsx",
+   "src/pages/JobQueuePage.tsx",
+   "src/pages/LiveMapPage.tsx",
+   "src/pages/MetricsPage.tsx",
+   "src/pages/NotificationHistoryPage.tsx",
+   "src/pages/OrdersPage.tsx",
+   "src/pages/PasswordResetApprovalsPage.tsx",
+   "src/pages/PerformanceDashboardPage.tsx",
+   "src/pages/PermissionsPage.tsx",
+   "src/pages/RateLimitDashboardPage.tsx",
+   "src/pages/ReportsPage.tsx",
+   "src/pages/RiskRulesPage.tsx",
+   "src/pages/RolesPage.tsx",
+   "src/pages/SLADashboardPage.tsx",
+   "src/pages/SecurityDashboardPage.tsx",
+   "src/pages/SettingsPage.tsx",
+   "src/pages/SystemHealthExpandedPage.tsx",
+   "src/pages/SystemHealthPage.tsx",
+   "src/pages/UserPreferencesPage.tsx",
+   "src/pages/WebhooksPage.tsx"
+  ],
+  "src/hooks/usePushNotifications.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useRateLimiting.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useRealtimeSubscriptions.ts": [
+   "src/components/notifications/NotificationPreferences.tsx",
+   "src/hooks/usePushNotifications.ts",
+   "src/integrations/supabase/client.ts",
+   "src/types/index.ts",
+   "src/utils/alertSounds.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useRecentOrders.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/types/index.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useRegionResolver.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useReportPresets.ts": [
+   "src/hooks/useAdvancedReports.ts",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useRiskRules.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/integrations/supabase/types.ts"
+  ],
+  "src/hooks/useRole.ts": [
+   "src/hooks/usePermissions.ts",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useSLAMetrics.ts": [
+   "src/hooks/useRealtimeSubscriptions.ts",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useSLOMetrics.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useScheduledTheme.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useSecurityPushNotifications.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useServiceWorker.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useSoundSettings.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useSystemHealth.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useSystemHealthExpanded.ts": [
+   "src/hooks/healthChecks.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useTestNotification.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useTrackingHistory.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useUAPI.ts": [
+   "src/lib/uapi-proxy.ts"
+  ],
+  "src/hooks/useUserDevices.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useWebAuthn.ts": [
+   "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/hooks/useWebhookEvents.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useWebhookSecurityMetrics.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/i18n/index.ts": [
+   "src/i18n/locales/en.json",
+   "src/i18n/locales/es.json",
+   "src/i18n/locales/pt-BR.json"
+  ],
+  "src/integrations/lovable/index.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/integrations/supabase/client.ts": [
+   "src/integrations/supabase/previewAuthStorage.ts",
+   "src/integrations/supabase/types.ts"
+  ],
+  "src/lib/geo-gateway.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/lib/lalamove-api.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/lib/lalamoveCatalog.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/lalamoveErrors.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/lalamoveGuards.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/lalamoveLabels.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/lalamoveOrderEdit.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/lalamoveTimeline.ts": [
+   "src/types/lalamove.ts"
+  ],
+  "src/lib/orderErrors.ts": [
+   "src/lib/lalamoveErrors.ts"
+  ],
+  "src/lib/uapi-proxy.ts": [
+   "src/lib/lalamove-api.ts"
+  ],
+  "src/lib/uapiStatement.ts": [
+   "src/hooks/useLalamoveUapi.ts"
+  ],
+  "src/main.tsx": [
+   "src/App.tsx",
+   "src/i18n/index.ts",
+   "src/index.css",
+   "src/services/errorMonitoring.ts",
+   "src/utils/webVitals.ts"
+  ],
+  "src/pages/AdminTelemetriaPage.tsx": [
+   "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
+   "src/components/admin/telemetry/TelemetryCharts.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/popover.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/pages/AdvancedReportsPage.tsx": [
+   "src/components/reports/GeoHeatmap.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useAdvancedReports.ts",
+   "src/hooks/useReportPresets.ts",
+   "src/lib/utils.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/pages/AlertConfigurationsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useAlertConfigurations.ts",
+   "src/integrations/supabase/types.ts",
+   "src/pages/alert-configurations/AlertConfigCard.tsx"
+  ],
+  "src/pages/AlertsPage.tsx": [
+   "src/components/alerts/AlertsAdvanced.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/components/ui/undo-toast.tsx",
+   "src/hooks/useActiveAlerts.ts",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/pages/AnalyticsDashboardPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useAnalyticsData.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/pages/ApprovalsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useApprovalRealtime.ts",
+   "src/hooks/usePendingApprovals.ts",
+   "src/lib/utils.ts",
+   "src/pages/approvals/ApprovalCard.tsx",
+   "src/types/index.ts"
+  ],
+  "src/pages/AuthPage.tsx": [
+   "src/components/auth/PasskeyLoginButton.tsx",
+   "src/components/auth/PasswordStrengthIndicator.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useLoginLockout.ts",
+   "src/integrations/lovable/index.ts"
+  ],
+  "src/pages/Bitrix24Page.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useBitrix24.ts",
+   "src/integrations/supabase/client.ts",
+   "src/pages/bitrix24/Bitrix24SubComponents.tsx"
+  ],
+  "src/pages/CacheMonitoringPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/hooks/useCacheViews.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/CacheStatusPage.tsx": [
+   "src/components/ui/alert.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useCacheViews.ts",
+   "src/hooks/useCachedStats.ts"
+  ],
+  "src/pages/ContactsPage.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useContacts.ts",
+   "src/lib/phone.ts"
+  ],
+  "src/pages/DashboardRedesigned.tsx": [
+   "src/components/alerts/PredictiveAlerts.tsx",
+   "src/components/dashboard/AIRouteChatbot.tsx",
+   "src/components/dashboard/AlertActionCard.tsx",
+   "src/components/dashboard/AlertsPanel.tsx",
+   "src/components/dashboard/ApprovalQueue.tsx",
+   "src/components/dashboard/DashboardHeroSection.tsx",
+   "src/components/dashboard/DashboardSkeleton.tsx",
+   "src/components/dashboard/LiveMapPlaceholder.tsx",
+   "src/components/dashboard/MetricCard.tsx",
+   "src/components/dashboard/OrdersTable.tsx",
+   "src/components/dashboard/UAPIStatusCards.tsx",
+   "src/components/ui/accessible-card.tsx",
+   "src/components/ui/activity-timeline.tsx",
+   "src/components/ui/prediction-card.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/hooks/use-mobile.tsx",
+   "src/hooks/useAccessibility.tsx",
+   "src/hooks/useActiveAlerts.ts",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useDashboardStats.ts",
+   "src/hooks/usePendingApprovals.ts",
+   "src/hooks/useRecentOrders.ts",
+   "src/types/index.ts"
+  ],
+  "src/pages/DeliveryMetricsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useDeliveryMetrics.ts"
+  ],
+  "src/pages/DriversPage.tsx": [
+   "src/components/drivers/AdvancedFilters.tsx",
+   "src/components/drivers/BulkActions.tsx",
+   "src/components/drivers/DriverProfileModal.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/swipeable-list.tsx",
+   "src/components/ui/undo-toast.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/hooks/useFuseSearch.ts",
+   "src/integrations/supabase/types.ts",
+   "src/lib/utils.ts",
+   "src/pages/drivers/DriverCard.tsx",
+   "src/pages/drivers/DriverConfirmDialog.tsx",
+   "src/pages/drivers/DriverStatsCards.tsx"
+  ],
+  "src/pages/ErrorMonitoringPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useErrorLogs.ts"
+  ],
+  "src/pages/EvaluationsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/integrations/supabase/client.ts",
+   "src/pages/evaluations/EvaluationDetails.tsx",
+   "src/types/driver.ts"
+  ],
+  "src/pages/ExternalDataPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/useDebouncedValue.ts",
+   "src/hooks/useExternalData.ts"
+  ],
+  "src/pages/ForgotPasswordPage.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/GeoBlockingPage.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/HeatmapPage.tsx": [
+   "src/components/map/hooks/useMapboxToken.ts",
+   "src/components/ui/button.tsx",
+   "src/components/ui/motion.tsx",
+   "src/hooks/useDeliveryHeatmapData.ts",
+   "src/lib/geo-gateway.ts",
+   "src/pages/heatmap/HeatmapControls.tsx",
+   "src/pages/heatmap/HeatmapStatsPanel.tsx"
+  ],
+  "src/pages/IPWhitelistPage.tsx": [
+   "src/components/auth/PermissionGate.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts",
+   "src/pages/ip-whitelist/IPWhitelistDialogs.tsx"
+  ],
+  "src/pages/IncidentsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/useIncidents.ts",
+   "src/lib/utils.ts",
+   "src/pages/incidents/IncidentDialogs.tsx"
+  ],
+  "src/pages/JobQueuePage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useJobQueue.ts"
+  ],
+  "src/pages/LalamoveOperationsPage.tsx": [
+   "src/components/lalamove/UapiCouponsPanel.tsx",
+   "src/components/lalamove/UapiFleetPanel.tsx",
+   "src/components/lalamove/UapiOrderHistoryPanel.tsx",
+   "src/components/lalamove/UapiStatementPanel.tsx"
+  ],
+  "src/pages/LalamoveQuotaPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useLalamoveQuota.ts"
+  ],
+  "src/pages/LalamoveSettingsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useLalamove.ts",
+   "src/pages/lalamove/LalamoveV3Explorer.tsx"
+  ],
+  "src/pages/LiveMapPage.tsx": [
+   "src/components/map/LiveMap.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/toggle-group.tsx",
+   "src/hooks/useFeatureFlags.ts",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/MFAVerifyPage.tsx": [
+   "src/components/auth/MFAVerify.tsx"
+  ],
+  "src/pages/MapToolsPage.tsx": [
+   "src/components/ui/tabs.tsx",
+   "src/pages/map-tools/IsochroneTab.tsx",
+   "src/pages/map-tools/MapMatchingTab.tsx",
+   "src/pages/map-tools/MatrixTab.tsx",
+   "src/pages/map-tools/OptimizationTab.tsx",
+   "src/pages/map-tools/StaticImageTab.tsx",
+   "src/pages/map-tools/TilequeryTab.tsx"
+  ],
+  "src/pages/MetricsPage.panels.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx"
+  ],
+  "src/pages/MetricsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/hooks/useMetrics.ts",
+   "src/lib/utils.ts",
+   "src/pages/MetricsPage.panels.tsx"
+  ],
+  "src/pages/NotFound.tsx": [
+   "src/utils/logger.ts"
+  ],
+  "src/pages/NotificationHistoryPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/useNotificationHistory.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/OrdersPage.tsx": [
+   "src/components/orders/FetchOrderDialog.tsx",
+   "src/components/orders/ImportCSVDialog.tsx",
+   "src/components/orders/NewOrderDialog.tsx",
+   "src/components/orders/OrderDetailModal.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/useRecentOrders.ts",
+   "src/lib/utils.ts",
+   "src/pages/orders/OrderCard.tsx",
+   "src/types/index.ts"
+  ],
+  "src/pages/PasswordResetApprovalsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/table.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/usePasswordResetActions.ts",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/PerformanceDashboardPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/lib/utils.ts",
+   "src/utils/webVitals.ts"
+  ],
+  "src/pages/PermissionsPage.tsx": [
+   "src/components/auth/PermissionGate.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/usePermissions.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts",
+   "src/pages/permissions/PermissionModuleList.tsx"
+  ],
+  "src/pages/ProfilePage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useAuth.tsx",
+   "src/hooks/useAuthLogs.ts",
+   "src/hooks/usePermissions.ts",
+   "src/hooks/useUserDevices.ts",
+   "src/integrations/supabase/client.ts",
+   "src/lib/user-display.ts"
+  ],
+  "src/pages/RateLimitDashboardPage.tsx": [
+   "src/components/auth/PermissionGate.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/search-help-tooltip.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/useRateLimiting.ts",
+   "src/pages/ratelimit/RateLimitDialogs.tsx"
+  ],
+  "src/pages/ReportsPage.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/pages/reports/ReportDistributionTab.tsx",
+   "src/pages/reports/ReportDriversTab.tsx",
+   "src/pages/reports/ReportOverviewTab.tsx",
+   "src/pages/reports/ReportStatsCards.tsx",
+   "src/pages/reports/useReportData.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/pages/ResetPasswordPage.tsx": [
+   "src/components/auth/PasswordStrengthIndicator.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/pages/RiskRulesPage.dialogs.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useRiskRules.ts"
+  ],
+  "src/pages/RiskRulesPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useRiskRules.ts",
+   "src/lib/utils.ts",
+   "src/pages/RiskRulesPage.dialogs.tsx"
+  ],
+  "src/pages/RolesPage.tsx": [
+   "src/components/auth/PermissionGate.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/hooks/usePermissions.ts",
+   "src/hooks/useRole.ts"
+  ],
+  "src/pages/SLADashboardPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/hooks/useSLAMetrics.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/SLODashboardPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/hooks/useSLOMetrics.ts",
+   "src/lib/utils.ts",
+   "src/utils/exportUtils.ts"
+  ],
+  "src/pages/SecurityDashboardPage.tsx": [
+   "src/components/auth/MFASettings.tsx",
+   "src/components/auth/PasskeySettings.tsx",
+   "src/components/notifications/PushNotificationSettings.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/progress.tsx",
+   "src/hooks/useAuthLogs.ts",
+   "src/hooks/useMFA.ts",
+   "src/hooks/usePermissions.ts",
+   "src/hooks/useRateLimiting.ts",
+   "src/hooks/useRole.ts",
+   "src/hooks/useWebAuthn.ts"
+  ],
+  "src/pages/SettingsPage.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useAlertSettings.ts",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useSoundSettings.ts",
+   "src/pages/settings/LateDeliveryCard.tsx",
+   "src/pages/settings/PushNotificationsCard.tsx",
+   "src/pages/settings/RouteDeviationCard.tsx",
+   "src/pages/settings/SoundSettingsCard.tsx",
+   "src/pages/settings/StoppedDriverCard.tsx"
+  ],
+  "src/pages/SystemHealthExpandedPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useSystemHealthExpanded.ts"
+  ],
+  "src/pages/SystemHealthPage.tsx": [
+   "src/components/health/CronJobsHealthPanel.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/hooks/useSystemHealth.ts"
+  ],
+  "src/pages/UAPISettingsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/hooks/useUAPI.ts"
+  ],
+  "src/pages/UnauthorizedPage.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx"
+  ],
+  "src/pages/UserPreferencesPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/radio-group.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/tabs.tsx",
+   "src/hooks/usePushNotifications.ts",
+   "src/hooks/useScheduledTheme.ts",
+   "src/hooks/useSoundSettings.ts",
+   "src/i18n/index.ts"
+  ],
+  "src/pages/WebhooksPage.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/webhooks/WebhookSecurityPanel.tsx",
+   "src/hooks/useWebhookEvents.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/alert-configurations/AlertConfigCard.tsx": [
+   "src/components/ui/accordion.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/components/ui/tooltip.tsx",
+   "src/hooks/useAlertConfigurations.ts",
+   "src/hooks/useTestNotification.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/approvals/ApprovalCard.tsx": [
+   "src/components/approvals/WaitingTimeCounter.tsx",
+   "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/pages/bitrix24/Bitrix24SubComponents.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/table.tsx"
+  ],
+  "src/pages/drivers/DriverCard.tsx": [
+   "src/components/dashboard/RiskScoreGauge.tsx",
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/dropdown-menu.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/components/ui/swipeable-list.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/integrations/supabase/types.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/drivers/DriverConfirmDialog.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useDrivers.ts"
+  ],
+  "src/pages/drivers/DriverStatsCards.tsx": [
+   "src/components/ui/card.tsx",
+   "src/components/ui/sparkline.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/evaluations/EvaluationDetails.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/scroll-area.tsx",
+   "src/types/driver.ts"
+  ],
+  "src/pages/heatmap/HeatmapControls.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/motion.tsx",
+   "src/components/ui/select.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/heatmap/HeatmapStatsPanel.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/motion.tsx",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/incidents/IncidentDialogs.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/textarea.tsx",
+   "src/hooks/useDrivers.ts",
+   "src/hooks/useIncidents.ts"
+  ],
+  "src/pages/ip-whitelist/IPWhitelistDialogs.tsx": [
+   "src/components/ui/alert-dialog.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/textarea.tsx"
+  ],
+  "src/pages/lalamove/LalamoveV3Explorer.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useLalamove.ts",
+   "src/lib/lalamove-api.ts"
+  ],
+  "src/pages/map-tools/CoordinateInput.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/input.tsx"
+  ],
+  "src/pages/map-tools/IsochroneTab.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts"
+  ],
+  "src/pages/map-tools/MapMatchingTab.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts",
+   "src/pages/map-tools/CoordinateInput.tsx"
+  ],
+  "src/pages/map-tools/MatrixTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts",
+   "src/pages/map-tools/CoordinateInput.tsx"
+  ],
+  "src/pages/map-tools/OptimizationTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts",
+   "src/pages/map-tools/CoordinateInput.tsx"
+  ],
+  "src/pages/map-tools/StaticImageTab.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts"
+  ],
+  "src/pages/map-tools/TilequeryTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/hooks/useMapbox.ts"
+  ],
+  "src/pages/orders/OrderCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/highlight-match.tsx",
+   "src/hooks/useFuseSearch.ts",
+   "src/lib/utils.ts",
+   "src/types/index.ts"
+  ],
+  "src/pages/permissions/PermissionModuleList.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/checkbox.tsx",
+   "src/components/ui/collapsible.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/usePermissions.ts",
+   "src/lib/utils.ts"
+  ],
+  "src/pages/ratelimit/RateLimitDialogs.tsx": [
+   "src/components/ui/button.tsx",
+   "src/components/ui/dialog.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/textarea.tsx"
+  ],
+  "src/pages/reports/ReportDistributionTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/pages/reports/useReportData.ts"
+  ],
+  "src/pages/reports/ReportDriversTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/pages/reports/useReportData.ts"
+  ],
+  "src/pages/reports/ReportOverviewTab.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/pages/reports/useReportData.ts"
+  ],
+  "src/pages/reports/ReportStatsCards.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/pages/reports/useReportData.ts"
+  ],
+  "src/pages/reports/useReportData.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/pages/settings/LateDeliveryCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useAlertSettings.ts"
+  ],
+  "src/pages/settings/PushNotificationsCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/switch.tsx"
+  ],
+  "src/pages/settings/RouteDeviationCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useAlertSettings.ts"
+  ],
+  "src/pages/settings/SoundSettingsCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useSoundSettings.ts",
+   "src/utils/alertSounds.ts"
+  ],
+  "src/pages/settings/StoppedDriverCard.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/separator.tsx",
+   "src/components/ui/slider.tsx",
+   "src/components/ui/switch.tsx",
+   "src/hooks/useAlertSettings.ts"
+  ],
+  "src/services/errorMonitoring.ts": [
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
+  ],
+  "src/utils/alertSounds.ts": [
+   "src/hooks/useSoundSettings.ts"
+  ],
+  "src/utils/circuitBreaker.ts": [
+   "src/utils/logger.ts"
+  ],
+  "src/utils/webVitals.ts": [
+   "src/utils/logger.ts"
+  ],
+  "supabase/functions/_shared/schemas.ts": [
+   "supabase/functions/_shared/contract.ts"
+  ],
+  "supabase/functions/_shared/telemetry.ts": [
+   "supabase/functions/_shared/contract.ts"
+  ],
+  "supabase/functions/bitrix24-process-queue/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/bitrix24-sync/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/check-driver-alerts/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/check-external-api/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/cors.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/escalate-alerts/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/evaluate-driver/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/geo-gateway/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/cors.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/geo-gateway/metering.ts",
+   "supabase/functions/geo-gateway/providers/mapbox.ts",
+   "supabase/functions/geo-gateway/providers/types.ts",
+   "supabase/functions/geo-gateway/resolver.ts"
+  ],
+  "supabase/functions/geo-gateway/metering.ts": [
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/geo-gateway/polyline.ts": [
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/geo-gateway/providers/mapbox.ts": [
+   "supabase/functions/geo-gateway/polyline.ts",
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/geo-gateway/resolver.ts": [
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/job-worker/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/lalamove-api/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/lalamove-gateway/index.ts": [
+   "supabase/functions/lalamove-gateway/route.ts"
+  ],
+  "supabase/functions/lalamove-uapi/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/lalamove-webhook/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/lalamove-webhook/normalize.ts",
+   "supabase/functions/lalamove-webhook/security.ts"
+  ],
+  "supabase/functions/lalamove-webhook/security.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/mcp-query/index.ts": [
+   "supabase/functions/_shared/cors.ts"
+  ],
+  "supabase/functions/new-device-alert/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/rotate-tokens/index.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
+  "supabase/functions/route-analyzer/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/send-notification/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/test-notification/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ]
+ }
+}

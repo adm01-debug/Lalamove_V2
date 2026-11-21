@@ -1,0 +1,1004 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "stack": {
+  "linguagens": [
+   "TypeScript (476)",
+   "SQL (172)",
+   "JavaScript (112)",
+   "Markdown (96)",
+   "JSON (34)",
+   "Shell (9)",
+   "Python (8)",
+   "YAML (8)"
+  ],
+  "linguagem_principal": "TypeScript",
+  "framework": "React",
+  "bundler": "Vite",
+  "roteador": "react-router-dom (rotas declaradas em src/App.tsx)",
+  "banco": "Supabase Cloud (project_id em supabase/config.toml: iecgydonctmabiijadsf)",
+  "edge_runtime": "Deno (supabase/functions)",
+  "testes": [
+   "vitest",
+   "playwright",
+   "deno test (contratos das edges)"
+  ],
+  "ui": [
+   "tailwind",
+   "radix/shadcn",
+   "lucide",
+   "recharts",
+   "mapbox-gl"
+  ],
+  "estado": [
+   "react-query",
+   "zustand"
+  ],
+  "gerenciador_pacotes": "npm (package-lock.json; não há bun.lock)",
+  "node": null,
+  "deploy": [
+   "github actions"
+  ],
+  "pastas_fonte": [
+   "src"
+  ]
+ },
+ "package": {
+  "nome": "vite_react_shadcn_ts",
+  "versao": "0.0.0",
+  "scripts": {
+   "build": "vite build",
+   "build:dev": "vite build --mode development",
+   "dev": "vite",
+   "graph:setup": "bash scripts/graphify/setup.sh",
+   "graph:update": "graphify update .",
+   "lint": "eslint .",
+   "preview": "vite preview",
+   "seed": "tsx scripts/seed-database.ts",
+   "test:e2e": "playwright test",
+   "test:e2e:report": "playwright show-report",
+   "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencias": 79,
+  "dev_dependencias": 21,
+  "principais": {
+   "@supabase/supabase-js": "^2.116.0",
+   "@tanstack/react-query": "^5.83.0",
+   "date-fns": "^4.4.0",
+   "framer-motion": "^12.23.26",
+   "i18next": "^25.7.4",
+   "i18next-browser-languagedetector": "^8.2.0",
+   "jspdf": "^4.2.1",
+   "jspdf-autotable": "^5.0.8",
+   "mapbox-gl": "^3.30.0",
+   "pg": "^8.23.0",
+   "react": "^18.3.1",
+   "react-day-picker": "^10.0.1",
+   "react-dom": "^18.3.1",
+   "react-hook-form": "^7.79.0",
+   "react-i18next": "^16.5.2",
+   "react-is": "^19.3.0",
+   "react-markdown": "^10.1.0",
+   "react-resizable-panels": "^2.1.9",
+   "react-router-dom": "^7.18.6",
+   "react-window": "^2.2.7",
+   "recharts": "^3.10.1",
+   "tailwindcss-animate": "^1.0.7",
+   "vitest": "^5.0.3",
+   "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+   "zod": "^4.4.3",
+   "zustand": "^5.0.13"
+  },
+  "engines": null,
+  "packageManager": null
+ },
+ "configs": [
+  ".github/PULL_REQUEST_TEMPLATE.md",
+  ".github/dependabot.yml",
+  ".graphifyignore",
+  ".lintstagedrc",
+  ".prettierrc",
+  "Makefile",
+  "components.json",
+  "eslint.config.js",
+  "package.json",
+  "playwright.config.ts",
+  "postcss.config.js",
+  "supabase/config.toml",
+  "tailwind.config.ts",
+  "tsconfig.app.json",
+  "tsconfig.json",
+  "tsconfig.node.json",
+  "vite.config.ts",
+  "vitest.config.ts"
+ ],
+ "workflows": [
+  {
+   "arquivo": ".github/workflows/apply-migrations.yml",
+   "nome": "Apply Migrations (manual)",
+   "gatilhos": [
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [],
+   "jobs": [
+    "apply"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/ci.yml",
+   "nome": "CI/CD",
+   "gatilhos": [
+    "pull_request",
+    "push"
+   ],
+   "crons": [],
+   "branches": [
+    "develop",
+    "main"
+   ],
+   "jobs": [
+    "lint-and-typecheck",
+    "test",
+    "e2e",
+    "build",
+    "guard-agents-md",
+    "security",
+    "contract-tests",
+    "edge-integration-tests",
+    "deploy"
+   ],
+   "permissoes": [],
+   "scripts_usados": [
+    "scripts/ci/check-agents-md-integrity.mjs"
+   ],
+   "npm_scripts": [
+    "build",
+    "lint"
+   ],
+   "secrets": [
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "denoland/setup-deno"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/contexto.yml",
+   "nome": "Contexto para agentes de IA (10 min)",
+   "gatilhos": [
+    "push",
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "3 * * * *"
+   ],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "gate",
+    "codigo",
+    "banco",
+    "regras",
+    "publicar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/ai-context/gerar.mjs",
+    "scripts/regras_negocio/generate.py",
+    "scripts/regras_negocio/indice.py",
+    "scripts/regras_negocio/test_generate.py",
+    "scripts/supabase_snapshot/snapshot.py",
+    "scripts/supabase_snapshot/test_snapshot.py"
+   ],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_DB_URL"
+   ],
+   "actions": [
+    "actions/cache",
+    "actions/checkout",
+    "actions/download-artifact",
+    "actions/setup-node",
+    "actions/upload-artifact"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/deploy-edges.yml",
+   "nome": "Deploy Edge Functions",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "deploy"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "supabase/setup-cli"
+   ]
+  },
+  {
+   "arquivo": ".github/workflows/inventario-estado-semanal.yml",
+   "nome": "Inventário do estado real (semanal)",
+   "gatilhos": [
+    "schedule",
+    "workflow_dispatch"
+   ],
+   "crons": [
+    "37 9 * * 1"
+   ],
+   "branches": [],
+   "jobs": [
+    "gerar"
+   ],
+   "permissoes": [
+    "contents: read"
+   ],
+   "scripts_usados": [
+    "scripts/inventario/gerar-banco.mjs",
+    "scripts/inventario/gerar-repo.mjs",
+    "scripts/inventario/gerar-rotas.mjs",
+    "scripts/inventario/mudou-conteudo.mjs"
+   ],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "actions/setup-node",
+    "actions/upload-artifact",
+    "peter-evans/create-pull-request"
+   ]
+  }
+ ],
+ "docs_raiz": [
+  {
+   "arquivo": ".github/PULL_REQUEST_TEMPLATE.md",
+   "titulo": null,
+   "linhas": 20
+  },
+  {
+   "arquivo": "AGENTS.md",
+   "titulo": "AGENTS.md — Lalamove V2",
+   "linhas": 139
+  },
+  {
+   "arquivo": "CHANGELOG.md",
+   "titulo": "Changelog",
+   "linhas": 448
+  },
+  {
+   "arquivo": "CLAUDE.md",
+   "titulo": null,
+   "linhas": 2
+  },
+  {
+   "arquivo": "README.md",
+   "titulo": "🚀 Lalamove Intelligence",
+   "linhas": 1462
+  },
+  {
+   "arquivo": "SECURITY_CHECKLIST.md",
+   "titulo": "Security Checklist - Lalamove Guardian",
+   "linhas": 77
+  },
+  {
+   "arquivo": "docs/ACHADO_GATEWAY_PROXY_2026-11.md",
+   "titulo": "Achado: o `lalamove-gateway` aponta para um proxy que não existe",
+   "linhas": 48
+  },
+  {
+   "arquivo": "docs/API_CONTRACTS.md",
+   "titulo": "📑 Contratos de API — Webhooks & Edge Functions",
+   "linhas": 162
+  },
+  {
+   "arquivo": "docs/API_REFERENCE.md",
+   "titulo": "📘 API Reference - Lalamove Guardian",
+   "linhas": 948
+  },
+  {
+   "arquivo": "docs/ARCHITECTURE.md",
+   "titulo": "🏗️ Arquitetura - Lalamove Guardian",
+   "linhas": 968
+  },
+  {
+   "arquivo": "docs/AUDITORIA_PRS_FECHADAS_2026-11.md",
+   "titulo": "Auditoria das PRs fechadas sem merge — 2026-11-21 (byte a byte)",
+   "linhas": 67
+  },
+  {
+   "arquivo": "docs/AUDITORIA_TECNICA_2026-09.md",
+   "titulo": "🔬 Auditoria Técnica — Lalamove V2",
+   "linhas": 223
+  },
+  {
+   "arquivo": "docs/CACHE_SYSTEM.md",
+   "titulo": "📊 Sistema de Cache - Materialized Views",
+   "linhas": 47
+  },
+  {
+   "arquivo": "docs/CONTRIBUTING.md",
+   "titulo": "🤝 Contributing - Lalamove Guardian",
+   "linhas": 110
+  },
+  {
+   "arquivo": "docs/CRON_JOBS.md",
+   "titulo": "⏱️ Cron Jobs & Rotinas de Manutenção",
+   "linhas": 73
+  },
+  {
+   "arquivo": "docs/DATA_DICTIONARY.md",
+   "titulo": "📖 Dicionário de Dados — Lalamove Intelligence",
+   "linhas": 33
+  },
+  {
+   "arquivo": "docs/DEPLOYMENT.md",
+   "titulo": "🚀 Deployment - Lalamove Guardian",
+   "linhas": 89
+  },
+  {
+   "arquivo": "docs/EDGE_DEPLOY_PIPELINE.md",
+   "titulo": "Pipeline de deploy das edge functions — 2026-11",
+   "linhas": 49
+  },
+  {
+   "arquivo": "docs/FUNCIONALIDADES_E_FERRAMENTAS.md",
+   "titulo": "📋 Levantamento Completo de Funcionalidades e Ferramentas",
+   "linhas": 725
+  },
+  {
+   "arquivo": "docs/JOB_QUEUE_SYSTEM.md",
+   "titulo": "📦 Sistema de Filas Assíncronas - Job Queue",
+   "linhas": 578
+  },
+  {
+   "arquivo": "docs/LALAMOVE_API_V3.md",
+   "titulo": "Lalamove API v3 — Documentação Técnica Completa (Brasil)",
+   "linhas": 635
+  },
+  {
+   "arquivo": "docs/LALAMOVE_FAILURE_SIMULATION.md",
+   "titulo": "Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI)",
+   "linhas": 70
+  },
+  {
+   "arquivo": "docs/LALAMOVE_MASTER_ANALYSIS.md",
+   "titulo": "🔬 Lalamove — Análise Mestra e Roteiro de Evolução",
+   "linhas": 477
+  },
+  {
+   "arquivo": "docs/LALAMOVE_SCORECARD.md",
+   "titulo": "Scorecard de Conformidade Lalamove — 22 dimensões",
+   "linhas": 39
+  },
+  {
+   "arquivo": "docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md",
+   "titulo": "📋 Levantamento Completo e Exaustivo de Funcionalidades",
+   "linhas": 928
+  },
+  {
+   "arquivo": "docs/LOGGING_AND_HEALTH.md",
+   "titulo": "📊 Logging & Health Checks",
+   "linhas": 529
+  },
+  {
+   "arquivo": "docs/MAPBOX.md",
+   "titulo": "MAPBOX — Inventário e Referência (21/11/2026)",
+   "linhas": 91
+  },
+  {
+   "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
+   "titulo": "Reconciliação ledger × schema × repo — 2026-11-21",
+   "linhas": 70
+  },
+  {
+   "arquivo": "docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md",
+   "titulo": "Lalamove V2 — estado da sessão de 21/11/2026 (continuidade)",
+   "linhas": 197
+  },
+  {
+   "arquivo": "docs/QUEUE_SYSTEM.md",
+   "titulo": "🔄 Sistema de Filas Assíncronas",
+   "linhas": 612
+  },
+  {
+   "arquivo": "docs/RUNBOOK_LALAMOVE.md",
+   "titulo": "Runbook — Integração Lalamove (v3 REST + UAPI)",
+   "linhas": 126
+  },
+  {
+   "arquivo": "docs/SCREENING_SYSTEM.md",
+   "titulo": "🔍 Sistema de Screening - Lalamove Guardian",
+   "linhas": 717
+  },
+  {
+   "arquivo": "docs/SECURITY.md",
+   "titulo": "🔒 Security - Lalamove Guardian",
+   "linhas": 87
+  },
+  {
+   "arquivo": "docs/TROUBLESHOOTING.md",
+   "titulo": "🔧 Troubleshooting - Lalamove Guardian",
+   "linhas": 178
+  },
+  {
+   "arquivo": "docs/WEBHOOK_HANDLER.md",
+   "titulo": "📡 Webhook Handler - Lalamove Guardian",
+   "linhas": 142
+  },
+  {
+   "arquivo": "docs/audit_report.md",
+   "titulo": "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian",
+   "linhas": 124
+  },
+  {
+   "arquivo": "lalamove_documentacao_completa.md",
+   "titulo": "Lalamove Brasil — Documentação Mestra Exaustiva",
+   "linhas": 1738
+  },
+  {
+   "arquivo": "lalamove_n8n_integration.md",
+   "titulo": "Integração n8n ↔ Lalamove Token Manager",
+   "linhas": 141
+  },
+  {
+   "arquivo": "lalamove_order_history_full.md",
+   "titulo": "Lalamove Brasil — Histórico Completo de Pedidos",
+   "linhas": 116
+  },
+  {
+   "arquivo": "lalamove_suplemento_v2.md",
+   "titulo": "Lalamove Brasil — Suplemento Técnico v2",
+   "linhas": 772
+  }
+ ],
+ "docs_em_subpastas": [
+  {
+   "pasta": "docs/pendencias",
+   "arquivos_md": 20
+  },
+  {
+   "pasta": "docs/agentes",
+   "arquivos_md": 6
+  },
+  {
+   "pasta": "docs/planos",
+   "arquivos_md": 4
+  },
+  {
+   "pasta": "docs/adr",
+   "arquivos_md": 2
+  },
+  {
+   "pasta": "docs/backups",
+   "arquivos_md": 2
+  },
+  {
+   "pasta": "docs/contexto",
+   "arquivos_md": 2
+  },
+  {
+   "pasta": "docs/ci",
+   "arquivos_md": 1
+  }
+ ],
+ "changelog_topo": "[1.5.0] - 2025-06-25",
+ "env": {
+  "declaradas_no_env_example": [
+   "SUPABASE_SERVICE_ROLE_KEY",
+   "SUPABASE_URL",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "comentadas_no_env_example": [
+   "BITRIX24_CLIENT_ID",
+   "BITRIX24_CLIENT_SECRET",
+   "GOOGLE_MAPS_API_KEY",
+   "LALAMOVE_API_KEY",
+   "LALAMOVE_API_SECRET",
+   "LOVABLE_API_KEY",
+   "MAPBOX_ACCESS_TOKEN",
+   "MAPBOX_SERVER_TOKEN",
+   "MAPBOX_TOKENS_API_TOKEN",
+   "MAPBOX_USERNAME"
+  ],
+  "usadas_no_front": [
+   "DEV",
+   "PROD",
+   "VITE_APP_VERSION",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "usadas_nas_edges": [
+   "ALLOWED_ORIGINS",
+   "BITRIX24_CLIENT_ID",
+   "BITRIX24_CLIENT_SECRET",
+   "BITRIX24_WEBHOOK_URL",
+   "EMAIL_FROM",
+   "ENVIRONMENT",
+   "EVOLUTION_API_KEY",
+   "EVOLUTION_API_URL",
+   "EVOLUTION_INSTANCE_NAME",
+   "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
+   "EXTERNAL_SUPABASE_URL",
+   "GOOGLE_MAPS_SERVER_KEY",
+   "LALAMOVE_API_KEY",
+   "LALAMOVE_API_SECRET",
+   "LALAMOVE_API_URL",
+   "LALAMOVE_BASE_URL",
+   "LALAMOVE_TRUSTED_IPS",
+   "LALAMOVE_UNIFIED_PROXY_KEY",
+   "LALAMOVE_UNIFIED_PROXY_URL",
+   "LOVABLE_API_KEY",
+   "MAPBOX_ACCESS_TOKEN",
+   "MAPBOX_SERVER_TOKEN",
+   "RESEND_API_KEY",
+   "SLACK_WEBHOOK_URL",
+   "SUPABASE_ANON_KEY",
+   "SUPABASE_SERVICE_ROLE_KEY",
+   "SUPABASE_URL",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "usadas_mas_nao_declaradas": [
+   "DEV",
+   "PROD",
+   "VITE_APP_VERSION",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+  ],
+  "secrets_em_workflows": [
+   "SUPABASE_ACCESS_TOKEN",
+   "SUPABASE_DB_URL",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL"
+  ]
+ },
+ "deploy": {
+  "alvos": [
+   "github actions"
+  ],
+  "vercel": null,
+  "nota": "Deploy real: Vercel (projeto lalamove-v2, team juca1) + Lovable — ver docs/agentes/deploy.md."
+ },
+ "integracoes": {
+  "sdks": [
+   {
+    "pacote": "papaparse",
+    "servico": "CSV (papaparse)",
+    "versao": "^5.7.1"
+   },
+   {
+    "pacote": "i18next",
+    "servico": "i18next",
+    "versao": "^25.7.4"
+   },
+   {
+    "pacote": "react-i18next",
+    "servico": "i18next",
+    "versao": "^16.5.2"
+   },
+   {
+    "pacote": "idb",
+    "servico": "IndexedDB (idb)",
+    "versao": "^8.0.3"
+   },
+   {
+    "pacote": "jspdf",
+    "servico": "jsPDF (export)",
+    "versao": "^4.2.1"
+   },
+   {
+    "pacote": "@lovable.dev/cloud-auth-js",
+    "servico": "Lovable Cloud",
+    "versao": "^1.0.0"
+   },
+   {
+    "pacote": "@types/mapbox-gl",
+    "servico": "Mapbox GL",
+    "versao": "^3.5.0"
+   },
+   {
+    "pacote": "mapbox-gl",
+    "servico": "Mapbox GL",
+    "versao": "^3.30.0"
+   },
+   {
+    "pacote": "pg",
+    "servico": "Postgres (pg, scripts)",
+    "versao": "^8.23.0"
+   },
+   {
+    "pacote": "@tanstack/react-query",
+    "servico": "react-query",
+    "versao": "^5.83.0"
+   },
+   {
+    "pacote": "recharts",
+    "servico": "Recharts",
+    "versao": "^3.10.1"
+   },
+   {
+    "pacote": "@supabase/supabase-js",
+    "servico": "Supabase",
+    "versao": "^2.116.0"
+   },
+   {
+    "pacote": "web-vitals",
+    "servico": "Web Vitals",
+    "versao": "^6.2.3"
+   },
+   {
+    "pacote": "xlsx",
+    "servico": "XLSX (export)",
+    "versao": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+   },
+   {
+    "pacote": "zod",
+    "servico": "zod",
+    "versao": "^4.4.3"
+   },
+   {
+    "pacote": "zustand",
+    "servico": "zustand",
+    "versao": "^5.0.13"
+   }
+  ],
+  "servicos_por_edge": [
+   {
+    "servico": "Lalamove API v3",
+    "edges": [
+     "lalamove-api",
+     "lalamove-gateway",
+     "lalamove-token-refresh",
+     "lalamove-uapi",
+     "lalamove-webhook"
+    ],
+    "total": 5
+   },
+   {
+    "servico": "Notificações/Alertas",
+    "edges": [
+     "check-driver-alerts",
+     "escalate-alerts",
+     "new-device-alert",
+     "send-notification",
+     "test-notification"
+    ],
+    "total": 5
+   },
+   {
+    "servico": "Dados externos",
+    "edges": [
+     "external-companies",
+     "external-db-bridge",
+     "llm-wh"
+    ],
+    "total": 3
+   },
+   {
+    "servico": "Bitrix24",
+    "edges": [
+     "bitrix24-process-queue",
+     "bitrix24-sync"
+    ],
+    "total": 2
+   },
+   {
+    "servico": "Manutenção/DDL",
+    "edges": [
+     "apply-fixes",
+     "seed-fix-rls"
+    ],
+    "total": 2
+   },
+   {
+    "servico": "Mapbox",
+    "edges": [
+     "get-mapbox-token",
+     "mapbox-proxy"
+    ],
+    "total": 2
+   },
+   {
+    "servico": "Motoristas",
+    "edges": [
+     "evaluate-driver",
+     "simulate-driver-movement"
+    ],
+    "total": 2
+   },
+   {
+    "servico": "Fila de jobs",
+    "edges": [
+     "job-worker"
+    ],
+    "total": 1
+   },
+   {
+    "servico": "Lovable AI (custo por token)",
+    "edges": [
+     "route-analyzer"
+    ],
+    "total": 1
+   },
+   {
+    "servico": "Segredos/token",
+    "edges": [
+     "rotate-tokens"
+    ],
+    "total": 1
+   }
+  ],
+  "hosts_externos": [
+   {
+    "host": "iecgydonctmabiijadsf.supabase.co",
+    "arquivos": 10
+   },
+   {
+    "host": "api.supabase.com",
+    "arquivos": 8
+   },
+   {
+    "host": "api.mapbox.com",
+    "arquivos": 4
+   },
+   {
+    "host": "supabase.com",
+    "arquivos": 3
+   },
+   {
+    "host": "www.google.com",
+    "arquivos": 3
+   },
+   {
+    "host": "api.resend.com",
+    "arquivos": 2
+   },
+   {
+    "host": "lalamove-v2.vercel.app",
+    "arquivos": 2
+   },
+   {
+    "host": "rest.lalamove.com",
+    "arquivos": 2
+   },
+   {
+    "host": "wa.me",
+    "arquivos": 2
+   },
+   {
+    "host": "a.tile.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "ai.gateway.lovable.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "api.pwnedpasswords.com",
+    "arquivos": 1
+   },
+   {
+    "host": "b.tile.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "br-uapi.lalamove.com",
+    "arquivos": 1
+   },
+   {
+    "host": "c.tile.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "docs.mapbox.com",
+    "arquivos": 1
+   },
+   {
+    "host": "earth.google.com",
+    "arquivos": 1
+   },
+   {
+    "host": "exemplo.test",
+    "arquivos": 1
+   },
+   {
+    "host": "fixture.supabase.co",
+    "arquivos": 1
+   },
+   {
+    "host": "fonts.googleapis.com",
+    "arquivos": 1
+   },
+   {
+    "host": "geocode.googleapis.com",
+    "arquivos": 1
+   },
+   {
+    "host": "i.pravatar.cc",
+    "arquivos": 1
+   },
+   {
+    "host": "lovable.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "maps.googleapis.com",
+    "arquivos": 1
+   },
+   {
+    "host": "server.arcgisonline.com",
+    "arquivos": 1
+   },
+   {
+    "host": "share.lalamove.com",
+    "arquivos": 1
+   },
+   {
+    "host": "test.supabase.co",
+    "arquivos": 1
+   },
+   {
+    "host": "track.lalamove.com",
+    "arquivos": 1
+   },
+   {
+    "host": "viacep.com.br",
+    "arquivos": 1
+   },
+   {
+    "host": "web.lalamove.com",
+    "arquivos": 1
+   },
+   {
+    "host": "www.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "x.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "x.supabase.co",
+    "arquivos": 1
+   }
+  ],
+  "env_de_integracao": [
+   "BITRIX24_CLIENT_ID",
+   "BITRIX24_CLIENT_SECRET",
+   "BITRIX24_WEBHOOK_URL",
+   "EVOLUTION_API_KEY",
+   "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
+   "EXTERNAL_SUPABASE_URL",
+   "GOOGLE_MAPS_API_KEY",
+   "LALAMOVE_API_KEY",
+   "LALAMOVE_API_SECRET",
+   "LALAMOVE_API_URL",
+   "LALAMOVE_BASE_URL",
+   "LALAMOVE_TRUSTED_IPS",
+   "LALAMOVE_UNIFIED_PROXY_KEY",
+   "LALAMOVE_UNIFIED_PROXY_URL",
+   "LOVABLE_API_KEY",
+   "MAPBOX_ACCESS_TOKEN",
+   "MAPBOX_SERVER_TOKEN",
+   "MAPBOX_TOKENS_API_TOKEN",
+   "MAPBOX_USERNAME",
+   "RESEND_API_KEY",
+   "SLACK_WEBHOOK_URL",
+   "SUPABASE_ANON_KEY",
+   "SUPABASE_SERVICE_ROLE_KEY",
+   "SUPABASE_URL",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID",
+   "VITE_SUPABASE_PUBLISHABLE_KEY",
+   "VITE_SUPABASE_URL"
+  ],
+  "webhooks_recebidos": [
+   "lalamove-webhook",
+   "llm-wh",
+   "mcp-query"
+  ],
+  "realtime": [
+   "active-tracking-changes",
+   "alerts-consolidated",
+   "approvals-consolidated",
+   "consolidated-realtime",
+   "live-map-consolidated",
+   "live-map-tracking",
+   "password-reset-changes",
+   "report_presets:${auth.user.id}",
+   "runtime-error-logs-realtime",
+   "security-auth-logs",
+   "security-blocked-ips",
+   "security-device-alerts",
+   "security-mfa-sessions",
+   "sidebar-counts-consolidated",
+   "sla-metrics-consolidated"
+  ]
+ },
+ "feature_flags": {
+  "total": 4,
+  "flags": [
+   {
+    "flag": "realtime_map_updates",
+    "arquivos": 2
+   },
+   {
+    "flag": "ai_route_optimization",
+    "arquivos": 1
+   },
+   {
+    "flag": "driver_auto_evaluation",
+    "arquivos": 1
+   },
+   {
+    "flag": "flag_inexistente",
+    "arquivos": 1
+   }
+  ],
+  "tabelas_de_flag": [
+   "feature_flags",
+   "geo_settings",
+   "map_settings_overrides"
+  ]
+ },
+ "providers": {
+  "entrada": "src/main.tsx",
+  "providers": [
+   "AchievementsProvider",
+   "AuthProvider",
+   "BrowserRouter",
+   "ErrorBoundary",
+   "HintProvider",
+   "QueryClientProvider",
+   "TooltipProvider"
+  ]
+ },
+ "i18n": {
+  "arquivos": 4,
+  "idiomas": [
+   "en",
+   "es",
+   "pt-BR"
+  ],
+  "lib": [
+   "i18next",
+   "react-i18next"
+  ]
+ }
+}

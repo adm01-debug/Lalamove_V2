@@ -1,0 +1,817 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "git": {
+  "commit": "808653cc873944ae37e09d691e5c0ff0b97518b1",
+  "branch": "main",
+  "data_commit": "2026-11-21T17:40:12-03:00",
+  "remote": "https://github.com/adm01-debug/Lalamove_V2",
+  "ultimos_commits": [
+   {
+    "sha": "808653c",
+    "data": "2026-11-21",
+    "assunto": "fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)"
+   },
+   {
+    "sha": "7fa1073",
+    "data": "2026-11-21",
+    "assunto": "feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)"
+   },
+   {
+    "sha": "6407f62",
+    "data": "2026-11-21",
+    "assunto": "chore(config): declara verify_jwt explicito para mapbox-proxy (#142)"
+   },
+   {
+    "sha": "7c69b82",
+    "data": "2026-11-21",
+    "assunto": "fix(geo): region_cache passa a usar reverse geocode permanente (#139)"
+   },
+   {
+    "sha": "125ec8c",
+    "data": "2026-11-21",
+    "assunto": "fix(check-external-api): corrige nome do secret do health check Mapbox (#140)"
+   },
+   {
+    "sha": "896743f",
+    "data": "2026-11-21",
+    "assunto": "fix(simulacao): corrige regressão que bloqueava admin/manager também (#164)"
+   },
+   {
+    "sha": "1363db8",
+    "data": "2026-11-21",
+    "assunto": "docs(banco): atualiza status de rotação de segredos (service_role já rotacionada) (#147)"
+   },
+   {
+    "sha": "bc48a46",
+    "data": "2026-11-21",
+    "assunto": "feat(orders): migra autocomplete de endereço para Mapbox Search Box (#150)"
+   },
+   {
+    "sha": "49fc8f0",
+    "data": "2026-11-21",
+    "assunto": "docs: registra estado, recuperação de branches e bloqueios de 21/11 (#145)"
+   },
+   {
+    "sha": "d2c18d1",
+    "data": "2026-11-21",
+    "assunto": "fix(pedidos): aplica restrição de cidade a special request ao trocar praça (#162)"
+   },
+   {
+    "sha": "8b0f762",
+    "data": "2026-11-21",
+    "assunto": "fix(gateway): mapeia orders/call/update_token do uapi-proxy no roteador (#161)"
+   },
+   {
+    "sha": "5809039",
+    "data": "2026-11-21",
+    "assunto": "fix(webhook): payload v1 no send-notification e aviso ao responsável pela coleta no DRIVER_ASSIGNED (#157)"
+   },
+   {
+    "sha": "73f0813",
+    "data": "2026-11-21",
+    "assunto": "ci(migrations): workflow manual para aplicar migrations na produção pela Management API (#156)"
+   },
+   {
+    "sha": "6e76232",
+    "data": "2026-11-21",
+    "assunto": "fix(simulacao): restringe simulate-driver-movement a admin/manager (#159)"
+   },
+   {
+    "sha": "2a2a3d1",
+    "data": "2026-11-21",
+    "assunto": "fix(alertas/pedidos): aviso ao fornecedor funciona ponta a ponta (#149)"
+   },
+   {
+    "sha": "82843c8",
+    "data": "2026-11-21",
+    "assunto": "chore(docs): backup do plano PIM/Promo Supply V2 contra perda de tokens (#151)"
+   },
+   {
+    "sha": "7d675c1",
+    "data": "2026-11-21",
+    "assunto": "docs(planos): análise e planos de 100 etapas Google Maps e Mapbox com estado atual (#146)"
+   },
+   {
+    "sha": "54fd87b",
+    "data": "2026-11-21",
+    "assunto": "chore(docs): adiciona plano Mapbox × Lalamove V2 com 100 etapas (#127)"
+   },
+   {
+    "sha": "31067eb",
+    "data": "2026-11-21",
+    "assunto": "fix(ci): retry com force-with-lease restrito no push da branch contexto (#137)"
+   },
+   {
+    "sha": "e071c9e",
+    "data": "2026-11-21",
+    "assunto": "feat(mapas): mede carregamento de mapa e corrige atribuição Mapbox ausente (#138)"
+   },
+   {
+    "sha": "3dd51e4",
+    "data": "2026-11-21",
+    "assunto": "fix: send-notification despacha destinatários ad-hoc em metadata.recipients (#132)"
+   },
+   {
+    "sha": "4a4ebfc",
+    "data": "2026-11-21",
+    "assunto": "chore(docs): inventário Mapbox e secrets no .env.example (#135)"
+   },
+   {
+    "sha": "a081063",
+    "data": "2026-11-21",
+    "assunto": "feat(pedidos): filtra o veículo pela praça de coleta no novo pedido (#133)"
+   },
+   {
+    "sha": "04fe256",
+    "data": "2026-11-21",
+    "assunto": "chore(geo): script de cobertura BR do Search Box Mapbox com 50 endereços de amostra (#131)"
+   },
+   {
+    "sha": "2f7add2",
+    "data": "2026-11-21",
+    "assunto": "fix(gateway): religa as telas de Configurações atendendo as ações pelas edges locais (#130)"
+   }
+  ],
+  "arquivos_mudados_7d": 150,
+  "pastas_mais_mudadas_30d": [
+   {
+    "pasta": "package-lock.json",
+    "mudancas": 14
+   },
+   {
+    "pasta": "package.json",
+    "mudancas": 14
+   },
+   {
+    "pasta": "docs/pendencias/_ordem.md",
+    "mudancas": 10
+   },
+   {
+    "pasta": "supabase/functions/geo-gateway",
+    "mudancas": 9
+   },
+   {
+    "pasta": "supabase/functions/lalamove-webhook",
+    "mudancas": 6
+   },
+   {
+    "pasta": "docs/pendencias/README.md",
+    "mudancas": 5
+   },
+   {
+    "pasta": "supabase/config.toml",
+    "mudancas": 5
+   },
+   {
+    "pasta": "supabase/functions/lalamove-gateway",
+    "mudancas": 5
+   },
+   {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 4
+   },
+   {
+    "pasta": "docs/MAPBOX.md",
+    "mudancas": 4
+   },
+   {
+    "pasta": "src/components/map",
+    "mudancas": 4
+   },
+   {
+    "pasta": "src/components/orders",
+    "mudancas": 4
+   },
+   {
+    "pasta": ".env.example",
+    "mudancas": 3
+   },
+   {
+    "pasta": ".github/workflows/contexto.yml",
+    "mudancas": 3
+   },
+   {
+    "pasta": ".github/workflows/deploy-edges.yml",
+    "mudancas": 3
+   }
+  ],
+  "arquivos_mais_mudados_90d": [
+   {
+    "arquivo": "package-lock.json",
+    "mudancas": 31
+   },
+   {
+    "arquivo": "package.json",
+    "mudancas": 31
+   },
+   {
+    "arquivo": "supabase/config.toml",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 10
+   },
+   {
+    "arquivo": ".github/workflows/ci.yml",
+    "mudancas": 8
+   },
+   {
+    "arquivo": "src/hooks/useRegionResolver.ts",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "docs/pendencias/README.md",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 5
+   },
+   {
+    "arquivo": ".env.example",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "AGENTS.md",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "docs/MAPBOX.md",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "src/lib/lalamoveCatalog.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": ".github/workflows/contexto.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": ".github/workflows/deploy-edges.yml",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "docs/agentes/banco.md",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "eslint.config.js",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "scripts/seed-database.ts",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "src/components/map/LiveMap.tsx",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "src/hooks/useAlertSettings.ts",
+    "mudancas": 3
+   }
+  ],
+  "autores_30d": [
+   {
+    "autor": "adm01-debug",
+    "commits": 72
+   },
+   {
+    "autor": "dependabot[bot]",
+    "commits": 9
+   }
+  ]
+ },
+ "contagens": {
+  "arquivos_total": 942,
+  "arquivos_codigo": 587,
+  "linhas_codigo": 113363,
+  "rotas": 54,
+  "rotas_protegidas": 46,
+  "rotas_com_mfa": 6,
+  "itens_menu": 37,
+  "modulos": 43,
+  "componentes": 214,
+  "hooks": 97,
+  "edge_functions": 27,
+  "tabelas": 85,
+  "migrations": 168,
+  "cron_jobs": 17,
+  "testes": 107,
+  "workflows": 5,
+  "scripts": 105,
+  "docs_md": 96
+ },
+ "por_pasta": {
+  "e2e/helpers": {
+   "arquivos": 1,
+   "linhas": 55
+  },
+  "e2e/login-lockout.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 177
+  },
+  "e2e/mfa.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 51
+  },
+  "e2e/password-reset.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 67
+  },
+  "e2e/rbac.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 84
+  },
+  "eslint.config.js": {
+   "arquivos": 1,
+   "linhas": 34
+  },
+  "playwright.config.ts": {
+   "arquivos": 1,
+   "linhas": 41
+  },
+  "postcss.config.js": {
+   "arquivos": 1,
+   "linhas": 7
+  },
+  "public/sw.js": {
+   "arquivos": 1,
+   "linhas": 357
+  },
+  "scripts/add-security-manage.ts": {
+   "arquivos": 1,
+   "linhas": 55
+  },
+  "scripts/ai-context": {
+   "arquivos": 3,
+   "linhas": 1543
+  },
+  "scripts/apply-dashboard-fixes.ts": {
+   "arquivos": 1,
+   "linhas": 101
+  },
+  "scripts/apply-final-sql.ts": {
+   "arquivos": 1,
+   "linhas": 61
+  },
+  "scripts/apply-permissions-via-api.ts": {
+   "arquivos": 1,
+   "linhas": 46
+  },
+  "scripts/apply-rls-fix.ts": {
+   "arquivos": 1,
+   "linhas": 111
+  },
+  "scripts/apply-rls-via-pg.ts": {
+   "arquivos": 1,
+   "linhas": 163
+  },
+  "scripts/apply-sql-via-management-api.ts": {
+   "arquivos": 1,
+   "linhas": 63
+  },
+  "scripts/apply-via-management-api.ts": {
+   "arquivos": 1,
+   "linhas": 84
+  },
+  "scripts/check-permissions.ts": {
+   "arquivos": 1,
+   "linhas": 72
+  },
+  "scripts/ci": {
+   "arquivos": 54,
+   "linhas": 11181
+  },
+  "scripts/db-audit": {
+   "arquivos": 29,
+   "linhas": 7019
+  },
+  "scripts/diagnose-rpc.ts": {
+   "arquivos": 1,
+   "linhas": 79
+  },
+  "scripts/docs": {
+   "arquivos": 1,
+   "linhas": 198
+  },
+  "scripts/ensure-admin-active.ts": {
+   "arquivos": 1,
+   "linhas": 51
+  },
+  "scripts/eslint": {
+   "arquivos": 1,
+   "linhas": 61
+  },
+  "scripts/fix-admin-role-active.ts": {
+   "arquivos": 1,
+   "linhas": 66
+  },
+  "scripts/fix-dashboard-via-api.ts": {
+   "arquivos": 1,
+   "linhas": 71
+  },
+  "scripts/fix-rpc-functions.ts": {
+   "arquivos": 1,
+   "linhas": 71
+  },
+  "scripts/generate-dashboard-sql.ts": {
+   "arquivos": 1,
+   "linhas": 22
+  },
+  "scripts/geo": {
+   "arquivos": 1,
+   "linhas": 71
+  },
+  "scripts/inventario": {
+   "arquivos": 4,
+   "linhas": 839
+  },
+  "scripts/lib": {
+   "arquivos": 2,
+   "linhas": 240
+  },
+  "scripts/list-tables-v2.ts": {
+   "arquivos": 1,
+   "linhas": 54
+  },
+  "scripts/list-tables.ts": {
+   "arquivos": 1,
+   "linhas": 56
+  },
+  "scripts/qa": {
+   "arquivos": 4,
+   "linhas": 992
+  },
+  "scripts/seed-contacts.ts": {
+   "arquivos": 1,
+   "linhas": 138
+  },
+  "scripts/seed-database.ts": {
+   "arquivos": 1,
+   "linhas": 535
+  },
+  "scripts/set-user-admin.ts": {
+   "arquivos": 1,
+   "linhas": 74
+  },
+  "scripts/test-after-fix.ts": {
+   "arquivos": 1,
+   "linhas": 40
+  },
+  "scripts/test-user-permissions.ts": {
+   "arquivos": 1,
+   "linhas": 73
+  },
+  "scripts/ui-audit": {
+   "arquivos": 6,
+   "linhas": 992
+  },
+  "scripts/vercel": {
+   "arquivos": 5,
+   "linhas": 1037
+  },
+  "src/App.tsx": {
+   "arquivos": 1,
+   "linhas": 226
+  },
+  "src/__tests__": {
+   "arquivos": 1,
+   "linhas": 520
+  },
+  "src/components": {
+   "arquivos": 148,
+   "linhas": 26972
+  },
+  "src/hooks": {
+   "arquivos": 104,
+   "linhas": 17383
+  },
+  "src/i18n": {
+   "arquivos": 1,
+   "linhas": 37
+  },
+  "src/integrations": {
+   "arquivos": 4,
+   "linhas": 4044
+  },
+  "src/lib": {
+   "arquivos": 35,
+   "linhas": 3374
+  },
+  "src/main.tsx": {
+   "arquivos": 1,
+   "linhas": 28
+  },
+  "src/pages": {
+   "arquivos": 86,
+   "linhas": 18438
+  },
+  "src/services": {
+   "arquivos": 1,
+   "linhas": 206
+  },
+  "src/test": {
+   "arquivos": 1,
+   "linhas": 16
+  },
+  "src/types": {
+   "arquivos": 4,
+   "linhas": 892
+  },
+  "src/utils": {
+   "arquivos": 8,
+   "linhas": 1080
+  },
+  "supabase/functions": {
+   "arquivos": 48,
+   "linhas": 12722
+  },
+  "tailwind.config.ts": {
+   "arquivos": 1,
+   "linhas": 230
+  },
+  "vite.config.ts": {
+   "arquivos": 1,
+   "linhas": 30
+  },
+  "vitest.config.ts": {
+   "arquivos": 1,
+   "linhas": 33
+  }
+ },
+ "maiores_arquivos": [
+  {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "linhas": 3899
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-api/index.ts",
+   "linhas": 1118
+  },
+  {
+   "arquivo": "src/components/orders/NewOrderDialog.tsx",
+   "linhas": 1060
+  },
+  {
+   "arquivo": "scripts/db-audit/check-migration-drift.mjs",
+   "linhas": 1007
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 938
+  },
+  {
+   "arquivo": "src/components/orders/OrderDetailModal.tsx",
+   "linhas": 917
+  },
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linhas": 901
+  },
+  {
+   "arquivo": "supabase/functions/evaluate-driver/index.ts",
+   "linhas": 844
+  },
+  {
+   "arquivo": "supabase/functions/lalamove-uapi/index.ts",
+   "linhas": 793
+  },
+  {
+   "arquivo": "src/pages/AdvancedReportsPage.tsx",
+   "linhas": 750
+  },
+  {
+   "arquivo": "scripts/ci/lint-ratchet.mjs",
+   "linhas": 668
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 625
+  },
+  {
+   "arquivo": "src/components/map/LiveMap.tsx",
+   "linhas": 608
+  },
+  {
+   "arquivo": "src/pages/AlertsPage.tsx",
+   "linhas": 602
+  },
+  {
+   "arquivo": "src/hooks/useAdvancedReports.ts",
+   "linhas": 539
+  },
+  {
+   "arquivo": "scripts/seed-database.ts",
+   "linhas": 535
+  },
+  {
+   "arquivo": "src/components/dashboard/OrdersTable.tsx",
+   "linhas": 511
+  },
+  {
+   "arquivo": "src/components/approvals/SwipeableApprovalCard.tsx",
+   "linhas": 501
+  },
+  {
+   "arquivo": "src/pages/AdminTelemetriaPage.tsx",
+   "linhas": 499
+  },
+  {
+   "arquivo": "src/pages/RateLimitDashboardPage.tsx",
+   "linhas": 478
+  },
+  {
+   "arquivo": "src/components/ui/micro-interactions.tsx",
+   "linhas": 476
+  },
+  {
+   "arquivo": "src/components/ui/contextual-hints.tsx",
+   "linhas": 468
+  },
+  {
+   "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
+   "linhas": 465
+  },
+  {
+   "arquivo": "src/pages/WebhooksPage.tsx",
+   "linhas": 465
+  },
+  {
+   "arquivo": "scripts/qa/medir-tipografia.cjs",
+   "linhas": 457
+  }
+ ],
+ "qualidade": {
+  "any": 84,
+  "console_log": 399,
+  "ts_ignore": 0,
+  "eslint_disable": 1,
+  "todos": 3,
+  "arquivos_acima_500_linhas": 18
+ },
+ "todos": [
+  {
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linha": 176,
+   "tipo": "TODO",
+   "texto": "|FIXME|HACK|XXX)\\b[:\\s-]*([^\\n]{0,100})/.exec(line); if (m) todos.push({ linha: ln, tipo: m[1], text"
+  },
+  {
+   "arquivo": "scripts/docs/verificar-docs-realtime.mjs",
+   "linha": 61,
+   "tipo": "XXX",
+   "texto": "|\\.\\.\\.|<[^>]+>)/;"
+  },
+  {
+   "arquivo": "src/lib/statusPalette.ts",
+   "linha": 4,
+   "tipo": "TODO",
+   "texto": "indicador de status use"
+  }
+ ],
+ "alertas": {
+  "rotas_sem_arquivo": [],
+  "rotas_sem_protecao": [
+   "/",
+   "/dashboard"
+  ],
+  "menu_visivel_sem_acesso": [
+   "Ferramentas Mapa -> /map-tools (menu: todos; rota: manager)",
+   "Base CRM -> /external-data (menu: todos; rota: manager)",
+   "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
+   "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
+   "Webhooks -> /webhooks (menu: todos; rota: manager)",
+   "Alertas -> /alerts (menu: todos; rota: operator)",
+   "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",
+   "Aprovações -> /approvals (menu: todos; rota: manager)",
+   "Avaliações -> /evaluations (menu: todos; rota: operator)",
+   "Incidentes -> /incidents (menu: todos; rota: operator)",
+   "Contatos -> /contacts (menu: todos; rota: operator)",
+   "Motoristas -> /drivers (menu: todos; rota: operator)",
+   "Operações Lalamove -> /lalamove-operacoes (menu: todos; rota: operator)",
+   "Pedidos -> /orders (menu: todos; rota: operator)"
+  ],
+  "componentes_ambiguos": [],
+  "menu_sem_destino": [],
+  "edges_orfas": [
+   "apply-fixes",
+   "escalate-alerts",
+   "external-db-bridge",
+   "lalamove-token-refresh",
+   "rotate-tokens",
+   "seed-fix-rls"
+  ],
+  "edges_chamadas_sem_pasta": [],
+  "edges_sem_verify_jwt": [
+   "lalamove-webhook",
+   "llm-wh",
+   "mcp-query"
+  ],
+  "tabelas_sem_rls": [
+   "cache_refresh_log",
+   "job_queue_processing_log"
+  ],
+  "tabelas_usadas_sem_definicao": [
+   "carriers",
+   "companies",
+   "customers",
+   "suppliers"
+  ],
+  "tabelas_com_drift_migration_vs_types": [
+   "active_tracking",
+   "lalamove_orders",
+   "lalamove_stops",
+   "mfa_sessions"
+  ],
+  "rpcs_sem_definicao": [
+   "exec"
+  ],
+  "componentes_orfaos": [
+   "src/components/approvals/SwipeableApprovalCard.tsx",
+   "src/components/debug/AuditReportGenerator.tsx",
+   "src/components/ui/chart.tsx",
+   "src/components/ui/hero-metric.tsx"
+  ],
+  "componentes_com_nome_duplicado": [
+   "ExtendedFAB",
+   "MiniFAB",
+   "QuickActionsPanel",
+   "SpeedDialFAB",
+   "WelcomeBanner"
+  ],
+  "scripts_orfaos": [
+   "scripts/deploy-gateway.ps1",
+   "scripts/fix_corrupted_imports.py",
+   "scripts/fix_logs.py"
+  ],
+  "scripts_soltos_na_raiz": [
+   "scripts/add-security-manage.ts",
+   "scripts/apply-dashboard-fixes.ts",
+   "scripts/apply-final-sql.ts",
+   "scripts/apply-permissions-via-api.ts",
+   "scripts/apply-rls-fix.ts",
+   "scripts/apply-rls-via-pg.ts",
+   "scripts/apply-sql-via-management-api.ts",
+   "scripts/apply-via-management-api.ts",
+   "scripts/backup.sh",
+   "scripts/check-permissions.ts",
+   "scripts/deploy-gateway.ps1",
+   "scripts/deploy.sh",
+   "scripts/diagnose-rpc.ts",
+   "scripts/ensure-admin-active.ts",
+   "scripts/fix-admin-role-active.ts",
+   "scripts/fix-dashboard-via-api.ts",
+   "scripts/fix-rpc-functions.ts",
+   "scripts/fix_corrupted_imports.py",
+   "scripts/fix_logs.py",
+   "scripts/generate-dashboard-sql.ts",
+   "scripts/health-check.sh",
+   "scripts/list-tables-v2.ts",
+   "scripts/list-tables.ts",
+   "scripts/pre-commit-secrets.sh",
+   "scripts/seed-contacts.ts",
+   "scripts/seed-database.ts",
+   "scripts/set-user-admin.ts",
+   "scripts/test-after-fix.ts",
+   "scripts/test-user-permissions.ts"
+  ],
+  "env_usadas_nao_declaradas": [
+   "DEV",
+   "PROD",
+   "VITE_APP_VERSION",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+  ],
+  "ciclos_de_import": 0,
+  "possiveis_segredos_no_codigo": []
+ },
+ "erros_do_gerador": []
+}

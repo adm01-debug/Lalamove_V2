@@ -1,0 +1,1087 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "pasta": "supabase/functions",
+ "total": 27,
+ "verify_jwt_false": [
+  "lalamove-webhook",
+  "llm-wh",
+  "mcp-query"
+ ],
+ "shared": [
+  "supabase/functions/_shared/contract.integration.test.ts",
+  "supabase/functions/_shared/contract.test.ts",
+  "supabase/functions/_shared/contract.ts",
+  "supabase/functions/_shared/cors.ts",
+  "supabase/functions/_shared/logger.ts",
+  "supabase/functions/_shared/schemas.ts",
+  "supabase/functions/_shared/telemetry.ts"
+ ],
+ "edges": [
+  {
+   "nome": "apply-fixes",
+   "servico": "Manutenção/DDL",
+   "entrada": "supabase/functions/apply-fixes/index.ts",
+   "arquivos": 1,
+   "linhas": 65,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [],
+   "rpcs": [
+    "exec"
+   ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "bitrix24-process-queue",
+   "servico": "Bitrix24",
+   "entrada": "supabase/functions/bitrix24-process-queue/index.ts",
+   "arquivos": 1,
+   "linhas": 261,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "bitrix24_activities",
+    "bitrix24_stage_mappings",
+    "bitrix24_sync",
+    "bitrix24_tokens"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "BITRIX24_CLIENT_ID",
+    "BITRIX24_CLIENT_SECRET",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/pages/Bitrix24Page.tsx"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "bitrix24-sync",
+   "servico": "Bitrix24",
+   "entrada": "supabase/functions/bitrix24-sync/index.ts",
+   "arquivos": 1,
+   "linhas": 354,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "bitrix24_activities",
+    "bitrix24_stage_mappings",
+    "bitrix24_sync",
+    "bitrix24_tokens",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "BITRIX24_CLIENT_ID",
+    "BITRIX24_CLIENT_SECRET",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useBitrix24.ts"
+   ],
+   "chamada_por_edges": [
+    "job-worker"
+   ],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "check-driver-alerts",
+   "servico": "Notificações/Alertas",
+   "entrada": "supabase/functions/check-driver-alerts/index.ts",
+   "arquivos": 1,
+   "linhas": 261,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "active_tracking",
+    "alert_configurations",
+    "alerts"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "send-notification"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [
+    "simulate-driver-movement"
+   ],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "check-external-api",
+   "servico": null,
+   "entrada": "supabase/functions/check-external-api/index.ts",
+   "arquivos": 1,
+   "linhas": 262,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": false,
+   "tabelas": [],
+   "rpcs": [],
+   "env": [
+    "BITRIX24_WEBHOOK_URL",
+    "EVOLUTION_API_KEY",
+    "EVOLUTION_API_URL",
+    "LALAMOVE_API_KEY",
+    "LALAMOVE_API_URL",
+    "MAPBOX_ACCESS_TOKEN",
+    "MAPBOX_SERVER_TOKEN"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.mapbox.com",
+    "rest.lalamove.com"
+   ],
+   "usa_shared": [
+    "contract.ts",
+    "cors.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/healthChecks.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "escalate-alerts",
+   "servico": "Notificações/Alertas",
+   "entrada": "supabase/functions/escalate-alerts/index.ts",
+   "arquivos": 1,
+   "linhas": 101,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [],
+   "rpcs": [
+    "get_pending_escalations"
+   ],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "send-notification"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "evaluate-driver",
+   "servico": "Motoristas",
+   "entrada": "supabase/functions/evaluate-driver/index.ts",
+   "arquivos": 1,
+   "linhas": 844,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "driver_evaluations",
+    "driver_incidents",
+    "drivers",
+    "lalamove_orders",
+    "risk_rules"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useEvaluateDriver.ts"
+   ],
+   "chamada_por_edges": [
+    "job-worker",
+    "lalamove-webhook"
+   ],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "external-companies",
+   "servico": "Dados externos",
+   "entrada": "supabase/functions/external-companies/index.ts",
+   "arquivos": 1,
+   "linhas": 261,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "carriers",
+    "companies",
+    "contacts",
+    "customers",
+    "suppliers"
+   ],
+   "rpcs": [],
+   "env": [
+    "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
+    "EXTERNAL_SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [
+    "src/hooks/useExternalData.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "external-db-bridge",
+   "servico": "Dados externos",
+   "entrada": "supabase/functions/external-db-bridge/index.ts",
+   "arquivos": 1,
+   "linhas": 307,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "query_telemetry"
+   ],
+   "rpcs": [],
+   "env": [
+    "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
+    "EXTERNAL_SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 1
+  },
+  {
+   "nome": "geo-gateway",
+   "servico": null,
+   "entrada": "supabase/functions/geo-gateway/index.ts",
+   "arquivos": 6,
+   "linhas": 1019,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "geo_cache",
+    "geo_price_list",
+    "geo_settings",
+    "geo_usage_month"
+   ],
+   "rpcs": [
+    "geo_budget_status",
+    "geo_usage_increment"
+   ],
+   "env": [
+    "GOOGLE_MAPS_SERVER_KEY",
+    "MAPBOX_ACCESS_TOKEN",
+    "MAPBOX_SERVER_TOKEN",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.mapbox.com"
+   ],
+   "usa_shared": [
+    "contract.ts",
+    "cors.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useGeoSearch.ts",
+    "src/hooks/useRegionResolver.ts",
+    "src/lib/geo-gateway.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 4
+  },
+  {
+   "nome": "get-mapbox-token",
+   "servico": "Mapbox",
+   "entrada": "supabase/functions/get-mapbox-token/index.ts",
+   "arquivos": 1,
+   "linhas": 47,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": false,
+   "tabelas": [],
+   "rpcs": [],
+   "env": [
+    "MAPBOX_ACCESS_TOKEN"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [
+    "src/components/map/hooks/useMapboxToken.ts",
+    "src/hooks/healthChecks.ts",
+    "src/hooks/useSystemHealth.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "job-worker",
+   "servico": "Fila de jobs",
+   "entrada": "supabase/functions/job-worker/index.ts",
+   "arquivos": 1,
+   "linhas": 331,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [],
+   "rpcs": [
+    "mark_job_completed",
+    "mark_job_failed"
+   ],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "bitrix24-sync",
+    "evaluate-driver",
+    "send-notification"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": true,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "lalamove-api",
+   "servico": "Lalamove API v3",
+   "entrada": "supabase/functions/lalamove-api/index.ts",
+   "arquivos": 1,
+   "linhas": 1118,
+   "verify_jwt": true,
+   "metodos": [
+    "GET",
+    "OPTIONS"
+   ],
+   "assina_hmac": true,
+   "usa_service_role": true,
+   "tabelas": [
+    "drivers",
+    "lalamove_orders",
+    "lalamove_priority_fee_history",
+    "lalamove_rate_limits",
+    "lalamove_status_history"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "LALAMOVE_API_KEY",
+    "LALAMOVE_API_SECRET",
+    "LALAMOVE_BASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "lalamove-webhook"
+   ],
+   "hosts_externos": [
+    "rest.lalamove.com"
+   ],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/components/orders/FetchOrderDialog.tsx",
+    "src/components/orders/ImportCSVDialog.tsx",
+    "src/components/orders/NewOrderDialog.tsx",
+    "src/components/orders/OrderDetailModal.tsx"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "lalamove-gateway",
+   "servico": "Lalamove API v3",
+   "entrada": "supabase/functions/lalamove-gateway/index.ts",
+   "arquivos": 2,
+   "linhas": 544,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alerts",
+    "lalamove_rate_limits",
+    "query_telemetry"
+   ],
+   "rpcs": [
+    "claim_alert_notification"
+   ],
+   "env": [
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [
+    "src/lib/lalamove-api.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 1
+  },
+  {
+   "nome": "lalamove-token-refresh",
+   "servico": "Lalamove API v3",
+   "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
+   "arquivos": 1,
+   "linhas": 193,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alerts",
+    "lalamove_uapi_sessions"
+   ],
+   "rpcs": [
+    "claim_alert_notification"
+   ],
+   "env": [
+    "LALAMOVE_UNIFIED_PROXY_KEY",
+    "LALAMOVE_UNIFIED_PROXY_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "lalamove-uapi",
+   "servico": "Lalamove API v3",
+   "entrada": "supabase/functions/lalamove-uapi/index.ts",
+   "arquivos": 1,
+   "linhas": 793,
+   "verify_jwt": true,
+   "metodos": [
+    "GET",
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "lalamove_orders",
+    "lalamove_uapi_sessions"
+   ],
+   "rpcs": [
+    "get_active_uapi_token"
+   ],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "br-uapi.lalamove.com",
+    "web.lalamove.com"
+   ],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useLalamoveUapi.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "lalamove-webhook",
+   "servico": "Lalamove API v3",
+   "entrada": "supabase/functions/lalamove-webhook/index.ts",
+   "arquivos": 3,
+   "linhas": 1107,
+   "verify_jwt": false,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": true,
+   "usa_service_role": true,
+   "tabelas": [
+    "active_tracking",
+    "alerts",
+    "driver_locations",
+    "drivers",
+    "lalamove_order_replacements",
+    "lalamove_orders",
+    "lalamove_status_history",
+    "lalamove_stop_proofs",
+    "lalamove_stops",
+    "tracking_events",
+    "webhook_events"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "LALAMOVE_API_SECRET",
+    "LALAMOVE_TRUSTED_IPS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "evaluate-driver",
+    "send-notification"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [
+    "lalamove-api",
+    "llm-wh"
+   ],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 1
+  },
+  {
+   "nome": "llm-wh",
+   "servico": "Dados externos",
+   "entrada": "supabase/functions/llm-wh/index.ts",
+   "arquivos": 1,
+   "linhas": 79,
+   "verify_jwt": false,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [],
+   "rpcs": [],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "lalamove-webhook"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "mapbox-proxy",
+   "servico": "Mapbox",
+   "entrada": "supabase/functions/mapbox-proxy/index.ts",
+   "arquivos": 1,
+   "linhas": 366,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": false,
+   "tabelas": [],
+   "rpcs": [],
+   "env": [
+    "MAPBOX_ACCESS_TOKEN"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.mapbox.com"
+   ],
+   "usa_shared": [],
+   "chamada_pelo_front": [
+    "src/hooks/useMapbox.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "mcp-query",
+   "servico": null,
+   "entrada": "supabase/functions/mcp-query/index.ts",
+   "arquivos": 1,
+   "linhas": 222,
+   "verify_jwt": false,
+   "metodos": [
+    "OPTIONS",
+    "POST"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": false,
+   "tabelas": [
+    "query_telemetry"
+   ],
+   "rpcs": [
+    "can_run_db_diagnostics",
+    "mcp_introspect"
+   ],
+   "env": [
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "cors.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "new-device-alert",
+   "servico": "Notificações/Alertas",
+   "entrada": "supabase/functions/new-device-alert/index.ts",
+   "arquivos": 1,
+   "linhas": 290,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "auth_logs",
+    "new_device_alerts",
+    "user_devices"
+   ],
+   "rpcs": [
+    "is_known_device"
+   ],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useDeviceDetection.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "rotate-tokens",
+   "servico": "Segredos/token",
+   "entrada": "supabase/functions/rotate-tokens/index.ts",
+   "arquivos": 1,
+   "linhas": 204,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alerts",
+    "bitrix24_tokens"
+   ],
+   "rpcs": [],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "BITRIX24_CLIENT_ID",
+    "BITRIX24_CLIENT_SECRET",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "route-analyzer",
+   "servico": "Lovable AI (custo por token)",
+   "entrada": "supabase/functions/route-analyzer/index.ts",
+   "arquivos": 1,
+   "linhas": 228,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alerts",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "env": [
+    "LOVABLE_API_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "ai.gateway.lovable.dev"
+   ],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/components/dashboard/AIRouteChatbot.tsx"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "seed-fix-rls",
+   "servico": "Manutenção/DDL",
+   "entrada": "supabase/functions/seed-fix-rls/index.ts",
+   "arquivos": 1,
+   "linhas": 133,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [],
+   "rpcs": [
+    "exec"
+   ],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 0
+  },
+  {
+   "nome": "send-notification",
+   "servico": "Notificações/Alertas",
+   "entrada": "supabase/functions/send-notification/index.ts",
+   "arquivos": 1,
+   "linhas": 625,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "alert_configurations",
+    "alerts",
+    "alerts_sent",
+    "bitrix24_tokens"
+   ],
+   "rpcs": [
+    "claim_alert_notification"
+   ],
+   "env": [
+    "ALLOWED_ORIGINS",
+    "EMAIL_FROM",
+    "EVOLUTION_API_KEY",
+    "EVOLUTION_API_URL",
+    "EVOLUTION_INSTANCE_NAME",
+    "RESEND_API_KEY",
+    "SLACK_WEBHOOK_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.resend.com"
+   ],
+   "usa_shared": [
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [
+    "check-driver-alerts",
+    "escalate-alerts",
+    "job-worker",
+    "lalamove-webhook"
+   ],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "simulate-driver-movement",
+   "servico": "Motoristas",
+   "entrada": "supabase/functions/simulate-driver-movement/index.ts",
+   "arquivos": 1,
+   "linhas": 237,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "active_tracking",
+    "tracking_events",
+    "user_roles"
+   ],
+   "rpcs": [],
+   "env": [
+    "ENVIRONMENT",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [
+    "check-driver-alerts"
+   ],
+   "hosts_externos": [],
+   "usa_shared": [],
+   "chamada_pelo_front": [
+    "src/pages/LiveMapPage.tsx"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  },
+  {
+   "nome": "test-notification",
+   "servico": "Notificações/Alertas",
+   "entrada": "supabase/functions/test-notification/index.ts",
+   "arquivos": 1,
+   "linhas": 285,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "bitrix24_tokens"
+   ],
+   "rpcs": [],
+   "env": [
+    "EVOLUTION_API_KEY",
+    "EVOLUTION_API_URL",
+    "RESEND_API_KEY",
+    "SLACK_WEBHOOK_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.resend.com"
+   ],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
+   "chamada_pelo_front": [
+    "src/hooks/useTestNotification.ts"
+   ],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": false,
+   "testes": 0
+  }
+ ],
+ "chamadas_sem_pasta": []
+}

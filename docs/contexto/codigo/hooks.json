@@ -1,0 +1,2528 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "total": 97,
+ "hooks": [
+  {
+   "arquivo": "scripts/ai-context/cenarios.mjs",
+   "hooks_exportados": [
+    "useA",
+    "useB",
+    "useC",
+    "useX"
+   ],
+   "linhas": 184,
+   "dominio": null,
+   "tabelas": [
+    "fantasma",
+    "so_teste",
+    "t",
+    "t1",
+    "tx"
+   ],
+   "rpcs": [
+    "r1"
+   ],
+   "edges": [
+    "lalamove-token-refresh"
+   ],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/alerts/AlertsAdvanced.tsx",
+   "hooks_exportados": [
+    "useAlertGrouping",
+    "useAlertSelection"
+   ],
+   "linhas": 167,
+   "dominio": "components/alerts",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AlertsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ErrorBoundary.tsx",
+   "hooks_exportados": [
+    "useErrorHandler"
+   ],
+   "linhas": 316,
+   "dominio": "components",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/App.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/map/hooks/useGoogleMapsLoader.ts",
+   "hooks_exportados": [
+    "useGoogleMapsLoader"
+   ],
+   "linhas": 104,
+   "dominio": "components/map",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/map/Google3DCanvas.tsx",
+    "src/components/map/GoogleMapsCanvas.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/map/hooks/useMapAlerts.ts",
+   "hooks_exportados": [
+    "useMapAlerts"
+   ],
+   "linhas": 99,
+   "dominio": "components/map",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/components/map/hooks/useMapboxToken.ts",
+   "hooks_exportados": [
+    "useMapboxToken"
+   ],
+   "linhas": 38,
+   "dominio": "components/map",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "get-mapbox-token"
+   ],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx",
+    "src/components/reports/GeoHeatmap.tsx",
+    "src/pages/HeatmapPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/components/map/hooks/useMapMarkers.ts",
+   "hooks_exportados": [
+    "useMapMarkers"
+   ],
+   "linhas": 414,
+   "dominio": "components/map",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/components/map/hooks/useTrackingData.ts",
+   "hooks_exportados": [
+    "useTrackingData"
+   ],
+   "linhas": 107,
+   "dominio": "components/map",
+   "tabelas": [
+    "active_tracking"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [
+    "active-tracking-changes"
+   ],
+   "usado_por": 8,
+   "usado_por_arquivos": [
+    "src/components/map/Google3DCanvas.tsx",
+    "src/components/map/GoogleMapsCanvas.tsx",
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/MapHUD.tsx",
+    "src/components/map/MapSearchPanel.tsx",
+    "src/components/map/hooks/useMapAlerts.ts",
+    "src/components/map/hooks/useMapMarkers.ts",
+    "src/components/map/markerFactories.ts"
+   ],
+   "coberto_por_testes": 3
+  },
+  {
+   "arquivo": "src/components/ui/contextual-hints.tsx",
+   "hooks_exportados": [
+    "useHints"
+   ],
+   "linhas": 468,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/hooks/useContextualHints.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/data-refresh-indicator.tsx",
+   "hooks_exportados": [
+    "useDataRefresh"
+   ],
+   "linhas": 255,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 6,
+   "usado_por_arquivos": [
+    "src/pages/AlertsPage.tsx",
+    "src/pages/ApprovalsPage.tsx",
+    "src/pages/DriversPage.tsx",
+    "src/pages/IncidentsPage.tsx",
+    "src/pages/MetricsPage.tsx",
+    "src/pages/OrdersPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/keyboard-shortcuts-help.tsx",
+   "hooks_exportados": [
+    "useKeyboardShortcuts"
+   ],
+   "linhas": 291,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useFuseSearchWithMatches",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/App.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/pull-to-refresh.tsx",
+   "hooks_exportados": [
+    "usePullToRefresh"
+   ],
+   "linhas": 180,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMotionValue",
+    "useMotionValueEvent",
+    "useRef",
+    "useState",
+    "useTransform"
+   ],
+   "canais_realtime": [],
+   "usado_por": 7,
+   "usado_por_arquivos": [
+    "src/pages/AlertsPage.tsx",
+    "src/pages/ApprovalsPage.tsx",
+    "src/pages/DashboardRedesigned.tsx",
+    "src/pages/DriversPage.tsx",
+    "src/pages/IncidentsPage.tsx",
+    "src/pages/MetricsPage.tsx",
+    "src/pages/OrdersPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/components/ui/undo-toast.tsx",
+   "hooks_exportados": [
+    "useOptimisticList",
+    "useOptimisticUpdate",
+    "useUndoableAction"
+   ],
+   "linhas": 364,
+   "dominio": "components/ui",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/AlertsPage.tsx",
+    "src/pages/DriversPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/use-mobile.tsx",
+   "hooks_exportados": [
+    "useIsMobile"
+   ],
+   "linhas": 21,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 8,
+   "usado_por_arquivos": [
+    "src/components/approvals/SwipeableApprovalCard.tsx",
+    "src/components/dashboard/AlertsPanel.tsx",
+    "src/components/dashboard/ApprovalQueue.tsx",
+    "src/components/dashboard/OrdersTable.tsx",
+    "src/components/layout/AppLayout.tsx",
+    "src/components/layout/Header.tsx",
+    "src/hooks/useContextualHints.ts",
+    "src/pages/DashboardRedesigned.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAccessibility.tsx",
+   "hooks_exportados": [
+    "useAccessibility",
+    "useAnnounce",
+    "useInputMethod"
+   ],
+   "linhas": 139,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useLocation"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/layout/AppLayout.tsx",
+    "src/pages/DashboardRedesigned.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAchievementsSystem.tsx",
+   "hooks_exportados": [
+    "useAchievementsSystem",
+    "useApprovalAchievements"
+   ],
+   "linhas": 426,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/hooks/useApprovalActionsEnhanced.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useActiveAlerts.ts",
+   "hooks_exportados": [
+    "useActiveAlerts",
+    "useAlertActions"
+   ],
+   "linhas": 168,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts"
+   ],
+   "rpcs": [
+    "acknowledge_alert"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useAlertsRealtime",
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/components/layout/AppLayout.tsx",
+    "src/components/layout/Header.tsx",
+    "src/components/layout/MobileBottomNav.tsx",
+    "src/pages/AlertsPage.tsx",
+    "src/pages/DashboardRedesigned.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useAdvancedReports.ts",
+   "hooks_exportados": [
+    "useAdvancedReports"
+   ],
+   "linhas": 539,
+   "dominio": "hooks",
+   "tabelas": [
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useMemo",
+    "useRegionResolution",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/reports/GeoHeatmap.tsx",
+    "src/hooks/useReportPresets.ts",
+    "src/pages/AdvancedReportsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAlertConfigurations.ts",
+   "hooks_exportados": [
+    "useAlertConfigurations",
+    "useCreateAlertConfiguration",
+    "useDeleteAlertConfiguration",
+    "useUpdateAlertConfiguration"
+   ],
+   "linhas": 183,
+   "dominio": "hooks",
+   "tabelas": [
+    "alert_configurations"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/AlertConfigurationsPage.tsx",
+    "src/pages/alert-configurations/AlertConfigCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAlertGrouping.ts",
+   "hooks_exportados": [
+    "useAlertGrouping",
+    "useAlertSelection"
+   ],
+   "linhas": 98,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/alerts/AlertsAdvanced.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAlertSettings.ts",
+   "hooks_exportados": [
+    "useAlertSettings"
+   ],
+   "linhas": 154,
+   "dominio": "hooks",
+   "tabelas": [
+    "alert_configurations"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/pages/SettingsPage.tsx",
+    "src/pages/settings/LateDeliveryCard.tsx",
+    "src/pages/settings/RouteDeviationCard.tsx",
+    "src/pages/settings/StoppedDriverCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAnalyticsData.ts",
+   "hooks_exportados": [
+    "useAnalyticsData"
+   ],
+   "linhas": 101,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AnalyticsDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useApprovalActions.ts",
+   "hooks_exportados": [
+    "useApprovalActions"
+   ],
+   "linhas": 108,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_approval_queue",
+    "drivers"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/usePendingApprovals.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useApprovalActionsEnhanced.ts",
+   "hooks_exportados": [
+    "useAchievementsSystem",
+    "useApprovalActionsWithAchievements"
+   ],
+   "linhas": 98,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAchievementsContext",
+    "useBaseApprovalActions",
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useApprovalRealtime.ts",
+   "hooks_exportados": [
+    "useApprovalRealtime"
+   ],
+   "linhas": 6,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/ApprovalsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAuth.tsx",
+   "hooks_exportados": [
+    "useAuth"
+   ],
+   "linhas": 88,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useContext",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 19,
+   "usado_por_arquivos": [
+    "src/App.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/layout/AppLayout.tsx",
+    "src/components/layout/Header.tsx",
+    "src/components/layout/MobileSidebar.tsx",
+    "src/components/layout/Sidebar.tsx",
+    "src/hooks/useActiveAlerts.ts",
+    "src/hooks/useAuthLogs.ts",
+    "src/hooks/useCommandPaletteSearch.ts",
+    "src/hooks/useDeviceDetection.ts",
+    "src/hooks/useMFA.ts",
+    "src/hooks/usePermissions.ts",
+    "src/hooks/useSecurityPushNotifications.ts",
+    "src/hooks/useUserDevices.ts",
+    "src/hooks/useWebAuthn.ts",
+    "src/pages/AuthPage.tsx",
+    "src/pages/DashboardRedesigned.tsx",
+    "src/pages/IPWhitelistPage.tsx",
+    "src/pages/ProfilePage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useAuthLogs.ts",
+   "hooks_exportados": [
+    "useAuthLogs"
+   ],
+   "linhas": 65,
+   "dominio": "hooks",
+   "tabelas": [
+    "auth_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/ProfilePage.tsx",
+    "src/pages/SecurityDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useBitrix24.ts",
+   "hooks_exportados": [
+    "useBitrix24"
+   ],
+   "linhas": 248,
+   "dominio": "hooks",
+   "tabelas": [
+    "bitrix24_stage_mappings",
+    "bitrix24_sync",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [
+    "bitrix24-sync"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/Bitrix24Page.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCachedStats.ts",
+   "hooks_exportados": [
+    "useCachedStats",
+    "useDashboardSummary",
+    "useDeliveryMetricsCache",
+    "useDriverStatsCache",
+    "useHourlyMetricsCache",
+    "useMetricsComparison",
+    "useTopDrivers"
+   ],
+   "linhas": 346,
+   "dominio": "hooks",
+   "tabelas": [
+    "delivery_metrics_cache",
+    "driver_stats_cache",
+    "hourly_metrics_cache"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/CacheStatusPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCacheViews.ts",
+   "hooks_exportados": [
+    "useAutoRefreshCache",
+    "useCacheNeedsRefresh",
+    "useCacheRefreshHistory",
+    "useCacheStats",
+    "useCacheViews",
+    "useRefreshCache"
+   ],
+   "linhas": 245,
+   "dominio": "hooks",
+   "tabelas": [
+    "cache_status"
+   ],
+   "rpcs": [
+    "refresh_cache_view"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/CacheMonitoringPage.tsx",
+    "src/pages/CacheStatusPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useCommandPaletteSearch.ts",
+   "hooks_exportados": [
+    "useCommandPaletteSearch"
+   ],
+   "linhas": 226,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useDebouncedValue",
+    "useEffect",
+    "useFuseSearchWithMatches",
+    "useLocation",
+    "useMemo",
+    "useNavigate",
+    "useState",
+    "useTheme"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/CommandPaletteEnhanced.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useContacts.ts",
+   "hooks_exportados": [
+    "useContacts"
+   ],
+   "linhas": 169,
+   "dominio": "hooks",
+   "tabelas": [
+    "contacts"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/orders/ContactPicker.tsx",
+    "src/components/orders/NewOrderDialog.tsx",
+    "src/pages/ContactsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useContextualHints.ts",
+   "hooks_exportados": [
+    "useContextualHints"
+   ],
+   "linhas": 242,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useHints",
+    "useIsMobile",
+    "useLocation",
+    "usePermissions"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/layout/AppLayout.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useContractV1SunsetReadiness.ts",
+   "hooks_exportados": [
+    "useContractV1SunsetReadiness"
+   ],
+   "linhas": 68,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "get_contract_v1_sunset_readiness"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useContractVersionUsage.ts",
+   "hooks_exportados": [
+    "useContractVersionUsage"
+   ],
+   "linhas": 216,
+   "dominio": "hooks",
+   "tabelas": [
+    "contract_version_usage"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useContractVersionUsageMonthly.ts",
+   "hooks_exportados": [
+    "useContractVersionUsageMonthly"
+   ],
+   "linhas": 83,
+   "dominio": "hooks",
+   "tabelas": [
+    "contract_version_usage_monthly"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useCronJobsHealth.ts",
+   "hooks_exportados": [
+    "useCronJobsHealth"
+   ],
+   "linhas": 40,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "get_cron_jobs_health"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/health/CronJobsHealthPanel.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useDashboardStats.ts",
+   "hooks_exportados": [
+    "useDashboardStats"
+   ],
+   "linhas": 126,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/DashboardRedesigned.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useDataRefresh.ts",
+   "hooks_exportados": [
+    "useDataRefresh"
+   ],
+   "linhas": 115,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useRef",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/ui/data-refresh-indicator.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDebouncedValue.ts",
+   "hooks_exportados": [
+    "useDebouncedValue"
+   ],
+   "linhas": 37,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/components/orders/AddressAutocomplete.tsx",
+    "src/hooks/useCommandPaletteSearch.ts",
+    "src/hooks/useGlobalSearch.ts",
+    "src/pages/ExternalDataPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDeliveryHeatmapData.ts",
+   "hooks_exportados": [
+    "useDeliveryHeatmapData"
+   ],
+   "linhas": 113,
+   "dominio": "hooks",
+   "tabelas": [
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/HeatmapPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDeliveryMetrics.ts",
+   "hooks_exportados": [
+    "useDeliveryMetrics",
+    "useDeliveryTrends",
+    "useDriverDeliveryStats"
+   ],
+   "linhas": 256,
+   "dominio": "hooks",
+   "tabelas": [
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/DeliveryMetricsPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useDeviceDetection.ts",
+   "hooks_exportados": [
+    "useDeviceDetection"
+   ],
+   "linhas": 122,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "new-device-alert"
+   ],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/auth/DeviceDetector.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDriverEvaluations.ts",
+   "hooks_exportados": [
+    "useCreateEvaluation",
+    "useDriverEvaluations",
+    "useLatestDriverEvaluation"
+   ],
+   "linhas": 289,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_evaluations"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useDrivers.ts",
+   "hooks_exportados": [
+    "useAddToBlacklist",
+    "useAddToWhitelist",
+    "useApproveDriver",
+    "useBlockDriver",
+    "useDriver",
+    "useDrivers",
+    "useRemoveFromBlacklist",
+    "useRemoveFromWhitelist",
+    "useUpdateDriver"
+   ],
+   "linhas": 371,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_incidents",
+    "drivers"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 7,
+   "usado_por_arquivos": [
+    "src/components/drivers/DriverProfileModal.tsx",
+    "src/components/drivers/DriverProfileTabs.tsx",
+    "src/pages/DriversPage.tsx",
+    "src/pages/IncidentsPage.tsx",
+    "src/pages/drivers/DriverCard.tsx",
+    "src/pages/drivers/DriverConfirmDialog.tsx",
+    "src/pages/incidents/IncidentDialogs.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useErrorLogs.ts",
+   "hooks_exportados": [
+    "useDeleteErrorLog",
+    "useErrorLogs",
+    "useErrorStats",
+    "useResolveError"
+   ],
+   "linhas": 158,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [
+    "runtime-error-logs-realtime"
+   ],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/ErrorMonitoringPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useEvaluateDriver.ts",
+   "hooks_exportados": [
+    "useEvaluateDriver",
+    "useEvaluateDriverOnAssignment"
+   ],
+   "linhas": 132,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "evaluate-driver"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/orders/OrderDetailModal.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useExternalData.ts",
+   "hooks_exportados": [
+    "useAddressSearch",
+    "useExternalList",
+    "useExternalRecord",
+    "useExternalStats"
+   ],
+   "linhas": 104,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "external-companies"
+   ],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/orders/AddressAutocomplete.tsx",
+    "src/pages/ExternalDataPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useFeatureFlags.ts",
+   "hooks_exportados": [
+    "useFeatureFlag",
+    "useFeatureFlags"
+   ],
+   "linhas": 43,
+   "dominio": "hooks",
+   "tabelas": [
+    "feature_flags"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/dashboard/AIRouteChatbot.tsx",
+    "src/pages/LiveMapPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useFuseSearch.ts",
+   "hooks_exportados": [
+    "useFuseSearch",
+    "useFuseSearchWithMatches",
+    "useFuseSearchWithPreset"
+   ],
+   "linhas": 188,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMemo"
+   ],
+   "canais_realtime": [],
+   "usado_por": 15,
+   "usado_por_arquivos": [
+    "src/components/map/MapSearchPanel.tsx",
+    "src/components/ui/keyboard-shortcuts-help.tsx",
+    "src/components/ui/search-help-tooltip.tsx",
+    "src/hooks/useCommandPaletteSearch.ts",
+    "src/pages/DriversPage.tsx",
+    "src/pages/EvaluationsPage.tsx",
+    "src/pages/GeoBlockingPage.tsx",
+    "src/pages/IPWhitelistPage.tsx",
+    "src/pages/IncidentsPage.tsx",
+    "src/pages/OrdersPage.tsx",
+    "src/pages/PasswordResetApprovalsPage.tsx",
+    "src/pages/PermissionsPage.tsx",
+    "src/pages/RateLimitDashboardPage.tsx",
+    "src/pages/RolesPage.tsx",
+    "src/pages/orders/OrderCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGeoSearch.ts",
+   "hooks_exportados": [
+    "useAddressSearchBox"
+   ],
+   "linhas": 78,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "geo-gateway"
+   ],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/orders/AddressAutocomplete.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useGlobalSearch.ts",
+   "hooks_exportados": [
+    "useGlobalSearch"
+   ],
+   "linhas": 192,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useDebouncedValue",
+    "useEffect",
+    "useMemo",
+    "useNavigate",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/GlobalSearchAdvanced.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGlobalUndo.tsx",
+   "hooks_exportados": [
+    "useGlobalUndo"
+   ],
+   "linhas": 106,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useApprovalActions.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useIncidents.ts",
+   "hooks_exportados": [
+    "useCreateIncident",
+    "useDeleteIncident",
+    "useDriverIncidents",
+    "useIncidents",
+    "useResolveIncident",
+    "useUpdateIncident"
+   ],
+   "linhas": 385,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_incidents",
+    "drivers"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/IncidentsPage.tsx",
+    "src/pages/incidents/IncidentDialogs.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useJobQueue.ts",
+   "hooks_exportados": [
+    "useAddJob",
+    "useDeleteJob",
+    "useJobQueue",
+    "useProcessQueue",
+    "useQueueStatistics",
+    "useRetryJob"
+   ],
+   "linhas": 344,
+   "dominio": "hooks",
+   "tabelas": [
+    "bitrix24_sync",
+    "driver_evaluations",
+    "webhook_events"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/JobQueuePage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLalamove.ts",
+   "hooks_exportados": [
+    "useCities",
+    "useDriverLocation",
+    "useLalamoveStatus",
+    "useLalamoveTest",
+    "useLalamoveUser",
+    "useOrderCancel",
+    "useOrderCreate",
+    "useOrderGet",
+    "useQuote",
+    "useRefreshUapiToken",
+    "useServiceAreas",
+    "useUAPIStatus",
+    "useUAPIUser",
+    "useUpdateUapiToken",
+    "useUpdateV3Keys",
+    "useV3Call",
+    "useV3CallMutation",
+    "useVehicles",
+    "useWallet",
+    "useWalletBalance",
+    "useWalletHistory"
+   ],
+   "linhas": 193,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/dashboard/UAPIStatusCards.tsx",
+    "src/pages/LalamoveSettingsPage.tsx",
+    "src/pages/lalamove/LalamoveV3Explorer.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLalamoveQuota.ts",
+   "hooks_exportados": [
+    "useLalamoveQuota"
+   ],
+   "linhas": 149,
+   "dominio": "hooks",
+   "tabelas": [
+    "lalamove_rate_limits"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/LalamoveQuotaPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLalamoveUapi.ts",
+   "hooks_exportados": [
+    "useDownloadReceipt",
+    "useExchangeCoupon",
+    "useFleetMutation",
+    "useFleetSearch",
+    "useUapiCoupons",
+    "useUapiFleet",
+    "useUapiOrderHistory",
+    "useUapiWalletStatement"
+   ],
+   "linhas": 284,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "lalamove-uapi"
+   ],
+   "hooks_internos": [
+    "useCallback",
+    "useQueryClient",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 6,
+   "usado_por_arquivos": [
+    "src/components/lalamove/UapiCouponsPanel.tsx",
+    "src/components/lalamove/UapiFleetPanel.tsx",
+    "src/components/lalamove/UapiOrderHistoryPanel.tsx",
+    "src/components/lalamove/UapiStatementPanel.tsx",
+    "src/components/orders/OrderDetailModal.tsx",
+    "src/lib/uapiStatement.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useLoginLockout.ts",
+   "hooks_exportados": [
+    "useLoginLockout"
+   ],
+   "linhas": 102,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [
+    "check_login_lockout_v2",
+    "clear_login_attempts",
+    "record_failed_login_v2"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AuthPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useMapbox.ts",
+   "hooks_exportados": [
+    "useMapboxDirections",
+    "useMapboxGeocode",
+    "useMapboxIsochrone",
+    "useMapboxMapMatching",
+    "useMapboxMatrix",
+    "useMapboxOptimization",
+    "useMapboxReverseGeocode",
+    "useMapboxStaticImage",
+    "useMapboxTilequery"
+   ],
+   "linhas": 312,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "mapbox-proxy"
+   ],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 8,
+   "usado_por_arquivos": [
+    "src/components/map/hooks/useMapMarkers.ts",
+    "src/components/orders/AddressAutocomplete.tsx",
+    "src/pages/map-tools/IsochroneTab.tsx",
+    "src/pages/map-tools/MapMatchingTab.tsx",
+    "src/pages/map-tools/MatrixTab.tsx",
+    "src/pages/map-tools/OptimizationTab.tsx",
+    "src/pages/map-tools/StaticImageTab.tsx",
+    "src/pages/map-tools/TilequeryTab.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useMapSettings.ts",
+   "hooks_exportados": [
+    "useMapSettings"
+   ],
+   "linhas": 130,
+   "dominio": "hooks",
+   "tabelas": [
+    "map_settings_overrides"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/MapProviderSelector.tsx",
+    "src/components/map/MapSettingsPanel.tsx"
+   ],
+   "coberto_por_testes": 2
+  },
+  {
+   "arquivo": "src/hooks/useMetrics.ts",
+   "hooks_exportados": [
+    "useApprovalMetrics",
+    "useDriverMetrics",
+    "useIncidentMetrics"
+   ],
+   "linhas": 214,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_approval_queue",
+    "driver_incidents",
+    "drivers"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/MetricsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useMFA.ts",
+   "hooks_exportados": [
+    "useMFA"
+   ],
+   "linhas": 220,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/components/auth/MFAEnroll.tsx",
+    "src/components/auth/MFASettings.tsx",
+    "src/components/auth/MFAVerify.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/pages/SecurityDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useNotificationHistory.ts",
+   "hooks_exportados": [
+    "useNotificationHistory",
+    "useNotificationStats"
+   ],
+   "linhas": 102,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts_sent"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/NotificationHistoryPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useOfflineStorage.ts",
+   "hooks_exportados": [
+    "useOfflineSettings",
+    "useOfflineStorage"
+   ],
+   "linhas": 291,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 0,
+   "usado_por_arquivos": [],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePasswordResetActions.ts",
+   "hooks_exportados": [
+    "usePasswordResetActions"
+   ],
+   "linhas": 87,
+   "dominio": "hooks",
+   "tabelas": [
+    "password_reset_requests"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/PasswordResetApprovalsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePendingApprovals.ts",
+   "hooks_exportados": [
+    "useApprovalActions",
+    "useApprovalHistory",
+    "useApprovalStats",
+    "usePendingApprovals"
+   ],
+   "linhas": 146,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_approval_queue"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/components/layout/AppLayout.tsx",
+    "src/components/layout/MobileBottomNav.tsx",
+    "src/hooks/useApprovalActionsEnhanced.ts",
+    "src/pages/ApprovalsPage.tsx",
+    "src/pages/DashboardRedesigned.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/usePermissions.ts",
+   "hooks_exportados": [
+    "usePermissions"
+   ],
+   "linhas": 189,
+   "dominio": "hooks",
+   "tabelas": [
+    "permissions",
+    "role_permissions",
+    "user_roles"
+   ],
+   "rpcs": [
+    "get_user_permissions"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 9,
+   "usado_por_arquivos": [
+    "src/components/auth/PermissionGate.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/hooks/useContextualHints.ts",
+    "src/hooks/useRole.ts",
+    "src/pages/PermissionsPage.tsx",
+    "src/pages/ProfilePage.tsx",
+    "src/pages/RolesPage.tsx",
+    "src/pages/SecurityDashboardPage.tsx",
+    "src/pages/permissions/PermissionModuleList.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/usePredictiveAnalysis.ts",
+   "hooks_exportados": [
+    "usePredictiveAnalysis"
+   ],
+   "linhas": 226,
+   "dominio": "hooks",
+   "tabelas": [
+    "driver_approval_queue",
+    "driver_incidents",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/alerts/PredictiveAlerts.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePrefetch.ts",
+   "hooks_exportados": [
+    "usePrefetch"
+   ],
+   "linhas": 146,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/layout/MobileBottomNav.tsx",
+    "src/components/layout/Sidebar.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/usePushNotifications.ts",
+   "hooks_exportados": [
+    "usePushNotifications"
+   ],
+   "linhas": 348,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/components/notifications/NotificationPreferences.tsx",
+    "src/components/notifications/SoundSettingsPanel.tsx",
+    "src/hooks/useRealtimeSubscriptions.ts",
+    "src/pages/SettingsPage.tsx",
+    "src/pages/UserPreferencesPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useQuotationExpiry.ts",
+   "hooks_exportados": [
+    "useQuotationExpiry"
+   ],
+   "linhas": 59,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/orders/NewOrderDialog.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRateLimiting.ts",
+   "hooks_exportados": [
+    "useRateLimiting"
+   ],
+   "linhas": 242,
+   "dominio": "hooks",
+   "tabelas": [
+    "blocked_ips",
+    "ip_whitelist",
+    "rate_limit_logs"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/RateLimitDashboardPage.tsx",
+    "src/pages/SecurityDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useRealtimeSubscriptions.ts",
+   "hooks_exportados": [
+    "useAlertsRealtime",
+    "useApprovalsRealtime",
+    "useLiveMapRealtime",
+    "useRealtimeManager",
+    "useSLAMetricsRealtime",
+    "useSidebarCountsRealtime"
+   ],
+   "linhas": 465,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useQueryClient"
+   ],
+   "canais_realtime": [
+    "alerts-consolidated",
+    "approvals-consolidated",
+    "consolidated-realtime",
+    "live-map-consolidated",
+    "sidebar-counts-consolidated",
+    "sla-metrics-consolidated"
+   ],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/components/layout/Sidebar.tsx",
+    "src/hooks/useActiveAlerts.ts",
+    "src/hooks/useApprovalRealtime.ts",
+    "src/hooks/useSLAMetrics.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRecentOrders.ts",
+   "hooks_exportados": [
+    "useRecentOrders"
+   ],
+   "linhas": 92,
+   "dominio": "hooks",
+   "tabelas": [
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/DashboardRedesigned.tsx",
+    "src/pages/OrdersPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useRegionResolver.ts",
+   "hooks_exportados": [
+    "useRegionResolution",
+    "useRegionResolver"
+   ],
+   "linhas": 244,
+   "dominio": "hooks",
+   "tabelas": [
+    "region_cache"
+   ],
+   "rpcs": [],
+   "edges": [
+    "geo-gateway"
+   ],
+   "hooks_internos": [
+    "useEffect",
+    "useMemo",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/hooks/useAdvancedReports.ts"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useReportPresets.ts",
+   "hooks_exportados": [
+    "useReportPresets"
+   ],
+   "linhas": 177,
+   "dominio": "hooks",
+   "tabelas": [
+    "report_presets"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [
+    "report_presets:${auth.user.id}"
+   ],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/AdvancedReportsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useRiskRules.ts",
+   "hooks_exportados": [
+    "useCreateRiskRule",
+    "useDeleteRiskRule",
+    "useRiskRules",
+    "useUpdateRiskRule"
+   ],
+   "linhas": 134,
+   "dominio": "hooks",
+   "tabelas": [
+    "risk_rules"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/RiskRulesPage.dialogs.tsx",
+    "src/pages/RiskRulesPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useRole.ts",
+   "hooks_exportados": [
+    "useRole"
+   ],
+   "linhas": 152,
+   "dominio": "hooks",
+   "tabelas": [
+    "user_roles"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/pages/RolesPage.tsx",
+    "src/pages/SecurityDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useScheduledTheme.ts",
+   "hooks_exportados": [
+    "useScheduledTheme"
+   ],
+   "linhas": 184,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/UserPreferencesPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSecurityPushNotifications.ts",
+   "hooks_exportados": [
+    "useSecurityPushNotifications"
+   ],
+   "linhas": 217,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [
+    "security-auth-logs",
+    "security-blocked-ips",
+    "security-device-alerts",
+    "security-mfa-sessions"
+   ],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/notifications/PushNotificationSettings.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useServiceWorker.ts",
+   "hooks_exportados": [
+    "useServiceWorker"
+   ],
+   "linhas": 255,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/pwa/OfflineIndicator.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSLAMetrics.ts",
+   "hooks_exportados": [
+    "useSLAMetrics"
+   ],
+   "linhas": 204,
+   "dominio": "hooks",
+   "tabelas": [
+    "active_tracking",
+    "alerts",
+    "driver_approval_queue",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useQuery",
+    "useSLAMetricsRealtime"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/SLADashboardPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useSLOMetrics.ts",
+   "hooks_exportados": [
+    "useSLOMetrics"
+   ],
+   "linhas": 314,
+   "dominio": "hooks",
+   "tabelas": [
+    "query_telemetry",
+    "runtime_error_logs",
+    "webhook_events"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/SLODashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSoundSettings.ts",
+   "hooks_exportados": [
+    "useSoundSettings"
+   ],
+   "linhas": 152,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 6,
+   "usado_por_arquivos": [
+    "src/components/notifications/NotificationPreferences.tsx",
+    "src/components/notifications/SoundSettingsPanel.tsx",
+    "src/pages/SettingsPage.tsx",
+    "src/pages/UserPreferencesPage.tsx",
+    "src/pages/settings/SoundSettingsCard.tsx",
+    "src/utils/alertSounds.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSystemHealth.ts",
+   "hooks_exportados": [
+    "useSystemHealth"
+   ],
+   "linhas": 50,
+   "dominio": "hooks",
+   "tabelas": [
+    "drivers"
+   ],
+   "rpcs": [],
+   "edges": [
+    "get-mapbox-token"
+   ],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/SystemHealthPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSystemHealthExpanded.ts",
+   "hooks_exportados": [
+    "useSystemHealthExpanded"
+   ],
+   "linhas": 51,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/SystemHealthExpandedPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTestNotification.ts",
+   "hooks_exportados": [
+    "useTestNotification"
+   ],
+   "linhas": 45,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [
+    "test-notification"
+   ],
+   "hooks_internos": [
+    "useMutation"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/alert-configurations/AlertConfigCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTheme.ts",
+   "hooks_exportados": [
+    "useTheme"
+   ],
+   "linhas": 112,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 4,
+   "usado_por_arquivos": [
+    "src/components/layout/Header.tsx",
+    "src/components/layout/Sidebar.tsx",
+    "src/components/ui/sonner.tsx",
+    "src/hooks/useCommandPaletteSearch.ts"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useTrackingHistory.ts",
+   "hooks_exportados": [
+    "useTrackingHistory"
+   ],
+   "linhas": 75,
+   "dominio": "hooks",
+   "tabelas": [
+    "tracking_events"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/MapHistoryPanel.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useUAPI.ts",
+   "hooks_exportados": [
+    "useUAPICall",
+    "useUAPIOrders",
+    "useUAPIStatus",
+    "useUAPITest",
+    "useUAPIUser",
+    "useUpdateToken",
+    "useWalletBalance"
+   ],
+   "linhas": 66,
+   "dominio": "hooks",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/UAPISettingsPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useUserDevices.ts",
+   "hooks_exportados": [
+    "useUserDevices"
+   ],
+   "linhas": 107,
+   "dominio": "hooks",
+   "tabelas": [
+    "user_devices"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/ProfilePage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWebAuthn.ts",
+   "hooks_exportados": [
+    "useWebAuthn"
+   ],
+   "linhas": 366,
+   "dominio": "hooks",
+   "tabelas": [
+    "auth_logs",
+    "user_passkeys",
+    "webauthn_challenges"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useAuth",
+    "useCallback",
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 3,
+   "usado_por_arquivos": [
+    "src/components/auth/PasskeyLoginButton.tsx",
+    "src/components/auth/PasskeySettings.tsx",
+    "src/pages/SecurityDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useWebhookEvents.ts",
+   "hooks_exportados": [
+    "useDeleteWebhook",
+    "useEventTypes",
+    "useMarkWebhookProcessed",
+    "useReprocessWebhook",
+    "useWebhookEvents"
+   ],
+   "linhas": 150,
+   "dominio": "hooks",
+   "tabelas": [
+    "webhook_events"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/WebhooksPage.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
+   "arquivo": "src/hooks/useWebhookSecurityMetrics.ts",
+   "hooks_exportados": [
+    "useWebhookSecurityMetrics"
+   ],
+   "linhas": 113,
+   "dominio": "hooks",
+   "tabelas": [
+    "webhook_events"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useQuery"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/components/webhooks/WebhookSecurityPanel.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/pages/reports/useReportData.ts",
+   "hooks_exportados": [
+    "useReportData"
+   ],
+   "linhas": 191,
+   "dominio": "pages/reports",
+   "tabelas": [
+    "driver_incidents",
+    "drivers",
+    "lalamove_orders"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect",
+    "useState"
+   ],
+   "canais_realtime": [],
+   "usado_por": 5,
+   "usado_por_arquivos": [
+    "src/pages/ReportsPage.tsx",
+    "src/pages/reports/ReportDistributionTab.tsx",
+    "src/pages/reports/ReportDriversTab.tsx",
+    "src/pages/reports/ReportOverviewTab.tsx",
+    "src/pages/reports/ReportStatsCards.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/utils/webVitals.ts",
+   "hooks_exportados": [
+    "useWebVitals"
+   ],
+   "linhas": 220,
+   "dominio": "utils",
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useEffect"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/main.tsx",
+    "src/pages/PerformanceDashboardPage.tsx"
+   ],
+   "coberto_por_testes": 0
+  }
+ ]
+}

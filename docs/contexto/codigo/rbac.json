@@ -1,0 +1,547 @@
+{
+ "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
+ "format_version": 1,
+ "nota": "ProtectedRoute (src/components/auth/ProtectedRoute.tsx) × sidebar-config.ts × enums de papel do banco. menu_visivel_sem_acesso = item aparece para papel que a rota bloqueia.",
+ "hierarquia_de_papeis": {
+  "admin": 4,
+  "manager": 3,
+  "operator": 2,
+  "viewer": 1
+ },
+ "guards": [
+  "src/components/auth/ProtectedRoute.tsx"
+ ],
+ "rotas_por_papel": {
+  "(público)": [
+   "/",
+   "/*",
+   "/auth",
+   "/dashboard",
+   "/forgot-password",
+   "/mfa-verify",
+   "/reset-password",
+   "/unauthorized"
+  ],
+  "(só autenticado)": [
+   "/profile"
+  ],
+  "admin": [
+   "/geo-blocking",
+   "/ip-whitelist",
+   "/lalamove-quota",
+   "/password-reset-approvals",
+   "/permissions",
+   "/rate-limiting",
+   "/roles",
+   "/security",
+   "/telemetria"
+  ],
+  "manager": [
+   "/alert-configurations",
+   "/approvals",
+   "/bitrix24",
+   "/cache-monitoring",
+   "/cache-status",
+   "/error-monitoring",
+   "/external-data",
+   "/job-queue",
+   "/map-tools",
+   "/performance",
+   "/risk-rules",
+   "/settings",
+   "/settings/lalamove",
+   "/settings/uapi",
+   "/slo",
+   "/system-health",
+   "/system-health-expanded",
+   "/webhooks"
+  ],
+  "operator": [
+   "/alerts",
+   "/contacts",
+   "/drivers",
+   "/evaluations",
+   "/incidents",
+   "/lalamove-operacoes",
+   "/orders"
+  ],
+  "viewer": [
+   "/analytics",
+   "/delivery-metrics",
+   "/heatmap",
+   "/live-map",
+   "/map",
+   "/metrics",
+   "/notification-history",
+   "/preferences",
+   "/reports",
+   "/reports/advanced",
+   "/sla"
+  ]
+ },
+ "rotas_com_mfa": [
+  "/bitrix24",
+  "/external-data",
+  "/risk-rules",
+  "/settings/lalamove",
+  "/settings/uapi",
+  "/webhooks"
+ ],
+ "rotas_com_permissao": [],
+ "rotas_publicas": [
+  "/",
+  "/*",
+  "/auth",
+  "/dashboard",
+  "/forgot-password",
+  "/mfa-verify",
+  "/reset-password",
+  "/unauthorized"
+ ],
+ "enums_de_papel_no_banco": [
+  {
+   "enum": "app_role",
+   "valores": [
+    "admin",
+    "manager",
+    "operator",
+    "viewer"
+   ]
+  }
+ ],
+ "rpcs_de_autorizacao": [
+  "can_run_db_diagnostics",
+  "get_user_permissions",
+  "is_known_device"
+ ],
+ "itens_de_menu": [
+  {
+   "rotulo": "Mais",
+   "grupo": null,
+   "destino": "#more",
+   "papel_no_menu": null,
+   "papel_na_rota": null,
+   "rota_existe": false,
+   "rota_protegida": null,
+   "rota_requer_mfa": null,
+   "arquivo": null
+  },
+  {
+   "rotulo": "Relatórios",
+   "grupo": null,
+   "destino": "/reports",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ReportsPage.tsx"
+  },
+  {
+   "rotulo": "Dashboard SLA",
+   "grupo": "Analytics",
+   "destino": "/sla",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SLADashboardPage.tsx"
+  },
+  {
+   "rotulo": "Ferramentas Mapa",
+   "grupo": "Analytics",
+   "destino": "/map-tools",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/MapToolsPage.tsx"
+  },
+  {
+   "rotulo": "Mapa de Calor",
+   "grupo": "Analytics",
+   "destino": "/heatmap",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/HeatmapPage.tsx"
+  },
+  {
+   "rotulo": "Métricas",
+   "grupo": "Analytics",
+   "destino": "/metrics",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/MetricsPage.tsx"
+  },
+  {
+   "rotulo": "Métricas Entregas",
+   "grupo": "Analytics",
+   "destino": "/delivery-metrics",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/DeliveryMetricsPage.tsx"
+  },
+  {
+   "rotulo": "Relatórios Avançados",
+   "grupo": "Analytics",
+   "destino": "/reports/advanced",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/AdvancedReportsPage.tsx"
+  },
+  {
+   "rotulo": "Base CRM",
+   "grupo": "Integrações",
+   "destino": "/external-data",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/ExternalDataPage.tsx"
+  },
+  {
+   "rotulo": "Bitrix24",
+   "grupo": "Integrações",
+   "destino": "/bitrix24",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/Bitrix24Page.tsx"
+  },
+  {
+   "rotulo": "Lalamove API",
+   "grupo": "Integrações",
+   "destino": "/settings/lalamove",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/LalamoveSettingsPage.tsx"
+  },
+  {
+   "rotulo": "Webhooks",
+   "grupo": "Integrações",
+   "destino": "/webhooks",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/WebhooksPage.tsx"
+  },
+  {
+   "rotulo": "Alertas",
+   "grupo": "Notificações",
+   "destino": "/alerts",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/AlertsPage.tsx"
+  },
+  {
+   "rotulo": "Config. Alertas",
+   "grupo": "Notificações",
+   "destino": "/alert-configurations",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/AlertConfigurationsPage.tsx"
+  },
+  {
+   "rotulo": "Histórico",
+   "grupo": "Notificações",
+   "destino": "/notification-history",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/NotificationHistoryPage.tsx"
+  },
+  {
+   "rotulo": "Aprovações",
+   "grupo": "Operações",
+   "destino": "/approvals",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ApprovalsPage.tsx"
+  },
+  {
+   "rotulo": "Avaliações",
+   "grupo": "Operações",
+   "destino": "/evaluations",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/EvaluationsPage.tsx"
+  },
+  {
+   "rotulo": "Incidentes",
+   "grupo": "Operações",
+   "destino": "/incidents",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/IncidentsPage.tsx"
+  },
+  {
+   "rotulo": "Mapa ao Vivo",
+   "grupo": "Operações",
+   "destino": "/map",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/LiveMapPage.tsx"
+  },
+  {
+   "rotulo": "Contatos",
+   "grupo": "Principal",
+   "destino": "/contacts",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ContactsPage.tsx"
+  },
+  {
+   "rotulo": "Dashboard",
+   "grupo": "Principal",
+   "destino": "/",
+   "papel_no_menu": null,
+   "papel_na_rota": null,
+   "rota_existe": true,
+   "rota_protegida": false,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/DashboardRedesigned.tsx"
+  },
+  {
+   "rotulo": "Motoristas",
+   "grupo": "Principal",
+   "destino": "/drivers",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/DriversPage.tsx"
+  },
+  {
+   "rotulo": "Operações Lalamove",
+   "grupo": "Principal",
+   "destino": "/lalamove-operacoes",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/LalamoveOperationsPage.tsx"
+  },
+  {
+   "rotulo": "Pedidos",
+   "grupo": "Principal",
+   "destino": "/orders",
+   "papel_no_menu": null,
+   "papel_na_rota": "operator",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/OrdersPage.tsx"
+  },
+  {
+   "rotulo": "Bloqueio Geo",
+   "grupo": "Segurança",
+   "destino": "/geo-blocking",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/GeoBlockingPage.tsx"
+  },
+  {
+   "rotulo": "Central Segurança",
+   "grupo": "Segurança",
+   "destino": "/security",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SecurityDashboardPage.tsx"
+  },
+  {
+   "rotulo": "IP Whitelist",
+   "grupo": "Segurança",
+   "destino": "/ip-whitelist",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/IPWhitelistPage.tsx"
+  },
+  {
+   "rotulo": "Permissões",
+   "grupo": "Segurança",
+   "destino": "/permissions",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/PermissionsPage.tsx"
+  },
+  {
+   "rotulo": "Reset Senha",
+   "grupo": "Segurança",
+   "destino": "/password-reset-approvals",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/PasswordResetApprovalsPage.tsx"
+  },
+  {
+   "rotulo": "Roles",
+   "grupo": "Segurança",
+   "destino": "/roles",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/RolesPage.tsx"
+  },
+  {
+   "rotulo": "Cache Monitor",
+   "grupo": "Sistema",
+   "destino": "/cache-monitoring",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/CacheMonitoringPage.tsx"
+  },
+  {
+   "rotulo": "Configurações",
+   "grupo": "Sistema",
+   "destino": "/settings",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SettingsPage.tsx"
+  },
+  {
+   "rotulo": "Dashboard SLO",
+   "grupo": "Sistema",
+   "destino": "/slo",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SLODashboardPage.tsx"
+  },
+  {
+   "rotulo": "Erros Runtime",
+   "grupo": "Sistema",
+   "destino": "/error-monitoring",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ErrorMonitoringPage.tsx"
+  },
+  {
+   "rotulo": "Performance",
+   "grupo": "Sistema",
+   "destino": "/performance",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/PerformanceDashboardPage.tsx"
+  },
+  {
+   "rotulo": "Regras de Risco",
+   "grupo": "Sistema",
+   "destino": "/risk-rules",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/RiskRulesPage.tsx"
+  },
+  {
+   "rotulo": "Telemetria BD",
+   "grupo": "Sistema",
+   "destino": "/telemetria",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/AdminTelemetriaPage.tsx"
+  }
+ ],
+ "menu_visivel_sem_acesso": [
+  "Ferramentas Mapa -> /map-tools (menu: todos; rota: manager)",
+  "Base CRM -> /external-data (menu: todos; rota: manager)",
+  "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
+  "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
+  "Webhooks -> /webhooks (menu: todos; rota: manager)",
+  "Alertas -> /alerts (menu: todos; rota: operator)",
+  "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",
+  "Aprovações -> /approvals (menu: todos; rota: manager)",
+  "Avaliações -> /evaluations (menu: todos; rota: operator)",
+  "Incidentes -> /incidents (menu: todos; rota: operator)",
+  "Contatos -> /contacts (menu: todos; rota: operator)",
+  "Motoristas -> /drivers (menu: todos; rota: operator)",
+  "Operações Lalamove -> /lalamove-operacoes (menu: todos; rota: operator)",
+  "Pedidos -> /orders (menu: todos; rota: operator)"
+ ],
+ "menu_mais_restrito_que_a_rota": [],
+ "tabelas_sem_rls": [
+  "cache_refresh_log",
+  "job_queue_processing_log"
+ ]
+}
