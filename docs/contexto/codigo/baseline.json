@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c77f6cc07bed873c5b84129cc967ab45b386f872",
+  "commit": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
   "branch": "main",
-  "data_commit": "2026-11-21T09:54:27-03:00",
+  "data_commit": "2026-11-21T10:33:14-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a614869",
+    "data": "2026-11-21",
+    "assunto": "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)"
+   },
+   {
+    "sha": "56aaa27",
+    "data": "2026-11-21",
+    "assunto": "docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)"
+   },
    {
     "sha": "c77f6cc",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "63987c9",
     "data": "2026-11-19",
     "assunto": "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)"
-   },
-   {
-    "sha": "ebde884",
-    "data": "2026-11-19",
-    "assunto": "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)"
-   },
-   {
-    "sha": "55a4d92",
-    "data": "2026-11-14",
-    "assunto": "chore: contexto agendado de 10 min para 1x/hora (#87)"
    }
   ],
-  "arquivos_mudados_7d": 48,
+  "arquivos_mudados_7d": 52,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -145,11 +145,11 @@
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 6
+    "mudancas": 7
    },
    {
     "pasta": "docs/pendencias/README.md",
-    "mudancas": 4
+    "mudancas": 5
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -215,15 +215,15 @@
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 6
+    "mudancas": 7
+   },
+   {
+    "arquivo": "docs/pendencias/README.md",
+    "mudancas": 5
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "docs/pendencias/README.md",
-    "mudancas": 4
    },
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -266,6 +266,10 @@
     "mudancas": 2
    },
    {
+    "arquivo": "docs/audit_report.md",
+    "mudancas": 2
+   },
+   {
     "arquivo": "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
     "mudancas": 2
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "docs/pendencias/P-09-transicoes-status-sem-check.md",
     "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/add-security-manage.ts",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 23
+    "commits": 25
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 889,
+  "arquivos_total": 892,
   "arquivos_codigo": 566,
   "linhas_codigo": 110180,
   "rotas": 54,
@@ -322,12 +322,12 @@
   "hooks": 96,
   "edge_functions": 26,
   "tabelas": 76,
-  "migrations": 158,
+  "migrations": 159,
   "cron_jobs": 16,
   "testes": 97,
   "workflows": 3,
   "scripts": 104,
-  "docs_md": 77
+  "docs_md": 79
  },
  "por_pasta": {
   "e2e/helpers": {

@@ -4,9 +4,9 @@
  "stack": {
   "linguagens": [
    "TypeScript (455)",
-   "SQL (162)",
+   "SQL (163)",
    "JavaScript (112)",
-   "Markdown (77)",
+   "Markdown (79)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -383,7 +383,7 @@
   {
    "arquivo": "docs/audit_report.md",
    "titulo": "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian",
-   "linhas": 122
+   "linhas": 124
   },
   {
    "arquivo": "lalamove_documentacao_completa.md",
@@ -409,7 +409,7 @@
  "docs_em_subpastas": [
   {
    "pasta": "docs/pendencias",
-   "arquivos_md": 15
+   "arquivos_md": 17
   },
   {
    "pasta": "docs/agentes",

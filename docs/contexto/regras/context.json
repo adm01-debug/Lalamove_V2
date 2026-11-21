@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c77f6cc07bed873c5b84129cc967ab45b386f872",
+  "sha": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 13:11 UTC",
-  "files_total": 884,
-  "code_files": 737,
-  "code_lines": 126890
+  "generated_at": "2026-11-21 13:33 UTC",
+  "files_total": 887,
+  "code_files": 738,
+  "code_lines": 126952
  },
  "version": "1.3.2",
- "facts_hash": "665008b9553acd1e",
+ "facts_hash": "afa9d23c57abe274",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -166,7 +166,7 @@
   "languages": {
    ".ts": 231,
    ".tsx": 224,
-   ".sql": 162,
+   ".sql": 163,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -619,7 +619,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Cadastro de motoristas com metricas de performance e score de risco.",
     "origin": "migration"
    },
    "lalamove_orders": {
@@ -973,7 +973,7 @@
      "constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO …"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Pedidos Lalamove com campos customizados e status em tempo real.",
     "origin": "migration"
    },
    "lalamove_stops": {
@@ -1088,7 +1088,7 @@
      "constraint lalamove_stops_stop_index_non_negative CHECK (stop_index >= 0), ADD CONSTRAINT lalamove_stops_latitude_range CHECK (latitude IS NULL OR (latitude >= -90 AND latitude <= 90)), ADD CONSTRAINT lalamove_stops_longitude_range CHECK (longitude IS NULL OR (longitude >= -180 AND longitude <= 180) …"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Paradas/stops dos pedidos Lalamove com endereco e horarios.",
     "origin": "migration"
    },
    "lalamove_status_history": {
@@ -1159,7 +1159,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Historico de mudancas de status de cada pedido Lalamove.",
     "origin": "migration"
    },
    "driver_incidents": {
@@ -1260,7 +1260,7 @@
      "constraint driver_incidents_resolution_consistency CHECK ( (resolved IS NOT TRUE AND resolved_at IS NULL) OR (resolved IS TRUE) )"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano).",
     "origin": "migration"
    },
    "driver_approval_queue": {
@@ -1368,7 +1368,7 @@
      "constraint driver_approval_queue_risk_score_range CHECK (risk_score >= 0 AND risk_score <= 100), ADD CONSTRAINT driver_approval_queue_priority_non_negative CHECK (priority IS NULL OR priority >= 0)"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Fila de aprovacao de motoristas com score de risco, prioridade e status.",
     "origin": "migration"
    },
    "active_tracking": {
@@ -1526,7 +1526,7 @@
      "constraint active_tracking_eta_non_negative CHECK (eta_minutes IS NULL OR eta_minutes >= 0)"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota.",
     "origin": "migration"
    },
    "alerts": {
@@ -1639,7 +1639,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status.",
     "origin": "migration"
    },
    "alerts_sent": {
@@ -1724,7 +1724,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Historico de notificacoes enviadas por canal com status, retry e erro.",
     "origin": "migration"
    },
    "alert_configurations": {
@@ -1969,7 +1969,7 @@
      "constraint alert_configurations_fallback_channel_valid CHECK (fallback_channel IS NULL OR fallback_channel IN ('whatsapp','email','slack','sms','bitrix24','n8n'))"
     ],
     "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
-    "comment": "",
+    "comment": "Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas.",
     "origin": "migration"
    },
    "webhook_events": {
@@ -2040,7 +2040,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224181603_0ace1e1d-c3a8-4569-b3ec-02bdee6d54c9.sql",
-    "comment": "Log completo de todos webhooks recebidos do Lalamove",
+    "comment": "Log completo de todos webhooks recebidos do Lalamove.",
     "origin": "migration"
    },
    "risk_rules": {
@@ -2104,7 +2104,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224181603_0ace1e1d-c3a8-4569-b3ec-02bdee6d54c9.sql",
-    "comment": "Regras configuráveis para cálculo de risk score dos motoristas",
+    "comment": "Regras configuraveis para calculo de risk score dos motoristas.",
     "origin": "migration"
    },
    "driver_locations": {
@@ -2177,7 +2177,7 @@
      "constraint driver_locations_latitude_check CHECK (latitude >= -90 AND latitude <= 90), ADD CONSTRAINT driver_locations_longitude_check CHECK (longitude >= -180 AND longitude <= 180), ADD CONSTRAINT driver_locations_speed_check CHECK (speed_kmh IS NULL OR speed_kmh >= 0), ADD CONSTRAINT driver_locati …"
     ],
     "src": "supabase/migrations/20251224181603_0ace1e1d-c3a8-4569-b3ec-02bdee6d54c9.sql",
-    "comment": "Histórico detalhado de posições GPS dos motoristas",
+    "comment": "Historico detalhado de posicoes GPS dos motoristas.",
     "origin": "migration"
    },
    "bitrix24_sync": {
@@ -2250,7 +2250,7 @@
      "constraint bitrix24_sync_order_id_key UNIQUE (order_id)"
     ],
     "src": "supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql",
-    "comment": "",
+    "comment": "Registro de sincronizacao de deals com o Bitrix24.",
     "origin": "migration"
    },
    "bitrix24_activities": {
@@ -2307,7 +2307,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql",
-    "comment": "",
+    "comment": "Atividades/timeline sincronizadas com o CRM Bitrix24.",
     "origin": "migration"
    },
    "bitrix24_tokens": {
@@ -2364,7 +2364,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql",
-    "comment": "",
+    "comment": "Tokens OAuth2 do Bitrix24 com refresh.",
     "origin": "migration"
    },
    "bitrix24_stage_mappings": {
@@ -2407,7 +2407,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql",
-    "comment": "",
+    "comment": "Mapeamento de estagios entre o sistema e os funis do Bitrix24.",
     "origin": "migration"
    },
    "driver_evaluations": {
@@ -2550,7 +2550,7 @@
      "constraint driver_evaluations_risk_score_range CHECK (risk_score >= 0 AND risk_score <= 100), ADD CONSTRAINT driver_evaluations_failure_rate_range CHECK (failure_rate IS NULL OR (failure_rate >= 0 AND failure_rate <= 1)), ADD CONSTRAINT driver_evaluations_total_deliveries_non_negative CHECK (total_d …"
     ],
     "src": "supabase/migrations/20251225194242_ab4f75da-94a4-4a98-85e6-4f1170dc4e8a.sql",
-    "comment": "",
+    "comment": "Historico de avaliacoes de risco dos motoristas com fatores detalhados.",
     "origin": "migration"
    },
    "system_logs": {
@@ -2942,7 +2942,7 @@
      "UNIQUE (user_id, role)"
     ],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Roles atribuidas a cada usuario (RBAC).",
     "origin": "migration"
    },
    "permissions": {
@@ -2992,7 +2992,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Permissoes granulares do sistema por modulo e acao.",
     "origin": "migration"
    },
    "role_permissions": {
@@ -3030,7 +3030,7 @@
      "UNIQUE (role, permission_id)"
     ],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Associacao entre roles e permissoes (RBAC).",
     "origin": "migration"
    },
    "rate_limit_logs": {
@@ -3117,7 +3117,7 @@
      "constraint rate_limit_logs_request_count_non_negative CHECK (request_count IS NULL OR request_count >= 0)"
     ],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Log de requisicoes por endpoint para monitoramento de rate limiting.",
     "origin": "migration"
    },
    "blocked_ips": {
@@ -3202,7 +3202,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "IPs bloqueados por rate limit/seguranca com motivo e expiracao.",
     "origin": "migration"
    },
    "ip_whitelist": {
@@ -3266,7 +3266,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "IPs autorizados com CIDR para acesso privilegiado.",
     "origin": "migration"
    },
    "mfa_sessions": {
@@ -3344,7 +3344,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260516112923_4931320e-6f67-4667-8eae-490bb7d9564c.sql",
-    "comment": "",
+    "comment": "Sessoes MFA (TOTP) registradas por usuario.",
     "origin": "migration"
    },
    "auth_logs": {
@@ -3415,7 +3415,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Auditoria de autenticacao: IP, user agent e evento de cada acesso.",
     "origin": "migration"
    },
    "password_reset_tokens": {
@@ -3472,7 +3472,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Tokens de reset de senha com expiracao.",
     "origin": "migration"
    },
    "email_verifications": {
@@ -3529,7 +3529,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql",
-    "comment": "",
+    "comment": "Tokens de verificacao de email com expiracao.",
     "origin": "migration"
    },
    "user_devices": {
@@ -3637,7 +3637,7 @@
      "UNIQUE(user_id, device_fingerprint)"
     ],
     "src": "supabase/migrations/20251231121414_f2fd5361-347b-4762-a085-7cb787a4effa.sql",
-    "comment": "",
+    "comment": "Dispositivos registrados dos usuarios para deteccao de novo login.",
     "origin": "migration"
    },
    "new_device_alerts": {
@@ -3701,7 +3701,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231121414_f2fd5361-347b-4762-a085-7cb787a4effa.sql",
-    "comment": "",
+    "comment": "Alertas de novo dispositivo detectado no login.",
     "origin": "migration"
    },
    "user_passkeys": {
@@ -3788,7 +3788,7 @@
      "CONSTRAINT user_passkeys_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
     ],
     "src": "supabase/migrations/20251231124540_2e008d82-c4a5-4717-aed9-a718562523ab.sql",
-    "comment": "",
+    "comment": "Chaves WebAuthn/passkeys registradas por usuario.",
     "origin": "migration"
    },
    "webauthn_challenges": {
@@ -3838,7 +3838,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231124540_2e008d82-c4a5-4717-aed9-a718562523ab.sql",
-    "comment": "",
+    "comment": "Challenges WebAuthn para fluxo de autenticacao sem senha.",
     "origin": "migration"
    },
    "password_reset_requests": {
@@ -3923,7 +3923,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql",
-    "comment": "",
+    "comment": "Requisicoes de reset de senha com aprovacao de admin.",
     "origin": "migration"
    },
    "login_attempts": {
@@ -4010,7 +4010,7 @@
      "constraint login_attempts_attempt_count_non_negative CHECK (attempt_count >= 0)"
     ],
     "src": "supabase/migrations/20251231132341_0338fc6c-b0df-47d7-8654-d5a5f4795c13.sql",
-    "comment": "",
+    "comment": "Tentativas de login com IP e resultado para lockout de conta.",
     "origin": "migration"
    },
    "cron_job_logs": {
@@ -4081,7 +4081,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260109205309_5747a020-5d75-4401-a623-b5688143f754.sql",
-    "comment": "Histórico de execuções dos cron jobs do sistema.",
+    "comment": "Historico de execucoes dos cron jobs do sistema com duracao e resultado.",
     "origin": "migration"
    },
    "runtime_error_logs": {
@@ -4236,7 +4236,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260306010726_5cbbb02c-7796-45ef-8cc4-ba1187998111.sql",
-    "comment": "",
+    "comment": "Logs de erros em runtime capturados pelo monitoramento.",
     "origin": "migration"
    },
    "lalamove_uapi_sessions": {
@@ -4335,7 +4335,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260315165451_86aebbac-da62-421e-b90c-59196d72b2da.sql",
-    "comment": "",
+    "comment": "Sessoes da Unified API da Lalamove (token e expiracao).",
     "origin": "migration"
    },
    "query_telemetry": {
@@ -4434,7 +4434,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260323120518_3b6de716-fc7b-4d8d-a0e9-3503c86411ce.sql",
-    "comment": "",
+    "comment": "Telemetria de consultas (logica/duracao/erro) para auditoria.",
     "origin": "migration"
    },
    "feature_flags": {
@@ -4491,7 +4491,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260513180430_c3906a74-efff-4053-8845-8bde91f86251.sql",
-    "comment": "",
+    "comment": "Flags de feature para ativacao/desativacao de funcionalidades.",
     "origin": "migration"
    },
    "security_test_logs": {
@@ -4555,7 +4555,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260513180724_3f8df4ed-2b79-4254-a66e-c07ac0297cfe.sql",
-    "comment": "",
+    "comment": "Registro de testes de seguranca executados.",
     "origin": "migration"
    },
    "tracking_events": {
@@ -4635,7 +4635,7 @@
      "constraint tracking_events_latitude_check CHECK (latitude >= -90 AND latitude <= 90), ADD CONSTRAINT tracking_events_longitude_check CHECK (longitude >= -180 AND longitude <= 180), ADD CONSTRAINT tracking_events_speed_check CHECK (speed IS NULL OR speed >= 0), ADD CONSTRAINT tracking_events_heading_ …"
     ],
     "src": "supabase/migrations/20260516114956_ae65dc31-f603-4f09-87a8-f7ff56459e41.sql",
-    "comment": "",
+    "comment": "Eventos de tracking particionados por mes (particionamento).",
     "origin": "migration"
    },
    "map_settings_overrides": {
@@ -4701,7 +4701,7 @@
      "UNIQUE(user_id, context_key)"
     ],
     "src": "supabase/migrations/20260520211741_b4954224-5626-4651-972f-14a0d2c8fff1.sql",
-    "comment": "",
+    "comment": "Overrides de configuracao de mapa por usuario/contexto.",
     "origin": "migration"
    },
    "contract_version_usage": {
@@ -4767,7 +4767,7 @@
      "CONSTRAINT contract_version_usage_unique UNIQUE (contract_name, contract_version, usage_date)"
     ],
     "src": "supabase/migrations/20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql",
-    "comment": "",
+    "comment": "Uso de versoes de contrato por periodo.",
     "origin": "migration"
    },
    "contract_version_usage_monthly": {
@@ -4840,7 +4840,7 @@
      "CONSTRAINT contract_version_usage_monthly_unique UNIQUE (contract_name, contract_version, usage_month)"
     ],
     "src": "supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql",
-    "comment": "",
+    "comment": "Agregado mensal de uso de versoes de contrato.",
     "origin": "migration"
    },
    "alert_dedup": {
@@ -4890,7 +4890,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql",
-    "comment": "",
+    "comment": "Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo.",
     "origin": "migration"
    },
    "report_presets": {
@@ -4942,7 +4942,7 @@
      "UNIQUE (user_id, name)"
     ],
     "src": "supabase/migrations/20260712231241_f7f824c7-4bd9-4648-812b-9aa57732088c.sql",
-    "comment": "",
+    "comment": "Presets de relatorios salvos pelos usuarios.",
     "origin": "migration"
    },
    "region_cache": {
@@ -4978,7 +4978,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260713105232_bcde1a1f-2639-4851-a868-1c9f2fbf028f.sql",
-    "comment": "",
+    "comment": "Cache por regiao para performance de consultas.",
     "origin": "migration"
    },
    "lalamove_stop_proofs": {
@@ -5086,7 +5086,7 @@
      "CONSTRAINT lalamove_stop_proofs_stop_unique UNIQUE (stop_id)"
     ],
     "src": "supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql",
-    "comment": "",
+    "comment": "Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove.",
     "origin": "migration"
    },
    "lalamove_order_replacements": {
@@ -5146,7 +5146,7 @@
      "CONSTRAINT lalamove_order_replacements_distinct_ids CHECK (previous_lalamove_id <> new_lalamove_id)"
     ],
     "src": "supabase/migrations/20260723130425_76481d2c-7b89-4ed7-9e3c-b89a98051ac3.sql",
-    "comment": "",
+    "comment": "Registro de pedidos de reposicao/reescolha na Lalamove.",
     "origin": "migration"
    },
    "lalamove_rate_limits": {
@@ -5238,7 +5238,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260723131806_a3854e60-0935-4d4c-be8a-51b57157d413.sql",
-    "comment": "",
+    "comment": "Controle de rate limit das chamadas a API Lalamove.",
     "origin": "migration"
    },
    "lalamove_priority_fee_history": {
@@ -5309,7 +5309,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260723133439_622ac986-0c37-4560-84ca-de587b0496cc.sql",
-    "comment": "",
+    "comment": "Historico de taxas de prioridade aplicadas aos pedidos Lalamove.",
     "origin": "migration"
    },
    "contacts": {
@@ -5390,7 +5390,7 @@
      "CONSTRAINT contacts_owner_phone_unique UNIQUE (owner_id, phone_e164)"
     ],
     "src": "supabase/migrations/20260723135010_e3a23b59-7351-4ad8-afaf-6c2a3af32f23.sql",
-    "comment": "",
+    "comment": "Contatos cadastrados (empresas/parceiros) para integracao externa.",
     "origin": "migration"
    },
    "mcp_diagnostics_grants": {
@@ -5447,7 +5447,7 @@
     ],
     "constraints": [],
     "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
-    "comment": "",
+    "comment": "Grants de acesso a diagnosticos via MCP (query_telemetry).",
     "origin": "migration"
    },
    "geo_blocks": {
@@ -12325,6 +12325,7 @@
    "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
    "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql",
    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
+   "supabase/migrations/20261121100000_add_table_comments.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -14328,9 +14329,9 @@
    "column:saved_filters.entity_type": "Tipo de entidade (ex: produtos, pedidos, colaboradores)",
    "column:saved_filters.filters": "Estrutura JSON do filtro",
    "column:saved_filters.is_default": "Se este é o filtro padrão para o usuário nesta entidade",
-   "table:webhook_events": "Log completo de todos webhooks recebidos do Lalamove",
-   "table:risk_rules": "Regras configuráveis para cálculo de risk score dos motoristas",
-   "table:driver_locations": "Histórico detalhado de posições GPS dos motoristas",
+   "table:webhook_events": "Log completo de todos webhooks recebidos do Lalamove.",
+   "table:risk_rules": "Regras configuraveis para calculo de risk score dos motoristas.",
+   "table:driver_locations": "Historico detalhado de posicoes GPS dos motoristas.",
    "column:lalamove_orders.bitrix24_deal_id": "ID do deal no Bitrix24 para integração",
    "column:lalamove_orders.is_urgent": "Indica se o pedido é urgente/prioritário",
    "column:lalamove_stops.pod_status": "Status do comprovante de entrega: NOT_REQUIRED, PENDING, COMPLETED, FAILED",
@@ -14367,11 +14368,62 @@
    "function:get_hourly_stats": "Busca estatísticas horárias (usa cache)",
    "function:get_risk_distribution": "Busca distribuição de riscos (usa cache)",
    "function:refresh_all_caches": "Atualiza todos os caches manualmente",
-   "table:cron_job_logs": "Histórico de execuções dos cron jobs do sistema.",
+   "table:cron_job_logs": "Historico de execucoes dos cron jobs do sistema com duracao e resultado.",
    "column:lalamove_orders.supplier_contact": "Telefone ou ID do fornecedor para notificações automáticas via WhatsApp/Bot",
    "column:lalamove_orders.auto_notify_supplier": "Se verdadeiro, o sistema enviará avisos automáticos ao fornecedor quando o motorista estiver a caminho",
    "column:lalamove_orders.stalled_threshold_minutes": "Tempo máximo (minutos) que o motorista pode ficar parado antes de disparar alerta",
-   "column:lalamove_orders.route_deviation_threshold_minutes": "Tempo máximo (minutos) fora da rota antes de disparar alerta"
+   "column:lalamove_orders.route_deviation_threshold_minutes": "Tempo máximo (minutos) fora da rota antes de disparar alerta",
+   "table:active_tracking": "Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota.",
+   "table:alert_configurations": "Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas.",
+   "table:alert_dedup": "Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo.",
+   "table:alerts": "Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status.",
+   "table:alerts_sent": "Historico de notificacoes enviadas por canal com status, retry e erro.",
+   "table:auth_logs": "Auditoria de autenticacao: IP, user agent e evento de cada acesso.",
+   "table:bitrix24_activities": "Atividades/timeline sincronizadas com o CRM Bitrix24.",
+   "table:bitrix24_stage_mappings": "Mapeamento de estagios entre o sistema e os funis do Bitrix24.",
+   "table:bitrix24_sync": "Registro de sincronizacao de deals com o Bitrix24.",
+   "table:bitrix24_tokens": "Tokens OAuth2 do Bitrix24 com refresh.",
+   "table:blocked_ips": "IPs bloqueados por rate limit/seguranca com motivo e expiracao.",
+   "table:contacts": "Contatos cadastrados (empresas/parceiros) para integracao externa.",
+   "table:contract_version_usage": "Uso de versoes de contrato por periodo.",
+   "table:contract_version_usage_monthly": "Agregado mensal de uso de versoes de contrato.",
+   "table:driver_approval_queue": "Fila de aprovacao de motoristas com score de risco, prioridade e status.",
+   "table:driver_evaluations": "Historico de avaliacoes de risco dos motoristas com fatores detalhados.",
+   "table:driver_incidents": "Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano).",
+   "table:drivers": "Cadastro de motoristas com metricas de performance e score de risco.",
+   "table:email_verifications": "Tokens de verificacao de email com expiracao.",
+   "table:feature_flags": "Flags de feature para ativacao/desativacao de funcionalidades.",
+   "table:geo_blocks": "Bloqueios geograficos por pais (permanente ou temporario).",
+   "table:ip_whitelist": "IPs autorizados com CIDR para acesso privilegiado.",
+   "table:lalamove_order_replacements": "Registro de pedidos de reposicao/reescolha na Lalamove.",
+   "table:lalamove_orders": "Pedidos Lalamove com campos customizados e status em tempo real.",
+   "table:lalamove_priority_fee_history": "Historico de taxas de prioridade aplicadas aos pedidos Lalamove.",
+   "table:lalamove_rate_limits": "Controle de rate limit das chamadas a API Lalamove.",
+   "table:lalamove_status_history": "Historico de mudancas de status de cada pedido Lalamove.",
+   "table:lalamove_stop_proofs": "Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove.",
+   "table:lalamove_stops": "Paradas/stops dos pedidos Lalamove com endereco e horarios.",
+   "table:lalamove_uapi_sessions": "Sessoes da Unified API da Lalamove (token e expiracao).",
+   "table:login_attempts": "Tentativas de login com IP e resultado para lockout de conta.",
+   "table:map_settings_overrides": "Overrides de configuracao de mapa por usuario/contexto.",
+   "table:mcp_diagnostics_grants": "Grants de acesso a diagnosticos via MCP (query_telemetry).",
+   "table:mfa_sessions": "Sessoes MFA (TOTP) registradas por usuario.",
+   "table:new_device_alerts": "Alertas de novo dispositivo detectado no login.",
+   "table:password_reset_requests": "Requisicoes de reset de senha com aprovacao de admin.",
+   "table:password_reset_tokens": "Tokens de reset de senha com expiracao.",
+   "table:permissions": "Permissoes granulares do sistema por modulo e acao.",
+   "table:query_telemetry": "Telemetria de consultas (logica/duracao/erro) para auditoria.",
+   "table:rate_limit_logs": "Log de requisicoes por endpoint para monitoramento de rate limiting.",
+   "table:region_cache": "Cache por regiao para performance de consultas.",
+   "table:report_presets": "Presets de relatorios salvos pelos usuarios.",
+   "table:role_permissions": "Associacao entre roles e permissoes (RBAC).",
+   "table:runtime_error_logs": "Logs de erros em runtime capturados pelo monitoramento.",
+   "table:security_test_logs": "Registro de testes de seguranca executados.",
+   "table:tracking_events": "Eventos de tracking particionados por mes (particionamento).",
+   "table:tracking_events_default": "Particao padrao da tabela tracking_events.",
+   "table:user_devices": "Dispositivos registrados dos usuarios para deteccao de novo login.",
+   "table:user_passkeys": "Chaves WebAuthn/passkeys registradas por usuario.",
+   "table:user_roles": "Roles atribuidas a cada usuario (RBAC).",
+   "table:webauthn_challenges": "Challenges WebAuthn para fluxo de autenticacao sem senha."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -18784,8 +18836,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 158,
-   "lines": 10244,
+   "files": 159,
+   "lines": 10306,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -43234,7 +43286,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "63/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `drivers`, `lalamove_orders`, `lalamove_stops`, `lalamove_status_history`, `driver_incidents`, `driver_approval_queue`, `active_tracking`, `alerts`, `alerts_sent`, `alert_configurations` …",
+   "14/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_blocks`, `tracking_events_default`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -61111,13 +61163,39 @@
   "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql": {
    "path": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
    "lines": 27
+  },
+  "supabase/migrations/20261121100000_add_table_comments.sql": {
+   "path": "supabase/migrations/20261121100000_add_table_comments.sql",
+   "lines": 62
   }
  },
  "git": {
-  "sha": "c77f6cc07bed873c5b84129cc967ab45b386f872",
+  "sha": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a614869",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)",
+    "files": [
+     "supabase/migrations/20261121100000_add_table_comments.sql"
+    ]
+   },
+   {
+    "sha": "56aaa27",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)",
+    "files": [
+     "docs/audit_report.md",
+     "docs/pendencias/P-12-analise-funcionalidades-planejadas.md",
+     "docs/pendencias/P-13-comment-on-table-faltantes.md",
+     "docs/pendencias/README.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
    {
     "sha": "c77f6cc",
     "date": "2026-11-21",
@@ -61434,176 +61512,6 @@
     "files": [
      "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql"
     ]
-   },
-   {
-    "sha": "0fd8bc3",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(ui): escurece --primary de 60% para 50% para WCAG AA",
-    "files": [
-     "src/index.css"
-    ]
-   },
-   {
-    "sha": "c8807f7",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2",
-    "files": [
-     ".github/toolchain.json",
-     ".github/workflows/contexto.yml",
-     ".github/workflows/inventario-estado-semanal.yml",
-     ".gitignore",
-     "docs/ci/MATRIZ_EDGE_TABELA.md",
-     "docs/contexto/regras/manual/README.md",
-     "docs/contexto/regras/manual/TEMPLATE-regras-de-negocio.md",
-     "inventario/estado/README.md",
-     "inventario/estado/edges.json",
-     "inventario/estado/rotas.json",
-     "scripts/ai-context/README.md",
-     "scripts/ai-context/cenarios.mjs",
-     "scripts/ai-context/gerar.mjs",
-     "scripts/ai-context/gerar.unit.mjs",
-     "scripts/ci/README.md",
-     "scripts/ci/a11y-button-name-baseline.json",
-     "scripts/ci/a11y-button-name-ratchet.mjs",
-     "scripts/ci/a11y-button-name-ratchet.unit.mjs",
-     "scripts/ci/actions-kpi.mjs",
-     "scripts/ci/actions-kpi.unit.mjs",
-     "scripts/ci/allowed-actions.json",
-     "scripts/ci/branch-podaveis.mjs",
-     "scripts/ci/branch-podaveis.unit.mjs",
-     "scripts/ci/bump-toolchain.mjs",
-     "scripts/ci/bump-toolchain.unit.mjs",
-     "scripts/ci/bundle-budget.mjs",
-     "scripts/ci/bundle-budget.unit.mjs",
-     "scripts/ci/check-bundle-secrets.mjs",
-     "scripts/ci/check-bundle-secrets.unit.mjs",
-     "scripts/ci/check-e2e-artifact-secrets.mjs",
-     "scripts/ci/check-e2e-artifact-secrets.unit.mjs",
-     "scripts/ci/check-edge-error-exposure-baseline.json",
-     "scripts/ci/check-edge-error-exposure.mjs",
-     "scripts/ci/check-edge-error-exposure.unit.mjs",
-     "scripts/ci/check-pr-workflow-secrets.mjs",
-     "scripts/ci/check-pr-workflow-secrets.unit.mjs",
-     "scripts/ci/check-quarantine.mjs",
-     "scripts/ci/check-quarantine.unit.mjs",
-     "scripts/ci/check-test-inventory.mjs",
-     "scripts/ci/check-test-inventory.unit.mjs",
-     "scripts/ci/check-workflow-pins-resolvem.mjs",
-     "scripts/ci/check-workflow-pins-resolvem.unit.mjs",
-     "scripts/ci/check-workflow-pins.mjs",
-     "scripts/ci/check-workflow-pins.unit.mjs",
-     "scripts/ci/eslint-baseline.json",
-     "scripts/ci/fila-merge.mjs",
-     "scripts/ci/fila-merge.unit.mjs",
-     "scripts/ci/gerar-matriz-edge-tabela.mjs",
-     "scripts/ci/gerar-matriz-edge-tabela.unit.mjs",
-     "scripts/ci/github-settings-baseline.json",
-     "scripts/ci/github-settings-guard.mjs",
-     "scripts/ci/github-settings-guard.unit.mjs",
-     "scripts/ci/implicit-any-baseline.json",
-     "scripts/ci/implicit-any-ratchet.mjs",
-     "scripts/ci/implicit-any-ratchet.unit.mjs",
-     "scripts/ci/issue-rotativa.mjs",
-     "scripts/ci/issue-rotativa.unit.mjs",
-     "scripts/ci/lint-ratchet.mjs",
-     "scripts/ci/lint-ratchet.unit.mjs",
-     "scripts/ci/marcador-specs.mjs",
-     "scripts/ci/marcador-specs.unit.mjs",
-     "scripts/ci/redigir-relatorio.mjs",
-     "scripts/ci/redigir-relatorio.unit.mjs",
-     "scripts/ci/render-workflow-docs.mjs",
-     "scripts/ci/render-workflow-docs.unit.mjs",
-     "scripts/ci/typecheck-baseline.json",
-     "scripts/ci/typecheck-ratchet.mjs",
-     "scripts/ci/typecheck-ratchet.unit.mjs",
-     "scripts/ci/vercel-env-baseline.json",
-     "scripts/ci/vercel-env-baseline.mjs",
-     "scripts/ci/vercel-env-baseline.unit.mjs",
-     "scripts/ci/workflow-invariants.mjs",
-     "scripts/ci/workflow-invariants.unit.mjs",
-     "scripts/ci/workflow-test-support.mjs",
-     "scripts/db-audit/README.md",
-     "scripts/db-audit/catalog-from-types.mjs",
-     "scripts/db-audit/catalog-from-types.test.mjs",
-     "scripts/db-audit/catalog.sql",
-     "scripts/db-audit/certs/supabase-prod-ca-2021.crt",
-     "scripts/db-audit/check-grants-fresh.mjs",
-     "scripts/db-audit/check-grants-fresh.test.mjs",
-     "scripts/db-audit/check-manifest-fresh.mjs",
-     "scripts/db-audit/check-manifest-fresh.test.mjs",
-     "scripts/db-audit/check-migration-drift.mjs",
-     "scripts/db-audit/check-migration-drift.test.mjs",
-     "scripts/db-audit/check-realtime-subscriptions.mjs",
-     "scripts/db-audit/check-realtime-subscriptions.test.mjs",
-     "scripts/db-audit/check-remocoes-destrutivas.mjs",
-     "scripts/db-audit/check-screen-permission-db-guards.mjs",
-     "scripts/db-audit/check-screen-permission-db-guards.test.mjs",
-     "scripts/db-audit/database-identity.json",
-     "scripts/db-audit/database-identity.mjs",
-     "scripts/db-audit/database-identity.test.mjs",
-     "scripts/db-audit/diff.mjs",
-     "scripts/db-audit/diff.test.mjs",
-     "scripts/db-audit/dry-run-plan.mjs",
-     "scripts/db-audit/grants-baseline.sql",
-     "scripts/db-audit/known-violations.json",
-     "scripts/db-audit/manifest-lib.mjs",
-     "scripts/db-audit/manifest.sql",
-     "scripts/db-audit/migration-evidence.json",
-     "scripts/db-audit/psql-environment.mjs",
-     "scripts/db-audit/psql-environment.test.mjs",
-     "scripts/db-audit/psql-safe.mjs",
-     "scripts/db-audit/psql-safe.test.mjs",
-     "scripts/db-audit/register-migration.mjs",
-     "scripts/db-audit/register-migration.test.mjs",
-     "scripts/db-audit/seguranca-processo.mjs",
-     "scripts/db-audit/seguranca-processo.test.mjs",
-     "scripts/db-audit/sql-lexer.mjs",
-     "scripts/db-audit/supabase-usage-guard.mjs",
-     "scripts/docs/README.md",
-     "scripts/docs/verificar-docs-realtime.mjs",
-     "scripts/eslint/README.md",
-     "scripts/eslint/no-secret-compare.js",
-     "scripts/inventario/README.md",
-     "scripts/inventario/banco.sql",
-     "scripts/inventario/gerar-banco.mjs",
-     "scripts/inventario/gerar-repo.mjs",
-     "scripts/inventario/gerar-rotas.mjs",
-     "scripts/inventario/mudou-conteudo.mjs",
-     "scripts/lib/README.md",
-     "scripts/lib/seguranca-processo.mjs",
-     "scripts/lib/seguranca-processo.test.mjs",
-     "scripts/qa/README.md",
-     "scripts/qa/contraste-auditores.unit.mjs",
-     "scripts/qa/contraste-busca.mjs",
-     "scripts/qa/contraste-tokens.mjs",
-     "scripts/qa/medir-tipografia.cjs",
-     "scripts/qa/tipografia-budget.json",
-     "scripts/regras_negocio/README.md",
-     "scripts/regras_negocio/generate.py",
-     "scripts/regras_negocio/indice.py",
-     "scripts/regras_negocio/publish.sh",
-     "scripts/regras_negocio/test_generate.py",
-     "scripts/supabase_snapshot/README.md",
-     "scripts/supabase_snapshot/requirements.txt",
-     "scripts/supabase_snapshot/snapshot.py",
-     "scripts/supabase_snapshot/test_snapshot.py",
-     "scripts/ui-audit/README.md",
-     "scripts/ui-audit/layout-guard.mjs",
-     "scripts/ui-audit/layout-guard.unit.mjs",
-     "scripts/ui-audit/root-className.mjs",
-     "scripts/ui-audit/width-check.mjs",
-     "scripts/ui-audit/width-check.unit.mjs",
-     "scripts/ui-audit/width-regression.mjs",
-     "scripts/vercel/README.md",
-     "scripts/vercel/ignore-build.sh",
-     "scripts/vercel/ignore-build.unit.mjs",
-     "scripts/vercel/verify-production.mjs",
-     "scripts/vercel/verify-production.unit.mjs",
-     "scripts/vercel/verify-release-targets.mjs",
-     "scripts/vercel/verify-release-targets.unit.mjs"
-    ]
    }
   ],
   "hot_files": [
@@ -61617,11 +61525,11 @@
    ],
    [
     "docs/pendencias/_ordem.md",
-    6
+    7
    ],
    [
     "docs/pendencias/README.md",
-    4
+    5
    ],
    [
     "docs/pendencias/P-06-vulns-npm-restantes.md",
@@ -61668,23 +61576,23 @@
     2
    ],
    [
-    ".github/workflows/contexto.yml",
-    2
+    "supabase/migrations/20261121100000_add_table_comments.sql",
+    1
    ],
    [
-    "src/index.css",
-    2
+    "docs/audit_report.md",
+    1
+   ],
+   [
+    "docs/pendencias/P-12-analise-funcionalidades-planejadas.md",
+    1
+   ],
+   [
+    "docs/pendencias/P-13-comment-on-table-faltantes.md",
+    1
    ],
    [
     "docs/pendencias/P-11-mfa-webauthn.md",
-    1
-   ],
-   [
-    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
-    1
-   ],
-   [
-    "docs/pendencias/P-04-rotacionar-jwt-secret-painel.md",
     1
    ]
   ]

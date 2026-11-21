@@ -1,71 +1,71 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c77f6cc07b` · branch `main` · 2026-11-21 13:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a614869669` · branch `main` · 2026-11-21 13:33 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
 
 | Termo | Significado / valores | Tamanho | Origem |
 |---|---|---|---|
-| `active_tracking` | _(sem COMMENT ON TABLE — significado não documentado)_ | 21 colunas | migration |
-| `alert_configurations` | _(sem COMMENT ON TABLE — significado não documentado)_ | 33 colunas | migration |
-| `alert_dedup` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
-| `alerts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
-| `alerts_sent` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
+| `active_tracking` | Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota. | 21 colunas | migration |
+| `alert_configurations` | Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas. | 33 colunas | migration |
+| `alert_dedup` | Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo. | 6 colunas | migration |
+| `alerts` | Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status. | 15 colunas | migration |
+| `alerts_sent` | Historico de notificacoes enviadas por canal com status, retry e erro. | 11 colunas | migration |
 | `audit_log` | Registro de auditoria de ações | 9 colunas | migration |
-| `auth_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `bitrix24_activities` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
-| `bitrix24_stage_mappings` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | migration |
-| `bitrix24_sync` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `bitrix24_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
-| `blocked_ips` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
+| `auth_logs` | Auditoria de autenticacao: IP, user agent e evento de cada acesso. | 9 colunas | migration |
+| `bitrix24_activities` | Atividades/timeline sincronizadas com o CRM Bitrix24. | 7 colunas | migration |
+| `bitrix24_stage_mappings` | Mapeamento de estagios entre o sistema e os funis do Bitrix24. | 5 colunas | migration |
+| `bitrix24_sync` | Registro de sincronizacao de deals com o Bitrix24. | 9 colunas | migration |
+| `bitrix24_tokens` | Tokens OAuth2 do Bitrix24 com refresh. | 7 colunas | migration |
+| `blocked_ips` | IPs bloqueados por rate limit/seguranca com motivo e expiracao. | 11 colunas | migration |
 | `cache_refresh_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `contacts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
-| `contract_version_usage` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| `contract_version_usage_monthly` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `cron_job_logs` | Histórico de execuções dos cron jobs do sistema. | 9 colunas | migration |
-| `driver_approval_queue` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
-| `driver_evaluations` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | migration |
-| `driver_incidents` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
-| `driver_locations` | Histórico detalhado de posições GPS dos motoristas | 9 colunas | migration |
-| `drivers` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | migration |
+| `contacts` | Contatos cadastrados (empresas/parceiros) para integracao externa. | 10 colunas | migration |
+| `contract_version_usage` | Uso de versoes de contrato por periodo. | 8 colunas | migration |
+| `contract_version_usage_monthly` | Agregado mensal de uso de versoes de contrato. | 9 colunas | migration |
+| `cron_job_logs` | Historico de execucoes dos cron jobs do sistema com duracao e resultado. | 9 colunas | migration |
+| `driver_approval_queue` | Fila de aprovacao de motoristas com score de risco, prioridade e status. | 14 colunas | migration |
+| `driver_evaluations` | Historico de avaliacoes de risco dos motoristas com fatores detalhados. | 19 colunas | migration |
+| `driver_incidents` | Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano). | 13 colunas | migration |
+| `driver_locations` | Historico detalhado de posicoes GPS dos motoristas. | 9 colunas | migration |
+| `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 32 colunas | migration |
 | `drivers_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | types.ts |
-| `email_verifications` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
+| `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `entity_versions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| `feature_flags` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
+| `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
 | `geo_blocks` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
-| `ip_whitelist` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
+| `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
 | `job_queue` | Fila de jobs assíncronos para processamento em background | 16 colunas | migration |
 | `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| `lalamove_order_replacements` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
-| `lalamove_orders` | _(sem COMMENT ON TABLE — significado não documentado)_ | 49 colunas | migration |
-| `lalamove_priority_fee_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `lalamove_rate_limits` | _(sem COMMENT ON TABLE — significado não documentado)_ | 12 colunas | migration |
-| `lalamove_status_history` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
-| `lalamove_stop_proofs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
-| `lalamove_stops` | _(sem COMMENT ON TABLE — significado não documentado)_ | 15 colunas | migration |
-| `lalamove_uapi_sessions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
-| `login_attempts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
-| `map_settings_overrides` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
-| `mcp_diagnostics_grants` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
-| `mfa_sessions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
-| `new_device_alerts` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
+| `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
+| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 49 colunas | migration |
+| `lalamove_priority_fee_history` | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. | 9 colunas | migration |
+| `lalamove_rate_limits` | Controle de rate limit das chamadas a API Lalamove. | 12 colunas | migration |
+| `lalamove_status_history` | Historico de mudancas de status de cada pedido Lalamove. | 9 colunas | migration |
+| `lalamove_stop_proofs` | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. | 14 colunas | migration |
+| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 15 colunas | migration |
+| `lalamove_uapi_sessions` | Sessoes da Unified API da Lalamove (token e expiracao). | 13 colunas | migration |
+| `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
+| `map_settings_overrides` | Overrides de configuracao de mapa por usuario/contexto. | 8 colunas | migration |
+| `mcp_diagnostics_grants` | Grants de acesso a diagnosticos via MCP (query_telemetry). | 7 colunas | migration |
+| `mfa_sessions` | Sessoes MFA (TOTP) registradas por usuario. | 10 colunas | migration |
+| `new_device_alerts` | Alertas de novo dispositivo detectado no login. | 8 colunas | migration |
 | `orders_operator_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
 | `orders_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
-| `password_reset_requests` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
-| `password_reset_tokens` | _(sem COMMENT ON TABLE — significado não documentado)_ | 7 colunas | migration |
-| `permissions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
-| `query_telemetry` | _(sem COMMENT ON TABLE — significado não documentado)_ | 13 colunas | migration |
-| `rate_limit_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
-| `region_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
-| `report_presets` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
-| `risk_rules` | Regras configuráveis para cálculo de risk score dos motoristas | 8 colunas | migration |
-| `role_permissions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 4 colunas | migration |
-| `runtime_error_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 21 colunas | migration |
+| `password_reset_requests` | Requisicoes de reset de senha com aprovacao de admin. | 11 colunas | migration |
+| `password_reset_tokens` | Tokens de reset de senha com expiracao. | 7 colunas | migration |
+| `permissions` | Permissoes granulares do sistema por modulo e acao. | 6 colunas | migration |
+| `query_telemetry` | Telemetria de consultas (logica/duracao/erro) para auditoria. | 13 colunas | migration |
+| `rate_limit_logs` | Log de requisicoes por endpoint para monitoramento de rate limiting. | 11 colunas | migration |
+| `region_cache` | Cache por regiao para performance de consultas. | 4 colunas | migration |
+| `report_presets` | Presets de relatorios salvos pelos usuarios. | 6 colunas | migration |
+| `risk_rules` | Regras configuraveis para calculo de risk score dos motoristas. | 8 colunas | migration |
+| `role_permissions` | Associacao entre roles e permissoes (RBAC). | 4 colunas | migration |
+| `runtime_error_logs` | Logs de erros em runtime capturados pelo monitoramento. | 21 colunas | migration |
 | `saved_filters` | Armazena filtros salvos pelos usuários para diferentes entidades | 8 colunas | migration |
-| `security_test_logs` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
+| `security_test_logs` | Registro de testes de seguranca executados. | 8 colunas | migration |
 | `system_logs` | Logs estruturados do sistema | 7 colunas | migration |
-| `tracking_events` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
+| `tracking_events` | Eventos de tracking particionados por mes (particionamento). | 10 colunas | migration |
 | `tracking_events_default` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m05` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m06` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
@@ -73,11 +73,11 @@
 | `tracking_events_y2026m08` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m09` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m10` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
-| `user_devices` | _(sem COMMENT ON TABLE — significado não documentado)_ | 14 colunas | migration |
-| `user_passkeys` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | migration |
-| `user_roles` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | migration |
-| `webauthn_challenges` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
-| `webhook_events` | Log completo de todos webhooks recebidos do Lalamove | 9 colunas | migration |
+| `user_devices` | Dispositivos registrados dos usuarios para deteccao de novo login. | 14 colunas | migration |
+| `user_passkeys` | Chaves WebAuthn/passkeys registradas por usuario. | 11 colunas | migration |
+| `user_roles` | Roles atribuidas a cada usuario (RBAC). | 10 colunas | migration |
+| `webauthn_challenges` | Challenges WebAuthn para fluxo de autenticacao sem senha. | 6 colunas | migration |
+| `webhook_events` | Log completo de todos webhooks recebidos do Lalamove. | 9 colunas | migration |
 | `order_status` (enum) | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED |  | banco |
 | `vehicle_type` (enum) | MOTORCYCLE, CAR, VAN, TRUCK |  | banco |
 | `driver_status` (enum) | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST |  | banco |
@@ -258,7 +258,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 63/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `drivers`, `lalamove_orders`, `lalamove_stops`, `lalamove_status_history`, `driver_incidents`, `driver_approval_queue`, `active_tracking`, `alerts`, `alerts_sent`, `alert_configurations` …
+- 14/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_blocks`, `tracking_events_default`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c77f6cc07bed873c5b84129cc967ab45b386f872` (2026-11-21T09:54:27-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a614869669c9b4a18c4d91aa882caa5a0396f0ef` (2026-11-21T10:33:14-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (162), JavaScript (112), Markdown (77), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (163), JavaScript (112), Markdown (79), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 889 |
+| arquivos_total | 892 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 110180 |
 | rotas | 54 |
@@ -47,12 +47,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 96 |
 | edge_functions | 26 |
 | tabelas | 76 |
-| migrations | 158 |
+| migrations | 159 |
 | cron_jobs | 16 |
 | testes | 97 |
 | workflows | 3 |
 | scripts | 104 |
-| docs_md | 77 |
+| docs_md | 79 |
 
 ## Onde ficam as coisas
 - telas: src/pages (52)
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6509 nós · 14326 arestas · 511 comunidades · grafo do commit `c77f6cc0`
-- comunidades maiores: cn (200), button.tsx (122), App.tsx (107), snapshot.py (102), lucide-react (102), EvaluationsPage.tsx (91), AdminTelemetriaPage.tsx (90), dependencies (80), client.ts (76), gerar.mjs (76), ref_node_path (71), DashboardRedesigned.tsx (68)
+- 6522 nós · 14336 arestas · 508 comunidades · grafo do commit `a6148696`
+- comunidades maiores: card.tsx (110), snapshot.py (102), button.tsx (93), cn (91), lucide-react (82), DriversPage.tsx (81), NotificationPreferences.tsx (80), dependencies (80), client.ts (79), gerar.mjs (76), ref_node_path (75), DashboardRedesigned.tsx (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -274,9 +274,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (30)
 - supabase/config.toml (11)
 - .github/workflows/ci.yml (7)
-- docs/pendencias/_ordem.md (6)
+- docs/pendencias/_ordem.md (7)
+- docs/pendencias/README.md (5)
 - src/hooks/useRegionResolver.ts (5)
-- docs/pendencias/README.md (4)
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
 - docs/pendencias/P-06-vulns-npm-restantes.md (3)
@@ -342,15 +342,17 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/SECURITY.md` — 🔒 Security - Lalamove Guardian (87 linhas)
 - `docs/TROUBLESHOOTING.md` — 🔧 Troubleshooting - Lalamove Guardian (178 linhas)
 - `docs/WEBHOOK_HANDLER.md` — 📡 Webhook Handler - Lalamove Guardian (142 linhas)
-- `docs/audit_report.md` — 🏆 Relatório de Auditoria Enterprise - Lalamove Guardian (122 linhas)
+- `docs/audit_report.md` — 🏆 Relatório de Auditoria Enterprise - Lalamove Guardian (124 linhas)
 - `lalamove_documentacao_completa.md` — Lalamove Brasil — Documentação Mestra Exaustiva (1738 linhas)
 - `lalamove_n8n_integration.md` — Integração n8n ↔ Lalamove Token Manager (141 linhas)
 - `lalamove_order_history_full.md` — Lalamove Brasil — Histórico Completo de Pedidos (116 linhas)
 - `lalamove_suplemento_v2.md` — Lalamove Brasil — Suplemento Técnico v2 (772 linhas)
-- subpastas de docs/: docs/pendencias (15), docs/agentes (6), docs/adr (2), docs/contexto (2), docs/ci (1)
+- subpastas de docs/: docs/pendencias (17), docs/agentes (6), docs/adr (2), docs/contexto (2), docs/ci (1)
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `a614869` feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)
+- 2026-11-21 `56aaa27` docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)
 - 2026-11-21 `c77f6cc` docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)
 - 2026-11-21 `59599d3` docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)
 - 2026-11-21 `f1218b2` fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)
@@ -364,8 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `1ef5f30` fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)
 - 2026-11-20 `158850e` build(deps-dev): bump vite from 7.3.5 to 8.3.8 (#77)
 - 2026-11-20 `a4e1f18` build(deps): bump input-otp from 1.4.2 to 1.5.0 (#76)
-- 2026-11-20 `1eb8189` build(deps): bump papaparse from 5.5.3 to 5.7.1 (#73)
-- 2026-11-20 `cbc45da` build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
