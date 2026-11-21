@@ -1,0 +1,3378 @@
+{
+  "api": {},
+  "db": {
+    "cron_runs": [
+      {
+        "end_time": "2026-11-21T03:45:00.252360+00:00",
+        "jobid": 4,
+        "return_message": "1 row",
+        "runid": 28975,
+        "seconds": 0.09,
+        "start_time": "2026-11-21T03:45:00.161862+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-20T03:45:00.223041+00:00",
+        "jobid": 4,
+        "return_message": "1 row",
+        "runid": 28659,
+        "seconds": 0.07,
+        "start_time": "2026-11-20T03:45:00.157940+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-19T03:45:00.234247+00:00",
+        "jobid": 4,
+        "return_message": "1 row",
+        "runid": 28343,
+        "seconds": 0.07,
+        "start_time": "2026-11-19T03:45:00.168708+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-15T04:15:00.168885+00:00",
+        "jobid": 5,
+        "return_message": "1 row",
+        "runid": 27086,
+        "seconds": 0.01,
+        "start_time": "2026-11-15T04:15:00.155152+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T03:50:00.123868+00:00",
+        "jobid": 6,
+        "return_message": "1 row",
+        "runid": 28977,
+        "seconds": 0.02,
+        "start_time": "2026-11-21T03:50:00.104253+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-20T03:50:00.120122+00:00",
+        "jobid": 6,
+        "return_message": "1 row",
+        "runid": 28661,
+        "seconds": 0.01,
+        "start_time": "2026-11-20T03:50:00.108088+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-19T03:50:00.096698+00:00",
+        "jobid": 6,
+        "return_message": "1 row",
+        "runid": 28345,
+        "seconds": 0.01,
+        "start_time": "2026-11-19T03:50:00.085012+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T03:15:00.233130+00:00",
+        "jobid": 7,
+        "return_message": "1 row",
+        "runid": 28967,
+        "seconds": 0.07,
+        "start_time": "2026-11-21T03:15:00.160186+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-20T03:15:00.203320+00:00",
+        "jobid": 7,
+        "return_message": "1 row",
+        "runid": 28651,
+        "seconds": 0.04,
+        "start_time": "2026-11-20T03:15:00.166544+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-19T03:15:00.212932+00:00",
+        "jobid": 7,
+        "return_message": "1 row",
+        "runid": 28335,
+        "seconds": 0.04,
+        "start_time": "2026-11-19T03:15:00.169943+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T03:45:00.231779+00:00",
+        "jobid": 8,
+        "return_message": "1 row",
+        "runid": 28974,
+        "seconds": 0.07,
+        "start_time": "2026-11-21T03:45:00.163204+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-20T03:45:00.205738+00:00",
+        "jobid": 8,
+        "return_message": "1 row",
+        "runid": 28658,
+        "seconds": 0.05,
+        "start_time": "2026-11-20T03:45:00.158475+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-19T03:45:00.209303+00:00",
+        "jobid": 8,
+        "return_message": "1 row",
+        "runid": 28342,
+        "seconds": 0.04,
+        "start_time": "2026-11-19T03:45:00.167525+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T12:45:00.318849+00:00",
+        "jobid": 9,
+        "return_message": "1 row",
+        "runid": 29094,
+        "seconds": 0.02,
+        "start_time": "2026-11-21T12:45:00.300224+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T12:40:00.259229+00:00",
+        "jobid": 9,
+        "return_message": "1 row",
+        "runid": 29093,
+        "seconds": 0.03,
+        "start_time": "2026-11-21T12:40:00.224387+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T12:35:00.360768+00:00",
+        "jobid": 9,
+        "return_message": "1 row",
+        "runid": 29092,
+        "seconds": 0.05,
+        "start_time": "2026-11-21T12:35:00.305946+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T12:17:00.057580+00:00",
+        "jobid": 10,
+        "return_message": "1 row",
+        "runid": 29088,
+        "seconds": 0.01,
+        "start_time": "2026-11-21T12:17:00.043265+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T11:17:00.048526+00:00",
+        "jobid": 10,
+        "return_message": "1 row",
+        "runid": 29075,
+        "seconds": 0.01,
+        "start_time": "2026-11-21T11:17:00.036938+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T10:17:00.043129+00:00",
+        "jobid": 10,
+        "return_message": "1 row",
+        "runid": 29062,
+        "seconds": 0.01,
+        "start_time": "2026-11-21T10:17:00.029080+00:00",
+        "status": "succeeded"
+      }
+    ],
+    "db_stats": {
+      "auth": {
+        "identities_by_provider": [
+          {
+            "provider": "email",
+            "users": 3
+          }
+        ],
+        "mfa_factors": [],
+        "users_confirmed": 3,
+        "users_last_30d": 0,
+        "users_total": 3
+      },
+      "connections": [
+        {
+          "n": 8,
+          "state": "idle",
+          "usename": "authenticator"
+        },
+        {
+          "n": 1,
+          "state": "idle",
+          "usename": "pgbouncer"
+        },
+        {
+          "n": 1,
+          "state": "active",
+          "usename": "postgres"
+        },
+        {
+          "n": 1,
+          "state": "idle",
+          "usename": "postgres"
+        },
+        {
+          "n": 2,
+          "state": "idle",
+          "usename": "supabase_admin"
+        },
+        {
+          "n": 1,
+          "state": null,
+          "usename": "supabase_admin"
+        }
+      ],
+      "database_bytes": 42331283,
+      "queues": [],
+      "schema_bytes": [
+        {
+          "bytes": 4907008,
+          "schema": "public"
+        }
+      ],
+      "storage": [],
+      "top_queries": [
+        {
+          "calls": 28703,
+          "mean_ms": 11.61,
+          "query": "select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id",
+          "role": "postgres",
+          "rows": 28703,
+          "total_ms": 333341
+        },
+        {
+          "calls": 26261,
+          "mean_ms": 7.95,
+          "query": "WITH pgrst_source AS (SELECT \"pgrst_call\".* FROM \"public\".\"get_pending_escalations\"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ",
+          "role": "service_role",
+          "rows": 26261,
+          "total_ms": 208757
+        },
+        {
+          "calls": 220,
+          "mean_ms": 558.93,
+          "query": "SELECT e.name, n.nspname AS schema, e.default_version, x.extversion AS installed_version, e.comment, ev.schema AS default_version_schema FROM pg_available_extensions e LEFT JOIN pg_extension x ON e.name = x.extname LEFT ",
+          "role": "postgres",
+          "rows": 17160,
+          "total_ms": 122966
+        },
+        {
+          "calls": 71600,
+          "mean_ms": 1.05,
+          "query": "WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid",
+          "role": "postgres",
+          "rows": 28625,
+          "total_ms": 75222
+        },
+        {
+          "calls": 2,
+          "mean_ms": 35627.51,
+          "query": "SELECT table_schema AS schema, table_name AS \"table\", column_name AS \"column\", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ",
+          "role": "postgres",
+          "rows": 0,
+          "total_ms": 71255
+        },
+        {
+          "calls": 71600,
+          "mean_ms": 0.88,
+          "query": "WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key || ",
+          "role": "postgres",
+          "rows": 28703,
+          "total_ms": 62787
+        },
+        {
+          "calls": 84,
+          "mean_ms": 623.99,
+          "query": "SELECT name FROM pg_timezone_names",
+          "role": "authenticator",
+          "rows": 100464,
+          "total_ms": 52415
+        },
+        {
+          "calls": 1395,
+          "mean_ms": 27.41,
+          "query": "WITH pgrst_source AS (INSERT INTO \"public\".\"alerts\"(\"message\", \"metadata\", \"severity\", \"title\", \"type\") SELECT \"pgrst_body\".\"message\", \"pgrst_body\".\"metadata\", \"pgrst_body\".\"severity\", \"pgrst_body\".\"title\", \"pgrst_body\".",
+          "role": "service_role",
+          "rows": 1395,
+          "total_ms": 38243
+        },
+        {
+          "calls": 2191,
+          "mean_ms": 16.14,
+          "query": "WITH pgrst_source AS (SELECT \"pgrst_call\".* FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT \"p_dedup_key\", \"p_alert_type\", \"p_window_seconds\" FROM json_to_record(pgrst_payload.json_data) AS _(\"p_dedup_key\" t",
+          "role": "service_role",
+          "rows": 2191,
+          "total_ms": 35357
+        },
+        {
+          "calls": 15,
+          "mean_ms": 2257.99,
+          "query": "with page as ( select c.oid, c.relname, c.relrowsecurity, c.relforcerowsecurity, c.relreplident, nc.nspname as schema, -- Computed once here so the final select can reference it for both the -- raw byte count and pg_size",
+          "role": "postgres",
+          "rows": 649,
+          "total_ms": 33870
+        },
+        {
+          "calls": 28703,
+          "mean_ms": 0.69,
+          "query": "insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)",
+          "role": "postgres",
+          "rows": 28703,
+          "total_ms": 19822
+        },
+        {
+          "calls": 60,
+          "mean_ms": 225.35,
+          "query": "with f as ( -- CTE with sane arg_modes, arg_names, and arg_types. -- All three are always of the same length. -- All three include all args, including OUT and TABLE args. with functions as ( select *, -- proargmodes is n",
+          "role": "postgres",
+          "rows": 11752,
+          "total_ms": 13521
+        },
+        {
+          "calls": 84,
+          "mean_ms": 87.55,
+          "query": "WITH -- Recursively get the base types of domains base_types AS ( WITH RECURSIVE recurse AS ( SELECT oid, typbasetype, typnamespace AS base_namespace, COALESCE(NULLIF(typbasetype, $2), oid) AS base_type FROM pg_type UNIO",
+          "role": "authenticator",
+          "rows": 8317,
+          "total_ms": 7354
+        },
+        {
+          "calls": 33303,
+          "mean_ms": 0.22,
+          "query": "select set_config('?', $1, true), set_config('?', $2, true), set_config('?', $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('request.head",
+          "role": "service_role",
+          "rows": 33303,
+          "total_ms": 7221
+        },
+        {
+          "calls": 167,
+          "mean_ms": 36.52,
+          "query": "WITH pgrst_source AS ( SELECT \"public\".\"alerts\".\"id\" FROM \"public\".\"alerts\" WHERE \"public\".\"alerts\".\"is_dismissed\" = $1 LIMIT $2 OFFSET $3 ) , pgrst_source_count AS (SELECT $5 FROM \"public\".\"alerts\" WHERE \"public\".\"alert",
+          "role": "authenticated",
+          "rows": 167,
+          "total_ms": 6098
+        }
+      ]
+    },
+    "index_stats": [
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "active_tracking_order_id_key",
+        "scans": 6,
+        "schema": "public",
+        "table": "active_tracking"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "active_tracking_pkey",
+        "scans": 4,
+        "schema": "public",
+        "table": "active_tracking"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_active_tracking_driver_id",
+        "scans": 7,
+        "schema": "public",
+        "table": "active_tracking"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_tracking_status_active",
+        "scans": 0,
+        "schema": "public",
+        "table": "active_tracking"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "alert_configurations_alert_type_channel_key",
+        "scans": 1,
+        "schema": "public",
+        "table": "alert_configurations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "alert_configurations_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "alert_configurations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alert_configurations_escalation_lookup",
+        "scans": 24240,
+        "schema": "public",
+        "table": "alert_configurations"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "alert_dedup_pkey",
+        "scans": 107,
+        "schema": "public",
+        "table": "alert_dedup"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alert_dedup_last_notified",
+        "scans": 0,
+        "schema": "public",
+        "table": "alert_dedup"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alert_dedup_suppressed",
+        "scans": 0,
+        "schema": "public",
+        "table": "alert_dedup"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alert_dedup_type_notified",
+        "scans": 0,
+        "schema": "public",
+        "table": "alert_dedup"
+      },
+      {
+        "bytes": 65536,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "alerts_pkey",
+        "scans": 4,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 73728,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_created",
+        "scans": 68,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_driver_active",
+        "scans": 2,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_driver_id",
+        "scans": 4,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 90112,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_not_dismissed",
+        "scans": 181,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_order_active",
+        "scans": 12,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_order_id",
+        "scans": 61,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 57344,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_pending_escalation",
+        "scans": 963,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_severity",
+        "scans": 1,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_type",
+        "scans": 3,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_unread",
+        "scans": 28,
+        "schema": "public",
+        "table": "alerts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "alerts_sent_pkey",
+        "scans": 5,
+        "schema": "public",
+        "table": "alerts_sent"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_sent_alert_id",
+        "scans": 107,
+        "schema": "public",
+        "table": "alerts_sent"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_sent_channel_recent",
+        "scans": 0,
+        "schema": "public",
+        "table": "alerts_sent"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_alerts_sent_failed_retry",
+        "scans": 0,
+        "schema": "public",
+        "table": "alerts_sent"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "auth_logs_pkey",
+        "scans": 5,
+        "schema": "public",
+        "table": "auth_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_auth_logs_created",
+        "scans": 10,
+        "schema": "public",
+        "table": "auth_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_auth_logs_event_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "auth_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_auth_logs_failures",
+        "scans": 0,
+        "schema": "public",
+        "table": "auth_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_auth_logs_user_created",
+        "scans": 1,
+        "schema": "public",
+        "table": "auth_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "bitrix24_activities_pkey",
+        "scans": 4,
+        "schema": "public",
+        "table": "bitrix24_activities"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_bitrix24_activities_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "bitrix24_activities"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "bitrix24_stage_mappings_lalamove_status_key",
+        "scans": 1,
+        "schema": "public",
+        "table": "bitrix24_stage_mappings"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "bitrix24_stage_mappings_pkey",
+        "scans": 4,
+        "schema": "public",
+        "table": "bitrix24_stage_mappings"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "bitrix24_sync_order_id_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "bitrix24_sync"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "bitrix24_sync_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "bitrix24_sync"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "bitrix24_tokens_pkey",
+        "scans": 5,
+        "schema": "public",
+        "table": "bitrix24_tokens"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "blocked_ips_ip_address_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "blocked_ips"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "blocked_ips_pkey",
+        "scans": 4,
+        "schema": "public",
+        "table": "blocked_ips"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_blocked_ips_expires",
+        "scans": 10,
+        "schema": "public",
+        "table": "blocked_ips"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "contacts_owner_phone_unique",
+        "scans": 0,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "contacts_pkey",
+        "scans": 66,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contacts_name_trgm",
+        "scans": 0,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contacts_owner_last_used",
+        "scans": 4,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contacts_owner_name",
+        "scans": 1,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 32768,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contacts_phone_trgm",
+        "scans": 0,
+        "schema": "public",
+        "table": "contacts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "contract_version_usage_pkey",
+        "scans": 1,
+        "schema": "public",
+        "table": "contract_version_usage"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "contract_version_usage_unique",
+        "scans": 915,
+        "schema": "public",
+        "table": "contract_version_usage"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contract_version_usage_date_cover",
+        "scans": 13,
+        "schema": "public",
+        "table": "contract_version_usage"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contract_version_usage_deprecated",
+        "scans": 0,
+        "schema": "public",
+        "table": "contract_version_usage"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contract_version_usage_version",
+        "scans": 0,
+        "schema": "public",
+        "table": "contract_version_usage"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "contract_version_usage_monthly_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "contract_version_usage_monthly"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "contract_version_usage_monthly_unique",
+        "scans": 0,
+        "schema": "public",
+        "table": "contract_version_usage_monthly"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contract_version_usage_monthly_month",
+        "scans": 0,
+        "schema": "public",
+        "table": "contract_version_usage_monthly"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_contract_version_usage_monthly_month_cover",
+        "scans": 2,
+        "schema": "public",
+        "table": "contract_version_usage_monthly"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "cron_job_logs_pkey",
+        "scans": 11,
+        "schema": "public",
+        "table": "cron_job_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_cron_job_logs_created_at",
+        "scans": 2,
+        "schema": "public",
+        "table": "cron_job_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_cron_job_logs_job_name",
+        "scans": 0,
+        "schema": "public",
+        "table": "cron_job_logs"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "driver_approval_queue_pkey",
+        "scans": 1,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_approval_priority",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_approvals_driver",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_approvals_status",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_approval_queue_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_approval_queue_pending_priority",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_approval_queue_pending_recent",
+        "scans": 2270,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_approval_queue_status_reviewed",
+        "scans": 1403,
+        "schema": "public",
+        "table": "driver_approval_queue"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "driver_evaluations_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_evaluations_approved",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_evaluations_driver_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_evaluations_evaluated_at",
+        "scans": 1,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_evaluations_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_evaluations_requires_manual",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_evaluations"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "driver_incidents_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "driver_incidents"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_incidents_driver_created",
+        "scans": 14,
+        "schema": "public",
+        "table": "driver_incidents"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_incidents_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_incidents"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_incidents_resolved",
+        "scans": 86,
+        "schema": "public",
+        "table": "driver_incidents"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_incidents_type",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_incidents"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "driver_locations_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "driver_locations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_locations_recorded",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_locations"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_driver_locations_tracking_recorded",
+        "scans": 0,
+        "schema": "public",
+        "table": "driver_locations"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "drivers_lalamove_id_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "drivers_pkey",
+        "scans": 16969,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_drivers_blacklisted",
+        "scans": 0,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_drivers_risk_level",
+        "scans": 196,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_drivers_risk_score",
+        "scans": 0,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_drivers_status",
+        "scans": 2,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_drivers_whitelisted",
+        "scans": 0,
+        "schema": "public",
+        "table": "drivers"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "email_verifications_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "email_verifications"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "email_verifications_token_hash_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "email_verifications"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "feature_flags_name_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "feature_flags"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "feature_flags_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "feature_flags"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "geo_blocks_country_code_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "geo_blocks"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "geo_blocks_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "geo_blocks"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_geo_blocks_active",
+        "scans": 0,
+        "schema": "public",
+        "table": "geo_blocks"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_geo_blocks_blocked_by",
+        "scans": 0,
+        "schema": "public",
+        "table": "geo_blocks"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "ip_whitelist_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "ip_whitelist"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_order_replacements_new_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_order_replacements"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_order_replacements_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_order_replacements"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_order_replacements_prev_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_order_replacements"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "lalamove_order_replacements_pair_unique",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_order_replacements"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_order_replacements_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "lalamove_order_replacements"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_cancellation_reason",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_cancelled_at",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_cancelled_by",
+        "scans": 4,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_driver_status_updated",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_open_status",
+        "scans": 350,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_orders_status_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_bitrix24",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_cost_center",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_created",
+        "scans": 438,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_driver",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_status",
+        "scans": 257,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_orders_urgent",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "lalamove_orders_lalamove_id_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_orders_pkey",
+        "scans": 16074,
+        "schema": "public",
+        "table": "lalamove_orders"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_priority_fee_history_changed_by",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_priority_fee_history"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_priority_fee_history_order",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_priority_fee_history"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_priority_fee_history_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_priority_fee_history"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_rate_limits_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_rate_limits"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_rate_limits_endpoint_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_rate_limits"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_rate_limits_errors",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_rate_limits"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_rate_limits_low_remaining",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_rate_limits"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_rate_limits_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "lalamove_rate_limits"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_status_history_order_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_status_history"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_status_history_order_id",
+        "scans": 4,
+        "schema": "public",
+        "table": "lalamove_status_history"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_status_history_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_status_history"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_stop_proofs_delivered_at",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_stop_proofs_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_stop_proofs_pod_status",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_stop_proofs_pop_status",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_stop_proofs_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "lalamove_stop_proofs_stop_unique",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stop_proofs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_lalamove_stops_order_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stops"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_stops_pod_status",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_stops"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_stops_pkey",
+        "scans": 1,
+        "schema": "public",
+        "table": "lalamove_stops"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "idx_uapi_sessions_active",
+        "scans": 0,
+        "schema": "public",
+        "table": "lalamove_uapi_sessions"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "lalamove_uapi_sessions_pkey",
+        "scans": 1,
+        "schema": "public",
+        "table": "lalamove_uapi_sessions"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_login_attempts_email",
+        "scans": 6,
+        "schema": "public",
+        "table": "login_attempts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_login_attempts_ip_last_attempt",
+        "scans": 10,
+        "schema": "public",
+        "table": "login_attempts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_login_attempts_locked_until",
+        "scans": 0,
+        "schema": "public",
+        "table": "login_attempts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_login_attempts_suspicious",
+        "scans": 0,
+        "schema": "public",
+        "table": "login_attempts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "login_attempts_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "login_attempts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "map_settings_overrides_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "map_settings_overrides"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "map_settings_overrides_user_id_context_key_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "map_settings_overrides"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "mcp_diagnostics_grants_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "mcp_diagnostics_grants"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "mcp_diagnostics_grants_user_id_key",
+        "scans": 13,
+        "schema": "public",
+        "table": "mcp_diagnostics_grants"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_mfa_sessions_user",
+        "scans": 0,
+        "schema": "public",
+        "table": "mfa_sessions"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "mfa_sessions_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "mfa_sessions"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_new_device_alerts_device_id",
+        "scans": 0,
+        "schema": "public",
+        "table": "new_device_alerts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_new_device_alerts_user",
+        "scans": 0,
+        "schema": "public",
+        "table": "new_device_alerts"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "new_device_alerts_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "new_device_alerts"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_password_reset_requests_reviewed_by",
+        "scans": 0,
+        "schema": "public",
+        "table": "password_reset_requests"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "password_reset_requests_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "password_reset_requests"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_password_reset_tokens_cleanup",
+        "scans": 0,
+        "schema": "public",
+        "table": "password_reset_tokens"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_password_reset_tokens_lookup",
+        "scans": 1,
+        "schema": "public",
+        "table": "password_reset_tokens"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "password_reset_tokens_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "password_reset_tokens"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "password_reset_tokens_token_hash_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "password_reset_tokens"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "permissions_name_key",
+        "scans": 33,
+        "schema": "public",
+        "table": "permissions"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "permissions_pkey",
+        "scans": 3219,
+        "schema": "public",
+        "table": "permissions"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_created_at",
+        "scans": 14,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_errors",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_operation_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_rpc_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_severity_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_slow",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_query_telemetry_table_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "query_telemetry_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "query_telemetry"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_rate_limit_logs_created",
+        "scans": 11,
+        "schema": "public",
+        "table": "rate_limit_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_rate_limit_logs_ip_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "rate_limit_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "rate_limit_logs_pkey",
+        "scans": 0,
+        "schema": "public",
+        "table": "rate_limit_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "region_cache_pkey",
+        "scans": 3,
+        "schema": "public",
+        "table": "region_cache"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_report_presets_user_id",
+        "scans": 2,
+        "schema": "public",
+        "table": "report_presets"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "report_presets_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "report_presets"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "report_presets_user_id_name_key",
+        "scans": 1,
+        "schema": "public",
+        "table": "report_presets"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_risk_rules_active",
+        "scans": 0,
+        "schema": "public",
+        "table": "risk_rules"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "risk_rules_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "risk_rules"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_role_permissions_permission_id",
+        "scans": 6,
+        "schema": "public",
+        "table": "role_permissions"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "role_permissions_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "role_permissions"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "role_permissions_role_permission_id_key",
+        "scans": 93,
+        "schema": "public",
+        "table": "role_permissions"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_created_at",
+        "scans": 12,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_fingerprint",
+        "scans": 0,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_fingerprint_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_resolved",
+        "scans": 0,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_severity",
+        "scans": 0,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_runtime_error_logs_unresolved_recent",
+        "scans": 2,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "runtime_error_logs_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "runtime_error_logs"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "security_test_logs_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "security_test_logs"
+      },
+      {
+        "bytes": 0,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_tracking_driver_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events"
+      },
+      {
+        "bytes": 0,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_tracking_events_created_brin",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events"
+      },
+      {
+        "bytes": 0,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_tracking_order_created",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_default_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_default"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_default_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_default"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_default_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_default"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m05_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m05"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m05_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m05"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m05_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m05"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m06_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m06"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m06_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m06"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m06_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m06"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m07_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m07"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m07_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m07"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m07_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m07"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m08_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m08"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m08_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m08"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m08_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m08"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m09_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m09"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m09_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m09"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m09_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m09"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m10_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m10"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m10_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m10"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m10_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m10"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m11_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m11"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m11_created_brin",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m11"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m11_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m11"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m11_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m11"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m12_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m12"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m12_created_brin",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m12"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m12_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m12"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2026m12_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2026m12"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2027m01_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2027m01"
+      },
+      {
+        "bytes": 24576,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2027m01_created_brin",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2027m01"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2027m01_driver_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2027m01"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "tracking_events_y2027m01_order_id_created_at_idx",
+        "scans": 0,
+        "schema": "public",
+        "table": "tracking_events_y2027m01"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_user_devices_last_seen",
+        "scans": 0,
+        "schema": "public",
+        "table": "user_devices"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "user_devices_pkey",
+        "scans": 5,
+        "schema": "public",
+        "table": "user_devices"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "user_devices_user_id_device_fingerprint_key",
+        "scans": 97,
+        "schema": "public",
+        "table": "user_devices"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_user_passkeys_user_id",
+        "scans": 1,
+        "schema": "public",
+        "table": "user_passkeys"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "user_passkeys_credential_id_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "user_passkeys"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "user_passkeys_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "user_passkeys"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_user_roles_role",
+        "scans": 6,
+        "schema": "public",
+        "table": "user_roles"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_user_roles_user_id",
+        "scans": 666,
+        "schema": "public",
+        "table": "user_roles"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "user_roles_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "user_roles"
+      },
+      {
+        "bytes": 16384,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "user_roles_user_id_role_key",
+        "scans": 196317,
+        "schema": "public",
+        "table": "user_roles"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webauthn_challenges_expires",
+        "scans": 0,
+        "schema": "public",
+        "table": "webauthn_challenges"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "webauthn_challenges_pkey",
+        "scans": 1,
+        "schema": "public",
+        "table": "webauthn_challenges"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webhook_events_event_type_received_at",
+        "scans": 0,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": true,
+        "name": "idx_webhook_events_idempotency_key",
+        "scans": 0,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webhooks_order",
+        "scans": 0,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webhooks_processed",
+        "scans": 0,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webhooks_received",
+        "scans": 4,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": false,
+        "is_unique": false,
+        "name": "idx_webhooks_type",
+        "scans": 1,
+        "schema": "public",
+        "table": "webhook_events"
+      },
+      {
+        "bytes": 8192,
+        "is_primary": true,
+        "is_unique": true,
+        "name": "webhook_events_pkey",
+        "scans": 2,
+        "schema": "public",
+        "table": "webhook_events"
+      }
+    ],
+    "table_stats": [
+      {
+        "dead_rows": 0,
+        "est_rows": 1307,
+        "heap_bytes": 385024,
+        "idx_scan": 1327,
+        "index_bytes": 466944,
+        "last_autoanalyze": "2026-11-20T01:17:37.990911+00:00",
+        "last_autovacuum": "2026-11-16T14:17:44.964832+00:00",
+        "name": "alerts",
+        "schema": "public",
+        "seq_scan": 2087,
+        "total_bytes": 892928
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 50,
+        "heap_bytes": 24576,
+        "idx_scan": 17123,
+        "index_bytes": 180224,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_orders",
+        "schema": "public",
+        "seq_scan": 704,
+        "total_bytes": 237568
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 196,
+        "heap_bytes": 40960,
+        "idx_scan": 0,
+        "index_bytes": 81920,
+        "last_autoanalyze": "2026-08-28T17:01:30.463297+00:00",
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m08",
+        "schema": "public",
+        "seq_scan": 32,
+        "total_bytes": 155648
+      },
+      {
+        "dead_rows": 2,
+        "est_rows": 30,
+        "heap_bytes": 8192,
+        "idx_scan": 71,
+        "index_bytes": 131072,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "contacts",
+        "schema": "public",
+        "seq_scan": 87,
+        "total_bytes": 147456
+      },
+      {
+        "dead_rows": 10,
+        "est_rows": 0,
+        "heap_bytes": 8192,
+        "idx_scan": 3674,
+        "index_bytes": 131072,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "driver_approval_queue",
+        "schema": "public",
+        "seq_scan": 27,
+        "total_bytes": 147456
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 75,
+        "heap_bytes": 8192,
+        "idx_scan": 929,
+        "index_bytes": 81920,
+        "last_autoanalyze": "2026-11-21T12:20:15.969842+00:00",
+        "last_autovacuum": "2026-11-21T12:30:16.405223+00:00",
+        "name": "contract_version_usage",
+        "schema": "public",
+        "seq_scan": 24,
+        "total_bytes": 131072
+      },
+      {
+        "dead_rows": 2,
+        "est_rows": 0,
+        "heap_bytes": 8192,
+        "idx_scan": 16,
+        "index_bytes": 114688,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "query_telemetry",
+        "schema": "public",
+        "seq_scan": 104,
+        "total_bytes": 131072
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 114688,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m11",
+        "schema": "public",
+        "seq_scan": 9,
+        "total_bytes": 122880
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 114688,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m12",
+        "schema": "public",
+        "seq_scan": 4,
+        "total_bytes": 122880
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 114688,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2027m01",
+        "schema": "public",
+        "seq_scan": 4,
+        "total_bytes": 122880
+      },
+      {
+        "dead_rows": 48,
+        "est_rows": 1,
+        "heap_bytes": 8192,
+        "idx_scan": 107,
+        "index_bytes": 65536,
+        "last_autoanalyze": "2026-11-20T07:17:54.831339+00:00",
+        "last_autovacuum": "2026-11-18T17:18:08.754569+00:00",
+        "name": "alert_dedup",
+        "schema": "public",
+        "seq_scan": 4303,
+        "total_bytes": 114688
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 20,
+        "heap_bytes": 8192,
+        "idx_scan": 17167,
+        "index_bytes": 90112,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "drivers",
+        "schema": "public",
+        "seq_scan": 413,
+        "total_bytes": 106496
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 15,
+        "heap_bytes": 8192,
+        "idx_scan": 102,
+        "index_bytes": 81920,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "driver_incidents",
+        "schema": "public",
+        "seq_scan": 533,
+        "total_bytes": 98304
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 128,
+        "heap_bytes": 16384,
+        "idx_scan": 4,
+        "index_bytes": 49152,
+        "last_autoanalyze": "2026-08-28T17:01:30.460568+00:00",
+        "last_autovacuum": null,
+        "name": "lalamove_status_history",
+        "schema": "public",
+        "seq_scan": 17,
+        "total_bytes": 98304
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 1,
+        "heap_bytes": 8192,
+        "idx_scan": 16,
+        "index_bytes": 73728,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "auth_logs",
+        "schema": "public",
+        "seq_scan": 101,
+        "total_bytes": 90112
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 8192,
+        "idx_scan": 3,
+        "index_bytes": 73728,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_rate_limits",
+        "schema": "public",
+        "seq_scan": 14,
+        "total_bytes": 90112
+      },
+      {
+        "dead_rows": 20,
+        "est_rows": 20,
+        "heap_bytes": 8192,
+        "idx_scan": 17,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "active_tracking",
+        "schema": "public",
+        "seq_scan": 1807,
+        "total_bytes": 81920
+      },
+      {
+        "dead_rows": 41,
+        "est_rows": 0,
+        "heap_bytes": 8192,
+        "idx_scan": 13,
+        "index_bytes": 49152,
+        "last_autoanalyze": null,
+        "last_autovacuum": "2026-10-11T03:45:53.675819+00:00",
+        "name": "cron_job_logs",
+        "schema": "public",
+        "seq_scan": 108,
+        "total_bytes": 81920
+      },
+      {
+        "dead_rows": 2,
+        "est_rows": 2,
+        "heap_bytes": 8192,
+        "idx_scan": 196991,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "user_roles",
+        "schema": "public",
+        "seq_scan": 65,
+        "total_bytes": 81920
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_default",
+        "schema": "public",
+        "seq_scan": 45,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m05",
+        "schema": "public",
+        "seq_scan": 33,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m06",
+        "schema": "public",
+        "seq_scan": 32,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m07",
+        "schema": "public",
+        "seq_scan": 31,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m09",
+        "schema": "public",
+        "seq_scan": 30,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 65536,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events_y2026m10",
+        "schema": "public",
+        "seq_scan": 30,
+        "total_bytes": 73728
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 1,
+        "heap_bytes": 8192,
+        "idx_scan": 0,
+        "index_bytes": 49152,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "new_device_alerts",
+        "schema": "public",
+        "seq_scan": 17,
+        "total_bytes": 65536
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 16,
+        "index_bytes": 57344,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "runtime_error_logs",
+        "schema": "public",
+        "seq_scan": 99,
+        "total_bytes": 65536
+      },
+      {
+        "dead_rows": 48,
+        "est_rows": 1,
+        "heap_bytes": 8192,
+        "idx_scan": 102,
+        "index_bytes": 49152,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "user_devices",
+        "schema": "public",
+        "seq_scan": 21,
+        "total_bytes": 65536
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 7,
+        "index_bytes": 57344,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "webhook_events",
+        "schema": "public",
+        "seq_scan": 15,
+        "total_bytes": 65536
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 1,
+        "index_bytes": 49152,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "driver_evaluations",
+        "schema": "public",
+        "seq_scan": 24,
+        "total_bytes": 57344
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 49152,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_stop_proofs",
+        "schema": "public",
+        "seq_scan": 23,
+        "total_bytes": 57344
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 55,
+        "heap_bytes": 8192,
+        "idx_scan": 101,
+        "index_bytes": 49152,
+        "last_autoanalyze": "2026-08-28T18:16:34.068033+00:00",
+        "last_autovacuum": null,
+        "name": "role_permissions",
+        "schema": "public",
+        "seq_scan": 182,
+        "total_bytes": 57344
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 3,
+        "heap_bytes": 8192,
+        "idx_scan": 3,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "feature_flags",
+        "schema": "public",
+        "seq_scan": 20,
+        "total_bytes": 49152
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 40960,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_order_replacements",
+        "schema": "public",
+        "seq_scan": 18,
+        "total_bytes": 49152
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 16,
+        "index_bytes": 40960,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "login_attempts",
+        "schema": "public",
+        "seq_scan": 100,
+        "total_bytes": 49152
+      },
+      {
+        "dead_rows": 2,
+        "est_rows": 1,
+        "heap_bytes": 8192,
+        "idx_scan": 16,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "mcp_diagnostics_grants",
+        "schema": "public",
+        "seq_scan": 38,
+        "total_bytes": 49152
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 28,
+        "heap_bytes": 8192,
+        "idx_scan": 3252,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "permissions",
+        "schema": "public",
+        "seq_scan": 118,
+        "total_bytes": 49152
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 112,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "alerts_sent",
+        "schema": "public",
+        "seq_scan": 19,
+        "total_bytes": 40960
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "contract_version_usage_monthly",
+        "schema": "public",
+        "seq_scan": 13,
+        "total_bytes": 40960
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "geo_blocks",
+        "schema": "public",
+        "seq_scan": 20,
+        "total_bytes": 40960
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 1,
+        "index_bytes": 32768,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "password_reset_tokens",
+        "schema": "public",
+        "seq_scan": 196,
+        "total_bytes": 40960
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 24243,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "alert_configurations",
+        "schema": "public",
+        "seq_scan": 25334,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 14,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "blocked_ips",
+        "schema": "public",
+        "seq_scan": 96,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_priority_fee_history",
+        "schema": "public",
+        "seq_scan": 19,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 1,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_stops",
+        "schema": "public",
+        "seq_scan": 22,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 11,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "rate_limit_logs",
+        "schema": "public",
+        "seq_scan": 94,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 5,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "report_presets",
+        "schema": "public",
+        "seq_scan": 15,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 3,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "user_passkeys",
+        "schema": "public",
+        "seq_scan": 17,
+        "total_bytes": 32768
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 4,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "bitrix24_activities",
+        "schema": "public",
+        "seq_scan": 14,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 5,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "bitrix24_stage_mappings",
+        "schema": "public",
+        "seq_scan": 11,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "bitrix24_sync",
+        "schema": "public",
+        "seq_scan": 17,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 3,
+        "index_bytes": 24576,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "driver_locations",
+        "schema": "public",
+        "seq_scan": 21,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 3,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "email_verifications",
+        "schema": "public",
+        "seq_scan": 11,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 1,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "lalamove_uapi_sessions",
+        "schema": "public",
+        "seq_scan": 2239,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "map_settings_overrides",
+        "schema": "public",
+        "seq_scan": 16,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "mfa_sessions",
+        "schema": "public",
+        "seq_scan": 11,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "password_reset_requests",
+        "schema": "public",
+        "seq_scan": 17,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "risk_rules",
+        "schema": "public",
+        "seq_scan": 12,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 1,
+        "index_bytes": 16384,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "webauthn_challenges",
+        "schema": "public",
+        "seq_scan": 11,
+        "total_bytes": 24576
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 5,
+        "index_bytes": 8192,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "bitrix24_tokens",
+        "schema": "public",
+        "seq_scan": 11,
+        "total_bytes": 16384
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 3,
+        "index_bytes": 8192,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "ip_whitelist",
+        "schema": "public",
+        "seq_scan": 15,
+        "total_bytes": 16384
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 3,
+        "index_bytes": 8192,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "region_cache",
+        "schema": "public",
+        "seq_scan": 101,
+        "total_bytes": 16384
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 0,
+        "heap_bytes": 0,
+        "idx_scan": 2,
+        "index_bytes": 8192,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "security_test_logs",
+        "schema": "public",
+        "seq_scan": 10,
+        "total_bytes": 16384
+      },
+      {
+        "dead_rows": 0,
+        "est_rows": 196,
+        "heap_bytes": 0,
+        "idx_scan": 0,
+        "index_bytes": 0,
+        "last_autoanalyze": null,
+        "last_autovacuum": null,
+        "name": "tracking_events",
+        "schema": "public",
+        "seq_scan": 0,
+        "total_bytes": 0
+      }
+    ]
+  }
+}

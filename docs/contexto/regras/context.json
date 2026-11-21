@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "f1218b2bfda7fd6c940f2a527fa87b8456192987",
+  "sha": "59599d3f3932bd16befd67f05f2221d3adab721e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 12:19 UTC",
+  "generated_at": "2026-11-21 12:44 UTC",
   "files_total": 884,
   "code_files": 737,
   "code_lines": 126890
@@ -61114,10 +61114,21 @@
   }
  },
  "git": {
-  "sha": "f1218b2bfda7fd6c940f2a527fa87b8456192987",
+  "sha": "59599d3f3932bd16befd67f05f2221d3adab721e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "59599d3",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)",
+    "files": [
+     "docs/pendencias/P-06-vulns-npm-restantes.md",
+     "docs/pendencias/README.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
    {
     "sha": "f1218b2",
     "date": "2026-11-21",
@@ -61591,42 +61602,6 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "79b861b",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)",
-    "files": [
-     ".agents/skills/lalamove-v2/SKILL.md",
-     ".agents/skills/lalamove-v2/agents/openai.yaml",
-     ".claude/ecc-tools.json",
-     ".claude/homunculus/instincts/inherited/lalamove-v2-instincts.yaml",
-     ".claude/hooks/session-start.sh",
-     ".claude/identity.json",
-     ".claude/settings.json",
-     ".claude/skills/lalamove-v2/SKILL.md",
-     ".codex/AGENTS.md",
-     ".codex/agents/docs-researcher.toml",
-     ".codex/agents/explorer.toml",
-     ".codex/agents/reviewer.toml",
-     ".codex/config.toml",
-     ".gitignore",
-     ".graphifyignore",
-     "AGENTS.md",
-     "CLAUDE.md",
-     "docs/agentes/banco.md",
-     "docs/agentes/deploy.md",
-     "docs/agentes/github-ci.md",
-     "docs/agentes/lalamove-api.md",
-     "docs/agentes/mapa-repo.md",
-     "docs/agentes/regras-dominio.md",
-     "package.json",
-     "scripts/ci/check-agents-md-integrity.mjs",
-     "scripts/ci/commit-msg-lint.mjs",
-     "scripts/ci/commit-msg-lint.unit.mjs",
-     "scripts/graphify/setup.sh"
-    ]
    }
   ],
   "hot_files": [
@@ -61636,19 +61611,23 @@
    ],
    [
     "package.json",
-    13
+    12
    ],
    [
     "docs/pendencias/_ordem.md",
-    4
+    5
    ],
    [
-    ".github/workflows/ci.yml",
+    "docs/pendencias/P-06-vulns-npm-restantes.md",
     3
    ],
    [
     "docs/pendencias/README.md",
-    2
+    3
+   ],
+   [
+    ".github/workflows/ci.yml",
+    3
    ],
    [
     "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
@@ -61656,10 +61635,6 @@
    ],
    [
     "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
-    2
-   ],
-   [
-    "docs/pendencias/P-06-vulns-npm-restantes.md",
     2
    ],
    [
@@ -61679,14 +61654,6 @@
     2
    ],
    [
-    "AGENTS.md",
-    2
-   ],
-   [
-    "docs/agentes/banco.md",
-    2
-   ],
-   [
     "supabase/config.toml",
     2
    ],
@@ -61699,15 +61666,23 @@
     2
    ],
    [
-    ".gitignore",
-    2
-   ],
-   [
     "docs/pendencias/P-11-mfa-webauthn.md",
     1
    ],
    [
     "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
+    1
+   ],
+   [
+    "docs/pendencias/P-02-app-mobile-motoristas.md",
+    1
+   ],
+   [
+    "docs/pendencias/P-03-chat-cliente-motorista.md",
+    1
+   ],
+   [
+    "docs/pendencias/P-04-rotacionar-jwt-secret-painel.md",
     1
    ]
   ]

@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)",
    "fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)",
    "chore: registra P-11 MFA descartado e consolida README do backlog (#98)",
    "chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)",
-   "fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)",
-   "ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)"
+   "fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

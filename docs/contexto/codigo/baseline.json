@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f1218b2bfda7fd6c940f2a527fa87b8456192987",
+  "commit": "59599d3f3932bd16befd67f05f2221d3adab721e",
   "branch": "main",
-  "data_commit": "2026-11-21T09:19:16-03:00",
+  "data_commit": "2026-11-21T09:28:46-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "59599d3",
+    "data": "2026-11-21",
+    "assunto": "docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)"
+   },
    {
     "sha": "f1218b2",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "846ea80",
     "data": "2026-11-08",
     "assunto": "fix(deps): downgrade tailwindcss de v4 para v3.4.19"
-   },
-   {
-    "sha": "d0fa636",
-    "data": "2026-11-08",
-    "assunto": "fix(ui): contraste WCAG em dark mode e badges tinted"
    }
   ],
   "arquivos_mudados_7d": 48,
@@ -145,10 +145,18 @@
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 4
+    "mudancas": 5
    },
    {
     "pasta": ".github/workflows/ci.yml",
+    "mudancas": 3
+   },
+   {
+    "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 3
+   },
+   {
+    "pasta": "docs/pendencias/README.md",
     "mudancas": 3
    },
    {
@@ -184,15 +192,7 @@
     "mudancas": 2
    },
    {
-    "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
-    "mudancas": 2
-   },
-   {
     "pasta": "docs/pendencias/P-07-security-definer-search-path.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
     "mudancas": 2
    }
   ],
@@ -214,12 +214,12 @@
     "mudancas": 7
    },
    {
-    "arquivo": "src/hooks/useRegionResolver.ts",
+    "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 5
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 4
+    "arquivo": "src/hooks/useRegionResolver.ts",
+    "mudancas": 5
    },
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -227,6 +227,14 @@
    },
    {
     "arquivo": "AGENTS.md",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 3
+   },
+   {
+    "arquivo": "docs/pendencias/README.md",
     "mudancas": 3
    },
    {
@@ -266,10 +274,6 @@
     "mudancas": 2
    },
    {
-    "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
-    "mudancas": 2
-   },
-   {
     "arquivo": "docs/pendencias/P-07-security-definer-search-path.md",
     "mudancas": 2
    },
@@ -279,10 +283,6 @@
    },
    {
     "arquivo": "docs/pendencias/P-09-transicoes-status-sem-check.md",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "docs/pendencias/README.md",
     "mudancas": 2
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 21
+    "commits": 22
    },
    {
     "autor": "dependabot[bot]",
