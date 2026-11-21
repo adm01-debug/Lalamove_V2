@@ -4,11 +4,16 @@ import { logger } from '@/utils/logger';
 
 /**
  * Resolve coordenadas de entrega em regiões precisas (bairro/cidade) via
- * reverse geocoding do Mapbox, com cache persistente em localStorage para
+ * reverse geocoding (geo-gateway), com cache persistente em localStorage para
  * evitar chamadas repetidas e respeitar limites de taxa.
  *
  * A resolução é assíncrona e incremental: a UI usa o fallback textual até que
  * as regiões sejam resolvidas, momento em que o estado é atualizado.
+ *
+ * `persist: true` no reverse geocode: o resultado é gravado permanentemente em
+ * `region_cache` (cache L2 compartilhado), então o Mapbox precisa do modo
+ * `permanent` (Geocoding v6) — resultado temporário não pode ser retido
+ * (plano Mapbox × Lalamove V2, etapa 16).
  */
 
 export interface Coord {
@@ -99,51 +104,22 @@ async function writeBackendCache(entries: RegionCache): Promise<void> {
   }
 }
 
-interface MapboxContextEntry {
-  id: string;
-  text: string;
-}
-
-interface MapboxFeatureLike {
-  text: string;
-  place_name?: string;
-  place_type?: string[];
-  context?: MapboxContextEntry[];
-}
-
-interface ReverseResult {
-  features?: MapboxFeatureLike[];
+/** Formato normalizado devolvido pela action `reverse` do geo-gateway. */
+interface GeoAddressLike {
+  formatted: string;
+  components: {
+    district?: string;
+    city?: string;
+  };
 }
 
 /**
- * Extrai a região mais representativa de um resultado de reverse geocode.
- * Preferência: bairro → localidade → cidade. Usa o `context` como reforço.
+ * Extrai a região mais representativa do endereço normalizado do geo-gateway.
+ * Preferência: bairro (district) → cidade (city) → endereço formatado.
  */
-export function pickRegion(result: ReverseResult): string | null {
-  const features = result.features ?? [];
-  if (features.length === 0) return null;
-
-  const byType = (type: string) =>
-    features.find((f) => f.place_type?.includes(type))?.text;
-
-  const fromContext = (prefix: string) => {
-    for (const f of features) {
-      const hit = f.context?.find((c) => c.id.startsWith(prefix));
-      if (hit?.text) return hit.text;
-    }
-    return undefined;
-  };
-
-  return (
-    byType('neighborhood') ||
-    fromContext('neighborhood') ||
-    byType('locality') ||
-    fromContext('locality') ||
-    byType('place') ||
-    fromContext('place') ||
-    features[0]?.text ||
-    null
-  );
+export function regionFromAddress(address: GeoAddressLike | null): string | null {
+  if (!address) return null;
+  return address.components.district || address.components.city || address.formatted || null;
 }
 
 export interface RegionResolution {
@@ -212,11 +188,11 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
         await Promise.all(
           chunk.map(async ([key, c]) => {
             try {
-              const { data, error } = await supabase.functions.invoke('mapbox-proxy', {
-                body: { action: 'reverse-geocode', lng: c.lng, lat: c.lat },
+              const { data, error } = await supabase.functions.invoke('geo-gateway', {
+                body: { action: 'reverse', lat: c.lat, lng: c.lng, persist: true },
               });
               if (error) throw error;
-              const region = pickRegion((data ?? {}) as ReverseResult);
+              const region = regionFromAddress(data as GeoAddressLike | null);
               if (region) {
                 resolved[key] = region;
                 freshlyGeocoded[key] = region;
