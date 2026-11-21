@@ -4,6 +4,8 @@
  "pasta": "supabase/functions",
  "total": 26,
  "verify_jwt_false": [
+  "lalamove-webhook",
+  "llm-wh",
   "mcp-query"
  ],
  "shared": [
@@ -600,7 +602,7 @@
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 2,
    "linhas": 948,
-   "verify_jwt": true,
+   "verify_jwt": false,
    "metodos": [
     "OPTIONS"
    ],
@@ -653,7 +655,7 @@
    "entrada": "supabase/functions/llm-wh/index.ts",
    "arquivos": 1,
    "linhas": 79,
-   "verify_jwt": true,
+   "verify_jwt": false,
    "metodos": [
     "OPTIONS"
    ],
@@ -674,7 +676,7 @@
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
-   "orfa": true,
+   "orfa": false,
    "testes": 0
   },
   {

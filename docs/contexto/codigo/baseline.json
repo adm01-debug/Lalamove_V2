@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "9f9c709a5c72504f162a8f7d90252dacf567fe97",
+  "commit": "666bc90dae6293f55bc93d366460a438204dba2e",
   "branch": "main",
-  "data_commit": "2026-11-21T13:05:12-03:00",
+  "data_commit": "2026-11-21T13:05:32-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "666bc90",
+    "data": "2026-11-21",
+    "assunto": "infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)"
+   },
    {
     "sha": "9f9c709",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "1bf53fb",
     "data": "2026-11-20",
     "assunto": "build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)"
-   },
-   {
-    "sha": "f62d754",
-    "data": "2026-11-20",
-    "assunto": "build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)"
    }
   ],
-  "arquivos_mudados_7d": 63,
+  "arquivos_mudados_7d": 65,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -157,6 +157,10 @@
    },
    {
     "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 3
+   },
+   {
+    "pasta": "supabase/config.toml",
     "mudancas": 3
    },
    {
@@ -190,10 +194,6 @@
    {
     "pasta": "docs/pendencias/P-02-app-mobile-motoristas.md",
     "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/P-03-chat-cliente-motorista.md",
-    "mudancas": 2
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 29
+    "commits": 30
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 898,
+  "arquivos_total": 900,
   "arquivos_codigo": 566,
   "linhas_codigo": 110253,
   "rotas": 54,
@@ -325,9 +325,9 @@
   "migrations": 163,
   "cron_jobs": 16,
   "testes": 97,
-  "workflows": 3,
+  "workflows": 4,
   "scripts": 104,
-  "docs_md": 81
+  "docs_md": 82
  },
  "por_pasta": {
   "e2e/helpers": {
@@ -722,12 +722,13 @@
    "escalate-alerts",
    "external-db-bridge",
    "lalamove-token-refresh",
-   "llm-wh",
    "rotate-tokens",
    "seed-fix-rls"
   ],
   "edges_chamadas_sem_pasta": [],
   "edges_sem_verify_jwt": [
+   "lalamove-webhook",
+   "llm-wh",
    "mcp-query"
   ],
   "tabelas_sem_rls": [

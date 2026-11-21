@@ -40,7 +40,7 @@
    "src/components/layout/sidebar-config.ts"
   ],
   "docs": [
-   "docs (25)",
+   "docs (26)",
    "(raiz) (9)",
    ".github (1)"
   ]
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)",
    "feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)",
    "feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)",
    "fix: comments do glossario agora ligam a tabelas so do types.ts (#105)",
-   "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)",
-   "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)"
+   "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

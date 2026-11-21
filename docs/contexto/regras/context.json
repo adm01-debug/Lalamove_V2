@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "9f9c709a5c72504f162a8f7d90252dacf567fe97",
+  "sha": "666bc90dae6293f55bc93d366460a438204dba2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 16:05 UTC",
-  "files_total": 893,
+  "generated_at": "2026-11-21 16:06 UTC",
+  "files_total": 895,
   "code_files": 742,
   "code_lines": 127540
  },
  "version": "1.3.2",
- "facts_hash": "f38fb870d0673b0e",
+ "facts_hash": "12238c170b4b85bd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -154,6 +154,14 @@
     ]
    },
    {
+    "file": ".github/workflows/deploy-edges.yml",
+    "name": "Deploy Edge Functions",
+    "triggers": [
+     "push",
+     "workflow_dispatch"
+    ]
+   },
+   {
     "file": ".github/workflows/inventario-estado-semanal.yml",
     "name": "Inventário do estado real (semanal)",
     "triggers": [
@@ -176,7 +184,9 @@
   "supabase_config": {
    "functions_no_jwt": [
     "lalamove-uapi",
-    "mcp-query"
+    "mcp-query",
+    "lalamove-webhook",
+    "llm-wh"
    ],
    "auth": {}
   },
@@ -16274,7 +16284,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "active_tracking",
      "alerts",
@@ -16316,7 +16326,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) + valida JWT do usuário",
+    "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [],
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -40570,7 +40580,9 @@
   ],
   "public_functions": [
    "lalamove-uapi",
-   "mcp-query"
+   "mcp-query",
+   "lalamove-webhook",
+   "llm-wh"
   ],
   "auth_config": {},
   "grants": [
@@ -62305,10 +62317,21 @@
   }
  },
  "git": {
-  "sha": "9f9c709a5c72504f162a8f7d90252dacf567fe97",
+  "sha": "666bc90dae6293f55bc93d366460a438204dba2e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "666bc90",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)",
+    "files": [
+     ".github/workflows/deploy-edges.yml",
+     "docs/EDGE_DEPLOY_PIPELINE.md",
+     "supabase/config.toml"
+    ]
+   },
    {
     "sha": "9f9c709",
     "date": "2026-11-21",
@@ -62641,19 +62664,6 @@
      "supabase/config.toml",
      "supabase/functions/migrate-helper/index.ts"
     ]
-   },
-   {
-    "sha": "ebde884",
-    "date": "2026-11-19",
-    "author": "adm01-debug",
-    "subject": "fix: recupera edge function mcp-query e migrations perdidas da branch lovable-sync (#88)",
-    "files": [
-     "supabase/config.toml",
-     "supabase/functions/mcp-query/index.ts",
-     "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
-     "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
-     "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -62680,6 +62690,10 @@
    [
     ".github/workflows/ci.yml",
     3
+   ],
+   [
+    "supabase/config.toml",
+    2
    ],
    [
     "docs/pendencias/P-13-comment-on-table-faltantes.md",
@@ -62718,8 +62732,12 @@
     2
    ],
    [
-    "supabase/config.toml",
-    2
+    ".github/workflows/deploy-edges.yml",
+    1
+   ],
+   [
+    "docs/EDGE_DEPLOY_PIPELINE.md",
+    1
    ],
    [
     "docs/MIGRATION_RECONCILIATION_2026-11.md",
@@ -62727,14 +62745,6 @@
    ],
    [
     "supabase/migrations/20261122120000_baseline_order_status_values.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261122120200_job_queue_system.sql",
     1
    ]
   ]

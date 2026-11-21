@@ -6,11 +6,11 @@
    "TypeScript (455)",
    "SQL (167)",
    "JavaScript (112)",
-   "Markdown (81)",
+   "Markdown (82)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
-   "YAML (6)"
+   "YAML (7)"
   ],
   "linguagem_principal": "TypeScript",
   "framework": "React",
@@ -200,6 +200,31 @@
    ]
   },
   {
+   "arquivo": ".github/workflows/deploy-edges.yml",
+   "nome": "Deploy Edge Functions",
+   "gatilhos": [
+    "push",
+    "workflow_dispatch"
+   ],
+   "crons": [],
+   "branches": [
+    "main"
+   ],
+   "jobs": [
+    "deploy"
+   ],
+   "permissoes": [],
+   "scripts_usados": [],
+   "npm_scripts": [],
+   "secrets": [
+    "SUPABASE_ACCESS_TOKEN"
+   ],
+   "actions": [
+    "actions/checkout",
+    "supabase/setup-cli"
+   ]
+  },
+  {
    "arquivo": ".github/workflows/inventario-estado-semanal.yml",
    "nome": "Inventário do estado real (semanal)",
    "gatilhos": [
@@ -309,6 +334,11 @@
    "arquivo": "docs/DEPLOYMENT.md",
    "titulo": "🚀 Deployment - Lalamove Guardian",
    "linhas": 89
+  },
+  {
+   "arquivo": "docs/EDGE_DEPLOY_PIPELINE.md",
+   "titulo": "Pipeline de deploy das edge functions — 2026-11",
+   "linhas": 49
   },
   {
    "arquivo": "docs/FUNCIONALIDADES_E_FERRAMENTAS.md",
@@ -836,6 +866,8 @@
    "VITE_SUPABASE_URL"
   ],
   "webhooks_recebidos": [
+   "lalamove-webhook",
+   "llm-wh",
    "mcp-query"
   ],
   "realtime": [

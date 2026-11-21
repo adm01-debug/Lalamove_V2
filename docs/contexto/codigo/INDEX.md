@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9f9c709a5c72504f162a8f7d90252dacf567fe97` (2026-11-21T13:05:12-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `666bc90dae6293f55bc93d366460a438204dba2e` (2026-11-21T13:05:32-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (167), JavaScript (112), Markdown (81), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (167), JavaScript (112), Markdown (82), JSON (34), Shell (9), Python (8), YAML (7)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 898 |
+| arquivos_total | 900 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 110253 |
 | rotas | 54 |
@@ -50,9 +50,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | migrations | 163 |
 | cron_jobs | 16 |
 | testes | 97 |
-| workflows | 3 |
+| workflows | 4 |
 | scripts | 104 |
-| docs_md | 81 |
+| docs_md | 82 |
 
 ## Onde ficam as coisas
 - telas: src/pages (52)
@@ -65,7 +65,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
-- docs: docs (25), (raiz) (9), .github (1)
+- docs: docs (26), (raiz) (9), .github (1)
 - nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (86%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/regras-dominio.md
 
@@ -198,8 +198,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove-gateway` [Lalamove API v3] — tabelas: alerts, lalamove_rate_limits, query_telemetry; chamada por 1 arquivo(s) do front
 - `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions; chamada por 1 arquivo(s) do front
-- `lalamove-webhook` [Lalamove API v3] — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
-- `llm-wh` [Dados externos] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `lalamove-webhook` [Lalamove API v3] (verify_jwt=false) — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
+- `llm-wh` [Dados externos] (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
 - `mapbox-proxy` [Mapbox] — tabelas: -; chamada por 2 arquivo(s) do front
 - `mcp-query` (verify_jwt=false) — tabelas: query_telemetry; chamada por 0 arquivo(s) do front
 - `new-device-alert` [Notificações/Alertas] — tabelas: auth_logs, new_device_alerts, user_devices; chamada por 1 arquivo(s) do front
@@ -232,7 +232,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - SDKs: CSV (papaparse), IndexedDB (idb), Lovable Cloud, Mapbox GL, Postgres (pg, scripts), Recharts, Supabase, Web Vitals, XLSX (export), i18next, jsPDF (export), react-query, zod, zustand
 - serviços por edge: Lalamove API v3 (5), Notificações/Alertas (5), Dados externos (3), Bitrix24 (2), Manutenção/DDL (2), Mapbox (2), Motoristas (2), Fila de jobs (1), Lovable AI (custo por token) (1), Segredos/token (1)
 - hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, supabase.com, www.google.com, api.mapbox.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, wa.me, a.tile.openstreetmap.org, ai.gateway.lovable.dev, api.pwnedpasswords.com, b.tile.openstreetmap.org, br-uapi.lalamove.com, c.tile.openstreetmap.org
-- webhooks recebidos (verify_jwt=false): mcp-query
+- webhooks recebidos (verify_jwt=false): lalamove-webhook, llm-wh, mcp-query
 - env de integração (só NOMES, nunca valores): BITRIX24_CLIENT_ID, BITRIX24_CLIENT_SECRET, BITRIX24_WEBHOOK_URL, EVOLUTION_API_KEY, EXTERNAL_SUPABASE_SERVICE_ROLE_KEY, EXTERNAL_SUPABASE_URL, LALAMOVE_API_KEY, LALAMOVE_API_SECRET, LALAMOVE_API_URL, LALAMOVE_BASE_URL, LALAMOVE_TRUSTED_IPS, LALAMOVE_UNIFIED_PROXY_KEY, LALAMOVE_UNIFIED_PROXY_URL, LOVABLE_API_KEY, MAPBOX_ACCESS_TOKEN, MAPBOX_API_KEY, RESEND_API_KEY, SLACK_WEBHOOK_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY, VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_URL
 
 ## RBAC
@@ -249,9 +249,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - menu_visivel_sem_acesso: 14 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
-- edges_orfas: 7 — ex.: apply-fixes, escalate-alerts, external-db-bridge
+- edges_orfas: 6 — ex.: apply-fixes, escalate-alerts, external-db-bridge
 - edges_chamadas_sem_pasta: 0
-- edges_sem_verify_jwt: 1 — ex.: mcp-query
+- edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 2 — ex.: cache_refresh_log, job_queue_processing_log
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
 - tabelas_com_drift_migration_vs_types: 3 — ex.: lalamove_orders, lalamove_stops, mfa_sessions
@@ -265,14 +265,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6582 nós · 14412 arestas · 493 comunidades · grafo do commit `9f9c709a`
-- comunidades maiores: cn (224), button.tsx (126), snapshot.py (102), lucide-react (102), ref_node_path (84), react (81), dependencies (80), gerar.mjs (76), App.tsx (74), generate.py (73), badge.tsx (70), useRealtimeSubscriptions.ts (68)
+- 6588 nós · 14417 arestas · 503 comunidades · grafo do commit `666bc90d`
+- comunidades maiores: lucide-react (128), snapshot.py (100), cn (97), utils.ts (97), react (84), dependencies (80), gerar.mjs (76), Header.tsx (76), generate.py (75), useRealtimeSubscriptions.ts (72), Button (71), client.ts (70)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (30)
 - package.json (30)
-- supabase/config.toml (11)
+- supabase/config.toml (12)
 - docs/pendencias/_ordem.md (8)
 - .github/workflows/ci.yml (7)
 - docs/pendencias/README.md (5)
@@ -289,6 +289,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
 - `contexto.yml` — Contexto para agentes de IA (10 min) (push, schedule, workflow_dispatch; cron 3 * * * *)
+- `deploy-edges.yml` — Deploy Edge Functions (push, workflow_dispatch)
 - `inventario-estado-semanal.yml` — Inventário do estado real (semanal) (schedule, workflow_dispatch; cron 37 9 * * 1)
 
 ## Scripts npm
@@ -328,6 +329,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/CRON_JOBS.md` — ⏱️ Cron Jobs & Rotinas de Manutenção (73 linhas)
 - `docs/DATA_DICTIONARY.md` — 📖 Dicionário de Dados — Lalamove Intelligence (33 linhas)
 - `docs/DEPLOYMENT.md` — 🚀 Deployment - Lalamove Guardian (89 linhas)
+- `docs/EDGE_DEPLOY_PIPELINE.md` — Pipeline de deploy das edge functions — 2026-11 (49 linhas)
 - `docs/FUNCIONALIDADES_E_FERRAMENTAS.md` — 📋 Levantamento Completo de Funcionalidades e Ferramentas (725 linhas)
 - `docs/JOB_QUEUE_SYSTEM.md` — 📦 Sistema de Filas Assíncronas - Job Queue (578 linhas)
 - `docs/LALAMOVE_API_V3.md` — Lalamove API v3 — Documentação Técnica Completa (Brasil) (635 linhas)
@@ -352,6 +354,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `666bc90` infra: pipeline de deploy das edge functions + verify_jwt completo no config.toml (#108)
 - 2026-11-21 `9f9c709` feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)
 - 2026-11-21 `18c9d83` feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)
 - 2026-11-21 `0cac154` fix: comments do glossario agora ligam a tabelas so do types.ts (#105)
@@ -366,7 +369,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
 - 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
 - 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
-- 2026-11-20 `a1b3ef3` docs: backlog de pendencias do goal concluir funcionalidades
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
