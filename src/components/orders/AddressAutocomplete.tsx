@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
+import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation } from 'lucide-react';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
-import { useMapboxGeocode, type MapboxFeature } from '@/hooks/useMapbox';
+import { useGeoAutocomplete, useGeoSession, fetchGeoPlace, type GeoAddress, type GeoSuggestion } from '@/hooks/useGeo';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +12,7 @@ interface AddressAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
   onSelectRecord?: (record: AddressSearchResult) => void;
-  onSelectMapbox?: (feature: MapboxFeature) => void;
+  onSelectPlace?: (place: GeoAddress) => void;
   onCoordinatesChange?: (lat: number, lng: number) => void;
   placeholder?: string;
   className?: string;
@@ -37,7 +38,7 @@ export function AddressAutocomplete({
   value,
   onChange,
   onSelectRecord,
-  onSelectMapbox,
+  onSelectPlace,
   onCoordinatesChange,
   placeholder = 'Buscar endereço...',
   className,
@@ -50,10 +51,16 @@ export function AddressAutocomplete({
   // CRM search
   const { data: crmData, isLoading: crmLoading } = useAddressSearch(debouncedSearch, open && debouncedSearch.length >= 2);
   
-  // Mapbox Geocoding search
-  const { data: mapboxData, isLoading: mapboxLoading } = useMapboxGeocode(debouncedSearch, open && debouncedSearch.length >= 3);
+  // Autocomplete via geo-gateway (Google ou Mapbox conforme geo_settings) — 1 sessão por "digitar → escolher"
+  const session = useGeoSession();
+  const [resolving, setResolving] = useState(false);
+  const { data: geoData, isLoading: geoLoading, error: geoError } = useGeoAutocomplete(
+    debouncedSearch,
+    open && debouncedSearch.length >= 3 ? session.get() : null,
+    open,
+  );
 
-  const isLoading = crmLoading || mapboxLoading;
+  const isLoading = crmLoading || geoLoading || resolving;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -78,20 +85,36 @@ export function AddressAutocomplete({
     setOpen(false);
   };
 
-  const handleSelectMapbox = (feature: MapboxFeature) => {
-    setInputValue(feature.place_name);
-    onChange(feature.place_name);
-    onSelectMapbox?.(feature);
-    // Pass coordinates back (center is [lng, lat])
-    if (feature.center && onCoordinatesChange) {
-      onCoordinatesChange(feature.center[1], feature.center[0]);
-    }
+  const handleSelectPlace = async (suggestion: GeoSuggestion) => {
+    const label = suggestion.secondary_text || suggestion.main_text;
+    setInputValue(label);
+    onChange(label);
     setOpen(false);
+    setResolving(true);
+    try {
+      // place-details fecha a sessão de cobrança e devolve coordenada + componentes
+      const place = await fetchGeoPlace(suggestion.id, session.get());
+      if (place.formatted) {
+        setInputValue(place.formatted);
+        onChange(place.formatted);
+      }
+      onSelectPlace?.(place);
+      const point = place.routable_point ?? place.location;
+      if (point && onCoordinatesChange) onCoordinatesChange(point.lat, point.lng);
+    } catch (err) {
+      toast.error('Não foi possível obter a localização do endereço', {
+        description: err instanceof Error ? err.message : undefined,
+      });
+    } finally {
+      session.end();
+      setResolving(false);
+    }
   };
 
   const crmResults = crmData?.results ?? [];
-  const mapboxResults = mapboxData?.features ?? [];
-  const hasResults = crmResults.length > 0 || mapboxResults.length > 0;
+  const geoResults = geoData ?? [];
+  const geoProvider = geoResults[0]?.provider;
+  const hasResults = crmResults.length > 0 || geoResults.length > 0;
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
@@ -148,35 +171,38 @@ export function AddressAutocomplete({
             </>
           )}
 
-          {/* Mapbox Geocoding Results */}
-          {mapboxResults.length > 0 && (
+          {/* Sugestões do provedor de mapas (geo-gateway) */}
+          {geoResults.length > 0 && (
             <>
               <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold bg-muted/30 border-b border-border/30">
-                Mapbox Geocoding
+                {geoProvider === 'google' ? 'Google Maps' : 'Mapbox'}
               </div>
-              {mapboxResults.map((feature) => (
+              {geoResults.map((suggestion) => (
                 <button
-                  key={feature.id}
+                  key={suggestion.id}
                   type="button"
                   className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30 last:border-0"
-                  onClick={() => handleSelectMapbox(feature)}
+                  onClick={() => void handleSelectPlace(suggestion)}
                 >
                   <div className="flex items-center gap-2">
                     <Navigation className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                     <div className="min-w-0">
                       <span className="font-medium text-sm text-foreground truncate block">
-                        {feature.text}
+                        {suggestion.main_text}
                       </span>
                       <p className="text-xs text-muted-foreground truncate">
-                        {feature.place_name}
+                        {suggestion.secondary_text}
                       </p>
                     </div>
                     <Badge variant="outline" className="text-[10px] px-1.5 py-0 flex-shrink-0">
-                      {feature.place_type?.[0] || 'local'}
+                      {suggestion.type || 'local'}
                     </Badge>
                   </div>
                 </button>
               ))}
+              {geoProvider === 'mapbox' && (
+                <div className="px-3 py-1 text-[10px] text-muted-foreground border-t border-border/30">© Mapbox © OpenStreetMap</div>
+              )}
             </>
           )}
         </div>
@@ -184,7 +210,13 @@ export function AddressAutocomplete({
 
       {open && debouncedSearch.length >= 2 && !isLoading && !hasResults && (
         <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 text-center">
-          <p className="text-sm text-muted-foreground">Nenhum resultado encontrado</p>
+          <p className="text-sm text-muted-foreground">
+            {geoError
+              ? (geoError.status === 429
+                  ? 'Busca de endereços indisponível no momento (limite/orçamento). Digite o endereço completo.'
+                  : 'Busca de endereços indisponível. Digite o endereço completo.')
+              : 'Nenhum resultado encontrado — tente com número e cidade'}
+          </p>
         </div>
       )}
     </div>
