@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c3577b5b684f28006f3573c71b554f52600292a8` (2026-11-21T10:46:13-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e` (2026-11-21T11:13:59-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6535 nós · 14351 arestas · 507 comunidades · grafo do commit `c3577b5b`
-- comunidades maiores: cn (176), lucide-react (136), ref_node_path (108), client.ts (103), snapshot.py (102), react (93), dependencies (80), utils.ts (79), gerar.mjs (76), RolesPage.tsx (74), Sidebar.tsx (72), AdvancedReportsPage.tsx (68)
+- 6536 nós · 14354 arestas · 506 comunidades · grafo do commit `0cac154a`
+- comunidades maiores: button.tsx (162), cn (114), card.tsx (108), snapshot.py (102), ref_node_fs (99), react (89), AdvancedReportsPage.tsx (89), RolesPage.tsx (89), dependencies (80), gerar.mjs (76), seed-database.ts (67), package.json (66)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -351,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `0cac154` fix: comments do glossario agora ligam a tabelas so do types.ts (#105)
 - 2026-11-21 `c3577b5` docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)
 - 2026-11-21 `a614869` feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)
 - 2026-11-21 `56aaa27` docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)
@@ -365,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `a1b3ef3` docs: backlog de pendencias do goal concluir funcionalidades
 - 2026-11-20 `4767a5e` fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded
 - 2026-11-20 `1ef5f30` fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)
-- 2026-11-20 `158850e` build(deps-dev): bump vite from 7.3.5 to 8.3.8 (#77)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

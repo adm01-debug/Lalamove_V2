@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c3577b5b68` · branch `main` · 2026-11-21 14:00 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0cac154a60` · branch `main` · 2026-11-21 14:14 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -33,7 +33,7 @@
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `entity_versions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
-| `geo_blocks` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
+| `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
 | `job_queue` | Fila de jobs assíncronos para processamento em background | 16 colunas | migration |
 | `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
@@ -66,7 +66,7 @@
 | `security_test_logs` | Registro de testes de seguranca executados. | 8 colunas | migration |
 | `system_logs` | Logs estruturados do sistema | 7 colunas | migration |
 | `tracking_events` | Eventos de tracking particionados por mes (particionamento). | 10 colunas | migration |
-| `tracking_events_default` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
+| `tracking_events_default` | Particao padrao da tabela tracking_events. | 10 colunas | types.ts |
 | `tracking_events_y2026m05` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m06` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m07` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
@@ -258,7 +258,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 14/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_blocks`, `tracking_events_default`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view` …
+- 12/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view`
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

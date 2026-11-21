@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c3577b5b684f28006f3573c71b554f52600292a8",
+  "sha": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 14:00 UTC",
+  "generated_at": "2026-11-21 14:14 UTC",
   "files_total": 888,
   "code_files": 738,
-  "code_lines": 126952
+  "code_lines": 126990
  },
  "version": "1.3.2",
- "facts_hash": "afa9d23c57abe274",
+ "facts_hash": "af37c4249c911f4c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -5525,7 +5525,7 @@
     ],
     "constraints": [],
     "src": "src/integrations/supabase/types.ts",
-    "comment": "",
+    "comment": "Bloqueios geograficos por pais (permanente ou temporario).",
     "origin": "types.ts"
    },
    "tracking_events_default": {
@@ -5603,7 +5603,7 @@
     ],
     "constraints": [],
     "src": "src/integrations/supabase/types.ts",
-    "comment": "",
+    "comment": "Particao padrao da tabela tracking_events.",
     "origin": "types.ts"
    },
    "tracking_events_y2026m05": {
@@ -17716,7 +17716,7 @@
   {
    "module": "scripts",
    "files": 142,
-   "lines": 32262,
+   "lines": 32300,
    "tables": [
     "a",
     "active_tracking",
@@ -43286,7 +43286,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "14/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_blocks`, `tracking_events_default`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view` …",
+   "12/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view`",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -46773,7 +46773,7 @@
   },
   "scripts/regras_negocio/generate.py": {
    "path": "scripts/regras_negocio/generate.py",
-   "lines": 2138,
+   "lines": 2140,
    "exports": [
     "def is_app_code",
     "def log",
@@ -46899,9 +46899,12 @@
   },
   "scripts/regras_negocio/test_generate.py": {
    "path": "scripts/regras_negocio/test_generate.py",
-   "lines": 164,
+   "lines": 200,
    "exports": [
     "class CurrentSqlSourcesTests"
+   ],
+   "rule_comments": [
+    "database.types.ts; o COMMENT ON TABLE das migrations deve ligar a elas."
    ],
    "doc": "Regressões offline do gerador de regras; não acessam banco nem APIs de LLM.",
    "cron": [
@@ -61170,10 +61173,20 @@
   }
  },
  "git": {
-  "sha": "c3577b5b684f28006f3573c71b554f52600292a8",
+  "sha": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "0cac154",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: comments do glossario agora ligam a tabelas so do types.ts (#105)",
+    "files": [
+     "scripts/regras_negocio/generate.py",
+     "scripts/regras_negocio/test_generate.py"
+    ]
+   },
    {
     "sha": "c3577b5",
     "date": "2026-11-21",
@@ -61504,16 +61517,6 @@
      "package-lock.json",
      "package.json"
     ]
-   },
-   {
-    "sha": "d0fa636",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(ui): contraste WCAG em dark mode e badges tinted",
-    "files": [
-     "src/components/ui/badge.tsx",
-     "src/index.css"
-    ]
    }
   ],
   "hot_files": [
@@ -61582,19 +61585,19 @@
     2
    ],
    [
+    "scripts/regras_negocio/generate.py",
+    1
+   ],
+   [
+    "scripts/regras_negocio/test_generate.py",
+    1
+   ],
+   [
     "docs/pendencias/P-14-analise-correcoes-planejadas.md",
     1
    ],
    [
     "supabase/migrations/20261121100000_add_table_comments.sql",
-    1
-   ],
-   [
-    "docs/audit_report.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-12-analise-funcionalidades-planejadas.md",
     1
    ]
   ]

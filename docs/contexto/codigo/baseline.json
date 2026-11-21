@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c3577b5b684f28006f3573c71b554f52600292a8",
+  "commit": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
   "branch": "main",
-  "data_commit": "2026-11-21T10:46:13-03:00",
+  "data_commit": "2026-11-21T11:13:59-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "0cac154",
+    "data": "2026-11-21",
+    "assunto": "fix: comments do glossario agora ligam a tabelas so do types.ts (#105)"
+   },
    {
     "sha": "c3577b5",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "c86f279",
     "data": "2026-11-20",
     "assunto": "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)"
-   },
-   {
-    "sha": "8832302",
-    "data": "2026-11-19",
-    "assunto": "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)"
    }
   ],
-  "arquivos_mudados_7d": 53,
+  "arquivos_mudados_7d": 55,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 26
+    "commits": 27
    },
    {
     "autor": "dependabot[bot]",

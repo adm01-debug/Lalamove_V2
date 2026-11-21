@@ -1072,7 +1072,7 @@
    "arquivo": "scripts/regras_negocio/generate.py",
    "pasta": "scripts/regras_negocio",
    "descricao": null,
-   "linhas": 2138,
+   "linhas": 2140,
    "env": [],
    "npm_scripts": [],
    "workflows": [
@@ -1109,7 +1109,7 @@
    "arquivo": "scripts/regras_negocio/test_generate.py",
    "pasta": "scripts/regras_negocio",
    "descricao": "Regressões offline do gerador de regras; não acessam banco nem APIs de LLM.\"\"\"",
-   "linhas": 164,
+   "linhas": 200,
    "env": [],
    "npm_scripts": [],
    "workflows": [
