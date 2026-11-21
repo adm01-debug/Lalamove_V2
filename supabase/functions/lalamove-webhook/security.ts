@@ -45,3 +45,52 @@ export async function validateHmacSignature(
     return { valid: false, reason: `Validation error: ${errorMsg}` };
   }
 }
+
+// ── Lalamove v3 body-signature validation ──
+// Formula oficial (v3_Webhook_v1.5.pdf p.8 + sample code da Lalamove):
+//   raw      = `${timestamp}\r\nPOST\r\n${path}\r\n\r\n${JSON.stringify(data)}`
+//   expected = hex(HMAC_SHA256(raw, API_SECRET))
+//   valido quando expected === payload.signature
+// path = caminho da URL registrada apos o dominio (ex: /functions/v1/lalamove-webhook).
+// Aceita uma lista de paths candidatos porque o runtime pode reescrever o
+// pathname visto pela function; a assinatura continua obrigatoria em todos.
+export async function validateLalamoveV3Signature(
+  payload: { timestamp?: unknown; signature?: unknown; data?: unknown },
+  paths: string[],
+  secret: string,
+): Promise<{ valid: boolean; reason?: string }> {
+  if (!secret) {
+    logger.error('[Webhook] LALAMOVE_API_SECRET not configured — rejecting webhook (fail-closed)');
+    return { valid: false, reason: 'Server misconfiguration: signing secret not configured' };
+  }
+  const { timestamp, signature, data } = payload;
+  if (typeof timestamp !== 'string' && typeof timestamp !== 'number') {
+    return { valid: false, reason: 'Missing timestamp in body' };
+  }
+  if (typeof signature !== 'string' || !signature) {
+    return { valid: false, reason: 'Missing signature in body' };
+  }
+  if (data === undefined) return { valid: false, reason: 'Missing data in body' };
+
+  try {
+    const encoder = new TextEncoder();
+    const cryptoKey = await crypto.subtle.importKey(
+      "raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+    );
+    const body = JSON.stringify(data);
+    const expected = signature.toLowerCase().trim();
+    for (const path of [...new Set(paths)]) {
+      const raw = `${timestamp}\r\nPOST\r\n${path}\r\n\r\n${body}`;
+      const sigBuf = await crypto.subtle.sign("HMAC", cryptoKey, encoder.encode(raw));
+      const computed = new TextDecoder().decode(encode(new Uint8Array(sigBuf))).toLowerCase();
+      if (timingSafeEqual(computed, expected)) {
+        return { valid: true, reason: 'Signature valid (v3 body)' };
+      }
+    }
+    return { valid: false, reason: 'Signature mismatch (v3 body)' };
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    logger.error('[Webhook] HMAC v3 validation error:', errorMsg);
+    return { valid: false, reason: `Validation error: ${errorMsg}` };
+  }
+}
