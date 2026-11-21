@@ -28,7 +28,7 @@ export interface Order {
   updatedAt: Date;
 }
 
-export type OrderStatus = 
+export type OrderStatus =
   | 'PENDING'
   | 'MATCHED'
   | 'ON_GOING'
@@ -36,7 +36,10 @@ export type OrderStatus =
   | 'COMPLETED'
   | 'CANCELLED'
   | 'REJECTED'
-  | 'EXPIRED';
+  | 'EXPIRED'
+  | 'QUOTED'
+  | 'ASSIGNING_DRIVER'
+  | 'DELIVERING';
 
 export type VehicleType = 
   | 'MOTORCYCLE'

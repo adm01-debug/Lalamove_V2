@@ -100,7 +100,7 @@ async function fetchSLAMetrics(): Promise<SLAMetrics> {
   const deliveryTimes = completedOrders
     .filter(o => o.actual_delivery && o.scheduled_at)
     .map(o => {
-      const start = new Date(o.scheduled_at).getTime();
+      const start = new Date(o.scheduled_at!).getTime();
       const end = new Date(o.actual_delivery!).getTime();
       return (end - start) / (1000 * 60); // in minutes
     })
