@@ -14,8 +14,12 @@ export interface TrackingData {
   is_on_route: boolean | null;
   is_stopped: boolean | null;
   eta_minutes: number | null;
-  /** Polyline calculada no servidor pelo job `route_plan`. Evita Directions no browser. */
-  expected_route: Array<{ lat: number; lng: number }> | null;
+  /**
+   * Polyline calculada no servidor pelo job `route_plan`. Vem como `jsonb` do banco,
+   * por isso `unknown` — normalizada por `parseExpectedRoute()` em `useMapMarkers`.
+   * Evita chamar Directions no browser.
+   */
+  expected_route?: unknown;
   driver?: {
     name: string;
     vehicle_type: string;
