@@ -3395,6 +3395,76 @@ export type Database = {
           },
         ]
       }
+      cache_status: {
+        Row: {
+          is_stale: boolean | null
+          last_refresh: string | null
+          refresh_duration_ms: number | null
+          row_count: number | null
+          status: string | null
+          view_name: string | null
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      delivery_metrics_cache: {
+        Row: {
+          avg_delay_minutes: number | null
+          avg_value: number | null
+          cached_at: string | null
+          cancelled_orders: number | null
+          completed_orders: number | null
+          delivery_date: string | null
+          failed_orders: number | null
+          in_progress_orders: number | null
+          max_value: number | null
+          total_orders: number | null
+          total_value: number | null
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      driver_stats_cache: {
+        Row: {
+          avg_rating: number | null
+          cached_at: string | null
+          cancelled_deliveries: number | null
+          completed_deliveries: number | null
+          driver_created_at: string | null
+          driver_id: string | null
+          driver_name: string | null
+          driver_status: string | null
+          failed_deliveries: number | null
+          is_blacklisted: boolean | null
+          is_whitelisted: boolean | null
+          lalamove_driver_id: string | null
+          last_active_at: string | null
+          last_delivery_at: string | null
+          phone: string | null
+          risk_level: string | null
+          risk_score: number | null
+          total_deliveries: number | null
+          vehicle_type: string | null
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      hourly_metrics_cache: {
+        Row: {
+          avg_value: number | null
+          cached_at: string | null
+          completed_orders: number | null
+          hour: string | null
+          total_orders: number | null
+          total_value: number | null
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
     }
     Functions: {
       acknowledge_alert: { Args: { p_alert_id: string }; Returns: boolean }
@@ -3449,6 +3519,15 @@ export type Database = {
       cleanup_old_region_cache: {
         Args: { p_retention_days?: number }
         Returns: number
+      }
+      refresh_cache_view: {
+        Args: { p_view_name?: string }
+        Returns: {
+          duration_ms: number | null
+          row_count: number | null
+          status: string | null
+          view_refreshed: string | null
+        }[]
       }
       clear_login_attempts: { Args: { p_email: string }; Returns: undefined }
       ensure_tracking_events_partition: {
