@@ -125,7 +125,8 @@ export function AddressAutocomplete({
       </div>
 
       {open && hasResults && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg max-h-72 overflow-y-auto">
+        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+          <div className="max-h-72 overflow-y-auto">
           {/* CRM Results */}
           {crmResults.length > 0 && (
             <>
@@ -190,6 +191,10 @@ export function AddressAutocomplete({
               ))}
             </>
           )}
+          </div>
+          <p className="px-3 py-1 text-[10px] text-muted-foreground/70 bg-muted/20 border-t border-border/30">
+            © Mapbox © OpenStreetMap
+          </p>
         </div>
       )}
 
