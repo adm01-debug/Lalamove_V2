@@ -30,7 +30,8 @@ import { useMapSettings } from '@/hooks/useMapSettings';
 import { useEffectiveMapProvider } from '@/hooks/useMapProviderPolicy';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { type VehicleFilter, type StatusFilter } from './types';
-import { setupMapLayers, applyRasterOverlay, type RasterProvider } from './mapLayers';
+import { setupMapLayers, applyRasterOverlay, setExpectedRoute, setDriverTrail, type RasterProvider, type RoutePoint } from './mapLayers';
+import { parseExpectedRoute } from './hooks/useMapMarkers';
 import { GoogleMapsCanvas } from './GoogleMapsCanvas';
 import { Google3DCanvas } from './Google3DCanvas';
 import { MapProviderSelector } from './MapProviderSelector';
@@ -348,6 +349,32 @@ export function LiveMap({
   }, []);
 
   // Reconciliação de markers, rotas, clustering e animação foram extraídos para `useMapMarkers`.
+
+  // Rota contratada (expected_route) e rastro do motorista selecionado.
+  // Reaplica após cada `style.load` (troca de estilo base recria sources/layers vazios).
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+    const points = parseExpectedRoute(selectedTracking?.expected_route) ?? [];
+    const apply = () => {
+      if (map.current) setExpectedRoute(map.current, points);
+    };
+    if (m.isStyleLoaded()) apply();
+    else m.once('style.load', apply);
+  }, [selectedTracking, loading, mapStyle]);
+
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+    const trail: RoutePoint[] = history
+      .filter((e) => Number.isFinite(e.latitude) && Number.isFinite(e.longitude))
+      .map((e) => ({ lat: e.latitude, lng: e.longitude }));
+    const apply = () => {
+      if (map.current) setDriverTrail(map.current, trail);
+    };
+    if (m.isStyleLoaded()) apply();
+    else m.once('style.load', apply);
+  }, [history, loading, mapStyle]);
 
 
   const vehicleCounts = useMemo(() => trackingData.reduce((acc, t) => {

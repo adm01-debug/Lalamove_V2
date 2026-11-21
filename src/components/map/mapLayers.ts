@@ -145,6 +145,47 @@ export function setupMapLayers(map: mapboxgl.Map, showTraffic: boolean): void {
     });
   }
 
+  // Rota contratada (expected_route do pedido, polyline {lat,lng}) — preenchida por setExpectedRoute().
+  if (!map.getSource('expected-route')) {
+    map.addSource('expected-route', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+
+    map.addLayer({
+      id: 'expected-route',
+      type: 'line',
+      source: 'expected-route',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: {
+        'line-color': statusHsl('operational'),
+        'line-width': 4,
+        'line-opacity': 0.9,
+      },
+    });
+  }
+
+  // Rastro percorrido pelo motorista (histórico de posições) — preenchido por setDriverTrail().
+  if (!map.getSource('driver-trail')) {
+    map.addSource('driver-trail', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+
+    map.addLayer({
+      id: 'driver-trail',
+      type: 'line',
+      source: 'driver-trail',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: {
+        'line-color': statusHsl('info'),
+        'line-width': 2,
+        'line-dasharray': [1.5, 1],
+        'line-opacity': 0.8,
+      },
+    });
+  }
+
   // Add Geofence Source
   if (!map.getSource('geofence')) {
     map.addSource('geofence', {
@@ -175,8 +216,45 @@ export function setupMapLayers(map: mapboxgl.Map, showTraffic: boolean): void {
   }
 }
 
-const RASTER_LAYER_ID = 'lovable-raster-overlay';
-const RASTER_SOURCE_ID = 'lovable-raster-overlay-source';
+/** Ponto no formato gravado em `active_tracking.expected_route` (`geo_point_to_polyline_m`). */
+/** Ponto no formato gravado em `active_tracking.expected_route` (`geo_point_to_polyline_m`). */
+export interface RoutePoint {
+  lat: number;
+  lng: number;
+}
+
+function lineFeature(points: RoutePoint[]): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: points.length < 2
+      ? []
+      : [{
+          type: 'Feature',
+          properties: {},
+          geometry: { type: 'LineString', coordinates: points.map((p) => [p.lng, p.lat]) },
+        }],
+  };
+}
+
+/**
+ * Desenha a rota contratada do pedido. Recebe a polyline `{lat,lng}[]` que o trigger
+ * `geo_evaluate_tracking()` consome em `active_tracking.expected_route`, então o traçado
+ * na tela é exatamente o usado para medir desvio. Lista vazia/curta limpa a camada.
+ */
+export function setExpectedRoute(map: mapboxgl.Map, points: RoutePoint[] | null | undefined): void {
+  const source = map.getSource('expected-route') as mapboxgl.GeoJSONSource | undefined;
+  if (!source) return;
+  source.setData(lineFeature(points ?? []));
+}
+
+/** Desenha o rastro percorrido pelo motorista (histórico de posições, ordem cronológica). */
+export function setDriverTrail(map: mapboxgl.Map, points: RoutePoint[] | null | undefined): void {
+  const source = map.getSource('driver-trail') as mapboxgl.GeoJSONSource | undefined;
+  if (!source) return;
+  source.setData(lineFeature(points ?? []));
+}
+
+const RASTER_LAYER_ID = 'lovable-raster-overlay';const RASTER_SOURCE_ID = 'lovable-raster-overlay-source';
 
 export type RasterProvider = 'osm' | 'esri-sat' | null;
 
