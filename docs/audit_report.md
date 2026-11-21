@@ -28,7 +28,7 @@ O sistema **Lalamove Guardian** apresenta uma maturidade técnica elevada, com a
 ### 💡 Recomendações
 1. **Redundância:** Implementar fallback para APIs críticas (Mapbox/Lalamove) caso os gateways primários falhem.
 2. **Observabilidade:** Expandir o monitoramento de logs de auditoria para incluir ações administrativas sensíveis (ex: bypass de aprovação).
-3. **MFA:** Tornar obrigatório o uso de Autenticação Multifator (MFA) para todos os perfis administrativos.
+3. **MFA:** TORNAR obrigatório o uso de Autenticação Multifator (MFA) para todos os perfis administrativos. _Nota 2026-11-21: MFA/WebAuthn já está implementado de ponta a ponta (ver P-11); o enforcement por perfil é política de acesso, não funcionalidade._
 
 ---
 
@@ -90,15 +90,15 @@ O sistema **Lalamove Guardian** apresenta uma maturidade técnica elevada, com a
 | Item | Descrição | Status | Prioridade |
 |------|-----------|--------|------------|
 | 1.1 | Autenticação Supabase Auth | ✅ Implementado | P0 |
-| 1.2 | MFA (Multi-factor Authentication) | ⚠️ Parcial | P1 |
+| 1.2 | MFA (Multi-factor Authentication) | ✅ Implementado | P1 |
 | 2.1 | Webhook Lalamove (Recepção) | ✅ Implementado | P0 |
 | 2.2 | Validação HMAC | ✅ Implementado | P0 |
 | 3.1 | Motor de Risco (Risk Engine) | ✅ Implementado | P0 |
 | 3.2 | IA Route Analyzer | ✅ Implementado | P1 |
 | 4.1 | Dashboard de Analytics | ✅ Implementado | P2 |
 | 4.2 | Exportação PDF/CSV | ✅ Implementado | P2 |
-| 5.1 | App Mobile para Motoristas | ❌ Pendente | P1 |
-| 5.2 | Chat em tempo real Cliente-Motorista | ❌ Pendente | P2 |
+| 5.1 | App Mobile para Motoristas | ⏸️ Adiado para a V3 (decisão dono 2026-11-21) | P1 |
+| 5.2 | Chat em tempo real Cliente-Motorista | ⏸️ Adiado para a V3 (decisão dono 2026-11-21) | P2 |
 | 6.1 | Sincronização Bitrix24 | ✅ Implementado | P1 |
 
 ---
@@ -114,7 +114,9 @@ O sistema **Lalamove Guardian** apresenta uma maturidade técnica elevada, com a
 
 ## 7. Conclusão e Próximos Passos
 
-O sistema **Lalamove Guardian** está pronto para operação enterprise. A robustez do backend e a fluidez da interface garantem uma ferramenta de alta confiabilidade para gestão logística. Os próximos esforços devem ser focados na **conclusão do MFA** e no desenvolvimento de um **front-end mobile nativo** para motoristas, fechando o ciclo de rastreamento direto.
+O sistema **Lalamove Guardian** está pronto para operação enterprise. A robustez do backend e a fluidez da interface garantem uma ferramenta de alta confiabilidade para gestão logística. 
+
+_Atualização 2026-11-21 (análise exaustiva P-12): o MFA citado como pendente já está implementado de ponta a ponta (P-11 descartado com evidência). Os dois itens restantes — front-end mobile nativo para motoristas (5.1) e chat em tempo real (5.2) — foram adiados pelo dono para a versão V3 (concorrente do Lalamove), fora do escopo V2. Nenhuma funcionalidade planejada para a V2 ficou pendente._
 
 ---
 **Assinado por:**

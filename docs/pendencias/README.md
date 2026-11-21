@@ -17,10 +17,14 @@
 | P-09 | Transições de status sem CHECK no schema | OBSOLETO (enums já validam) |
 | P-10 | Scripts com chaves legacy hardcoded | decidido: manter |
 | P-11 | MFA/WebAuthn (auditoria 1.2) | DESCARTADO (já implementado, evidência no código) |
+| P-12 | Análise exaustiva funcionalidades planejadas vs. implementadas | CONCLUÍDO (2026-11-21 — veredito: 100% do planejado V2 implementado) |
+| P-13 | Documentar tabelas sem COMMENT ON TABLE | ABERTO (documentação de schema, não funcionalidade) |
 
 ## Trabalho de agentes JÁ incorporado a main (não perder, não reexecutar)
 
 Verificado byte a byte nesta sessão / sessões anteriores (evidência em _linha-de-base.md):
+
+- **P-12 (2026-11-21): análise exaustiva planejado vs. implementado** — cruzou o LEVANTAMENTO (41 páginas/54 hooks/17 edge functions/31+ tabelas/11 enums/3 idiomas/7 canais/3 views) com o real (85 páginas/101 hooks/36 edge functions/65 tabelas com RLS/11 enums/3 idiomas/7 canais/3 views). Veredito: 100% do planejado V2 implementado; MFA completo (P-11); único pendente humano é o P-04. Ver `P-12-analise-funcionalidades-planejadas.md`.
 
 - PR #88: edge mcp-query + migrations recuperadas — mergeada, deployada (edge v2 no ar, 401-gate validado).
 - PR #80/#81: remoção de segredos hardcoded + guards de CI — no main (8832302, 63987c9).
