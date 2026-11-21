@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b",
+  "commit": "4c030383e14a369615089f3a890ab6f458ce6d8a",
   "branch": "main",
-  "data_commit": "2026-11-21T08:29:42-03:00",
+  "data_commit": "2026-11-21T08:48:57-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "4c03038",
+    "data": "2026-11-21",
+    "assunto": "chore: registra P-11 MFA descartado e consolida README do backlog (#98)"
+   },
+   {
+    "sha": "75b7bef",
+    "data": "2026-11-21",
+    "assunto": "chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)"
+   },
    {
     "sha": "41ba75b",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "92a5411",
     "data": "2026-11-08",
     "assunto": "fix(banco): habilita Realtime nas 4 tabelas de segurança"
-   },
-   {
-    "sha": "0fd8bc3",
-    "data": "2026-11-08",
-    "assunto": "fix(ui): escurece --primary de 60% para 50% para WCAG AA"
-   },
-   {
-    "sha": "c8807f7",
-    "data": "2026-11-08",
-    "assunto": "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2"
    }
   ],
-  "arquivos_mudados_7d": 47,
+  "arquivos_mudados_7d": 48,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -142,6 +142,10 @@
    {
     "pasta": "package.json",
     "mudancas": 12
+   },
+   {
+    "pasta": "docs/pendencias/_ordem.md",
+    "mudancas": 4
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -172,27 +176,23 @@
     "mudancas": 2
    },
    {
+    "pasta": "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+    "mudancas": 2
+   },
+   {
+    "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 2
+   },
+   {
     "pasta": "docs/pendencias/P-07-security-definer-search-path.md",
     "mudancas": 2
    },
    {
     "pasta": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/P-09-transicoes-status-sem-check.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "scripts/seed-database.ts",
-    "mudancas": 2
-   },
-   {
-    "pasta": "src/index.css",
     "mudancas": 2
    }
   ],
@@ -216,6 +216,10 @@
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 5
+   },
+   {
+    "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 4
    },
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -254,6 +258,18 @@
     "mudancas": 2
    },
    {
+    "arquivo": "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
+    "mudancas": 2
+   },
+   {
     "arquivo": "docs/pendencias/P-07-security-definer-search-path.md",
     "mudancas": 2
    },
@@ -266,7 +282,7 @@
     "mudancas": 2
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
+    "arquivo": "docs/pendencias/README.md",
     "mudancas": 2
    },
    {
@@ -280,28 +296,12 @@
    {
     "arquivo": "scripts/apply-final-sql.ts",
     "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-permissions-via-api.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-rls-via-pg.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-sql-via-management-api.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-via-management-api.ts",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 18
+    "commits": 20
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 888,
+  "arquivos_total": 889,
   "arquivos_codigo": 566,
   "linhas_codigo": 110180,
   "rotas": 54,
@@ -327,7 +327,7 @@
   "testes": 97,
   "workflows": 3,
   "scripts": 104,
-  "docs_md": 76
+  "docs_md": 77
  },
  "por_pasta": {
   "e2e/helpers": {

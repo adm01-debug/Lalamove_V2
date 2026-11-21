@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b",
+  "sha": "4c030383e14a369615089f3a890ab6f458ce6d8a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 11:30 UTC",
-  "files_total": 883,
+  "generated_at": "2026-11-21 12:17 UTC",
+  "files_total": 884,
   "code_files": 737,
   "code_lines": 126890
  },
@@ -61114,10 +61114,33 @@
   }
  },
  "git": {
-  "sha": "41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b",
+  "sha": "4c030383e14a369615089f3a890ab6f458ce6d8a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "4c03038",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "chore: registra P-11 MFA descartado e consolida README do backlog (#98)",
+    "files": [
+     "docs/pendencias/P-11-mfa-webauthn.md",
+     "docs/pendencias/README.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
+   {
+    "sha": "75b7bef",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)",
+    "files": [
+     "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
+     "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+     "docs/pendencias/P-06-vulns-npm-restantes.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
    {
     "sha": "41ba75b",
     "date": "2026-11-21",
@@ -61601,37 +61624,40 @@
     "author": "adm01-debug",
     "subject": "Merge pull request #66 from adm01-debug/dependabot/npm_and_yarn/globals-17.12.0",
     "files": []
-   },
-   {
-    "sha": "7349b3a",
-    "date": "2026-10-03",
-    "author": "dependabot[bot]",
-    "subject": "build(deps-dev): bump globals from 15.15.0 to 17.12.0",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
-   },
-   {
-    "sha": "a0ef45f",
-    "date": "2026-10-03",
-    "author": "adm01-debug",
-    "subject": "Merge pull request #67 from adm01-debug/dependabot/npm_and_yarn/vitest-5.0.0",
-    "files": []
    }
   ],
   "hot_files": [
    [
     "package-lock.json",
-    13
+    12
    ],
    [
     "package.json",
-    13
+    12
+   ],
+   [
+    "docs/pendencias/_ordem.md",
+    4
    ],
    [
     ".github/workflows/ci.yml",
     3
+   ],
+   [
+    "docs/pendencias/README.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-06-vulns-npm-restantes.md",
+    2
    ],
    [
     "docs/pendencias/P-07-security-definer-search-path.md",
@@ -61643,10 +61669,6 @@
    ],
    [
     "docs/pendencias/P-09-transicoes-status-sem-check.md",
-    2
-   ],
-   [
-    "docs/pendencias/_ordem.md",
     2
    ],
    [
@@ -61678,27 +61700,11 @@
     2
    ],
    [
+    "docs/pendencias/P-11-mfa-webauthn.md",
+    1
+   ],
+   [
     "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
-    1
-   ],
-   [
-    "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-02-app-mobile-motoristas.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-03-chat-cliente-motorista.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-04-rotacionar-jwt-secret-painel.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
     1
    ]
   ]

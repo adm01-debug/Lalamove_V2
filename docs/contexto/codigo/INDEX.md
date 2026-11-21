@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b` (2026-11-21T08:29:42-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `4c030383e14a369615089f3a890ab6f458ce6d8a` (2026-11-21T08:48:57-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (162), JavaScript (112), Markdown (76), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (162), JavaScript (112), Markdown (77), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 888 |
+| arquivos_total | 889 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 110180 |
 | rotas | 54 |
@@ -52,7 +52,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | testes | 97 |
 | workflows | 3 |
 | scripts | 104 |
-| docs_md | 76 |
+| docs_md | 77 |
 
 ## Onde ficam as coisas
 - telas: src/pages (52)
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6499 nós · 14317 arestas · 501 comunidades · grafo do commit `41ba75ba`
-- comunidades maiores: cn (199), button.tsx (167), GeoBlockingPage.tsx (101), snapshot.py (100), client.ts (89), react (88), ref_node_url (85), dependencies (80), gerar.mjs (76), generate.py (75), lucide-react (74), package.json (73)
+- 6505 nós · 14323 arestas · 499 comunidades · grafo do commit `4c030383`
+- comunidades maiores: cn (206), button.tsx (114), react (107), lucide-react (103), snapshot.py (102), ref_node_path (86), dependencies (80), @tanstack/react-query (79), gerar.mjs (76), client.ts (74), generate.py (73), UserPreferencesPage.tsx (72)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -275,6 +275,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/config.toml (11)
 - .github/workflows/ci.yml (7)
 - src/hooks/useRegionResolver.ts (5)
+- docs/pendencias/_ordem.md (4)
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
 - eslint.config.js (3)
@@ -284,7 +285,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - .env.example (2)
 - .github/workflows/contexto.yml (2)
 - docs/agentes/banco.md (2)
-- docs/pendencias/P-07-security-definer-search-path.md (2)
 
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
@@ -347,10 +347,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove_n8n_integration.md` — Integração n8n ↔ Lalamove Token Manager (141 linhas)
 - `lalamove_order_history_full.md` — Lalamove Brasil — Histórico Completo de Pedidos (116 linhas)
 - `lalamove_suplemento_v2.md` — Lalamove Brasil — Suplemento Técnico v2 (772 linhas)
-- subpastas de docs/: docs/pendencias (14), docs/agentes (6), docs/adr (2), docs/contexto (2), docs/ci (1)
+- subpastas de docs/: docs/pendencias (15), docs/agentes (6), docs/adr (2), docs/contexto (2), docs/ci (1)
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `4c03038` chore: registra P-11 MFA descartado e consolida README do backlog (#98)
+- 2026-11-21 `75b7bef` chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)
 - 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
 - 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
 - 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
@@ -364,8 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `a6e36fe` build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)
 - 2026-11-20 `bb236d9` build(deps): bump recharts from 3.8.1 to 3.10.1 (#75)
 - 2026-11-20 `1bf53fb` build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)
-- 2026-11-20 `f62d754` build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)
-- 2026-11-20 `8115008` build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
