@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `808653cc87` · branch `main` · 2026-11-21 20:41 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `023202f673` · branch `main` · 2026-11-21 22:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -285,6 +285,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lalamove_orders` | `metadata` | default '{}' |
 | `lalamove_orders` | `created_at` | default now() |
 | `lalamove_orders` | `updated_at` | default now() |
+| `lalamove_orders` | `requires_address_review` | obrigatório |
 | `lalamove_orders` | `(tabela)` | constraint lalamove_orders_total_cost_nonneg CHECK (total_cost >= 0), ADD CONSTRAINT lalamove_orders_distance_nonneg CHECK (distance_meters IS NULL OR distance_meters >= 0), ADD CONSTRAINT lalamove_orders_delay_nonneg CHECK (delay_minutes IS NULL OR delay_minutes >= 0), ADD CONSTRAINT lalamove_order … |
 | `lalamove_orders` | `(tabela)` | constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO … |
 | `lalamove_stops` | `id` | PK; default gen_random_uuid() |
@@ -327,6 +328,9 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `active_tracking` | `is_on_route` | default true |
 | `active_tracking` | `is_stopped` | default false |
 | `active_tracking` | `last_updated` | default now() |
+| `active_tracking` | `near_stop_cycles` | obrigatório |
+| `active_tracking` | `next_stop_index` | obrigatório |
+| `active_tracking` | `off_route_cycles` | obrigatório |
 | `active_tracking` | `(tabela)` | constraint active_tracking_curlat_check CHECK (current_latitude >= -90 AND current_latitude <= 90), ADD CONSTRAINT active_tracking_curlon_check CHECK (current_longitude >= -180 AND current_longitude <= 180), ADD CONSTRAINT active_tracking_orglat_check CHECK (origin_lat IS NULL OR (origin_lat >= -90 … |
 | `active_tracking` | `(tabela)` | constraint active_tracking_eta_non_negative CHECK (eta_minutes IS NULL OR eta_minutes >= 0) |
 | `alerts` | `id` | PK; default gen_random_uuid() |
@@ -531,11 +535,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `new_device_alerts` | `id` | PK; default gen_random_uuid() |
 | `new_device_alerts` | `user_id` | obrigatório |
 | `new_device_alerts` | `device_id` | FK → user_devices.id ON DELETE CASCADE |
-| `new_device_alerts` | `email_sent` | default false |
-| `new_device_alerts` | `created_at` | default now() |
-| `user_passkeys` | `id` | PK; default gen_random_uuid() |
-| `user_passkeys` | `user_id` | obrigatório |
-| … +266 linhas — lista completa em `context.json` | | |
+| … +282 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -600,6 +600,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `drivers` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | `PENDING_APPROVAL` |
 | `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` | `PENDING` |
 | `lalamove_orders` | `internal_status` | **livre (sem enum/CHECK)** |  |
+| `lalamove_orders` | `lalamove_status` | **livre (sem enum/CHECK)** |  |
 | `lalamove_stops` | `pod_status` | **livre (sem enum/CHECK)** | `NOT_REQUIRED` |
 | `lalamove_status_history` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
 | `lalamove_status_history` | `old_status` | **livre (sem enum/CHECK)** |  |
@@ -618,13 +619,13 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `bitrix24_spa_sync` | `last_stage` | **livre (sem enum/CHECK)** |  |
 | `bitrix24_spa_sync` | `sync_status` | `error`, `pending`, `success` | `pending` |
 | `order_geo_events` | `notification_status` | `cancelled`, `deferred`, `failed`, `no_recipient`, `queued`, `sent`, `skipped` | `queued` |
+| `cache_status` | `status` | **livre (sem enum/CHECK)** |  |
+| `driver_stats_cache` | `driver_status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `drivers_safe_view` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `orders_operator_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
 | `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
 | `orders_safe_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
 | `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
-| `cache_status` | `status` | **livre (sem enum/CHECK)** |  |
-| `driver_stats_cache` | `driver_status` | **livre (sem enum/CHECK)** |  |
 
 ### E.2 Mapas de transição declarados no código
 
@@ -814,6 +815,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | ViewMode | list \| compact | `src/hooks/useAlertGrouping.ts` |
 | ExternalTable | companies \| customers \| suppliers \| carriers \| contacts | `src/hooks/useExternalData.ts` |
 | FusePreset | strict \| balanced \| fuzzy | `src/hooks/useFuseSearch.ts` |
+| GeoProviderName | mapbox \| google | `src/hooks/useGeoAdmin.ts` |
+| GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization | `src/hooks/useGeoAdmin.ts` |
 | FleetKind | favorites \| blocked | `src/hooks/useLalamoveUapi.ts` |
 | MarkerDensity | comfortable \| compact | `src/hooks/useMapSettings.ts` |
 | MapProvider | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d | `src/hooks/useMapSettings.ts` |
@@ -838,7 +841,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | ApprovalPriority | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', URGENT = 'URGENT', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
 | IncidentType | DELAY = 'DELAY', DAMAGE = 'DAMAGE', THEFT = 'THEFT', RUDE_BEHAVIOR = 'RUDE_BEHAVIOR', WRONG_DELIVERY = 'WRONG_DELIVERY', NO_SHOW = 'NO_SHOW', UNSAFE_DRIVING = 'UNSAFE_DRIVING', // Compatibilidade com sistema atual ROUTE_DEVIATION = 'ROUTE_DEVIATION', LONG_STOP = 'LONG_STOP', LATE_DELIVERY = 'LATE_DE … | `src/types/driver.ts` |
 | IncidentSeverity | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
-| OrderStatus | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED | `src/types/index.ts` |
+| OrderStatus | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED \| QUOTED \| ASSIGNING_DRIVER \| DELIVERING | `src/types/index.ts` |
 | VehicleType | MOTORCYCLE \| CAR \| VAN \| TRUCK | `src/types/index.ts` |
 | DriverStatus | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST | `src/types/index.ts` |
 | IncidentType | ROUTE_DEVIATION \| LONG_STOP \| LATE_DELIVERY \| CUSTOMER_COMPLAINT \| DAMAGE \| OTHER | `src/types/index.ts` |
@@ -1687,6 +1690,8 @@ _nenhum item encontrado_
 | Não foi possível renovar. Cole um novo token manualmente. | `src/pages/LalamoveSettingsPage.tsx` |
 | Token inválido ou expirado. | `src/pages/LalamoveSettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/LalamoveSettingsPage.tsx` |
+| Falha ao salvar teto: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
+| Falha ao trocar provedor: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Erro ao salvar: ${error instanceof Error ? error.message :  | `src/pages/PermissionsPage.tsx` |
 | Erro ao atualizar nome: ${error.message} | `src/pages/ProfilePage.tsx` |
 | O nome não pode estar vazio | `src/pages/ProfilePage.tsx` |
@@ -1704,9 +1709,7 @@ _nenhum item encontrado_
 | Body JSON inválido | `src/pages/lalamove/LalamoveV3Explorer.tsx` |
 | Erro na chamada V3 | `src/pages/lalamove/LalamoveV3Explorer.tsx` |
 | Mínimo 2 coordenadas | `src/pages/map-tools/MapMatchingTab.tsx` |
-| Erro na otimização | `src/pages/map-tools/OptimizationTab.tsx` |
-| Mínimo 2 coordenadas | `src/pages/map-tools/OptimizationTab.tsx` |
-| … +75 linhas — lista completa em `context.json` | |
+| … +77 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1844,6 +1847,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/hooks/useDeviceDetection.ts` |
 | `invoke(` | `src/hooks/useEvaluateDriver.ts` |
 | `invoke(` | `src/hooks/useExternalData.ts` |
+| `invoke(` | `src/hooks/useGeoAdmin.ts` |
 | `invoke(` | `src/hooks/useGeoSearch.ts` |
 | `invoke(` | `src/hooks/useLalamoveUapi.ts` |
 | `invoke(` | `src/hooks/useMapbox.ts` |
@@ -1856,6 +1860,7 @@ _nenhum item encontrado_
 | `.add('dark'` | `src/hooks/useTheme.ts` |
 | `.add('theme-transition'` | `src/hooks/useTheme.ts` |
 | `notify_bitrix24_task` | `src/integrations/supabase/types.ts` |
+| `notify_delivery_contact` | `src/integrations/supabase/types.ts` |
 | `notify_email` | `src/integrations/supabase/types.ts` |
 | `notify_n8n_webhook` | `src/integrations/supabase/types.ts` |
 | `notify_slack` | `src/integrations/supabase/types.ts` |
@@ -1911,6 +1916,7 @@ _nenhum item encontrado_
 | `notify_whatsapp` | `supabase/migrations/20261121193000_fix_escalation_pipeline.sql` |
 | `notify_delivery_contact` | `supabase/migrations/20261122130100_geo_foundation.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122130100_geo_foundation.sql` |
+| `notify_whatsapp` | `supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql` |
 
 ## N. Regras citadas em comentários do código
 
@@ -1988,6 +1994,7 @@ _nenhum item encontrado_
 | * `true` quando o erro indica falha de autenticação e deve gerar alerta. */ | `src/lib/uapiErrors.ts` |
 | Se houver apenas uma palavra, retorna as 2 primeiras letras. | `src/lib/user-display.ts` |
 | existiam apenas no backend: histórico por cursor, extrato/comprovantes, | `src/pages/LalamoveOperationsPage.tsx` |
+| * Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */ | `src/pages/MapsSettingsPage.tsx` |
 | Action Required */} | `src/pages/evaluations/EvaluationDetails.tsx` |
 | * Presente somente quando o cliente habilita POD. */ | `src/types/lalamove.ts` |
 | * JSON pointer — presente apenas em `ERR_INVALID_FIELD`. */ | `src/types/lalamove.ts` |

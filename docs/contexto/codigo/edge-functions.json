@@ -406,6 +406,7 @@
     "telemetry.ts"
    ],
    "chamada_pelo_front": [
+    "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"

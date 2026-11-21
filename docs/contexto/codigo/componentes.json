@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 214,
+ "total": 215,
  "orfaos": 4,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 226,
+   "linhas": 228,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -1006,7 +1006,7 @@
     "AddressAutocomplete"
    ],
    "export_default": null,
-   "linhas": 213,
+   "linhas": 220,
    "dominio": "components/orders",
    "hooks_locais": [
     "useAddressSearch",
@@ -1105,7 +1105,7 @@
     "OrderDetailModal"
    ],
    "export_default": null,
-   "linhas": 917,
+   "linhas": 920,
    "dominio": "components/orders",
    "hooks_locais": [
     "useEvaluateDriver",
@@ -1306,7 +1306,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 105,
+   "usado_por": 106,
    "orfao": false
   },
   {
@@ -1321,7 +1321,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 124,
+   "usado_por": 125,
    "orfao": false
   },
   {
@@ -1341,7 +1341,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 96,
+   "usado_por": 97,
    "orfao": false
   },
   {
@@ -1601,7 +1601,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 42,
+   "usado_por": 43,
    "orfao": false
   },
   {
@@ -1647,7 +1647,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 29,
+   "usado_por": 30,
    "orfao": false
   },
   {
@@ -1858,7 +1858,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 32,
+   "usado_por": 33,
    "orfao": false
   },
   {
@@ -1909,7 +1909,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 26,
+   "usado_por": 27,
    "orfao": false
   },
   {
@@ -2001,7 +2001,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 17,
+   "usado_por": 18,
    "orfao": false
   },
   {
@@ -2022,7 +2022,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 11,
+   "usado_por": 12,
    "orfao": false
   },
   {
@@ -2979,6 +2979,28 @@
    "orfao": false
   },
   {
+   "arquivo": "src/pages/MapsSettingsPage.tsx",
+   "exports": [
+    "MapsSettingsPage"
+   ],
+   "export_default": "MapsSettingsPage",
+   "linhas": 400,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useGeoBudgetStatus",
+    "useGeoBudgets",
+    "useGeoPriceList",
+    "useGeoProviderStatus",
+    "useGeoUsageMonth",
+    "useUpdateGeoBudget",
+    "useUpdateGeoSetting"
+   ],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
    "arquivo": "src/pages/MapToolsPage.tsx",
    "exports": [
     "MapToolsPage"
@@ -3078,7 +3100,7 @@
     "OrderCard"
    ],
    "export_default": null,
-   "linhas": 157,
+   "linhas": 160,
    "dominio": "pages/orders",
    "hooks_locais": [],
    "tabelas": [],

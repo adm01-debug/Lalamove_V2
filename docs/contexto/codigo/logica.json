@@ -87,7 +87,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 88,
+   "usado_por": 89,
    "usado_por_modulos": [
     "components/dashboard",
     "components/layout",
@@ -141,7 +141,7 @@
     "TablesUpdate"
    ],
    "export_default": null,
-   "linhas": 3899,
+   "linhas": 4801,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -885,7 +885,7 @@
     "VehicleType"
    ],
    "export_default": null,
-   "linhas": 150,
+   "linhas": 153,
    "tabelas": [],
    "rpcs": [],
    "edges": [],

@@ -1,13 +1,13 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `808653cc87` · branch `main` · 2026-11-21 20:41 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `023202f673` · branch `main` · 2026-11-21 22:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
 
 | Termo | Significado / valores | Tamanho | Origem |
 |---|---|---|---|
-| `active_tracking` | Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota. | 22 colunas | migration |
+| `active_tracking` | Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota. | 32 colunas | migration |
 | `alert_configurations` | Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas. | 33 colunas | migration |
 | `alert_dedup` | Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo. | 6 colunas | migration |
 | `alerts` | Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status. | 15 colunas | migration |
@@ -44,17 +44,18 @@
 | `geo_price_list` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
 | `geo_settings` | Provedor de mapas por funcao (google\|mapbox\|off) com fallback. Admin edita em /settings/maps. | 6 colunas | migration |
 | `geo_usage` | Uso diario de APIs de mapa por provedor/funcao/sku com custo estimado (USD). | 7 colunas | migration |
+| `geo_usage_month` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | types.ts |
 | `hourly_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
 | `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 17 colunas | migration |
 | `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
-| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 51 colunas | migration |
+| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 71 colunas | migration |
 | `lalamove_priority_fee_history` | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. | 9 colunas | migration |
 | `lalamove_rate_limits` | Controle de rate limit das chamadas a API Lalamove. | 12 colunas | migration |
 | `lalamove_status_history` | Historico de mudancas de status de cada pedido Lalamove. | 9 colunas | migration |
 | `lalamove_stop_proofs` | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. | 14 colunas | migration |
-| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 17 colunas | migration |
+| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 19 colunas | migration |
 | `lalamove_uapi_sessions` | Sessoes da Unified API da Lalamove (token e expiracao). | 13 colunas | migration |
 | `lalamove_webhook_config` | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). | 9 colunas | migration |
 | `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
@@ -86,6 +87,9 @@
 | `tracking_events_y2026m08` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m09` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `tracking_events_y2026m10` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
+| `tracking_events_y2026m11` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
+| `tracking_events_y2026m12` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
+| `tracking_events_y2027m01` | _(sem COMMENT ON TABLE — significado não documentado)_ | 10 colunas | types.ts |
 | `user_devices` | Dispositivos registrados dos usuarios para deteccao de novo login. | 14 colunas | migration |
 | `user_passkeys` | Chaves WebAuthn/passkeys registradas por usuario. | 11 colunas | migration |
 | `user_roles` | Roles atribuidas a cada usuario (RBAC). | 10 colunas | migration |
@@ -116,6 +120,8 @@
 | `ViewMode` (TS) | list \| compact |  | `src/hooks/useAlertGrouping.ts` |
 | `ExternalTable` (TS) | companies \| customers \| suppliers \| carriers \| contacts |  | `src/hooks/useExternalData.ts` |
 | `FusePreset` (TS) | strict \| balanced \| fuzzy |  | `src/hooks/useFuseSearch.ts` |
+| `GeoProviderName` (TS) | mapbox \| google |  | `src/hooks/useGeoAdmin.ts` |
+| `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization |  | `src/hooks/useGeoAdmin.ts` |
 | `FleetKind` (TS) | favorites \| blocked |  | `src/hooks/useLalamoveUapi.ts` |
 | `MarkerDensity` (TS) | comfortable \| compact |  | `src/hooks/useMapSettings.ts` |
 | `MapProvider` (TS) | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d |  | `src/hooks/useMapSettings.ts` |
@@ -140,7 +146,7 @@
 | `ApprovalPriority` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', URGENT = 'URGENT', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
 | `IncidentType` (TS) | DELAY = 'DELAY', DAMAGE = 'DAMAGE', THEFT = 'THEFT', RUDE_BEHAVIOR = 'RUDE_BEHAVIOR', WRONG_DELIVERY = 'WRONG_DELIVERY', NO_SHOW = 'NO_SHOW', UNSAFE_DRIVING = 'UNSAFE_DRIVING', // Compatibilidade com sistema atual ROUTE_DEVIATION = 'ROUTE_DEVIATION', LONG_STOP = 'LONG_STOP', LATE_DELIVERY = 'LATE_DE … |  | `src/types/driver.ts` |
 | `IncidentSeverity` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
-| `OrderStatus` (TS) | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED |  | `src/types/index.ts` |
+| `OrderStatus` (TS) | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED \| QUOTED \| ASSIGNING_DRIVER \| DELIVERING |  | `src/types/index.ts` |
 | `VehicleType` (TS) | MOTORCYCLE \| CAR \| VAN \| TRUCK |  | `src/types/index.ts` |
 | `DriverStatus` (TS) | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST |  | `src/types/index.ts` |
 | `IncidentType` (TS) | ROUTE_DEVIATION \| LONG_STOP \| LATE_DELIVERY \| CUSTOMER_COMPLAINT \| DAMAGE \| OTHER |  | `src/types/index.ts` |
@@ -222,9 +228,11 @@ _nenhum item encontrado_
 | rls | `delivery_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | rls | `driver_stats_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | rls | `geo_blocks`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
+| rls | `geo_budget`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_cache`: RLS ligado sem nenhuma política → só service_role acessa |  |
-| rls | `geo_price_list`: RLS ligado sem nenhuma política → só service_role acessa |  |
-| rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa |  |
+| rls | `geo_price_list`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
+| rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
+| rls | `geo_usage_month`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |
 | rls | `hourly_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | edge | edge function `edge` invocada mas não existe em supabase/functions/ | `scripts/inventario/gerar-rotas.mjs` |
 | edge | edge function `inexistente` invocada mas não existe em supabase/functions/ | `scripts/ai-context/cenarios.mjs` |
@@ -260,6 +268,7 @@ _nenhum item encontrado_
 - `drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `lalamove_orders.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_stops.pod_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_status_history.old_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
@@ -278,14 +287,14 @@ _nenhum item encontrado_
 - `bitrix24_spa_sync.last_stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `bitrix24_spa_sync.sync_status` tem valores ['error', 'pending', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `order_geo_events.notification_status` tem valores ['cancelled', 'deferred', 'failed', 'no_recipient', 'queued', 'sent', 'skipped'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `driver_stats_cache.driver_status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_operator_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `driver_stats_cache.driver_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- 17/84 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view` …
+- 21/88 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

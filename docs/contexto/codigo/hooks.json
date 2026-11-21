@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 97,
+ "total": 98,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1289,6 +1289,42 @@
     "src/pages/RateLimitDashboardPage.tsx",
     "src/pages/RolesPage.tsx",
     "src/pages/orders/OrderCard.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useGeoAdmin.ts",
+   "hooks_exportados": [
+    "useGeoBudgetStatus",
+    "useGeoBudgets",
+    "useGeoPriceList",
+    "useGeoProviderStatus",
+    "useGeoUsageMonth",
+    "useUpdateGeoBudget",
+    "useUpdateGeoSetting"
+   ],
+   "linhas": 196,
+   "dominio": "hooks",
+   "tabelas": [
+    "geo_budget",
+    "geo_price_list",
+    "geo_settings",
+    "geo_usage_month"
+   ],
+   "rpcs": [
+    "geo_budget_status"
+   ],
+   "edges": [
+    "geo-gateway"
+   ],
+   "hooks_internos": [
+    "useMutation",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/MapsSettingsPage.tsx"
    ],
    "coberto_por_testes": 0
   },

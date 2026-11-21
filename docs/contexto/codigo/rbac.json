@@ -50,6 +50,7 @@
    "/risk-rules",
    "/settings",
    "/settings/lalamove",
+   "/settings/maps",
    "/settings/uapi",
    "/slo",
    "/system-health",
@@ -84,6 +85,7 @@
   "/external-data",
   "/risk-rules",
   "/settings/lalamove",
+  "/settings/maps",
   "/settings/uapi",
   "/webhooks"
  ],
@@ -235,6 +237,17 @@
    "rota_protegida": true,
    "rota_requer_mfa": true,
    "arquivo": "src/pages/LalamoveSettingsPage.tsx"
+  },
+  {
+   "rotulo": "Provedores de Mapa",
+   "grupo": "Integrações",
+   "destino": "/settings/maps",
+   "papel_no_menu": null,
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/MapsSettingsPage.tsx"
   },
   {
    "rotulo": "Webhooks",
@@ -528,6 +541,7 @@
   "Base CRM -> /external-data (menu: todos; rota: manager)",
   "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
   "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
+  "Provedores de Mapa -> /settings/maps (menu: todos; rota: manager)",
   "Webhooks -> /webhooks (menu: todos; rota: manager)",
   "Alertas -> /alerts (menu: todos; rota: operator)",
   "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",

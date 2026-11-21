@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `808653cc87` · branch `main` · 2026-11-21 20:41 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `023202f673` · branch `main` · 2026-11-21 22:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -53,6 +53,7 @@
 | `geo_price_list` | enabled | — | — | — | — |
 | `geo_settings` | enabled | — | — | — | — |
 | `geo_usage` | enabled | public: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | — | — | — |
+| `geo_usage_month` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `hourly_metrics_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ip_whitelist` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') |
 | `job_queue` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'service_role'<br>public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true<br>authenticated: public.has_role(auth.uid(), 'admin'::app_role) | public: auth.role() = 'service_role'<br>public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true |
@@ -95,6 +96,9 @@
 | `tracking_events_y2026m08` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `tracking_events_y2026m09` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `tracking_events_y2026m10` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `tracking_events_y2026m11` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `tracking_events_y2026m12` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `tracking_events_y2027m01` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `user_devices` | enabled | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')<br>authenticated: auth.uid() = user_id |
 | `user_passkeys` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') |
 | `user_roles` | enabled | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')<br>authenticated: true<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin') AND public.is_aal2()<br>authenticated: true<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin') AND public.is_aal2()<br>authenticated: true<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin') AND public.is_aal2()<br>service_role: true |
@@ -103,7 +107,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 113 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 114 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -218,6 +222,7 @@
 - `supabase/migrations/20261122090000_cache_system_backend.sql`
 - `supabase/migrations/20261122120200_job_queue_system.sql`
 - `supabase/migrations/20261122130100_geo_foundation.sql`
+- `supabase/migrations/20261122150100_fix_public_rls_bypass.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -336,6 +341,7 @@
 | /settings | ProtectedRoute |  | `scripts/ai-context/gerar.unit.mjs` |
 | /settings | ProtectedRoute | manager | `src/App.tsx` |
 | /settings/lalamove | ProtectedRoute | manager | `src/App.tsx` |
+| /settings/maps | ProtectedRoute | manager | `src/App.tsx` |
 | /settings/uapi | ProtectedRoute | manager | `src/App.tsx` |
 | /sla | ProtectedRoute | viewer | `src/App.tsx` |
 | /slo | ProtectedRoute | manager | `src/App.tsx` |
@@ -395,9 +401,11 @@ Middleware matcher (Next.js): nenhum
 | `delivery_metrics_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | `driver_stats_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | `geo_blocks` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
+| `geo_budget` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | `geo_cache` | RLS ligado sem nenhuma política → só service_role acessa |  |
-| `geo_price_list` | RLS ligado sem nenhuma política → só service_role acessa |  |
-| `geo_settings` | RLS ligado sem nenhuma política → só service_role acessa |  |
+| `geo_price_list` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
+| `geo_settings` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
+| `geo_usage_month` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |
 | `hourly_metrics_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 
 ## Multi-tenancy
@@ -487,6 +495,9 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `tracking_events_y2026m08` | `created_at` |
 | `tracking_events_y2026m09` | `created_at` |
 | `tracking_events_y2026m10` | `created_at` |
+| `tracking_events_y2026m11` | `created_at` |
+| `tracking_events_y2026m12` | `created_at` |
+| `tracking_events_y2027m01` | `created_at` |
 | `drivers_safe_view` | `created_at`, `updated_at` |
 | `orders_operator_view` | `created_at`, `updated_at` |
 | `orders_safe_view` | `created_at`, `updated_at` |
@@ -531,8 +542,14 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `tracking_events_y2026m09` | `longitude` |
 | `tracking_events_y2026m10` | `latitude` |
 | `tracking_events_y2026m10` | `longitude` |
-| `drivers_safe_view` | `phone` |
+| `tracking_events_y2026m11` | `latitude` |
+| `tracking_events_y2026m11` | `longitude` |
+| `tracking_events_y2026m12` | `latitude` |
+| `tracking_events_y2026m12` | `longitude` |
+| `tracking_events_y2027m01` | `latitude` |
+| `tracking_events_y2027m01` | `longitude` |
 | `driver_stats_cache` | `phone` |
+| `drivers_safe_view` | `phone` |
 
 ## Colunas de dinheiro (tipo importa: numeric ✅ / float ❌)
 
@@ -545,7 +562,12 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `lalamove_orders` | `cost_center` | `string` |
 | `lalamove_orders` | `custom_rating` | `number` |
 | `driver_evaluations` | `total_deliveries` | `integer` |
+| `delivery_metrics_cache` | `total_orders` | `number` |
+| `delivery_metrics_cache` | `total_value` | `number` |
+| `driver_stats_cache` | `total_deliveries` | `number` |
 | `drivers_safe_view` | `total_deliveries` | `number` |
+| `hourly_metrics_cache` | `total_orders` | `number` |
+| `hourly_metrics_cache` | `total_value` | `number` |
 | `orders_operator_view` | `cost_center` | `string` |
 | `orders_operator_view` | `custom_rating` | `number` |
 | `orders_operator_view` | `customer_name` | `string` |
@@ -556,8 +578,3 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `orders_safe_view` | `customer_name` | `string` |
 | `orders_safe_view` | `customer_phone` | `string` |
 | `orders_safe_view` | `total_cost` | `number` |
-| `delivery_metrics_cache` | `total_orders` | `number` |
-| `delivery_metrics_cache` | `total_value` | `number` |
-| `driver_stats_cache` | `total_deliveries` | `number` |
-| `hourly_metrics_cache` | `total_orders` | `number` |
-| `hourly_metrics_cache` | `total_value` | `number` |

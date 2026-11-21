@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `808653cc873944ae37e09d691e5c0ff0b97518b1` (2026-11-21T17:40:12-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `023202f673c20e8aed463fa14f963bd0fedffbe8` (2026-11-21T19:19:43-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (476), SQL (172), JavaScript (112), Markdown (96), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (478), SQL (174), JavaScript (112), Markdown (96), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,19 +35,19 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 942 |
-| arquivos_codigo | 587 |
-| linhas_codigo | 113363 |
-| rotas | 54 |
-| rotas_protegidas | 46 |
-| rotas_com_mfa | 6 |
-| itens_menu | 37 |
+| arquivos_total | 946 |
+| arquivos_codigo | 589 |
+| linhas_codigo | 114880 |
+| rotas | 55 |
+| rotas_protegidas | 47 |
+| rotas_com_mfa | 7 |
+| itens_menu | 38 |
 | modulos | 43 |
-| componentes | 214 |
-| hooks | 97 |
+| componentes | 215 |
+| hooks | 98 |
 | edge_functions | 27 |
-| tabelas | 85 |
-| migrations | 168 |
+| tabelas | 88 |
+| migrations | 170 |
 | cron_jobs | 17 |
 | testes | 107 |
 | workflows | 5 |
@@ -55,9 +55,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | docs_md | 96 |
 
 ## Onde ficam as coisas
-- telas: src/pages (52)
-- componentes: src/components (125), src/pages (85), src/hooks (3)
-- hooks: src/hooks (82), src/components (12), scripts/ai-context (1)
+- telas: src/pages (53)
+- componentes: src/components (125), src/pages (86), src/hooks (3)
+- hooks: src/hooks (83), src/components (12), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
 - testes: guards em scripts/ (46), co-localizado (__tests__) (41), supabase/functions/<edge> (8)
 - edge_functions: supabase/functions
@@ -79,9 +79,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/orders | 0 | 0 | 8 | 27 | 6 | 3 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 40 | 0 | 5 | 38 |
-| hooks | 0 | 0 | 83 | 196 | 15 | 42 |
+| hooks | 0 | 0 | 84 | 203 | 15 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 36 | 54 | 54 | 181 | 14 | 42 |
+| pages | 37 | 55 | 55 | 188 | 14 | 46 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -134,6 +134,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `/security` [tela] → src/pages/SecurityDashboardPage.tsx · papel admin
 - `/settings` [tela] → src/pages/SettingsPage.tsx · papel manager
 - `/settings/lalamove` [tela] → src/pages/LalamoveSettingsPage.tsx · papel manager · MFA
+- `/settings/maps` [tela] → src/pages/MapsSettingsPage.tsx · papel manager · MFA
 - `/settings/uapi` [tela] → src/pages/UAPISettingsPage.tsx · papel manager · MFA
 - `/sla` [tela] → src/pages/SLADashboardPage.tsx · papel viewer
 - `/slo` [tela] → src/pages/SLODashboardPage.tsx · papel manager
@@ -155,6 +156,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - [Integrações] Base CRM → `/external-data`
 - [Integrações] Bitrix24 → `/bitrix24`
 - [Integrações] Lalamove API → `/settings/lalamove`
+- [Integrações] Provedores de Mapa → `/settings/maps`
 - [Integrações] Webhooks → `/webhooks`
 - [Notificações] Alertas → `/alerts`
 - [Notificações] Config. Alertas → `/alert-configurations`
@@ -192,7 +194,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `evaluate-driver` [Motoristas] — tabelas: alerts, driver_approval_queue, driver_evaluations, driver_incidents, drivers, lalamove_orders, risk_rules; chamada por 1 arquivo(s) do front
 - `external-companies` [Dados externos] — tabelas: carriers, companies, contacts, customers, suppliers; chamada por 1 arquivo(s) do front
 - `external-db-bridge` [Dados externos] — tabelas: query_telemetry; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `geo-gateway` — tabelas: geo_cache, geo_price_list, geo_settings, geo_usage_month; chamada por 3 arquivo(s) do front
+- `geo-gateway` — tabelas: geo_cache, geo_price_list, geo_settings, geo_usage_month; chamada por 4 arquivo(s) do front
 - `get-mapbox-token` [Mapbox] — tabelas: -; chamada por 3 arquivo(s) do front
 - `job-worker` [Fila de jobs] — tabelas: -; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lalamove-api` [Lalamove API v3] — tabelas: drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history; chamada por 4 arquivo(s) do front
@@ -239,8 +241,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## RBAC
 - hierarquia: viewer=1 < operator=2 < manager=3 < admin=4
-- rotas por papel: (público) (8), (só autenticado) (1), admin (9), manager (18), operator (7), viewer (11)
-- rotas com MFA: /bitrix24, /external-data, /risk-rules, /settings/lalamove, /settings/uapi, /webhooks
+- rotas por papel: (público) (8), (só autenticado) (1), admin (9), manager (19), operator (7), viewer (11)
+- rotas com MFA: /bitrix24, /external-data, /risk-rules, /settings/lalamove, /settings/maps, /settings/uapi, /webhooks
 - guards: src/components/auth/ProtectedRoute.tsx
 - enums de papel no banco: app_role: admin|manager|operator|viewer
 - feature flags: realtime_map_updates, ai_route_optimization, driver_auto_evaluation, flag_inexistente
@@ -248,7 +250,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Alertas (baseline.json → alertas)
 - rotas_sem_arquivo: 0
 - rotas_sem_protecao: 2 — ex.: /, /dashboard
-- menu_visivel_sem_acesso: 14 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
+- menu_visivel_sem_acesso: 15 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
 - edges_orfas: 6 — ex.: apply-fixes, escalate-alerts, external-db-bridge
@@ -256,7 +258,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 2 — ex.: cache_refresh_log, job_queue_processing_log
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
-- tabelas_com_drift_migration_vs_types: 4 — ex.: active_tracking, lalamove_orders, lalamove_stops
+- tabelas_com_drift_migration_vs_types: 2 — ex.: geo_cache, mfa_sessions
 - rpcs_sem_definicao: 1 — ex.: exec
 - componentes_orfaos: 4 — ex.: src/components/approvals/SwipeableApprovalCard.tsx, src/components/debug/AuditReportGenerator.tsx, src/components/ui/chart.tsx
 - componentes_com_nome_duplicado: 5 — ex.: ExtendedFAB, MiniFAB, QuickActionsPanel
@@ -267,8 +269,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7259 nós · 15419 arestas · 547 comunidades · grafo do commit `808653cc`
-- comunidades maiores: lucide-react (114), snapshot.py (102), button.tsx (99), ref_node_path (88), cn (84), client.ts (83), generate.py (81), dependencies (80), EvaluationsPage.tsx (78), gerar.mjs (76), lint-ratchet.mjs (75), Header.tsx (71)
+- 7288 nós · 15505 arestas · 550 comunidades · grafo do commit `023202f6`
+- comunidades maiores: cn (175), button.tsx (147), ref_node_fs (114), snapshot.py (104), App.tsx (104), react (103), NewOrderDialog.tsx (100), utils.ts (99), client.ts (97), generate.py (81), DashboardRedesigned.tsx (80), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -285,8 +287,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - .env.example (4)
 - AGENTS.md (4)
 - docs/MAPBOX.md (4)
-- src/lib/lalamoveCatalog.ts (4)
-- supabase/functions/_shared/contract.integration.test.ts (4)
+- src/components/orders/AddressAutocomplete.tsx (4)
+- src/integrations/supabase/types.ts (4)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -361,6 +363,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `023202f` fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)
+- 2026-11-21 `96b1253` fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)
+- 2026-11-21 `641034b` feat(mapas): tela de provedores de mapa em /settings/maps (#168)
 - 2026-11-21 `808653c` fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)
 - 2026-11-21 `7fa1073` feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)
 - 2026-11-21 `6407f62` chore(config): declara verify_jwt explicito para mapbox-proxy (#142)
@@ -373,9 +378,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `d2c18d1` fix(pedidos): aplica restrição de cidade a special request ao trocar praça (#162)
 - 2026-11-21 `8b0f762` fix(gateway): mapeia orders/call/update_token do uapi-proxy no roteador (#161)
 - 2026-11-21 `5809039` fix(webhook): payload v1 no send-notification e aviso ao responsável pela coleta no DRIVER_ASSIGNED (#157)
-- 2026-11-21 `73f0813` ci(migrations): workflow manual para aplicar migrations na produção pela Management API (#156)
-- 2026-11-21 `6e76232` fix(simulacao): restringe simulate-driver-movement a admin/manager (#159)
-- 2026-11-21 `2a2a3d1` fix(alertas/pedidos): aviso ao fornecedor funciona ponta a ponta (#149)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

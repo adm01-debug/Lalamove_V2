@@ -94,6 +94,7 @@
    "src/pages/LiveMapPage.tsx",
    "src/pages/MFAVerifyPage.tsx",
    "src/pages/MapToolsPage.tsx",
+   "src/pages/MapsSettingsPage.tsx",
    "src/pages/MetricsPage.tsx",
    "src/pages/NotFound.tsx",
    "src/pages/NotificationHistoryPage.tsx",
@@ -1050,6 +1051,9 @@
    "src/integrations/supabase/client.ts",
    "src/utils/logger.ts"
   ],
+  "src/hooks/useGeoAdmin.ts": [
+   "src/integrations/supabase/client.ts"
+  ],
   "src/hooks/useGeoSearch.ts": [
    "src/integrations/supabase/client.ts"
   ],
@@ -1625,6 +1629,18 @@
    "src/pages/map-tools/OptimizationTab.tsx",
    "src/pages/map-tools/StaticImageTab.tsx",
    "src/pages/map-tools/TilequeryTab.tsx"
+  ],
+  "src/pages/MapsSettingsPage.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/input.tsx",
+   "src/components/ui/label.tsx",
+   "src/components/ui/select.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/components/ui/switch.tsx",
+   "src/components/ui/table.tsx",
+   "src/hooks/useGeoAdmin.ts"
   ],
   "src/pages/MetricsPage.panels.tsx": [
    "src/components/ui/badge.tsx",

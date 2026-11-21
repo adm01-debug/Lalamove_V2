@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 168,
+ "migrations": 170,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -809,30 +809,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can delete tracking",
-     "comando": "delete",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can insert tracking",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can update tracking",
-     "comando": "update",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view tracking",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access tracking",
      "comando": "all",
      "para": "service_role",
@@ -868,17 +844,28 @@
     "current_longitude": "number",
     "destination_lat": "number | null",
     "destination_lng": "number | null",
+    "distance_to_next_stop_m": "number | null",
+    "distance_to_route_m": "number | null",
     "driver_id": "string",
     "eta_minutes": "number | null",
+    "eta_provider": "string | null",
+    "eta_updated_at": "string | null",
     "expected_route": "Json | null",
     "heading": "number | null",
     "id": "string",
     "is_on_route": "boolean | null",
     "is_stopped": "boolean | null",
     "last_updated": "string",
+    "near_stop_cycles": "number",
+    "next_stop_index": "number",
+    "off_route_cycles": "number",
     "order_id": "string",
     "origin_lat": "number | null",
     "origin_lng": "number | null",
+    "route_computed_at": "string | null",
+    "route_distance_m": "number | null",
+    "route_duration_s": "number | null",
+    "route_provider": "string | null",
     "speed": "number | null",
     "stopped_since": "string | null",
     "tracking_ended_at": "string | null",
@@ -886,19 +873,7 @@
     "tracking_status": "string | null"
    },
    "drift": {
-    "so_na_migration": [
-     "eta_updated_at",
-     "eta_provider",
-     "route_provider",
-     "route_distance_m",
-     "route_duration_s",
-     "route_computed_at",
-     "distance_to_route_m",
-     "distance_to_next_stop_m",
-     "next_stop_index",
-     "near_stop_cycles",
-     "off_route_cycles"
-    ],
+    "so_na_migration": [],
     "so_no_types": []
    },
    "usada_no_front": 3,
@@ -1169,12 +1144,6 @@
      "nome": "Managers can update alert configs",
      "comando": "update",
      "para": "authenticated",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can insert alert configs",
-     "comando": "insert",
-     "para": "anon",
      "tipo": "permissive"
     },
     {
@@ -1481,30 +1450,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can delete alerts",
-     "comando": "delete",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can insert alerts",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can update alerts",
-     "comando": "update",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view alerts",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access alerts",
      "comando": "all",
      "para": "service_role",
@@ -1711,18 +1656,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert alerts sent",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view alerts sent",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access alerts sent",
      "comando": "all",
      "para": "service_role",
@@ -1883,6 +1816,21 @@
     "user_id->auth"
    ],
    "criada_em": "20251226000002_create_audit_log.sql",
+   "colunas_types": {
+    "action": "string",
+    "changes": "Json | null",
+    "created_at": "string",
+    "id": "string",
+    "ip_address": "string | null",
+    "resource_id": "string",
+    "resource_type": "string",
+    "user_agent": "string | null",
+    "user_id": "string | null"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -2235,6 +2183,22 @@
     "order_id->lalamove_orders"
    ],
    "criada_em": "20261122120100_lalamove_integration_columns.sql",
+   "colunas_types": {
+    "category_id": "number | null",
+    "created_at": "string",
+    "id": "string",
+    "last_error": "string | null",
+    "last_stage": "string | null",
+    "last_synced_at": "string | null",
+    "order_id": "string",
+    "spa_id": "number",
+    "sync_status": "string",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -3411,24 +3375,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert approvals",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can update approvals",
-     "comando": "update",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view approvals",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access approvals",
      "comando": "all",
      "para": "service_role",
@@ -3863,18 +3809,6 @@
      "nome": "Operators can insert incidents",
      "comando": "insert",
      "para": "authenticated",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can insert incidents",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view incidents",
-     "comando": "select",
-     "para": "anon",
      "tipo": "permissive"
     },
     {
@@ -4411,24 +4345,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert drivers",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can update drivers",
-     "comando": "update",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view drivers",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access drivers",
      "comando": "all",
      "para": "service_role",
@@ -4921,14 +4837,27 @@
     "updated_by->auth"
    ],
    "criada_em": "20261122130100_geo_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "alert_at_pct": "number",
+    "hard_stop": "boolean",
+    "monthly_limit_usd": "number",
+    "provider": "string",
+    "updated_at": "string",
+    "updated_by": "string | null",
+    "warned_month": "string | null"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [
     "trg_geo_budget_audit",
     "update_geo_budget_updated_at"
    ],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "geo_cache": {
    "colunas": {
@@ -4979,6 +4908,20 @@
    ],
    "fks": [],
    "criada_em": "20261122130100_geo_foundation.sql",
+   "colunas_types": {
+    "created_at": "string",
+    "expires_at": "string",
+    "function": "string",
+    "key": "string",
+    "provider": "string",
+    "response": "Json"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": [
+     "key"
+    ]
+   },
    "usada_no_front": 0,
    "usada_em_edges": [
     "geo-gateway"
@@ -5074,6 +5017,23 @@
     "updated_by->auth"
    ],
    "criada_em": "20261122130100_geo_foundation.sql",
+   "colunas_types": {
+    "approach_eta_min": "number",
+    "approach_radius_m": "number",
+    "arrived_radius_m": "number",
+    "id": "boolean",
+    "notify_delivery_contact": "boolean",
+    "off_route_threshold_m": "number",
+    "quiet_hours_end": "string",
+    "quiet_hours_start": "string",
+    "quiet_hours_tz": "string",
+    "updated_at": "string",
+    "updated_by": "string | null"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [
@@ -5133,7 +5093,19 @@
    "indices": [],
    "fks": [],
    "criada_em": "20261122130100_geo_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "free_quota_month": "number",
+    "note": "string | null",
+    "provider": "string",
+    "sku": "string",
+    "unit_cost_per_1000": "number",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "geo-gateway"
    ],
@@ -5193,7 +5165,19 @@
     "updated_by->auth"
    ],
    "criada_em": "20261122130100_geo_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "config": "Json",
+    "fallback_provider": "string | null",
+    "function": "string",
+    "provider": "string",
+    "updated_at": "string",
+    "updated_by": "string | null"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "geo-gateway"
    ],
@@ -5274,6 +5258,19 @@
    ],
    "fks": [],
    "criada_em": "20261122130100_geo_foundation.sql",
+   "colunas_types": {
+    "count": "number",
+    "day": "string",
+    "est_cost_usd": "number",
+    "function": "string",
+    "provider": "string",
+    "sku": "string",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -5623,6 +5620,29 @@
     "created_by->auth"
    ],
    "criada_em": "20251226000003_create_job_queue.sql",
+   "colunas_types": {
+    "attempts": "number",
+    "completed_at": "string | null",
+    "created_at": "string",
+    "created_by": "string | null",
+    "dedup_key": "string | null",
+    "error_message": "string | null",
+    "error_stack": "string | null",
+    "id": "string",
+    "max_attempts": "number",
+    "metadata": "Json",
+    "next_retry_at": "string | null",
+    "payload": "Json",
+    "priority": "number",
+    "started_at": "string | null",
+    "status": "string",
+    "type": "string",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [
@@ -6350,24 +6370,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert orders",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can update orders",
-     "comando": "update",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view orders",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access orders",
      "comando": "all",
      "para": "service_role",
@@ -6469,6 +6471,8 @@
    "criada_em": "20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
    "colunas_types": {
     "actual_delivery": "string | null",
+    "approach_eta_min": "number | null",
+    "approach_radius_m": "number | null",
     "auto_notify_supplier": "boolean | null",
     "bitrix24_deal_id": "number | null",
     "cancellation_notes": "string | null",
@@ -6483,33 +6487,53 @@
     "customer_phone": "string | null",
     "delay_minutes": "number | null",
     "delivery_address": "string",
+    "delivery_address_components": "Json | null",
     "delivery_latitude": "number | null",
     "delivery_longitude": "number | null",
+    "delivery_place_id": "string | null",
     "department": "string | null",
     "distance_meters": "number | null",
     "driver_id": "string | null",
+    "driver_lalamove_id": "string | null",
+    "driver_name": "string | null",
+    "driver_phone": "string | null",
+    "driver_plate": "string | null",
     "duration_minutes": "number | null",
     "estimated_delivery": "string | null",
+    "geocode_precision": "string | null",
+    "geocode_provider": "string | null",
     "id": "string",
     "internal_notes": "string | null",
     "internal_order_id": "string | null",
     "internal_status": "string | null",
     "is_urgent": "boolean | null",
     "lalamove_id": "string",
+    "lalamove_status": "string | null",
     "metadata": "Json | null",
+    "notify_delivery_contact": "boolean | null",
     "outcome": "Database[\"public\"][\"Enums\"][\"delivery_outcome\"] | null",
     "pickup_address": "string",
+    "pickup_address_components": "Json | null",
+    "pickup_contact_name": "string | null",
+    "pickup_contact_phone": "string | null",
     "pickup_latitude": "number | null",
     "pickup_longitude": "number | null",
+    "pickup_place_id": "string | null",
     "pod_received": "boolean | null",
     "priority_fee": "number | null",
     "priority_fee_currency": "string | null",
     "priority_fee_updated_at": "string | null",
+    "quotation_expires_at": "string | null",
     "quotation_id": "string | null",
+    "requires_address_review": "boolean",
     "requires_pod": "boolean | null",
     "route_deviation_threshold_minutes": "number | null",
-    "scheduled_at": "string",
+    "scheduled_at": "string | null",
+    "service_type": "string | null",
     "share_link": "string | null",
+    "source": "string | null",
+    "spa_category_id": "number | null",
+    "spa_id": "number | null",
     "stalled_threshold_minutes": "number | null",
     "status": "Database[\"public\"][\"Enums\"][\"order_status\"]",
     "supplier_contact": "string | null",
@@ -6519,30 +6543,7 @@
     "vehicle_type": "Database[\"public\"][\"Enums\"][\"vehicle_type\"]"
    },
    "drift": {
-    "so_na_migration": [
-     "service_type",
-     "lalamove_status",
-     "quotation_expires_at",
-     "driver_lalamove_id",
-     "driver_name",
-     "driver_phone",
-     "driver_plate",
-     "source",
-     "spa_id",
-     "spa_category_id",
-     "pickup_place_id",
-     "delivery_place_id",
-     "pickup_address_components",
-     "delivery_address_components",
-     "geocode_provider",
-     "geocode_precision",
-     "requires_address_review",
-     "pickup_contact_name",
-     "pickup_contact_phone",
-     "approach_radius_m",
-     "approach_eta_min",
-     "notify_delivery_contact"
-    ],
+    "so_na_migration": [],
     "so_no_types": []
    },
    "usada_no_front": 13,
@@ -6930,18 +6931,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert status history",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view status history",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access status history",
      "comando": "all",
      "para": "service_role",
@@ -6979,7 +6968,7 @@
     "notes": "string | null",
     "old_status": "string | null",
     "order_id": "string",
-    "status": "Database[\"public\"][\"Enums\"][\"order_status\"]"
+    "status": "string"
    },
    "drift": {
     "so_na_migration": [],
@@ -7354,18 +7343,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert stops",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view stops",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access stops",
      "comando": "all",
      "para": "service_role",
@@ -7395,28 +7372,27 @@
    "criada_em": "20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
    "colunas_types": {
     "address": "string",
+    "address_components": "Json | null",
     "arrived_at": "string | null",
     "completed_at": "string | null",
     "contact_name": "string | null",
     "contact_phone": "string | null",
     "created_at": "string",
+    "geocode_precision": "string | null",
     "id": "string",
     "latitude": "number | null",
     "longitude": "number | null",
     "order_id": "string",
+    "place_id": "string | null",
     "pod_delivered_at": "string | null",
     "pod_image_url": "string | null",
     "pod_status": "string | null",
     "remarks": "string | null",
+    "stop_id": "string | null",
     "stop_index": "number"
    },
    "drift": {
-    "so_na_migration": [
-     "stop_id",
-     "place_id",
-     "address_components",
-     "geocode_precision"
-    ],
+    "so_na_migration": [],
     "so_no_types": []
    },
    "usada_no_front": 1,
@@ -7653,6 +7629,21 @@
     "registered_by->auth"
    ],
    "criada_em": "20261122120100_lalamove_integration_columns.sql",
+   "colunas_types": {
+    "created_at": "string",
+    "environment": "string",
+    "id": "string",
+    "is_active": "boolean",
+    "notes": "string | null",
+    "registered_at": "string",
+    "registered_by": "string | null",
+    "updated_at": "string",
+    "url": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -8446,6 +8437,26 @@
     "order_id->lalamove_orders"
    ],
    "criada_em": "20261122130100_geo_foundation.sql",
+   "colunas_types": {
+    "alert_id": "string | null",
+    "distance_m": "number | null",
+    "driver_lat": "number | null",
+    "driver_lng": "number | null",
+    "eta_min": "number | null",
+    "event_type": "Database[\"public\"][\"Enums\"][\"alert_type\"]",
+    "id": "string",
+    "job_id": "string | null",
+    "notification_status": "string",
+    "notified_at": "string | null",
+    "order_id": "string",
+    "payload": "Json",
+    "stop_index": "number",
+    "triggered_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -10140,18 +10151,6 @@
      "tipo": "permissive"
     },
     {
-     "nome": "Public can insert tracking events",
-     "comando": "insert",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
-     "nome": "Public can view tracking events",
-     "comando": "select",
-     "para": "anon",
-     "tipo": "permissive"
-    },
-    {
      "nome": "Service role full access tracking events",
      "comando": "all",
      "para": "service_role",
@@ -10387,6 +10386,81 @@
    "fks": [],
    "criada_em": "20260513180659_3d0cc70a-4422-478c-825d-2da43ac7eb15.sql",
    "particao_de": "tracking_events",
+   "colunas_types": {
+    "created_at": "string",
+    "driver_id": "string | null",
+    "event_type": "string | null",
+    "heading": "number | null",
+    "id": "string",
+    "latitude": "number",
+    "longitude": "number",
+    "metadata": "Json | null",
+    "order_id": "string | null",
+    "speed": "number | null"
+   },
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "tracking_events_y2026m11": {
+   "colunas": {},
+   "rls": false,
+   "policies": [],
+   "indices": [],
+   "fks": [],
+   "criada_em": null,
+   "colunas_types": {
+    "created_at": "string",
+    "driver_id": "string | null",
+    "event_type": "string | null",
+    "heading": "number | null",
+    "id": "string",
+    "latitude": "number",
+    "longitude": "number",
+    "metadata": "Json | null",
+    "order_id": "string | null",
+    "speed": "number | null"
+   },
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "tracking_events_y2026m12": {
+   "colunas": {},
+   "rls": false,
+   "policies": [],
+   "indices": [],
+   "fks": [],
+   "criada_em": null,
+   "colunas_types": {
+    "created_at": "string",
+    "driver_id": "string | null",
+    "event_type": "string | null",
+    "heading": "number | null",
+    "id": "string",
+    "latitude": "number",
+    "longitude": "number",
+    "metadata": "Json | null",
+    "order_id": "string | null",
+    "speed": "number | null"
+   },
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "tracking_events_y2027m01": {
+   "colunas": {},
+   "rls": false,
+   "policies": [],
+   "indices": [],
+   "fks": [],
+   "criada_em": null,
    "colunas_types": {
     "created_at": "string",
     "driver_id": "string | null",
@@ -11179,7 +11253,7 @@
   {
    "nome": "geo_budget_status",
    "definida": true,
-   "usada_em": 1
+   "usada_em": 2
   },
   {
    "nome": "geo_usage_increment",

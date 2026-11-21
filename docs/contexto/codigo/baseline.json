@@ -2,11 +2,26 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "808653cc873944ae37e09d691e5c0ff0b97518b1",
+  "commit": "023202f673c20e8aed463fa14f963bd0fedffbe8",
   "branch": "main",
-  "data_commit": "2026-11-21T17:40:12-03:00",
+  "data_commit": "2026-11-21T19:19:43-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "023202f",
+    "data": "2026-11-21",
+    "assunto": "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)"
+   },
+   {
+    "sha": "96b1253",
+    "data": "2026-11-21",
+    "assunto": "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)"
+   },
+   {
+    "sha": "641034b",
+    "data": "2026-11-21",
+    "assunto": "feat(mapas): tela de provedores de mapa em /settings/maps (#168)"
+   },
    {
     "sha": "808653c",
     "data": "2026-11-21",
@@ -116,24 +131,9 @@
     "sha": "4a4ebfc",
     "data": "2026-11-21",
     "assunto": "chore(docs): inventário Mapbox e secrets no .env.example (#135)"
-   },
-   {
-    "sha": "a081063",
-    "data": "2026-11-21",
-    "assunto": "feat(pedidos): filtra o veículo pela praça de coleta no novo pedido (#133)"
-   },
-   {
-    "sha": "04fe256",
-    "data": "2026-11-21",
-    "assunto": "chore(geo): script de cobertura BR do Search Box Mapbox com 50 endereços de amostra (#131)"
-   },
-   {
-    "sha": "2f7add2",
-    "data": "2026-11-21",
-    "assunto": "fix(gateway): religa as telas de Configurações atendendo as ações pelas edges locais (#130)"
    }
   ],
-  "arquivos_mudados_7d": 150,
+  "arquivos_mudados_7d": 160,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -150,6 +150,10 @@
    {
     "pasta": "supabase/functions/geo-gateway",
     "mudancas": 9
+   },
+   {
+    "pasta": "src/components/orders",
+    "mudancas": 6
    },
    {
     "pasta": "supabase/functions/lalamove-webhook",
@@ -177,10 +181,6 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 4
-   },
-   {
-    "pasta": "src/components/orders",
     "mudancas": 4
    },
    {
@@ -250,6 +250,14 @@
     "mudancas": 4
    },
    {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "src/integrations/supabase/types.ts",
+    "mudancas": 4
+   },
+   {
     "arquivo": "src/lib/lalamoveCatalog.ts",
     "mudancas": 4
    },
@@ -286,22 +294,14 @@
     "mudancas": 3
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 3
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 3
-   },
-   {
-    "arquivo": "src/hooks/useAlertSettings.ts",
+    "arquivo": "src/App.tsx",
     "mudancas": 3
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 72
+    "commits": 75
    },
    {
     "autor": "dependabot[bot]",
@@ -310,19 +310,19 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 942,
-  "arquivos_codigo": 587,
-  "linhas_codigo": 113363,
-  "rotas": 54,
-  "rotas_protegidas": 46,
-  "rotas_com_mfa": 6,
-  "itens_menu": 37,
+  "arquivos_total": 946,
+  "arquivos_codigo": 589,
+  "linhas_codigo": 114880,
+  "rotas": 55,
+  "rotas_protegidas": 47,
+  "rotas_com_mfa": 7,
+  "itens_menu": 38,
   "modulos": 43,
-  "componentes": 214,
-  "hooks": 97,
+  "componentes": 215,
+  "hooks": 98,
   "edge_functions": 27,
-  "tabelas": 85,
-  "migrations": 168,
+  "tabelas": 88,
+  "migrations": 170,
   "cron_jobs": 17,
   "testes": 107,
   "workflows": 5,
@@ -500,7 +500,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 226
+   "linhas": 228
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -508,11 +508,11 @@
   },
   "src/components": {
    "arquivos": 148,
-   "linhas": 26972
+   "linhas": 26983
   },
   "src/hooks": {
-   "arquivos": 104,
-   "linhas": 17383
+   "arquivos": 105,
+   "linhas": 17579
   },
   "src/i18n": {
    "arquivos": 1,
@@ -520,7 +520,7 @@
   },
   "src/integrations": {
    "arquivos": 4,
-   "linhas": 4044
+   "linhas": 4946
   },
   "src/lib": {
    "arquivos": 35,
@@ -531,8 +531,8 @@
    "linhas": 28
   },
   "src/pages": {
-   "arquivos": 86,
-   "linhas": 18438
+   "arquivos": 87,
+   "linhas": 18841
   },
   "src/services": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/types": {
    "arquivos": 4,
-   "linhas": 892
+   "linhas": 895
   },
   "src/utils": {
    "arquivos": 8,
@@ -570,7 +570,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 3899
+   "linhas": 4801
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
-   "linhas": 917
+   "linhas": 920
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -708,6 +708,7 @@
    "Base CRM -> /external-data (menu: todos; rota: manager)",
    "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
    "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
+   "Provedores de Mapa -> /settings/maps (menu: todos; rota: manager)",
    "Webhooks -> /webhooks (menu: todos; rota: manager)",
    "Alertas -> /alerts (menu: todos; rota: operator)",
    "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",
@@ -746,9 +747,7 @@
    "suppliers"
   ],
   "tabelas_com_drift_migration_vs_types": [
-   "active_tracking",
-   "lalamove_orders",
-   "lalamove_stops",
+   "geo_cache",
    "mfa_sessions"
   ],
   "rpcs_sem_definicao": [
