@@ -66,12 +66,13 @@ dono), toda afirmação sobre tabelas, RLS, policies, funções, crons e ledger 
    é feito por inserção direta, como `docs/CRON_JOBS.md` registra ("o agendamento contém segredos … não via
    migração — para não vazar em remixes").
 
-## Segredos commitados — código limpo em 2026-11-08, chaves ainda não rotacionadas
+## Segredos commitados — código limpo em 2026-11-08; `service_role` legada já rotacionada; PAT e migrate-helper em produção ainda sem confirmação
 
 Varredura em 2026-11-08 no HEAD `924454e` achou segredo hardcoded em 19 arquivos de `scripts/` (13 com o
 JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-helper`
 (`ACCESS_KEY` fixa + `verify_jwt = false`; a action `credentials` devolvia `SUPABASE_SERVICE_ROLE_KEY` e
-`SUPABASE_DB_URL` a quem soubesse a chave). A PR `claude/fix-segredos-commitados-261108-2105`:
+`SUPABASE_DB_URL` a quem soubesse a chave). A PR #80 (`claude/fix-segredos-commitados-261108-2105`, mergeada
+2026-11-20):
 
 - trocou as 22 ocorrências (19 arquivos, 2 delas com o valor sob o nome `SUPABASE_ANON_KEY` ou
   `SUPABASE_DB_PASSWORD` — o conteúdo sempre foi o `service_role`) por leitura de `process.env` com guarda
@@ -79,13 +80,26 @@ JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-
   de seed em `test-user-permissions.ts`;
 - removeu `supabase/functions/migrate-helper/` e sua entrada em `supabase/config.toml`.
 
-**Pendente, ação do dono — o código limpo não desfaz o vazamento:**
+**Já feito (confirmado por fonte independente, com uma ressalva de horário):** o commit `b819be8`
+(2026-11-21, corrige os crons 18/19) registra evidência de produção — "78/78 respostas 401 em
+`net._http_response` desde [horário]" — porque esses crons embutiam a `anon` JWT legada, confirmando que a
+chave antiga **parou de funcionar de fato em 2026-11-20**. A PR #93 (mergeada 2026-11-20T19:13Z) cita o
+horário exato "17:25Z, 20/11" para a rotação, mas essa PR não anexa log/query para esse horário específico —
+**o dia está confirmado por evidência de produção; o horário "17:25Z" é só citação de outra PR, sem
+confirmação independente (NÃO VERIFICADO nesse detalhe).** A PR #108 (mergeada 2026-11-21) já se refere à
+chave nova no formato `sb_secret_…`. **Isso resolve o vazamento do `service_role`/`anon` legado que estava
+hardcoded nos 19 arquivos** — quem leu o histórico do Git fica com um valor já invalidado desde 20/11.
 
-1. Rotacionar o `service_role` e o PAT `sbp_…` deste projeto (quem leu o histórico do Git continua com os
-   valores antigos; só a rotação os invalida).
+**Ainda pendente, ação do dono — sem confirmação direta:**
+
+1. **PAT `sbp_…` da Management API** (6 arquivos tinham esse valor) — nenhuma PR encontrada confirma rotação
+   dele especificamente; a rotação de 20/11 foi descrita como das "legacy keys" (anon/service_role), que é
+   uma credencial diferente do PAT de Management API. Rotacionar em
+   https://supabase.com/dashboard/account/tokens se ainda não foi feito.
 2. Confirmar que `migrate-helper` foi removida **da produção** (painel Supabase ou CLI) — apagar o arquivo
    do repo não a desimplanta, porque não há deploy automático de edge function aqui
-   (`docs/agentes/deploy.md`).
+   (`docs/agentes/deploy.md`; a PR #108 criou `deploy-edges.yml`, mas isso não reverte uma função já no ar
+   antes dele).
 3. Scripts que ainda forem usados precisam de `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_ACCESS_TOKEN` /
    `SEED_TI_PASSWORD` exportados no ambiente antes de rodar.
 
