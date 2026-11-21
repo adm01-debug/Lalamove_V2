@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -38,7 +38,13 @@ function newSessionToken(): string {
 export function useAddressSearchBox(query: string, enabled: boolean) {
   const sessionTokenRef = useRef<string>(newSessionToken());
 
-  const { data, isLoading } = useQuery<GeoSuggestion[]>({
+  // Campo limpo sem retrieve = sessão de busca abandonada; renova o token para
+  // a próxima busca não herdar uma sessão que nunca terminou em seleção.
+  useEffect(() => {
+    if (query.length === 0) sessionTokenRef.current = newSessionToken();
+  }, [query]);
+
+  const { data, isLoading, isError } = useQuery<GeoSuggestion[]>({
     queryKey: ['geo-search', 'autocomplete', query],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke('geo-gateway', {
@@ -67,5 +73,5 @@ export function useAddressSearchBox(query: string, enabled: boolean) {
     return (data as GeoAddress) ?? null;
   }, []);
 
-  return { suggestions: data ?? [], isLoading, retrieve };
+  return { suggestions: data ?? [], isLoading, isError, retrieve };
 }

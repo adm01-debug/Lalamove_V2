@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
 import { useAddressSearchBox, type GeoSuggestion } from '@/hooks/useGeoSearch';
@@ -52,7 +53,7 @@ export function AddressAutocomplete({
   const { data: crmData, isLoading: crmLoading } = useAddressSearch(debouncedSearch, open && debouncedSearch.length >= 2);
   
   // Mapbox Search Box (sugestões + retrieve, sessão cobrada por token)
-  const { suggestions: mapboxResults, isLoading: mapboxLoading, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
+  const { suggestions: mapboxResults, isLoading: mapboxLoading, isError: mapboxError, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
 
   const isLoading = crmLoading || mapboxLoading;
 
@@ -80,7 +81,13 @@ export function AddressAutocomplete({
   };
 
   const handleSelectMapbox = async (suggestion: GeoSuggestion) => {
-    const address = await retrieve(suggestion.id);
+    let address: Awaited<ReturnType<typeof retrieve>>;
+    try {
+      address = await retrieve(suggestion.id);
+    } catch {
+      toast.error('Não foi possível buscar os detalhes deste endereço. Tente novamente.');
+      return;
+    }
     if (!address) return;
     setInputValue(address.formatted);
     onChange(address.formatted);
@@ -195,7 +202,9 @@ export function AddressAutocomplete({
 
       {open && debouncedSearch.length >= 2 && !isLoading && !hasResults && (
         <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 text-center">
-          <p className="text-sm text-muted-foreground">Nenhum resultado encontrado</p>
+          <p className="text-sm text-muted-foreground">
+            {mapboxError ? 'Busca de endereço indisponível agora — tente de novo em alguns segundos' : 'Nenhum resultado encontrado'}
+          </p>
         </div>
       )}
     </div>
