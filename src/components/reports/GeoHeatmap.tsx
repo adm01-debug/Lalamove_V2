@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 import { useMapboxToken } from '@/components/map/hooks/useMapboxToken';
+import { countMapLoad } from '@/lib/geo-gateway';
 import type { WeightedGeoPoint } from '@/hooks/useAdvancedReports';
 
 /** Métrica usada para ponderar a densidade do heatmap. */
@@ -78,8 +79,8 @@ export function GeoHeatmap({ points, metric = 'volume', height = 360 }: GeoHeatm
       style: 'mapbox://styles/mapbox/dark-v11',
       center: [-46.63, -23.55],
       zoom: 9,
-      attributionControl: false,
     });
+    countMapLoad('mapbox');
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 
     map.on('load', () => {
