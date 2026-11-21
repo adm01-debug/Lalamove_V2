@@ -169,7 +169,6 @@ interface UpdateBudgetArgs {
   hard_stop: boolean;
   alert_at_pct: number;
 }
-
 export function useUpdateGeoBudget() {
   const qc = useQueryClient();
   return useMutation({
@@ -191,6 +190,37 @@ export function useUpdateGeoBudget() {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['geo', 'budget'] });
       void qc.invalidateQueries({ queryKey: ['geo', 'budget-status'] });
+    },
+  });
+}
+
+/** Detalhe do teste de saúde devolvido pelo `check-external-api` (etapa 67). */
+export interface GeoHealthDetails {
+  provider: string;
+  sku: string;
+  address: string;
+  http_status: number;
+  latency_ms: number;
+  rate_limit_remaining: number | null;
+  rate_limit_interval: number | null;
+}
+
+export interface GeoHealthResult {
+  status: 'ok' | 'degraded' | 'down' | 'unknown';
+  message: string;
+  latency: number;
+  details?: GeoHealthDetails;
+}
+
+/** Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */
+export function useGeoProviderHealth() {
+  return useMutation({
+    mutationFn: async (provider: GeoProviderName): Promise<GeoHealthResult> => {
+      const { data, error } = await supabase.functions.invoke('check-external-api', {
+        body: { service: provider },
+      });
+      if (error) throw error;
+      return data as GeoHealthResult;
     },
   });
 }

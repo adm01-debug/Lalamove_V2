@@ -40,6 +40,7 @@ Deno.serve(async (req) => {
     let status = 'unknown';
     let message = '';
     let latency = 0;
+    let details: Record<string, unknown> | undefined;
 
     const startTime = Date.now();
 
@@ -56,9 +57,19 @@ Deno.serve(async (req) => {
         ({ status, message } = await checkEvolution());
         break;
 
-      case 'mapbox':
-        ({ status, message } = await checkMapbox());
+      case 'mapbox': {
+        const probe = await probeGeoProvider('mapbox');
+        ({ status, message } = probe);
+        details = probe.details;
         break;
+      }
+
+      case 'google': {
+        const probe = await probeGeoProvider('google');
+        ({ status, message } = probe);
+        details = probe.details;
+        break;
+      }
 
       default:
         throw new Error(`Unknown service: ${service}`);
@@ -72,6 +83,7 @@ Deno.serve(async (req) => {
         message,
         latency,
         service,
+        ...(details ? { details } : {}),
         timestamp: new Date().toISOString(),
       }),
       {
@@ -216,46 +228,118 @@ async function checkEvolution(): Promise<{ status: string; message: string }> {
   }
 }
 
-async function checkMapbox(): Promise<{ status: string; message: string }> {
-  try {
-    const MAPBOX_TOKEN = Deno.env.get('MAPBOX_SERVER_TOKEN') ?? Deno.env.get('MAPBOX_ACCESS_TOKEN');
+// ── Health por provedor geo (etapa 67 do plano Mapbox) ──────────────────────
+// Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do
+// provedor. Mapbox vai com `permanent=false`, então a chamada não é gravada
+// (não é cobrada como permanente nem entra no cache do provedor).
 
-    if (!MAPBOX_TOKEN) {
+const HEALTH_ADDRESS = 'Avenida Paulista 1578, São Paulo';
+
+interface GeoProbe {
+  status: string;
+  message: string;
+  details: {
+    provider: string;
+    sku: string;
+    address: string;
+    http_status: number;
+    latency_ms: number;
+    rate_limit_remaining: number | null;
+    rate_limit_interval: number | null;
+  };
+}
+
+async function probeGeoProvider(provider: 'mapbox' | 'google'): Promise<GeoProbe> {
+  const q = encodeURIComponent(HEALTH_ADDRESS);
+
+  if (provider === 'mapbox') {
+    const token = Deno.env.get('MAPBOX_SERVER_TOKEN') ?? Deno.env.get('MAPBOX_ACCESS_TOKEN');
+    if (!token) {
       return {
         status: 'unknown',
-        message: 'API key not configured',
+        message: 'MAPBOX_SERVER_TOKEN não configurado',
+        details: emptyProbe('mapbox', 'geocoding_temporary'),
       };
     }
+    const url =
+      `https://api.mapbox.com/search/geocode/v6/forward?q=${q}` +
+      `&limit=1&permanent=false&access_token=${encodeURIComponent(token)}`;
+    return runProbe('mapbox', 'geocoding_temporary', url);
+  }
 
-    // Endpoint simples de geocoding
-    const response = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/test.json?access_token=${MAPBOX_TOKEN}&limit=1`,
-      {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000),
+  const key = Deno.env.get('GOOGLE_MAPS_SERVER_KEY');
+  if (!key) {
+    return {
+      status: 'unknown',
+      message: 'GOOGLE_MAPS_SERVER_KEY não configurado',
+      details: emptyProbe('google', 'geocoding'),
+    };
+  }
+  const url =
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${q}&key=${encodeURIComponent(key)}`;
+  return runProbe('google', 'geocoding', url);
+}
+
+function emptyProbe(provider: string, sku: string): GeoProbe['details'] {
+  return {
+    provider,
+    sku,
+    address: HEALTH_ADDRESS,
+    http_status: 0,
+    latency_ms: 0,
+    rate_limit_remaining: null,
+    rate_limit_interval: null,
+  };
+}
+
+async function runProbe(provider: string, sku: string, url: string): Promise<GeoProbe> {
+  const start = Date.now();
+  try {
+    const res = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(8000) });
+    const latency = Date.now() - start;
+    const remainingHeader = res.headers.get('X-Rate-Limit-Remaining');
+    const intervalHeader = res.headers.get('X-Rate-Limit-Interval');
+
+    const details: GeoProbe['details'] = {
+      provider,
+      sku,
+      address: HEALTH_ADDRESS,
+      http_status: res.status,
+      latency_ms: latency,
+      rate_limit_remaining: remainingHeader === null ? null : Number(remainingHeader),
+      rate_limit_interval: intervalHeader === null ? null : Number.parseInt(intervalHeader, 10),
+    };
+
+    const body = await res.text();
+    let parsed: Record<string, unknown> = {};
+    try { parsed = body ? JSON.parse(body) : {}; } catch { /* corpo não-JSON */ }
+
+    if (res.status === 401 || res.status === 403) {
+      return { status: 'down', message: 'Credencial recusada pelo provedor', details };
+    }
+    if (res.status === 429) {
+      return { status: 'degraded', message: 'Provedor respondeu 429 (rate limit)', details };
+    }
+    if (!res.ok) {
+      return { status: 'degraded', message: `Provedor respondeu ${res.status}`, details };
+    }
+
+    if (provider === 'google') {
+      const gStatus = String((parsed.status as string | undefined) ?? '');
+      if (gStatus && gStatus !== 'OK' && gStatus !== 'ZERO_RESULTS') {
+        return { status: gStatus === 'REQUEST_DENIED' ? 'down' : 'degraded', message: `Google Geocoding: ${gStatus}`, details };
       }
-    );
-
-    if (response.ok) {
-      return {
-        status: 'ok',
-        message: 'API responding',
-      };
-    } else if (response.status === 401) {
-      return {
-        status: 'down',
-        message: 'Invalid API key',
-      };
-    } else {
-      return {
-        status: 'degraded',
-        message: `API returned ${response.status}`,
-      };
+      const found = Array.isArray(parsed.results) ? parsed.results.length : 0;
+      return { status: 'ok', message: `Geocoding respondeu em ${latency} ms (${found} resultado(s))`, details };
     }
+
+    const features = Array.isArray(parsed.features) ? parsed.features.length : 0;
+    return { status: 'ok', message: `Geocoding respondeu em ${latency} ms (${features} resultado(s))`, details };
   } catch (error) {
     return {
       status: 'down',
       message: error instanceof Error ? error.message : 'Connection failed',
+      details: { ...emptyProbe(provider, sku), latency_ms: Date.now() - start },
     };
   }
 }
