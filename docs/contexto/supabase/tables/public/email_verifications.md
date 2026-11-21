@@ -1,5 +1,7 @@
 # public.email_verifications
 
+> Tokens de verificacao de email com expiracao.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

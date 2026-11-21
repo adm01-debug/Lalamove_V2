@@ -1,5 +1,7 @@
 # public.risk_rules
 
+> Regras configuraveis para calculo de risk score dos motoristas.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

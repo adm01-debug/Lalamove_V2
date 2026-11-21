@@ -1,5 +1,7 @@
 # public.mfa_sessions
 
+> Sessoes MFA (TOTP) registradas por usuario.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

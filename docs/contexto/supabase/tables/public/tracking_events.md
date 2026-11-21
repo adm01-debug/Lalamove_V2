@@ -1,5 +1,7 @@
 # public.tracking_events
 
+> Eventos de tracking particionados por mes (particionamento).
+
 | propriedade | valor |
 |---|---|
 | tipo | partitioned |

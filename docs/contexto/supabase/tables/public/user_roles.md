@@ -1,5 +1,7 @@
 # public.user_roles
 
+> Roles atribuidas a cada usuario (RBAC).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

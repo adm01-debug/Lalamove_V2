@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)",
    "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)",
    "docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)",
    "docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)",
-   "docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)",
-   "fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)"
+   "docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

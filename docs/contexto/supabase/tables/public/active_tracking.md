@@ -1,5 +1,7 @@
 # public.active_tracking
 
+> Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

@@ -1,5 +1,7 @@
 # public.webauthn_challenges
 
+> Challenges WebAuthn para fluxo de autenticacao sem senha.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

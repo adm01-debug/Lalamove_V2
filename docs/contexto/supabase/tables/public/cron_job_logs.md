@@ -1,5 +1,7 @@
 # public.cron_job_logs
 
+> Historico de execucoes dos cron jobs do sistema com duracao e resultado.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

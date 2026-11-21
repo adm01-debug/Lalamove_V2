@@ -1,5 +1,7 @@
 # public.contract_version_usage_monthly
 
+> Agregado mensal de uso de versoes de contrato.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

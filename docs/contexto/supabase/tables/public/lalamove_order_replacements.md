@@ -1,5 +1,7 @@
 # public.lalamove_order_replacements
 
+> Registro de pedidos de reposicao/reescolha na Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

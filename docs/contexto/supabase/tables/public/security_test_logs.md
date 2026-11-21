@@ -1,5 +1,7 @@
 # public.security_test_logs
 
+> Registro de testes de seguranca executados.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

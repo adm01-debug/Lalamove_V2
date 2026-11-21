@@ -1,5 +1,7 @@
 # public.bitrix24_sync
 
+> Registro de sincronizacao de deals com o Bitrix24.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

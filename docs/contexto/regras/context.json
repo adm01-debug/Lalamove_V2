@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
+  "sha": "c3577b5b684f28006f3573c71b554f52600292a8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 13:33 UTC",
-  "files_total": 887,
+  "generated_at": "2026-11-21 14:00 UTC",
+  "files_total": 888,
   "code_files": 738,
   "code_lines": 126952
  },
@@ -61170,10 +61170,21 @@
   }
  },
  "git": {
-  "sha": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
+  "sha": "c3577b5b684f28006f3573c71b554f52600292a8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c3577b5",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)",
+    "files": [
+     "docs/pendencias/P-13-comment-on-table-faltantes.md",
+     "docs/pendencias/P-14-analise-correcoes-planejadas.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
    {
     "sha": "a614869",
     "date": "2026-11-21",
@@ -61503,15 +61514,6 @@
      "src/components/ui/badge.tsx",
      "src/index.css"
     ]
-   },
-   {
-    "sha": "92a5411",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(banco): habilita Realtime nas 4 tabelas de segurança",
-    "files": [
-     "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -61525,7 +61527,7 @@
    ],
    [
     "docs/pendencias/_ordem.md",
-    7
+    8
    ],
    [
     "docs/pendencias/README.md",
@@ -61538,6 +61540,10 @@
    [
     ".github/workflows/ci.yml",
     3
+   ],
+   [
+    "docs/pendencias/P-13-comment-on-table-faltantes.md",
+    2
    ],
    [
     "docs/pendencias/P-02-app-mobile-motoristas.md",
@@ -61576,6 +61582,10 @@
     2
    ],
    [
+    "docs/pendencias/P-14-analise-correcoes-planejadas.md",
+    1
+   ],
+   [
     "supabase/migrations/20261121100000_add_table_comments.sql",
     1
    ],
@@ -61585,14 +61595,6 @@
    ],
    [
     "docs/pendencias/P-12-analise-funcionalidades-planejadas.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-13-comment-on-table-faltantes.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-11-mfa-webauthn.md",
     1
    ]
   ]

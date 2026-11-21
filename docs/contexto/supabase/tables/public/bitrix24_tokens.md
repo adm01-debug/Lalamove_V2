@@ -1,5 +1,7 @@
 # public.bitrix24_tokens
 
+> Tokens OAuth2 do Bitrix24 com refresh.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a614869669c9b4a18c4d91aa882caa5a0396f0ef",
+  "commit": "c3577b5b684f28006f3573c71b554f52600292a8",
   "branch": "main",
-  "data_commit": "2026-11-21T10:33:14-03:00",
+  "data_commit": "2026-11-21T10:46:13-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c3577b5",
+    "data": "2026-11-21",
+    "assunto": "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)"
+   },
    {
     "sha": "a614869",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "8832302",
     "data": "2026-11-19",
     "assunto": "ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)"
-   },
-   {
-    "sha": "63987c9",
-    "data": "2026-11-19",
-    "assunto": "fix(security): remove segredos hardcoded de scripts/ e a edge migrate-helper (#80)"
    }
   ],
-  "arquivos_mudados_7d": 52,
+  "arquivos_mudados_7d": 53,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "pasta": "docs/pendencias/README.md",
@@ -210,11 +210,11 @@
     "mudancas": 11
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 7
+    "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 8
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
+    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 25
+    "commits": 26
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 892,
+  "arquivos_total": 893,
   "arquivos_codigo": 566,
   "linhas_codigo": 110180,
   "rotas": 54,
@@ -327,7 +327,7 @@
   "testes": 97,
   "workflows": 3,
   "scripts": 104,
-  "docs_md": 79
+  "docs_md": 80
  },
  "por_pasta": {
   "e2e/helpers": {

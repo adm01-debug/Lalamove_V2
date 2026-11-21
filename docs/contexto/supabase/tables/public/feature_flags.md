@@ -1,5 +1,7 @@
 # public.feature_flags
 
+> Flags de feature para ativacao/desativacao de funcionalidades.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

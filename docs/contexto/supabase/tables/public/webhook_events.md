@@ -1,5 +1,7 @@
 # public.webhook_events
 
+> Log completo de todos webhooks recebidos do Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

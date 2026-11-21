@@ -1,5 +1,7 @@
 # public.mcp_diagnostics_grants
 
+> Grants de acesso a diagnosticos via MCP (query_telemetry).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

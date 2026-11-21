@@ -1,5 +1,7 @@
 # public.user_devices
 
+> Dispositivos registrados dos usuarios para deteccao de novo login.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

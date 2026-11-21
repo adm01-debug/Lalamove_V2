@@ -1,5 +1,7 @@
 # public.login_attempts
 
+> Tentativas de login com IP e resultado para lockout de conta.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

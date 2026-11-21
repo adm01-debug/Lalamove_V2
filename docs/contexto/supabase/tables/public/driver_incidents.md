@@ -1,5 +1,7 @@
 # public.driver_incidents
 
+> Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

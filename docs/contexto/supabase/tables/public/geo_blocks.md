@@ -1,5 +1,7 @@
 # public.geo_blocks
 
+> Bloqueios geograficos por pais (permanente ou temporario).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

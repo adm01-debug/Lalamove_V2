@@ -1,5 +1,7 @@
 # public.driver_evaluations
 
+> Historico de avaliacoes de risco dos motoristas com fatores detalhados.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

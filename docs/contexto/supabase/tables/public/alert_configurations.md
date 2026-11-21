@@ -1,5 +1,7 @@
 # public.alert_configurations
 
+> Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

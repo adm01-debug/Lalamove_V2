@@ -1,5 +1,7 @@
 # public.alerts
 
+> Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

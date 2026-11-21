@@ -1,5 +1,7 @@
 # public.bitrix24_stage_mappings
 
+> Mapeamento de estagios entre o sistema e os funis do Bitrix24.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

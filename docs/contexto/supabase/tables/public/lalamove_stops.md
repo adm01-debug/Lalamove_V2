@@ -1,5 +1,7 @@
 # public.lalamove_stops
 
+> Paradas/stops dos pedidos Lalamove com endereco e horarios.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

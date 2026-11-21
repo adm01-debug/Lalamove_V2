@@ -1,5 +1,7 @@
 # public.lalamove_rate_limits
 
+> Controle de rate limit das chamadas a API Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

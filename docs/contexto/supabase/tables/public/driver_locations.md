@@ -1,5 +1,7 @@
 # public.driver_locations
 
+> Historico detalhado de posicoes GPS dos motoristas.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

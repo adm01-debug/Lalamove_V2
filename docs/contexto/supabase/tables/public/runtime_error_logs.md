@@ -1,5 +1,7 @@
 # public.runtime_error_logs
 
+> Logs de erros em runtime capturados pelo monitoramento.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

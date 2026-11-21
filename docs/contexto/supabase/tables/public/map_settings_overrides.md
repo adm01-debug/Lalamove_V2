@@ -1,5 +1,7 @@
 # public.map_settings_overrides
 
+> Overrides de configuracao de mapa por usuario/contexto.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

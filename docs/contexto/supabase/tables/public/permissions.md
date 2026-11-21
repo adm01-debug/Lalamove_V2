@@ -1,5 +1,7 @@
 # public.permissions
 
+> Permissoes granulares do sistema por modulo e acao.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

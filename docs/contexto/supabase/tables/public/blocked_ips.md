@@ -1,5 +1,7 @@
 # public.blocked_ips
 
+> IPs bloqueados por rate limit/seguranca com motivo e expiracao.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

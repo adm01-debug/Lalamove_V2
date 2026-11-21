@@ -1,5 +1,7 @@
 # public.password_reset_requests
 
+> Requisicoes de reset de senha com aprovacao de admin.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

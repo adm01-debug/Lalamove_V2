@@ -1,5 +1,7 @@
 # public.role_permissions
 
+> Associacao entre roles e permissoes (RBAC).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

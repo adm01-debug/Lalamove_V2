@@ -1,5 +1,7 @@
 # public.lalamove_uapi_sessions
 
+> Sessoes da Unified API da Lalamove (token e expiracao).
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

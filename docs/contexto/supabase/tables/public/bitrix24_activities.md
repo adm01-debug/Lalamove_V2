@@ -1,5 +1,7 @@
 # public.bitrix24_activities
 
+> Atividades/timeline sincronizadas com o CRM Bitrix24.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

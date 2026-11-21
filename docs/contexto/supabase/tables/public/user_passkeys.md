@@ -1,5 +1,7 @@
 # public.user_passkeys
 
+> Chaves WebAuthn/passkeys registradas por usuario.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

@@ -1,5 +1,7 @@
 # public.contacts
 
+> Contatos cadastrados (empresas/parceiros) para integracao externa.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

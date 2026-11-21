@@ -1,5 +1,7 @@
 # public.rate_limit_logs
 
+> Log de requisicoes por endpoint para monitoramento de rate limiting.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

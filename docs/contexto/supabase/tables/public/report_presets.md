@@ -1,5 +1,7 @@
 # public.report_presets
 
+> Presets de relatorios salvos pelos usuarios.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

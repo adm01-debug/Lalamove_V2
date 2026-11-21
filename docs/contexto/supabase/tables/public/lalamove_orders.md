@@ -1,5 +1,7 @@
 # public.lalamove_orders
 
+> Pedidos Lalamove com campos customizados e status em tempo real.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

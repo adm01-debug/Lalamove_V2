@@ -1,5 +1,7 @@
 # public.query_telemetry
 
+> Telemetria de consultas (logica/duracao/erro) para auditoria.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

@@ -1,5 +1,7 @@
 # public.lalamove_status_history
 
+> Historico de mudancas de status de cada pedido Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

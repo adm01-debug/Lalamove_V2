@@ -19,7 +19,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.tracking_events_y2026m08 | ~200 | 152.0 KB | 40.0 KB | 80.0 KB | 0 | ~30 | 0 |  |
 | public.contacts | ~30 | 144.0 KB | 8.0 KB | 128.0 KB | 2 | ~90 | ~70 |  |
 | public.driver_approval_queue | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~30 | ~3.7k |  |
-| public.contract_version_usage | ~80 | 128.0 KB | 8.0 KB | 80.0 KB | ~20 | ~20 | ~950 | 2026-11-21 |
+| public.contract_version_usage | ~80 | 128.0 KB | 8.0 KB | 80.0 KB | ~20 | ~20 | ~1k | 2026-11-21 |
 | public.query_telemetry | 0 | 128.0 KB | 8.0 KB | 112.0 KB | 2 | ~100 | ~20 |  |
 | public.tracking_events_y2026m11 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 9 | 0 |  |
 | public.tracking_events_y2026m12 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 4 | 0 |  |
@@ -106,27 +106,27 @@ _nenhum_
 ## Consultas mais custosas (pg_stat_statements, desde o último reset)
 | role | chamadas (~) | total ms (~) | média ms | query |
 |---|---|---|---|---|
-| postgres | ~28.7k | ~333.4k | 11.61 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
+| postgres | ~28.7k | ~333.7k | 11.62 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
 | service_role | ~26.3k | ~208.8k | 7.95 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM "public"."get_pending_escalations"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ` |
+| postgres | 4 | ~142.8k | 35692.12 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
 | postgres | ~220 | ~123k | 558.93 | `SELECT e.name, n.nspname AS schema, e.default_version, x.extversion AS installed_version, e.comment, ev.schema AS default_version_schema FROM pg_available_extensions e LEFT JOIN pg_extension x ON e.name = x.extname LEFT ` |
-| postgres | 3 | ~106.8k | 35603.63 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
-| postgres | ~71.6k | ~75.2k | 1.05 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
-| postgres | ~71.6k | ~62.8k | 0.88 | `WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key \|\| ` |
-| authenticator | ~80 | ~52.4k | 623.99 | `SELECT name FROM pg_timezone_names` |
+| postgres | ~71.6k | ~75.3k | 1.05 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| postgres | ~71.6k | ~62.9k | 0.88 | `WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key \|\| ` |
+| authenticator | ~80 | ~53.3k | 627.14 | `SELECT name FROM pg_timezone_names` |
 | service_role | ~1.4k | ~38.2k | 27.41 | `WITH pgrst_source AS (INSERT INTO "public"."alerts"("message", "metadata", "severity", "title", "type") SELECT "pgrst_body"."message", "pgrst_body"."metadata", "pgrst_body"."severity", "pgrst_body"."title", "pgrst_body".` |
 | service_role | ~2.2k | ~35.4k | 16.14 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_dedup_key", "p_alert_type", "p_window_seconds" FROM json_to_record(pgrst_payload.json_data) AS _("p_dedup_key" t` |
 | postgres | ~20 | ~33.9k | 2257.99 | `with page as ( select c.oid, c.relname, c.relrowsecurity, c.relforcerowsecurity, c.relreplident, nc.nspname as schema, -- Computed once here so the final select can reference it for both the -- raw byte count and pg_size` |
 | postgres | ~28.7k | ~19.8k | 0.69 | `insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)` |
 | postgres | ~60 | ~13.5k | 225.35 | `with f as ( -- CTE with sane arg_modes, arg_names, and arg_types. -- All three are always of the same length. -- All three include all args, including OUT and TABLE args. with functions as ( select *, -- proargmodes is n` |
-| authenticator | ~80 | ~7.4k | 87.55 | `WITH -- Recursively get the base types of domains base_types AS ( WITH RECURSIVE recurse AS ( SELECT oid, typbasetype, typnamespace AS base_namespace, COALESCE(NULLIF(typbasetype, $2), oid) AS base_type FROM pg_type UNIO` |
-| service_role | ~33.3k | ~7.2k | 0.22 | `select set_config('?', $1, true), set_config('?', $2, true), set_config('?', $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('request.head` |
+| authenticator | ~80 | ~7.5k | 88.75 | `WITH -- Recursively get the base types of domains base_types AS ( WITH RECURSIVE recurse AS ( SELECT oid, typbasetype, typnamespace AS base_namespace, COALESCE(NULLIF(typbasetype, $2), oid) AS base_type FROM pg_type UNIO` |
+| service_role | ~33.4k | ~7.2k | 0.22 | `select set_config('?', $1, true), set_config('?', $2, true), set_config('?', $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('request.head` |
 | authenticated | ~170 | ~6.1k | 36.52 | `WITH pgrst_source AS ( SELECT "public"."alerts"."id" FROM "public"."alerts" WHERE "public"."alerts"."is_dismissed" = $1 LIMIT $2 OFFSET $3 ) , pgrst_source_count AS (SELECT $5 FROM "public"."alerts" WHERE "public"."alert` |
 
 
 ## Conexões
 | usuário | estado | n |
 |---|---|---|
-| authenticator | idle | 8 |
+| authenticator | idle | 11 |
 | pgbouncer | idle | 1 |
 | postgres | active | 1 |
 | postgres | idle | 1 |

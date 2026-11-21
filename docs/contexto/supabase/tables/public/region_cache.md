@@ -1,5 +1,7 @@
 # public.region_cache
 
+> Cache por regiao para performance de consultas.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

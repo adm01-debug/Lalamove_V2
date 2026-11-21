@@ -1,5 +1,7 @@
 # public.alerts_sent
 
+> Historico de notificacoes enviadas por canal com status, retry e erro.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

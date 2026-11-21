@@ -1,5 +1,7 @@
 # public.driver_approval_queue
 
+> Fila de aprovacao de motoristas com score de risco, prioridade e status.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

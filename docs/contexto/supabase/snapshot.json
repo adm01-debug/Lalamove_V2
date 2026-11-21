@@ -25965,7 +25965,7 @@
     "storage": [],
     "tables": [
       {
-        "comment": null,
+        "comment": "Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -25980,7 +25980,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Configuracoes de alertas por tipo/canal: templates, intervalo minimo, condicoes personalizadas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -25995,7 +25995,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26010,7 +26010,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26025,7 +26025,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico de notificacoes enviadas por canal com status, retry e erro.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26040,7 +26040,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Auditoria de autenticacao: IP, user agent e evento de cada acesso.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26055,7 +26055,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Atividades/timeline sincronizadas com o CRM Bitrix24.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26070,7 +26070,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Mapeamento de estagios entre o sistema e os funis do Bitrix24.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26085,7 +26085,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Registro de sincronizacao de deals com o Bitrix24.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26100,7 +26100,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Tokens OAuth2 do Bitrix24 com refresh.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26115,7 +26115,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "IPs bloqueados por rate limit/seguranca com motivo e expiracao.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26130,7 +26130,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Contatos cadastrados (empresas/parceiros) para integracao externa.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26145,7 +26145,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Uso de versoes de contrato por periodo.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26160,7 +26160,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Agregado mensal de uso de versoes de contrato.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26175,7 +26175,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico de execucoes dos cron jobs do sistema com duracao e resultado.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26190,7 +26190,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Fila de aprovacao de motoristas com score de risco, prioridade e status.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26205,7 +26205,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico de avaliacoes de risco dos motoristas com fatores detalhados.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26220,7 +26220,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26235,7 +26235,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico detalhado de posicoes GPS dos motoristas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26250,7 +26250,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Cadastro de motoristas com metricas de performance e score de risco.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26265,7 +26265,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Tokens de verificacao de email com expiracao.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26280,7 +26280,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Flags de feature para ativacao/desativacao de funcionalidades.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26295,7 +26295,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Bloqueios geograficos por pais (permanente ou temporario).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26310,7 +26310,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "IPs autorizados com CIDR para acesso privilegiado.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26325,7 +26325,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Registro de pedidos de reposicao/reescolha na Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26340,7 +26340,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Pedidos Lalamove com campos customizados e status em tempo real.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26355,7 +26355,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico de taxas de prioridade aplicadas aos pedidos Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26370,7 +26370,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Controle de rate limit das chamadas a API Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26385,7 +26385,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Historico de mudancas de status de cada pedido Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26400,7 +26400,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26415,7 +26415,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Paradas/stops dos pedidos Lalamove com endereco e horarios.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26430,7 +26430,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Sessoes da Unified API da Lalamove (token e expiracao).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26445,7 +26445,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Tentativas de login com IP e resultado para lockout de conta.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26460,7 +26460,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Overrides de configuracao de mapa por usuario/contexto.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26475,7 +26475,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Grants de acesso a diagnosticos via MCP (query_telemetry).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26490,7 +26490,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Sessoes MFA (TOTP) registradas por usuario.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26505,7 +26505,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Alertas de novo dispositivo detectado no login.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26520,7 +26520,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Requisicoes de reset de senha com aprovacao de admin.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26535,7 +26535,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Tokens de reset de senha com expiracao.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26550,7 +26550,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Permissoes granulares do sistema por modulo e acao.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26565,7 +26565,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Telemetria de consultas (logica/duracao/erro) para auditoria.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26580,7 +26580,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Log de requisicoes por endpoint para monitoramento de rate limiting.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26595,7 +26595,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Cache por regiao para performance de consultas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26610,7 +26610,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Presets de relatorios salvos pelos usuarios.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26625,7 +26625,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Regras configuraveis para calculo de risk score dos motoristas.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26640,7 +26640,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Associacao entre roles e permissoes (RBAC).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26655,7 +26655,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Logs de erros em runtime capturados pelo monitoramento.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26670,7 +26670,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Registro de testes de seguranca executados.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26685,7 +26685,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Eventos de tracking particionados por mes (particionamento).",
         "from_extension": false,
         "is_partition": false,
         "kind": "partitioned",
@@ -26700,7 +26700,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Particao padrao da tabela tracking_events.",
         "from_extension": false,
         "is_partition": true,
         "kind": "table",
@@ -26850,7 +26850,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Dispositivos registrados dos usuarios para deteccao de novo login.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26865,7 +26865,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Chaves WebAuthn/passkeys registradas por usuario.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26880,7 +26880,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Roles atribuidas a cada usuario (RBAC).",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26895,7 +26895,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Challenges WebAuthn para fluxo de autenticacao sem senha.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",
@@ -26910,7 +26910,7 @@
         "schema": "public"
       },
       {
-        "comment": null,
+        "comment": "Log completo de todos webhooks recebidos do Lalamove.",
         "from_extension": false,
         "is_partition": false,
         "kind": "table",

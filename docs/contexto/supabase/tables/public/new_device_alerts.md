@@ -1,5 +1,7 @@
 # public.new_device_alerts
 
+> Alertas de novo dispositivo detectado no login.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

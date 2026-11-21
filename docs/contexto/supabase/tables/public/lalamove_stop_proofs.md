@@ -1,5 +1,7 @@
 # public.lalamove_stop_proofs
 
+> Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

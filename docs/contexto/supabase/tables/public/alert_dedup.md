@@ -1,5 +1,7 @@
 # public.alert_dedup
 
+> Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

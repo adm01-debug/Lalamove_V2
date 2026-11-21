@@ -1,5 +1,7 @@
 # public.auth_logs
 
+> Auditoria de autenticacao: IP, user agent e evento de cada acesso.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

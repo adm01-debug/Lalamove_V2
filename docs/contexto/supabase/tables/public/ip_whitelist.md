@@ -1,5 +1,7 @@
 # public.ip_whitelist
 
+> IPs autorizados com CIDR para acesso privilegiado.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

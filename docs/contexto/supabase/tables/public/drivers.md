@@ -1,5 +1,7 @@
 # public.drivers
 
+> Cadastro de motoristas com metricas de performance e score de risco.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

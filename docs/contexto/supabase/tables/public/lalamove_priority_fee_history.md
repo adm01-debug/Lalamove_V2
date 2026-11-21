@@ -1,5 +1,7 @@
 # public.lalamove_priority_fee_history
 
+> Historico de taxas de prioridade aplicadas aos pedidos Lalamove.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

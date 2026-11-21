@@ -1,5 +1,7 @@
 # public.contract_version_usage
 
+> Uso de versoes de contrato por periodo.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

@@ -1,5 +1,7 @@
 # public.password_reset_tokens
 
+> Tokens de reset de senha com expiracao.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |

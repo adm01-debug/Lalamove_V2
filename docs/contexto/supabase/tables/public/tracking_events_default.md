@@ -1,5 +1,7 @@
 # public.tracking_events_default
 
+> Particao padrao da tabela tracking_events.
+
 | propriedade | valor |
 |---|---|
 | tipo | table |
