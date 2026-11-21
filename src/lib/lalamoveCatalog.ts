@@ -243,6 +243,21 @@ export function validateSpecialRequest(
   return null;
 }
 
+/**
+ * Mantém só os special requests ainda válidos para `serviceType`+`city`.
+ * Usada pela UI ao trocar serviço ou cidade: sem isso, um special request
+ * restrito a outra praça (ex.: REFRIGERATED_VEHICLE só em BR SAO) ficava no
+ * formulário mesmo depois de mudar a cidade de coleta, reproduzindo o 422
+ * ERR_INVALID_FIELD que a troca de serviço já evita para o campo `item`.
+ */
+export function filterValidSpecialRequests(
+  specialRequests: readonly string[],
+  serviceType: LalamoveServiceType,
+  city: LalamoveCityCode,
+): string[] {
+  return specialRequests.filter(code => validateSpecialRequest(code, serviceType, city) === null);
+}
+
 /** `true` quando a API realmente processa `deliveryItemSpecification` para o serviço. */
 export function serviceAcceptsItem(serviceType: LalamoveServiceType): boolean {
   return SERVICE_CATALOG[serviceType].acceptsItem;

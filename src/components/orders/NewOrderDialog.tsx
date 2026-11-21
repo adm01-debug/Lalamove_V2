@@ -25,6 +25,7 @@ import {
   serviceAcceptsItem,
   servicesForCity,
   serviceAvailableInCity,
+  filterValidSpecialRequests,
   CITY_LABELS,
 } from '@/lib/lalamoveCatalog';
 import {
@@ -170,8 +171,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       // Ao trocar o serviço, remove Special Requests e faixas de peso incompatíveis.
       if (field === 'vehicleType' && isServiceType(String(value))) {
         const service = String(value) as LalamoveServiceType;
-        const allowed = SPECIAL_REQUESTS_BY_SERVICE[service];
-        next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
+        next.specialRequests = filterValidSpecialRequests(prev.specialRequests, service, prev.city);
         const ranges = ITEM_WEIGHT_RANGES[service];
         next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
       }
@@ -180,15 +180,19 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       if (field === 'city') {
         const city = String(value) as LalamoveCityCode;
         const current = prev.vehicleType;
-        if (!isServiceType(current) || !serviceAvailableInCity(current, city)) {
-          const fallback = servicesForCity(city)[0];
-          if (fallback) {
-            next.vehicleType = fallback;
-            const allowed = SPECIAL_REQUESTS_BY_SERVICE[fallback];
-            next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
-            const ranges = ITEM_WEIGHT_RANGES[fallback];
+        const needsFallback = !isServiceType(current) || !serviceAvailableInCity(current, city);
+        const service = needsFallback ? servicesForCity(city)[0] : current;
+        if (service) {
+          if (needsFallback) {
+            next.vehicleType = service;
+            const ranges = ITEM_WEIGHT_RANGES[service];
             next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
           }
+          // Reaplica as DUAS restrições (serviço + cidade): mesmo quando o
+          // serviço continua válido na nova praça, um special request como
+          // REFRIGERATED_VEHICLE pode estar restrito a outra cidade
+          // (SPECIAL_REQUEST_CITY_RESTRICTIONS) e ficava esquecido no payload.
+          next.specialRequests = filterValidSpecialRequests(prev.specialRequests, service, city);
         }
       }
       return next;
