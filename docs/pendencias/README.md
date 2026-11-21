@@ -11,7 +11,7 @@
 | P-03 | Chat em tempo real Cliente-Motorista (auditoria 5.2) | AGUARDANDO HUMANO (decisão do dono) |
 | P-04 | Rotacionar JWT_SECRET no painel Supabase | AGUARDANDO HUMANO (ação do dono) |
 | P-05 | Snapshot do banco real (docs/contexto/supabase/) | AGUARDANDO HUMANO (falta SUPABASE_DB_URL) |
-| P-06 | Vulns npm restantes (4 moderate, fix = bump major) | AGUARDANDO HUMANO (decisão do dono) |
+| P-06 | Vulns npm restantes (4 moderate, fix = bump major) | CONCLUÍDO (2026-11-21, PR #99) |
 | P-07 | SECURITY DEFINER sem set search_path | OBSOLETO (verificado: 47/47 têm search_path) |
 | P-08 | geo_blocks sem RLS | OBSOLETO (verificado: 5 policies ativas) |
 | P-09 | Transições de status sem CHECK no schema | OBSOLETO (enums já validam) |
@@ -26,6 +26,7 @@ Verificado byte a byte nesta sessão / sessões anteriores (evidência em _linha
 - PR #80/#81: remoção de segredos hardcoded + guards de CI — no main (8832302, 63987c9).
 - PR #90: fix CI pin ubuntu-24.04 — no main (c86f279).
 - PR #91: fix 14 vulns npm (zod, undici, brace-expansion) — no main (1ef5f30).
+- PR #99: fix 4 vulns npm restantes (react-router-dom 6→7.18.6 + override postcss-selector-parser 6.1.5) — no main (f1218b2), 0 vulns, deploy READY/PROMOTED.
 - PR #93: seed via env vars — no main (4767a5e), branch deletada.
 - Dependabot merges (#68-#77 faixa): vite, input-otp, papaparse, recharts, web-vitals, radix, postcss, eslint-plugin-react-refresh — no main.
 
