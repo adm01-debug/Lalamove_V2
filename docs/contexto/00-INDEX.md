@@ -1,6 +1,6 @@
 # CONTEXTO PARA AGENTES DE IA — ÍNDICE ÚNICO
 
-> Gerado automaticamente por indice.py · 2026-11-21 23:08 UTC · HEAD `c2ae0baa10` · Não edite à mão.
+> Gerado automaticamente por indice.py · 2026-11-21 23:12 UTC · HEAD `c2ae0baa10` · Não edite à mão.
 
 Um sistema, três fontes de verdade, três produtores independentes. **Leia este arquivo e vá direto à fonte certa.** Cada fato tem um dono: se duas fontes discordarem, vale o dono.
 
@@ -8,9 +8,9 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 
 | Preciso de… | Fonte (dona do fato) | Onde ler | Estado |
 |---|---|---|---|
-| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 1 min atrás |
-| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/` (ainda não existe — o produtor não rodou) | ainda não gerado |
-| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 0 min atrás |
+| Regras que não podem ser quebradas: RLS por operação, estados e transições, validações, fórmulas, prazos, erros de negócio, testes como especificação, inconsistências código×schema (NÃO VERIFICADO) e regras humanas (`manual/`) | **regras de negócio** | `docs/contexto/regras/07-REGRAS-DE-NEGOCIO.md` | ok · 5 min atrás |
+| Tabelas, colunas, RLS/políticas, funções, triggers, cron, storage, lints — **como está em produção agora** | **banco real** | `docs/contexto/supabase/README.md` | ok · 0 min atrás |
+| Rotas, telas, módulos, hooks, edge functions, grafo de dependências, testes, scripts, convenções | **código** | `docs/contexto/codigo/INDEX.md` | ok · 5 min atrás |
 
 ## Ordem de leitura antes de qualquer tarefa ou planejamento
 
@@ -25,6 +25,92 @@ Um sistema, três fontes de verdade, três produtores independentes. **Leia este
 - Pode fazer isso? Qual estado vem depois? Qual o limite? → **regras de negócio** (inclui `manual/`, escrito por humanos, prioridade máxima).
 - Item listado como **NÃO VERIFICADO** ou **inconsistência** em qualquer fonte: confirme na fonte dona antes de assumir.
 - Nada aqui é editado à mão. Para registrar uma regra que só o negócio sabe, escreva em `manual/` da fonte de regras.
+
+<details><summary>Arquivos de <b>banco real</b> (`docs/contexto/supabase/`)</summary>
+
+- `docs/contexto/supabase/CHANGELOG.md`
+- `docs/contexto/supabase/README.md`
+- `docs/contexto/supabase/auth.md`
+- `docs/contexto/supabase/cron-runs.md`
+- `docs/contexto/supabase/cron.md`
+- `docs/contexto/supabase/edge-functions.md`
+- `docs/contexto/supabase/errors.md`
+- `docs/contexto/supabase/extensions.md`
+- `docs/contexto/supabase/foreign-servers.md`
+- `docs/contexto/supabase/functions.md`
+- `docs/contexto/supabase/grants.md`
+- `docs/contexto/supabase/indexes.md`
+- `docs/contexto/supabase/lints.md`
+- `docs/contexto/supabase/manifest.json`
+- `docs/contexto/supabase/migrations.md`
+- `docs/contexto/supabase/policies.md`
+- `docs/contexto/supabase/project-config.md`
+- `docs/contexto/supabase/queues.md`
+- `docs/contexto/supabase/realtime.md`
+- `docs/contexto/supabase/relationships.md`
+- `docs/contexto/supabase/roles.md`
+- `docs/contexto/supabase/schemas.md`
+- `docs/contexto/supabase/sequences.md`
+- `docs/contexto/supabase/snapshot.json`
+- `docs/contexto/supabase/stats.json`
+- `docs/contexto/supabase/stats.md`
+- `docs/contexto/supabase/storage.md`
+- `docs/contexto/supabase/tables.md`
+- `docs/contexto/supabase/tables/_supabase_internal_triggers.md`
+- `docs/contexto/supabase/tables/public/active_tracking.md`
+- `docs/contexto/supabase/tables/public/alert_configurations.md`
+- `docs/contexto/supabase/tables/public/alert_dedup.md`
+- `docs/contexto/supabase/tables/public/alerts.md`
+- `docs/contexto/supabase/tables/public/alerts_sent.md`
+- `docs/contexto/supabase/tables/public/audit_log.md`
+- `docs/contexto/supabase/tables/public/auth_logs.md`
+- `docs/contexto/supabase/tables/public/bitrix24_activities.md`
+- `docs/contexto/supabase/tables/public/bitrix24_spa_sync.md`
+- `docs/contexto/supabase/tables/public/bitrix24_stage_mappings.md`
+- `docs/contexto/supabase/tables/public/bitrix24_sync.md`
+- `docs/contexto/supabase/tables/public/bitrix24_tokens.md`
+- `docs/contexto/supabase/tables/public/blocked_ips.md`
+- `docs/contexto/supabase/tables/public/contacts.md`
+- `docs/contexto/supabase/tables/public/contract_version_usage.md`
+- `docs/contexto/supabase/tables/public/contract_version_usage_monthly.md`
+- `docs/contexto/supabase/tables/public/cron_job_logs.md`
+- `docs/contexto/supabase/tables/public/driver_approval_queue.md`
+- `docs/contexto/supabase/tables/public/driver_evaluations.md`
+- `docs/contexto/supabase/tables/public/driver_incidents.md`
+- `docs/contexto/supabase/tables/public/driver_locations.md`
+- `docs/contexto/supabase/tables/public/drivers.md`
+- `docs/contexto/supabase/tables/public/email_verifications.md`
+- `docs/contexto/supabase/tables/public/feature_flags.md`
+- `docs/contexto/supabase/tables/public/geo_blocks.md`
+- `docs/contexto/supabase/tables/public/geo_budget.md`
+- `docs/contexto/supabase/tables/public/geo_cache.md`
+- `docs/contexto/supabase/tables/public/geo_defaults.md`
+- `docs/contexto/supabase/tables/public/geo_price_list.md`
+- `docs/contexto/supabase/tables/public/geo_settings.md`
+- `docs/contexto/supabase/tables/public/geo_usage.md`
+- `docs/contexto/supabase/tables/public/ip_whitelist.md`
+- `docs/contexto/supabase/tables/public/job_queue.md`
+- `docs/contexto/supabase/tables/public/lalamove_order_replacements.md`
+- `docs/contexto/supabase/tables/public/lalamove_orders.md`
+- `docs/contexto/supabase/tables/public/lalamove_priority_fee_history.md`
+- `docs/contexto/supabase/tables/public/lalamove_rate_limits.md`
+- `docs/contexto/supabase/tables/public/lalamove_status_history.md`
+- `docs/contexto/supabase/tables/public/lalamove_stop_proofs.md`
+- `docs/contexto/supabase/tables/public/lalamove_stops.md`
+- `docs/contexto/supabase/tables/public/lalamove_uapi_sessions.md`
+- `docs/contexto/supabase/tables/public/lalamove_webhook_config.md`
+- `docs/contexto/supabase/tables/public/login_attempts.md`
+- `docs/contexto/supabase/tables/public/map_settings_overrides.md`
+- `docs/contexto/supabase/tables/public/mcp_diagnostics_grants.md`
+- `docs/contexto/supabase/tables/public/mfa_sessions.md`
+- `docs/contexto/supabase/tables/public/new_device_alerts.md`
+- `docs/contexto/supabase/tables/public/order_geo_events.md`
+- `docs/contexto/supabase/tables/public/password_reset_requests.md`
+- `docs/contexto/supabase/tables/public/password_reset_tokens.md`
+- `docs/contexto/supabase/tables/public/permissions.md`
+- … +29
+
+</details>
 
 <details><summary>Arquivos de <b>código</b> (`docs/contexto/codigo/`)</summary>
 

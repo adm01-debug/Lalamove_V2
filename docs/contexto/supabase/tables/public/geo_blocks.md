@@ -1,0 +1,118 @@
+# public.geo_blocks
+
+> Bloqueios geograficos por pais (permanente ou temporario).
+
+| propriedade | valor |
+|---|---|
+| tipo | table |
+| owner | postgres |
+| RLS habilitado | sim |
+| RLS forçado (owner) | não |
+| policies | 5 |
+| realtime (publication) | não |
+| replica identity | default |
+| vem de extensão | não |
+
+
+## Colunas
+
+| # | coluna | tipo | nullable | default | identity/generated | comentário |
+|---|---|---|---|---|---|---|
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
+| 2 | `country_code` | `text` | não |  |  |  |
+| 3 | `country_name` | `text` | não |  |  |  |
+| 4 | `is_blocked` | `boolean` | não | `true` |  |  |
+| 5 | `block_type` | `text` | não | `'full'::text` |  |  |
+| 6 | `reason` | `text` | sim |  |  |  |
+| 7 | `blocked_by` | `uuid` | sim |  |  |  |
+| 8 | `created_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 9 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 10 | `expires_at` | `timestamp with time zone` | sim |  |  |  |
+
+
+## Constraints
+
+| nome | tipo | definição | on delete | on update | validada |
+|---|---|---|---|---|---|
+| geo_blocks_block_type_check | CHECK | `CHECK (block_type = ANY (ARRAY['full'::text, 'login_only'::text, 'registration_only'::text]))` |  |  | sim |
+| geo_blocks_blocked_by_fkey | FOREIGN KEY | `FOREIGN KEY (blocked_by) REFERENCES auth.users(id) ON DELETE SET NULL` | SET NULL | NO ACTION | sim |
+| geo_blocks_country_code_key | UNIQUE | `UNIQUE (country_code)` |  |  | sim |
+| geo_blocks_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
+
+
+## Índices
+
+| nome | método | colunas | único | válido | predicado | definição |
+|---|---|---|---|---|---|---|
+| geo_blocks_country_code_key | btree | country_code | sim | sim |  | `CREATE UNIQUE INDEX geo_blocks_country_code_key ON public.geo_blocks USING btree (country_code)` |
+| geo_blocks_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX geo_blocks_pkey ON public.geo_blocks USING btree (id)` |
+| idx_geo_blocks_active | btree | is_blocked | não | sim | `(is_blocked = true)` | `CREATE INDEX idx_geo_blocks_active ON public.geo_blocks USING btree (is_blocked) WHERE (is_blocked = true)` |
+| idx_geo_blocks_blocked_by | btree | blocked_by | não | sim |  | `CREATE INDEX idx_geo_blocks_blocked_by ON public.geo_blocks USING btree (blocked_by)` |
+
+
+## Policies (RLS)
+
+### `Admins can delete geo blocks`
+
+| campo | valor |
+|---|---|
+| comando | DELETE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| WITH CHECK |  |
+
+### `Admins can insert geo blocks`
+
+| campo | valor |
+|---|---|
+| comando | INSERT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING |  |
+| WITH CHECK | `has_role(auth.uid(), 'admin'::app_role)` |
+
+### `Admins can manage geo blocks`
+
+| campo | valor |
+|---|---|
+| comando | ALL |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| WITH CHECK |  |
+
+### `Admins can update geo blocks`
+
+| campo | valor |
+|---|---|
+| comando | UPDATE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `has_role(auth.uid(), 'admin'::app_role)` |
+| WITH CHECK |  |
+
+### `Managers can view geo blocks`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | public |
+| USING | `has_role(auth.uid(), 'manager'::app_role)` |
+| WITH CHECK |  |
+
+
+## Triggers
+
+| nome | timing | eventos | nível | status | função |
+|---|---|---|---|---|---|
+| update_geo_blocks_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
+
+
+## Grants
+
+| role | privilégios |
+|---|---|
+| authenticated | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

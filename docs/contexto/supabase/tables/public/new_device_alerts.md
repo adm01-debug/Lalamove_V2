@@ -1,0 +1,101 @@
+# public.new_device_alerts
+
+> Alertas de novo dispositivo detectado no login.
+
+| propriedade | valor |
+|---|---|
+| tipo | table |
+| owner | postgres |
+| RLS habilitado | sim |
+| RLS forçado (owner) | não |
+| policies | 4 |
+| realtime (publication) | sim |
+| replica identity | full |
+| vem de extensão | não |
+
+
+## Colunas
+
+| # | coluna | tipo | nullable | default | identity/generated | comentário |
+|---|---|---|---|---|---|---|
+| 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
+| 2 | `user_id` | `uuid` | não |  |  |  |
+| 3 | `device_id` | `uuid` | sim |  |  |  |
+| 4 | `ip_address` | `inet` | sim |  |  |  |
+| 5 | `user_agent` | `text` | sim |  |  |  |
+| 6 | `email_sent` | `boolean` | sim | `false` |  |  |
+| 7 | `sent_at` | `timestamp with time zone` | sim |  |  |  |
+| 8 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
+
+
+## Constraints
+
+| nome | tipo | definição | on delete | on update | validada |
+|---|---|---|---|---|---|
+| new_device_alerts_device_id_fkey | FOREIGN KEY | `FOREIGN KEY (device_id) REFERENCES user_devices(id) ON DELETE CASCADE` | CASCADE | NO ACTION | sim |
+| new_device_alerts_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
+
+
+## Índices
+
+| nome | método | colunas | único | válido | predicado | definição |
+|---|---|---|---|---|---|---|
+| idx_new_device_alerts_device_id | btree | device_id | não | sim |  | `CREATE INDEX idx_new_device_alerts_device_id ON public.new_device_alerts USING btree (device_id)` |
+| idx_new_device_alerts_user | btree | user_id, created_at | não | sim |  | `CREATE INDEX idx_new_device_alerts_user ON public.new_device_alerts USING btree (user_id, created_at DESC)` |
+| new_device_alerts_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX new_device_alerts_pkey ON public.new_device_alerts USING btree (id)` |
+
+
+## Policies (RLS)
+
+### `Users can delete their device alerts`
+
+| campo | valor |
+|---|---|
+| comando | DELETE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| WITH CHECK |  |
+
+### `Users can insert their device alerts`
+
+| campo | valor |
+|---|---|
+| comando | INSERT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING |  |
+| WITH CHECK | `(auth.uid() = user_id)` |
+
+### `Users can update their device alerts`
+
+| campo | valor |
+|---|---|
+| comando | UPDATE |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |
+| WITH CHECK |  |
+
+### `Users can view own device alerts`
+
+| campo | valor |
+|---|---|
+| comando | SELECT |
+| tipo | PERMISSIVE |
+| roles | authenticated |
+| USING | `(auth.uid() = user_id)` |
+| WITH CHECK |  |
+
+
+## Triggers
+
+_nenhum_
+
+
+## Grants
+
+| role | privilégios |
+|---|---|
+| authenticated | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |
+| service_role | DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE |

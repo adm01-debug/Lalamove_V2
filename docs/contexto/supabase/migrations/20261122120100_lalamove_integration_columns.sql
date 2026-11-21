@@ -1,0 +1,1 @@
+-- aplicada via Management API em 2026-11-21, ver docs/MIGRATION_RECONCILIATION_2026-11.md
