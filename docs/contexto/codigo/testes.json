@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 109,
+ "total": 110,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 5,
   "edge (deno)": 8,
   "guard (node --test)": 33,
-  "unit (vitest)": 61
+  "unit (vitest)": 62
  },
  "onde_ficam": [
   {
@@ -29,7 +29,7 @@
   },
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 41
+   "arquivos": 42
   },
   {
    "padrao": "supabase/functions/<edge>",
@@ -672,6 +672,15 @@
    "casos": 7
   },
   {
+   "arquivo": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 21,
+   "testa": [
+    "src/hooks/useMapProviderPolicy.ts"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/hooks/__tests__/useMapSettings.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 162,
@@ -1095,6 +1104,7 @@
   "src/hooks/useGeoSearch.ts": 1,
   "src/hooks/useIncidents.ts": 1,
   "src/hooks/useLoginLockout.ts": 1,
+  "src/hooks/useMapProviderPolicy.ts": 1,
   "src/hooks/useMapSettings.ts": 2,
   "src/hooks/useMapbox.ts": 1,
   "src/hooks/usePendingApprovals.ts": 1,

@@ -31,6 +31,7 @@
     "useActiveAlerts",
     "useAlertActions",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnnounce",
     "useApprovalActions",
     "useApprovalHistory",
@@ -43,6 +44,7 @@
     "useDashboardStats",
     "useDriverLocation",
     "useEffect",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -95,6 +97,7 @@
     "useSoundSettings",
     "useSpring",
     "useState",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
     "useTransform",
@@ -111,6 +114,7 @@
     "useActiveAlerts",
     "useAlertActions",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnnounce",
     "useApprovalActions",
     "useApprovalHistory",
@@ -120,6 +124,7 @@
     "useCities",
     "useDashboardStats",
     "useDriverLocation",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -160,6 +165,7 @@
     "useServiceAreas",
     "useSidebarCountsRealtime",
     "useSoundSettings",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
     "useUpdateUapiToken",
@@ -177,6 +183,7 @@
     "driver_incidents",
     "drivers",
     "feature_flags",
+    "geo_settings",
     "lalamove_orders",
     "map_settings_overrides",
     "tracking_events"
@@ -214,7 +221,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 92
+   "arquivos_puxados": 93
   },
   {
    "caminho": "/*",
@@ -779,6 +786,7 @@
     "useActiveAlerts",
     "useAlertActions",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnnounce",
     "useApprovalActions",
     "useApprovalHistory",
@@ -791,6 +799,7 @@
     "useDashboardStats",
     "useDriverLocation",
     "useEffect",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -843,6 +852,7 @@
     "useSoundSettings",
     "useSpring",
     "useState",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
     "useTransform",
@@ -859,6 +869,7 @@
     "useActiveAlerts",
     "useAlertActions",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnnounce",
     "useApprovalActions",
     "useApprovalHistory",
@@ -868,6 +879,7 @@
     "useCities",
     "useDashboardStats",
     "useDriverLocation",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -908,6 +920,7 @@
     "useServiceAreas",
     "useSidebarCountsRealtime",
     "useSoundSettings",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
     "useUpdateUapiToken",
@@ -925,6 +938,7 @@
     "driver_incidents",
     "drivers",
     "feature_flags",
+    "geo_settings",
     "lalamove_orders",
     "map_settings_overrides",
     "tracking_events"
@@ -962,7 +976,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 92
+   "arquivos_puxados": 93
   },
   {
    "caminho": "/delivery-metrics",
@@ -1619,9 +1633,11 @@
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
+    "useAllowedMapProviders",
     "useCallback",
     "useContext",
     "useEffect",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -1644,10 +1660,13 @@
     "useQuery",
     "useRef",
     "useState",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory"
    ],
    "hooks_locais": [
+    "useAllowedMapProviders",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -1666,12 +1685,14 @@
     "useMapboxStaticImage",
     "useMapboxTilequery",
     "useMapboxToken",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory"
    ],
    "tabelas": [
     "active_tracking",
     "feature_flags",
+    "geo_settings",
     "map_settings_overrides",
     "tracking_events"
    ],
@@ -1693,7 +1714,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 40
+   "arquivos_puxados": 41
   },
   {
    "caminho": "/map",
@@ -1714,9 +1735,11 @@
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
+    "useAllowedMapProviders",
     "useCallback",
     "useContext",
     "useEffect",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -1739,10 +1762,13 @@
     "useQuery",
     "useRef",
     "useState",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory"
    ],
    "hooks_locais": [
+    "useAllowedMapProviders",
+    "useEffectiveMapProvider",
     "useFeatureFlag",
     "useFeatureFlags",
     "useFuseSearch",
@@ -1761,12 +1787,14 @@
     "useMapboxStaticImage",
     "useMapboxTilequery",
     "useMapboxToken",
+    "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory"
    ],
    "tabelas": [
     "active_tracking",
     "feature_flags",
+    "geo_settings",
     "map_settings_overrides",
     "tracking_events"
    ],
@@ -1788,7 +1816,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 40
+   "arquivos_puxados": 41
   },
   {
    "caminho": "/map-tools",
@@ -3236,6 +3264,7 @@
     "useAlertSelection",
     "useAlertSettings",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnalyticsData",
     "useAnnounce",
     "useApprovalActions",
@@ -3286,6 +3315,7 @@
     "useDriverStatsCache",
     "useDrivers",
     "useEffect",
+    "useEffectiveMapProvider",
     "useEvaluateDriver",
     "useEvaluateDriverOnAssignment",
     "useEventTypes",
@@ -3384,6 +3414,7 @@
     "useSystemHealthExpanded",
     "useTestNotification",
     "useTheme",
+    "useTilesProvider",
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
@@ -3422,6 +3453,7 @@
     "useAlertSelection",
     "useAlertSettings",
     "useAlertsRealtime",
+    "useAllowedMapProviders",
     "useAnalyticsData",
     "useAnnounce",
     "useApprovalActions",
@@ -3469,6 +3501,7 @@
     "useDriverMetrics",
     "useDriverStatsCache",
     "useDrivers",
+    "useEffectiveMapProvider",
     "useEvaluateDriver",
     "useEvaluateDriverOnAssignment",
     "useEventTypes",
@@ -3553,6 +3586,7 @@
     "useSystemHealthExpanded",
     "useTestNotification",
     "useTheme",
+    "useTilesProvider",
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
@@ -3595,6 +3629,7 @@
     "drivers",
     "feature_flags",
     "geo_blocks",
+    "geo_settings",
     "hourly_metrics_cache",
     "ip_whitelist",
     "lalamove_orders",
@@ -3671,7 +3706,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 272
+   "arquivos_puxados": 273
   }
  ],
  "menu": [

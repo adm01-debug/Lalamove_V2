@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ad0ba323ec` · branch `main` · 2026-11-21 22:55 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e0ebbdb1ca` · branch `main` · 2026-11-21 23:01 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -20,8 +20,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `saved_filters` | Users can delete own filters | DELETE | public | permissive | `auth.uid() = user_id` |  |
 | `system_logs` | system_logs_select | SELECT | public | permissive | `auth.uid() IS NOT NULL` |  |
 | `system_logs` | system_logs_insert | INSERT | public | permissive |  | `true` |
-| `audit_log` | audit_log_select | SELECT | public | permissive | `auth.uid() IS NOT NULL` |  |
-| `audit_log` | audit_log_insert | INSERT | public | permissive |  | `true` |
 | `job_queue` | Admin can view all jobs | SELECT | public | permissive | `auth.role() = 'authenticated'` |  |
 | `job_queue` | Service role can manage jobs | ALL | public | permissive | `auth.role() = 'service_role'` |  |
 | `job_queue` | Users can view their own jobs | SELECT | public | permissive | `auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )` |  |
@@ -224,6 +222,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_roles` | Authenticated users can update roles | UPDATE | authenticated | permissive | `true` |  |
 | `user_roles` | Service role full access user_roles | ALL | service_role | permissive | `true` | `true` |
 | `query_telemetry` | System can insert telemetry | INSERT | authenticated | permissive |  | `has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())` |
+| `audit_log` | audit_log_select | SELECT | public | permissive | `auth.uid() IS NOT NULL` |  |
+| `audit_log` | audit_log_insert | INSERT | public | permissive |  | `true` |
 | `lalamove_webhook_config` | Admins manage webhook config | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role)` | `public.has_role(auth.uid(), 'admin'::app_role)` |
 | `bitrix24_spa_sync` | Admin manager view spa sync | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)` |  |
 | `job_queue` | Service role full access | ALL | service_role | permissive | `true` | `true` |
@@ -438,7 +438,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `system_logs` | `user_id` | FK → users.id |
 | `system_logs` | `created_at` | default now() |
 | `audit_log` | `id` | PK; default gen_random_uuid() |
-| `audit_log` | `user_id` | FK → users.id |
+| `audit_log` | `user_id` | FK → users.id ON DELETE SET NULL |
 | `audit_log` | `action` | obrigatório |
 | `audit_log` | `resource_type` | obrigatório |
 | `audit_log` | `resource_id` | obrigatório |
@@ -818,6 +818,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GeoProviderName | mapbox \| google | `src/hooks/useGeoAdmin.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization | `src/hooks/useGeoAdmin.ts` |
 | FleetKind | favorites \| blocked | `src/hooks/useLalamoveUapi.ts` |
+| TilesProvider | mapbox \| google \| off | `src/hooks/useMapProviderPolicy.ts` |
 | MarkerDensity | comfortable \| compact | `src/hooks/useMapSettings.ts` |
 | MapProvider | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d | `src/hooks/useMapSettings.ts` |
 | AppRole | admin \| manager \| operator \| viewer | `src/hooks/usePermissions.ts` |
@@ -1366,6 +1367,9 @@ _nenhum item encontrado_
 | `v_end date := (date_trunc('month', p_month) + interval '1 month')::date;` | `supabase/migrations/20260712200453_da8e70b1-bf6a-4701-bb64-4a4c09f9c849.sql` |
 | `v_end date := (date_trunc('month', p_month) + interval '1 month')::date;` | `supabase/migrations/20260715175652_9eec973e-6015-436e-aa33-91be0a504eb6.sql` |
 | `AND a.created_at > now() - interval '24 hours'` | `supabase/migrations/20261121193000_fix_escalation_pipeline.sql` |
+| `AND (t.route_computed_at IS NULL OR t.route_computed_at < now() - interval '5 minutes')` | `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` |
+| `AND t.last_updated > now() - interval '2 hours'` | `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` |
+| `OR t.route_computed_at < now() - interval '30 minutes'` | `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` |
 
 ### H.3 Limites de paginação
 
@@ -1744,7 +1748,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (848 testes em 70 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (852 testes em 71 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1812,6 +1816,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useDashboardStats.test.ts` | 4 | useDashboardStats · deve retornar stats padrão quando supabase retorna zeros · deve calcular onTimeRate corretamente com dados de entrega · deve consultar 7 queries do supabase |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
+| `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |

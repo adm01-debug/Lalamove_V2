@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 98,
+ "total": 99,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1622,6 +1622,31 @@
    "coberto_por_testes": 1
   },
   {
+   "arquivo": "src/hooks/useMapProviderPolicy.ts",
+   "hooks_exportados": [
+    "useAllowedMapProviders",
+    "useEffectiveMapProvider",
+    "useTilesProvider"
+   ],
+   "linhas": 67,
+   "dominio": "hooks",
+   "tabelas": [
+    "geo_settings"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useMapSettings"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/map/LiveMap.tsx",
+    "src/components/map/MapProviderSelector.tsx"
+   ],
+   "coberto_por_testes": 1
+  },
+  {
    "arquivo": "src/hooks/useMapSettings.ts",
    "hooks_exportados": [
     "useMapSettings"
@@ -1635,11 +1660,12 @@
    "edges": [],
    "hooks_internos": [],
    "canais_realtime": [],
-   "usado_por": 3,
+   "usado_por": 4,
    "usado_por_arquivos": [
     "src/components/map/LiveMap.tsx",
     "src/components/map/MapProviderSelector.tsx",
-    "src/components/map/MapSettingsPanel.tsx"
+    "src/components/map/MapSettingsPanel.tsx",
+    "src/hooks/useMapProviderPolicy.ts"
    ],
    "coberto_por_testes": 2
   },

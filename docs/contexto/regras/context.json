@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ad0ba323ec44b3bf76065eaed0c8f260e18de18b",
+  "sha": "e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 22:55 UTC",
-  "files_total": 946,
-  "code_files": 776,
-  "code_lines": 133749
+  "generated_at": "2026-11-21 23:01 UTC",
+  "files_total": 950,
+  "code_files": 780,
+  "code_lines": 133995
  },
  "version": "1.3.2",
- "facts_hash": "ff51b2c913ac8d38",
+ "facts_hash": "c59f6bca8f240ef0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,9 +179,9 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 256,
+   ".ts": 258,
    ".tsx": 226,
-   ".sql": 174,
+   ".sql": 176,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -2893,67 +2893,67 @@
       "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "user_id",
-      "type": "UUID REFERENCES auth.users(id)",
-      "fk": "users.id",
+      "type": "UUID REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "action",
       "type": "TEXT NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "resource_type",
       "type": "TEXT NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "resource_id",
       "type": "UUID NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "changes",
       "type": "JSONB",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "ip_address",
       "type": "TEXT",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "user_agent",
       "type": "TEXT",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      },
      {
       "name": "created_at",
       "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226000002_create_audit_log.sql"
+      "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql",
     "comment": "Registro de auditoria de ações",
     "origin": "migration"
    },
@@ -8418,26 +8418,6 @@
     "src": "supabase/migrations/20251226000001_create_system_logs.sql"
    },
    {
-    "name": "audit_log_select",
-    "table": "audit_log",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() IS NOT NULL",
-    "check": "",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql"
-   },
-   {
-    "name": "audit_log_insert",
-    "table": "audit_log",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "true",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql"
-   },
-   {
     "name": "Admin can view all jobs",
     "table": "job_queue",
     "cmd": "SELECT",
@@ -10458,6 +10438,26 @@
     "src": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql"
    },
    {
+    "name": "audit_log_select",
+    "table": "audit_log",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() IS NOT NULL",
+    "check": "",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "name": "audit_log_insert",
+    "table": "audit_log",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "true",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
     "name": "Admins manage webhook config",
     "table": "lalamove_webhook_config",
     "cmd": "ALL",
@@ -10977,10 +10977,10 @@
     "args": "p_action TEXT, p_resource_type TEXT, p_resource_id UUID, p_changes JSONB DEFAULT NULL",
     "returns": "void",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "BEGIN INSERT INTO audit_log ( user_id, action, resource_type, resource_id, changes ) VALUES ( auth.uid(), p_action, p_resource_type, p_resource_id, p_changes ); END;",
+    "search_path": true,
+    "body": "BEGIN INSERT INTO public.audit_log (user_id, action, resource_type, resource_id, changes) VALUES (auth.uid(), p_action, p_resource_type, p_resource_id, p_changes); END;",
     "raises": [],
     "tables": [
      "audit_log"
@@ -11934,6 +11934,20 @@
      "user_roles"
     ]
    },
+   "refresh_geo_jobs": {
+    "args": "",
+    "returns": "TABLE(enqueued_eta integer, enqueued_route integer)",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_eta integer := 0; v_route integer := 0; v_slot text := to_char(now(), 'YYYYMMDDHH24') || '_' || (floor(extract(minute from now()) / 5)::int); r RECORD; BEGIN FOR r IN SELECT t.id FROM active_tracking t WHERE t.tracking_status = 'ACTIVE' AND t.current_latitude IS NOT NULL AND t.current_longitude IS NOT NULL AND t.last_updated > now() - interval '2 hours' LOOP IF add_job( p_type => 'eta_refresh', p_payload => jsonb_build_object('trackingId', r.id), p_priority => 6, p_max_attempts => 2, p_dedup_key => 'eta:' || r.id::text || ':' || v_slot ) IS NOT NULL THEN v_eta := v_eta + 1; END IF; END LOOP; FOR r IN SELECT t.id FROM active_tracking t WHERE t.tracking_status = 'ACTIVE' AND t.curren …",
+    "raises": [],
+    "tables": [
+     "active_tracking",
+     "now"
+    ]
+   },
    "geo_usage_increment": {
     "args": "p_provider text, p_function text, p_sku text, p_count integer DEFAULT 1",
     "returns": "void",
@@ -12103,17 +12117,6 @@
     "tables": []
    },
    "mcp_exec_many": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
-   },
-   "refresh_geo_jobs": {
     "args": "",
     "returns": "?",
     "lang": "",
@@ -13859,6 +13862,30 @@
     "src": "supabase/migrations/20260726183530_dba04ac0-388f-4e70-972f-15110f056791.sql"
    },
    {
+    "name": "audit_log_user_id_idx",
+    "table": "audit_log",
+    "columns": "user_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "name": "audit_log_resource_idx",
+    "table": "audit_log",
+    "columns": "resource_type, resource_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "name": "audit_log_created_at_idx",
+    "table": "audit_log",
+    "columns": "created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
     "name": "idx_driver_stats_cache_driver_id",
     "table": "driver_stats_cache",
     "columns": "driver_id",
@@ -14047,6 +14074,12 @@
     "schedule": "45 3 * * *",
     "body": "SELECT public.cleanup_old_audit_logs();",
     "src": "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql"
+   },
+   {
+    "job": "geo-jobs-refresh",
+    "schedule": "1-59/5 * * * *",
+    "body": "SELECT public.refresh_geo_jobs();",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
    }
   ],
   "views": {
@@ -14251,7 +14284,9 @@
    "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql",
    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
    "supabase/migrations/20261121100000_add_table_comments.sql",
+   "supabase/migrations/20261121192500_restore_audit_log.sql",
    "supabase/migrations/20261121193000_fix_escalation_pipeline.sql",
+   "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
    "supabase/migrations/20261122120000_baseline_order_status_values.sql",
    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
@@ -16211,6 +16246,38 @@
     "src": "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+   },
+   {
     "kind": "grant",
     "privs": "select",
     "object": "driver_stats_cache",
@@ -16683,6 +16750,7 @@
      "driver_incidents",
      "drivers",
      "feature_flags",
+     "geo_settings",
      "lalamove_orders",
      "map_settings_overrides",
      "tracking_events"
@@ -16696,7 +16764,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 89
+    "deps_count": 90
    },
    {
     "path": "",
@@ -16862,6 +16930,7 @@
     "component": "LiveMapPage",
     "tables_transitive": [
      "feature_flags",
+     "geo_settings",
      "map_settings_overrides",
      "tracking_events"
     ],
@@ -16870,7 +16939,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 39
+    "deps_count": 40
    },
    {
     "path": "",
@@ -19307,6 +19376,18 @@
     "file": "src/hooks/useMFA.ts"
    },
    {
+    "name": "useTilesProvider",
+    "file": "src/hooks/useMapProviderPolicy.ts"
+   },
+   {
+    "name": "useAllowedMapProviders",
+    "file": "src/hooks/useMapProviderPolicy.ts"
+   },
+   {
+    "name": "useEffectiveMapProvider",
+    "file": "src/hooks/useMapProviderPolicy.ts"
+   },
+   {
     "name": "useMapSettings",
     "file": "src/hooks/useMapSettings.ts"
    },
@@ -20182,7 +20263,7 @@
   {
    "module": "src/components",
    "files": 148,
-   "lines": 26983,
+   "lines": 26988,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20360,8 +20441,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 105,
-   "lines": 17739,
+   "files": 107,
+   "lines": 17827,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -20528,6 +20609,7 @@
     "src/hooks/useLalamoveUapi.ts",
     "src/hooks/useLoginLockout.ts",
     "src/hooks/useMFA.ts",
+    "src/hooks/useMapProviderPolicy.ts",
     "src/hooks/useMapSettings.ts",
     "src/hooks/useMapbox.ts",
     "src/hooks/useMetrics.ts",
@@ -20556,8 +20638,7 @@
     "src/hooks/useSystemHealth.ts",
     "src/hooks/useSystemHealthExpanded.ts",
     "src/hooks/useTestNotification.ts",
-    "src/hooks/useTheme.ts",
-    "src/hooks/useTrackingHistory.ts"
+    "src/hooks/useTheme.ts"
    ]
   },
   {
@@ -21096,8 +21177,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 170,
-   "lines": 11616,
+   "files": 172,
+   "lines": 11769,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21559,6 +21640,7 @@
      "src/hooks/useGeoAdmin.ts"
     ],
     "select": [
+     "src/hooks/useMapProviderPolicy.ts",
      "supabase/functions/geo-gateway/index.ts"
     ]
    },
@@ -23448,6 +23530,11 @@
     "file": "src/hooks/useLalamoveUapi.ts",
     "name": "FleetKind",
     "values": "favorites | blocked"
+   },
+   {
+    "file": "src/hooks/useMapProviderPolicy.ts",
+    "name": "TilesProvider",
+    "values": "mapbox | google | off"
    },
    {
     "file": "src/hooks/useMapSettings.ts",
@@ -26817,7 +26904,7 @@
    {
     "table": "audit_log",
     "column": "user_id",
-    "rule": "FK → users.id"
+    "rule": "FK → users.id ON DELETE SET NULL"
    },
    {
     "table": "audit_log",
@@ -33247,6 +33334,18 @@
    {
     "file": "supabase/migrations/20261121193000_fix_escalation_pipeline.sql",
     "line": "AND a.created_at > now() - interval '24 hours'"
+   },
+   {
+    "file": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    "line": "AND (t.route_computed_at IS NULL OR t.route_computed_at < now() - interval '5 minutes')"
+   },
+   {
+    "file": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    "line": "AND t.last_updated > now() - interval '2 hours'"
+   },
+   {
+    "file": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    "line": "OR t.route_computed_at < now() - interval '30 minutes'"
    }
   ],
   "percents": [
@@ -35039,6 +35138,22 @@
    {
     "file": "src/hooks/__tests__/useLoginLockout.test.ts",
     "name": "deve simular 150 respostas progressivas de brute force"
+   },
+   {
+    "file": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+    "name": "allowedProvidersFor"
+   },
+   {
+    "file": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+    "name": "libera tudo quando a política é off (fail-open)"
+   },
+   {
+    "file": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+    "name": "restrito a mapbox mantém raster gratuito e tira Google"
+   },
+   {
+    "file": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+    "name": "restrito a google mantém raster gratuito e tira Mapbox"
    },
    {
     "file": "src/hooks/__tests__/useMapSettings.test.ts",
@@ -37237,26 +37352,6 @@
     "src": "supabase/migrations/20251226000001_create_system_logs.sql"
    },
    {
-    "name": "audit_log_select",
-    "table": "audit_log",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.uid() IS NOT NULL",
-    "check": "",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql"
-   },
-   {
-    "name": "audit_log_insert",
-    "table": "audit_log",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "true",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql"
-   },
-   {
     "name": "Admin can view all jobs",
     "table": "job_queue",
     "cmd": "SELECT",
@@ -39277,6 +39372,26 @@
     "src": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql"
    },
    {
+    "name": "audit_log_select",
+    "table": "audit_log",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "auth.uid() IS NOT NULL",
+    "check": "",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "name": "audit_log_insert",
+    "table": "audit_log",
+    "cmd": "INSERT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "",
+    "check": "true",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
     "name": "Admins manage webhook config",
     "table": "lalamove_webhook_config",
     "cmd": "ALL",
@@ -39796,10 +39911,10 @@
     "args": "p_action TEXT, p_resource_type TEXT, p_resource_id UUID, p_changes JSONB DEFAULT NULL",
     "returns": "void",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226000002_create_audit_log.sql",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "BEGIN INSERT INTO audit_log ( user_id, action, resource_type, resource_id, changes ) VALUES ( auth.uid(), p_action, p_resource_type, p_resource_id, p_changes ); END;",
+    "search_path": true,
+    "body": "BEGIN INSERT INTO public.audit_log (user_id, action, resource_type, resource_id, changes) VALUES (auth.uid(), p_action, p_resource_type, p_resource_id, p_changes); END;",
     "raises": [],
     "tables": [
      "audit_log"
@@ -40753,6 +40868,20 @@
      "user_roles"
     ]
    },
+   "refresh_geo_jobs": {
+    "args": "",
+    "returns": "TABLE(enqueued_eta integer, enqueued_route integer)",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_eta integer := 0; v_route integer := 0; v_slot text := to_char(now(), 'YYYYMMDDHH24') || '_' || (floor(extract(minute from now()) / 5)::int); r RECORD; BEGIN FOR r IN SELECT t.id FROM active_tracking t WHERE t.tracking_status = 'ACTIVE' AND t.current_latitude IS NOT NULL AND t.current_longitude IS NOT NULL AND t.last_updated > now() - interval '2 hours' LOOP IF add_job( p_type => 'eta_refresh', p_payload => jsonb_build_object('trackingId', r.id), p_priority => 6, p_max_attempts => 2, p_dedup_key => 'eta:' || r.id::text || ':' || v_slot ) IS NOT NULL THEN v_eta := v_eta + 1; END IF; END LOOP; FOR r IN SELECT t.id FROM active_tracking t WHERE t.tracking_status = 'ACTIVE' AND t.curren …",
+    "raises": [],
+    "tables": [
+     "active_tracking",
+     "now"
+    ]
+   },
    "geo_usage_increment": {
     "args": "p_provider text, p_function text, p_sku text, p_count integer DEFAULT 1",
     "returns": "void",
@@ -40922,17 +41051,6 @@
     "tables": []
    },
    "mcp_exec_many": {
-    "args": "",
-    "returns": "?",
-    "lang": "",
-    "src": "src/integrations/supabase/types.ts",
-    "security_definer": false,
-    "search_path": false,
-    "body": "",
-    "raises": [],
-    "tables": []
-   },
-   "refresh_geo_jobs": {
     "args": "",
     "returns": "?",
     "lang": "",
@@ -43493,7 +43611,8 @@
     "table": "geo_settings",
     "issue": "RLS ligado sem nenhuma política → só service_role acessa",
     "files": [
-     "src/hooks/useGeoAdmin.ts"
+     "src/hooks/useGeoAdmin.ts",
+     "src/hooks/useMapProviderPolicy.ts"
     ]
    },
    {
@@ -43622,6 +43741,8 @@
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
    "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
+   "supabase/migrations/20261121192500_restore_audit_log.sql",
+   "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
    "supabase/migrations/20261122120200_job_queue_system.sql",
    "supabase/migrations/20261122130100_geo_foundation.sql",
@@ -43677,6 +43798,7 @@
    "record_failed_login",
    "record_failed_login_v2",
    "refresh_cache_view",
+   "refresh_geo_jobs",
    "resume_cron_job",
    "rollup_contract_version_usage",
    "run_daily_cleanup",
@@ -45568,6 +45690,38 @@
     "src": "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "create_audit_log",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261121192500_restore_audit_log.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_geo_jobs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+   },
+   {
     "kind": "grant",
     "privs": "select",
     "object": "driver_stats_cache",
@@ -47448,7 +47602,8 @@
     "kind": "rls",
     "msg": "`geo_settings`: RLS ligado sem nenhuma política → só service_role acessa",
     "where": [
-     "src/hooks/useGeoAdmin.ts"
+     "src/hooks/useGeoAdmin.ts",
+     "src/hooks/useMapProviderPolicy.ts"
     ]
    },
    {
@@ -47598,13 +47753,6 @@
     "msg": "função `cleanup_old_system_logs` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
     "where": [
      "supabase/migrations/20251226000001_create_system_logs.sql"
-    ]
-   },
-   {
-    "kind": "segurança",
-    "msg": "função `create_audit_log` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
-    "where": [
-     "supabase/migrations/20251226000002_create_audit_log.sql"
     ]
    },
    {
@@ -53253,7 +53401,7 @@
   },
   "src/components/map/LiveMap.tsx": {
    "path": "src/components/map/LiveMap.tsx",
-   "lines": 608,
+   "lines": 611,
    "exports": [
     "function LiveMap"
    ],
@@ -53341,7 +53489,7 @@
   },
   "src/components/map/MapProviderSelector.tsx": {
    "path": "src/components/map/MapProviderSelector.tsx",
-   "lines": 149,
+   "lines": 151,
    "exports": [
     "function MapProviderSelector"
    ]
@@ -57716,6 +57864,41 @@
     "useMFA"
    ]
   },
+  "src/hooks/useMapProviderPolicy.ts": {
+   "path": "src/hooks/useMapProviderPolicy.ts",
+   "lines": 67,
+   "exports": [
+    "const PROVIDER_FAMILY",
+    "type TilesProvider",
+    "function useTilesProvider",
+    "function allowedProvidersFor",
+    "function useAllowedMapProviders",
+    "function useEffectiveMapProvider"
+   ],
+   "tables": [
+    {
+     "table": "geo_settings",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "geo_settings": [
+     "function",
+     "provider"
+    ]
+   },
+   "enums": [
+    {
+     "name": "TilesProvider",
+     "values": "mapbox | google | off"
+    }
+   ],
+   "hooks": [
+    "useTilesProvider",
+    "useAllowedMapProviders",
+    "useEffectiveMapProvider"
+   ]
+  },
   "src/hooks/useMapSettings.ts": {
    "path": "src/hooks/useMapSettings.ts",
    "lines": 130,
@@ -59738,6 +59921,17 @@
     "deve formatar tempo restante corretamente (cenários base)",
     "deve simular 600 cenários de formatação sem falhar",
     "deve simular 150 respostas progressivas de brute force"
+   ]
+  },
+  "src/hooks/__tests__/useMapProviderPolicy.test.ts": {
+   "path": "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+   "lines": 21,
+   "is_test": true,
+   "tests": [
+    "allowedProvidersFor",
+    "libera tudo quando a política é off (fail-open)",
+    "restrito a mapbox mantém raster gratuito e tira Google",
+    "restrito a google mantém raster gratuito e tira Mapbox"
    ]
   },
   "src/hooks/__tests__/useMapSettings.test.ts": {
@@ -66326,6 +66520,11 @@
    "path": "supabase/migrations/20261121100000_add_table_comments.sql",
    "lines": 62
   },
+  "supabase/migrations/20261121192500_restore_audit_log.sql": {
+   "path": "supabase/migrations/20261121192500_restore_audit_log.sql",
+   "lines": 63,
+   "uses_service_role": true
+  },
   "supabase/migrations/20261121193000_fix_escalation_pipeline.sql": {
    "path": "supabase/migrations/20261121193000_fix_escalation_pipeline.sql",
    "lines": 61,
@@ -66339,6 +66538,16 @@
     "notify_slack",
     "notify_whatsapp"
    ]
+  },
+  "supabase/migrations/20261121194500_geo_jobs_scheduler.sql": {
+   "path": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+   "lines": 90,
+   "temporal": [
+    "AND (t.route_computed_at IS NULL OR t.route_computed_at < now() - interval '5 minutes')",
+    "AND t.last_updated > now() - interval '2 hours'",
+    "OR t.route_computed_at < now() - interval '30 minutes'"
+   ],
+   "uses_service_role": true
   },
   "supabase/migrations/20261122090000_cache_system_backend.sql": {
    "path": "supabase/migrations/20261122090000_cache_system_backend.sql",
@@ -66393,10 +66602,32 @@
   }
  },
  "git": {
-  "sha": "ad0ba323ec44b3bf76065eaed0c8f260e18de18b",
+  "sha": "e0ebbdb1ca6a248253d4fd13c9993bdc9e5ee680",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e0ebbdb",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)",
+    "files": [
+     "supabase/migrations/20261121192500_restore_audit_log.sql",
+     "supabase/migrations/20261121194500_geo_jobs_scheduler.sql"
+    ]
+   },
+   {
+    "sha": "00e2fb7",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)",
+    "files": [
+     "src/components/map/LiveMap.tsx",
+     "src/components/map/MapProviderSelector.tsx",
+     "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+     "src/hooks/useMapProviderPolicy.ts"
+    ]
+   },
    {
     "sha": "ad0ba32",
     "date": "2026-11-21",
@@ -66700,36 +66931,20 @@
      "src/lib/geo-gateway.ts",
      "src/pages/HeatmapPage.tsx"
     ]
-   },
-   {
-    "sha": "3dd51e4",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: send-notification despacha destinatários ad-hoc em metadata.recipients (#132)",
-    "files": [
-     "supabase/functions/check-driver-alerts/index.ts",
-     "supabase/functions/send-notification/index.ts"
-    ]
-   },
-   {
-    "sha": "4a4ebfc",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(docs): inventário Mapbox e secrets no .env.example (#135)",
-    "files": [
-     ".env.example",
-     "docs/MAPBOX.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
-    6
+    5
    ],
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     3
+   ],
+   [
+    "src/components/map/LiveMap.tsx",
+    2
    ],
    [
     "supabase/functions/lalamove-api/index.ts",
@@ -66764,8 +66979,24 @@
     2
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
-    2
+    "supabase/migrations/20261121192500_restore_audit_log.sql",
+    1
+   ],
+   [
+    "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
+    1
+   ],
+   [
+    "src/components/map/MapProviderSelector.tsx",
+    1
+   ],
+   [
+    "src/hooks/__tests__/useMapProviderPolicy.test.ts",
+    1
+   ],
+   [
+    "src/hooks/useMapProviderPolicy.ts",
+    1
    ],
    [
     "supabase/functions/lalamove-api/coordinates.test.ts",
@@ -66781,26 +67012,6 @@
    ],
    [
     "supabase/functions/geo-gateway/failover.ts",
-    1
-   ],
-   [
-    "src/hooks/useMapbox.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/schemas.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/types.ts",
     1
    ]
   ]

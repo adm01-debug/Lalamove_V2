@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ad0ba323ec` · branch `main` · 2026-11-21 22:55 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e0ebbdb1ca` · branch `main` · 2026-11-21 23:01 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -123,6 +123,7 @@
 | `GeoProviderName` (TS) | mapbox \| google |  | `src/hooks/useGeoAdmin.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization |  | `src/hooks/useGeoAdmin.ts` |
 | `FleetKind` (TS) | favorites \| blocked |  | `src/hooks/useLalamoveUapi.ts` |
+| `TilesProvider` (TS) | mapbox \| google \| off |  | `src/hooks/useMapProviderPolicy.ts` |
 | `MarkerDensity` (TS) | comfortable \| compact |  | `src/hooks/useMapSettings.ts` |
 | `MapProvider` (TS) | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d |  | `src/hooks/useMapSettings.ts` |
 | `AppRole` (TS) | admin \| manager \| operator \| viewer |  | `src/hooks/usePermissions.ts` |
@@ -231,7 +232,7 @@ _nenhum item encontrado_
 | rls | `geo_budget`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_cache`: RLS ligado sem nenhuma política → só service_role acessa |  |
 | rls | `geo_price_list`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
-| rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
+| rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useMapProviderPolicy.ts` |
 | rls | `geo_usage_month`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |
 | rls | `hourly_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | edge | edge function `edge` invocada mas não existe em supabase/functions/ | `scripts/inventario/gerar-rotas.mjs` |
@@ -253,7 +254,6 @@ _nenhum item encontrado_
 | dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-companies/index.ts` |
 | dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-db-bridge/index.ts` |
 | segurança | função `cleanup_old_system_logs` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226000001_create_system_logs.sql` |
-| segurança | função `create_audit_log` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226000002_create_audit_log.sql` |
 | segurança | função `process_job_queue` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `get_cron_jobs_status` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `pause_cron_job` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |

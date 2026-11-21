@@ -510,6 +510,7 @@
    "src/components/map/types.ts",
    "src/components/ui/button.tsx",
    "src/components/ui/dropdown-menu.tsx",
+   "src/hooks/useMapProviderPolicy.ts",
    "src/hooks/useMapSettings.ts",
    "src/hooks/useTrackingHistory.ts",
    "src/lib/geo-gateway.ts"
@@ -533,6 +534,7 @@
   "src/components/map/MapProviderSelector.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/dropdown-menu.tsx",
+   "src/hooks/useMapProviderPolicy.ts",
    "src/hooks/useMapSettings.ts"
   ],
   "src/components/map/MapSearchPanel.tsx": [
@@ -1089,6 +1091,10 @@
   ],
   "src/hooks/useMFA.ts": [
    "src/hooks/useAuth.tsx",
+   "src/integrations/supabase/client.ts"
+  ],
+  "src/hooks/useMapProviderPolicy.ts": [
+   "src/hooks/useMapSettings.ts",
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useMapSettings.ts": [

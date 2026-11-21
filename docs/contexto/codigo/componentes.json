@@ -845,9 +845,10 @@
     "LiveMap"
    ],
    "export_default": null,
-   "linhas": 608,
+   "linhas": 611,
    "dominio": "components/map",
    "hooks_locais": [
+    "useEffectiveMapProvider",
     "useMapAlerts",
     "useMapMarkers",
     "useMapSettings",
@@ -908,9 +909,10 @@
     "MapProviderSelector"
    ],
    "export_default": null,
-   "linhas": 149,
+   "linhas": 151,
    "dominio": "components/map",
    "hooks_locais": [
+    "useEffectiveMapProvider",
     "useMapSettings"
    ],
    "tabelas": [],

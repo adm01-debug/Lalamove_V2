@@ -11,7 +11,7 @@
    "src/hooks (3)"
   ],
   "hooks": [
-   "src/hooks (83)",
+   "src/hooks (84)",
    "src/components (12)",
    "scripts/ai-context (1)"
   ],
@@ -22,7 +22,7 @@
   ],
   "testes": [
    "guards em scripts/ (46)",
-   "co-localizado (__tests__) (41)",
+   "co-localizado (__tests__) (42)",
    "supabase/functions/<edge> (10)"
   ],
   "edge_functions": "supabase/functions",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)",
+   "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)",
    "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)",
    "feat: failover de provedor em runtime no geo-gateway (#175)",
-   "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)",
-   "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)",
-   "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)"
+   "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

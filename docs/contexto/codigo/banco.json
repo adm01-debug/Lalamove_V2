@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 170,
+ "migrations": 172,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -196,6 +196,7 @@
   "refresh_all_cache_views",
   "refresh_all_caches",
   "refresh_cache_view",
+  "refresh_geo_jobs",
   "resume_cron_job",
   "rollup_contract_version_usage",
   "run_daily_cleanup",
@@ -490,6 +491,11 @@
    "nome": "geo-cache-prune",
    "agenda": "15 3 * * *",
    "migration": "20261122130100_geo_foundation.sql"
+  },
+  {
+   "nome": "geo-jobs-refresh",
+   "agenda": "1-59/5 * * * *",
+   "migration": "20261121194500_geo_jobs_scheduler.sql"
   },
   {
    "nome": "process-job-queue",
@@ -5177,7 +5183,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 1,
+   "usada_no_front": 2,
    "usada_em_edges": [
     "geo-gateway"
    ],
