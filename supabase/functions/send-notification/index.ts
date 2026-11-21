@@ -29,6 +29,12 @@ function isServiceRoleCaller(req: Request): boolean {
   } catch { return false; }
 }
 
+/** Arredonda o resultado de um envio para o status persistido em `order_geo_events`. */
+function geoDeliveryStatus(results: Array<{ success: boolean }>): string {
+  if (results.length === 0) return "no_recipient";
+  return results.some(r => r.success) ? "sent" : "failed";
+}
+
 interface NotificationRequest {
   alert_id: string;
   type: string;
@@ -104,6 +110,7 @@ serve(async (req) => {
         const claim = Array.isArray(dedupRows) ? dedupRows[0] : dedupRows;
         if (claim && claim.should_send === false) {
           logger.log(`[Notification] Suppressed by dedup: ${dedupKey} (x${claim.occurrence_count})`);
+          await recordGeoEventStatus(supabase, metadata, "skipped");
           return new Response(
             JSON.stringify({
               success: true,
@@ -192,6 +199,11 @@ serve(async (req) => {
           continue;
         }
         await dispatch(channel, (r as { to: string }).to);
+      } else if (r && typeof r === 'object') {
+        // Sem `to` (o trigger geo grava `to: null` quando o pedido não tem
+        // telefone de contato): não há como enviar, mas o descarte precisa ser
+        // visível — antes ele era silencioso e o alerta morria sem rastro.
+        logger.log(`[Notification] Ad-hoc recipient ignored (no destination): ${JSON.stringify(r)}`);
       }
     }
 
@@ -201,6 +213,7 @@ serve(async (req) => {
       logger.log(`[Notification] No active configurations for: ${type}`);
       const successCount = results.filter(r => r.success).length;
       const failCount = results.filter(r => !r.success).length;
+      await recordGeoEventStatus(supabase, metadata, geoDeliveryStatus(results));
       return new Response(
         JSON.stringify({ success: true, message: 'No notification channels configured', results, summary: { sent: successCount, failed: failCount } }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -314,6 +327,8 @@ serve(async (req) => {
 
     logger.log(`[Notification] Done: ${successCount} sent, ${failCount} failed`);
 
+    await recordGeoEventStatus(supabase, metadata, geoDeliveryStatus(results));
+
     return new Response(
       JSON.stringify({ success: true, escalation: isEscalation, results, summary: { sent: successCount, failed: failCount } }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -328,6 +343,29 @@ serve(async (req) => {
     );
   }
 });
+
+// Contrato com o trigger geo (`geo_emit_event`): o evento nasce com
+// `notification_status='queued'` e nada o atualizava — ficava "queued" para
+// sempre, mesmo depois de o send-notification rodar. Fechamos o ciclo aqui,
+// só quando o chamador informou `geo_event_id` no metadata (caminho do trigger).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function recordGeoEventStatus(
+  supabase: any,
+  metadata: Record<string, unknown> | null | undefined,
+  status: string
+): Promise<void> {
+  const geoEventId = metadata?.geo_event_id;
+  if (typeof geoEventId !== "string") return;
+  try {
+    await supabase
+      .from("order_geo_events")
+      .update({ notification_status: status, notified_at: new Date().toISOString() })
+      .eq("id", geoEventId)
+      .eq("notification_status", "queued");
+  } catch (e) {
+    logger.error("Failed to update order_geo_events status:", e);
+  }
+}
 
 // Record notification in DB - using any for supabase client to avoid type conflicts
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
