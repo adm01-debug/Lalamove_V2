@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2847da147563834643a670fa89f955f8ee0e091b` (2026-11-21T20:24:38-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e6683cbe9eb79195bfce8d9ab644c4f42333c5e` (2026-11-21T20:41:34-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (492), SQL (179), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (492), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 968 |
+| arquivos_total | 969 |
 | arquivos_codigo | 603 |
 | linhas_codigo | 117741 |
 | rotas | 55 |
@@ -47,8 +47,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 88 |
-| migrations | 175 |
-| cron_jobs | 20 |
+| migrations | 176 |
+| cron_jobs | 21 |
 | testes | 117 |
 | workflows | 5 |
 | scripts | 105 |
@@ -227,6 +227,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `process-job-queue` * * * * * → edge escalate-alerts (20251226010001_configure_pg_cron.sql)
 - `provision-tracking-partitions` 5 0 1 * * (20260711192431_6df39da5-eab7-41bd-8d4e-f6f7ad4e777e.sql)
 - `prune-tracking-partitions` 20 0 2 * * (20260711192632_782b3feb-4233-4a31-85ae-def6a74cec82.sql)
+- `refresh-cache-views` 3 * * * * (20261123110000_cron_refresh_cache_views.sql)
 - `refresh-delivery-hourly-stats` 5 * * * * (20251226020000_create_materialized_views_cache.sql)
 - `refresh-delivery-metrics-cache` */30 * * * * (20251226000004_create_cache_views.sql)
 - `refresh-driver-stats-cache` */15 * * * * (20251226020000_create_materialized_views_cache.sql)
@@ -271,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7465 nós · 15873 arestas · 555 comunidades · grafo do commit `2847da14`
+- 7466 nós · 15873 arestas · 556 comunidades · grafo do commit `3e6683cb`
 - comunidades maiores: cn (181), card.tsx (149), RateLimitDashboardPage.tsx (140), snapshot.py (102), react (99), ref_node_url (97), lucide-react (92), dependencies (80), gerar.mjs (76), client.ts (73), package.json (72), seed-database.ts (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), internalLogger() (supabase/functions/job-worker/index.ts)
 
@@ -368,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `3e6683c` infra: cron horario de refresh das materialized views de cache (#180)
 - 2026-11-21 `2847da1` fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)
 - 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
 - 2026-11-21 `554e68b` ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)
@@ -382,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `fe9865a` docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)
 - 2026-11-21 `99e0b43` feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)
 - 2026-11-21 `658445d` docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)
-- 2026-11-21 `023202f` fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

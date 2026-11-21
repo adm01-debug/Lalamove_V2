@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "2847da147563834643a670fa89f955f8ee0e091b",
+  "commit": "3e6683cbe9eb79195bfce8d9ab644c4f42333c5e",
   "branch": "main",
-  "data_commit": "2026-11-21T20:24:38-03:00",
+  "data_commit": "2026-11-21T20:41:34-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3e6683c",
+    "data": "2026-11-21",
+    "assunto": "infra: cron horario de refresh das materialized views de cache (#180)"
+   },
    {
     "sha": "2847da1",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "1363db8",
     "data": "2026-11-21",
     "assunto": "docs(banco): atualiza status de rotação de segredos (service_role já rotacionada) (#147)"
-   },
-   {
-    "sha": "bc48a46",
-    "data": "2026-11-21",
-    "assunto": "feat(orders): migra autocomplete de endereço para Mapbox Search Box (#150)"
    }
   ],
-  "arquivos_mudados_7d": 192,
+  "arquivos_mudados_7d": 193,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 89
+    "commits": 90
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 968,
+  "arquivos_total": 969,
   "arquivos_codigo": 603,
   "linhas_codigo": 117741,
   "rotas": 55,
@@ -322,8 +322,8 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 175,
-  "cron_jobs": 20,
+  "migrations": 176,
+  "cron_jobs": 21,
   "testes": 117,
   "workflows": 5,
   "scripts": 105,

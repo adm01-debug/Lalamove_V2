@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2847da147563834643a670fa89f955f8ee0e091b",
+  "sha": "3e6683cbe9eb79195bfce8d9ab644c4f42333c5e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 23:25 UTC",
-  "files_total": 963,
-  "code_files": 791,
-  "code_lines": 136276
+  "generated_at": "2026-11-21 23:41 UTC",
+  "files_total": 964,
+  "code_files": 792,
+  "code_lines": 136300
  },
  "version": "1.3.2",
- "facts_hash": "1c5cfb22da725f3b",
+ "facts_hash": "af9b79de50481260",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   "languages": {
    ".ts": 264,
    ".tsx": 228,
-   ".sql": 179,
+   ".sql": 180,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -14331,6 +14331,7 @@
    "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
    "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
    "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
+   "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -21233,8 +21234,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 175,
-   "lines": 11988,
+   "files": 176,
+   "lines": 12012,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -67958,13 +67959,26 @@
   "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql": {
    "path": "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
    "lines": 45
+  },
+  "supabase/migrations/20261123110000_cron_refresh_cache_views.sql": {
+   "path": "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
+   "lines": 24
   }
  },
  "git": {
-  "sha": "2847da147563834643a670fa89f955f8ee0e091b",
+  "sha": "3e6683cbe9eb79195bfce8d9ab644c4f42333c5e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3e6683c",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "infra: cron horario de refresh das materialized views de cache (#180)",
+    "files": [
+     "supabase/migrations/20261123110000_cron_refresh_cache_views.sql"
+    ]
+   },
    {
     "sha": "2847da1",
     "date": "2026-11-21",
@@ -68307,15 +68321,6 @@
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/migrations/20261122130200_alert_type_driver_assigned.sql"
     ]
-   },
-   {
-    "sha": "73f0813",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "ci(migrations): workflow manual para aplicar migrations na produção pela Management API (#156)",
-    "files": [
-     ".github/workflows/apply-migrations.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -68388,15 +68393,15 @@
     2
    ],
    [
-    ".github/workflows/apply-migrations.yml",
-    2
-   ],
-   [
     "src/components/map/hooks/useMapMarkers.ts",
     2
    ],
    [
     "src/components/orders/AddressAutocomplete.tsx",
+    2
+   ],
+   [
+    "src/pages/LiveMapPage.tsx",
     2
    ]
   ]

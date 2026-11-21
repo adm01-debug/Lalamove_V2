@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 175,
+ "migrations": 176,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -524,6 +524,11 @@
    "nome": "prune-tracking-partitions",
    "agenda": "20 0 2 * *",
    "migration": "20260711192632_782b3feb-4233-4a31-85ae-def6a74cec82.sql"
+  },
+  {
+   "nome": "refresh-cache-views",
+   "agenda": "3 * * * *",
+   "migration": "20261123110000_cron_refresh_cache_views.sql"
   },
   {
    "nome": "refresh-delivery-hourly-stats",
