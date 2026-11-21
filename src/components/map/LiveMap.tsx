@@ -27,6 +27,7 @@ import {
   DropdownMenuLabel
 } from "@/components/ui/dropdown-menu";
 import { useMapSettings } from '@/hooks/useMapSettings';
+import { useEffectiveMapProvider } from '@/hooks/useMapProviderPolicy';
 import { MapSettingsPanel } from './MapSettingsPanel';
 import { type VehicleFilter, type StatusFilter } from './types';
 import { setupMapLayers, applyRasterOverlay, type RasterProvider } from './mapLayers';
@@ -84,7 +85,9 @@ export function LiveMap({
   const VERY_FAR_ZOOM_THRESHOLD = 9.5;
 
 
-  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity, preferredProvider } = useMapSettings();
+  const { offRouteThreshold, stoppedThreshold, geofenceRadius, markerDensity } = useMapSettings();
+  /** Respeita `geo_settings.tiles`: provedor desligado pelo admin não é renderizado. */
+  const { provider: preferredProvider } = useEffectiveMapProvider();
   const isGoogle2D = preferredProvider === 'google-roadmap' || preferredProvider === 'google-hybrid';
   const isGoogle3D = preferredProvider === 'google-3d';
   const isGoogleActive = isGoogle2D || isGoogle3D;
