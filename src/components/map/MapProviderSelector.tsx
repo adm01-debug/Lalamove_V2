@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useMapSettings, type MapProvider } from '@/hooks/useMapSettings';
+import { useEffectiveMapProvider } from '@/hooks/useMapProviderPolicy';
 
 interface ProviderOption {
   id: MapProvider;
@@ -33,8 +34,9 @@ interface MapProviderSelectorProps {
 }
 
 export function MapProviderSelector({ externalCoords, className = '' }: MapProviderSelectorProps) {
-  const provider = useMapSettings((s) => s.preferredProvider);
   const setProvider = useMapSettings((s) => s.setPreferredProvider);
+  const { provider, allowed } = useEffectiveMapProvider();
+  const visibleOptions = OPTIONS.filter((o) => allowed.includes(o.id));
   const current = OPTIONS.find((o) => o.id === provider) ?? OPTIONS[0];
   const CurrentIcon = current.icon;
 
@@ -58,7 +60,7 @@ export function MapProviderSelector({ externalCoords, className = '' }: MapProvi
         <DropdownMenuContent align="end" className="w-64">
           <DropdownMenuLabel>Escolher provider</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {OPTIONS.map((opt) => {
+          {visibleOptions.map((opt) => {
             const Icon = opt.icon;
             return (
               <DropdownMenuItem
