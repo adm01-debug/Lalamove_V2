@@ -65,6 +65,8 @@ export function LiveMapPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [showFilters, setShowFilters] = useState(false);
   const simulationInterval = useRef<NodeJS.Timeout | null>(null);
+  const simulationRunId = useRef(0);
+  const isTogglingRef = useRef(false);
 
   // Kill-switch de produto: quando `realtime_map_updates` está desligada, o mapa
   // cai para polling de 10s em vez de abrir canal Realtime.
@@ -105,6 +107,7 @@ export function LiveMapPage() {
 
   const toggleSimulation = async () => {
     if (isSimulating) {
+      simulationRunId.current += 1;
       if (simulationInterval.current) {
         clearInterval(simulationInterval.current);
         simulationInterval.current = null;
@@ -113,16 +116,24 @@ export function LiveMapPage() {
       toast.info('Simulação pausada');
       return;
     }
+    // isTogglingRef evita que um duplo clique antes da primeira resposta crie dois
+    // intervalos (a pausa só conhece o último salvo em simulationInterval.current,
+    // e o outro fica órfão gravando posições). runId invalida a resposta se o
+    // usuário já saiu do mapa (unmount) ou pausou/clicou de novo nesse meio tempo.
+    if (isTogglingRef.current) return;
+    isTogglingRef.current = true;
+    const runId = ++simulationRunId.current;
     // Espera a primeira chamada antes de anunciar sucesso e armar o intervalo,
     // para não dizer "iniciada" e repetir uma chamada rejeitada (403) a cada 3s.
     const ok = await runSimulation();
-    if (!ok) return;
+    isTogglingRef.current = false;
+    if (!ok || runId !== simulationRunId.current) return;
     simulationInterval.current = setInterval(async () => {
       const stillOk = await runSimulation();
-      if (!stillOk && simulationInterval.current) {
+      if ((!stillOk || runId !== simulationRunId.current) && simulationInterval.current) {
         clearInterval(simulationInterval.current);
         simulationInterval.current = null;
-        setIsSimulating(false);
+        if (runId === simulationRunId.current) setIsSimulating(false);
       }
     }, 3000);
     setIsSimulating(true);
@@ -134,11 +145,13 @@ export function LiveMapPage() {
     fetchDeliveries();
 
     const interval = setInterval(fetchDeliveries, 10000);
-    
+
     return () => {
       clearInterval(interval);
+      simulationRunId.current += 1;
       if (simulationInterval.current) {
         clearInterval(simulationInterval.current);
+        simulationInterval.current = null;
       }
     };
   }, []);
