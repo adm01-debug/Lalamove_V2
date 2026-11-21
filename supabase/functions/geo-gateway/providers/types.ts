@@ -1,0 +1,208 @@
+// Interface comum dos provedores de mapa (Google / Mapbox).
+// Tudo que o front e as outras edges consomem passa por estes tipos — nunca pelo JSON cru do provedor.
+
+export type ProviderName = "google" | "mapbox";
+export type ProviderSetting = ProviderName | "auto" | "off";
+
+export type GeoFunction =
+  | "tiles"
+  | "autocomplete"
+  | "geocode"
+  | "reverse"
+  | "route"
+  | "matrix"
+  | "static"
+  | "snap"
+  | "validate"
+  | "isochrone"
+  | "optimization"
+  | "tilequery";
+
+export interface GeoPoint {
+  lat: number;
+  lng: number;
+}
+
+export type GeoPrecision = "exact" | "high" | "medium" | "low" | "unknown";
+
+export interface GeoSuggestion {
+  id: string; // "<provider>:<id do provedor>"
+  main_text: string;
+  secondary_text: string;
+  type: string;
+  provider: ProviderName;
+}
+
+export interface GeoAddressComponents {
+  street?: string;
+  number?: string;
+  district?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  country?: string;
+}
+
+export interface GeoAddress {
+  formatted: string;
+  place_id: string | null; // "<provider>:<id>"
+  location: GeoPoint | null;
+  routable_point?: GeoPoint | null;
+  components: GeoAddressComponents;
+  precision: GeoPrecision;
+  match_confidence?: string;
+  provider: ProviderName;
+  /** true quando o provedor permite guardar a coordenada (Mapbox permanent / Google) */
+  retainable: boolean;
+}
+
+export interface GeoRouteLeg {
+  distance_m: number;
+  duration_s: number;
+}
+
+export interface GeoRoute {
+  polyline: GeoPoint[];
+  distance_m: number;
+  duration_s: number;
+  duration_traffic_s?: number;
+  legs: GeoRouteLeg[];
+  provider: ProviderName;
+  profile: string;
+}
+
+export interface GeoMatrix {
+  durations_s: (number | null)[][];
+  distances_m: (number | null)[][];
+  provider: ProviderName;
+  profile: string;
+}
+
+export interface GeoStaticImage {
+  image: string; // data URL PNG
+  width: number;
+  height: number;
+  provider: ProviderName;
+}
+
+export interface GeoSnapResult {
+  points: GeoPoint[]; // pontos encaixados na via (mesma ordem da entrada)
+  confidence: number | null;
+  provider: ProviderName;
+}
+
+// ── Requests normalizados (espelham _shared/schemas.ts) ─────────────────────
+
+export interface AutocompleteReq {
+  input: string;
+  session_token?: string;
+  bias?: { lat: number; lng: number; radius_m?: number };
+  country?: string; // ISO-2, default "br"
+  language?: string; // default "pt"
+  limit?: number;
+}
+
+export interface PlaceDetailsReq {
+  place_id: string; // "<provider>:<id>"
+  session_token?: string;
+}
+
+export interface GeocodeReq {
+  address?: string;
+  structured?: {
+    address_line1?: string;
+    postal_code?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  bias?: { lat: number; lng: number };
+  country?: string;
+  language?: string;
+  limit?: number;
+  /** o chamador vai GRAVAR a coordenada → Mapbox usa permanent=true */
+  persist?: boolean;
+}
+
+export interface ReverseReq {
+  lat: number;
+  lng: number;
+  language?: string;
+  persist?: boolean;
+}
+
+export interface RouteReq {
+  origin: GeoPoint;
+  destination: GeoPoint;
+  waypoints?: GeoPoint[];
+  traffic?: boolean;
+  alternatives?: boolean;
+  language?: string;
+}
+
+export interface MatrixReq {
+  origins: GeoPoint[];
+  destinations: GeoPoint[];
+  traffic?: boolean;
+}
+
+export interface StaticReq {
+  width?: number;
+  height?: number;
+  markers?: { lat: number; lng: number; color?: string; label?: string }[];
+  path?: GeoPoint[];
+  center?: GeoPoint;
+  zoom?: number;
+  style?: string;
+}
+
+export interface SnapReq {
+  points: GeoPoint[];
+  timestamps?: number[];
+  radius_m?: number;
+}
+
+export interface ProviderResult<T> {
+  data: T;
+  /** SKU em geo_price_list usado na medição */
+  sku: string;
+  /** unidades cobradas (requisições, elementos, sessões...) — 0 = não contar */
+  units: number;
+  /** o provedor usou um perfil/tier diferente do pedido (ex.: traffic → driving) */
+  downgraded?: string;
+}
+
+export class GeoProviderError extends Error {
+  constructor(
+    public code:
+      | "GEO_NOT_FOUND"
+      | "GEO_NO_ROUTE"
+      | "GEO_INVALID_INPUT"
+      | "GEO_RATE_LIMITED"
+      | "GEO_PROVIDER_ERROR"
+      | "GEO_NOT_SUPPORTED"
+      | "GEO_NOT_CONFIGURED",
+    message: string,
+    public status: number,
+    public retryAfterMs?: number,
+  ) {
+    super(message);
+    this.name = "GeoProviderError";
+  }
+}
+
+export interface GeoProvider {
+  readonly name: ProviderName;
+  /** funções que este provedor implementa */
+  readonly supports: ReadonlySet<GeoFunction>;
+  autocomplete(req: AutocompleteReq): Promise<ProviderResult<GeoSuggestion[]>>;
+  placeDetails(req: PlaceDetailsReq): Promise<ProviderResult<GeoAddress>>;
+  geocode(req: GeocodeReq): Promise<ProviderResult<GeoAddress[]>>;
+  reverse(req: ReverseReq): Promise<ProviderResult<GeoAddress | null>>;
+  route(req: RouteReq): Promise<ProviderResult<GeoRoute>>;
+  matrix(req: MatrixReq): Promise<ProviderResult<GeoMatrix>>;
+  staticMap(req: StaticReq): Promise<ProviderResult<GeoStaticImage>>;
+  snap?(req: SnapReq): Promise<ProviderResult<GeoSnapResult>>;
+  /** pass-through de APIs sem equivalente no outro provedor (Mapbox-only) */
+  raw?(action: "isochrone" | "optimization" | "tilequery", body: Record<string, unknown>): Promise<ProviderResult<unknown>>;
+}

@@ -1,0 +1,320 @@
+// Provedor Mapbox — porta do mapbox-proxy para a interface GeoProvider.
+// Docs: Search Box (sessões), Geocoding v6 (temporary/permanent), Directions v5, Matrix v1, Map Matching v5,
+// Static Images. Token: MAPBOX_SERVER_TOKEN (sk.) com fallback para MAPBOX_ACCESS_TOKEN (pk.).
+import { decodePolyline, encodePolyline, simplify } from "../polyline.ts";
+import type {
+  AutocompleteReq, GeoAddress, GeoAddressComponents, GeoMatrix, GeoPoint, GeoPrecision, GeoProvider,
+  GeoRoute, GeoSnapResult, GeoStaticImage, GeoSuggestion, GeocodeReq, MatrixReq, PlaceDetailsReq,
+  ProviderResult, ReverseReq, RouteReq, SnapReq, StaticReq,
+} from "./types.ts";
+import { GeoProviderError } from "./types.ts";
+
+const BASE = "https://api.mapbox.com";
+
+// Limites por token (docs.mapbox.com/api/overview): usados pelo rate guard local.
+export const MAPBOX_RATE_LIMITS: Record<string, number> = {
+  "directions": 300,
+  "matrix:driving-traffic": 30,
+  "matrix:driving": 60,
+  "matching": 300,
+  "geocoding": 1000,
+  "searchbox": 600, // 10 req/s
+  "static": 1250,
+  "isochrone": 300,
+  "optimization": 300,
+  "tilequery": 600,
+};
+
+type Fetch = typeof fetch;
+
+export interface MapboxOptions {
+  token: string;
+  fetch?: Fetch;
+  /** devolve false quando o bucket (provider:api) está vazio neste minuto */
+  rateGuard?: (api: string) => boolean;
+}
+
+const ACCURACY_TO_PRECISION: Record<string, GeoPrecision> = {
+  rooftop: "exact", parcel: "exact", point: "high", interpolated: "medium", intersection: "medium",
+  approximate: "low", street: "low",
+};
+
+function fmt(p: GeoPoint) {
+  return `${p.lng},${p.lat}`;
+}
+
+function toComponents(ctx: Record<string, { name?: string; address_number?: string; street_name?: string } | undefined> | undefined): GeoAddressComponents {
+  if (!ctx) return {};
+  return {
+    street: ctx.street?.name ?? ctx.address?.street_name,
+    number: ctx.address?.address_number,
+    district: ctx.neighborhood?.name ?? ctx.locality?.name,
+    city: ctx.place?.name,
+    state: ctx.region?.name,
+    postal_code: ctx.postcode?.name,
+    country: ctx.country?.name,
+  };
+}
+
+export class MapboxProvider implements GeoProvider {
+  readonly name = "mapbox" as const;
+  readonly supports = new Set<
+    "tiles" | "autocomplete" | "geocode" | "reverse" | "route" | "matrix" | "static" | "snap" | "isochrone" | "optimization" | "tilequery"
+  >(["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "isochrone", "optimization", "tilequery"]);
+
+  private token: string;
+  private fetchFn: Fetch;
+  private rateGuard: (api: string) => boolean;
+
+  constructor(opts: MapboxOptions) {
+    this.token = opts.token;
+    this.fetchFn = opts.fetch ?? fetch;
+    this.rateGuard = opts.rateGuard ?? (() => true);
+  }
+
+  // ── HTTP ────────────────────────────────────────────────────────────────
+  private async call<T = Record<string, unknown>>(api: string, url: string, init?: RequestInit): Promise<T> {
+    if (!this.rateGuard(api)) {
+      throw new GeoProviderError("GEO_RATE_LIMITED", `Limite local da API Mapbox ${api} atingido neste minuto`, 429, 60_000);
+    }
+    const sep = url.includes("?") ? "&" : "?";
+    const res = await this.fetchFn(`${url}${sep}access_token=${encodeURIComponent(this.token)}`, init);
+    if (res.status === 429) {
+      const reset = Number(res.headers.get("X-Rate-Limit-Reset") ?? 0) * 1000;
+      throw new GeoProviderError("GEO_RATE_LIMITED", "Mapbox 429", 429, reset ? Math.max(0, reset - Date.now()) : 60_000);
+    }
+    if (res.status === 414) {
+      throw new GeoProviderError("GEO_INVALID_INPUT", "URL acima de 8 KB — reduza as coordenadas", 414);
+    }
+    const text = await res.text();
+    let json: Record<string, unknown> = {};
+    try { json = text ? JSON.parse(text) : {}; } catch { json = { message: text }; }
+    if (!res.ok) {
+      const msg = String(json.message ?? json.error ?? res.statusText);
+      if (res.status === 401 || res.status === 403) throw new GeoProviderError("GEO_NOT_CONFIGURED", `Token Mapbox recusado: ${msg}`, 502);
+      if (res.status === 422 || res.status === 400) throw new GeoProviderError("GEO_INVALID_INPUT", msg, 422);
+      throw new GeoProviderError("GEO_PROVIDER_ERROR", `Mapbox ${res.status}: ${msg}`, 502);
+    }
+    const code = json.code as string | undefined;
+    if (code && code !== "Ok") {
+      if (code === "NoRoute" || code === "NoSegment" || code === "NoMatch") throw new GeoProviderError("GEO_NO_ROUTE", String(json.message ?? code), 404);
+      if (code === "InvalidInput" || code === "ProfileNotFound") throw new GeoProviderError("GEO_INVALID_INPUT", String(json.message ?? code), 422);
+    }
+    return json as T;
+  }
+
+  // ── Search Box: suggest (autocomplete) ──────────────────────────────────
+  async autocomplete(req: AutocompleteReq): Promise<ProviderResult<GeoSuggestion[]>> {
+    if (!req.session_token) throw new GeoProviderError("GEO_INVALID_INPUT", "session_token é obrigatório no Search Box", 422);
+    const p = new URLSearchParams({
+      q: req.input,
+      session_token: req.session_token,
+      language: req.language ?? "pt",
+      country: req.country ?? "br",
+      limit: String(Math.min(req.limit ?? 5, 10)),
+      types: "address,street,place,locality,neighborhood,poi",
+    });
+    if (req.bias) p.set("proximity", `${req.bias.lng},${req.bias.lat}`);
+    const json = await this.call<{ suggestions?: Array<Record<string, unknown>> }>("searchbox", `${BASE}/search/searchbox/v1/suggest?${p}`);
+    const data: GeoSuggestion[] = (json.suggestions ?? []).map((s) => ({
+      id: `mapbox:${s.mapbox_id}`,
+      main_text: String(s.name ?? ""),
+      secondary_text: String(s.full_address ?? s.place_formatted ?? ""),
+      type: String(s.feature_type ?? "unknown"),
+      provider: "mapbox",
+    }));
+    // Cobrança por sessão: a medição conta 1 por session_token (index.ts registra a sessão); aqui units=0.
+    return { data, sku: "searchbox_session", units: 0 };
+  }
+
+  // ── Search Box: retrieve ────────────────────────────────────────────────
+  async placeDetails(req: PlaceDetailsReq): Promise<ProviderResult<GeoAddress>> {
+    const id = req.place_id.replace(/^mapbox:/, "");
+    if (!req.session_token) throw new GeoProviderError("GEO_INVALID_INPUT", "session_token é obrigatório no retrieve", 422);
+    const p = new URLSearchParams({ session_token: req.session_token });
+    const json = await this.call<{ features?: Array<Record<string, unknown>> }>("searchbox", `${BASE}/search/searchbox/v1/retrieve/${encodeURIComponent(id)}?${p}`);
+    const f = json.features?.[0];
+    if (!f) throw new GeoProviderError("GEO_NOT_FOUND", "Lugar não encontrado", 404);
+    return { data: this.featureToAddress(f, false), sku: "searchbox_session", units: 0 };
+  }
+
+  private featureToAddress(f: Record<string, unknown>, retainable: boolean): GeoAddress {
+    const props = (f.properties ?? {}) as Record<string, unknown>;
+    const geom = (f.geometry ?? {}) as { coordinates?: [number, number] };
+    const coords = (props.coordinates ?? {}) as { accuracy?: string; routable_points?: Array<{ latitude: number; longitude: number }>; latitude?: number; longitude?: number };
+    const lng = geom.coordinates?.[0] ?? coords.longitude;
+    const lat = geom.coordinates?.[1] ?? coords.latitude;
+    const rp = coords.routable_points?.[0];
+    const match = props.match_code as { confidence?: string } | undefined;
+    return {
+      formatted: String(props.full_address ?? props.place_formatted ?? props.name ?? ""),
+      place_id: props.mapbox_id ? `mapbox:${props.mapbox_id}` : null,
+      location: lat != null && lng != null ? { lat: Number(lat), lng: Number(lng) } : null,
+      routable_point: rp ? { lat: rp.latitude, lng: rp.longitude } : null,
+      components: toComponents(props.context as Parameters<typeof toComponents>[0]),
+      precision: ACCURACY_TO_PRECISION[coords.accuracy ?? ""] ?? "unknown",
+      match_confidence: match?.confidence,
+      provider: "mapbox",
+      retainable,
+    };
+  }
+
+  // ── Geocoding v6 forward ────────────────────────────────────────────────
+  async geocode(req: GeocodeReq): Promise<ProviderResult<GeoAddress[]>> {
+    const p = new URLSearchParams({
+      language: req.language ?? "pt",
+      country: req.country ?? "br",
+      limit: String(Math.min(req.limit ?? 5, 10)),
+      autocomplete: "false",
+      permanent: req.persist ? "true" : "false",
+    });
+    if (req.structured) {
+      const s = req.structured;
+      if (s.address_line1) p.set("address_line1", s.address_line1);
+      if (s.postal_code) p.set("postcode", s.postal_code);
+      if (s.city) p.set("place", s.city);
+      if (s.state) p.set("region", s.state);
+      if (s.country) p.set("country", s.country);
+    } else if (req.address) {
+      p.set("q", req.address);
+    } else {
+      throw new GeoProviderError("GEO_INVALID_INPUT", "address ou structured é obrigatório", 422);
+    }
+    if (req.bias) p.set("proximity", `${req.bias.lng},${req.bias.lat}`);
+    const json = await this.call<{ features?: Array<Record<string, unknown>> }>("geocoding", `${BASE}/search/geocode/v6/forward?${p}`);
+    const data = (json.features ?? []).map((f) => this.featureToAddress(f, !!req.persist));
+    if (data.length === 0) throw new GeoProviderError("GEO_NOT_FOUND", "Endereço não encontrado", 404);
+    return { data, sku: req.persist ? "geocoding_permanent" : "geocoding_temporary", units: 1 };
+  }
+
+  // ── Geocoding v6 reverse ────────────────────────────────────────────────
+  async reverse(req: ReverseReq): Promise<ProviderResult<GeoAddress | null>> {
+    const p = new URLSearchParams({
+      longitude: String(req.lng), latitude: String(req.lat),
+      language: req.language ?? "pt",
+      types: "address,street,neighborhood,locality,place",
+      limit: "1",
+      permanent: req.persist ? "true" : "false",
+    });
+    const json = await this.call<{ features?: Array<Record<string, unknown>> }>("geocoding", `${BASE}/search/geocode/v6/reverse?${p}`);
+    const f = json.features?.[0];
+    return { data: f ? this.featureToAddress(f, !!req.persist) : null, sku: req.persist ? "geocoding_permanent" : "geocoding_temporary", units: 1 };
+  }
+
+  // ── Directions v5 ───────────────────────────────────────────────────────
+  async route(req: RouteReq): Promise<ProviderResult<GeoRoute>> {
+    const pts = [req.origin, ...(req.waypoints ?? []), req.destination];
+    if (pts.length > 25) throw new GeoProviderError("GEO_INVALID_INPUT", "Directions aceita no máximo 25 coordenadas", 422);
+    const profile = req.traffic === false ? "driving" : "driving-traffic";
+    const p = new URLSearchParams({
+      geometries: "polyline6", overview: "full", steps: "false",
+      alternatives: req.alternatives ? "true" : "false",
+      annotations: "duration,distance", language: req.language ?? "pt",
+    });
+    const coords = pts.map(fmt).join(";");
+    const json = await this.call<{ routes?: Array<Record<string, unknown>> }>("directions", `${BASE}/directions/v5/mapbox/${profile}/${coords}?${p}`);
+    const r = json.routes?.[0];
+    if (!r) throw new GeoProviderError("GEO_NO_ROUTE", "Sem rota", 404);
+    const legs = ((r.legs ?? []) as Array<{ distance: number; duration: number }>).map((l) => ({ distance_m: Math.round(l.distance), duration_s: Math.round(l.duration) }));
+    return {
+      data: {
+        polyline: decodePolyline(String(r.geometry), 6),
+        distance_m: Math.round(Number(r.distance)),
+        duration_s: Math.round(Number(r.duration)),
+        duration_traffic_s: profile === "driving-traffic" ? Math.round(Number(r.duration)) : undefined,
+        legs, provider: "mapbox", profile,
+      },
+      sku: "directions", units: 1,
+    };
+  }
+
+  // ── Matrix v1 ───────────────────────────────────────────────────────────
+  async matrix(req: MatrixReq): Promise<ProviderResult<GeoMatrix>> {
+    const all = [...req.origins, ...req.destinations];
+    const elements = req.origins.length * req.destinations.length;
+    if (elements < 1 || elements > 625) throw new GeoProviderError("GEO_INVALID_INPUT", "Matrix: entre 1 e 625 elementos", 422);
+    // driving-traffic: ≤ 10 coordenadas e 30 req/min; cai para driving quando não couber ou o bucket estiver vazio
+    let profile = req.traffic === false ? "driving" : "driving-traffic";
+    let downgraded: string | undefined;
+    if (profile === "driving-traffic" && (all.length > 10 || !this.rateGuard("matrix:driving-traffic"))) {
+      profile = "driving"; downgraded = "driving-traffic→driving";
+    }
+    if (all.length > 25) throw new GeoProviderError("GEO_INVALID_INPUT", "Matrix: no máximo 25 coordenadas", 422);
+    const sources = req.origins.map((_, i) => i).join(";");
+    const destinations = req.destinations.map((_, i) => req.origins.length + i).join(";");
+    const p = new URLSearchParams({ sources, destinations, annotations: "duration,distance" });
+    const json = await this.call<{ durations?: (number | null)[][]; distances?: (number | null)[][] }>(
+      `matrix:${profile}`, `${BASE}/directions-matrix/v1/mapbox/${profile}/${all.map(fmt).join(";")}?${p}`);
+    return {
+      data: {
+        durations_s: (json.durations ?? []).map((row) => row.map((v) => v == null ? null : Math.round(v))),
+        distances_m: (json.distances ?? []).map((row) => row.map((v) => v == null ? null : Math.round(v))),
+        provider: "mapbox", profile,
+      },
+      sku: "matrix", units: elements, downgraded,
+    };
+  }
+
+  // ── Map Matching v5 (snap) ──────────────────────────────────────────────
+  async snap(req: SnapReq): Promise<ProviderResult<GeoSnapResult>> {
+    const pts = req.points.slice(-100);
+    if (pts.length < 2) throw new GeoProviderError("GEO_INVALID_INPUT", "Map Matching precisa de ≥ 2 pontos", 422);
+    const p = new URLSearchParams({ geometries: "geojson", overview: "false", steps: "false", tidy: "true" });
+    p.set("radiuses", pts.map(() => String(req.radius_m ?? 25)).join(";"));
+    if (req.timestamps && req.timestamps.length === pts.length) p.set("timestamps", req.timestamps.join(";"));
+    const json = await this.call<{ matchings?: Array<{ confidence?: number }>; tracepoints?: Array<{ location: [number, number] } | null> }>(
+      "matching", `${BASE}/matching/v5/mapbox/driving/${pts.map(fmt).join(";")}?${p}`);
+    const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
+    return { data: { points, confidence: json.matchings?.[0]?.confidence ?? null, provider: "mapbox" }, sku: "map_matching", units: 1 };
+  }
+
+  // ── Static Images ───────────────────────────────────────────────────────
+  async staticMap(req: StaticReq): Promise<ProviderResult<GeoStaticImage>> {
+    const width = Math.min(req.width ?? 600, 1280), height = Math.min(req.height ?? 300, 1280);
+    const style = req.style ?? "streets-v12";
+    const overlays: string[] = [];
+    if (req.path && req.path.length >= 2) {
+      const enc = encodePolyline(simplify(req.path, 40), 5);
+      overlays.push(`path-5+3b82f6-0.8(${encodeURIComponent(enc)})`);
+    }
+    for (const m of req.markers ?? []) {
+      overlays.push(`pin-s${m.label ? "-" + m.label.toLowerCase().slice(0, 1) : ""}+${(m.color ?? "f44336").replace("#", "")}(${m.lng},${m.lat})`);
+    }
+    const view = req.center ? `${req.center.lng},${req.center.lat},${req.zoom ?? 13},0,0` : "auto";
+    const url = `${BASE}/styles/v1/mapbox/${style}/static/${overlays.length ? overlays.join(",") + "/" : ""}${view}/${width}x${height}@2x?access_token=${encodeURIComponent(this.token)}`;
+    if (url.length > 8000) throw new GeoProviderError("GEO_INVALID_INPUT", "URL da imagem estática acima de 8 KB", 414);
+    if (!this.rateGuard("static")) throw new GeoProviderError("GEO_RATE_LIMITED", "Limite local Static Images", 429, 60_000);
+    const res = await this.fetchFn(url);
+    if (!res.ok) throw new GeoProviderError("GEO_PROVIDER_ERROR", `Static Images ${res.status}`, 502);
+    const buf = new Uint8Array(await res.arrayBuffer());
+    let bin = "";
+    for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+    return { data: { image: `data:image/png;base64,${btoa(bin)}`, width, height, provider: "mapbox" }, sku: "static_image", units: 1 };
+  }
+
+  // ── Mapbox-only (pass-through com medição) ──────────────────────────────
+  async raw(action: "isochrone" | "optimization" | "tilequery", body: Record<string, unknown>): Promise<ProviderResult<unknown>> {
+    const toCoords = (c: unknown) => Array.isArray(c) ? (c as number[][]).map((x) => x.join(",")).join(";") : String(c ?? "");
+    switch (action) {
+      case "isochrone": {
+        const p = new URLSearchParams({ contours_minutes: String(body.contours_minutes ?? "15,30,60"), polygons: String(body.polygons ?? true) });
+        const data = await this.call("isochrone", `${BASE}/isochrone/v1/mapbox/${body.profile ?? "driving"}/${body.lng},${body.lat}?${p}`);
+        return { data, sku: "isochrone", units: 1 };
+      }
+      case "optimization": {
+        const p = new URLSearchParams({
+          source: String(body.source ?? "first"), destination: String(body.destination ?? "last"),
+          roundtrip: String(body.roundtrip ?? false), geometries: "geojson", overview: "full", language: "pt",
+        });
+        const data = await this.call("optimization", `${BASE}/optimized-trips/v1/mapbox/${body.profile ?? "driving"}/${toCoords(body.coordinates)}?${p}`);
+        return { data, sku: "optimization", units: 1 };
+      }
+      case "tilequery": {
+        const p = new URLSearchParams({ radius: String(body.radius ?? 100), limit: String(body.limit ?? 5) });
+        if (body.layers) p.set("layers", String(body.layers));
+        const data = await this.call("tilequery", `${BASE}/v4/${body.tileset ?? "mapbox.mapbox-streets-v8"}/tilequery/${body.lng},${body.lat}.json?${p}`);
+        return { data, sku: "tilequery", units: 1 };
+      }
+    }
+  }
+}
