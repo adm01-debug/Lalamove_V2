@@ -34,6 +34,10 @@ export interface MapboxOptions {
   rateGuard?: (api: string) => boolean;
 }
 
+const ROUTE_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
+// Matrix não tem todos os perfis do Directions: fora desta lista cai no default.
+const MATRIX_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
+
 const ACCURACY_TO_PRECISION: Record<string, GeoPrecision> = {
   rooftop: "exact", parcel: "exact", point: "high", interpolated: "medium", intersection: "medium",
   approximate: "low", street: "low",
@@ -205,7 +209,11 @@ export class MapboxProvider implements GeoProvider {
   async route(req: RouteReq): Promise<ProviderResult<GeoRoute>> {
     const pts = [req.origin, ...(req.waypoints ?? []), req.destination];
     if (pts.length > 25) throw new GeoProviderError("GEO_INVALID_INPUT", "Directions aceita no máximo 25 coordenadas", 422);
-    const profile = req.traffic === false ? "driving" : "driving-traffic";
+    // O perfil pedido pela tela vence a heurística de tráfego: /map-tools oferece
+    // walking e cycling, e antes disto qualquer perfil virava driving-traffic.
+    const profile = req.profile && ROUTE_PROFILES.has(req.profile)
+      ? req.profile
+      : req.traffic === false ? "driving" : "driving-traffic";
     const p = new URLSearchParams({
       geometries: "polyline6", overview: "full", steps: "false",
       alternatives: req.alternatives ? "true" : "false",
@@ -234,7 +242,9 @@ export class MapboxProvider implements GeoProvider {
     const elements = req.origins.length * req.destinations.length;
     if (elements < 1 || elements > 625) throw new GeoProviderError("GEO_INVALID_INPUT", "Matrix: entre 1 e 625 elementos", 422);
     // driving-traffic: ≤ 10 coordenadas e 30 req/min; cai para driving quando não couber ou o bucket estiver vazio
-    let profile = req.traffic === false ? "driving" : "driving-traffic";
+    let profile = req.profile && MATRIX_PROFILES.has(req.profile)
+      ? req.profile
+      : req.traffic === false ? "driving" : "driving-traffic";
     let downgraded: string | undefined;
     if (profile === "driving-traffic" && (all.length > 10 || !this.rateGuard("matrix:driving-traffic"))) {
       profile = "driving"; downgraded = "driving-traffic→driving";
@@ -259,13 +269,28 @@ export class MapboxProvider implements GeoProvider {
   async snap(req: SnapReq): Promise<ProviderResult<GeoSnapResult>> {
     const pts = req.points.slice(-100);
     if (pts.length < 2) throw new GeoProviderError("GEO_INVALID_INPUT", "Map Matching precisa de ≥ 2 pontos", 422);
-    const p = new URLSearchParams({ geometries: "geojson", overview: "false", steps: "false", tidy: "true" });
+    // overview=full: sem a geometria a tela não tem o que desenhar nem distância/duração
+    const p = new URLSearchParams({ geometries: "geojson", overview: "full", steps: "false", tidy: "true" });
     p.set("radiuses", pts.map(() => String(req.radius_m ?? 25)).join(";"));
     if (req.timestamps && req.timestamps.length === pts.length) p.set("timestamps", req.timestamps.join(";"));
-    const json = await this.call<{ matchings?: Array<{ confidence?: number }>; tracepoints?: Array<{ location: [number, number] } | null> }>(
-      "matching", `${BASE}/matching/v5/mapbox/driving/${pts.map(fmt).join(";")}?${p}`);
+    const json = await this.call<{
+      matchings?: Array<{ confidence?: number; distance?: number; duration?: number; geometry?: { coordinates?: [number, number][] } }>;
+      tracepoints?: Array<{ location: [number, number] } | null>;
+    }>("matching", `${BASE}/matching/v5/mapbox/driving/${pts.map(fmt).join(";")}?${p}`);
     const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
-    return { data: { points, confidence: json.matchings?.[0]?.confidence ?? null, provider: "mapbox" }, sku: "map_matching", units: 1 };
+    const m = json.matchings?.[0];
+    const geom = m?.geometry?.coordinates ?? [];
+    return {
+      data: {
+        points,
+        confidence: m?.confidence ?? null,
+        provider: "mapbox",
+        distance_m: m?.distance != null ? Math.round(m.distance) : null,
+        duration_s: m?.duration != null ? Math.round(m.duration) : null,
+        polyline: geom.map(([lng, lat]) => ({ lat, lng })),
+      },
+      sku: "map_matching", units: 1,
+    };
   }
 
   // ── Static Images ───────────────────────────────────────────────────────

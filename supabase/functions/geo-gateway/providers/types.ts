@@ -89,6 +89,11 @@ export interface GeoSnapResult {
   points: GeoPoint[]; // pontos encaixados na via (mesma ordem da entrada)
   confidence: number | null;
   provider: ProviderName;
+  /** métricas do trecho encaixado — a tela /map-tools mostra distância e duração */
+  distance_m?: number | null;
+  duration_s?: number | null;
+  /** geometria do trecho encaixado, pronta para desenhar no mapa */
+  polyline?: GeoPoint[];
 }
 
 // ── Requests normalizados (espelham _shared/schemas.ts) ─────────────────────
@@ -135,6 +140,8 @@ export interface RouteReq {
   origin: GeoPoint;
   destination: GeoPoint;
   waypoints?: GeoPoint[];
+  /** perfil do Directions (driving-traffic | driving | walking | cycling); vence `traffic` */
+  profile?: string;
   traffic?: boolean;
   alternatives?: boolean;
   language?: string;
@@ -143,6 +150,8 @@ export interface RouteReq {
 export interface MatrixReq {
   origins: GeoPoint[];
   destinations: GeoPoint[];
+  /** perfil do Matrix (driving | driving-traffic | walking | cycling); vence `traffic` */
+  profile?: string;
   traffic?: boolean;
 }
 

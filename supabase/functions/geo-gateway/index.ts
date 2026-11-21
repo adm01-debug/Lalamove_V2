@@ -15,7 +15,7 @@ import { trackContractUsage } from "../_shared/telemetry.ts";
 import { MAPBOX_RATE_LIMITS, MapboxProvider } from "./providers/mapbox.ts";
 import { GeoProviderError } from "./providers/types.ts";
 import type { GeoFunction, GeoProvider, ProviderName } from "./providers/types.ts";
-import { ProviderResolver, ResolveError } from "./resolver.ts";
+import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
 import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, registerSession } from "./metering.ts";
 
@@ -55,14 +55,14 @@ function uidFromJwt(req: Request): string {
 }
 
 // Defaults da decisão D6 — usados só se geo_settings ainda não existir (migration #118 não aplicada).
-const DEFAULT_SETTINGS: GeoSettingRow[] = (["autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "isochrone", "optimization", "tilequery"] as GeoFunction[])
+export const DEFAULT_SETTINGS: GeoSettingRow[] = (["autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "isochrone", "optimization", "tilequery"] as GeoFunction[])
   .map((fn) => ({ function: fn, provider: "mapbox", fallback_provider: "google", config: {} }));
 
 const resolver: ProviderResolver = new ProviderResolver({
   loadSettings: async () => {
     const { data, error } = await db.from("geo_settings").select("function, provider, fallback_provider, config");
     if (error) { logger.error("[geo-gateway] geo_settings indisponível, usando defaults", error.message); return DEFAULT_SETTINGS; }
-    return (data ?? []) as GeoSettingRow[];
+    return mergeSettings((data ?? []) as GeoSettingRow[], DEFAULT_SETTINGS);
   },
   loadBudget: async () => {
     const { data, error } = await db.rpc("geo_budget_status");

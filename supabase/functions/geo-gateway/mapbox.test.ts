@@ -86,6 +86,41 @@ Deno.test("route: Directions driving-traffic, polyline6 decodificada, legs", asy
   await assertRejects(() => new MapboxProvider({ token: "t", fetch: f2 }).route({ origin: pts[0], destination: pts[2] }), GeoProviderError, "No route");
 });
 
+Deno.test("route/matrix: perfil pedido pela tela chega ao Mapbox (walking/cycling) e inválido volta ao padrão", async () => {
+  const o = { lat: -25.4296, lng: -49.2716 }, d = { lat: -25.4426, lng: -49.2385 };
+  const { fetch, calls } = mockFetch(() => ({ body: { code: "Ok", routes: [{ geometry: encodePolyline([o, d], 6), distance: 100, duration: 60, legs: [] }], durations: [[60]], distances: [[100]] } }));
+  const p = new MapboxProvider({ token: "t", fetch });
+
+  await p.route({ origin: o, destination: d, profile: "walking" });
+  assert(calls[0].url.includes("/directions/v5/mapbox/walking/"), calls[0].url);
+  await p.route({ origin: o, destination: d, profile: "cycling" });
+  assert(calls[1].url.includes("/directions/v5/mapbox/cycling/"), calls[1].url);
+  // perfil desconhecido não vaza para a URL: cai em driving-traffic
+  await p.route({ origin: o, destination: d, profile: "hoverboard" });
+  assert(calls[2].url.includes("/directions/v5/mapbox/driving-traffic/"), calls[2].url);
+
+  await p.matrix({ origins: [o], destinations: [d], profile: "walking" });
+  assert(calls[3].url.includes("/directions-matrix/v1/mapbox/walking/"), calls[3].url);
+  await p.matrix({ origins: [o], destinations: [d], profile: "cycling" });
+  assert(calls[4].url.includes("/directions-matrix/v1/mapbox/cycling/"), calls[4].url);
+});
+
+Deno.test("snap: geometria e métricas do Map Matching são expostas para a tela de conferência", async () => {
+  const { fetch, calls } = mockFetch(() => ({
+    body: {
+      code: "Ok",
+      matchings: [{ confidence: 0.87, distance: 842.6, duration: 95.4, geometry: { type: "LineString", coordinates: [[-49.271, -25.429], [-49.270, -25.430]] } }],
+      tracepoints: [{ location: [-49.271, -25.429] }, { location: [-49.270, -25.430] }],
+    },
+  }));
+  const p = new MapboxProvider({ token: "t", fetch });
+  const r = await p.snap({ points: [{ lat: -25.4296, lng: -49.2716 }, { lat: -25.43, lng: -49.27 }] });
+  assert(calls[0].url.includes("overview=full"), calls[0].url);
+  assertEquals(r.data.distance_m, 843);
+  assertEquals(r.data.duration_s, 95);
+  assertEquals(r.data.polyline, [{ lat: -25.429, lng: -49.271 }, { lat: -25.43, lng: -49.27 }]);
+});
+
 Deno.test("matrix: elementos = origens×destinos; cai para driving acima de 10 coords ou sem bucket", async () => {
   const o = { lat: -25.43, lng: -49.27 }, d = { lat: -25.44, lng: -49.24 };
   const { fetch, calls } = mockFetch(() => ({ body: { code: "Ok", durations: [[541.3]], distances: [[3625.9]] } }));

@@ -84,9 +84,9 @@ verify_jwt = true
 [functions.geo-gateway]
 verify_jwt = true
 
-# mapbox-proxy: proxy legado da API Mapbox (geocoding/directions/matrix v5), ainda usado por
-# useMapbox.ts e useRegionResolver.ts. verify_jwt=true já é o default do Supabase para funções sem
-# bloco — declarado aqui explicitamente (plano Mapbox × Lalamove V2, etapa 7). Será removido quando
-# o front migrar para o geo-gateway (etapa 60/61).
+# mapbox-proxy: proxy legado da API Mapbox (geocoding/directions/matrix v5). O front já migrou para
+# o geo-gateway (etapa 60/61) e não há mais chamador no repo — a função segue deployada apenas
+# até a remoção em produção ser autorizada. verify_jwt=true é o default do Supabase para funções
+# sem bloco; declarado aqui explicitamente (plano Mapbox × Lalamove V2, etapa 7).
 [functions.mapbox-proxy]
 verify_jwt = true
