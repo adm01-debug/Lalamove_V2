@@ -80,7 +80,9 @@ serve(async (req) => {
           requires_pod,
           pod_received,
           status,
-          actual_delivery
+          actual_delivery,
+          auto_notify_supplier,
+          supplier_contact
         )
       `);
 
