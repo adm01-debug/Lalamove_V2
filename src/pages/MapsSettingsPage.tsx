@@ -29,8 +29,7 @@ import {
   type GeoProviderName,
 } from '@/hooks/useGeoAdmin';
 
-/** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */
-const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
+/** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
   tiles: { label: 'Mapa (tiles)', hint: 'Carregamento do mapa no painel e no rastreio' },
   autocomplete: { label: 'Autocomplete de endereço', hint: 'Sugestões enquanto o operador digita' },
   geocode: { label: 'Geocodificação', hint: 'Endereço digitado para coordenada' },
@@ -58,6 +57,61 @@ function providerLabel(value: string | null): string {
 function fmtMoney(value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
 }
+
+/**
+ * Etapa 70 do plano Mapbox: o que muda de verdade ao trocar de provedor.
+ * Fonte: `docs/MAPBOX.md` (paridade ETA, cobertura BR, decisões M1–M10).
+ */
+const PARITY_ROWS: Array<{ tema: string; mapbox: string; google: string; impacto: 'igual' | 'mapbox' | 'google' }> = [
+  {
+    tema: 'Validação de endereço',
+    mapbox: 'Não oferece',
+    google: 'Valida e corrige o CEP antes de salvar',
+    impacto: 'google',
+  },
+  {
+    tema: 'Moto (entrega de duas rodas)',
+    mapbox: 'Perfil `driving` — não tem perfil de moto',
+    google: 'Também não tem perfil de moto',
+    impacto: 'igual',
+  },
+  {
+    tema: 'Encaixe do GPS na via (snap)',
+    mapbox: 'Incluído na franquia gratuita de Map Matching',
+    google: 'Cobra por Roads API desde a primeira chamada',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Área de alcance (isócrona)',
+    mapbox: 'Incluída, desenha o polígono em 1 chamada',
+    google: 'Sem endpoint equivalente — só simulando várias rotas',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Autocomplete',
+    mapbox: 'Cobra por sessão (várias teclas = 1 sessão)',
+    google: 'Cobra por requisição, inclusive cada tecla',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'Retenção de dados',
+    mapbox: 'Chamada temporária não é gravada pelo provedor',
+    google: 'Guarda o resultado conforme o termo de uso',
+    impacto: 'mapbox',
+  },
+  {
+    tema: 'ETA e traçado de rota',
+    mapbox: 'Paridade medida contra a Lalamove em `docs/MAPBOX.md`',
+    google: 'Também tem trânsito em tempo real',
+    impacto: 'igual',
+  },
+];
+
+const PARITY_IMPACT_LABEL: Record<'igual' | 'mapbox' | 'google', string> = {
+  igual: 'Igual nos dois',
+  mapbox: 'Só no Mapbox',
+  google: 'Só no Google',
+};
 
 export default function MapsSettingsPage() {
   const status = useGeoProviderStatus();
@@ -573,6 +627,48 @@ export default function MapsSettingsPage() {
               </TableBody>
             </Table>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Matriz de paridade (etapa 70) */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ShieldAlert className="w-4 h-4" /> O que muda ao trocar de provedor
+          </CardTitle>
+          <CardDescription>
+            Impacto real de negócio em cada função. Fonte: <code>docs/MAPBOX.md</code>.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Tema</TableHead>
+                <TableHead>Mapbox</TableHead>
+                <TableHead>Google Maps</TableHead>
+                <TableHead className="w-[130px]">Diferença</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {PARITY_ROWS.map((row) => (
+                <TableRow key={row.tema}>
+                  <TableCell className="font-medium">{row.tema}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{row.mapbox}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{row.google}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        row.impacto === 'igual' ? 'secondary' : row.impacto === 'mapbox' ? 'default' : 'outline'
+                      }
+                    >
+                      {PARITY_IMPACT_LABEL[row.impacto]}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
