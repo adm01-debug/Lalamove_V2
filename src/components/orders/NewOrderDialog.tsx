@@ -23,6 +23,9 @@ import {
   ITEM_WEIGHT_RANGES,
   isServiceType,
   serviceAcceptsItem,
+  servicesForCity,
+  serviceAvailableInCity,
+  CITY_LABELS,
 } from '@/lib/lalamoveCatalog';
 import {
   SERVICE_EMOJI,
@@ -33,9 +36,11 @@ import {
 } from '@/lib/lalamoveLabels';
 import {
   SERVICE_TYPES,
+  CITY_CODES,
   ITEM_CATEGORIES,
   HANDLING_INSTRUCTIONS,
   type LalamoveServiceType,
+  type LalamoveCityCode,
 } from '@/types/lalamove';
 
 
@@ -47,15 +52,21 @@ interface NewOrderDialogProps {
 }
 
 // Etapa 7 — a UI passa a consumir o catálogo canônico (docs/LALAMOVE_MASTER_ANALYSIS.md).
-const vehicleTypes = SERVICE_TYPES.map(value => ({
-  value,
-  label: `${SERVICE_EMOJI[value]} ${SERVICE_CATALOG[value].label}`,
-  description:
-    `até ${SERVICE_CATALOG[value].maxWeightKg} kg` +
-    (SERVICE_CATALOG[value].cities === null
-      ? ' — todas as cidades'
-      : ` — ${SERVICE_CATALOG[value].cities!.length} cidades`),
-}));
+// A lista é por cidade: a Lalamove recusa com 422 ERR_INVALID_FIELD qualquer
+// serviceType que a praça de coleta não ofereça (Curitiba tem 6 dos 14).
+function vehicleTypesForCity(city: LalamoveCityCode) {
+  return servicesForCity(city).map(value => ({
+    value,
+    label: `${SERVICE_EMOJI[value]} ${SERVICE_CATALOG[value].label}`,
+    description:
+      `até ${SERVICE_CATALOG[value].maxWeightKg} kg` +
+      (SERVICE_CATALOG[value].cities === null
+        ? ' — todas as cidades'
+        : ` — ${SERVICE_CATALOG[value].cities!.length} cidades`),
+  }));
+}
+
+const cityOptions = CITY_CODES.map(value => ({ value, label: CITY_LABELS[value] }));
 
 const itemCategoryOptions = ITEM_CATEGORIES.map(value => ({
   value,
@@ -118,6 +129,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     recipientPhone: '',
     pickupAddress: '',
     deliveryAddress: '',
+    // Praca da coleta: decide quais serviceType a Lalamove aceita (422 se errado).
+    city: 'BR CWB' as LalamoveCityCode,
     vehicleType: 'LALAGO',
     remarks: '',
     specialRequests: [] as string[],
@@ -162,6 +175,22 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         const ranges = ITEM_WEIGHT_RANGES[service];
         next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
       }
+      // Ao trocar de praça, o serviço selecionado pode não existir lá: cai no
+      // primeiro disponível em vez de deixar o operador enviar e tomar 422.
+      if (field === 'city') {
+        const city = String(value) as LalamoveCityCode;
+        const current = prev.vehicleType;
+        if (!isServiceType(current) || !serviceAvailableInCity(current, city)) {
+          const fallback = servicesForCity(city)[0];
+          if (fallback) {
+            next.vehicleType = fallback;
+            const allowed = SPECIAL_REQUESTS_BY_SERVICE[fallback];
+            next.specialRequests = prev.specialRequests.filter(sr => allowed.includes(sr));
+            const ranges = ITEM_WEIGHT_RANGES[fallback];
+            next.itemWeight = ranges && ranges.length > 0 ? ranges[0] : '';
+          }
+        }
+      }
       return next;
     });
   };
@@ -178,6 +207,9 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
   const activeService: LalamoveServiceType = isServiceType(form.vehicleType)
     ? form.vehicleType
     : 'LALAGO';
+
+  // Só os veículos que a praça de coleta realmente atende.
+  const availableVehicleTypes = vehicleTypesForCity(form.city);
 
   // Opções válidas de Special Requests para o serviço atualmente selecionado.
   const availableSpecialRequests: { value: string; label: string; restriction: string | null }[] =
@@ -434,6 +466,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       recipientPhone: '',
       pickupAddress: '',
       deliveryAddress: '',
+      city: 'BR CWB' as LalamoveCityCode,
       vehicleType: 'LALAGO',
       remarks: '',
       specialRequests: [],
@@ -634,6 +667,28 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
               </div>
             </div>
 
+            {/* Praça da coleta — define os veículos disponíveis */}
+            <div className="space-y-2">
+              <Label className="flex items-center gap-1.5 text-xs font-semibold">
+                <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+                Cidade da coleta
+              </Label>
+              <Select value={form.city} onValueChange={v => updateField('city', v)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {cityOptions.map(c => (
+                    <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                {availableVehicleTypes.length} de {SERVICE_TYPES.length} veículos atendem{' '}
+                {CITY_LABELS[form.city]}
+              </p>
+            </div>
+
             {/* Veículo */}
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5 text-xs font-semibold">
@@ -645,7 +700,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {vehicleTypes.map(vt => (
+                  {availableVehicleTypes.map(vt => (
                     <SelectItem key={vt.value} value={vt.value}>
                       <span className="flex items-center gap-2">
                         {vt.label}

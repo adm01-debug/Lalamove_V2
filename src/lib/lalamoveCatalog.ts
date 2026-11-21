@@ -279,3 +279,26 @@ export function serviceAvailableInCity(
   const spec = SERVICE_CATALOG[service];
   return spec.cities === null || spec.cities.includes(city);
 }
+
+/**
+ * Nome da praca para exibir no seletor. O codigo e o `locode` que a Lalamove
+ * usa no header `Market`/campo `data.market`; o operador nao reconhece "BR CWB".
+ */
+export const CITY_LABELS: Readonly<Record<LalamoveCityCode, string>> = {
+  'BR AJU': 'Aracaju',
+  'BR BEL': 'Belém',
+  'BR BHZ': 'Belo Horizonte',
+  'BR BSB': 'Brasília',
+  'BR CWB': 'Curitiba',
+  'BR FLN': 'Florianópolis',
+  'BR FOR': 'Fortaleza',
+  'BR GYN': 'Goiânia',
+  'BR MAO': 'Manaus',
+  'BR POA': 'Porto Alegre',
+  'BR RAO': 'Ribeirão Preto',
+  'BR REC': 'Recife',
+  'BR RIO': 'Rio de Janeiro',
+  'BR SAO': 'São Paulo',
+  'BR SLZ': 'São Luís',
+  'BR SSA': 'Salvador',
+};
