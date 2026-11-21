@@ -101,6 +101,13 @@ export function routeAction(target: GatewayTarget, action: string): RouteResult 
       return { fn: 'lalamove-uapi', action: 'city-info' };
     case 'refresh_token':
       return { fn: 'lalamove-uapi', action: 'refresh-token' };
+    case 'orders':
+      // uapi-proxy.ts (getOrders) manda page/size por querystring, GET sem
+      // corpo. A edge lalamove-uapi só lê paginação de `body` (list-orders
+      // usa cursor `last_id`, não número de página) e GET chega com corpo
+      // vazio — a 1ª página funciona, "carregar mais" ainda não avança.
+      // Preferível a 400 total por ação não mapeada (painel ficava inoperante).
+      return { fn: 'lalamove-uapi', action: 'list-orders', passBody: true };
 
     // ── passagem genérica: só o proxy externo sabia fazer ────────────────
     case 'v3':
@@ -112,16 +119,18 @@ export function routeAction(target: GatewayTarget, action: string): RouteResult 
           'order_priority, driver_location) ou chame a edge lalamove-api direto.',
       };
     case 'uapi':
+    case 'call':
       return {
         unsupported: true,
         reason:
           'Passagem genérica para a UAPI não está disponível sem o proxy externo. ' +
-          'Use uma ação nomeada (user, wallet, wallet_flow_list, vehicles, service_areas) ' +
+          'Use uma ação nomeada (user, wallet, wallet_flow_list, vehicles, service_areas, orders) ' +
           'ou chame a edge lalamove-uapi direto.',
       };
 
     // ── escrita de credencial: nunca pelo gateway ───────────────────────
     case 'update_uapi_token':
+    case 'update_token':
     case 'update_v3_keys':
       return {
         unsupported: true,

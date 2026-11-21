@@ -10,11 +10,34 @@ const ACOES_DO_CLIENTE = [
   'refresh_token', 'update_uapi_token', 'update_v3_keys',
 ];
 
+// Ações expostas por src/lib/uapi-proxy.ts (uapi.getOrders/call/updateToken) —
+// caíam em default:null (400 genérico) por não estarem no switch acima.
+const ACOES_DO_UAPI_PROXY = ['orders', 'call', 'update_token'];
+
 Deno.test('nenhuma ação do cliente cai em 400 por ser desconhecida', () => {
-  for (const action of ACOES_DO_CLIENTE) {
+  for (const action of [...ACOES_DO_CLIENTE, ...ACOES_DO_UAPI_PROXY]) {
     const r = routeAction('unified', action);
     assertExists(r, `ação sem destino: ${action}`);
   }
+});
+
+Deno.test('uapi.getOrders ("orders") vai para lalamove-uapi list-orders', () => {
+  const r = routeAction('unified', 'orders');
+  if (isUnsupported(r) || r === null) throw new Error('orders deveria rotear');
+  assertEquals(r.fn, 'lalamove-uapi');
+  assertEquals(r.action, 'list-orders');
+});
+
+Deno.test('uapi.call ("call") responde 501 — a edge não tem passagem genérica', () => {
+  const r = routeAction('unified', 'call');
+  if (!isUnsupported(r)) throw new Error('call deveria ser unsupported');
+  assertEquals(r.reason.length > 20, true);
+});
+
+Deno.test('uapi.updateToken ("update_token") é bloqueado como escrita de credencial', () => {
+  const r = routeAction('unified', 'update_token');
+  if (!isUnsupported(r)) throw new Error('update_token deveria ser unsupported');
+  assertEquals(/LALAMOVE_API_SECRET|sbp_|service_role/.test(r.reason), false);
 });
 
 Deno.test('ações da API v3 vão para lalamove-api', () => {
