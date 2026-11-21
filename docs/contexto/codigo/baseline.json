@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "59599d3f3932bd16befd67f05f2221d3adab721e",
+  "commit": "c77f6cc07bed873c5b84129cc967ab45b386f872",
   "branch": "main",
-  "data_commit": "2026-11-21T09:28:46-03:00",
+  "data_commit": "2026-11-21T09:54:27-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c77f6cc",
+    "data": "2026-11-21",
+    "assunto": "docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)"
+   },
    {
     "sha": "59599d3",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "55a4d92",
     "data": "2026-11-14",
     "assunto": "chore: contexto agendado de 10 min para 1x/hora (#87)"
-   },
-   {
-    "sha": "846ea80",
-    "data": "2026-11-08",
-    "assunto": "fix(deps): downgrade tailwindcss de v4 para v3.4.19"
    }
   ],
   "arquivos_mudados_7d": 48,
@@ -145,7 +145,11 @@
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 5
+    "mudancas": 6
+   },
+   {
+    "pasta": "docs/pendencias/README.md",
+    "mudancas": 4
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -153,10 +157,6 @@
    },
    {
     "pasta": "docs/pendencias/P-06-vulns-npm-restantes.md",
-    "mudancas": 3
-   },
-   {
-    "pasta": "docs/pendencias/README.md",
     "mudancas": 3
    },
    {
@@ -188,11 +188,11 @@
     "mudancas": 2
    },
    {
-    "pasta": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
+    "pasta": "docs/pendencias/P-02-app-mobile-motoristas.md",
     "mudancas": 2
    },
    {
-    "pasta": "docs/pendencias/P-07-security-definer-search-path.md",
+    "pasta": "docs/pendencias/P-03-chat-cliente-motorista.md",
     "mudancas": 2
    }
   ],
@@ -215,11 +215,15 @@
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 5
+    "mudancas": 6
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 5
+   },
+   {
+    "arquivo": "docs/pendencias/README.md",
+    "mudancas": 4
    },
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -231,10 +235,6 @@
    },
    {
     "arquivo": "docs/pendencias/P-06-vulns-npm-restantes.md",
-    "mudancas": 3
-   },
-   {
-    "arquivo": "docs/pendencias/README.md",
     "mudancas": 3
    },
    {
@@ -270,6 +270,14 @@
     "mudancas": 2
    },
    {
+    "arquivo": "docs/pendencias/P-02-app-mobile-motoristas.md",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/pendencias/P-03-chat-cliente-motorista.md",
+    "mudancas": 2
+   },
+   {
     "arquivo": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
     "mudancas": 2
    },
@@ -288,20 +296,12 @@
    {
     "arquivo": "scripts/add-security-manage.ts",
     "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-dashboard-fixes.ts",
-    "mudancas": 2
-   },
-   {
-    "arquivo": "scripts/apply-final-sql.ts",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 22
+    "commits": 23
    },
    {
     "autor": "dependabot[bot]",

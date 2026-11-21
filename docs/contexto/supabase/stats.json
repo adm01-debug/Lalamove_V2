@@ -120,30 +120,30 @@
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-21T12:45:00.318849+00:00",
+        "end_time": "2026-11-21T13:10:00.149762+00:00",
         "jobid": 9,
         "return_message": "1 row",
-        "runid": 29094,
-        "seconds": 0.02,
-        "start_time": "2026-11-21T12:45:00.300224+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-21T12:40:00.259229+00:00",
-        "jobid": 9,
-        "return_message": "1 row",
-        "runid": 29093,
+        "runid": 29099,
         "seconds": 0.03,
-        "start_time": "2026-11-21T12:40:00.224387+00:00",
+        "start_time": "2026-11-21T13:10:00.122310+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-21T12:35:00.360768+00:00",
+        "end_time": "2026-11-21T13:05:00.187039+00:00",
         "jobid": 9,
         "return_message": "1 row",
-        "runid": 29092,
-        "seconds": 0.05,
-        "start_time": "2026-11-21T12:35:00.305946+00:00",
+        "runid": 29098,
+        "seconds": 0.02,
+        "start_time": "2026-11-21T13:05:00.166851+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-21T13:00:00.191556+00:00",
+        "jobid": 9,
+        "return_message": "1 row",
+        "runid": 29097,
+        "seconds": 0.03,
+        "start_time": "2026-11-21T13:00:00.164646+00:00",
         "status": "succeeded"
       },
       {
@@ -219,7 +219,7 @@
           "usename": "supabase_admin"
         }
       ],
-      "database_bytes": 42331283,
+      "database_bytes": 42347667,
       "queues": [],
       "schema_bytes": [
         {
@@ -230,12 +230,12 @@
       "storage": [],
       "top_queries": [
         {
-          "calls": 28703,
+          "calls": 28708,
           "mean_ms": 11.61,
           "query": "select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id",
           "role": "postgres",
-          "rows": 28703,
-          "total_ms": 333341
+          "rows": 28708,
+          "total_ms": 333433
         },
         {
           "calls": 26261,
@@ -254,28 +254,28 @@
           "total_ms": 122966
         },
         {
-          "calls": 71600,
-          "mean_ms": 1.05,
-          "query": "WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid",
-          "role": "postgres",
-          "rows": 28625,
-          "total_ms": 75222
-        },
-        {
-          "calls": 2,
-          "mean_ms": 35627.51,
+          "calls": 3,
+          "mean_ms": 35603.63,
           "query": "SELECT table_schema AS schema, table_name AS \"table\", column_name AS \"column\", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ",
           "role": "postgres",
           "rows": 0,
-          "total_ms": 71255
+          "total_ms": 106811
         },
         {
-          "calls": 71600,
+          "calls": 71611,
+          "mean_ms": 1.05,
+          "query": "WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid",
+          "role": "postgres",
+          "rows": 28630,
+          "total_ms": 75242
+        },
+        {
+          "calls": 71611,
           "mean_ms": 0.88,
           "query": "WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key || ",
           "role": "postgres",
-          "rows": 28703,
-          "total_ms": 62787
+          "rows": 28708,
+          "total_ms": 62800
         },
         {
           "calls": 84,
@@ -310,12 +310,12 @@
           "total_ms": 33870
         },
         {
-          "calls": 28703,
+          "calls": 28708,
           "mean_ms": 0.69,
           "query": "insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)",
           "role": "postgres",
-          "rows": 28703,
-          "total_ms": 19822
+          "rows": 28708,
+          "total_ms": 19829
         },
         {
           "calls": 60,
@@ -334,12 +334,12 @@
           "total_ms": 7354
         },
         {
-          "calls": 33303,
+          "calls": 33326,
           "mean_ms": 0.22,
           "query": "select set_config('?', $1, true), set_config('?', $2, true), set_config('?', $3, true), set_config('?', $4, true), set_config('?', $5, true), set_config('request.head",
           "role": "service_role",
-          "rows": 33303,
-          "total_ms": 7221
+          "rows": 33326,
+          "total_ms": 7222
         },
         {
           "calls": 167,
@@ -789,7 +789,7 @@
         "is_primary": false,
         "is_unique": true,
         "name": "contract_version_usage_unique",
-        "scans": 915,
+        "scans": 937,
         "schema": "public",
         "table": "contract_version_usage"
       },
@@ -2607,10 +2607,10 @@
         "total_bytes": 147456
       },
       {
-        "dead_rows": 0,
+        "dead_rows": 22,
         "est_rows": 75,
         "heap_bytes": 8192,
-        "idx_scan": 929,
+        "idx_scan": 951,
         "index_bytes": 81920,
         "last_autoanalyze": "2026-11-21T12:20:15.969842+00:00",
         "last_autovacuum": "2026-11-21T12:30:16.405223+00:00",

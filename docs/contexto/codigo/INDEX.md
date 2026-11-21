@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `59599d3f3932bd16befd67f05f2221d3adab721e` (2026-11-21T09:28:46-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c77f6cc07bed873c5b84129cc967ab45b386f872` (2026-11-21T09:54:27-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -265,19 +265,21 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- não gerado neste run (o gerador segue sem ele). npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.
+- 6509 nós · 14326 arestas · 511 comunidades · grafo do commit `c77f6cc0`
+- comunidades maiores: cn (200), button.tsx (122), App.tsx (107), snapshot.py (102), lucide-react (102), EvaluationsPage.tsx (91), AdminTelemetriaPage.tsx (90), dependencies (80), client.ts (76), gerar.mjs (76), ref_node_path (71), DashboardRedesigned.tsx (68)
+- símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (30)
 - package.json (30)
 - supabase/config.toml (11)
 - .github/workflows/ci.yml (7)
-- docs/pendencias/_ordem.md (5)
+- docs/pendencias/_ordem.md (6)
 - src/hooks/useRegionResolver.ts (5)
+- docs/pendencias/README.md (4)
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
 - docs/pendencias/P-06-vulns-npm-restantes.md (3)
-- docs/pendencias/README.md (3)
 - eslint.config.js (3)
 - scripts/seed-database.ts (3)
 - src/hooks/useDeviceDetection.ts (3)
@@ -349,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `c77f6cc` docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)
 - 2026-11-21 `59599d3` docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)
 - 2026-11-21 `f1218b2` fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)
 - 2026-11-21 `4c03038` chore: registra P-11 MFA descartado e consolida README do backlog (#98)
@@ -363,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `a4e1f18` build(deps): bump input-otp from 1.4.2 to 1.5.0 (#76)
 - 2026-11-20 `1eb8189` build(deps): bump papaparse from 5.5.3 to 5.7.1 (#73)
 - 2026-11-20 `cbc45da` build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)
-- 2026-11-20 `a6e36fe` build(deps): bump web-vitals from 5.1.0 to 6.2.3 (#71)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

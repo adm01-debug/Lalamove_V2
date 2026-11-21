@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "59599d3f3932bd16befd67f05f2221d3adab721e",
+  "sha": "c77f6cc07bed873c5b84129cc967ab45b386f872",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 12:44 UTC",
+  "generated_at": "2026-11-21 13:11 UTC",
   "files_total": 884,
   "code_files": 737,
   "code_lines": 126890
@@ -61114,10 +61114,22 @@
   }
  },
  "git": {
-  "sha": "59599d3f3932bd16befd67f05f2221d3adab721e",
+  "sha": "c77f6cc07bed873c5b84129cc967ab45b386f872",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c77f6cc",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)",
+    "files": [
+     "docs/pendencias/P-02-app-mobile-motoristas.md",
+     "docs/pendencias/P-03-chat-cliente-motorista.md",
+     "docs/pendencias/README.md",
+     "docs/pendencias/_ordem.md"
+    ]
+   },
    {
     "sha": "59599d3",
     "date": "2026-11-21",
@@ -61592,42 +61604,40 @@
      "scripts/vercel/verify-release-targets.mjs",
      "scripts/vercel/verify-release-targets.unit.mjs"
     ]
-   },
-   {
-    "sha": "ecce49a",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "package-lock.json",
-    13
-   ],
-   [
-    "package.json",
     12
    ],
    [
+    "package.json",
+    11
+   ],
+   [
     "docs/pendencias/_ordem.md",
-    5
+    6
+   ],
+   [
+    "docs/pendencias/README.md",
+    4
    ],
    [
     "docs/pendencias/P-06-vulns-npm-restantes.md",
     3
    ],
    [
-    "docs/pendencias/README.md",
+    ".github/workflows/ci.yml",
     3
    ],
    [
-    ".github/workflows/ci.yml",
-    3
+    "docs/pendencias/P-02-app-mobile-motoristas.md",
+    2
+   ],
+   [
+    "docs/pendencias/P-03-chat-cliente-motorista.md",
+    2
    ],
    [
     "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
@@ -61671,14 +61681,6 @@
    ],
    [
     "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
-    1
-   ],
-   [
-    "docs/pendencias/P-02-app-mobile-motoristas.md",
-    1
-   ],
-   [
-    "docs/pendencias/P-03-chat-cliente-motorista.md",
     1
    ],
    [

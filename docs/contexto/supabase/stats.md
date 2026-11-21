@@ -19,7 +19,7 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.tracking_events_y2026m08 | ~200 | 152.0 KB | 40.0 KB | 80.0 KB | 0 | ~30 | 0 |  |
 | public.contacts | ~30 | 144.0 KB | 8.0 KB | 128.0 KB | 2 | ~90 | ~70 |  |
 | public.driver_approval_queue | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~30 | ~3.7k |  |
-| public.contract_version_usage | ~80 | 128.0 KB | 8.0 KB | 80.0 KB | 0 | ~20 | ~930 | 2026-11-21 |
+| public.contract_version_usage | ~80 | 128.0 KB | 8.0 KB | 80.0 KB | ~20 | ~20 | ~950 | 2026-11-21 |
 | public.query_telemetry | 0 | 128.0 KB | 8.0 KB | 112.0 KB | 2 | ~100 | ~20 |  |
 | public.tracking_events_y2026m11 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 9 | 0 |  |
 | public.tracking_events_y2026m12 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 4 | 0 |  |
@@ -106,11 +106,11 @@ _nenhum_
 ## Consultas mais custosas (pg_stat_statements, desde o último reset)
 | role | chamadas (~) | total ms (~) | média ms | query |
 |---|---|---|---|---|
-| postgres | ~28.7k | ~333.3k | 11.61 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
+| postgres | ~28.7k | ~333.4k | 11.61 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
 | service_role | ~26.3k | ~208.8k | 7.95 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM "public"."get_pending_escalations"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ` |
 | postgres | ~220 | ~123k | 558.93 | `SELECT e.name, n.nspname AS schema, e.default_version, x.extversion AS installed_version, e.comment, ev.schema AS default_version_schema FROM pg_available_extensions e LEFT JOIN pg_extension x ON e.name = x.extname LEFT ` |
+| postgres | 3 | ~106.8k | 35603.63 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
 | postgres | ~71.6k | ~75.2k | 1.05 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
-| postgres | 2 | ~71.3k | 35627.51 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
 | postgres | ~71.6k | ~62.8k | 0.88 | `WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key \|\| ` |
 | authenticator | ~80 | ~52.4k | 623.99 | `SELECT name FROM pg_timezone_names` |
 | service_role | ~1.4k | ~38.2k | 27.41 | `WITH pgrst_source AS (INSERT INTO "public"."alerts"("message", "metadata", "severity", "title", "type") SELECT "pgrst_body"."message", "pgrst_body"."metadata", "pgrst_body"."severity", "pgrst_body"."title", "pgrst_body".` |
