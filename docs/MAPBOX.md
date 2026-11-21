@@ -1,7 +1,7 @@
 # MAPBOX — Inventário e Referência (21/11/2026)
 
 > Fonte canônica sobre a integração Mapbox no Lalamove V2.
-> Plano detalhado: `claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md`
+> Plano detalhado: `docs/planos/PLANO_MAPBOX_100_ETAPAS.md`
 
 ## Conta
 
