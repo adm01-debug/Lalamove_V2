@@ -43,3 +43,37 @@ verify_jwt = true
 # do migrate-helper); a autorização real é via RPC can_run_db_diagnostics.
 [functions.mcp-query]
 verify_jwt = false
+
+# lalamove-webhook: receptor dos webhooks da Lalamove (ORDER_STATUS_CHANGED,
+# DRIVER_ASSIGNED, WALLET_BALANCE_CHANGED...). A Lalamove NÃO envia JWT
+# Supabase — com verify_jwt = true todo webhook morreria com 401 antes de
+# chegar no código. A autenticidade é validada em código pela assinatura
+# HMAC-SHA256 no body (security.ts).
+[functions.lalamove-webhook]
+verify_jwt = false
+
+# llm-wh: alias/receptor alternativo de webhook (mesma razão: caller externo
+# sem JWT Supabase; validação por assinatura no código).
+[functions.llm-wh]
+verify_jwt = false
+
+# job-worker: processa a job_queue. Invocado por pg_cron/chamadas internas
+# com Bearer service_role — passa no verify_jwt. Nenhum caller anônimo deve
+# conseguir disparar o worker.
+[functions.job-worker]
+verify_jwt = true
+
+# lalamove-gateway: gateway interno para a API v3 (assinatura HMAC das
+# requests). Só é chamado por functions internas/frontend autenticado.
+[functions.lalamove-gateway]
+verify_jwt = true
+
+# lalamove-token-refresh: renova o token de sessão da UAPI. Invocado por
+# pg_cron com Bearer service_role.
+[functions.lalamove-token-refresh]
+verify_jwt = true
+
+# bitrix24-sync: sincroniza pedidos com o Bitrix24. Chamado por functions
+# internas/n8n com Bearer service_role.
+[functions.bitrix24-sync]
+verify_jwt = true
