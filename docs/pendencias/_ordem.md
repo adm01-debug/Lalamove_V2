@@ -10,6 +10,7 @@
 | 2 | P-15 Pipeline de escalonamento de alertas | cron rodou 2016x sem escalar nada: lert_configurations nunca teve seed e a funcao faz INNER JOIN nela. PR #119 validada por dry-run | apply em producao (regra 8, PR #119) |
 | 3 | P-10 Scripts chaves legacy | decidido: manter; nada a executar | — |
 
+- **P-16** (2026-11-21): hooks orfaos triados — 51 encontrados, 3 wireados na PR #125 (squash `53b286b`: feature_flags como kill-switch + dados reais no perfil + secao Dispositivos), 3 cobertos pela PR #119, 1 adiado por decisao de produto (`useEvaluateDriverOnAssignment`, flag `driver_auto_evaluation` desligada), 3 descartados como cobertos por invoke direto, 41 declarados utilitarios nao adotados. Ver `P-16-hooks-orfaos-triagem.md`.
 ## Itens concluídos
 - **P-01** (2026-11-21): RLS de `query_telemetry` grant-only — PR #92 mergeada (squash `41ba75b`), CI 9/9 verde no push pós-merge, deploy de produção READY. Ver `P-01-rls-query-telemetria-grant-only.md`.
 - **P-06** (2026-11-21): vulns npm restantes — PR #99 mergeada (squash `f1218b2`), bump react-router-dom 6→7.18.6 + override postcss-selector-parser 6.1.5; `npm audit` 0 vulns, build/lint/CI 9/9 verdes, deploy READY/PROMOTED. Ver `P-06-vulns-npm-restantes.md`.
