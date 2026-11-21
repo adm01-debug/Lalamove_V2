@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9f9c709a5c` · branch `main` · 2026-11-21 16:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -26,7 +26,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `job_queue` | Service role can manage jobs | ALL | public | permissive | `auth.role() = 'service_role'` |  |
 | `job_queue` | Users can view their own jobs | SELECT | public | permissive | `auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )` |  |
 | `job_queue` | Admins can create jobs | INSERT | public | permissive |  | `auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )` |
-| `job_queue` | Service role full access | ALL | public | permissive | `auth.role() = 'service_role'` |  |
 | `role_permissions` | Admins can manage role_permissions | ALL | public | permissive | `public.has_role(auth.uid(), 'admin')` |  |
 | `rate_limit_logs` | Admins can view rate limit logs | SELECT | public | permissive | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')` |  |
 | `blocked_ips` | Admins can manage blocked IPs | ALL | public | permissive | `public.has_role(auth.uid(), 'admin')` |  |
@@ -225,6 +224,10 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_roles` | Authenticated users can update roles | UPDATE | authenticated | permissive | `true` |  |
 | `user_roles` | Service role full access user_roles | ALL | service_role | permissive | `true` | `true` |
 | `query_telemetry` | System can insert telemetry | INSERT | authenticated | permissive |  | `has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())` |
+| `lalamove_webhook_config` | Admins manage webhook config | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role)` | `public.has_role(auth.uid(), 'admin'::app_role)` |
+| `bitrix24_spa_sync` | Admin manager view spa sync | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)` |  |
+| `job_queue` | Service role full access | ALL | service_role | permissive | `true` | `true` |
+| `job_queue` | Admins view jobs | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role)` |  |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -435,15 +438,15 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `audit_log` | `resource_id` | obrigatório |
 | `audit_log` | `created_at` | default now() |
 | `job_queue` | `id` | PK; default gen_random_uuid() |
-| `job_queue` | `type` | obrigatório; CHECK type IN ( 'webhook', 'notification', 'evaluation', 'bitrix_sync', 'email', 'whatsapp', 'slack' ) |
+| `job_queue` | `type` | obrigatório; CHECK type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch') |
 | `job_queue` | `payload` | obrigatório |
-| `job_queue` | `status` | default 'PENDING'; CHECK status IN ( 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED' ) |
+| `job_queue` | `status` | default 'PENDING'; CHECK status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED') |
 | `job_queue` | `attempts` | default 0 |
 | `job_queue` | `max_attempts` | default 3 |
 | `job_queue` | `priority` | default 5; CHECK priority BETWEEN 1 AND 10 |
 | `job_queue` | `metadata` | default '{}'::jsonb |
-| `job_queue` | `created_at` | default NOW() |
-| `job_queue` | `updated_at` | default NOW() |
+| `job_queue` | `created_at` | default now() |
+| `job_queue` | `updated_at` | default now() |
 | `job_queue` | `created_by` | FK → users.id |
 | `job_queue_processing_log` | `id` | PK; default gen_random_uuid() |
 | `job_queue_processing_log` | `run_at` | default NOW() |
@@ -530,7 +533,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_passkeys` | `user_id` | obrigatório |
 | `user_passkeys` | `credential_id` | obrigatório; único |
 | `user_passkeys` | `public_key` | obrigatório |
-| … +198 linhas — lista completa em `context.json` | | |
+| … +212 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -548,7 +551,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | on_order_status_change_sync_bitrix24 | AFTER UPDATE OF STATUS | `lalamove_orders` | `trigger_bitrix24_sync` |  |
 | audit_drivers_trigger | AFTER UPDATE | `drivers` | `audit_driver_changes` |  |
 | trigger_job_queue_updated_at | BEFORE UPDATE | `job_queue` | `update_job_queue_updated_at` |  |
-| trigger_update_job_queue_updated_at | BEFORE UPDATE | `job_queue` | `update_job_queue_updated_at` |  |
 | update_user_roles_updated_at | BEFORE UPDATE | `user_roles` | `update_updated_at_column` |  |
 | update_ip_whitelist_updated_at | BEFORE UPDATE | `ip_whitelist` | `update_updated_at_column` |  |
 | trg_set_token_expiration | BEFORE INSERT | `password_reset_tokens` | `set_token_expiration` |  |
@@ -564,13 +566,12 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_contacts_updated_at | BEFORE UPDATE | `contacts` | `update_updated_at_column` |  |
 | trg_notify_webhook_security_event | AFTER INSERT | `webhook_events` | `notify_webhook_security_event` |  |
 | trg_mcp_diagnostics_grants_updated_at | BEFORE UPDATE | `mcp_diagnostics_grants` | `update_updated_at_column` |  |
+| trigger_update_job_queue_updated_at | BEFORE UPDATE | `job_queue` | `update_job_queue_updated_at` |  |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
 | Função | Mensagem | Origem |
 |---|---|---|
-| `add_job` | Invalid job type: % | `supabase/migrations/20251226010000_create_job_queue_system.sql` |
-| `add_job` | Priority must be between 1 and 10 | `supabase/migrations/20251226010000_create_job_queue_system.sql` |
 | `get_cron_jobs_health` | Acesso negado: requer papel de administrador | `supabase/migrations/20260711194632_e6def1eb-1b3c-487f-978f-b0774a8201af.sql` |
 | `get_contract_v1_sunset_readiness` | Acesso negado: requer papel de administrador | `supabase/migrations/20260712194831_1bd67c8e-482f-4a15-abfc-6f3986b33611.sql` |
 | `acknowledge_alert` | Acesso negado | `supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql` |
@@ -589,10 +590,10 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 |---|---|---|---|
 | `cache_refresh_log` | `status` | `failed`, `running`, `success` | `running` |
 | `drivers` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | `PENDING_APPROVAL` |
-| `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` | `PENDING` |
+| `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` | `PENDING` |
 | `lalamove_orders` | `internal_status` | **livre (sem enum/CHECK)** |  |
 | `lalamove_stops` | `pod_status` | **livre (sem enum/CHECK)** | `NOT_REQUIRED` |
-| `lalamove_status_history` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
+| `lalamove_status_history` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
 | `lalamove_status_history` | `old_status` | **livre (sem enum/CHECK)** |  |
 | `driver_approval_queue` | `status` | `PENDING`, `APPROVED`, `REJECTED` | `PENDING` |
 | `active_tracking` | `tracking_status` | **livre (sem enum/CHECK)** |  |
@@ -606,11 +607,13 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `lalamove_stop_proofs` | `pop_status` | `NOT_REQUIRED`, `failed`, `pending`, `picked_up` |  |
 | `lalamove_stop_proofs` | `delivery_code_status` | **livre (sem enum/CHECK)** |  |
 | `lalamove_rate_limits` | `status` | **livre (sem enum/CHECK)** |  |
+| `bitrix24_spa_sync` | `last_stage` | **livre (sem enum/CHECK)** |  |
+| `bitrix24_spa_sync` | `sync_status` | `error`, `pending`, `success` | `pending` |
 | `drivers_safe_view` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `orders_operator_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
-| `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
+| `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
 | `orders_safe_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
-| `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
+| `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
 | `cache_status` | `status` | **livre (sem enum/CHECK)** |  |
 | `driver_stats_cache` | `driver_status` | **livre (sem enum/CHECK)** |  |
 
@@ -775,7 +778,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 
 | Nome | Valores | Onde |
 |---|---|---|
-| order_status | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` | banco |
+| order_status | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` | banco |
 | vehicle_type | `MOTORCYCLE`, `CAR`, `VAN`, `TRUCK` | banco |
 | driver_status | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | banco |
 | incident_type | `ROUTE_DEVIATION`, `LONG_STOP`, `LATE_DELIVERY`, `CUSTOMER_COMPLAINT`, `DAMAGE`, `OTHER` | banco |

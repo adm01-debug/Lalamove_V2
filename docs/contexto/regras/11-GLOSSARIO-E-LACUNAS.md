@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9f9c709a5c` · branch `main` · 2026-11-21 16:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -15,6 +15,7 @@
 | `audit_log` | Registro de auditoria de ações | 9 colunas | migration |
 | `auth_logs` | Auditoria de autenticacao: IP, user agent e evento de cada acesso. | 9 colunas | migration |
 | `bitrix24_activities` | Atividades/timeline sincronizadas com o CRM Bitrix24. | 7 colunas | migration |
+| `bitrix24_spa_sync` | Sincronizacao do pedido com o SPA 1690 do Bitrix24 (crm.item.*). Substitui bitrix24_sync (modelo de deals). | 10 colunas | migration |
 | `bitrix24_stage_mappings` | Mapeamento de estagios entre o sistema e os funis do Bitrix24. | 5 colunas | migration |
 | `bitrix24_sync` | Registro de sincronizacao de deals com o Bitrix24. | 9 colunas | migration |
 | `bitrix24_tokens` | Tokens OAuth2 do Bitrix24 com refresh. | 7 colunas | migration |
@@ -39,16 +40,17 @@
 | `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
 | `hourly_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
-| `job_queue` | Fila de jobs assíncronos para processamento em background | 16 colunas | migration |
+| `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 17 colunas | migration |
 | `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
-| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 49 colunas | migration |
+| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 50 colunas | migration |
 | `lalamove_priority_fee_history` | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. | 9 colunas | migration |
 | `lalamove_rate_limits` | Controle de rate limit das chamadas a API Lalamove. | 12 colunas | migration |
 | `lalamove_status_history` | Historico de mudancas de status de cada pedido Lalamove. | 9 colunas | migration |
 | `lalamove_stop_proofs` | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. | 14 colunas | migration |
-| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 15 colunas | migration |
+| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 16 colunas | migration |
 | `lalamove_uapi_sessions` | Sessoes da Unified API da Lalamove (token e expiracao). | 13 colunas | migration |
+| `lalamove_webhook_config` | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). | 9 colunas | migration |
 | `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
 | `map_settings_overrides` | Overrides de configuracao de mapa por usuario/contexto. | 8 colunas | migration |
 | `mcp_diagnostics_grants` | Grants de acesso a diagnosticos via MCP (query_telemetry). | 7 colunas | migration |
@@ -82,7 +84,7 @@
 | `user_roles` | Roles atribuidas a cada usuario (RBAC). | 10 colunas | migration |
 | `webauthn_challenges` | Challenges WebAuthn para fluxo de autenticacao sem senha. | 6 colunas | migration |
 | `webhook_events` | Log completo de todos webhooks recebidos do Lalamove. | 9 colunas | migration |
-| `order_status` (enum) | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED |  | banco |
+| `order_status` (enum) | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED, QUOTED, ASSIGNING_DRIVER, DELIVERING |  | banco |
 | `vehicle_type` (enum) | MOTORCYCLE, CAR, VAN, TRUCK |  | banco |
 | `driver_status` (enum) | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST |  | banco |
 | `incident_type` (enum) | ROUTE_DEVIATION, LONG_STOP, LATE_DELIVERY, CUSTOMER_COMPLAINT, DAMAGE, OTHER |  | banco |
@@ -182,7 +184,6 @@ _nenhum item encontrado_
 | status | valor `CLOSED` para `state` usado no código não existe em nenhum enum do banco/TS | `escreve:src/utils/circuitBreaker.ts` |
 | status | valor `OPEN` para `state` usado no código não existe em nenhum enum do banco/TS | `compara:src/utils/circuitBreaker.ts` |
 | status | valor `synced` para `sync_status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useJobQueue.ts`<br>`filtra:src/hooks/useJobQueue.ts` |
-| status | valor `error` para `sync_status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useJobQueue.ts`<br>`escreve:supabase/functions/bitrix24-process-queue/index.ts`<br>`filtra:src/hooks/useJobQueue.ts` |
 | coluna | coluna `city` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `email` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `phone` usada no código não existe no schema de `contacts` |  |
@@ -231,7 +232,6 @@ _nenhum item encontrado_
 | dinâmico | 4 chamada(s) `.from(variável)` — tabela só conhecida em runtime | `supabase/functions/external-db-bridge/index.ts` |
 | segurança | função `cleanup_old_system_logs` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226000001_create_system_logs.sql` |
 | segurança | função `create_audit_log` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226000002_create_audit_log.sql` |
-| segurança | função `add_job` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010000_create_job_queue_system.sql` |
 | segurança | função `process_job_queue` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `get_cron_jobs_status` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
 | segurança | função `pause_cron_job` é SECURITY DEFINER sem `set search_path` (risco de escalação) | `supabase/migrations/20251226010001_configure_pg_cron.sql` |
@@ -244,10 +244,10 @@ _nenhum item encontrado_
 - Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.
 - `cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_stops.pod_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_status_history.old_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `driver_approval_queue.status` tem valores ['PENDING', 'APPROVED', 'REJECTED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `active_tracking.tracking_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
@@ -261,14 +261,16 @@ _nenhum item encontrado_
 - `lalamove_stop_proofs.pop_status` tem valores ['NOT_REQUIRED', 'failed', 'pending', 'picked_up'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_stop_proofs.delivery_code_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_rate_limits.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `bitrix24_spa_sync.last_stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `bitrix24_spa_sync.sync_status` tem valores ['error', 'pending', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_operator_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `driver_stats_cache.driver_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- 16/75 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …
+- 16/77 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

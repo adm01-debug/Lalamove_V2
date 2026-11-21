@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 160,
+ "migrations": 163,
  "seeds": [],
  "avisos": [
   "13 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -86,7 +86,10 @@
    "COMPLETED",
    "CANCELLED",
    "REJECTED",
-   "EXPIRED"
+   "EXPIRED",
+   "QUOTED",
+   "ASSIGNING_DRIVER",
+   "DELIVERING"
   ],
   "vehicle_type": [
    "MOTORCYCLE",
@@ -1979,6 +1982,110 @@
    "triggers": [],
    "sem_rls": false,
    "nao_usada": false
+  },
+  "bitrix24_spa_sync": {
+   "colunas": {
+    "category_id": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "last_error": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "last_stage": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "last_synced_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "order_id": {
+     "tipo": "uuid",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": "lalamove_orders"
+    },
+    "spa_id": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "sync_status": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'pending'",
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "Admin manager view spa sync",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "idx_bitrix24_spa_sync_spa",
+     "colunas": "spa_id",
+     "unico": false
+    },
+    {
+     "nome": "uq_bitrix24_spa_sync_order",
+     "colunas": "order_id",
+     "unico": true
+    }
+   ],
+   "fks": [
+    "order_id->lalamove_orders"
+   ],
+   "criada_em": "20261122120100_lalamove_integration_columns.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
   },
   "bitrix24_stage_mappings": {
    "colunas": {
@@ -4741,7 +4848,7 @@
    "colunas": {
     "attempts": {
      "tipo": "integer",
-     "nn": false,
+     "nn": true,
      "pk": false,
      "default": "0",
      "ref": null
@@ -4755,9 +4862,9 @@
     },
     "created_at": {
      "tipo": "timestamptz",
-     "nn": false,
+     "nn": true,
      "pk": false,
-     "default": "NOW()",
+     "default": "now()",
      "ref": null
     },
     "created_by": {
@@ -4766,6 +4873,13 @@
      "pk": false,
      "default": null,
      "ref": "auth"
+    },
+    "dedup_key": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
     },
     "error_message": {
      "tipo": "text",
@@ -4790,14 +4904,14 @@
     },
     "max_attempts": {
      "tipo": "integer",
-     "nn": false,
+     "nn": true,
      "pk": false,
      "default": "3",
      "ref": null
     },
     "metadata": {
      "tipo": "jsonb",
-     "nn": false,
+     "nn": true,
      "pk": false,
      "default": "'{}'::jsonb",
      "ref": null
@@ -4818,7 +4932,7 @@
     },
     "priority": {
      "tipo": "integer",
-     "nn": false,
+     "nn": true,
      "pk": false,
      "default": "5",
      "ref": null
@@ -4832,7 +4946,7 @@
     },
     "status": {
      "tipo": "text",
-     "nn": false,
+     "nn": true,
      "pk": false,
      "default": "'PENDING'",
      "ref": null
@@ -4846,9 +4960,9 @@
     },
     "updated_at": {
      "tipo": "timestamptz",
-     "nn": false,
+     "nn": true,
      "pk": false,
-     "default": "NOW()",
+     "default": "now()",
      "ref": null
     }
    },
@@ -4867,6 +4981,12 @@
      "tipo": "permissive"
     },
     {
+     "nome": "Admins view jobs",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
      "nome": "Service role can manage jobs",
      "comando": "all",
      "para": "public",
@@ -4875,7 +4995,7 @@
     {
      "nome": "Service role full access",
      "comando": "all",
-     "para": "public",
+     "para": "service_role",
      "tipo": "permissive"
     },
     {
@@ -4920,6 +5040,11 @@
      "nome": "idx_job_queue_type",
      "colunas": "type",
      "unico": false
+    },
+    {
+     "nome": "uq_job_queue_dedup_open",
+     "colunas": "dedup_key",
+     "unico": true
     }
    ],
    "fks": [
@@ -5262,6 +5387,34 @@
      "default": null,
      "ref": "drivers"
     },
+    "driver_lalamove_id": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "driver_name": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "driver_phone": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "driver_plate": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "duration_minutes": {
      "tipo": "integer",
      "nn": false,
@@ -5314,6 +5467,13 @@
     "lalamove_id": {
      "tipo": "text",
      "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "lalamove_status": {
+     "tipo": "text",
+     "nn": false,
      "pk": false,
      "default": null,
      "ref": null
@@ -5381,6 +5541,13 @@
      "default": null,
      "ref": null
     },
+    "quotation_expires_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "quotation_id": {
      "tipo": "text",
      "nn": false,
@@ -5404,13 +5571,41 @@
     },
     "scheduled_at": {
      "tipo": "timestamptz",
-     "nn": true,
+     "nn": false,
      "pk": false,
      "default": "now()",
      "ref": null
     },
+    "service_type": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "share_link": {
      "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "source": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": "'painel'",
+     "ref": null
+    },
+    "spa_category_id": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "spa_id": {
+     "tipo": "integer",
      "nn": false,
      "pk": false,
      "default": null,
@@ -5556,6 +5751,16 @@
      "unico": false
     },
     {
+     "nome": "idx_lalamove_orders_source",
+     "colunas": "source",
+     "unico": false
+    },
+    {
+     "nome": "idx_lalamove_orders_spa_id",
+     "colunas": "spa_id",
+     "unico": false
+    },
+    {
      "nome": "idx_lalamove_orders_status_created",
      "colunas": "status, created_at DESC",
      "unico": false
@@ -5648,7 +5853,18 @@
     "vehicle_type": "Database[\"public\"][\"Enums\"][\"vehicle_type\"]"
    },
    "drift": {
-    "so_na_migration": [],
+    "so_na_migration": [
+     "service_type",
+     "lalamove_status",
+     "quotation_expires_at",
+     "driver_lalamove_id",
+     "driver_name",
+     "driver_phone",
+     "driver_plate",
+     "source",
+     "spa_id",
+     "spa_category_id"
+    ],
     "so_no_types": []
    },
    "usada_no_front": 13,
@@ -6002,7 +6218,7 @@
      "ref": "lalamove_orders"
     },
     "status": {
-     "tipo": "public",
+     "tipo": "text",
      "nn": true,
      "pk": false,
      "default": null,
@@ -6391,6 +6607,13 @@
      "default": null,
      "ref": null
     },
+    "stop_id": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "stop_index": {
      "tipo": "integer",
      "nn": true,
@@ -6460,6 +6683,11 @@
      "nome": "idx_stops_pod_status",
      "colunas": "pod_status",
      "unico": false
+    },
+    {
+     "nome": "uq_lalamove_stops_order_stop_index",
+     "colunas": "order_id, stop_index",
+     "unico": true
     }
    ],
    "fks": [
@@ -6484,7 +6712,9 @@
     "stop_index": "number"
    },
    "drift": {
-    "so_na_migration": [],
+    "so_na_migration": [
+     "stop_id"
+    ],
     "so_no_types": []
    },
    "usada_no_front": 1,
@@ -6634,6 +6864,98 @@
    "triggers": [],
    "sem_rls": false,
    "nao_usada": false
+  },
+  "lalamove_webhook_config": {
+   "colunas": {
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "environment": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'production'",
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "is_active": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "true",
+     "ref": null
+    },
+    "notes": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "registered_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "registered_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth"
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "url": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "Admins manage webhook config",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "uq_webhook_config_active_env",
+     "colunas": "environment",
+     "unico": true
+    }
+   ],
+   "fks": [
+    "registered_by->auth"
+   ],
+   "criada_em": "20261122120100_lalamove_integration_columns.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
   },
   "login_attempts": {
    "colunas": {

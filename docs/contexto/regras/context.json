@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "18c9d8333344847da6cfe27ac966d831b8a94fb1",
+  "sha": "9f9c709a5c72504f162a8f7d90252dacf567fe97",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 14:51 UTC",
-  "files_total": 889,
-  "code_files": 739,
-  "code_lines": 127251
+  "generated_at": "2026-11-21 16:05 UTC",
+  "files_total": 893,
+  "code_files": 742,
+  "code_lines": 127540
  },
  "version": "1.3.2",
- "facts_hash": "15892de75dce731a",
+ "facts_hash": "f38fb870d0673b0e",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -166,7 +166,7 @@
   "languages": {
    ".ts": 231,
    ".tsx": 224,
-   ".sql": 164,
+   ".sql": 167,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -710,7 +710,7 @@
      },
      {
       "name": "scheduled_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
+      "type": "TIMESTAMPTZ DEFAULT now()",
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
@@ -826,6 +826,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20260723133439_622ac986-0c37-4560-84ca-de587b0496cc.sql"
+     },
+     {
+      "name": "service_type",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
      },
      {
       "name": "auto_notify_supplier",
@@ -1061,6 +1068,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
+     },
+     {
+      "name": "stop_id",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
      },
      {
       "name": "pod_delivered_at",
@@ -2685,120 +2699,127 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "type",
-      "type": "TEXT NOT NULL CHECK (type IN ( 'webhook', 'notification', 'evaluation', 'bitrix_sync', 'email', 'whatsapp', 'slack' ))",
+      "type": "text NOT NULL CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch'))",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "payload",
-      "type": "JSONB NOT NULL",
+      "type": "jsonb NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "status",
-      "type": "TEXT DEFAULT 'PENDING' CHECK (status IN ( 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED' ))",
+      "type": "text NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "attempts",
-      "type": "INTEGER DEFAULT 0",
+      "type": "integer NOT NULL DEFAULT 0",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "max_attempts",
-      "type": "INTEGER DEFAULT 3",
+      "type": "integer NOT NULL DEFAULT 3",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "error_message",
-      "type": "TEXT",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "error_stack",
-      "type": "TEXT",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "next_retry_at",
-      "type": "TIMESTAMPTZ",
+      "type": "timestamptz",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "started_at",
-      "type": "TIMESTAMPTZ",
+      "type": "timestamptz",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "completed_at",
-      "type": "TIMESTAMPTZ",
+      "type": "timestamptz",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "priority",
-      "type": "INTEGER DEFAULT 5 CHECK (priority BETWEEN 1 AND 10)",
+      "type": "integer NOT NULL DEFAULT 5 CHECK (priority BETWEEN 1 AND 10)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+     },
+     {
+      "name": "dedup_key",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "metadata",
-      "type": "JSONB DEFAULT '{}'::jsonb",
+      "type": "jsonb NOT NULL DEFAULT '{}'::jsonb",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "created_at",
-      "type": "TIMESTAMPTZ DEFAULT NOW()",
+      "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "updated_at",
-      "type": "TIMESTAMPTZ DEFAULT NOW()",
+      "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      },
      {
       "name": "created_by",
-      "type": "UUID REFERENCES auth.users(id)",
+      "type": "uuid REFERENCES auth.users(id)",
       "fk": "users.id",
       "generated": "",
-      "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
+      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
-    "comment": "Fila de jobs assíncronos para processamento em background",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
+    "comment": "Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao.",
     "origin": "migration"
    },
    "job_queue_processing_log": {
@@ -5450,6 +5471,155 @@
     "comment": "Grants de acesso a diagnosticos via MCP (query_telemetry).",
     "origin": "migration"
    },
+   "lalamove_webhook_config": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "environment",
+      "type": "text NOT NULL DEFAULT 'production' CHECK (environment IN ('sandbox','production'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "url",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "is_active",
+      "type": "boolean NOT NULL DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "registered_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "registered_by",
+      "type": "uuid REFERENCES auth.users(id)",
+      "fk": "users.id",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "notes",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
+    "comment": "URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro).",
+    "origin": "migration"
+   },
+   "bitrix24_spa_sync": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "order_id",
+      "type": "uuid NOT NULL REFERENCES public.lalamove_orders(id) ON DELETE CASCADE",
+      "fk": "lalamove_orders.id ON DELETE CASCADE",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "spa_id",
+      "type": "integer NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "category_id",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "last_stage",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "last_synced_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "last_error",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "sync_status",
+      "type": "text NOT NULL DEFAULT 'pending' CHECK (sync_status IN ('pending','success','error'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
+    "comment": "Sincronizacao do pedido com o SPA 1690 do Bitrix24 (crm.item.*). Substitui bitrix24_sync (modelo de deals).",
+    "origin": "migration"
+   },
    "geo_blocks": {
     "columns": [
      {
@@ -7302,16 +7472,6 @@
     "mode": "permissive",
     "using": "",
     "check": "auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
-   {
-    "name": "Service role full access",
-    "table": "job_queue",
-    "cmd": "ALL",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.role() = 'service_role'",
-    "check": "",
     "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
    },
    {
@@ -9293,6 +9453,46 @@
     "using": "",
     "check": "has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())",
     "src": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql"
+   },
+   {
+    "name": "Admins manage webhook config",
+    "table": "lalamove_webhook_config",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "Admin manager view spa sync",
+    "table": "bitrix24_spa_sync",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "Service role full access",
+    "table": "job_queue",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "Admins view jobs",
+    "table": "job_queue",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "triggers": [
@@ -9403,15 +9603,6 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
-   },
-   {
-    "name": "trigger_update_job_queue_updated_at",
-    "when": "BEFORE UPDATE",
-    "table": "job_queue",
-    "function": "update_job_queue_updated_at",
-    "condition": "",
-    "each": "row",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
    },
    {
     "name": "update_user_roles_updated_at",
@@ -9547,6 +9738,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "name": "trigger_update_job_queue_updated_at",
+    "when": "BEFORE UPDATE",
+    "table": "job_queue",
+    "function": "update_job_queue_updated_at",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "functions": {
@@ -9722,40 +9922,37 @@
    },
    "update_job_queue_updated_at": {
     "args": "",
-    "returns": "TRIGGER",
+    "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN NEW.updated_at = NOW(); RETURN NEW; END;",
+    "search_path": true,
+    "body": "BEGIN NEW.updated_at = now(); RETURN NEW; END;",
     "raises": [],
     "tables": []
    },
    "add_job": {
-    "args": "p_type TEXT, p_payload JSONB, p_priority INTEGER DEFAULT 5, p_max_attempts INTEGER DEFAULT 3, p_metadata JSONB DEFAULT '{}'::jsonb",
-    "returns": "UUID",
+    "args": "p_type text, p_payload jsonb, p_priority integer DEFAULT 5, p_max_attempts integer DEFAULT 3, p_dedup_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'::jsonb",
+    "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "DECLARE v_job_id UUID; BEGIN IF p_type NOT IN ('webhook', 'notification', 'evaluation', 'bitrix_sync', 'email', 'whatsapp', 'slack') THEN RAISE EXCEPTION 'Invalid job type: %', p_type; END IF; IF p_priority < 1 OR p_priority > 10 THEN RAISE EXCEPTION 'Priority must be between 1 and 10'; END IF; INSERT INTO job_queue ( type, payload, priority, max_attempts, metadata, created_by ) VALUES ( p_type, p_payload, p_priority, p_max_attempts, p_metadata, auth.uid() ) RETURNING id INTO v_job_id; RAISE NOTICE 'Job added: % (type: %, priority: %)', v_job_id, p_type, p_priority; RETURN v_job_id; END;",
-    "raises": [
-     "Invalid job type: %",
-     "Priority must be between 1 and 10"
-    ],
+    "search_path": true,
+    "body": "DECLARE v_job_id uuid; BEGIN IF p_dedup_key IS NOT NULL THEN SELECT id INTO v_job_id FROM job_queue WHERE dedup_key = p_dedup_key AND status IN ('PENDING','PROCESSING') LIMIT 1; IF v_job_id IS NOT NULL THEN RETURN v_job_id; END IF; END IF; INSERT INTO job_queue (type, payload, priority, max_attempts, dedup_key, metadata, created_by) VALUES (p_type, p_payload, p_priority, p_max_attempts, p_dedup_key, p_metadata, auth.uid()) RETURNING id INTO v_job_id; RETURN v_job_id; END;",
+    "raises": [],
     "tables": [
      "job_queue",
      "v_job_id"
     ]
    },
    "get_next_jobs": {
-    "args": "p_limit INTEGER DEFAULT 10, p_types TEXT[] DEFAULT NULL",
-    "returns": "SETOF job_queue",
+    "args": "p_limit integer DEFAULT 10, p_types text[] DEFAULT NULL",
+    "returns": "SETOF public.job_queue",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN QUERY SELECT * FROM job_queue WHERE status = 'PENDING' AND (next_retry_at IS NULL OR next_retry_at <= NOW()) AND (p_types IS NULL OR type = ANY(p_types)) ORDER BY priority DESC, created_at ASC LIMIT p_limit FOR UPDATE SKIP LOCKED; END;",
+    "search_path": true,
+    "body": "BEGIN RETURN QUERY SELECT * FROM job_queue WHERE status = 'PENDING' AND (next_retry_at IS NULL OR next_retry_at <= now()) AND (p_types IS NULL OR type = ANY(p_types)) ORDER BY priority DESC, created_at ASC LIMIT p_limit FOR UPDATE SKIP LOCKED; END;",
     "raises": [],
     "tables": [
      "SKIP",
@@ -9763,40 +9960,40 @@
     ]
    },
    "mark_job_processing": {
-    "args": "p_job_id UUID",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_updated BOOLEAN; BEGIN UPDATE job_queue SET status = 'PROCESSING', started_at = NOW(), updated_at = NOW() WHERE id = p_job_id AND status = 'PENDING' RETURNING TRUE INTO v_updated; RETURN COALESCE(v_updated, FALSE); END;",
+    "search_path": true,
+    "body": "DECLARE v boolean; BEGIN UPDATE job_queue SET status='PROCESSING', started_at=now(), updated_at=now() WHERE id=p_job_id AND status='PENDING' RETURNING true INTO v; RETURN COALESCE(v,false); END;",
     "raises": [],
     "tables": [
      "job_queue",
-     "v_updated"
+     "v"
     ]
    },
    "mark_job_completed": {
-    "args": "p_job_id UUID, p_result JSONB DEFAULT NULL",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid, p_result jsonb DEFAULT NULL",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN UPDATE job_queue SET status = 'COMPLETED', completed_at = NOW(), metadata = CASE WHEN p_result IS NOT NULL THEN metadata || jsonb_build_object('result', p_result) ELSE metadata END, updated_at = NOW() WHERE id = p_job_id AND status = 'PROCESSING'; RETURN FOUND; END;",
+    "search_path": true,
+    "body": "BEGIN UPDATE job_queue SET status='COMPLETED', completed_at=now(), metadata = CASE WHEN p_result IS NOT NULL THEN metadata || jsonb_build_object('result',p_result) ELSE metadata END, updated_at=now() WHERE id=p_job_id AND status='PROCESSING'; RETURN FOUND; END;",
     "raises": [],
     "tables": [
      "job_queue"
     ]
    },
    "mark_job_failed": {
-    "args": "p_job_id UUID, p_error_message TEXT, p_error_stack TEXT DEFAULT NULL",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid, p_error_message text, p_error_stack text DEFAULT NULL",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_job RECORD; v_next_retry TIMESTAMPTZ; v_backoff_seconds INTEGER; BEGIN SELECT * INTO v_job FROM job_queue WHERE id = p_job_id AND status IN ('PROCESSING', 'PENDING'); IF NOT FOUND THEN RETURN FALSE; END IF; v_job.attempts := v_job.attempts + 1; IF v_job.attempts >= v_job.max_attempts THEN UPDATE job_queue SET status = 'FAILED', attempts = v_job.attempts, error_message = p_error_message, error_stack = p_error_stack, completed_at = NOW(), updated_at = NOW() WHERE id = p_job_id; RAISE NOTICE 'Job % failed permanently after % attempts', p_job_id, v_job.attempts; ELSE v_backoff_seconds := POWER(2, v_job.attempts)::INTEGER; v_next_retry := NOW() + (v_backoff_seconds || ' seconds')::INTER …",
+    "search_path": true,
+    "body": "DECLARE v_job record; v_backoff integer; BEGIN SELECT * INTO v_job FROM job_queue WHERE id=p_job_id AND status IN ('PROCESSING','PENDING'); IF NOT FOUND THEN RETURN false; END IF; v_job.attempts := v_job.attempts + 1; IF v_job.attempts >= v_job.max_attempts THEN UPDATE job_queue SET status='FAILED', attempts=v_job.attempts, error_message=p_error_message, error_stack=p_error_stack, completed_at=now(), updated_at=now() WHERE id=p_job_id; ELSE v_backoff := POWER(2, v_job.attempts)::integer; UPDATE job_queue SET status='PENDING', attempts=v_job.attempts, error_message=p_error_message, error_stack=p_error_stack, next_retry_at = now() + (v_backoff || ' seconds')::interval, updated_at=now() WHERE i …",
     "raises": [],
     "tables": [
      "job_queue",
@@ -9817,13 +10014,13 @@
     ]
    },
    "cleanup_old_jobs": {
-    "args": "p_days_old INTEGER DEFAULT 30",
-    "returns": "INTEGER",
+    "args": "p_days_old integer DEFAULT 30",
+    "returns": "integer",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM job_queue WHERE status IN ('COMPLETED', 'FAILED', 'CANCELLED') AND created_at < NOW() - (p_days_old || ' days')::INTERVAL; GET DIAGNOSTICS v_deleted = ROW_COUNT; RAISE NOTICE 'Deleted % old jobs', v_deleted; RETURN v_deleted; END;",
+    "search_path": true,
+    "body": "DECLARE v integer; BEGIN DELETE FROM job_queue WHERE status IN ('COMPLETED','FAILED','CANCELLED') AND created_at < now() - (p_days_old || ' days')::interval; GET DIAGNOSTICS v = ROW_COUNT; RETURN v; END;",
     "raises": [],
     "tables": [
      "job_queue"
@@ -9860,13 +10057,13 @@
     ]
    },
    "cancel_job": {
-    "args": "p_job_id UUID",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN UPDATE job_queue SET status = 'CANCELLED', completed_at = NOW(), updated_at = NOW() WHERE id = p_job_id AND status IN ('PENDING', 'PROCESSING'); RETURN FOUND; END;",
+    "search_path": true,
+    "body": "BEGIN UPDATE job_queue SET status='CANCELLED', completed_at=now(), updated_at=now() WHERE id=p_job_id AND status IN ('PENDING','PROCESSING'); RETURN FOUND; END;",
     "raises": [],
     "tables": [
      "job_queue"
@@ -10703,7 +10900,10 @@
     "COMPLETED",
     "CANCELLED",
     "REJECTED",
-    "EXPIRED"
+    "EXPIRED",
+    "QUOTED",
+    "ASSIGNING_DRIVER",
+    "DELIVERING"
    ],
    "vehicle_type": [
     "MOTORCYCLE",
@@ -12438,6 +12638,94 @@
     "unique": true,
     "where": "",
     "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "name": "idx_lalamove_orders_spa_id",
+    "table": "lalamove_orders",
+    "columns": "spa_id",
+    "unique": false,
+    "where": "WHERE spa_id IS NOT NULL",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "idx_lalamove_orders_source",
+    "table": "lalamove_orders",
+    "columns": "source",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "uq_lalamove_stops_order_stop_index",
+    "table": "lalamove_stops",
+    "columns": "order_id, stop_index",
+    "unique": true,
+    "where": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "uq_webhook_config_active_env",
+    "table": "lalamove_webhook_config",
+    "columns": "environment",
+    "unique": true,
+    "where": "WHERE is_active",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "uq_bitrix24_spa_sync_order",
+    "table": "bitrix24_spa_sync",
+    "columns": "order_id",
+    "unique": true,
+    "where": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "idx_bitrix24_spa_sync_spa",
+    "table": "bitrix24_spa_sync",
+    "columns": "spa_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "idx_job_queue_pending",
+    "table": "job_queue",
+    "columns": "next_retry_at, priority DESC",
+    "unique": false,
+    "where": "WHERE status = 'PENDING'",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "idx_job_queue_status",
+    "table": "job_queue",
+    "columns": "status",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "idx_job_queue_type",
+    "table": "job_queue",
+    "columns": "type",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "idx_job_queue_monitoring",
+    "table": "job_queue",
+    "columns": "type, status, created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "uq_job_queue_dedup_open",
+    "table": "job_queue",
+    "columns": "dedup_key",
+    "unique": true,
+    "where": "WHERE dedup_key IS NOT NULL AND status IN ('PENDING','PROCESSING')",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "cron_jobs": [
@@ -12677,6 +12965,9 @@
    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
    "supabase/migrations/20261121100000_add_table_comments.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
+   "supabase/migrations/20261122120000_baseline_order_status_values.sql",
+   "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
+   "supabase/migrations/20261122120200_job_queue_system.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -12741,7 +13032,9 @@
    "lalamove_rate_limits": "enabled",
    "lalamove_priority_fee_history": "enabled",
    "contacts": "enabled",
-   "mcp_diagnostics_grants": "enabled"
+   "mcp_diagnostics_grants": "enabled",
+   "lalamove_webhook_config": "enabled",
+   "bitrix24_spa_sync": "enabled"
   },
   "grants": [
    {
@@ -14663,19 +14956,65 @@
     "objkind": "function",
     "roles": "PUBLIC",
     "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "add_job",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "get_next_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_processing",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_completed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_failed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cancel_job",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cleanup_old_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "raises": [
-   {
-    "function": "add_job",
-    "msg": "Invalid job type: %",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
-   {
-    "function": "add_job",
-    "msg": "Priority must be between 1 and 10",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
    {
     "function": "get_cron_jobs_health",
     "msg": "Acesso negado: requer papel de administrador",
@@ -14738,7 +15077,7 @@
    "column:alert_configurations.min_interval_seconds": "Intervalo mínimo entre alertas do mesmo tipo (throttling)",
    "table:system_logs": "Logs estruturados do sistema",
    "table:audit_log": "Registro de auditoria de ações",
-   "table:job_queue": "Fila de jobs assíncronos para processamento em background",
+   "table:job_queue": "Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao.",
    "function:add_job": "Adiciona um novo job à fila",
    "function:process_job_queue": "Processa fila de jobs chamando Edge Function worker",
    "function:cleanup_old_jobs": "Remove jobs antigos já finalizados",
@@ -14822,7 +15161,11 @@
    "table:user_devices": "Dispositivos registrados dos usuarios para deteccao de novo login.",
    "table:user_passkeys": "Chaves WebAuthn/passkeys registradas por usuario.",
    "table:user_roles": "Roles atribuidas a cada usuario (RBAC).",
-   "table:webauthn_challenges": "Challenges WebAuthn para fluxo de autenticacao sem senha."
+   "table:webauthn_challenges": "Challenges WebAuthn para fluxo de autenticacao sem senha.",
+   "table:lalamove_webhook_config": "URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro).",
+   "table:bitrix24_spa_sync": "Sincronizacao do pedido com o SPA 1690 do Bitrix24 (crm.item.*). Substitui bitrix24_sync (modelo de deals).",
+   "column:lalamove_orders.driver_lalamove_id": "ID do motorista NA Lalamove (driverId v3 numerico ou driver_fid UAPI) — nunca o UUID da tabela drivers.",
+   "column:lalamove_orders.service_type": "serviceType BR da v3 (14 valores). vehicle_type (enum de 4) passa a ser derivado deste."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -19247,8 +19590,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 160,
-   "lines": 10494,
+   "files": 163,
+   "lines": 10783,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21166,7 +21509,8 @@
     "bitrix24_sync",
     "bitrix24_activities",
     "lalamove_order_replacements",
-    "lalamove_priority_fee_history"
+    "lalamove_priority_fee_history",
+    "bitrix24_spa_sync"
    ],
    "drivers": [
     "driver_incidents",
@@ -21213,6 +21557,7 @@
   "tables_only_in_schema": [
    "alert_dedup",
    "audit_log",
+   "bitrix24_spa_sync",
    "cache_refresh_log",
    "cron_job_logs",
    "drivers_safe_view",
@@ -21220,6 +21565,7 @@
    "entity_versions",
    "job_queue",
    "job_queue_processing_log",
+   "lalamove_webhook_config",
    "login_attempts",
    "mcp_diagnostics_grants",
    "mfa_sessions",
@@ -24685,7 +25031,7 @@
    {
     "table": "job_queue",
     "column": "type",
-    "rule": "obrigatório; CHECK type IN ( 'webhook', 'notification', 'evaluation', 'bitrix_sync', 'email', 'whatsapp', 'slack' )"
+    "rule": "obrigatório; CHECK type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch')"
    },
    {
     "table": "job_queue",
@@ -24695,7 +25041,7 @@
    {
     "table": "job_queue",
     "column": "status",
-    "rule": "default 'PENDING'; CHECK status IN ( 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED' )"
+    "rule": "default 'PENDING'; CHECK status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED')"
    },
    {
     "table": "job_queue",
@@ -24720,12 +25066,12 @@
    {
     "table": "job_queue",
     "column": "created_at",
-    "rule": "default NOW()"
+    "rule": "default now()"
    },
    {
     "table": "job_queue",
     "column": "updated_at",
-    "rule": "default NOW()"
+    "rule": "default now()"
    },
    {
     "table": "job_queue",
@@ -25969,6 +26315,76 @@
    },
    {
     "table": "mcp_diagnostics_grants",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "environment",
+    "rule": "default 'production'; CHECK environment IN ('sandbox','production')"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "url",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "is_active",
+    "rule": "default true"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "registered_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "registered_by",
+    "rule": "FK → users.id"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_webhook_config",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "bitrix24_spa_sync",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "bitrix24_spa_sync",
+    "column": "order_id",
+    "rule": "obrigatório; FK → lalamove_orders.id ON DELETE CASCADE"
+   },
+   {
+    "table": "bitrix24_spa_sync",
+    "column": "spa_id",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "bitrix24_spa_sync",
+    "column": "sync_status",
+    "rule": "default 'pending'; CHECK sync_status IN ('pending','success','error')"
+   },
+   {
+    "table": "bitrix24_spa_sync",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "bitrix24_spa_sync",
     "column": "updated_at",
     "rule": "default now()"
    },
@@ -34175,16 +34591,6 @@
     "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
    },
    {
-    "name": "Service role full access",
-    "table": "job_queue",
-    "cmd": "ALL",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "auth.role() = 'service_role'",
-    "check": "",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
-   {
     "name": "Admins can manage role_permissions",
     "table": "role_permissions",
     "cmd": "ALL",
@@ -36163,6 +36569,46 @@
     "using": "",
     "check": "has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())",
     "src": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql"
+   },
+   {
+    "name": "Admins manage webhook config",
+    "table": "lalamove_webhook_config",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "Admin manager view spa sync",
+    "table": "bitrix24_spa_sync",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+   },
+   {
+    "name": "Service role full access",
+    "table": "job_queue",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "name": "Admins view jobs",
+    "table": "job_queue",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "db_triggers": [
@@ -36273,15 +36719,6 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
-   },
-   {
-    "name": "trigger_update_job_queue_updated_at",
-    "when": "BEFORE UPDATE",
-    "table": "job_queue",
-    "function": "update_job_queue_updated_at",
-    "condition": "",
-    "each": "row",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
    },
    {
     "name": "update_user_roles_updated_at",
@@ -36417,6 +36854,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "name": "trigger_update_job_queue_updated_at",
+    "when": "BEFORE UPDATE",
+    "table": "job_queue",
+    "function": "update_job_queue_updated_at",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "db_functions": {
@@ -36592,40 +37038,37 @@
    },
    "update_job_queue_updated_at": {
     "args": "",
-    "returns": "TRIGGER",
+    "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN NEW.updated_at = NOW(); RETURN NEW; END;",
+    "search_path": true,
+    "body": "BEGIN NEW.updated_at = now(); RETURN NEW; END;",
     "raises": [],
     "tables": []
    },
    "add_job": {
-    "args": "p_type TEXT, p_payload JSONB, p_priority INTEGER DEFAULT 5, p_max_attempts INTEGER DEFAULT 3, p_metadata JSONB DEFAULT '{}'::jsonb",
-    "returns": "UUID",
+    "args": "p_type text, p_payload jsonb, p_priority integer DEFAULT 5, p_max_attempts integer DEFAULT 3, p_dedup_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'::jsonb",
+    "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": true,
-    "search_path": false,
-    "body": "DECLARE v_job_id UUID; BEGIN IF p_type NOT IN ('webhook', 'notification', 'evaluation', 'bitrix_sync', 'email', 'whatsapp', 'slack') THEN RAISE EXCEPTION 'Invalid job type: %', p_type; END IF; IF p_priority < 1 OR p_priority > 10 THEN RAISE EXCEPTION 'Priority must be between 1 and 10'; END IF; INSERT INTO job_queue ( type, payload, priority, max_attempts, metadata, created_by ) VALUES ( p_type, p_payload, p_priority, p_max_attempts, p_metadata, auth.uid() ) RETURNING id INTO v_job_id; RAISE NOTICE 'Job added: % (type: %, priority: %)', v_job_id, p_type, p_priority; RETURN v_job_id; END;",
-    "raises": [
-     "Invalid job type: %",
-     "Priority must be between 1 and 10"
-    ],
+    "search_path": true,
+    "body": "DECLARE v_job_id uuid; BEGIN IF p_dedup_key IS NOT NULL THEN SELECT id INTO v_job_id FROM job_queue WHERE dedup_key = p_dedup_key AND status IN ('PENDING','PROCESSING') LIMIT 1; IF v_job_id IS NOT NULL THEN RETURN v_job_id; END IF; END IF; INSERT INTO job_queue (type, payload, priority, max_attempts, dedup_key, metadata, created_by) VALUES (p_type, p_payload, p_priority, p_max_attempts, p_dedup_key, p_metadata, auth.uid()) RETURNING id INTO v_job_id; RETURN v_job_id; END;",
+    "raises": [],
     "tables": [
      "job_queue",
      "v_job_id"
     ]
    },
    "get_next_jobs": {
-    "args": "p_limit INTEGER DEFAULT 10, p_types TEXT[] DEFAULT NULL",
-    "returns": "SETOF job_queue",
+    "args": "p_limit integer DEFAULT 10, p_types text[] DEFAULT NULL",
+    "returns": "SETOF public.job_queue",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN RETURN QUERY SELECT * FROM job_queue WHERE status = 'PENDING' AND (next_retry_at IS NULL OR next_retry_at <= NOW()) AND (p_types IS NULL OR type = ANY(p_types)) ORDER BY priority DESC, created_at ASC LIMIT p_limit FOR UPDATE SKIP LOCKED; END;",
+    "search_path": true,
+    "body": "BEGIN RETURN QUERY SELECT * FROM job_queue WHERE status = 'PENDING' AND (next_retry_at IS NULL OR next_retry_at <= now()) AND (p_types IS NULL OR type = ANY(p_types)) ORDER BY priority DESC, created_at ASC LIMIT p_limit FOR UPDATE SKIP LOCKED; END;",
     "raises": [],
     "tables": [
      "SKIP",
@@ -36633,40 +37076,40 @@
     ]
    },
    "mark_job_processing": {
-    "args": "p_job_id UUID",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_updated BOOLEAN; BEGIN UPDATE job_queue SET status = 'PROCESSING', started_at = NOW(), updated_at = NOW() WHERE id = p_job_id AND status = 'PENDING' RETURNING TRUE INTO v_updated; RETURN COALESCE(v_updated, FALSE); END;",
+    "search_path": true,
+    "body": "DECLARE v boolean; BEGIN UPDATE job_queue SET status='PROCESSING', started_at=now(), updated_at=now() WHERE id=p_job_id AND status='PENDING' RETURNING true INTO v; RETURN COALESCE(v,false); END;",
     "raises": [],
     "tables": [
      "job_queue",
-     "v_updated"
+     "v"
     ]
    },
    "mark_job_completed": {
-    "args": "p_job_id UUID, p_result JSONB DEFAULT NULL",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid, p_result jsonb DEFAULT NULL",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN UPDATE job_queue SET status = 'COMPLETED', completed_at = NOW(), metadata = CASE WHEN p_result IS NOT NULL THEN metadata || jsonb_build_object('result', p_result) ELSE metadata END, updated_at = NOW() WHERE id = p_job_id AND status = 'PROCESSING'; RETURN FOUND; END;",
+    "search_path": true,
+    "body": "BEGIN UPDATE job_queue SET status='COMPLETED', completed_at=now(), metadata = CASE WHEN p_result IS NOT NULL THEN metadata || jsonb_build_object('result',p_result) ELSE metadata END, updated_at=now() WHERE id=p_job_id AND status='PROCESSING'; RETURN FOUND; END;",
     "raises": [],
     "tables": [
      "job_queue"
     ]
    },
    "mark_job_failed": {
-    "args": "p_job_id UUID, p_error_message TEXT, p_error_stack TEXT DEFAULT NULL",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid, p_error_message text, p_error_stack text DEFAULT NULL",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_job RECORD; v_next_retry TIMESTAMPTZ; v_backoff_seconds INTEGER; BEGIN SELECT * INTO v_job FROM job_queue WHERE id = p_job_id AND status IN ('PROCESSING', 'PENDING'); IF NOT FOUND THEN RETURN FALSE; END IF; v_job.attempts := v_job.attempts + 1; IF v_job.attempts >= v_job.max_attempts THEN UPDATE job_queue SET status = 'FAILED', attempts = v_job.attempts, error_message = p_error_message, error_stack = p_error_stack, completed_at = NOW(), updated_at = NOW() WHERE id = p_job_id; RAISE NOTICE 'Job % failed permanently after % attempts', p_job_id, v_job.attempts; ELSE v_backoff_seconds := POWER(2, v_job.attempts)::INTEGER; v_next_retry := NOW() + (v_backoff_seconds || ' seconds')::INTER …",
+    "search_path": true,
+    "body": "DECLARE v_job record; v_backoff integer; BEGIN SELECT * INTO v_job FROM job_queue WHERE id=p_job_id AND status IN ('PROCESSING','PENDING'); IF NOT FOUND THEN RETURN false; END IF; v_job.attempts := v_job.attempts + 1; IF v_job.attempts >= v_job.max_attempts THEN UPDATE job_queue SET status='FAILED', attempts=v_job.attempts, error_message=p_error_message, error_stack=p_error_stack, completed_at=now(), updated_at=now() WHERE id=p_job_id; ELSE v_backoff := POWER(2, v_job.attempts)::integer; UPDATE job_queue SET status='PENDING', attempts=v_job.attempts, error_message=p_error_message, error_stack=p_error_stack, next_retry_at = now() + (v_backoff || ' seconds')::interval, updated_at=now() WHERE i …",
     "raises": [],
     "tables": [
      "job_queue",
@@ -36687,13 +37130,13 @@
     ]
    },
    "cleanup_old_jobs": {
-    "args": "p_days_old INTEGER DEFAULT 30",
-    "returns": "INTEGER",
+    "args": "p_days_old integer DEFAULT 30",
+    "returns": "integer",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM job_queue WHERE status IN ('COMPLETED', 'FAILED', 'CANCELLED') AND created_at < NOW() - (p_days_old || ' days')::INTERVAL; GET DIAGNOSTICS v_deleted = ROW_COUNT; RAISE NOTICE 'Deleted % old jobs', v_deleted; RETURN v_deleted; END;",
+    "search_path": true,
+    "body": "DECLARE v integer; BEGIN DELETE FROM job_queue WHERE status IN ('COMPLETED','FAILED','CANCELLED') AND created_at < now() - (p_days_old || ' days')::interval; GET DIAGNOSTICS v = ROW_COUNT; RETURN v; END;",
     "raises": [],
     "tables": [
      "job_queue"
@@ -36730,13 +37173,13 @@
     ]
    },
    "cancel_job": {
-    "args": "p_job_id UUID",
-    "returns": "BOOLEAN",
+    "args": "p_job_id uuid",
+    "returns": "boolean",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
     "security_definer": false,
-    "search_path": false,
-    "body": "BEGIN UPDATE job_queue SET status = 'CANCELLED', completed_at = NOW(), updated_at = NOW() WHERE id = p_job_id AND status IN ('PENDING', 'PROCESSING'); RETURN FOUND; END;",
+    "search_path": true,
+    "body": "BEGIN UPDATE job_queue SET status='CANCELLED', completed_at=now(), updated_at=now() WHERE id=p_job_id AND status IN ('PENDING','PROCESSING'); RETURN FOUND; END;",
     "raises": [],
     "tables": [
      "job_queue"
@@ -37573,7 +38016,10 @@
     "COMPLETED",
     "CANCELLED",
     "REJECTED",
-    "EXPIRED"
+    "EXPIRED",
+    "QUOTED",
+    "ASSIGNING_DRIVER",
+    "DELIVERING"
    ],
    "vehicle_type": [
     "MOTORCYCLE",
@@ -37645,16 +38091,6 @@
    ]
   },
   "db_raises": [
-   {
-    "function": "add_job",
-    "msg": "Invalid job type: %",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
-   {
-    "function": "add_job",
-    "msg": "Priority must be between 1 and 10",
-    "src": "supabase/migrations/20251226010000_create_job_queue_system.sql"
-   },
    {
     "function": "get_cron_jobs_health",
     "msg": "Acesso negado: requer papel de administrador",
@@ -37922,7 +38358,10 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED"
+      "EXPIRED",
+      "QUOTED",
+      "ASSIGNING_DRIVER",
+      "DELIVERING"
      ],
      "default": "PENDING",
      "type": "public.order_status NOT NULL DEFAULT 'PENDING'"
@@ -37955,7 +38394,10 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED"
+      "EXPIRED",
+      "QUOTED",
+      "ASSIGNING_DRIVER",
+      "DELIVERING"
      ],
      "default": "",
      "type": "public.order_status NOT NULL"
@@ -38032,7 +38474,7 @@
       "PROCESSING"
      ],
      "default": "PENDING",
-     "type": "TEXT DEFAULT 'PENDING' CHECK (status IN ( 'PENDING', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED' ))"
+     "type": "text NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))"
     },
     {
      "table": "password_reset_requests",
@@ -38089,6 +38531,26 @@
      "type": "INTEGER NOT NULL"
     },
     {
+     "table": "bitrix24_spa_sync",
+     "column": "last_stage",
+     "enum": "",
+     "allowed": [],
+     "default": "",
+     "type": "text"
+    },
+    {
+     "table": "bitrix24_spa_sync",
+     "column": "sync_status",
+     "enum": "",
+     "allowed": [
+      "error",
+      "pending",
+      "success"
+     ],
+     "default": "pending",
+     "type": "text NOT NULL DEFAULT 'pending' CHECK (sync_status IN ('pending','success','error'))"
+    },
+    {
      "table": "drivers_safe_view",
      "column": "status",
      "enum": "driver_status",
@@ -38122,7 +38584,10 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED"
+      "EXPIRED",
+      "QUOTED",
+      "ASSIGNING_DRIVER",
+      "DELIVERING"
      ],
      "default": "",
      "type": "Database[\"public\"][\"Enums\"][\"order_status\"] | null"
@@ -38147,7 +38612,10 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED"
+      "EXPIRED",
+      "QUOTED",
+      "ASSIGNING_DRIVER",
+      "DELIVERING"
      ],
      "default": "",
      "type": "Database[\"public\"][\"Enums\"][\"order_status\"] | null"
@@ -39000,6 +39468,15 @@
      "authenticated: public.has_role(auth.uid(), 'admin')"
     ]
    },
+   "bitrix24_spa_sync": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)"
+    ],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
+   },
    "bitrix24_stage_mappings": {
     "rls": "enabled",
     "SELECT": [
@@ -39306,20 +39783,21 @@
      "public: auth.role() = 'authenticated'",
      "public: auth.role() = 'service_role'",
      "public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )",
-     "public: auth.role() = 'service_role'"
+     "service_role: true",
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
     ],
     "INSERT": [
      "public: auth.role() = 'service_role'",
      "public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )",
-     "public: auth.role() = 'service_role'"
+     "service_role: true"
     ],
     "UPDATE": [
      "public: auth.role() = 'service_role'",
-     "public: auth.role() = 'service_role'"
+     "service_role: true"
     ],
     "DELETE": [
      "public: auth.role() = 'service_role'",
-     "public: auth.role() = 'service_role'"
+     "service_role: true"
     ]
    },
    "job_queue_processing_log": {
@@ -39428,6 +39906,21 @@
     ]
    },
    "lalamove_uapi_sessions": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
+    ]
+   },
+   "lalamove_webhook_config": {
     "rls": "enabled",
     "SELECT": [
      "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
@@ -40017,7 +40510,8 @@
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
    "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
-   "supabase/migrations/20261122090000_cache_system_backend.sql"
+   "supabase/migrations/20261122090000_cache_system_backend.sql",
+   "supabase/migrations/20261122120200_job_queue_system.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -41999,6 +42493,62 @@
     "objkind": "function",
     "roles": "PUBLIC",
     "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "add_job",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "get_next_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_processing",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_completed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "mark_job_failed",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cancel_job",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "cleanup_old_jobs",
+    "objkind": "function",
+    "roles": "PUBLIC, anon, authenticated",
+    "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    }
   ],
   "guards": [
@@ -42767,6 +43317,10 @@
    [
     "mcp_diagnostics_grants",
     "is_active"
+   ],
+   [
+    "lalamove_webhook_config",
+    "is_active"
    ]
   ],
   "audit": {
@@ -42952,6 +43506,14 @@
     "updated_at"
    ],
    "mcp_diagnostics_grants": [
+    "created_at",
+    "updated_at"
+   ],
+   "lalamove_webhook_config": [
+    "created_at",
+    "updated_at"
+   ],
+   "bitrix24_spa_sync": [
     "created_at",
     "updated_at"
    ],
@@ -43454,15 +44016,6 @@
     ]
    },
    {
-    "kind": "status",
-    "msg": "valor `error` para `sync_status` usado no código não existe em nenhum enum do banco/TS",
-    "where": [
-     "compara:src/hooks/useJobQueue.ts",
-     "escreve:supabase/functions/bitrix24-process-queue/index.ts",
-     "filtra:src/hooks/useJobQueue.ts"
-    ]
-   },
-   {
     "kind": "coluna",
     "msg": "coluna `city` usada no código não existe no schema de `contacts`",
     "where": []
@@ -43793,13 +44346,6 @@
    },
    {
     "kind": "segurança",
-    "msg": "função `add_job` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
-    "where": [
-     "supabase/migrations/20251226010000_create_job_queue_system.sql"
-    ]
-   },
-   {
-    "kind": "segurança",
     "msg": "função `process_job_queue` é SECURITY DEFINER sem `set search_path` (risco de escalação)",
     "where": [
      "supabase/migrations/20251226010001_configure_pg_cron.sql"
@@ -43845,10 +44391,10 @@
    "Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.",
    "`cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "`lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`lalamove_stops.pod_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_status_history.old_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`driver_approval_queue.status` tem valores ['PENDING', 'APPROVED', 'REJECTED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`active_tracking.tracking_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
@@ -43862,14 +44408,16 @@
    "`lalamove_stop_proofs.pop_status` tem valores ['NOT_REQUIRED', 'failed', 'pending', 'picked_up'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_stop_proofs.delivery_code_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`lalamove_rate_limits.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "`bitrix24_spa_sync.last_stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "`bitrix24_spa_sync.sync_status` tem valores ['error', 'pending', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_operator_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`driver_stats_cache.driver_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "16/75 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …",
+   "16/77 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -61741,13 +62289,38 @@
    "path": "supabase/migrations/20261122090000_cache_system_backend.sql",
    "lines": 188,
    "uses_service_role": true
+  },
+  "supabase/migrations/20261122120000_baseline_order_status_values.sql": {
+   "path": "supabase/migrations/20261122120000_baseline_order_status_values.sql",
+   "lines": 19
+  },
+  "supabase/migrations/20261122120100_lalamove_integration_columns.sql": {
+   "path": "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
+   "lines": 113
+  },
+  "supabase/migrations/20261122120200_job_queue_system.sql": {
+   "path": "supabase/migrations/20261122120200_job_queue_system.sql",
+   "lines": 157,
+   "uses_service_role": true
   }
  },
  "git": {
-  "sha": "18c9d8333344847da6cfe27ac966d831b8a94fb1",
+  "sha": "9f9c709a5c72504f162a8f7d90252dacf567fe97",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "9f9c709",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)",
+    "files": [
+     "docs/MIGRATION_RECONCILIATION_2026-11.md",
+     "supabase/migrations/20261122120000_baseline_order_status_values.sql",
+     "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
+     "supabase/migrations/20261122120200_job_queue_system.sql"
+    ]
+   },
    {
     "sha": "18c9d83",
     "date": "2026-11-21",
@@ -62081,15 +62654,6 @@
      "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
      "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql"
     ]
-   },
-   {
-    "sha": "55a4d92",
-    "date": "2026-11-14",
-    "author": "adm01-debug",
-    "subject": "chore: contexto agendado de 10 min para 1x/hora (#87)",
-    "files": [
-     ".github/workflows/contexto.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -62158,19 +62722,19 @@
     2
    ],
    [
-    "src/hooks/useCacheViews.ts",
+    "docs/MIGRATION_RECONCILIATION_2026-11.md",
     1
    ],
    [
-    "src/hooks/useCachedStats.ts",
+    "supabase/migrations/20261122120000_baseline_order_status_values.sql",
     1
    ],
    [
-    "src/integrations/supabase/types.ts",
+    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
     1
    ],
    [
-    "supabase/migrations/20261122090000_cache_system_backend.sql",
+    "supabase/migrations/20261122120200_job_queue_system.sql",
     1
    ]
   ]

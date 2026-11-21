@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9f9c709a5c` · branch `main` · 2026-11-21 16:05 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -24,6 +24,7 @@
 | `audit_log` | enabled | public: auth.uid() IS NOT NULL | public: true | — | — |
 | `auth_logs` | enabled | public: auth.uid() = user_id<br>public: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') OR  | — | — |
 | `bitrix24_activities` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
+| `bitrix24_spa_sync` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role) | — | — | — |
 | `bitrix24_stage_mappings` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `bitrix24_sync` | enabled | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
 | `bitrix24_tokens` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
@@ -48,7 +49,7 @@
 | `geo_blocks` | não encontrado | sem RLS | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `hourly_metrics_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ip_whitelist` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') |
-| `job_queue` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'service_role'<br>public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.role() = 'service_role' |
+| `job_queue` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'service_role'<br>public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true<br>authenticated: public.has_role(auth.uid(), 'admin'::app_role) | public: auth.role() = 'service_role'<br>public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true |
 | `job_queue_processing_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `lalamove_order_replacements` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role) OR public.has_role(auth.ui | — | — | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `lalamove_orders` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
@@ -58,6 +59,7 @@
 | `lalamove_stop_proofs` | enabled | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager')<br>authenticated: has_role(auth.uid(),'operator') | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager') OR has_role(auth.uid(),'operator') | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager') | authenticated: has_role(auth.uid(),'admin') |
 | `lalamove_stops` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `lalamove_uapi_sessions` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
+| `lalamove_webhook_config` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `login_attempts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) | public: has_role(auth.uid(), 'admin'::app_role) |
 | `map_settings_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
 | `mcp_diagnostics_grants` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
@@ -94,7 +96,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 108 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 109 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -204,6 +206,7 @@
 - `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`
 - `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
 - `supabase/migrations/20261122090000_cache_system_backend.sql`
+- `supabase/migrations/20261122120200_job_queue_system.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -352,7 +355,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
-| revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +2 |
+| revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +9 |
 | revoke | PUBLIC, anon, authenticated | execute | `ensure_tracking_events_partition`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `cleanup_old_region_cache`, `check_login_lockout`, `record_failed_login`, `has_role`, `has_permission`, `is_aal2`, `get_user_roles`, `is_token_valid`, `use_reset_token`, `notify_lalamove_quota_low`, `notify_webhook_security_event`, `cleanup_old_audit_logs` |
 | revoke | anon | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | anon | all privileges | `public`, `public` |
@@ -388,6 +391,7 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `ip_whitelist` | `is_active` |
 | `lalamove_uapi_sessions` | `is_active` |
 | `mcp_diagnostics_grants` | `is_active` |
+| `lalamove_webhook_config` | `is_active` |
 
 ## Auditoria (colunas de rastreio)
 
@@ -445,6 +449,8 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `lalamove_priority_fee_history` | `created_at` |
 | `contacts` | `created_at`, `updated_at` |
 | `mcp_diagnostics_grants` | `created_at`, `updated_at` |
+| `lalamove_webhook_config` | `created_at`, `updated_at` |
+| `bitrix24_spa_sync` | `created_at`, `updated_at` |
 | `geo_blocks` | `created_at`, `updated_at` |
 | `tracking_events_default` | `created_at` |
 | `tracking_events_y2026m05` | `created_at` |

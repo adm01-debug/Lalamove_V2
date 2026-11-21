@@ -40,7 +40,7 @@
    "src/components/layout/sidebar-config.ts"
   ],
   "docs": [
-   "docs (24)",
+   "docs (25)",
    "(raiz) (9)",
    ".github (1)"
   ]
@@ -50,7 +50,7 @@
   "hooks": "use + PascalCase",
   "servicos": "camelCase (86%)",
   "edge_functions": "kebab-case (100%)",
-  "tabelas": "snake_case (93%)"
+  "tabelas": "snake_case (94%)"
  },
  "barrels_index": 3,
  "extensao_componentes": [
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)",
    "feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)",
    "fix: comments do glossario agora ligam a tabelas so do types.ts (#105)",
    "docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)",
-   "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)",
-   "docs: registra analise exaustiva planejado vs implementado (P-12) e abre P-13 (#102)"
+   "feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `18c9d8333344847da6cfe27ac966d831b8a94fb1` (2026-11-21T11:51:14-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9f9c709a5c72504f162a8f7d90252dacf567fe97` (2026-11-21T13:05:12-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (164), JavaScript (112), Markdown (80), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (167), JavaScript (112), Markdown (81), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 894 |
+| arquivos_total | 898 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 110253 |
 | rotas | 54 |
@@ -46,13 +46,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | componentes | 214 |
 | hooks | 96 |
 | edge_functions | 26 |
-| tabelas | 76 |
-| migrations | 160 |
+| tabelas | 78 |
+| migrations | 163 |
 | cron_jobs | 16 |
 | testes | 97 |
 | workflows | 3 |
 | scripts | 104 |
-| docs_md | 80 |
+| docs_md | 81 |
 
 ## Onde ficam as coisas
 - telas: src/pages (52)
@@ -65,8 +65,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
-- docs: docs (24), (raiz) (9), .github (1)
-- nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (86%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (93%)"}
+- docs: docs (25), (raiz) (9), .github (1)
+- nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (86%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/regras-dominio.md
 
 ## Módulos (menu → domínio)
@@ -254,7 +254,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - edges_sem_verify_jwt: 1 — ex.: mcp-query
 - tabelas_sem_rls: 2 — ex.: cache_refresh_log, job_queue_processing_log
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
-- tabelas_com_drift_migration_vs_types: 1 — ex.: mfa_sessions
+- tabelas_com_drift_migration_vs_types: 3 — ex.: lalamove_orders, lalamove_stops, mfa_sessions
 - rpcs_sem_definicao: 1 — ex.: exec
 - componentes_orfaos: 4 — ex.: src/components/approvals/SwipeableApprovalCard.tsx, src/components/debug/AuditReportGenerator.tsx, src/components/ui/chart.tsx
 - componentes_com_nome_duplicado: 5 — ex.: ExtendedFAB, MiniFAB, QuickActionsPanel
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6544 nós · 14364 arestas · 513 comunidades · grafo do commit `18c9d833`
-- comunidades maiores: cn (222), badge.tsx (127), button.tsx (109), snapshot.py (100), client.ts (88), ref_node_path (85), dependencies (80), App.tsx (78), gerar.mjs (76), package.json (64), OrderDetailModal.tsx (62), useMapbox.ts (61)
+- 6582 nós · 14412 arestas · 493 comunidades · grafo do commit `9f9c709a`
+- comunidades maiores: cn (224), button.tsx (126), snapshot.py (102), lucide-react (102), ref_node_path (84), react (81), dependencies (80), gerar.mjs (76), App.tsx (74), generate.py (73), badge.tsx (70), useRealtimeSubscriptions.ts (68)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -336,6 +336,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
+- `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (65 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
 - `docs/RUNBOOK_LALAMOVE.md` — Runbook — Integração Lalamove (v3 REST + UAPI) (126 linhas)
 - `docs/SCREENING_SYSTEM.md` — 🔍 Sistema de Screening - Lalamove Guardian (717 linhas)
@@ -351,6 +352,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `9f9c709` feat(banco): baseline de reconciliacao — enum, colunas de integracao e job_queue real (#107)
 - 2026-11-21 `18c9d83` feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)
 - 2026-11-21 `0cac154` fix: comments do glossario agora ligam a tabelas so do types.ts (#105)
 - 2026-11-21 `c3577b5` docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)
@@ -365,7 +367,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
 - 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
 - 2026-11-20 `a1b3ef3` docs: backlog de pendencias do goal concluir funcionalidades
-- 2026-11-20 `4767a5e` fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
