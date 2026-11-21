@@ -120,6 +120,7 @@ Ver `claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md` seção "Decis�
 - **Etapa 50 — trânsito futuro (`depart_at`, BETA):** não usar. Exige cadastro especial na Mapbox sem data de GA garantida. O ETA já é coberto em tempo real pela Matrix `driving-traffic` (etapa 46); não há hoje caso de uso para prever ETA de uma partida futura.
 - **Etapa 59 — estilo do mapa:** manter `dark-v11` (`LiveMap`) e `streets-v12`/`satellite-streets-v12` (demais telas) como estão. Mapbox Standard usa o mesmo SKU de map load — trocar não mudaria custo —, mas exigiria revalidar a legibilidade dos overlays customizados (`mapLayers.ts`: rota, geofence, marcadores) no estilo novo. Fica para quando houver demanda visual explícita.
 - **Etapa 79 — dependências:** confirmado em `package.json` — só `mapbox-gl` e `@types/mapbox-gl`, nenhum `@mapbox/search-js-*` ou `@mapbox/mapbox-sdk`. Toda chamada de API passa pelo `geo-gateway` no servidor, então o SDK JS da Mapbox (que embutiria o token no bundle do front) não é necessário.
+- **Etapa 18 — trigger de geofence agnóstico de provedor:** confirmado lendo `public.geo_evaluate_tracking()` (`supabase/migrations/20261122130100_geo_foundation.sql:389-531`) — a função só lê `active_tracking`, `lalamove_orders`, `lalamove_stops` e `geo_defaults`, e só calcula distância/ETA (`geo_haversine_m`, `geo_point_to_polyline_m`); nenhuma referência a `provider`, `geocode_provider`, `eta_provider` ou `route_provider` em toda a função. Trocar o provedor Mapbox↔Google não exige mudança no trigger.
 
 ## Rotação de token (Runbook — etapa 9)
 
