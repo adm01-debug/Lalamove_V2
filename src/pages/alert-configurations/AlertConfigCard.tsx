@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap } from 'lucide-react';
+import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useUpdateAlertConfiguration, AlertConfiguration } from '@/hooks/useAlertConfigurations';
+import { useUpdateAlertConfiguration, useDeleteAlertConfiguration, AlertConfiguration } from '@/hooks/useAlertConfigurations';
 import { useTestNotification } from '@/hooks/useTestNotification';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,9 +14,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const alertTypeLabels: Record<string, string> = { 'DRIVER_BLOCKED': 'Motorista Bloqueado', 'ROUTE_DEVIATION': 'Desvio de Rota', 'DRIVER_STOPPED': 'Motorista Parado', 'LATE_DELIVERY': 'Entrega Atrasada', 'APPROVAL_REQUIRED': 'Aprovação Necessária', 'ORDER_CANCELLED': 'Pedido Cancelado' };
-const alertTypeDescriptions: Record<string, string> = { 'DRIVER_BLOCKED': 'Notifica quando um motorista na blocklist é atribuído a um pedido', 'ROUTE_DEVIATION': 'Alerta quando o motorista desvia significativamente da rota esperada', 'DRIVER_STOPPED': 'Alerta quando o motorista fica parado por muito tempo', 'LATE_DELIVERY': 'Notifica quando uma entrega ultrapassa o prazo estimado', 'APPROVAL_REQUIRED': 'Avisa quando um motorista precisa de aprovação manual', 'ORDER_CANCELLED': 'Notifica sobre cancelamentos de pedidos' };
-const alertTypeIcons: Record<string, typeof Bell> = { 'DRIVER_BLOCKED': Zap, 'ROUTE_DEVIATION': Settings2, 'DRIVER_STOPPED': Bell, 'LATE_DELIVERY': Bell, 'APPROVAL_REQUIRED': Sparkles, 'ORDER_CANCELLED': Bell };
+const alertTypeLabels: Record<string, string> = { 'DRIVER_BLOCKED': 'Motorista Bloqueado', 'ROUTE_DEVIATION': 'Desvio de Rota', 'DRIVER_STOPPED': 'Motorista Parado', 'LATE_DELIVERY': 'Entrega Atrasada', 'APPROVAL_REQUIRED': 'Aprovação Necessária', 'ORDER_CANCELLED': 'Pedido Cancelado', 'INTEGRATION_FAILURE': 'Falha de Integração' };
+const alertTypeDescriptions: Record<string, string> = { 'DRIVER_BLOCKED': 'Notifica quando um motorista na blocklist é atribuído a um pedido', 'ROUTE_DEVIATION': 'Alerta quando o motorista desvia significativamente da rota esperada', 'DRIVER_STOPPED': 'Alerta quando o motorista fica parado por muito tempo', 'LATE_DELIVERY': 'Notifica quando uma entrega ultrapassa o prazo estimado', 'APPROVAL_REQUIRED': 'Avisa quando um motorista precisa de aprovação manual', 'ORDER_CANCELLED': 'Notifica sobre cancelamentos de pedidos', 'INTEGRATION_FAILURE': 'Notifica quando uma integração externa (Lalamove, UAPI, Bitrix24) falha' };
+const alertTypeIcons: Record<string, typeof Bell> = { 'DRIVER_BLOCKED': Zap, 'ROUTE_DEVIATION': Settings2, 'DRIVER_STOPPED': Bell, 'LATE_DELIVERY': Bell, 'APPROVAL_REQUIRED': Sparkles, 'ORDER_CANCELLED': Bell, 'INTEGRATION_FAILURE': Webhook };
 const channelIcons = { whatsapp: MessageCircle, email: Mail, slack: Hash, bitrix24: Briefcase, n8n: Webhook };
 const channelLabels = { whatsapp: 'WhatsApp', email: 'Email', slack: 'Slack', bitrix24: 'Bitrix24', n8n: 'N8N Webhook' };
 
@@ -28,6 +28,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
   const [editedSlack, setEditedSlack] = useState(config.slack_channels?.join(', ') || '');
   const [editedN8nUrl, setEditedN8nUrl] = useState(config.n8n_webhook_url || '');
   const updateMutation = useUpdateAlertConfiguration();
+  const deleteMutation = useDeleteAlertConfiguration();
   const testMutation = useTestNotification();
   const AlertIcon = alertTypeIcons[config.alert_type] || Bell;
 
@@ -68,7 +69,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
           </div>
           <div className="flex items-center gap-2">
             {config.is_enabled ? <Badge variant="glow-success" size="sm" dot pulse>Ativo</Badge> : <Badge variant="inactive" size="sm">Inativo</Badge>}
-            <Button variant="ghost" size="icon-sm" onClick={() => setIsEditing(true)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="icon-sm" onClick={() => setIsEditing(true)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></Button><Button variant="ghost" size="icon-sm" onClick={() => { if (window.confirm(`Excluir a configuração de ${alertTypeLabels[config.alert_type] || config.alert_type}? O alerta para de ser notificado.`)) deleteMutation.mutate(config.id); }} disabled={deleteMutation.isPending} title="Excluir configuração" className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
             <Button variant={config.is_enabled ? "outline" : "gradient"} size="sm" onClick={handleToggleEnabled} disabled={updateMutation.isPending} className="gap-1.5">{config.is_enabled ? <><PowerOff className="w-3.5 h-3.5" />Desativar</> : <><Power className="w-3.5 h-3.5" />Ativar</>}</Button>
           </div>
         </div>
