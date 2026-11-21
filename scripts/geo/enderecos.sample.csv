@@ -1,0 +1,52 @@
+# endereco;cidade;uf — 50 endereços públicos conhecidos (Curitiba/RMC, São Paulo, Goiânia).
+# SUBSTITUIR pela lista real de fornecedores/clientes (Bitrix24) antes de decidir M1.
+Rua XV de Novembro, 100;Curitiba;PR
+Avenida Sete de Setembro, 2775;Curitiba;PR
+Rua Marechal Deodoro, 500;Curitiba;PR
+Avenida Cândido de Abreu, 817;Curitiba;PR
+Rua Comendador Araújo, 499;Curitiba;PR
+Avenida Visconde de Guarapuava, 3263;Curitiba;PR
+Rua Mateus Leme, 4700;Curitiba;PR
+Avenida das Torres, 1700;Curitiba;PR
+Rua Engenheiros Rebouças, 3401;Curitiba;PR
+Avenida Marechal Floriano Peixoto, 5700;Curitiba;PR
+Rua Padre Anchieta, 2050;Curitiba;PR
+Avenida República Argentina, 2700;Curitiba;PR
+Rua Francisco Rocha, 198;Curitiba;PR
+Avenida Presidente Kennedy, 4121;Curitiba;PR
+Rua Augusto Stresser, 1600;Curitiba;PR
+Avenida Manoel Ribas, 5000;Curitiba;PR
+Rua Itupava, 1299;Curitiba;PR
+Avenida Winston Churchill, 2400;Curitiba;PR
+Rua João Negrão, 1285;Curitiba;PR
+Avenida Paraná, 3600;Curitiba;PR
+Rua Carlos de Carvalho, 2010;Curitiba;PR
+Avenida Silva Jardim, 2042;Curitiba;PR
+Rua Brasílio Itiberê, 3500;Curitiba;PR
+Avenida Comendador Franco, 4600;Curitiba;PR
+Rua Desembargador Westphalen, 1500;Curitiba;PR
+Rua Rocha Pombo, 2400;Colombo;PR
+Avenida Rui Barbosa, 5400;São José dos Pinhais;PR
+Rua Doutor Pedrosa, 1000;Pinhais;PR
+Avenida das Américas, 500;Araucária;PR
+Rua Benjamin Constant, 1700;Campo Largo;PR
+Avenida Paulista, 1578;São Paulo;SP
+Rua Augusta, 1500;São Paulo;SP
+Avenida Brigadeiro Faria Lima, 3477;São Paulo;SP
+Rua Oscar Freire, 827;São Paulo;SP
+Avenida Rebouças, 3970;São Paulo;SP
+Rua 25 de Março, 1000;São Paulo;SP
+Avenida Ipiranga, 200;São Paulo;SP
+Rua Vergueiro, 1000;São Paulo;SP
+Avenida do Estado, 5533;São Paulo;SP
+Rua Florêncio de Abreu, 282;São Paulo;SP
+Avenida Goiás, 1200;Goiânia;GO
+Rua 10, 250;Goiânia;GO
+Avenida T-63, 1800;Goiânia;GO
+Avenida 85, 1900;Goiânia;GO
+Rua 1137, 241;Goiânia;GO
+Avenida Anhanguera, 5440;Goiânia;GO
+Avenida Jamel Cecílio, 3300;Goiânia;GO
+Rua 70, 661;Goiânia;GO
+Avenida Mutirão, 2653;Goiânia;GO
+Rua 7, 1101;Aparecida de Goiânia;GO
