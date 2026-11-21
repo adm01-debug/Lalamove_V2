@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a8335551c761ae4f76dadf2afc4afa1349a4dfea",
+  "commit": "41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b",
   "branch": "main",
-  "data_commit": "2026-11-20T16:42:57-03:00",
+  "data_commit": "2026-11-21T08:29:42-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "41ba75b",
+    "data": "2026-11-21",
+    "assunto": "fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)"
+   },
+   {
+    "sha": "8005592",
+    "data": "2026-11-21",
+    "assunto": "ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)"
+   },
    {
     "sha": "a833555",
     "data": "2026-11-20",
@@ -121,19 +131,9 @@
     "sha": "c8807f7",
     "data": "2026-11-08",
     "assunto": "feat(scripts): porta sistema de scripts autônomos do Zapp Web V2"
-   },
-   {
-    "sha": "ecce49a",
-    "data": "2026-11-08",
-    "assunto": "fix(deps): corrige ERESOLVE e URL de mirror interno que travam npm ci (#79)"
-   },
-   {
-    "sha": "79b861b",
-    "data": "2026-11-08",
-    "assunto": "chore(agentes): replica o padrao de AGENTS.md e docs/agentes do Zapp Web V2 (#78)"
    }
   ],
-  "arquivos_mudados_7d": 46,
+  "arquivos_mudados_7d": 47,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -144,11 +144,11 @@
     "mudancas": 12
    },
    {
-    "pasta": ".agents/skills/lalamove-v2",
-    "mudancas": 2
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 3
    },
    {
-    "pasta": ".github/workflows/ci.yml",
+    "pasta": ".agents/skills/lalamove-v2",
     "mudancas": 2
    },
    {
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 6
+    "mudancas": 7
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 16
+    "commits": 18
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 887,
+  "arquivos_total": 888,
   "arquivos_codigo": 566,
   "linhas_codigo": 110180,
   "rotas": 54,
@@ -322,7 +322,7 @@
   "hooks": 96,
   "edge_functions": 26,
   "tabelas": 76,
-  "migrations": 157,
+  "migrations": 158,
   "cron_jobs": 16,
   "testes": 97,
   "workflows": 3,

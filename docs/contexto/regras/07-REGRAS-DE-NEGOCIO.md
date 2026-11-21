@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a8335551c7` · branch `main` · 2026-11-20 20:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `41ba75ba9f` · branch `main` · 2026-11-21 11:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -179,7 +179,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `alert_configurations` | Viewers can view alert configs | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'viewer'::app_role)` |  |
 | `query_telemetry` | Admins can manage telemetry | ALL | authenticated | permissive | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
 | `query_telemetry` | Managers can view telemetry | SELECT | authenticated | permissive | `has_role(auth.uid(), 'manager'::app_role)` |  |
-| `query_telemetry` | System can insert telemetry | INSERT | authenticated | permissive |  | `has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role)` |
 | `feature_flags` | Feature flags can only be managed by admins | ALL | public | permissive | `EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true )` |  |
 | `tracking_events` | Users can view tracking for their orders | SELECT | public | permissive | `auth.role() = 'authenticated'` |  |
 | `tracking_events` | System can insert tracking events | INSERT | public | permissive |  | `auth.role() = 'authenticated'` |
@@ -225,6 +224,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_roles` | Authenticated users can insert roles | INSERT | authenticated | permissive |  | `true` |
 | `user_roles` | Authenticated users can update roles | UPDATE | authenticated | permissive | `true` |  |
 | `user_roles` | Service role full access user_roles | ALL | service_role | permissive | `true` | `true` |
+| `query_telemetry` | System can insert telemetry | INSERT | authenticated | permissive |  | `has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role) OR public.can_run_db_diagnostics(auth.uid())` |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 

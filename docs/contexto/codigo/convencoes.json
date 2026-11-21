@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)",
+   "ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)",
    "chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)",
    "docs: backlog de pendencias do goal concluir funcionalidades",
-   "fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded",
-   "fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)",
-   "build(deps-dev): bump vite from 7.3.5 to 8.3.8 (#77)"
+   "fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

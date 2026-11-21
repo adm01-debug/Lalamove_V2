@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a8335551c761ae4f76dadf2afc4afa1349a4dfea` (2026-11-20T16:42:57-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `41ba75ba9f85d05c8023fe6ecaa0b8c146a85c7b` (2026-11-21T08:29:42-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (161), JavaScript (112), Markdown (76), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (162), JavaScript (112), Markdown (76), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 887 |
+| arquivos_total | 888 |
 | arquivos_codigo | 566 |
 | linhas_codigo | 110180 |
 | rotas | 54 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 96 |
 | edge_functions | 26 |
 | tabelas | 76 |
-| migrations | 157 |
+| migrations | 158 |
 | cron_jobs | 16 |
 | testes | 97 |
 | workflows | 3 |
@@ -265,7 +265,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6498 nós · 14317 arestas · 500 comunidades · grafo do commit `a8335551`
+- 6499 nós · 14317 arestas · 501 comunidades · grafo do commit `41ba75ba`
 - comunidades maiores: cn (199), button.tsx (167), GeoBlockingPage.tsx (101), snapshot.py (100), client.ts (89), react (88), ref_node_url (85), dependencies (80), gerar.mjs (76), generate.py (75), lucide-react (74), package.json (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
@@ -273,7 +273,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package-lock.json (29)
 - package.json (29)
 - supabase/config.toml (11)
-- .github/workflows/ci.yml (6)
+- .github/workflows/ci.yml (7)
 - src/hooks/useRegionResolver.ts (5)
 - supabase/functions/_shared/contract.integration.test.ts (4)
 - AGENTS.md (3)
@@ -351,6 +351,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `41ba75b` fix(banco): telemetria de query_telemetry para usuarios com grant de diagnostico (#92)
+- 2026-11-21 `8005592` ci: injeta SUPABASE_URL e SERVICE_ROLE no .env do job de integracao Deno (#95)
 - 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
 - 2026-11-20 `a1b3ef3` docs: backlog de pendencias do goal concluir funcionalidades
 - 2026-11-20 `4767a5e` fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded
@@ -364,8 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `1bf53fb` build(deps-dev): bump eslint-plugin-react-refresh from 0.4.20 to 0.5.8 (#70)
 - 2026-11-20 `f62d754` build(deps-dev): bump postcss from 8.5.28 to 8.5.33 (#69)
 - 2026-11-20 `8115008` build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)
-- 2026-11-20 `c86f279` fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)
-- 2026-11-19 `8832302` ci(agentes): roda os guards de AGENTS.md/docs/agentes no CI (#81)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

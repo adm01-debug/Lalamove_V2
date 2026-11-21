@@ -1,17 +1,17 @@
-# Graph Report - Lalamove_V2  (2026-11-20)
+# Graph Report - Lalamove_V2  (2026-11-21)
 
 ## Corpus Check
-- 848 files · ~598,898 words
+- 849 files · ~599,088 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 14 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 6498 nodes · 14317 edges · 500 communities (346 shown, 154 thin omitted)
+- 6499 nodes · 14317 edges · 501 communities (346 shown, 155 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 291 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a8335551`
+- Built from commit: `41ba75ba`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -453,7 +453,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (500 total, 154 thin omitted)
+## Communities (501 total, 155 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
@@ -1841,16 +1841,16 @@ Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
 ## Knowledge Gaps
 - **2158 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+2153 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2874 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **154 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2875 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **155 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `button.tsx`, `GeoBlockingPage.tsx`, `CronJobsHealthPanel.tsx`, `client.ts`, `react`, `lucide-react`, `package.json`, `framer-motion`, `scripts/qa — contraste WCAG e tipografia`, `useMapbox.ts`, `App.tsx`, `utils/logger.ts`, `DashboardRedesigned.tsx`, `CommandPaletteEnhanced.tsx`, `HeatmapPage.tsx`, `OfflineIndicator.tsx`, `chart.tsx`, `AppLayout.tsx`, `micro-interactions.tsx`, `useRealtimeSubscriptions.ts`, `Sidebar`, `useMetrics.ts`, `useSoundSettings.ts`, `AlertConfigCard.tsx`, `useDrivers.ts`, `RiskRulesPage.tsx`, `useIncidents.ts`, `Regras de domínio que o código não deixa óbvio — referência para agentes`, `🪝 Hooks Personalizados`, `useNotificationHistory.ts`, `motion.tsx`, `layout-guard.mjs`, `StatusTimeline.tsx`, `floating-action-button.tsx`, `undo-toast.tsx`, `WaitingTimeCounter.tsx`, `NotificationPreferences.tsx`, `useWebhookEvents.ts`, `PasswordStrengthIndicator.tsx`, `exportToCSV`, `UrgencyIndicator.tsx`, `smart-breadcrumbs.tsx`, `contextual-hints.tsx`?**
-  _High betweenness centrality (0.159) - this node is a cross-community bridge._
+  _High betweenness centrality (0.161) - this node is a cross-community bridge._
 - **Why does `Dados e Estado` connect `🪝 Hooks Personalizados` to `AppLayout.tsx`, `generate.py`, `bundle-budget.unit.mjs`, `useAuth`, `lint-ratchet.mjs`, `useDrivers.ts`, `SnapshotDBStatsTests`, `useIncidents.ts`?**
-  _High betweenness centrality (0.082) - this node is a cross-community bridge._
+  _High betweenness centrality (0.081) - this node is a cross-community bridge._
 - **Why does `Realtime e Notificações` connect `useNotificationHistory.ts` to `workflow-invariants.unit.mjs`, `useRealtimeSubscriptions.ts`, `client.ts`, `🪝 Hooks Personalizados`?**
   _High betweenness centrality (0.054) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**

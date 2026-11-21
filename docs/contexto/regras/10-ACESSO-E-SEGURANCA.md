@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a8335551c7` · branch `main` · 2026-11-20 20:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `41ba75ba9f` · branch `main` · 2026-11-21 11:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -10,7 +10,7 @@
 - Tabelas de perfil/permissão: `user_roles`, `permissions`, `role_permissions`
 - Colunas de perfil: `user_roles.role` (app_role NOT NULL DEFAULT 'viewer'), `role_permissions.role` (app_role NOT NULL)
 - Claims do JWT usados em políticas/funções: `aal`
-- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `has_role`
+- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `can_run_db_diagnostics`, `has_role`
 
 ## Matriz tabela × operação → quem pode (derivada das políticas RLS)
 
