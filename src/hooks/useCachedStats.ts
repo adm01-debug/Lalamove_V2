@@ -104,8 +104,10 @@ export function useDriverStatsCache() {
       }
 
       return (data || []).map(d => ({
-        id: d.driver_id,
-        name: d.driver_name,
+        // Colunas de VIEW chegam nullable nos tipos gerados; o contrato
+        // publico das interfaces continua nao-nulo.
+        id: d.driver_id ?? '',
+        name: d.driver_name ?? '',
         phone: d.phone || '',
         total_deliveries: d.total_deliveries || 0,
         completed_deliveries: d.completed_deliveries || 0,
@@ -113,7 +115,7 @@ export function useDriverStatsCache() {
         avg_rating: d.avg_rating,
         total_revenue: 0,
         last_delivery_at: d.last_delivery_at,
-        cached_at: d.cached_at,
+        cached_at: d.cached_at ?? '',
       }));
     },
     staleTime: 5 * 60 * 1000, // Cache por 5 minutos no client
@@ -148,16 +150,16 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
       }
 
       return (data || []).map(m => ({
-        date: m.delivery_date,
-        total_orders: m.total_orders,
-        completed_orders: m.completed_orders,
-        in_progress_orders: m.in_progress_orders,
+        date: m.delivery_date ?? '',
+        total_orders: m.total_orders ?? 0,
+        completed_orders: m.completed_orders ?? 0,
+        in_progress_orders: m.in_progress_orders ?? 0,
         pending_orders: 0,
-        cancelled_orders: m.cancelled_orders,
+        cancelled_orders: m.cancelled_orders ?? 0,
         avg_value: m.avg_value || 0,
         total_value: m.total_value || 0,
         avg_delivery_time_minutes: null,
-        cached_at: m.cached_at,
+        cached_at: m.cached_at ?? '',
       }));
     },
     staleTime: 5 * 60 * 1000,
@@ -193,11 +195,11 @@ export function useHourlyMetricsCache(hoursBack: number = 24) {
       }
 
       return (data || []).map(h => ({
-        hour: h.hour,
-        total_orders: h.total_orders,
-        completed_orders: h.completed_orders,
+        hour: h.hour ?? '',
+        total_orders: h.total_orders ?? 0,
+        completed_orders: h.completed_orders ?? 0,
         avg_value: h.avg_value || 0,
-        cached_at: h.cached_at,
+        cached_at: h.cached_at ?? '',
       }));
     },
     staleTime: 5 * 60 * 1000,
@@ -236,8 +238,8 @@ export function useTopDrivers(
       }
 
       return (data || []).map(d => ({
-        id: d.driver_id,
-        name: d.driver_name,
+        id: d.driver_id ?? '',
+        name: d.driver_name ?? '',
         metric_value: metric === 'avg_rating' ? (d.avg_rating || 0) : (d.total_deliveries || 0),
       }));
     },

@@ -52,7 +52,7 @@ export default function ResetPasswordPage() {
   const validatePassword = (): boolean => {
     const result = passwordSchema.safeParse(password);
     if (!result.success) {
-      setErrors(result.error.errors.map(e => e.message));
+      setErrors(result.error.issues.map(e => e.message));
       return false;
     }
     if (password !== confirmPassword) {

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import type { TablesUpdate } from '@/integrations/supabase/types';
 
 export interface RiskRule {
   id: string;
@@ -60,7 +61,9 @@ async function createRiskRule(input: RiskRuleInput): Promise<RiskRule> {
 }
 
 async function updateRiskRule(id: string, input: Partial<RiskRuleInput>): Promise<RiskRule> {
-  const updateData: Record<string, unknown> = {};
+  // supabase-js >= 2.116 rejeita Record<string, unknown> em .update()
+  // (RejectExcessProperties); usar o tipo gerado da tabela.
+  const updateData: TablesUpdate<'risk_rules'> = {};
   if (input.name !== undefined) updateData.name = input.name;
   if (input.description !== undefined) updateData.description = input.description;
   if (input.condition !== undefined) updateData.condition = input.condition;

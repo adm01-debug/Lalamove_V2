@@ -29,7 +29,7 @@
 | `lalamove-webhook` | `active_tracking`, `alerts`, `driver_locations`, `drivers`, `lalamove_order_replacements`, `lalamove_orders`, `lalamove_status_history`, `lalamove_stop_proofs`, `lalamove_stops`, `tracking_events`, `webhook_events` |
 | `llm-wh` | — |
 | `mapbox-proxy` | — |
-| `migrate-helper` | — |
+| `mcp-query` | `query_telemetry` |
 | `new-device-alert` | `auth_logs`, `new_device_alerts`, `user_devices` |
 | `rotate-tokens` | `alerts`, `bitrix24_tokens` |
 | `route-analyzer` | `alerts`, `drivers`, `lalamove_orders` |
@@ -69,7 +69,7 @@
 | `lalamove_stops` | `lalamove-webhook` |
 | `lalamove_uapi_sessions` | `lalamove-token-refresh`, `lalamove-uapi` |
 | `new_device_alerts` | `new-device-alert` |
-| `query_telemetry` | `external-db-bridge`, `lalamove-gateway` |
+| `query_telemetry` | `external-db-bridge`, `lalamove-gateway`, `mcp-query` |
 | `risk_rules` | `evaluate-driver` |
 | `suppliers` | `external-companies` |
 | `tracking_events` | `lalamove-webhook`, `simulate-driver-movement` |
