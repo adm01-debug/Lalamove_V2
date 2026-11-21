@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { getDirections } from '@/hooks/useMapbox';
-import { statusColor as statusHsl } from '@/lib/statusPalette';
+import { statusColorCss as statusHsl } from '@/lib/statusPalette';
 import { vehicleColors } from '../types';
 import {
   createDriverMarkerElement,
@@ -30,6 +30,21 @@ export function parseExpectedRoute(value: unknown): Array<{ lat: number; lng: nu
     points.push({ lat, lng });
   }
   return points;
+}
+
+/**
+ * Um mapa recriado (StrictMode, troca de estilo, remount) pode deixar referências
+ * vivas a instâncias já destruídas. `Marker.addTo()` estoura `appendChild` de
+ * `undefined` nesse caso, porque `getCanvas()`/container do mapa removido vira
+ * `undefined`. Só operamos quando a instância ainda tem canvas utilizável.
+ */
+function isLiveMap(map: mapboxgl.Map | null | undefined): map is mapboxgl.Map {
+  if (!map) return false;
+  try {
+    return !!map.getCanvas?.() && !!map.getContainer?.();
+  } catch {
+    return false;
+  }
 }
 
 interface UseMapMarkersParams {
@@ -135,7 +150,7 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
   // Reconciliação de markers, rotas e stops.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || loading) return;
+    if (!isLiveMap(map) || loading) return;
 
     const currentIds = new Set(trackingData.map(t => t.id));
     const effectiveDensity: MarkerDensity = isFarZoom ? 'compact' : markerDensity;
@@ -323,7 +338,7 @@ export function useMapMarkers(params: UseMapMarkersParams): UseMapMarkersResult 
   // Clustering em zoom muito afastado.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || loading) return;
+    if (!isLiveMap(map) || loading) return;
 
     const clearClusters = () => {
       clusterMarkers.current.forEach(m => m.remove());
