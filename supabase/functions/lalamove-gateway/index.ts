@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders as baseCorsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { isUnsupported, routeAction, translateParams } from './route.ts';
 
 // Override CORS headers to include x-request-id and other custom headers
 const corsHeaders = {
@@ -253,16 +254,42 @@ Deno.serve(async (req) => {
     const { urlEnv, keyEnv } = TARGETS[target];
     const baseUrl = Deno.env.get(urlEnv);
     const proxyKey = Deno.env.get(keyEnv);
-    if (!baseUrl || !proxyKey) {
-      return json({ error: `Configuração ausente para o destino "${target}"` }, 500, requestId);
-    }
 
     // ── 3. Montagem da URL de destino ──────────────────────────────────────
-    const url = new URL(baseUrl);
-    url.searchParams.set('key', proxyKey);
-    url.searchParams.set('action', action);
-    for (const [k, v] of Object.entries(payload.params ?? {})) {
-      if (typeof v === 'string') url.searchParams.set(k, v);
+    // O proxy externo é opcional: quando os secrets não estão definidos
+    // (é o caso da produção), a ação é atendida pelas edges locais.
+    let url: URL;
+    let forwardHeaders: Record<string, string> = {};
+
+    if (baseUrl && proxyKey) {
+      url = new URL(baseUrl);
+      url.searchParams.set('key', proxyKey);
+      url.searchParams.set('action', action);
+      for (const [k, v] of Object.entries(payload.params ?? {})) {
+        if (typeof v === 'string') url.searchParams.set(k, v);
+      }
+    } else {
+      const routed = routeAction(target, action);
+      if (routed === null) {
+        return json({ error: `Ação "${action}" não é reconhecida`, requestId }, 400, requestId);
+      }
+      if (isUnsupported(routed)) {
+        return json({ error: routed.reason, action, requestId }, 501, requestId);
+      }
+      const functionsBase = Deno.env.get('SUPABASE_URL');
+      if (!functionsBase) {
+        return json({ error: 'SUPABASE_URL ausente no ambiente da função' }, 500, requestId);
+      }
+      url = new URL(`${functionsBase}/functions/v1/${routed.fn}`);
+      url.searchParams.set('action', routed.action);
+      for (const [k, v] of Object.entries(translateParams(payload.params ?? {}))) {
+        url.searchParams.set(k, v);
+      }
+      for (const [k, v] of Object.entries(routed.query ?? {})) {
+        url.searchParams.set(k, v);
+      }
+      // a edge de destino exige JWT: repassamos o do chamador, já validado acima
+      forwardHeaders = { Authorization: authHeader };
     }
 
     const method = payload.method === 'POST' || payload.body !== undefined ? 'POST' : 'GET';
@@ -279,6 +306,7 @@ Deno.serve(async (req) => {
         headers: {
           'Content-Type': 'application/json',
           'x-request-id': requestId,
+          ...forwardHeaders,
         },
         body: method === 'POST' ? JSON.stringify(payload.body ?? {}) : undefined,
         signal: controller.signal,
