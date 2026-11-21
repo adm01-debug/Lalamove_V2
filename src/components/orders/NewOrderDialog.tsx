@@ -243,9 +243,14 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         action: 'quotation',
         serviceType: form.vehicleType,
         language: 'pt_BR',
+        // NUNCA enviar coordenadas placeholder: a Lalamove responde 422
+        // ERR_OUT_OF_SERVICE_AREA para lat/lng 0,0 (verificado em producao
+        // 21/11/2026) e nenhuma cotacao da interface era concluida. Sem
+        // geocodificacao no formulario, enviamos apenas o endereco — a API
+        // resolve e devolve as coordenadas reais na cotacao.
         stops: [
-          { coordinates: { lat: '0', lng: '0' }, address: form.pickupAddress.trim() },
-          { coordinates: { lat: '0', lng: '0' }, address: form.deliveryAddress.trim() },
+          { address: form.pickupAddress.trim() },
+          { address: form.deliveryAddress.trim() },
         ],
         ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
         ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
