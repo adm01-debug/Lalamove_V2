@@ -36,11 +36,21 @@ serve(async (req) => {
       if (!uid) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      const [{ data: isAdmin }, { data: isManager }] = await Promise.all([
-        supabase.rpc('has_role', { _user_id: uid, _role: 'admin' }),
-        supabase.rpc('has_role', { _user_id: uid, _role: 'manager' }),
-      ]);
-      if (!isAdmin && !isManager) {
+      // has_role() (migration 20260712210653) exige auth.uid() = _user_id, que é
+      // null com o client service_role — a RPC sempre voltaria false e bloquearia
+      // até admin/manager legítimos. Com service_role (bypassa RLS), consultamos
+      // user_roles direto, replicando a mesma condição de has_role sem o auth.uid().
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('role, is_active, expires_at')
+        .eq('user_id', uid)
+        .in('role', ['admin', 'manager']);
+      if (rolesError) {
+        return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      const now = Date.now();
+      const hasAccess = (roles ?? []).some((r) => r.is_active === true && (!r.expires_at || new Date(r.expires_at).getTime() > now));
+      if (!hasAccess) {
         return new Response(JSON.stringify({ error: 'Forbidden: requires admin or manager role' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
     }

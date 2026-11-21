@@ -91,16 +91,19 @@ export function LiveMapPage() {
     setIsRefreshing(false);
   };
 
-  const runSimulation = async () => {
+  const runSimulation = async (): Promise<boolean> => {
     try {
       const { error } = await supabase.functions.invoke('simulate-driver-movement');
       if (error) throw error;
-    } catch {
-      toast.error('Erro ao simular movimento');
+      return true;
+    } catch (err: any) {
+      const status = err?.context?.status;
+      toast.error(status === 403 ? 'Sem permissão para simular (requer admin ou manager)' : 'Erro ao simular movimento');
+      return false;
     }
   };
 
-  const toggleSimulation = () => {
+  const toggleSimulation = async () => {
     if (isSimulating) {
       if (simulationInterval.current) {
         clearInterval(simulationInterval.current);
@@ -108,12 +111,22 @@ export function LiveMapPage() {
       }
       setIsSimulating(false);
       toast.info('Simulação pausada');
-    } else {
-      runSimulation(); // Run immediately
-      simulationInterval.current = setInterval(runSimulation, 3000); // Then every 3s
-      setIsSimulating(true);
-      toast.success('Simulação iniciada - motoristas em movimento!');
+      return;
     }
+    // Espera a primeira chamada antes de anunciar sucesso e armar o intervalo,
+    // para não dizer "iniciada" e repetir uma chamada rejeitada (403) a cada 3s.
+    const ok = await runSimulation();
+    if (!ok) return;
+    simulationInterval.current = setInterval(async () => {
+      const stillOk = await runSimulation();
+      if (!stillOk && simulationInterval.current) {
+        clearInterval(simulationInterval.current);
+        simulationInterval.current = null;
+        setIsSimulating(false);
+      }
+    }, 3000);
+    setIsSimulating(true);
+    toast.success('Simulação iniciada - motoristas em movimento!');
   };
 
   useEffect(() => {
