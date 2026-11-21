@@ -205,7 +205,10 @@ export class MapboxProvider implements GeoProvider {
   async route(req: RouteReq): Promise<ProviderResult<GeoRoute>> {
     const pts = [req.origin, ...(req.waypoints ?? []), req.destination];
     if (pts.length > 25) throw new GeoProviderError("GEO_INVALID_INPUT", "Directions aceita no máximo 25 coordenadas", 422);
-    const profile = req.traffic === false ? "driving" : "driving-traffic";
+    const profile = req.profile ?? (req.traffic === false ? "driving" : "driving-traffic");
+    if (!/^(driving|driving-traffic|walking|cycling)$/.test(profile)) {
+      throw new GeoProviderError("GEO_INVALID_INPUT", `Perfil inválido: ${profile}`, 422);
+    }
     const p = new URLSearchParams({
       geometries: "polyline6", overview: "full", steps: "false",
       alternatives: req.alternatives ? "true" : "false",
@@ -234,7 +237,10 @@ export class MapboxProvider implements GeoProvider {
     const elements = req.origins.length * req.destinations.length;
     if (elements < 1 || elements > 625) throw new GeoProviderError("GEO_INVALID_INPUT", "Matrix: entre 1 e 625 elementos", 422);
     // driving-traffic: ≤ 10 coordenadas e 30 req/min; cai para driving quando não couber ou o bucket estiver vazio
-    let profile = req.traffic === false ? "driving" : "driving-traffic";
+    let profile = req.profile ?? (req.traffic === false ? "driving" : "driving-traffic");
+    if (!/^(driving|driving-traffic|walking|cycling)$/.test(profile)) {
+      throw new GeoProviderError("GEO_INVALID_INPUT", `Perfil inválido: ${profile}`, 422);
+    }
     let downgraded: string | undefined;
     if (profile === "driving-traffic" && (all.length > 10 || !this.rateGuard("matrix:driving-traffic"))) {
       profile = "driving"; downgraded = "driving-traffic→driving";
@@ -259,13 +265,35 @@ export class MapboxProvider implements GeoProvider {
   async snap(req: SnapReq): Promise<ProviderResult<GeoSnapResult>> {
     const pts = req.points.slice(-100);
     if (pts.length < 2) throw new GeoProviderError("GEO_INVALID_INPUT", "Map Matching precisa de ≥ 2 pontos", 422);
-    const p = new URLSearchParams({ geometries: "geojson", overview: "false", steps: "false", tidy: "true" });
+    const snapProfile = req.profile ?? "driving";
+    if (!/^(driving|walking|cycling)$/.test(snapProfile)) {
+      throw new GeoProviderError("GEO_INVALID_INPUT", `Perfil inválido para map matching: ${snapProfile}`, 422);
+    }
+    const p = new URLSearchParams({ geometries: "geojson", overview: "full", steps: "false", tidy: "true" });
     p.set("radiuses", pts.map(() => String(req.radius_m ?? 25)).join(";"));
     if (req.timestamps && req.timestamps.length === pts.length) p.set("timestamps", req.timestamps.join(";"));
-    const json = await this.call<{ matchings?: Array<{ confidence?: number }>; tracepoints?: Array<{ location: [number, number] } | null> }>(
-      "matching", `${BASE}/matching/v5/mapbox/driving/${pts.map(fmt).join(";")}?${p}`);
+    const json = await this.call<{
+      matchings?: Array<{
+        confidence?: number; distance?: number; duration?: number;
+        geometry?: { type: string; coordinates: [number, number][] };
+        legs?: Array<{ distance: number; duration: number }>;
+      }>;
+      tracepoints?: Array<{ location: [number, number] } | null>;
+    }>("matching", `${BASE}/matching/v5/mapbox/${snapProfile}/${pts.map(fmt).join(";")}?${p}`);
     const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
-    return { data: { points, confidence: json.matchings?.[0]?.confidence ?? null, provider: "mapbox" }, sku: "map_matching", units: 1 };
+    const m = json.matchings?.[0];
+    return {
+      data: {
+        points,
+        confidence: m?.confidence ?? null,
+        provider: "mapbox",
+        distance_m: m?.distance != null ? Math.round(Number(m.distance)) : undefined,
+        duration_s: m?.duration != null ? Math.round(Number(m.duration)) : undefined,
+        geometry: m?.geometry,
+        legs: m?.legs?.map((l) => ({ distance_m: Math.round(l.distance), duration_s: Math.round(l.duration) })),
+      },
+      sku: "map_matching", units: 1,
+    };
   }
 
   // ── Static Images ───────────────────────────────────────────────────────

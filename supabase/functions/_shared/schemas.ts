@@ -179,6 +179,7 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     destination: geoPoint,
     waypoints: z.array(geoPoint).max(23).optional(),
     traffic: z.boolean().optional(),
+    profile: z.string().min(1).max(20).optional(),
     alternatives: z.boolean().optional(),
     language: z.string().min(2).max(5).optional(),
     provider: geoProvider,
@@ -188,6 +189,7 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     origins: z.array(geoPoint).min(1).max(25),
     destinations: z.array(geoPoint).min(1).max(25),
     traffic: z.boolean().optional(),
+    profile: z.string().min(1).max(20).optional(),
     provider: geoProvider,
   }),
   z.object({
@@ -206,6 +208,7 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     points: z.array(geoPoint).min(2).max(100),
     timestamps: z.array(z.number().int()).max(100).optional(),
     radius_m: z.number().int().min(1).max(50).optional(),
+    profile: z.string().min(1).max(20).optional(),
     provider: geoProvider,
   }),
   // Mapbox-only: pass-through validado só no essencial (a tela /map-tools já monta o body)

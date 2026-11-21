@@ -89,6 +89,11 @@ export interface GeoSnapResult {
   points: GeoPoint[]; // pontos encaixados na via (mesma ordem da entrada)
   confidence: number | null;
   provider: ProviderName;
+  /** distância/duração/geometria da melhor match — só quando o provedor devolve (Mapbox /matching) */
+  distance_m?: number;
+  duration_s?: number;
+  geometry?: { type: string; coordinates: [number, number][] };
+  legs?: GeoRouteLeg[];
 }
 
 // ── Requests normalizados (espelham _shared/schemas.ts) ─────────────────────
@@ -136,6 +141,8 @@ export interface RouteReq {
   destination: GeoPoint;
   waypoints?: GeoPoint[];
   traffic?: boolean;
+  /** perfil explícito do provedor (driving | driving-traffic | walking | cycling); ausente = derivado de `traffic` */
+  profile?: string;
   alternatives?: boolean;
   language?: string;
 }
@@ -144,6 +151,8 @@ export interface MatrixReq {
   origins: GeoPoint[];
   destinations: GeoPoint[];
   traffic?: boolean;
+  /** perfil explícito do provedor (driving | driving-traffic | walking | cycling); ausente = derivado de `traffic` */
+  profile?: string;
 }
 
 export interface StaticReq {
@@ -160,6 +169,8 @@ export interface SnapReq {
   points: GeoPoint[];
   timestamps?: number[];
   radius_m?: number;
+  /** perfil do Map Matching (driving | walking | cycling); ausente = driving */
+  profile?: string;
 }
 
 export interface ProviderResult<T> {

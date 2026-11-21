@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/utils/logger';
+import { reverseGeocode } from '@/hooks/useGeo';
 
 /**
  * Resolve coordenadas de entrega em regiões precisas (bairro/cidade) via
@@ -212,11 +213,8 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
         await Promise.all(
           chunk.map(async ([key, c]) => {
             try {
-              const { data, error } = await supabase.functions.invoke('mapbox-proxy', {
-                body: { action: 'reverse-geocode', lng: c.lng, lat: c.lat },
-              });
-              if (error) throw error;
-              const region = pickRegion((data ?? {}) as ReverseResult);
+              const feature = await reverseGeocode(c.lng, c.lat);
+              const region = pickRegion({ features: feature ? [feature] : [] });
               if (region) {
                 resolved[key] = region;
                 freshlyGeocoded[key] = region;
