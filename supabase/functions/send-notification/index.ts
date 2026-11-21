@@ -17,6 +17,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// verify_jwt=true so a valid JWT is required, but that includes ordinary
+// authenticated users, not just internal service_role callers. metadata.recipients
+// lets the caller pick an arbitrary destination, so it must be restricted to
+// service_role (the other edge functions that call send-notification already use it).
+function isServiceRoleCaller(req: Request): boolean {
+  try {
+    const token = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
+    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload.role === "service_role";
+  } catch { return false; }
+}
+
 interface NotificationRequest {
   alert_id: string;
   type: string;
@@ -134,29 +146,56 @@ serve(async (req) => {
       return result;
     };
 
-    // Ad-hoc recipients supplied by the caller (e.g. the geo-foundation
-    // trigger notifying an order's pickup/delivery contact, or
-    // check-driver-alerts notifying a supplier). Independent of
-    // alert_configurations, since these recipients vary per request and
-    // have no reason to live in a static per-type config row.
-    // Contract: metadata.recipients = [{ channel: string, to: string, ... }]
-    const metadataRecipients = Array.isArray(metadata?.recipients) ? metadata.recipients : [];
-    for (const r of metadataRecipients) {
-      if (r && typeof r === 'object' && typeof (r as Record<string, unknown>).channel === 'string' && typeof (r as Record<string, unknown>).to === 'string') {
-        await dispatch((r as { channel: string }).channel, (r as { to: string }).to);
-      }
-    }
-
-    // Get alert configurations for this type
-    const { data: configs, error: configsError } = await supabase
+    // Get alert configurations for this type. Fetch all rows (not just
+    // is_enabled=true) so we can tell "channel explicitly disabled" apart
+    // from "no config exists for this type" below.
+    const { data: allConfigsForType, error: configsError } = await supabase
       .from('alert_configurations')
       .select('*')
-      .eq('alert_type', type)
-      .eq('is_enabled', true);
+      .eq('alert_type', type);
 
     if (configsError) {
       logger.error(`[Notification] Failed to load alert_configurations for ${type}:`, configsError);
     }
+
+    const configRows = (allConfigsForType ?? []) as Array<Record<string, unknown>>;
+    const notifyFieldByChannel: Record<string, string> = {
+      whatsapp: 'notify_whatsapp',
+      email: 'notify_email',
+      slack: 'notify_slack',
+      bitrix24: 'notify_bitrix24_task',
+      n8n: 'notify_n8n_webhook',
+    };
+    // A channel is "explicitly disabled" when configs exist for this alert type
+    // but none of them has it enabled — distinct from no config existing at all.
+    const isChannelDisabled = (channel: string): boolean => {
+      const field = notifyFieldByChannel[channel];
+      if (!field || configRows.length === 0) return false;
+      return !configRows.some((c) => c.is_enabled === true && c[field] === true);
+    };
+
+    // Ad-hoc recipients supplied by the caller (e.g. the geo-foundation
+    // trigger notifying an order's pickup/delivery contact, or
+    // check-driver-alerts notifying a supplier). Independent of
+    // alert_configurations, since these recipients vary per request and
+    // have no reason to live in a static per-type config row — but an
+    // operator-disabled channel still wins over an ad-hoc recipient.
+    // Contract: metadata.recipients = [{ channel: string, to: string, ... }]
+    const metadataRecipients = isServiceRoleCaller(req) && Array.isArray(metadata?.recipients)
+      ? metadata.recipients
+      : [];
+    for (const r of metadataRecipients) {
+      if (r && typeof r === 'object' && typeof (r as Record<string, unknown>).channel === 'string' && typeof (r as Record<string, unknown>).to === 'string') {
+        const channel = (r as { channel: string }).channel;
+        if (isChannelDisabled(channel)) {
+          logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
+          continue;
+        }
+        await dispatch(channel, (r as { to: string }).to);
+      }
+    }
+
+    const configs = configRows.filter((c) => c.is_enabled);
 
     if (!configs || configs.length === 0) {
       logger.log(`[Notification] No active configurations for: ${type}`);
