@@ -80,12 +80,15 @@ JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-
   de seed em `test-user-permissions.ts`;
 - removeu `supabase/functions/migrate-helper/` e sua entrada em `supabase/config.toml`.
 
-**Já feito (confirmado, não assumido):** a PR #93 (mergeada 2026-11-20T19:13Z) registra que "a rotação das
-chaves Supabase (17:25Z, 20/11) desabilitou as legacy keys" — o `service_role`/`anon` antigos (formato JWT)
-pararam de funcionar nesse momento (quebrou `scripts/seed-database.ts`, corrigido na própria PR #93 para ler
-a chave nova via `process.env`). A PR #108 (mergeada 2026-11-21) já se refere à chave nova no formato
-`sb_secret_…`. **Isso resolve o vazamento do `service_role`/`anon` legado que estava hardcoded nos 19
-arquivos** — quem leu o histórico do Git fica com um valor já invalidado.
+**Já feito (confirmado por fonte independente, com uma ressalva de horário):** o commit `b819be8`
+(2026-11-21, corrige os crons 18/19) registra evidência de produção — "78/78 respostas 401 em
+`net._http_response` desde [horário]" — porque esses crons embutiam a `anon` JWT legada, confirmando que a
+chave antiga **parou de funcionar de fato em 2026-11-20**. A PR #93 (mergeada 2026-11-20T19:13Z) cita o
+horário exato "17:25Z, 20/11" para a rotação, mas essa PR não anexa log/query para esse horário específico —
+**o dia está confirmado por evidência de produção; o horário "17:25Z" é só citação de outra PR, sem
+confirmação independente (NÃO VERIFICADO nesse detalhe).** A PR #108 (mergeada 2026-11-21) já se refere à
+chave nova no formato `sb_secret_…`. **Isso resolve o vazamento do `service_role`/`anon` legado que estava
+hardcoded nos 19 arquivos** — quem leu o histórico do Git fica com um valor já invalidado desde 20/11.
 
 **Ainda pendente, ação do dono — sem confirmação direta:**
 
