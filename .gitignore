@@ -50,3 +50,6 @@ docs/contexto/regras/*
 __pycache__/
 *.pyc
 *.pyo
+
+# Lockfile do Deno: a CI roda deno v1.x e nao le lockfile v5 gerado pelo deno 2.x
+deno.lock

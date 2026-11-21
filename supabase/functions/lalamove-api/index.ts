@@ -665,7 +665,9 @@ serve(async (req) => {
 
       // --- Quotations ---
       case 'quotation':
-        result = await createQuotation(body);
+        // body ja passou pelo zod (z.record(z.any())); a validacao de forma
+        // fica com a propria API (422 com o campo exato).
+        result = await createQuotation(body as unknown as QuotationRequest);
         break;
 
       case 'get-quotation': {
@@ -682,7 +684,7 @@ serve(async (req) => {
 
       // --- Orders ---
       case 'order': {
-        result = await createOrder(body);
+        result = await createOrder(body as unknown as OrderRequest);
         if (result.data && !result.error) {
           const orderData = (result.data as Record<string, unknown>).data as Record<string, unknown>;
           const priceBreakdown = orderData.priceBreakdown as Record<string, string> | undefined;
@@ -983,6 +985,85 @@ serve(async (req) => {
         break;
       }
 
+      // --- Webhook self-test (smoke test assinado) ---
+      // Assina um payload v3 com o LALAMOVE_API_SECRET real (a mesma formula
+      // que a Lalamove usa: v3_Webhook_v1.5.pdf p.8) e entrega no proprio
+      // webhook. Prova a cadeia inteira — assinatura, normalizacao v3,
+      // contrato e processamento — sem criar pedido pago nem despachar
+      // motorista. O segredo nunca sai da edge.
+      //
+      // TRAVA DE SEGURANCA: so aceita orderId com o prefixo de teste, entao
+      // nao e possivel forjar evento de pedido real por aqui.
+      case 'webhook-selftest': {
+        const SELFTEST_PREFIX = 'E2E-SELFTEST-';
+        const orderId = typeof body.orderId === 'string' ? body.orderId : '';
+        if (!orderId.startsWith(SELFTEST_PREFIX)) {
+          return new Response(
+            JSON.stringify({ error: `orderId deve comecar com ${SELFTEST_PREFIX}` }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        const eventType = typeof body.eventType === 'string' ? body.eventType : 'ORDER_STATUS_CHANGED';
+        const status = typeof body.status === 'string' ? body.status : 'ON_GOING';
+        const nowIso = new Date().toISOString();
+
+        const data: Record<string, unknown> = eventType === 'DRIVER_ASSIGNED'
+          ? {
+              driver: {
+                driverId: `${SELFTEST_PREFIX}DRIVER`,
+                phone: '+5541999999999',
+                name: 'Motorista de Teste (self-test)',
+                photo: '',
+                plateNumber: 'TST0A00',
+              },
+              location: { lat: -25.4284, lng: -49.2733 },
+              order: { orderId },
+              updatedAt: nowIso,
+            }
+          : { order: { orderId, status, previousStatus: '', market: 'BR CWB' }, updatedAt: nowIso };
+
+        const webhookPath = '/functions/v1/lalamove-webhook';
+        const timestamp = Math.floor(Date.now() / 1000);
+        const raw = `${timestamp}\r\nPOST\r\n${webhookPath}\r\n\r\n${JSON.stringify(data)}`;
+
+        const encoder = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+          'raw', encoder.encode(LALAMOVE_API_SECRET!),
+          { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
+        );
+        const sigBuf = await crypto.subtle.sign('HMAC', key, encoder.encode(raw));
+        const signature = Array.from(new Uint8Array(sigBuf))
+          .map(b => b.toString(16).padStart(2, '0')).join('');
+
+        const payload = {
+          apiKey: LALAMOVE_API_KEY,
+          timestamp,
+          signature,
+          eventId: crypto.randomUUID(),
+          eventType,
+          eventVersion: 'v3',
+          data,
+        };
+
+        const whRes = await fetch(`${SUPABASE_URL}${webhookPath}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const whBody = await whRes.text();
+        result = {
+          data: {
+            delivered: whRes.ok,
+            webhookStatus: whRes.status,
+            webhookResponse: whBody.substring(0, 500),
+            eventType,
+            orderId,
+          },
+          status: whRes.status,
+        };
+        break;
+      }
+
       // --- Sync ---
       case 'sync': {
         const syncResult = await syncActiveOrders(supabase);
@@ -1000,7 +1081,7 @@ serve(async (req) => {
               'order', 'get-order', 'fetch-order', 'fetch-orders-bulk', 'edit-order', 'cancel',
               'priority-fee',
               'get-driver', 'change-driver',
-              'set-webhook',
+              'set-webhook', 'webhook-selftest',
               'sync',
             ]
           }),
