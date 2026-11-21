@@ -3,7 +3,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation } from 'lucide-react';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
-import { useMapboxGeocode, type MapboxFeature } from '@/hooks/useMapbox';
+import type { MapboxFeature } from '@/hooks/useMapbox';
+import { useAddressSearchBox, type GeoSuggestion } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -50,8 +51,8 @@ export function AddressAutocomplete({
   // CRM search
   const { data: crmData, isLoading: crmLoading } = useAddressSearch(debouncedSearch, open && debouncedSearch.length >= 2);
   
-  // Mapbox Geocoding search
-  const { data: mapboxData, isLoading: mapboxLoading } = useMapboxGeocode(debouncedSearch, open && debouncedSearch.length >= 3);
+  // Mapbox Search Box (sugestões + retrieve, sessão cobrada por token)
+  const { suggestions: mapboxResults, isLoading: mapboxLoading, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
 
   const isLoading = crmLoading || mapboxLoading;
 
@@ -78,19 +79,29 @@ export function AddressAutocomplete({
     setOpen(false);
   };
 
-  const handleSelectMapbox = (feature: MapboxFeature) => {
-    setInputValue(feature.place_name);
-    onChange(feature.place_name);
-    onSelectMapbox?.(feature);
-    // Pass coordinates back (center is [lng, lat])
-    if (feature.center && onCoordinatesChange) {
-      onCoordinatesChange(feature.center[1], feature.center[0]);
+  const handleSelectMapbox = async (suggestion: GeoSuggestion) => {
+    const address = await retrieve(suggestion.id);
+    if (!address) return;
+    setInputValue(address.formatted);
+    onChange(address.formatted);
+    if (onSelectMapbox || onCoordinatesChange) {
+      const feature: MapboxFeature = {
+        id: address.place_id ?? suggestion.id,
+        place_name: address.formatted,
+        text: suggestion.main_text,
+        center: address.location ? [address.location.lng, address.location.lat] : [0, 0],
+        place_type: [suggestion.type],
+        geometry: { type: 'Point', coordinates: address.location ? [address.location.lng, address.location.lat] : [0, 0] },
+      };
+      onSelectMapbox?.(feature);
+      if (address.location && onCoordinatesChange) {
+        onCoordinatesChange(address.location.lat, address.location.lng);
+      }
     }
     setOpen(false);
   };
 
   const crmResults = crmData?.results ?? [];
-  const mapboxResults = mapboxData?.features ?? [];
   const hasResults = crmResults.length > 0 || mapboxResults.length > 0;
 
   return (
@@ -148,31 +159,31 @@ export function AddressAutocomplete({
             </>
           )}
 
-          {/* Mapbox Geocoding Results */}
+          {/* Mapbox Search Box Results */}
           {mapboxResults.length > 0 && (
             <>
               <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold bg-muted/30 border-b border-border/30">
-                Mapbox Geocoding
+                Mapbox Search Box
               </div>
-              {mapboxResults.map((feature) => (
+              {mapboxResults.map((suggestion) => (
                 <button
-                  key={feature.id}
+                  key={suggestion.id}
                   type="button"
                   className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30 last:border-0"
-                  onClick={() => handleSelectMapbox(feature)}
+                  onClick={() => handleSelectMapbox(suggestion)}
                 >
                   <div className="flex items-center gap-2">
                     <Navigation className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                     <div className="min-w-0">
                       <span className="font-medium text-sm text-foreground truncate block">
-                        {feature.text}
+                        {suggestion.main_text}
                       </span>
                       <p className="text-xs text-muted-foreground truncate">
-                        {feature.place_name}
+                        {suggestion.secondary_text}
                       </p>
                     </div>
                     <Badge variant="outline" className="text-[10px] px-1.5 py-0 flex-shrink-0">
-                      {feature.place_type?.[0] || 'local'}
+                      {suggestion.type || 'local'}
                     </Badge>
                   </div>
                 </button>
