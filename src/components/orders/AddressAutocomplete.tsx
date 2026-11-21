@@ -177,6 +177,9 @@ export function AddressAutocomplete({
                   </div>
                 </button>
               ))}
+              <p className="px-3 py-1 text-[10px] text-muted-foreground/70 bg-muted/20">
+                © Mapbox © OpenStreetMap
+              </p>
             </>
           )}
         </div>
