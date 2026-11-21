@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
+  "commit": "2847da147563834643a670fa89f955f8ee0e091b",
   "branch": "main",
-  "data_commit": "2026-11-21T20:12:28-03:00",
+  "data_commit": "2026-11-21T20:24:38-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2847da1",
+    "data": "2026-11-21",
+    "assunto": "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)"
+   },
    {
     "sha": "06bcb9f",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "bc48a46",
     "data": "2026-11-21",
     "assunto": "feat(orders): migra autocomplete de endereço para Mapbox Search Box (#150)"
-   },
-   {
-    "sha": "49fc8f0",
-    "data": "2026-11-21",
-    "assunto": "docs: registra estado, recuperação de branches e bloqueios de 21/11 (#145)"
    }
   ],
   "arquivos_mudados_7d": 192,
@@ -164,11 +164,11 @@
     "mudancas": 7
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 6
+    "pasta": "supabase/config.toml",
+    "mudancas": 7
    },
    {
-    "pasta": "supabase/config.toml",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 6
    },
    {
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 88
+    "commits": 89
    },
    {
     "autor": "dependabot[bot]",

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `06bcb9ff151575fe4c9c4e76c09d347ccf16aafd` (2026-11-21T20:12:28-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2847da147563834643a670fa89f955f8ee0e091b` (2026-11-21T20:24:38-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -271,14 +271,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7465 nós · 15873 arestas · 555 comunidades · grafo do commit `06bcb9ff`
+- 7465 nós · 15873 arestas · 555 comunidades · grafo do commit `2847da14`
 - comunidades maiores: cn (181), card.tsx (149), RateLimitDashboardPage.tsx (140), snapshot.py (102), react (99), ref_node_url (97), lucide-react (92), dependencies (80), gerar.mjs (76), client.ts (73), package.json (72), seed-database.ts (67)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
 - package.json (31)
-- supabase/config.toml (15)
+- supabase/config.toml (16)
 - .github/workflows/ci.yml (10)
 - docs/pendencias/_ordem.md (10)
 - docs/MAPBOX.md (7)
@@ -368,6 +368,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `2847da1` fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)
 - 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
 - 2026-11-21 `554e68b` ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)
 - 2026-11-21 `e616ccf` fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)
@@ -382,7 +383,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `99e0b43` feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)
 - 2026-11-21 `658445d` docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)
 - 2026-11-21 `023202f` fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)
-- 2026-11-21 `96b1253` fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

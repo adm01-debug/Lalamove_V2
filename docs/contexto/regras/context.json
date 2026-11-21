@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
+  "sha": "2847da147563834643a670fa89f955f8ee0e091b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 23:13 UTC",
+  "generated_at": "2026-11-21 23:25 UTC",
   "files_total": 963,
   "code_files": 791,
   "code_lines": 136276
@@ -67961,10 +67961,19 @@
   }
  },
  "git": {
-  "sha": "06bcb9ff151575fe4c9c4e76c09d347ccf16aafd",
+  "sha": "2847da147563834643a670fa89f955f8ee0e091b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "2847da1",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)",
+    "files": [
+     "supabase/config.toml"
+    ]
+   },
    {
     "sha": "06bcb9f",
     "date": "2026-11-21",
@@ -68307,21 +68316,16 @@
     "files": [
      ".github/workflows/apply-migrations.yml"
     ]
-   },
-   {
-    "sha": "6e76232",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(simulacao): restringe simulate-driver-movement a admin/manager (#159)",
-    "files": [
-     "supabase/functions/simulate-driver-movement/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
     5
+   ],
+   [
+    "supabase/config.toml",
+    3
    ],
    [
     "src/components/map/LiveMap.tsx",
@@ -68337,10 +68341,6 @@
    ],
    [
     "supabase/functions/geo-gateway/resolver.ts",
-    3
-   ],
-   [
-    "supabase/functions/simulate-driver-movement/index.ts",
     3
    ],
    [
@@ -68396,7 +68396,7 @@
     2
    ],
    [
-    "supabase/config.toml",
+    "src/components/orders/AddressAutocomplete.tsx",
     2
    ]
   ]

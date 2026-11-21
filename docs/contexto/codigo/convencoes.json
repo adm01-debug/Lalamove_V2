@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)",
    "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)",
    "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)",
    "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)",
-   "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)",
-   "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)"
+   "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
