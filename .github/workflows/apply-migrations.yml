@@ -55,16 +55,21 @@ jobs:
             version="${f%%_*}"
             name="${f#*_}"; name="${name%.sql}"
             echo "== aplicando $f ($(wc -l < "$path") linhas)"
-            jq -Rs '{query: .}' "$path" \
-              | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
-                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- \
-              | jq -c 'if type=="array" then {rows: length} else . end'
+            # DDL: falha = erro do run (corpo da resposta visível)
+            resp=$(jq -Rs '{query: .}' "$path" \
+              | curl -sS -w '\n%{http_code}' -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @-)
+            code="${resp##*$'\n'}"; body="${resp%$'\n'*}"
+            if [ "$code" != "200" ] && [ "$code" != "201" ]; then echo "::error::HTTP $code ao aplicar $f: $body"; exit 1; fi
+            echo "$body" | jq -c 'if type=="array" then {rows: length} else . end'
+            # Ledger: best-effort (DDL já aplicado); só version+name, colunas garantidas em qualquer versão
             echo "== ledger $version $name"
-            jq -n --arg v "$version" --arg n "$name" \
-              '{query: ("INSERT INTO supabase_migrations.schema_migrations (version, name, statements) VALUES (" + ($v|@json) + ", " + ($n|@json) + ", ARRAY[]::text[]) ON CONFLICT (version) DO NOTHING")}' \
-              | curl -sfS -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
-                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @- \
-              | jq -c .
+            lresp=$(jq -n --arg v "$version" --arg n "$name" \
+              '{query: ("INSERT INTO supabase_migrations.schema_migrations (version, name) VALUES (" + ($v|@json) + ", " + ($n|@json) + ") ON CONFLICT (version) DO NOTHING")}' \
+              | curl -sS -w '\n%{http_code}' -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+                  -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @-)
+            lcode="${lresp##*$'\n'}"
+            if [ "$lcode" != "200" ] && [ "$lcode" != "201" ]; then echo "::warning::ledger não registrado (HTTP $lcode): ${lresp%$'\n'*}"; else echo "ledger ok"; fi
           done
 
       - name: Dry run — tamanho dos arquivos
