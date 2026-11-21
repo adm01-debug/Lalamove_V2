@@ -164,3 +164,7 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20260828000004 | [populate_permissions](migrations/20260828000004_populate_permissions.sql) | 0 |
 | 20260831204251 | [add_mcp_exec_helpers](migrations/20260831204251_add_mcp_exec_helpers.sql) | 0 |
 | 20260902000000 | [harden_revoke_anon_grants](migrations/20260902000000_harden_revoke_anon_grants.sql) | 0 |
+| 20261109004100 | [add_security_tables_to_realtime](migrations/20261109004100_add_security_tables_to_realtime.sql) | 0 |
+| 20261120180500 | [fix_telemetria_grant_only](migrations/20261120180500_fix_telemetria_grant_only.sql) | 0 |
+| 20261121100000 | [add_table_comments](migrations/20261121100000_add_table_comments.sql) | 0 |
+| 20261122090000 | [cache_system_backend](migrations/20261122090000_cache_system_backend.sql) | 0 |

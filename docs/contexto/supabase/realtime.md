@@ -11,8 +11,12 @@
 
 | publication | tabela | replica identity |
 |---|---|---|
+| supabase_realtime | public.auth_logs | full |
+| supabase_realtime | public.blocked_ips | full |
 | supabase_realtime | public.lalamove_order_replacements | full |
 | supabase_realtime | public.lalamove_stop_proofs | full |
+| supabase_realtime | public.mfa_sessions | full |
+| supabase_realtime | public.new_device_alerts | full |
 | supabase_realtime | public.report_presets | full |
 | supabase_realtime_messages_publication | realtime.messages_2026_08_28 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_08_29 |  |

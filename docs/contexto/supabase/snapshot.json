@@ -16608,11 +16608,19 @@
         "callers": {
           "code": [
             {
+              "file": "src/hooks/useCacheViews.ts",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20250102000002_cache_system_complete.sql",
               "hits": 3
+            },
+            {
+              "file": "supabase/migrations/20261122090000_cache_system_backend.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 3,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -23889,6 +23897,26 @@
         "name": "harden_revoke_anon_grants",
         "statements": null,
         "version": "20260902000000"
+      },
+      {
+        "name": "add_security_tables_to_realtime",
+        "statements": null,
+        "version": "20261109004100"
+      },
+      {
+        "name": "fix_telemetria_grant_only",
+        "statements": null,
+        "version": "20261120180500"
+      },
+      {
+        "name": "add_table_comments",
+        "statements": null,
+        "version": "20261121100000"
+      },
+      {
+        "name": "cache_system_backend",
+        "statements": null,
+        "version": "20261122090000"
       }
     ],
     "policies": [
@@ -26284,12 +26312,32 @@
         {
           "publication": "supabase_realtime",
           "schema": "public",
+          "table": "auth_logs"
+        },
+        {
+          "publication": "supabase_realtime",
+          "schema": "public",
+          "table": "blocked_ips"
+        },
+        {
+          "publication": "supabase_realtime",
+          "schema": "public",
           "table": "lalamove_order_replacements"
         },
         {
           "publication": "supabase_realtime",
           "schema": "public",
           "table": "lalamove_stop_proofs"
+        },
+        {
+          "publication": "supabase_realtime",
+          "schema": "public",
+          "table": "mfa_sessions"
+        },
+        {
+          "publication": "supabase_realtime",
+          "schema": "public",
+          "table": "new_device_alerts"
         },
         {
           "publication": "supabase_realtime",
@@ -26702,7 +26750,7 @@
         "parent": null,
         "partition_bound": null,
         "partition_key": null,
-        "replica_identity": "default",
+        "replica_identity": "full",
         "rls_enabled": true,
         "rls_forced": false,
         "schema": "public"
@@ -26777,7 +26825,7 @@
         "parent": null,
         "partition_bound": null,
         "partition_key": null,
-        "replica_identity": "default",
+        "replica_identity": "full",
         "rls_enabled": true,
         "rls_forced": false,
         "schema": "public"
@@ -27152,7 +27200,7 @@
         "parent": null,
         "partition_bound": null,
         "partition_key": null,
-        "replica_identity": "default",
+        "replica_identity": "full",
         "rls_enabled": true,
         "rls_forced": false,
         "schema": "public"
@@ -27167,7 +27215,7 @@
         "parent": null,
         "partition_bound": null,
         "partition_key": null,
-        "replica_identity": "default",
+        "replica_identity": "full",
         "rls_enabled": true,
         "rls_forced": false,
         "schema": "public"

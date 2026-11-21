@@ -9,12 +9,12 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.alert_dedup](tables/public/alert_dedup.md) | table | sim | 1 | 6 | não | Controle de deduplicacao de alertas para evitar envio duplicado no mesmo intervalo. |
 | [public.alerts](tables/public/alerts.md) | table | sim | 5 | 15 | não | Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status. |
 | [public.alerts_sent](tables/public/alerts_sent.md) | table | sim | 4 | 11 | não | Historico de notificacoes enviadas por canal com status, retry e erro. |
-| [public.auth_logs](tables/public/auth_logs.md) | table | sim | 3 | 9 | não | Auditoria de autenticacao: IP, user agent e evento de cada acesso. |
+| [public.auth_logs](tables/public/auth_logs.md) | table | sim | 3 | 9 | sim | Auditoria de autenticacao: IP, user agent e evento de cada acesso. |
 | [public.bitrix24_activities](tables/public/bitrix24_activities.md) | table | sim | 4 | 7 | não | Atividades/timeline sincronizadas com o CRM Bitrix24. |
 | [public.bitrix24_stage_mappings](tables/public/bitrix24_stage_mappings.md) | table | sim | 4 | 5 | não | Mapeamento de estagios entre o sistema e os funis do Bitrix24. |
 | [public.bitrix24_sync](tables/public/bitrix24_sync.md) | table | sim | 4 | 9 | não | Registro de sincronizacao de deals com o Bitrix24. |
 | [public.bitrix24_tokens](tables/public/bitrix24_tokens.md) | table | sim | 4 | 7 | não | Tokens OAuth2 do Bitrix24 com refresh. |
-| [public.blocked_ips](tables/public/blocked_ips.md) | table | sim | 2 | 11 | não | IPs bloqueados por rate limit/seguranca com motivo e expiracao. |
+| [public.blocked_ips](tables/public/blocked_ips.md) | table | sim | 2 | 11 | sim | IPs bloqueados por rate limit/seguranca com motivo e expiracao. |
 | [public.contacts](tables/public/contacts.md) | table | sim | 1 | 10 | não | Contatos cadastrados (empresas/parceiros) para integracao externa. |
 | [public.contract_version_usage](tables/public/contract_version_usage.md) | table | sim | 1 | 8 | não | Uso de versoes de contrato por periodo. |
 | [public.contract_version_usage_monthly](tables/public/contract_version_usage_monthly.md) | table | sim | 1 | 9 | não | Agregado mensal de uso de versoes de contrato. |
@@ -39,8 +39,8 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 11 | não | Tentativas de login com IP e resultado para lockout de conta. |
 | [public.map_settings_overrides](tables/public/map_settings_overrides.md) | table | sim | 1 | 8 | não | Overrides de configuracao de mapa por usuario/contexto. |
 | [public.mcp_diagnostics_grants](tables/public/mcp_diagnostics_grants.md) | table | sim | 1 | 7 | não | Grants de acesso a diagnosticos via MCP (query_telemetry). |
-| [public.mfa_sessions](tables/public/mfa_sessions.md) | table | sim | 5 | 9 | não | Sessoes MFA (TOTP) registradas por usuario. |
-| [public.new_device_alerts](tables/public/new_device_alerts.md) | table | sim | 4 | 8 | não | Alertas de novo dispositivo detectado no login. |
+| [public.mfa_sessions](tables/public/mfa_sessions.md) | table | sim | 5 | 9 | sim | Sessoes MFA (TOTP) registradas por usuario. |
+| [public.new_device_alerts](tables/public/new_device_alerts.md) | table | sim | 4 | 8 | sim | Alertas de novo dispositivo detectado no login. |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 11 | não | Requisicoes de reset de senha com aprovacao de admin. |
 | [public.password_reset_tokens](tables/public/password_reset_tokens.md) | table | sim | 4 | 7 | não | Tokens de reset de senha com expiracao. |
 | [public.permissions](tables/public/permissions.md) | table | sim | 4 | 6 | não | Permissoes granulares do sistema por modulo e acao. |

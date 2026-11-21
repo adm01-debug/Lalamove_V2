@@ -9,8 +9,8 @@
 | RLS habilitado | sim |
 | RLS forçado (owner) | não |
 | policies | 2 |
-| realtime (publication) | não |
-| replica identity | default |
+| realtime (publication) | sim |
+| replica identity | full |
 | vem de extensão | não |
 
 
