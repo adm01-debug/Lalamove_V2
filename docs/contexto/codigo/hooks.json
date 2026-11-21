@@ -722,11 +722,12 @@
     "useMetricsComparison",
     "useTopDrivers"
    ],
-   "linhas": 377,
+   "linhas": 344,
    "dominio": "hooks",
    "tabelas": [
-    "drivers",
-    "lalamove_orders"
+    "delivery_metrics_cache",
+    "driver_stats_cache",
+    "hourly_metrics_cache"
    ],
    "rpcs": [],
    "edges": [],
@@ -750,10 +751,14 @@
     "useCacheViews",
     "useRefreshCache"
    ],
-   "linhas": 218,
+   "linhas": 245,
    "dominio": "hooks",
-   "tabelas": [],
-   "rpcs": [],
+   "tabelas": [
+    "cache_status"
+   ],
+   "rpcs": [
+    "refresh_cache_view"
+   ],
    "edges": [],
    "hooks_internos": [
     "useEffect",

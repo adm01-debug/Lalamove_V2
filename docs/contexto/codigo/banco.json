@@ -6,10 +6,10 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 159,
+ "migrations": 160,
  "seeds": [],
  "avisos": [
-  "12 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
+  "13 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
  ],
  "extensoes": [
   "pg_cron",
@@ -3005,7 +3005,7 @@
    "indices": [
     {
      "nome": "idx_delivery_metrics_cache_date",
-     "colunas": "delivery_date DESC",
+     "colunas": "delivery_date",
      "unico": true
     },
     {
@@ -3016,11 +3016,11 @@
    ],
    "fks": [],
    "criada_em": null,
-   "usada_no_front": 0,
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "driver_approval_queue": {
    "colunas": {
@@ -3884,11 +3884,11 @@
    ],
    "fks": [],
    "criada_em": null,
-   "usada_no_front": 0,
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "drivers": {
    "colunas": {
@@ -4247,7 +4247,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 16,
+   "usada_no_front": 15,
    "usada_em_edges": [
     "evaluate-driver",
     "lalamove-api",
@@ -4608,17 +4608,17 @@
    "indices": [
     {
      "nome": "idx_hourly_metrics_cache_hour",
-     "colunas": "hour DESC",
+     "colunas": "hour",
      "unico": true
     }
    ],
    "fks": [],
    "criada_em": null,
-   "usada_no_front": 0,
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "ip_whitelist": {
    "colunas": {
@@ -5651,7 +5651,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 14,
+   "usada_no_front": 13,
    "usada_em_edges": [
     "bitrix24-sync",
     "evaluate-driver",
@@ -10074,6 +10074,11 @@
   },
   {
    "nome": "record_failed_login_v2",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
+   "nome": "refresh_cache_view",
    "definida": true,
    "usada_em": 1
   }

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0cac154a60` · branch `main` · 2026-11-21 14:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -611,6 +611,8 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
 | `orders_safe_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
 | `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
+| `cache_status` | `status` | **livre (sem enum/CHECK)** |  |
+| `driver_stats_cache` | `driver_status` | **livre (sem enum/CHECK)** |  |
 
 ### E.2 Mapas de transição declarados no código
 
@@ -707,20 +709,20 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `BLACKLIST` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/components/drivers/DriverProfileTabs.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>… +3 |
 | `status` | `BLOCKED` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>… +3 |
 | `status` | `CANCELED` | escreve | `supabase/functions/lalamove-api/index.ts` |
-| `status` | `CANCELLED` | compara | `src/hooks/useCachedStats.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDeliveryMetrics.ts`<br>`src/pages/reports/useReportData.ts`<br>`supabase/functions/evaluate-driver/index.ts` |
-| `status` | `COMPLETED` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useCachedStats.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDashboardStats.ts`<br>… +9 |
+| `status` | `CANCELLED` | compara | `src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDeliveryMetrics.ts`<br>`src/pages/reports/useReportData.ts`<br>`supabase/functions/evaluate-driver/index.ts` |
+| `status` | `COMPLETED` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/useDeliveryHeatmapData.ts`<br>… +8 |
 | `status` | `DELETED` | compara | `supabase/migrations/20251226020000_create_materialized_views_cache.sql` |
 | `status` | `DELIVERING` | compara | `src/lib/lalamoveOrderEdit.ts` |
 | `status` | `DRIVER_CHANGED` | escreve | `supabase/functions/lalamove-api/index.ts` |
 | `status` | `Disponível` | compara | `src/components/ui/hover-preview.tsx` |
 | `status` | `Entregue` | compara | `src/components/ui/hover-preview.tsx` |
 | `status` | `FAILED` | compara | `src/hooks/useJobQueue.ts`<br>`src/pages/JobQueuePage.tsx` |
-| `status` | `MATCHED` | compara, escreve | `src/hooks/useCachedStats.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
-| `status` | `ON_GOING` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/components/orders/OrderDetailModal.tsx`<br>`src/hooks/useCachedStats.ts`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/usePredictiveAnalysis.ts`<br>… +3 |
+| `status` | `MATCHED` | escreve | `supabase/functions/lalamove-webhook/index.ts` |
+| `status` | `ON_GOING` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/components/orders/OrderDetailModal.tsx`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/usePredictiveAnalysis.ts`<br>`src/pages/orders/OrderCard.tsx`<br>… +2 |
 | `status` | `OPEN` | compara | `src/pages/IncidentsPage.tsx` |
-| `status` | `PENDING` | compara, escreve, filtra | `src/components/layout/MobileSidebar.tsx`<br>`src/components/layout/Sidebar.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCachedStats.ts`<br>… +10 |
+| `status` | `PENDING` | compara, escreve, filtra | `src/components/layout/MobileSidebar.tsx`<br>`src/components/layout/Sidebar.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>… +9 |
 | `status` | `PENDING_APPROVAL` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +3 |
-| `status` | `PICKED_UP` | compara, escreve | `src/components/dashboard/OrdersTable.tsx`<br>`src/hooks/useCachedStats.ts`<br>`src/lib/lalamoveOrderEdit.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
+| `status` | `PICKED_UP` | compara, escreve | `src/components/dashboard/OrdersTable.tsx`<br>`src/lib/lalamoveOrderEdit.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `status` | `PROCESSING` | compara | `src/pages/JobQueuePage.tsx` |
 | `status` | `REJECTED` | compara, escreve, filtra | `src/hooks/useApprovalActions.ts`<br>`src/hooks/useDeliveryMetrics.ts`<br>`src/hooks/useMetrics.ts`<br>`src/hooks/usePendingApprovals.ts`<br>`src/hooks/useRealtimeSubscriptions.ts` |
 | `status` | `WHITELIST` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +2 |
@@ -916,7 +918,7 @@ _nenhum item encontrado_
 | View | SELECT |
 |---|---|
 | `job_queue_stats` | `SELECT type, status, COUNT(*) as count, AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - created_at))) as avg_duration_seconds, MAX(created_at) as last_created_at FROM job_queue WHERE created_at > NOW() - INTERVAL '24 hours' GROUP BY type, status` |
-| `cache_status` | `SELECT 'driver_stats_cache' as cache_name, (SELECT cached_at FROM driver_stats_cache ORDER BY cached_at DESC LIMIT 1) as last_refresh, (SELECT COUNT(*) FROM driver_stats_cache) as row_count, pg_size_pretty(pg_total_relation_size('driver_stats_cache')) as size UNION ALL SELECT 'delivery_hourly_stats_ …` |
+| `cache_status` | `SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT …` |
 | `cron_job_run_history` | `SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr. …` |
 | `driver_stats_cache` | `SELECT d.id as driver_id, d.name, d.lalamove_driver_id, d.phone, d.vehicle_plate, d.vehicle_type, d.status, d.risk_score, d.risk_level, d.is_whitelist, d.is_blacklist, COUNT(DISTINCT lo.id) as total_deliveries, COUNT(DISTINCT lo.id) FILTER (WHERE lo.status = 'DELIVERED') as successful_deliveries, CO …` |
 | `delivery_hourly_stats_cache` | `SELECT DATE_TRUNC('hour', created_at) as hour, COUNT(*) as total_orders, COUNT(*) FILTER (WHERE status = 'DELIVERED') as delivered_count, COUNT(*) FILTER (WHERE status = 'CANCELLED') as cancelled_count, COUNT(*) FILTER (WHERE status = 'FAILED') as failed_count, COALESCE(AVG(delay_minutes), 0) as avg …` |
@@ -1869,6 +1871,7 @@ _nenhum item encontrado_
 | * Custo mínimo (string vazia = sem filtro). */ | `src/hooks/useAdvancedReports.ts` |
 | * Custo máximo (string vazia = sem filtro). */ | `src/hooks/useAdvancedReports.ts` |
 | Falha na janela anterior não deve quebrar o relatório principal. | `src/hooks/useAdvancedReports.ts` |
+| sem argumento refresca as 3 views; com argumento, apenas a informada. | `src/hooks/useCacheViews.ts` |
 | @param limit - Quantidade de drivers (padrão: 10) | `src/hooks/useCachedStats.ts` |
 | permissões — evitando orientar o usuário para ações que ele não pode executar. | `src/hooks/useContextualHints.ts` |
 | SECURITY DEFINER). Centraliza a regra de negócio no banco e reduz o payload | `src/hooks/useContractV1SunsetReadiness.ts` |

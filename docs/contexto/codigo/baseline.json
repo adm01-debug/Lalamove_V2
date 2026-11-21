@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
+  "commit": "18c9d8333344847da6cfe27ac966d831b8a94fb1",
   "branch": "main",
-  "data_commit": "2026-11-21T11:13:59-03:00",
+  "data_commit": "2026-11-21T11:51:14-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "18c9d83",
+    "data": "2026-11-21",
+    "assunto": "feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)"
+   },
    {
     "sha": "0cac154",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "8115008",
     "data": "2026-11-20",
     "assunto": "build(deps): bump @radix-ui/react-dropdown-menu from 2.1.15 to 2.2.1 (#68)"
-   },
-   {
-    "sha": "c86f279",
-    "data": "2026-11-20",
-    "assunto": "fix(ci): pina ubuntu-24.04 para destravar job E2E (Playwright) (#90)"
    }
   ],
-  "arquivos_mudados_7d": 55,
+  "arquivos_mudados_7d": 59,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -254,6 +254,10 @@
     "mudancas": 3
    },
    {
+    "arquivo": "src/integrations/supabase/types.ts",
+    "mudancas": 3
+   },
+   {
     "arquivo": ".env.example",
     "mudancas": 2
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "docs/pendencias/P-08-geo-blocks-sem-rls.md",
     "mudancas": 2
-   },
-   {
-    "arquivo": "docs/pendencias/P-09-transicoes-status-sem-check.md",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 27
+    "commits": 28
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 893,
+  "arquivos_total": 894,
   "arquivos_codigo": 566,
-  "linhas_codigo": 110180,
+  "linhas_codigo": 110253,
   "rotas": 54,
   "rotas_protegidas": 46,
   "rotas_com_mfa": 6,
@@ -322,7 +322,7 @@
   "hooks": 96,
   "edge_functions": 26,
   "tabelas": 76,
-  "migrations": 159,
+  "migrations": 160,
   "cron_jobs": 16,
   "testes": 97,
   "workflows": 3,
@@ -508,7 +508,7 @@
   },
   "src/hooks": {
    "arquivos": 101,
-   "linhas": 17196
+   "linhas": 17190
   },
   "src/i18n": {
    "arquivos": 1,
@@ -516,7 +516,7 @@
   },
   "src/integrations": {
    "arquivos": 4,
-   "linhas": 3965
+   "linhas": 4044
   },
   "src/lib": {
    "arquivos": 31,
@@ -566,7 +566,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 3820
+   "linhas": 3899
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
@@ -666,7 +666,7 @@
   }
  ],
  "qualidade": {
-  "any": 79,
+  "any": 81,
   "console_log": 394,
   "ts_ignore": 0,
   "eslint_disable": 1,

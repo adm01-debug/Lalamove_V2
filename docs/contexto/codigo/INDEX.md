@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e` (2026-11-21T11:13:59-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `18c9d8333344847da6cfe27ac966d831b8a94fb1` (2026-11-21T11:51:14-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (163), JavaScript (112), Markdown (80), JSON (34), Shell (9), Python (8), YAML (6)
+- linguagens: TypeScript (455), SQL (164), JavaScript (112), Markdown (80), JSON (34), Shell (9), Python (8), YAML (6)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 893 |
+| arquivos_total | 894 |
 | arquivos_codigo | 566 |
-| linhas_codigo | 110180 |
+| linhas_codigo | 110253 |
 | rotas | 54 |
 | rotas_protegidas | 46 |
 | rotas_com_mfa | 6 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 96 |
 | edge_functions | 26 |
 | tabelas | 76 |
-| migrations | 159 |
+| migrations | 160 |
 | cron_jobs | 16 |
 | testes | 97 |
 | workflows | 3 |
@@ -74,14 +74,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
 | components/dashboard | 0 | 0 | 13 | 37 | 4 | 3 |
-| components/layout | 0 | 0 | 6 | 162 | 13 | 29 |
+| components/layout | 0 | 0 | 6 | 162 | 13 | 33 |
 | components/map | 0 | 0 | 17 | 18 | 2 | 3 |
 | components/orders | 0 | 0 | 8 | 26 | 5 | 3 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 32 | 0 | 5 | 33 |
-| hooks | 0 | 0 | 82 | 195 | 14 | 38 |
+| hooks | 0 | 0 | 82 | 195 | 14 | 42 |
 | lib | 0 | 0 | 21 | 8 | 2 | 0 |
-| pages | 36 | 54 | 54 | 177 | 13 | 36 |
+| pages | 36 | 54 | 54 | 177 | 13 | 40 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6536 nós · 14354 arestas · 506 comunidades · grafo do commit `0cac154a`
-- comunidades maiores: button.tsx (162), cn (114), card.tsx (108), snapshot.py (102), ref_node_fs (99), react (89), AdvancedReportsPage.tsx (89), RolesPage.tsx (89), dependencies (80), gerar.mjs (76), seed-database.ts (67), package.json (66)
+- 6544 nós · 14364 arestas · 513 comunidades · grafo do commit `18c9d833`
+- comunidades maiores: cn (222), badge.tsx (127), button.tsx (109), snapshot.py (100), client.ts (88), ref_node_path (85), dependencies (80), App.tsx (78), gerar.mjs (76), package.json (64), OrderDetailModal.tsx (62), useMapbox.ts (61)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -284,7 +284,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts/seed-database.ts (3)
 - src/hooks/useDeviceDetection.ts (3)
 - src/index.css (3)
-- .env.example (2)
+- src/integrations/supabase/types.ts (3)
 
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
@@ -351,6 +351,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `18c9d83` feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)
 - 2026-11-21 `0cac154` fix: comments do glossario agora ligam a tabelas so do types.ts (#105)
 - 2026-11-21 `c3577b5` docs: analise exaustiva plano+correcoes (P-14) e P-13 concluido (#104)
 - 2026-11-21 `a614869` feat: migration P-13 adiciona COMMENT ON TABLE para 55 tabelas public (#103)
@@ -365,7 +366,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-20 `a833555` chore: marca P-07/P-08/P-09 como obsoletos no backlog (#96)
 - 2026-11-20 `a1b3ef3` docs: backlog de pendencias do goal concluir funcionalidades
 - 2026-11-20 `4767a5e` fix: seed-database usa env vars (SUPABASE_URL + SERVICE_ROLE) no lugar da anon legacy hardcoded
-- 2026-11-20 `1ef5f30` fix: resolve 14 vulns via npm audit (zod, undici, brace-expansion) (#91)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

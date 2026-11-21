@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
+  "sha": "18c9d8333344847da6cfe27ac966d831b8a94fb1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-21 14:43 UTC",
-  "files_total": 888,
-  "code_files": 738,
-  "code_lines": 126990
+  "generated_at": "2026-11-21 14:51 UTC",
+  "files_total": 889,
+  "code_files": 739,
+  "code_lines": 127251
  },
  "version": "1.3.2",
- "facts_hash": "af37c4249c911f4c",
+ "facts_hash": "15892de75dce731a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -166,7 +166,7 @@
   "languages": {
    ".ts": 231,
    ".tsx": 224,
-   ".sql": 163,
+   ".sql": 164,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -6825,6 +6825,332 @@
     "src": "src/integrations/supabase/types.ts",
     "comment": "",
     "origin": "types.ts"
+   },
+   "cache_status": {
+    "columns": [
+     {
+      "name": "is_stale",
+      "type": "boolean | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "last_refresh",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "refresh_duration_ms",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "row_count",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "status",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "view_name",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     }
+    ],
+    "constraints": [],
+    "src": "src/integrations/supabase/types.ts",
+    "comment": "",
+    "origin": "types.ts"
+   },
+   "delivery_metrics_cache": {
+    "columns": [
+     {
+      "name": "avg_delay_minutes",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "avg_value",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cached_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cancelled_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "completed_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "delivery_date",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "failed_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "in_progress_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "max_value",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_value",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     }
+    ],
+    "constraints": [],
+    "src": "src/integrations/supabase/types.ts",
+    "comment": "",
+    "origin": "types.ts"
+   },
+   "driver_stats_cache": {
+    "columns": [
+     {
+      "name": "avg_rating",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cached_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cancelled_deliveries",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "completed_deliveries",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "driver_created_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "driver_id",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "driver_name",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "driver_status",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "failed_deliveries",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "is_blacklisted",
+      "type": "boolean | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "is_whitelisted",
+      "type": "boolean | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "lalamove_driver_id",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "last_active_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "last_delivery_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "phone",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "risk_level",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "risk_score",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_deliveries",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "vehicle_type",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     }
+    ],
+    "constraints": [],
+    "src": "src/integrations/supabase/types.ts",
+    "comment": "",
+    "origin": "types.ts"
+   },
+   "hourly_metrics_cache": {
+    "columns": [
+     {
+      "name": "avg_value",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cached_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "completed_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "hour",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_orders",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_value",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     }
+    ],
+    "constraints": [],
+    "src": "src/integrations/supabase/types.ts",
+    "comment": "",
+    "origin": "types.ts"
    }
   },
   "policies": [
@@ -9327,18 +9653,18 @@
     ]
    },
    "refresh_cache_view": {
-    "args": "view_name TEXT DEFAULT NULL",
-    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count INTEGER,\n  status TEXT\n)",
+    "args": "p_view_name TEXT DEFAULT NULL",
+    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count BIGINT,\n  status TEXT\n)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20250102000002_cache_system_complete.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_view_name TEXT; v_start_time TIMESTAMPTZ; v_end_time TIMESTAMPTZ; v_duration INTEGER; v_row_count INTEGER; v_log_id UUID; BEGIN IF view_name IS NULL THEN FOR v_view_name IN SELECT unnest(ARRAY['mv_driver_stats', 'mv_delivery_metrics', 'mv_hourly_metrics']) LOOP PERFORM refresh_cache_view(v_view_name); END LOOP; RETURN QUERY SELECT 'all'::TEXT, NULL::INTEGER, NULL::INTEGER, 'success'::TEXT; RETURN; END IF; INSERT INTO cache_refresh_log (view_name, status) VALUES (view_name, 'running') RETURNING id INTO v_log_id; v_start_time := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', view_name); v_end_time := clock_timestamp(); v_duration := EXTRACT(EPOCH …",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM refresh_cache_view(v_name); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; v_start := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', p_view_name); v_dur := EXTRACT(MILLISECONDS FROM clock_timestamp() - v_start)::INTEGER; EXECUTE format('SELECT COU …",
     "raises": [],
     "tables": [
-     "cache_refresh_log",
-     "v_log_id",
-     "v_row_count"
+     "clock_timestamp",
+     "refresh_cache_view",
+     "v_count"
     ]
    },
    "trigger_bitrix24_sync": {
@@ -12088,6 +12414,30 @@
     "unique": false,
     "where": "",
     "src": "supabase/migrations/20260726183530_dba04ac0-388f-4e70-972f-15110f056791.sql"
+   },
+   {
+    "name": "idx_driver_stats_cache_driver_id",
+    "table": "driver_stats_cache",
+    "columns": "driver_id",
+    "unique": true,
+    "where": "",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "name": "idx_delivery_metrics_cache_date",
+    "table": "delivery_metrics_cache",
+    "columns": "delivery_date",
+    "unique": true,
+    "where": "",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "name": "idx_hourly_metrics_cache_hour",
+    "table": "hourly_metrics_cache",
+    "columns": "hour",
+    "unique": true,
+    "where": "",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
    }
   ],
   "cron_jobs": [
@@ -12134,8 +12484,8 @@
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
    },
    "cache_status": {
-    "body": "SELECT 'driver_stats_cache' as cache_name, (SELECT cached_at FROM driver_stats_cache ORDER BY cached_at DESC LIMIT 1) as last_refresh, (SELECT COUNT(*) FROM driver_stats_cache) as row_count, pg_size_pretty(pg_total_relation_size('driver_stats_cache')) as size UNION ALL SELECT 'delivery_hourly_stats_cache', (SELECT cached_at FROM delivery_hourly_stats_cache ORDER BY cached_at DESC LIMIT 1), (SELECT COUNT(*) FROM delivery_hourly_stats_cache), pg_size_pretty(pg_total_relation_size('delivery_hourly_stats_cache')) UNION ALL SELECT 'risk_level_distribution_cache', (SELECT cached_at FROM risk_level_d …",
-    "src": "supabase/migrations/20251226020000_create_materialized_views_cache.sql"
+    "body": "SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT 'driver_stats_cache' AS view_name, (SELECT COUNT(*) FROM driver_stats_cache) AS row_count, (SELECT MAX(cached_at) FROM driver_stats_cache) AS last_refresh, NULL::INTEGER AS refresh_duration_ms UNION ALL SELECT 'delivery_metrics_cache', (SELECT COUNT(*) FROM delivery_metrics_cache), (SELECT MAX(cache …",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
    },
    "cron_job_run_history": {
     "body": "SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr.start_time DESC LIMIT 100",
@@ -12326,6 +12676,7 @@
    "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql",
    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
    "supabase/migrations/20261121100000_add_table_comments.sql",
+   "supabase/migrations/20261122090000_cache_system_backend.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -14264,6 +14615,54 @@
     "objkind": "sequences",
     "roles": "anon",
     "src": "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "driver_stats_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "delivery_metrics_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "hourly_metrics_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "cache_status",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
    }
   ],
   "raises": [
@@ -14547,9 +14946,13 @@
     "path": "",
     "file": "src/pages/CacheMonitoringPage.tsx",
     "component": "CacheMonitoringPage",
-    "tables_transitive": [],
+    "tables_transitive": [
+     "cache_status"
+    ],
     "invokes_transitive": [],
-    "rpc_transitive": [],
+    "rpc_transitive": [
+     "refresh_cache_view"
+    ],
     "deps_count": 10
    },
    {
@@ -14557,11 +14960,15 @@
     "file": "src/pages/CacheStatusPage.tsx",
     "component": "CacheStatusPage",
     "tables_transitive": [
-     "drivers",
-     "lalamove_orders"
+     "cache_status",
+     "delivery_metrics_cache",
+     "driver_stats_cache",
+     "hourly_metrics_cache"
     ],
     "invokes_transitive": [],
-    "rpc_transitive": [],
+    "rpc_transitive": [
+     "refresh_cache_view"
+    ],
     "deps_count": 12
    },
    {
@@ -18148,7 +18555,7 @@
   {
    "module": "src/hooks",
    "files": 101,
-   "lines": 17196,
+   "lines": 17190,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -18158,14 +18565,18 @@
     "bitrix24_stage_mappings",
     "bitrix24_sync",
     "blocked_ips",
+    "cache_status",
     "contacts",
     "contract_version_usage",
     "contract_version_usage_monthly",
+    "delivery_metrics_cache",
     "driver_approval_queue",
     "driver_evaluations",
     "driver_incidents",
+    "driver_stats_cache",
     "drivers",
     "feature_flags",
+    "hourly_metrics_cache",
     "ip_whitelist",
     "lalamove_orders",
     "lalamove_rate_limits",
@@ -18361,7 +18772,7 @@
   {
    "module": "src/integrations",
    "files": 4,
-   "lines": 3965,
+   "lines": 4044,
    "tables": [],
    "exports": [
     "index.ts: lovable",
@@ -18836,8 +19247,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 159,
-   "lines": 10306,
+   "files": 160,
+   "lines": 10494,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -19089,6 +19500,11 @@
      "src/hooks/useRateLimiting.ts"
     ]
    },
+   "cache_status": {
+    "select": [
+     "src/hooks/useCacheViews.ts"
+    ]
+   },
    "carriers": {
     "select": [
      "supabase/functions/external-companies/index.ts"
@@ -19130,6 +19546,11 @@
    "customers": {
     "select": [
      "supabase/functions/external-companies/index.ts"
+    ]
+   },
+   "delivery_metrics_cache": {
+    "select": [
+     "src/hooks/useCachedStats.ts"
     ]
    },
    "driver_approval_queue": {
@@ -19195,6 +19616,11 @@
      "supabase/functions/lalamove-webhook/index.ts"
     ]
    },
+   "driver_stats_cache": {
+    "select": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
    "drivers": {
     "insert": [
      "scripts/seed-database.ts",
@@ -19205,7 +19631,6 @@
      "scripts/seed-database.ts",
      "src/hooks/healthChecks.ts",
      "src/hooks/useAnalyticsData.ts",
-     "src/hooks/useCachedStats.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useDeliveryMetrics.ts",
@@ -19258,6 +19683,11 @@
      "src/pages/GeoBlockingPage.tsx"
     ]
    },
+   "hourly_metrics_cache": {
+    "select": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
    "ignorada": {
     "ref": [
      "scripts/ci/gerar-matriz-edge-tabela.unit.mjs"
@@ -19305,7 +19735,6 @@
      "src/hooks/useAdvancedReports.ts",
      "src/hooks/useAnalyticsData.ts",
      "src/hooks/useBitrix24.ts",
-     "src/hooks/useCachedStats.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useDeliveryHeatmapData.ts",
@@ -19690,6 +20119,14 @@
    "blocked_ips": [
     "id"
    ],
+   "cache_status": [
+    "is_stale",
+    "last_refresh",
+    "refresh_duration_ms",
+    "row_count",
+    "status",
+    "view_name"
+   ],
    "carriers": [
     "address",
     "city",
@@ -19748,6 +20185,16 @@
     "state",
     "zip_code"
    ],
+   "delivery_metrics_cache": [
+    "avg_value",
+    "cached_at",
+    "cancelled_orders",
+    "completed_orders",
+    "delivery_date",
+    "in_progress_orders",
+    "total_orders",
+    "total_value"
+   ],
    "driver_approval_queue": [
     "driver_id",
     "driver_name",
@@ -19771,15 +20218,24 @@
     "severity",
     "type"
    ],
+   "driver_stats_cache": [
+    "avg_rating",
+    "cached_at",
+    "cancelled_deliveries",
+    "completed_deliveries",
+    "driver_id",
+    "driver_name",
+    "last_delivery_at",
+    "phone",
+    "total_deliveries"
+   ],
    "drivers": [
     "blacklisted",
-    "cancelled_deliveries",
     "completed_deliveries",
     "count",
     "failure_rate",
     "id",
     "lalamove_id",
-    "last_delivery_at",
     "name",
     "phone",
     "rating",
@@ -19796,6 +20252,14 @@
     "country_code",
     "id",
     "is_blocked"
+   ],
+   "hourly_metrics_cache": [
+    "avg_value",
+    "cached_at",
+    "completed_orders",
+    "hour",
+    "total_orders",
+    "total_value"
    ],
    "information_schema.tables": [
     "table_name",
@@ -19826,7 +20290,6 @@
     "scheduled_at",
     "status",
     "supplier_contact",
-    "total_cost",
     "updated_at",
     "vehicle_type"
    ],
@@ -20473,6 +20936,9 @@
    ],
    "record_failed_login_v2": [
     "src/hooks/useLoginLockout.ts"
+   ],
+   "refresh_cache_view": [
+    "src/hooks/useCacheViews.ts"
    ],
    "rpc_inexistente": [
     "scripts/ai-context/gerar.unit.mjs"
@@ -22828,6 +23294,10 @@
    {
     "file": "src/hooks/useAdvancedReports.ts",
     "text": "Falha na janela anterior não deve quebrar o relatório principal."
+   },
+   {
+    "file": "src/hooks/useCacheViews.ts",
+    "text": "sem argumento refresca as 3 views; com argumento, apenas a informada."
    },
    {
     "file": "src/hooks/useCachedStats.ts",
@@ -27282,30 +27752,6 @@
     "file": "src/hooks/useCacheViews.ts",
     "field": "status",
     "value": "success",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useCacheViews.ts",
-    "field": "status",
-    "value": "success",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useCacheViews.ts",
-    "field": "status",
-    "value": "success",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useCacheViews.ts",
-    "field": "status",
-    "value": "success",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useCacheViews.ts",
-    "field": "status",
-    "value": "success",
     "kind": "compara"
    },
    {
@@ -27318,48 +27764,6 @@
     "file": "src/hooks/useCacheViews.ts",
     "field": "status",
     "value": "failed",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "COMPLETED",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "ON_GOING",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "PICKED_UP",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "PENDING",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "MATCHED",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "CANCELLED",
-    "kind": "compara"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "field": "status",
-    "value": "COMPLETED",
     "kind": "compara"
    },
    {
@@ -36119,18 +36523,18 @@
     ]
    },
    "refresh_cache_view": {
-    "args": "view_name TEXT DEFAULT NULL",
-    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count INTEGER,\n  status TEXT\n)",
+    "args": "p_view_name TEXT DEFAULT NULL",
+    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count BIGINT,\n  status TEXT\n)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20250102000002_cache_system_complete.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_view_name TEXT; v_start_time TIMESTAMPTZ; v_end_time TIMESTAMPTZ; v_duration INTEGER; v_row_count INTEGER; v_log_id UUID; BEGIN IF view_name IS NULL THEN FOR v_view_name IN SELECT unnest(ARRAY['mv_driver_stats', 'mv_delivery_metrics', 'mv_hourly_metrics']) LOOP PERFORM refresh_cache_view(v_view_name); END LOOP; RETURN QUERY SELECT 'all'::TEXT, NULL::INTEGER, NULL::INTEGER, 'success'::TEXT; RETURN; END IF; INSERT INTO cache_refresh_log (view_name, status) VALUES (view_name, 'running') RETURNING id INTO v_log_id; v_start_time := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', view_name); v_end_time := clock_timestamp(); v_duration := EXTRACT(EPOCH …",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM refresh_cache_view(v_name); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; v_start := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', p_view_name); v_dur := EXTRACT(MILLISECONDS FROM clock_timestamp() - v_start)::INTEGER; EXECUTE format('SELECT COU …",
     "raises": [],
     "tables": [
-     "cache_refresh_log",
-     "v_log_id",
-     "v_row_count"
+     "clock_timestamp",
+     "refresh_cache_view",
+     "v_count"
     ]
    },
    "trigger_bitrix24_sync": {
@@ -37304,8 +37708,8 @@
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
    },
    "cache_status": {
-    "body": "SELECT 'driver_stats_cache' as cache_name, (SELECT cached_at FROM driver_stats_cache ORDER BY cached_at DESC LIMIT 1) as last_refresh, (SELECT COUNT(*) FROM driver_stats_cache) as row_count, pg_size_pretty(pg_total_relation_size('driver_stats_cache')) as size UNION ALL SELECT 'delivery_hourly_stats_cache', (SELECT cached_at FROM delivery_hourly_stats_cache ORDER BY cached_at DESC LIMIT 1), (SELECT COUNT(*) FROM delivery_hourly_stats_cache), pg_size_pretty(pg_total_relation_size('delivery_hourly_stats_cache')) UNION ALL SELECT 'risk_level_distribution_cache', (SELECT cached_at FROM risk_level_d …",
-    "src": "supabase/migrations/20251226020000_create_materialized_views_cache.sql"
+    "body": "SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT 'driver_stats_cache' AS view_name, (SELECT COUNT(*) FROM driver_stats_cache) AS row_count, (SELECT MAX(cached_at) FROM driver_stats_cache) AS last_refresh, NULL::INTEGER AS refresh_duration_ms UNION ALL SELECT 'delivery_metrics_cache', (SELECT COUNT(*) FROM delivery_metrics_cache), (SELECT MAX(cache …",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
    },
    "cron_job_run_history": {
     "body": "SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr.start_time DESC LIMIT 100",
@@ -37747,6 +38151,22 @@
      ],
      "default": "",
      "type": "Database[\"public\"][\"Enums\"][\"order_status\"] | null"
+    },
+    {
+     "table": "cache_status",
+     "column": "status",
+     "enum": "",
+     "allowed": [],
+     "default": "",
+     "type": "string | null"
+    },
+    {
+     "table": "driver_stats_cache",
+     "column": "driver_status",
+     "enum": "",
+     "allowed": [],
+     "default": "",
+     "type": "string | null"
     }
    ],
    "usage": {
@@ -38089,7 +38509,6 @@
      "ON_GOING": [
       "compara:src/components/dashboard/OrdersTable.tsx",
       "compara:src/components/orders/OrderDetailModal.tsx",
-      "compara:src/hooks/useCachedStats.ts",
       "compara:src/hooks/usePredictiveAnalysis.ts",
       "compara:src/pages/orders/OrderCard.tsx",
       "escreve:supabase/functions/lalamove-webhook/index.ts",
@@ -38099,14 +38518,12 @@
      ],
      "PICKED_UP": [
       "compara:src/components/dashboard/OrdersTable.tsx",
-      "compara:src/hooks/useCachedStats.ts",
       "compara:src/lib/lalamoveOrderEdit.ts",
       "escreve:supabase/functions/lalamove-webhook/index.ts"
      ],
      "COMPLETED": [
       "compara:src/components/dashboard/OrdersTable.tsx",
       "compara:src/hooks/useAnalyticsData.ts",
-      "compara:src/hooks/useCachedStats.ts",
       "compara:src/hooks/useCommandPaletteSearch.ts",
       "compara:src/hooks/useDeliveryHeatmapData.ts",
       "compara:src/hooks/useDeliveryMetrics.ts",
@@ -38174,7 +38591,6 @@
      ],
      "PENDING": [
       "compara:src/hooks/useAnalyticsData.ts",
-      "compara:src/hooks/useCachedStats.ts",
       "compara:src/hooks/useJobQueue.ts",
       "compara:src/hooks/useMetrics.ts",
       "compara:src/pages/JobQueuePage.tsx",
@@ -38256,12 +38672,7 @@
       "compara:src/pages/CacheStatusPage.tsx",
       "escreve:src/hooks/useCacheViews.ts"
      ],
-     "MATCHED": [
-      "compara:src/hooks/useCachedStats.ts",
-      "escreve:supabase/functions/lalamove-webhook/index.ts"
-     ],
      "CANCELLED": [
-      "compara:src/hooks/useCachedStats.ts",
       "compara:src/hooks/useCommandPaletteSearch.ts",
       "compara:src/hooks/useDeliveryMetrics.ts",
       "compara:src/pages/reports/useReportData.ts",
@@ -38329,6 +38740,9 @@
      ],
      "DRIVER_CHANGED": [
       "escreve:supabase/functions/lalamove-api/index.ts"
+     ],
+     "MATCHED": [
+      "escreve:supabase/functions/lalamove-webhook/index.ts"
      ],
      "DELETED": [
       "compara:supabase/migrations/20251226020000_create_materialized_views_cache.sql"
@@ -38654,6 +39068,13 @@
     "UPDATE": [],
     "DELETE": []
    },
+   "cache_status": {
+    "rls": "não encontrado",
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
+   },
    "contacts": {
     "rls": "enabled",
     "SELECT": [
@@ -38692,6 +39113,13 @@
     "SELECT": [
      "public: has_role(auth.uid(), 'admin'::app_role)"
     ],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
+   },
+   "delivery_metrics_cache": {
+    "rls": "não encontrado",
+    "SELECT": [],
     "INSERT": [],
     "UPDATE": [],
     "DELETE": []
@@ -38759,6 +39187,13 @@
     "DELETE": [
      "authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')"
     ]
+   },
+   "driver_stats_cache": {
+    "rls": "não encontrado",
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
    },
    "drivers": {
     "rls": "enabled",
@@ -38838,6 +39273,13 @@
     "DELETE": [
      "authenticated: public.has_role(auth.uid(), 'admin')"
     ]
+   },
+   "hourly_metrics_cache": {
+    "rls": "não encontrado",
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
    },
    "ip_whitelist": {
     "rls": "enabled",
@@ -39432,10 +39874,38 @@
   },
   "risky": [
    {
+    "table": "cache_status",
+    "issue": "acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "files": [
+     "src/hooks/useCacheViews.ts"
+    ]
+   },
+   {
+    "table": "delivery_metrics_cache",
+    "issue": "acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "files": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
+   {
+    "table": "driver_stats_cache",
+    "issue": "acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "files": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
+   {
     "table": "geo_blocks",
     "issue": "acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
     "files": [
      "src/pages/GeoBlockingPage.tsx"
+    ]
+   },
+   {
+    "table": "hourly_metrics_cache",
+    "issue": "acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "files": [
+     "src/hooks/useCachedStats.ts"
     ]
    }
   ],
@@ -39546,7 +40016,8 @@
    "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
-   "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql"
+   "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
+   "supabase/migrations/20261122090000_cache_system_backend.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -39592,6 +40063,7 @@
    "prune_tracking_events_partitions",
    "record_failed_login",
    "record_failed_login_v2",
+   "refresh_cache_view",
    "resume_cron_job",
    "rollup_contract_version_usage",
    "run_daily_cleanup",
@@ -41479,6 +41951,54 @@
     "objkind": "sequences",
     "roles": "anon",
     "src": "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "driver_stats_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "delivery_metrics_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "hourly_metrics_cache",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "cache_status",
+    "objkind": "table",
+    "roles": "authenticated, anon, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
    }
   ],
   "guards": [
@@ -42471,7 +42991,11 @@
    "orders_safe_view": [
     "created_at",
     "updated_at"
-   ]
+   ],
+   "cache_status": [],
+   "delivery_metrics_cache": [],
+   "driver_stats_cache": [],
+   "hourly_metrics_cache": []
   },
   "pii": [
    [
@@ -42621,6 +43145,10 @@
    [
     "drivers_safe_view",
     "phone"
+   ],
+   [
+    "driver_stats_cache",
+    "phone"
    ]
   ],
   "money_float": [],
@@ -42713,6 +43241,31 @@
    [
     "orders_safe_view",
     "total_cost",
+    "number"
+   ],
+   [
+    "delivery_metrics_cache",
+    "total_orders",
+    "number"
+   ],
+   [
+    "delivery_metrics_cache",
+    "total_value",
+    "number"
+   ],
+   [
+    "driver_stats_cache",
+    "total_deliveries",
+    "number"
+   ],
+   [
+    "hourly_metrics_cache",
+    "total_orders",
+    "number"
+   ],
+   [
+    "hourly_metrics_cache",
+    "total_value",
     "number"
    ]
   ]
@@ -43063,9 +43616,37 @@
    },
    {
     "kind": "rls",
+    "msg": "`cache_status`: acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "where": [
+     "src/hooks/useCacheViews.ts"
+    ]
+   },
+   {
+    "kind": "rls",
+    "msg": "`delivery_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "where": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
+   {
+    "kind": "rls",
+    "msg": "`driver_stats_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "where": [
+     "src/hooks/useCachedStats.ts"
+    ]
+   },
+   {
+    "kind": "rls",
     "msg": "`geo_blocks`: acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
     "where": [
      "src/pages/GeoBlockingPage.tsx"
+    ]
+   },
+   {
+    "kind": "rls",
+    "msg": "`hourly_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado)",
+    "where": [
+     "src/hooks/useCachedStats.ts"
     ]
    },
    {
@@ -43286,7 +43867,9 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "12/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view`",
+   "`cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "`driver_stats_cache.driver_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "16/75 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -51414,7 +51997,7 @@
   },
   "src/hooks/useCacheViews.ts": {
    "path": "src/hooks/useCacheViews.ts",
-   "lines": 218,
+   "lines": 245,
    "exports": [
     "interface CacheStats",
     "interface CacheView",
@@ -51428,6 +52011,29 @@
     "function formatRefreshDuration",
     "function formatLastRefresh"
    ],
+   "tables": [
+    {
+     "table": "cache_status",
+     "op": "select"
+    },
+    {
+     "table": "cache_status",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "cache_status": [
+     "is_stale",
+     "last_refresh",
+     "refresh_duration_ms",
+     "row_count",
+     "status",
+     "view_name"
+    ]
+   },
+   "rpc": [
+    "refresh_cache_view"
+   ],
    "errors": [
     "Erro ao atualizar cache"
    ],
@@ -51439,26 +52045,6 @@
     },
     {
      "field": "refresh_status",
-     "value": "success",
-     "kind": "escreve"
-    },
-    {
-     "field": "status",
-     "value": "success",
-     "kind": "escreve"
-    },
-    {
-     "field": "status",
-     "value": "success",
-     "kind": "escreve"
-    },
-    {
-     "field": "status",
-     "value": "success",
-     "kind": "escreve"
-    },
-    {
-     "field": "status",
      "value": "success",
      "kind": "escreve"
     },
@@ -51483,6 +52069,9 @@
      "kind": "compara"
     }
    ],
+   "rule_comments": [
+    "sem argumento refresca as 3 views; com argumento, apenas a informada."
+   ],
    "hooks": [
     "useCacheStats",
     "useCacheRefreshHistory",
@@ -51494,7 +52083,7 @@
   },
   "src/hooks/useCachedStats.ts": {
    "path": "src/hooks/useCachedStats.ts",
-   "lines": 377,
+   "lines": 344,
    "exports": [
     "interface DriverStatsCached",
     "interface DeliveryMetricsCached",
@@ -51513,76 +52102,53 @@
    ],
    "tables": [
     {
-     "table": "drivers",
+     "table": "driver_stats_cache",
      "op": "select"
     },
     {
-     "table": "lalamove_orders",
+     "table": "delivery_metrics_cache",
      "op": "select"
     },
     {
-     "table": "lalamove_orders",
+     "table": "hourly_metrics_cache",
      "op": "select"
     },
     {
-     "table": "drivers",
+     "table": "driver_stats_cache",
      "op": "select"
     }
    ],
    "table_cols": {
-    "drivers": [
+    "driver_stats_cache": [
+     "avg_rating",
+     "cached_at",
      "cancelled_deliveries",
      "completed_deliveries",
-     "id",
+     "driver_id",
+     "driver_name",
      "last_delivery_at",
-     "name",
      "phone",
-     "rating",
      "total_deliveries"
     ],
-    "lalamove_orders": [
-     "created_at",
-     "status",
-     "total_cost"
+    "delivery_metrics_cache": [
+     "avg_value",
+     "cached_at",
+     "cancelled_orders",
+     "completed_orders",
+     "delivery_date",
+     "in_progress_orders",
+     "total_orders",
+     "total_value"
+    ],
+    "hourly_metrics_cache": [
+     "avg_value",
+     "cached_at",
+     "completed_orders",
+     "hour",
+     "total_orders",
+     "total_value"
     ]
    },
-   "status_values": [
-    {
-     "field": "status",
-     "value": "COMPLETED",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "ON_GOING",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "PICKED_UP",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "PENDING",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "MATCHED",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "CANCELLED",
-     "kind": "compara"
-    },
-    {
-     "field": "status",
-     "value": "COMPLETED",
-     "kind": "compara"
-    }
-   ],
    "rule_comments": [
     "@param limit - Quantidade de drivers (padrão: 10)"
    ],
@@ -55382,7 +55948,7 @@
   },
   "src/integrations/supabase/types.ts": {
    "path": "src/integrations/supabase/types.ts",
-   "lines": 3820,
+   "lines": 3899,
    "exports": [
     "type Json",
     "type Database",
@@ -61170,13 +61736,30 @@
   "supabase/migrations/20261121100000_add_table_comments.sql": {
    "path": "supabase/migrations/20261121100000_add_table_comments.sql",
    "lines": 62
+  },
+  "supabase/migrations/20261122090000_cache_system_backend.sql": {
+   "path": "supabase/migrations/20261122090000_cache_system_backend.sql",
+   "lines": 188,
+   "uses_service_role": true
   }
  },
  "git": {
-  "sha": "0cac154a607b9a3f6ffe69c4a9d57bcfba4baf1e",
+  "sha": "18c9d8333344847da6cfe27ac966d831b8a94fb1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "18c9d83",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat: backend do sistema de cache (MVs + cache_status + refresh RPC) (#106)",
+    "files": [
+     "src/hooks/useCacheViews.ts",
+     "src/hooks/useCachedStats.ts",
+     "src/integrations/supabase/types.ts",
+     "supabase/migrations/20261122090000_cache_system_backend.sql"
+    ]
+   },
    {
     "sha": "0cac154",
     "date": "2026-11-21",
@@ -61507,26 +62090,16 @@
     "files": [
      ".github/workflows/contexto.yml"
     ]
-   },
-   {
-    "sha": "846ea80",
-    "date": "2026-11-08",
-    "author": "adm01-debug",
-    "subject": "fix(deps): downgrade tailwindcss de v4 para v3.4.19",
-    "files": [
-     "package-lock.json",
-     "package.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "package-lock.json",
-    12
+    11
    ],
    [
     "package.json",
-    11
+    10
    ],
    [
     "docs/pendencias/_ordem.md",
@@ -61585,19 +62158,19 @@
     2
    ],
    [
-    "scripts/regras_negocio/generate.py",
+    "src/hooks/useCacheViews.ts",
     1
    ],
    [
-    "scripts/regras_negocio/test_generate.py",
+    "src/hooks/useCachedStats.ts",
     1
    ],
    [
-    "docs/pendencias/P-14-analise-correcoes-planejadas.md",
+    "src/integrations/supabase/types.ts",
     1
    ],
    [
-    "supabase/migrations/20261121100000_add_table_comments.sql",
+    "supabase/migrations/20261122090000_cache_system_backend.sql",
     1
    ]
   ]

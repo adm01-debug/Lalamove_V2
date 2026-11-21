@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0cac154a60` · branch `main` · 2026-11-21 14:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -29,20 +29,24 @@
 | `bitrix24_tokens` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `blocked_ips` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
 | `cache_refresh_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `cache_status` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `contacts` | enabled | public: auth.uid() = owner_id | public: auth.uid() = owner_id | public: auth.uid() = owner_id | public: auth.uid() = owner_id |
 | `contract_version_usage` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | — | — |
 | `contract_version_usage_monthly` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | — | — |
 | `cron_job_logs` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | — | — | — |
+| `delivery_metrics_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `driver_approval_queue` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `driver_evaluations` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `driver_incidents` | enabled | public: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `driver_locations` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role) AND EXISTS ( SELECT 1 FROM public.active_tracking at WHERE at.id = driver_location | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
+| `driver_stats_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `drivers` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `drivers_safe_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `email_verifications` | enabled | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `entity_versions` | enabled | public: true | public: auth.uid() = changed_by OR changed_by IS NULL | — | — |
 | `feature_flags` | enabled | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true )<br>authenticated: true | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) |
 | `geo_blocks` | não encontrado | sem RLS | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
+| `hourly_metrics_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ip_whitelist` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') |
 | `job_queue` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'service_role'<br>public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.role() = 'service_role' | public: auth.role() = 'service_role'<br>public: auth.role() = 'service_role' |
 | `job_queue_processing_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
@@ -90,7 +94,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 107 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 108 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -199,6 +203,7 @@
 - `supabase/migrations/20260828000002_dashboard_fixes.sql`
 - `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`
 - `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
+- `supabase/migrations/20261122090000_cache_system_backend.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -245,6 +250,7 @@
 - `prune_tracking_events_partitions`
 - `record_failed_login`
 - `record_failed_login_v2`
+- `refresh_cache_view`
 - `resume_cron_job`
 - `rollup_contract_version_usage`
 - `run_daily_cleanup`
@@ -338,12 +344,13 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated | select, insert, update, delete | `report_presets`, `lalamove_stop_proofs`, `contacts`, `mcp_diagnostics_grants` |
 | grant | authenticated, anon | execute | `get_driver_stats_cached`, `get_delivery_metrics_cached`, `get_hourly_metrics_cached`, `get_top_drivers_by_metric`, `cache_status` |
 | grant | authenticated, anon | select | `mv_driver_stats`, `mv_delivery_metrics`, `mv_hourly_metrics` |
-| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role` |
+| grant | authenticated, anon, service_role | select | `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
+| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `refresh_cache_view` |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
 | grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants` |
 | grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +27 |
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics` |
-| revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2` |
+| revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
 | revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +2 |
 | revoke | PUBLIC, anon, authenticated | execute | `ensure_tracking_events_partition`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `cleanup_old_region_cache`, `check_login_lockout`, `record_failed_login`, `has_role`, `has_permission`, `is_aal2`, `get_user_roles`, `is_token_valid`, `use_reset_token`, `notify_lalamove_quota_low`, `notify_webhook_security_event`, `cleanup_old_audit_logs` |
@@ -362,7 +369,11 @@ Middleware matcher (Next.js): nenhum
 
 | Tabela | Problema | Arquivos |
 |---|---|---|
+| `cache_status` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCacheViews.ts` |
+| `delivery_metrics_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
+| `driver_stats_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | `geo_blocks` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
+| `hourly_metrics_cache` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 
 ## Multi-tenancy
 
@@ -487,6 +498,7 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `tracking_events_y2026m10` | `latitude` |
 | `tracking_events_y2026m10` | `longitude` |
 | `drivers_safe_view` | `phone` |
+| `driver_stats_cache` | `phone` |
 
 ## Colunas de dinheiro (tipo importa: numeric ✅ / float ❌)
 
@@ -510,3 +522,8 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `orders_safe_view` | `customer_name` | `string` |
 | `orders_safe_view` | `customer_phone` | `string` |
 | `orders_safe_view` | `total_cost` | `number` |
+| `delivery_metrics_cache` | `total_orders` | `number` |
+| `delivery_metrics_cache` | `total_value` | `number` |
+| `driver_stats_cache` | `total_deliveries` | `number` |
+| `hourly_metrics_cache` | `total_orders` | `number` |
+| `hourly_metrics_cache` | `total_value` | `number` |

@@ -628,8 +628,12 @@
     "useCacheViews",
     "useRefreshCache"
    ],
-   "tabelas": [],
-   "rpcs": [],
+   "tabelas": [
+    "cache_status"
+   ],
+   "rpcs": [
+    "refresh_cache_view"
+   ],
    "edges": [],
    "canais_realtime": [],
    "flags": [],
@@ -689,10 +693,14 @@
     "useTopDrivers"
    ],
    "tabelas": [
-    "drivers",
-    "lalamove_orders"
+    "cache_status",
+    "delivery_metrics_cache",
+    "driver_stats_cache",
+    "hourly_metrics_cache"
    ],
-   "rpcs": [],
+   "rpcs": [
+    "refresh_cache_view"
+   ],
    "edges": [],
    "canais_realtime": [],
    "flags": [],
@@ -3457,12 +3465,16 @@
     "bitrix24_stage_mappings",
     "bitrix24_sync",
     "blocked_ips",
+    "cache_status",
     "contacts",
+    "delivery_metrics_cache",
     "driver_approval_queue",
     "driver_evaluations",
     "driver_incidents",
+    "driver_stats_cache",
     "drivers",
     "geo_blocks",
+    "hourly_metrics_cache",
     "ip_whitelist",
     "lalamove_orders",
     "lalamove_status_history",
@@ -3482,7 +3494,8 @@
    "rpcs": [
     "acknowledge_alert",
     "get_cron_jobs_health",
-    "get_user_permissions"
+    "get_user_permissions",
+    "refresh_cache_view"
    ],
    "edges": [
     "bitrix24-process-queue",

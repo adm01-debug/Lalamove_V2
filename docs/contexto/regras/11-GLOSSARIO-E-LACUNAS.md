@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0cac154a60` · branch `main` · 2026-11-21 14:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `18c9d83333` · branch `main` · 2026-11-21 14:51 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -20,20 +20,24 @@
 | `bitrix24_tokens` | Tokens OAuth2 do Bitrix24 com refresh. | 7 colunas | migration |
 | `blocked_ips` | IPs bloqueados por rate limit/seguranca com motivo e expiracao. | 11 colunas | migration |
 | `cache_refresh_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
+| `cache_status` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `contacts` | Contatos cadastrados (empresas/parceiros) para integracao externa. | 10 colunas | migration |
 | `contract_version_usage` | Uso de versoes de contrato por periodo. | 8 colunas | migration |
 | `contract_version_usage_monthly` | Agregado mensal de uso de versoes de contrato. | 9 colunas | migration |
 | `cron_job_logs` | Historico de execucoes dos cron jobs do sistema com duracao e resultado. | 9 colunas | migration |
+| `delivery_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 11 colunas | types.ts |
 | `driver_approval_queue` | Fila de aprovacao de motoristas com score de risco, prioridade e status. | 14 colunas | migration |
 | `driver_evaluations` | Historico de avaliacoes de risco dos motoristas com fatores detalhados. | 19 colunas | migration |
 | `driver_incidents` | Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano). | 13 colunas | migration |
 | `driver_locations` | Historico detalhado de posicoes GPS dos motoristas. | 9 colunas | migration |
+| `driver_stats_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | types.ts |
 | `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 32 colunas | migration |
 | `drivers_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | types.ts |
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `entity_versions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
 | `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
+| `hourly_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
 | `job_queue` | Fila de jobs assíncronos para processamento em background | 16 colunas | migration |
 | `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
@@ -202,7 +206,11 @@ _nenhum item encontrado_
 | tabela | tabela `tabela` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.mjs`<br>`scripts/inventario/gerar-banco.mjs`<br>`scripts/inventario/gerar-repo.mjs` |
 | tabela | tabela `tx` usada no código não existe nas migrations/types do repo | `scripts/ai-context/cenarios.mjs` |
 | tabela | tabela `x` usada no código não existe nas migrations/types do repo | `scripts/db-audit/supabase-usage-guard.mjs`<br>`scripts/inventario/gerar-rotas.mjs` |
+| rls | `cache_status`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCacheViews.ts` |
+| rls | `delivery_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
+| rls | `driver_stats_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | rls | `geo_blocks`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
+| rls | `hourly_metrics_cache`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useCachedStats.ts` |
 | edge | edge function `edge` invocada mas não existe em supabase/functions/ | `scripts/inventario/gerar-rotas.mjs` |
 | edge | edge function `inexistente` invocada mas não existe em supabase/functions/ | `scripts/ai-context/cenarios.mjs` |
 | edge | edge function `nada` invocada mas não existe em supabase/functions/ | `scripts/ai-context/cenarios.mjs` |
@@ -258,7 +266,9 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 12/71 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view`
+- `cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `driver_stats_cache.driver_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- 16/75 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `drivers_safe_view`, `orders_operator_view`, `orders_safe_view` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes
