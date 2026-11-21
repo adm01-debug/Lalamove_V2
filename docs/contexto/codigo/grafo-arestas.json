@@ -2175,6 +2175,7 @@
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/lalamove-webhook/normalize.ts",
    "supabase/functions/lalamove-webhook/security.ts"
   ],
   "supabase/functions/lalamove-webhook/security.ts": [

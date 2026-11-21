@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7af49d74f40cc8424e057675d63ee7caf7ce0094` (2026-11-21T13:32:18-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0532c835973642ad173009d4192db6d367fc9d1d` (2026-11-21T13:51:03-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (455), SQL (167), JavaScript (112), Markdown (82), JSON (34), Shell (9), Python (8), YAML (7)
+- linguagens: TypeScript (456), SQL (167), JavaScript (112), Markdown (82), JSON (34), Shell (9), Python (8), YAML (7)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 900 |
-| arquivos_codigo | 566 |
-| linhas_codigo | 110326 |
+| arquivos_total | 901 |
+| arquivos_codigo | 567 |
+| linhas_codigo | 110524 |
 | rotas | 54 |
 | rotas_protegidas | 46 |
 | rotas_com_mfa | 6 |
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 17 | 18 | 2 | 3 |
 | components/orders | 0 | 0 | 8 | 26 | 5 | 3 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 32 | 0 | 5 | 33 |
+| functions | 0 | 0 | 33 | 0 | 5 | 33 |
 | hooks | 0 | 0 | 82 | 195 | 14 | 42 |
 | lib | 0 | 0 | 21 | 8 | 2 | 0 |
 | pages | 36 | 54 | 54 | 177 | 13 | 40 |
@@ -265,8 +265,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 6589 nós · 14420 arestas · 515 comunidades · grafo do commit `7af49d74`
-- comunidades maiores: cn (175), lucide-react (145), App.tsx (104), snapshot.py (102), client.ts (95), generate.py (81), AlertConfigCard.tsx (81), dependencies (80), ref_node_path (79), RateLimitDashboardPage.tsx (77), gerar.mjs (76), badge.tsx (74)
+- 6592 nós · 14426 arestas · 508 comunidades · grafo do commit `0532c835`
+- comunidades maiores: cn (173), card.tsx (123), snapshot.py (100), DashboardRedesigned.tsx (85), @tanstack/react-query (85), ref_node_path (85), button.tsx (81), dependencies (80), react (79), client.ts (77), gerar.mjs (76), generate.py (75)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), lalamoveRequest() (supabase/functions/lalamove-api/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -278,13 +278,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/pendencias/README.md (5)
 - src/hooks/useRegionResolver.ts (5)
 - supabase/functions/_shared/contract.integration.test.ts (4)
+- supabase/functions/lalamove-webhook/index.ts (4)
 - .github/workflows/deploy-edges.yml (3)
 - AGENTS.md (3)
 - docs/pendencias/P-06-vulns-npm-restantes.md (3)
 - eslint.config.js (3)
 - scripts/seed-database.ts (3)
 - src/hooks/useDeviceDetection.ts (3)
-- src/index.css (3)
 
 ## Workflows
 - `ci.yml` — CI/CD (pull_request, push)
@@ -338,7 +338,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (65 linhas)
+- `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
 - `docs/RUNBOOK_LALAMOVE.md` — Runbook — Integração Lalamove (v3 REST + UAPI) (126 linhas)
 - `docs/SCREENING_SYSTEM.md` — 🔍 Sistema de Screening - Lalamove Guardian (717 linhas)
@@ -354,6 +354,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.5.0] - 2025-06-25
 
 ## Últimos commits
+- 2026-11-21 `0532c83` feat(webhook): normaliza payload v3 real (eventType + data.order) para o contrato interno (#113)
+- 2026-11-21 `57153cb` docs: decisao sobre os 5 artefatos Lovable fantasmas — nao recriar (#112)
 - 2026-11-21 `7af49d7` fix(webhook): handshake 200, IP gate vira log e assinatura v3 no corpo (#111)
 - 2026-11-21 `c730393` fix(ci): --yes no functions deploy (CLI 3.2.0 pede confirmacao em producao) (#110)
 - 2026-11-21 `56391de` fix(ci): pina Supabase CLI 3.2.0 no deploy-edges (rate limit no resolve de latest) (#109)
@@ -367,8 +369,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `c77f6cc` docs: adia P-02/P-03 para a V3 (concorrente do Lalamove) (#101)
 - 2026-11-21 `59599d3` docs: marca P-06 como concluido (PR #99 - 0 vulns npm) (#100)
 - 2026-11-21 `f1218b2` fix: resolve 4 vulns npm - react-router-dom 6 para 7 e postcss-selector-parser 6.1.5 via overrides (#99)
-- 2026-11-21 `4c03038` chore: registra P-11 MFA descartado e consolida README do backlog (#98)
-- 2026-11-21 `75b7bef` chore: consolida backlog da Fase 2 (P-01 concluido, P-05/P-06 bloqueios) (#97)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

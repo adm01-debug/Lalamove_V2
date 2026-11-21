@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (455)",
+   "TypeScript (456)",
    "SQL (167)",
    "JavaScript (112)",
    "Markdown (82)",
@@ -383,7 +383,7 @@
   {
    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
    "titulo": "Reconciliação ledger × schema × repo — 2026-11-21",
-   "linhas": 65
+   "linhas": 70
   },
   {
    "arquivo": "docs/QUEUE_SYSTEM.md",

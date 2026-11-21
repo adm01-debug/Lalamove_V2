@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "7af49d74f40cc8424e057675d63ee7caf7ce0094",
+  "commit": "0532c835973642ad173009d4192db6d367fc9d1d",
   "branch": "main",
-  "data_commit": "2026-11-21T13:32:18-03:00",
+  "data_commit": "2026-11-21T13:51:03-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "0532c83",
+    "data": "2026-11-21",
+    "assunto": "feat(webhook): normaliza payload v3 real (eventType + data.order) para o contrato interno (#113)"
+   },
+   {
+    "sha": "57153cb",
+    "data": "2026-11-21",
+    "assunto": "docs: decisao sobre os 5 artefatos Lovable fantasmas — nao recriar (#112)"
+   },
    {
     "sha": "7af49d7",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "a4e1f18",
     "data": "2026-11-20",
     "assunto": "build(deps): bump input-otp from 1.4.2 to 1.5.0 (#76)"
-   },
-   {
-    "sha": "1eb8189",
-    "data": "2026-11-20",
-    "assunto": "build(deps): bump papaparse from 5.5.3 to 5.7.1 (#73)"
-   },
-   {
-    "sha": "cbc45da",
-    "data": "2026-11-20",
-    "assunto": "build(deps): bump @radix-ui/react-toggle from 1.1.9 to 1.2.1 (#72)"
    }
   ],
-  "arquivos_mudados_7d": 67,
+  "arquivos_mudados_7d": 68,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "package-lock.json",
@@ -149,6 +149,10 @@
    },
    {
     "pasta": "docs/pendencias/README.md",
+    "mudancas": 5
+   },
+   {
+    "pasta": "supabase/functions/lalamove-webhook",
     "mudancas": 5
    },
    {
@@ -184,15 +188,11 @@
     "mudancas": 2
    },
    {
+    "pasta": "docs/MIGRATION_RECONCILIATION_2026-11.md",
+    "mudancas": 2
+   },
+   {
     "pasta": "docs/agentes/banco.md",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/contexto/regras",
-    "mudancas": 2
-   },
-   {
-    "pasta": "docs/pendencias/P-01-rls-query-telemetria-grant-only.md",
     "mudancas": 2
    }
   ],
@@ -230,6 +230,10 @@
     "mudancas": 4
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 4
+   },
+   {
     "arquivo": ".github/workflows/deploy-edges.yml",
     "mudancas": 3
    },
@@ -262,15 +266,15 @@
     "mudancas": 3
    },
    {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 3
-   },
-   {
     "arquivo": ".env.example",
     "mudancas": 2
    },
    {
     "arquivo": ".github/workflows/contexto.yml",
+    "mudancas": 2
+   },
+   {
+    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
     "mudancas": 2
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "docs/pendencias/P-03-chat-cliente-motorista.md",
     "mudancas": 2
-   },
-   {
-    "arquivo": "docs/pendencias/P-05-snapshot-banco-nao-gerado.md",
-    "mudancas": 2
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 33
+    "commits": 35
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 900,
-  "arquivos_codigo": 566,
-  "linhas_codigo": 110326,
+  "arquivos_total": 901,
+  "arquivos_codigo": 567,
+  "linhas_codigo": 110524,
   "rotas": 54,
   "rotas_protegidas": 46,
   "rotas_com_mfa": 6,
@@ -547,8 +547,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 36,
-   "linhas": 10684
+   "arquivos": 37,
+   "linhas": 10882
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -582,7 +582,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 924
+   "linhas": 931
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",

@@ -912,11 +912,12 @@
   {
    "arquivo": "supabase/functions/lalamove-webhook/security.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 60,
+   "linhas": 179,
    "testa": [
+    "supabase/functions/lalamove-webhook/normalize.ts",
     "supabase/functions/lalamove-webhook/security.ts"
    ],
-   "casos": 7
+   "casos": 17
   }
  ],
  "sql": [],
@@ -1007,6 +1008,7 @@
   "src/utils/timeUtils.ts": 1,
   "supabase/functions/_shared/contract.ts": 2,
   "supabase/functions/_shared/schemas.ts": 2,
+  "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1
  },
  "sem_teste": {
