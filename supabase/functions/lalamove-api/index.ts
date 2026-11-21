@@ -691,6 +691,11 @@ serve(async (req) => {
           const distance = orderData.distance as Record<string, string> | undefined;
           const stops = orderData.stops as Array<Record<string, unknown>> | undefined;
           
+          // body.metadata carrega os campos do formulário (Guardian: auto-aviso ao
+          // fornecedor; threshold de parada; exige POD) — nunca eram persistidos
+          // aqui, então check-driver-alerts sempre lia null/default pra eles.
+          const requestMetadata = (body as Record<string, unknown>).metadata as Record<string, unknown> | undefined;
+
           await supabase.from('lalamove_orders').insert({
             lalamove_id: orderData.orderId,
             quotation_id: body.quotationId,
@@ -704,6 +709,11 @@ serve(async (req) => {
             distance_meters: distance ? parseInt(distance.value) : null,
             vehicle_type: body.serviceType || 'MOTORCYCLE',
             metadata: orderData.metadata || {},
+            internal_order_id: requestMetadata?.internalOrderId as string ?? null,
+            auto_notify_supplier: requestMetadata?.autoNotifySupplier as boolean ?? false,
+            supplier_contact: requestMetadata?.supplierContact as string ?? null,
+            stalled_threshold_minutes: requestMetadata?.stalledThresholdMinutes as number ?? 15,
+            requires_pod: requestMetadata?.requiresPod as boolean ?? true,
           });
         }
         break;
