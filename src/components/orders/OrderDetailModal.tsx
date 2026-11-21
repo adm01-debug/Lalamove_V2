@@ -44,6 +44,7 @@ import { useEvaluateDriver } from '@/hooks/useEvaluateDriver';
 import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
 import { StatusTimeline } from './StatusTimeline';
+import { OrderTrackingMap } from '@/components/map/OrderTrackingMap';
 import { evaluateOrderOperation, validatePriorityFee } from '@/lib/lalamoveOrderEdit';
 import { changeDriverReasonOptions, cancelOrderReasonOptions } from '@/lib/lalamoveReasons';
 import { useFleetMutation, UapiError } from '@/hooks/useLalamoveUapi';
@@ -485,6 +486,49 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
       enabled: !!order?.id && open,
     });
 
+    /**
+     * Etapa 58 — dados do mini-mapa: coordenadas ficam em `lalamove_orders` (o objeto
+     * `Order` da UI não carrega lat/lng) e a rota contratada em `active_tracking`.
+     */
+    const { data: trackingMapData } = useQuery({
+      queryKey: ['order-tracking-map', order?.id],
+      queryFn: async () => {
+        if (!order?.id) return null;
+        const [{ data: coords }, { data: tracking }] = await Promise.all([
+          supabase
+            .from('lalamove_orders')
+            .select('pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude')
+            .eq('id', order.id)
+            .maybeSingle(),
+          supabase
+            .from('active_tracking')
+            .select('current_latitude, current_longitude, expected_route')
+            .eq('order_id', order.id)
+            .order('last_updated', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+        ]);
+        const num = (v: unknown): number | null => {
+          if (v === null || v === undefined || v === '') return null;
+          const n = Number(v);
+          return Number.isFinite(n) ? n : null;
+        };
+        return {
+          pickup: coords
+            ? { lat: num(coords.pickup_latitude), lng: num(coords.pickup_longitude) }
+            : null,
+          delivery: coords
+            ? { lat: num(coords.delivery_latitude), lng: num(coords.delivery_longitude) }
+            : null,
+          driver: tracking
+            ? { lat: num(tracking.current_latitude), lng: num(tracking.current_longitude) }
+            : null,
+          expectedRoute: tracking?.expected_route ?? null,
+        };
+      },
+      enabled: !!order?.id && open,
+    });
+
     if (!order) return null;
 
     const status = statusConfig[order.status];
@@ -604,6 +648,21 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Trajeto no mapa (etapa 58) */}
+            <div className="glass-card p-4 rounded-lg">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                Trajeto
+              </h3>
+              <OrderTrackingMap
+                pickup={trackingMapData?.pickup}
+                delivery={trackingMapData?.delivery}
+                driver={trackingMapData?.driver}
+                expectedRoute={trackingMapData?.expectedRoute}
+                className="h-56 w-full"
+              />
             </div>
 
             {/* Driver Info */}

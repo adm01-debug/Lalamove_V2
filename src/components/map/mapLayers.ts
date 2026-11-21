@@ -217,7 +217,6 @@ export function setupMapLayers(map: mapboxgl.Map, showTraffic: boolean): void {
 }
 
 /** Ponto no formato gravado em `active_tracking.expected_route` (`geo_point_to_polyline_m`). */
-/** Ponto no formato gravado em `active_tracking.expected_route` (`geo_point_to_polyline_m`). */
 export interface RoutePoint {
   lat: number;
   lng: number;
