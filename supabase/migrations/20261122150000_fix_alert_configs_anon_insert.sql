@@ -1,0 +1,15 @@
+-- Remove a política pública de INSERT em alert_configurations.
+--
+-- 20260828000001_seed_fix_rls.sql criou "Public can insert alert configs"
+-- (INSERT TO anon WITH CHECK (true)), além da política correta já existente
+-- desde 20260108144121 ("Managers can insert alert configs", INSERT TO
+-- authenticated WITH CHECK has_role(admin|manager)). Políticas RLS permissivas
+-- são combinadas com OR, então a pública bypassava a de manager: qualquer
+-- pessoa sem login podia inserir uma linha em alert_configurations com
+-- is_enabled=true e notify_whatsapp=false para um alert_type, e isso fazia
+-- send-notification (que itera por configs com is_enabled=true) tratar aquele
+-- canal como desabilitado — silenciando alertas de produção sem autenticação.
+--
+-- A política de manager/admin cobre o fluxo real da UI (/alert-configurations,
+-- requiredRole="manager"); não há regressão de funcionalidade.
+DROP POLICY IF EXISTS "Public can insert alert configs" ON public.alert_configurations;
