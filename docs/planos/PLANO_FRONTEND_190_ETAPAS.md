@@ -116,9 +116,9 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `select policyname from pg_policies where tablename='runtime_error_logs'` sem `anon`; erro forçado no front aparece na tabela com `user_id` do usuário logado.
 
 ### 9 — [F][D] Desligar o auto-cadastro (D3)
-- [ ] `src/pages/AuthPage.tsx:132`: remover a aba "Cadastrar" e `signUp` do `useAuth`; texto de sucesso "Você já está logado" sai junto.
+- [x] `src/pages/AuthPage.tsx:132`: remover a aba "Cadastrar" e `signUp` do `useAuth`; texto de sucesso "Você já está logado" sai junto.
 - [ ] Painel Supabase: desabilitar signups (dono) — registrar na PR.
-- **Evidência:** `rg -n "signUp" src` retorna 0; tela `/auth` só com login/esqueci a senha.
+- **Evidência:** `rg -n "signUp" src` retorna 0 (só mock em `useActiveAlerts.test.ts`, não é o hook); `npx tsc --noEmit -p tsconfig.app.json` → 0 erros; `npx eslint` em `AuthPage.tsx`/`useAuth.tsx` → 0 erros; tela `/auth` só com login/esqueci a senha (removidos `Tabs`, `handleSignUp`, `validateSignupForm`, `signupSchema`, `PasswordStrengthIndicator`).
 
 ### 10 — [F] Sanitizar a busca global contra injeção de filtro PostgREST
 - [x] Criar `src/lib/postgrest.ts` com `escapeIlike(q)` (remove `,`, `(`, `)`, `.`, `%`, `\\`) e `buildOrIlike(fields, q)`.

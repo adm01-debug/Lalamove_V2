@@ -6,36 +6,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Truck, Mail, Lock, Loader2, Eye, EyeOff, ShieldAlert, Radar, Navigation, Activity, ShieldCheck, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { PasskeyLoginButton } from '@/components/auth/PasskeyLoginButton';
 import { lovable } from '@/integrations/lovable/index';
-import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(1, 'Senha é obrigatória'),
 });
 
-const signupSchema = z.object({
-  email: z.string().email('Email inválido'),
-  password: z.string()
-    .min(8, 'A senha deve ter pelo menos 8 caracteres')
-    .regex(/[^A-Za-z0-9]/, 'A senha deve ter pelo menos um caractere especial'),
-});
-
 export function AuthPage() {
-  const { user, loading, signIn, signUp } = useAuth();
+  const { user, loading, signIn } = useAuth();
   const { lockoutStatus, checkLockout, recordFailedAttempt, clearAttempts, formatRemainingTime } = useLoginLockout();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState('login');
-  const [isPasswordBreached, setIsPasswordBreached] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
   // Countdown timer for lockout
@@ -67,20 +56,6 @@ export function AuthPage() {
     if (!result.success) {
       const firstError = result.error.issues[0];
       toast.error(firstError.message);
-      return false;
-    }
-    return true;
-  };
-
-  const validateSignupForm = () => {
-    const result = signupSchema.safeParse({ email, password });
-    if (!result.success) {
-      const firstError = result.error.issues[0];
-      toast.error(firstError.message);
-      return false;
-    }
-    if (isPasswordBreached) {
-      toast.error('Esta senha foi exposta em vazamentos. Escolha outra senha.');
       return false;
     }
     return true;
@@ -121,25 +96,6 @@ export function AuthPage() {
       // Clear failed attempts on successful login
       await clearAttempts(email);
       toast.success('Login realizado com sucesso!');
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateSignupForm()) return;
-
-    setIsSubmitting(true);
-    const { error } = await signUp(email, password);
-    setIsSubmitting(false);
-
-    if (error) {
-      if (error.message.includes('already registered')) {
-        toast.error('Este email já está cadastrado');
-      } else {
-        toast.error('Erro ao criar conta: ' + error.message);
-      }
-    } else {
-      toast.success('Conta criada com sucesso! Você já está logado.');
     }
   };
 
@@ -222,17 +178,10 @@ export function AuthPage() {
         <Card className="glass-card border-border/50">
           <CardHeader className="text-center pb-2">
             <CardTitle>Bem-vindo</CardTitle>
-            <CardDescription>Entre na sua conta ou crie uma nova</CardDescription>
+            <CardDescription>Entre na sua conta</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="login">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Criar Conta</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="login">
-                <form onSubmit={handleSignIn} className="space-y-4">
+            <form onSubmit={handleSignIn} className="space-y-4">
                   {/* Lockout warning */}
                   {lockoutStatus.isLocked && countdown > 0 && (
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive">
@@ -341,66 +290,7 @@ export function AuthPage() {
                     </svg>
                     Entrar com Google
                   </Button>
-                </form>
-              </TabsContent>
-
-              <TabsContent value="signup">
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Senha</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input
-                        id="signup-password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Mínimo 8 caracteres"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="pl-10 pr-10"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                    <PasswordStrengthIndicator 
-                      password={password} 
-                      showRequirements 
-                      onBreachCheck={setIsPasswordBreached}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isSubmitting || isPasswordBreached}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                        Criando conta...
-                      </>
-                    ) : (
-                      'Criar Conta'
-                    )}
-                  </Button>
-                </form>
-              </TabsContent>
-            </Tabs>
+            </form>
           </CardContent>
         </Card>
 

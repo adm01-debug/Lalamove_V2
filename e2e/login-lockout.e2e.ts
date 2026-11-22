@@ -129,7 +129,7 @@ test.describe('Fluxo de bloqueio de login (lockout v2)', () => {
     await installLockoutBackend(page);
     await page.goto('/auth');
 
-    await expect(page.getByRole('tab', { name: 'Entrar' })).toBeVisible();
+    await expect(page.getByLabel('Email')).toBeVisible();
 
     // Realiza MAX_ATTEMPTS tentativas de login com credenciais inválidas.
     for (let i = 0; i < MAX_ATTEMPTS; i++) {
