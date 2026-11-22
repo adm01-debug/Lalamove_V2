@@ -40,12 +40,19 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c`+PR #118; docs.mapbox
 >   produção; `MAPBOX_ACCESS_TOKEN` já basta como fallback de servidor (testado em produção em 2026-11-22:
 >   autocomplete real de Curitiba via `geo-gateway`) — as etapas 2–10 (tokens pk/sk dedicados, rotação,
 >   alertas de faturamento) ficam só de endurecimento, não travam o resto do plano.
-> - ✅ Bloco 3 (35, 37, 39–41, 43, 44): PR #193 (sessão com TTL, estados de falha, endereços frequentes —
+> - ✅ Bloco 3 (35, 37–41, 43, 44): PR #193 (sessão com TTL, estados de falha, endereços frequentes —
 >   etapas 37/40/41); `AddressAutocomplete.tsx` usa `useAddressSearchBox`/atribuição Mapbox visível;
->   `e2e/autocomplete.e2e.ts` existe. Etapa 36 (teste de cobertura BR, decide M1): script/CSV prontos (PR
->   #131), execução real em andamento nesta sessão com a amostra genérica do CSV — **ainda não com
->   endereços reais do Bitrix**, resultado a atualizar aqui quando sair. Etapa 38 (CEP antes do Mapbox) não
->   reconfirmada no fluxo de novo pedido. Etapa 42 (import Bitrix/n8n) não reauditada.
+>   `e2e/autocomplete.e2e.ts` existe; `NewOrderDialog.tsx` renderiza `CepQuickFill` (ViaCEP, sem Mapbox)
+>   antes de `AddressAutocomplete` nos dois endereços (etapa 38 confirmada).
+>   - ⚠️ **Etapa 36 MEDIDA em 2026-11-22 — M1 REPROVADO.** Duas medições independentes concordam:
+>     `docs/MAPBOX.md` registra 30/50 (60%) pelo script direto; esta sessão mediu 26/50 (52%) via
+>     `geo-gateway` e achou 6 casos de **rua/cidade totalmente errada** (não só baixa precisão, risco
+>     operacional real — ver `docs/MAPBOX.md` "Risco adicional"). Nenhum modo Mapbox atinge 90% no BR com a
+>     amostra genérica do CSV; decisão de M1 definitiva ainda depende de endereços reais do Bitrix24
+>     (não feito) e possivelmente de `GOOGLE_MAPS_SERVER_KEY` (ausente) como `fallback_provider`.
+>   - Etapa 42 (import Bitrix/n8n): `job-worker` já tem `geo_backfill` usando `geocode-batch` (etapa 25,
+>     agnóstico de provedor) — lado do job OK; se o workflow n8n `F01` parou de chamar DistanceMatrix.ai
+>     não foi verificado (fora do alcance desta sessão, workflow externo).
 > - ✅ Bloco 4 (45–47, 51): PR #188 (snap antes do geofence, etapa 47); `job-worker` tem `route_plan`/
 >   `eta_refresh`/`expected_route`; `scripts/geo/eta-parity.ts` existe (etapa 51). Etapas 48–50, 52–54 não
 >   reauditadas nesta rodada.
