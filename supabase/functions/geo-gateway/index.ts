@@ -348,7 +348,13 @@ Deno.serve(async (req) => {
       return jsonResponse(buildErrorBody(code, err.message, [{ field: "(geo)", message: err.message, code: err.code }], version), err.status, h, version);
     }
     if (err instanceof ResolveError) {
-      return jsonResponse(buildErrorBody(err.status === 429 ? ERROR_CODES.RATE_LIMITED : ERROR_CODES.INTERNAL_ERROR, err.message, [{ field: "(geo)", message: err.message, code: "GEO_UNAVAILABLE" }], version), err.status, corsHeaders, version);
+      // Etapa 30: orçamento esgotado precisa de código próprio. Antes caía em
+      // RATE_LIMITED, indistinguível do rate limit por minuto da etapa 32 — o front
+      // não tinha como dizer "acabou o saldo do provedor" versus "espere 1 minuto".
+      const budget = err.status === 429;
+      const code = budget ? ERROR_CODES.GEO_BUDGET_EXCEEDED : ERROR_CODES.INTERNAL_ERROR;
+      const fieldCode = budget ? "GEO_BUDGET_EXCEEDED" : "GEO_UNAVAILABLE";
+      return jsonResponse(buildErrorBody(code, err.message, [{ field: "(geo)", message: err.message, code: fieldCode }], version), err.status, corsHeaders, version);
     }
     logger.error("[geo-gateway]", err);
     return jsonResponse(buildErrorBody(ERROR_CODES.INTERNAL_ERROR, "Erro interno no geo-gateway", [], version), 500, corsHeaders, version);

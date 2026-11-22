@@ -232,7 +232,10 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `useMapbox` continua funcionando (`/map-tools` manual)
 
 ### 30 — Resolver de provedor + orçamento
-- [ ] `resolveProvider(function)`: lê `geo_settings` (cache em memória 60 s) → se `geo_budget_status().blocked` para esse provider → `fallback_provider` → se também bloqueado → `off` → `errorResponse('GEO_BUDGET_EXCEEDED', 429)`
+- [x] `resolveProvider(function)`: lê `geo_settings` (cache em memória 60 s) → se `geo_budget_status().blocked` para esse provider → `fallback_provider` → se também bloqueado → `off` → `errorResponse('GEO_BUDGET_EXCEEDED', 429)`
+  - `ProviderResolver.resolve()` já fazia a cadeia primário → `auto` (cota grátis) → `fallback_provider` → `off` com 429, mas **o código do erro saía como `RATE_LIMITED`** — indistinguível do limite por minuto da etapa 32. Adicionado `ERROR_CODES.GEO_BUDGET_EXCEEDED` em `_shared/contract.ts` e o `ResolveError` 429 agora usa esse código com `GEO_BUDGET_EXCEEDED` no `fields[].code`.
+  - **Bug de integração corrigido junto:** o `job-worker` classificava erro recuperável por regex (`GEO_UNAVAILABLE|está desligada|Nenhum provedor|RATE_LIMITED|429`) em 4 pontos. `GEO_BUDGET_EXCEEDED` não casava, então um orçamento esgotado passaria a virar `status:'error'` e job retentável em vez de `skipped`. A regex foi estendida nos 4 pontos (`job-worker/index.ts:368,447,599,764`).
+  - Evidência: `geo-gateway/budget-error.test.ts` 3/3 verde (429 lançado, código próprio, regex do worker casa) e suíte `geo-gateway/` **75/75**. `deno check` limpo em `index.ts` e `job-worker/index.ts`.
 - [ ] Funções críticas (`autocomplete`, `geocode`) nunca ficam `off` enquanto houver um provedor com saldo (D11)
 - [ ] Alerta `GEO_BUDGET_WARNING` ao cruzar `alert_at_pct` (1× por mês por provider)
 - **Evidência:** teste Deno com `geo_budget` mockado em 100% → resposta usa fallback
