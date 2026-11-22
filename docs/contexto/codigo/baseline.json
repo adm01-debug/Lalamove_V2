@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "62a5161249da0e2e826d6692816953868c6df82c",
+  "commit": "a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21",
   "branch": "main",
-  "data_commit": "2026-11-22T15:31:40-03:00",
+  "data_commit": "2026-11-22T15:38:55-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a7e7d11",
+    "data": "2026-11-22",
+    "assunto": "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)"
+   },
    {
     "sha": "62a5161",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "03b0ca8",
     "data": "2026-11-22",
     "assunto": "feat: replay deterministico do trajeto e 100 testes na CI (#277)"
-   },
-   {
-    "sha": "95b66ec",
-    "data": "2026-11-22",
-    "assunto": "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)"
    }
   ],
-  "arquivos_mudados_7d": 359,
+  "arquivos_mudados_7d": 360,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -278,6 +278,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/lalamove-api/coordinates.ts",
     "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 205
+    "commits": 206
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1063,
   "arquivos_codigo": 662,
-  "linhas_codigo": 129282,
+  "linhas_codigo": 129281,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 236
+   "linhas": 233
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 161,
-   "linhas": 29566
+   "linhas": 29568
   },
   "src/hooks": {
    "arquivos": 111,

@@ -1,17 +1,17 @@
 # Graph Report - Lalamove_V2  (2026-11-22)
 
 ## Corpus Check
-- 1020 files · ~820,846 words
+- 1020 files · ~820,861 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 8734 nodes · 18294 edges · 636 communities (439 shown, 197 thin omitted)
+- 8734 nodes · 18293 edges · 636 communities (439 shown, 197 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 832 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `62a51612`
+- Built from commit: `a7e7d11c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -545,7 +545,7 @@
 6. `supabase` - 106 edges
 7. `Card` - 100 edges
 8. `@tanstack/react-query` - 92 edges
-9. `framer-motion` - 91 edges
+9. `framer-motion` - 90 edges
 10. `CardContent` - 89 edges
 
 ## Surprising Connections (you probably didn't know these)

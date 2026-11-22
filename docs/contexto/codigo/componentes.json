@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 236,
+   "linhas": 233,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -707,7 +707,7 @@
     "AppLayout"
    ],
    "export_default": null,
-   "linhas": 393,
+   "linhas": 395,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAccessibility",

@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)",
    "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
    "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)",
    "feat: desligar auto-cadastro no front (item 9) (#300)",
-   "feat: cliente do front entende o formato único de erro (item 42) (#301)",
-   "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)"
+   "feat: cliente do front entende o formato único de erro (item 42) (#301)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

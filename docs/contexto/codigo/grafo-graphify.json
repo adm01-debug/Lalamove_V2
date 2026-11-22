@@ -4,10 +4,10 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "62a5161249da0e2e826d6692816953868c6df82c",
+ "commit_do_grafo": "a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21",
  "grafo_atual": true,
  "nos": 8734,
- "arestas": 18294,
+ "arestas": 18293,
  "comunidades_total": 636,
  "relacoes": {
   "calls": 2433,
@@ -18,7 +18,7 @@
   "dynamic_import": 111,
   "implements": 2,
   "imports": 3639,
-  "imports_from": 3293,
+  "imports_from": 3292,
   "indexes": 230,
   "indirect_call": 127,
   "inherits": 13,
@@ -30,7 +30,7 @@
   "triggers": 32
  },
  "origem": {
-  "EXTRACTED": 17462,
+  "EXTRACTED": 17461,
   "INFERRED": 832
  },
  "comunidades": [
@@ -1180,7 +1180,7 @@
    "id": "src_app",
    "rotulo": "App.tsx",
    "arquivo": "src/App.tsx",
-   "grau": 145,
+   "grau": 144,
    "comunidade": "App.tsx"
   },
   {
@@ -1275,18 +1275,18 @@
    "comunidade": "client.ts"
   },
   {
-   "id": "ref_framer_motion",
-   "rotulo": "framer-motion",
-   "arquivo": "package.json",
-   "grau": 91,
-   "comunidade": "lucide-react"
-  },
-  {
    "id": "scripts_supabase_snapshot_snapshot",
    "rotulo": "snapshot.py",
    "arquivo": "scripts/supabase_snapshot/snapshot.py",
    "grau": 91,
    "comunidade": "snapshot.py"
+  },
+  {
+   "id": "ref_framer_motion",
+   "rotulo": "framer-motion",
+   "arquivo": "package.json",
+   "grau": 90,
+   "comunidade": "lucide-react"
   },
   {
    "id": "src_components_ui_card_cardcontent",

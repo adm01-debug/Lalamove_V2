@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `62a5161249da0e2e826d6692816953868c6df82c` (2026-11-22T15:31:40-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21` (2026-11-22T15:38:55-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1063 |
 | arquivos_codigo | 662 |
-| linhas_codigo | 129282 |
+| linhas_codigo | 129281 |
 | rotas | 56 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -275,7 +275,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8734 nós · 18294 arestas · 636 comunidades · grafo do commit `62a51612`
+- 8734 nós · 18293 arestas · 636 comunidades · grafo do commit `a7e7d11c`
 - comunidades maiores: cn (187), DashboardRedesigned.tsx (137), button.tsx (132), badge.tsx (122), client.ts (117), lucide-react (114), snapshot.py (105), ref_https (95), AlertsPage.tsx (87), ref_node_path (85), App.tsx (80), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -283,7 +283,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (39)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (18)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (19)
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
 - docs/MAPBOX.md (12)
@@ -378,6 +378,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `a7e7d11` feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)
 - 2026-11-22 `62a5161` feat: hierarquia de papeis numa unica fonte (item 48) (#303)
 - 2026-11-22 `fa9a59c` fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)
 - 2026-11-22 `6487163` feat: desligar auto-cadastro no front (item 9) (#300)
@@ -392,7 +393,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `ba39240` fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)
 - 2026-11-22 `79fecdf` chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)
 - 2026-11-22 `6d201eb` chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)
-- 2026-11-22 `d055637` feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
