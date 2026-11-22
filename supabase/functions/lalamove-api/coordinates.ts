@@ -32,7 +32,16 @@ export function stopsCoords(stops: Array<Record<string, unknown>> | undefined): 
 // geocode_provider='lalamove' / geocode_precision='LALAMOVE' marca que a coordenada veio
 // da cotação e portanto é permanente (etapa 93 do plano de 100 etapas).
 // deno-lint-ignore no-explicit-any
-export async function persistOrderCoordinates(supabase: any, orderId: string, stops: Array<Record<string, unknown>> | undefined) {
+export async function persistOrderCoordinates(
+  supabase: any,
+  orderId: string,
+  stops: Array<Record<string, unknown>> | undefined,
+  // Etapa 36: quando o pedido veio do formulário, o autocomplete já resolveu um
+  // place_id do provedor (google:/mapbox:) — ele identifica o ENDEREÇO e não pode
+  // ser sobrescrito pelo id da parada da Lalamove. Sem preferência, o id da parada é
+  // o que existe para guardar.
+  preferred?: { pickupPlaceId?: string | null; deliveryPlaceId?: string | null },
+) {
   const coords = stopsCoords(stops);
   const first = coords[0];
   const second = coords[1];
@@ -48,7 +57,8 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
     // Etapa 14: `pickup_place_id`/`delivery_place_id` existem desde a geo_foundation mas
     // nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto
     // de coleta/entrega não tinha identidade estável por provedor.
-    if (first.stopId) patch.pickup_place_id = `lalamove:${first.stopId}`;
+    const placeId = preferred?.pickupPlaceId ?? (first.stopId ? `lalamove:${first.stopId}` : null);
+    if (placeId) patch.pickup_place_id = placeId;
   }
   if (second?.lat !== null && second?.lat !== undefined) {
     patch.delivery_latitude = second.lat;
@@ -56,7 +66,8 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
     patch.geocode_provider = "lalamove";
     patch.geocode_precision = "LALAMOVE";
     patch.geocode_match_confidence = "LALAMOVE";
-    if (second.stopId) patch.delivery_place_id = `lalamove:${second.stopId}`;
+    const placeId = preferred?.deliveryPlaceId ?? (second.stopId ? `lalamove:${second.stopId}` : null);
+    if (placeId) patch.delivery_place_id = placeId;
   }
   if (Object.keys(patch).length === 0) return;
 

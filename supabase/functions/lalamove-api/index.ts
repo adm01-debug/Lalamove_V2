@@ -728,13 +728,23 @@ serve(async (req) => {
             supplier_contact: requestMetadata?.supplierContact as string ?? null,
             stalled_threshold_minutes: requestMetadata?.stalledThresholdMinutes as number ?? 15,
             requires_pod: requestMetadata?.requiresPod as boolean ?? true,
+            // Etapa 13/36: place_id e componentes resolvidos pelo autocomplete no
+            // formulário. Sem isso o pedido fica só com lat/lng da cotação, sem
+            // identidade do endereço nem bairro/cidade para auditar.
+            pickup_place_id: (requestMetadata?.pickupPlaceId as string) ?? null,
+            delivery_place_id: (requestMetadata?.deliveryPlaceId as string) ?? null,
+            pickup_address_components: (requestMetadata?.pickupAddressComponents as Record<string, string>) ?? null,
+            delivery_address_components: (requestMetadata?.deliveryAddressComponents as Record<string, string>) ?? null,
           }).select('id').single();
 
           // As coordenadas reais vêm da resposta da Lalamove (a cotação geocodifica).
           // Antes disto pickup_/delivery_latitude ficavam sempre NULL e o /map não
           // desenhava os marcadores de coleta e entrega de nenhum pedido.
           if (insertedOrder?.id) {
-            await persistOrderCoordinates(supabase, insertedOrder.id as string, stops);
+            await persistOrderCoordinates(supabase, insertedOrder.id as string, stops, {
+              pickupPlaceId: requestMetadata?.pickupPlaceId as string | undefined,
+              deliveryPlaceId: requestMetadata?.deliveryPlaceId as string | undefined,
+            });
             // Etapa 37: pedidos de bitrix24/uapi_import/n8n chegam sem lat/lng. Se a
             // Lalamove não devolveu coordenada, geocodifica aqui e marca para revisão
             // quando a precisão não for confiável.
