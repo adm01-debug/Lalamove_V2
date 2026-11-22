@@ -111,3 +111,23 @@ Deno.test("persistOrderCoordinates mantem 'lalamove' como default sem override d
   assertEquals(updates[0].geocode_provider, "lalamove");
   assertEquals(updates[0].geocode_precision, "LALAMOVE");
 });
+
+// Etapa 36: o trigger de entrega usa contact_name/contact_phone da parada como
+// destinatario do alerta (geo_foundation.sql:484-485). Sem estes campos o alerta de
+// aproximacao/chegada da entrega sai sem `to` e o WhatsApp falha calado.
+Deno.test("stopsCoords extrai nome e telefone do contato da parada", () => {
+  const [c] = stopsCoords([
+    { stopId: "s2", address: "Rua B, 2", coordinates: { lat: "-23.6", lng: "-46.7" }, name: "Maria Silva", phone: "+5511999998888" },
+  ]);
+  assertEquals(c.name, "Maria Silva");
+  assertEquals(c.phone, "+5511999998888");
+});
+
+Deno.test("stopsCoords normaliza contato ausente ou vazio para null", () => {
+  const [vazio] = stopsCoords([{ stopId: "s1", address: "Rua A", name: "", phone: "" }]);
+  assertEquals(vazio.name, null);
+  assertEquals(vazio.phone, null);
+  const [ausente] = stopsCoords([{ stopId: "s1", address: "Rua A" }]);
+  assertEquals(ausente.name, null);
+  assertEquals(ausente.phone, null);
+});

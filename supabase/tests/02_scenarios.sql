@@ -379,6 +379,58 @@ BEGIN
   PERFORM public.assert_true(v_cyc = 0, 'cenario 10: voltar para a rota zera off_route_cycles (recebido '||v_cyc||')');
 END $$;
 
+-- ===========================================================================
+-- Cenario 11 — alerta da ENTREGA carrega o destinatario da parada 1
+-- O trigger monta `recipients` lendo contact_name/contact_phone de lalamove_stops
+-- (geo_foundation.sql:482-485). Sem essas colunas preenchidas o alerta de
+-- aproximacao/chegada da entrega vai sem `to` e o WhatsApp falha sem erro.
+-- Antes da etapa 36 nenhuma edge function gravava esses campos: 100% NULL.
+-- ===========================================================================
+DO $$
+DECLARE
+  v_order uuid := '99999999-0000-4000-8000-000000000011';
+  v_n integer;
+  v_rec jsonb;
+BEGIN
+  DELETE FROM active_tracking WHERE order_id = v_order;
+  DELETE FROM order_geo_events WHERE order_id = v_order;
+  DELETE FROM alerts WHERE order_id = v_order;
+  DELETE FROM lalamove_stops WHERE order_id = v_order;
+  DELETE FROM lalamove_orders WHERE id = v_order;
+
+  INSERT INTO lalamove_orders (id, lalamove_id, lalamove_status, status,
+      pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude,
+      scheduled_at, driver_name, driver_plate)
+  VALUES (v_order, 'LM-DEST-11', 'PICKED_UP', 'PICKED_UP',
+      -25.4295963, -49.2712724, -25.4433, -49.2288,
+      now(), 'Motorista Dest', 'DST1B23');
+
+  -- Parada 0 ja consumida (coleta concluida); a parada perseguida e a 1 (entrega).
+  INSERT INTO lalamove_stops (order_id, stop_index, latitude, longitude, contact_name, contact_phone)
+  VALUES (v_order, 0, -25.4295963, -49.2712724, 'Fornecedor', '+5541999990011'),
+         (v_order, 1, -25.4433, -49.2288, 'Cliente Final', '+5541999990022');
+
+  -- Motorista a ~130 m da parada 1 e pouco ETA: dispara DRIVER_APPROACHING_DELIVERY.
+  INSERT INTO active_tracking (order_id, driver_id, current_latitude, current_longitude,
+      eta_minutes, tracking_status, next_stop_index, distance_to_next_stop_m)
+  VALUES (v_order, '21111111-0000-4000-8000-000000000011',
+      -25.44220, -49.22880, 5, 'ACTIVE', 1, 130);
+
+  SELECT count(*) INTO v_n FROM order_geo_events
+   WHERE order_id = v_order AND event_type = 'DRIVER_APPROACHING_DELIVERY';
+  PERFORM public.assert_true(v_n = 1,
+    'cenario 11: DRIVER_APPROACHING_DELIVERY emitido com next_stop_index=1 (recebido '||v_n||')');
+
+  SELECT payload->'recipients'->0 INTO v_rec FROM order_geo_events
+   WHERE order_id = v_order AND event_type = 'DRIVER_APPROACHING_DELIVERY' LIMIT 1;
+  PERFORM public.assert_true(v_rec->>'role' = 'delivery_contact',
+    'cenario 11: papel do destinatario = delivery_contact (recebido '||coalesce(v_rec->>'role','null')||')');
+  PERFORM public.assert_true(v_rec->>'name' = 'Cliente Final',
+    'cenario 11: nome do destinatario vem do contato da parada (recebido '||coalesce(v_rec->>'name','null')||')');
+  PERFORM public.assert_true(v_rec->>'to' = '+5541999990022',
+    'cenario 11: telefone do destinatario vem do contato da parada (recebido '||coalesce(v_rec->>'to','null')||')');
+END $$;
+
 \echo ''
 \echo '================================================'
 \echo ' TUDO OK — todos os cenarios passaram'

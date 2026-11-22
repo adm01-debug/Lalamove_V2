@@ -23,7 +23,7 @@ gravado no banco de produção e o container é removido ao final.
 | `00_stubs.sql` | DDL mínimo das tabelas reais (`lalamove_orders`, `active_tracking`, `order_geo_events`, `job_queue`, …) com os tipos de produção. Não é migration. |
 | `01_functions.sql` | **Gerado.** Cópia literal das funções reais extraídas das migrations — garante que o teste exercita o código que vai para produção. |
 | `03_fixture.sql` | **Gerado.** Converte `fixtures/route_curitiba.json` em tabela. |
-| `02_scenarios.sql` | Os 10 cenários com as asserções. Falha = `RAISE EXCEPTION` + `ON_ERROR_STOP`. |
+| `02_scenarios.sql` | Os 11 cenários (27 asserções). Falha = `RAISE EXCEPTION` + `ON_ERROR_STOP`. |
 
 Porta padrão `55433`; use `PG_TEST_PORT` para trocar.
 
@@ -39,3 +39,4 @@ Porta padrão `55433`; use `PG_TEST_PORT` para trocar.
 8. Os 40 pontos de `fixtures/route_curitiba.json` mantêm `is_on_route = true`.
 9. Desvio de 500 m marca `is_on_route = false` e acumula `off_route_cycles`.
 10. Voltar para a rota zera `off_route_cycles`.
+11. Alerta da entrega carrega destinatário de `lalamove_stops.contact_name`/`contact_phone` (`role`, `name`, `to`) — sem esses campos o WhatsApp sai sem destinatário e falha sem erro.

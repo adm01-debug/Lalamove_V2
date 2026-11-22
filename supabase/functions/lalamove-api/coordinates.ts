@@ -13,6 +13,7 @@ import { logger } from '../_shared/logger.ts';
 // Mapbox, que proíbem reter coordenada de geocode temporário.
 export function stopsCoords(stops: Array<Record<string, unknown>> | undefined): Array<{
   stopId: string | null; lat: number | null; lng: number | null; address: string | null;
+  name: string | null; phone: string | null;
 }> {
   return (stops ?? []).map((s) => {
     const c = (s.coordinates ?? {}) as Record<string, unknown>;
@@ -24,6 +25,8 @@ export function stopsCoords(stops: Array<Record<string, unknown>> | undefined): 
       lat: Number.isFinite(lat) && !(lat === 0 && lng === 0) ? lat : null,
       lng: Number.isFinite(lng) && !(lat === 0 && lng === 0) ? lng : null,
       address: (s.address as string) ?? null,
+      name: (s.name as string) || null,
+      phone: (s.phone as string) || null,
     };
   });
 }
@@ -98,6 +101,13 @@ export async function persistOrderCoordinates(
       longitude: c.lng,
       geocode_precision: "LALAMOVE",
       geocode_match_confidence: "LALAMOVE",
+      // Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL
+      // (nenhum escritor no repo), e o trigger geo_evaluate_tracking monta os
+      // destinatários da notificação de aproximação/chegada da ENTREGA lendo
+      // exatamente estas duas colunas (geo_foundation.sql:484-485). Sem elas o alerta
+      // saía sem `to` e o envio por WhatsApp falhava silenciosamente em toda entrega.
+      ...(c.name ? { contact_name: c.name } : {}),
+      ...(c.phone ? { contact_phone: c.phone } : {}),
       ...(c.stopId ? { place_id: `lalamove:${c.stopId}` } : {}),
     }));
   if (rows.length > 0) {
