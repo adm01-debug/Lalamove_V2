@@ -385,9 +385,12 @@ correta no plano.
 - **Evidência:** doc mergeado e confirmado pelo chat da UAPI
 
 ### 42 — n8n F01 sem DistanceMatrix.ai
-- [ ] Nós "Geo Coleta"/"Geo Entrega" (`lalamove_f01_cotacao.json:62,77`) → HTTP para `geo-gateway geocode` com service_role (credencial n8n) **ou** remover geocode do n8n e deixar a edge fazer (etapa 37)
-- [ ] Atualizar `lalamove_bundle_import.json`
-- **Evidência:** execução de teste do F01 no n8n com coordenadas reais
+- [x] Nós "Geo Coleta"/"Geo Entrega" (`lalamove_f01_cotacao.json:62,77`) → HTTP para `geo-gateway geocode` com service_role (credencial n8n) **ou** remover geocode do n8n e deixar a edge fazer (etapa 37)
+  - **FEITO:** os dois nós passaram de `GET api.distancematrix.ai/maps/api/geocode/json` para `POST .../functions/v1/geo-gateway` com `action: 'geocode'`, `country: 'BR'`, `language: 'pt-BR'`, `limit: 1`, `persist: true` e header `Authorization: Bearer $env.SUPABASE_SERVICE_ROLE_KEY`. `📐 Build Payload` passou a ler `[0].location` (contrato `GeoAddress`) em vez de `results[0].geometry.location`.
+- [x] Atualizar `lalamove_bundle_import.json`
+  - **FEITO:** incluindo a cópia do F01 embutida no node `🚀 Bootstrap` (`const FLOWS = [...]`), que é o que de fato instala o flow no n8n — sem isso o bundle reinstalaria a versão antiga.
+- **Evidência:** `grep -c distancematrix` = **0** nos dois arquivos; JSON de ambos válidos (`json.load`); body normalizado validado contra `getSchema('geo-gateway','v1')` → **2/2**; simulação do `Build Payload` com resposta real do `GeoAddress` produziu as 2 `stops` com `lat`/`lng` string e `poc` do destinatário.
+- **Não verificado:** execução de teste do F01 no n8n (exige a credencial n8n e um pedido real) — fica condicionado a `SUPABASE_SERVICE_ROLE_KEY` em Settings → Variables do n8n.
 
 ---
 

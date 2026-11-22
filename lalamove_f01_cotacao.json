@@ -15,7 +15,7 @@
       "parameters": {
         "width": 680,
         "height": 160,
-        "content": "## 🚚 F01 — Cotação Lalamove\n**POST** `/webhook/lalamove-cotacao`\n\n**Envia:** spa_id + campos endereço → **Recebe:** quotationId + stopIds + preço\n\n> Configurar: `B24_TOKEN` em n8n → Settings → Variables",
+        "content": "## 🚚 F01 — Cotação Lalamove\n**POST** `/webhook/lalamove-cotacao`\n\n**Envia:** spa_id + campos endereço → **Recebe:** quotationId + stopIds + preço\n\n> Configurar em n8n → Settings → Variables: `B24_TOKEN` e `SUPABASE_SERVICE_ROLE_KEY` (geocode via `geo-gateway`, etapa 42)",
         "color": 4
       }
     },
@@ -58,8 +58,24 @@
         240
       ],
       "parameters": {
-        "method": "GET",
-        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_coleta)}}&key={{ $env.DISTANCEMATRIX_API_KEY }}",
+        "method": "POST",
+        "url": "=https://iecgydonctmabiijadsf.supabase.co/functions/v1/geo-gateway",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'geocode', address: $json.end_coleta, country: 'BR', language: 'pt-BR', limit: 1, persist: true }) }}",
         "options": {}
       }
     },
@@ -73,8 +89,24 @@
         400
       ],
       "parameters": {
-        "method": "GET",
-        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_entrega)}}&key={{ $env.DISTANCEMATRIX_API_KEY }}",
+        "method": "POST",
+        "url": "=https://iecgydonctmabiijadsf.supabase.co/functions/v1/geo-gateway",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ action: 'geocode', address: $json.end_entrega, country: 'BR', language: 'pt-BR', limit: 1, persist: true }) }}",
         "options": {}
       }
     },
@@ -88,7 +120,7 @@
         320
       ],
       "parameters": {
-        "jsCode": "const r0 = $('🌍 Geo Coleta').first().json;\nconst r1 = $('🌍 Geo Entrega').first().json;\nconst g0 = r0.results?.[0]?.geometry?.location;\nconst g1 = r1.results?.[0]?.geometry?.location;\nif (!g0) throw new Error('Geocode coleta falhou: ' + JSON.stringify(r0).slice(0,200));\nif (!g1) throw new Error('Geocode entrega falhou: ' + JSON.stringify(r1).slice(0,200));\nconst p = $('📥 Parse').first().json;\n// Mapeamento vehicle_id → serviceType\nconst SVC = {'120767':'MOTORCYCLE','121120':'MPV','666':'VAN','120768':'TRUCK550'};\nconst payload = {\n  serviceType: SVC[p.veiculo] || 'MOTORCYCLE',\n  language: 'pt_BR',\n  stops: [\n    { coordinates:{lat:String(g0.lat),lng:String(g0.lng)}, address:p.end_coleta,\n      phone:{displayNumber:p.tel_coleta,countryCode:'+55'} },\n    { coordinates:{lat:String(g1.lat),lng:String(g1.lng)}, address:p.end_entrega,\n      phone:{displayNumber:p.tel_dest,countryCode:'+55'},\n      ...(p.nome_dest ? {poc:p.nome_dest} : {}) }\n  ],\n  requesterContact:{name:'Promo Brindes',phone:{displayNumber:'1146375517',countryCode:'+55'}},\n  specialRequests:[], isRouteOptimized:false\n};\nreturn [{ json:{\n  spa_id:p.spa_id, category_id:p.category_id,\n  http_method:'POST', http_path:'/v3/quotations',\n  http_body:JSON.stringify(payload)\n}}];"
+        "jsCode": "// Etapa 42: geocode vem do geo-gateway (action \"geocode\"); coordenada em `location`.\nconst r0 = $('🌍 Geo Coleta').first().json;\nconst r1 = $('🌍 Geo Entrega').first().json;\nconst g0 = r0?.[0]?.location;   // antes: r0.results[0].geometry.location\nconst g1 = r1?.[0]?.location;\nif (!g0) throw new Error('Geocode coleta falhou: ' + JSON.stringify(r0).slice(0,200));\nif (!g1) throw new Error('Geocode entrega falhou: ' + JSON.stringify(r1).slice(0,200));\nconst p = $('📥 Parse').first().json;\n// Mapeamento vehicle_id → serviceType\nconst SVC = {'120767':'MOTORCYCLE','121120':'MPV','666':'VAN','120768':'TRUCK550'};\nconst payload = {\n  serviceType: SVC[p.veiculo] || 'MOTORCYCLE',\n  language: 'pt_BR',\n  stops: [\n    { coordinates:{lat:String(g0.lat),lng:String(g0.lng)}, address:p.end_coleta,\n      phone:{displayNumber:p.tel_coleta,countryCode:'+55'} },\n    { coordinates:{lat:String(g1.lat),lng:String(g1.lng)}, address:p.end_entrega,\n      phone:{displayNumber:p.tel_dest,countryCode:'+55'},\n      ...(p.nome_dest ? {poc:p.nome_dest} : {}) }\n  ],\n  requesterContact:{name:'Promo Brindes',phone:{displayNumber:'1146375517',countryCode:'+55'}},\n  specialRequests:[], isRouteOptimized:false\n};\nreturn [{ json:{\n  spa_id:p.spa_id, category_id:p.category_id,\n  http_method:'POST', http_path:'/v3/quotations',\n  http_body:JSON.stringify(payload)\n}}];"
       }
     },
     {
