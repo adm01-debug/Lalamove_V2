@@ -306,7 +306,9 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** item do SPA → pedido com coordenadas
 
 ### 41 — Contrato de posição com a UAPI (outro chat)
-- [ ] Documentar em `docs/GEO_CONTRACT.md` o que este plano **lê**: `active_tracking(order_id UNIQUE, current_latitude, current_longitude, heading, speed, last_updated, tracking_status='active'|'ended', driver_id)` e `lalamove_orders(lalamove_status, driver_lalamove_id, scheduled_at)`
+- [x] Documentar em `docs/GEO_CONTRACT.md` o que este plano **lê**: `active_tracking(order_id UNIQUE, current_latitude, current_longitude, heading, speed, last_updated, tracking_status='active'|'ended', driver_id)` e `lalamove_orders(lalamove_status, driver_lalamove_id, scheduled_at)`
+  - `docs/GEO_CONTRACT.md` (101 linhas): colunas lidas com o papel de cada uma, o que o motor escreve, ciclo de vida do rastreio e seção de divergências plano × código. **`tracking_status` real é `'ACTIVE'` maiúsculo** — o plano está errado em três pontos e o código manda em todos (tabela na seção 4).
+  - **Gap descoberto ao documentar:** nenhuma edge cria a linha de `active_tracking`. `lalamove-webhook/index.ts:571-588` faz `maybeSingle()` e só `update` quando a linha já existe — posição de pedido sem linha é descartada em silêncio. Registrado no documento com o fix (UPSERT `onConflict: 'order_id'`).
 - [ ] Exigência: UPSERT em `active_tracking` a cada ciclo (10–15 s) — é o UPDATE que dispara o trigger da etapa 20
 - [ ] Linha criada em `DRIVER_ASSIGNED`/`ON_GOING`, `tracking_status='ended'` em `COMPLETED/CANCELED`
 - **Evidência:** doc mergeado e confirmado pelo chat da UAPI
