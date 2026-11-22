@@ -174,6 +174,7 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122005314 | [fix_alert_configs_anon_insert](migrations/20261122005314_fix_alert_configs_anon_insert.sql) | 1 |
 | 20261122005320 | [fix_public_rls_bypass](migrations/20261122005320_fix_public_rls_bypass.sql) | 1 |
 | 20261122090000 | [cache_system_backend](migrations/20261122090000_cache_system_backend.sql) | 0 |
+| 20261122110913 | [revoke_anon_geo_rpcs](migrations/20261122110913_revoke_anon_geo_rpcs.sql) | 1 |
 | 20261122120000 | [baseline_order_status_values](migrations/20261122120000_baseline_order_status_values.sql) | 1 |
 | 20261122120100 | [lalamove_integration_columns](migrations/20261122120100_lalamove_integration_columns.sql) | 1 |
 | 20261122120200 | [job_queue_system](migrations/20261122120200_job_queue_system.sql) | 1 |

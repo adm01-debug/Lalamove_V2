@@ -18685,8 +18685,8 @@
         ],
         "definition": null,
         "definition_sha": "19f9cafb796b796b",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
         "language": "plpgsql",
@@ -18732,8 +18732,8 @@
         ],
         "definition": null,
         "definition_sha": "27da05889f4b6ba5",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "authenticated, service_role",
+        "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
         "language": "sql",
@@ -18777,7 +18777,7 @@
         ],
         "definition": null,
         "definition_sha": "11aff1c845a6f148",
-        "execute_api_roles": "anon, service_role",
+        "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
@@ -18814,8 +18814,8 @@
         ],
         "definition": null,
         "definition_sha": "37949d474f5b7f8b",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": true,
         "kind": "function",
         "language": "plpgsql",
@@ -18956,8 +18956,8 @@
         ],
         "definition": null,
         "definition_sha": "ea32d4ab49467ee2",
-        "execute_api_roles": "anon, authenticated, service_role",
-        "execute_public": true,
+        "execute_api_roles": "service_role",
+        "execute_public": false,
         "is_trigger_fn": false,
         "kind": "function",
         "language": "plpgsql",
@@ -27729,24 +27729,6 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.geo_budget_status()",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.geo_usage_increment(p_provider text, p_function text, p_sku text, p_count integer)",
-        "severity": "INFO"
-      },
-      {
-        "code": "rpc_anon_executable",
-        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.process_job_queue(p_limit integer)",
         "severity": "INFO"
       },
@@ -28621,6 +28603,12 @@
         "name": "cache_system_backend",
         "statements": null,
         "version": "20261122090000"
+      },
+      {
+        "name": "revoke_anon_geo_rpcs",
+        "statements": 1,
+        "statements_sha": "3fb253eb0de2f611",
+        "version": "20261122110913"
       },
       {
         "name": "baseline_order_status_values",

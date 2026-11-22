@@ -2,6 +2,12 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 11:12 UTC
+
+- **functions** alterado (5): `public.geo_audit_config()`, `public.geo_budget_status()`, `public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`, `public.geo_evaluate_tracking()`, `public.geo_usage_increment(p_provider text, p_function text, p_sku text, p_count integer)`
+- **lints** removido (3): `rpc_anon_executable:public.geo_budget_status()`, `rpc_anon_executable:public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`, `rpc_anon_executable:public.geo_usage_increment(p_provider text, p_function text, p_sku text, p_count integer)`
+- **migrations** adicionado (1): `20261122110913_revoke_anon_geo_rpcs`
+
 ## 2026-11-22 05:13 UTC
 
 - **functions** alterado (1): `public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`
