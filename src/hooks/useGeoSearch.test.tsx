@@ -2,15 +2,17 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { useAddressSearchBox, resolveDeliveryPoint } from './useGeoSearch';
+import { useAddressSearchBox, resolveDeliveryPoint, useFrequentAddresses } from './useGeoSearch';
 
 const invokeMock = vi.fn();
+const orderQueryMock = vi.fn();
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     functions: {
       invoke: (...args: unknown[]) => invokeMock(...args),
     },
+    from: (...args: unknown[]) => orderQueryMock(...args),
   },
 }));
 
@@ -69,6 +71,86 @@ describe('useAddressSearchBox', () => {
     const { result } = renderHook(() => useAddressSearchBox('', false), { wrapper });
 
     await expect(result.current.retrieve('mapbox:1')).rejects.toThrow('network down');
+  });
+});
+
+describe('useAddressSearchBox — validade da sessão (etapa 37)', () => {
+  beforeEach(() => {
+    invokeMock.mockReset();
+    vi.useRealTimers();
+  });
+
+  it('renova o session_token depois de 170 s, mesmo sem limpar o campo', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    invokeMock.mockResolvedValue({ data: [], error: null });
+    const { result } = renderHook(() => useAddressSearchBox('Rua A', true), { wrapper });
+    await waitFor(() => expect(invokeMock).toHaveBeenCalled());
+    const firstToken = invokeMock.mock.calls.at(-1)![1].body.session_token as string;
+
+    // 180 s sem seleção: o Mapbox já teria fechado a sessão.
+    vi.advanceTimersByTime(171_000);
+    invokeMock.mockResolvedValue({ data: null, error: new Error('ok') });
+    await result.current.retrieve('mapbox:1').catch(() => undefined);
+
+    const renewCall = invokeMock.mock.calls.at(-1)! as [string, { body: Record<string, unknown> }];
+    expect(renewCall[1].body.action).toBe('place-details');
+    expect(renewCall[1].body.session_token).not.toBe(firstToken);
+  });
+
+  it('mantém o session_token dentro dos 170 s', async () => {
+    invokeMock.mockResolvedValue({ data: [], error: null });
+    const { result } = renderHook(() => useAddressSearchBox('Rua A', true), { wrapper });
+    await waitFor(() => expect(invokeMock).toHaveBeenCalled());
+    const firstToken = invokeMock.mock.calls.at(-1)![1].body.session_token as string;
+
+    invokeMock.mockResolvedValue({ data: null, error: null });
+    await result.current.retrieve('mapbox:1');
+
+    const call = invokeMock.mock.calls.at(-1)! as [string, { body: Record<string, unknown> }];
+    expect(call[1].body.session_token).toBe(firstToken);
+  });
+});
+
+describe('useFrequentAddresses (etapa 41)', () => {
+  beforeEach(() => {
+    orderQueryMock.mockReset();
+  });
+
+  function mockOrders(rows: unknown[]) {
+    orderQueryMock.mockReturnValue({
+      select: () => ({
+        gte: () => ({
+          order: () => ({ limit: () => Promise.resolve({ data: rows, error: null }) }),
+        }),
+      }),
+    });
+  }
+
+  it('deduplica coleta e entrega iguais e ordena por reincidência', async () => {
+    mockOrders([
+      { pickup_address: 'Rua A, 1', pickup_latitude: -25.4, pickup_longitude: -49.2, delivery_address: 'Rua B, 2', delivery_latitude: -25.5, delivery_longitude: -49.3 },
+      { pickup_address: 'rua a, 1 ', pickup_latitude: -25.4, pickup_longitude: -49.2, delivery_address: null, delivery_latitude: null, delivery_longitude: null },
+    ]);
+
+    const { result } = renderHook(() => useFrequentAddresses(true), { wrapper });
+    await waitFor(() => expect(result.current.data).toHaveLength(2));
+
+    const [first, second] = result.current.data!;
+    expect(first.address).toBe('Rua A, 1');
+    expect(first.hits).toBe(2);
+    expect(first.latitude).toBe(-25.4);
+    expect(second.address).toBe('Rua B, 2');
+    expect(second.hits).toBe(1);
+  });
+
+  it('descarta linhas sem coordenada — preencher o texto sem ponto seria pior que não sugerir', async () => {
+    mockOrders([
+      { pickup_address: 'Rua sem ponto', pickup_latitude: null, pickup_longitude: null, delivery_address: 'Rua C, 3', delivery_latitude: -25.5, delivery_longitude: -49.3 },
+    ]);
+
+    const { result } = renderHook(() => useFrequentAddresses(true), { wrapper });
+    await waitFor(() => expect(result.current.data).toHaveLength(1));
+    expect(result.current.data![0].address).toBe('Rua C, 3');
   });
 });
 

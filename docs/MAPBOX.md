@@ -55,6 +55,9 @@ Setar via: `supabase secrets set MAPBOX_SERVER_TOKEN=<valor> --project-ref iecgy
 | Health check | `supabase/functions/check-external-api/index.ts` | ✅ testa Mapbox v6 (`permanent=false`) e Google v4, devolve latência/SKU/req-min (etapa 67) |
 | Seletor visual | `src/pages/MapsSettingsPage.tsx` | ✅ lê e grava `geo_settings`; modo `auto`, painel de uso, matriz de paridade, escrita só admin |
 | Seletor do usuário | `src/hooks/useMapSettings.ts` + `useMapProviderPolicy.ts` | ✅ preferência visual em localStorage, **filtrada** por `geo_settings.tiles` (etapa 66) |
+| Sessão do Search Box | `src/hooks/useGeoSearch.ts` | ✅ token renovado aos **170 s** (janela de 180 s do Mapbox) e ao limpar o campo (etapa 37) |
+| Falha de busca no formulário | `src/components/orders/AddressAutocomplete.tsx` | ✅ separa **429/orçamento** de **falha de rede**, oferece "usar o endereço como digitado" e sugere número/CEP no vazio (etapa 40) |
+| Endereços frequentes | `src/hooks/useGeoSearch.ts` (`useFrequentAddresses`) | ✅ lista endereços já geocodificados em `lalamove_orders` antes de chamar o provedor — custo zero (etapa 41) |
 
 ## Estilo do mapa (etapa 59)
 

@@ -454,10 +454,14 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
     }
 
     try {
+      // Etapa 26: `driving-traffic` explícito. O provider cai para `driving` quando
+      // `traffic === false`; sem o campo o perfil vira implícito e uma mudança de
+      // default no provider alteraria silenciosamente a rota contratada do pedido.
       const route = await invokeEdge(supabase, 'geo-gateway', {
         action: 'route',
         origin: { lat: Number(t.current_latitude), lng: Number(t.current_longitude) },
         destination: stop,
+        traffic: true,
       });
 
       const polyline: Array<{ lat: number; lng: number }> = route?.polyline ?? [];

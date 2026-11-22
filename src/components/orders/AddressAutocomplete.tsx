@@ -1,11 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigation, AlertTriangle, PencilLine } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
-import { useAddressSearchBox, resolveDeliveryPoint, type GeoSuggestion } from '@/hooks/useGeoSearch';
+import { useAddressSearchBox, useFrequentAddresses, resolveDeliveryPoint, normalizeAddressKey, type GeoSuggestion, type FrequentAddress } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +16,8 @@ interface AddressAutocompleteProps {
   onSelectRecord?: (record: AddressSearchResult) => void;
   onSelectMapbox?: (feature: MapboxFeature) => void;
   onCoordinatesChange?: (lat: number, lng: number) => void;
+  /** Etapa 40: habilita "usar o endereço como digitado" quando a busca falha. */
+  onUseTypedAddress?: (value: string) => void;
   placeholder?: string;
   className?: string;
 }
@@ -35,12 +38,32 @@ const SOURCE_LABELS: Record<ExternalTable, string> = {
   contacts: 'Contato',
 };
 
+/**
+ * Etapa 40: separa "acabou o orçamento / limite do provedor" (429) de "caiu a rede"
+ * (sem status). Os dois precisam de mensagens e ações diferentes na UI — o operador
+ * não pode descobrir na cotação que ficou sem busca de endereço.
+ */
+function geoSearchFailure(kind: unknown): { type: 'quota' | 'network'; message: string } {
+  const status = (kind as { context?: { status?: number } } | null)?.context?.status;
+  if (status === 429) {
+    return {
+      type: 'quota',
+      message: 'Busca de endereço atingiu o limite de uso agora. Digite o endereço completo e siga — a cotação da Lalamove localiza o ponto.',
+    };
+  }
+  return {
+    type: 'network',
+    message: 'Busca de endereço indisponível no momento. Digite o endereço completo e siga — a cotação da Lalamove localiza o ponto.',
+  };
+}
+
 export function AddressAutocomplete({
   value,
   onChange,
   onSelectRecord,
   onSelectMapbox,
   onCoordinatesChange,
+  onUseTypedAddress,
   placeholder = 'Buscar endereço...',
   className,
 }: AddressAutocompleteProps) {
@@ -53,7 +76,10 @@ export function AddressAutocomplete({
   const { data: crmData, isLoading: crmLoading } = useAddressSearch(debouncedSearch, open && debouncedSearch.length >= 2);
   
   // Mapbox Search Box (sugestões + retrieve, sessão cobrada por token)
-  const { suggestions: mapboxResults, isLoading: mapboxLoading, isError: mapboxError, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
+  const { suggestions: mapboxResults, isLoading: mapboxLoading, isError: mapboxError, error: mapboxFailure, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
+  const searchFailure = mapboxError ? geoSearchFailure(mapboxFailure) : null;
+  // Etapa 41: endereços com coordenada já gravada, mostrados antes de qualquer provedor.
+  const { data: frequentAddresses } = useFrequentAddresses(open);
 
   const isLoading = crmLoading || mapboxLoading;
 
@@ -120,8 +146,33 @@ export function AddressAutocomplete({
     setOpen(false);
   };
 
+  const handleSelectFrequent = (item: FrequentAddress) => {
+    setInputValue(item.address);
+    onChange(item.address);
+    if (onSelectMapbox || onCoordinatesChange) {
+      const feature: MapboxFeature = {
+        id: `lalamove:${normalizeAddressKey(item.address)}`,
+        place_name: item.address,
+        text: item.address,
+        center: [item.longitude, item.latitude],
+        place_type: [item.side],
+        geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] },
+      };
+      onSelectMapbox?.(feature);
+      onCoordinatesChange?.(item.latitude, item.longitude);
+    }
+    setOpen(false);
+  };
+
   const crmResults = crmData?.results ?? [];
-  const hasResults = crmResults.length > 0 || mapboxResults.length > 0;
+  // Só sugere o que casa com o que o operador digitou; a lista cheia fica para o campo vazio.
+  const frequentMatches = useMemo(() => {
+    const term = debouncedSearch.trim().toLowerCase();
+    return (frequentAddresses ?? [])
+      .filter((item) => term.length < 2 || item.address.toLowerCase().includes(term))
+      .slice(0, 5);
+  }, [frequentAddresses, debouncedSearch]);
+  const hasResults = crmResults.length > 0 || mapboxResults.length > 0 || frequentMatches.length > 0;
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
@@ -146,6 +197,31 @@ export function AddressAutocomplete({
       {open && hasResults && (
         <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
         <div className="max-h-72 overflow-y-auto">
+          {/* Endereços já usados (etapa 41) — zero chamada ao provedor */}
+          {frequentMatches.length > 0 && (
+            <>
+              <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground font-semibold bg-muted/30 border-b border-border/30">
+                Já usados ({frequentMatches.length})
+              </div>
+              {frequentMatches.map((item) => (
+                <button
+                  key={`freq-${item.address}`}
+                  type="button"
+                  className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30"
+                  onClick={() => handleSelectFrequent(item)}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium text-sm text-foreground truncate">{item.address}</span>
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 gap-1 flex-shrink-0">
+                      <MapPin className="w-3 h-3" />
+                      {item.hits}x
+                    </Badge>
+                  </div>
+                </button>
+              ))}
+            </>
+          )}
+
           {/* CRM Results */}
           {crmResults.length > 0 && (
             <>
@@ -219,11 +295,61 @@ export function AddressAutocomplete({
         </div>
       )}
 
-      {open && debouncedSearch.length >= 2 && !isLoading && !hasResults && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            {mapboxError ? 'Busca de endereço indisponível agora — tente de novo em alguns segundos' : 'Nenhum resultado encontrado'}
-          </p>
+      {open && debouncedSearch.length >= 2 && !isLoading && !hasResults && crmResults.length === 0 && (
+        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4">
+          {searchFailure ? (
+            <div className="flex items-start gap-2 text-left">
+              <AlertTriangle
+                className={cn(
+                  'w-4 h-4 mt-0.5 flex-shrink-0',
+                  searchFailure.type === 'quota' ? 'text-destructive' : 'text-amber-500',
+                )}
+              />
+              <div className="space-y-1">
+                <p className="text-sm text-foreground">
+                  {searchFailure.type === 'quota' ? 'Limite de busca atingido' : 'Busca indisponível'}
+                </p>
+                <p className="text-xs text-muted-foreground">{searchFailure.message}</p>
+                {onUseTypedAddress && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-1 gap-1.5"
+                    onClick={() => {
+                      onUseTypedAddress(inputValue.trim());
+                      setOpen(false);
+                    }}
+                  >
+                    <PencilLine className="w-3.5 h-3.5" /> Usar o endereço como digitado
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center space-y-1">
+              <p className="text-sm text-muted-foreground">
+                Nenhum resultado para “{debouncedSearch}”
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Tente incluir o número do imóvel ou o CEP.
+              </p>
+              {onUseTypedAddress && (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="mt-1 gap-1.5"
+                  onClick={() => {
+                    onUseTypedAddress(inputValue.trim());
+                    setOpen(false);
+                  }}
+                >
+                  <PencilLine className="w-3.5 h-3.5" /> Usar o endereço como digitado
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
