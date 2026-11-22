@@ -44,6 +44,7 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
     patch.pickup_longitude = first.lng;
     patch.geocode_provider = "lalamove";
     patch.geocode_precision = "LALAMOVE";
+    patch.geocode_match_confidence = "LALAMOVE"; // etapa 13: coordenada da cotação, permanente
     // Etapa 14: `pickup_place_id`/`delivery_place_id` existem desde a geo_foundation mas
     // nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto
     // de coleta/entrega não tinha identidade estável por provedor.
@@ -54,6 +55,7 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
     patch.delivery_longitude = second.lng;
     patch.geocode_provider = "lalamove";
     patch.geocode_precision = "LALAMOVE";
+    patch.geocode_match_confidence = "LALAMOVE";
     if (second.stopId) patch.delivery_place_id = `lalamove:${second.stopId}`;
   }
   if (Object.keys(patch).length === 0) return;
@@ -71,6 +73,7 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
       latitude: c.lat,
       longitude: c.lng,
       geocode_precision: "LALAMOVE",
+      geocode_match_confidence: "LALAMOVE",
       ...(c.stopId ? { place_id: `lalamove:${c.stopId}` } : {}),
     }));
   if (rows.length > 0) {

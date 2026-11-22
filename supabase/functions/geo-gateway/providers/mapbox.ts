@@ -111,6 +111,10 @@ export class MapboxProvider implements GeoProvider {
 
   // ── Search Box: suggest (autocomplete) ──────────────────────────────────
   async autocomplete(req: AutocompleteReq): Promise<ProviderResult<GeoSuggestion[]>> {
+    // Etapa 22: `geo_settings.autocomplete.config.mode='geocoding'` troca o Search Box pelo
+    // Geocoding v6 `autocomplete=true` — usado quando a cobertura do Search Box reprova na
+    // medição (script `scripts/geo/searchbox-coverage.ts`). Default = Search Box.
+    if (req.mode === "geocoding") return this.autocompleteGeocoding(req);
     if (!req.session_token) throw new GeoProviderError("GEO_INVALID_INPUT", "session_token é obrigatório no Search Box", 422);
     const p = new URLSearchParams({
       q: req.input,
@@ -133,9 +137,50 @@ export class MapboxProvider implements GeoProvider {
     return { data, sku: "searchbox_session", units: 0 };
   }
 
+  /**
+   * Etapa 22 — respaldo do autocomplete: Geocoding v6 `forward` com `autocomplete=true`.
+   * Cobra `geocoding_temporary` por requisição (não por sessão), então `units=1`.
+   * O `id` continua `mapbox:<id>` para o `place-details` resolver pelo mesmo caminho.
+   */
+  private async autocompleteGeocoding(req: AutocompleteReq): Promise<ProviderResult<GeoSuggestion[]>> {
+    const p = new URLSearchParams({
+      q: req.input,
+      autocomplete: "true",
+      language: req.language ?? "pt",
+      country: req.country ?? "br",
+      limit: String(Math.min(req.limit ?? 5, 10)),
+      types: "address,street,place",
+    });
+    if (req.bias) p.set("proximity", `${req.bias.lng},${req.bias.lat}`);
+    const json = await this.call<{ features?: Array<Record<string, unknown>> }>("geocoding", `${BASE}/search/geocode/v6/forward?${p}`);
+    const data: GeoSuggestion[] = (json.features ?? []).map((f) => {
+      const props = (f.properties ?? {}) as Record<string, unknown>;
+      return {
+        id: `mapbox:${props.mapbox_id ?? f.id ?? ""}`,
+        main_text: String(props.name ?? props.name_preferred ?? ""),
+        secondary_text: String(props.full_address ?? props.place_formatted ?? ""),
+        type: String(props.feature_type ?? "unknown"),
+        provider: "mapbox" as const,
+      };
+    });
+    return { data, sku: "geocoding_temporary", units: 1 };
+  }
+
   // ── Search Box: retrieve ────────────────────────────────────────────────
   async placeDetails(req: PlaceDetailsReq): Promise<ProviderResult<GeoAddress>> {
     const id = req.place_id.replace(/^mapbox:/, "");
+    // Etapa 22: id vindo do Geocoding v6 (modo `geocoding`) não existe no Search Box —
+    // resolve pelo `forward` com `q=<id>`? Não: o v6 não tem retrieve avulso por id, então
+    // o detalhe vem do próprio forward quando o chamador manda o endereço formatado.
+    if (req.mode === "geocoding" && req.address) {
+      const p = new URLSearchParams({
+        q: req.address, language: req.language ?? "pt", country: req.country ?? "br", limit: "1",
+      });
+      const json = await this.call<{ features?: Array<Record<string, unknown>> }>("geocoding", `${BASE}/search/geocode/v6/forward?${p}`);
+      const f = json.features?.[0];
+      if (!f) throw new GeoProviderError("GEO_NOT_FOUND", "Lugar não encontrado", 404);
+      return { data: this.featureToAddress(f, false), sku: "geocoding_temporary", units: 1 };
+    }
     if (!req.session_token) throw new GeoProviderError("GEO_INVALID_INPUT", "session_token é obrigatório no retrieve", 422);
     const p = new URLSearchParams({ session_token: req.session_token });
     const json = await this.call<{ features?: Array<Record<string, unknown>> }>("searchbox", `${BASE}/search/searchbox/v1/retrieve/${encodeURIComponent(id)}?${p}`);

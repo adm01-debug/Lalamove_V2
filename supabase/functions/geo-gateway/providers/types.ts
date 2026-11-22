@@ -109,11 +109,18 @@ export interface AutocompleteReq {
   country?: string; // ISO-2, default "br"
   language?: string; // default "pt"
   limit?: number;
+  /** Etapa 22: `geocoding` troca o Search Box pelo Geocoding v6 `autocomplete=true`. */
+  mode?: "searchbox" | "geocoding";
 }
 
 export interface PlaceDetailsReq {
   place_id: string; // "<provider>:<id>"
   session_token?: string;
+  /** Etapa 22: no modo `geocoding` o detalhe é resolvido por `address` (v6 não tem retrieve por id). */
+  mode?: "searchbox" | "geocoding";
+  address?: string;
+  country?: string;
+  language?: string;
 }
 
 export interface GeocodeReq {

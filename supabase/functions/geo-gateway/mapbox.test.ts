@@ -218,3 +218,39 @@ Deno.test("geocode-batch: endereço livre vai em `q`, não em `address_line1` (c
   assertEquals(sent[1].place, "Curitiba");
   assertEquals(sent[1].q, undefined);
 });
+Deno.test("etapa 22: mode=geocoding troca o Search Box pelo v6 forward com autocomplete=true", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: {
+    features: [{
+      id: "feat.1",
+      properties: { mapbox_id: "dXJuOm1ieGFkcjoxMjM", name: "Rua XV de Novembro", full_address: "Rua XV de Novembro, Curitiba, PR", feature_type: "street" },
+    }],
+  } }));
+  const p = new MapboxProvider({ token: "pk.test", fetch });
+  const r = await p.autocomplete({ input: "Rua XV", session_token: "11111111-1111-4111-8111-111111111111", mode: "geocoding" });
+  assert(calls[0].url.includes("/search/geocode/v6/forward"), "deve chamar o v6 forward");
+  assert(calls[0].url.includes("autocomplete=true"), "deve mandar autocomplete=true");
+  assert(!calls[0].url.includes("searchbox"), "não deve chamar o Search Box");
+  assertEquals(r.data[0].id, "mapbox:dXJuOm1ieGFkcjoxMjM");
+  assertEquals(r.data[0].provider, "mapbox");
+  // cobra por requisição (não por sessão), ao contrário do Search Box
+  assertEquals(r.sku, "geocoding_temporary");
+  assertEquals(r.units, 1);
+});
+
+Deno.test("etapa 22: mode=geocoding sem session_token não falha (Search Box exige, v6 não)", async () => {
+  const { fetch } = mockFetch(() => ({ body: { features: [] } }));
+  const p = new MapboxProvider({ token: "pk.test", fetch });
+  const r = await p.autocomplete({ input: "Rua XV", mode: "geocoding" });
+  assertEquals(r.data.length, 0);
+  assertEquals(r.sku, "geocoding_temporary");
+});
+
+Deno.test("etapa 22: place-details no modo geocoding resolve por address no v6", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: RETRIEVE }));
+  const p = new MapboxProvider({ token: "pk.test", fetch });
+  const r = await p.placeDetails({ place_id: "mapbox:abc", mode: "geocoding", address: "Rua XV de Novembro 100, Curitiba" });
+  assert(calls[0].url.includes("/search/geocode/v6/forward"), "detalhe vem do forward");
+  assert(!calls[0].url.includes("retrieve"), "não tenta retrieve com id do v6");
+  assertEquals(r.data.provider, "mapbox");
+  assertEquals(r.sku, "geocoding_temporary");
+});

@@ -1835,6 +1835,7 @@ export type Database = {
           driver_plate: string | null
           duration_minutes: number | null
           estimated_delivery: string | null
+          geocode_match_confidence: string | null
           geocode_precision: string | null
           geocode_provider: string | null
           id: string
@@ -1908,6 +1909,7 @@ export type Database = {
           driver_plate?: string | null
           duration_minutes?: number | null
           estimated_delivery?: string | null
+          geocode_match_confidence?: string | null
           geocode_precision?: string | null
           geocode_provider?: string | null
           id?: string
@@ -1981,6 +1983,7 @@ export type Database = {
           driver_plate?: string | null
           duration_minutes?: number | null
           estimated_delivery?: string | null
+          geocode_match_confidence?: string | null
           geocode_precision?: string | null
           geocode_provider?: string | null
           id?: string
@@ -2297,6 +2300,7 @@ export type Database = {
           contact_name: string | null
           contact_phone: string | null
           created_at: string
+          geocode_match_confidence: string | null
           geocode_precision: string | null
           id: string
           latitude: number | null
@@ -2318,6 +2322,7 @@ export type Database = {
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          geocode_match_confidence?: string | null
           geocode_precision?: string | null
           id?: string
           latitude?: number | null
@@ -2339,6 +2344,7 @@ export type Database = {
           contact_name?: string | null
           contact_phone?: string | null
           created_at?: string
+          geocode_match_confidence?: string | null
           geocode_precision?: string | null
           id?: string
           latitude?: number | null
