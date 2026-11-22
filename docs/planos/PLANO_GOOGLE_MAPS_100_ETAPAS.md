@@ -48,7 +48,7 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > código; cada uma ganhou o bloco **"Auditado (2026-11-24)"** logo abaixo, com `arquivo:linha`. De 74 itens `[ ]`,
 > 51 fecharam nesta passagem. Ficaram **3 abertos de propósito**, com o motivo escrito no próprio item: **35**
 > (contrato da edge de `lalamove-api` — decisão de arquitetura), **32.2** (diretório de fixtures; o efeito já está
-> entregue) e as evidências que exigem banco/pedido real. Contagem: **170 `[x]` / 21 `[ ]`**.
+> entregue) e as evidências que exigem banco/pedido real. Contagem: **171 `[x]` / 20 `[ ]`**.
 
 > **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
@@ -353,9 +353,8 @@ Varredura de 2026-11-24: as 6 branches `claude/*` no remoto foram comparadas com
 | 30 | `resolver.ts` + `index.ts:183-220` | `ProviderResolver.resolve()` faz a cadeia `geo_settings` → cota grátis `auto` → `fallback_provider` → `off` + 429 `GEO_BUDGET_EXCEEDED`. O alerta `GEO_BUDGET_WARNING` vem de **duas** fontes: `index.ts:183-220` (in-process, na primeira requisição que cruza o pct) e `20261123120000_geo_budget_cron.sql:74` (WARNING em `alert_at_pct`, `:112` CRITICAL em 100%), com dedup por `warned_month` |
 | 32 | `index.ts:66-87` + 8 suítes | `USER_LIMITS = {autocomplete: 60, tiles: 120}` com default 20/min, bucket `${uid}:${fn}` janela 60 s, `uid` do `sub` do JWT. Suítes Deno: `resolver`, `metering`, `mapbox`, `google`, `failover`, `error-monitor`, `polyline`, `budget-error` — **75 testes**. Deploy verificado: `deploy-edges.yml` success em `2026-11-22T12:16` com o smoke `provider-status` |
 
-**Dois itens seguem abertos por dependência externa, não por falta de código:**
-- **35** — `place_id`/`components`/`pickup_contact_*` no body da edge: o contrato de `lalamove-api` não recebe esses campos da UI; entram pelo servidor (`persistOrderCoordinates`). Mudar o contrato é decisão de arquitetura (regra 8) — deliberadamente não feito.
-- **32 (2º item)** — fixtures gravadas em `geo-gateway/__fixtures__/`: os testes mockam `fetch` inline. O efeito (provider testado sem rede real) está entregue; só o diretório não existe.
+**Um item segue aberto por dependência externa, não por falta de código:**
+- **32 (2º item)** — fixtures gravadas em `geo-gateway/__fixtures__/`: os testes mockam `fetch` inline pelo helper `mockFetch` (`google.test.ts:10-26`, replicado nos demais). O efeito da etapa (provider testado sem rede real) está entregue; criar o diretório vazio só para cumprir o nome seria churn sem valor.
 
 ---
 
@@ -391,7 +390,7 @@ consumidor existente mudou de import:
 - [x] `pickupGeo`/`deliveryGeo` no state, alimentados por `onAddressSelected`; editar o texto à mão **descarta** a coordenada antiga (senão a cotação usaria outro endereço com o ponto velho)
 - [x] `lat:'0'` não existe no código: a versão atual já removia o placeholder e mandava só `address` (0,0 devolve `ERR_OUT_OF_SERVICE_AREA`). Agora manda `coordinates` **quando** há ponto (`stopCoordinates` → `resolveDeliveryPoint`, priorizando `routable_point`)
 - [x] **Não bloqueia** "Cotar" sem coordenada: sem ponto a Lalamove geocodifica o texto e a cotação conclui — bloquear travaria o fluxo que hoje funciona. O fallback de geocode do lado servidor é a etapa 37 (feita)
-- [ ] `place_id`/`components`/`pickup_contact_*` no body: a edge ainda não aceita esses campos da UI; hoje eles entram pelo servidor (`persistOrderCoordinates` + etapa 37). Fica aberto até o contrato da edge mudar
+- [x] `place_id`/`components`/`pickup_contact_*` no body: o front envia `pickupPlaceId`/`deliveryPlaceId`/`pickupAddressComponents`/`deliveryAddressComponents`/`geocodeProvider`/`*GeocodePrecision` em `body.metadata` (`NewOrderDialog.tsx:430-437`) e a edge consome em `lalamove-api/index.ts:711` (`requestMetadata`), grava as colunas em `:734-737` e repassa o override para `persistOrderCoordinates` (`:748-760`), que preserva o `place_id` do autocomplete via `preferred` (`coordinates.ts:41-43,55-56`). **Auditado (2026-11-24): item estava desatualizado — o contrato já foi estendido.**
 - **Evidência:** `stopCoordinates` é função pura coberta pelos testes de `AddressAutocomplete` (emissão com e sem coordenada); `tsc --noEmit` e `eslint` limpos
 
 ### 36 — `lalamove-api`: persistir endereço completo
