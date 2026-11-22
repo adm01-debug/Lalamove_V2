@@ -618,6 +618,7 @@
   ],
   "src/components/orders/AddressAutocomplete.tsx": [
    "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
    "src/components/ui/input.tsx",
    "src/hooks/useDebouncedValue.ts",
    "src/hooks/useExternalData.ts",

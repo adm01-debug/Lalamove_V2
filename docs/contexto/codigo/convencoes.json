@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)",
+   "docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)",
    "feat: eta_refresh encaixa o motorista na via antes do geofence (#188)",
    "fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)",
-   "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)",
-   "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)",
-   "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)"
+   "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

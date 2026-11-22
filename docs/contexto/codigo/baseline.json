@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "fe2ee4a3f2815ef4d2169f666939aeed86f47c1e",
+  "commit": "a76d93c972c1d330fc2bbebf747bb0d0b73ddb69",
   "branch": "main",
-  "data_commit": "2026-11-21T21:58:18-03:00",
+  "data_commit": "2026-11-21T22:10:53-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a76d93c",
+    "data": "2026-11-21",
+    "assunto": "feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)"
+   },
+   {
+    "sha": "0aa60dd",
+    "data": "2026-11-21",
+    "assunto": "docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)"
+   },
    {
     "sha": "fe2ee4a",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "658445d",
     "data": "2026-11-21",
     "assunto": "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)"
-   },
-   {
-    "sha": "023202f",
-    "data": "2026-11-21",
-    "assunto": "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)"
-   },
-   {
-    "sha": "96b1253",
-    "data": "2026-11-21",
-    "assunto": "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)"
    }
   ],
-  "arquivos_mudados_7d": 195,
+  "arquivos_mudados_7d": 196,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -156,12 +156,12 @@
     "mudancas": 10
    },
    {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 8
+    "pasta": "src/components/orders",
+    "mudancas": 10
    },
    {
-    "pasta": "src/components/orders",
-    "mudancas": 8
+    "pasta": "docs/MAPBOX.md",
+    "mudancas": 9
    },
    {
     "pasta": "supabase/config.toml",
@@ -219,10 +219,14 @@
    },
    {
     "arquivo": "docs/MAPBOX.md",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 6
    },
    {
@@ -231,10 +235,6 @@
    },
    {
     "arquivo": "docs/pendencias/README.md",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 5
    },
    {
@@ -266,6 +266,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 5
+   },
+   {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 5
    },
@@ -275,6 +279,10 @@
    },
    {
     "arquivo": "AGENTS.md",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "docs/agentes/banco.md",
     "mudancas": 4
    },
    {
@@ -288,20 +296,12 @@
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
     "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 98
+    "commits": 100
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 971,
-  "arquivos_codigo": 605,
-  "linhas_codigo": 118496,
+  "arquivos_total": 972,
+  "arquivos_codigo": 606,
+  "linhas_codigo": 118928,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 176,
   "cron_jobs": 21,
-  "testes": 118,
+  "testes": 119,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 99
@@ -515,12 +515,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 152,
-   "linhas": 27713
+   "arquivos": 153,
+   "linhas": 27958
   },
   "src/hooks": {
    "arquivos": 110,
-   "linhas": 18246
+   "linhas": 18429
   },
   "src/i18n": {
    "arquivos": 1,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13891
+   "linhas": 13895
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -606,7 +606,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 863
+   "linhas": 867
   },
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",

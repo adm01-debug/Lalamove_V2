@@ -1025,12 +1025,13 @@
     "AddressAutocomplete"
    ],
    "export_default": null,
-   "linhas": 232,
+   "linhas": 358,
    "dominio": "components/orders",
    "hooks_locais": [
     "useAddressSearch",
     "useAddressSearchBox",
-    "useDebouncedValue"
+    "useDebouncedValue",
+    "useFrequentAddresses"
    ],
    "tabelas": [],
    "edges": [],
@@ -1342,7 +1343,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 125,
+   "usado_por": 126,
    "orfao": false
   },
   {

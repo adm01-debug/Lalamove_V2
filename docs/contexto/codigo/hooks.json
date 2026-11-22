@@ -1351,11 +1351,14 @@
   {
    "arquivo": "src/hooks/useGeoSearch.ts",
    "hooks_exportados": [
-    "useAddressSearchBox"
+    "useAddressSearchBox",
+    "useFrequentAddresses"
    ],
-   "linhas": 99,
+   "linhas": 200,
    "dominio": "hooks",
-   "tabelas": [],
+   "tabelas": [
+    "lalamove_orders"
+   ],
    "rpcs": [],
    "edges": [
     "geo-gateway"

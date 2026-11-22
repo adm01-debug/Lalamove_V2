@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `fe2ee4a3f2815ef4d2169f666939aeed86f47c1e` (2026-11-21T21:58:18-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a76d93c972c1d330fc2bbebf747bb0d0b73ddb69` (2026-11-21T22:10:53-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (494), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (495), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 971 |
-| arquivos_codigo | 605 |
-| linhas_codigo | 118496 |
+| arquivos_total | 972 |
+| arquivos_codigo | 606 |
+| linhas_codigo | 118928 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 88 |
 | migrations | 176 |
 | cron_jobs | 21 |
-| testes | 118 |
+| testes | 119 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 99 |
@@ -74,14 +74,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
 | components/dashboard | 0 | 0 | 13 | 42 | 4 | 5 |
-| components/layout | 0 | 0 | 6 | 168 | 13 | 35 |
+| components/layout | 0 | 0 | 6 | 169 | 13 | 35 |
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
-| components/orders | 0 | 0 | 8 | 30 | 6 | 5 |
+| components/orders | 0 | 0 | 8 | 31 | 6 | 5 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 41 | 0 | 5 | 40 |
-| hooks | 0 | 0 | 86 | 208 | 14 | 46 |
+| hooks | 0 | 0 | 86 | 209 | 14 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 193 | 13 | 46 |
+| pages | 37 | 55 | 55 | 194 | 13 | 46 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7493 nós · 15917 arestas · 564 comunidades · grafo do commit `fe2ee4a3`
-- comunidades maiores: cn (297), react (146), button.tsx (141), card.tsx (124), snapshot.py (102), client.ts (101), contract.ts (89), ref_node_path (85), dependencies (80), gerar.mjs (76), @tanstack/react-query (73), package.json (72)
+- 7506 nós · 15946 arestas · 567 comunidades · grafo do commit `a76d93c9`
+- comunidades maiores: cn (151), utils.ts (148), lucide-react (145), ref_node_path (105), button.tsx (102), RateLimitDashboardPage.tsx (101), snapshot.py (100), App.tsx (84), client.ts (80), dependencies (80), gerar.mjs (76), generate.py (75)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts), uniq() (scripts/ai-context/gerar.mjs)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -282,11 +282,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (10)
 - docs/pendencias/_ordem.md (10)
-- docs/MAPBOX.md (8)
+- docs/MAPBOX.md (9)
 - src/components/map/LiveMap.tsx (6)
+- src/components/orders/AddressAutocomplete.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
 - docs/pendencias/README.md (5)
-- src/components/orders/AddressAutocomplete.tsx (5)
 - src/components/orders/NewOrderDialog.tsx (5)
 - src/pages/LiveMapPage.tsx (5)
 - supabase/functions/_shared/schemas.ts (5)
@@ -350,7 +350,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (200 linhas)
+- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (203 linhas)
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
@@ -369,6 +369,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `a76d93c` feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)
+- 2026-11-21 `0aa60dd` docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)
 - 2026-11-21 `fe2ee4a` feat: eta_refresh encaixa o motorista na via antes do geofence (#188)
 - 2026-11-21 `f973d92` fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)
 - 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
@@ -382,8 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
 - 2026-11-21 `554e68b` ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)
 - 2026-11-21 `e616ccf` fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)
-- 2026-11-21 `c2ae0ba` fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)
-- 2026-11-21 `39f672a` chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 118,
+ "total": 119,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
   "edge (deno)": 8,
   "guard (node --test)": 33,
-  "unit (vitest)": 68
+  "unit (vitest)": 69
  },
  "onde_ficam": [
   {
@@ -36,12 +36,12 @@
    "arquivos": 10
   },
   {
-   "padrao": "e2e/",
+   "padrao": "co-localizado (*.test)",
    "arquivos": 7
   },
   {
-   "padrao": "co-localizado (*.test)",
-   "arquivos": 6
+   "padrao": "e2e/",
+   "arquivos": 7
   },
   {
    "padrao": "outro",
@@ -621,6 +621,15 @@
    "casos": 6
   },
   {
+   "arquivo": "src/components/orders/AddressAutocomplete.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 119,
+   "testa": [
+    "src/components/orders/AddressAutocomplete.tsx"
+   ],
+   "casos": 4
+  },
+  {
    "arquivo": "src/hooks/__tests__/useActiveAlerts.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 229,
@@ -845,11 +854,11 @@
   {
    "arquivo": "src/hooks/useGeoSearch.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 103,
+   "linhas": 185,
    "testa": [
     "src/hooks/useGeoSearch.ts"
    ],
-   "casos": 7
+   "casos": 11
   },
   {
    "arquivo": "src/lib/__tests__/filterValidSpecialRequests.test.ts",
@@ -1164,6 +1173,7 @@
   "src/components/map/hooks/useTrackingData.ts": 4,
   "src/components/map/mapLayers.ts": 1,
   "src/components/map/markerFactories.ts": 1,
+  "src/components/orders/AddressAutocomplete.tsx": 1,
   "src/components/ui/button.tsx": 1,
   "src/components/ui/select.tsx": 1,
   "src/components/ui/tabs.tsx": 1,

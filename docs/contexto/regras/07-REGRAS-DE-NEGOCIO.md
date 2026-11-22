@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fe2ee4a3f2` · branch `main` · 2026-11-22 00:58 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a76d93c972` · branch `main` · 2026-11-22 01:11 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -691,6 +691,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `line` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/hooks/useMapMarkers.ts`<br>`src/components/map/mapLayers.ts` |
 | `type` | `mfa_session` | escreve | `src/hooks/useSecurityPushNotifications.ts` |
 | `type` | `neighborhood` | escreve | `src/hooks/useMapbox.ts` |
+| `type` | `network` | escreve | `src/components/orders/AddressAutocomplete.tsx` |
 | `type` | `new_device` | compara, escreve | `src/hooks/useSecurityPushNotifications.ts` |
 | `type` | `notification` | compara, escreve | `src/hooks/useSoundSettings.ts`<br>`supabase/functions/job-worker/index.ts` |
 | `type` | `order` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`supabase/functions/lalamove-uapi/index.ts` |
@@ -700,6 +701,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `pod_fetch` | compara | `supabase/functions/job-worker/index.ts` |
 | `type` | `postcode` | escreve | `src/hooks/useMapbox.ts` |
 | `type` | `public-key` | escreve | `src/hooks/useWebAuthn.ts` |
+| `type` | `quota` | compara, escreve | `src/components/orders/AddressAutocomplete.tsx` |
 | `type` | `raster` | escreve | `src/components/map/mapLayers.ts` |
 | `type` | `region` | escreve | `src/hooks/useMapbox.ts` |
 | `type` | `registration` | escreve | `src/hooks/useWebAuthn.ts` |
@@ -1264,6 +1266,7 @@ _nenhum item encontrado_
 | `MAX_RECENT_SEARCHES` | `5` | `src/hooks/useCommandPaletteSearch.ts` |
 | `TREND_RISE_THRESHOLD` | `0.5` | `src/hooks/useContractVersionUsage.ts` |
 | `SUSTAINED_MIN_DAYS` | `3` | `src/hooks/useContractVersionUsage.ts` |
+| `SESSION_TTL_MS` | `170` | `src/hooks/useGeoSearch.ts` |
 | `MAX_RECENT` | `10` | `src/hooks/useGlobalSearch.ts` |
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useLalamoveUapi.ts` |
@@ -1345,6 +1348,7 @@ _nenhum item encontrado_
 | `const timer = setTimeout(() => { checkDevice(); }, 2000); // Small delay to ensure auth is complete` | `src/hooks/useDeviceDetection.ts` |
 | `const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);` | `src/hooks/useErrorLogs.ts` |
 | `const last7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);` | `src/hooks/useErrorLogs.ts` |
+| `const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();` | `src/hooks/useGeoSearch.ts` |
 | `const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);` | `src/hooks/useJobQueue.ts` |
 | `staleTime: 24 * 60 * 60_000,` | `src/hooks/useLalamove.ts` |
 | `staleTime: 24 * 60 * 60_000, // 24h` | `src/hooks/useLalamove.ts` |
@@ -1428,6 +1432,7 @@ _nenhum item encontrado_
 | 1 | `src/hooks/useDriverEvaluations.ts` |
 | 100 | `src/hooks/useDriverEvaluations.ts` |
 | 10 | `src/hooks/useGeoAdmin.ts` |
+| 500 | `src/hooks/useGeoSearch.ts` |
 | 10 | `src/hooks/useGlobalSearch.ts` |
 | 1 | `src/hooks/useJobQueue.ts` |
 | 2000 | `src/hooks/useLalamoveQuota.ts` |
@@ -1789,7 +1794,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (908 testes em 77 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (920 testes em 78 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1811,6 +1816,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveCatalogCities.test.ts` | 16 | matriz servico x cidade (conferida com a API real) · Curitiba oferece exatamente os 6 servicos que a API lista · Sao Paulo oferece os 14 servicos · LALAGOFOUR existe so em RIO e SAO (nao em BHZ/CWB) … |
 | `scripts/db-audit/check-grants-fresh.test.mjs` | 15 | aceita baselines identicas · ignora mudanca so em metadados (generated_at/note/how_to_regenerate) · falha quando um grant novo aparece no banco (anon_execute) · falha quando um grant e removido do banco (anon_table_select) … |
 | `scripts/db-audit/check-manifest-fresh.test.mjs` | 15 | aceita manifesto identico apesar da ordem e do generated_at · detecta objeto novo na secao  · detecta alteracao de default pelo hash · detecta constraint removida do banco … |
+| `src/hooks/useGeoSearch.test.tsx` | 15 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/hooks/__tests__/useContractVersionUsage.trend.test.ts` | 15 | detectTrend — alerta de reversão de uso v1 · marca amostra insuficiente com menos de 4 pontos válidos · não alerta quando a proporção está descendo · não alerta quando a proporção é estável em zero … |
 | `src/lib/utils.test.ts` | 15 | deve combinar classes simples · deve lidar com valores undefined · deve lidar com valores null · deve lidar com condicionais … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
@@ -1828,7 +1834,6 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
-| `src/hooks/useGeoSearch.test.tsx` | 9 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
 | `src/hooks/__tests__/useGeo.test.ts` | 9 | useGeo · geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete) · geocode 404 vira lista vazia (estado vazio da UI, não erro) · directions monta origin/destination/waypoints e preserva perfil explícito … |
 | `src/hooks/__tests__/useMapSettings.test.ts` | 9 | useMapSettings Persistence · should load default values initially · should update state when setters are called · should load settings from supabase for a specific context (driver/delivery) … |
@@ -1848,6 +1853,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 6 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapboxToken.test.ts` | 6 | useMapboxToken · retorna o token quando a edge function responde com sucesso · falha silenciosamente (mapbox é opcional) quando a edge function retorna erro · define erro específico quando o token está ausente na resposta … |
+| `src/components/orders/AddressAutocomplete.test.tsx` | 6 | AddressAutocomplete — estados de falha (etapa 40) · 429 mostra  · erro sem status (rede) tem mensagem distinta do 429 · sem resultado e sem falha sugere incluir número ou CEP … |
 | `src/hooks/__tests__/useGeoAdmin.latency.test.ts` | 6 | aggregateGeoLatency (etapa 80) · agrupa por provedor e função e calcula p50/p95 · separa provedores e funções diferentes · descarta linhas sem duração e operações que não são do geo-gateway … |
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
@@ -1991,6 +1997,8 @@ _nenhum item encontrado_
 | Lista completa de veículos no tooltip (sem limite de 3). | `src/components/map/markerFactories.ts` |
 | * Destroi todos os markers e limpa refs internas. Deve ser invocada no | `src/components/map/hooks/useMapMarkers.ts` |
 | Auto-fit apenas quando não há seleção ativa. | `src/components/map/hooks/useMapMarkers.ts` |
+| * Etapa 40: separa "acabou o orçamento / limite do provedor" (429) de "caiu a rede" | `src/components/orders/AddressAutocomplete.tsx` |
+| não pode descobrir na cotação que ficou sem busca de endereço. | `src/components/orders/AddressAutocomplete.tsx` |
 | * Campo de CEP com máscara, validação e busca ViaCEP. Após localizar | `src/components/orders/CepQuickFill.tsx` |
 | 24 * 60) return { valid: false as const, iso: '', error: 'Agendamento máximo: 30 dias' }; | `src/components/orders/NewOrderDialog.tsx` |
 | Validação E.164 dos telefones (Lalamove v3 exige celular BR válido). | `src/components/orders/NewOrderDialog.tsx` |
@@ -2016,6 +2024,7 @@ _nenhum item encontrado_
 | How close the match must be to the location | `src/hooks/useFuseSearch.ts` |
 | * Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */ | `src/hooks/useGeoAdmin.ts` |
 | retrieve (regra de cobrança por sessão do Search Box, ToS etapa 8). | `src/hooks/useGeoSearch.ts` |
+| inflando o sku `searchbox_session`. Renovamos aos 170 s para nunca chegar no limite. | `src/hooks/useGeoSearch.ts` |
 | v2: além do lockout por e-mail, considera bloqueio/rate-limit por IP. | `src/hooks/useLoginLockout.ts` |
 | v2: rate-limit progressivo + detecção de atividade suspeita por IP. | `src/hooks/useLoginLockout.ts` |
 | Verificar se usuário tem uma permissão específica | `src/hooks/usePermissions.ts` |
