@@ -149,6 +149,10 @@ jobs:
       # Etapa 53 do plano Mapbox: replay deterministico do trajeto.
       - name: Run driver movement replay tests
         run: deno test --allow-net --allow-env --allow-read supabase/functions/simulate-driver-movement/
+      # Etapa 9 do plano Mapbox: a rotacao de token e codigo puro que decide qual
+      # credencial morre. Sem teste, um bug aqui revoga o token errado em producao.
+      - name: Run geo-admin token rotation tests
+        run: deno test supabase/functions/geo-admin/
 
   sql-geo-tests:
     name: SQL Geo Trigger Tests

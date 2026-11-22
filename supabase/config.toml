@@ -84,6 +84,12 @@ verify_jwt = true
 [functions.geo-gateway]
 verify_jwt = true
 
+# geo-admin: roda a etapa 9 do plano Mapbox (rotacao do token de servidor via Tokens API).
+# Cunha e revoga credenciais que determinam a fatura da Mapbox, entao nunca e anonima — a
+# function ainda recheca admin/manager em user_roles alem do verify_jwt.
+[functions.geo-admin]
+verify_jwt = true
+
 # mapbox-proxy: REMOVIDA do repo na etapa 61 (arquivo apagado). O bloco [functions.mapbox-proxy]
 # nao pode existir aqui: `supabase functions deploy` (sem nome) le o config.toml e tenta empacotar
 # toda function declarada — com o diretorio ausente o deploy inteiro falha com "entrypoint path
