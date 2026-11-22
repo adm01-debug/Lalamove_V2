@@ -53,7 +53,7 @@ describe('OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio)', () => 
     mockEvents([]);
     render(<OrderGeoEvents orderId="ord-1" />, { wrapper });
     await waitFor(() =>
-      expect(screen.getByText(/Nenhum evento geográfico registrado/i)).toBeInTheDocument(),
+      expect(screen.getByText(/Nenhum evento geográfico registrado/i)).toBeTruthy(),
     );
   });
 
@@ -61,24 +61,24 @@ describe('OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio)', () => 
     mockEvents([baseEvent]);
     render(<OrderGeoEvents orderId="ord-1" />, { wrapper });
     await waitFor(() =>
-      expect(screen.getByText('Motorista chegou na coleta')).toBeInTheDocument(),
+      expect(screen.getByText('Motorista chegou na coleta')).toBeTruthy(),
     );
-    expect(screen.getByText('87 m do ponto')).toBeInTheDocument();
-    expect(screen.getByText('ETA 1 min')).toBeInTheDocument();
-    expect(screen.getByText('Enviado')).toBeInTheDocument();
+    expect(screen.getByText('87 m do ponto')).toBeTruthy();
+    expect(screen.getByText('ETA 1 min')).toBeTruthy();
+    expect(screen.getByText('Enviado')).toBeTruthy();
   });
 
   it('status sem destinatário é sinalizado na UI (motivo do reenvio)', async () => {
     mockEvents([{ ...baseEvent, notification_status: 'no_recipient', notified_at: null }]);
     render(<OrderGeoEvents orderId="ord-1" />, { wrapper });
-    await waitFor(() => expect(screen.getByText('Sem destinatário')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Sem destinatário')).toBeTruthy());
   });
 
   it('reenvio chama send-notification com skip_dedup e geo_event_id', async () => {
     mockEvents([baseEvent]);
     invokeMock.mockResolvedValue({ data: { success: true }, error: null });
     render(<OrderGeoEvents orderId="ord-1" driverId="drv-9" />, { wrapper });
-    await waitFor(() => expect(screen.getByText('Reenviar')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Reenviar')).toBeTruthy());
 
     screen.getByText('Reenviar').click();
     await waitFor(() => expect(invokeMock).toHaveBeenCalledTimes(1));
