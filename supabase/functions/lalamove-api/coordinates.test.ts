@@ -89,3 +89,25 @@ Deno.test("persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com
   assertEquals(upserts[0][1].place_id, "lalamove:s2");
   assertEquals(upserts[0][1].stop_index, 1);
 });
+
+Deno.test("persistOrderCoordinates nao sobrescreve o provedor do autocomplete para 'lalamove'", async () => {
+  const { client, updates } = fakeSupabase();
+  await persistOrderCoordinates(client, "id", [stop("-25.43", "-49.27", "s1"), stop("-23.55", "-46.63", "s2")], {
+    pickupGeocodeProvider: "google",
+    pickupGeocodePrecision: "ROOFTOP",
+    deliveryGeocodeProvider: "mapbox",
+    deliveryGeocodePrecision: "high",
+  });
+  // geocode_provider/precision sao colunas do PEDIDO (nao por parada), entao a
+  // ultima escrita (entrega) prevalece — mesma semantica do fallback da etapa 37.
+  assertEquals(updates[0].geocode_provider, "mapbox");
+  assertEquals(updates[0].geocode_precision, "high");
+  assertEquals(updates[0].pickup_place_id, "lalamove:s1");
+});
+
+Deno.test("persistOrderCoordinates mantem 'lalamove' como default sem override do autocomplete", async () => {
+  const { client, updates } = fakeSupabase();
+  await persistOrderCoordinates(client, "id", [stop("-25.43", "-49.27", "s1"), stop("-23.55", "-46.63", "s2")]);
+  assertEquals(updates[0].geocode_provider, "lalamove");
+  assertEquals(updates[0].geocode_precision, "LALAMOVE");
+});

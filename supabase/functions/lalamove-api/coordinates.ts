@@ -40,7 +40,18 @@ export async function persistOrderCoordinates(
   // place_id do provedor (google:/mapbox:) — ele identifica o ENDEREÇO e não pode
   // ser sobrescrito pelo id da parada da Lalamove. Sem preferência, o id da parada é
   // o que existe para guardar.
-  preferred?: { pickupPlaceId?: string | null; deliveryPlaceId?: string | null },
+  preferred?: {
+    pickupPlaceId?: string | null;
+    deliveryPlaceId?: string | null;
+    // Etapa 35/36: o autocomplete do formulário resolveu o ponto (e a coordenada
+    // persistida é a da cotação). Sem estes overrides, a atribuição do geocode era
+    // sobrescrita para 'lalamove' mesmo quando o endereço veio do Google/Mapbox,
+    // quebrando a auditoria de custo (etapa 93).
+    pickupGeocodeProvider?: string | null;
+    pickupGeocodePrecision?: string | null;
+    deliveryGeocodeProvider?: string | null;
+    deliveryGeocodePrecision?: string | null;
+  },
 ) {
   const coords = stopsCoords(stops);
   const first = coords[0];
@@ -51,8 +62,10 @@ export async function persistOrderCoordinates(
   if (first?.lat !== null && first?.lat !== undefined) {
     patch.pickup_latitude = first.lat;
     patch.pickup_longitude = first.lng;
-    patch.geocode_provider = "lalamove";
-    patch.geocode_precision = "LALAMOVE";
+    // A coordenada que persistimos é a da cotação (fonte da verdade do ponto real),
+    // mas a atribuição de quem resolveu o endereço pode ser do provedor do autocomplete.
+    patch.geocode_provider = preferred?.pickupGeocodeProvider ?? "lalamove";
+    patch.geocode_precision = preferred?.pickupGeocodePrecision ?? "LALAMOVE";
     patch.geocode_match_confidence = "LALAMOVE"; // etapa 13: coordenada da cotação, permanente
     // Etapa 14: `pickup_place_id`/`delivery_place_id` existem desde a geo_foundation mas
     // nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto
@@ -63,8 +76,8 @@ export async function persistOrderCoordinates(
   if (second?.lat !== null && second?.lat !== undefined) {
     patch.delivery_latitude = second.lat;
     patch.delivery_longitude = second.lng;
-    patch.geocode_provider = "lalamove";
-    patch.geocode_precision = "LALAMOVE";
+    patch.geocode_provider = preferred?.deliveryGeocodeProvider ?? "lalamove";
+    patch.geocode_precision = preferred?.deliveryGeocodePrecision ?? "LALAMOVE";
     patch.geocode_match_confidence = "LALAMOVE";
     const placeId = preferred?.deliveryPlaceId ?? (second.stopId ? `lalamove:${second.stopId}` : null);
     if (placeId) patch.delivery_place_id = placeId;

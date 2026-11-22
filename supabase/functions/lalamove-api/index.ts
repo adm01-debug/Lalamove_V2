@@ -744,6 +744,13 @@ serve(async (req) => {
             await persistOrderCoordinates(supabase, insertedOrder.id as string, stops, {
               pickupPlaceId: requestMetadata?.pickupPlaceId as string | undefined,
               deliveryPlaceId: requestMetadata?.deliveryPlaceId as string | undefined,
+              // Etapa 35/36: a atribuição do geocode do autocomplete (google:/mapbox:)
+              // não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode
+              // é contabilizado no provedor errado (etapa 93).
+              pickupGeocodeProvider: requestMetadata?.geocodeProvider as string | undefined,
+              pickupGeocodePrecision: requestMetadata?.pickupGeocodePrecision as string | undefined,
+              deliveryGeocodeProvider: requestMetadata?.geocodeProvider as string | undefined,
+              deliveryGeocodePrecision: requestMetadata?.deliveryGeocodePrecision as string | undefined,
             });
             // Etapa 37: pedidos de bitrix24/uapi_import/n8n chegam sem lat/lng. Se a
             // Lalamove não devolveu coordenada, geocodifica aqui e marca para revisão
