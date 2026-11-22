@@ -2293,6 +2293,9 @@
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
+  "supabase/functions/geo-admin/index.ts": [
+   "supabase/functions/geo-admin/rotation.ts"
+  ],
   "supabase/functions/geo-gateway/error-monitor.ts": [
    "supabase/functions/geo-gateway/providers/types.ts"
   ],

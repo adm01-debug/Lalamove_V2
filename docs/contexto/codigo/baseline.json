@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
+  "commit": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
   "branch": "main",
-  "data_commit": "2026-11-22T19:42:26-03:00",
+  "data_commit": "2026-11-22T19:42:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "281cd07",
+    "data": "2026-11-22",
+    "assunto": "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)"
+   },
    {
     "sha": "7f6a42b",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "6e6c62b",
     "data": "2026-11-22",
     "assunto": "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)"
-   },
-   {
-    "sha": "93d26a3",
-    "data": "2026-11-22",
-    "assunto": "docs(planos): plano de UX de navegacao em 200 etapas (#286)"
    }
   ],
-  "arquivos_mudados_7d": 380,
+  "arquivos_mudados_7d": 383,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -172,11 +172,15 @@
     "mudancas": 15
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 14
+   },
+   {
     "pasta": "package-lock.json",
     "mudancas": 14
    },
    {
-    "pasta": ".github/workflows/ci.yml",
+    "pasta": "docs/MAPBOX.md",
     "mudancas": 13
    },
    {
@@ -184,16 +188,12 @@
     "mudancas": 13
    },
    {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 12
-   },
-   {
     "pasta": "src/components/layout",
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 11
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -215,19 +215,23 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "docs/MAPBOX.md",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 12
+   },
+   {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 11
    },
    {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
@@ -235,10 +239,6 @@
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 212
+    "commits": 213
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1075,
-  "arquivos_codigo": 673,
-  "linhas_codigo": 131798,
+  "arquivos_total": 1078,
+  "arquivos_codigo": 676,
+  "linhas_codigo": 132230,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -320,11 +320,11 @@
   "modulos": 43,
   "componentes": 217,
   "hooks": 101,
-  "edge_functions": 26,
+  "edge_functions": 27,
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 165,
+  "testes": 166,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 110
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 91,
-   "linhas": 23155
+   "arquivos": 94,
+   "linhas": 23587
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -734,6 +734,7 @@
   "edges_orfas": [
    "apply-fixes",
    "external-db-bridge",
+   "geo-admin",
    "rotate-tokens",
    "seed-fix-rls"
   ],
@@ -816,7 +817,9 @@
    "VITE_GOOGLE_MAPS_MAP_ID"
   ],
   "ciclos_de_import": 0,
-  "possiveis_segredos_no_codigo": []
+  "possiveis_segredos_no_codigo": [
+   "supabase/functions/geo-admin/rotation.test.ts:32"
+  ]
  },
  "erros_do_gerador": []
 }

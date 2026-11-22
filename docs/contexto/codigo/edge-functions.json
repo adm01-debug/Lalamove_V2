@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "pasta": "supabase/functions",
- "total": 26,
+ "total": 27,
  "verify_jwt_false": [
   "lalamove-webhook",
   "llm-wh",
@@ -403,6 +403,44 @@
     "schemas.ts",
     "telemetry.ts"
    ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 1
+  },
+  {
+   "nome": "geo-admin",
+   "servico": null,
+   "entrada": "supabase/functions/geo-admin/index.ts",
+   "arquivos": 2,
+   "linhas": 344,
+   "verify_jwt": true,
+   "metodos": [
+    "OPTIONS",
+    "POST"
+   ],
+   "assina_hmac": false,
+   "usa_service_role": true,
+   "tabelas": [
+    "audit_log",
+    "user_roles"
+   ],
+   "rpcs": [],
+   "env": [
+    "MAPBOX_SERVER_TOKEN",
+    "MAPBOX_TOKENS_API_TOKEN",
+    "MAPBOX_USERNAME",
+    "SUPABASE_PROJECT_REF",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [
+    "api.mapbox.com"
+   ],
+   "usa_shared": [],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,

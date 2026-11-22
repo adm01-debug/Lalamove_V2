@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (560)",
+   "TypeScript (563)",
    "SQL (202)",
    "JavaScript (114)",
    "Markdown (110)",
@@ -448,7 +448,7 @@
   {
    "arquivo": "docs/MAPBOX.md",
    "titulo": "MAPBOX — Inventário e Referência (21/11/2026)",
-   "linhas": 233
+   "linhas": 241
   },
   {
    "arquivo": "docs/MIGRATION_RECONCILIATION_2026-11.md",
@@ -614,9 +614,12 @@
    "LOVABLE_API_KEY",
    "MAPBOX_ACCESS_TOKEN",
    "MAPBOX_SERVER_TOKEN",
+   "MAPBOX_TOKENS_API_TOKEN",
+   "MAPBOX_USERNAME",
    "RESEND_API_KEY",
    "SLACK_WEBHOOK_URL",
    "SUPABASE_ANON_KEY",
+   "SUPABASE_PROJECT_REF",
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -822,7 +825,7 @@
    },
    {
     "host": "api.mapbox.com",
-    "arquivos": 5
+    "arquivos": 6
    },
    {
     "host": "maps.googleapis.com",
@@ -1004,6 +1007,7 @@
    "RESEND_API_KEY",
    "SLACK_WEBHOOK_URL",
    "SUPABASE_ANON_KEY",
+   "SUPABASE_PROJECT_REF",
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",

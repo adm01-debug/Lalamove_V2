@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 165,
+ "total": 166,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 31,
+  "edge (deno)": 32,
   "guard (node --test)": 34,
   "unit (vitest)": 82
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 33
+   "arquivos": 34
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1279,6 +1279,15 @@
    "casos": 24
   },
   {
+   "arquivo": "supabase/functions/geo-admin/rotation.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 88,
+   "testa": [
+    "supabase/functions/geo-admin/rotation.ts"
+   ],
+   "casos": 11
+  },
+  {
    "arquivo": "supabase/functions/geo-gateway/budget-error.test.ts",
    "tipo": "edge (deno)",
    "linhas": 55,
@@ -1620,6 +1629,7 @@
   "supabase/functions/_shared/phone.ts": 1,
   "supabase/functions/_shared/schemas.ts": 2,
   "supabase/functions/_shared/template.ts": 1,
+  "supabase/functions/geo-admin/rotation.ts": 1,
   "supabase/functions/geo-gateway/error-monitor.ts": 1,
   "supabase/functions/geo-gateway/failover.ts": 1,
   "supabase/functions/geo-gateway/metering.ts": 1,

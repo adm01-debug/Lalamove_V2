@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7f6a42bbf0` · branch `main` · 2026-11-22 22:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `281cd076ce` · branch `main` · 2026-11-22 22:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -181,6 +181,7 @@
 | `MessageChannel` (TS) | whatsapp \| sms \| email \| slack \| n8n |  | `supabase/functions/_shared/messaging/router.ts` |
 | `IMMEDIATE_FALLBACK_REASONS` (TS) | "invalid_number", "instance_unavailable", "recipient_blocked", "channel_down", |  | `supabase/functions/_shared/messaging/router.ts` |
 | `RATE_LIMIT_EXEMPT_EVENTS` (TS) | "DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY", |  | `supabase/functions/_shared/messaging/router.ts` |
+| `TOKEN_ADMIN_SCOPES` (TS) | "tokens:write", "tokens:read" |  | `supabase/functions/geo-admin/rotation.ts` |
 | `ErrorOutcome` (TS) | ok \| error \| skipped |  | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `ProviderName` (TS) | google \| mapbox |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |

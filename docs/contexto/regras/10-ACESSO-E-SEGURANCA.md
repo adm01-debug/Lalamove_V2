@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7f6a42bbf0` · branch `main` · 2026-11-22 22:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `281cd076ce` · branch `main` · 2026-11-22 22:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -109,7 +109,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 122 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 123 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -153,6 +153,7 @@
 - `supabase/functions/evaluate-driver/index.ts`
 - `supabase/functions/external-companies/index.ts`
 - `supabase/functions/external-db-bridge/index.ts`
+- `supabase/functions/geo-admin/index.ts`
 - `supabase/functions/geo-gateway/index.ts`
 - `supabase/functions/geo-gateway/metering.ts`
 - `supabase/functions/job-worker/index.ts`

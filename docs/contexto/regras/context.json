@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
+  "sha": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 22:42 UTC",
-  "files_total": 1069,
-  "code_files": 884,
-  "code_lines": 152975
+  "generated_at": "2026-11-22 22:44 UTC",
+  "files_total": 1072,
+  "code_files": 887,
+  "code_lines": 153407
  },
  "version": "1.3.2",
- "facts_hash": "29dcbd6464d783f9",
+ "facts_hash": "739329d6a35a94d9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 324,
+   ".ts": 327,
    ".tsx": 236,
    ".sql": 202,
    ".mjs": 109,
@@ -18018,6 +18018,35 @@
     "idempotency": false
    },
    {
+    "name": "geo-admin",
+    "file": "supabase/functions/geo-admin/index.ts",
+    "methods": [
+     "OPTIONS"
+    ],
+    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "tables": [
+     "audit_log",
+     "user_roles"
+    ],
+    "env": [
+     "MAPBOX_SERVER_TOKEN",
+     "MAPBOX_TOKENS_API_TOKEN",
+     "MAPBOX_USERNAME",
+     "SUPABASE_PROJECT_REF",
+     "SUPABASE_SERVICE_ROLE_KEY",
+     "SUPABASE_URL"
+    ],
+    "external": [],
+    "invokes": [],
+    "doc": "Etapa 9 do plano Mapbox: administracao do token de servidor pela Tokens API. Duas actions, ambas idempotentes e explicitas: rotate-mapbox-token -> cria um `sk.` novo com os mesmos scopes (menos `tokens:*`) e devolve o valor UMA vez na resposta; revoke-mapbox-token -> revoga um token pelo id, depois …",
+    "errors": [
+     "Tokens API list ${res.status}: ${(await res.text()).slice(0, 200)}"
+    ],
+    "side_effects": [],
+    "webhook_events": [],
+    "idempotency": true
+   },
+   {
     "name": "geo-gateway",
     "file": "supabase/functions/geo-gateway/index.ts",
     "methods": [
@@ -21663,13 +21692,14 @@
   },
   {
    "module": "supabase/functions",
-   "files": 91,
-   "lines": 23155,
+   "files": 94,
+   "lines": 23587,
    "tables": [
     "active_tracking",
     "alert_configurations",
     "alerts",
     "alerts_sent",
+    "audit_log",
     "auth_logs",
     "bitrix24_activities",
     "bitrix24_stage_mappings",
@@ -21724,6 +21754,7 @@
     "inbound.ts: InboundChoice, InboundIntent, InboundResult, OPTOUT_KEYWORDS, isOptOutKeyword, InboundMediaKind",
     "router.ts: MessageRole, MessageChannel, IMMEDIATE_FALLBACK_REASONS, ImmediateFallbackReason, RouteRule, DEFAULT_ROUTES",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
+    "rotation.ts: MapboxToken, TOKEN_ADMIN_SCOPES, REVOKE_AFTER_MS, tokenFingerprint, tokenKind, kindOfListedToken",
     "error-monitor.ts: ERROR_RATE_THRESHOLD, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_WINDOW_MINUTES, ERROR_ALERT_COOLDOWN_MINUTES, ErrorOutcome, recordProviderFailure",
     "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
     "index.ts: DEFAULT_SETTINGS",
@@ -21797,6 +21828,9 @@
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.test.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-admin/index.ts",
+    "supabase/functions/geo-admin/rotation.test.ts",
+    "supabase/functions/geo-admin/rotation.ts",
     "supabase/functions/geo-gateway/budget-error.test.ts",
     "supabase/functions/geo-gateway/error-monitor.test.ts",
     "supabase/functions/geo-gateway/error-monitor.ts",
@@ -21840,10 +21874,7 @@
     "supabase/functions/rotate-tokens/index.ts",
     "supabase/functions/route-analyzer/index.ts",
     "supabase/functions/seed-fix-rls/index.ts",
-    "supabase/functions/send-notification/index.ts",
-    "supabase/functions/send-notification/message-id.test.ts",
-    "supabase/functions/send-notification/message-id.ts",
-    "supabase/functions/send-notification/quiet-hours.test.ts"
+    "supabase/functions/send-notification/index.ts"
    ]
   },
   {
@@ -22050,6 +22081,11 @@
     ],
     "insert": [
      "supabase/functions/send-notification/index.ts"
+    ]
+   },
+   "audit_log": {
+    "insert": [
+     "supabase/functions/geo-admin/index.ts"
     ]
    },
    "auth_logs": {
@@ -22734,6 +22770,7 @@
      "scripts/set-user-admin.ts",
      "src/hooks/usePermissions.ts",
      "src/hooks/useRole.ts",
+     "supabase/functions/geo-admin/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ],
     "ref": [
@@ -23447,7 +23484,14 @@
     "scripts/geo/eta-parity.ts",
     "scripts/geo/searchbox-coverage.ts",
     "supabase/functions/check-external-api/index.ts",
+    "supabase/functions/geo-admin/index.ts",
     "supabase/functions/geo-gateway/index.ts"
+   ],
+   "MAPBOX_TOKENS_API_TOKEN": [
+    "supabase/functions/geo-admin/index.ts"
+   ],
+   "MAPBOX_USERNAME": [
+    "supabase/functions/geo-admin/index.ts"
    ],
    "MIGRATIONS_DIR": [
     "scripts/db-audit/check-migration-drift.mjs"
@@ -23550,7 +23594,8 @@
    ],
    "SUPABASE_PROJECT_REF": [
     "scripts/inventario/gerar-banco.mjs",
-    "scripts/supabase_snapshot/snapshot.py"
+    "scripts/supabase_snapshot/snapshot.py",
+    "supabase/functions/geo-admin/index.ts"
    ],
    "SUPABASE_SERVICE_ROLE_KEY": [
     "scripts/ai-context/cenarios.mjs",
@@ -23576,6 +23621,7 @@
     "supabase/functions/escalate-alerts/index.ts",
     "supabase/functions/evaluate-driver/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-admin/index.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/job-worker/index.ts",
     "supabase/functions/lalamove-api/index.ts",
@@ -23608,6 +23654,7 @@
     "supabase/functions/evaluate-driver/index.ts",
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-admin/index.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/job-worker/index.ts",
     "supabase/functions/lalamove-api/index.ts",
@@ -24059,7 +24106,6 @@
   ],
   "tables_only_in_schema": [
    "alert_dedup",
-   "audit_log",
    "bitrix24_spa_sync",
    "cache_refresh_log",
    "cron_job_logs",
@@ -24817,6 +24863,11 @@
     "file": "supabase/functions/_shared/messaging/router.ts",
     "name": "RATE_LIMIT_EXEMPT_EVENTS",
     "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\","
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.ts",
+    "name": "TOKEN_ADMIN_SCOPES",
+    "values": "\"tokens:write\", \"tokens:read\""
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
@@ -26151,6 +26202,10 @@
     "msg": "Unauthorized"
    },
    {
+    "file": "supabase/functions/geo-admin/index.ts",
+    "msg": "Tokens API list ${res.status}: ${(await res.text()).slice(0, 200)}"
+   },
+   {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
     "msg": ",\n        response: {},\n        expires_at: expiresAt,\n      })\n      .select("
    },
@@ -26579,6 +26634,10 @@
    {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "value": "role"
+   },
+   {
+    "file": "supabase/functions/geo-admin/index.ts",
+    "value": "service_role"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -27113,6 +27172,14 @@
    {
     "file": "supabase/functions/external-companies/index.ts",
     "text": "significa que admin, manager e operator passam; apenas viewer é negado."
+   },
+   {
+    "file": "supabase/functions/geo-admin/index.ts",
+    "text": "Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.ts",
+    "text": "apenas quando ele está presente."
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
@@ -30514,6 +30581,11 @@
     "file": "supabase/functions/check-external-api/index.ts",
     "name": "HEALTH_ADDRESS",
     "value": "'Avenida Paulista 1578, São Paulo'"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.ts",
+    "name": "REVOKE_AFTER_MS",
+    "value": "10"
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
@@ -34271,6 +34343,18 @@
     "kind": "compara"
    },
    {
+    "file": "supabase/functions/geo-admin/index.ts",
+    "field": "role",
+    "value": "service_role",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/geo-admin/index.ts",
+    "field": "role",
+    "value": "admin",
+    "kind": "filtra"
+   },
+   {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
     "field": "type",
     "value": "INTEGRATION_FAILURE",
@@ -35011,6 +35095,12 @@
     "body": "const total = driver.total_deliveries || 0; const completed = driver.completed_deliveries || 0; const failed = driver.failed_deliveries || 0; const cancelled = driver.cancelled_deliveries || 0; return { totalDeliveries: total, completedDeliveries: completed, failedDeliveries: failed, cancelledDeliveries: cancelled, successRate: driver.success_rate || (total > 0 ? (completed / total) * 100 : 0), failureRate: driver.failure_rate || (total > 0 ? (failed / total) * 100 : 0), incidentCount: 0, avgDel …"
    },
    {
+    "file": "supabase/functions/geo-admin/rotation.ts",
+    "name": "validateNewToken",
+    "params": "token: string | undefined, scopes: string[]",
+    "body": "if (!token) return \"Tokens API não devolveu token na criação\"; if (tokenKind(token) !== \"secret\") return `Token criado não é secreto (prefixo ${token.slice(0, 3) || \"vazio\"})`; if (scopes.length === 0) return \"Token criado sem nenhum scope\"; return null;"
+   },
+   {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
     "name": "shouldAlert",
     "params": "sample: ErrorRateSample",
@@ -35331,6 +35421,10 @@
    {
     "file": "src/types/lalamove.ts",
     "line": "ORDER_TIMEOUT: 5,"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.ts",
+    "line": "export const REVOKE_AFTER_MS = 10 * 60 * 1000;"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -40075,6 +40169,50 @@
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
     "name": "telemetry response shape includes duration and severity"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "tokenKind separa segredo, publico e temporario"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "kindOfListedToken usa "
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "tokenFingerprint aguenta valor curto e vazio sem estourar"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "buildCreateTokenBody herda os scopes mas remove tokens:write/read"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "buildCreateTokenBody de token sem scopes nao inventa escopo"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "pickTokenToRevoke devolve o unico sk candidato e ignora o novo"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "pickTokenToRevoke nunca escolhe o token publico do navegador"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "pickTokenToRevoke devolve null quando ha mais de um sk (ambiguidade)"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "pickTokenToRevoke usa o fingerprint quando a listagem traz o valor"
+   },
+   {
+    "file": "supabase/functions/geo-admin/rotation.test.ts",
+    "name": "validateNewToken aceita sk com escopo e rejeita o resto"
    },
    {
     "file": "supabase/functions/geo-gateway/budget-error.test.ts",
@@ -46733,6 +46871,7 @@
       "compara:src/pages/PermissionsPage.tsx",
       "compara:src/pages/ProfilePage.tsx",
       "compara:supabase/functions/lalamove-uapi/index.ts",
+      "filtra:supabase/functions/geo-admin/index.ts",
       "filtra:supabase/functions/simulate-driver-movement/index.ts"
      ],
      "manager": [
@@ -46759,16 +46898,17 @@
       "escreve:supabase/functions/check-driver-alerts/index.ts",
       "escreve:supabase/functions/lalamove-webhook/index.ts"
      ],
+     "service_role": [
+      "compara:supabase/functions/geo-admin/index.ts",
+      "compara:supabase/functions/send-notification/index.ts",
+      "compara:supabase/functions/simulate-driver-movement/index.ts"
+     ],
      "delivery_contact": [
       "compara:supabase/functions/send-notification/index.ts",
       "escreve:supabase/functions/job-worker/index.ts"
      ],
      "system": [
       "escreve:supabase/functions/route-analyzer/index.ts"
-     ],
-     "service_role": [
-      "compara:supabase/functions/send-notification/index.ts",
-      "compara:supabase/functions/simulate-driver-movement/index.ts"
      ],
      "string": [
       "compara:supabase/functions/send-notification/recipients.ts"
@@ -48133,6 +48273,7 @@
    "supabase/functions/evaluate-driver/index.ts",
    "supabase/functions/external-companies/index.ts",
    "supabase/functions/external-db-bridge/index.ts",
+   "supabase/functions/geo-admin/index.ts",
    "supabase/functions/geo-gateway/index.ts",
    "supabase/functions/geo-gateway/metering.ts",
    "supabase/functions/job-worker/index.ts",
@@ -70701,6 +70842,118 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/geo-admin/index.ts": {
+   "path": "supabase/functions/geo-admin/index.ts",
+   "lines": 235,
+   "tables": [
+    {
+     "table": "user_roles",
+     "op": "select"
+    },
+    {
+     "table": "audit_log",
+     "op": "insert"
+    }
+   ],
+   "table_cols": {
+    "user_roles": [
+     "expires_at",
+     "is_active",
+     "role",
+     "user_id"
+    ]
+   },
+   "env": [
+    "MAPBOX_SERVER_TOKEN",
+    "MAPBOX_TOKENS_API_TOKEN",
+    "MAPBOX_USERNAME",
+    "SUPABASE_PROJECT_REF",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "errors": [
+    "Tokens API list ${res.status}: ${(await res.text()).slice(0, 200)}"
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "service_role",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "admin",
+     "kind": "filtra"
+    }
+   ],
+   "role_checks": [
+    "service_role"
+   ],
+   "rule_comments": [
+    "Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null"
+   ],
+   "doc": "Etapa 9 do plano Mapbox: administracao do token de servidor pela Tokens API. Duas actions, ambas idempotentes e explicitas: rotate-mapbox-token -> cria um `sk.` novo com os mesmos scopes (menos `tokens:*`) e devolve o valor UMA vez na resposta; revoke-mapbox-token -> revoga um token pelo id, depois …",
+   "uses_service_role": true
+  },
+  "supabase/functions/geo-admin/rotation.test.ts": {
+   "path": "supabase/functions/geo-admin/rotation.test.ts",
+   "lines": 88,
+   "is_test": true,
+   "tests": [
+    "tokenKind separa segredo, publico e temporario",
+    "kindOfListedToken usa ",
+    "tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho",
+    "tokenFingerprint aguenta valor curto e vazio sem estourar",
+    "buildCreateTokenBody herda os scopes mas remove tokens:write/read",
+    "buildCreateTokenBody de token sem scopes nao inventa escopo",
+    "pickTokenToRevoke devolve o unico sk candidato e ignora o novo",
+    "pickTokenToRevoke nunca escolhe o token publico do navegador",
+    "pickTokenToRevoke devolve null quando ha mais de um sk (ambiguidade)",
+    "pickTokenToRevoke usa o fingerprint quando a listagem traz o valor",
+    "validateNewToken aceita sk com escopo e rejeita o resto"
+   ]
+  },
+  "supabase/functions/geo-admin/rotation.ts": {
+   "path": "supabase/functions/geo-admin/rotation.ts",
+   "lines": 109,
+   "exports": [
+    "interface MapboxToken",
+    "const TOKEN_ADMIN_SCOPES",
+    "const REVOKE_AFTER_MS",
+    "function tokenFingerprint",
+    "function tokenKind",
+    "function kindOfListedToken",
+    "function pickTokenToRevoke",
+    "function buildCreateTokenBody",
+    "function validateNewToken"
+   ],
+   "enums": [
+    {
+     "name": "TOKEN_ADMIN_SCOPES",
+     "values": "\"tokens:write\", \"tokens:read\""
+    }
+   ],
+   "params": [
+    {
+     "name": "REVOKE_AFTER_MS",
+     "value": "10"
+    }
+   ],
+   "rule_comments": [
+    "apenas quando ele está presente."
+   ],
+   "doc": "Etapa 9 do plano Mapbox: rotação do token de servidor pelo Tokens API. Toda a decisão que pode errar (qual token revogar, com que scopes criar o novo, o que vai para o log) mora aqui, pura e testável. O `index.ts` só faz HTTP e auth. Nunca devolvemos nem logamos o valor do token: só o `tokenFingerpr …",
+   "calc_fns": [
+    {
+     "name": "validateNewToken",
+     "params": "token: string | undefined, scopes: string[]",
+     "body": "if (!token) return \"Tokens API não devolveu token na criação\"; if (tokenKind(token) !== \"secret\") return `Token criado não é secreto (prefixo ${token.slice(0, 3) || \"vazio\"})`; if (scopes.length === 0) return \"Token criado sem nenhum scope\"; return null;"
+    }
+   ],
+   "temporal": [
+    "export const REVOKE_AFTER_MS = 10 * 60 * 1000;"
+   ]
+  },
   "supabase/functions/geo-gateway/budget-error.test.ts": {
    "path": "supabase/functions/geo-gateway/budget-error.test.ts",
    "lines": 55,
@@ -74375,10 +74628,25 @@
   }
  },
  "git": {
-  "sha": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
+  "sha": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "281cd07",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "docs/MAPBOX.md",
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+     "supabase/config.toml",
+     "supabase/functions/geo-admin/index.ts",
+     "supabase/functions/geo-admin/rotation.test.ts",
+     "supabase/functions/geo-admin/rotation.ts"
+    ]
+   },
    {
     "sha": "7f6a42b",
     "date": "2026-11-22",
@@ -74765,15 +75033,6 @@
      "supabase/functions/_shared/messaging/router.test.ts",
      "supabase/functions/_shared/messaging/router.ts"
     ]
-   },
-   {
-    "sha": "4ee7ef0",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)",
-    "files": [
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
@@ -74794,16 +75053,16 @@
     4
    ],
    [
+    ".github/workflows/ci.yml",
+    3
+   ],
+   [
     "src/components/layout/sidebar-config.ts",
     3
    ],
    [
     "src/components/map/markerFactories.ts",
     3
-   ],
-   [
-    ".github/workflows/ci.yml",
-    2
    ],
    [
     "supabase/functions/_shared/messaging/router.test.ts",

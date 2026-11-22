@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7f6a42bbf0` · branch `main` · 2026-11-22 22:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `281cd076ce` · branch `main` · 2026-11-22 22:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -791,7 +791,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `update_error` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
-| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/lalamove-uapi/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
+| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +1 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts` |
@@ -799,7 +799,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `operator` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
 | `role` | `pickup_contact` | escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/job-worker/index.ts` |
-| `role` | `service_role` | compara | `supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
+| `role` | `service_role` | compara | `supabase/functions/geo-admin/index.ts`<br>`supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `string` | compara | `supabase/functions/send-notification/recipients.ts` |
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `role` | `system` | escreve | `supabase/functions/route-analyzer/index.ts` |
@@ -912,6 +912,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | MessageChannel | whatsapp \| sms \| email \| slack \| n8n | `supabase/functions/_shared/messaging/router.ts` |
 | IMMEDIATE_FALLBACK_REASONS | "invalid_number", "instance_unavailable", "recipient_blocked", "channel_down", | `supabase/functions/_shared/messaging/router.ts` |
 | RATE_LIMIT_EXEMPT_EVENTS | "DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY", | `supabase/functions/_shared/messaging/router.ts` |
+| TOKEN_ADMIN_SCOPES | "tokens:write", "tokens:read" | `supabase/functions/geo-admin/rotation.ts` |
 | ErrorOutcome | ok \| error \| skipped | `supabase/functions/geo-gateway/error-monitor.ts` |
 | ProviderName | google \| mapbox | `supabase/functions/geo-gateway/providers/types.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
@@ -1306,6 +1307,10 @@ _nenhum item encontrado_
   ```
   const total = driver.total_deliveries || 0; const completed = driver.completed_deliveries || 0; const failed = driver.failed_deliveries || 0; const cancelled = driver.cancelled_deliveries || 0; return { totalDeliveries: total, completedDeliveries: completed, failedDeliveries: failed, cancelledDeliveries: cancelled, successRate: driver.success_rate || (total > 0 ? (completed / total) * 100 : 0), failureRate: driver.failure_rate || (total > 0 ? (failed / total) * 100 : 0), incidentCount: 0, avgDel …
   ```
+- **validateNewToken(token: string | undefined, scopes: string[])** — `supabase/functions/geo-admin/rotation.ts`
+  ```
+  if (!token) return "Tokens API não devolveu token na criação"; if (tokenKind(token) !== "secret") return `Token criado não é secreto (prefixo ${token.slice(0, 3) || "vazio"})`; if (scopes.length === 0) return "Token criado sem nenhum scope"; return null;
+  ```
 - **shouldAlert(sample: ErrorRateSample)** — `supabase/functions/geo-gateway/error-monitor.ts`
   ```
   const pct = sample.total > 0 ? Math.round((sample.errors / sample.total) * 10000) / 100 : 0; const fire = sample.total >= ERROR_RATE_MIN_SAMPLES && sample.errors / sample.total > ERROR_RATE_THRESHOLD; return { fire, total: sample.total, errors: sample.errors, pct };
@@ -1446,6 +1451,7 @@ _nenhum item encontrado_
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
 | `HEALTH_ADDRESS` | `'Avenida Paulista 1578, São Paulo'` | `supabase/functions/check-external-api/index.ts` |
+| `REVOKE_AFTER_MS` | `10` | `supabase/functions/geo-admin/rotation.ts` |
 | `ERROR_RATE_THRESHOLD` | `0.05` | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `ERROR_RATE_MIN_SAMPLES` | `20` | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `ERROR_RATE_WINDOW_MINUTES` | `60` | `supabase/functions/geo-gateway/error-monitor.ts` |
@@ -1544,6 +1550,7 @@ _nenhum item encontrado_
 | `return remaining > 0 && remaining < 30 * 60 * 1000; // within 30 min` | `src/pages/DashboardRedesigned.tsx` |
 | `setTimeout(() => { navigate('/'); }, 3000);` | `src/pages/ResetPasswordPage.tsx` |
 | `ORDER_TIMEOUT: 5,` | `src/types/lalamove.ts` |
+| `export const REVOKE_AFTER_MS = 10 * 60 * 1000;` | `supabase/functions/geo-admin/rotation.ts` |
 | `token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),` | `supabase/functions/lalamove-uapi/index.ts` |
 | `const WEBHOOK_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes` | `supabase/functions/lalamove-webhook/index.ts` |
 | `expires_at TIMESTAMP WITH TIME ZONE DEFAULT (now() + interval '24 hours'),` | `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql` |
@@ -1934,7 +1941,7 @@ _nenhum item encontrado_
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
-| … +107 linhas — lista completa em `context.json` | |
+| … +108 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1965,6 +1972,7 @@ _nenhum item encontrado_
 | `granted` | `src/pages/UserPreferencesPage.tsx` |
 | `driver` | `supabase/functions/_shared/messaging/router.ts` |
 | `role` | `supabase/functions/_shared/messaging/router.ts` |
+| `service_role` | `supabase/functions/geo-admin/index.ts` |
 | `admin` | `supabase/functions/lalamove-uapi/index.ts` |
 | `true` | `supabase/functions/mcp-query/index.ts` |
 | `delivery_contact` | `supabase/functions/send-notification/index.ts` |
@@ -1974,7 +1982,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1338 testes em 115 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1349 testes em 116 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2024,6 +2032,7 @@ _nenhum item encontrado_
 | `src/components/orders/AddressAutocomplete.test.tsx` | 11 | AddressAutocomplete — estados de falha (etapa 40) · 429 mostra  · erro sem status (rede) tem mensagem distinta do 429 · sem resultado e sem falha sugere incluir número ou CEP … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
 | `supabase/functions/_shared/channels/sms.test.ts` | 11 | toGsm7 remove acento para nao pagar 2 segmentos · smsSegments conta 160 no primeiro e 153 nos seguintes · composeSmsText corta no espaco e sinaliza truncamento · composeSmsText nao trunca mensagem curta … |
+| `supabase/functions/geo-admin/rotation.test.ts` | 11 | tokenKind separa segredo, publico e temporario · kindOfListedToken usa  · tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho · tokenFingerprint aguenta valor curto e vazio sem estourar … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
@@ -2341,6 +2350,8 @@ _nenhum item encontrado_
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
 | significa que admin, manager e operator passam; apenas viewer é negado. | `supabase/functions/external-companies/index.ts` |
+| Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null | `supabase/functions/geo-admin/index.ts` |
+| apenas quando ele está presente. | `supabase/functions/geo-admin/rotation.ts` |
 | sozinho quando o cooldown expira. | `supabase/functions/geo-gateway/error-monitor.ts` |
 | Nunca lança: observabilidade não pode derrubar a requisição de mapa. | `supabase/functions/geo-gateway/error-monitor.ts` |
 | * Decide se deve alertar. Puro — testável sem banco. */ | `supabase/functions/geo-gateway/error-monitor.ts` |
