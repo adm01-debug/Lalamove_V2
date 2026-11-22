@@ -16,7 +16,7 @@ Todo provedor implementa `GeoProvider` (`providers/types.ts`):
 | `route` | `RouteReq → GeoRoute` (`polyline: GeoPoint[]`, `distance_m`, `duration_s`, `legs`) |
 | `matrix` | `MatrixReq → GeoMatrix` (`durations_s`, `distances_m` NxN) |
 | `static` | `StaticReq → GeoStaticImage` (`image`: URL ou data URL) |
-| `snap` | `SnapReq → GeoSnapResult` (`points`, `confidence` **nunca null**, `geometry?`) |
+| `snap` | `SnapReq → GeoSnapResult` (`points`, `confidence` **nunca null**, `geometry?`) — consumido pelo `job-worker/eta_refresh`: ele encaixa o motorista na via antes do geofence e só grava `current_latitude/longitude` quando `confidence >= 0.3` |
 | `isochrone / optimization / tilequery` | opcionais; ausente = função indisponível naquele provedor |
 
 Regras válidas para qualquer provedor:
