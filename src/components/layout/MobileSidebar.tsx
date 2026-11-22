@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, matchPath } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { 
@@ -15,10 +15,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
 import { BackButton } from '@/components/ui/back-button';
-import { meetsRole } from '@/lib/roles';
+import { meetsRole, getHighestRole } from '@/lib/roles';
+import { usePermissions } from '@/hooks/usePermissions';
+import { useSidebarCounts } from '@/hooks/useSidebarCounts';
+import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 
 interface MenuItem {
   id: string;
@@ -127,26 +128,11 @@ interface MobileSidebarProps {
 export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [openCategories, setOpenCategories] = useState<string[]>(['main']);
-  const [unreadAlerts, setUnreadAlerts] = useState(0);
-  const [pendingApprovals, setPendingApprovals] = useState(0);
-  const [openIncidents, setOpenIncidents] = useState(0);
-  const [userRole, setUserRole] = useState<string | null>(null);
-
-  // Fetch user role
-  useEffect(() => {
-    const fetchRole = async () => {
-      if (!user?.id) return;
-      const { data } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .single();
-      if (data) setUserRole(data.role);
-    };
-    fetchRole();
-  }, [user?.id]);
+  const { userRoles } = usePermissions();
+  const userRole = getHighestRole(userRoles);
+  const { unreadAlerts, pendingApprovals, openIncidents, refetchCounts } = useSidebarCounts();
+  useSidebarCountsRealtime(refetchCounts);
 
   // Role hierarchy for filtering (fonte única em @/lib/roles, item 48)
   const hasRequiredRole = (required?: 'admin' | 'manager') => meetsRole(userRole, required);
@@ -158,33 +144,6 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
       items: cat.items.filter(item => hasRequiredRole(item.requiredRole)),
     }))
     .filter(cat => cat.items.length > 0);
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const { count: alertsCount } = await supabase
-        .from('alerts')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_read', false)
-        .eq('is_dismissed', false);
-      setUnreadAlerts(alertsCount || 0);
-
-      const { count: approvalsCount } = await supabase
-        .from('driver_approval_queue')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'PENDING');
-      setPendingApprovals(approvalsCount || 0);
-
-      const { count: incidentsCount } = await supabase
-        .from('driver_incidents')
-        .select('*', { count: 'exact', head: true })
-        .eq('resolved', false);
-      setOpenIncidents(incidentsCount || 0);
-    };
-
-    if (open) {
-      fetchCounts();
-    }
-  }, [open]);
 
   // Auto-open category when active route is inside
   useEffect(() => {
@@ -205,7 +164,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
-    return location.pathname === path;
+    return matchPath({ path, end: false }, location.pathname) !== null;
   };
 
   const toggleCategory = (categoryId: string) => {
