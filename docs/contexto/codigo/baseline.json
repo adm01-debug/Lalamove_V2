@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e21df074ac62a70ac9f92478501bab99185da80e",
+  "commit": "ea8f382bfa07ec186bd6581e25739edefd6b71b0",
   "branch": "main",
-  "data_commit": "2026-11-22T10:17:43-03:00",
+  "data_commit": "2026-11-22T10:26:55-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ea8f382",
+    "data": "2026-11-22",
+    "assunto": "fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)"
+   },
+   {
+    "sha": "a9c2b2f",
+    "data": "2026-11-22",
+    "assunto": "docs(lalamove): commita análise exaustiva e plano de integração completo (#276)"
+   },
    {
     "sha": "e21df07",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "affd0df",
     "data": "2026-11-22",
     "assunto": "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)"
-   },
-   {
-    "sha": "1e2d9ce",
-    "data": "2026-11-22",
-    "assunto": "feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)"
-   },
-   {
-    "sha": "8f42f4f",
-    "data": "2026-11-22",
-    "assunto": "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)"
    }
   ],
-  "arquivos_mudados_7d": 296,
+  "arquivos_mudados_7d": 298,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 176
+    "commits": 178
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1034,
+  "arquivos_total": 1035,
   "arquivos_codigo": 646,
   "linhas_codigo": 126408,
   "rotas": 55,
@@ -327,7 +327,7 @@
   "testes": 147,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 104
+  "docs_md": 105
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {

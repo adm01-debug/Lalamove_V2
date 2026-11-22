@@ -6,7 +6,7 @@
    "TypeScript (533)",
    "SQL (196)",
    "JavaScript (114)",
-   "Markdown (104)",
+   "Markdown (105)",
    "JSON (35)",
    "Shell (9)",
    "Python (8)",
@@ -323,6 +323,11 @@
    "arquivo": "docs/ACHADO_GATEWAY_PROXY_2026-11.md",
    "titulo": "Achado: o `lalamove-gateway` aponta para um proxy que não existe",
    "linhas": 48
+  },
+  {
+   "arquivo": "docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md",
+   "titulo": "Lalamove V2 — Análise Exaustiva e Plano de Integração Completo",
+   "linhas": 709
   },
   {
    "arquivo": "docs/API_CONTRACTS.md",
