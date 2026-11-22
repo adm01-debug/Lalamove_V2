@@ -86,3 +86,67 @@ Regras que mudam o custo (routes/usage-and-billing): >10 waypoints intermediári
 - **Eventos**: `DRIVER_APPROACHING_PICKUP` (raio 500 m OU ETA ≤ 5 min), `DRIVER_ARRIVED_PICKUP` (2 ciclos ≤ 100 m), `DRIVER_APPROACHING_DELIVERY`/`DRIVER_ARRIVED_DELIVERY` (registra; notifica só com `notify_delivery_contact`), `ETA_DELAY`, `GEO_BUDGET_WARNING`.
 - **Notificação ao responsável pela coleta** via `send-notification` com `metadata.recipients` por pedido (pendente, Google etapa 66), templates em `alert_configurations`.
 - **Admin "Mapas & Custos"**: matriz função × provedor, orçamento, uso, teste de chave (pendente, Google Bloco 8 / Mapbox Bloco 6).
+
+---
+
+## 6. Estado real em 22/11/2026 — fechamento (etapa 100)
+
+Atualização da seção 4 após a implementação dos Blocos 0–9 dos dois planos de 100 etapas.
+
+### Configuração viva em produção (`geo_settings`)
+
+| Função | Provedor | Fallback | Observação |
+|---|---|---|---|
+| `autocomplete` | mapbox | mapbox | bias Curitiba 60 km, `region=br` |
+| `geocode` | mapbox | mapbox | `region=br` |
+| `reverse` | mapbox | mapbox | |
+| `route` | mapbox | mapbox | `travel_mode=DRIVE` |
+| `matrix` | mapbox | mapbox | refresh 300 m / 60 s, `traffic_when_eta_le_min=15` |
+| `snap` | mapbox | mapbox | sem equivalente Google |
+| `static` | mapbox | mapbox | |
+| `isochrone` / `optimization` / `tilequery` | mapbox | — | sem equivalente Google (`GEO_NOT_SUPPORTED` 501) |
+| `tiles` | mapbox | **google** | único com fallback cruzado |
+| `validate` | **off** | — | Address Validation fora do escopo (ver "V3") |
+
+Trocar qualquer linha acima em `/settings/maps` vale em **≤ 60 s** (TTL do resolver), sem deploy.
+
+### Orçamento e consumo
+
+- `geo_budget`: Google **US$ 50/mês** e Mapbox **US$ 50/mês**, ambos com `hard_stop = true` e
+  alerta em 80 %. Bloqueio responde `429`; aviso emite `GEO_BUDGET_WARNING`.
+- Consumo acumulado medido em `geo_usage`: **13 pares (provedor, função)** com tráfego real —
+  `mapbox.route` 196, `mapbox.autocomplete` 79, `mapbox.geocode` 46, `google.matrix` 40,
+  `mapbox.matrix` 28, `mapbox.tiles` 36, além de `snap`, `static`, `reverse`, `isochrone`.
+  Custo total acumulado: **US$ 0,0208** (praticamente tudo dentro da cota grátis).
+
+### O que mudou desde a análise original
+
+| Item da seção 4 | Estado em 22/11 |
+|---|---|
+| 1. Pedido sem coordenadas | **resolvido** — geocode no create + `lalamove_stops` com `place_id` prefixado por provedor (#115, #199, #211) |
+| 2. Posição do motorista descartada | **resolvido** — `snapDriverPosition` (#118) + 20 trackings ACTIVE com posição real |
+| 3. Sem geometria | **resolvido** — `geo_haversine_m`, `geo_point_to_polyline_m`, trigger `trg_active_tracking_geo`; 20/20 com `expected_route` e `eta_minutes` preenchidos |
+| 4. Aviso ao fornecedor nunca saía | **resolvido** — enum, schemas e chamadores corrigidos (#118, #211) |
+| 5. Crons ausentes | **resolvido** — 14 crons ativos, incluindo `process-job-queue` e `geo-jobs-refresh` |
+| 6. Toggle só visual | **resolvido** — `geo_settings` global + `geo_usage` + `geo_budget` + tela `/settings/maps` |
+| 7. Chave DistanceMatrix.ai hardcoded | **resolvido** — rotacionada e removida dos JSONs de bootstrap |
+| 8. `.env.example` sem variáveis Google | **resolvido** — `GOOGLE_MAPS_SERVER_KEY` e `MAPBOX_ACCESS_TOKEN` como secrets de edge |
+| 9. Deploy de edge manual | **resolvido** — `deploy-edges.yml` (#108) |
+
+### O que fica para a V3 (decisão do dono: V3 é concorrente do Lalamove, a atual é parceira)
+
+- **App do motorista próprio** — hoje a posição vem da UAPI da Lalamove; um app próprio é
+  pré-requisito de qualquer operação que não dependa do parceiro.
+- **Chat comprador ↔ motorista** — não existe e não faz sentido enquanto o motorista é da Lalamove.
+- **Address Validation, Roads API e entrega ao cliente final** — ficam `off`; só fazem sentido com
+  frota própria e o cliente final como destinatário direto.
+
+### O que permanece bloqueado por dependência externa
+
+- **Aceite com pedido real** (etapas 99 de ambos os planos): a conta Lalamove não tem pedidos
+  desde 27/08/2026 e `lalamove_uapi_sessions` está vazia desde 17/08 — sem sessão UAPI não há
+  cotação nem rastreio para percorrer o checklist ponta a ponta. Requer re-login UAPI (dono).
+- **Tokens Mapbox dedicados (`sk.`)**: o backend usa hoje a chave pública `pk.`, o que impede
+  restringir por escopo. Ação do dono no painel Mapbox.
+- **Sentry**: sem DSN configurado; a observabilidade cobre logs estruturados, `observability_logs`
+  e health checks, mas não captura de exceção no front.

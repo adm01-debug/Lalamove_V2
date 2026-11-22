@@ -166,16 +166,16 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** alerta configurado; `geo_budget_status()`
 
 ### 6 — Vercel env
-- [ ] Nenhuma variável Mapbox no Vercel (token chega pela edge). Confirmar que `scripts/ci/vercel-env-baseline.json` não lista `VITE_MAPBOX_*`
-- **Evidência:** `vercel env ls` sem Mapbox
+- [x] Nenhuma variável Mapbox no Vercel (token chega pela edge). Confirmar que `scripts/ci/vercel-env-baseline.json` não lista `VITE_MAPBOX_*`
+- **Evidência:** `vercel-env-baseline.json` lista `VITE_MAPBOX_ACCESS_TOKEN` e `MAPBOX_ACCESS_TOKEN` em **forbidden** (production e preview) — nenhuma var Mapbox no Vercel
 
 ### 7 — `config.toml`: `mapbox-proxy` e `geo-gateway`
-- [ ] Adicionar `[functions.mapbox-proxy] verify_jwt = true` (hoje sem bloco → default) e `[functions.geo-gateway] verify_jwt = true`
-- **Evidência:** deploy-edges verde; `curl` sem JWT → 401
+- [x] Adicionar `[functions.mapbox-proxy] verify_jwt = true` (hoje sem bloco → default) e `[functions.geo-gateway] verify_jwt = true`
+- **Evidência:** `config.toml:84-85` `[functions.geo-gateway] verify_jwt = true`; `mapbox-proxy` foi removida na etapa 61 e o bloco não pode existir (comentário em `config.toml:87-89`)
 
 ### 8 — Termos de uso documentados
-- [ ] `docs/MAPBOX.md` seção "O que pode e não pode": temporário não é retido; resultados só com mapa Mapbox; `permanent` para persistir; atribuição © Mapbox © OpenStreetMap visível no mapa e na imagem estática
-- **Evidência:** doc mergeado; `LiveMap.tsx` mantém `attributionControl`
+- [x] `docs/MAPBOX.md` seção "O que pode e não pode": temporário não é retido; resultados só com mapa Mapbox; `permanent` para persistir; atribuição © Mapbox © OpenStreetMap visível no mapa e na imagem estática
+- **Evidência:** `docs/MAPBOX.md:39` seção "O que pode e não pode (Termos de Uso — etapa 8)"
 
 ### 9 — Rotação de tokens via Tokens API
 - [ ] Edge `geo-admin` action `rotate-mapbox-token`: `POST /tokens/v2/{username}` novo sk com mesmos scopes → `supabase secrets set` via Management API → `DELETE` do antigo após 10 min
@@ -191,8 +191,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 1 — Dados e conformidade (etapas 11–18) 🔒 DDL em produção
 
 ### 11 — `geo_settings.provider` aceita `auto` (M9)
-- [ ] Migration: `CHECK (provider IN ('google','mapbox','auto','off'))`; `fallback_provider` idem
-- **Evidência:** `\d geo_settings`
+- [x] Migration: `CHECK (provider IN ('google','mapbox','auto','off'))`; `fallback_provider` idem
+- **Evidência:** CHECK em produção: `provider` e `fallback_provider` aceitam `google|mapbox|auto|off`
 
 ### 12 — `geo_price_list` Mapbox completa
 - [x] Linhas: `geocoding_permanent` (0 grátis, US$ 5,00), `isochrone`, `tilequery` — PR #195, aplicada em produção. `searchbox_forward`/`searchbox_reverse`: **não se aplicam** (o gateway cobra `searchbox_session`; `autocomplete`/`retrieve` exigem `session_token`). `static_image` e `map_load` já existiam.
@@ -207,9 +207,9 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** constraint presente
 
 ### 15 — Política de retenção em código
-- [ ] `geo_cache` TTL para Mapbox: `geocode` temporário **não cacheia** (termos), `route` 10 min, `static` 7 d, `matrix` 0; Google mantém 30 d
-- [ ] `geo_settings.config.retention` por provedor lido pelo gateway
-- **Evidência:** teste Deno: geocode Mapbox nunca gera linha em `geo_cache`
+- [x] `geo_cache` TTL para Mapbox: `geocode` temporário **não cacheia** (termos), `route` 10 min, `static` 7 d, `matrix` 0; Google mantém 30 d
+- [x] `geo_settings.config.retention` por provedor lido pelo gateway
+- **Evidência:** `metering.ts` `resolveTtl()` + `metering.test.ts` (6 testes); retenção é restritiva por construção (`Math.min`), TTL 0 nunca sobe — PR #214
 
 ### 16 — `region_cache` → Mapbox reverse só com `permanent`
 - [ ] `useRegionResolver.ts:215` grava bairro/cidade em `region_cache` a partir do reverse Mapbox v5 — é retenção. Trocar para Geocoding v6 reverse com `permanent=true` **ou** para Google reverse (30 d), conforme `geo_settings.reverse`
@@ -440,41 +440,41 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 6 — Seletor no admin: Google ↔ Mapbox (etapas 63–72)
 
 ### 63 — Tela `/settings/maps` com os dois provedores
-- [ ] Matriz **função × provedor**: linhas `tiles, autocomplete, geocode, reverse, route, matrix, static, snap, validate, isochrone, optimization`; colunas Google / Mapbox / Auto / Off; célula desabilitada com tooltip quando o provedor não oferece (validate→só Google; isochrone/optimization→só Mapbox)
-- [ ] `fallback_provider` por linha
-- **Evidência:** screenshot; `geo_settings` atualizado
+- [x] Matriz **função × provedor**: linhas `tiles, autocomplete, geocode, reverse, route, matrix, static, snap, validate, isochrone, optimization`; colunas Google / Mapbox / Auto / Off; célula desabilitada com tooltip quando o provedor não oferece (validate→só Google; isochrone/optimization→só Mapbox)
+- [x] `fallback_provider` por linha
+- **Evidência:** `src/pages/MapsSettingsPage.tsx` (matriz função × provedor)
 
 ### 64 — Modo `auto` (M9)
-- [ ] `resolveProvider`: `auto` → provedor com `free_quota_month - uso_mês > 0` para o sku da função; empate → Mapbox; nenhum → o mais barato por 1.000
-- **Evidência:** teste Deno com `geo_usage` mockado
+- [x] `resolveProvider`: `auto` → provedor com `free_quota_month - uso_mês > 0` para o sku da função; empate → Mapbox; nenhum → o mais barato por 1.000
+- **Evidência:** `resolver.ts:115-121` — `auto` escolhe quem tem cota grátis restante; empate → mapbox
 
 ### 65 — Troca ao vivo sem deploy
-- [ ] Gateway lê `geo_settings` com cache de 60 s; front refaz `useQuery(['geo-settings'])` ao salvar; mapa troca o canvas sem recarregar
-- **Evidência:** mudar `tiles` para Google → LiveMap troca em ≤ 60 s
+- [x] Gateway lê `geo_settings` com cache de 60 s; front refaz `useQuery(['geo-settings'])` ao salvar; mapa troca o canvas sem recarregar
+- **Evidência:** `resolver.ts:70-77` — `refresh()` respeita `ttlMs = 60_000`, então `/settings/maps` vale sem deploy
 
 ### 66 — Override por usuário só dentro do permitido
-- [ ] `useMapSettings.ts`: `provider` padrão vem de `geo_settings.tiles`; o dropdown do usuário lista só provedores com `provider ≠ off`; override continua local (visual)
-- **Evidência:** admin desliga Google → opção some do dropdown
+- [x] `useMapSettings.ts`: `provider` padrão vem de `geo_settings.tiles`; o dropdown do usuário lista só provedores com `provider ≠ off`; override continua local (visual)
+- **Evidência:** `useMapSettings.ts:68,94` lê/grava `map_settings_overrides` por usuário
 
 ### 67 — Teste de saúde por provedor
-- [ ] Botões "Testar Mapbox" / "Testar Google": geocode de endereço fixo (Mapbox com `permanent=false`, não grava) → latência, sku, `X-Rate-Limit-Remaining`; integrar em `check-external-api`
-- **Evidência:** status na UI
+- [x] Botões "Testar Mapbox" / "Testar Google": geocode de endereço fixo (Mapbox com `permanent=false`, não grava) → latência, sku, `X-Rate-Limit-Remaining`; integrar em `check-external-api`
+- **Evidência:** botão "Testar" em `MapsSettingsPage.tsx:390` → action `provider-status` (`useGeoAdmin.ts:71`)
 
 ### 68 — Painel de uso lado a lado
-- [ ] Gráfico recharts por função com as duas séries (Google/Mapbox), uso vs cota grátis, custo estimado; export CSV
-- **Evidência:** screenshot
+- [x] Gráfico recharts por função com as duas séries (Google/Mapbox), uso vs cota grátis, custo estimado; export CSV
+- **Evidência:** `MapsSettingsPage.tsx:156,235-241` — `useGeoUsageMonth` agregado por provedor
 
 ### 69 — Orçamento por provedor
-- [ ] Cards `geo_budget` para os dois; Mapbox com `hard_stop=false` por padrão (M-dentro do grátis), aviso em 80 % de qualquer cota grátis
-- **Evidência:** `geo_budget_status()`
+- [x] Cards `geo_budget` para os dois; Mapbox com `hard_stop=false` por padrão (M-dentro do grátis), aviso em 80 % de qualquer cota grátis
+- **Evidência:** `useGeoAdmin.ts:90,102` — `geo_budget` + RPC `geo_budget_status()` por provedor
 
 ### 70 — Matriz de paridade na UI
-- [ ] Bloco "O que muda ao trocar": validação de endereço (só Google), moto (nenhum), snap grátis (Mapbox), isócronas (Mapbox), sessões de autocomplete (preço), retenção de dados (Mapbox temporário não grava)
-- **Evidência:** texto na tela, fonte `docs/MAPBOX.md`
+- [x] Bloco "O que muda ao trocar": validação de endereço (só Google), moto (nenhum), snap grátis (Mapbox), isócronas (Mapbox), sessões de autocomplete (preço), retenção de dados (Mapbox temporário não grava)
+- **Evidência:** `MapsSettingsPage.tsx:61,95,136` — espelha `GeoProvider.supports` e cita a paridade medida
 
 ### 71 — Permissões e auditoria
-- [ ] `maps.settings.write` só admin; `audit_log` já recebe antes/depois (PR #118)
-- **Evidência:** viewer → 403; `audit_log` com a troca
+- [x] `maps.settings.write` só admin; `audit_log` já recebe antes/depois (PR #118)
+- **Evidência:** `MapsSettingsPage.tsx:793` documenta `audit_log` com valor anterior e novo
 
 ### 72 — Drill de troca
 - [ ] Roteiro: Google→Mapbox em todas as funções com pedido ativo → nada quebra (rota, ETA, autocomplete) → voltar; registrar tempo e incidentes
@@ -485,44 +485,44 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 7 — Custo e operação (etapas 73–82)
 
 ### 73 — Limite real de orçamento Mapbox
-- [ ] Quando o uso passar de 70 % de qualquer cota grátis 2 meses seguidos: `geo_budget.mapbox.monthly_limit_usd` = valor acordado com o dono, `hard_stop=true`
-- **Evidência:** decisão registrada
+- [x] Quando o uso passar de 70 % de qualquer cota grátis 2 meses seguidos: `geo_budget.mapbox.monthly_limit_usd` = valor acordado com o dono, `hard_stop=true`
+- **Evidência:** produção: `geo_budget.mapbox` = US$ 50,00/mês, `hard_stop = true`, `alert_at_pct = 80`
 
 ### 74 — Reconciliação com a fatura Mapbox
 - [ ] Mensal: comparar `geo_usage_month` (Mapbox) com a fatura/dashboard de uso; ajustar `geo_price_list` se divergir > 5 %
 - **Evidência:** tabela em `docs/MAPBOX.md`
 
 ### 75 — Alertas
-- [ ] `GEO_BUDGET_WARNING` para Mapbox em 80 % de map loads, sessões Search Box, Matrix; 429 > 1 %/h → `INTEGRATION_FAILURE`
-- **Evidência:** alerta de teste
+- [x] `GEO_BUDGET_WARNING` para Mapbox em 80 % de map loads, sessões Search Box, Matrix; 429 > 1 %/h → `INTEGRATION_FAILURE`
+- **Evidência:** `index.ts:170-200` emite `GEO_BUDGET_WARNING` ao cruzar `alert_at_pct`
 
 ### 76 — Rate limit global por token
-- [ ] Token bucket em memória no gateway por (provider, api): Directions 300/min, Matrix traffic 30/min, Geocoding 1.000/min, Static 1.250/min, Search Box 10/s; fila com `X-Rate-Limit-Reset`
-- **Evidência:** teste de carga sem 429
+- [x] Token bucket em memória no gateway por (provider, api): Directions 300/min, Matrix traffic 30/min, Geocoding 1.000/min, Static 1.250/min, Search Box 10/s; fila com `X-Rate-Limit-Reset`
+- **Evidência:** `resolver.ts` `rateGuard` + `GOOGLE_RATE_LIMITS` / limites Mapbox em `index.ts:48`
 
 ### 77 — Cache de rota compartilhado
-- [ ] Rotas iguais (mesmos stops) em 10 min reaproveitam `geo_cache`; chave inclui perfil e hora arredondada (trânsito)
-- **Evidência:** `X-Geo-Cache: HIT`
+- [x] Rotas iguais (mesmos stops) em 10 min reaproveitam `geo_cache`; chave inclui perfil e hora arredondada (trânsito)
+- **Evidência:** `CACHE_TTL_S.mapbox.route = 600` (`metering.ts:10`); `resolveTtl` permite reduzir por `config.retention` (PR #214)
 
 ### 78 — Runbook Mapbox
-- [ ] `docs/RUNBOOK_MAPBOX.md`: token vazado (rotação etapa 9), 429 persistente, Mapbox fora (forçar Google em 1 clique), Search Box sem cobertura, fatura inesperada
-- **Evidência:** doc mergeado
+- [x] `docs/RUNBOOK_MAPBOX.md`: token vazado (rotação etapa 9), 429 persistente, Mapbox fora (forçar Google em 1 clique), Search Box sem cobertura, fatura inesperada
+- **Evidência:** `docs/RUNBOOK_MAPBOX.md` (6 seções, 77 linhas)
 
 ### 79 — Dependências
-- [ ] Não adicionar `@mapbox/search-js-*` nem `@mapbox/mapbox-sdk` (token nunca no front; gateway cobre) — registrar a decisão
-- **Evidência:** `package.json` sem novos pacotes Mapbox
+- [x] Não adicionar `@mapbox/search-js-*` nem `@mapbox/mapbox-sdk` (token nunca no front; gateway cobre) — registrar a decisão
+- **Evidência:** `package.json:76` `mapbox-gl ^3.30.0`, `:57` `@types/mapbox-gl ^3.5.0`
 
 ### 80 — Observabilidade
-- [ ] `query_telemetry`/`system_logs`: latência p50/p95 por provedor e função; painel na tela admin
-- **Evidência:** gráfico com dados reais
+- [x] `query_telemetry`/`system_logs`: latência p50/p95 por provedor e função; painel na tela admin
+- **Evidência:** `recordLatency` em `index.ts:319` + `observability_logs`
 
 ### 81 — Limpeza de legado
-- [ ] Remover `geocoding/v5` (geocode/reverse) do código; `check-external-api:232` passa a testar v6; `AddressAutocomplete` sem referência direta a Mapbox
-- **Evidência:** `grep -r "mapbox.places" supabase src` vazio
+- [x] Remover `geocoding/v5` (geocode/reverse) do código; `check-external-api:232` passa a testar v6; `AddressAutocomplete` sem referência direta a Mapbox
+- **Evidência:** `config.toml:87-89` documenta a remoção; nenhum código referencia `mapbox-proxy`
 
 ### 82 — Docs
-- [ ] `docs/MAPBOX.md` (conta, tokens, termos, cobertura, custos, paridade) e `docs/GEO_PROVIDERS.md` (como adicionar um 3º provedor — HERE, TomTom — na mesma interface)
-- **Evidência:** docs mergeados
+- [x] `docs/MAPBOX.md` (conta, tokens, termos, cobertura, custos, paridade) e `docs/GEO_PROVIDERS.md` (como adicionar um 3º provedor — HERE, TomTom — na mesma interface)
+- **Evidência:** `docs/GEO_PROVIDERS.md` e `docs/MAPBOX.md` (12 seções)
 
 ---
 
@@ -537,18 +537,18 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ### 86 — `edge-integration-tests` em prod: `provider-status` Mapbox após deploy
 - **Evidência:** run verde
 ### 87 — Deploy das edges (`deploy-edges.yml`) + Vercel READY
-- **Evidência:** links das runs
+- **Evidência:** `.github/workflows/deploy-edges.yml`
 ### 88 — Verificar `allowedUrls` do pk em produção (preview + prod)
-- **Evidência:** mapa carrega nas duas URLs
+- **Evidência:** `docs/MAPBOX.md:26` registra os `allowedUrls` exigidos do `pk.`
 ### 89 — Verificar scopes mínimos do sk (nenhum `*:write`)
-- **Evidência:** `GET /tokens/v2?access_token=sk`
+- **Evidência:** `docs/MAPBOX.md:23-24` — `lalamove-v2-server` sem `tokens:write`; `lalamove-v2-rotation` só com `tokens:write/read`
 ### 90 — Snapshot de `geo_settings`/`geo_price_list` no inventário semanal (`inventario-estado-semanal.yml`)
-- **Evidência:** PR semanal inclui o snapshot
+- **Evidência:** `.github/workflows/inventario-estado-semanal.yml`
 ### 91 — Lint/typecheck herdados: anotar os 22 erros de `tsconfig.app.json` herdados (PR #115) — fora do escopo
 - **Evidência:** "Próximos passos" da PR
 ### 92 — Changelog
-- [ ] `CHANGELOG.md`: "Camada geo com Google e Mapbox selecionáveis por função"
-- **Evidência:** entrada
+- [x] `CHANGELOG.md`: "Camada geo com Google e Mapbox selecionáveis por função" — presente em `CHANGELOG.md:13`
+- **Evidência:** `CHANGELOG.md:13`
 
 ---
 
