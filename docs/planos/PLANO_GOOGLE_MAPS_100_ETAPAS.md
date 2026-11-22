@@ -47,7 +47,7 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
 > **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
 > 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Contagem: **87 `[x]` / 103 `[ ]`**.
-> Gaps reais confirmados que seguem abertos: 33 (`useGeo.ts` é só re-export; `src/types/geo.ts` não existe),
+> Gaps reais confirmados que seguem abertos:
 > 56 (sem destinatário interno), 60 (`notification_optouts` só na PR #221), 61 (`tracking_status='ended'` só
 > na PR #221), 66 (união ad-hoc × `alert_configurations` ainda não explícita), 68 (`sendMedia` inexistente),
 > 70 (`check-driver-alerts` sem `cron.schedule`), 83 (`mapbox-proxy`/`get-mapbox-token` ainda no ar),
@@ -280,11 +280,27 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 
 ## BLOCO 3 — Endereço no pedido (etapas 33–42)
 
-### 33 — Hook `src/hooks/useGeo.ts`
-- [ ] `useGeoAutocomplete(input, {bias})` com debounce 300 ms, `sessionToken` (uuid v4) gerado ao focar e descartado após `place-details`
-- [ ] `useGeoPlaceDetails`, `useGeocode`, `useRoute`, `useMatrix`, `useStaticMap` → todos via `supabase.functions.invoke('geo-gateway')`
-- [ ] Tipos em `src/types/geo.ts` espelhando `_shared/schemas.ts`
-- **Evidência:** vitest `useGeo.test.ts`
+### 33 — Hook `src/hooks/useGeo.ts` ✅
+- [x] `useGeoAutocomplete(input, {bias})` com debounce 300 ms, `sessionToken` (uuid v4) gerado ao focar e descartado após `place-details`
+- [x] `useGeoPlaceDetails`, `useGeocode`, `useRoute`, `useMatrix`, `useStaticMap` → todos via `supabase.functions.invoke('geo-gateway')`
+- [x] Tipos em `src/types/geo.ts` espelhando `_shared/schemas.ts`
+- **Evidência:** vitest `useGeo.test.ts` / `useGeo.contract.test.ts`
+
+**Executado (2026-11-22).** `src/hooks/useGeo.ts` manteve o `export * from "./useMapbox"` (linha 6) e passou a
+exportar o contrato nomeado do plano, como camada fina sobre `callGeo` (`src/lib/geo-gateway.ts:63`) — nenhum
+consumidor existente mudou de import:
+- `useGeoAutocomplete` (~:70) delega a `useAddressSearchBox` (`src/hooks/useGeoSearch.ts:130`), que já é dona do
+  `sessionToken` uuid v4 (`crypto.randomUUID`), do `SESSION_TTL_MS` e da renovação após `retrieve`; o debounce de
+  300 ms vem de `useDebouncedValue` (`src/hooks/useDebouncedValue.ts:20`), sobrescrevível por `debounceMs`.
+- `useGeoPlaceDetails` (~:105), `useGeocode` (~:130), `useRoute`, `useMatrix`, `useStaticMap` (~:155-185) chamam
+  `action: place-details | geocode | route | matrix | static` no `geo-gateway`.
+- `toGeoPrecision`/`GEO_PRECISIONS` normalizam o `precision` livre de `useGeoSearch.ts:37` para o vocabulário do
+  edge; `GeoAddress.retainable` é opcional no front (obrigatório no backend).
+- `src/types/geo.ts` (novo) é o espelho de `_shared/schemas.ts:123-260` + `geo-gateway/providers/types.ts`; todos os
+  request são `type X = { ... }` para ter index signature implícita exigida por `callGeo(Record<string, unknown>)`.
+
+**Verificado:** `npx tsc --noEmit -p tsconfig.app.json` → exit 0; `npx vitest run src/hooks/__tests__/useGeo.contract.test.ts`
+→ 8/8; `useGeo.test.ts` → 8/8; `useGeoSearch.test.tsx` → 15/15; `npx eslint` nos 3 arquivos → limpo.
 
 ### 34 — `AddressAutocomplete.tsx` com provedor ✅
 - [x] `useAddressSearchBox` (gateway, sessão por token) substituiu `useMapboxGeocode`; o CRM (`useAddressSearch`) continua como **primeiro grupo** da lista, seguido de "Já usados" e do provedor
