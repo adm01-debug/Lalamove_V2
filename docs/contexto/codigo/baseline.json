@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5",
+  "commit": "2a87c43651e441ee8b4d85e03a51f0ee6a700c6c",
   "branch": "main",
-  "data_commit": "2026-11-21T22:37:58-03:00",
+  "data_commit": "2026-11-21T22:41:21-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2a87c43",
+    "data": "2026-11-21",
+    "assunto": "fix(migration): resolve colisao das constraints de place_id (#204)"
+   },
+   {
+    "sha": "e0bceb0",
+    "data": "2026-11-21",
+    "assunto": "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)"
+   },
    {
     "sha": "7938358",
     "data": "2026-11-21",
@@ -121,16 +131,6 @@
     "sha": "e616ccf",
     "data": "2026-11-21",
     "assunto": "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)"
-   },
-   {
-    "sha": "c2ae0ba",
-    "data": "2026-11-21",
-    "assunto": "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)"
-   },
-   {
-    "sha": "39f672a",
-    "data": "2026-11-21",
-    "assunto": "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)"
    }
   ],
   "arquivos_mudados_7d": 206,
@@ -153,7 +153,7 @@
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
@@ -210,11 +210,11 @@
     "mudancas": 16
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 10
+    "arquivo": "docs/MAPBOX.md",
+    "mudancas": 11
    },
    {
-    "arquivo": "docs/MAPBOX.md",
+    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 108
+    "commits": 110
    },
    {
     "autor": "dependabot[bot]",

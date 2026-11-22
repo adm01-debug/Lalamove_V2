@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5` (2026-11-21T22:37:58-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2a87c43651e441ee8b4d85e03a51f0ee6a700c6c` (2026-11-21T22:41:21-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -272,16 +272,16 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7555 nós · 16085 arestas · 575 comunidades · grafo do commit `7938358c`
-- comunidades maiores: cn (252), button.tsx (138), lucide-react (127), App.tsx (116), snapshot.py (102), client.ts (96), ref_node_path (85), dependencies (80), DashboardRedesigned.tsx (78), gerar.mjs (76), generate.py (73), package.json (70)
+- 7556 nós · 16086 arestas · 568 comunidades · grafo do commit `2a87c436`
+- comunidades maiores: cn (214), lucide-react (178), App.tsx (117), snapshot.py (102), ref_node_path (101), badge.tsx (93), RolesPage.tsx (90), contract.ts (89), mapbox.ts (89), client.ts (83), generate.py (81), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
 - package.json (31)
 - supabase/config.toml (16)
+- docs/MAPBOX.md (11)
 - .github/workflows/ci.yml (10)
-- docs/MAPBOX.md (10)
 - docs/pendencias/_ordem.md (10)
 - src/components/map/LiveMap.tsx (6)
 - src/components/orders/AddressAutocomplete.tsx (6)
@@ -350,7 +350,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (204 linhas)
+- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (230 linhas)
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
@@ -369,6 +369,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `2a87c43` fix(migration): resolve colisao das constraints de place_id (#204)
+- 2026-11-21 `e0bceb0` docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)
 - 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
 - 2026-11-21 `0a1c0f1` docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)
 - 2026-11-21 `972a37c` feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)
@@ -382,8 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `fe2ee4a` feat: eta_refresh encaixa o motorista na via antes do geofence (#188)
 - 2026-11-21 `f973d92` fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)
 - 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
-- 2026-11-21 `d62d6d8` feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)
-- 2026-11-21 `3ab9d64` test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
