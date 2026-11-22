@@ -1,10 +1,17 @@
--- Etapa 50 do plano Google Maps.
+-- Etapas 46 e 50 do plano Google Maps.
 --
 -- 50 — `ETA_DELAY`: existia no enum (`20261122130000_geo_alert_types.sql:11`) e em
 --      `alert_configurations` (`20261122130100:548-549` com `message_template`), mas
 --      nenhum código emitia o evento. Agora o trigger emite quando a previsão de chegada
 --      passa do `scheduled_at` + a tolerância de `LATE_DELIVERY`, uma vez por pedido por
 --      parada (`order_geo_events` tem UNIQUE(order_id, event_type, stop_index)).
+--
+-- 46 — Avanço de parada: `active_tracking.next_stop_index` era criado com DEFAULT 0
+--      (`20261122130100:241`) e NENHUM código do repositório o incrementava (grep em
+--      `supabase/functions/` e `src/` só encontra leitura). Consequência real: o bloco de
+--      ENTREGA do trigger (`20261122130100:508`) exige `next_stop_index >= 1` e por isso
+--      nunca executava — nenhum pedido gerava DRIVER_APPROACHING_DELIVERY nem
+--      DRIVER_ARRIVED_DELIVERY. Este arquivo passa a avançar a parada.
 --
 -- Nota sobre a etapa 44 (replanejar rota fora do caminho): já estava implementada pelo
 -- cron `geo-jobs-refresh` (`20261121194500_geo_jobs_scheduler.sql:52-73`), que a cada 5 min
@@ -192,8 +199,51 @@ BEGIN
     END IF;
   END IF;
 
+  -- ---------------- AVANCO DE PARADA (etapa 46) ----------------
+  -- Nada mais no repositorio escrevia `next_stop_index`: a coluna nascia em 0
+  -- (`geo_foundation.sql:241`) e ficava em 0 para sempre. Como o bloco de ENTREGA acima
+  -- exige `next_stop_index >= 1`, ele nunca executava — nenhum pedido recebia alerta de
+  -- aproximacao/chegada na entrega. Este bloco fecha isso.
+  --
+  -- Regra (plano, etapa 46): chegou ao raio de chegada por 2 ciclos consecutivos
+  -- (`near_stop_cycles >= 2`) OU o status Lalamove virou PICKED_UP -> avanca uma parada e
+  -- marca `arrived_at` na parada que ficou para tras. Antes de avancar, o codigo so
+  -- emitia DRIVER_ARRIVED_*; agora a parada tambem e quitada.
+  --
+  -- Ordem importa: o avanco roda no FIM, depois de todos os eventos, para que stop_index
+  -- dos eventos emitidos seja o da parada que estava sendo perseguida neste ciclo.
+  IF NEW.next_stop_index < v_last_index
+     AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER','PICKED_UP','DELIVERING')
+     AND (NEW.near_stop_cycles >= 2 OR v_status = 'PICKED_UP') THEN
+
+    UPDATE lalamove_stops SET arrived_at = COALESCE(arrived_at, now())
+     WHERE order_id = NEW.order_id AND stop_index = NEW.next_stop_index;
+
+    NEW.next_stop_index  := NEW.next_stop_index + 1;
+    NEW.near_stop_cycles := 0;   -- zera, senao o contador herdado dispararia
+                                 -- DRIVER_ARRIVED_DELIVERY no ciclo seguinte
+
+    -- as metricas precisam apontar para a NOVA parada, nao para a que acabou de ser deixada
+    SELECT latitude, longitude INTO v_stop_lat, v_stop_lng
+      FROM lalamove_stops WHERE order_id = NEW.order_id AND stop_index = NEW.next_stop_index LIMIT 1;
+    IF v_stop_lat IS NULL THEN
+      IF NEW.next_stop_index = 0 THEN
+        v_stop_lat := o.pickup_latitude;   v_stop_lng := o.pickup_longitude;
+      ELSE
+        v_stop_lat := o.delivery_latitude; v_stop_lng := o.delivery_longitude;
+      END IF;
+    END IF;
+
+    IF v_stop_lat IS NOT NULL AND v_stop_lng IS NOT NULL THEN
+      NEW.distance_to_next_stop_m := round(
+        geo_haversine_m(NEW.current_latitude, NEW.current_longitude, v_stop_lat, v_stop_lng)::numeric, 1);
+    ELSE
+      NEW.distance_to_next_stop_m := NULL;
+    END IF;
+  END IF;
+
   RETURN NEW;
 END; $$;
 
 COMMENT ON FUNCTION public.geo_evaluate_tracking() IS
-  'Trigger de active_tracking: calcula distancia/ETA local, emite os eventos de geofence (etapas 54-57) e ETA_DELAY (etapa 50).';
+  'Trigger de active_tracking: calcula distancia/ETA local, emite os eventos de geofence (etapas 54-57), ETA_DELAY (etapa 50) e avanca next_stop_index (etapa 46).';
