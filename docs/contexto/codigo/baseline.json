@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d825edfc3cea6e6c678620ab2c176e975bd5c677",
+  "commit": "b7a81367fa7b7b14963dba0cb08d977096090315",
   "branch": "main",
-  "data_commit": "2026-11-21T22:28:47-03:00",
+  "data_commit": "2026-11-21T22:30:00-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b7a8136",
+    "data": "2026-11-21",
+    "assunto": "fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)"
+   },
    {
     "sha": "d825edf",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "339acda",
     "data": "2026-11-21",
     "assunto": "feat: failover de provedor em runtime no geo-gateway (#175)"
-   },
-   {
-    "sha": "fe9865a",
-    "data": "2026-11-21",
-    "assunto": "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)"
    }
   ],
-  "arquivos_mudados_7d": 199,
+  "arquivos_mudados_7d": 200,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 102
+    "commits": 103
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 975,
+  "arquivos_total": 976,
   "arquivos_codigo": 608,
   "linhas_codigo": 119145,
   "rotas": 55,
@@ -322,7 +322,7 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 177,
+  "migrations": 178,
   "cron_jobs": 21,
   "testes": 120,
   "workflows": 5,

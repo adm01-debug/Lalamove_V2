@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d825edfc3cea6e6c678620ab2c176e975bd5c677` (2026-11-21T22:28:47-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b7a81367fa7b7b14963dba0cb08d977096090315` (2026-11-21T22:30:00-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (497), SQL (181), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (497), SQL (182), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 975 |
+| arquivos_total | 976 |
 | arquivos_codigo | 608 |
 | linhas_codigo | 119145 |
 | rotas | 55 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 88 |
-| migrations | 177 |
+| migrations | 178 |
 | cron_jobs | 21 |
 | testes | 120 |
 | workflows | 5 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7519 nós · 15971 arestas · 565 comunidades · grafo do commit `d825edfc`
+- 7520 nós · 15971 arestas · 566 comunidades · grafo do commit `b7a81367`
 - comunidades maiores: cn (264), lucide-react (153), snapshot.py (102), ref_node_path (94), RateLimitDashboardPage.tsx (91), badge.tsx (90), generate.py (81), dependencies (80), gerar.mjs (76), client.ts (75), package.json (75), NotificationPreferences.tsx (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts), uniq() (scripts/ai-context/gerar.mjs)
 
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `b7a8136` fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)
 - 2026-11-21 `d825edf` feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)
 - 2026-11-21 `a9a7781` chore: registra os resultados reais do drill da etapa 72 (#194)
 - 2026-11-21 `a76d93c` feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `5281908` fix: fechar ciclo de notification_status dos eventos geo (#181)
 - 2026-11-21 `3e6683c` infra: cron horario de refresh das materialized views de cache (#180)
 - 2026-11-21 `2847da1` fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)
-- 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

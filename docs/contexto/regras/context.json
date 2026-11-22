@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d825edfc3cea6e6c678620ab2c176e975bd5c677",
+  "sha": "b7a81367fa7b7b14963dba0cb08d977096090315",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 01:29 UTC",
-  "files_total": 970,
-  "code_files": 798,
-  "code_lines": 137736
+  "generated_at": "2026-11-22 01:30 UTC",
+  "files_total": 971,
+  "code_files": 799,
+  "code_lines": 137755
  },
  "version": "1.3.2",
- "facts_hash": "33bd84c410d3da43",
+ "facts_hash": "66012b9f7cfb1b7a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   "languages": {
    ".ts": 268,
    ".tsx": 229,
-   ".sql": 181,
+   ".sql": 182,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -14333,6 +14333,7 @@
    "supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql",
    "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
    "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
+   "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -21250,8 +21251,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 177,
-   "lines": 12044,
+   "files": 178,
+   "lines": 12063,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -68520,13 +68521,26 @@
   "supabase/migrations/20261123110000_cron_refresh_cache_views.sql": {
    "path": "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
    "lines": 24
+  },
+  "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql": {
+   "path": "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
+   "lines": 19
   }
  },
  "git": {
-  "sha": "d825edfc3cea6e6c678620ab2c176e975bd5c677",
+  "sha": "b7a81367fa7b7b14963dba0cb08d977096090315",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b7a8136",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)",
+    "files": [
+     "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql"
+    ]
+   },
    {
     "sha": "d825edf",
     "date": "2026-11-21",
@@ -68871,25 +68885,6 @@
      "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
      "supabase/migrations/20261122150100_fix_public_rls_bypass.sql"
     ]
-   },
-   {
-    "sha": "641034b",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(mapas): tela de provedores de mapa em /settings/maps (#168)",
-    "files": [
-     "src/App.tsx",
-     "src/components/layout/sidebar-config.ts",
-     "src/components/orders/OrderDetailModal.tsx",
-     "src/hooks/useGeoAdmin.ts",
-     "src/hooks/usePendingApprovals.ts",
-     "src/hooks/useRecentOrders.ts",
-     "src/hooks/useSLAMetrics.ts",
-     "src/integrations/supabase/types.ts",
-     "src/pages/MapsSettingsPage.tsx",
-     "src/pages/orders/OrderCard.tsx",
-     "src/types/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -68970,7 +68965,7 @@
     2
    ],
    [
-    "src/components/orders/OrderDetailModal.tsx",
+    "src/hooks/useMapbox.ts",
     2
    ]
   ]
