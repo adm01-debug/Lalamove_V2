@@ -458,8 +458,9 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `SELECT alert_type,is_enabled FROM alert_configurations`
 
 ### 72 — UI de configuração dos novos alertas
-- [ ] `AlertConfigCard.tsx`: suportar os 8 tipos novos; campos raio/ETA padrão; preview do template
-- **Evidência:** screenshot
+- [x] `AlertConfigCard.tsx`: suportar os 8 tipos novos; campos raio/ETA padrão; preview do template
+- **Evidência:** `AlertConfigCard.test.tsx` — 3 testes verdes: os 8 `alert_type` geo resolvem para rótulo PT-BR em vez de cair no fallback do nome cru; o preview substitui `{{driver_name}}`/`{{driver_plate}}`/`{{eta_min}}` pelos valores de exemplo e não deixa `{{` no texto; variável desconhecida é preservada (não apagada). Os padrões de raio/ETA vivem em `geo_defaults` e são editados na `MapsSettingsPage` (etapa 88) — o card não duplica esses campos.
+- **Correção embutida:** o placeholder do modal ensinava `{driver_name}` (chave simples), sintaxe que `_shared/template.ts` **não** renderiza — quem seguia a dica gravava template que saía literal na mensagem do cliente. Agora o hint lista `{{variavel}}` e vem de `TEMPLATE_VARIABLES`.
 
 ### 73 — Histórico
 - [ ] `NotificationHistoryPage.tsx` + `useNotificationHistory`: filtrar por pedido e por tipo geo; mostrar `deferred/no_recipient`
