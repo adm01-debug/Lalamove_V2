@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `8b67608f1abec484348d76a808b7aae5cd765d3d` (2026-11-22T08:29:31-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8` (2026-11-22T08:40:52-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1027 |
 | arquivos_codigo | 646 |
-| linhas_codigo | 125762 |
+| linhas_codigo | 125908 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7862 nós · 16788 arestas · 586 comunidades · grafo do commit `8b67608f`
+- 7862 nós · 16788 arestas · 586 comunidades · grafo do commit `6e48f45b`
 - comunidades maiores: cn (246), react (186), lucide-react (182), snapshot.py (102), ref_node_path (96), AlertsPage.tsx (92), App.tsx (82), AppLayout.tsx (81), dependencies (80), gerar.mjs (76), NewOrderDialog.tsx (74), contract.ts (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -291,7 +291,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - src/components/map/LiveMap.tsx (8)
 - src/components/orders/NewOrderDialog.tsx (8)
 - supabase/functions/_shared/schemas.ts (8)
-- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
+- supabase/functions/geo-gateway/providers/mapbox.ts (8)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -374,6 +374,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `6e48f45` fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)
 - 2026-11-22 `8b67608` docs: corrige referência desatualizada no comentário do stub de migration (#263)
 - 2026-11-22 `2b6eeeb` fix(geo): evita colisão de versão de migration com a PR #246 (#262)
 - 2026-11-22 `2a4d1b1` fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)
@@ -388,7 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `4ad97ef` chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)
 - 2026-11-22 `b59c51c` feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)
 - 2026-11-22 `9af8801` feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)
-- 2026-11-22 `e0e0118` docs: etapas 90 e 92 marcadas como executadas no plano (#247)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

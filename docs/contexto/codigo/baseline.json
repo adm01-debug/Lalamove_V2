@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "8b67608f1abec484348d76a808b7aae5cd765d3d",
+  "commit": "6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8",
   "branch": "main",
-  "data_commit": "2026-11-22T08:29:31-03:00",
+  "data_commit": "2026-11-22T08:40:52-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "6e48f45",
+    "data": "2026-11-22",
+    "assunto": "fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)"
+   },
    {
     "sha": "8b67608",
     "data": "2026-11-22",
@@ -126,18 +131,13 @@
     "sha": "2d6c7b1",
     "data": "2026-11-22",
     "assunto": "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)"
-   },
-   {
-    "sha": "5e00e7c",
-    "data": "2026-11-22",
-    "assunto": "fix: webhook cria a linha de active_tracking no primeiro ping (#236)"
    }
   ],
   "arquivos_mudados_7d": 288,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 60
+    "mudancas": 62
    },
    {
     "pasta": "src/components/map",
@@ -254,11 +254,11 @@
     "mudancas": 8
    },
    {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "mudancas": 8
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 7
    },
    {
@@ -278,6 +278,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/components/orders/OrderDetailModal.tsx",
     "mudancas": 5
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 160
+    "commits": 161
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1027,
   "arquivos_codigo": 646,
-  "linhas_codigo": 125762,
+  "linhas_codigo": 125908,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18138
+   "linhas": 18284
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -661,6 +661,10 @@
    "linhas": 501
   },
   {
+   "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+   "linhas": 500
+  },
+  {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",
    "linhas": 499
   },
@@ -675,10 +679,6 @@
   {
    "arquivo": "src/pages/RateLimitDashboardPage.tsx",
    "linhas": 478
-  },
-  {
-   "arquivo": "src/components/ui/micro-interactions.tsx",
-   "linhas": 476
   }
  ],
  "qualidade": {
@@ -686,7 +686,7 @@
   "console_log": 414,
   "ts_ignore": 0,
   "eslint_disable": 1,
-  "todos": 3,
+  "todos": 4,
   "arquivos_acima_500_linhas": 20
  },
  "todos": [
@@ -707,6 +707,12 @@
    "linha": 4,
    "tipo": "TODO",
    "texto": "indicador de status use"
+  },
+  {
+   "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+   "linha": 345,
+   "tipo": "TODO",
+   "texto": "o resto de `p` (geometries, overview, steps,"
   }
  ],
  "alertas": {
