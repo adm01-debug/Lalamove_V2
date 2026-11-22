@@ -151,6 +151,38 @@ jobs:
       - name: Run Edge Function I/O integration tests
         run: deno test --allow-net --allow-env --allow-read supabase/functions/_shared/contract.integration.test.ts
 
+  geo-sql-tests:
+    name: Geo geometry SQL tests
+    runs-on: ubuntu-24.04
+    needs: lint-and-typecheck
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: geotest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Create geometry functions from the geo_foundation migration
+        env:
+          PGPASSWORD: postgres
+        run: |
+          # Só as funções puras de geometria: elas não dependem de auth/alert_type,
+          # então rodam num Postgres limpo. Etapa 17 do plano Google Maps.
+          sed -n '277,345p' supabase/migrations/20261122130100_geo_foundation.sql \
+            | psql -h localhost -U postgres -d geotest -q -v ON_ERROR_STOP=1
+      - name: Run known-value asserts
+        env:
+          PGPASSWORD: postgres
+        run: psql -h localhost -U postgres -d geotest -v ON_ERROR_STOP=1 -f supabase/tests/geo_functions.test.sql
+
   deploy:
     needs: build
     runs-on: ubuntu-24.04
