@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "9ec9341971faa8c695a432a1d13657d96bb5535e",
+  "commit": "a7b144f92bf5de1bcefbc49460a130b9430ccdc3",
   "branch": "main",
-  "data_commit": "2026-11-22T01:44:47-03:00",
+  "data_commit": "2026-11-22T01:46:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a7b144f",
+    "data": "2026-11-22",
+    "assunto": "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)"
+   },
    {
     "sha": "9ec9341",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "2a87c43",
     "data": "2026-11-21",
     "assunto": "fix(migration): resolve colisao das constraints de place_id (#204)"
-   },
-   {
-    "sha": "e0bceb0",
-    "data": "2026-11-21",
-    "assunto": "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)"
    }
   ],
-  "arquivos_mudados_7d": 254,
+  "arquivos_mudados_7d": 256,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -148,12 +148,12 @@
     "mudancas": 18
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 15
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 14
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 15
    },
    {
     "pasta": "package-lock.json",
@@ -176,12 +176,12 @@
     "mudancas": 10
    },
    {
-    "pasta": "supabase/functions/send-notification",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 8
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 7
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 8
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -211,15 +211,15 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 14
+    "mudancas": 15
+   },
+   {
+    "arquivo": ".github/workflows/ci.yml",
+    "mudancas": 12
    },
    {
     "arquivo": "docs/MAPBOX.md",
     "mudancas": 12
-   },
-   {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 11
    },
    {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 133
+    "commits": 134
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1003,
+  "arquivos_total": 1004,
   "arquivos_codigo": 627,
   "linhas_codigo": 122391,
   "rotas": 55,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 132,
+  "testes": 133,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 102

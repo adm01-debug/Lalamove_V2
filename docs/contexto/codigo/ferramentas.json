@@ -4,7 +4,7 @@
  "stack": {
   "linguagens": [
    "TypeScript (516)",
-   "SQL (187)",
+   "SQL (188)",
    "JavaScript (112)",
    "Markdown (102)",
    "JSON (34)",
@@ -157,6 +157,7 @@
     "security",
     "contract-tests",
     "edge-integration-tests",
+    "geo-sql-tests",
     "deploy"
    ],
    "permissoes": [],

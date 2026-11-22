@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9ec9341971faa8c695a432a1d13657d96bb5535e` (2026-11-22T01:44:47-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a7b144f92bf5de1bcefbc49460a130b9430ccdc3` (2026-11-22T01:46:56-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (516), SQL (187), JavaScript (112), Markdown (102), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (516), SQL (188), JavaScript (112), Markdown (102), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1003 |
+| arquivos_total | 1004 |
 | arquivos_codigo | 627 |
 | linhas_codigo | 122391 |
 | rotas | 55 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 132 |
+| testes | 133 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 102 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7707 nós · 16386 arestas · 564 comunidades · grafo do commit `9ec93419`
+- 7708 nós · 16386 arestas · 565 comunidades · grafo do commit `a7b144f9`
 - comunidades maiores: cn (190), react (132), Badge (127), snapshot.py (102), contract.ts (99), client.ts (94), providers/types.ts (87), EvaluationsPage.tsx (85), dependencies (80), gerar.mjs (76), generate.py (75), lint-ratchet.mjs (75)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
@@ -280,9 +280,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package-lock.json (31)
 - package.json (31)
 - supabase/config.toml (16)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (14)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (15)
+- .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
-- .github/workflows/ci.yml (11)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
 - src/components/orders/AddressAutocomplete.tsx (8)
@@ -371,6 +371,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `a7b144f` feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)
 - 2026-11-22 `9ec9341` fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)
 - 2026-11-22 `32c1842` feat: canal Zapp no send-notification (etapa 69) (#232)
 - 2026-11-22 `ed72e8d` feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)
@@ -385,7 +386,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `460de12` fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)
 - 2026-11-21 `845586a` docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)
 - 2026-11-21 `c9424eb` fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)
-- 2026-11-21 `c194d15` feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
