@@ -911,8 +911,8 @@
   {
    "modulo": "components/map",
    "arquivos": 20,
-   "testes": 11,
-   "linhas": 4308,
+   "testes": 12,
+   "linhas": 4328,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1006,6 +1006,7 @@
     "jspdf-autotable",
     "lucide-react",
     "mapbox-gl",
+    "react-i18next",
     "sonner"
    ]
   },

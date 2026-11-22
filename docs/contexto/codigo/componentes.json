@@ -846,7 +846,7 @@
     "LiveMap"
    ],
    "export_default": null,
-   "linhas": 657,
+   "linhas": 671,
    "dominio": "components/map",
    "hooks_locais": [
     "useEffectiveMapProvider",
@@ -868,7 +868,7 @@
     "MapHistoryPanel"
    ],
    "export_default": null,
-   "linhas": 318,
+   "linhas": 320,
    "dominio": "components/map",
    "hooks_locais": [],
    "tabelas": [],
@@ -882,7 +882,7 @@
     "MapHUD"
    ],
    "export_default": null,
-   "linhas": 359,
+   "linhas": 361,
    "dominio": "components/map",
    "hooks_locais": [],
    "tabelas": [],
@@ -927,7 +927,7 @@
     "MapSearchPanel"
    ],
    "export_default": null,
-   "linhas": 133,
+   "linhas": 135,
    "dominio": "components/map",
    "hooks_locais": [
     "useFuseSearchWithMatches"

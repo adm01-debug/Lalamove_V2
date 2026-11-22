@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a067e02e828a79ed72be57616ea9982a072a944b` (2026-11-22T02:20:20-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `250e9353cc3976be29d4f1a666aef2ea2f1fa8a8` (2026-11-22T02:24:40-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (524), SQL (188), JavaScript (112), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (525), SQL (188), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1014 |
-| arquivos_codigo | 635 |
-| linhas_codigo | 123846 |
+| arquivos_total | 1017 |
+| arquivos_codigo | 638 |
+| linhas_codigo | 124198 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,9 +49,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 138 |
+| testes | 140 |
 | workflows | 5 |
-| scripts | 106 |
+| scripts | 107 |
 | docs_md | 103 |
 
 ## Onde ficam as coisas
@@ -59,10 +59,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (127), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (49), guards em scripts/ (46), supabase/functions/<edge> (24)
+- testes: co-localizado (__tests__) (50), guards em scripts/ (47), supabase/functions/<edge> (24)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
-- scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
+- scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
 - docs: docs (36), (raiz) (9), .github (1)
@@ -272,14 +272,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7765 nós · 16525 arestas · 581 comunidades · grafo do commit `a067e02e`
-- comunidades maiores: cn (202), lucide-react (128), react (127), button.tsx (121), ref_node_path (105), client.ts (102), snapshot.py (100), EvaluationsPage.tsx (99), badge.tsx (92), framer-motion (87), dependencies (80), gerar.mjs (76)
+- 7785 nós · 16582 arestas · 581 comunidades · grafo do commit `250e9353`
+- comunidades maiores: cn (187), react (182), ref_node_fs (121), ref_https (114), snapshot.py (102), lucide-react (102), DashboardRedesigned.tsx (87), SLODashboardPage.tsx (87), providers/types.ts (87), framer-motion (82), Sidebar.tsx (82), geo-gateway/index.ts (82)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
+- package.json (32)
 - package-lock.json (31)
-- package.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (22)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (23)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
@@ -289,9 +289,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/job-worker/index.ts (9)
 - supabase/functions/send-notification/index.ts (8)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
+- src/components/map/LiveMap.tsx (7)
 - src/components/orders/NewOrderDialog.tsx (7)
 - supabase/functions/_shared/schemas.ts (7)
-- supabase/functions/geo-gateway/providers/mapbox.ts (7)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -305,6 +305,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `build`: `vite build`
 - `build:dev`: `vite build --mode development`
 - `lint`: `eslint .`
+- `lint:i18n`: `node scripts/ci/check-i18n-parity.mjs`
+- `lint:a11y`: `node scripts/ci/a11y-button-name-ratchet.mjs`
 - `preview`: `vite preview`
 - `test:e2e`: `playwright test`
 - `test:e2e:ui`: `playwright test --ui`
@@ -372,6 +374,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `250e935` feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)
 - 2026-11-22 `a067e02` feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)
 - 2026-11-22 `619f449` feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)
 - 2026-11-22 `40e2adb` feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)
@@ -386,7 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `32c1842` feat: canal Zapp no send-notification (etapa 69) (#232)
 - 2026-11-22 `ed72e8d` feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)
 - 2026-11-22 `b5b3088` feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)
-- 2026-11-22 `a08dd87` feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a067e02e828a79ed72be57616ea9982a072a944b",
+  "commit": "250e9353cc3976be29d4f1a666aef2ea2f1fa8a8",
   "branch": "main",
-  "data_commit": "2026-11-22T02:20:20-03:00",
+  "data_commit": "2026-11-22T02:24:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "250e935",
+    "data": "2026-11-22",
+    "assunto": "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)"
+   },
    {
     "sha": "a067e02",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "c9424eb",
     "data": "2026-11-21",
     "assunto": "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)"
-   },
-   {
-    "sha": "c194d15",
-    "data": "2026-11-21",
-    "assunto": "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)"
    }
   ],
-  "arquivos_mudados_7d": 267,
+  "arquivos_mudados_7d": 276,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,11 +141,11 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 26
+    "mudancas": 31
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "pasta": "src/components/orders",
@@ -156,11 +156,11 @@
     "mudancas": 17
    },
    {
-    "pasta": "package-lock.json",
-    "mudancas": 14
+    "pasta": "package.json",
+    "mudancas": 15
    },
    {
-    "pasta": "package.json",
+    "pasta": "package-lock.json",
     "mudancas": 14
    },
    {
@@ -198,16 +198,16 @@
   ],
   "arquivos_mais_mudados_90d": [
    {
+    "arquivo": "package.json",
+    "mudancas": 32
+   },
+   {
     "arquivo": "package-lock.json",
     "mudancas": 31
    },
    {
-    "arquivo": "package.json",
-    "mudancas": 31
-   },
-   {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "arquivo": "supabase/config.toml",
@@ -246,6 +246,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "src/components/map/LiveMap.tsx",
+    "mudancas": 7
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 7
    },
@@ -260,10 +264,6 @@
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
-   },
-   {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 6
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 143
+    "commits": 144
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1014,
-  "arquivos_codigo": 635,
-  "linhas_codigo": 123846,
+  "arquivos_total": 1017,
+  "arquivos_codigo": 638,
+  "linhas_codigo": 124198,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,9 +324,9 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 138,
+  "testes": 140,
   "workflows": 5,
-  "scripts": 106,
+  "scripts": 107,
   "docs_md": 103
  },
  "por_pasta": {
@@ -415,8 +415,8 @@
    "linhas": 72
   },
   "scripts/ci": {
-   "arquivos": 54,
-   "linhas": 11183
+   "arquivos": 56,
+   "linhas": 11426
   },
   "scripts/db-audit": {
    "arquivos": 29,
@@ -515,8 +515,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 158,
-   "linhas": 28945
+   "arquivos": 159,
+   "linhas": 29054
   },
   "src/hooks": {
    "arquivos": 110,
@@ -629,12 +629,12 @@
    "linhas": 750
   },
   {
-   "arquivo": "scripts/ci/lint-ratchet.mjs",
-   "linhas": 668
+   "arquivo": "src/components/map/LiveMap.tsx",
+   "linhas": 671
   },
   {
-   "arquivo": "src/components/map/LiveMap.tsx",
-   "linhas": 657
+   "arquivo": "scripts/ci/lint-ratchet.mjs",
+   "linhas": 668
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",
@@ -679,7 +679,7 @@
  ],
  "qualidade": {
   "any": 129,
-  "console_log": 412,
+  "console_log": 414,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 3,

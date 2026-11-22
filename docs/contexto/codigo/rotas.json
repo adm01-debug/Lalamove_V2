@@ -102,6 +102,7 @@
     "useTrackingHistory",
     "useTrackingTrails",
     "useTransform",
+    "useTranslation",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
     "useV3Call",
@@ -859,6 +860,7 @@
     "useTrackingHistory",
     "useTrackingTrails",
     "useTransform",
+    "useTranslation",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
     "useV3Call",
@@ -1667,7 +1669,8 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
-    "useTrackingTrails"
+    "useTrackingTrails",
+    "useTranslation"
    ],
    "hooks_locais": [
     "useAllowedMapProviders",
@@ -1771,7 +1774,8 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
-    "useTrackingTrails"
+    "useTrackingTrails",
+    "useTranslation"
    ],
    "hooks_locais": [
     "useAllowedMapProviders",

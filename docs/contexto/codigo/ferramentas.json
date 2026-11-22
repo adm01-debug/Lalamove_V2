@@ -3,9 +3,9 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (524)",
+   "TypeScript (525)",
    "SQL (188)",
-   "JavaScript (112)",
+   "JavaScript (114)",
    "Markdown (103)",
    "JSON (35)",
    "Shell (9)",
@@ -53,6 +53,8 @@
    "graph:setup": "bash scripts/graphify/setup.sh",
    "graph:update": "graphify update .",
    "lint": "eslint .",
+   "lint:a11y": "node scripts/ci/a11y-button-name-ratchet.mjs",
+   "lint:i18n": "node scripts/ci/check-i18n-parity.mjs",
    "preview": "vite preview",
    "seed": "tsx scripts/seed-database.ts",
    "test:e2e": "playwright test",

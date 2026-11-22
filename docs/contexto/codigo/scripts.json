@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 106,
+ "total": 107,
  "nota": "scripts soltos na raiz de scripts/ são legado de sessões antigas (alguns com segredo commitado) — ver AGENTS.md; automação nova vai em scripts/<nome>/ com README.",
  "scripts": [
   {
@@ -174,7 +174,9 @@
    "descricao": "Ratchet: fails CI if the count of a11y button-name violations grows above baseline. Covers three defect classes from the Y13 audit:",
    "linhas": 307,
    "env": [],
-   "npm_scripts": [],
+   "npm_scripts": [
+    "lint:a11y"
+   ],
    "workflows": [],
    "solto_na_raiz_de_scripts": false,
    "orfao": false
@@ -280,6 +282,19 @@
    "linhas": 379,
    "env": [],
    "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/ci/check-i18n-parity.mjs",
+   "pasta": "scripts/ci",
+   "descricao": "* Paridade de chaves entre os locales do i18n.",
+   "linhas": 136,
+   "env": [],
+   "npm_scripts": [
+    "lint:i18n"
+   ],
    "workflows": [],
    "solto_na_raiz_de_scripts": false,
    "orfao": false

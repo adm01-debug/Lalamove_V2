@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a067e02e82` · branch `main` · 2026-11-22 05:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `250e9353cc` · branch `main` · 2026-11-22 05:25 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1523,6 +1523,8 @@ _nenhum item encontrado_
 | Argumento desconhecido: ${argv[i]} | `scripts/ci/check-bundle-secrets.mjs` |
 | baseline invalido ou com schema diferente de ${SCHEMA_BASELINE}: ${caminho} | `scripts/ci/check-edge-error-exposure.mjs` |
 | ), { recursive: true });   mkdirSync(path.join(raiz,  | `scripts/ci/check-edge-error-exposure.unit.mjs` |
+| Argumento desconhecido: ${arg} | `scripts/ci/check-i18n-parity.mjs` |
+| Valor ausente para ${arg}. | `scripts/ci/check-i18n-parity.mjs` |
 | comando nao encontrado no PATH: ${comando} | `scripts/ci/check-test-inventory.mjs` |
 | comando nao encontrado no PATH: ${comando} | `scripts/ci/check-workflow-pins-resolvem.mjs` |
 | não deveria consultar a rede | `scripts/ci/check-workflow-pins-resolvem.unit.mjs` |
@@ -1805,9 +1807,7 @@ _nenhum item encontrado_
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
-| Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
-| … +98 linhas — lista completa em `context.json` | |
+| … +100 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1841,7 +1841,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1098 testes em 96 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1105 testes em 97 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1908,6 +1908,7 @@ _nenhum item encontrado_
 | `supabase/functions/send-notification/quiet-hours.test.ts` | 8 | [quiet-hours] dentro da janela (10:00 UTC = 07:00 local, início inclusive) · [quiet-hours] 1 min antes do início é fora da janela · [quiet-hours] fim é exclusivo (23:00 UTC = 20:00 local) · [quiet-hours] madrugada (01:00 UTC = 22:00 local do dia anterior) é fora da janela … |
 | `scripts/db-audit/catalog-from-types.test.mjs` | 7 | catalogoDeTypes le tabelas, views, funcoes e enums do schema public · catalogoDeTypes para no export const Constants (nao reabre Enums) · catalogoDeTypes ignora campos internos (Row/Args/Returns) como objetos · catalogoDeTypes devolve a forma esperada pelo supabase-usage-guard … |
 | `scripts/db-audit/psql-safe.test.mjs` | 7 | forwards flags/args to psql without the connection string in argv · propagates psql stdin (heredoc), stdout and stderr, and its exit code · propagates a non-zero psql exit code unchanged · derives PGHOST/PGPORT/PGUSER/PGDATABASE/PGPASSFILE from DESTINO_URL and never leaks DESTINO_URL to the child … |
+| `src/components/map/__tests__/mapA11yNames.test.tsx` | 7 | etapa 82 — aria-label dos controles de mapa vem do i18n · MapHistoryPanel: botão fechar usa map.actions.closeHistory · MapHistoryPanel: em inglês o aria-label muda de idioma · MapHUD: as três ações expõem nome acessível traduzido … |
 | `src/components/map/hooks/__tests__/useTrackingData.test.ts` | 7 | useTrackingData · faz o fetch inicial e popula trackingData/allTrackingData · filtra por tipo de veículo · filtra por status STOPPED … |
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |

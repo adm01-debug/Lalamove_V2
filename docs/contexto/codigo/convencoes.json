@@ -21,14 +21,14 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (49)",
-   "guards em scripts/ (46)",
+   "co-localizado (__tests__) (50)",
+   "guards em scripts/ (47)",
    "supabase/functions/<edge> (24)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
   "scripts": [
-   "scripts/ci (28)",
+   "scripts/ci (29)",
    "scripts/db-audit (20)",
    "scripts/inventario (5)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)",
    "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)",
    "feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)",
    "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)",
-   "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)",
-   "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)"
+   "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
