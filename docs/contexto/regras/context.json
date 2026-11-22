@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "affd0df91ee9299d6c403bdc5f11e76574940b76",
+  "sha": "6c065b33db34427b5520622288b29b5fec3f21e4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 07:44 UTC",
+  "generated_at": "2026-11-22 10:44 UTC",
   "files_total": 1019,
   "code_files": 843,
-  "code_lines": 144837
+  "code_lines": 144839
  },
  "version": "1.3.2",
- "facts_hash": "b89f309b03a0349c",
+ "facts_hash": "5f7ab67ec7cecb64",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21235,7 +21235,7 @@
   {
    "module": "supabase/functions",
    "files": 77,
-   "lines": 18136,
+   "lines": 18138,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -38679,7 +38679,7 @@
    },
    {
     "file": "supabase/functions/geo-gateway/google.test.ts",
-    "name": "placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true"
+    "name": "placeDetails: componentes mapeados (número/rua/bairro sublocality_level_1/cidade/UF/CEP), retainable=true"
    },
    {
     "file": "supabase/functions/geo-gateway/google.test.ts",
@@ -68167,7 +68167,7 @@
   },
   "supabase/functions/geo-gateway/google.test.ts": {
    "path": "supabase/functions/geo-gateway/google.test.ts",
-   "lines": 227,
+   "lines": 229,
    "is_test": true,
    "rule_comments": [
     "Sem departureTime: a API rejeita \"agora\" em produção (\"Timestamp must be set to"
@@ -68176,7 +68176,7 @@
    "tests": [
     "autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão",
     "autocomplete: sem session_token conta units=1 (sem sessão paga)",
-    "placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true",
+    "placeDetails: componentes mapeados (número/rua/bairro sublocality_level_1/cidade/UF/CEP), retainable=true",
     "geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code",
     "geocode: ZERO_RESULTS vira GEO_NOT_FOUND (lista vazia)",
     "geocode: REQUEST_DENIED vira GEO_NOT_CONFIGURED (chave recusada)",
@@ -71452,10 +71452,20 @@
   }
  },
  "git": {
-  "sha": "affd0df91ee9299d6c403bdc5f11e76574940b76",
+  "sha": "6c065b33db34427b5520622288b29b5fec3f21e4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "6c065b3",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)",
+    "files": [
+     "supabase/functions/geo-gateway/google.test.ts",
+     "supabase/functions/geo-gateway/providers/google.ts"
+    ]
+   },
    {
     "sha": "affd0df",
     "date": "2026-11-22",
@@ -71810,25 +71820,12 @@
      "supabase/functions/geo-gateway/error-monitor.ts",
      "supabase/functions/geo-gateway/index.ts"
     ]
-   },
-   {
-    "sha": "c980ca7",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)",
-    "files": [
-     ".env.example",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "src/components/map/GoogleMapsCanvas.tsx",
-     "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
-     "src/components/map/hooks/useGoogleMapsLoader.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    25
+    24
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -71843,16 +71840,16 @@
     3
    ],
    [
-    "src/components/map/GoogleMapsCanvas.tsx",
-    3
-   ],
-   [
     "src/components/orders/NewOrderDialog.tsx",
     3
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
     3
+   ],
+   [
+    "supabase/functions/geo-gateway/providers/google.ts",
+    2
    ],
    [
     "supabase/functions/lalamove-api/coordinates.test.ts",
@@ -71875,6 +71872,10 @@
     2
    ],
    [
+    "src/components/map/GoogleMapsCanvas.tsx",
+    2
+   ],
+   [
     "src/components/map/LiveMap.tsx",
     2
    ],
@@ -71887,6 +71888,10 @@
     2
    ],
    [
+    "supabase/functions/geo-gateway/google.test.ts",
+    1
+   ],
+   [
     "src/pages/AlertConfigurationsPage.tsx",
     1
    ],
@@ -71896,14 +71901,6 @@
    ],
    [
     "supabase/functions/send-notification/recipients.ts",
-    1
-   ],
-   [
-    "supabase/functions/send-notification/static-map.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/send-notification/static-map.ts",
     1
    ]
   ]

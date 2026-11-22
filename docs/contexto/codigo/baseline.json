@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "affd0df91ee9299d6c403bdc5f11e76574940b76",
+  "commit": "6c065b33db34427b5520622288b29b5fec3f21e4",
   "branch": "main",
-  "data_commit": "2026-11-22T04:43:36-03:00",
+  "data_commit": "2026-11-22T07:44:24-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "6c065b3",
+    "data": "2026-11-22",
+    "assunto": "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)"
+   },
    {
     "sha": "affd0df",
     "data": "2026-11-22",
@@ -126,18 +131,13 @@
     "sha": "ed72e8d",
     "data": "2026-11-22",
     "assunto": "feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)"
-   },
-   {
-    "sha": "b5b3088",
-    "data": "2026-11-22",
-    "assunto": "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)"
    }
   ],
   "arquivos_mudados_7d": 285,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 57
+    "mudancas": 59
    },
    {
     "pasta": "src/components/map",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 154
+    "commits": 155
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1025,
   "arquivos_codigo": 646,
-  "linhas_codigo": 125760,
+  "linhas_codigo": 125762,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18136
+   "linhas": 18138
   },
   "tailwind.config.ts": {
    "arquivos": 1,

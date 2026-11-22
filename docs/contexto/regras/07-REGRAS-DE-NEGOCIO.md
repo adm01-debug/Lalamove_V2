@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `affd0df91e` · branch `main` · 2026-11-22 07:44 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6c065b33db` · branch `main` · 2026-11-22 10:44 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1881,7 +1881,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/check-manifest-fresh.test.mjs` | 15 | aceita manifesto identico apesar da ordem e do generated_at · detecta objeto novo na secao  · detecta alteracao de default pelo hash · detecta constraint removida do banco … |
 | `src/hooks/__tests__/useContractVersionUsage.trend.test.ts` | 15 | detectTrend — alerta de reversão de uso v1 · marca amostra insuficiente com menos de 4 pontos válidos · não alerta quando a proporção está descendo · não alerta quando a proporção é estável em zero … |
 | `src/lib/utils.test.ts` | 15 | deve combinar classes simples · deve lidar com valores undefined · deve lidar com valores null · deve lidar com condicionais … |
-| `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
+| `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/bairro sublocality_level_1/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
 | `supabase/functions/_shared/phone.test.ts` | 14 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |

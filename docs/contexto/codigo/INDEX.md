@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `affd0df91ee9299d6c403bdc5f11e76574940b76` (2026-11-22T04:43:36-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `6c065b33db34427b5520622288b29b5fec3f21e4` (2026-11-22T07:44:24-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1025 |
 | arquivos_codigo | 646 |
-| linhas_codigo | 125760 |
+| linhas_codigo | 125762 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7860 nós · 16788 arestas · 584 comunidades · grafo do commit `affd0df9`
+- 7860 nós · 16788 arestas · 584 comunidades · grafo do commit `6c065b33`
 - comunidades maiores: cn (246), react (186), lucide-react (182), snapshot.py (102), ref_node_path (96), AlertsPage.tsx (92), App.tsx (82), AppLayout.tsx (81), dependencies (80), gerar.mjs (76), NewOrderDialog.tsx (74), contract.ts (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -374,6 +374,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `6c065b3` fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)
 - 2026-11-22 `affd0df` fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)
 - 2026-11-22 `1e2d9ce` feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)
 - 2026-11-22 `8f42f4f` feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)
@@ -388,7 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `a067e02` feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)
 - 2026-11-22 `619f449` feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)
 - 2026-11-22 `40e2adb` feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)
-- 2026-11-22 `2809b60` feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1211,7 +1211,7 @@
   {
    "arquivo": "supabase/functions/geo-gateway/google.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 227,
+   "linhas": 229,
    "testa": [
     "supabase/functions/geo-gateway/polyline.ts",
     "supabase/functions/geo-gateway/providers/google.ts",
