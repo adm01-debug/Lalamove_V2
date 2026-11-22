@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
+  "sha": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 13:42 UTC",
-  "files_total": 1041,
-  "code_files": 859,
-  "code_lines": 147860
+  "generated_at": "2026-11-22 14:13 UTC",
+  "files_total": 1043,
+  "code_files": 861,
+  "code_lines": 148193
  },
  "version": "1.3.2",
- "facts_hash": "349c02caba6d31d2",
+ "facts_hash": "2bc3554f377ccc8b",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 300,
+   ".ts": 302,
    ".tsx": 235,
    ".sql": 202,
    ".mjs": 109,
@@ -21577,8 +21577,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 79,
-   "lines": 18574,
+   "files": 81,
+   "lines": 18907,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21633,6 +21633,7 @@
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
     "zapp.ts: TextChannelResult, TextChannel, ZappConfig, normalizeZappNumber, createZappChannel, zappChannelFromEnv",
+    "router.ts: MessageRole, MessageChannel, IMMEDIATE_FALLBACK_REASONS, ImmediateFallbackReason, RouteRule, DEFAULT_ROUTES",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
     "error-monitor.ts: ERROR_RATE_THRESHOLD, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_WINDOW_MINUTES, ERROR_ALERT_COOLDOWN_MINUTES, ErrorOutcome, recordProviderFailure",
     "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
@@ -21687,6 +21688,8 @@
     "supabase/functions/_shared/template.ts",
     "supabase/functions/_shared/channels/zapp.test.ts",
     "supabase/functions/_shared/channels/zapp.ts",
+    "supabase/functions/_shared/messaging/router.test.ts",
+    "supabase/functions/_shared/messaging/router.ts",
     "supabase/functions/apply-fixes/index.ts",
     "supabase/functions/bitrix24-process-queue/index.ts",
     "supabase/functions/bitrix24-sync/index.ts",
@@ -21749,8 +21752,7 @@
     "supabase/functions/send-notification/static-map.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
     "supabase/functions/simulate-driver-movement/replay.test.ts",
-    "supabase/functions/simulate-driver-movement/replay.ts",
-    "supabase/functions/test-notification/index.ts"
+    "supabase/functions/simulate-driver-movement/replay.ts"
    ]
   },
   {
@@ -24525,6 +24527,26 @@
     "values": "\"pickup_contact_name\", \"delivery_contact_name\", \"driver_name\", \"driver_plate\", \"eta_min\", \"distance_m\", \"share_link\", \"order_ref\", \"pickup_address\", \"delivery_address\", \"static_map_url\","
    },
    {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "MessageRole",
+    "values": "driver | pickup_contact | delivery_contact | internal"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "MessageChannel",
+    "values": "whatsapp | sms | email | slack | n8n"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "IMMEDIATE_FALLBACK_REASONS",
+    "values": "\"invalid_number\", \"instance_unavailable\", \"recipient_blocked\", \"channel_down\","
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "RATE_LIMIT_EXEMPT_EVENTS",
+    "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\""
+   },
+   {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
     "name": "ErrorOutcome",
     "values": "ok | error | skipped"
@@ -26251,6 +26273,14 @@
     "value": "granted"
    },
    {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "value": "driver"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "value": "role"
+   },
+   {
     "file": "supabase/functions/lalamove-uapi/index.ts",
     "value": "admin"
    },
@@ -26683,6 +26713,18 @@
    {
     "file": "supabase/functions/_shared/channels/zapp.ts",
     "text": "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "text": "testar os casos de borda que custam dinheiro — limite por motorista, silencio"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "text": "* Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "text": "* Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */"
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
@@ -33525,6 +33567,66 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "pickup_contact",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "compara"
+   },
+   {
     "file": "supabase/functions/bitrix24-process-queue/index.ts",
     "field": "sync_status",
     "value": "error",
@@ -34503,6 +34605,18 @@
     "name": "calculatePerformanceScore",
     "params": "metrics: Record<string, Metric>",
     "body": "const weights = { LCP: 0.25, INP: 0.30, // INP is now a Core Web Vital CLS: 0.25, FCP: 0.10, TTFB: 0.10, }; let score = 0; let totalWeight = 0; for (const [name, weight] of Object.entries(weights)) { const metric = metrics[name]; if (metric) { const metricRating = metric.rating; const metricScore = metricRating === 'good' ? 100 : metricRating === 'needs-improvement' ? 50 : 0; score += metricScore * weight; totalWeight += weight; } } return totalWeight > 0 ? Math.round(score / totalWeight * 100) …"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "shouldFallback",
+    "params": "sentAt: Date | null, now: Date, fallbackAfterMin: number,",
+    "body": "if (!sentAt) return false; if (fallbackAfterMin <= 0) return false; return now.getTime() - sentAt.getTime() >= fallbackAfterMin * 60_000;"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.ts",
+    "name": "applyQuietHours",
+    "params": "role: MessageRole, at: Date, hasActiveOrder: boolean, quiet: QuietHours = DEFAULT_QUIET_HOURS,",
+    "body": "if (role === \"driver\" && hasActiveOrder) return { suppressed: false, releaseAt: null }; if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000)); return { suppressed: true, releaseAt };"
    },
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
@@ -38843,6 +38957,78 @@
    {
     "file": "supabase/functions/_shared/channels/zapp.test.ts",
     "name": "zapp: sendMedia com destinatário vazio não chama a API"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 88: evento ou papel sem rota nao envia nada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 88: rota desabilitada devolve lista vazia (desligado e desligado)"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 88: resolveChannels nao devolve a referencia interna do catalogo"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 88: findRoute devolve a regra com fallback e reply_timeout"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 89: mesma entrada gera o mesmo id (webhook repetido nao duplica)"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 89: seq diferente no mesmo evento gera id diferente (2o aviso e legitimo)"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 90: fallback temporizado so dispara depois da janela"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 90: sem envio previo ou janela 0 nao ha fallback temporizado"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 91: os quatro motivos viram SMS na hora"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 93: silencio noturno no fuso de Sao Paulo (20h-7h)"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 93: localHour aplica o deslocamento do fuso"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 93: motorista com pedido ativo nunca e silenciado; fornecedor e"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 93: adiamento devolve o instante em que a janela abre"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 95: sexta mensagem em 10 min ainda passa, setima bloqueia"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 95: envios fora da janela de 10 min nao contam"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 95: motorista chegou (M8) fura o limite — o aviso e o que importa"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 92: opt-out vence o limite de taxa na razao registrada"
    },
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
@@ -45537,12 +45723,17 @@
      "option": [
       "compara:src/components/ui/accessible-card.tsx"
      ],
+     "driver": [
+      "compara:supabase/functions/_shared/messaging/router.ts",
+      "escreve:supabase/functions/_shared/messaging/router.ts"
+     ],
+     "pickup_contact": [
+      "escreve:supabase/functions/_shared/messaging/router.ts",
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
      "supplier": [
       "escreve:supabase/functions/check-driver-alerts/index.ts",
       "escreve:supabase/functions/lalamove-webhook/index.ts"
-     ],
-     "pickup_contact": [
-      "escreve:supabase/functions/job-worker/index.ts"
      ],
      "delivery_contact": [
       "compara:supabase/functions/send-notification/index.ts",
@@ -45648,6 +45839,7 @@
    "assistant",
    "delivery_contact",
    "denied",
+   "driver",
    "granted",
    "manager",
    "operator",
@@ -67980,6 +68172,152 @@
    ],
    "doc": "Etapa 69 do plano Google Maps (decisão D2): canal Zapp Web. O Zapp é o provedor de WhatsApp Web da Promo Brindes. A interface é deliberadamente igual à do Evolution em `send-notification` — mesma assinatura `sendText(number, text)` devolvendo `{success, error?}` — para que o despacho troque de canal …"
   },
+  "supabase/functions/_shared/messaging/router.test.ts": {
+   "path": "supabase/functions/_shared/messaging/router.test.ts",
+   "lines": 135,
+   "is_test": true,
+   "doc": "Etapas 88-95: cada teste aqui representa um caso que ja custou (ou custaria) dinheiro ou credibilidade com o motorista — mensagem duplicada, rajada de 20 SMS, aviso as 3h da manha, fallback que nunca dispara.",
+   "tests": [
+    "etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms",
+    "etapa 88: evento ou papel sem rota nao envia nada",
+    "etapa 88: rota desabilitada devolve lista vazia (desligado e desligado)",
+    "etapa 88: resolveChannels nao devolve a referencia interna do catalogo",
+    "etapa 88: findRoute devolve a regra com fallback e reply_timeout",
+    "etapa 89: mesma entrada gera o mesmo id (webhook repetido nao duplica)",
+    "etapa 89: seq diferente no mesmo evento gera id diferente (2o aviso e legitimo)",
+    "etapa 90: fallback temporizado so dispara depois da janela",
+    "etapa 90: sem envio previo ou janela 0 nao ha fallback temporizado",
+    "etapa 91: os quatro motivos viram SMS na hora",
+    "etapa 93: silencio noturno no fuso de Sao Paulo (20h-7h)",
+    "etapa 93: localHour aplica o deslocamento do fuso",
+    "etapa 93: motorista com pedido ativo nunca e silenciado; fornecedor e",
+    "etapa 93: adiamento devolve o instante em que a janela abre",
+    "etapa 95: sexta mensagem em 10 min ainda passa, setima bloqueia",
+    "etapa 95: envios fora da janela de 10 min nao contam",
+    "etapa 95: motorista chegou (M8) fura o limite — o aviso e o que importa",
+    "etapa 92: opt-out vence o limite de taxa na razao registrada"
+   ]
+  },
+  "supabase/functions/_shared/messaging/router.ts": {
+   "path": "supabase/functions/_shared/messaging/router.ts",
+   "lines": 198,
+   "exports": [
+    "type MessageRole",
+    "type MessageChannel",
+    "const IMMEDIATE_FALLBACK_REASONS",
+    "type ImmediateFallbackReason",
+    "interface RouteRule",
+    "const DEFAULT_ROUTES",
+    "function resolveChannels",
+    "function findRoute",
+    "function clientMessageId",
+    "function shouldFallback",
+    "function needsImmediateFallback",
+    "interface QuietHours",
+    "const DEFAULT_QUIET_HOURS",
+    "function localHour",
+    "function isInQuietHours",
+    "interface SilenceDecision",
+    "function applyQuietHours",
+    "const DRIVER_RATE_LIMIT",
+    "const RATE_LIMIT_EXEMPT_EVENTS",
+    "interface RateLimitInput",
+    "function isRateLimited",
+    "function suppressionReason"
+   ],
+   "enums": [
+    {
+     "name": "MessageRole",
+     "values": "driver | pickup_contact | delivery_contact | internal"
+    },
+    {
+     "name": "MessageChannel",
+     "values": "whatsapp | sms | email | slack | n8n"
+    },
+    {
+     "name": "IMMEDIATE_FALLBACK_REASONS",
+     "values": "\"invalid_number\", \"instance_unavailable\", \"recipient_blocked\", \"channel_down\","
+    },
+    {
+     "name": "RATE_LIMIT_EXEMPT_EVENTS",
+     "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\""
+    }
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "pickup_contact",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "compara"
+    }
+   ],
+   "role_checks": [
+    "driver",
+    "role"
+   ],
+   "rule_comments": [
+    "testar os casos de borda que custam dinheiro — limite por motorista, silencio",
+    "* Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o",
+    "* Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */"
+   ],
+   "doc": "Roteador evento x papel e regras de envio (etapas 88-95 do plano de mensageria). Tudo aqui e funcao pura: o `send-notification` continua dono do banco, do HTTP e do `claim_alert_notification`. Separar essas decisoes do I/O e o que permite testar os casos de borda que custam dinheiro — limite por mot …",
+   "calc_fns": [
+    {
+     "name": "shouldFallback",
+     "params": "sentAt: Date | null, now: Date, fallbackAfterMin: number,",
+     "body": "if (!sentAt) return false; if (fallbackAfterMin <= 0) return false; return now.getTime() - sentAt.getTime() >= fallbackAfterMin * 60_000;"
+    },
+    {
+     "name": "applyQuietHours",
+     "params": "role: MessageRole, at: Date, hasActiveOrder: boolean, quiet: QuietHours = DEFAULT_QUIET_HOURS,",
+     "body": "if (role === \"driver\" && hasActiveOrder) return { suppressed: false, releaseAt: null }; if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000)); return { suppressed: true, releaseAt };"
+    }
+   ]
+  },
   "supabase/functions/apply-fixes/index.ts": {
    "path": "supabase/functions/apply-fixes/index.ts",
    "lines": 59,
@@ -72375,10 +72713,30 @@
   }
  },
  "git": {
-  "sha": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
+  "sha": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d6f59de",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "supabase/functions/_shared/messaging/router.test.ts",
+     "supabase/functions/_shared/messaging/router.ts"
+    ]
+   },
+   {
+    "sha": "4ee7ef0",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)",
+    "files": [
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "03b0ca8",
     "date": "2026-11-22",
@@ -72672,26 +73030,6 @@
      "supabase/functions/geo-gateway/google.test.ts",
      "supabase/functions/geo-gateway/providers/google.ts"
     ]
-   },
-   {
-    "sha": "affd0df",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)",
-    "files": [
-     "supabase/functions/lalamove-api/coordinates.test.ts",
-     "supabase/functions/lalamove-api/coordinates.ts",
-     "supabase/functions/lalamove-api/index.ts"
-    ]
-   },
-   {
-    "sha": "1e2d9ce",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)",
-    "files": [
-     "src/pages/AlertConfigurationsPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -72701,6 +73039,10 @@
    ],
    [
     ".github/workflows/ci.yml",
+    4
+   ],
+   [
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     3
    ],
    [
@@ -72708,24 +73050,16 @@
     3
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.ts",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-api/index.ts",
-    2
-   ],
-   [
     "supabase/functions/geo-gateway/google.test.ts",
     2
+   ],
+   [
+    "supabase/functions/_shared/messaging/router.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/_shared/messaging/router.ts",
+    1
    ],
    [
     "src/components/orders/AddressAutocomplete.test.tsx",
@@ -72772,7 +73106,11 @@
     1
    ],
    [
-    "supabase/migrations/20261122131000_geo_eta_delay.sql",
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
     1
    ]
   ]

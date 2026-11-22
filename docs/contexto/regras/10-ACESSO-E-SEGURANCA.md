@@ -1,11 +1,11 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `03b0ca8cf4` · branch `main` · 2026-11-22 13:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d6f59de0a9` · branch `main` · 2026-11-22 14:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
 
-`admin`, `assistant`, `delivery_contact`, `denied`, `granted`, `manager`, `operator`, `option`, `permission`, `role`, `service_role`, `string`, `user`, `viewer`
+`admin`, `assistant`, `delivery_contact`, `denied`, `driver`, `granted`, `manager`, `operator`, `option`, `permission`, `role`, `service_role`, `string`, `user`, `viewer`
 
 - Tabelas de perfil/permissão: `user_roles`, `permissions`, `role_permissions`
 - Colunas de perfil: `user_roles.role` (app_role NOT NULL DEFAULT 'viewer'), `role_permissions.role` (app_role NOT NULL)

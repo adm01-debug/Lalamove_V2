@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `03b0ca8cf4` · branch `main` · 2026-11-22 13:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d6f59de0a9` · branch `main` · 2026-11-22 14:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -790,10 +790,11 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `admin` | compara, filtra | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/lalamove-uapi/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
+| `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts` |
 | `role` | `manager` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `operator` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
-| `role` | `pickup_contact` | escreve | `supabase/functions/job-worker/index.ts` |
+| `role` | `pickup_contact` | escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/job-worker/index.ts` |
 | `role` | `service_role` | compara | `supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `string` | compara | `supabase/functions/send-notification/recipients.ts` |
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
@@ -896,6 +897,10 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/_shared/geo-precision.ts` |
 | ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway | `supabase/functions/_shared/schemas.ts` |
 | TEMPLATE_VARS | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", | `supabase/functions/_shared/template.ts` |
+| MessageRole | driver \| pickup_contact \| delivery_contact \| internal | `supabase/functions/_shared/messaging/router.ts` |
+| MessageChannel | whatsapp \| sms \| email \| slack \| n8n | `supabase/functions/_shared/messaging/router.ts` |
+| IMMEDIATE_FALLBACK_REASONS | "invalid_number", "instance_unavailable", "recipient_blocked", "channel_down", | `supabase/functions/_shared/messaging/router.ts` |
+| RATE_LIMIT_EXEMPT_EVENTS | "DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY" | `supabase/functions/_shared/messaging/router.ts` |
 | ErrorOutcome | ok \| error \| skipped | `supabase/functions/geo-gateway/error-monitor.ts` |
 | ProviderName | google \| mapbox | `supabase/functions/geo-gateway/providers/types.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
@@ -1196,6 +1201,14 @@ _nenhum item encontrado_
 - **calculatePerformanceScore(metrics: Record<string, Metric>)** — `src/utils/webVitals.ts`
   ```
   const weights = { LCP: 0.25, INP: 0.30, // INP is now a Core Web Vital CLS: 0.25, FCP: 0.10, TTFB: 0.10, }; let score = 0; let totalWeight = 0; for (const [name, weight] of Object.entries(weights)) { const metric = metrics[name]; if (metric) { const metricRating = metric.rating; const metricScore = metricRating === 'good' ? 100 : metricRating === 'needs-improvement' ? 50 : 0; score += metricScore * weight; totalWeight += weight; } } return totalWeight > 0 ? Math.round(score / totalWeight * 100) …
+  ```
+- **shouldFallback(sentAt: Date | null, now: Date, fallbackAfterMin: number,)** — `supabase/functions/_shared/messaging/router.ts`
+  ```
+  if (!sentAt) return false; if (fallbackAfterMin <= 0) return false; return now.getTime() - sentAt.getTime() >= fallbackAfterMin * 60_000;
+  ```
+- **applyQuietHours(role: MessageRole, at: Date, hasActiveOrder: boolean, quiet: QuietHours = DEFAULT_QUIET_HOURS,)** — `supabase/functions/_shared/messaging/router.ts`
+  ```
+  if (role === "driver" && hasActiveOrder) return { suppressed: false, releaseAt: null }; if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000)); return { suppressed: true, releaseAt };
   ```
 - **calculateRiskAnalysis(stats: DriverStats, incidentCount: number, hasCriticalIncidents: boolean, driverRating: number)** — `supabase/functions/evaluate-driver/index.ts`
   ```
@@ -1859,6 +1872,8 @@ _nenhum item encontrado_
 | `admin` | `src/pages/ProfilePage.tsx` |
 | `selectedRole` | `src/pages/RolesPage.tsx` |
 | `granted` | `src/pages/UserPreferencesPage.tsx` |
+| `driver` | `supabase/functions/_shared/messaging/router.ts` |
+| `role` | `supabase/functions/_shared/messaging/router.ts` |
 | `admin` | `supabase/functions/lalamove-uapi/index.ts` |
 | `true` | `supabase/functions/mcp-query/index.ts` |
 | `delivery_contact` | `supabase/functions/send-notification/index.ts` |
@@ -1868,7 +1883,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1163 testes em 102 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1181 testes em 103 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1887,6 +1902,7 @@ _nenhum item encontrado_
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
+| `supabase/functions/_shared/messaging/router.test.ts` | 18 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 17 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `supabase/functions/lalamove-webhook/security.test.ts` | 17 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |
@@ -2195,6 +2211,9 @@ _nenhum item encontrado_
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
 | é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
 | Nunca lança: falta de secret não pode derrubar o despacho de alerta. | `supabase/functions/_shared/channels/zapp.ts` |
+| testar os casos de borda que custam dinheiro — limite por motorista, silencio | `supabase/functions/_shared/messaging/router.ts` |
+| * Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o | `supabase/functions/_shared/messaging/router.ts` |
+| * Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */ | `supabase/functions/_shared/messaging/router.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |
 | Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do | `supabase/functions/check-external-api/index.ts` |
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |

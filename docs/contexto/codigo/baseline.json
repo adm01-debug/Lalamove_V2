@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
+  "commit": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
   "branch": "main",
-  "data_commit": "2026-11-22T10:41:25-03:00",
+  "data_commit": "2026-11-22T11:08:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d6f59de",
+    "data": "2026-11-22",
+    "assunto": "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)"
+   },
+   {
+    "sha": "4ee7ef0",
+    "data": "2026-11-22",
+    "assunto": "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)"
+   },
    {
     "sha": "03b0ca8",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "8b67608",
     "data": "2026-11-22",
     "assunto": "docs: corrige referência desatualizada no comentário do stub de migration (#263)"
-   },
-   {
-    "sha": "2b6eeeb",
-    "data": "2026-11-22",
-    "assunto": "fix(geo): evita colisão de versão de migration com a PR #246 (#262)"
-   },
-   {
-    "sha": "2a4d1b1",
-    "data": "2026-11-22",
-    "assunto": "fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)"
    }
   ],
-  "arquivos_mudados_7d": 311,
+  "arquivos_mudados_7d": 313,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -152,12 +152,12 @@
     "mudancas": 25
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 21
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 22
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 20
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 21
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -172,6 +172,10 @@
     "mudancas": 14
    },
    {
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 12
+   },
+   {
     "pasta": "docs/MAPBOX.md",
     "mudancas": 12
    },
@@ -180,16 +184,12 @@
     "mudancas": 12
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 11
-   },
-   {
     "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 9
+    "mudancas": 10
    },
    {
     "pasta": "supabase/functions/lalamove-webhook",
@@ -210,12 +210,12 @@
     "mudancas": 31
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 16
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 15
+    "arquivo": "supabase/config.toml",
+    "mudancas": 16
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -234,12 +234,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 10
    },
    {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 9
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 10
    },
    {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 182
+    "commits": 184
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1047,
-  "arquivos_codigo": 648,
-  "linhas_codigo": 126683,
+  "arquivos_total": 1049,
+  "arquivos_codigo": 650,
+  "linhas_codigo": 127016,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 152,
+  "testes": 153,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 107
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 79,
-   "linhas": 18574
+   "arquivos": 81,
+   "linhas": 18907
   },
   "tailwind.config.ts": {
    "arquivos": 1,

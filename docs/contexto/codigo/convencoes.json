@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (52)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (27)"
+   "supabase/functions/<edge> (28)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)",
+   "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)",
    "feat: replay deterministico do trajeto e 100 testes na CI (#277)",
    "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)",
-   "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)",
-   "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)",
-   "fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)"
+   "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
