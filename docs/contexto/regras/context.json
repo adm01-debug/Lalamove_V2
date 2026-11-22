@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
+  "sha": "8f42f4fce4ac10f29d48824ecc56c5d59d877530",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 06:43 UTC",
-  "files_total": 1017,
-  "code_files": 841,
-  "code_lines": 144576
+  "generated_at": "2026-11-22 06:48 UTC",
+  "files_total": 1019,
+  "code_files": 843,
+  "code_lines": 144783
  },
  "version": "1.3.2",
- "facts_hash": "496a2b2077136752",
+ "facts_hash": "fd6a0820accc513a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 296,
+   ".ts": 298,
    ".tsx": 235,
    ".sql": 188,
    ".mjs": 109,
@@ -21234,8 +21234,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 75,
-   "lines": 17887,
+   "files": 77,
+   "lines": 18094,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21308,6 +21308,7 @@
     "normalize.ts: normalizeLalamoveV3Payload",
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
     "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
+    "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole",
     "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute"
    ],
    "docs": [
@@ -21398,6 +21399,8 @@
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/send-notification/quiet-hours.test.ts",
     "supabase/functions/send-notification/quiet-hours.ts",
+    "supabase/functions/send-notification/recipients.test.ts",
+    "supabase/functions/send-notification/recipients.ts",
     "supabase/functions/send-notification/static-map.test.ts",
     "supabase/functions/send-notification/static-map.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
@@ -24162,6 +24165,11 @@
     "file": "supabase/functions/lalamove-gateway/route.ts",
     "name": "GatewayTarget",
     "values": "unified | uapi"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "name": "RecipientRole",
+    "values": "pickup_contact | delivery_contact | internal"
    }
   ],
   "error_messages": [
@@ -25872,6 +25880,14 @@
     "value": "service_role"
    },
    {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "value": "role"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "value": "string"
+   },
+   {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "value": "service_role"
    },
@@ -26560,6 +26576,14 @@
    {
     "file": "supabase/functions/send-notification/index.ts",
     "text": "lets the caller pick an arbitrary destination, so it must be restricted to"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "text": "descarta o que não dá para enviar — entrada inválida nunca deve lançar, senão"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "text": "destinos que são URLs/canais, mas a mesma regra de chave vale."
    },
    {
     "file": "supabase/functions/send-notification/static-map.ts",
@@ -33820,6 +33844,12 @@
     "kind": "filtra"
    },
    {
+    "file": "supabase/functions/send-notification/recipients.ts",
+    "field": "role",
+    "value": "string",
+    "kind": "compara"
+   },
+   {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "field": "role",
     "value": "service_role",
@@ -39246,6 +39276,34 @@
    {
     "file": "supabase/functions/send-notification/quiet-hours.test.ts",
     "name": "[quiet-hours] nextAllowedTime na madrugada aponta para o mesmo dia local às 07:00"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "normaliza o formato do trigger e descarta o que não tem canal ou destino"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "entrada que não é array devolve lista vazia, sem lançar"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "une pedido + configuração preservando os dois"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "mesmo destino no pedido e na configuração sai uma vez só"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "o mesmo número em canais diferentes são dois envios legítimos"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "chave ignora caixa e espaço nas pontas do destino"
+   },
+   {
+    "file": "supabase/functions/send-notification/recipients.test.ts",
+    "name": "primeiro por papel alimenta o template"
    },
    {
     "file": "supabase/functions/send-notification/static-map.test.ts",
@@ -44914,6 +44972,9 @@
      "service_role": [
       "compara:supabase/functions/send-notification/index.ts",
       "compara:supabase/functions/simulate-driver-movement/index.ts"
+     ],
+     "string": [
+      "compara:supabase/functions/send-notification/recipients.ts"
      ]
     },
     "last_status": {
@@ -45012,6 +45073,7 @@
    "permission",
    "role",
    "service_role",
+   "string",
    "user",
    "viewer"
   ],
@@ -66929,7 +66991,7 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 297,
+   "lines": 310,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
@@ -70074,7 +70136,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 889,
+   "lines": 925,
    "tables": [
     {
      "table": "geo_defaults",
@@ -70246,6 +70308,54 @@
     "function nextAllowedTime"
    ],
    "doc": "Horário de silêncio (D3, docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md etapa 58): alertas geo-disparados para o fornecedor/cliente não saem fora de 07:00-20:00 America/Sao_Paulo. `index.ts` usa estas funções puras (sem I/O) para decidir se envia agora ou reenfileira — mesmo padrão de `lalamove-webhook …"
+  },
+  "supabase/functions/send-notification/recipients.test.ts": {
+   "path": "supabase/functions/send-notification/recipients.test.ts",
+   "lines": 76,
+   "is_test": true,
+   "doc": "Etapa 66: a união pedido × alert_configurations tem de ser explícita. O risco real é duplicidade (mesmo telefone configurado e no pedido) e entrada inválida derrubando o alerta.",
+   "tests": [
+    "normaliza o formato do trigger e descarta o que não tem canal ou destino",
+    "entrada que não é array devolve lista vazia, sem lançar",
+    "une pedido + configuração preservando os dois",
+    "mesmo destino no pedido e na configuração sai uma vez só",
+    "o mesmo número em canais diferentes são dois envios legítimos",
+    "chave ignora caixa e espaço nas pontas do destino",
+    "primeiro por papel alimenta o template"
+   ]
+  },
+  "supabase/functions/send-notification/recipients.ts": {
+   "path": "supabase/functions/send-notification/recipients.ts",
+   "lines": 82,
+   "exports": [
+    "type RecipientRole",
+    "interface NotificationRecipient",
+    "function recipientKey",
+    "function normalizeRecipients",
+    "function unionRecipients",
+    "function firstByRole"
+   ],
+   "enums": [
+    {
+     "name": "RecipientRole",
+     "values": "pickup_contact | delivery_contact | internal"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "string",
+     "kind": "compara"
+    }
+   ],
+   "role_checks": [
+    "role",
+    "string"
+   ],
+   "rule_comments": [
+    "descarta o que não dá para enviar — entrada inválida nunca deve lançar, senão",
+    "destinos que são URLs/canais, mas a mesma regra de chave vale."
+   ]
   },
   "supabase/functions/send-notification/static-map.test.ts": {
    "path": "supabase/functions/send-notification/static-map.test.ts",
@@ -71327,10 +71437,23 @@
   }
  },
  "git": {
-  "sha": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
+  "sha": "8f42f4fce4ac10f29d48824ecc56c5d59d877530",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "8f42f4f",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/send-notification/index.ts",
+     "supabase/functions/send-notification/recipients.test.ts",
+     "supabase/functions/send-notification/recipients.ts"
+    ]
+   },
    {
     "sha": "59db689",
     "date": "2026-11-22",
@@ -71689,26 +71812,16 @@
      "src/components/orders/OrderGeoEvents.test.tsx",
      "src/components/orders/OrderGeoEvents.tsx"
     ]
-   },
-   {
-    "sha": "460de12",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
-    "files": [
-     "src/components/orders/AddressAutocomplete.test.tsx",
-     "src/components/orders/AddressAutocomplete.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    25
+    26
    ],
    [
     "supabase/functions/send-notification/index.ts",
-    4
+    5
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -71723,12 +71836,12 @@
     3
    ],
    [
-    "src/components/orders/AddressAutocomplete.tsx",
+    "supabase/functions/geo-gateway/index.ts",
     3
    ],
    [
-    "supabase/functions/geo-gateway/index.ts",
-    3
+    "supabase/functions/_shared/schemas.ts",
+    2
    ],
    [
     "supabase/functions/_shared/channels/zapp.test.ts",
@@ -71755,12 +71868,20 @@
     2
    ],
    [
+    "src/components/orders/AddressAutocomplete.tsx",
+    2
+   ],
+   [
     ".github/workflows/ci.yml",
     2
    ],
    [
-    "src/components/orders/AddressAutocomplete.test.tsx",
-    2
+    "supabase/functions/send-notification/recipients.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/send-notification/recipients.ts",
+    1
    ],
    [
     "supabase/functions/send-notification/static-map.test.ts",
@@ -71772,14 +71893,6 @@
    ],
    [
     "src/hooks/__tests__/useGeo.contract.test.ts",
-    1
-   ],
-   [
-    "src/hooks/useGeo.ts",
-    1
-   ],
-   [
-    "src/types/geo.ts",
     1
    ]
   ]

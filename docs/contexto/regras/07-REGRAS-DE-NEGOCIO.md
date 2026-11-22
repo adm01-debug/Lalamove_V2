@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `59db68997b` · branch `main` · 2026-11-22 06:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f42f4fce4` · branch `main` · 2026-11-22 06:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -791,6 +791,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
 | `role` | `pickup_contact` | escreve | `supabase/functions/job-worker/index.ts` |
 | `role` | `service_role` | compara | `supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
+| `role` | `string` | compara | `supabase/functions/send-notification/recipients.ts` |
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `role` | `system` | escreve | `supabase/functions/route-analyzer/index.ts` |
 | `role` | `user` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx`<br>`supabase/functions/route-analyzer/index.ts` |
@@ -896,6 +897,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
 | GatewayTarget | unified \| uapi | `supabase/functions/lalamove-gateway/route.ts` |
+| RecipientRole | pickup_contact \| delivery_contact \| internal | `supabase/functions/send-notification/recipients.ts` |
 
 ## F. Validações de entrada
 
@@ -1847,10 +1849,12 @@ _nenhum item encontrado_
 | `true` | `supabase/functions/mcp-query/index.ts` |
 | `delivery_contact` | `supabase/functions/send-notification/index.ts` |
 | `service_role` | `supabase/functions/send-notification/index.ts` |
+| `role` | `supabase/functions/send-notification/recipients.ts` |
+| `string` | `supabase/functions/send-notification/recipients.ts` |
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1135 testes em 100 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1142 testes em 101 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1925,6 +1929,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
 | `supabase/functions/job-worker/route-fixture-replay.test.ts` | 7 | fixture: 40 pontos com sequencia e tempo crescentes · fixture: distancia total declarada bate com a soma dos segmentos · replay: todo ponto do trajeto esta sobre a propria rota (is_on_route=true) · replay: posicao a 600 m do trajeto conta como fora da rota … |
+| `supabase/functions/send-notification/recipients.test.ts` | 7 | normaliza o formato do trigger e descarta o que não tem canal ou destino · entrada que não é array devolve lista vazia, sem lançar · une pedido + configuração preservando os dois · mesmo destino no pedido e na configuração sai uma vez só … |
 | `src/components/map/hooks/__tests__/useMapboxToken.test.ts` | 6 | useMapboxToken · retorna o token quando a edge function responde com sucesso · falha silenciosamente (mapbox é opcional) quando a edge function retorna erro · define erro específico quando o token está ausente na resposta … |
 | `src/hooks/__tests__/useGeoAdmin.latency.test.ts` | 6 | aggregateGeoLatency (etapa 80) · agrupa por provedor e função e calcula p50/p95 · separa provedores e funções diferentes · descarta linhas sem duração e operações que não são do geo-gateway … |
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
@@ -2235,6 +2240,8 @@ _nenhum item encontrado_
 | Deve ser chamada periodicamente (ex: a cada hora via cron job externo) | `supabase/functions/rotate-tokens/index.ts` |
 | verify_jwt=true so a valid JWT is required, but that includes ordinary | `supabase/functions/send-notification/index.ts` |
 | lets the caller pick an arbitrary destination, so it must be restricted to | `supabase/functions/send-notification/index.ts` |
+| descarta o que não dá para enviar — entrada inválida nunca deve lançar, senão | `supabase/functions/send-notification/recipients.ts` |
+| destinos que são URLs/canais, mas a mesma regra de chave vale. | `supabase/functions/send-notification/recipients.ts` |
 | fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da | `supabase/functions/send-notification/static-map.ts` |
 | imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode | `supabase/functions/send-notification/static-map.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |

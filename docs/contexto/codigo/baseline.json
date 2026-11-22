@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
+  "commit": "8f42f4fce4ac10f29d48824ecc56c5d59d877530",
   "branch": "main",
-  "data_commit": "2026-11-22T03:43:04-03:00",
+  "data_commit": "2026-11-22T03:47:57-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "8f42f4f",
+    "data": "2026-11-22",
+    "assunto": "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)"
+   },
    {
     "sha": "59db689",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "f7d18db",
     "data": "2026-11-22",
     "assunto": "feat(geo): geocode server-side de fallback e action validate (etapas 37/38) (#228)"
-   },
-   {
-    "sha": "0029ab4",
-    "data": "2026-11-22",
-    "assunto": "chore: remove chave DistanceMatrix.ai do repo e documenta Google Maps (etapas 8-10) (#225)"
    }
   ],
-  "arquivos_mudados_7d": 283,
+  "arquivos_mudados_7d": 285,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "pasta": "src/components/orders",
@@ -153,10 +153,14 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "pasta": "package.json",
+    "mudancas": 15
+   },
+   {
+    "pasta": "supabase/functions/send-notification",
     "mudancas": 15
    },
    {
@@ -173,10 +177,6 @@
    },
    {
     "pasta": "supabase/functions/job-worker",
-    "mudancas": 12
-   },
-   {
-    "pasta": "supabase/functions/send-notification",
     "mudancas": 12
    },
    {
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 29
+    "mudancas": 30
    },
    {
     "arquivo": "supabase/config.toml",
@@ -230,15 +230,15 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 9
    },
    {
@@ -250,11 +250,11 @@
     "mudancas": 8
    },
    {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 8
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 151
+    "commits": 152
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1023,
-  "arquivos_codigo": 644,
-  "linhas_codigo": 125499,
+  "arquivos_total": 1025,
+  "arquivos_codigo": 646,
+  "linhas_codigo": 125706,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 144,
+  "testes": 145,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 75,
-   "linhas": 17887
+   "arquivos": 77,
+   "linhas": 18094
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -609,12 +609,12 @@
    "linhas": 956
   },
   {
-   "arquivo": "scripts/ai-context/gerar.mjs",
-   "linhas": 901
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 925
   },
   {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 889
+   "arquivo": "scripts/ai-context/gerar.mjs",
+   "linhas": 901
   },
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",

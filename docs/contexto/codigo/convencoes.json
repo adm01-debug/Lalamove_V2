@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (52)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (25)"
+   "supabase/functions/<edge> (26)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)",
    "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)",
    "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)",
    "chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)",
-   "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)",
-   "feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)"
+   "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

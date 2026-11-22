@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `59db68997b` · branch `main` · 2026-11-22 06:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8f42f4fce4` · branch `main` · 2026-11-22 06:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -172,6 +172,7 @@
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |
 | `GatewayTarget` (TS) | unified \| uapi |  | `supabase/functions/lalamove-gateway/route.ts` |
+| `RecipientRole` (TS) | pickup_contact \| delivery_contact \| internal |  | `supabase/functions/send-notification/recipients.ts` |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 

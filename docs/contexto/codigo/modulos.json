@@ -1446,9 +1446,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 50,
-   "testes": 25,
-   "linhas": 14194,
+   "arquivos": 51,
+   "testes": 26,
+   "linhas": 14325,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1559,6 +1559,7 @@
     "delivery_contact",
     "pickup_contact",
     "service_role",
+    "string",
     "supplier",
     "system",
     "user"

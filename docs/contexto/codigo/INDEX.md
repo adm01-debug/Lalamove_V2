@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `59db68997b1f589ee2da81b7c7f52bad5617a1e9` (2026-11-22T03:43:04-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `8f42f4fce4ac10f29d48824ecc56c5d59d877530` (2026-11-22T03:47:57-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (531), SQL (188), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (533), SQL (188), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1023 |
-| arquivos_codigo | 644 |
-| linhas_codigo | 125499 |
+| arquivos_total | 1025 |
+| arquivos_codigo | 646 |
+| linhas_codigo | 125706 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 144 |
+| testes | 145 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 103 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (127), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (52), guards em scripts/ (47), supabase/functions/<edge> (25)
+- testes: co-localizado (__tests__) (52), guards em scripts/ (47), supabase/functions/<edge> (26)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 32 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 50 | 0 | 6 | 42 |
+| functions | 0 | 0 | 51 | 0 | 6 | 42 |
 | hooks | 0 | 0 | 86 | 218 | 15 | 47 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 197 | 14 | 47 |
@@ -272,26 +272,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7852 nós · 16771 arestas · 589 comunidades · grafo do commit `59db6899`
-- comunidades maiores: cn (191), button.tsx (124), App.tsx (114), snapshot.py (104), framer-motion (103), ref_node_path (96), dependencies (80), RateLimitDashboardPage.tsx (79), gerar.mjs (76), @tanstack/react-query (72), seed-database.ts (67), package.json (66)
+- 7860 nós · 16788 arestas · 584 comunidades · grafo do commit `8f42f4fc`
+- comunidades maiores: cn (246), react (186), lucide-react (182), snapshot.py (102), ref_node_path (96), AlertsPage.tsx (92), App.tsx (82), AppLayout.tsx (81), dependencies (80), gerar.mjs (76), NewOrderDialog.tsx (74), contract.ts (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (29)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (30)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
+- supabase/functions/send-notification/index.ts (10)
 - src/components/orders/AddressAutocomplete.tsx (9)
 - supabase/functions/job-worker/index.ts (9)
-- supabase/functions/send-notification/index.ts (9)
 - src/components/map/LiveMap.tsx (8)
 - src/components/orders/NewOrderDialog.tsx (8)
+- supabase/functions/_shared/schemas.ts (8)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
-- supabase/functions/_shared/schemas.ts (7)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -374,6 +374,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `8f42f4f` feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)
 - 2026-11-22 `59db689` feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)
 - 2026-11-22 `5984867` feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)
 - 2026-11-22 `4ad97ef` chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)
@@ -388,7 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `2809b60` feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)
 - 2026-11-22 `d725090` docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)
 - 2026-11-22 `5937457` docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)
-- 2026-11-22 `2d6c7b1` feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
