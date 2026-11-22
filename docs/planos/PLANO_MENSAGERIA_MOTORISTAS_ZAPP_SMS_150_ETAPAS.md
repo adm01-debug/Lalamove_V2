@@ -621,16 +621,16 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 10 — SMS (119–130)
 
 ### 119 — [L] Interface `SmsChannel`
-- [ ] `send(to, text, ref)`, `parseDeliveryReport(req)`, `parseInbound(req)`; resultado no mesmo formato do canal Zapp
-- **Evidência:** tipo exportado e coberto por teste
+- [x] `send(to, text, ref)`, `parseDeliveryReport(req)`, `parseInbound(req)`; resultado no mesmo formato do canal Zapp
+- **Evidência:** `supabase/functions/_shared/channels/sms.ts` exporta `SmsChannel`; `sms.test.ts` cobre DLR e inbound dos dois provedores (PR #281)
 
 ### 120 — [L] Provedor principal (Z2)
-- [ ] Implementação do provedor escolhido com timeout de 10 s e mapeamento de erros
-- **Evidência:** SMS real no número interno
+- [~] Comtele (`auth-key`) e Zenvia (`X-API-TOKEN`) implementados com `AbortSignal.timeout(10_000)` e erro prefixado pelo provedor
+- **Evidência:** `createComteleChannel`/`createZenviaChannel` em `_shared/channels/sms.ts`; payload conferido em teste. **Falta:** provedor escolhido (Z2) e SMS real no número interno — sem `SMS_PROVIDER_API_KEY` nenhum envio aconteceu
 
 ### 121 — [L] Seletor de provedor
-- [ ] `messaging_settings.sms_provider`; segundo provedor opcional como contingência (mesmo padrão do seletor de mapas)
-- **Evidência:** troca de provedor sem deploy
+- [~] Seletor por env `SMS_PROVIDER` (`comtele` | `zenvia`), devolvendo `null` sem secret
+- **Evidência:** `smsChannelFromEnv()` em `_shared/channels/sms.ts`, coberto por teste. **Falta:** ler de `messaging_settings.sms_provider` (tabela do Bloco 6, DDL pendente) para trocar sem deploy
 
 ### 122 — [L] Secrets SMS 🔒
 - [ ] `SMS_PROVIDER_API_KEY`, `SMS_WEBHOOK_SECRET`, remetente — só nas edges
@@ -641,8 +641,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** SMS chega identificado
 
 ### 124 — [L] Texto SMS econômico
-- [ ] Transliteração de acentos (evita a codificação de 70 caracteres), contador de segmentos, corte seguro em 160
-- **Evidência:** teste: template M8 = 1 segmento
+- [x] Transliteração de acentos (evita a codificação de 70 caracteres), contador de segmentos, corte seguro em 160
+- **Evidência:** `toGsm7`/`smsSegments`/`composeSmsText` em `_shared/channels/sms.ts`; `sms.test.ts` prova 160 no 1º segmento e 153 nos seguintes, e que acento não cai para UCS-2 (PR #281)
 
 ### 125 — [L] Link curto no SMS
 - [ ] Usar `share_link` da Lalamove ou rota curta própria para detalhes
