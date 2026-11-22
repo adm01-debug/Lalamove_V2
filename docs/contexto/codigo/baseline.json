@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a8e52d5d072f9cc4dd4d7c37f72ba43f87f7f239",
+  "commit": "2a4d1b1826707c4588901f261887e3058487c5dd",
   "branch": "main",
-  "data_commit": "2026-11-22T08:12:41-03:00",
+  "data_commit": "2026-11-22T08:18:41-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2a4d1b1",
+    "data": "2026-11-22",
+    "assunto": "fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)"
+   },
    {
     "sha": "a8e52d5",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "a7b144f",
     "data": "2026-11-22",
     "assunto": "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)"
-   },
-   {
-    "sha": "9ec9341",
-    "data": "2026-11-22",
-    "assunto": "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)"
    }
   ],
-  "arquivos_mudados_7d": 286,
+  "arquivos_mudados_7d": 287,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 157
+    "commits": 158
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1026,
+  "arquivos_total": 1027,
   "arquivos_codigo": 646,
   "linhas_codigo": 125762,
   "rotas": 55,
@@ -322,7 +322,7 @@
   "hooks": 101,
   "edge_functions": 26,
   "tabelas": 87,
-  "migrations": 184,
+  "migrations": 185,
   "cron_jobs": 21,
   "testes": 145,
   "workflows": 5,

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a8e52d5d072f9cc4dd4d7c37f72ba43f87f7f239` (2026-11-22T08:12:41-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2a4d1b1826707c4588901f261887e3058487c5dd` (2026-11-22T08:18:41-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (533), SQL (189), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (533), SQL (190), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1026 |
+| arquivos_total | 1027 |
 | arquivos_codigo | 646 |
 | linhas_codigo | 125762 |
 | rotas | 55 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 101 |
 | edge_functions | 26 |
 | tabelas | 87 |
-| migrations | 184 |
+| migrations | 185 |
 | cron_jobs | 21 |
 | testes | 145 |
 | workflows | 5 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7861 nós · 16788 arestas · 585 comunidades · grafo do commit `a8e52d5d`
+- 7862 nós · 16788 arestas · 586 comunidades · grafo do commit `2a4d1b18`
 - comunidades maiores: cn (246), react (186), lucide-react (182), snapshot.py (102), ref_node_path (96), AlertsPage.tsx (92), App.tsx (82), AppLayout.tsx (81), dependencies (80), gerar.mjs (76), NewOrderDialog.tsx (74), contract.ts (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -374,6 +374,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `2a4d1b1` fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)
 - 2026-11-22 `a8e52d5` security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)
 - 2026-11-22 `961964c` fix(geo): remove sublocality do mock do teste de bairro do Google (#259)
 - 2026-11-22 `6c065b3` fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)
@@ -388,7 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `e0e0118` docs: etapas 90 e 92 marcadas como executadas no plano (#247)
 - 2026-11-22 `57c28e4` test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)
 - 2026-11-22 `250e935` feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)
-- 2026-11-22 `a067e02` feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

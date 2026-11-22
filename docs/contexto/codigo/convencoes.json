@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)",
    "security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)",
    "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)",
    "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)",
-   "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)",
-   "feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)"
+   "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
