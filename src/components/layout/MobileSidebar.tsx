@@ -55,7 +55,7 @@ const menuCategories: MenuCategory[] = [
     label: 'Operações',
     icon: Gauge,
     items: [
-      { id: 'approvals', path: '/approvals', label: 'Aprovações', icon: Shield, badgeType: 'approvals' },
+      { id: 'approvals', path: '/approvals', label: 'Aprovações', icon: Shield, badgeType: 'approvals', requiredRole: 'manager' },
       { id: 'incidents', path: '/incidents', label: 'Incidentes', icon: AlertTriangle, badgeType: 'incidents' },
       { id: 'map', path: '/map', label: 'Mapa ao Vivo', icon: Map },
       { id: 'evaluations', path: '/evaluations', label: 'Avaliações', icon: ClipboardCheck },
@@ -78,7 +78,7 @@ const menuCategories: MenuCategory[] = [
     icon: Bell,
     items: [
       { id: 'alerts', path: '/alerts', label: 'Alertas', icon: Bell, badgeType: 'alerts' },
-      { id: 'alert-config', path: '/alert-configurations', label: 'Config. Alertas', icon: Bell },
+      { id: 'alert-config', path: '/alert-configurations', label: 'Config. Alertas', icon: Bell, requiredRole: 'manager' },
       { id: 'notification-history', path: '/notification-history', label: 'Histórico', icon: History },
     ]
   },
@@ -87,8 +87,8 @@ const menuCategories: MenuCategory[] = [
     label: 'Integrações',
     icon: Webhook,
     items: [
-      { id: 'webhooks', path: '/webhooks', label: 'Webhooks', icon: Webhook },
-      { id: 'bitrix24', path: '/bitrix24', label: 'Bitrix24', icon: Briefcase },
+      { id: 'webhooks', path: '/webhooks', label: 'Webhooks', icon: Webhook, requiredRole: 'manager' },
+      { id: 'bitrix24', path: '/bitrix24', label: 'Bitrix24', icon: Briefcase, requiredRole: 'manager' },
     ]
   },
   {
