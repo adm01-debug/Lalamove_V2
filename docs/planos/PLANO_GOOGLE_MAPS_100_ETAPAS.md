@@ -47,11 +47,11 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
 > **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
 > 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Fechadas depois: **33, 68, 85** (PR
-> #251/#252 e auditoria) e **66** (união explícita de destinatários). Contagem: **93 `[x]` / 97 `[ ]`**
+> #251/#252 e auditoria) e **66** (união explícita de destinatários). Contagem: **96 `[x]` / 94 `[ ]`**
 > (algumas etapas têm mais de um item de checklist).
-> Gaps reais confirmados que seguem abertos: 56 (sem destinatário interno), 60 (`notification_optouts` só na
-> PR #221), 61 (`tracking_status='ended'` só na PR #221), 70 (`check-driver-alerts` sem `cron.schedule`, PR
-> #217), 83 (`mapbox-proxy` ainda no ar), 94 (`provider-status` pós-deploy ausente).
+> Gaps reais confirmados que seguem abertos: 56 (sem destinatário interno), 70 (`check-driver-alerts` sem
+> `cron.schedule`, PR #217), 83 (`mapbox-proxy` ainda no ar), 94 (`provider-status` pós-deploy ausente).
+> 60/61 estão na PR #221 (branch `claude/feat-optout-tracking-clean-261122-0300`), rebasada em `main`.
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
@@ -558,16 +558,18 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 `deno check` mantém os **4 `TS2345` pré-existentes** de `send-notification` (baseline).
 
 ### 60 — Opt-out e dedup
-- [ ] Tabela `notification_optouts(phone PK, reason, created_at)`; checar antes de enviar
-- [ ] `alert_dedup` já existe (`20260712221144`): chave `order_id+event_type+recipient`
+- [x] Tabela `notification_optouts(phone PK, reason, created_at)`; checar antes de enviar
+  - **FEITO:** `20261123200000_optout_and_tracking_end.sql` cria a tabela + `normalize_br_phone()` + `is_phone_opted_out()`; `send-notification/index.ts:255-270` consulta antes de cada destinatário ad-hoc de whatsapp/sms e registra `opted_out` em `alerts_sent`. Validado em Postgres 16: `+55 41 99999-8888`, `41 99999-8888` e `4199998888` bloqueiam; outro número, vazio e `****` não.
+- [x] `alert_dedup` já existe (`20260712221144`): chave `order_id+event_type+recipient` — dedup vive em `claim_alert_notification` (janela 300 s), chamada em `send-notification/index.ts:124`
 - **Evidência:** 2º envio bloqueado
 
 ### 61 — Encerramento do tracking
-- [ ] Em `COMPLETED/CANCELED/REJECTED/EXPIRED`: `tracking_status='ended'`; eventos pendentes `deferred` são cancelados
+- [x] Em `COMPLETED/CANCELED/REJECTED/EXPIRED`: `tracking_status='ended'`; eventos pendentes `deferred` são cancelados
+  - **FEITO:** `end_order_tracking(uuid, text)` + trigger `trg_close_tracking_on_order_end` na mesma migration; `lalamove-webhook/index.ts:325-333` chama a RPC nos 5 estados finais. Validado: `ON_GOING`→`COMPLETED` deixou `tracking_status='ended'` com `tracking_ended_at`, converteu `deferred`→`skipped` e preservou `sent`; segunda chamada retorna 0 (idempotente).
 - **Evidência:** pedido cancelado não gera mensagem
 
 ### 62 — Painel de eventos no pedido
-- [x] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar)
+- [x] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar) — PR #219 (`OrderGeoEvents.tsx`), 4 testes
 - **Evidência:** screenshot
 
 **Auditado (2026-11-22).** `OrderGeoEvents.tsx` (187 linhas) é renderizado em `OrderDetailModal.tsx:1003` (`<OrderGeoEvents orderId={order.id} driverId={order.driverId} />`, import em `:49`).
@@ -575,7 +577,7 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - Cobre também a etapa 63 (botão "Reenviar" em `:187`).
 
 ### 63 — Reenvio manual
-- [x] Botão "Reenviar aviso" → `send-notification` com `force=true` (operator+), registra em `alerts_sent` com `manual=true`
+- [x] Botão "Reenviar aviso" → `send-notification` com `skip_dedup=true` (equivalente ao `force`, o contrato usa `skip_dedup`) · **FEITO:** botão em `OrderGeoEvents.tsx` envia `metadata: { manual: true, geo_event_id }` e a edge grava o status de volta em `order_geo_events` via `recordGeoEventStatus`
 - **Evidência:** `alerts_sent` com a linha
 
 **Auditado (2026-11-22).** `resend` em `OrderGeoEvents.tsx:83-108`:
