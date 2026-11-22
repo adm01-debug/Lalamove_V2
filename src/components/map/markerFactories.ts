@@ -332,6 +332,7 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
   // Substitui o antigo `onclick` inline (que interpolava `driverName` numa string JS,
   // permitindo injeção de código) por listeners que leem os dados de atributos `data-*`.
   const root = popup.getElement();
+  if (!root) return popup;
   const historyBtn = root.querySelector<HTMLButtonElement>('[data-action="show-driver-history"]');
   historyBtn?.addEventListener('click', () => {
     const { driverId, orderId, driverName: name } = historyBtn.dataset;

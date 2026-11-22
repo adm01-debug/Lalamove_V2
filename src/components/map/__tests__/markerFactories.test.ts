@@ -169,14 +169,16 @@ describe('markerFactories', () => {
 
     it('não cria elemento <img> a partir do nome do motorista no popup', () => {
       const popup = createDriverPopup(malicious);
-      expect(popup.getElement().querySelector('img')).toBeNull();
-      expect(popup.getElement().textContent).toContain('<img src=x onerror=alert(1)>');
+      const el = popup.getElement()!;
+      expect(el.querySelector('img')).toBeNull();
+      expect(el.textContent).toContain('<img src=x onerror=alert(1)>');
     });
 
     it('não cria elemento <script>/<b> a partir de cliente e endereços no popup', () => {
       const popup = createDriverPopup(malicious);
-      expect(popup.getElement().querySelector('script')).toBeNull();
-      expect(popup.getElement().querySelector('b')).toBeNull();
+      const el = popup.getElement()!;
+      expect(el.querySelector('script')).toBeNull();
+      expect(el.querySelector('b')).toBeNull();
     });
 
     it('não cria elemento <b> a partir do endereço de coleta no marcador', () => {
@@ -198,7 +200,7 @@ describe('markerFactories', () => {
 
     it('dispara show-driver-history sem onclick inline (dados via atributos, string pura)', () => {
       const popup = createDriverPopup(malicious);
-      const btn = popup.getElement().querySelector<HTMLButtonElement>('[data-action="show-driver-history"]');
+      const btn = popup.getElement()!.querySelector<HTMLButtonElement>('[data-action="show-driver-history"]');
       expect(btn).not.toBeNull();
       expect(btn!.hasAttribute('onclick')).toBe(false);
       // O valor guardado no atributo é a string crua; ao disparar o evento vai como dado, não como HTML.
