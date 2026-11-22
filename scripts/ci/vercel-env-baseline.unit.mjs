@@ -96,6 +96,8 @@ test('as VITE_* que o src/ realmente le estao declaradas (required ou optional)'
     'VITE_APP_VERSION',
     'VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY',
     'VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID',
+    'VITE_GOOGLE_MAPS_BROWSER_KEY',
+    'VITE_GOOGLE_MAPS_MAP_ID',
   ]) {
     assert.ok(declaradas.has(k), `${k} e lida em src/ e precisa estar no baseline de production`);
   }

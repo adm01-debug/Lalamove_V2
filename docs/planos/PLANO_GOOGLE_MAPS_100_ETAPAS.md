@@ -102,20 +102,20 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `supabase secrets list` mostra o nome (sem valor)
 
 ### 8 — Variáveis no Vercel (front, time `juca1`, projeto `lalamove-v2`)
-- [ ] `VITE_GOOGLE_MAPS_BROWSER_KEY` e `VITE_GOOGLE_MAPS_MAP_ID` em Production/Preview/Development
-- [ ] Atualizar `scripts/ci/vercel-env-baseline.json` e `.unit.mjs` (hoje listam só `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*`)
-- **Evidência:** `vercel env ls` + CI `vercel-env-baseline` verde
+- [x] Atualizar `scripts/ci/vercel-env-baseline.json` e `.unit.mjs` (hoje listam só `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*`)
+- [ ] `VITE_GOOGLE_MAPS_BROWSER_KEY` e `VITE_GOOGLE_MAPS_MAP_ID` em Production/Preview/Development — **ação do dono** (sem MCP da Vercel com escopo para escrita de env)
+- **Evidência:** baseline com as duas vars nos 3 blocos (`production`/`preview`/`development`); `node --test scripts/ci/vercel-env-baseline.unit.mjs` → **12 passed / 0 failed** (PR #225). Falta só o cadastro na Vercel.
 
 ### 9 — `.env.example` e documentação
-- [ ] Adicionar `GOOGLE_MAPS_SERVER_KEY=`, `VITE_GOOGLE_MAPS_BROWSER_KEY=`, `VITE_GOOGLE_MAPS_MAP_ID=` comentados (hoje só `MAPBOX_ACCESS_TOKEN`)
-- [ ] Criar `docs/GOOGLE_MAPS.md`: projeto, chaves, caps, SKUs usados, custo estimado, como rotacionar
-- **Evidência:** PR mergeada
+- [x] Adicionar `GOOGLE_MAPS_SERVER_KEY=`, `VITE_GOOGLE_MAPS_BROWSER_KEY=`, `VITE_GOOGLE_MAPS_MAP_ID=` comentados (hoje só `MAPBOX_ACCESS_TOKEN`)
+- [x] Criar `docs/GOOGLE_MAPS.md`: projeto, chaves, caps, SKUs usados, custo estimado, como rotacionar
+- **Evidência:** `.env.example:19-24` documenta as 3 (`GOOGLE_MAPS_API_KEY` marcado como servidor). `docs/GOOGLE_MAPS.md` criado com 156 linhas: projeto/billing, 7 APIs, as 2 chaves com escopo, Map ID, 6 quotas, tabela de SKUs lida da `geo_price_list`, conferência mensal gateway × fatura (±5%), rotação das 2 chaves e por que a chave própria é opcional.
 
 ### 10 — Retirar chave DistanceMatrix.ai hardcoded (prefixo `k2sJ`)
-- [ ] Remover de `lalamove_f01_cotacao.json:62,77`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_suplemento_v2.md/.html`, `lalamove_documentacao_completa.md/.html`
-- [ ] Substituir por `{{ $credentials }}` no n8n ou por chamada ao `geo-gateway` (etapa 42)
+- [x] Remover de `lalamove_f01_cotacao.json:62,77`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_suplemento_v2.md/.html`, `lalamove_documentacao_completa.md/.html`
+- [x] Substituir por `{{ $credentials }}` no n8n ou por chamada ao `geo-gateway` (etapa 42)
 - [ ] 🔒 Rotacionar a chave no painel DistanceMatrix.ai (ação do dono)
-- **Evidência:** `grep -r "k2sJ" .` vazio; commit
+- **Evidência:** as **12 ocorrências** em 7 arquivos foram trocadas por `{{ $env.DISTANCEMATRIX_API_KEY }}` nos workflows n8n (padrão já usado no repo: `$env.B24_TOKEN`, `$env.N8N_API_KEY`) e por `<DISTANCEMATRIX_API_KEY>` nos 4 docs. `grep -rln "k2sJ" .` (fora de `docs/planos`) → **vazio**. Os 3 JSON revalidados com `json.load` → OK. PR #225. **Falta**: cadastrar `DISTANCEMATRIX_API_KEY` nas variáveis de ambiente do n8n e rotacionar no painel.
 
 ---
 
