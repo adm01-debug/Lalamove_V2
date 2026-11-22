@@ -26,7 +26,7 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > - ✅ Blocos 2–4 (21–40): `geo-gateway` é o ponto único; `providers/google.ts` implementa
 >   `autocomplete` (Places), `geocode`/`reverse` (Geocoding), `route` (`computeRoutes`), `matrix`
 >   (`computeRouteMatrix`), `static`. `snap`/`isochrone`/`optimization`/`tilequery` **não têm equivalente no
->   Google** — documentado em `google.ts:5` e o gateway responde `GEO_NOT_SUPPORTED` (501 Triton), com
+>   Google** — documentado em `google.ts:5` e o gateway responde `GEO_NOT_SUPPORTED` (HTTP 501), com
 >   `geo_settings` desabilitando a função na UI (`MapsSettingsPage` matriz por provedor).
 >   - **Bug de produção corrigido em 2026-11-22** (PR #205): `computeRoutes` enviava
 >     `departureTime = new Date().toISOString()` e a API rejeitava com `"Timestamp must be set to a future
