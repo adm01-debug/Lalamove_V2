@@ -18,6 +18,8 @@ import { usePermissions } from '@/hooks/usePermissions';
 import {
   useGeoBudgets,
   useGeoBudgetStatus,
+  useGeoDefaults,
+  useUpdateGeoDefaults,
   useGeoPriceList,
   useGeoProviderHealth,
   useGeoProviderStatus,
@@ -26,6 +28,7 @@ import {
   useUpdateGeoBudget,
   useUpdateGeoSetting,
   type GeoBudgetRow,
+  type GeoDefaultsRow,
   type GeoFunction,
   type GeoHealthResult,
   type GeoProviderName,
@@ -158,6 +161,9 @@ export default function MapsSettingsPage() {
   const updateSetting = useUpdateGeoSetting();
   const updateBudget = useUpdateGeoBudget();
   const health = useGeoProviderHealth();
+  const defaults = useGeoDefaults();
+  const updateDefaults = useUpdateGeoDefaults();
+  const [defaultsEdits, setDefaultsEdits] = useState<Partial<GeoDefaultsRow>>({});
   const [healthResults, setHealthResults] = useState<Record<string, GeoHealthResult>>({});
   /** Etapa 71/paridade: o gateway informa quem está realmente implementado (Google ainda não). */
   const googleImplemented =
@@ -232,8 +238,29 @@ export default function MapsSettingsPage() {
     );
   };
 
-  const usageByProvider = useMemo(() => {
-    const map = new Map<string, number>();
+  const handleSaveDefaults = () => {
+    if (!defaults.data) return;
+    const next = { ...defaults.data, ...defaultsEdits };
+    const dirty = (['approach_radius_m', 'approach_eta_min', 'arrived_radius_m', 'off_route_threshold_m', 'quiet_hours_start', 'quiet_hours_end', 'quiet_hours_tz', 'notify_delivery_contact'] as const).filter(
+      (k) => JSON.stringify(next[k]) !== JSON.stringify(defaults.data?.[k]),
+    );
+    if (dirty.length === 0) {
+      toast.info('Nada mudou nos padrões globais.');
+      return;
+    }
+    updateDefaults.mutate(
+      Object.fromEntries(dirty.map((k) => [k, next[k]])) as Partial<GeoDefaultsRow>,
+      {
+        onSuccess: () => {
+          toast.success('Padrões globais atualizados');
+          setDefaultsEdits({});
+        },
+        onError: (err) => toast.error(`Falha ao salvar padrões: ${(err as Error).message}`),
+      },
+    );
+  };
+
+  const usageByProvider = useMemo(() => {    const map = new Map<string, number>();
     for (const row of usage.data ?? []) {
       map.set(row.provider, (map.get(row.provider) ?? 0) + Number(row.count ?? 0));
     }
@@ -455,6 +482,140 @@ export default function MapsSettingsPage() {
           );
         })}
       </div>
+
+      {/* Padrões globais de geofence e notificação (etapa 90) */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ShieldAlert className="w-4 h-4" /> Padrões de aviso do rastreio
+          </CardTitle>
+          <CardDescription>
+            Valem para todo pedido novo. O pedido pode definir um valor próprio no campo avançado; quando não define, é este que o
+            sistema usa para decidir quando avisar o cliente.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {defaults.isLoading ? (
+            <Skeleton className="h-32 w-full" />
+          ) : !defaults.data ? (
+            <p className="text-sm text-muted-foreground">
+              Sem linha de padrões globais no banco — o rastreio usa os valores de fábrica. Salve uma vez para criar a configuração.
+            </p>
+          ) : (
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-approach-radius">Raio de aproximação (m)</Label>
+                  <Input
+                    id="def-approach-radius"
+                    type="number"
+                    min={0}
+                    value={defaultsEdits.approach_radius_m ?? defaults.data.approach_radius_m}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, approach_radius_m: Number(e.target.value) }))}
+                    disabled={!canWrite}
+                  />
+                  <p className="text-xs text-muted-foreground">Distância do motorista ao ponto que dispara “chegando”.</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-approach-eta">ETA de aproximação (min)</Label>
+                  <Input
+                    id="def-approach-eta"
+                    type="number"
+                    min={0}
+                    value={defaultsEdits.approach_eta_min ?? defaults.data.approach_eta_min}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, approach_eta_min: Number(e.target.value) }))}
+                    disabled={!canWrite}
+                  />
+                  <p className="text-xs text-muted-foreground">Tempo estimado ao ponto que também dispara o aviso.</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-arrived-radius">Raio de chegada (m)</Label>
+                  <Input
+                    id="def-arrived-radius"
+                    type="number"
+                    min={0}
+                    value={defaultsEdits.arrived_radius_m ?? defaults.data.arrived_radius_m}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, arrived_radius_m: Number(e.target.value) }))}
+                    disabled={!canWrite}
+                  />
+                  <p className="text-xs text-muted-foreground">Distância que conta como “chegou no local”.</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-off-route">Tolerância fora de rota (m)</Label>
+                  <Input
+                    id="def-off-route"
+                    type="number"
+                    min={0}
+                    value={defaultsEdits.off_route_threshold_m ?? defaults.data.off_route_threshold_m}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, off_route_threshold_m: Number(e.target.value) }))}
+                    disabled={!canWrite}
+                  />
+                  <p className="text-xs text-muted-foreground">Acima disso o motorista é considerado fora do trajeto.</p>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-quiet-start">Início do horário silencioso</Label>
+                  <Input
+                    id="def-quiet-start"
+                    type="time"
+                    value={defaultsEdits.quiet_hours_start ?? defaults.data.quiet_hours_start}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, quiet_hours_start: e.target.value }))}
+                    disabled={!canWrite}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-quiet-end">Fim do horário silencioso</Label>
+                  <Input
+                    id="def-quiet-end"
+                    type="time"
+                    value={defaultsEdits.quiet_hours_end ?? defaults.data.quiet_hours_end}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, quiet_hours_end: e.target.value }))}
+                    disabled={!canWrite}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="def-quiet-tz">Fuso do horário</Label>
+                  <Input
+                    id="def-quiet-tz"
+                    value={defaultsEdits.quiet_hours_tz ?? defaults.data.quiet_hours_tz}
+                    onChange={(e) => setDefaultsEdits((p) => ({ ...p, quiet_hours_tz: e.target.value }))}
+                    disabled={!canWrite}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-lg border p-3">
+                <Switch
+                  id="def-notify-delivery"
+                  checked={defaultsEdits.notify_delivery_contact ?? defaults.data.notify_delivery_contact}
+                  onCheckedChange={(checked) => setDefaultsEdits((p) => ({ ...p, notify_delivery_contact: checked }))}
+                  disabled={!canWrite}
+                />
+                <div>
+                  <Label htmlFor="def-notify-delivery">Avisar o contato de entrega por padrão</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Desligado, só quem retira é avisado. Cada pedido pode ligar isso individualmente.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted-foreground">
+                  {defaults.data.updated_by
+                    ? `Última alteração em ${new Date(defaults.data.updated_at).toLocaleString('pt-BR')}.`
+                    : 'Ainda não foi alterado desde a instalação.'}
+                </p>
+                <Button size="sm" onClick={handleSaveDefaults} disabled={updateDefaults.isPending || !canWrite}>
+                  {updateDefaults.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : null}
+                  Salvar padrões
+                </Button>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Matriz de funções */}
       <Card>

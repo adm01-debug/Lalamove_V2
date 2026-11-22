@@ -120,6 +120,53 @@ export function useGeoPriceList() {
   });
 }
 
+/**
+ * Etapa 90: parametros globais de geofence/notificacao (linha unica de `geo_defaults`).
+ * O trigger geo_evaluate_tracking le esta linha quando o pedido nao define override.
+ */
+export interface GeoDefaultsRow {
+  id: boolean;
+  approach_radius_m: number;
+  approach_eta_min: number;
+  arrived_radius_m: number;
+  off_route_threshold_m: number;
+  notify_delivery_contact: boolean;
+  quiet_hours_start: string;
+  quiet_hours_end: string;
+  quiet_hours_tz: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
+export function useGeoDefaults() {
+  return useQuery<GeoDefaultsRow | null>({
+    queryKey: ['geo', 'defaults'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('geo_defaults').select('*').eq('id', true).maybeSingle();
+      if (error) throw error;
+      return (data as GeoDefaultsRow | null) ?? null;
+    },
+    retry: false,
+  });
+}
+
+export function useUpdateGeoDefaults() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (args: Partial<Omit<GeoDefaultsRow, 'id' | 'updated_at' | 'updated_by'>>) => {
+      const { data: userData } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from('geo_defaults')
+        .update({ ...args, updated_by: userData.user?.id ?? null, updated_at: new Date().toISOString() })
+        .eq('id', true);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['geo', 'defaults'] });
+    },
+  });
+}
+
 export function useGeoUsageMonth() {
   return useQuery<GeoUsageMonthRow[]>({
     queryKey: ['geo', 'usage-month'],
