@@ -568,30 +568,48 @@ serve(async (req) => {
           const locationData = payload.data || {};
           
           if (orderUuid && locationData.latitude && locationData.longitude) {
-            const { data: tracking } = await supabase
-              .from('active_tracking').select('id, driver_id').eq('order_id', orderUuid).maybeSingle();
-            const trackingData = tracking as TrackingRecord | null;
-            
-            if (trackingData) {
-              await supabase.from('active_tracking').update({
-                current_latitude: locationData.latitude,
-                current_longitude: locationData.longitude,
-                speed: locationData.speed || 0,
-                heading: locationData.heading || 0,
-                last_updated: new Date().toISOString(),
-              }).eq('id', trackingData.id);
-              
+            const { data: order } = await supabase.from('lalamove_orders').select('driver_id').eq('id', orderUuid).single();
+            const orderData = order as OrderDriverRecord | null;
+
+            // Etapa 41/43 do plano Google: a linha de active_tracking e o que liga o
+            // motor geo (trigger geo_evaluate_tracking + jobs route_plan/eta).
+            // Antes daqui so existia UPDATE: pedido sem linha tinha a posicao
+            // descartada em silencio e o rastreio nunca comecava. O UPSERT cria no
+            // primeiro DRIVER_LOCATION_UPDATED e mantem o caminho de hoje quando a
+            // linha ja existe. ON CONFLICT order_id porque a coluna e UNIQUE.
+            let trackingId: string | null = null;
+
+            if (orderData?.driver_id) {
+              const { data: upserted, error: trackingError } = await supabase
+                .from('active_tracking')
+                .upsert({
+                  order_id: orderUuid,
+                  driver_id: orderData.driver_id,
+                  current_latitude: locationData.latitude,
+                  current_longitude: locationData.longitude,
+                  speed: locationData.speed || 0,
+                  heading: locationData.heading || 0,
+                  last_updated: new Date().toISOString(),
+                }, { onConflict: 'order_id' })
+                .select('id')
+                .maybeSingle();
+              trackingId = (upserted as TrackingRecord | null)?.id ?? null;
+              if (trackingError) logger.error(`[Webhook] Tracking upsert failed: ${trackingError.message}`);
+            } else {
+              // driver_id e NOT NULL em active_tracking: sem motorista vinculado
+              // nao ha como abrir a linha. Logar evita perder o caso em silencio.
+              logger.error(`[Webhook] Pedido ${orderUuid} sem driver_id: posicao recebida mas rastreio nao iniciado`);
+            }
+
+            if (trackingId) {
               await supabase.from('driver_locations').insert({
-                tracking_id: trackingData.id,
+                tracking_id: trackingId,
                 latitude: locationData.latitude,
                 longitude: locationData.longitude,
                 speed_kmh: locationData.speed || 0,
                 heading_degrees: locationData.heading || 0,
               });
             }
-            
-            const { data: order } = await supabase.from('lalamove_orders').select('driver_id').eq('id', orderUuid).single();
-            const orderData = order as OrderDriverRecord | null;
             
             if (orderData?.driver_id) {
               await supabase.from('tracking_events').insert({
