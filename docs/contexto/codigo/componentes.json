@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 230,
+   "linhas": 236,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -2378,7 +2378,7 @@
     "AuthPage"
    ],
    "export_default": null,
-   "linhas": 305,
+   "linhas": 307,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",

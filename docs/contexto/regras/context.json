@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "64871637446708ea08fd2b661eabbd6d39d52a01",
+  "sha": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 17:43 UTC",
+  "generated_at": "2026-11-22 18:14 UTC",
   "files_total": 1055,
   "code_files": 871,
-  "code_lines": 150354
+  "code_lines": 150362
  },
  "version": "1.3.2",
- "facts_hash": "faf342330e312474",
+ "facts_hash": "863b669d21c3f52d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20790,7 +20790,7 @@
   {
    "module": "src",
    "files": 3,
-   "lines": 260,
+   "lines": 266,
    "tables": [],
    "exports": [
     "App.tsx: App"
@@ -21379,7 +21379,7 @@
   {
    "module": "src/pages",
    "files": 90,
-   "lines": 19690,
+   "lines": 19692,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -56241,7 +56241,7 @@
   },
   "src/App.tsx": {
    "path": "src/App.tsx",
-   "lines": 230,
+   "lines": 236,
    "exports": [
     "default App"
    ],
@@ -66264,7 +66264,7 @@
   },
   "src/pages/AuthPage.tsx": {
    "path": "src/pages/AuthPage.tsx",
-   "lines": 305,
+   "lines": 307,
    "exports": [
     "function AuthPage"
    ],
@@ -73636,10 +73636,21 @@
   }
  },
  "git": {
-  "sha": "64871637446708ea08fd2b661eabbd6d39d52a01",
+  "sha": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "fa9a59c",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/App.tsx",
+     "src/pages/AuthPage.tsx"
+    ]
+   },
    {
     "sha": "6487163",
     "date": "2026-11-22",
@@ -73997,21 +74008,12 @@
     "files": [
      "docs/agentes/pendencias-dono.md"
     ]
-   },
-   {
-    "sha": "83fe5ba",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: fecha 6 itens com evidencia de producao (#272)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    16
+    17
    ],
    [
     "src/components/map/markerFactories.ts",
@@ -74028,6 +74030,14 @@
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     3
+   ],
+   [
+    "src/App.tsx",
+    2
+   ],
+   [
+    "src/pages/AuthPage.tsx",
+    2
    ],
    [
     "src/hooks/useBitrix24.ts",
@@ -74080,14 +74090,6 @@
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     2
-   ],
-   [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    2
-   ],
-   [
-    "e2e/login-lockout.e2e.ts",
-    1
    ]
   ]
  }

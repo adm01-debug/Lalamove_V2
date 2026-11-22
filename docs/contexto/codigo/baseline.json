@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "64871637446708ea08fd2b661eabbd6d39d52a01",
+  "commit": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
   "branch": "main",
-  "data_commit": "2026-11-22T14:42:22-03:00",
+  "data_commit": "2026-11-22T15:14:03-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "fa9a59c",
+    "data": "2026-11-22",
+    "assunto": "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)"
+   },
    {
     "sha": "6487163",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "d7c05dd",
     "data": "2026-11-22",
     "assunto": "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)"
-   },
-   {
-    "sha": "83125d1",
-    "data": "2026-11-22",
-    "assunto": "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)"
    }
   ],
   "arquivos_mudados_7d": 355,
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -210,11 +210,11 @@
     "mudancas": 31
    },
    {
-    "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 16
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 17
    },
    {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "arquivo": ".github/workflows/ci.yml",
     "mudancas": 16
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 203
+    "commits": 204
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1061,
   "arquivos_codigo": 660,
-  "linhas_codigo": 129177,
+  "linhas_codigo": 129185,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 230
+   "linhas": 236
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19690
+   "linhas": 19692
   },
   "src/services": {
    "arquivos": 1,
