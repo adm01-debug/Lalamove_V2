@@ -15,14 +15,27 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c`+PR #118; docs.mapbox
 >   (não mais v5); `lalamove-api/coordinates.ts` grava `geocode_provider='lalamove'` a partir de
 >   `stops[].coordinates` (migration `20261122130100_geo_foundation.sql`); `geo_evaluate_tracking()` é
 >   agnóstico de provedor.
->   - ⚠️ Etapa 12 **PARCIAL**: `geo_price_list` (provider=mapbox) tem `directions, geocoding_temporary,
->     map_load, map_matching, matrix, optimization, searchbox_session, static_image`. PR #195 (aberta,
->     não mergeada) adiciona `geocoding_permanent`/`isochrone`/`tilequery` — mas **mesmo após mergear**,
->     `searchbox_forward`/`searchbox_reverse` continuam faltando.
->   - ⬜ Etapa 13 parcial (`geocode_precision`/`place_id` existem; `_shared/geo-precision.ts` e
->     `geocode_match_confidence` em `lalamove_orders`, não). Etapa 14 (CHECK de prefixo `google:`/`mapbox:`
->     em `pickup_place_id`/`delivery_place_id`/`lalamove_stops.place_id`) **não iniciada** — colunas são
->     `text` livre, sem constraint. Etapa 15 não reauditada nesta rodada.
+>   - ✅ Etapa 12 **COMPLETA**: `geo_price_list` (provider=mapbox) tem 11 SKUs. PR #195 (mergeada em
+>     2026-11-22, `b7a8136`) fechou o gap real: `geocoding_permanent` (US$ 5/1k, sem faixa grátis),
+>     `isochrone` e `tilequery` estavam ausentes e o `geo_usage_increment` caía em `v_unit := 0`,
+>     contabilizando essas chamadas como custo ZERO. Verificado em produção após o apply:
+>     `geocoding_permanent` passou de `0.0000` para `0.0050` em 12 chamadas.
+>     - **Correção de uma afirmação anterior desta própria trilha:** `searchbox_forward`/`searchbox_reverse`
+>       **não** são necessários. `providers/mapbox.ts:135` e `:146` emitem sempre `searchbox_session`
+>       (`units: 0`, porque a cobrança é por `session_token` e o `index.ts` registra 1 por sessão).
+>       `autocomplete()` e `placeDetails()` exigem `session_token` e lançam `GEO_INVALID_INPUT` sem ele —
+>       não existe caminho de código que emita `searchbox_forward`/`searchbox_reverse`. Criar essas linhas
+>       na `geo_price_list` seria preço de SKU que o sistema nunca cobra.
+>   - ✅ Etapa 13 **COMPLETA**: `_shared/geo-precision.ts` (PR #199) concentra `GeoPrecision`,
+>     `ACCURACY_TO_PRECISION` e `precisionFromAccuracy()`; `providers/types.ts` reexporta e `mapbox.ts`
+>     consome o helper. `geocode_match_confidence` **decidido como fora de escopo**: `persistOrderCoordinates`
+>     grava coordenada vinda da cotação Lalamove (`coordinates.ts`), que não devolve `match_code` — a coluna
+>     não teria escritor real e ficaria morta, exatamente o problema que a etapa 14 corrige.
+>   - ✅ Etapa 14 **COMPLETA** (PR #199): aplicada e registrada em `supabase_migrations`
+>     (`20261123140000_geo_place_id_prefix_check`). CHECK de prefixo `(mapbox|google|lalamove):` nas 3
+>     colunas; `pickup_place_id`/`delivery_place_id` passaram a ser escritos por
+>     `lalamove-api/coordinates.ts` (antes: 100 % NULL, coluna morta). Validado por `BEGIN`/`ROLLBACK`:
+>     válido passa, sem prefixo bloqueia (`23514`), NULL segue permitido. Etapa 15 não reauditada.
 > - ✅ Bloco 2 (19–34): PR #129 + #186 (geocode-batch, etapa 25) + #187 (fix). `geo-gateway` ACTIVE v11+ em
 >   produção; `MAPBOX_ACCESS_TOKEN` já basta como fallback de servidor (testado em produção em 2026-11-22:
 >   autocomplete real de Curitiba via `geo-gateway`) — as etapas 2–10 (tokens pk/sk dedicados, rotação,
@@ -144,7 +157,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `\d geo_settings`
 
 ### 12 — `geo_price_list` Mapbox completa
-- [ ] Linhas: `geocoding_permanent` (0 grátis, US$ 5,00), `searchbox_forward`/`searchbox_reverse` (por requisição), `isochrone`, `tilequery`, `static_image` (já), `map_load` (já)
+- [x] Linhas: `geocoding_permanent` (0 grátis, US$ 5,00), `isochrone`, `tilequery` — PR #195, aplicada em produção. `searchbox_forward`/`searchbox_reverse`: **não se aplicam** (o gateway cobra `searchbox_session`; `autocomplete`/`retrieve` exigem `session_token`). `static_image` e `map_load` já existiam.
 - **Evidência:** `SELECT * FROM geo_price_list WHERE provider='mapbox'`
 
 ### 13 — `geocode_precision` com valores Mapbox
