@@ -402,10 +402,14 @@ consumidor existente mudou de import:
 - **Evidência:** `stopCoordinates` é função pura coberta pelos testes de `AddressAutocomplete` (emissão com e sem coordenada); `tsc --noEmit` e `eslint` limpos
 
 ### 36 — `lalamove-api`: persistir endereço completo
-- [x] Em `order` (`lalamove-api/index.ts:692-704`) e `upsertOrderToDatabase`: gravar `pickup_/delivery_latitude/longitude`, `*_place_id`, `*_address_components`, `geocode_provider`, `geocode_precision`, `pickup_contact_*`
-- [x] **Inserir `lalamove_stops`** (hoje nenhuma edge insere) com `stop_id` da cotação (coluna criada no #107), `latitude/longitude`, `place_id`, `contact_*`
-- [x] Teste Deno do mapeamento quotation→stops
-- **Evidência:** `SELECT * FROM lalamove_stops WHERE order_id = ...` com 2 linhas após pedido real
+- [x] `lalamove_stops` **já recebe INSERT**: `persistOrderCoordinates` (`coordinates.ts:80-82`) faz upsert de uma linha por parada com `order_id`, `stop_index`, `address`, `latitude`, `longitude`, `place_id`, `geocode_precision`, `geocode_match_confidence`. Chamado nos 3 caminhos: criação (`lalamove-api/index.ts:736`), `upsertOrderToDatabase` (`:603`) e sync de pedido existente (`:517`). (A anotação anterior do plano — "nenhuma edge insere" — estava errada: o grep só olhava `lalamove-webhook`.)
+- [x] **`pickup_/delivery_latitude/longitude`, `*_place_id`, `geocode_provider`, `geocode_precision`**: gravados em `coordinates.ts:41-63`.
+- [x] **`contact_name`/`contact_phone` de `lalamove_stops` — GAP FECHADO NESTA RODADA.** O trigger `geo_evaluate_tracking` monta o destinatário do alerta de aproximação/chegada da ENTREGA lendo exatamente essas duas colunas (`geo_foundation.sql:482-485`). `persistOrderCoordinates` gravava coordenada e `place_id` mas nunca o contato, então `recipients[0].to` saía `null` em 100% das entregas e o envio por WhatsApp falhava sem erro. Agora `stopsCoords` extrai `name`/`phone` (`coordinates.ts:14-34`) e o upsert grava as colunas (`:76-84`).
+- [x] Teste Deno do mapeamento quotation→stops: `coordinates.test.ts` **8/8 verdes** (2 novos: extração de contato e normalização de vazio/ausente).
+- [x] Cenário 11 do harness SQL prova o efeito de ponta a ponta: `DRIVER_APPROACHING_DELIVERY` emite `recipients[0]` com `role='delivery_contact'`, `name='Cliente Final'`, `to='+5541999990022'`.
+- [ ] Continua aberto: `*_address_components` (a Lalamove não devolve componentes estruturados; exigiria geocode reverso pago — decisão de custo).
+- [ ] Continua aberto: `pickup_contact_*` em `lalamove_orders` (hoje só `customer_*` da entrega).
+- **Evidência:** `deno test supabase/functions/lalamove-api/coordinates.test.ts` → 8/8; `bash supabase/tests/run.sh` → 27/27 asserções, incluindo o cenário 11.
 
 **Auditado (2026-11-22).** `persistOrderCoordinates` (`lalamove-api/coordinates.ts:35-95`):
 - Grava `pickup_/delivery_latitude/longitude`, `geocode_provider='lalamove'`, `geocode_precision='LALAMOVE'`, `geocode_match_confidence='LALAMOVE'` e `pickup_/delivery_place_id` — este último **preserva** o `place_id` do autocomplete quando o pedido veio do formulário (`preferred`, `coordinates.ts:41-43,55-56`), só caindo em `lalamove:<stopId>` quando não há provedor.
