@@ -132,10 +132,14 @@ export function LiveMap({
   // Initialize map
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
-    mapboxgl.accessToken = mapboxToken;
+    // Etapa 80: com provedor Google ativo o canvas Mapbox fica escondido — instanciá-lo
+    // só queimava map load do Mapbox (style + tiles) sem uso. O `GoogleMapsCanvas`/
+    // `Google3DCanvas` desenham o mapa e contabilizam o próprio load.
     // Ao recriar o mapa, os efeitos derivados (declarados antes deste) precisam
     // aguardar o novo 'load' antes de tocar em layers/markers.
     setLoading(true);
+    if (isGoogleActive) return;
+    mapboxgl.accessToken = mapboxToken;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -201,7 +205,7 @@ export function LiveMap({
       // rodam no ciclo seguinte e receberiam um mapa já destruído.
       map.current = null;
     };
-  }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers]);
+  }, [mapboxToken, initialCenter, initialZoom, showControls, mapStyle, resetMarkers, isGoogleActive]);
 
   // Reactive raster overlay swap (OSM/Esri) sem reinstanciar o mapa.
   useEffect(() => {
@@ -555,7 +559,7 @@ export function LiveMap({
       <MapSettingsPanel show={showSettings} onClose={() => setShowSettings(false)} />
 
       {/* Loading Overlay */}
-      {loading && (
+      {loading && !isGoogleActive && (
         <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-md flex flex-col items-center justify-center">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-primary/20 rounded-full animate-ping" />

@@ -504,7 +504,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
             .maybeSingle(),
           supabase
             .from('active_tracking')
-            .select('current_latitude, current_longitude, expected_route')
+            .select('current_latitude, current_longitude, expected_route, tracking_status')
             .eq('order_id', order.id)
             .order('last_updated', { ascending: false })
             .limit(1)
@@ -526,6 +526,8 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
             ? { lat: num(tracking.current_latitude), lng: num(tracking.current_longitude) }
             : null,
           expectedRoute: tracking?.expected_route ?? null,
+          // Etapa 79: o mini-mapa é lazy — só monta quando o rastreio está de fato ativo.
+          isTrackingActive: tracking?.tracking_status === 'ACTIVE',
         };
       },
       enabled: !!order?.id && open,
@@ -652,20 +654,44 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
               </div>
             </div>
 
-            {/* Trajeto no mapa (etapa 58) */}
-            <div className="glass-card p-4 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                Trajeto
-              </h3>
-              <OrderTrackingMap
-                pickup={trackingMapData?.pickup}
-                delivery={trackingMapData?.delivery}
-                driver={trackingMapData?.driver}
-                expectedRoute={trackingMapData?.expectedRoute}
-                className="h-56 w-full"
-              />
-            </div>
+            {/* Trajeto no mapa (etapa 58) — lazy (etapa 79): sem tracking ativo o
+                mini-mapa não é instanciado, evitando map load sem uso. */}
+            {trackingMapData?.isTrackingActive ? (
+              <div className="glass-card p-4 rounded-lg">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  Trajeto
+                </h3>
+                <OrderTrackingMap
+                  pickup={trackingMapData?.pickup}
+                  delivery={trackingMapData?.delivery}
+                  driver={trackingMapData?.driver}
+                  expectedRoute={trackingMapData?.expectedRoute}
+                  className="h-56 w-full"
+                />
+              </div>
+            ) : (
+              order.shareLink && (
+                <div className="glass-card p-4 rounded-lg">
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    Trajeto
+                  </h3>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    O rastreamento deste pedido não está ativo no momento.
+                  </p>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => window.open(order.shareLink!, '_blank', 'noopener,noreferrer')}
+                  >
+                    Abrir rastreio Lalamove
+                    <ExternalLink className="w-3.5 h-3.5 ml-2" />
+                  </Button>
+                </div>
+              )
+            )}
 
             {/* Driver Info */}
             {hasDriver && (
