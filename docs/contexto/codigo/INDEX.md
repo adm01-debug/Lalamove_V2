@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `58a4500969fc00185fe7d501c11352deb451832a` (2026-11-22T09:16:22-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `83fe5ba3a9c2abe83146bd269ceae69f1d467417` (2026-11-22T09:51:01-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -274,12 +274,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7896 nós · 16829 arestas · 589 comunidades · grafo do commit `58a45009`
-- comunidades maiores: cn (137), button.tsx (127), NotificationHistoryPage.tsx (124), DashboardRedesigned.tsx (105), snapshot.py (102), client.ts (95), mapbox.ts (93), contract.ts (90), ref_node_path (85), RateLimitDashboardPage.tsx (83), geo-gateway/index.ts (80), dependencies (80)
+- 7897 nós · 16837 arestas · 579 comunidades · grafo do commit `83fe5ba3`
+- comunidades maiores: cn (224), button.tsx (162), App.tsx (115), GeoBlockingPage.tsx (111), snapshot.py (104), client.ts (101), providers/types.ts (100), contract.ts (91), DashboardRedesigned.tsx (91), ref_node_path (84), generate.py (81), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (34)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (38)
 - package.json (32)
 - package-lock.json (31)
 - supabase/config.toml (16)
@@ -376,6 +376,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `83fe5ba` docs: fecha 6 itens com evidencia de producao (#272)
+- 2026-11-22 `9218d1b` docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)
+- 2026-11-22 `aedf1ee` docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)
+- 2026-11-22 `2bd22c2` docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)
 - 2026-11-22 `58a4500` feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)
 - 2026-11-22 `062c6b7` feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)
 - 2026-11-22 `eb1ea10` feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)
@@ -387,10 +391,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `6c13bec` fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)
 - 2026-11-22 `6e48f45` fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)
 - 2026-11-22 `8b67608` docs: corrige referência desatualizada no comentário do stub de migration (#263)
-- 2026-11-22 `2b6eeeb` fix(geo): evita colisão de versão de migration com a PR #246 (#262)
-- 2026-11-22 `2a4d1b1` fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)
-- 2026-11-22 `a8e52d5` security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)
-- 2026-11-22 `961964c` fix(geo): remove sublocality do mock do teste de bairro do Google (#259)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

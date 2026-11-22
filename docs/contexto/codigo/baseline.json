@@ -2,11 +2,31 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "58a4500969fc00185fe7d501c11352deb451832a",
+  "commit": "83fe5ba3a9c2abe83146bd269ceae69f1d467417",
   "branch": "main",
-  "data_commit": "2026-11-22T09:16:22-03:00",
+  "data_commit": "2026-11-22T09:51:01-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "83fe5ba",
+    "data": "2026-11-22",
+    "assunto": "docs: fecha 6 itens com evidencia de producao (#272)"
+   },
+   {
+    "sha": "9218d1b",
+    "data": "2026-11-22",
+    "assunto": "docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)"
+   },
+   {
+    "sha": "aedf1ee",
+    "data": "2026-11-22",
+    "assunto": "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)"
+   },
+   {
+    "sha": "2bd22c2",
+    "data": "2026-11-22",
+    "assunto": "docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)"
+   },
    {
     "sha": "58a4500",
     "data": "2026-11-22",
@@ -111,26 +131,6 @@
     "sha": "5984867",
     "data": "2026-11-22",
     "assunto": "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)"
-   },
-   {
-    "sha": "4ad97ef",
-    "data": "2026-11-22",
-    "assunto": "chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)"
-   },
-   {
-    "sha": "b59c51c",
-    "data": "2026-11-22",
-    "assunto": "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)"
-   },
-   {
-    "sha": "9af8801",
-    "data": "2026-11-22",
-    "assunto": "feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)"
-   },
-   {
-    "sha": "e0e0118",
-    "data": "2026-11-22",
-    "assunto": "docs: etapas 90 e 92 marcadas como executadas no plano (#247)"
    }
   ],
   "arquivos_mudados_7d": 295,
@@ -140,12 +140,12 @@
     "mudancas": 62
    },
    {
-    "pasta": "src/components/map",
-    "mudancas": 35
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 38
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 34
+    "pasta": "src/components/map",
+    "mudancas": 35
    },
    {
     "pasta": "src/components/orders",
@@ -199,7 +199,7 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 34
+    "mudancas": 38
    },
    {
     "arquivo": "package.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 170
+    "commits": 174
    },
    {
     "autor": "dependabot[bot]",

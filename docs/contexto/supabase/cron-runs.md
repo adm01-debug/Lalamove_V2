@@ -72,9 +72,9 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 12:15:00 | succeeded | 0.03 | 1 row |
-| 2026-11-22 12:10:00 | succeeded | 0.01 | 1 row |
-| 2026-11-22 12:05:00 | succeeded | 0.03 | 1 row |
+| 2026-11-22 13:10:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 13:05:00 | succeeded | 0.03 | 1 row |
+| 2026-11-22 13:00:00 | succeeded | 0.01 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
@@ -90,24 +90,24 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 12:18:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 12:17:00 | succeeded | 0.03 | 1 row |
-| 2026-11-22 12:16:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 13:13:00 | succeeded | 0.05 | 1 row |
+| 2026-11-22 13:12:00 | succeeded | 0.03 | 1 row |
+| 2026-11-22 13:11:00 | succeeded | 0.03 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 12:16:00 | succeeded | 0.06 | 1 row |
-| 2026-11-22 12:11:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 12:06:00 | succeeded | 0.04 | 1 row |
+| 2026-11-22 13:11:00 | succeeded | 0.07 | 1 row |
+| 2026-11-22 13:06:00 | succeeded | 0.01 | 1 row |
+| 2026-11-22 13:01:00 | succeeded | 0.02 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-22 13:03:00 | succeeded | 0.24 | 3 rows |
 | 2026-11-22 12:03:00 | succeeded | 0.23 | 3 rows |
 | 2026-11-22 11:03:00 | succeeded | 0.22 | 3 rows |
-| 2026-11-22 10:03:00 | succeeded | 0.22 | 3 rows |
