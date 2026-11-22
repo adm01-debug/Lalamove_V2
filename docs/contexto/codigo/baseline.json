@@ -2,11 +2,26 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8",
+  "commit": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
   "branch": "main",
-  "data_commit": "2026-11-22T08:40:52-03:00",
+  "data_commit": "2026-11-22T09:14:37-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "555a756",
+    "data": "2026-11-22",
+    "assunto": "infra: agenda o cron check-driver-alerts (etapa 70) (#217)"
+   },
+   {
+    "sha": "cdaaa4f",
+    "data": "2026-11-22",
+    "assunto": "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)"
+   },
+   {
+    "sha": "6c13bec",
+    "data": "2026-11-22",
+    "assunto": "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)"
+   },
    {
     "sha": "6e48f45",
     "data": "2026-11-22",
@@ -116,24 +131,9 @@
     "sha": "2809b60",
     "data": "2026-11-22",
     "assunto": "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)"
-   },
-   {
-    "sha": "d725090",
-    "data": "2026-11-22",
-    "assunto": "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)"
-   },
-   {
-    "sha": "5937457",
-    "data": "2026-11-22",
-    "assunto": "docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)"
-   },
-   {
-    "sha": "2d6c7b1",
-    "data": "2026-11-22",
-    "assunto": "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)"
    }
   ],
-  "arquivos_mudados_7d": 288,
+  "arquivos_mudados_7d": 290,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 30
+    "mudancas": 31
    },
    {
     "pasta": "src/components/orders",
@@ -202,12 +202,12 @@
     "mudancas": 32
    },
    {
-    "arquivo": "package-lock.json",
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 31
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 30
+    "arquivo": "package-lock.json",
+    "mudancas": 31
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 161
+    "commits": 164
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1027,
+  "arquivos_total": 1028,
   "arquivos_codigo": 646,
   "linhas_codigo": 125908,
   "rotas": 55,
@@ -322,8 +322,8 @@
   "hooks": 101,
   "edge_functions": 26,
   "tabelas": 87,
-  "migrations": 185,
-  "cron_jobs": 21,
+  "migrations": 186,
+  "cron_jobs": 22,
   "testes": 145,
   "workflows": 5,
   "scripts": 107,

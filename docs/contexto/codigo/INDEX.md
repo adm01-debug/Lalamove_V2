@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8` (2026-11-22T08:40:52-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `555a756eaee2b51aa5a7d8dcb595c642937ec3f0` (2026-11-22T09:14:37-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (533), SQL (190), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (533), SQL (191), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1027 |
+| arquivos_total | 1028 |
 | arquivos_codigo | 646 |
 | linhas_codigo | 125908 |
 | rotas | 55 |
@@ -47,8 +47,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 101 |
 | edge_functions | 26 |
 | tabelas | 87 |
-| migrations | 185 |
-| cron_jobs | 21 |
+| migrations | 186 |
+| cron_jobs | 22 |
 | testes | 145 |
 | workflows | 5 |
 | scripts | 107 |
@@ -213,6 +213,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 1 arquivo(s) do front
 
 ## Cron jobs (pg_cron)
+- `check-driver-alerts` */2 * * * * (20261123190000_cron_check_driver_alerts.sql)
 - `cleanup_audit_logs_daily` 45 3 * * * (20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql)
 - `cleanup-old-cron-logs` 15 4 * * 0 (20260712202307_d4575c89-bdd8-439f-92bc-3d5524309049.sql)
 - `cleanup-old-jobs` 0 3 * * * (20251226010001_configure_pg_cron.sql)
@@ -272,14 +273,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7862 nós · 16788 arestas · 586 comunidades · grafo do commit `6e48f45b`
-- comunidades maiores: cn (246), react (186), lucide-react (182), snapshot.py (102), ref_node_path (96), AlertsPage.tsx (92), App.tsx (82), AppLayout.tsx (81), dependencies (80), gerar.mjs (76), NewOrderDialog.tsx (74), contract.ts (73)
+- 7868 nós · 16793 arestas · 588 comunidades · grafo do commit `555a756e`
+- comunidades maiores: cn (201), button.tsx (142), lucide-react (128), ref_https (107), badge.tsx (101), snapshot.py (100), providers/types.ts (94), client.ts (92), react (83), DriversPage.tsx (82), dependencies (80), ref_node_path (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package.json (32)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (31)
 - package-lock.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (30)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
@@ -338,7 +339,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/AUDITORIA_TECNICA_2026-09.md` — 🔬 Auditoria Técnica — Lalamove V2 (223 linhas)
 - `docs/CACHE_SYSTEM.md` — 📊 Sistema de Cache - Materialized Views (47 linhas)
 - `docs/CONTRIBUTING.md` — 🤝 Contributing - Lalamove Guardian (110 linhas)
-- `docs/CRON_JOBS.md` — ⏱️ Cron Jobs & Rotinas de Manutenção (73 linhas)
+- `docs/CRON_JOBS.md` — ⏱️ Cron Jobs & Rotinas de Manutenção (130 linhas)
 - `docs/DATA_DICTIONARY.md` — 📖 Dicionário de Dados — Lalamove Intelligence (33 linhas)
 - `docs/DEPLOYMENT.md` — 🚀 Deployment - Lalamove Guardian (89 linhas)
 - `docs/EDGE_DEPLOY_PIPELINE.md` — Pipeline de deploy das edge functions — 2026-11 (49 linhas)
@@ -374,6 +375,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `555a756` infra: agenda o cron check-driver-alerts (etapa 70) (#217)
+- 2026-11-22 `cdaaa4f` docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)
+- 2026-11-22 `6c13bec` fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)
 - 2026-11-22 `6e48f45` fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)
 - 2026-11-22 `8b67608` docs: corrige referência desatualizada no comentário do stub de migration (#263)
 - 2026-11-22 `2b6eeeb` fix(geo): evita colisão de versão de migration com a PR #246 (#262)
@@ -386,9 +390,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `8f42f4f` feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)
 - 2026-11-22 `59db689` feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)
 - 2026-11-22 `5984867` feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)
-- 2026-11-22 `4ad97ef` chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)
-- 2026-11-22 `b59c51c` feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)
-- 2026-11-22 `9af8801` feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

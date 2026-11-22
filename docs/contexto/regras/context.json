@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8",
+  "sha": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 11:41 UTC",
-  "files_total": 1021,
-  "code_files": 845,
-  "code_lines": 145015
+  "generated_at": "2026-11-22 12:15 UTC",
+  "files_total": 1022,
+  "code_files": 846,
+  "code_lines": 145076
  },
  "version": "1.3.2",
- "facts_hash": "d7b9241ac121d5c7",
+ "facts_hash": "07a59e7a2cac1258",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,7 +183,7 @@
   "languages": {
    ".ts": 298,
    ".tsx": 235,
-   ".sql": 190,
+   ".sql": 191,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -14318,6 +14318,7 @@
    "supabase/migrations/20261123160000_job_queue_processing_log.sql",
    "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
    "supabase/migrations/20261123180000_geocode_match_confidence.sql",
+   "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
    "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
    "supabase/tests/geo_functions.test.sql",
    "src/integrations/supabase/types.ts"
@@ -21451,8 +21452,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 185,
-   "lines": 12505,
+   "files": 186,
+   "lines": 12566,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -71561,6 +71562,10 @@
    "path": "supabase/migrations/20261123180000_geocode_match_confidence.sql",
    "lines": 22
   },
+  "supabase/migrations/20261123190000_cron_check_driver_alerts.sql": {
+   "path": "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
+   "lines": 61
+  },
   "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql": {
    "path": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
    "lines": 22
@@ -71572,10 +71577,39 @@
   }
  },
  "git": {
-  "sha": "6e48f45b043d99916ec8a0bdef7122b8c8c5e5d8",
+  "sha": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "555a756",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "infra: agenda o cron check-driver-alerts (etapa 70) (#217)",
+    "files": [
+     "supabase/migrations/20261123190000_cron_check_driver_alerts.sql"
+    ]
+   },
+   {
+    "sha": "cdaaa4f",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)",
+    "files": [
+     "docs/CRON_JOBS.md"
+    ]
+   },
+   {
+    "sha": "6c13bec",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "lalamove_bundle_import.json",
+     "lalamove_f01_cotacao.json"
+    ]
+   },
    {
     "sha": "6e48f45",
     "date": "2026-11-22",
@@ -71875,60 +71909,19 @@
      "docs/GEO_CONTRACT.md",
      "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "a7b144f",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)",
-    "files": [
-     ".github/toolchain.json",
-     ".github/workflows/ci.yml",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/tests/geo_functions.test.sql"
-    ]
-   },
-   {
-    "sha": "9ec9341",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/_shared/contract.ts",
-     "supabase/functions/geo-gateway/budget-error.test.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
-   },
-   {
-    "sha": "32c1842",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: canal Zapp no send-notification (etapa 69) (#232)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/_shared/channels/zapp.test.ts",
-     "supabase/functions/_shared/channels/zapp.ts",
-     "supabase/functions/send-notification/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    18
-   ],
-   [
-    "supabase/functions/send-notification/index.ts",
-    4
+    16
    ],
    [
     "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
     3
    ],
    [
-    "supabase/functions/job-worker/index.ts",
+    "supabase/functions/send-notification/index.ts",
     3
    ],
    [
@@ -71948,14 +71941,6 @@
     2
    ],
    [
-    "supabase/functions/_shared/channels/zapp.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/channels/zapp.ts",
-    2
-   ],
-   [
     "src/components/map/GoogleMapsCanvas.tsx",
     2
    ],
@@ -71972,6 +71957,26 @@
     2
    ],
    [
+    "supabase/functions/job-worker/index.ts",
+    2
+   ],
+   [
+    "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
+    1
+   ],
+   [
+    "docs/CRON_JOBS.md",
+    1
+   ],
+   [
+    "lalamove_bundle_import.json",
+    1
+   ],
+   [
+    "lalamove_f01_cotacao.json",
+    1
+   ],
+   [
     "supabase/functions/geo-gateway/mapbox.test.ts",
     1
    ],
@@ -71985,14 +71990,6 @@
    ],
    [
     "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql",
-    1
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/google.ts",
-    1
-   ],
-   [
-    "src/pages/AlertConfigurationsPage.tsx",
     1
    ]
   ]

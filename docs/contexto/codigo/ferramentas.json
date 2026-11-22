@@ -4,7 +4,7 @@
  "stack": {
   "linguagens": [
    "TypeScript (533)",
-   "SQL (190)",
+   "SQL (191)",
    "JavaScript (114)",
    "Markdown (103)",
    "JSON (35)",
@@ -359,7 +359,7 @@
   {
    "arquivo": "docs/CRON_JOBS.md",
    "titulo": "⏱️ Cron Jobs & Rotinas de Manutenção",
-   "linhas": 73
+   "linhas": 130
   },
   {
    "arquivo": "docs/DATA_DICTIONARY.md",

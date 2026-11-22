@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 185,
+ "migrations": 186,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -453,6 +453,11 @@
   }
  ],
  "cron_jobs": [
+  {
+   "nome": "check-driver-alerts",
+   "agenda": "*/2 * * * *",
+   "migration": "20261123190000_cron_check_driver_alerts.sql"
+  },
   {
    "nome": "cleanup_audit_logs_daily",
    "agenda": "45 3 * * *",
