@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7e572fecb0e4fa0549071927623d1e56b00f22c1` (2026-11-22T12:30:14-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `762c4b67a2b6ee69b4f1b5b70872e9e5f3e6d406` (2026-11-22T12:37:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1050 |
 | arquivos_codigo | 650 |
-| linhas_codigo | 128000 |
+| linhas_codigo | 128002 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -274,7 +274,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8469 nós · 17771 arestas · 630 comunidades · grafo do commit `7e572fec`
+- 8469 nós · 17771 arestas · 630 comunidades · grafo do commit `762c4b67`
 - comunidades maiores: cn (201), client.ts (130), button.tsx (121), RateLimitDashboardPage.tsx (116), snapshot.py (107), lucide-react (98), ref_node_path (97), react (91), badge.tsx (88), ref_https (81), DashboardRedesigned.tsx (80), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -377,6 +377,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `762c4b6` fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)
 - 2026-11-22 `7e572fe` feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)
 - 2026-11-22 `572af27` docs(planos): plano front-end de 190 etapas (#280)
 - 2026-11-22 `d6f59de` feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)
@@ -391,7 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `124e628` docs(agentes): registra pendencias do dono (#273)
 - 2026-11-22 `83fe5ba` docs: fecha 6 itens com evidencia de producao (#272)
 - 2026-11-22 `9218d1b` docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)
-- 2026-11-22 `aedf1ee` docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

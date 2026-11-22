@@ -244,7 +244,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/escalate-alerts/index.ts",
    "arquivos": 1,
-   "linhas": 121,
+   "linhas": 122,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -644,7 +644,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
    "arquivos": 1,
-   "linhas": 213,
+   "linhas": 214,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

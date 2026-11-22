@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
+  "commit": "762c4b67a2b6ee69b4f1b5b70872e9e5f3e6d406",
   "branch": "main",
-  "data_commit": "2026-11-22T12:30:14-03:00",
+  "data_commit": "2026-11-22T12:37:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "762c4b6",
+    "data": "2026-11-22",
+    "assunto": "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)"
+   },
    {
     "sha": "7e572fe",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "cdaaa4f",
     "data": "2026-11-22",
     "assunto": "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)"
-   },
-   {
-    "sha": "6c13bec",
-    "data": "2026-11-22",
-    "assunto": "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)"
    }
   ],
   "arquivos_mudados_7d": 325,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 186
+    "commits": 187
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1050,
   "arquivos_codigo": 650,
-  "linhas_codigo": 128000,
+  "linhas_codigo": 128002,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 81,
-   "linhas": 19891
+   "linhas": 19893
   },
   "tailwind.config.ts": {
    "arquivos": 1,

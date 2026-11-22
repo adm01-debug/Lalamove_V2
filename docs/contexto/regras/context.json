@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
+  "sha": "762c4b67a2b6ee69b4f1b5b70872e9e5f3e6d406",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 15:30 UTC",
+  "generated_at": "2026-11-22 15:37 UTC",
   "files_total": 1044,
   "code_files": 861,
-  "code_lines": 149177
+  "code_lines": 149179
  },
  "version": "1.3.2",
- "facts_hash": "543a4ad1a1e04768",
+ "facts_hash": "4a7695fd9c63e144",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21575,7 +21575,7 @@
   {
    "module": "supabase/functions",
    "files": 81,
-   "lines": 19891,
+   "lines": 19893,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -69077,7 +69077,7 @@
   },
   "supabase/functions/escalate-alerts/index.ts": {
    "path": "supabase/functions/escalate-alerts/index.ts",
-   "lines": 121,
+   "lines": 122,
    "rpc": [
     "get_pending_escalations"
    ],
@@ -70827,7 +70827,7 @@
   },
   "supabase/functions/lalamove-token-refresh/index.ts": {
    "path": "supabase/functions/lalamove-token-refresh/index.ts",
-   "lines": 213,
+   "lines": 214,
    "tables": [
     {
      "table": "alerts",
@@ -73004,10 +73004,20 @@
   }
  },
  "git": {
-  "sha": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
+  "sha": "762c4b67a2b6ee69b4f1b5b70872e9e5f3e6d406",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "762c4b6",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)",
+    "files": [
+     "supabase/functions/escalate-alerts/index.ts",
+     "supabase/functions/lalamove-token-refresh/index.ts"
+    ]
+   },
    {
     "sha": "7e572fe",
     "date": "2026-11-22",
@@ -73331,15 +73341,6 @@
      "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
      "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
     ]
-   },
-   {
-    "sha": "a8e52d5",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)",
-    "files": [
-     "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -73356,8 +73357,12 @@
     3
    ],
    [
-    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
-    3
+    "supabase/functions/escalate-alerts/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-token-refresh/index.ts",
+    2
    ],
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -73369,6 +73374,10 @@
    ],
    [
     "docs/planos/README.md",
+    2
+   ],
+   [
+    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
     2
    ],
    [
@@ -73404,10 +73413,6 @@
     1
    ],
    [
-    "supabase/functions/escalate-alerts/index.ts",
-    1
-   ],
-   [
     "supabase/functions/external-companies/index.ts",
     1
    ],
@@ -73417,10 +73422,6 @@
    ],
    [
     "supabase/functions/get-mapbox-token/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-gateway/index.ts",
     1
    ]
   ]
