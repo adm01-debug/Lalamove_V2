@@ -298,7 +298,8 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `rg -n "export const roleHierarchy|const roleHierarchy" src` retorna só `src/lib/roles.ts` (o mapa de comparação de papéis é fonte única; `usePermissions.ts`, `useContextualHints.ts`, `useRole.ts` e `PermissionsPage.tsx` ainda listam os papéis para tipo/UI, fora do escopo). `npx tsc --noEmit -p tsconfig.app.json` 0 erros; `npx eslint` nos arquivos tocados 0 erros (6 warnings pré-existentes); `npx vitest run src/lib/__tests__/roles.test.ts` 10/10; ProtectedRoute/usePermissions/improvements-validation 49/49; `npm run build` OK.
 
 ### 49 — [F] Menu alinhado às rotas
-- [ ] `sidebar-config.ts`: `requiredRole`/`requireMFA` em `approvals` (`:42`), `map-tools` (`:55`), `alert-config` (`:60`) e categoria `integrations` (`:67-75`) iguais aos de `App.tsx:176-201`; teste que compara `sidebar-config` × rotas do `App`.
+- [x] `sidebar-config.ts`: `requiredRole`/`requireMFA` em `approvals` (`:42`), `map-tools` (`:55`), `alert-config` (`:60`) e categoria `integrations` (`:67-75`) iguais aos de `App.tsx:176-201`; teste que compara `sidebar-config` × rotas do `App`.
+  - **Evidência:** `requiredRole: 'manager'` aplicado em approvals/map-tools/alert-config e nos itens de Integrações (webhooks, bitrix24, lalamove, maps-providers, external-data) no `sidebar-config.ts` e no `MobileSidebar.tsx`; novo teste `src/lib/__tests__/sidebarRoutes.test.ts` (2 testes) compara `menuCategories` × rotas do `App` (todo item de menu tem rota; nenhum item vaza `/unauthorized`). Validação: tsc 0, eslint 0, build OK, vitest 1069/1069 (69 arquivos).
 - **Evidência:** teste `sidebar-config.test.ts` verde; operador não vê links que levam a `/unauthorized`.
 
 ### 50 — [F] Rotas sem entrada no menu
