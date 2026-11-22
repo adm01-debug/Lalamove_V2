@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { parseEdgeError } from '@/lib/edge-error';
 
 /**
  * Cliente Lalamove (proxy unificado v3 + UAPI).
@@ -73,8 +74,9 @@ export async function callLalamoveGateway<T>(payload: GatewayPayload): Promise<T
   });
 
   if (error) {
+    const edge = await parseEdgeError(error);
     throw new LalamoveGatewayError(
-      error.message || 'Falha ao contatar o gateway Lalamove',
+      edge?.message || error.message || 'Falha ao contatar o gateway Lalamove',
       requestId,
     );
   }

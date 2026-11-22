@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { BITRIX24_CONNECTED, isTrustedBitrix24Origin } from "@/lib/postMessage";
+import { parseEdgeError, formatEdgeError } from "@/lib/edge-error";
 
 interface ConnectionStatus {
   connected: boolean;
@@ -134,8 +135,9 @@ export function useBitrix24() {
         setIsConnecting(false);
       }, 120000);
     } catch (error) {
-      toast.error("Erro ao conectar", { 
-        description: error instanceof Error ? error.message : 'Erro desconhecido'
+      const edge = await parseEdgeError(error);
+      toast.error("Erro ao conectar", {
+        description: edge ? formatEdgeError(edge) : error instanceof Error ? error.message : 'Erro desconhecido',
       });
       setIsConnecting(false);
     }
@@ -166,10 +168,11 @@ export function useBitrix24() {
       queryClient.invalidateQueries({ queryKey: ["bitrix24-sync-history"] });
       toast.success("Pedido sincronizado com sucesso!");
     },
-    onError: (error: unknown) => {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      toast.error("Erro ao sincronizar", { 
-        description: errorMessage
+    onError: async (error: unknown) => {
+      const edge = await parseEdgeError(error);
+      const errorMessage = edge ? formatEdgeError(edge) : error instanceof Error ? error.message : "Erro desconhecido";
+      toast.error("Erro ao sincronizar", {
+        description: errorMessage,
       });
     },
   });

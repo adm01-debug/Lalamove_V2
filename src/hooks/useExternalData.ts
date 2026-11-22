@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { isBitrixConfigured } from '@/lib/bitrix-config';
+import { parseEdgeError, formatEdgeError } from '@/lib/edge-error';
 
 export type ExternalTable = 'companies' | 'customers' | 'suppliers' | 'carriers' | 'contacts';
 
@@ -44,7 +45,7 @@ export function useExternalList(table: ExternalTable, search?: string, page = 1,
           offset: (page - 1) * pageSize,
         },
       });
-      if (error) throw error;
+      if (error) await edgeThrow(error);
       return data as { data: ExternalRecord[]; count: number; table: string };
     },
     staleTime: 60_000,
@@ -60,7 +61,7 @@ export function useExternalRecord(table: ExternalTable, id: string | null) {
       const { data, error } = await supabase.functions.invoke('external-companies', {
         body: { action: 'get', table, id },
       });
-      if (error) throw error;
+      if (error) await edgeThrow(error);
       return data as { data: ExternalRecord };
     },
     enabled: !!id && isBitrixConfigured(),
@@ -75,7 +76,7 @@ export function useAddressSearch(search: string, enabled = true) {
       const { data, error } = await supabase.functions.invoke('external-companies', {
         body: { action: 'search_address', search, limit: 20 },
       });
-      if (error) throw error;
+      if (error) await edgeThrow(error);
       return data as { results: AddressSearchResult[] };
     },
     enabled: enabled && search.length >= 2 && isBitrixConfigured(),
@@ -91,13 +92,21 @@ export function useExternalStats() {
       const { data, error } = await supabase.functions.invoke('external-companies', {
         body: { action: 'stats' },
       });
-      if (error) throw error;
+      if (error) await edgeThrow(error);
       return data as { counts: Record<string, number> };
     },
     staleTime: 5 * 60_000,
     enabled: isBitrixConfigured(),
     retry: false,
   });
+}
+
+/** Relança o erro de uma Edge Function com a mensagem do formato único. */
+async function edgeThrow(error: unknown): Promise<never> {
+  const edge = await parseEdgeError(error);
+  throw new Error(
+    edge ? formatEdgeError(edge) : error instanceof Error ? error.message : 'Erro na Edge Function',
+  );
 }
 
 export { TABLE_LABELS };
