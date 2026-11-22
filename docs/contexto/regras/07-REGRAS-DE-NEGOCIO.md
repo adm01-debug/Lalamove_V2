@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9af8801468` · branch `main` · 2026-11-22 05:46 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b59c51ca8f` · branch `main` · 2026-11-22 06:15 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -796,6 +796,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `user` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx`<br>`supabase/functions/route-analyzer/index.ts` |
 | `role` | `viewer` | compara, escreve | `src/components/layout/sidebar-config.ts`<br>`src/pages/RolesPage.tsx` |
 | `last_status` | `succeeded` | compara | `src/components/health/CronJobsHealthPanel.tsx` |
+| `tracking_status` | `ACTIVE` | compara, filtra | `src/components/orders/OrderDetailModal.tsx`<br>`supabase/functions/job-worker/index.ts` |
 | `notification_status` | `no_recipient` | compara | `src/components/orders/OrderGeoEvents.tsx` |
 | `notification_status` | `queued` | filtra | `supabase/functions/send-notification/index.ts` |
 | `state` | `CLOSED` | escreve | `src/utils/circuitBreaker.ts` |
@@ -810,7 +811,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `sync_status` | `synced` | compara, filtra | `src/hooks/useJobQueue.ts` |
 | `refresh_status` | `success` | escreve | `src/hooks/useCacheViews.ts` |
 | `approval_status` | `PENDING` | escreve | `src/integrations/supabase/types.ts` |
-| `tracking_status` | `ACTIVE` | filtra | `supabase/functions/job-worker/index.ts` |
 | `pop_status` | `picked_up` | escreve | `supabase/functions/lalamove-webhook/index.ts` |
 | `pod_status` | `NOT_REQUIRED` | compara | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
 
@@ -1841,7 +1841,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1108 testes em 97 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1111 testes em 98 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1936,6 +1936,7 @@ _nenhum item encontrado_
 | `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
+| `src/components/map/__tests__/mapLoadBilling.test.tsx` | 3 | GoogleMapsCanvas — contagem de map load (etapa 80) · cobra o load no provedor google, não no mapbox · não cobra load quando o mapa não chega a ser instanciado |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |
 | `src/hooks/__tests__/useCronJobsHealth.test.ts` | 3 | useCronJobsHealth · deve retornar a saúde dos jobs de cron · deve propagar erro quando a RPC falha (ex.: sem permissão de admin) |
 | `src/hooks/__tests__/useDrivers.test.ts` | 3 | useDrivers · deve buscar e mapear motoristas corretamente · deve lidar com erro do supabase |

@@ -14,18 +14,18 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 141,
+ "total": 142,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 8,
   "edge (deno)": 22,
   "guard (node --test)": 34,
-  "unit (vitest)": 74
+  "unit (vitest)": 75
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 50
+   "arquivos": 51
   },
   {
    "padrao": "guards em scripts/",
@@ -573,6 +573,15 @@
     "src/components/map/mapLayers.ts"
    ],
    "casos": 8
+  },
+  {
+   "arquivo": "src/components/map/__tests__/mapLoadBilling.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 58,
+   "testa": [
+    "src/components/map/GoogleMapsCanvas.tsx"
+   ],
+   "casos": 2
   },
   {
    "arquivo": "src/components/map/__tests__/MapSettingsPanel.test.tsx",
@@ -1364,6 +1373,7 @@
   "scripts/ui-audit/width-check.mjs": 1,
   "scripts/vercel/verify-release-targets.mjs": 1,
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
+  "src/components/map/GoogleMapsCanvas.tsx": 1,
   "src/components/map/MapHUD.tsx": 1,
   "src/components/map/MapHistoryPanel.tsx": 1,
   "src/components/map/MapSearchPanel.tsx": 1,

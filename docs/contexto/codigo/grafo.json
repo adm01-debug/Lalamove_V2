@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "nos": 499,
- "arestas": 1608,
+ "arestas": 1610,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -109,6 +109,10 @@
    "importado_por": 11
   },
   {
+   "arquivo": "src/lib/geo-gateway.ts",
+   "importado_por": 11
+  },
+  {
    "arquivo": "src/types/lalamove.ts",
    "importado_por": 11
   },
@@ -130,10 +134,6 @@
   },
   {
    "arquivo": "src/components/ui/search-help-tooltip.tsx",
-   "importado_por": 9
-  },
-  {
-   "arquivo": "src/lib/geo-gateway.ts",
    "importado_por": 9
   },
   {

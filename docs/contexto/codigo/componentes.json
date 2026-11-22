@@ -811,7 +811,7 @@
     "Google3DCanvas"
    ],
    "export_default": null,
-   "linhas": 147,
+   "linhas": 150,
    "dominio": "components/map",
    "hooks_locais": [
     "useGoogleMapsLoader",
@@ -828,7 +828,7 @@
     "GoogleMapsCanvas"
    ],
    "export_default": null,
-   "linhas": 363,
+   "linhas": 366,
    "dominio": "components/map",
    "hooks_locais": [
     "useGoogleMapsLoader",
@@ -846,7 +846,7 @@
     "LiveMap"
    ],
    "export_default": null,
-   "linhas": 671,
+   "linhas": 675,
    "dominio": "components/map",
    "hooks_locais": [
     "useEffectiveMapProvider",
@@ -1127,7 +1127,7 @@
     "OrderDetailModal"
    ],
    "export_default": null,
-   "linhas": 991,
+   "linhas": 1017,
    "dominio": "components/orders",
    "hooks_locais": [
     "useEvaluateDriver",

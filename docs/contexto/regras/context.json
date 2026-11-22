@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "9af88014686f91029fe592188d966c2896a8cf85",
+  "sha": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 05:46 UTC",
-  "files_total": 1012,
-  "code_files": 836,
-  "code_lines": 143505
+  "generated_at": "2026-11-22 06:15 UTC",
+  "files_total": 1013,
+  "code_files": 837,
+  "code_lines": 143599
  },
  "version": "1.3.2",
- "facts_hash": "6b6ccac1200a3cc0",
+ "facts_hash": "2ae29bb6159a6f5a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -182,7 +182,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 292,
-   ".tsx": 234,
+   ".tsx": 235,
    ".sql": 188,
    ".mjs": 109,
    ".py": 8,
@@ -18930,7 +18930,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 160,
+  "components_count": 161,
   "hooks": [
    {
     "name": "useOrders",
@@ -20410,8 +20410,8 @@
   },
   {
    "module": "src/components",
-   "files": 159,
-   "lines": 29065,
+   "files": 160,
+   "lines": 29159,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20578,6 +20578,7 @@
     "src/components/map/__tests__/googleLayers.test.ts",
     "src/components/map/__tests__/mapA11yNames.test.tsx",
     "src/components/map/__tests__/mapLayers.test.ts",
+    "src/components/map/__tests__/mapLoadBilling.test.tsx",
     "src/components/map/__tests__/markerFactories.test.ts",
     "src/components/map/hooks/useGoogleMapsLoader.ts",
     "src/components/map/hooks/useMapAlerts.ts",
@@ -20586,8 +20587,7 @@
     "src/components/map/hooks/useTrackingData.ts",
     "src/components/map/hooks/useTrackingTrails.ts",
     "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
-    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
-    "src/components/map/hooks/__tests__/useMapAlerts.test.ts"
+    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts"
    ]
   },
   {
@@ -30575,6 +30575,12 @@
    },
    {
     "file": "src/components/orders/OrderDetailModal.tsx",
+    "field": "tracking_status",
+    "value": "ACTIVE",
+    "kind": "compara"
+   },
+   {
+    "file": "src/components/orders/OrderDetailModal.tsx",
     "field": "status",
     "value": "ON_GOING",
     "kind": "compara"
@@ -36030,6 +36036,18 @@
    {
     "file": "src/components/map/__tests__/mapLayers.test.ts",
     "name": "não quebra quando a source ainda não existe"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLoadBilling.test.tsx",
+    "name": "GoogleMapsCanvas — contagem de map load (etapa 80)"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLoadBilling.test.tsx",
+    "name": "cobra o load no provedor google, não no mapbox"
+   },
+   {
+    "file": "src/components/map/__tests__/mapLoadBilling.test.tsx",
+    "name": "não cobra load quando o mapa não chega a ser instanciado"
    },
    {
     "file": "src/components/map/__tests__/markerFactories.test.ts",
@@ -44709,6 +44727,12 @@
       "compara:src/components/health/CronJobsHealthPanel.tsx"
      ]
     },
+    "tracking_status": {
+     "ACTIVE": [
+      "compara:src/components/orders/OrderDetailModal.tsx",
+      "filtra:supabase/functions/job-worker/index.ts"
+     ]
+    },
     "notification_status": {
      "no_recipient": [
       "compara:src/components/orders/OrderGeoEvents.tsx"
@@ -44766,11 +44790,6 @@
     "approval_status": {
      "PENDING": [
       "escreve:src/integrations/supabase/types.ts"
-     ]
-    },
-    "tracking_status": {
-     "ACTIVE": [
-      "filtra:supabase/functions/job-worker/index.ts"
      ]
     },
     "pop_status": {
@@ -56001,14 +56020,14 @@
   },
   "src/components/map/Google3DCanvas.tsx": {
    "path": "src/components/map/Google3DCanvas.tsx",
-   "lines": 147,
+   "lines": 150,
    "exports": [
     "function Google3DCanvas"
    ]
   },
   "src/components/map/GoogleMapsCanvas.tsx": {
    "path": "src/components/map/GoogleMapsCanvas.tsx",
-   "lines": 363,
+   "lines": 366,
    "exports": [
     "function GoogleMapsCanvas"
    ],
@@ -56022,7 +56041,7 @@
   },
   "src/components/map/LiveMap.tsx": {
    "path": "src/components/map/LiveMap.tsx",
-   "lines": 671,
+   "lines": 675,
    "exports": [
     "function LiveMap"
    ],
@@ -56559,6 +56578,16 @@
     "envia LineString com coordenadas [lng,lat] na ordem do Mapbox",
     "limpa a camada quando há menos de 2 pontos",
     "não quebra quando a source ainda não existe"
+   ]
+  },
+  "src/components/map/__tests__/mapLoadBilling.test.tsx": {
+   "path": "src/components/map/__tests__/mapLoadBilling.test.tsx",
+   "lines": 58,
+   "is_test": true,
+   "tests": [
+    "GoogleMapsCanvas — contagem de map load (etapa 80)",
+    "cobra o load no provedor google, não no mapbox",
+    "não cobra load quando o mapa não chega a ser instanciado"
    ]
   },
   "src/components/map/__tests__/markerFactories.test.ts": {
@@ -57108,7 +57137,7 @@
   },
   "src/components/orders/OrderDetailModal.tsx": {
    "path": "src/components/orders/OrderDetailModal.tsx",
-   "lines": 991,
+   "lines": 1017,
    "exports": [
     "const OrderDetailModal"
    ],
@@ -57141,7 +57170,8 @@
      "current_latitude",
      "current_longitude",
      "expected_route",
-     "order_id"
+     "order_id",
+     "tracking_status"
     ]
    },
    "invokes": [
@@ -57155,6 +57185,11 @@
     "Não foi possível copiar o link"
    ],
    "status_values": [
+    {
+     "field": "tracking_status",
+     "value": "ACTIVE",
+     "kind": "compara"
+    },
     {
      "field": "status",
      "value": "ON_GOING",
@@ -70921,10 +70956,24 @@
   }
  },
  "git": {
-  "sha": "9af88014686f91029fe592188d966c2896a8cf85",
+  "sha": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b59c51c",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/components/map/Google3DCanvas.tsx",
+     "src/components/map/GoogleMapsCanvas.tsx",
+     "src/components/map/LiveMap.tsx",
+     "src/components/map/__tests__/mapLoadBilling.test.tsx",
+     "src/components/orders/OrderDetailModal.tsx"
+    ]
+   },
    {
     "sha": "9af8801",
     "date": "2026-11-22",
@@ -71276,21 +71325,12 @@
      "supabase/functions/geo-gateway/metering.test.ts",
      "supabase/functions/geo-gateway/metering.ts"
     ]
-   },
-   {
-    "sha": "1eeeb96",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)",
-    "files": [
-     "docs/RUNBOOK_GOOGLE_MAPS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    22
+    23
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -71299,6 +71339,10 @@
    [
     "supabase/functions/geo-gateway/index.ts",
     4
+   ],
+   [
+    "src/components/map/GoogleMapsCanvas.tsx",
+    3
    ],
    [
     "src/components/orders/NewOrderDialog.tsx",
@@ -71313,15 +71357,19 @@
     3
    ],
    [
+    "src/components/map/LiveMap.tsx",
+    2
+   ],
+   [
+    "src/components/orders/OrderDetailModal.tsx",
+    2
+   ],
+   [
     "supabase/functions/lalamove-api/index.ts",
     2
    ],
    [
     "src/components/map/MapHUD.tsx",
-    2
-   ],
-   [
-    "src/components/map/GoogleMapsCanvas.tsx",
     2
    ],
    [
@@ -71333,8 +71381,12 @@
     2
    ],
    [
-    "docs/RUNBOOK_GOOGLE_MAPS.md",
-    2
+    "src/components/map/Google3DCanvas.tsx",
+    1
+   ],
+   [
+    "src/components/map/__tests__/mapLoadBilling.test.tsx",
+    1
    ],
    [
     "supabase/functions/lalamove-api/coordinates.test.ts",
@@ -71354,18 +71406,6 @@
    ],
    [
     "scripts/ci/a11y-button-name-baseline.json",
-    1
-   ],
-   [
-    "scripts/ci/check-i18n-parity.mjs",
-    1
-   ],
-   [
-    "scripts/ci/check-i18n-parity.unit.mjs",
-    1
-   ],
-   [
-    "src/components/map/LiveMap.tsx",
     1
    ]
   ]

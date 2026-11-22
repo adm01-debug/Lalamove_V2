@@ -21,7 +21,7 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (50)",
+   "co-localizado (__tests__) (51)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (24)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)",
    "feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)",
    "docs: etapas 90 e 92 marcadas como executadas no plano (#247)",
    "test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)",
-   "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)",
-   "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)"
+   "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "9af88014686f91029fe592188d966c2896a8cf85",
+  "commit": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
   "branch": "main",
-  "data_commit": "2026-11-22T02:45:48-03:00",
+  "data_commit": "2026-11-22T03:15:09-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b59c51c",
+    "data": "2026-11-22",
+    "assunto": "feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)"
+   },
    {
     "sha": "9af8801",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "fac6e49",
     "data": "2026-11-22",
     "assunto": "feat: renderiza message_template dos alertas geo (etapa 67) (#222)"
-   },
-   {
-    "sha": "1a1f486",
-    "data": "2026-11-21",
-    "assunto": "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)"
    }
   ],
-  "arquivos_mudados_7d": 277,
+  "arquivos_mudados_7d": 279,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,15 +141,15 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 31
+    "mudancas": 35
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "arquivo": "supabase/config.toml",
@@ -238,6 +238,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "src/components/map/LiveMap.tsx",
+    "mudancas": 8
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 8
    },
@@ -247,10 +251,6 @@
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 7
    },
    {
@@ -290,18 +290,18 @@
     "mudancas": 5
    },
    {
-    "arquivo": "src/pages/LiveMapPage.tsx",
+    "arquivo": "src/components/orders/OrderDetailModal.tsx",
     "mudancas": 5
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "arquivo": "src/pages/LiveMapPage.tsx",
     "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 147
+    "commits": 148
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1018,
-  "arquivos_codigo": 639,
-  "linhas_codigo": 124428,
+  "arquivos_total": 1019,
+  "arquivos_codigo": 640,
+  "linhas_codigo": 124522,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 141,
+  "testes": 142,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -519,8 +519,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 159,
-   "linhas": 29065
+   "arquivos": 160,
+   "linhas": 29159
   },
   "src/hooks": {
    "arquivos": 110,
@@ -597,12 +597,12 @@
    "linhas": 1108
   },
   {
-   "arquivo": "scripts/db-audit/check-migration-drift.mjs",
-   "linhas": 1007
+   "arquivo": "src/components/orders/OrderDetailModal.tsx",
+   "linhas": 1017
   },
   {
-   "arquivo": "src/components/orders/OrderDetailModal.tsx",
-   "linhas": 991
+   "arquivo": "scripts/db-audit/check-migration-drift.mjs",
+   "linhas": 1007
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
@@ -634,7 +634,7 @@
   },
   {
    "arquivo": "src/components/map/LiveMap.tsx",
-   "linhas": 671
+   "linhas": 675
   },
   {
    "arquivo": "scripts/ci/lint-ratchet.mjs",
