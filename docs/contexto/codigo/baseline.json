@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
+  "commit": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
   "branch": "main",
-  "data_commit": "2026-11-21T23:25:20-03:00",
+  "data_commit": "2026-11-21T23:28:31-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c7d9fce",
+    "data": "2026-11-21",
+    "assunto": "chore: destrackear supabase/.temp e ignorar (#212)"
+   },
    {
     "sha": "1d97ccb",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "3e9f386",
     "data": "2026-11-21",
     "assunto": "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)"
-   },
-   {
-    "sha": "d598435",
-    "data": "2026-11-21",
-    "assunto": "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)"
    }
   ],
-  "arquivos_mudados_7d": 222,
+  "arquivos_mudados_7d": 223,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 116
+    "commits": 117
    },
    {
     "autor": "dependabot[bot]",

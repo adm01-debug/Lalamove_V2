@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
+  "sha": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:25 UTC",
-  "files_total": 990,
-  "code_files": 809,
-  "code_lines": 138958
+  "generated_at": "2026-11-22 02:29 UTC",
+  "files_total": 980,
+  "code_files": 808,
+  "code_lines": 138946
  },
  "version": "1.3.2",
- "facts_hash": "68cae79a24e8e6fd",
+ "facts_hash": "ff8ab2a49886d173",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,7 +183,7 @@
    ".tsx": 229,
    ".sql": 187,
    ".mjs": 107,
-   ".py": 9,
+   ".py": 8,
    ".js": 4,
    ".cjs": 1
   },
@@ -21158,19 +21158,6 @@
     "src/utils/webVitals.ts",
     "src/utils/__tests__/exportUtils.test.ts",
     "src/utils/__tests__/timeUtils.test.ts"
-   ]
-  },
-  {
-   "module": "supabase/.temp",
-   "files": 1,
-   "lines": 12,
-   "tables": [],
-   "exports": [],
-   "docs": [],
-   "deps": [],
-   "imports_modules": [],
-   "file_list": [
-    "supabase/.temp/anc.py"
    ]
   },
   {
@@ -64989,10 +64976,6 @@
     "deve formatar dias horas minutos"
    ]
   },
-  "supabase/.temp/anc.py": {
-   "path": "supabase/.temp/anc.py",
-   "lines": 12
-  },
   "supabase/functions/_shared/contract.integration.test.ts": {
    "path": "supabase/functions/_shared/contract.integration.test.ts",
    "lines": 271,
@@ -68976,10 +68959,29 @@
   }
  },
  "git": {
-  "sha": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
+  "sha": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c7d9fce",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "chore: destrackear supabase/.temp e ignorar (#212)",
+    "files": [
+     ".gitignore",
+     "supabase/.temp/anc.py",
+     "supabase/.temp/cli-latest",
+     "supabase/.temp/gotrue-version",
+     "supabase/.temp/linked-project.json",
+     "supabase/.temp/pooler-url",
+     "supabase/.temp/postgres-version",
+     "supabase/.temp/project-ref",
+     "supabase/.temp/rest-version",
+     "supabase/.temp/storage-migration",
+     "supabase/.temp/storage-version"
+    ]
+   },
    {
     "sha": "1d97ccb",
     "date": "2026-11-21",
@@ -69328,15 +69330,6 @@
      "supabase/functions/mapbox-proxy/index.ts",
      "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql"
     ]
-   },
-   {
-    "sha": "554e68b",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)",
-    "files": [
-     ".github/workflows/apply-migrations.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -69385,39 +69378,39 @@
     3
    ],
    [
-    "src/integrations/supabase/types.ts",
+    "supabase/.temp/anc.py",
     2
    ],
    [
-    "supabase/functions/lalamove-api/coordinates.ts",
+    "supabase/.temp/cli-latest",
     2
    ],
    [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "supabase/.temp/gotrue-version",
     2
    ],
    [
-    "supabase/functions/geo-gateway/google.test.ts",
+    "supabase/.temp/pooler-url",
     2
    ],
    [
-    "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql",
+    "supabase/.temp/postgres-version",
     2
    ],
    [
-    "src/components/orders/AddressAutocomplete.tsx",
+    "supabase/.temp/project-ref",
     2
    ],
    [
-    "src/hooks/useGeoSearch.test.tsx",
+    "supabase/.temp/rest-version",
     2
    ],
    [
-    "src/hooks/useGeoSearch.ts",
+    "supabase/.temp/storage-migration",
     2
    ],
    [
-    "supabase/functions/geo-gateway/resolver.test.ts",
+    "supabase/.temp/storage-version",
     2
    ]
   ]

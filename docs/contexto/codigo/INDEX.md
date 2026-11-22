@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1d97ccb9d8527694a12408aa8ced1570d30a5375` (2026-11-21T23:25:20-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c7d9fceeedc3a2c32417c259a31e41af36335d63` (2026-11-21T23:28:31-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7582 nós · 16127 arestas · 565 comunidades · grafo do commit `1d97ccb9`
-- comunidades maiores: cn (289), button.tsx (163), App.tsx (130), ref_https (118), client.ts (111), react (106), ref_node_path (101), snapshot.py (100), mapbox.ts (85), RateLimitDashboardPage.tsx (81), dependencies (80), gerar.mjs (76)
+- 7581 nós · 16126 arestas · 574 comunidades · grafo do commit `c7d9fcee`
+- comunidades maiores: badge.tsx (170), cn (151), react (140), framer-motion (110), snapshot.py (102), client.ts (100), ref_node_fs (87), dependencies (80), AdvancedReportsPage.tsx (79), gerar.mjs (76), package.json (74), generate.py (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `c7d9fce` chore: destrackear supabase/.temp e ignorar (#212)
 - 2026-11-21 `1d97ccb` feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)
 - 2026-11-21 `933f4d6` docs: auditoria do ledger de migrations x schema real (#210)
 - 2026-11-21 `e38c647` fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `a0e2990` feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)
 - 2026-11-21 `2e299d5` docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)
 - 2026-11-21 `b7a8136` fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)
-- 2026-11-21 `d825edf` feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
