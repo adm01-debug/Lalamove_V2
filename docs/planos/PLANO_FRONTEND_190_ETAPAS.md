@@ -293,9 +293,9 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - [ ] Manter `CommandPaletteEnhanced` + `useCommandPaletteSearch`; remover `GlobalSearchAdvanced` (`AppLayout.tsx:211`) e `useGlobalSearch.ts` (ou o inverso) — decidir pelo que tem teste.
 - **Evidência:** `rg -n "key === 'k'" src` retorna 1 ocorrência; Ctrl+K abre um só diálogo.
 
-### 48 — [F] Hierarquia de papéis numa única fonte
-- [ ] Criar `src/lib/roles.ts` (`ROLE_ORDER`, `hasRole(userRoles, required)`) e usar em `ProtectedRoute.tsx:14`, `sidebar-config.ts:102`, `MobileSidebar.tsx:151`, `Sidebar.tsx:78-79`.
-- **Evidência:** `rg -n "admin.*manager.*operator.*viewer" src` retorna só `src/lib/roles.ts`; teste unitário.
+### 48 — [F] Hierarquia de papéis numa única fonte ✅
+- [x] Criar `src/lib/roles.ts` (`ROLE_ORDER`, `roleHierarchy`, `roleLevel`, `meetsRole`, `hasRole`, `getRoleDisplayName`, `getRoleColor`, `AppRole`) e usar em `ProtectedRoute.tsx` (importa `roleHierarchy`/`AppRole` de `@/lib/roles`), `sidebar-config.ts` (re-exporta os helpers), `MobileSidebar.tsx:152` (`meetsRole`) e `Sidebar.tsx:79` (`meetsRole`).
+- **Evidência:** `rg -n "export const roleHierarchy|const roleHierarchy" src` retorna só `src/lib/roles.ts` (o mapa de comparação de papéis é fonte única; `usePermissions.ts`, `useContextualHints.ts`, `useRole.ts` e `PermissionsPage.tsx` ainda listam os papéis para tipo/UI, fora do escopo). `npx tsc --noEmit -p tsconfig.app.json` 0 erros; `npx eslint` nos arquivos tocados 0 erros (6 warnings pré-existentes); `npx vitest run src/lib/__tests__/roles.test.ts` 10/10; ProtectedRoute/usePermissions/improvements-validation 49/49; `npm run build` OK.
 
 ### 49 — [F] Menu alinhado às rotas
 - [ ] `sidebar-config.ts`: `requiredRole`/`requireMFA` em `approvals` (`:42`), `map-tools` (`:55`), `alert-config` (`:60`) e categoria `integrations` (`:67-75`) iguais aos de `App.tsx:176-201`; teste que compara `sidebar-config` × rotas do `App`.
