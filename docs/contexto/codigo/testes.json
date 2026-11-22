@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 143,
+ "total": 144,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 22,
+  "edge (deno)": 23,
   "guard (node --test)": 34,
   "unit (vitest)": 75
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 24
+   "arquivos": 25
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1119,11 +1119,11 @@
   {
    "arquivo": "supabase/functions/_shared/channels/zapp.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 126,
+   "linhas": 182,
    "testa": [
     "supabase/functions/_shared/channels/zapp.ts"
    ],
-   "casos": 9
+   "casos": 12
   },
   {
    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -1338,6 +1338,15 @@
     "supabase/functions/send-notification/quiet-hours.ts"
    ],
    "casos": 8
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/static-map.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 116,
+   "testa": [
+    "supabase/functions/send-notification/static-map.ts"
+   ],
+   "casos": 12
   }
  ],
  "sql": [
@@ -1473,6 +1482,7 @@
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1,
   "supabase/functions/send-notification/quiet-hours.ts": 1,
+  "supabase/functions/send-notification/static-map.ts": 1,
   "supabase/tests/fixtures/route_curitiba.json": 1
  },
  "sem_teste": {

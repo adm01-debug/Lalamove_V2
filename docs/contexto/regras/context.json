@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5984867fca25657c8c8fa5415672d91411a817e8",
+  "sha": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 06:40 UTC",
-  "files_total": 1015,
-  "code_files": 839,
-  "code_lines": 144122
+  "generated_at": "2026-11-22 06:43 UTC",
+  "files_total": 1017,
+  "code_files": 841,
+  "code_lines": 144576
  },
  "version": "1.3.2",
- "facts_hash": "079ac7df4e292fb7",
+ "facts_hash": "496a2b2077136752",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 294,
+   ".ts": 296,
    ".tsx": 235,
    ".sql": 188,
    ".mjs": 109,
@@ -18081,12 +18081,14 @@
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
+     "active_tracking",
      "alert_configurations",
      "alerts",
      "alerts_sent",
      "bitrix24_tokens",
      "geo_defaults",
      "job_queue",
+     "lalamove_orders",
      "order_geo_events"
     ],
     "env": [
@@ -18104,16 +18106,20 @@
      "https://${token.domain}/rest/…",
      "https://api.resend.com/emails"
     ],
-    "invokes": [],
+    "invokes": [
+     "geo-gateway"
+    ],
     "doc": "",
     "errors": [
      "Bitrix24 error: ${response.statusText}",
      "Evolution API error: ${response.statusText}",
      "N8N error: ${response.statusText}",
      "Resend error: ${response.statusText}",
-     "Slack error: ${response.statusText}"
+     "Slack error: ${response.statusText}",
+     "geo-gateway: ${detail}"
     ],
     "side_effects": [
+     "invoke(",
      "notifyFieldByChannel",
      "notify_bitrix24_task",
      "notify_email",
@@ -21228,8 +21234,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 73,
-   "lines": 17433,
+   "files": 75,
+   "lines": 17887,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21301,7 +21307,8 @@
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
     "normalize.ts: normalizeLalamoveV3Payload",
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
-    "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime"
+    "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
+    "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -21391,6 +21398,8 @@
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/send-notification/quiet-hours.test.ts",
     "supabase/functions/send-notification/quiet-hours.ts",
+    "supabase/functions/send-notification/static-map.test.ts",
+    "supabase/functions/send-notification/static-map.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
     "supabase/functions/test-notification/index.ts"
    ]
@@ -21521,6 +21530,7 @@
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/send-notification/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ],
     "update": [
@@ -21987,7 +21997,8 @@
      "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/route-analyzer/index.ts"
+     "supabase/functions/route-analyzer/index.ts",
+     "supabase/functions/send-notification/index.ts"
     ],
     "update": [
      "src/hooks/useBitrix24.ts",
@@ -23345,7 +23356,8 @@
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.ts",
     "src/hooks/useRegionResolver.ts",
-    "src/lib/geo-gateway.ts"
+    "src/lib/geo-gateway.ts",
+    "supabase/functions/send-notification/index.ts"
    ],
    "get-mapbox-token": [
     "src/components/map/hooks/useMapboxToken.ts",
@@ -25590,6 +25602,10 @@
     "msg": "Slack error: ${response.statusText}"
    },
    {
+    "file": "supabase/functions/send-notification/index.ts",
+    "msg": "geo-gateway: ${detail}"
+   },
+   {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "msg": "Forbidden: requires admin or manager role"
    },
@@ -26544,6 +26560,14 @@
    {
     "file": "supabase/functions/send-notification/index.ts",
     "text": "lets the caller pick an arbitrary destination, so it must be restricted to"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.ts",
+    "text": "fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.ts",
+    "text": "imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode"
    },
    {
     "file": "supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql",
@@ -34174,6 +34198,12 @@
     "name": "validateLalamoveV3Signature",
     "params": "payload: { timestamp?: unknown; signature?: unknown; data?: unknown }, paths: string[], secret: string,",
     "body": "valid: boolean; reason?: string"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.ts",
+    "name": "shouldAttachStaticMap",
+    "params": "type: string",
+    "body": "return MEDIA_ALERT_TYPES.has(type);"
    }
   ],
   "temporal": [
@@ -38406,6 +38436,18 @@
     "name": "normalizeZappNumber remove máscara e não-dígitos"
    },
    {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: sendMedia envia imagem com caption e mimetype extraído do data URL"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: sendMedia recusa mídia que não é data URL de imagem"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: sendMedia com destinatário vazio não chama a API"
+   },
+   {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
     "name": "classifySeverity: error takes priority"
    },
@@ -39204,6 +39246,54 @@
    {
     "file": "supabase/functions/send-notification/quiet-hours.test.ts",
     "name": "[quiet-hours] nextAllowedTime na madrugada aponta para o mesmo dia local às 07:00"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "só as aproximações levam imagem"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "rota de um ponto só não vira path (path exige 2)"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "sem nenhum ponto não gera request (Google exige center/markers/path)"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "lê coordenadas do banco: numeric vem como string"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "expected_route inválido é ignorado, não quebra"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "só data URL de imagem é aceito como mídia"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "orçamento estourado e provedor desligado não são falha retentável"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "fetchStaticMap devolve o data URL do gateway"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "orçamento bloqueado ⇒ null, e o texto ainda sai"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "erro real do provedor também cai para texto, sem lançar"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.test.ts",
+    "name": "GEO_STATIC_MAP_IN_WHATSAPP=false desliga a imagem sem chamar o gateway"
    }
   ],
   "webhook_events": [
@@ -39475,6 +39565,10 @@
    },
    {
     "file": "supabase/functions/send-notification/index.ts",
+    "call": "invoke("
+   },
+   {
+    "file": "supabase/functions/send-notification/index.ts",
     "call": "notifyFieldByChannel"
    },
    {
@@ -39508,6 +39602,10 @@
    {
     "file": "supabase/functions/send-notification/index.ts",
     "call": "sendWhatsApp"
+   },
+   {
+    "file": "supabase/functions/send-notification/static-map.ts",
+    "call": "invoke("
    },
    {
     "file": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql",
@@ -66984,7 +67082,7 @@
   },
   "supabase/functions/_shared/channels/zapp.test.ts": {
    "path": "supabase/functions/_shared/channels/zapp.test.ts",
-   "lines": 126,
+   "lines": 182,
    "is_test": true,
    "tests": [
     "zapp: envia POST com Bearer, número só com dígitos e corpo JSON",
@@ -66995,12 +67093,15 @@
     "zapp: timeout devolve mensagem de timeout",
     "zapp: sem secrets o canal é ausente (null), não quebrado",
     "zapp: com os dois secrets monta o canal",
-    "normalizeZappNumber remove máscara e não-dígitos"
+    "normalizeZappNumber remove máscara e não-dígitos",
+    "zapp: sendMedia envia imagem com caption e mimetype extraído do data URL",
+    "zapp: sendMedia recusa mídia que não é data URL de imagem",
+    "zapp: sendMedia com destinatário vazio não chama a API"
    ]
   },
   "supabase/functions/_shared/channels/zapp.ts": {
    "path": "supabase/functions/_shared/channels/zapp.ts",
-   "lines": 121,
+   "lines": 178,
    "exports": [
     "interface TextChannelResult",
     "interface TextChannel",
@@ -69973,7 +70074,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 832,
+   "lines": 889,
    "tables": [
     {
      "table": "geo_defaults",
@@ -69982,6 +70083,14 @@
     {
      "table": "job_queue",
      "op": "insert"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "select"
     },
     {
      "table": "alert_configurations",
@@ -70011,6 +70120,19 @@
      "quiet_hours_start",
      "quiet_hours_tz"
     ],
+    "lalamove_orders": [
+     "delivery_latitude",
+     "delivery_longitude",
+     "id",
+     "pickup_latitude",
+     "pickup_longitude"
+    ],
+    "active_tracking": [
+     "current_latitude",
+     "current_longitude",
+     "expected_route",
+     "order_id"
+    ],
     "alert_configurations": [
      "alert_type"
     ],
@@ -70024,6 +70146,9 @@
    },
    "rpc": [
     "claim_alert_notification"
+   ],
+   "invokes": [
+    "geo-gateway"
    ],
    "external_urls": [
     "https://${token.domain}/rest/…",
@@ -70045,7 +70170,8 @@
     "Evolution API error: ${response.statusText}",
     "N8N error: ${response.statusText}",
     "Resend error: ${response.statusText}",
-    "Slack error: ${response.statusText}"
+    "Slack error: ${response.statusText}",
+    "geo-gateway: ${detail}"
    ],
    "status_values": [
     {
@@ -70078,6 +70204,7 @@
     "lets the caller pick an arbitrary destination, so it must be restricted to"
    ],
    "side_effects": [
+    "invoke(",
     "notifyFieldByChannel",
     "notify_bitrix24_task",
     "notify_email",
@@ -70119,6 +70246,61 @@
     "function nextAllowedTime"
    ],
    "doc": "Horário de silêncio (D3, docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md etapa 58): alertas geo-disparados para o fornecedor/cliente não saem fora de 07:00-20:00 America/Sao_Paulo. `index.ts` usa estas funções puras (sem I/O) para decidir se envia agora ou reenfileira — mesmo padrão de `lalamove-webhook …"
+  },
+  "supabase/functions/send-notification/static-map.test.ts": {
+   "path": "supabase/functions/send-notification/static-map.test.ts",
+   "lines": 116,
+   "is_test": true,
+   "errors": [
+    "Static Maps 503",
+    "geo-gateway: {"
+   ],
+   "doc": "Etapa 68: imagem do trajeto no WhatsApp. O contrato tem três pernas e cada uma pode falhar sozinha sem derrubar o alerta: (1) decidir quando há imagem, (2) gerar a imagem, (3) enviar.",
+   "tests": [
+    "só as aproximações levam imagem",
+    "markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos",
+    "rota de um ponto só não vira path (path exige 2)",
+    "sem nenhum ponto não gera request (Google exige center/markers/path)",
+    "lê coordenadas do banco: numeric vem como string",
+    "expected_route inválido é ignorado, não quebra",
+    "só data URL de imagem é aceito como mídia",
+    "orçamento estourado e provedor desligado não são falha retentável",
+    "fetchStaticMap devolve o data URL do gateway",
+    "orçamento bloqueado ⇒ null, e o texto ainda sai",
+    "erro real do provedor também cai para texto, sem lançar",
+    "GEO_STATIC_MAP_IN_WHATSAPP=false desliga a imagem sem chamar o gateway"
+   ]
+  },
+  "supabase/functions/send-notification/static-map.ts": {
+   "path": "supabase/functions/send-notification/static-map.ts",
+   "lines": 168,
+   "exports": [
+    "interface GeoPointLatLng",
+    "interface StaticMapMarker",
+    "interface StaticMapRequestOptions",
+    "function shouldAttachStaticMap",
+    "function isNonRetryableGeoError",
+    "function parseRoute",
+    "function buildStaticMapRequest",
+    "function buildStaticMapRequestFromRows",
+    "function extractDataUrl",
+    "interface StaticMapDeps",
+    "function fetchStaticMap"
+   ],
+   "rule_comments": [
+    "fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da",
+    "imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode"
+   ],
+   "calc_fns": [
+    {
+     "name": "shouldAttachStaticMap",
+     "params": "type: string",
+     "body": "return MEDIA_ALERT_TYPES.has(type);"
+    }
+   ],
+   "side_effects": [
+    "invoke("
+   ]
   },
   "supabase/functions/simulate-driver-movement/index.ts": {
    "path": "supabase/functions/simulate-driver-movement/index.ts",
@@ -71145,10 +71327,24 @@
   }
  },
  "git": {
-  "sha": "5984867fca25657c8c8fa5415672d91411a817e8",
+  "sha": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "59db689",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/_shared/channels/zapp.test.ts",
+     "supabase/functions/_shared/channels/zapp.ts",
+     "supabase/functions/send-notification/index.ts",
+     "supabase/functions/send-notification/static-map.test.ts",
+     "supabase/functions/send-notification/static-map.ts"
+    ]
+   },
    {
     "sha": "5984867",
     "date": "2026-11-22",
@@ -71503,24 +71699,16 @@
      "src/components/orders/AddressAutocomplete.test.tsx",
      "src/components/orders/AddressAutocomplete.tsx"
     ]
-   },
-   {
-    "sha": "845586a",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)",
-    "files": [
-     "docs/RUNBOOK_GOOGLE_MAPS.md",
-     "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     25
+   ],
+   [
+    "supabase/functions/send-notification/index.ts",
+    4
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -71539,12 +71727,16 @@
     3
    ],
    [
-    "supabase/functions/send-notification/index.ts",
+    "supabase/functions/geo-gateway/index.ts",
     3
    ],
    [
-    "supabase/functions/geo-gateway/index.ts",
-    3
+    "supabase/functions/_shared/channels/zapp.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/channels/zapp.ts",
+    2
    ],
    [
     "src/components/map/LiveMap.tsx",
@@ -71571,6 +71763,14 @@
     2
    ],
    [
+    "supabase/functions/send-notification/static-map.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/send-notification/static-map.ts",
+    1
+   ],
+   [
     "src/hooks/__tests__/useGeo.contract.test.ts",
     1
    ],
@@ -71580,22 +71780,6 @@
    ],
    [
     "src/types/geo.ts",
-    1
-   ],
-   [
-    "src/components/map/Google3DCanvas.tsx",
-    1
-   ],
-   [
-    "src/components/map/__tests__/mapLoadBilling.test.tsx",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-api/coordinates.ts",
     1
    ]
   ]

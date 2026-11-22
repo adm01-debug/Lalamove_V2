@@ -906,6 +906,7 @@
     "check-driver-alerts",
     "job-worker",
     "lalamove-webhook",
+    "send-notification",
     "simulate-driver-movement"
    ],
    "triggers": [],
@@ -6526,7 +6527,8 @@
     "lalamove-api",
     "lalamove-uapi",
     "lalamove-webhook",
-    "route-analyzer"
+    "route-analyzer",
+    "send-notification"
    ],
    "triggers": [
     "on_order_status_change_sync_bitrix24",

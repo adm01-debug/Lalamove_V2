@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5984867fca` · branch `main` · 2026-11-22 06:40 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `59db68997b` · branch `main` · 2026-11-22 06:43 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1231,6 +1231,10 @@ _nenhum item encontrado_
   ```
   valid: boolean; reason?: string
   ```
+- **shouldAttachStaticMap(type: string)** — `supabase/functions/send-notification/static-map.ts`
+  ```
+  return MEDIA_ALERT_TYPES.has(type);
+  ```
 
 ### G.4 Percentuais e multiplicadores no código
 
@@ -1812,7 +1816,7 @@ _nenhum item encontrado_
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| … +100 linhas — lista completa em `context.json` | |
+| … +101 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1846,7 +1850,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1120 testes em 99 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1135 testes em 100 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1882,8 +1886,10 @@ _nenhum item encontrado_
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/job-worker/eta-delay.test.ts` | 13 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
+| `supabase/functions/_shared/channels/zapp.test.ts` | 12 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
+| `supabase/functions/send-notification/static-map.test.ts` | 12 | só as aproximações levam imagem · markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos · rota de um ponto só não vira path (path exige 2) · sem nenhum ponto não gera request (Google exige center/markers/path) … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 11 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
@@ -1904,7 +1910,6 @@ _nenhum item encontrado_
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
-| `supabase/functions/_shared/channels/zapp.test.ts` | 9 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 9 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
@@ -2025,6 +2030,7 @@ _nenhum item encontrado_
 | `notifyError` | `supabase/functions/lalamove-webhook/index.ts` |
 | `sendNotification` | `supabase/functions/lalamove-webhook/index.ts` |
 | `resend.emails.send` | `supabase/functions/new-device-alert/index.ts` |
+| `invoke(` | `supabase/functions/send-notification/index.ts` |
 | `notifyFieldByChannel` | `supabase/functions/send-notification/index.ts` |
 | `notify_bitrix24_task` | `supabase/functions/send-notification/index.ts` |
 | `notify_email` | `supabase/functions/send-notification/index.ts` |
@@ -2034,6 +2040,7 @@ _nenhum item encontrado_
 | `notifying` | `supabase/functions/send-notification/index.ts` |
 | `sendEmail` | `supabase/functions/send-notification/index.ts` |
 | `sendWhatsApp` | `supabase/functions/send-notification/index.ts` |
+| `invoke(` | `supabase/functions/send-notification/static-map.ts` |
 | `notify_bitrix24_task` | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
 | `notify_email` | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
 | `notify_n8n_webhook` | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
@@ -2228,6 +2235,8 @@ _nenhum item encontrado_
 | Deve ser chamada periodicamente (ex: a cada hora via cron job externo) | `supabase/functions/rotate-tokens/index.ts` |
 | verify_jwt=true so a valid JWT is required, but that includes ordinary | `supabase/functions/send-notification/index.ts` |
 | lets the caller pick an arbitrary destination, so it must be restricted to | `supabase/functions/send-notification/index.ts` |
+| fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da | `supabase/functions/send-notification/static-map.ts` |
+| imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode | `supabase/functions/send-notification/static-map.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5984867fca25657c8c8fa5415672d91411a817e8",
+  "commit": "59db68997b1f589ee2da81b7c7f52bad5617a1e9",
   "branch": "main",
-  "data_commit": "2026-11-22T03:40:10-03:00",
+  "data_commit": "2026-11-22T03:43:04-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "59db689",
+    "data": "2026-11-22",
+    "assunto": "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)"
+   },
    {
     "sha": "5984867",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "0029ab4",
     "data": "2026-11-22",
     "assunto": "chore: remove chave DistanceMatrix.ai do repo e documenta Google Maps (etapas 8-10) (#225)"
-   },
-   {
-    "sha": "d1b6ddf",
-    "data": "2026-11-22",
-    "assunto": "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)"
    }
   ],
-  "arquivos_mudados_7d": 281,
+  "arquivos_mudados_7d": 283,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 28
+    "mudancas": 29
    },
    {
     "pasta": "src/components/orders",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 17
+    "mudancas": 19
    },
    {
     "pasta": "package.json",
@@ -176,12 +176,12 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 12
    },
    {
-    "pasta": "supabase/functions/send-notification",
-    "mudancas": 9
+    "pasta": "docs/pendencias/_ordem.md",
+    "mudancas": 10
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 28
+    "mudancas": 29
    },
    {
     "arquivo": "supabase/config.toml",
@@ -238,15 +238,15 @@
     "mudancas": 9
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 9
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
    {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 150
+    "commits": 151
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1021,
-  "arquivos_codigo": 642,
-  "linhas_codigo": 125045,
+  "arquivos_total": 1023,
+  "arquivos_codigo": 644,
+  "linhas_codigo": 125499,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 143,
+  "testes": 144,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 73,
-   "linhas": 17433
+   "arquivos": 75,
+   "linhas": 17887
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -613,12 +613,12 @@
    "linhas": 901
   },
   {
-   "arquivo": "supabase/functions/evaluate-driver/index.ts",
-   "linhas": 844
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 889
   },
   {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 832
+   "arquivo": "supabase/functions/evaluate-driver/index.ts",
+   "linhas": 844
   },
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",

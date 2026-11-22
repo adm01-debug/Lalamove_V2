@@ -431,7 +431,8 @@
     "src/lib/geo-gateway.ts"
    ],
    "chamada_por_edges": [
-    "lalamove-api"
+    "lalamove-api",
+    "send-notification"
    ],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
@@ -955,8 +956,8 @@
    "nome": "send-notification",
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
-   "arquivos": 2,
-   "linhas": 943,
+   "arquivos": 3,
+   "linhas": 1168,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -964,12 +965,14 @@
    "assina_hmac": false,
    "usa_service_role": true,
    "tabelas": [
+    "active_tracking",
     "alert_configurations",
     "alerts",
     "alerts_sent",
     "bitrix24_tokens",
     "geo_defaults",
     "job_queue",
+    "lalamove_orders",
     "order_geo_events"
    ],
    "rpcs": [
@@ -987,7 +990,9 @@
     "SUPABASE_URL"
    ],
    "buckets": [],
-   "chama_edges": [],
+   "chama_edges": [
+    "geo-gateway"
+   ],
    "hosts_externos": [
     "api.resend.com"
    ],
@@ -1011,7 +1016,7 @@
    ],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 1
+   "testes": 2
   },
   {
    "nome": "simulate-driver-movement",
