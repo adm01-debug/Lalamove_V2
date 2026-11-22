@@ -661,6 +661,96 @@ async function snapDriverPosition(
 }
 
 /**
+ * ETA_DELAY (etapa 50 do plano Google): o ETA e o melhor lugar para prever atraso
+ * — `geo_evaluate_tracking` so roda quando lat/lng/eta mudam, e o atraso depende
+ * de `scheduled_at` versus `now() + eta_minutes`. Dispara pelo mesmo
+ * `geo_emit_event` dos avisos de aproximacao, que ja deduplica por
+ * (order_id, event_type, stop_index) e respeita `alert_configurations`.
+ *
+ * Teto: `alert_configurations.LATE_DELIVERY.min_interval_seconds` (default 900,
+ * `20261121193000:24`). O dedup do `geo_emit_event` e por pedido+parada para
+ * sempre, entao o alerta sai uma vez quando o atraso e detectado.
+ */
+export async function maybeEmitEtaDelay(
+  supabase: any,
+  args: {
+    trackingId: string;
+    orderId: string;
+    driverId: string | null;
+    stopIndex: number;
+    etaMinutes: number;
+    lat: number;
+    lng: number;
+  },
+): Promise<boolean> {
+  const { data: order } = await supabase
+    .from('lalamove_orders')
+    .select('scheduled_at, lalamove_id, driver_name, driver_plate, pickup_address, delivery_address, supplier_contact, pickup_contact_name, pickup_contact_phone, share_link, delivery_contact_name, delivery_contact_phone, status')
+    .eq('id', args.orderId)
+    .maybeSingle();
+  if (!order?.scheduled_at) return false;
+
+  // Alerta so faz sentido para pedido vivo: encerrado/cancelado nao atrasa.
+  const status = String(order.status ?? '').toUpperCase();
+  if (['COMPLETED', 'CANCELLED', 'CANCELED', 'REJECTED', 'EXPIRED', 'DELIVERED'].includes(status)) return false;
+
+  // Janela de tolerancia: `LATE_DELIVERY` das alert_configurations; sem linha,
+  // cai no padrao do plano (15 min) para nao ficar sem alerta por falta de seed.
+  const { data: cfg } = await supabase
+    .from('alert_configurations')
+    .select('min_interval_seconds, is_enabled')
+    .eq('alert_type', 'LATE_DELIVERY')
+    .eq('channel', 'email')
+    .maybeSingle();
+  if (cfg && cfg.is_enabled === false) return false;
+  const thresholdMin = Math.max(1, Math.round(Number(cfg?.min_interval_seconds ?? 900) / 60));
+
+  const arrivalMs = Date.now() + args.etaMinutes * 60_000;
+  const lateMs = new Date(order.scheduled_at).getTime() + thresholdMin * 60_000;
+  if (!Number.isFinite(lateMs) || arrivalMs <= lateMs) return false;
+
+  const { data: emitted, error } = await supabase.rpc('geo_emit_event', {
+    p_order_id: args.orderId,
+    p_driver_id: args.driverId,
+    p_event_type: 'ETA_DELAY',
+    p_stop_index: args.stopIndex,
+    p_latitude: args.lat,
+    p_longitude: args.lng,
+    p_distance_m: null,
+    p_eta_minutes: args.etaMinutes,
+    p_title: 'Atraso previsto',
+    p_message: `O pedido ${order.lalamove_id ?? args.orderId} deve atrasar: previsao de chegada em ${args.etaMinutes} min (agendado ${new Date(order.scheduled_at).toISOString()}).`,
+    p_notify: true,
+    // Sem `always_send`: respeita horario de silencio, ao contrario dos avisos
+    // de chegada do motorista.
+    p_metadata: {
+      order_ref: order.lalamove_id,
+      driver_name: order.driver_name,
+      driver_plate: order.driver_plate,
+      pickup_address: order.pickup_address,
+      delivery_address: order.delivery_address,
+      share_link: order.share_link,
+      scheduled_at: order.scheduled_at,
+      threshold_min: thresholdMin,
+      recipients: args.stopIndex === 0
+        ? [{ role: 'pickup_contact', channel: 'whatsapp',
+             name: order.pickup_contact_name ?? order.supplier_contact,
+             to: order.pickup_contact_phone ?? order.supplier_contact }]
+        : [{ role: 'delivery_contact', channel: 'whatsapp',
+             name: order.delivery_contact_name ?? null,
+             to: order.delivery_contact_phone ?? null }],
+    },
+  });
+
+  if (error) {
+    // Nao derruba o refresh do ETA: o alerta e efeito colateral.
+    internalLogger('warn', 'ETA_DELAY nao emitido', { tracking_id: args.trackingId, error: error.message });
+    return false;
+  }
+  return emitted != null;
+}
+
+/**
  * `eta_refresh` — Matrix 1×1 `driving-traffic` motorista → próxima parada.
  * `eta_minutes = ceil(duration_s / 60)`; provedor desligado mantém a estimativa
  * local já calculada por `geo_evaluate_tracking` (não sobrescreve com NULL).
@@ -748,11 +838,22 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
 
       if (updErr) throw updErr;
 
+      const etaDelayed = await maybeEmitEtaDelay(supabase, {
+        trackingId: t.id,
+        orderId: t.order_id,
+        driverId: t.driver_id ?? null,
+        stopIndex: t.next_stop_index ?? 0,
+        etaMinutes,
+        lat: snap.lat,
+        lng: snap.lng,
+      });
+
       refreshed++;
       results.push({
         tracking_id: t.id,
         status: 'refreshed',
         eta_minutes: etaMinutes,
+        eta_delay_emitted: etaDelayed,
         duration_s: durationS,
         previous_eta_minutes: t.eta_minutes,
         provider: route.provider,
