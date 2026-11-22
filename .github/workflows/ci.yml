@@ -127,6 +127,18 @@ jobs:
       # uma regressao de custo so aparece na fatura do Mapbox.
       - name: Run geo-gateway tests (resolver, metering, polyline, provider)
         run: deno test --allow-all supabase/functions/geo-gateway/
+      # job-worker, send-notification e lalamove-api tinham testes no repo que
+      # nenhum workflow executava: ETA, cadencia, replay de trajeto, opt-out e
+      # fallback de geocode podiam quebrar sem o CI ficar vermelho.
+      - name: Run job-worker, send-notification and lalamove-api tests
+        run: |
+          deno test --allow-net --allow-env --allow-read \
+            supabase/functions/job-worker/ \
+            supabase/functions/send-notification/ \
+            supabase/functions/lalamove-api/
+      # Etapa 53 do plano Mapbox: replay deterministico do trajeto.
+      - name: Run driver movement replay tests
+        run: deno test --allow-net --allow-env --allow-read supabase/functions/simulate-driver-movement/
 
   sql-geo-tests:
     name: SQL Geo Trigger Tests

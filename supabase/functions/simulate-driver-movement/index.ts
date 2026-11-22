@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { bearingDeg, replaySteps, type ReplayFixture } from "./replay.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,17 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Etapa 53 do PLANO_MAPBOX_100_ETAPAS: `replay:true` percorre a fixture
+    // `route_curitiba.json` ponto a ponto (deterministico) em vez de sortear
+    // o deslocamento — e o unico jeito de o trajeto passar por um caminho
+    // conhecido e os eventos geo serem conferiveis.
+    let body: { replay?: boolean; fixture?: ReplayFixture; cursor?: number; steps?: number } = {};
+    try {
+      body = req.method === "POST" ? await req.json() : {};
+    } catch {
+      body = {};
+    }
 
     // docs/agentes/regras-dominio.md: "simulate-driver-movement ... existe só para
     // dev ... Nunca rode contra produção". Checagem de role (admin/manager) não
@@ -88,10 +100,46 @@ serve(async (req) => {
 
     const updates = [];
 
+    // Cursor do replay por tracking: cada chamada avanca `steps` pontos da
+    // fixture. Guardado em memoria porque a funcao e stateless entre invocacoes;
+    // quem quiser continuar manda `cursor` no corpo.
+    const replayFixture: ReplayFixture | null = body.replay
+      ? (body.fixture ?? null)
+      : null;
+    if (body.replay && !replayFixture) {
+      return new Response(
+        JSON.stringify({ error: 'replay:true exige `fixture` no corpo (route_curitiba.json)' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
+    let replayCursor = body.cursor ?? 0;
+    const replayBatch = body.steps ?? 1;
+    const replayStep = replayFixture
+      ? replaySteps(replayFixture, replayCursor, replayBatch)[0] ?? null
+      : null;
+
     for (const tracking of trackingData || []) {
       const order = tracking.order;
       if (!order?.delivery_latitude || !order?.delivery_longitude) {
         console.log(`Skipping tracking ${tracking.id} - no delivery coordinates`);
+        continue;
+      }
+
+      // Replay deterministico: posicao/heading/ETA vem da fixture, nao de sorteio.
+      if (replayStep) {
+        updates.push({
+          id: tracking.id,
+          current_latitude: replayStep.lat,
+          current_longitude: replayStep.lng,
+          heading: replayStep.heading,
+          speed: replayStep.speed_kmh,
+          eta_minutes: replayStep.eta_minutes,
+          is_stopped: replayStep.is_stopped,
+          stopped_since: replayStep.is_stopped ? new Date().toISOString() : null,
+          is_on_route: true,
+          last_updated: new Date().toISOString(),
+        });
+        console.log(`Replay driver ${tracking.driver_id}: seq ${replayStep.seq} -> ${replayStep.lat.toFixed(5)},${replayStep.lng.toFixed(5)}`);
         continue;
       }
 
@@ -220,6 +268,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         updated: updates.length,
+        ...(replayFixture ? { replay: { seq: replayStep?.seq ?? null, next_cursor: replayCursor + (replayStep ? 1 : 0), total_points: replayFixture.points.length } } : {}),
         message: `Updated ${updates.length} driver positions`
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
