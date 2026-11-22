@@ -132,6 +132,11 @@ jobs:
       # motorista. Regressao aqui manda 20 SMS em rajada ou cala o motorista as 3h.
       - name: Run messaging router tests
         run: deno test supabase/functions/_shared/messaging/
+      # Canais de entrega (Zapp e SMS): `zapp.test.ts` existia e nenhum workflow
+      # executava — uma regressao de formato de payload so apareceria com o
+      # motorista esperando a mensagem.
+      - name: Run messaging channel tests (zapp, sms)
+        run: deno test supabase/functions/_shared/channels/
       # job-worker, send-notification e lalamove-api tinham testes no repo que
       # nenhum workflow executava: ETA, cadencia, replay de trajeto, opt-out e
       # fallback de geocode podiam quebrar sem o CI ficar vermelho.

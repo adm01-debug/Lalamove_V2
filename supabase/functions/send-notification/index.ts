@@ -17,6 +17,9 @@ import {
   type QuietHours,
 } from "./quiet-hours.ts";
 import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
+import { smsChannelFromEnv } from "../_shared/channels/sms.ts";
+import { dispatchSms } from "./sms-dispatch.ts";
+
 import { normalizePhone } from "../_shared/phone.ts";
 import {
   normalizeRecipients,
@@ -250,6 +253,9 @@ serve(async (req) => {
         case "slack":
           result = await sendSlack(recipient, severity, title, effectiveMessage, order_id, driver_id);
           break;
+        case "sms":
+          result = await sendSms(recipient, title, effectiveMessage, order_id);
+          break;
         case "n8n":
           result = await sendN8NWebhook(recipient, { type, severity, title, message: effectiveMessage, order_id, driver_id, metadata });
           break;
@@ -276,6 +282,7 @@ serve(async (req) => {
     const configRows = (allConfigsForType ?? []) as Array<Record<string, unknown>>;
     const notifyFieldByChannel: Record<string, string> = {
       whatsapp: 'notify_whatsapp',
+      sms: 'notify_sms',
       email: 'notify_email',
       slack: 'notify_slack',
       bitrix24: 'notify_bitrix24_task',
@@ -462,6 +469,10 @@ serve(async (req) => {
       const emailAddresses = isEscalation
         ? (cfg.escalation_email_addresses?.length ? cfg.escalation_email_addresses : (cfg.email_addresses ?? []))
         : (cfg.email_addresses ?? []);
+      // Etapa 130 do plano de mensageria: `sms_numbers` existe em
+      // `alert_configurations` desde a migration `20251224181640` e nunca era lido
+      // — SMS configurado pela UI simplesmente não saía.
+      const smsNumbers: string[] = (cfg as { sms_numbers?: string[] }).sms_numbers ?? [];
       const slackChannels = isEscalation
         ? (cfg.escalation_slack_channels?.length ? cfg.escalation_slack_channels : (cfg.slack_channels ?? []))
         : (cfg.slack_channels ?? []);
@@ -503,6 +514,13 @@ serve(async (req) => {
       if (cfg.notify_email && emailAddresses.length > 0) {
         for (const email of emailAddresses) {
           await dispatchIfNew("email", email);
+        }
+      }
+
+      // SMS (contingência do WhatsApp — etapas 119/120)
+      if ((cfg as { notify_sms?: boolean }).notify_sms && smsNumbers.length > 0) {
+        for (const number of smsNumbers) {
+          await dispatchIfNew("sms", number);
         }
       }
 
@@ -739,6 +757,25 @@ async function sendWhatsApp(
     logger.error('[WhatsApp] Error:', error);
     return { success: false, error: error?.message || 'Unknown error' };
   }
+}
+
+// SMS de contingencia (etapas 119/120/124 do plano de mensageria). O canal so
+// existe quando `SMS_PROVIDER_API_KEY` esta configurado: sem ele o despacho
+// devolve erro explicito em vez de fingir que enviou.
+async function sendSms(
+  number: string,
+  title: string,
+  message: string,
+  orderId?: string | null,
+): Promise<{ success: boolean; error?: string }> {
+  const channel = smsChannelFromEnv();
+  const result = await dispatchSms({ channel, number, title, message, orderId });
+  if (result.success) {
+    logger.log(`[SMS] Sent via ${channel?.name} to ${number.replace(/\D/g, '')} (${result.segments ?? '?'} segmento(s))`);
+    return { success: true };
+  }
+  logger.error(`[SMS] Erro no ${channel?.name ?? "provedor nao configurado"}:`, result.error);
+  return { success: false, error: result.error };
 }
 
 // Email via Resend
