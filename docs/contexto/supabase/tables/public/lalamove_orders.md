@@ -230,6 +230,7 @@
 | nome | timing | eventos | nível | status | função |
 |---|---|---|---|---|---|
 | on_order_status_change_sync_bitrix24 | AFTER | UPDATE | ROW | enabled | public.trigger_bitrix24_sync |
+| trg_close_tracking_on_order_end | AFTER | INSERT OR UPDATE | ROW | enabled | public.trg_close_tracking_on_order_end |
 | update_orders_updated_at | BEFORE | UPDATE | ROW | enabled | public.update_updated_at_column |
 
 

@@ -21,7 +21,7 @@
 | 1 | `id` | `uuid` | não | `gen_random_uuid()` |  |  |
 | 2 | `name` | `text` | não |  |  |  |
 | 3 | `description` | `text` | sim |  |  |  |
-| 4 | `module` | `text` | não |  |  |  |
+| 4 | `module` | `text` | não |  |  | Modulo funcional; maps cobre provedores de mapa e custo (etapa 92). |
 | 5 | `action` | `text` | não |  |  |  |
 | 6 | `created_at` | `timestamp with time zone` | sim | `now()` |  |  |
 

@@ -37,6 +37,7 @@
 | public.lalamove_webhook_config | registered_by | auth.users | id | NO ACTION | NO ACTION |
 | public.map_settings_overrides | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.new_device_alerts | device_id | public.user_devices | id | CASCADE | NO ACTION |
+| public.notification_optouts | created_by | auth.users | id | SET NULL | NO ACTION |
 | public.order_geo_events | alert_id | public.alerts | id | SET NULL | NO ACTION |
 | public.order_geo_events | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.password_reset_requests | reviewed_by | auth.users | id | SET NULL | NO ACTION |
@@ -431,6 +432,7 @@ erDiagram
         text quiet_hours_tz
         uuid updated_by FK
         timestamp_with_time_zone updated_at
+        integer late_tolerance_min
     }
     public_geo_price_list {
         text provider PK
@@ -686,6 +688,12 @@ erDiagram
         timestamp_with_time_zone sent_at
         timestamp_with_time_zone created_at
     }
+    public_notification_optouts {
+        text phone PK
+        text reason
+        uuid created_by FK
+        timestamp_with_time_zone created_at
+    }
     public_order_geo_events {
         uuid id PK
         uuid order_id FK
@@ -929,6 +937,7 @@ erDiagram
     auth_users ||--o{ public_lalamove_webhook_config : "lalamove_webhook_config_registered_by_fkey"
     auth_users ||--o{ public_map_settings_overrides : "map_settings_overrides_user_id_fkey"
     public_user_devices ||--o{ public_new_device_alerts : "new_device_alerts_device_id_fkey"
+    auth_users ||--o{ public_notification_optouts : "notification_optouts_created_by_fkey"
     public_alerts ||--o{ public_order_geo_events : "order_geo_events_alert_id_fkey"
     public_lalamove_orders ||--o{ public_order_geo_events : "order_geo_events_order_id_fkey"
     auth_users ||--o{ public_password_reset_requests : "password_reset_requests_reviewed_by_fkey"

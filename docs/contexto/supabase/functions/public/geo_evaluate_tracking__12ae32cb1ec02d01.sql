@@ -19,6 +19,8 @@ DECLARE
   v_notify_del  boolean;
   v_meta        jsonb;
   v_driver_name text;
+  v_eta_at      timestamptz;
+  v_late_limit  timestamptz;
 BEGIN
   -- so posicoes novas de tracking ativo
   IF NEW.tracking_status IS DISTINCT FROM 'ACTIVE' THEN RETURN NEW; END IF;
@@ -46,32 +48,27 @@ BEGIN
   v_eta_min    := COALESCE(o.approach_eta_min,  d.approach_eta_min);
   v_arrived_m  := d.arrived_radius_m;
   v_off_m      := d.off_route_threshold_m;
-  v_notify_del := COALESCE(o.notify_delivery_contact, d.notify_delivery_contact);
-  v_driver_name := COALESCE(o.driver_name, 'o motorista');
 
-  -- ultima parada (entrega): maior stop_index em lalamove_stops, senao 1
-  SELECT COALESCE(MAX(stop_index), 1) INTO v_last_index FROM lalamove_stops WHERE order_id = o.id;
+  -- ultima parada conhecida do pedido (fallback: 1 = coleta + entrega)
+  SELECT COALESCE(MAX(stop_index), 1) INTO v_last_index
+    FROM lalamove_stops WHERE order_id = o.id;
+  IF v_last_index IS NULL THEN v_last_index := 1; END IF;
 
-  -- coordenada da proxima parada: lalamove_stops[next_stop_index] -> fallback colunas do pedido
+  -- Coordenada da proxima parada: lalamove_stops[next_stop_index], fallback nas colunas do pedido
   SELECT latitude, longitude INTO v_stop_lat, v_stop_lng
     FROM lalamove_stops WHERE order_id = o.id AND stop_index = NEW.next_stop_index LIMIT 1;
   IF v_stop_lat IS NULL THEN
     IF NEW.next_stop_index = 0 THEN
-      v_stop_lat := o.pickup_latitude;   v_stop_lng := o.pickup_longitude;
+      v_stop_lat := o.pickup_latitude;  v_stop_lng := o.pickup_longitude;
     ELSE
       v_stop_lat := o.delivery_latitude; v_stop_lng := o.delivery_longitude;
     END IF;
   END IF;
 
-  -- metricas
   IF v_stop_lat IS NOT NULL AND v_stop_lng IS NOT NULL THEN
     v_dist := geo_haversine_m(NEW.current_latitude, NEW.current_longitude, v_stop_lat, v_stop_lng);
     NEW.distance_to_next_stop_m := round(v_dist::numeric, 1);
-    IF v_dist <= v_arrived_m THEN
-      NEW.near_stop_cycles := COALESCE(OLD.near_stop_cycles, 0) + 1;
-    ELSE
-      NEW.near_stop_cycles := 0;
-    END IF;
+    NEW.near_stop_cycles := CASE WHEN v_dist <= v_arrived_m THEN COALESCE(OLD.near_stop_cycles, 0) + 1 ELSE 0 END;
   ELSE
     v_dist := NULL;
     NEW.distance_to_next_stop_m := NULL;
@@ -94,12 +91,47 @@ BEGIN
         WHEN NEW.next_stop_index = 0 THEN jsonb_build_array(jsonb_build_object(
             'role', 'pickup_contact', 'channel', 'whatsapp',
             'name', COALESCE(o.pickup_contact_name, o.supplier_contact),
-            'to',   COALESCE(o.pickup_contact_phone, (SELECT contact_phone FROM lalamove_stops WHERE order_id = o.id AND stop_index = 0 LIMIT 1))))
+            -- D1 (etapa 59): pickup_contact_phone -> supplier_contact (só com
+            -- auto_notify_supplier) -> lalamove_stops[0].contact_phone. Sem o
+            -- supplier_contact aqui, pedido que só tem fornecedor cadastrado
+            -- montava destinatário com nome e to=null.
+            'to',   COALESCE(
+                      o.pickup_contact_phone,
+                      CASE WHEN o.auto_notify_supplier THEN o.supplier_contact ELSE NULL END,
+                      (SELECT contact_phone FROM lalamove_stops WHERE order_id = o.id AND stop_index = 0 LIMIT 1))))
         ELSE jsonb_build_array(jsonb_build_object(
             'role', 'delivery_contact', 'channel', 'whatsapp',
             'name', (SELECT contact_name  FROM lalamove_stops WHERE order_id = o.id AND stop_index = NEW.next_stop_index LIMIT 1),
             'to',   (SELECT contact_phone FROM lalamove_stops WHERE order_id = o.id AND stop_index = NEW.next_stop_index LIMIT 1)))
       END);
+
+  -- ---------------- ETAPA 50: ETA_DELAY ----------------
+  -- Previsao de chegada = agora + eta_minutes; compara com scheduled_at + tolerancia.
+  -- So faz sentido com ETA conhecido e pedido agendado. `order_geo_events` tem
+  -- UNIQUE(order_id, event_type, stop_index): 1 aviso por parada, mesmo com o motorista
+  -- atrasando mais ao longo do trajeto.
+  IF o.scheduled_at IS NOT NULL
+     AND NEW.eta_minutes IS NOT NULL
+     AND v_status IN ('ON_GOING', 'MATCHED', 'ASSIGNING_DRIVER', 'PICKED_UP', 'DELIVERING') THEN
+    v_eta_at     := now() + make_interval(mins => NEW.eta_minutes);
+    v_late_limit := o.scheduled_at + make_interval(mins => d.late_tolerance_min);
+    IF v_eta_at > v_late_limit THEN
+      PERFORM geo_emit_event(o.id, NEW.driver_id, 'ETA_DELAY', NEW.next_stop_index,
+        NEW.current_latitude, NEW.current_longitude, NEW.distance_to_next_stop_m, NEW.eta_minutes,
+        'Atraso previsto',
+        format('Pedido %s deve atrasar: previsao de chegada em ~%s min (%s), %s min depois do agendado (%s).',
+               COALESCE(o.lalamove_id, o.id::text), NEW.eta_minutes,
+               to_char(v_eta_at AT TIME ZONE 'America/Sao_Paulo', 'DD/MM HH24:MI'),
+               round(EXTRACT(EPOCH FROM (v_eta_at - o.scheduled_at)) / 60)::text,
+               to_char(o.scheduled_at AT TIME ZONE 'America/Sao_Paulo', 'DD/MM HH24:MI')),
+        true,
+        v_meta || jsonb_build_object(
+          'scheduled_at', o.scheduled_at,
+          'eta_at', v_eta_at,
+          'late_minutes', round(EXTRACT(EPOCH FROM (v_eta_at - o.scheduled_at)) / 60),
+          'late_tolerance_min', d.late_tolerance_min));
+    END IF;
+  END IF;
 
   -- ---------------- COLETA (next_stop_index = 0) ----------------
   IF NEW.next_stop_index = 0 AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER') THEN
@@ -136,6 +168,49 @@ BEGIN
         'Motorista chegou na entrega',
         format('%s (%s) chegou ao local de entrega do pedido %s.', v_driver_name, COALESCE(o.driver_plate,'-'), COALESCE(o.lalamove_id, o.id::text)),
         v_notify_del, v_meta || '{"always_send":true}'::jsonb);
+    END IF;
+  END IF;
+
+  -- ---------------- AVANCO DE PARADA (etapa 46) ----------------
+  -- Nada mais no repositorio escrevia `next_stop_index`: a coluna nascia em 0
+  -- (`geo_foundation.sql:241`) e ficava em 0 para sempre. Como o bloco de ENTREGA acima
+  -- exige `next_stop_index >= 1`, ele nunca executava — nenhum pedido recebia alerta de
+  -- aproximacao/chegada na entrega. Este bloco fecha isso.
+  --
+  -- Regra (plano, etapa 46): chegou ao raio de chegada por 2 ciclos consecutivos
+  -- (`near_stop_cycles >= 2`) OU o status Lalamove virou PICKED_UP -> avanca uma parada e
+  -- marca `arrived_at` na parada que ficou para tras. Antes de avancar, o codigo so
+  -- emitia DRIVER_ARRIVED_*; agora a parada tambem e quitada.
+  --
+  -- Ordem importa: o avanco roda no FIM, depois de todos os eventos, para que stop_index
+  -- dos eventos emitidos seja o da parada que estava sendo perseguida neste ciclo.
+  IF NEW.next_stop_index < v_last_index
+     AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER','PICKED_UP','DELIVERING')
+     AND (NEW.near_stop_cycles >= 2 OR v_status = 'PICKED_UP') THEN
+
+    UPDATE lalamove_stops SET arrived_at = COALESCE(arrived_at, now())
+     WHERE order_id = NEW.order_id AND stop_index = NEW.next_stop_index;
+
+    NEW.next_stop_index  := NEW.next_stop_index + 1;
+    NEW.near_stop_cycles := 0;   -- zera, senao o contador herdado dispararia
+                                 -- DRIVER_ARRIVED_DELIVERY no ciclo seguinte
+
+    -- as metricas precisam apontar para a NOVA parada, nao para a que acabou de ser deixada
+    SELECT latitude, longitude INTO v_stop_lat, v_stop_lng
+      FROM lalamove_stops WHERE order_id = NEW.order_id AND stop_index = NEW.next_stop_index LIMIT 1;
+    IF v_stop_lat IS NULL THEN
+      IF NEW.next_stop_index = 0 THEN
+        v_stop_lat := o.pickup_latitude;   v_stop_lng := o.pickup_longitude;
+      ELSE
+        v_stop_lat := o.delivery_latitude; v_stop_lng := o.delivery_longitude;
+      END IF;
+    END IF;
+
+    IF v_stop_lat IS NOT NULL AND v_stop_lng IS NOT NULL THEN
+      NEW.distance_to_next_stop_m := round(
+        geo_haversine_m(NEW.current_latitude, NEW.current_longitude, v_stop_lat, v_stop_lng)::numeric, 1);
+    ELSE
+      NEW.distance_to_next_stop_m := NULL;
     END IF;
   END IF;
 

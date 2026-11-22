@@ -18,3 +18,4 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 20 | process-job-queue | `* * * * *` | sim | postgres | postgres | `   select public.process_job_queue(10); ` |
 | 25 | geo-jobs-refresh | `1-59/5 * * * *` | sim | postgres | postgres | `SELECT public.refresh_geo_jobs();` |
 | 26 | refresh-cache-views | `3 * * * *` | sim | postgres | postgres | `SELECT public.refresh_cache_view();` |
+| 29 | check-driver-alerts | `*/2 * * * *` | sim | postgres | postgres | `       select net.http_post(         url := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1/check-driver-alerts',         headers := jsonb_build_object(           'Content-Type','application/json',           'apikey', '[REDACTED_KEY]',           'Authorization','Bearer ' \|\| '[REDACTED_KEY]'         ),         body := jsonb_build_object('time', now()),         timeout_milliseconds := 25000       ) as request_id;       ` |

@@ -194,6 +194,7 @@ Uso e tamanho em `stats.md`.
 | public.new_device_alerts | idx_new_device_alerts_device_id | btree | device_id | não | sim |  |
 | public.new_device_alerts | idx_new_device_alerts_user | btree | user_id, created_at | não | sim |  |
 | public.new_device_alerts | new_device_alerts_pkey | btree | id | sim | sim |  |
+| public.notification_optouts | notification_optouts_pkey | btree | phone | sim | sim |  |
 | public.order_geo_events | idx_order_geo_events_alert_id | btree | alert_id | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  |
 | public.order_geo_events | order_geo_events_order_id_event_type_stop_index_key | btree | order_id, event_type, stop_index | sim | sim |  |

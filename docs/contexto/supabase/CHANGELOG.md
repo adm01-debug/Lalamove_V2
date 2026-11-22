@@ -2,6 +2,23 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 14:17 UTC
+
+- **colunas** adicionado (5): `public.geo_defaults.late_tolerance_min`, `public.notification_optouts.created_at`, `public.notification_optouts.created_by`, `public.notification_optouts.phone`, `public.notification_optouts.reason`
+- **colunas** alterado (1): `public.permissions.module`
+- **constraints** adicionado (2): `public.notification_optouts.notification_optouts_created_by_fkey`, `public.notification_optouts.notification_optouts_pkey`
+- **cron jobs** adicionado (1): `29:check-driver-alerts`
+- **functions** adicionado (4): `public.end_order_tracking(p_order_id uuid, p_reason text)`, `public.is_phone_opted_out(p_phone text)`, `public.normalize_br_phone(p_phone text)`, `public.trg_close_tracking_on_order_end()`
+- **functions** alterado (5): `public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`, `public.geo_evaluate_tracking()`, `public.geo_haversine_m(lat1 double precision, lng1 double precision, lat2 double precision, lng2 double precision)`, `public.geo_point_to_polyline_m(plat double precision, plng double precision, polyline jsonb)`, `public.has_permission(_user_id uuid, _permission_name text)`
+- **grants** adicionado (2): `public.notification_optouts:authenticated`, `public.notification_optouts:service_role`
+- **indexes** adicionado (1): `public.notification_optouts_pkey`
+- **lints** adicionado (4): `fk_without_index:public.notification_optouts.notification_optouts_created_by_fkey`, `policy_auth_fn_not_wrapped:public.notification_optouts.admin gerencia opt-outs`, `rpc_anon_executable:public.end_order_tracking(p_order_id uuid, p_reason text)`, `rpc_anon_executable:public.is_phone_opted_out(p_phone text)`
+- **migrations** adicionado (6): `20261122131000_geo_eta_delay`, `20261123190000_cron_check_driver_alerts`, `20261123190001_revoke_anon_geo_rpcs`, `20261123190002_geo_maps_permissions`, `20261123200000_optout_and_tracking_end`, `20261124120000_internal_alert_channels`
+- **policies (RLS)** adicionado (2): `public.notification_optouts.admin gerencia opt-outs`, `public.notification_optouts.service role escreve opt-outs`
+- **policies (RLS)** alterado (1): `public.geo_usage.geo_usage_read_manager`
+- **tabelas** adicionado (1): `public.notification_optouts`
+- **triggers** adicionado (1): `public.lalamove_orders.trg_close_tracking_on_order_end`
+
 ## 2026-11-22 12:19 UTC
 
 - **functions** alterado (5): `public.add_job(p_type text, p_payload jsonb, p_priority integer, p_max_attempts integer, p_dedup_key text, p_metadata jsonb)`, `public.geo_budget_status()`, `public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`, `public.has_permission(_user_id uuid, _permission_name text)`, `public.has_role(_user_id uuid, _role app_role)`

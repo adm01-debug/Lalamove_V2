@@ -5362,6 +5362,19 @@
         "type": "timestamp with time zone"
       },
       {
+        "comment": "Minutos de atraso tolerados antes de emitir ETA_DELAY (etapa 50). Junto com lalamove_orders.scheduled_at.",
+        "default": "15",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "late_tolerance_min",
+        "nullable": false,
+        "position": 12,
+        "schema": "public",
+        "table": "geo_defaults",
+        "type": "integer"
+      },
+      {
         "comment": null,
         "default": null,
         "generated": null,
@@ -8886,6 +8899,58 @@
       },
       {
         "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "phone",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "reason",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_by",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
         "identity": null,
@@ -10276,7 +10341,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "Modulo funcional; maps cobre provedores de mapa e custo (etapa 92).",
         "default": null,
         "generated": null,
         "identity": null,
@@ -16363,6 +16428,42 @@
       },
       {
         "columns": [
+          "created_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (created_by) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "name": "notification_optouts_created_by_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "phone"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (phone)",
+        "name": "notification_optouts_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_optouts",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "alert_id"
         ],
         "deferrable": false,
@@ -17851,6 +17952,15 @@
           "jobname": "refresh-cache-views",
           "schedule": "3 * * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "\n      select net.http_post(\n        url := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1/check-driver-alerts',\n        headers := jsonb_build_object(\n          'Content-Type','application/json',\n          'apikey', '[REDACTED_KEY]',\n          'Authorization','Bearer ' || '[REDACTED_KEY]'\n        ),\n        body := jsonb_build_object('time', now()),\n        timeout_milliseconds := 25000\n      ) as request_id;\n      ",
+          "database": "postgres",
+          "jobid": 29,
+          "jobname": "check-driver-alerts",
+          "schedule": "*/2 * * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -18620,6 +18730,47 @@
         "volatility": "volatile"
       },
       {
+        "args": "p_order_id uuid, p_reason text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/lalamove-webhook/index.ts",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 2,
+          "cron": [],
+          "db": [
+            "public.trg_close_tracking_on_order_end"
+          ],
+          "triggers": [],
+          "views": []
+        },
+        "comment": "Encerra active_tracking e cancela eventos deferred do pedido (etapa 61).",
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "82985e9d1b26d2b5",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "end_order_tracking",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "p_month date",
         "callers": {
           "code": [
@@ -18771,6 +18922,10 @@
               "hits": 4
             },
             {
+              "file": "supabase/migrations/20261122131000_geo_eta_delay.sql",
+              "hits": 5
+            },
+            {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 1
             },
@@ -18779,7 +18934,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking"
@@ -18824,12 +18979,12 @@
           ],
           "views": []
         },
-        "comment": "Trigger em active_tracking: calcula distancia a proxima parada e a rota, is_on_route, e emite eventos geo idempotentes.",
+        "comment": "Trigger de active_tracking: calcula distancia/ETA local, emite os eventos de geofence (etapas 54-57), ETA_DELAY (etapa 50) e avanca next_stop_index (etapa 46).",
         "config": [
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "37949d474f5b7f8b",
+        "definition_sha": "0edce6a40c984600",
         "execute_api_roles": "service_role",
         "execute_public": false,
         "is_trigger_fn": true,
@@ -18851,9 +19006,13 @@
             {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20261122131000_geo_eta_delay.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking",
@@ -18888,9 +19047,13 @@
             {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122131000_geo_eta_delay.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking"
@@ -19274,7 +19437,7 @@
         "callers": {
           "code": [
             {
-              "file": "supabase/migrations/20261123190000_geo_maps_permissions.sql",
+              "file": "supabase/migrations/20261123190002_geo_maps_permissions.sql",
               "hits": 1
             }
           ],
@@ -19716,6 +19879,41 @@
         "volatility": "stable"
       },
       {
+        "args": "p_phone text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/send-notification/index.ts",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "ffd2fcbf43d6c46a",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "is_phone_opted_out",
+        "owner": "postgres",
+        "returns": "boolean",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
         "args": "p_token_hash text",
         "callers": {
           "code": [],
@@ -20019,6 +20217,41 @@
         "security_definer": true,
         "strict": false,
         "volatility": "stable"
+      },
+      {
+        "args": "p_phone text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [
+            "public.is_phone_opted_out"
+          ],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": null,
+        "definition": null,
+        "definition_sha": "017508c01fd86e61",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "normalize_br_phone",
+        "owner": "postgres",
+        "returns": "text",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "immutable"
       },
       {
         "args": "",
@@ -20684,6 +20917,43 @@
         "returns": "SETOF text",
         "schema": "public",
         "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [
+            "public.lalamove_orders.trg_close_tracking_on_order_end"
+          ],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "156ef858d57b090e",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": true,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "trg_close_tracking_on_order_end",
+        "owner": "postgres",
+        "returns": "trigger",
+        "schema": "public",
+        "security_definer": true,
         "strict": false,
         "volatility": "volatile"
       },
@@ -21837,6 +22107,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "new_device_alerts"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_optouts"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_optouts"
         },
         {
           "grantee": "authenticated",
@@ -25053,6 +25335,20 @@
       },
       {
         "columns": [
+          "phone"
+        ],
+        "definition": "CREATE UNIQUE INDEX notification_optouts_pkey ON public.notification_optouts USING btree (phone)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_optouts_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_optouts"
+      },
+      {
+        "columns": [
           "alert_id"
         ],
         "definition": "CREATE INDEX idx_order_geo_events_alert_id ON public.order_geo_events USING btree (alert_id)",
@@ -26464,6 +26760,12 @@
         "severity": "BAIXA"
       },
       {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.notification_optouts.notification_optouts_created_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.active_tracking.Admins can delete tracking",
@@ -27330,6 +27632,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.notification_optouts.admin gerencia opt-outs",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.order_geo_events.order_geo_events_read",
         "severity": "BAIXA"
       },
@@ -27745,6 +28053,18 @@
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.create_audit_log(p_action text, p_resource_type text, p_resource_id uuid, p_changes jsonb)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.end_order_tracking(p_order_id uuid, p_reason text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.is_phone_opted_out(p_phone text)",
         "severity": "INFO"
       },
       {
@@ -28676,6 +28996,11 @@
         "version": "20261122130200"
       },
       {
+        "name": "geo_eta_delay",
+        "statements": null,
+        "version": "20261122131000"
+      },
+      {
         "name": "fix_crons_dispatcher",
         "statements": null,
         "version": "20261122140000"
@@ -28713,6 +29038,31 @@
         "statements": 4,
         "statements_sha": "17192aff70d683c5",
         "version": "20261123180000"
+      },
+      {
+        "name": "cron_check_driver_alerts",
+        "statements": null,
+        "version": "20261123190000"
+      },
+      {
+        "name": "revoke_anon_geo_rpcs",
+        "statements": null,
+        "version": "20261123190001"
+      },
+      {
+        "name": "geo_maps_permissions",
+        "statements": null,
+        "version": "20261123190002"
+      },
+      {
+        "name": "optout_and_tracking_end",
+        "statements": null,
+        "version": "20261123200000"
+      },
+      {
+        "name": "internal_alert_channels",
+        "statements": null,
+        "version": "20261124120000"
       }
     ],
     "policies": [
@@ -29853,7 +30203,7 @@
         ],
         "schema": "public",
         "table": "geo_usage",
-        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))",
+        "using": "(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_permission(auth.uid(), 'maps.usage.read'::text))",
         "with_check": null
       },
       {
@@ -30479,6 +30829,30 @@
         "table": "new_device_alerts",
         "using": "(auth.uid() = user_id)",
         "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "admin gerencia opt-outs",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "notification_optouts",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role escreve opt-outs",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "notification_optouts",
+        "using": "true",
+        "with_check": "true"
       },
       {
         "cmd": "SELECT",
@@ -32417,6 +32791,21 @@
         "schema": "public"
       },
       {
+        "comment": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "notification_optouts",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) - 1 por (pedido, evento, parada).",
         "from_extension": false,
         "is_partition": false,
@@ -33042,6 +33431,17 @@
         "function": "public.trigger_bitrix24_sync",
         "level": "ROW",
         "name": "on_order_status_change_sync_bitrix24",
+        "schema": "public",
+        "status": "enabled",
+        "table": "lalamove_orders",
+        "timing": "AFTER"
+      },
+      {
+        "definition": "CREATE TRIGGER trg_close_tracking_on_order_end AFTER INSERT OR UPDATE OF status ON lalamove_orders FOR EACH ROW EXECUTE FUNCTION trg_close_tracking_on_order_end()",
+        "events": "INSERT OR UPDATE",
+        "function": "public.trg_close_tracking_on_order_end",
+        "level": "ROW",
+        "name": "trg_close_tracking_on_order_end",
         "schema": "public",
         "status": "enabled",
         "table": "lalamove_orders",

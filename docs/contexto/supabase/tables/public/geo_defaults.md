@@ -29,6 +29,7 @@
 | 9 | `quiet_hours_tz` | `text` | não | `'America/Sao_Paulo'::text` |  |  |
 | 10 | `updated_by` | `uuid` | sim |  |  |  |
 | 11 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 12 | `late_tolerance_min` | `integer` | não | `15` |  | Minutos de atraso tolerados antes de emitir ETA_DELAY (etapa 50). Junto com lalamove_orders.scheduled_at. |
 
 
 ## Constraints

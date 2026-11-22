@@ -99,7 +99,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.geo_price_list | geo_price_list_read_authenticated | SELECT | PERMISSIVE | public | `(auth.role() = 'authenticated'::text)` |  |
 | public.geo_settings | geo_settings_admin_all | ALL | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
 | public.geo_settings | geo_settings_read_authenticated | SELECT | PERMISSIVE | public | `(auth.role() = 'authenticated'::text)` |  |
-| public.geo_usage | geo_usage_read_manager | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
+| public.geo_usage | geo_usage_read_manager | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_permission(auth.uid(), 'maps.usage.read'::text))` |  |
 | public.ip_whitelist | Admins can delete whitelist | DELETE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.ip_whitelist | Admins can insert whitelist | INSERT | PERMISSIVE | authenticated |  | `has_role(auth.uid(), 'admin'::app_role)` |
 | public.ip_whitelist | Admins can manage IP whitelist | ALL | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
@@ -152,6 +152,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.new_device_alerts | Users can insert their device alerts | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.new_device_alerts | Users can update their device alerts | UPDATE | PERMISSIVE | authenticated | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |  |
 | public.new_device_alerts | Users can view own device alerts | SELECT | PERMISSIVE | authenticated | `(auth.uid() = user_id)` |  |
+| public.notification_optouts | admin gerencia opt-outs | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.notification_optouts | service role escreve opt-outs | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.order_geo_events | order_geo_events_read | SELECT | PERMISSIVE | public | `(auth.role() = 'authenticated'::text)` |  |
 | public.password_reset_requests | Admins and managers can view reset requests | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
 | public.password_reset_requests | Admins can update reset requests | UPDATE | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |

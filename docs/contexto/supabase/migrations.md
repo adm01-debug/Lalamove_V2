@@ -183,6 +183,7 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122130000 | [geo_alert_types](migrations/20261122130000_geo_alert_types.sql) | 0 |
 | 20261122130100 | [geo_foundation](migrations/20261122130100_geo_foundation.sql) | 0 |
 | 20261122130200 | [alert_type_driver_assigned](migrations/20261122130200_alert_type_driver_assigned.sql) | 0 |
+| 20261122131000 | [geo_eta_delay](migrations/20261122131000_geo_eta_delay.sql) | 0 |
 | 20261122140000 | [fix_crons_dispatcher](migrations/20261122140000_fix_crons_dispatcher.sql) | 0 |
 | 20261123130000 | [geo_price_list_skus_faltantes](migrations/20261123130000_geo_price_list_skus_faltantes.sql) | 0 |
 | 20261123140000 | [geo_place_id_prefix_check](migrations/20261123140000_geo_place_id_prefix_check.sql) | 0 |
@@ -190,3 +191,8 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261123160000 | [job_queue_processing_log](migrations/20261123160000_job_queue_processing_log.sql) | 10 |
 | 20261123170000 | [indices_fk_faltantes](migrations/20261123170000_indices_fk_faltantes.sql) | 2 |
 | 20261123180000 | [geocode_match_confidence](migrations/20261123180000_geocode_match_confidence.sql) | 4 |
+| 20261123190000 | [cron_check_driver_alerts](migrations/20261123190000_cron_check_driver_alerts.sql) | 0 |
+| 20261123190001 | [revoke_anon_geo_rpcs](migrations/20261123190001_revoke_anon_geo_rpcs.sql) | 0 |
+| 20261123190002 | [geo_maps_permissions](migrations/20261123190002_geo_maps_permissions.sql) | 0 |
+| 20261123200000 | [optout_and_tracking_end](migrations/20261123200000_optout_and_tracking_end.sql) | 0 |
+| 20261124120000 | [internal_alert_channels](migrations/20261124120000_internal_alert_channels.sql) | 0 |

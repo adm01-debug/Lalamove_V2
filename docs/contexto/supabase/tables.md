@@ -32,7 +32,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.geo_blocks](tables/public/geo_blocks.md) | table | sim | 5 | 10 | não | Bloqueios geograficos por pais (permanente ou temporario). |
 | [public.geo_budget](tables/public/geo_budget.md) | table | sim | 2 | 7 | não | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. |
 | [public.geo_cache](tables/public/geo_cache.md) | table | sim | 0 | 6 | não | Cache de respostas de geocode/rota/static por hash de request (TTL por funcao). |
-| [public.geo_defaults](tables/public/geo_defaults.md) | table | sim | 2 | 11 | não | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). |
+| [public.geo_defaults](tables/public/geo_defaults.md) | table | sim | 2 | 12 | não | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). |
 | [public.geo_price_list](tables/public/geo_price_list.md) | table | sim | 2 | 6 | não |  |
 | [public.geo_settings](tables/public/geo_settings.md) | table | sim | 2 | 6 | não | Provedor de mapas por funcao (google\|mapbox\|off) com fallback. Admin edita em /settings/maps. |
 | [public.geo_usage](tables/public/geo_usage.md) | table | sim | 1 | 7 | não | Uso diario de APIs de mapa por provedor/funcao/sku com custo estimado (USD). |
@@ -53,6 +53,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.mcp_diagnostics_grants](tables/public/mcp_diagnostics_grants.md) | table | sim | 1 | 7 | não | Grants de acesso a diagnosticos via MCP (query_telemetry). |
 | [public.mfa_sessions](tables/public/mfa_sessions.md) | table | sim | 5 | 9 | sim | Sessoes MFA (TOTP) registradas por usuario. |
 | [public.new_device_alerts](tables/public/new_device_alerts.md) | table | sim | 4 | 8 | sim | Alertas de novo dispositivo detectado no login. |
+| [public.notification_optouts](tables/public/notification_optouts.md) | table | sim | 2 | 4 | não | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. |
 | [public.order_geo_events](tables/public/order_geo_events.md) | table | sim | 1 | 14 | não | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) - 1 por (pedido, evento, parada). |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 11 | não | Requisicoes de reset de senha com aprovacao de admin. |
 | [public.password_reset_tokens](tables/public/password_reset_tokens.md) | table | sim | 4 | 7 | não | Tokens de reset de senha com expiracao. |
