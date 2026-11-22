@@ -597,8 +597,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 9 — Lalamove: respostas do motorista (113–118)
 
 ### 113 — [L] Interpretador de respostas
-- [ ] Ordem: id de opção → número "1/2/3" → palavras-chave ("cheguei", "a caminho", "problema", "coletado") → texto livre
-- **Evidência:** tabela de casos em teste de unidade
+- [x] Ordem: id de opção → número "1/2/3" → palavras-chave ("cheguei", "a caminho", "problema", "coletado") → texto livre
+- **Evidência:** `_shared/messaging/inbound.ts` (`classifyInbound`, `normalizeInboundText`); 10 testes em `inbound.test.ts` com a tabela de frases reais — id de opção vence dígito, dígito vence palavra, "não consigo chegar" é `problem` e não `arrived`/`decline`, acento e caixa alta não mudam nada, e "assim" não vira "sim". **Falta:** ligar no consumo do inbound, que é a etapa 80/96 (migration `20261125120000`, PR #283).
 
 ### 114 — [L] Ações por resposta
 - [ ] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
