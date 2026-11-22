@@ -261,6 +261,13 @@ async function processPodFetch(supabase: any, payload: any): Promise<any> {
 async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
   internalLogger('info', 'Processing geo_backfill job', { payload });
 
+  // Etapa 39: modo lote por pedidos órfãos. Antes disto o job só geocodificava os
+  // endereços que vinham no payload e devolvia o resultado — nada era gravado em
+  // lalamove_orders, então pedido sem coordenada continuava sem coordenada para sempre.
+  if (payload.source === 'orders') {
+    return processGeoBackfillOrders(supabase, payload);
+  }
+
   const raw: any[] = Array.isArray(payload.addresses)
     ? payload.addresses
     : (payload.address ? [payload.address] : []);
@@ -365,6 +372,100 @@ async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
   }
 
   return { requested: raw.length, geocoded: done, skipped, failed, mode: 'single', results };
+}
+
+/**
+ * Etapa 39 — backfill de pedidos sem coordenada.
+ *
+ * Origem: pedidos de `bitrix24`/`uapi_import`/n8n anteriores à etapa 37, e pedidos em
+ * que a cotação não devolveu `stops[].coordinates`. Sem ponto, o `/map` não desenha o
+ * pedido e o cálculo de distância não roda.
+ *
+ * Regras de custo (o geocode é cobrado por chamada):
+ * - prioriza status ativo: quem ainda vai ser executado precisa do ponto primeiro;
+ * - `limit` default 100, teto de 500 por execução — o cap diário do provedor é
+ *   controlado pelo `geo-gateway` (orçamento + rate limit), não aqui;
+ * - precisão `low`/`unknown` ou endereço sem número liga `requires_address_review`:
+ *   coordenada aproximada não pode passar como exata num pedido que será despachado.
+ */
+export async function processGeoBackfillOrders(supabase: any, payload: any): Promise<any> {
+  const limit = Math.min(Math.max(Number(payload.limit) || 100, 1), 500);
+  const activeStatuses = ['ASSIGNING_DRIVER', 'ON_GOING', 'PICKED_UP', 'COMPLETED'];
+
+  // Pedido entra no backfill quando falta o ponto de coleta OU o de entrega.
+  const { data: orders, error } = await supabase
+    .from('lalamove_orders')
+    .select('id, pickup_address, delivery_address, pickup_latitude, delivery_latitude, lalamove_status, created_at')
+    .or('pickup_latitude.is.null,delivery_latitude.is.null')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(`geo_backfill orders: ${error.message}`);
+
+  const rows = (orders ?? []) as Array<Record<string, any>>;
+  // Ativos primeiro (sort estável), o resto na ordem em que veio.
+  rows.sort((a, b) => {
+    const ai = activeStatuses.includes(String(a.lalamove_status ?? '')) ? 0 : 1;
+    const bi = activeStatuses.includes(String(b.lalamove_status ?? '')) ? 0 : 1;
+    return ai - bi;
+  });
+
+  let geocoded = 0, notFound = 0, skipped = 0, failed = 0, review = 0;
+  const results: Array<Record<string, unknown>> = [];
+
+  for (const order of rows) {
+    const patch: Record<string, unknown> = {};
+    let needsReview = false;
+
+    for (const side of ['pickup', 'delivery'] as const) {
+      if (order[`${side}_latitude`] != null) continue;
+      const address = String(order[`${side}_address`] ?? '').trim();
+      if (address.length < 5) { notFound++; continue; }
+
+      try {
+        const data = await invokeEdge(supabase, 'geo-gateway', {
+          action: 'geocode',
+          address,
+          country: payload.country ?? 'br',
+          language: payload.language ?? 'pt',
+          limit: 1,
+        });
+        const best = Array.isArray(data) ? data[0] : data;
+        const loc = best?.location;
+        if (loc?.lat == null || loc?.lng == null) { notFound++; continue; }
+
+        patch[`${side}_latitude`] = loc.lat;
+        patch[`${side}_longitude`] = loc.lng;
+        if (best?.place_id) patch[`${side}_place_id`] = best.place_id;
+        patch.geocode_provider = best?.provider ?? null;
+        patch.geocode_precision = best?.precision ?? null;
+        if (best?.precision === 'low' || best?.precision === 'unknown') needsReview = true;
+        if (!best?.components?.number) needsReview = true;
+        geocoded++;
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        const isSkip = /GEO_UNAVAILABLE|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
+        if (isSkip) skipped++; else failed++;
+        results.push({ order_id: order.id, side, status: isSkip ? 'skipped' : 'error', error: msg.slice(0, 200) });
+      }
+    }
+
+    if (Object.keys(patch).length === 0) continue;
+    if (needsReview) { patch.requires_address_review = true; review++; }
+
+    const { error: upErr } = await supabase.from('lalamove_orders').update(patch).eq('id', order.id);
+    if (upErr) {
+      failed++;
+      results.push({ order_id: order.id, status: 'update_error', error: upErr.message });
+      continue;
+    }
+    results.push({ order_id: order.id, status: 'updated', fields: Object.keys(patch) });
+  }
+
+  return {
+    requested: rows.length, geocoded, not_found: notFound,
+    skipped, failed, requires_review: review, mode: 'orders', results,
+  };
 }
 
 /** Coordenada da próxima parada: lalamove_stops[index] com fallback nas colunas do pedido. */
