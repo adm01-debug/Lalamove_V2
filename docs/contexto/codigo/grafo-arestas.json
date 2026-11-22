@@ -245,7 +245,8 @@
   "src/components/auth/ProtectedRoute.tsx": [
    "src/hooks/useAuth.tsx",
    "src/hooks/useMFA.ts",
-   "src/hooks/usePermissions.ts"
+   "src/hooks/usePermissions.ts",
+   "src/lib/roles.ts"
   ],
   "src/components/dashboard/AIRouteChatbot.tsx": [
    "src/components/ui/button.tsx",
@@ -465,6 +466,7 @@
    "src/components/ui/sheet.tsx",
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
+   "src/lib/roles.ts",
    "src/lib/utils.ts"
   ],
   "src/components/layout/Sidebar.tsx": [
@@ -480,8 +482,12 @@
    "src/hooks/useRealtimeSubscriptions.ts",
    "src/hooks/useTheme.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/roles.ts",
    "src/lib/user-display.ts",
    "src/lib/utils.ts"
+  ],
+  "src/components/layout/sidebar-config.ts": [
+   "src/lib/roles.ts"
   ],
   "src/components/map/Google3DCanvas.tsx": [
    "src/components/map/hooks/useGoogleMapsLoader.ts",

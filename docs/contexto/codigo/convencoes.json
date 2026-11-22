@@ -16,12 +16,12 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (26)",
+   "src/lib (27)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (55)",
+   "co-localizado (__tests__) (56)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (28)"
   ],
@@ -48,7 +48,7 @@
  "nomenclatura": {
   "componentes": "PascalCase (72%)",
   "hooks": "use + PascalCase",
-  "servicos": "camelCase (83%)",
+  "servicos": "camelCase (84%)",
   "edge_functions": "kebab-case (100%)",
   "tabelas": "snake_case (94%)"
  },
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
    "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)",
    "feat: desligar auto-cadastro no front (item 9) (#300)",
    "feat: cliente do front entende o formato único de erro (item 42) (#301)",
-   "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)",
-   "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)"
+   "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

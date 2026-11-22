@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fa9a59c776` · branch `main` · 2026-11-22 18:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `62a5161249` · branch `main` · 2026-11-22 18:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -787,12 +787,12 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `update_error` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
-| `role` | `admin` | compara, filtra | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/lalamove-uapi/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
+| `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/lalamove-uapi/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts` |
-| `role` | `manager` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
-| `role` | `operator` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
+| `role` | `manager` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
+| `role` | `operator` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
 | `role` | `pickup_contact` | escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/job-worker/index.ts` |
 | `role` | `service_role` | compara | `supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
@@ -800,7 +800,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `role` | `system` | escreve | `supabase/functions/route-analyzer/index.ts` |
 | `role` | `user` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx`<br>`supabase/functions/route-analyzer/index.ts` |
-| `role` | `viewer` | compara, escreve | `src/components/layout/sidebar-config.ts`<br>`src/pages/RolesPage.tsx` |
+| `role` | `viewer` | compara, escreve | `src/lib/roles.ts`<br>`src/pages/RolesPage.tsx` |
 | `last_status` | `succeeded` | compara | `src/components/health/CronJobsHealthPanel.tsx` |
 | `tracking_status` | `ACTIVE` | compara, filtra | `src/components/orders/OrderDetailModal.tsx`<br>`supabase/functions/job-worker/index.ts` |
 | `notification_status` | `no_recipient` | compara | `src/components/orders/OrderGeoEvents.tsx` |
@@ -869,6 +869,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | CANCEL_ORDER_REASONS | 'USER_REQUESTED', 'INCORRECT_ORDER_DETAILS', 'WRONG_ADDRESS', 'MISTAKEN_ORDER', 'PRICE_TOO_HIGH', 'DELIVERY_ETA_TOO_LONG', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CANCEL', 'DRIVER_ASKED_FOR_MORE_MONEY', 'NO_CAPACITY', 'OTHER', | `src/lib/lalamoveReasons.ts` |
 | StageState | done \| current \| pending \| skipped \| aborted | `src/lib/lalamoveTimeline.ts` |
 | OrderErrorField | senderPhone \| recipientPhone \| schedule \| address | `src/lib/orderErrors.ts` |
+| AppRole | admin \| manager \| operator \| viewer | `src/lib/roles.ts` |
 | StatusLevel | operational \| attention \| critical \| info | `src/lib/statusPalette.ts` |
 | DriverStatus | ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE', SUSPENDED = 'SUSPENDED', BANNED = 'BANNED', // Compatibilidade com sistema atual APPROVED = 'APPROVED', PENDING_APPROVAL = 'PENDING_APPROVAL', BLOCKED = 'BLOCKED', WHITELIST = 'WHITELIST', BLACKLIST = 'BLACKLIST' | `src/types/driver.ts` |
 | RiskLevel | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
@@ -1936,6 +1937,8 @@ _nenhum item encontrado_
 | `granted` | `src/hooks/usePushNotifications.ts` |
 | `role` | `src/hooks/useRole.ts` |
 | `granted` | `src/hooks/useSecurityPushNotifications.ts` |
+| `admin` | `src/lib/roles.ts` |
+| `role` | `src/lib/roles.ts` |
 | `admin` | `src/pages/PermissionsPage.tsx` |
 | `manager` | `src/pages/PermissionsPage.tsx` |
 | `operator` | `src/pages/PermissionsPage.tsx` |
@@ -1955,7 +1958,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1249 testes em 108 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1264 testes em 109 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1983,6 +1986,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/check-manifest-fresh.test.mjs` | 15 | aceita manifesto identico apesar da ordem e do generated_at · detecta objeto novo na secao  · detecta alteracao de default pelo hash · detecta constraint removida do banco … |
 | `src/hooks/__tests__/useContractVersionUsage.trend.test.ts` | 15 | detectTrend — alerta de reversão de uso v1 · marca amostra insuficiente com menos de 4 pontos válidos · não alerta quando a proporção está descendo · não alerta quando a proporção é estável em zero … |
 | `src/lib/utils.test.ts` | 15 | deve combinar classes simples · deve lidar com valores undefined · deve lidar com valores null · deve lidar com condicionais … |
+| `src/lib/__tests__/roles.test.ts` | 15 | roleHierarchy · admin > manager > operator > viewer · ROLE_ORDER é a sequência crescente dos papéis · roleLevel … |
 | `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/bairro sublocality_level_1/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
@@ -2264,6 +2268,8 @@ _nenhum item encontrado_
 | - `phone` deve estar em E.164 (`+` seguido de 8–15 dígitos). | `src/lib/phone.ts` |
 | Extrai apenas dígitos, preservando o + inicial se existir. | `src/lib/phone.ts` |
 | Não altera o valor armazenado — apenas o texto visível ao usuário. | `src/lib/phone.ts` |
+| * Todas as camadas (roteamento, sidebar, gates de permissão) leem daqui para não | `src/lib/roles.ts` |
+| * `true` se `role` atende (ou supera) o nível de `required`. */ | `src/lib/roles.ts` |
 | * `statusColor()` devolve `hsl(var(--token))`, que apenas o CSS resolve; passar | `src/lib/statusPalette.ts` |
 | * Garante que a informação de status NÃO dependa apenas da cor: cada nível | `src/lib/statusPalette.ts` |
 | ── Rate limit ─────────────────────────────────────────────────────────── | `src/lib/uapiErrors.ts` |

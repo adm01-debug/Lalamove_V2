@@ -283,7 +283,7 @@
     "ProtectedRoute"
    ],
    "export_default": null,
-   "linhas": 77,
+   "linhas": 71,
    "dominio": "components/auth",
    "hooks_locais": [
     "useAuth",
@@ -766,7 +766,7 @@
     "MobileSidebar"
    ],
    "export_default": null,
-   "linhas": 337,
+   "linhas": 333,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth"

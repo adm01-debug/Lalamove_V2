@@ -1,11 +1,11 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 42,
+ "total": 43,
  "por_camada": {
   "i18n": 1,
   "integrations": 4,
-  "lib": 26,
+  "lib": 27,
   "services": 1,
   "types": 4,
   "utils": 6
@@ -693,6 +693,37 @@
    "usado_por": 1,
    "usado_por_modulos": [
     "hooks"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/roles.ts",
+   "camada": "lib",
+   "exports": [
+    "AppRole",
+    "ROLE_ORDER",
+    "getRoleColor",
+    "getRoleDisplayName",
+    "hasRole",
+    "meetsRole",
+    "roleHierarchy",
+    "roleLevel"
+   ],
+   "export_default": null,
+   "linhas": 55,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 4,
+   "usado_por_modulos": [
+    "components/auth",
+    "components/layout"
    ],
    "coberto_por_testes": 1,
    "orfao": false

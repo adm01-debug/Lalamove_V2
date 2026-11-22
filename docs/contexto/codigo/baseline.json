@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
+  "commit": "62a5161249da0e2e826d6692816953868c6df82c",
   "branch": "main",
-  "data_commit": "2026-11-22T15:14:03-03:00",
+  "data_commit": "2026-11-22T15:31:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "62a5161",
+    "data": "2026-11-22",
+    "assunto": "feat: hierarquia de papeis numa unica fonte (item 48) (#303)"
+   },
    {
     "sha": "fa9a59c",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "95b66ec",
     "data": "2026-11-22",
     "assunto": "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)"
-   },
-   {
-    "sha": "d7c05dd",
-    "data": "2026-11-22",
-    "assunto": "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)"
    }
   ],
-  "arquivos_mudados_7d": 355,
+  "arquivos_mudados_7d": 359,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 204
+    "commits": 205
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1061,
-  "arquivos_codigo": 660,
-  "linhas_codigo": 129185,
+  "arquivos_total": 1063,
+  "arquivos_codigo": 662,
+  "linhas_codigo": 129282,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 158,
+  "testes": 159,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 161,
-   "linhas": 29592
+   "linhas": 29566
   },
   "src/hooks": {
    "arquivos": 111,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 44,
-   "linhas": 3923
+   "arquivos": 46,
+   "linhas": 4046
   },
   "src/main.tsx": {
    "arquivos": 1,

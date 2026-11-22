@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
+  "sha": "62a5161249da0e2e826d6692816953868c6df82c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 18:14 UTC",
-  "files_total": 1055,
-  "code_files": 871,
-  "code_lines": 150362
+  "generated_at": "2026-11-22 18:32 UTC",
+  "files_total": 1057,
+  "code_files": 873,
+  "code_lines": 150459
  },
  "version": "1.3.2",
- "facts_hash": "863b669d21c3f52d",
+ "facts_hash": "7fa371c6ecc55dfd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 310,
+   ".ts": 312,
    ".tsx": 237,
    ".sql": 202,
    ".mjs": 109,
@@ -20841,7 +20841,7 @@
   {
    "module": "src/components",
    "files": 161,
-   "lines": 29592,
+   "lines": 29566,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21274,8 +21274,8 @@
   },
   {
    "module": "src/lib",
-   "files": 44,
-   "lines": 3923,
+   "files": 46,
+   "lines": 4046,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -21297,6 +21297,7 @@
     "phone.ts: PhoneValidationResult, validateBrazilianPhone, maskBrazilianPhone",
     "postMessage.ts: BITRIX24_CONNECTED, isTrustedBitrix24Origin",
     "postgrest.ts: escapeIlike, buildOrIlike",
+    "roles.ts: AppRole, ROLE_ORDER, roleHierarchy, roleLevel, meetsRole, hasRole",
     "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, statusColorCss, STATUS_GLYPH, STATUS_A11Y_LABEL",
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
     "uapiErrors.ts: UapiErrorInfo, UAPI_ERROR_MAP, resolveUapiError, isUapiAuthFailure",
@@ -21354,6 +21355,7 @@
     "src/lib/phone.ts",
     "src/lib/postMessage.ts",
     "src/lib/postgrest.ts",
+    "src/lib/roles.ts",
     "src/lib/statusPalette.ts",
     "src/lib/uapi-proxy.ts",
     "src/lib/uapiErrors.ts",
@@ -21372,6 +21374,7 @@
     "src/lib/__tests__/lalamoveTimeline.test.ts",
     "src/lib/__tests__/postMessage.test.ts",
     "src/lib/__tests__/postgrest.test.ts",
+    "src/lib/__tests__/roles.test.ts",
     "src/lib/__tests__/statusPalette.test.ts",
     "src/lib/__tests__/uapiErrors.test.ts"
    ]
@@ -24610,6 +24613,11 @@
     "values": "senderPhone | recipientPhone | schedule | address"
    },
    {
+    "file": "src/lib/roles.ts",
+    "name": "AppRole",
+    "values": "admin | manager | operator | viewer"
+   },
+   {
     "file": "src/lib/statusPalette.ts",
     "name": "StatusLevel",
     "values": "operational | attention | critical | info"
@@ -26464,6 +26472,14 @@
     "value": "granted"
    },
    {
+    "file": "src/lib/roles.ts",
+    "value": "admin"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "value": "role"
+   },
+   {
     "file": "src/pages/PermissionsPage.tsx",
     "value": "admin"
    },
@@ -26840,6 +26856,14 @@
    {
     "file": "src/lib/phone.ts",
     "text": "Não altera o valor armazenado — apenas o texto visível ao usuário."
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "text": "* Todas as camadas (roteamento, sidebar, gates de permissão) leem daqui para não"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "text": "* `true` se `role` atende (ou supera) o nível de `required`. */"
    },
    {
     "file": "src/lib/statusPalette.ts",
@@ -30873,48 +30897,6 @@
     "kind": "filtra"
    },
    {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "admin",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "manager",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "operator",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "viewer",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "admin",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "manager",
-    "kind": "compara"
-   },
-   {
-    "file": "src/components/layout/sidebar-config.ts",
-    "field": "role",
-    "value": "operator",
-    "kind": "compara"
-   },
-   {
     "file": "src/components/map/LiveMap.tsx",
     "field": "type",
     "value": "Feature",
@@ -33048,6 +33030,48 @@
     "file": "src/lib/lalamoveOrderEdit.ts",
     "field": "status",
     "value": "ASSIGNING_DRIVER",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "admin",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "manager",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "operator",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "viewer",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "admin",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "manager",
+    "kind": "compara"
+   },
+   {
+    "file": "src/lib/roles.ts",
+    "field": "role",
+    "value": "operator",
     "kind": "compara"
    },
    {
@@ -38747,6 +38771,66 @@
    {
     "file": "src/lib/__tests__/postgrest.test.ts",
     "name": "escapa o termo antes de interpolar"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "roleHierarchy"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "admin > manager > operator > viewer"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "ROLE_ORDER é a sequência crescente dos papéis"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "roleLevel"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "retorna 0 para papel nulo ou desconhecido"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "retorna o nível do papel"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "meetsRole"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "sem required sempre libera"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "admin atende manager, mas manager não atende admin"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "operator não atende manager"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "hasRole"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "true somente se o papel exato está ativo"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "false para lista nula"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "getRoleDisplayName"
+   },
+   {
+    "file": "src/lib/__tests__/roles.test.ts",
+    "name": "traduz cada papel"
    },
    {
     "file": "src/lib/__tests__/statusPalette.test.ts",
@@ -46251,27 +46335,27 @@
       "compara:src/components/dashboard/AIRouteChatbot.tsx",
       "escreve:src/components/dashboard/AIRouteChatbot.tsx"
      ],
+     "option": [
+      "compara:src/components/ui/accessible-card.tsx"
+     ],
      "admin": [
-      "compara:src/components/layout/sidebar-config.ts",
+      "compara:src/lib/roles.ts",
       "compara:src/pages/PermissionsPage.tsx",
       "compara:src/pages/ProfilePage.tsx",
       "compara:supabase/functions/lalamove-uapi/index.ts",
       "filtra:supabase/functions/simulate-driver-movement/index.ts"
      ],
      "manager": [
-      "compara:src/components/layout/sidebar-config.ts",
+      "compara:src/lib/roles.ts",
       "compara:src/pages/PermissionsPage.tsx"
      ],
      "operator": [
-      "compara:src/components/layout/sidebar-config.ts",
+      "compara:src/lib/roles.ts",
       "compara:src/pages/PermissionsPage.tsx"
      ],
      "viewer": [
-      "compara:src/components/layout/sidebar-config.ts",
+      "compara:src/lib/roles.ts",
       "escreve:src/pages/RolesPage.tsx"
-     ],
-     "option": [
-      "compara:src/components/ui/accessible-card.tsx"
      ],
      "driver": [
       "compara:supabase/functions/_shared/messaging/router.ts",
@@ -57185,7 +57269,7 @@
   },
   "src/components/auth/ProtectedRoute.tsx": {
    "path": "src/components/auth/ProtectedRoute.tsx",
-   "lines": 77,
+   "lines": 71,
    "exports": [
     "function ProtectedRoute"
    ],
@@ -57671,7 +57755,7 @@
   },
   "src/components/layout/MobileSidebar.tsx": {
    "path": "src/components/layout/MobileSidebar.tsx",
-   "lines": 337,
+   "lines": 333,
    "exports": [
     "function MobileSidebar"
    ],
@@ -57781,51 +57865,11 @@
   },
   "src/components/layout/sidebar-config.ts": {
    "path": "src/components/layout/sidebar-config.ts",
-   "lines": 122,
+   "lines": 106,
    "exports": [
     "interface MenuItem",
     "interface MenuCategory",
-    "const menuCategories",
-    "const roleHierarchy",
-    "function getRoleDisplayName",
-    "function getRoleColor"
-   ],
-   "status_values": [
-    {
-     "field": "role",
-     "value": "admin",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "manager",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "operator",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "viewer",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "admin",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "manager",
-     "kind": "compara"
-    },
-    {
-     "field": "role",
-     "value": "operator",
-     "kind": "compara"
-    }
+    "const menuCategories"
    ]
   },
   "src/components/map/Google3DCanvas.tsx": {
@@ -65833,6 +65877,72 @@
    ],
    "doc": "Escapa um termo de busca para uso em filtros `ilike` do PostgREST. PostgREST interpreta `,`, `(`, `)`, `.` e `%` como operadores/estrutura no filtro `.or(...)`. Sem escapar, um termo de usuário como `a,b)c` quebra o filtro ou injeta uma condição arbitrária. Remove os caracteres que têm significado n …"
   },
+  "src/lib/roles.ts": {
+   "path": "src/lib/roles.ts",
+   "lines": 55,
+   "exports": [
+    "type AppRole",
+    "const ROLE_ORDER",
+    "const roleHierarchy",
+    "function roleLevel",
+    "function meetsRole",
+    "function hasRole",
+    "function getRoleDisplayName",
+    "function getRoleColor"
+   ],
+   "enums": [
+    {
+     "name": "AppRole",
+     "values": "admin | manager | operator | viewer"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "role",
+     "value": "admin",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "manager",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "operator",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "viewer",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "admin",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "manager",
+     "kind": "compara"
+    },
+    {
+     "field": "role",
+     "value": "operator",
+     "kind": "compara"
+    }
+   ],
+   "role_checks": [
+    "admin",
+    "role"
+   ],
+   "rule_comments": [
+    "* Todas as camadas (roteamento, sidebar, gates de permissão) leem daqui para não",
+    "* `true` se `role` atende (ou supera) o nível de `required`. */"
+   ],
+   "doc": "Fonte de verdade única para papéis e hierarquia de acesso (item 48). Todas as camadas (roteamento, sidebar, gates de permissão) leem daqui para não divergirem a ordem dos papéis. `roleHierarchy` é a ordem numérica usada nas comparações \"admin > manager > operator > viewer\"."
+  },
   "src/lib/statusPalette.ts": {
    "path": "src/lib/statusPalette.ts",
    "lines": 133,
@@ -66142,6 +66252,32 @@
     "buildOrIlike",
     "monta filtro ilike válido para vários campos",
     "escapa o termo antes de interpolar"
+   ]
+  },
+  "src/lib/__tests__/roles.test.ts": {
+   "path": "src/lib/__tests__/roles.test.ts",
+   "lines": 68,
+   "is_test": true,
+   "role_checks": [
+    "admin",
+    "viewer"
+   ],
+   "tests": [
+    "roleHierarchy",
+    "admin > manager > operator > viewer",
+    "ROLE_ORDER é a sequência crescente dos papéis",
+    "roleLevel",
+    "retorna 0 para papel nulo ou desconhecido",
+    "retorna o nível do papel",
+    "meetsRole",
+    "sem required sempre libera",
+    "admin atende manager, mas manager não atende admin",
+    "operator não atende manager",
+    "hasRole",
+    "true somente se o papel exato está ativo",
+    "false para lista nula",
+    "getRoleDisplayName",
+    "traduz cada papel"
    ]
   },
   "src/lib/__tests__/statusPalette.test.ts": {
@@ -73636,10 +73772,25 @@
   }
  },
  "git": {
-  "sha": "fa9a59c7764b3ee86179cad0cb6c91a3ced7859f",
+  "sha": "62a5161249da0e2e826d6692816953868c6df82c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "62a5161",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/components/auth/ProtectedRoute.tsx",
+     "src/components/layout/MobileSidebar.tsx",
+     "src/components/layout/Sidebar.tsx",
+     "src/components/layout/sidebar-config.ts",
+     "src/lib/__tests__/roles.test.ts",
+     "src/lib/roles.ts"
+    ]
+   },
    {
     "sha": "fa9a59c",
     "date": "2026-11-22",
@@ -73999,21 +74150,16 @@
      "supabase/functions/lalamove-api/geocode-fallback.test.ts",
      "supabase/functions/lalamove-api/geocode-fallback.ts"
     ]
-   },
-   {
-    "sha": "124e628",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(agentes): registra pendencias do dono (#273)",
-    "files": [
-     "docs/agentes/pendencias-dono.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    17
+    18
+   ],
+   [
+    "src/components/auth/ProtectedRoute.tsx",
+    3
    ],
    [
     "src/components/map/markerFactories.ts",
@@ -74045,10 +74191,6 @@
    ],
    [
     "src/components/auth/ProtectedRoute.test.tsx",
-    2
-   ],
-   [
-    "src/components/auth/ProtectedRoute.tsx",
     2
    ],
    [

@@ -3,10 +3,10 @@
  "format_version": 1,
  "nota": "ProtectedRoute (src/components/auth/ProtectedRoute.tsx) × sidebar-config.ts × enums de papel do banco. menu_visivel_sem_acesso = item aparece para papel que a rota bloqueia.",
  "hierarquia_de_papeis": {
-  "admin": 4,
-  "manager": 3,
+  "viewer": 1,
   "operator": 2,
-  "viewer": 1
+  "manager": 3,
+  "admin": 4
  },
  "guards": [
   "src/components/auth/ProtectedRoute.tsx"

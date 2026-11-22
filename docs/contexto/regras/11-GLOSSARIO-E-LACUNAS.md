@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fa9a59c776` · branch `main` · 2026-11-22 18:14 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `62a5161249` · branch `main` · 2026-11-22 18:32 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -142,6 +142,7 @@
 | `CANCEL_ORDER_REASONS` (TS) | 'USER_REQUESTED', 'INCORRECT_ORDER_DETAILS', 'WRONG_ADDRESS', 'MISTAKEN_ORDER', 'PRICE_TOO_HIGH', 'DELIVERY_ETA_TOO_LONG', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CANCEL', 'DRIVER_ASKED_FOR_MORE_MONEY', 'NO_CAPACITY', 'OTHER', |  | `src/lib/lalamoveReasons.ts` |
 | `StageState` (TS) | done \| current \| pending \| skipped \| aborted |  | `src/lib/lalamoveTimeline.ts` |
 | `OrderErrorField` (TS) | senderPhone \| recipientPhone \| schedule \| address |  | `src/lib/orderErrors.ts` |
+| `AppRole` (TS) | admin \| manager \| operator \| viewer |  | `src/lib/roles.ts` |
 | `StatusLevel` (TS) | operational \| attention \| critical \| info |  | `src/lib/statusPalette.ts` |
 | `DriverStatus` (TS) | ACTIVE = 'ACTIVE', INACTIVE = 'INACTIVE', SUSPENDED = 'SUSPENDED', BANNED = 'BANNED', // Compatibilidade com sistema atual APPROVED = 'APPROVED', PENDING_APPROVAL = 'PENDING_APPROVAL', BLOCKED = 'BLOCKED', WHITELIST = 'WHITELIST', BLACKLIST = 'BLACKLIST' |  | `src/types/driver.ts` |
 | `RiskLevel` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
