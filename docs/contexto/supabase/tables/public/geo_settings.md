@@ -19,7 +19,7 @@
 | # | coluna | tipo | nullable | default | identity/generated | comentário |
 |---|---|---|---|---|---|---|
 | 1 | `function` | `text` | não |  |  |  |
-| 2 | `provider` | `text` | não |  |  |  |
+| 2 | `provider` | `text` | não |  |  | google \| mapbox \| auto \| off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox. |
 | 3 | `fallback_provider` | `text` | sim |  |  |  |
 | 4 | `config` | `jsonb` | não | `'{}'::jsonb` |  |  |
 | 5 | `updated_by` | `uuid` | sim |  |  |  |
@@ -30,10 +30,10 @@
 
 | nome | tipo | definição | on delete | on update | validada |
 |---|---|---|---|---|---|
-| geo_settings_fallback_provider_check | CHECK | `CHECK (fallback_provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'off'::text]))` |  |  | sim |
-| geo_settings_function_check | CHECK | `CHECK (function = ANY (ARRAY['tiles'::text, 'autocomplete'::text, 'geocode'::text, 'reverse'::text, 'route'::text, 'matrix'::text, 'static'::text, 'snap'::text, 'validate'::text]))` |  |  | sim |
+| geo_settings_fallback_provider_check | CHECK | `CHECK (fallback_provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'auto'::text, 'off'::text]))` |  |  | sim |
+| geo_settings_function_check | CHECK | `CHECK (function = ANY (ARRAY['tiles'::text, 'autocomplete'::text, 'geocode'::text, 'reverse'::text, 'route'::text, 'matrix'::text, 'static'::text, 'snap'::text, 'validate'::text, 'isochrone'::text, 'optimization'::text, 'tilequery'::text]))` |  |  | sim |
 | geo_settings_pkey | PRIMARY KEY | `PRIMARY KEY (function)` |  |  | sim |
-| geo_settings_provider_check | CHECK | `CHECK (provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'off'::text]))` |  |  | sim |
+| geo_settings_provider_check | CHECK | `CHECK (provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'auto'::text, 'off'::text]))` |  |  | sim |
 | geo_settings_updated_by_fkey | FOREIGN KEY | `FOREIGN KEY (updated_by) REFERENCES auth.users(id)` | NO ACTION | NO ACTION | sim |
 
 

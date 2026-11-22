@@ -17,3 +17,4 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 19 | lalamove_uapi_token_refresh_hourly | `17 * * * *` | sim | postgres | postgres | `   select net.http_post(     url:='https://iecgydonctmabiijadsf.supabase.co/functions/v1/lalamove-token-refresh',     headers:='{"Content-Type": "application/json", "apikey": "[REDACTED_KEY]"}'::jsonb,     body:=concat('{"time": "', now(), '"}')::jsonb   ) as request_id; ` |
 | 20 | process-job-queue | `* * * * *` | sim | postgres | postgres | `   select public.process_job_queue(10); ` |
 | 25 | geo-jobs-refresh | `1-59/5 * * * *` | sim | postgres | postgres | `SELECT public.refresh_geo_jobs();` |
+| 26 | refresh-cache-views | `3 * * * *` | sim | postgres | postgres | `SELECT public.refresh_cache_view();` |

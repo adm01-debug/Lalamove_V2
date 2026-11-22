@@ -5336,7 +5336,7 @@
         "type": "text"
       },
       {
-        "comment": null,
+        "comment": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox.",
         "default": null,
         "generated": null,
         "identity": null,
@@ -14844,7 +14844,7 @@
           "fallback_provider"
         ],
         "deferrable": false,
-        "definition": "CHECK (fallback_provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'off'::text]))",
+        "definition": "CHECK (fallback_provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'auto'::text, 'off'::text]))",
         "name": "geo_settings_fallback_provider_check",
         "on_delete": null,
         "on_update": null,
@@ -14861,7 +14861,7 @@
           "function"
         ],
         "deferrable": false,
-        "definition": "CHECK (function = ANY (ARRAY['tiles'::text, 'autocomplete'::text, 'geocode'::text, 'reverse'::text, 'route'::text, 'matrix'::text, 'static'::text, 'snap'::text, 'validate'::text]))",
+        "definition": "CHECK (function = ANY (ARRAY['tiles'::text, 'autocomplete'::text, 'geocode'::text, 'reverse'::text, 'route'::text, 'matrix'::text, 'static'::text, 'snap'::text, 'validate'::text, 'isochrone'::text, 'optimization'::text, 'tilequery'::text]))",
         "name": "geo_settings_function_check",
         "on_delete": null,
         "on_update": null,
@@ -14895,7 +14895,7 @@
           "provider"
         ],
         "deferrable": false,
-        "definition": "CHECK (provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'off'::text]))",
+        "definition": "CHECK (provider = ANY (ARRAY['google'::text, 'mapbox'::text, 'auto'::text, 'off'::text]))",
         "name": "geo_settings_provider_check",
         "on_delete": null,
         "on_update": null,
@@ -17493,6 +17493,15 @@
           "jobname": "geo-jobs-refresh",
           "schedule": "1-59/5 * * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.refresh_cache_view();",
+          "database": "postgres",
+          "jobid": 26,
+          "jobname": "refresh-cache-views",
+          "schedule": "3 * * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -17598,9 +17607,13 @@
             {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.geo_emit_event",
@@ -18266,6 +18279,10 @@
         "callers": {
           "code": [
             {
+              "file": "scripts/inventario/banco.sql",
+              "hits": 1
+            },
+            {
               "file": "src/hooks/useGeoAdmin.ts",
               "hits": 1
             },
@@ -18278,7 +18295,7 @@
               "hits": 2
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -18311,9 +18328,13 @@
             {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 4
+            },
+            {
+              "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking"
@@ -18644,9 +18665,13 @@
             {
               "file": "supabase/migrations/20261122120200_job_queue_system.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.process_job_queue"
@@ -19406,9 +19431,13 @@
             {
               "file": "supabase/migrations/20261122120200_job_queue_system.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.process_job_queue"
@@ -19618,9 +19647,13 @@
             {
               "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [
             "20:process-job-queue"
           ],
@@ -19818,10 +19851,16 @@
             {
               "file": "supabase/migrations/20261122090000_cache_system_backend.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 3,
-          "cron": [],
+          "code_total_files": 4,
+          "cron": [
+            "26:refresh-cache-views"
+          ],
           "db": [],
           "triggers": [],
           "views": []
@@ -30635,41 +30674,6 @@
           "publication": "supabase_realtime",
           "schema": "public",
           "table": "report_presets"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_08_28"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_08_29"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_08_30"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_08_31"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_09_01"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_09_02"
-        },
-        {
-          "publication": "supabase_realtime_messages_publication",
-          "schema": "realtime",
-          "table": "messages_2026_09_03"
         },
         {
           "publication": "supabase_realtime_messages_publication",
