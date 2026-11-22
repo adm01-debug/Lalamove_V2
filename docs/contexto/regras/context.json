@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f7d18db623fa3fdfd740a985a5a1395b79fb2a3f",
+  "sha": "a08dd878de7484247f24bb1add51921958147ab6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 04:02 UTC",
-  "files_total": 991,
-  "code_files": 817,
-  "code_lines": 140352
+  "generated_at": "2026-11-22 04:09 UTC",
+  "files_total": 992,
+  "code_files": 818,
+  "code_lines": 140753
  },
  "version": "1.3.2",
- "facts_hash": "863b4835603b7433",
+ "facts_hash": "7da7fa081341ecf9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 279,
+   ".ts": 280,
    ".tsx": 231,
    ".sql": 187,
    ".mjs": 107,
@@ -17743,8 +17743,8 @@
      "Unknown job type: ${unknownType}",
      "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
      "geo_backfill exige payload.addresses[] ou payload.address",
-     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)",
-     "pod_fetch: pedido ${key} não encontrado em lalamove_orders"
+     "geo_backfill orders: ${error.message}",
+     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)"
     ],
     "side_effects": [
      "invoke("
@@ -20380,7 +20380,7 @@
   {
    "module": "src/components",
    "files": 155,
-   "lines": 28377,
+   "lines": 28500,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21166,8 +21166,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 64,
-   "lines": 15866,
+   "files": 65,
+   "lines": 16144,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21230,6 +21230,7 @@
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoValidation, GeoSuggestion",
+    "index.ts: processGeoBackfillOrders",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -21291,6 +21292,7 @@
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     "supabase/functions/geo-gateway/providers/types.ts",
     "supabase/functions/get-mapbox-token/index.ts",
+    "supabase/functions/job-worker/geo-backfill-orders.test.ts",
     "supabase/functions/job-worker/index.ts",
     "supabase/functions/lalamove-api/coordinates.test.ts",
     "supabase/functions/lalamove-api/coordinates.ts",
@@ -21896,6 +21898,7 @@
     ],
     "update": [
      "src/hooks/useBitrix24.ts",
+     "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-api/coordinates.ts",
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts"
@@ -22483,6 +22486,7 @@
     "id",
     "internal_order_id",
     "lalamove_id",
+    "lalamove_status",
     "pickup_address",
     "pickup_latitude",
     "pickup_longitude",
@@ -25351,6 +25355,10 @@
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
+    "msg": "geo_backfill orders: ${error.message}"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
     "msg": "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)"
    },
    {
@@ -26176,6 +26184,18 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "text": "Provedor desligado / orçamento estourado / rate limit: não é falha do job."
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "- `limit` default 100, teto de 500 por execução — o cap diário do provedor é"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "controlado pelo `geo-gateway` (orçamento + rate limit), não aqui;"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "coordenada aproximada não pode passar como exata num pedido que será despachado."
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -33171,6 +33191,18 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "field": "status",
+    "value": "update_error",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "updated",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
     "value": "skipped",
     "kind": "escreve"
    },
@@ -35919,6 +35951,18 @@
     "name": "mostra endereço já usado antes de qualquer chamada ao provedor"
    },
    {
+    "file": "src/components/orders/AddressAutocomplete.test.tsx",
+    "name": "AddressAutocomplete — onAddressSelected (etapa 34)"
+   },
+   {
+    "file": "src/components/orders/AddressAutocomplete.test.tsx",
+    "name": "entrega o endereço resolvido com place_id, componentes e precisão"
+   },
+   {
+    "file": "src/components/orders/AddressAutocomplete.test.tsx",
+    "name": "emite o endereço mesmo sem coordenada, deixando o consumidor decidir"
+   },
+   {
     "file": "src/components/orders/OrderGeoEvents.test.tsx",
     "name": "OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio)"
    },
@@ -38177,6 +38221,42 @@
    {
     "file": "supabase/functions/geo-gateway/resolver.test.ts",
     "name": "rateGuard com consume: lote maior que o limite inteiro é recusado de imediato"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "grava coordenada de coleta e entrega e marca provedor/precisão"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "endereço sem número liga requires_address_review"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "precisão low liga requires_address_review"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "lado que já tem coordenada não é recotado nem sobrescrito"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "sem resultado do provedor não grava nada"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "provedor desligado é skipped, não failed — não queima tentativa"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "status ativo é processado primeiro"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "endereço vazio ou curto não gasta chamada ao provedor"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "name": "limit é limitado entre 1 e 500"
    },
    {
     "file": "supabase/functions/lalamove-api/coordinates.test.ts",
@@ -43907,6 +43987,12 @@
      "invalid": [
       "escreve:supabase/functions/job-worker/index.ts"
      ],
+     "update_error": [
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
+     "updated": [
+      "escreve:supabase/functions/job-worker/index.ts"
+     ],
      "skipped": [
       "escreve:supabase/functions/job-worker/index.ts"
      ],
@@ -49081,6 +49167,20 @@
    {
     "kind": "status",
     "msg": "valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:supabase/functions/job-worker/index.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `update_error` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "escreve:supabase/functions/job-worker/index.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `updated` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "escreve:supabase/functions/job-worker/index.ts"
     ]
@@ -55956,7 +56056,7 @@
   },
   "src/components/orders/AddressAutocomplete.test.tsx": {
    "path": "src/components/orders/AddressAutocomplete.test.tsx",
-   "lines": 119,
+   "lines": 199,
    "is_test": true,
    "tests": [
     "AddressAutocomplete — estados de falha (etapa 40)",
@@ -55964,12 +56064,18 @@
     "erro sem status (rede) tem mensagem distinta do 429",
     "sem resultado e sem falha sugere incluir número ou CEP",
     "AddressAutocomplete — endereços frequentes (etapa 41)",
-    "mostra endereço já usado antes de qualquer chamada ao provedor"
+    "mostra endereço já usado antes de qualquer chamada ao provedor",
+    "AddressAutocomplete — onAddressSelected (etapa 34)",
+    "entrega o endereço resolvido com place_id, componentes e precisão",
+    "emite o endereço mesmo sem coordenada, deixando o consumidor decidir"
+   ],
+   "webhook_events": [
+    "autocomplete"
    ]
   },
   "src/components/orders/AddressAutocomplete.tsx": {
    "path": "src/components/orders/AddressAutocomplete.tsx",
-   "lines": 375,
+   "lines": 386,
    "exports": [
     "function AddressAutocomplete"
    ],
@@ -56076,7 +56182,7 @@
   },
   "src/components/orders/NewOrderDialog.tsx": {
    "path": "src/components/orders/NewOrderDialog.tsx",
-   "lines": 1060,
+   "lines": 1092,
    "exports": [
     "function NewOrderDialog"
    ],
@@ -67120,9 +67226,34 @@
     "MAPBOX_ACCESS_TOKEN"
    ]
   },
+  "supabase/functions/job-worker/geo-backfill-orders.test.ts": {
+   "path": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+   "lines": 177,
+   "is_test": true,
+   "errors": [
+    "tabela inesperada: ${table}"
+   ],
+   "rule_comments": [
+    "O fake cobre só o que a função usa: `from().select().or().order().limit()`,"
+   ],
+   "tests": [
+    "grava coordenada de coleta e entrega e marca provedor/precisão",
+    "endereço sem número liga requires_address_review",
+    "precisão low liga requires_address_review",
+    "lado que já tem coordenada não é recotado nem sobrescrito",
+    "sem resultado do provedor não grava nada",
+    "provedor desligado é skipped, não failed — não queima tentativa",
+    "status ativo é processado primeiro",
+    "endereço vazio ou curto não gasta chamada ao provedor",
+    "limit é limitado entre 1 e 500"
+   ]
+  },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 867,
+   "lines": 968,
+   "exports": [
+    "function processGeoBackfillOrders"
+   ],
    "tables": [
     {
      "table": "lalamove_orders",
@@ -67131,6 +67262,14 @@
     {
      "table": "lalamove_stops",
      "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "update"
     },
     {
      "table": "lalamove_stops",
@@ -67167,10 +67306,14 @@
    ],
    "table_cols": {
     "lalamove_orders": [
+     "created_at",
+     "delivery_address",
      "delivery_latitude",
      "delivery_longitude",
      "id",
      "lalamove_id",
+     "lalamove_status",
+     "pickup_address",
      "pickup_latitude",
      "pickup_longitude",
      "pod_received",
@@ -67223,6 +67366,7 @@
     "Unknown job type: ${unknownType}",
     "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
     "geo_backfill exige payload.addresses[] ou payload.address",
+    "geo_backfill orders: ${error.message}",
     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)",
     "pod_fetch: pedido ${key} não encontrado em lalamove_orders",
     "pod_fetch: pedido ${key} sem lalamove_id — impossível consultar o provedor",
@@ -67232,6 +67376,16 @@
     {
      "field": "status",
      "value": "invalid",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "update_error",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "updated",
      "kind": "escreve"
     },
     {
@@ -67357,6 +67511,9 @@
    ],
    "rule_comments": [
     "Provedor desligado / orçamento estourado / rate limit: não é falha do job.",
+    "- `limit` default 100, teto de 500 por execução — o cap diário do provedor é",
+    "controlado pelo `geo-gateway` (orçamento + rate limit), não aqui;",
+    "coordenada aproximada não pode passar como exata num pedido que será despachado.",
     "Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego.",
     "Verificar autenticação (apenas service role ou autenticado)"
    ],
@@ -69645,10 +69802,24 @@
   }
  },
  "git": {
-  "sha": "f7d18db623fa3fdfd740a985a5a1395b79fb2a3f",
+  "sha": "a08dd878de7484247f24bb1add51921958147ab6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a08dd87",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/components/orders/AddressAutocomplete.test.tsx",
+     "src/components/orders/AddressAutocomplete.tsx",
+     "src/components/orders/NewOrderDialog.tsx",
+     "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "f7d18db",
     "date": "2026-11-22",
@@ -69997,21 +70168,12 @@
      "src/hooks/useGeoSearch.ts",
      "supabase/functions/job-worker/index.ts"
     ]
-   },
-   {
-    "sha": "0aa60dd",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)",
-    "files": [
-     "docs/agentes/banco.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    8
+    9
    ],
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -70030,8 +70192,20 @@
     4
    ],
    [
+    "src/components/orders/AddressAutocomplete.test.tsx",
+    3
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.tsx",
+    3
+   ],
+   [
     "supabase/functions/geo-gateway/providers/types.ts",
     3
+   ],
+   [
+    "supabase/functions/job-worker/index.ts",
+    2
    ],
    [
     "supabase/functions/_shared/schemas.ts",
@@ -70039,14 +70213,6 @@
    ],
    [
     "supabase/functions/send-notification/index.ts",
-    2
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.test.tsx",
-    2
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.tsx",
     2
    ],
    [
@@ -70083,10 +70249,6 @@
    ],
    [
     "supabase/.temp/storage-migration",
-    2
-   ],
-   [
-    "supabase/.temp/storage-version",
     2
    ]
   ]

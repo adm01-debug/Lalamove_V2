@@ -1025,7 +1025,7 @@
     "AddressAutocomplete"
    ],
    "export_default": null,
-   "linhas": 375,
+   "linhas": 386,
    "dominio": "components/orders",
    "hooks_locais": [
     "useAddressSearch",
@@ -1106,7 +1106,7 @@
     "NewOrderDialog"
    ],
    "export_default": null,
-   "linhas": 1060,
+   "linhas": 1092,
    "dominio": "components/orders",
    "hooks_locais": [
     "useContacts",

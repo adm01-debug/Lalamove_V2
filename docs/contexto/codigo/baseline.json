@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f7d18db623fa3fdfd740a985a5a1395b79fb2a3f",
+  "commit": "a08dd878de7484247f24bb1add51921958147ab6",
   "branch": "main",
-  "data_commit": "2026-11-22T01:01:44-03:00",
+  "data_commit": "2026-11-22T01:08:59-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a08dd87",
+    "data": "2026-11-22",
+    "assunto": "feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)"
+   },
    {
     "sha": "f7d18db",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "a0e2990",
     "data": "2026-11-21",
     "assunto": "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)"
-   },
-   {
-    "sha": "2e299d5",
-    "data": "2026-11-21",
-    "assunto": "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)"
    }
   ],
-  "arquivos_mudados_7d": 245,
+  "arquivos_mudados_7d": 246,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 15
+    "mudancas": 18
    },
    {
     "pasta": "package-lock.json",
@@ -168,12 +168,12 @@
     "mudancas": 10
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 10
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 9
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 10
    },
    {
     "pasta": ".github/workflows/ci.yml",
@@ -192,7 +192,7 @@
     "mudancas": 7
    },
    {
-    "pasta": "supabase/functions/lalamove-webhook",
+    "pasta": "supabase/functions/job-worker",
     "mudancas": 6
    }
   ],
@@ -222,19 +222,19 @@
     "mudancas": 10
    },
    {
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 10
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 9
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 8
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 7
    },
    {
@@ -254,11 +254,19 @@
     "mudancas": 6
    },
    {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 6
    },
    {
     "arquivo": "src/integrations/supabase/types.ts",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 6
    },
    {
@@ -271,10 +279,6 @@
    },
    {
     "arquivo": "docs/pendencias/README.md",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 5
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/geo-gateway/resolver.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 128
+    "commits": 129
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 997,
-  "arquivos_codigo": 621,
-  "linhas_codigo": 121330,
+  "arquivos_total": 998,
+  "arquivos_codigo": 622,
+  "linhas_codigo": 121731,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 127,
+  "testes": 128,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 102
@@ -516,7 +516,7 @@
   },
   "src/components": {
    "arquivos": 155,
-   "linhas": 28377
+   "linhas": 28500
   },
   "src/hooks": {
    "arquivos": 110,
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 64,
-   "linhas": 15866
+   "arquivos": 65,
+   "linhas": 16144
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -586,7 +586,7 @@
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1060
+   "linhas": 1092
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",
@@ -597,16 +597,16 @@
    "linhas": 991
   },
   {
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 968
+  },
+  {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
    "linhas": 938
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
    "linhas": 901
-  },
-  {
-   "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 867
   },
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 118,
+  "any": 123,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,

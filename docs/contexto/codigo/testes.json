@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 127,
+ "total": 128,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 15,
+  "edge (deno)": 16,
   "guard (node --test)": 33,
   "unit (vitest)": 70
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 17
+   "arquivos": 18
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -623,11 +623,11 @@
   {
    "arquivo": "src/components/orders/AddressAutocomplete.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 119,
+   "linhas": 199,
    "testa": [
     "src/components/orders/AddressAutocomplete.tsx"
    ],
-   "casos": 4
+   "casos": 6
   },
   {
    "arquivo": "src/components/orders/OrderGeoEvents.test.tsx",
@@ -1152,6 +1152,15 @@
    "casos": 15
   },
   {
+   "arquivo": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 177,
+   "testa": [
+    "supabase/functions/job-worker/index.ts"
+   ],
+   "casos": 9
+  },
+  {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
    "tipo": "edge (deno)",
    "linhas": 42,
@@ -1309,6 +1318,7 @@
   "supabase/functions/geo-gateway/providers/mapbox.ts": 1,
   "supabase/functions/geo-gateway/providers/types.ts": 3,
   "supabase/functions/geo-gateway/resolver.ts": 1,
+  "supabase/functions/job-worker/index.ts": 1,
   "supabase/functions/lalamove-api/coordinates.ts": 1,
   "supabase/functions/lalamove-api/geocode-fallback.ts": 1,
   "supabase/functions/lalamove-gateway/route.ts": 1,
@@ -1453,7 +1463,6 @@
    "evaluate-driver",
    "external-companies",
    "get-mapbox-token",
-   "job-worker",
    "lalamove-token-refresh",
    "lalamove-uapi",
    "llm-wh",
