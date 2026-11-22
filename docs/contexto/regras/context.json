@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "961964c45aa53d09e5df397345ccab0ff55055d7",
+  "sha": "a8e52d5d072f9cc4dd4d7c37f72ba43f87f7f239",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 10:51 UTC",
-  "files_total": 1019,
-  "code_files": 843,
-  "code_lines": 144839
+  "generated_at": "2026-11-22 11:13 UTC",
+  "files_total": 1020,
+  "code_files": 844,
+  "code_lines": 144856
  },
  "version": "1.3.2",
- "facts_hash": "5f7ab67ec7cecb64",
+ "facts_hash": "bdee1bc021767c77",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,7 +183,7 @@
   "languages": {
    ".ts": 298,
    ".tsx": 235,
-   ".sql": 188,
+   ".sql": 189,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -14298,6 +14298,7 @@
    "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
    "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
+   "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
    "supabase/migrations/20261122120000_baseline_order_status_values.sql",
    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
    "supabase/migrations/20261122120200_job_queue_system.sql",
@@ -16346,6 +16347,46 @@
     "objkind": "function",
     "roles": "PUBLIC",
     "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_audit_config",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_budget_status",
+    "objkind": "function",
+    "roles": "public, anon",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_emit_event",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_evaluate_tracking",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_usage_increment",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -21409,8 +21450,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 183,
-   "lines": 12475,
+   "files": 184,
+   "lines": 12492,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -48414,6 +48455,46 @@
    },
    {
     "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_audit_config",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_budget_status",
+    "objkind": "function",
+    "roles": "public, anon",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_emit_event",
+    "objkind": "function",
+    "roles": "anon",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_evaluate_tracking",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "geo_usage_increment",
+    "objkind": "function",
+    "roles": "public, anon, authenticated",
+    "src": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
     "privs": "all",
     "object": "add_job",
     "objkind": "function",
@@ -71344,6 +71425,10 @@
    "lines": 188,
    "uses_service_role": true
   },
+  "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql": {
+   "path": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
+   "lines": 17
+  },
   "supabase/migrations/20261122120000_baseline_order_status_values.sql": {
    "path": "supabase/migrations/20261122120000_baseline_order_status_values.sql",
    "lines": 19
@@ -71452,10 +71537,19 @@
   }
  },
  "git": {
-  "sha": "961964c45aa53d09e5df397345ccab0ff55055d7",
+  "sha": "a8e52d5d072f9cc4dd4d7c37f72ba43f87f7f239",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a8e52d5",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)",
+    "files": [
+     "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+    ]
+   },
    {
     "sha": "961964c",
     "date": "2026-11-22",
@@ -71798,31 +71892,12 @@
      "supabase/functions/lalamove-api/geocode-fallback.ts",
      "supabase/functions/lalamove-api/index.ts"
     ]
-   },
-   {
-    "sha": "0029ab4",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "chore: remove chave DistanceMatrix.ai do repo e documenta Google Maps (etapas 8-10) (#225)",
-    "files": [
-     "docs/GOOGLE_MAPS.md",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "lalamove_bundle_import.json",
-     "lalamove_documentacao_completa.html",
-     "lalamove_documentacao_completa.md",
-     "lalamove_f00_bootstrap.json",
-     "lalamove_f01_cotacao.json",
-     "lalamove_suplemento_v2.html",
-     "lalamove_suplemento_v2.md",
-     "scripts/ci/vercel-env-baseline.json",
-     "scripts/ci/vercel-env-baseline.unit.mjs"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    23
+    22
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -71889,15 +71964,15 @@
     2
    ],
    [
+    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
+    1
+   ],
+   [
     "src/pages/AlertConfigurationsPage.tsx",
     1
    ],
    [
     "supabase/functions/send-notification/recipients.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/send-notification/recipients.ts",
     1
    ]
   ]

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "961964c45aa53d09e5df397345ccab0ff55055d7",
+  "commit": "a8e52d5d072f9cc4dd4d7c37f72ba43f87f7f239",
   "branch": "main",
-  "data_commit": "2026-11-22T07:50:48-03:00",
+  "data_commit": "2026-11-22T08:12:41-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a8e52d5",
+    "data": "2026-11-22",
+    "assunto": "security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)"
+   },
    {
     "sha": "961964c",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "9ec9341",
     "data": "2026-11-22",
     "assunto": "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)"
-   },
-   {
-    "sha": "32c1842",
-    "data": "2026-11-22",
-    "assunto": "feat: canal Zapp no send-notification (etapa 69) (#232)"
    }
   ],
-  "arquivos_mudados_7d": 285,
+  "arquivos_mudados_7d": 286,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 156
+    "commits": 157
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1025,
+  "arquivos_total": 1026,
   "arquivos_codigo": 646,
   "linhas_codigo": 125762,
   "rotas": 55,
@@ -322,7 +322,7 @@
   "hooks": 101,
   "edge_functions": 26,
   "tabelas": 87,
-  "migrations": 183,
+  "migrations": 184,
   "cron_jobs": 21,
   "testes": 145,
   "workflows": 5,

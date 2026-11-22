@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `961964c45a` · branch `main` · 2026-11-22 10:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a8e52d5d07` · branch `main` · 2026-11-22 11:13 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -392,7 +392,7 @@ Middleware matcher (Next.js): nenhum
 | revoke | PUBLIC, authenticated | execute | `geo_emit_event` |
 | revoke | anon | all | `mcp_introspect`, `can_run_db_diagnostics` |
 | revoke | anon | all privileges | `public`, `public` |
-| revoke | anon | execute | `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `get_cron_jobs_health`, `get_active_uapi_token`, `get_user_permissions`, `get_user_roles`, `is_aal2`, `is_known_device`, `clear_login_attempts`, `clear_login_attempts`, `has_role` |
+| revoke | anon | execute | `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `get_cron_jobs_health`, `get_active_uapi_token`, `get_user_permissions`, `get_user_roles`, `is_aal2`, `is_known_device`, `clear_login_attempts`, `clear_login_attempts`, `has_role` … +1 |
 | revoke | anon | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view` |
 | revoke | anon, authenticated | execute | `cleanup_old_login_attempts`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `test_rls_policies`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `ensure_tracking_events_partition`, `rollup_contract_version_usage`, `increment_contract_usage`, `update_updated_at_column`, `trigger_bitrix24_sync`, `invalidate_old_tokens` … +21 |
 | revoke | anon, public | execute | `claim_alert_notification`, `get_pending_escalations`, `acknowledge_alert`, `claim_alert_notification` |
@@ -400,6 +400,8 @@ Middleware matcher (Next.js): nenhum
 | revoke | authenticated | execute | `rollup_contract_version_usage`, `clear_login_attempts`, `clear_login_attempts` |
 | revoke | authenticated, anon, public | execute | `claim_alert_notification`, `get_pending_escalations` |
 | revoke | public | all | `increment_contract_usage` |
+| revoke | public, anon | execute | `geo_budget_status` |
+| revoke | public, anon, authenticated | execute | `geo_audit_config`, `geo_evaluate_tracking`, `geo_usage_increment` |
 
 ## Riscos de acesso detectados
 
