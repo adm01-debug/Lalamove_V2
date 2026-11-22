@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 157,
+ "total": 158,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 26,
   "guard (node --test)": 34,
-  "unit (vitest)": 79
+  "unit (vitest)": 80
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 11
+   "arquivos": 12
   },
   {
    "padrao": "e2e/",
@@ -1054,6 +1054,15 @@
    "casos": 4
   },
   {
+   "arquivo": "src/lib/edge-error.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 70,
+   "testa": [
+    "src/lib/edge-error.ts"
+   ],
+   "casos": 6
+  },
+  {
    "arquivo": "src/lib/geo-gateway.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 163,
@@ -1512,6 +1521,7 @@
   "src/hooks/useWebhookEvents.ts": 1,
   "src/i18n/index.ts": 1,
   "src/integrations/supabase/client.ts": 14,
+  "src/lib/edge-error.ts": 1,
   "src/lib/geo-gateway.ts": 6,
   "src/lib/html.ts": 1,
   "src/lib/lalamoveCatalog.ts": 3,

@@ -224,7 +224,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 96
+   "arquivos_puxados": 97
   },
   {
    "caminho": "/*",
@@ -606,7 +606,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/cache-monitoring",
@@ -982,7 +982,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 96
+   "arquivos_puxados": 97
   },
   {
    "caminho": "/delivery-metrics",
@@ -1229,7 +1229,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/forgot-password",
@@ -1582,7 +1582,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "caminho": "/lalamove-quota",
@@ -2208,7 +2208,7 @@
     "listbox",
     "option"
    ],
-   "arquivos_puxados": 73
+   "arquivos_puxados": 74
   },
   {
    "caminho": "/password-reset-approvals",
@@ -2909,7 +2909,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/settings/maps",
@@ -3039,7 +3039,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/sla",
@@ -3835,7 +3835,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 280
+   "arquivos_puxados": 281
   }
  ],
  "menu": [

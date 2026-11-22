@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `035a7c6a73` · branch `main` · 2026-11-22 17:31 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `97b9d2e309` · branch `main` · 2026-11-22 17:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1964,7 +1964,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1241 testes em 107 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1249 testes em 108 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2031,6 +2031,7 @@ _nenhum item encontrado_
 | `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
 | `src/hooks/__tests__/useLoginLockout.test.ts` | 8 | useLoginLockout · deve mapear checkLockout corretamente · deve retornar fallback no erro de checkLockout · deve mapear recordFailedAttempt corretamente … |
+| `src/lib/edge-error.test.ts` | 8 | parseEdgeError · lê o formato único de erro do body do FunctionsHttpError · retorna null para erro que não é FunctionsHttpError · retorna null quando o body não segue o formato único … |
 | `src/lib/phone.test.ts` | 8 | validateBrazilianPhone — casos válidos · aceita %s (nacional cru) · aceita 55 sem + como código do país · validateBrazilianPhone — rejeições … |
 | `supabase/functions/send-notification/quiet-hours.test.ts` | 8 | [quiet-hours] dentro da janela (10:00 UTC = 07:00 local, início inclusive) · [quiet-hours] 1 min antes do início é fora da janela · [quiet-hours] fim é exclusivo (23:00 UTC = 20:00 local) · [quiet-hours] madrugada (01:00 UTC = 22:00 local do dia anterior) é fora da janela … |
 | `scripts/db-audit/catalog-from-types.test.mjs` | 7 | catalogoDeTypes le tabelas, views, funcoes e enums do schema public · catalogoDeTypes para no export const Constants (nao reabre Enums) · catalogoDeTypes ignora campos internos (Row/Args/Returns) como objetos · catalogoDeTypes devolve a forma esperada pelo supabase-usage-guard … |

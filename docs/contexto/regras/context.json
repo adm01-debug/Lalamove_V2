@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "035a7c6a732a263a279496a9e04a08650c10cdd4",
+  "sha": "97b9d2e309ba6466fd774e29e96bc0ca12bf881c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 17:31 UTC",
-  "files_total": 1053,
-  "code_files": 869,
-  "code_lines": 150327
+  "generated_at": "2026-11-22 17:42 UTC",
+  "files_total": 1055,
+  "code_files": 871,
+  "code_lines": 150475
  },
  "version": "1.3.2",
- "facts_hash": "5a2a8ce994e74e39",
+ "facts_hash": "6e39996f415fb725",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 308,
+   ".ts": 310,
    ".tsx": 237,
    ".sql": 202,
    ".mjs": 109,
@@ -17123,7 +17123,7 @@
      "bitrix24-sync"
     ],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -17190,7 +17190,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 93
+    "deps_count": 94
    },
    {
     "path": "",
@@ -17243,7 +17243,7 @@
      "external-companies"
     ],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -17326,7 +17326,7 @@
      "lalamove-uapi"
     ],
     "rpc_transitive": [],
-    "deps_count": 20
+    "deps_count": 21
    },
    {
     "path": "",
@@ -17348,7 +17348,7 @@
      "lalamove-gateway"
     ],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -17491,7 +17491,7 @@
      "send-notification"
     ],
     "rpc_transitive": [],
-    "deps_count": 72
+    "deps_count": 73
    },
    {
     "path": "",
@@ -17720,7 +17720,7 @@
      "lalamove-gateway"
     ],
     "rpc_transitive": [],
-    "deps_count": 9
+    "deps_count": 10
    },
    {
     "path": "",
@@ -21023,7 +21023,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 19018,
+   "lines": 19034,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21274,12 +21274,13 @@
   },
   {
    "module": "src/lib",
-   "files": 42,
-   "lines": 3791,
+   "files": 44,
+   "lines": 3923,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
     "cep.ts: CepValidation, sanitizeCep, maskCep, validateCep, ViaCepAddress, lookupCep",
+    "edge-error.ts: EdgeFieldError, EdgeErrorInfo, parseEdgeError, formatEdgeError",
     "geo-gateway.ts: GeoFieldError, GeoGatewayError, callGeo, countMapLoad",
     "html.ts: escapeHtml, openExternal",
     "lalamove-api.ts: LalamoveApiResponse, LalamoveStatusResponse, LalamoveWalletHistoryResponse, LalamoveGatewayError, callLalamoveGateway, QuoteParams",
@@ -21331,6 +21332,8 @@
    "file_list": [
     "src/lib/bitrix-config.ts",
     "src/lib/cep.ts",
+    "src/lib/edge-error.test.ts",
+    "src/lib/edge-error.ts",
     "src/lib/geo-gateway.test.ts",
     "src/lib/geo-gateway.ts",
     "src/lib/html.ts",
@@ -38023,6 +38026,38 @@
    {
     "file": "src/hooks/__tests__/useWebhookEvents.test.ts",
     "name": "deve retornar vazio sem dados"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "parseEdgeError"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "lê o formato único de erro do body do FunctionsHttpError"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "retorna null para erro que não é FunctionsHttpError"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "retorna null quando o body não segue o formato único"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "retorna null quando o body não é JSON válido"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "formatEdgeError"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "usa field: message quando há campos"
+   },
+   {
+    "file": "src/lib/edge-error.test.ts",
+    "name": "usa message quando não há campos"
    },
    {
     "file": "src/lib/geo-gateway.test.ts",
@@ -60852,7 +60887,7 @@
   },
   "src/hooks/useBitrix24.ts": {
    "path": "src/hooks/useBitrix24.ts",
-   "lines": 256,
+   "lines": 259,
    "exports": [
     "function useBitrix24"
    ],
@@ -61958,7 +61993,7 @@
   },
   "src/hooks/useExternalData.ts": {
    "path": "src/hooks/useExternalData.ts",
-   "lines": 104,
+   "lines": 113,
    "exports": [
     "type ExternalTable",
     "interface ExternalRecord",
@@ -62833,7 +62868,7 @@
   },
   "src/hooks/useLalamoveUapi.ts": {
    "path": "src/hooks/useLalamoveUapi.ts",
-   "lines": 284,
+   "lines": 288,
    "exports": [
     "interface UapiEnvelope",
     "class UapiError",
@@ -65368,6 +65403,31 @@
     "const timeout = setTimeout(() => controller.abort(), 4000);"
    ]
   },
+  "src/lib/edge-error.test.ts": {
+   "path": "src/lib/edge-error.test.ts",
+   "lines": 70,
+   "is_test": true,
+   "tests": [
+    "parseEdgeError",
+    "lê o formato único de erro do body do FunctionsHttpError",
+    "retorna null para erro que não é FunctionsHttpError",
+    "retorna null quando o body não segue o formato único",
+    "retorna null quando o body não é JSON válido",
+    "formatEdgeError",
+    "usa field: message quando há campos",
+    "usa message quando não há campos"
+   ]
+  },
+  "src/lib/edge-error.ts": {
+   "path": "src/lib/edge-error.ts",
+   "lines": 60,
+   "exports": [
+    "interface EdgeFieldError",
+    "interface EdgeErrorInfo",
+    "function parseEdgeError",
+    "function formatEdgeError"
+   ]
+  },
   "src/lib/geo-gateway.test.ts": {
    "path": "src/lib/geo-gateway.test.ts",
    "lines": 163,
@@ -65423,7 +65483,7 @@
   },
   "src/lib/lalamove-api.ts": {
    "path": "src/lib/lalamove-api.ts",
-   "lines": 163,
+   "lines": 165,
    "exports": [
     "interface LalamoveApiResponse",
     "interface LalamoveStatusResponse",
@@ -73626,10 +73686,25 @@
   }
  },
  "git": {
-  "sha": "035a7c6a732a263a279496a9e04a08650c10cdd4",
+  "sha": "97b9d2e309ba6466fd774e29e96bc0ca12bf881c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "97b9d2e",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: cliente do front entende o formato único de erro (item 42) (#301)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/hooks/useBitrix24.ts",
+     "src/hooks/useExternalData.ts",
+     "src/hooks/useLalamoveUapi.ts",
+     "src/lib/edge-error.test.ts",
+     "src/lib/edge-error.ts",
+     "src/lib/lalamove-api.ts"
+    ]
+   },
    {
     "sha": "035a7c6",
     "date": "2026-11-22",
@@ -73978,25 +74053,12 @@
     "files": [
      "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "aedf1ee",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    14
-   ],
-   [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    4
+    15
    ],
    [
     "src/components/map/markerFactories.ts",
@@ -74013,6 +74075,14 @@
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     3
+   ],
+   [
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    3
+   ],
+   [
+    "src/hooks/useBitrix24.ts",
+    2
    ],
    [
     "src/components/auth/ProtectedRoute.test.tsx",
@@ -74063,11 +74133,7 @@
     2
    ],
    [
-    "src/App.tsx",
-    1
-   ],
-   [
-    "src/pages/MFAEnrollPage.tsx",
+    "src/hooks/useExternalData.ts",
     1
    ]
   ]

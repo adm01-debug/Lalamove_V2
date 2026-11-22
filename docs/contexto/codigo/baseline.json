@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "035a7c6a732a263a279496a9e04a08650c10cdd4",
+  "commit": "97b9d2e309ba6466fd774e29e96bc0ca12bf881c",
   "branch": "main",
-  "data_commit": "2026-11-22T14:31:09-03:00",
+  "data_commit": "2026-11-22T14:41:59-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "97b9d2e",
+    "data": "2026-11-22",
+    "assunto": "feat: cliente do front entende o formato único de erro (item 42) (#301)"
+   },
    {
     "sha": "035a7c6",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "ea8f382",
     "data": "2026-11-22",
     "assunto": "fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)"
-   },
-   {
-    "sha": "a9c2b2f",
-    "data": "2026-11-22",
-    "assunto": "docs(lalamove): commita análise exaustiva e plano de integração completo (#276)"
    }
   ],
-  "arquivos_mudados_7d": 348,
+  "arquivos_mudados_7d": 353,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -164,12 +164,12 @@
     "mudancas": 16
    },
    {
-    "pasta": "package.json",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 15
    },
    {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 14
+    "pasta": "package.json",
+    "mudancas": 15
    },
    {
     "pasta": "package-lock.json",
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 14
+    "mudancas": 15
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 201
+    "commits": 202
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1059,
-  "arquivos_codigo": 658,
-  "linhas_codigo": 129150,
+  "arquivos_total": 1061,
+  "arquivos_codigo": 660,
+  "linhas_codigo": 129298,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 157,
+  "testes": 158,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19018
+   "linhas": 19034
   },
   "src/i18n": {
    "arquivos": 1,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 42,
-   "linhas": 3791
+   "arquivos": 44,
+   "linhas": 3923
   },
   "src/main.tsx": {
    "arquivos": 1,

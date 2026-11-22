@@ -16,7 +16,7 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (25)",
+   "src/lib (26)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
@@ -48,7 +48,7 @@
  "nomenclatura": {
   "componentes": "PascalCase (72%)",
   "hooks": "use + PascalCase",
-  "servicos": "camelCase (85%)",
+  "servicos": "camelCase (83%)",
   "edge_functions": "kebab-case (100%)",
   "tabelas": "snake_case (94%)"
  },
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: cliente do front entende o formato único de erro (item 42) (#301)",
    "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)",
    "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)",
    "fix: instancia cliente Resend no new-device-alert (item 19) (#297)",
-   "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)",
-   "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)"
+   "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

@@ -715,7 +715,7 @@
    "hooks_exportados": [
     "useBitrix24"
    ],
-   "linhas": 256,
+   "linhas": 259,
    "dominio": "hooks",
    "tabelas": [
     "bitrix24_stage_mappings",
@@ -1241,7 +1241,7 @@
     "useExternalRecord",
     "useExternalStats"
    ],
-   "linhas": 104,
+   "linhas": 113,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1602,7 +1602,7 @@
     "useUapiOrderHistory",
     "useUapiWalletStatement"
    ],
-   "linhas": 284,
+   "linhas": 288,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

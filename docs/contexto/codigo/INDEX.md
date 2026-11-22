@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `035a7c6a732a263a279496a9e04a08650c10cdd4` (2026-11-22T14:31:09-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `97b9d2e309ba6466fd774e29e96bc0ca12bf881c` (2026-11-22T14:41:59-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (545), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (547), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1059 |
-| arquivos_codigo | 658 |
-| linhas_codigo | 129150 |
+| arquivos_total | 1061 |
+| arquivos_codigo | 660 |
+| linhas_codigo | 129298 |
 | rotas | 56 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 88 |
 | migrations | 191 |
 | cron_jobs | 23 |
-| testes | 157 |
+| testes | 158 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 109 |
@@ -58,7 +58,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - telas: src/pages (54)
 - componentes: src/components (127), src/pages (87), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
-- servicos_logica: src/lib (25), src/utils (6), src/integrations (4)
+- servicos_logica: src/lib (26), src/utils (6), src/integrations (4)
 - testes: co-localizado (__tests__) (55), guards em scripts/ (47), supabase/functions/<edge> (28)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
@@ -66,7 +66,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
 - docs: docs (37), (raiz) (9), .github (1)
-- nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (85%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
+- nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (83%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/pendencias-dono.md, docs/agentes/regras-dominio.md
 
 ## Módulos (menu → domínio)
@@ -80,7 +80,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 53 | 0 | 6 | 42 |
 | hooks | 0 | 0 | 86 | 220 | 15 | 48 |
-| lib | 0 | 0 | 25 | 8 | 3 | 0 |
+| lib | 0 | 0 | 26 | 8 | 3 | 0 |
 | pages | 37 | 56 | 56 | 199 | 14 | 48 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
@@ -275,8 +275,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8721 nós · 18236 arestas · 631 comunidades · grafo do commit `035a7c6a`
-- comunidades maiores: cn (240), button.tsx (126), badge.tsx (121), snapshot.py (107), card.tsx (100), client.ts (99), App.tsx (93), ref_https (92), ref_node_assert (85), react (82), dependencies (80), DriversPage.tsx (79)
+- 8729 nós · 18269 arestas · 645 comunidades · grafo do commit `97b9d2e3`
+- comunidades maiores: cn (267), button.tsx (132), badge.tsx (130), snapshot.py (107), NewOrderDialog.tsx (105), DashboardRedesigned.tsx (99), ref_https (83), @tanstack/react-query (82), dependencies (80), ref_node_path (80), App.tsx (79), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -285,7 +285,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package-lock.json (31)
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (14)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (15)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
@@ -378,6 +378,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `97b9d2e` feat: cliente do front entende o formato único de erro (item 42) (#301)
 - 2026-11-22 `035a7c6` feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)
 - 2026-11-22 `1f97a5b` fix: fechar janela de bypass de MFA no ProtectedRoute (#298)
 - 2026-11-22 `72dd548` fix: instancia cliente Resend no new-device-alert (item 19) (#297)
@@ -392,7 +393,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `65322a8` chore: marca item XSS do plano front-end como feito (#288)
 - 2026-11-22 `6e6c62b` fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)
 - 2026-11-22 `93d26a3` docs(planos): plano de UX de navegacao em 200 etapas (#286)
-- 2026-11-22 `762c4b6` fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

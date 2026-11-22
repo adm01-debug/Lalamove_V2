@@ -1016,6 +1016,7 @@
   ],
   "src/hooks/useBitrix24.ts": [
    "src/integrations/supabase/client.ts",
+   "src/lib/edge-error.ts",
    "src/lib/postMessage.ts"
   ],
   "src/hooks/useCacheViews.ts": [
@@ -1088,7 +1089,8 @@
   ],
   "src/hooks/useExternalData.ts": [
    "src/integrations/supabase/client.ts",
-   "src/lib/bitrix-config.ts"
+   "src/lib/bitrix-config.ts",
+   "src/lib/edge-error.ts"
   ],
   "src/hooks/useFeatureFlags.ts": [
    "src/integrations/supabase/client.ts",
@@ -1131,6 +1133,7 @@
   ],
   "src/hooks/useLalamoveUapi.ts": [
    "src/integrations/supabase/client.ts",
+   "src/lib/edge-error.ts",
    "src/lib/lalamove-config.ts",
    "src/lib/uapiErrors.ts"
   ],
@@ -1319,7 +1322,8 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/lib/lalamove-api.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/edge-error.ts"
   ],
   "src/lib/lalamoveCatalog.ts": [
    "src/types/lalamove.ts"
