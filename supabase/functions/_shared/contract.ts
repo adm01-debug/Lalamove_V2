@@ -165,6 +165,9 @@ export const ERROR_CODES = {
   UNSUPPORTED_VERSION: "UNSUPPORTED_VERSION",
   UNAUTHORIZED: "UNAUTHORIZED",
   RATE_LIMITED: "RATE_LIMITED",
+  // Orçamento mensal de um provedor de mapas esgotado (`geo_budget.hard_stop`).
+  // Distinto de RATE_LIMITED: aquele é "espere 1 minuto", este é "acabou o saldo".
+  GEO_BUDGET_EXCEEDED: "GEO_BUDGET_EXCEEDED",
   INTERNAL_ERROR: "INTERNAL_ERROR",
 } as const;
 

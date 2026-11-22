@@ -365,7 +365,7 @@ async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       // Provedor desligado / orçamento estourado / rate limit: não é falha do job.
-      const isSkip = /GEO_UNAVAILABLE|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
+      const isSkip = /GEO_UNAVAILABLE|GEO_BUDGET_EXCEEDED|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
       results.push({ input: body.address ?? body.structured, status: isSkip ? 'skipped' : 'error', error: msg });
       if (isSkip) skipped++; else failed++;
     }
@@ -444,7 +444,7 @@ export async function processGeoBackfillOrders(supabase: any, payload: any): Pro
         geocoded++;
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        const isSkip = /GEO_UNAVAILABLE|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
+        const isSkip = /GEO_UNAVAILABLE|GEO_BUDGET_EXCEEDED|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
         if (isSkip) skipped++; else failed++;
         results.push({ order_id: order.id, side, status: isSkip ? 'skipped' : 'error', error: msg.slice(0, 200) });
       }
@@ -596,7 +596,7 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
       planned++;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      const isSkip = /GEO_UNAVAILABLE|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
+      const isSkip = /GEO_UNAVAILABLE|GEO_BUDGET_EXCEEDED|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
       results.push({ tracking_id: t.id, status: isSkip ? 'skipped' : 'error', error: msg });
       if (isSkip) skipped++; else failed++;
     }
@@ -761,7 +761,7 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      const isSkip = /GEO_UNAVAILABLE|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
+      const isSkip = /GEO_UNAVAILABLE|GEO_BUDGET_EXCEEDED|est[áa] desligada|Nenhum provedor|RATE_LIMITED|429/i.test(msg);
       results.push({ tracking_id: t.id, status: isSkip ? 'skipped' : 'error', error: msg });
       if (isSkip) skipped++; else failed++;
     }
