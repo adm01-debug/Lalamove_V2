@@ -114,7 +114,8 @@
  "rpcs_de_autorizacao": [
   "can_run_db_diagnostics",
   "get_user_permissions",
-  "is_known_device"
+  "is_known_device",
+  "is_phone_opted_out"
  ],
  "itens_de_menu": [
   {

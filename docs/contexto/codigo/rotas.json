@@ -2882,6 +2882,7 @@
     "useEffect",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoDefaults",
     "useGeoLatency",
     "useGeoPriceList",
     "useGeoProviderHealth",
@@ -2894,12 +2895,14 @@
     "useQueryClient",
     "useState",
     "useUpdateGeoBudget",
+    "useUpdateGeoDefaults",
     "useUpdateGeoSetting"
    ],
    "hooks_locais": [
     "useAuth",
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoDefaults",
     "useGeoLatency",
     "useGeoPriceList",
     "useGeoProviderHealth",
@@ -2907,10 +2910,12 @@
     "useGeoUsageMonth",
     "usePermissions",
     "useUpdateGeoBudget",
+    "useUpdateGeoDefaults",
     "useUpdateGeoSetting"
    ],
    "tabelas": [
     "geo_budget",
+    "geo_defaults",
     "geo_price_list",
     "geo_settings",
     "geo_usage_month",

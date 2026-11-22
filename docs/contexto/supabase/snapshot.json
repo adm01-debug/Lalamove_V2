@@ -17960,9 +17960,13 @@
             {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+              "hits": 3
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.geo_emit_event",
@@ -18718,9 +18722,17 @@
             {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+              "hits": 5
+            },
+            {
+              "file": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 6,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -18761,9 +18773,13 @@
             {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking"
@@ -19256,8 +19272,13 @@
       {
         "args": "_user_id uuid, _permission_name text",
         "callers": {
-          "code": [],
-          "code_total_files": 0,
+          "code": [
+            {
+              "file": "supabase/migrations/20261123190000_geo_maps_permissions.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -19408,7 +19429,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 49,
+          "code_total_files": 51,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -28609,6 +28630,12 @@
         "statements": 1,
         "statements_sha": "3fb253eb0de2f611",
         "version": "20261122110913"
+      },
+      {
+        "name": "revoke_anon_geo_rpcs_v2_ledger_parity",
+        "statements": 1,
+        "statements_sha": "3fb253eb0de2f611",
+        "version": "20261122111505"
       },
       {
         "name": "baseline_order_status_values",

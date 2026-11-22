@@ -14,7 +14,7 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 145,
+ "total": 147,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
@@ -1359,7 +1359,9 @@
   }
  ],
  "sql": [
-  "supabase/tests/geo_functions.test.sql"
+  "supabase/tests/fixtures/geo_trigger_schema.sql",
+  "supabase/tests/geo_functions.test.sql",
+  "supabase/tests/geo_trigger.test.sql"
  ],
  "cobertura_por_arquivo": {
   "scripts/ci/actions-kpi.mjs": 1,

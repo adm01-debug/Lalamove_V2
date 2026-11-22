@@ -2,11 +2,41 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
+  "commit": "58a4500969fc00185fe7d501c11352deb451832a",
   "branch": "main",
-  "data_commit": "2026-11-22T09:14:37-03:00",
+  "data_commit": "2026-11-22T09:16:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "58a4500",
+    "data": "2026-11-22",
+    "assunto": "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)"
+   },
+   {
+    "sha": "062c6b7",
+    "data": "2026-11-22",
+    "assunto": "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)"
+   },
+   {
+    "sha": "eb1ea10",
+    "data": "2026-11-22",
+    "assunto": "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)"
+   },
+   {
+    "sha": "758b04c",
+    "data": "2026-11-22",
+    "assunto": "test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)"
+   },
+   {
+    "sha": "01eab04",
+    "data": "2026-11-22",
+    "assunto": "infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)"
+   },
+   {
+    "sha": "6831e5d",
+    "data": "2026-11-22",
+    "assunto": "fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)"
+   },
    {
     "sha": "555a756",
     "data": "2026-11-22",
@@ -101,39 +131,9 @@
     "sha": "e0e0118",
     "data": "2026-11-22",
     "assunto": "docs: etapas 90 e 92 marcadas como executadas no plano (#247)"
-   },
-   {
-    "sha": "57c28e4",
-    "data": "2026-11-22",
-    "assunto": "test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)"
-   },
-   {
-    "sha": "250e935",
-    "data": "2026-11-22",
-    "assunto": "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)"
-   },
-   {
-    "sha": "a067e02",
-    "data": "2026-11-22",
-    "assunto": "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)"
-   },
-   {
-    "sha": "619f449",
-    "data": "2026-11-22",
-    "assunto": "feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)"
-   },
-   {
-    "sha": "40e2adb",
-    "data": "2026-11-22",
-    "assunto": "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)"
-   },
-   {
-    "sha": "2809b60",
-    "data": "2026-11-22",
-    "assunto": "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)"
    }
   ],
-  "arquivos_mudados_7d": 290,
+  "arquivos_mudados_7d": 295,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,11 +145,11 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 31
+    "mudancas": 34
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -157,14 +157,14 @@
    },
    {
     "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 17
+   },
+   {
+    "pasta": "supabase/functions/send-notification",
     "mudancas": 16
    },
    {
     "pasta": "package.json",
-    "mudancas": 15
-   },
-   {
-    "pasta": "supabase/functions/send-notification",
     "mudancas": 15
    },
    {
@@ -185,25 +185,25 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
+    "mudancas": 9
+   },
+   {
+    "pasta": "supabase/functions/lalamove-webhook",
     "mudancas": 8
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 7
-   },
-   {
-    "pasta": "supabase/config.toml",
-    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
    {
-    "arquivo": "package.json",
-    "mudancas": 32
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 34
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 31
+    "arquivo": "package.json",
+    "mudancas": 32
    },
    {
     "arquivo": "package-lock.json",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -226,15 +226,19 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 10
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 9
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 9
    },
    {
@@ -246,15 +250,15 @@
     "mudancas": 8
    },
    {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 8
-   },
-   {
     "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 8
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "mudancas": 8
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 8
    },
    {
@@ -266,7 +270,7 @@
     "mudancas": 7
    },
    {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 7
    },
    {
@@ -279,10 +283,6 @@
    },
    {
     "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 164
+    "commits": 170
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1028,
+  "arquivos_total": 1033,
   "arquivos_codigo": 646,
-  "linhas_codigo": 125908,
+  "linhas_codigo": 126217,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -321,10 +321,10 @@
   "componentes": 217,
   "hooks": 101,
   "edge_functions": 26,
-  "tabelas": 87,
-  "migrations": 186,
-  "cron_jobs": 22,
-  "testes": 145,
+  "tabelas": 88,
+  "migrations": 189,
+  "cron_jobs": 23,
+  "testes": 147,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29159
+   "linhas": 29223
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 18948
+   "linhas": 18995
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 89,
-   "linhas": 19536
+   "linhas": 19697
   },
   "src/services": {
    "arquivos": 1,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18284
+   "linhas": 18321
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,11 +590,11 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1180
+   "linhas": 1184
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1108
+   "linhas": 1172
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
@@ -606,11 +606,15 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 956
+   "linhas": 967
+  },
+  {
+   "arquivo": "src/pages/MapsSettingsPage.tsx",
+   "linhas": 964
   },
   {
    "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 925
+   "linhas": 947
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -619,10 +623,6 @@
   {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",
    "linhas": 844
-  },
-  {
-   "arquivo": "src/pages/MapsSettingsPage.tsx",
-   "linhas": 803
   },
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
@@ -760,6 +760,7 @@
    "suppliers"
   ],
   "tabelas_com_drift_migration_vs_types": [
+   "geo_budget",
    "geo_cache",
    "mfa_sessions"
   ],

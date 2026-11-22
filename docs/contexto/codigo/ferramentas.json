@@ -4,7 +4,7 @@
  "stack": {
   "linguagens": [
    "TypeScript (533)",
-   "SQL (191)",
+   "SQL (196)",
    "JavaScript (114)",
    "Markdown (103)",
    "JSON (35)",
@@ -160,6 +160,7 @@
     "contract-tests",
     "edge-integration-tests",
     "geo-sql-tests",
+    "geo-trigger-sql-tests",
     "deploy"
    ],
    "permissoes": [],
@@ -243,7 +244,9 @@
    "scripts_usados": [],
    "npm_scripts": [],
    "secrets": [
-    "SUPABASE_ACCESS_TOKEN"
+    "SUPABASE_ACCESS_TOKEN",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
    ],
    "actions": [
     "actions/checkout",

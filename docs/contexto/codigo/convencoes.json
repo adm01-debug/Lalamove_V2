@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
-   "infra: agenda o cron check-driver-alerts (etapa 70) (#217)",
-   "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)",
-   "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)",
-   "fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)",
-   "docs: corrige referência desatualizada no comentário do stub de migration (#263)"
+   "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)",
+   "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)",
+   "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)",
+   "test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)",
+   "infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

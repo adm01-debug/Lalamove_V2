@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 186,
+ "migrations": 189,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -142,9 +142,11 @@
   "cleanup_processing_logs",
   "clear_login_attempts",
   "create_audit_log",
+  "end_order_tracking",
   "ensure_single_default_filter",
   "ensure_tracking_events_partition",
   "geo_audit_config",
+  "geo_budget_notify_if_needed",
   "geo_budget_status",
   "geo_emit_event",
   "geo_evaluate_tracking",
@@ -179,6 +181,7 @@
   "is_ip_blocked",
   "is_ip_whitelisted",
   "is_known_device",
+  "is_phone_opted_out",
   "is_token_valid",
   "log_mfa_session",
   "mark_job_completed",
@@ -186,6 +189,7 @@
   "mark_job_processing",
   "mcp_introspect",
   "monitor_queue_health",
+  "normalize_br_phone",
   "notify_lalamove_quota_low",
   "notify_webhook_security_event",
   "pause_cron_job",
@@ -206,6 +210,7 @@
   "sanitize_auth_log_metadata",
   "set_token_expiration",
   "test_rls_policies",
+  "trg_close_tracking_on_order_end",
   "trigger_bitrix24_sync",
   "update_job_queue_updated_at",
   "update_saved_filters_updated_at",
@@ -345,6 +350,13 @@
    "evento": "update of status",
    "tabela": "lalamove_orders",
    "funcao": "trigger_bitrix24_sync"
+  },
+  {
+   "nome": "trg_close_tracking_on_order_end",
+   "quando": "after",
+   "evento": "insert or update of status",
+   "tabela": "lalamove_orders",
+   "funcao": "trg_close_tracking_on_order_end"
   },
   {
    "nome": "update_orders_updated_at",
@@ -498,6 +510,11 @@
    "agenda": "*/5 * * * *",
    "migration": "20261122140000_fix_crons_dispatcher.sql",
    "chama_edge": "escalate-alerts"
+  },
+  {
+   "nome": "geo-budget-notify",
+   "agenda": "0 */6 * * *",
+   "migration": "20261123120000_geo_budget_cron.sql"
   },
   {
    "nome": "geo-cache-prune",
@@ -4739,6 +4756,13 @@
      "default": "80",
      "ref": null
     },
+    "blocked_warned_month": {
+     "tipo": "date",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "hard_stop": {
      "tipo": "boolean",
      "nn": true,
@@ -4799,7 +4823,9 @@
     "warned_month": "string | null"
    },
    "drift": {
-    "so_na_migration": [],
+    "so_na_migration": [
+     "blocked_warned_month"
+    ],
     "so_no_types": []
    },
    "usada_no_front": 1,
@@ -4988,7 +5014,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 0,
+   "usada_no_front": 1,
    "usada_em_edges": [
     "send-notification"
    ],
@@ -6537,6 +6563,7 @@
    ],
    "triggers": [
     "on_order_status_change_sync_bitrix24",
+    "trg_close_tracking_on_order_end",
     "update_orders_updated_at"
    ],
    "sem_rls": false,
@@ -8304,6 +8331,63 @@
    "triggers": [],
    "sem_rls": false,
    "nao_usada": false
+  },
+  "notification_optouts": {
+   "colunas": {
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "created_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth"
+    },
+    "phone": {
+     "tipo": "text",
+     "nn": false,
+     "pk": true,
+     "default": null,
+     "ref": null
+    },
+    "reason": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "admin gerencia opt-outs",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role escreve opt-outs",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [],
+   "fks": [
+    "created_by->auth"
+   ],
+   "criada_em": "20261123200000_optout_and_tracking_end.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
   },
   "order_geo_events": {
    "colunas": {
@@ -11245,6 +11329,11 @@
    "usada_em": 1
   },
   {
+   "nome": "end_order_tracking",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
    "nome": "exec",
    "definida": false,
    "usada_em": 2
@@ -11296,6 +11385,11 @@
   },
   {
    "nome": "is_known_device",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
+   "nome": "is_phone_opted_out",
    "definida": true,
    "usada_em": 1
   },

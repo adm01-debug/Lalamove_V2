@@ -520,7 +520,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 3,
-   "linhas": 1432,
+   "linhas": 1436,
    "verify_jwt": true,
    "metodos": [
     "GET",
@@ -688,7 +688,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 3,
-   "linhas": 1125,
+   "linhas": 1136,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
@@ -708,7 +708,9 @@
     "tracking_events",
     "webhook_events"
    ],
-   "rpcs": [],
+   "rpcs": [
+    "end_order_tracking"
+   ],
    "env": [
     "ALLOWED_ORIGINS",
     "LALAMOVE_API_SECRET",
@@ -957,7 +959,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 4,
-   "linhas": 1286,
+   "linhas": 1308,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -976,7 +978,8 @@
     "order_geo_events"
    ],
    "rpcs": [
-    "claim_alert_notification"
+    "claim_alert_notification",
+    "is_phone_opted_out"
    ],
    "env": [
     "ALLOWED_ORIGINS",

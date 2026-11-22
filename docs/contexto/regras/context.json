@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
+  "sha": "58a4500969fc00185fe7d501c11352deb451832a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 12:15 UTC",
-  "files_total": 1022,
-  "code_files": 846,
-  "code_lines": 145076
+  "generated_at": "2026-11-22 12:17 UTC",
+  "files_total": 1027,
+  "code_files": 851,
+  "code_lines": 146100
  },
  "version": "1.3.2",
- "facts_hash": "07a59e7a2cac1258",
+ "facts_hash": "01d2c30ac2f11c47",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,7 +183,7 @@
   "languages": {
    ".ts": 298,
    ".tsx": 235,
-   ".sql": 191,
+   ".sql": 196,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -577,251 +577,174 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "lalamove_id",
-      "type": "TEXT UNIQUE NOT NULL",
+      "type": "text UNIQUE NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "internal_order_id",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "status",
       "type": "public.order_status NOT NULL DEFAULT 'PENDING'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "lalamove_status",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "pickup_address",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL DEFAULT ''",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "pickup_latitude",
-      "type": "DECIMAL(10,8)",
+      "type": "decimal(10,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "pickup_longitude",
-      "type": "DECIMAL(11,8)",
+      "type": "decimal(11,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "delivery_address",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL DEFAULT ''",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "delivery_latitude",
-      "type": "DECIMAL(10,8)",
+      "type": "decimal(10,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "delivery_longitude",
-      "type": "DECIMAL(11,8)",
+      "type": "decimal(11,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "customer_name",
-      "type": "TEXT NOT NULL",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "customer_phone",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "scheduled_at",
-      "type": "TIMESTAMPTZ DEFAULT now()",
+      "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "estimated_delivery",
-      "type": "TIMESTAMPTZ",
+      "name": "share_link",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "actual_delivery",
-      "type": "TIMESTAMPTZ",
+      "name": "driver_name",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "driver_id",
-      "type": "UUID REFERENCES public.drivers(id) ON DELETE SET NULL",
-      "fk": "drivers.id ON DELETE SET NULL",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "vehicle_type",
-      "type": "public.vehicle_type NOT NULL DEFAULT 'MOTORCYCLE'",
+      "name": "driver_plate",
+      "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "total_cost",
-      "type": "DECIMAL(10,2) NOT NULL DEFAULT 0",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "currency",
-      "type": "TEXT NOT NULL DEFAULT 'BRL'",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "tags",
-      "type": "TEXT[] DEFAULT '{}'",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "quotation_id",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "metadata",
-      "type": "JSONB DEFAULT '{}'",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "created_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "updated_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "bitrix24_deal_id",
-      "type": "INTEGER",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
-     },
-     {
-      "name": "outcome",
-      "type": "delivery_outcome",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251225194242_ab4f75da-94a4-4a98-85e6-4f1170dc4e8a.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "supplier_contact",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260517125817_5fbfe94b-4f32-4095-b9cd-634493fc2bab.sql"
-     },
-     {
-      "name": "cancellation_reason",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql"
-     },
-     {
-      "name": "priority_fee",
-      "type": "NUMERIC(10",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20260723133439_622ac986-0c37-4560-84ca-de587b0496cc.sql"
-     },
-     {
-      "name": "service_type",
       "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
-     },
-     {
-      "name": "pickup_place_id",
-      "type": "text",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-     },
-     {
-      "name": "geocode_match_confidence",
-      "type": "text",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261123180000_geocode_match_confidence.sql"
-     },
-     {
-      "name": "approach_eta_min",
-      "type": "number | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "approach_radius_m",
-      "type": "number | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "auto_notify_supplier",
-      "type": "boolean | null",
+      "type": "boolean DEFAULT false",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "pickup_contact_name",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "pickup_contact_phone",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "approach_radius_m",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "approach_eta_min",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "notify_delivery_contact",
+      "type": "boolean",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "actual_delivery",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "bitrix24_deal_id",
+      "type": "number | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "cancellation_notes",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "cancellation_reason",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -849,8 +772,36 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
+      "name": "created_at",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "currency",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
       "name": "custom_rating",
       "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "customer_name",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "customer_phone",
+      "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -891,14 +842,14 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "driver_lalamove_id",
+      "name": "driver_id",
       "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "driver_name",
+      "name": "driver_lalamove_id",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -912,15 +863,22 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "driver_plate",
+      "name": "duration_minutes",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "estimated_delivery",
       "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "duration_minutes",
-      "type": "number | null",
+      "name": "geocode_match_confidence",
+      "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -947,6 +905,13 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
+      "name": "internal_order_id",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
       "name": "internal_status",
       "type": "string | null",
       "fk": "",
@@ -961,15 +926,15 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "lalamove_status",
-      "type": "string | null",
+      "name": "metadata",
+      "type": "Json | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "notify_delivery_contact",
-      "type": "boolean | null",
+      "name": "outcome",
+      "type": "Database[\"public\"][\"Enums\"][\"delivery_outcome\"] | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -982,14 +947,7 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "pickup_contact_name",
-      "type": "string | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "pickup_contact_phone",
+      "name": "pickup_place_id",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -998,6 +956,13 @@
      {
       "name": "pod_received",
       "type": "boolean | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "priority_fee",
+      "type": "number | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -1018,6 +983,13 @@
      },
      {
       "name": "quotation_expires_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "quotation_id",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -1045,7 +1017,7 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "share_link",
+      "name": "service_type",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -1078,13 +1050,38 @@
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "tags",
+      "type": "string[] | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "total_cost",
+      "type": "number not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "updated_at",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "vehicle_type",
+      "type": "Database[\"public\"][\"Enums\"][\"vehicle_type\"] not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      }
     ],
-    "constraints": [
-     "constraint lalamove_orders_total_cost_nonneg CHECK (total_cost >= 0), ADD CONSTRAINT lalamove_orders_distance_nonneg CHECK (distance_meters IS NULL OR distance_meters >= 0), ADD CONSTRAINT lalamove_orders_delay_nonneg CHECK (delay_minutes IS NULL OR delay_minutes >= 0), ADD CONSTRAINT lalamove_order …",
-     "constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO …"
-    ],
-    "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
+    "constraints": [],
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Pedidos Lalamove com campos customizados e status em tempo real.",
     "origin": "migration"
    },
@@ -1092,118 +1089,104 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "order_id",
-      "type": "UUID REFERENCES public.lalamove_orders(id) ON DELETE CASCADE NOT NULL",
+      "type": "uuid NOT NULL REFERENCES public.lalamove_orders(id) ON DELETE CASCADE",
       "fk": "lalamove_orders.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "stop_index",
-      "type": "INTEGER NOT NULL",
+      "type": "integer NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "address",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL DEFAULT ''",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "latitude",
-      "type": "DECIMAL(10,8)",
+      "type": "decimal(10,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "longitude",
-      "type": "DECIMAL(11,8)",
+      "type": "decimal(11,8)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "contact_name",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "contact_phone",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "arrived_at",
-      "type": "TIMESTAMPTZ",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "completed_at",
-      "type": "TIMESTAMPTZ",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "created_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "pod_status",
-      "type": "TEXT DEFAULT 'NOT_REQUIRED'",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
-     },
-     {
-      "name": "stop_id",
       "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120100_lalamove_integration_columns.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "contact_phone",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "place_id",
       "type": "text",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-     },
-     {
-      "name": "geocode_match_confidence",
-      "type": "text",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261123180000_geocode_match_confidence.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "address_components",
-      "type": "Json | null",
+      "type": "jsonb",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "geocode_precision",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "arrived_at",
+      "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "geocode_precision",
+      "name": "completed_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "created_at",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "geocode_match_confidence",
       "type": "string | null",
       "fk": "",
       "generated": "",
@@ -1224,17 +1207,29 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
+      "name": "pod_status",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
       "name": "remarks",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "stop_id",
       "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      }
     ],
-    "constraints": [
-     "constraint lalamove_stops_stop_index_non_negative CHECK (stop_index >= 0), ADD CONSTRAINT lalamove_stops_latitude_range CHECK (latitude IS NULL OR (latitude >= -90 AND latitude <= 90)), ADD CONSTRAINT lalamove_stops_longitude_range CHECK (longitude IS NULL OR (longitude >= -180 AND longitude <= 180) …"
-    ],
-    "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
+    "constraints": [],
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Paradas/stops dos pedidos Lalamove com endereco e horarios.",
     "origin": "migration"
    },
@@ -1522,101 +1517,108 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "order_id",
-      "type": "UUID REFERENCES public.lalamove_orders(id) ON DELETE CASCADE NOT NULL UNIQUE",
+      "type": "uuid NOT NULL UNIQUE REFERENCES public.lalamove_orders(id) ON DELETE CASCADE",
       "fk": "lalamove_orders.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "driver_id",
-      "type": "UUID REFERENCES public.drivers(id) ON DELETE CASCADE NOT NULL",
-      "fk": "drivers.id ON DELETE CASCADE",
+      "type": "uuid NOT NULL",
+      "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "current_latitude",
-      "type": "DECIMAL(10,8) NOT NULL",
+      "type": "decimal(10,8) NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "current_longitude",
-      "type": "DECIMAL(11,8) NOT NULL",
+      "type": "decimal(11,8) NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "heading",
-      "type": "DECIMAL(5,2) DEFAULT 0",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "speed",
-      "type": "DECIMAL(6,2) DEFAULT 0",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "is_on_route",
-      "type": "BOOLEAN DEFAULT true",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "is_stopped",
-      "type": "BOOLEAN DEFAULT false",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "stopped_since",
-      "type": "TIMESTAMPTZ",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "eta_minutes",
-      "type": "INTEGER",
+      "type": "integer",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "last_updated",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
+      "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "expected_route",
-      "type": "JSONB",
+      "type": "jsonb",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "eta_updated_at",
-      "type": "timestamptz",
+      "name": "tracking_status",
+      "type": "text DEFAULT 'ACTIVE'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "is_on_route",
+      "type": "boolean DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "distance_to_route_m",
+      "type": "numeric(10,1)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "distance_to_next_stop_m",
+      "type": "numeric(10,1)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "next_stop_index",
+      "type": "integer NOT NULL DEFAULT 0",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "near_stop_cycles",
+      "type": "integer NOT NULL DEFAULT 0",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "off_route_cycles",
+      "type": "integer NOT NULL DEFAULT 0",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "alerts_sent",
@@ -1640,20 +1642,6 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "distance_to_next_stop_m",
-      "type": "number | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "distance_to_route_m",
-      "type": "number | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
-     },
-     {
       "name": "eta_provider",
       "type": "string | null",
       "fk": "",
@@ -1661,22 +1649,22 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "near_stop_cycles",
-      "type": "number not null",
+      "name": "eta_updated_at",
+      "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "next_stop_index",
-      "type": "number not null",
+      "name": "heading",
+      "type": "number | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "off_route_cycles",
-      "type": "number not null",
+      "name": "is_stopped",
+      "type": "boolean | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -1724,6 +1712,20 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
+      "name": "speed",
+      "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "stopped_since",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
       "name": "tracking_ended_at",
       "type": "string | null",
       "fk": "",
@@ -1736,20 +1738,10 @@
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
-     },
-     {
-      "name": "tracking_status",
-      "type": "string | null",
-      "fk": "",
-      "generated": "",
-      "src": "src/integrations/supabase/types.ts"
      }
     ],
-    "constraints": [
-     "constraint active_tracking_curlat_check CHECK (current_latitude >= -90 AND current_latitude <= 90), ADD CONSTRAINT active_tracking_curlon_check CHECK (current_longitude >= -180 AND current_longitude <= 180), ADD CONSTRAINT active_tracking_orglat_check CHECK (origin_lat IS NULL OR (origin_lat >= -90 …",
-     "constraint active_tracking_eta_non_negative CHECK (eta_minutes IS NULL OR eta_minutes >= 0)"
-    ],
-    "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
+    "constraints": [],
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Tracking em tempo real dos motoristas: velocidade, heading, ETA, deteccao de parada e desvio de rota.",
     "origin": "migration"
    },
@@ -1757,87 +1749,87 @@
     "columns": [
      {
       "name": "id",
-      "type": "UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "type",
       "type": "public.alert_type NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "severity",
       "type": "public.alert_severity NOT NULL DEFAULT 'INFO'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "title",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "message",
-      "type": "TEXT NOT NULL",
+      "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "order_id",
-      "type": "UUID REFERENCES public.lalamove_orders(id) ON DELETE SET NULL",
+      "type": "uuid REFERENCES public.lalamove_orders(id) ON DELETE SET NULL",
       "fk": "lalamove_orders.id ON DELETE SET NULL",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "driver_id",
-      "type": "UUID REFERENCES public.drivers(id) ON DELETE SET NULL",
-      "fk": "drivers.id ON DELETE SET NULL",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "is_read",
-      "type": "BOOLEAN DEFAULT false",
+      "type": "uuid",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "is_dismissed",
-      "type": "BOOLEAN DEFAULT false",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "metadata",
-      "type": "JSONB DEFAULT '{}'",
+      "type": "jsonb DEFAULT '{}'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "created_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT now()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
-     },
-     {
-      "name": "acknowledged_at",
+      "name": "escalated_at",
       "type": "timestamptz",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "escalation_level",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "acknowledged_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "acknowledged_by",
@@ -1847,22 +1839,22 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "escalated_at",
-      "type": "string | null",
+      "name": "is_dismissed",
+      "type": "boolean | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      },
      {
-      "name": "escalation_level",
-      "type": "number not null",
+      "name": "is_read",
+      "type": "boolean | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status.",
     "origin": "migration"
    },
@@ -2912,126 +2904,137 @@
       "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "type",
-      "type": "text NOT NULL CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch'))",
+      "name": "job_type",
+      "type": "text NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "payload",
-      "type": "jsonb NOT NULL",
+      "type": "jsonb NOT NULL DEFAULT '{}'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "status",
-      "type": "text NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
-     },
-     {
-      "name": "attempts",
+      "name": "priority",
       "type": "integer NOT NULL DEFAULT 0",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "max_attempts",
       "type": "integer NOT NULL DEFAULT 3",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "error_message",
-      "type": "text",
+      "name": "attempts",
+      "type": "integer NOT NULL DEFAULT 0",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "error_stack",
-      "type": "text",
+      "name": "status",
+      "type": "text NOT NULL DEFAULT 'pending'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "next_retry_at",
-      "type": "timestamptz",
+      "name": "idempotency_key",
+      "type": "text UNIQUE",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
-     },
-     {
-      "name": "started_at",
-      "type": "timestamptz",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
-     },
-     {
-      "name": "completed_at",
-      "type": "timestamptz",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
-     },
-     {
-      "name": "priority",
-      "type": "integer NOT NULL DEFAULT 5 CHECK (priority BETWEEN 1 AND 10)",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
-     },
-     {
-      "name": "dedup_key",
-      "type": "text",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "metadata",
-      "type": "jsonb NOT NULL DEFAULT '{}'::jsonb",
+      "type": "jsonb NOT NULL DEFAULT '{}'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "created_at",
       "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
-      "name": "updated_at",
-      "type": "timestamptz NOT NULL DEFAULT now()",
+      "name": "completed_at",
+      "type": "string | null",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "created_by",
-      "type": "uuid REFERENCES auth.users(id)",
-      "fk": "users.id",
+      "type": "string | null",
+      "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122120200_job_queue_system.sql"
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "dedup_key",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "error_message",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "error_stack",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "next_retry_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "started_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "type",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "updated_at",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      }
     ],
-    "constraints": [
-     "constraint job_queue_status_check CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))",
-     "constraint job_queue_type_check CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch', 'geo_backfill','route_plan','eta_refresh'))"
-    ],
-    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
+    "constraints": [],
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao.",
     "origin": "migration"
    },
@@ -5894,81 +5897,81 @@
       "type": "boolean PRIMARY KEY DEFAULT true CHECK (id)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "approach_radius_m",
       "type": "integer NOT NULL DEFAULT 500",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "approach_eta_min",
       "type": "integer NOT NULL DEFAULT 5",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "arrived_radius_m",
       "type": "integer NOT NULL DEFAULT 100",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "off_route_threshold_m",
       "type": "integer NOT NULL DEFAULT 300",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "notify_delivery_contact",
       "type": "boolean NOT NULL DEFAULT false",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-     },
-     {
-      "name": "quiet_hours_start",
-      "type": "time NOT NULL DEFAULT '07:00'",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "quiet_hours_end",
-      "type": "time NOT NULL DEFAULT '20:00'",
+      "type": "string not null",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "quiet_hours_start",
+      "type": "string not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "quiet_hours_tz",
-      "type": "text NOT NULL DEFAULT 'America/Sao_Paulo'",
+      "type": "string not null",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-     },
-     {
-      "name": "updated_by",
-      "type": "uuid REFERENCES auth.users(id)",
-      "fk": "users.id",
-      "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "updated_at",
-      "type": "timestamptz NOT NULL DEFAULT now()",
+      "type": "string not null",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "updated_by",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Parametros globais de geofence/notificacao (raio, ETA, horario silencioso).",
     "origin": "migration"
    },
@@ -6133,6 +6136,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+     },
+     {
+      "name": "blocked_warned_month",
+      "type": "date",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123120000_geo_budget_cron.sql"
      }
     ],
     "constraints": [],
@@ -6197,105 +6207,156 @@
       "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "order_id",
       "type": "uuid NOT NULL REFERENCES public.lalamove_orders(id) ON DELETE CASCADE",
       "fk": "lalamove_orders.id ON DELETE CASCADE",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "event_type",
       "type": "public.alert_type NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "stop_index",
       "type": "integer NOT NULL DEFAULT 0",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "triggered_at",
       "type": "timestamptz NOT NULL DEFAULT now()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "driver_lat",
       "type": "numeric(10,7)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "driver_lng",
-      "type": "numeric(10,7)",
+      "type": "numeric(11,7)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "distance_m",
       "type": "numeric(10,1)",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "eta_min",
       "type": "integer",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "alert_id",
       "type": "uuid REFERENCES public.alerts(id) ON DELETE SET NULL",
       "fk": "alerts.id ON DELETE SET NULL",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "job_id",
       "type": "uuid",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "notified_at",
       "type": "timestamptz",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "notification_status",
       "type": "text NOT NULL DEFAULT 'queued' CHECK (notification_status IN ('queued','deferred','sent','failed','no_recipient','skipped','cancelled'))",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      },
      {
       "name": "payload",
       "type": "jsonb NOT NULL DEFAULT '{}'::jsonb",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
      }
     ],
     "constraints": [
      "UNIQUE (order_id, event_type, stop_index)"
     ],
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "comment": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada).",
+    "origin": "migration"
+   },
+   "notification_optouts": {
+    "columns": [
+     {
+      "name": "phone",
+      "type": "text PRIMARY KEY",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+     },
+     {
+      "name": "reason",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+     },
+     {
+      "name": "created_by",
+      "type": "uuid REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "comment": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
+    "origin": "migration"
+   },
+   "auth.users": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
+    "comment": "",
     "origin": "migration"
    },
    "geo_blocks": {
@@ -10430,16 +10491,6 @@
     "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    },
    {
-    "name": "geo_usage_read_manager",
-    "table": "geo_usage",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')",
-    "check": "",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-   },
-   {
     "name": "order_geo_events_read",
     "table": "order_geo_events",
     "cmd": "SELECT",
@@ -10448,6 +10499,36 @@
     "using": "auth.role() = 'authenticated'",
     "check": "",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "name": "geo_usage_read_manager",
+    "table": "geo_usage",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_permission(auth.uid(), 'maps.usage.read')",
+    "check": "",
+    "src": "supabase/migrations/20261123190000_geo_maps_permissions.sql"
+   },
+   {
+    "name": "admin gerencia opt-outs",
+    "table": "notification_optouts",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "service role escreve opt-outs",
+    "table": "notification_optouts",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "triggers": [
@@ -10756,6 +10837,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "name": "trg_close_tracking_on_order_end",
+    "when": "AFTER INSERT OR UPDATE OF STATUS",
+    "table": "lalamove_orders",
+    "function": "trg_close_tracking_on_order_end",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "functions": {
@@ -10785,9 +10875,9 @@
    },
    "update_updated_at_column": {
     "args": "",
-    "returns": "TRIGGER",
-    "lang": "",
-    "src": "supabase/migrations/20260520211741_b4954224-5626-4651-972f-14a0d2c8fff1.sql",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "security_definer": false,
     "search_path": false,
     "body": "BEGIN NEW.updated_at = now(); RETURN NEW; END;",
@@ -10926,17 +11016,17 @@
     "tables": []
    },
    "add_job": {
-    "args": "p_type text, p_payload jsonb, p_priority integer DEFAULT 5, p_max_attempts integer DEFAULT 3, p_dedup_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'::jsonb",
+    "args": "p_job_type text, p_payload jsonb, p_priority integer DEFAULT 0, p_max_attempts integer DEFAULT 3, p_idempotency_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'",
     "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
-    "security_definer": true,
-    "search_path": true,
-    "body": "DECLARE v_job_id uuid; BEGIN IF p_dedup_key IS NOT NULL THEN SELECT id INTO v_job_id FROM job_queue WHERE dedup_key = p_dedup_key AND status IN ('PENDING','PROCESSING') LIMIT 1; IF v_job_id IS NOT NULL THEN RETURN v_job_id; END IF; END IF; INSERT INTO job_queue (type, payload, priority, max_attempts, dedup_key, metadata, created_by) VALUES (p_type, p_payload, p_priority, p_max_attempts, p_dedup_key, p_metadata, auth.uid()) RETURNING id INTO v_job_id; RETURN v_job_id; END;",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "DECLARE v_id uuid; BEGIN INSERT INTO job_queue (job_type, payload, priority, max_attempts, idempotency_key, metadata) VALUES (p_job_type, p_payload, p_priority, p_max_attempts, p_idempotency_key, p_metadata) ON CONFLICT (idempotency_key) DO NOTHING RETURNING id INTO v_id; RETURN v_id; END;",
     "raises": [],
     "tables": [
      "job_queue",
-     "v_job_id"
+     "v_id"
     ]
    },
    "get_next_jobs": {
@@ -11985,6 +12075,23 @@
      "audit_log"
     ]
    },
+   "geo_budget_notify_if_needed": {
+    "args": "",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE r record; v_claimed boolean; v_alert_id uuid; v_title text; v_message text; v_count integer := 0; BEGIN FOR r IN SELECT * FROM geo_budget_status() LOOP IF r.warn AND NOT r.blocked THEN v_claimed := false; UPDATE geo_budget SET warned_month = date_trunc('month', now())::date, updated_at = now() WHERE provider = r.provider AND (warned_month IS NULL OR warned_month < date_trunc('month', now())::date) RETURNING true INTO v_claimed; IF COALESCE(v_claimed, false) THEN v_title := format('Orcamento de mapas: %s em %s%%', r.provider, r.pct); v_message := format( 'Uso do provedor %s atingiu %s%% do orcamento mensal (US$ %s de US$ %s).', r.provider, r.pct, r.spent_usd, r.limit_usd); INSERT INTO …",
+    "raises": [],
+    "tables": [
+     "alerts",
+     "geo_budget",
+     "geo_budget_status",
+     "v_alert_id",
+     "v_claimed"
+    ]
+   },
    "refresh_cache_view": {
     "args": "p_view_name text DEFAULT NULL, p_triggered_by text DEFAULT 'system'",
     "returns": "TABLE(view_refreshed text, duration_ms integer, row_count bigint, status text)",
@@ -12014,6 +12121,57 @@
     "tables": [
      "public",
      "v_count"
+    ]
+   },
+   "normalize_br_phone": {
+    "args": "p_phone text",
+    "returns": "text",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "DECLARE d text := regexp_replace(COALESCE(p_phone, ''), '\\D', '', 'g'); BEGIN IF length(d) > 11 AND left(d, 2) = '55' THEN d := substr(d, 3); END IF; IF length(d) = 11 AND substr(d, 3, 1) = '9' THEN d := substr(d, 1, 2) || substr(d, 4); END IF; RETURN d; END;",
+    "raises": [],
+    "tables": []
+   },
+   "is_phone_opted_out": {
+    "args": "p_phone text",
+    "returns": "boolean",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_norm text := public.normalize_br_phone(p_phone); BEGIN IF length(v_norm) < 10 THEN RETURN false; END IF; RETURN EXISTS ( SELECT 1 FROM notification_optouts WHERE public.normalize_br_phone(phone) = v_norm ); END;",
+    "raises": [],
+    "tables": [
+     "notification_optouts"
+    ]
+   },
+   "end_order_tracking": {
+    "args": "p_order_id uuid, p_reason text DEFAULT 'order_closed'",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_ended integer := 0; v_cancelled integer := 0; BEGIN IF p_order_id IS NULL THEN RETURN 0; END IF; UPDATE active_tracking SET tracking_status = 'ended', tracking_ended_at = COALESCE(tracking_ended_at, now()), last_updated = now() WHERE order_id = p_order_id AND COALESCE(tracking_status, 'ACTIVE') <> 'ended'; GET DIAGNOSTICS v_ended = ROW_COUNT; UPDATE order_geo_events SET notification_status = 'skipped' WHERE order_id = p_order_id AND notification_status = 'deferred'; GET DIAGNOSTICS v_cancelled = ROW_COUNT; IF v_ended > 0 OR v_cancelled > 0 THEN RAISE LOG 'end_order_tracking(%): % tracking(s) encerrado(s), % evento(s) cancelado(s) [%]', p_order_id, v_ended, v_cancelled, p_reason; EN …",
+    "raises": [],
+    "tables": [
+     "active_tracking",
+     "order_geo_events"
+    ]
+   },
+   "trg_close_tracking_on_order_end": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "BEGIN IF NEW.status::text IN ('COMPLETED', 'CANCELLED', 'CANCELED', 'REJECTED', 'EXPIRED') AND (TG_OP = 'INSERT' OR OLD.status::text IS DISTINCT FROM NEW.status::text) THEN PERFORM public.end_order_tracking(NEW.id, 'order_status:' || NEW.status::text); END IF; RETURN NEW; END;",
+    "raises": [],
+    "tables": [
+     "NEW"
     ]
    },
    "Args": {
@@ -12092,10 +12250,7 @@
     "COMPLETED",
     "CANCELLED",
     "REJECTED",
-    "EXPIRED",
-    "QUOTED",
-    "ASSIGNING_DRIVER",
-    "DELIVERING"
+    "EXPIRED"
    ],
    "vehicle_type": [
     "MOTORCYCLE",
@@ -12131,7 +12286,6 @@
     "LATE_DELIVERY",
     "APPROVAL_REQUIRED",
     "ORDER_CANCELLED",
-    "INTEGRATION_FAILURE",
     "DRIVER_APPROACHING_PICKUP",
     "DRIVER_ARRIVED_PICKUP",
     "DRIVER_APPROACHING_DELIVERY",
@@ -12139,8 +12293,7 @@
     "ETA_DELAY",
     "SUPPLIER_DELAY_NOTICE",
     "MISSING_POD",
-    "GEO_BUDGET_WARNING",
-    "DRIVER_ASSIGNED"
+    "GEO_BUDGET_WARNING"
    ],
    "alert_severity": [
     "INFO",
@@ -14312,6 +14465,7 @@
    "supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql",
    "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
    "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
+   "supabase/migrations/20261123120000_geo_budget_cron.sql",
    "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
    "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql",
    "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
@@ -14319,8 +14473,12 @@
    "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
    "supabase/migrations/20261123180000_geocode_match_confidence.sql",
    "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
+   "supabase/migrations/20261123190000_geo_maps_permissions.sql",
    "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
+   "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+   "supabase/tests/fixtures/geo_trigger_schema.sql",
    "supabase/tests/geo_functions.test.sql",
+   "supabase/tests/geo_trigger.test.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -14395,7 +14553,8 @@
    "geo_cache": "enabled",
    "order_geo_events": "enabled",
    "cache_refresh_log": "enabled",
-   "job_queue_processing_log": "enabled"
+   "job_queue_processing_log": "enabled",
+   "notification_optouts": "enabled"
   },
   "grants": [
    {
@@ -16455,6 +16614,22 @@
     "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql"
+   },
+   {
     "kind": "grant",
     "privs": "select",
     "object": "cache_refresh_log",
@@ -16557,6 +16732,54 @@
     "objkind": "function",
     "roles": "public, anon, authenticated",
     "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "normalize_br_phone",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "normalize_br_phone",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "is_phone_opted_out",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "is_phone_opted_out",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "raises": [
@@ -16721,7 +16944,9 @@
    "table:cache_refresh_log": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
    "table:job_queue_processing_log": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao).",
    "column:lalamove_orders.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode (Mapbox match_code.confidence / Google location_type / LALAMOVE). Complementa geocode_precision (escala normalizada).",
-   "column:lalamove_stops.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode da parada."
+   "column:lalamove_stops.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode da parada.",
+   "column:permissions.module": "Modulo funcional; maps cobre provedores de mapa e custo (etapa 92).",
+   "table:notification_optouts": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -17109,6 +17334,7 @@
     "component": "MapsSettingsPage",
     "tables_transitive": [
      "geo_budget",
+     "geo_defaults",
      "geo_price_list",
      "geo_settings",
      "geo_usage_month",
@@ -17843,7 +18069,10 @@
     "errors": [
      "Telefone inválido em ${label}: esperado formato E.164 (+5511...)"
     ],
-    "side_effects": [],
+    "side_effects": [
+     "notifyDeliveryContact",
+     "notify_delivery_contact"
+    ],
     "webhook_events": [],
     "idempotency": true
    },
@@ -19386,6 +19615,14 @@
     "file": "src/hooks/useGeoAdmin.ts"
    },
    {
+    "name": "useGeoDefaults",
+    "file": "src/hooks/useGeoAdmin.ts"
+   },
+   {
+    "name": "useUpdateGeoDefaults",
+    "file": "src/hooks/useGeoAdmin.ts"
+   },
+   {
     "name": "useGeoUsageMonth",
     "file": "src/hooks/useGeoAdmin.ts"
    },
@@ -20484,7 +20721,7 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29159,
+   "lines": 29223,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20666,7 +20903,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 18948,
+   "lines": 18995,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -20688,6 +20925,7 @@
     "drivers",
     "feature_flags",
     "geo_budget",
+    "geo_defaults",
     "geo_price_list",
     "geo_settings",
     "geo_usage_month",
@@ -21009,7 +21247,7 @@
   {
    "module": "src/pages",
    "files": 89,
-   "lines": 19536,
+   "lines": 19697,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -21278,7 +21516,7 @@
   {
    "module": "supabase/functions",
    "files": 77,
-   "lines": 18284,
+   "lines": 18321,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21452,8 +21690,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 186,
-   "lines": 12566,
+   "files": 189,
+   "lines": 12903,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21544,15 +21782,17 @@
   },
   {
    "module": "supabase/tests",
-   "files": 1,
-   "lines": 55,
+   "files": 3,
+   "lines": 433,
    "tables": [],
    "exports": [],
    "docs": [],
    "deps": [],
    "imports_modules": [],
    "file_list": [
-    "supabase/tests/geo_functions.test.sql"
+    "supabase/tests/geo_functions.test.sql",
+    "supabase/tests/geo_trigger.test.sql",
+    "supabase/tests/fixtures/geo_trigger_schema.sql"
    ]
   }
  ],
@@ -21946,7 +22186,11 @@
    },
    "geo_defaults": {
     "select": [
+     "src/hooks/useGeoAdmin.ts",
      "supabase/functions/send-notification/index.ts"
+    ],
+    "update": [
+     "src/hooks/useGeoAdmin.ts"
     ]
    },
    "geo_price_list": {
@@ -23297,6 +23541,9 @@
    "demo": [
     "scripts/supabase_snapshot/test_snapshot.py"
    ],
+   "end_order_tracking": [
+    "supabase/functions/lalamove-webhook/index.ts"
+   ],
    "exec": [
     "supabase/functions/apply-fixes/index.ts",
     "supabase/functions/seed-fix-rls/index.ts"
@@ -23347,6 +23594,9 @@
    ],
    "is_known_device": [
     "supabase/functions/new-device-alert/index.ts"
+   ],
+   "is_phone_opted_out": [
+    "supabase/functions/send-notification/index.ts"
    ],
    "mark_job_completed": [
     "supabase/functions/job-worker/index.ts"
@@ -23611,8 +23861,6 @@
    "drivers": [
     "driver_incidents",
     "driver_approval_queue",
-    "active_tracking",
-    "driver_locations",
     "driver_evaluations"
    ],
    "alerts": [
@@ -23664,6 +23912,7 @@
    "login_attempts",
    "mcp_diagnostics_grants",
    "mfa_sessions",
+   "notification_optouts",
    "orders_operator_view",
    "orders_safe_view",
    "password_reset_tokens",
@@ -23679,7 +23928,8 @@
    "tracking_events_y2026m10",
    "tracking_events_y2026m11",
    "tracking_events_y2026m12",
-   "tracking_events_y2027m01"
+   "tracking_events_y2027m01",
+   "users"
   ],
   "columns_unknown": [
    {
@@ -23866,6 +24116,26 @@
     "file": "src/pages/ForgotPasswordPage.tsx",
     "field": "email",
     "rules": "type=email"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "def-approach-radius",
+    "rules": "type=number, min=0"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "def-approach-eta",
+    "rules": "type=number, min=0"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "def-arrived-radius",
+    "rules": "type=number, min=0"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "field": "def-off-route",
+    "rules": "type=number, min=0"
    },
    {
     "file": "src/pages/RiskRulesPage.dialogs.tsx",
@@ -25370,6 +25640,10 @@
    },
    {
     "file": "src/pages/MapsSettingsPage.tsx",
+    "msg": "Falha ao salvar padrões: ${(err as Error).message}"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
     "msg": "Falha ao salvar teto: ${(err as Error).message}"
    },
    {
@@ -26806,11 +27080,31 @@
    {
     "table": "lalamove_orders",
     "column": "pickup_address",
-    "rule": "obrigatório"
+    "rule": "default ''"
    },
    {
     "table": "lalamove_orders",
     "column": "delivery_address",
+    "rule": "default ''"
+   },
+   {
+    "table": "lalamove_orders",
+    "column": "scheduled_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_orders",
+    "column": "auto_notify_supplier",
+    "rule": "default false"
+   },
+   {
+    "table": "lalamove_orders",
+    "column": "created_at",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_orders",
+    "column": "currency",
     "rule": "obrigatório"
    },
    {
@@ -26820,63 +27114,23 @@
    },
    {
     "table": "lalamove_orders",
-    "column": "scheduled_at",
-    "rule": "default now()"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "driver_id",
-    "rule": "FK → drivers.id ON DELETE SET NULL"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "vehicle_type",
-    "rule": "default 'MOTORCYCLE'"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "total_cost",
-    "rule": "default 0"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "currency",
-    "rule": "default 'BRL'"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "tags",
-    "rule": "default '{}'"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "metadata",
-    "rule": "default '{}'"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "created_at",
-    "rule": "default now()"
-   },
-   {
-    "table": "lalamove_orders",
-    "column": "updated_at",
-    "rule": "default now()"
-   },
-   {
-    "table": "lalamove_orders",
     "column": "requires_address_review",
     "rule": "obrigatório"
    },
    {
     "table": "lalamove_orders",
-    "column": "(tabela)",
-    "rule": "constraint lalamove_orders_total_cost_nonneg CHECK (total_cost >= 0), ADD CONSTRAINT lalamove_orders_distance_nonneg CHECK (distance_meters IS NULL OR distance_meters >= 0), ADD CONSTRAINT lalamove_orders_delay_nonneg CHECK (delay_minutes IS NULL OR delay_minutes >= 0), ADD CONSTRAINT lalamove_order …"
+    "column": "total_cost",
+    "rule": "obrigatório"
    },
    {
     "table": "lalamove_orders",
-    "column": "(tabela)",
-    "rule": "constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO …"
+    "column": "updated_at",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_orders",
+    "column": "vehicle_type",
+    "rule": "obrigatório"
    },
    {
     "table": "lalamove_stops",
@@ -26896,22 +27150,12 @@
    {
     "table": "lalamove_stops",
     "column": "address",
-    "rule": "obrigatório"
+    "rule": "default ''"
    },
    {
     "table": "lalamove_stops",
     "column": "created_at",
-    "rule": "default now()"
-   },
-   {
-    "table": "lalamove_stops",
-    "column": "pod_status",
-    "rule": "default 'NOT_REQUIRED'"
-   },
-   {
-    "table": "lalamove_stops",
-    "column": "(tabela)",
-    "rule": "constraint lalamove_stops_stop_index_non_negative CHECK (stop_index >= 0), ADD CONSTRAINT lalamove_stops_latitude_range CHECK (latitude IS NULL OR (latitude >= -90 AND latitude <= 90)), ADD CONSTRAINT lalamove_stops_longitude_range CHECK (longitude IS NULL OR (longitude >= -180 AND longitude <= 180) …"
+    "rule": "obrigatório"
    },
    {
     "table": "lalamove_status_history",
@@ -27041,7 +27285,7 @@
    {
     "table": "active_tracking",
     "column": "driver_id",
-    "rule": "obrigatório; FK → drivers.id ON DELETE CASCADE"
+    "rule": "obrigatório"
    },
    {
     "table": "active_tracking",
@@ -27055,13 +27299,13 @@
    },
    {
     "table": "active_tracking",
-    "column": "heading",
-    "rule": "default 0"
+    "column": "last_updated",
+    "rule": "default now()"
    },
    {
     "table": "active_tracking",
-    "column": "speed",
-    "rule": "default 0"
+    "column": "tracking_status",
+    "rule": "default 'ACTIVE'"
    },
    {
     "table": "active_tracking",
@@ -27070,38 +27314,18 @@
    },
    {
     "table": "active_tracking",
-    "column": "is_stopped",
-    "rule": "default false"
-   },
-   {
-    "table": "active_tracking",
-    "column": "last_updated",
-    "rule": "default now()"
+    "column": "next_stop_index",
+    "rule": "default 0"
    },
    {
     "table": "active_tracking",
     "column": "near_stop_cycles",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "active_tracking",
-    "column": "next_stop_index",
-    "rule": "obrigatório"
+    "rule": "default 0"
    },
    {
     "table": "active_tracking",
     "column": "off_route_cycles",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "active_tracking",
-    "column": "(tabela)",
-    "rule": "constraint active_tracking_curlat_check CHECK (current_latitude >= -90 AND current_latitude <= 90), ADD CONSTRAINT active_tracking_curlon_check CHECK (current_longitude >= -180 AND current_longitude <= 180), ADD CONSTRAINT active_tracking_orglat_check CHECK (origin_lat IS NULL OR (origin_lat >= -90 …"
-   },
-   {
-    "table": "active_tracking",
-    "column": "(tabela)",
-    "rule": "constraint active_tracking_eta_non_negative CHECK (eta_minutes IS NULL OR eta_minutes >= 0)"
+    "rule": "default 0"
    },
    {
     "table": "alerts",
@@ -27135,21 +27359,6 @@
    },
    {
     "table": "alerts",
-    "column": "driver_id",
-    "rule": "FK → drivers.id ON DELETE SET NULL"
-   },
-   {
-    "table": "alerts",
-    "column": "is_read",
-    "rule": "default false"
-   },
-   {
-    "table": "alerts",
-    "column": "is_dismissed",
-    "rule": "default false"
-   },
-   {
-    "table": "alerts",
     "column": "metadata",
     "rule": "default '{}'"
    },
@@ -27157,11 +27366,6 @@
     "table": "alerts",
     "column": "created_at",
     "rule": "default now()"
-   },
-   {
-    "table": "alerts",
-    "column": "escalation_level",
-    "rule": "obrigatório"
    },
    {
     "table": "alerts_sent",
@@ -27660,22 +27864,17 @@
    },
    {
     "table": "job_queue",
-    "column": "type",
-    "rule": "obrigatório; CHECK type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch')"
-   },
-   {
-    "table": "job_queue",
-    "column": "payload",
+    "column": "job_type",
     "rule": "obrigatório"
    },
    {
     "table": "job_queue",
-    "column": "status",
-    "rule": "default 'PENDING'; CHECK status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED')"
+    "column": "payload",
+    "rule": "default '{}'"
    },
    {
     "table": "job_queue",
-    "column": "attempts",
+    "column": "priority",
     "rule": "default 0"
    },
    {
@@ -27685,13 +27884,23 @@
    },
    {
     "table": "job_queue",
-    "column": "priority",
-    "rule": "default 5; CHECK priority BETWEEN 1 AND 10"
+    "column": "attempts",
+    "rule": "default 0"
+   },
+   {
+    "table": "job_queue",
+    "column": "status",
+    "rule": "default 'pending'"
+   },
+   {
+    "table": "job_queue",
+    "column": "idempotency_key",
+    "rule": "único"
    },
    {
     "table": "job_queue",
     "column": "metadata",
-    "rule": "default '{}'::jsonb"
+    "rule": "default '{}'"
    },
    {
     "table": "job_queue",
@@ -27700,23 +27909,13 @@
    },
    {
     "table": "job_queue",
+    "column": "type",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "job_queue",
     "column": "updated_at",
-    "rule": "default now()"
-   },
-   {
-    "table": "job_queue",
-    "column": "created_by",
-    "rule": "FK → users.id"
-   },
-   {
-    "table": "job_queue",
-    "column": "(tabela)",
-    "rule": "constraint job_queue_status_check CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))"
-   },
-   {
-    "table": "job_queue",
-    "column": "(tabela)",
-    "rule": "constraint job_queue_type_check CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch', 'geo_backfill','route_plan','eta_refresh'))"
+    "rule": "obrigatório"
    },
    {
     "table": "job_queue_processing_log",
@@ -29105,28 +29304,23 @@
    },
    {
     "table": "geo_defaults",
-    "column": "quiet_hours_start",
-    "rule": "default '07:00'"
+    "column": "quiet_hours_end",
+    "rule": "obrigatório"
    },
    {
     "table": "geo_defaults",
-    "column": "quiet_hours_end",
-    "rule": "default '20:00'"
+    "column": "quiet_hours_start",
+    "rule": "obrigatório"
    },
    {
     "table": "geo_defaults",
     "column": "quiet_hours_tz",
-    "rule": "default 'America/Sao_Paulo'"
-   },
-   {
-    "table": "geo_defaults",
-    "column": "updated_by",
-    "rule": "FK → users.id"
+    "rule": "obrigatório"
    },
    {
     "table": "geo_defaults",
     "column": "updated_at",
-    "rule": "default now()"
+    "rule": "obrigatório"
    },
    {
     "table": "geo_price_list",
@@ -29302,6 +29496,31 @@
     "table": "order_geo_events",
     "column": "(tabela)",
     "rule": "UNIQUE (order_id, event_type, stop_index)"
+   },
+   {
+    "table": "notification_optouts",
+    "column": "phone",
+    "rule": "PK"
+   },
+   {
+    "table": "notification_optouts",
+    "column": "reason",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "notification_optouts",
+    "column": "created_by",
+    "rule": "FK → users.id ON DELETE SET NULL"
+   },
+   {
+    "table": "notification_optouts",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "auth.users",
+    "column": "id",
+    "rule": "PK"
    },
    {
     "table": "geo_blocks",
@@ -39473,6 +39692,10 @@
     "call": "invoke("
    },
    {
+    "file": "src/components/orders/NewOrderDialog.tsx",
+    "call": "notifyDeliveryContact"
+   },
+   {
     "file": "src/components/orders/OrderDetailModal.tsx",
     "call": "invoke("
    },
@@ -39535,6 +39758,10 @@
    {
     "file": "src/hooks/useGeoAdmin.ts",
     "call": "invoke("
+   },
+   {
+    "file": "src/hooks/useGeoAdmin.ts",
+    "call": "notify_delivery_contact"
    },
    {
     "file": "src/hooks/useGeoSearch.ts",
@@ -39641,6 +39868,14 @@
     "call": "invoke("
    },
    {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "call": "notify"
+   },
+   {
+    "file": "src/pages/MapsSettingsPage.tsx",
+    "call": "notify_delivery_contact"
+   },
+   {
     "file": "src/pages/alert-configurations/AlertConfigCard.tsx",
     "call": "notify_bitrix24_task"
    },
@@ -39683,6 +39918,14 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "call": "invoke("
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "call": "notifyDeliveryContact"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "call": "notify_delivery_contact"
    },
    {
     "file": "supabase/functions/lalamove-webhook/index.ts",
@@ -39819,6 +40062,10 @@
    {
     "file": "supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql",
     "call": "notify_whatsapp"
+   },
+   {
+    "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+    "call": "notify"
    }
   ],
   "db_policies": [
@@ -41973,16 +42220,6 @@
     "src": "supabase/migrations/20261122120200_job_queue_system.sql"
    },
    {
-    "name": "geo_usage_read_manager",
-    "table": "geo_usage",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')",
-    "check": "",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql"
-   },
-   {
     "name": "order_geo_events_read",
     "table": "order_geo_events",
     "cmd": "SELECT",
@@ -41991,6 +42228,36 @@
     "using": "auth.role() = 'authenticated'",
     "check": "",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "name": "geo_usage_read_manager",
+    "table": "geo_usage",
+    "cmd": "SELECT",
+    "roles": "public",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_permission(auth.uid(), 'maps.usage.read')",
+    "check": "",
+    "src": "supabase/migrations/20261123190000_geo_maps_permissions.sql"
+   },
+   {
+    "name": "admin gerencia opt-outs",
+    "table": "notification_optouts",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "service role escreve opt-outs",
+    "table": "notification_optouts",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "db_triggers": [
@@ -42299,6 +42566,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "name": "trg_close_tracking_on_order_end",
+    "when": "AFTER INSERT OR UPDATE OF STATUS",
+    "table": "lalamove_orders",
+    "function": "trg_close_tracking_on_order_end",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "db_functions": {
@@ -42328,9 +42604,9 @@
    },
    "update_updated_at_column": {
     "args": "",
-    "returns": "TRIGGER",
-    "lang": "",
-    "src": "supabase/migrations/20260520211741_b4954224-5626-4651-972f-14a0d2c8fff1.sql",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
     "security_definer": false,
     "search_path": false,
     "body": "BEGIN NEW.updated_at = now(); RETURN NEW; END;",
@@ -42469,17 +42745,17 @@
     "tables": []
    },
    "add_job": {
-    "args": "p_type text, p_payload jsonb, p_priority integer DEFAULT 5, p_max_attempts integer DEFAULT 3, p_dedup_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'::jsonb",
+    "args": "p_job_type text, p_payload jsonb, p_priority integer DEFAULT 0, p_max_attempts integer DEFAULT 3, p_idempotency_key text DEFAULT NULL, p_metadata jsonb DEFAULT '{}'",
     "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122120200_job_queue_system.sql",
-    "security_definer": true,
-    "search_path": true,
-    "body": "DECLARE v_job_id uuid; BEGIN IF p_dedup_key IS NOT NULL THEN SELECT id INTO v_job_id FROM job_queue WHERE dedup_key = p_dedup_key AND status IN ('PENDING','PROCESSING') LIMIT 1; IF v_job_id IS NOT NULL THEN RETURN v_job_id; END IF; END IF; INSERT INTO job_queue (type, payload, priority, max_attempts, dedup_key, metadata, created_by) VALUES (p_type, p_payload, p_priority, p_max_attempts, p_dedup_key, p_metadata, auth.uid()) RETURNING id INTO v_job_id; RETURN v_job_id; END;",
+    "src": "supabase/tests/fixtures/geo_trigger_schema.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "DECLARE v_id uuid; BEGIN INSERT INTO job_queue (job_type, payload, priority, max_attempts, idempotency_key, metadata) VALUES (p_job_type, p_payload, p_priority, p_max_attempts, p_idempotency_key, p_metadata) ON CONFLICT (idempotency_key) DO NOTHING RETURNING id INTO v_id; RETURN v_id; END;",
     "raises": [],
     "tables": [
      "job_queue",
-     "v_job_id"
+     "v_id"
     ]
    },
    "get_next_jobs": {
@@ -43528,6 +43804,23 @@
      "audit_log"
     ]
    },
+   "geo_budget_notify_if_needed": {
+    "args": "",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE r record; v_claimed boolean; v_alert_id uuid; v_title text; v_message text; v_count integer := 0; BEGIN FOR r IN SELECT * FROM geo_budget_status() LOOP IF r.warn AND NOT r.blocked THEN v_claimed := false; UPDATE geo_budget SET warned_month = date_trunc('month', now())::date, updated_at = now() WHERE provider = r.provider AND (warned_month IS NULL OR warned_month < date_trunc('month', now())::date) RETURNING true INTO v_claimed; IF COALESCE(v_claimed, false) THEN v_title := format('Orcamento de mapas: %s em %s%%', r.provider, r.pct); v_message := format( 'Uso do provedor %s atingiu %s%% do orcamento mensal (US$ %s de US$ %s).', r.provider, r.pct, r.spent_usd, r.limit_usd); INSERT INTO …",
+    "raises": [],
+    "tables": [
+     "alerts",
+     "geo_budget",
+     "geo_budget_status",
+     "v_alert_id",
+     "v_claimed"
+    ]
+   },
    "refresh_cache_view": {
     "args": "p_view_name text DEFAULT NULL, p_triggered_by text DEFAULT 'system'",
     "returns": "TABLE(view_refreshed text, duration_ms integer, row_count bigint, status text)",
@@ -43557,6 +43850,57 @@
     "tables": [
      "public",
      "v_count"
+    ]
+   },
+   "normalize_br_phone": {
+    "args": "p_phone text",
+    "returns": "text",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "DECLARE d text := regexp_replace(COALESCE(p_phone, ''), '\\D', '', 'g'); BEGIN IF length(d) > 11 AND left(d, 2) = '55' THEN d := substr(d, 3); END IF; IF length(d) = 11 AND substr(d, 3, 1) = '9' THEN d := substr(d, 1, 2) || substr(d, 4); END IF; RETURN d; END;",
+    "raises": [],
+    "tables": []
+   },
+   "is_phone_opted_out": {
+    "args": "p_phone text",
+    "returns": "boolean",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_norm text := public.normalize_br_phone(p_phone); BEGIN IF length(v_norm) < 10 THEN RETURN false; END IF; RETURN EXISTS ( SELECT 1 FROM notification_optouts WHERE public.normalize_br_phone(phone) = v_norm ); END;",
+    "raises": [],
+    "tables": [
+     "notification_optouts"
+    ]
+   },
+   "end_order_tracking": {
+    "args": "p_order_id uuid, p_reason text DEFAULT 'order_closed'",
+    "returns": "integer",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_ended integer := 0; v_cancelled integer := 0; BEGIN IF p_order_id IS NULL THEN RETURN 0; END IF; UPDATE active_tracking SET tracking_status = 'ended', tracking_ended_at = COALESCE(tracking_ended_at, now()), last_updated = now() WHERE order_id = p_order_id AND COALESCE(tracking_status, 'ACTIVE') <> 'ended'; GET DIAGNOSTICS v_ended = ROW_COUNT; UPDATE order_geo_events SET notification_status = 'skipped' WHERE order_id = p_order_id AND notification_status = 'deferred'; GET DIAGNOSTICS v_cancelled = ROW_COUNT; IF v_ended > 0 OR v_cancelled > 0 THEN RAISE LOG 'end_order_tracking(%): % tracking(s) encerrado(s), % evento(s) cancelado(s) [%]', p_order_id, v_ended, v_cancelled, p_reason; EN …",
+    "raises": [],
+    "tables": [
+     "active_tracking",
+     "order_geo_events"
+    ]
+   },
+   "trg_close_tracking_on_order_end": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "BEGIN IF NEW.status::text IN ('COMPLETED', 'CANCELLED', 'CANCELED', 'REJECTED', 'EXPIRED') AND (TG_OP = 'INSERT' OR OLD.status::text IS DISTINCT FROM NEW.status::text) THEN PERFORM public.end_order_tracking(NEW.id, 'order_status:' || NEW.status::text); END IF; RETURN NEW; END;",
+    "raises": [],
+    "tables": [
+     "NEW"
     ]
    },
    "Args": {
@@ -43635,10 +43979,7 @@
     "COMPLETED",
     "CANCELLED",
     "REJECTED",
-    "EXPIRED",
-    "QUOTED",
-    "ASSIGNING_DRIVER",
-    "DELIVERING"
+    "EXPIRED"
    ],
    "vehicle_type": [
     "MOTORCYCLE",
@@ -43674,7 +44015,6 @@
     "LATE_DELIVERY",
     "APPROVAL_REQUIRED",
     "ORDER_CANCELLED",
-    "INTEGRATION_FAILURE",
     "DRIVER_APPROACHING_PICKUP",
     "DRIVER_ARRIVED_PICKUP",
     "DRIVER_APPROACHING_DELIVERY",
@@ -43682,8 +44022,7 @@
     "ETA_DELAY",
     "SUPPLIER_DELAY_NOTICE",
     "MISSING_POD",
-    "GEO_BUDGET_WARNING",
-    "DRIVER_ASSIGNED"
+    "GEO_BUDGET_WARNING"
    ],
    "alert_severity": [
     "INFO",
@@ -44022,13 +44361,18 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED",
-      "QUOTED",
-      "ASSIGNING_DRIVER",
-      "DELIVERING"
+      "EXPIRED"
      ],
      "default": "PENDING",
      "type": "public.order_status NOT NULL DEFAULT 'PENDING'"
+    },
+    {
+     "table": "lalamove_orders",
+     "column": "lalamove_status",
+     "enum": "",
+     "allowed": [],
+     "default": "",
+     "type": "text"
     },
     {
      "table": "lalamove_orders",
@@ -44039,20 +44383,12 @@
      "type": "string | null"
     },
     {
-     "table": "lalamove_orders",
-     "column": "lalamove_status",
-     "enum": "",
-     "allowed": [],
-     "default": "",
-     "type": "string | null"
-    },
-    {
      "table": "lalamove_stops",
      "column": "pod_status",
      "enum": "",
      "allowed": [],
-     "default": "NOT_REQUIRED",
-     "type": "TEXT DEFAULT 'NOT_REQUIRED'"
+     "default": "",
+     "type": "string | null"
     },
     {
      "table": "lalamove_status_history",
@@ -44066,10 +44402,7 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED",
-      "QUOTED",
-      "ASSIGNING_DRIVER",
-      "DELIVERING"
+      "EXPIRED"
      ],
      "default": "",
      "type": "public.order_status NOT NULL"
@@ -44099,8 +44432,8 @@
      "column": "tracking_status",
      "enum": "",
      "allowed": [],
-     "default": "",
-     "type": "string | null"
+     "default": "ACTIVE",
+     "type": "text DEFAULT 'ACTIVE'"
     },
     {
      "table": "alerts_sent",
@@ -44138,15 +44471,9 @@
      "table": "job_queue",
      "column": "status",
      "enum": "",
-     "allowed": [
-      "CANCELLED",
-      "COMPLETED",
-      "FAILED",
-      "PENDING",
-      "PROCESSING"
-     ],
-     "default": "PENDING",
-     "type": "text NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED'))"
+     "allowed": [],
+     "default": "pending",
+     "type": "text NOT NULL DEFAULT 'pending'"
     },
     {
      "table": "password_reset_requests",
@@ -44294,10 +44621,7 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED",
-      "QUOTED",
-      "ASSIGNING_DRIVER",
-      "DELIVERING"
+      "EXPIRED"
      ],
      "default": "",
      "type": "Database[\"public\"][\"Enums\"][\"order_status\"] | null"
@@ -44322,10 +44646,7 @@
       "COMPLETED",
       "CANCELLED",
       "REJECTED",
-      "EXPIRED",
-      "QUOTED",
-      "ASSIGNING_DRIVER",
-      "DELIVERING"
+      "EXPIRED"
      ],
      "default": "",
      "type": "Database[\"public\"][\"Enums\"][\"order_status\"] | null"
@@ -45178,6 +45499,7 @@
   ],
   "policy_fns": [
    "can_run_db_diagnostics",
+   "has_permission",
    "has_role"
   ],
   "matrix": {
@@ -45261,6 +45583,13 @@
     "INSERT": [
      "public: true"
     ],
+    "UPDATE": [],
+    "DELETE": []
+   },
+   "auth.users": {
+    "rls": "não encontrado",
+    "SELECT": [],
+    "INSERT": [],
     "UPDATE": [],
     "DELETE": []
    },
@@ -45601,7 +45930,7 @@
    "geo_usage": {
     "rls": "enabled",
     "SELECT": [
-     "public: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')"
+     "public: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_permission(auth.uid(), 'maps.usage.read"
     ],
     "INSERT": [],
     "UPDATE": [],
@@ -45875,6 +46204,25 @@
     ],
     "DELETE": [
      "authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')"
+    ]
+   },
+   "notification_optouts": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
     ]
    },
    "order_geo_events": {
@@ -46302,7 +46650,9 @@
    {
     "table": "geo_defaults",
     "issue": "RLS ligado sem nenhuma política → só service_role acessa",
-    "files": []
+    "files": [
+     "src/hooks/useGeoAdmin.ts"
+    ]
    },
    {
     "table": "geo_price_list",
@@ -46453,12 +46803,13 @@
    "supabase/migrations/20261122120200_job_queue_system.sql",
    "supabase/migrations/20261122130100_geo_foundation.sql",
    "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
+   "supabase/migrations/20261123120000_geo_budget_cron.sql",
    "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
-   "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+   "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
-   "add_job",
    "cache_view_count",
    "can_run_db_diagnostics",
    "check_login_lockout",
@@ -46474,8 +46825,10 @@
    "cleanup_processing_logs",
    "clear_login_attempts",
    "create_audit_log",
+   "end_order_tracking",
    "ensure_tracking_events_partition",
    "geo_audit_config",
+   "geo_budget_notify_if_needed",
    "geo_budget_status",
    "geo_emit_event",
    "geo_evaluate_tracking",
@@ -46496,6 +46849,7 @@
    "is_ip_blocked",
    "is_ip_whitelisted",
    "is_known_device",
+   "is_phone_opted_out",
    "is_token_valid",
    "log_mfa_session",
    "mcp_introspect",
@@ -46516,6 +46870,7 @@
    "run_rls_security_audit",
    "sanitize_auth_log_metadata",
    "set_token_expiration",
+   "trg_close_tracking_on_order_end",
    "trigger_bitrix24_sync",
    "use_reset_token"
   ],
@@ -48584,6 +48939,22 @@
     "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
    },
    {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "geo_budget_notify_if_needed",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123120000_geo_budget_cron.sql"
+   },
+   {
     "kind": "grant",
     "privs": "select",
     "object": "cache_refresh_log",
@@ -48686,6 +49057,54 @@
     "objkind": "function",
     "roles": "public, anon, authenticated",
     "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "normalize_br_phone",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "normalize_br_phone",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "is_phone_opted_out",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "is_phone_opted_out",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "end_order_tracking",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
    }
   ],
   "guards": [
@@ -49688,6 +50107,11 @@
     "created_at"
    ],
    "order_geo_events": [],
+   "notification_optouts": [
+    "created_at",
+    "created_by"
+   ],
+   "auth.users": [],
    "geo_blocks": [
     "created_at",
     "updated_at"
@@ -49830,6 +50254,10 @@
     "address"
    ],
    [
+    "notification_optouts",
+    "phone"
+   ],
+   [
     "tracking_events_default",
     "latitude"
    ],
@@ -49927,27 +50355,27 @@
    ],
    [
     "lalamove_orders",
-    "customer_name",
-    "TEXT"
-   ],
-   [
-    "lalamove_orders",
-    "customer_phone",
-    "TEXT"
-   ],
-   [
-    "lalamove_orders",
-    "total_cost",
-    "DECIMAL(10,2)"
-   ],
-   [
-    "lalamove_orders",
     "cost_center",
     "string"
    ],
    [
     "lalamove_orders",
     "custom_rating",
+    "number"
+   ],
+   [
+    "lalamove_orders",
+    "customer_name",
+    "string"
+   ],
+   [
+    "lalamove_orders",
+    "customer_phone",
+    "string"
+   ],
+   [
+    "lalamove_orders",
+    "total_cost",
     "number"
    ],
    [
@@ -50161,6 +50589,13 @@
     "msg": "valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/pages/IncidentsPage.tsx"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:src/pages/JobQueuePage.tsx"
     ]
    },
    {
@@ -50514,7 +50949,9 @@
    {
     "kind": "rls",
     "msg": "`geo_defaults`: RLS ligado sem nenhuma política → só service_role acessa",
-    "where": []
+    "where": [
+     "src/hooks/useGeoAdmin.ts"
+    ]
    },
    {
     "kind": "rls",
@@ -50720,11 +51157,11 @@
    "Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.",
    "`cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "`lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "`lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "`lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_orders.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
+   "`lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`lalamove_stops.pod_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_status_history.old_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`driver_approval_queue.status` tem valores ['PENDING', 'APPROVED', 'REJECTED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`active_tracking.tracking_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
@@ -50732,7 +51169,7 @@
    "`bitrix24_sync.sync_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`bitrix24_stage_mappings.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`bitrix24_stage_mappings.bitrix_stage_name` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`job_queue.status` tem valores ['CANCELLED', 'COMPLETED', 'FAILED', 'PENDING', 'PROCESSING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`job_queue.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`password_reset_requests.status` tem valores ['approved', 'pending', 'rejected'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_stop_proofs.pod_status` tem valores ['NOT_REQUIRED', 'delivered', 'failed', 'pending'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_stop_proofs.pop_status` tem valores ['NOT_REQUIRED', 'failed', 'pending', 'picked_up'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
@@ -50745,10 +51182,10 @@
    "`driver_stats_cache.driver_status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_operator_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
-   "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "18/87 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status`, `delivery_metrics_cache` …",
+   "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "19/89 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -57399,7 +57836,7 @@
   },
   "src/components/orders/NewOrderDialog.tsx": {
    "path": "src/components/orders/NewOrderDialog.tsx",
-   "lines": 1108,
+   "lines": 1172,
    "exports": [
     "function NewOrderDialog"
    ],
@@ -57507,7 +57944,8 @@
     "setTimeout(() => { resetForm(); onOpenChange(false); onSuccess(); }, 1500);"
    ],
    "side_effects": [
-    "invoke("
+    "invoke(",
+    "notifyDeliveryContact"
    ]
   },
   "src/components/orders/OrderDetailModal.tsx": {
@@ -60616,7 +61054,7 @@
   },
   "src/hooks/useGeoAdmin.ts": {
    "path": "src/hooks/useGeoAdmin.ts",
-   "lines": 296,
+   "lines": 343,
    "exports": [
     "type GeoProviderName",
     "type GeoSettingProvider",
@@ -60632,6 +61070,9 @@
     "function useGeoBudgets",
     "function useGeoBudgetStatus",
     "function useGeoPriceList",
+    "interface GeoDefaultsRow",
+    "function useGeoDefaults",
+    "function useUpdateGeoDefaults",
     "function useGeoUsageMonth",
     "interface GeoLatencyRow",
     "function aggregateGeoLatency",
@@ -60652,6 +61093,14 @@
      "op": "select"
     },
     {
+     "table": "geo_defaults",
+     "op": "select"
+    },
+    {
+     "table": "geo_defaults",
+     "op": "update"
+    },
+    {
      "table": "geo_usage_month",
      "op": "select"
     },
@@ -60669,6 +61118,9 @@
     }
    ],
    "table_cols": {
+    "geo_defaults": [
+     "id"
+    ],
     "query_telemetry": [
      "created_at",
      "duration_ms",
@@ -60709,6 +61161,8 @@
     "useGeoBudgets",
     "useGeoBudgetStatus",
     "useGeoPriceList",
+    "useGeoDefaults",
+    "useUpdateGeoDefaults",
     "useGeoUsageMonth",
     "useGeoLatency",
     "useUpdateGeoSetting",
@@ -60716,7 +61170,8 @@
     "useGeoProviderHealth"
    ],
    "side_effects": [
-    "invoke("
+    "invoke(",
+    "notify_delivery_contact"
    ],
    "pagination": [
     "10"
@@ -65337,15 +65792,34 @@
   },
   "src/pages/MapsSettingsPage.tsx": {
    "path": "src/pages/MapsSettingsPage.tsx",
-   "lines": 803,
+   "lines": 964,
    "exports": [
     "function MapsSettingsPage"
    ],
    "errors": [
     "${providerLabel(provider)}: ${result.message}",
+    "Falha ao salvar padrões: ${(err as Error).message}",
     "Falha ao salvar teto: ${(err as Error).message}",
     "Falha ao trocar provedor: ${(err as Error).message}",
     "Falha no teste: ${(err as Error).message}"
+   ],
+   "html_constraints": [
+    {
+     "field": "def-approach-radius",
+     "rules": "type=number, min=0"
+    },
+    {
+     "field": "def-approach-eta",
+     "rules": "type=number, min=0"
+    },
+    {
+     "field": "def-arrived-radius",
+     "rules": "type=number, min=0"
+    },
+    {
+     "field": "def-off-route",
+     "rules": "type=number, min=0"
+    }
    ],
    "status_values": [
     {
@@ -65366,6 +65840,10 @@
    ],
    "rule_comments": [
     "* Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */"
+   ],
+   "side_effects": [
+    "notify",
+    "notify_delivery_contact"
    ]
   },
   "src/pages/MetricsPage.panels.tsx": {
@@ -69239,7 +69717,7 @@
   },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1180,
+   "lines": 1184,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -69408,6 +69886,10 @@
      "params": "method: string, path: string, timestamp: string, body: string",
      "body": "const rawSignature = `${timestamp}\\r\\n${method}\\r\\n${path}\\r\\n\\r\\n${body}`; const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( 'raw', encoder.encode(LALAMOVE_API_SECRET!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'] ); const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(rawSignature)); return Array.from(new Uint8Array(signatureBuffer)) .map(b => b.toString(16).padStart(2, '0')) .join('');"
     }
+   ],
+   "side_effects": [
+    "notifyDeliveryContact",
+    "notify_delivery_contact"
    ],
    "uses_service_role": true
   },
@@ -69680,7 +70162,7 @@
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
-   "lines": 956,
+   "lines": 967,
    "tables": [
     {
      "table": "webhook_events",
@@ -69882,6 +70364,9 @@
      "id"
     ]
    },
+   "rpc": [
+    "end_order_tracking"
+   ],
    "env": [
     "ALLOWED_ORIGINS",
     "LALAMOVE_API_SECRET",
@@ -70264,7 +70749,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 925,
+   "lines": 947,
    "tables": [
     {
      "table": "geo_defaults",
@@ -70335,7 +70820,8 @@
     ]
    },
    "rpc": [
-    "claim_alert_notification"
+    "claim_alert_notification",
+    "is_phone_opted_out"
    ],
    "invokes": [
     "geo-gateway"
@@ -71529,6 +72015,14 @@
    "path": "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
    "lines": 24
   },
+  "supabase/migrations/20261123120000_geo_budget_cron.sql": {
+   "path": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+   "lines": 159,
+   "side_effects": [
+    "notify"
+   ],
+   "uses_service_role": true
+  },
   "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql": {
    "path": "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
    "lines": 19
@@ -71566,21 +72060,111 @@
    "path": "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
    "lines": 61
   },
+  "supabase/migrations/20261123190000_geo_maps_permissions.sql": {
+   "path": "supabase/migrations/20261123190000_geo_maps_permissions.sql",
+   "lines": 45
+  },
   "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql": {
    "path": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
    "lines": 22
+  },
+  "supabase/migrations/20261123200000_optout_and_tracking_end.sql": {
+   "path": "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+   "lines": 133,
+   "uses_service_role": true
   },
   "supabase/tests/geo_functions.test.sql": {
    "path": "supabase/tests/geo_functions.test.sql",
    "lines": 55,
    "is_test": true
+  },
+  "supabase/tests/geo_trigger.test.sql": {
+   "path": "supabase/tests/geo_trigger.test.sql",
+   "lines": 227,
+   "is_test": true,
+   "side_effects": [
+    "notify_delivery_contact"
+   ]
+  },
+  "supabase/tests/fixtures/geo_trigger_schema.sql": {
+   "path": "supabase/tests/fixtures/geo_trigger_schema.sql",
+   "lines": 151,
+   "is_test": true,
+   "side_effects": [
+    "notify_delivery_contact"
+   ]
   }
  },
  "git": {
-  "sha": "555a756eaee2b51aa5a7d8dcb595c642937ec3f0",
+  "sha": "58a4500969fc00185fe7d501c11352deb451832a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "58a4500",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/send-notification/index.ts",
+     "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+    ]
+   },
+   {
+    "sha": "062c6b7",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)",
+    "files": [
+     "src/components/orders/NewOrderDialog.tsx",
+     "src/hooks/useGeoAdmin.ts",
+     "src/pages/MapsSettingsPage.tsx",
+     "supabase/functions/lalamove-api/index.ts",
+     "supabase/migrations/20261123190000_geo_maps_permissions.sql"
+    ]
+   },
+   {
+    "sha": "eb1ea10",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)",
+    "files": [
+     "supabase/migrations/20261123120000_geo_budget_cron.sql"
+    ]
+   },
+   {
+    "sha": "758b04c",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/tests/fixtures/geo_trigger_schema.sql",
+     "supabase/tests/geo_trigger.test.sql"
+    ]
+   },
+   {
+    "sha": "01eab04",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)",
+    "files": [
+     ".github/workflows/deploy-edges.yml",
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
+    ]
+   },
+   {
+    "sha": "6831e5d",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)",
+    "files": [
+     ".github/workflows/apply-migrations.yml"
+    ]
+   },
    {
     "sha": "555a756",
     "date": "2026-11-22",
@@ -71849,79 +72433,27 @@
      "supabase/functions/_shared/phone.ts",
      "supabase/functions/send-notification/index.ts"
     ]
-   },
-   {
-    "sha": "2809b60",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/job-worker/eta-cadence.test.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
-   },
-   {
-    "sha": "d725090",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
-   },
-   {
-    "sha": "5937457",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/job-worker/route-fixture-replay.test.ts",
-     "supabase/tests/fixtures/route_curitiba.json"
-    ]
-   },
-   {
-    "sha": "2d6c7b1",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)",
-    "files": [
-     "supabase/functions/job-worker/eta-delay.test.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
-   },
-   {
-    "sha": "5e00e7c",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: webhook cria a linha de active_tracking no primeiro ping (#236)",
-    "files": [
-     "supabase/functions/lalamove-webhook/index.ts"
-    ]
-   },
-   {
-    "sha": "bdef20a",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: contrato de dados do motor geo (etapa 41) (#235)",
-    "files": [
-     "docs/GEO_CONTRACT.md",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    16
-   ],
-   [
-    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
-    3
+    15
    ],
    [
     "supabase/functions/send-notification/index.ts",
+    4
+   ],
+   [
+    "src/components/orders/NewOrderDialog.tsx",
+    3
+   ],
+   [
+    "supabase/functions/lalamove-api/index.ts",
+    3
+   ],
+   [
+    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
     3
    ],
    [
@@ -71937,10 +72469,6 @@
     2
    ],
    [
-    "supabase/functions/lalamove-api/index.ts",
-    2
-   ],
-   [
     "src/components/map/GoogleMapsCanvas.tsx",
     2
    ],
@@ -71949,47 +72477,43 @@
     2
    ],
    [
-    "src/components/orders/NewOrderDialog.tsx",
-    2
-   ],
-   [
     "src/components/map/MapHUD.tsx",
     2
    ],
    [
-    "supabase/functions/job-worker/index.ts",
-    2
-   ],
-   [
-    "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
+    "supabase/functions/lalamove-webhook/index.ts",
     1
    ],
    [
-    "docs/CRON_JOBS.md",
+    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
     1
    ],
    [
-    "lalamove_bundle_import.json",
+    "src/hooks/useGeoAdmin.ts",
     1
    ],
    [
-    "lalamove_f01_cotacao.json",
+    "src/pages/MapsSettingsPage.tsx",
     1
    ],
    [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
+    "supabase/migrations/20261123190000_geo_maps_permissions.sql",
     1
    ],
    [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "supabase/migrations/20261123120000_geo_budget_cron.sql",
     1
    ],
    [
-    "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
+    ".github/workflows/ci.yml",
     1
    ],
    [
-    "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql",
+    "supabase/tests/fixtures/geo_trigger_schema.sql",
+    1
+   ],
+   [
+    "supabase/tests/geo_trigger.test.sql",
     1
    ]
   ]

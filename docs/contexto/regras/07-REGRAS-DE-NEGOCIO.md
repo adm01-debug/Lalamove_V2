@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `555a756eae` · branch `main` · 2026-11-22 12:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `58a4500969` · branch `main` · 2026-11-22 12:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -226,8 +226,10 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `bitrix24_spa_sync` | Admin manager view spa sync | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role)` |  |
 | `job_queue` | Service role full access | ALL | service_role | permissive | `true` | `true` |
 | `job_queue` | Admins view jobs | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::app_role)` |  |
-| `geo_usage` | geo_usage_read_manager | SELECT | public | permissive | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager')` |  |
 | `order_geo_events` | order_geo_events_read | SELECT | public | permissive | `auth.role() = 'authenticated'` |  |
+| `geo_usage` | geo_usage_read_manager | SELECT | public | permissive | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_permission(auth.uid(), 'maps.usage.read')` |  |
+| `notification_optouts` | admin gerencia opt-outs | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role)` | `public.has_role(auth.uid(), 'admin'::public.app_role)` |
+| `notification_optouts` | service role escreve opt-outs | ALL | service_role | permissive | `true` | `true` |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -262,28 +264,22 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lalamove_orders` | `id` | PK; default gen_random_uuid() |
 | `lalamove_orders` | `lalamove_id` | obrigatório; único |
 | `lalamove_orders` | `status` | default 'PENDING' |
-| `lalamove_orders` | `pickup_address` | obrigatório |
-| `lalamove_orders` | `delivery_address` | obrigatório |
-| `lalamove_orders` | `customer_name` | obrigatório |
+| `lalamove_orders` | `pickup_address` | default '' |
+| `lalamove_orders` | `delivery_address` | default '' |
 | `lalamove_orders` | `scheduled_at` | default now() |
-| `lalamove_orders` | `driver_id` | FK → drivers.id ON DELETE SET NULL |
-| `lalamove_orders` | `vehicle_type` | default 'MOTORCYCLE' |
-| `lalamove_orders` | `total_cost` | default 0 |
-| `lalamove_orders` | `currency` | default 'BRL' |
-| `lalamove_orders` | `tags` | default '{}' |
-| `lalamove_orders` | `metadata` | default '{}' |
-| `lalamove_orders` | `created_at` | default now() |
-| `lalamove_orders` | `updated_at` | default now() |
+| `lalamove_orders` | `auto_notify_supplier` | default false |
+| `lalamove_orders` | `created_at` | obrigatório |
+| `lalamove_orders` | `currency` | obrigatório |
+| `lalamove_orders` | `customer_name` | obrigatório |
 | `lalamove_orders` | `requires_address_review` | obrigatório |
-| `lalamove_orders` | `(tabela)` | constraint lalamove_orders_total_cost_nonneg CHECK (total_cost >= 0), ADD CONSTRAINT lalamove_orders_distance_nonneg CHECK (distance_meters IS NULL OR distance_meters >= 0), ADD CONSTRAINT lalamove_orders_delay_nonneg CHECK (delay_minutes IS NULL OR delay_minutes >= 0), ADD CONSTRAINT lalamove_order … |
-| `lalamove_orders` | `(tabela)` | constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO … |
+| `lalamove_orders` | `total_cost` | obrigatório |
+| `lalamove_orders` | `updated_at` | obrigatório |
+| `lalamove_orders` | `vehicle_type` | obrigatório |
 | `lalamove_stops` | `id` | PK; default gen_random_uuid() |
 | `lalamove_stops` | `order_id` | obrigatório; FK → lalamove_orders.id ON DELETE CASCADE |
 | `lalamove_stops` | `stop_index` | obrigatório |
-| `lalamove_stops` | `address` | obrigatório |
-| `lalamove_stops` | `created_at` | default now() |
-| `lalamove_stops` | `pod_status` | default 'NOT_REQUIRED' |
-| `lalamove_stops` | `(tabela)` | constraint lalamove_stops_stop_index_non_negative CHECK (stop_index >= 0), ADD CONSTRAINT lalamove_stops_latitude_range CHECK (latitude IS NULL OR (latitude >= -90 AND latitude <= 90)), ADD CONSTRAINT lalamove_stops_longitude_range CHECK (longitude IS NULL OR (longitude >= -180 AND longitude <= 180) … |
+| `lalamove_stops` | `address` | default '' |
+| `lalamove_stops` | `created_at` | obrigatório |
 | `lalamove_status_history` | `id` | PK; default gen_random_uuid() |
 | `lalamove_status_history` | `order_id` | obrigatório; FK → lalamove_orders.id ON DELETE CASCADE |
 | `lalamove_status_history` | `status` | obrigatório |
@@ -309,31 +305,23 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `driver_approval_queue` | `(tabela)` | constraint driver_approval_queue_risk_score_range CHECK (risk_score >= 0 AND risk_score <= 100), ADD CONSTRAINT driver_approval_queue_priority_non_negative CHECK (priority IS NULL OR priority >= 0) |
 | `active_tracking` | `id` | PK; default gen_random_uuid() |
 | `active_tracking` | `order_id` | obrigatório; único; FK → lalamove_orders.id ON DELETE CASCADE |
-| `active_tracking` | `driver_id` | obrigatório; FK → drivers.id ON DELETE CASCADE |
+| `active_tracking` | `driver_id` | obrigatório |
 | `active_tracking` | `current_latitude` | obrigatório |
 | `active_tracking` | `current_longitude` | obrigatório |
-| `active_tracking` | `heading` | default 0 |
-| `active_tracking` | `speed` | default 0 |
-| `active_tracking` | `is_on_route` | default true |
-| `active_tracking` | `is_stopped` | default false |
 | `active_tracking` | `last_updated` | default now() |
-| `active_tracking` | `near_stop_cycles` | obrigatório |
-| `active_tracking` | `next_stop_index` | obrigatório |
-| `active_tracking` | `off_route_cycles` | obrigatório |
-| `active_tracking` | `(tabela)` | constraint active_tracking_curlat_check CHECK (current_latitude >= -90 AND current_latitude <= 90), ADD CONSTRAINT active_tracking_curlon_check CHECK (current_longitude >= -180 AND current_longitude <= 180), ADD CONSTRAINT active_tracking_orglat_check CHECK (origin_lat IS NULL OR (origin_lat >= -90 … |
-| `active_tracking` | `(tabela)` | constraint active_tracking_eta_non_negative CHECK (eta_minutes IS NULL OR eta_minutes >= 0) |
+| `active_tracking` | `tracking_status` | default 'ACTIVE' |
+| `active_tracking` | `is_on_route` | default true |
+| `active_tracking` | `next_stop_index` | default 0 |
+| `active_tracking` | `near_stop_cycles` | default 0 |
+| `active_tracking` | `off_route_cycles` | default 0 |
 | `alerts` | `id` | PK; default gen_random_uuid() |
 | `alerts` | `type` | obrigatório |
 | `alerts` | `severity` | default 'INFO' |
 | `alerts` | `title` | obrigatório |
 | `alerts` | `message` | obrigatório |
 | `alerts` | `order_id` | FK → lalamove_orders.id ON DELETE SET NULL |
-| `alerts` | `driver_id` | FK → drivers.id ON DELETE SET NULL |
-| `alerts` | `is_read` | default false |
-| `alerts` | `is_dismissed` | default false |
 | `alerts` | `metadata` | default '{}' |
 | `alerts` | `created_at` | default now() |
-| `alerts` | `escalation_level` | obrigatório |
 | `alerts_sent` | `id` | PK; default gen_random_uuid() |
 | `alerts_sent` | `alert_id` | obrigatório; FK → alerts.id ON DELETE CASCADE |
 | `alerts_sent` | `channel` | obrigatório |
@@ -433,18 +421,17 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `audit_log` | `resource_id` | obrigatório |
 | `audit_log` | `created_at` | default now() |
 | `job_queue` | `id` | PK; default gen_random_uuid() |
-| `job_queue` | `type` | obrigatório; CHECK type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch') |
-| `job_queue` | `payload` | obrigatório |
-| `job_queue` | `status` | default 'PENDING'; CHECK status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED') |
-| `job_queue` | `attempts` | default 0 |
+| `job_queue` | `job_type` | obrigatório |
+| `job_queue` | `payload` | default '{}' |
+| `job_queue` | `priority` | default 0 |
 | `job_queue` | `max_attempts` | default 3 |
-| `job_queue` | `priority` | default 5; CHECK priority BETWEEN 1 AND 10 |
-| `job_queue` | `metadata` | default '{}'::jsonb |
+| `job_queue` | `attempts` | default 0 |
+| `job_queue` | `status` | default 'pending' |
+| `job_queue` | `idempotency_key` | único |
+| `job_queue` | `metadata` | default '{}' |
 | `job_queue` | `created_at` | default now() |
-| `job_queue` | `updated_at` | default now() |
-| `job_queue` | `created_by` | FK → users.id |
-| `job_queue` | `(tabela)` | constraint job_queue_status_check CHECK (status IN ('PENDING','PROCESSING','COMPLETED','FAILED','CANCELLED')) |
-| `job_queue` | `(tabela)` | constraint job_queue_type_check CHECK (type IN ('webhook','notification','evaluation','bitrix_sync','email','whatsapp','slack','lalamove_sync','pod_fetch', 'geo_backfill','route_plan','eta_refresh')) |
+| `job_queue` | `type` | obrigatório |
+| `job_queue` | `updated_at` | obrigatório |
 | `job_queue_processing_log` | `id` | PK; default gen_random_uuid() |
 | `job_queue_processing_log` | `run_at` | default NOW() |
 | `job_queue_processing_log` | `processed` | obrigatório |
@@ -533,7 +520,22 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_passkeys` | `counter` | default 0 |
 | `user_passkeys` | `backed_up` | default false |
 | `user_passkeys` | `created_at` | default now() |
-| … +276 linhas — lista completa em `context.json` | | |
+| `user_passkeys` | `(tabela)` | CONSTRAINT user_passkeys_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE |
+| `webauthn_challenges` | `id` | PK; default gen_random_uuid() |
+| `webauthn_challenges` | `challenge` | obrigatório |
+| `webauthn_challenges` | `type` | obrigatório; CHECK type IN ('registration', 'authentication') |
+| `webauthn_challenges` | `expires_at` | obrigatório |
+| `webauthn_challenges` | `created_at` | default now() |
+| `password_reset_requests` | `id` | PK; default gen_random_uuid() |
+| `password_reset_requests` | `user_email` | obrigatório |
+| `password_reset_requests` | `requested_at` | default now() |
+| `password_reset_requests` | `status` | default 'pending'; CHECK status IN ('pending', 'approved', 'rejected') |
+| `password_reset_requests` | `reviewed_by` | FK → users.id |
+| `password_reset_requests` | `expires_at` | default (now() |
+| `password_reset_requests` | `created_at` | default now() |
+| `login_attempts` | `id` | PK; default gen_random_uuid() |
+| `login_attempts` | `email` | obrigatório |
+| … +265 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -573,6 +575,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_geo_settings_audit | AFTER INSERT OR UPDATE OR DELETE | `geo_settings` | `geo_audit_config` |  |
 | trg_geo_budget_audit | AFTER INSERT OR UPDATE OR DELETE | `geo_budget` | `geo_audit_config` |  |
 | trg_geo_defaults_audit | AFTER UPDATE | `geo_defaults` | `geo_audit_config` |  |
+| trg_close_tracking_on_order_end | AFTER INSERT OR UPDATE OF STATUS | `lalamove_orders` | `trg_close_tracking_on_order_end` |  |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
@@ -596,19 +599,19 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 |---|---|---|---|
 | `cache_refresh_log` | `status` | `failed`, `running`, `success` | `running` |
 | `drivers` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | `PENDING_APPROVAL` |
-| `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` | `PENDING` |
-| `lalamove_orders` | `internal_status` | **livre (sem enum/CHECK)** |  |
+| `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` | `PENDING` |
 | `lalamove_orders` | `lalamove_status` | **livre (sem enum/CHECK)** |  |
-| `lalamove_stops` | `pod_status` | **livre (sem enum/CHECK)** | `NOT_REQUIRED` |
-| `lalamove_status_history` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
+| `lalamove_orders` | `internal_status` | **livre (sem enum/CHECK)** |  |
+| `lalamove_stops` | `pod_status` | **livre (sem enum/CHECK)** |  |
+| `lalamove_status_history` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
 | `lalamove_status_history` | `old_status` | **livre (sem enum/CHECK)** |  |
 | `driver_approval_queue` | `status` | `PENDING`, `APPROVED`, `REJECTED` | `PENDING` |
-| `active_tracking` | `tracking_status` | **livre (sem enum/CHECK)** |  |
+| `active_tracking` | `tracking_status` | **livre (sem enum/CHECK)** | `ACTIVE` |
 | `alerts_sent` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `bitrix24_sync` | `sync_status` | **livre (sem enum/CHECK)** | `pending` |
 | `bitrix24_stage_mappings` | `lalamove_status` | **livre (sem enum/CHECK)** |  |
 | `bitrix24_stage_mappings` | `bitrix_stage_name` | **livre (sem enum/CHECK)** |  |
-| `job_queue` | `status` | `CANCELLED`, `COMPLETED`, `FAILED`, `PENDING`, `PROCESSING` | `PENDING` |
+| `job_queue` | `status` | **livre (sem enum/CHECK)** | `pending` |
 | `password_reset_requests` | `status` | `approved`, `pending`, `rejected` | `pending` |
 | `lalamove_stop_proofs` | `pod_status` | `NOT_REQUIRED`, `delivered`, `failed`, `pending` |  |
 | `lalamove_stop_proofs` | `pop_status` | `NOT_REQUIRED`, `failed`, `pending`, `picked_up` |  |
@@ -621,9 +624,9 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `driver_stats_cache` | `driver_status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `drivers_safe_view` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `orders_operator_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
-| `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
+| `orders_operator_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
 | `orders_safe_view` | `internal_status` | **livre (sem enum/CHECK)** |  |
-| `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` |  |
+| `orders_safe_view` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` |  |
 
 ### E.2 Mapas de transição declarados no código
 
@@ -819,12 +822,12 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 
 | Nome | Valores | Onde |
 |---|---|---|
-| order_status | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED`, `QUOTED`, `ASSIGNING_DRIVER`, `DELIVERING` | banco |
+| order_status | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` | banco |
 | vehicle_type | `MOTORCYCLE`, `CAR`, `VAN`, `TRUCK` | banco |
 | driver_status | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | banco |
 | incident_type | `ROUTE_DEVIATION`, `LONG_STOP`, `LATE_DELIVERY`, `CUSTOMER_COMPLAINT`, `DAMAGE`, `OTHER` | banco |
 | incident_severity | `LOW`, `MEDIUM`, `HIGH`, `CRITICAL` | banco |
-| alert_type | `DRIVER_BLOCKED`, `ROUTE_DEVIATION`, `DRIVER_STOPPED`, `LATE_DELIVERY`, `APPROVAL_REQUIRED`, `ORDER_CANCELLED`, `INTEGRATION_FAILURE`, `DRIVER_APPROACHING_PICKUP`, `DRIVER_ARRIVED_PICKUP`, `DRIVER_APPROACHING_DELIVERY`, `DRIVER_ARRIVED_DELIVERY`, `ETA_DELAY`, `SUPPLIER_DELAY_NOTICE`, `MISSING_POD`, `GEO_BUDGET_WARNING`, `DRIVER_ASSIGNED` | banco |
+| alert_type | `DRIVER_BLOCKED`, `ROUTE_DEVIATION`, `DRIVER_STOPPED`, `LATE_DELIVERY`, `APPROVAL_REQUIRED`, `ORDER_CANCELLED`, `DRIVER_APPROACHING_PICKUP`, `DRIVER_ARRIVED_PICKUP`, `DRIVER_APPROACHING_DELIVERY`, `DRIVER_ARRIVED_DELIVERY`, `ETA_DELAY`, `SUPPLIER_DELAY_NOTICE`, `MISSING_POD`, `GEO_BUDGET_WARNING` | banco |
 | alert_severity | `INFO`, `WARNING`, `CRITICAL` | banco |
 | approval_status | `PENDING`, `APPROVED`, `REJECTED` | banco |
 | delivery_outcome | `SUCCESS`, `FAILED`, `DAMAGED`, `STOLEN`, `LATE`, `WRONG_ADDRESS`, `CUSTOMER_UNAVAILABLE` | banco |
@@ -976,6 +979,10 @@ _nenhum item encontrado_
 | `signup-email` | type=email | `src/pages/AuthPage.tsx` |
 | `edit-phone` | disabled, readOnly | `src/pages/ContactsPage.tsx` |
 | `email` | type=email | `src/pages/ForgotPasswordPage.tsx` |
+| `def-approach-radius` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
+| `def-approach-eta` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
+| `def-arrived-radius` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
+| `def-off-route` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
 | `score_impact` | type=number | `src/pages/RiskRulesPage.dialogs.tsx` |
 
 ## G. Fórmulas e derivações (como valores são calculados)
@@ -1806,6 +1813,7 @@ _nenhum item encontrado_
 | Token inválido ou expirado. | `src/pages/LalamoveSettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/LalamoveSettingsPage.tsx` |
 | ${providerLabel(provider)}: ${result.message} | `src/pages/MapsSettingsPage.tsx` |
+| Falha ao salvar padrões: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao salvar teto: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao trocar provedor: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
@@ -1817,8 +1825,7 @@ _nenhum item encontrado_
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
-| Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| … +101 linhas — lista completa em `context.json` | |
+| … +102 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1978,6 +1985,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/components/orders/FetchOrderDialog.tsx` |
 | `invoke(` | `src/components/orders/ImportCSVDialog.tsx` |
 | `invoke(` | `src/components/orders/NewOrderDialog.tsx` |
+| `notifyDeliveryContact` | `src/components/orders/NewOrderDialog.tsx` |
 | `invoke(` | `src/components/orders/OrderDetailModal.tsx` |
 | `invoke(` | `src/components/orders/OrderGeoEvents.tsx` |
 | `invoke(` | `src/hooks/healthChecks.ts` |
@@ -1994,6 +2002,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/hooks/useEvaluateDriver.ts` |
 | `invoke(` | `src/hooks/useExternalData.ts` |
 | `invoke(` | `src/hooks/useGeoAdmin.ts` |
+| `notify_delivery_contact` | `src/hooks/useGeoAdmin.ts` |
 | `invoke(` | `src/hooks/useGeoSearch.ts` |
 | `invoke(` | `src/hooks/useLalamoveUapi.ts` |
 | `notify` | `src/hooks/useOfflineStorage.ts` |
@@ -2020,6 +2029,8 @@ _nenhum item encontrado_
 | `notify_whatsapp` | `src/pages/AlertConfigurationsPage.tsx` |
 | `invoke(` | `src/pages/Bitrix24Page.tsx` |
 | `invoke(` | `src/pages/LiveMapPage.tsx` |
+| `notify` | `src/pages/MapsSettingsPage.tsx` |
+| `notify_delivery_contact` | `src/pages/MapsSettingsPage.tsx` |
 | `notify_bitrix24_task` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
 | `notify_email` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
 | `notify_n8n_webhook` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
@@ -2031,6 +2042,8 @@ _nenhum item encontrado_
 | `notifying` | `supabase/functions/check-driver-alerts/index.ts` |
 | `invoke(` | `supabase/functions/escalate-alerts/index.ts` |
 | `invoke(` | `supabase/functions/job-worker/index.ts` |
+| `notifyDeliveryContact` | `supabase/functions/lalamove-api/index.ts` |
+| `notify_delivery_contact` | `supabase/functions/lalamove-api/index.ts` |
 | `notify` | `supabase/functions/lalamove-webhook/index.ts` |
 | `notifyError` | `supabase/functions/lalamove-webhook/index.ts` |
 | `sendNotification` | `supabase/functions/lalamove-webhook/index.ts` |
@@ -2065,6 +2078,7 @@ _nenhum item encontrado_
 | `notify_whatsapp` | `supabase/migrations/20261122130100_geo_foundation.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql` |
+| `notify` | `supabase/migrations/20261123120000_geo_budget_cron.sql` |
 
 ## N. Regras citadas em comentários do código
 

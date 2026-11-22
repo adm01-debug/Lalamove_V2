@@ -1347,18 +1347,21 @@
    "hooks_exportados": [
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoDefaults",
     "useGeoLatency",
     "useGeoPriceList",
     "useGeoProviderHealth",
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useUpdateGeoBudget",
+    "useUpdateGeoDefaults",
     "useUpdateGeoSetting"
    ],
-   "linhas": 296,
+   "linhas": 343,
    "dominio": "hooks",
    "tabelas": [
     "geo_budget",
+    "geo_defaults",
     "geo_price_list",
     "geo_settings",
     "geo_usage_month",

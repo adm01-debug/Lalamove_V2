@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `555a756eaee2b51aa5a7d8dcb595c642937ec3f0` (2026-11-22T09:14:37-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `58a4500969fc00185fe7d501c11352deb451832a` (2026-11-22T09:16:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (533), SQL (191), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (533), SQL (196), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1028 |
+| arquivos_total | 1033 |
 | arquivos_codigo | 646 |
-| linhas_codigo | 125908 |
+| linhas_codigo | 126217 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -46,10 +46,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | componentes | 217 |
 | hooks | 101 |
 | edge_functions | 26 |
-| tabelas | 87 |
-| migrations | 186 |
-| cron_jobs | 22 |
-| testes | 145 |
+| tabelas | 88 |
+| migrations | 189 |
+| cron_jobs | 23 |
+| testes | 147 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 103 |
@@ -79,9 +79,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/orders | 0 | 0 | 9 | 32 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 51 | 0 | 6 | 42 |
-| hooks | 0 | 0 | 86 | 218 | 15 | 47 |
+| hooks | 0 | 0 | 86 | 220 | 15 | 48 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 197 | 14 | 47 |
+| pages | 37 | 55 | 55 | 199 | 14 | 48 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -222,6 +222,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `daily-cleanup-tokens-and-attempts` 0 3 * * * (20260109205309_5747a020-5d75-4401-a623-b5688143f754.sql)
 - `daily-cleanup-with-logging` 45 3 * * * (20260712202307_d4575c89-bdd8-439f-92bc-3d5524309049.sql)
 - `escalate-unacknowledged-alerts` */5 * * * * → edge escalate-alerts (20261122140000_fix_crons_dispatcher.sql)
+- `geo-budget-notify` 0 */6 * * * (20261123120000_geo_budget_cron.sql)
 - `geo-cache-prune` 15 3 * * * (20261122130100_geo_foundation.sql)
 - `geo-jobs-refresh` 1-59/5 * * * * (20261121194500_geo_jobs_scheduler.sql)
 - `lalamove_uapi_token_refresh_hourly` 17 * * * * → edge lalamove-token-refresh (20261122140000_fix_crons_dispatcher.sql)
@@ -262,7 +263,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 0
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
-- tabelas_com_drift_migration_vs_types: 2 — ex.: geo_cache, mfa_sessions
+- tabelas_com_drift_migration_vs_types: 3 — ex.: geo_budget, geo_cache, mfa_sessions
 - rpcs_sem_definicao: 1 — ex.: exec
 - componentes_orfaos: 4 — ex.: src/components/approvals/SwipeableApprovalCard.tsx, src/components/debug/AuditReportGenerator.tsx, src/components/ui/chart.tsx
 - componentes_com_nome_duplicado: 5 — ex.: ExtendedFAB, MiniFAB, QuickActionsPanel
@@ -273,24 +274,24 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7868 nós · 16793 arestas · 588 comunidades · grafo do commit `555a756e`
-- comunidades maiores: cn (201), button.tsx (142), lucide-react (128), ref_https (107), badge.tsx (101), snapshot.py (100), providers/types.ts (94), client.ts (92), react (83), DriversPage.tsx (82), dependencies (80), ref_node_path (79)
+- 7896 nós · 16829 arestas · 589 comunidades · grafo do commit `58a45009`
+- comunidades maiores: cn (137), button.tsx (127), NotificationHistoryPage.tsx (124), DashboardRedesigned.tsx (105), snapshot.py (102), client.ts (95), mapbox.ts (93), contract.ts (90), ref_node_path (85), RateLimitDashboardPage.tsx (83), geo-gateway/index.ts (80), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (34)
 - package.json (32)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (31)
 - package-lock.json (31)
 - supabase/config.toml (16)
-- .github/workflows/ci.yml (12)
+- .github/workflows/ci.yml (13)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
+- supabase/functions/send-notification/index.ts (11)
 - docs/pendencias/_ordem.md (10)
-- supabase/functions/send-notification/index.ts (10)
 - src/components/orders/AddressAutocomplete.tsx (9)
+- src/components/orders/NewOrderDialog.tsx (9)
 - supabase/functions/job-worker/index.ts (9)
 - src/components/map/LiveMap.tsx (8)
-- src/components/orders/NewOrderDialog.tsx (8)
 - supabase/functions/_shared/schemas.ts (8)
 - supabase/functions/geo-gateway/providers/mapbox.ts (8)
 
@@ -375,6 +376,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `58a4500` feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)
+- 2026-11-22 `062c6b7` feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)
+- 2026-11-22 `eb1ea10` feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)
+- 2026-11-22 `758b04c` test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)
+- 2026-11-22 `01eab04` infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)
+- 2026-11-22 `6831e5d` fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)
 - 2026-11-22 `555a756` infra: agenda o cron check-driver-alerts (etapa 70) (#217)
 - 2026-11-22 `cdaaa4f` docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)
 - 2026-11-22 `6c13bec` fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)
@@ -384,12 +391,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `2a4d1b1` fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)
 - 2026-11-22 `a8e52d5` security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)
 - 2026-11-22 `961964c` fix(geo): remove sublocality do mock do teste de bairro do Google (#259)
-- 2026-11-22 `6c065b3` fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)
-- 2026-11-22 `affd0df` fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)
-- 2026-11-22 `1e2d9ce` feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)
-- 2026-11-22 `8f42f4f` feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)
-- 2026-11-22 `59db689` feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)
-- 2026-11-22 `5984867` feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

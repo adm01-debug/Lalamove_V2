@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `555a756eae` · branch `main` · 2026-11-22 12:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `58a4500969` · branch `main` · 2026-11-22 12:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -13,6 +13,7 @@
 | `alerts` | Alertas do sistema (ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY etc) com severidade e status. | 15 colunas | migration |
 | `alerts_sent` | Historico de notificacoes enviadas por canal com status, retry e erro. | 11 colunas | migration |
 | `audit_log` | Registro de auditoria de ações | 9 colunas | migration |
+| `auth.users` | _(sem COMMENT ON TABLE — significado não documentado)_ | 1 colunas | migration |
 | `auth_logs` | Auditoria de autenticacao: IP, user agent e evento de cada acesso. | 9 colunas | migration |
 | `bitrix24_activities` | Atividades/timeline sincronizadas com o CRM Bitrix24. | 7 colunas | migration |
 | `bitrix24_spa_sync` | Sincronizacao do pedido com o SPA 1690 do Bitrix24 (crm.item.*). Substitui bitrix24_sync (modelo de deals). | 10 colunas | migration |
@@ -37,7 +38,7 @@
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
 | `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
-| `geo_budget` | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. | 7 colunas | migration |
+| `geo_budget` | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. | 8 colunas | migration |
 | `geo_cache` | Cache de respostas de geocode/rota/static por hash de request (TTL por funcao). | 6 colunas | migration |
 | `geo_defaults` | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). | 11 colunas | migration |
 | `geo_price_list` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
@@ -46,7 +47,7 @@
 | `geo_usage_month` | _(sem COMMENT ON TABLE — significado não documentado)_ | 5 colunas | types.ts |
 | `hourly_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
-| `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 17 colunas | migration |
+| `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 19 colunas | migration |
 | `job_queue_processing_log` | Historico das rodadas do processador de fila (processados, sucesso, falha, duracao). | 8 colunas | migration |
 | `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
 | `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 72 colunas | migration |
@@ -62,6 +63,7 @@
 | `mcp_diagnostics_grants` | Grants de acesso a diagnosticos via MCP (query_telemetry). | 7 colunas | migration |
 | `mfa_sessions` | Sessoes MFA (TOTP) registradas por usuario. | 10 colunas | migration |
 | `new_device_alerts` | Alertas de novo dispositivo detectado no login. | 8 colunas | migration |
+| `notification_optouts` | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. | 4 colunas | migration |
 | `order_geo_events` | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada). | 14 colunas | migration |
 | `orders_operator_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
 | `orders_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
@@ -94,12 +96,12 @@
 | `user_roles` | Roles atribuidas a cada usuario (RBAC). | 10 colunas | migration |
 | `webauthn_challenges` | Challenges WebAuthn para fluxo de autenticacao sem senha. | 6 colunas | migration |
 | `webhook_events` | Log completo de todos webhooks recebidos do Lalamove. | 9 colunas | migration |
-| `order_status` (enum) | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED, QUOTED, ASSIGNING_DRIVER, DELIVERING |  | banco |
+| `order_status` (enum) | PENDING, MATCHED, ON_GOING, PICKED_UP, COMPLETED, CANCELLED, REJECTED, EXPIRED |  | banco |
 | `vehicle_type` (enum) | MOTORCYCLE, CAR, VAN, TRUCK |  | banco |
 | `driver_status` (enum) | APPROVED, PENDING_APPROVAL, BLOCKED, WHITELIST, BLACKLIST |  | banco |
 | `incident_type` (enum) | ROUTE_DEVIATION, LONG_STOP, LATE_DELIVERY, CUSTOMER_COMPLAINT, DAMAGE, OTHER |  | banco |
 | `incident_severity` (enum) | LOW, MEDIUM, HIGH, CRITICAL |  | banco |
-| `alert_type` (enum) | DRIVER_BLOCKED, ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY, APPROVAL_REQUIRED, ORDER_CANCELLED, INTEGRATION_FAILURE, DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING, DRIVER_ASSIGNED |  | banco |
+| `alert_type` (enum) | DRIVER_BLOCKED, ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY, APPROVAL_REQUIRED, ORDER_CANCELLED, DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING |  | banco |
 | `alert_severity` (enum) | INFO, WARNING, CRITICAL |  | banco |
 | `approval_status` (enum) | PENDING, APPROVED, REJECTED |  | banco |
 | `delivery_outcome` (enum) | SUCCESS, FAILED, DAMAGED, STOLEN, LATE, WRONG_ADDRESS, CUSTOMER_UNAVAILABLE |  | banco |
@@ -201,6 +203,7 @@ _nenhum item encontrado_
 | status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
 | status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
+| status | valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/JobQueuePage.tsx` |
 | status | valor `ZERO_RESULTS` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `OVER_QUERY_LIMIT` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `REQUEST_DENIED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
@@ -253,7 +256,7 @@ _nenhum item encontrado_
 | rls | `geo_blocks`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
 | rls | `geo_budget`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_cache`: RLS ligado sem nenhuma política → só service_role acessa |  |
-| rls | `geo_defaults`: RLS ligado sem nenhuma política → só service_role acessa |  |
+| rls | `geo_defaults`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_price_list`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useMapProviderPolicy.ts` |
 | rls | `geo_usage_month`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |
@@ -288,11 +291,11 @@ _nenhum item encontrado_
 - Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.
 - `cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- `lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_orders.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
+- `lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_stops.pod_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `lalamove_status_history.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_status_history.old_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `driver_approval_queue.status` tem valores ['PENDING', 'APPROVED', 'REJECTED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `active_tracking.tracking_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
@@ -300,7 +303,7 @@ _nenhum item encontrado_
 - `bitrix24_sync.sync_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `bitrix24_stage_mappings.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `bitrix24_stage_mappings.bitrix_stage_name` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `job_queue.status` tem valores ['CANCELLED', 'COMPLETED', 'FAILED', 'PENDING', 'PROCESSING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `job_queue.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `password_reset_requests.status` tem valores ['approved', 'pending', 'rejected'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_stop_proofs.pod_status` tem valores ['NOT_REQUIRED', 'delivered', 'failed', 'pending'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_stop_proofs.pop_status` tem valores ['NOT_REQUIRED', 'failed', 'pending', 'picked_up'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
@@ -313,10 +316,10 @@ _nenhum item encontrado_
 - `driver_stats_cache.driver_status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_operator_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
-- `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 18/87 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status`, `delivery_metrics_cache` …
+- `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- 19/89 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

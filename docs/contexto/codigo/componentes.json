@@ -1108,7 +1108,7 @@
     "NewOrderDialog"
    ],
    "export_default": null,
-   "linhas": 1108,
+   "linhas": 1172,
    "dominio": "components/orders",
    "hooks_locais": [
     "useContacts",
@@ -3026,11 +3026,12 @@
     "MapsSettingsPage"
    ],
    "export_default": "MapsSettingsPage",
-   "linhas": 803,
+   "linhas": 964,
    "dominio": "pages",
    "hooks_locais": [
     "useGeoBudgetStatus",
     "useGeoBudgets",
+    "useGeoDefaults",
     "useGeoLatency",
     "useGeoPriceList",
     "useGeoProviderHealth",
@@ -3038,6 +3039,7 @@
     "useGeoUsageMonth",
     "usePermissions",
     "useUpdateGeoBudget",
+    "useUpdateGeoDefaults",
     "useUpdateGeoSetting"
    ],
    "tabelas": [],
