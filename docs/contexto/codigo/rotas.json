@@ -3,10 +3,10 @@
  "format_version": 1,
  "descricao": "Rotas React Router de src/App.tsx: url → componente → arquivo → hooks/tabelas/edges (fecho transitivo dos imports). papel_requerido/requer_mfa/permissao_requerida vêm do ProtectedRoute e são herdados do Route pai.",
  "resumo": {
-  "urls": 55,
+  "urls": 56,
   "layouts": 1,
   "itens_menu": 38,
-  "lazy": 52
+  "lazy": 53
  },
  "urls": [
   {
@@ -1933,6 +1933,47 @@
    "flags": [],
    "papeis": [],
    "arquivos_puxados": 15
+  },
+  {
+   "caminho": "/mfa-enroll",
+   "componente": "MFAEnrollPage",
+   "arquivo": "src/pages/MFAEnrollPage.tsx",
+   "tipo": "tela",
+   "protegida": false,
+   "papel_requerido": null,
+   "requer_mfa": false,
+   "permissao_requerida": null,
+   "wrappers": [
+    "SuspenseWrapper"
+   ],
+   "pai": null,
+   "indice": false,
+   "lazy": true,
+   "definida_em": "src/App.tsx",
+   "redireciona": null,
+   "hooks": [
+    "useAuth",
+    "useContext",
+    "useEffect",
+    "useLocation",
+    "useMFA",
+    "useMutation",
+    "useNavigate",
+    "useQuery",
+    "useQueryClient",
+    "useState"
+   ],
+   "hooks_locais": [
+    "useAuth",
+    "useMFA"
+   ],
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "canais_realtime": [],
+   "flags": [],
+   "papeis": [],
+   "arquivos_puxados": 11
   },
   {
    "caminho": "/mfa-verify",
@@ -4305,6 +4346,7 @@
   "LalamoveQuotaPage": "src/pages/LalamoveQuotaPage.tsx",
   "LalamoveSettingsPage": "src/pages/LalamoveSettingsPage.tsx",
   "LiveMapPage": "src/pages/LiveMapPage.tsx",
+  "MFAEnrollPage": "src/pages/MFAEnrollPage.tsx",
   "MFAVerifyPage": "src/pages/MFAVerifyPage.tsx",
   "MapToolsPage": "src/pages/MapToolsPage.tsx",
   "MapsSettingsPage": "src/pages/MapsSettingsPage.tsx",

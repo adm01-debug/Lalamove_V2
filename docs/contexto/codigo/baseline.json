@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1f97a5b2f6551167731143f89fa50f238a86d938",
+  "commit": "035a7c6a732a263a279496a9e04a08650c10cdd4",
   "branch": "main",
-  "data_commit": "2026-11-22T14:21:39-03:00",
+  "data_commit": "2026-11-22T14:31:09-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "035a7c6",
+    "data": "2026-11-22",
+    "assunto": "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)"
+   },
    {
     "sha": "1f97a5b",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "a9c2b2f",
     "data": "2026-11-22",
     "assunto": "docs(lalamove): commita análise exaustiva e plano de integração completo (#276)"
-   },
-   {
-    "sha": "e21df07",
-    "data": "2026-11-22",
-    "assunto": "fix: geocode fallback com persist e mini-mapa por provider (#274)"
    }
   ],
-  "arquivos_mudados_7d": 347,
+  "arquivos_mudados_7d": 348,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -168,12 +168,12 @@
     "mudancas": 15
    },
    {
-    "pasta": "package-lock.json",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 14
    },
    {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 13
+    "pasta": "package-lock.json",
+    "mudancas": 14
    },
    {
     "pasta": "supabase/functions/job-worker",
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 200
+    "commits": 201
    },
    {
     "autor": "dependabot[bot]",
@@ -310,15 +310,15 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1058,
-  "arquivos_codigo": 657,
-  "linhas_codigo": 129102,
-  "rotas": 55,
+  "arquivos_total": 1059,
+  "arquivos_codigo": 658,
+  "linhas_codigo": 129150,
+  "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
   "itens_menu": 38,
   "modulos": 43,
-  "componentes": 217,
+  "componentes": 218,
   "hooks": 101,
   "edge_functions": 26,
   "tabelas": 88,
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 228
+   "linhas": 230
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 161,
-   "linhas": 29575
+   "linhas": 29592
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19013
+   "linhas": 19018
   },
   "src/i18n": {
    "arquivos": 1,
@@ -543,8 +543,8 @@
    "linhas": 28
   },
   "src/pages": {
-   "arquivos": 89,
-   "linhas": 19776
+   "arquivos": 90,
+   "linhas": 19800
   },
   "src/services": {
    "arquivos": 1,
@@ -719,7 +719,8 @@
   "rotas_sem_arquivo": [],
   "rotas_sem_protecao": [
    "/",
-   "/dashboard"
+   "/dashboard",
+   "/mfa-enroll"
   ],
   "menu_visivel_sem_acesso": [
    "Ferramentas Mapa -> /map-tools (menu: todos; rota: manager)",

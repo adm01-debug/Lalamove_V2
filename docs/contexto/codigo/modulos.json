@@ -215,7 +215,7 @@
    "modulo": "components/auth",
    "arquivos": 9,
    "testes": 1,
-   "linhas": 1285,
+   "linhas": 1290,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1658,7 +1658,7 @@
    "modulo": "hooks",
    "arquivos": 86,
    "testes": 1,
-   "linhas": 15582,
+   "linhas": 15587,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2561,9 +2561,9 @@
   },
   {
    "modulo": "pages",
-   "arquivos": 55,
+   "arquivos": 56,
    "testes": 1,
-   "linhas": 16250,
+   "linhas": 16274,
    "itens_menu": [
     "Relatórios",
     "Dashboard SLA",
@@ -2633,6 +2633,7 @@
     "/map",
     "/map-tools",
     "/metrics",
+    "/mfa-enroll",
     "/mfa-verify",
     "/notification-history",
     "/orders",
@@ -2666,7 +2667,7 @@
     "operator",
     "viewer"
    ],
-   "componentes": 55,
+   "componentes": 56,
    "hooks_locais": [
     "useAccessibility",
     "useActiveAlerts",

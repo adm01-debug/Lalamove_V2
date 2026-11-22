@@ -547,11 +547,11 @@
   {
    "arquivo": "src/components/auth/ProtectedRoute.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 82,
+   "linhas": 94,
    "testa": [
     "src/components/auth/ProtectedRoute.tsx"
    ],
-   "casos": 3
+   "casos": 4
   },
   {
    "arquivo": "src/components/map/__tests__/googleLayers.test.ts",
@@ -1591,6 +1591,7 @@
    "src/pages/LalamoveQuotaPage.tsx",
    "src/pages/LalamoveSettingsPage.tsx",
    "src/pages/LiveMapPage.tsx",
+   "src/pages/MFAEnrollPage.tsx",
    "src/pages/MFAVerifyPage.tsx",
    "src/pages/MapToolsPage.tsx",
    "src/pages/MapsSettingsPage.tsx",

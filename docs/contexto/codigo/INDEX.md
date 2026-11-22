@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1f97a5b2f6551167731143f89fa50f238a86d938` (2026-11-22T14:21:39-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `035a7c6a732a263a279496a9e04a08650c10cdd4` (2026-11-22T14:31:09-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (544), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (545), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,15 +35,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1058 |
-| arquivos_codigo | 657 |
-| linhas_codigo | 129102 |
-| rotas | 55 |
+| arquivos_total | 1059 |
+| arquivos_codigo | 658 |
+| linhas_codigo | 129150 |
+| rotas | 56 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
 | itens_menu | 38 |
 | modulos | 43 |
-| componentes | 217 |
+| componentes | 218 |
 | hooks | 101 |
 | edge_functions | 26 |
 | tabelas | 88 |
@@ -55,8 +55,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | docs_md | 109 |
 
 ## Onde ficam as coisas
-- telas: src/pages (53)
-- componentes: src/components (127), src/pages (86), src/hooks (3)
+- telas: src/pages (54)
+- componentes: src/components (127), src/pages (87), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (25), src/utils (6), src/integrations (4)
 - testes: co-localizado (__tests__) (55), guards em scripts/ (47), supabase/functions/<edge> (28)
@@ -81,7 +81,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | functions | 0 | 0 | 53 | 0 | 6 | 42 |
 | hooks | 0 | 0 | 86 | 220 | 15 | 48 |
 | lib | 0 | 0 | 25 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 199 | 14 | 48 |
+| pages | 37 | 56 | 56 | 199 | 14 | 48 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -117,6 +117,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `/map` [tela] → src/pages/LiveMapPage.tsx · papel viewer
 - `/map-tools` [tela] → src/pages/MapToolsPage.tsx · papel manager
 - `/metrics` [tela] → src/pages/MetricsPage.tsx · papel viewer
+- `/mfa-enroll` [tela] → src/pages/MFAEnrollPage.tsx · **público**
 - `/mfa-verify` [tela] → src/pages/MFAVerifyPage.tsx · **público**
 - `/notification-history` [tela] → src/pages/NotificationHistoryPage.tsx · papel viewer
 - `/orders` [tela] → src/pages/OrdersPage.tsx · papel operator
@@ -246,7 +247,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## RBAC
 - hierarquia: viewer=1 < operator=2 < manager=3 < admin=4
-- rotas por papel: (público) (8), (só autenticado) (1), admin (9), manager (19), operator (7), viewer (11)
+- rotas por papel: (público) (9), (só autenticado) (1), admin (9), manager (19), operator (7), viewer (11)
 - rotas com MFA: /bitrix24, /external-data, /risk-rules, /settings/lalamove, /settings/maps, /settings/uapi, /webhooks
 - guards: src/components/auth/ProtectedRoute.tsx
 - enums de papel no banco: app_role: admin|manager|operator|viewer
@@ -254,7 +255,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## Alertas (baseline.json → alertas)
 - rotas_sem_arquivo: 0
-- rotas_sem_protecao: 2 — ex.: /, /dashboard
+- rotas_sem_protecao: 3 — ex.: /, /dashboard, /mfa-enroll
 - menu_visivel_sem_acesso: 15 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
@@ -274,8 +275,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8718 nós · 18228 arestas · 631 comunidades · grafo do commit `1f97a5b2`
-- comunidades maiores: cn (194), badge.tsx (145), button.tsx (135), lucide-react (122), client.ts (112), ref_node_fs (98), ref_https (92), generate.py (81), dependencies (80), react (79), UserPreferencesPage.tsx (78), send-notification/index.ts (76)
+- 8721 nós · 18236 arestas · 631 comunidades · grafo do commit `035a7c6a`
+- comunidades maiores: cn (240), button.tsx (126), badge.tsx (121), snapshot.py (107), card.tsx (100), client.ts (99), App.tsx (93), ref_https (92), ref_node_assert (85), react (82), dependencies (80), DriversPage.tsx (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -284,7 +285,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package-lock.json (31)
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (13)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (14)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
@@ -377,6 +378,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `035a7c6` feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)
 - 2026-11-22 `1f97a5b` fix: fechar janela de bypass de MFA no ProtectedRoute (#298)
 - 2026-11-22 `72dd548` fix: instancia cliente Resend no new-device-alert (item 19) (#297)
 - 2026-11-22 `07c862d` fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)
@@ -391,7 +393,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `6e6c62b` fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)
 - 2026-11-22 `93d26a3` docs(planos): plano de UX de navegacao em 200 etapas (#286)
 - 2026-11-22 `762c4b6` fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)
-- 2026-11-22 `7e572fe` feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

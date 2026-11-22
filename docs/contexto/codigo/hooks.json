@@ -1764,7 +1764,7 @@
    "hooks_exportados": [
     "useMFA"
    ],
-   "linhas": 221,
+   "linhas": 226,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],

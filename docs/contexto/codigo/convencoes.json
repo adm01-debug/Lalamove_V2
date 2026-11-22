@@ -3,11 +3,11 @@
  "format_version": 1,
  "onde_ficam": {
   "telas": [
-   "src/pages (53)"
+   "src/pages (54)"
   ],
   "componentes": [
    "src/components (127)",
-   "src/pages (86)",
+   "src/pages (87)",
    "src/hooks (3)"
   ],
   "hooks": [
@@ -54,7 +54,7 @@
  },
  "barrels_index": 4,
  "extensao_componentes": [
-  ".tsx (217)"
+  ".tsx (218)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)",
    "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)",
    "fix: instancia cliente Resend no new-device-alert (item 19) (#297)",
    "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)",
-   "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)",
-   "feat: campos de token como password e sem autofill (#294)"
+   "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

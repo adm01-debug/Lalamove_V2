@@ -18,6 +18,7 @@
    "/auth",
    "/dashboard",
    "/forgot-password",
+   "/mfa-enroll",
    "/mfa-verify",
    "/reset-password",
    "/unauthorized"
@@ -96,6 +97,7 @@
   "/auth",
   "/dashboard",
   "/forgot-password",
+  "/mfa-enroll",
   "/mfa-verify",
   "/reset-password",
   "/unauthorized"

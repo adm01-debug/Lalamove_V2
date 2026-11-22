@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 217,
+ "total": 218,
  "orfaos": 4,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 228,
+   "linhas": 230,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -180,7 +180,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "orfao": false
   },
   {
@@ -283,7 +283,7 @@
     "ProtectedRoute"
    ],
    "export_default": null,
-   "linhas": 72,
+   "linhas": 77,
    "dominio": "components/auth",
    "hooks_locais": [
     "useAuth",
@@ -3095,6 +3095,20 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 2,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/MFAEnrollPage.tsx",
+   "exports": [
+    "MFAEnrollPage"
+   ],
+   "export_default": "MFAEnrollPage",
+   "linhas": 24,
+   "dominio": "pages",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
    "orfao": false
   },
   {
