@@ -603,8 +603,17 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `_shared/messaging/inbound.ts` (`classifyInbound`, `normalizeInboundText`); 10 testes em `inbound.test.ts` com a tabela de frases reais — id de opção vence dígito, dígito vence palavra, "não consigo chegar" é `problem` e não `arrived`/`decline`, acento e caixa alta não mudam nada, e "assim" não vira "sim". **Falta:** ligar no consumo do inbound, que é a etapa 80/96 (migration `20261125120000`, PR #283).
 
 ### 114 — [L] Ações por resposta
-- [ ] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
-- **Evidência:** resposta "2" abre incidente
+- [~] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
+- **Estado real:** a decisão está pronta e testada em `_shared/messaging/inbound-actions.ts`
+  (`planInboundAction`): confirmação → `driver_confirmed_at` + `tracking_event DRIVER_CONFIRMED`;
+  chegada → `driver_arrived_at` + `DRIVER_ARRIVED`; coletado/a caminho → evento;
+  recusa → `driver_declined_at` + badge (não vira incidente); problema → `driver_incidents`
+  com `DAMAGE` (batida/pneu) ou `LATE_DELIVERY` + badge. Respeita os NOT NULL do schema:
+  `tracking_events` só sai com motorista **e** posição, `driver_incidents` só com
+  `driver_id` — sem eles o efeito é convertido em badge e o motivo fica em `skipped`.
+  **Falta:** o executor que grava os efeitos, dentro do `zapp-callback` (PR #283), que
+  ainda não chama `classifyInbound`/`planInboundAction`.
+- **Evidência:** 12 testes em `_shared/messaging/inbound-actions.test.ts` (PR #281)
 
 ### 115 — [L] Texto livre
 - [ ] Vai para a timeline e sinaliza "aguardando operador" (a conversa já está na fila do Zapp)

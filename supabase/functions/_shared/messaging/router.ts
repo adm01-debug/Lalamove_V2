@@ -7,7 +7,11 @@
  * noturno, fallback — sem subir edge function.
  */
 
-export type MessageRole = "driver" | "pickup_contact" | "delivery_contact" | "internal";
+export type MessageRole =
+  | "driver"
+  | "pickup_contact"
+  | "delivery_contact"
+  | "internal";
 export type MessageChannel = "whatsapp" | "sms" | "email" | "slack" | "n8n";
 
 /** Estados que o canal devolve e que disparam SMS na hora (etapa 91). */
@@ -17,7 +21,8 @@ export const IMMEDIATE_FALLBACK_REASONS = [
   "recipient_blocked",
   "channel_down",
 ] as const;
-export type ImmediateFallbackReason = (typeof IMMEDIATE_FALLBACK_REASONS)[number];
+export type ImmediateFallbackReason =
+  (typeof IMMEDIATE_FALLBACK_REASONS)[number];
 
 export interface RouteRule {
   event: string;
@@ -36,15 +41,87 @@ export interface RouteRule {
  * A ordem importa: o primeiro canal e o preferido e o segundo e a contingencia.
  */
 export const DEFAULT_ROUTES: RouteRule[] = [
-  { event: "DRIVER_ASSIGNED", role: "driver", channels: ["whatsapp", "sms"], fallback_after_min: 10, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "DRIVER_APPROACHING_PICKUP", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "DRIVER_ARRIVED_PICKUP", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "DRIVER_APPROACHING_DELIVERY", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "DRIVER_ARRIVED_DELIVERY", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "ETA_DELAY", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: true, reply_timeout_min: 15, is_enabled: true },
-  { event: "ORDER_CANCELLED", role: "driver", channels: ["whatsapp", "sms"], fallback_after_min: 10, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "ORDER_CANCELLED", role: "pickup_contact", channels: ["whatsapp", "sms"], fallback_after_min: 10, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
-  { event: "ORDER_COMPLETED", role: "driver", channels: ["whatsapp"], fallback_after_min: 0, requires_reply: false, reply_timeout_min: 0, is_enabled: true },
+  {
+    event: "DRIVER_ASSIGNED",
+    role: "driver",
+    channels: ["whatsapp", "sms"],
+    fallback_after_min: 10,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "DRIVER_APPROACHING_PICKUP",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "DRIVER_ARRIVED_PICKUP",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "DRIVER_APPROACHING_DELIVERY",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "DRIVER_ARRIVED_DELIVERY",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "ETA_DELAY",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: true,
+    reply_timeout_min: 15,
+    is_enabled: true,
+  },
+  {
+    event: "ORDER_CANCELLED",
+    role: "driver",
+    channels: ["whatsapp", "sms"],
+    fallback_after_min: 10,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "ORDER_CANCELLED",
+    role: "pickup_contact",
+    channels: ["whatsapp", "sms"],
+    fallback_after_min: 10,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
+  {
+    event: "ORDER_COMPLETED",
+    role: "driver",
+    channels: ["whatsapp"],
+    fallback_after_min: 0,
+    requires_reply: false,
+    reply_timeout_min: 0,
+    is_enabled: true,
+  },
 ];
 
 /**
@@ -83,7 +160,9 @@ export function clientMessageId(
   phone: string,
   seq: number,
 ): string {
-  return [orderId, event, role, phone.replace(/\D/g, ""), String(seq)].join("|");
+  return [orderId, event, role, phone.replace(/\D/g, ""), String(seq)].join(
+    "|",
+  );
 }
 
 /**
@@ -101,7 +180,9 @@ export function shouldFallback(
 }
 
 /** Etapa 91: motivos que pulam a espera e vao direto para SMS. */
-export function needsImmediateFallback(reason: string | null | undefined): boolean {
+export function needsImmediateFallback(
+  reason: string | null | undefined,
+): boolean {
   if (!reason) return false;
   return (IMMEDIATE_FALLBACK_REASONS as readonly string[]).includes(reason);
 }
@@ -130,7 +211,10 @@ export function localHour(at: Date, timezoneOffsetMinutes: number): number {
   return shifted.getUTCHours();
 }
 
-export function isInQuietHours(at: Date, quiet: QuietHours = DEFAULT_QUIET_HOURS): boolean {
+export function isInQuietHours(
+  at: Date,
+  quiet: QuietHours = DEFAULT_QUIET_HOURS,
+): boolean {
   if (!quiet.enabled) return false;
   const hour = localHour(at, quiet.timezoneOffsetMinutes);
   if (quiet.startHour === quiet.endHour) return false;
@@ -157,13 +241,19 @@ export function applyQuietHours(
   hasActiveOrder: boolean,
   quiet: QuietHours = DEFAULT_QUIET_HOURS,
 ): SilenceDecision {
-  if (role === "driver" && hasActiveOrder) return { suppressed: false, releaseAt: null };
+  if (role === "driver" && hasActiveOrder) {
+    return { suppressed: false, releaseAt: null };
+  }
   if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null };
 
   const hour = localHour(at, quiet.timezoneOffsetMinutes);
   // Quantas horas faltam para `endHour`.
-  const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour;
-  const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000));
+  const hoursUntilOpen = quiet.endHour > hour
+    ? quiet.endHour - hour
+    : 24 - hour + quiet.endHour;
+  const releaseAt = new Date(
+    at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000),
+  );
   return { suppressed: true, releaseAt };
 }
 
@@ -171,7 +261,10 @@ export function applyQuietHours(
 export const DRIVER_RATE_LIMIT = { maxMessages: 6, windowMs: 10 * 60_000 };
 
 /** Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */
-export const RATE_LIMIT_EXEMPT_EVENTS = ["DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY"] as const;
+export const RATE_LIMIT_EXEMPT_EVENTS = [
+  "DRIVER_ARRIVED_PICKUP",
+  "DRIVER_ARRIVED_DELIVERY",
+] as const;
 
 export interface RateLimitInput {
   recentSends: Date[];
@@ -185,8 +278,12 @@ export function isRateLimited(input: RateLimitInput): boolean {
   const { recentSends, now, event } = input;
   const maxMessages = input.maxMessages ?? DRIVER_RATE_LIMIT.maxMessages;
   const windowMs = input.windowMs ?? DRIVER_RATE_LIMIT.windowMs;
-  if ((RATE_LIMIT_EXEMPT_EVENTS as readonly string[]).includes(event)) return false;
-  const inWindow = recentSends.filter((d) => now.getTime() - d.getTime() < windowMs);
+  if ((RATE_LIMIT_EXEMPT_EVENTS as readonly string[]).includes(event)) {
+    return false;
+  }
+  const inWindow = recentSends.filter((d) =>
+    now.getTime() - d.getTime() < windowMs
+  );
   return inWindow.length >= maxMessages;
 }
 
@@ -212,7 +309,10 @@ export const DEDUP_SEVERITY_FREE_EVENTS: ReadonlySet<string> = new Set([
 ]);
 
 /** Etapa 92: opt-out vale para todos os canais do telefone. */
-export function suppressionReason(optedOut: boolean, rateLimited: boolean): string | null {
+export function suppressionReason(
+  optedOut: boolean,
+  rateLimited: boolean,
+): string | null {
   if (optedOut) return "opted_out";
   if (rateLimited) return "rate_limited";
   return null;
