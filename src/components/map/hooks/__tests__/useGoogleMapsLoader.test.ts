@@ -5,10 +5,11 @@ import { renderHook, waitFor } from '@testing-library/react';
  * O loader é singleton de módulo: cada teste recarrega o módulo para resetar
  * `loaderPromise` e reler `import.meta.env`.
  */
-async function loadModule(browserKey?: string) {
+async function loadModule(browserKey?: string, opts: { ownKey?: string; mapId?: string } = {}) {
   vi.resetModules();
-  if (browserKey) vi.stubEnv('VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY', browserKey);
-  else vi.stubEnv('VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY', '');
+  vi.stubEnv('VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY', browserKey ?? '');
+  vi.stubEnv('VITE_GOOGLE_MAPS_BROWSER_KEY', opts.ownKey ?? '');
+  vi.stubEnv('VITE_GOOGLE_MAPS_MAP_ID', opts.mapId ?? '');
   return import('../useGoogleMapsLoader');
 }
 
@@ -59,6 +60,25 @@ describe('useGoogleMapsLoader', () => {
 
     (window as { __lovableInitGmaps?: () => void }).__lovableInitGmaps?.();
     await expect(p1).resolves.toBeUndefined();
+  });
+
+  it('etapa 75: chave propria usa v=weekly, libraries maps/marker/routes e expoe o Map ID', async () => {
+    const mod = await loadModule(undefined, { ownKey: 'own-key', mapId: 'map-abc' });
+    expect(mod.USING_OWN_KEY).toBe(true);
+    expect(mod.getGoogleMapsMapId()).toBe('map-abc');
+    const p = mod.loadGoogleMaps();
+    const script = document.head.querySelector('script');
+    expect(script!.src).toContain('key=own-key');
+    expect(script!.src).toContain('v=weekly');
+    expect(script!.src).toContain('libraries=maps%2Cmarker%2Croutes');
+    (window as { __lovableInitGmaps?: () => void }).__lovableInitGmaps?.();
+    await expect(p).resolves.toBeUndefined();
+  });
+
+  it('etapa 75: sem chave propria o conector gerenciado nao recebe mapId', async () => {
+    const mod = await loadModule('fake-key', { mapId: 'map-abc' });
+    expect(mod.USING_OWN_KEY).toBe(false);
+    expect(mod.getGoogleMapsMapId()).toBeUndefined();
   });
 
   it('rejeita e libera o singleton quando o script falha', async () => {
