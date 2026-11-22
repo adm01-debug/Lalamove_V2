@@ -13,7 +13,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 import { usePrefetch } from '@/hooks/usePrefetch';
-import { menuCategories, roleHierarchy, getRoleDisplayName, getRoleColor, type MenuItem } from './sidebar-config';
+import { menuCategories, getRoleDisplayName, getRoleColor, type MenuItem } from './sidebar-config';
+import { meetsRole } from '@/lib/roles';
 import { BounceBadge } from '@/components/ui/micro-interactions';
 import { getDisplayName, getDisplayInitials } from '@/lib/user-display';
 
@@ -75,8 +76,7 @@ export function Sidebar() {
   const getBadgeVariant = (badgeType?: string) => (badgeType ? badgeVariants[badgeType] ?? 'default' : 'default');
 
   const toggleCategory = (id: string) => setOpenCategories(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-  const userRoleLevel = roleHierarchy[userRole ?? ''] ?? 0;
-  const hasRequiredRole = (required?: 'admin' | 'manager') => !required || userRoleLevel >= roleHierarchy[required];
+  const hasRequiredRole = (required?: 'admin' | 'manager') => meetsRole(userRole, required);
 
   const filteredCategories = menuCategories.filter(cat => hasRequiredRole(cat.requiredRole)).map(cat => ({ ...cat, items: cat.items.filter(item => hasRequiredRole(item.requiredRole)) })).filter(cat => cat.items.length > 0);
 

@@ -1,8 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { usePermissions, type AppRole } from '@/hooks/usePermissions';
+import { usePermissions } from '@/hooks/usePermissions';
 import { useMFA } from '@/hooks/useMFA';
+import { roleHierarchy, type AppRole } from '@/lib/roles';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,13 +11,6 @@ interface ProtectedRouteProps {
   requiredPermission?: string;
   requireMFA?: boolean;
 }
-
-const roleHierarchy: Record<AppRole, number> = {
-  viewer: 1,
-  operator: 2,
-  manager: 3,
-  admin: 4,
-};
 
 export function ProtectedRoute({ 
   children, 

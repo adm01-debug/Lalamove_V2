@@ -99,23 +99,7 @@ export const menuCategories: MenuCategory[] = [
   },
 ];
 
-export const roleHierarchy: Record<string, number> = { admin: 4, manager: 3, operator: 2, viewer: 1 };
-
-export function getRoleDisplayName(role: string | null) {
-  switch (role) {
-    case 'admin': return 'Administrador';
-    case 'manager': return 'Gerente';
-    case 'operator': return 'Operador';
-    case 'viewer': return 'Visualizador';
-    default: return 'Membro';
-  }
-}
-
-export function getRoleColor(role: string | null) {
-  switch (role) {
-    case 'admin': return 'text-primary';
-    case 'manager': return 'text-amber-500';
-    case 'operator': return 'text-info';
-    default: return 'text-muted-foreground';
-  }
-}
+// Papéis, hierarquia e exibição são re-exportados da fonte única `@/lib/roles`
+// (item 48) para não divergirem a ordem dos papéis entre camadas.
+export { roleHierarchy, getRoleDisplayName, getRoleColor } from '@/lib/roles';
+export type { AppRole } from '@/lib/roles';

@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { BackButton } from '@/components/ui/back-button';
+import { meetsRole } from '@/lib/roles';
 
 interface MenuItem {
   id: string;
@@ -147,13 +148,8 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
     fetchRole();
   }, [user?.id]);
 
-  // Role hierarchy for filtering
-  const roleHierarchy: Record<string, number> = { admin: 4, manager: 3, operator: 2, viewer: 1 };
-  const userRoleLevel = roleHierarchy[userRole ?? ''] ?? 0;
-  const hasRequiredRole = (required?: 'admin' | 'manager') => {
-    if (!required) return true;
-    return userRoleLevel >= roleHierarchy[required];
-  };
+  // Role hierarchy for filtering (fonte única em @/lib/roles, item 48)
+  const hasRequiredRole = (required?: 'admin' | 'manager') => meetsRole(userRole, required);
 
   const filteredCategories = menuCategories
     .filter(cat => hasRequiredRole(cat.requiredRole))
