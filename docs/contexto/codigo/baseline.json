@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
+  "commit": "8b67608f1abec484348d76a808b7aae5cd765d3d",
   "branch": "main",
-  "data_commit": "2026-11-22T08:25:09-03:00",
+  "data_commit": "2026-11-22T08:29:31-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "8b67608",
+    "data": "2026-11-22",
+    "assunto": "docs: corrige referência desatualizada no comentário do stub de migration (#263)"
+   },
    {
     "sha": "2b6eeeb",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "5e00e7c",
     "data": "2026-11-22",
     "assunto": "fix: webhook cria a linha de active_tracking no primeiro ping (#236)"
-   },
-   {
-    "sha": "bdef20a",
-    "data": "2026-11-22",
-    "assunto": "docs: contrato de dados do motor geo (etapa 41) (#235)"
    }
   ],
   "arquivos_mudados_7d": 288,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 159
+    "commits": 160
    },
    {
     "autor": "dependabot[bot]",

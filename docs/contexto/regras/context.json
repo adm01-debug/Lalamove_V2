@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
+  "sha": "8b67608f1abec484348d76a808b7aae5cd765d3d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 11:25 UTC",
+  "generated_at": "2026-11-22 11:30 UTC",
   "files_total": 1021,
   "code_files": 845,
   "code_lines": 144869
@@ -71542,10 +71542,19 @@
   }
  },
  "git": {
-  "sha": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
+  "sha": "8b67608f1abec484348d76a808b7aae5cd765d3d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "8b67608",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs: corrige referência desatualizada no comentário do stub de migration (#263)",
+    "files": [
+     "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
+    ]
+   },
    {
     "sha": "2b6eeeb",
     "date": "2026-11-22",
@@ -71875,35 +71884,24 @@
      "src/pages/NotificationHistoryPage.geo.test.tsx",
      "src/pages/NotificationHistoryPage.tsx"
     ]
-   },
-   {
-    "sha": "b5b3088",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "src/pages/alert-configurations/AlertConfigCard.test.tsx",
-     "src/pages/alert-configurations/AlertConfigCard.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    20
+    19
    ],
    [
     "supabase/functions/send-notification/index.ts",
     4
    ],
    [
-    "supabase/functions/job-worker/index.ts",
+    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
     3
    ],
    [
-    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
-    2
+    "supabase/functions/job-worker/index.ts",
+    3
    ],
    [
     "supabase/functions/geo-gateway/google.test.ts",
