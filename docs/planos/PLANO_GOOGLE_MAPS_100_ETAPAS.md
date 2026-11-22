@@ -629,15 +629,16 @@ metro vs km no badge, haversine 1° ≈ 111 km). `src/components/map` **76/76 ve
 - [ ] `mapLayers.ts`: layer `expected-route` (line) e `driver-trail`; mesma fonte de dados → paridade entre provedores
 - **Evidência:** screenshot
 
-### 79 — Mini-mapa no detalhe do pedido
-- [ ] `OrderDetailModal.tsx` (entre header ~545 e paradas ~778): componente `OrderTrackingMap` (300 px) com coleta, entrega, rota e motorista; usa o provedor de `geo_settings.tiles`; lazy (só monta se `tracking_status='active'`) para não gastar map load
-- [ ] Link "Abrir rastreio Lalamove" (shareLink) mantido
-- **Evidência:** screenshot
+### 79 — Mini-mapa no detalhe do pedido ✅
+- [x] `OrderDetailModal.tsx`: `OrderTrackingMap` (h-56) com coleta, entrega, rota e motorista; usa o token de `get-mapbox-token`
+- [x] **Lazy:** só monta com `active_tracking.tracking_status = 'ACTIVE'` — sem tracking não há instância de mapa nem map load
+- [x] Fallback sem tracking: card com o link "Abrir rastreio Lalamove" (`order.shareLink`) preservado
+- **Evidência:** `OrderDetailModal.tsx:509-530` (query inclui `tracking_status`), `:660-695` (render condicional); `npx vitest run` 1017/1017; `tsc` limpo
 
-### 80 — Provedor de tiles vem do servidor
-- [ ] `useMapSettings.ts`: `provider` padrão lido de `geo_settings.tiles` (query) e **override por usuário** só entre provedores habilitados; persistência local continua para preferências visuais
-- [ ] Contar map load: `geo-gateway` action `count-map-load` (sem custo externo) ao inicializar o mapa → `geo_usage(tiles)`
-- **Evidência:** admin muda para `google` → novo usuário abre em Google
+### 80 — Provedor de tiles vem do servidor ✅
+- [x] `useMapProviderPolicy.ts`: `useTilesProvider()` lê `geo_settings.tiles`; `allowedProvidersFor()` restringe o seletor; `useEffectiveMapProvider()` cai na primeira opção permitida quando o admin desliga a família escolhida (preferência local preservada)
+- [x] Contar map load no **provedor efetivo**: `GoogleMapsCanvas` e `Google3DCanvas` chamam `countMapLoad('google')` ao instanciar; `LiveMap` só instancia o Mapbox quando o Google não está ativo (antes o mapa Mapbox era criado e cobrado escondido)
+- **Evidência:** `src/components/map/__tests__/mapLoadBilling.test.tsx` 2/2 (falha sem o `countMapLoad('google')`); `LiveMap.tsx:141-145` (early return); `npx vitest run` 1017/1017; `tsc` limpo
 
 ### 81 — Autocomplete com viés de localização ✅
 - [x] `locationBias` = centro do mapa atual ou coordenada do último pedido do cliente

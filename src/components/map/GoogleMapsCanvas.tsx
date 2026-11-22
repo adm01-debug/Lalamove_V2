@@ -4,6 +4,7 @@ import { useTrackingData } from './hooks/useTrackingData';
 import { getGoogleMapsMapId, useGoogleMapsLoader } from './hooks/useGoogleMapsLoader';
 import { createDriverMarkerElement } from './markerFactories';
 import { useTrackingTrails } from './hooks/useTrackingTrails';
+import { countMapLoad } from '@/lib/geo-gateway';
 import {
   DRIVER_ANIM_MS,
   buildTrailPath,
@@ -128,6 +129,8 @@ export function GoogleMapsCanvas({
       ...(mapId ? { mapId } : {}),
     });
     infoRef.current = new g.InfoWindow();
+    // Etapa 80: o load é cobrado do provedor que realmente desenhou o mapa.
+    countMapLoad('google');
   }, [ready, initialCenter, initialZoom, mapTypeId]);
 
   // Update mapTypeId when it changes

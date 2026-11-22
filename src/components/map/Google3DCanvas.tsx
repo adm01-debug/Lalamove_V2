@@ -3,6 +3,7 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTrackingData } from './hooks/useTrackingData';
 import { useGoogleMapsLoader } from './hooks/useGoogleMapsLoader';
+import { countMapLoad } from '@/lib/geo-gateway';
 import type { VehicleFilter, StatusFilter } from './types';
 
 interface Google3DCanvasProps {
@@ -57,6 +58,8 @@ export function Google3DCanvas({
       map3d.style.height = '100%';
       wrapperRef.current.appendChild(map3d);
       mapElRef.current = map3d;
+      // Etapa 80: cobrança no provedor do load efetivo.
+      countMapLoad('google');
     })();
     return () => {
       cancelled = true;
