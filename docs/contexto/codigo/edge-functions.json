@@ -9,6 +9,8 @@
   "mcp-query"
  ],
  "shared": [
+  "supabase/functions/_shared/channels/zapp.test.ts",
+  "supabase/functions/_shared/channels/zapp.ts",
   "supabase/functions/_shared/contract.integration.test.ts",
   "supabase/functions/_shared/contract.test.ts",
   "supabase/functions/_shared/contract.ts",
@@ -949,7 +951,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 2,
-   "linhas": 909,
+   "linhas": 930,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -989,7 +991,8 @@
     "logger.ts",
     "schemas.ts",
     "telemetry.ts",
-    "template.ts"
+    "template.ts",
+    "zapp.ts"
    ],
    "chamada_pelo_front": [
     "src/components/orders/OrderGeoEvents.tsx"

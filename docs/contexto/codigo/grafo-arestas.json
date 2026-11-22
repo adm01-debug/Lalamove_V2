@@ -2318,6 +2318,7 @@
    "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/send-notification/index.ts": [
+   "supabase/functions/_shared/channels/zapp.ts",
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/schemas.ts",

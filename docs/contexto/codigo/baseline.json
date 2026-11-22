@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ed72e8d632edcecc036c8e299c38683289bed752",
+  "commit": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
   "branch": "main",
-  "data_commit": "2026-11-22T01:21:41-03:00",
+  "data_commit": "2026-11-22T01:37:27-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "32c1842",
+    "data": "2026-11-22",
+    "assunto": "feat: canal Zapp no send-notification (etapa 69) (#232)"
+   },
    {
     "sha": "ed72e8d",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "7938358",
     "data": "2026-11-21",
     "assunto": "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)"
-   },
-   {
-    "sha": "0a1c0f1",
-    "data": "2026-11-21",
-    "assunto": "docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)"
    }
   ],
-  "arquivos_mudados_7d": 250,
+  "arquivos_mudados_7d": 252,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -156,15 +156,15 @@
     "mudancas": 14
    },
    {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 12
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 14
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "docs/MAPBOX.md",
     "mudancas": 12
    },
    {
@@ -176,6 +176,10 @@
     "mudancas": 10
    },
    {
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 8
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 7
    },
@@ -185,10 +189,6 @@
    },
    {
     "pasta": "supabase/config.toml",
-    "mudancas": 7
-   },
-   {
-    "pasta": "supabase/functions/send-notification",
     "mudancas": 7
    },
    {
@@ -210,11 +210,11 @@
     "mudancas": 16
    },
    {
-    "arquivo": "docs/MAPBOX.md",
-    "mudancas": 12
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 13
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "arquivo": "docs/MAPBOX.md",
     "mudancas": 12
    },
    {
@@ -250,6 +250,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 6
    },
@@ -267,10 +271,6 @@
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 131
+    "commits": 132
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1000,
-  "arquivos_codigo": 624,
-  "linhas_codigo": 122059,
+  "arquivos_total": 1002,
+  "arquivos_codigo": 626,
+  "linhas_codigo": 122327,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 130,
+  "testes": 131,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 102
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 65,
-   "linhas": 16144
+   "arquivos": 67,
+   "linhas": 16412
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -613,12 +613,12 @@
    "linhas": 844
   },
   {
-   "arquivo": "src/pages/MapsSettingsPage.tsx",
-   "linhas": 803
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 819
   },
   {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 798
+   "arquivo": "src/pages/MapsSettingsPage.tsx",
+   "linhas": 803
   },
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",

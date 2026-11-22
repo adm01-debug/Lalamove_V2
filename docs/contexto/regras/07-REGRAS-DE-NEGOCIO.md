@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ed72e8d632` · branch `main` · 2026-11-22 04:22 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `32c18424a5` · branch `main` · 2026-11-22 04:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1303,6 +1303,7 @@ _nenhum item encontrado_
 | `DEDUP_WINDOW_MS` | `30` | `src/services/errorMonitoring.ts` |
 | `DEFAULT_VERSION` | `"v1"` | `supabase/functions/_shared/contract.ts` |
 | `RECOMMENDED_VERSION` | `"v2"` | `supabase/functions/_shared/contract.ts` |
+| `DEFAULT_TIMEOUT_MS` | `15` | `supabase/functions/_shared/channels/zapp.ts` |
 | `DEFAULT_STOPPED_WARNING_MINUTES` | `5` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -1825,7 +1826,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1016 testes em 89 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1025 testes em 90 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1878,6 +1879,7 @@ _nenhum item encontrado_
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
+| `supabase/functions/_shared/channels/zapp.test.ts` | 9 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
@@ -2120,6 +2122,8 @@ _nenhum item encontrado_
 | Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway | `supabase/functions/_shared/schemas.ts` |
 | - Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal. | `supabase/functions/_shared/telemetry.ts` |
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
+| é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
+| Nunca lança: falta de secret não pode derrubar o despacho de alerta. | `supabase/functions/_shared/channels/zapp.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |
 | Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do | `supabase/functions/check-external-api/index.ts` |
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |

@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 130,
+ "total": 131,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 16,
+  "edge (deno)": 17,
   "guard (node --test)": 33,
   "unit (vitest)": 72
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 18
+   "arquivos": 19
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1059,6 +1059,15 @@
    "casos": 17
   },
   {
+   "arquivo": "supabase/functions/_shared/channels/zapp.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 126,
+   "testa": [
+    "supabase/functions/_shared/channels/zapp.ts"
+   ],
+   "casos": 9
+  },
+  {
    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
    "tipo": "contrato (deno)",
    "linhas": 271,
@@ -1330,6 +1339,7 @@
   "src/types/lalamove.ts": 3,
   "src/utils/exportUtils.ts": 1,
   "src/utils/timeUtils.ts": 1,
+  "supabase/functions/_shared/channels/zapp.ts": 1,
   "supabase/functions/_shared/contract.ts": 2,
   "supabase/functions/_shared/geo-precision.ts": 1,
   "supabase/functions/_shared/schemas.ts": 2,

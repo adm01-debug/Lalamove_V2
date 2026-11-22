@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ed72e8d632edcecc036c8e299c38683289bed752",
+  "sha": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 04:22 UTC",
-  "files_total": 994,
-  "code_files": 820,
-  "code_lines": 141081
+  "generated_at": "2026-11-22 04:37 UTC",
+  "files_total": 996,
+  "code_files": 822,
+  "code_lines": 141349
  },
  "version": "1.3.2",
- "facts_hash": "1098127de467d884",
+ "facts_hash": "5e44c938729d8899",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 280,
+   ".ts": 282,
    ".tsx": 233,
    ".sql": 187,
    ".mjs": 107,
@@ -21186,8 +21186,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 65,
-   "lines": 16144,
+   "files": 67,
+   "lines": 16412,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21240,6 +21240,7 @@
     "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
+    "zapp.ts: TextChannelResult, TextChannel, ZappConfig, normalizeZappNumber, createZappChannel, zappChannelFromEnv",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
     "error-monitor.ts: ERROR_RATE_THRESHOLD, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_WINDOW_MINUTES, ERROR_ALERT_COOLDOWN_MINUTES, ErrorOutcome, recordProviderFailure",
     "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
@@ -21285,6 +21286,8 @@
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/_shared/template.test.ts",
     "supabase/functions/_shared/template.ts",
+    "supabase/functions/_shared/channels/zapp.test.ts",
+    "supabase/functions/_shared/channels/zapp.ts",
     "supabase/functions/apply-fixes/index.ts",
     "supabase/functions/bitrix24-process-queue/index.ts",
     "supabase/functions/bitrix24-sync/index.ts",
@@ -26095,6 +26098,14 @@
     "text": "Ambiente sem credenciais (ex.: testes): apenas log."
    },
    {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "text": "é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais."
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "text": "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
+   },
+   {
     "file": "supabase/functions/check-driver-alerts/index.ts",
     "text": "If order is COMPLETED but no POD received after deadline"
    },
@@ -29442,6 +29453,11 @@
     "file": "supabase/functions/_shared/contract.ts",
     "name": "RECOMMENDED_VERSION",
     "value": "\"v2\""
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "name": "DEFAULT_TIMEOUT_MS",
+    "value": "15"
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
@@ -37878,6 +37894,42 @@
    {
     "file": "supabase/functions/_shared/template.test.ts",
     "name": "missingTemplateVars: template completo devolve lista vazia"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: envia POST com Bearer, número só com dígitos e corpo JSON"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: omite instance quando ausente"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: destinatário vazio não chama a API"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: erro HTTP devolve status e trecho do corpo"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: falha de rede devolve erro sem lançar"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: timeout devolve mensagem de timeout"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: sem secrets o canal é ausente (null), não quebrado"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "zapp: com os dois secrets monta o canal"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "normalizeZappNumber remove máscara e não-dígitos"
    },
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
@@ -65954,6 +66006,45 @@
    ],
    "doc": "Renderizador dos templates de alerta (etapa 67 do plano Google). `alert_configurations.message_template` guarda textos PT-BR com variáveis `{{nome}}` editáveis pelo operador na UI de configurações. Sem este módulo o texto do template era ignorado: o trigger `geo_evaluate_tracking` montava a mensagem …"
   },
+  "supabase/functions/_shared/channels/zapp.test.ts": {
+   "path": "supabase/functions/_shared/channels/zapp.test.ts",
+   "lines": 126,
+   "is_test": true,
+   "tests": [
+    "zapp: envia POST com Bearer, número só com dígitos e corpo JSON",
+    "zapp: omite instance quando ausente",
+    "zapp: destinatário vazio não chama a API",
+    "zapp: erro HTTP devolve status e trecho do corpo",
+    "zapp: falha de rede devolve erro sem lançar",
+    "zapp: timeout devolve mensagem de timeout",
+    "zapp: sem secrets o canal é ausente (null), não quebrado",
+    "zapp: com os dois secrets monta o canal",
+    "normalizeZappNumber remove máscara e não-dígitos"
+   ]
+  },
+  "supabase/functions/_shared/channels/zapp.ts": {
+   "path": "supabase/functions/_shared/channels/zapp.ts",
+   "lines": 121,
+   "exports": [
+    "interface TextChannelResult",
+    "interface TextChannel",
+    "interface ZappConfig",
+    "function normalizeZappNumber",
+    "function createZappChannel",
+    "function zappChannelFromEnv"
+   ],
+   "params": [
+    {
+     "name": "DEFAULT_TIMEOUT_MS",
+     "value": "15"
+    }
+   ],
+   "rule_comments": [
+    "é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais.",
+    "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
+   ],
+   "doc": "Etapa 69 do plano Google Maps (decisão D2): canal Zapp Web. O Zapp é o provedor de WhatsApp Web da Promo Brindes. A interface é deliberadamente igual à do Evolution em `send-notification` — mesma assinatura `sendText(number, text)` devolvendo `{success, error?}` — para que o despacho troque de canal …"
+  },
   "supabase/functions/apply-fixes/index.ts": {
    "path": "supabase/functions/apply-fixes/index.ts",
    "lines": 59,
@@ -68740,7 +68831,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 798,
+   "lines": 819,
    "tables": [
     {
      "table": "geo_defaults",
@@ -69907,10 +69998,22 @@
   }
  },
  "git": {
-  "sha": "ed72e8d632edcecc036c8e299c38683289bed752",
+  "sha": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "32c1842",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: canal Zapp no send-notification (etapa 69) (#232)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/_shared/channels/zapp.test.ts",
+     "supabase/functions/_shared/channels/zapp.ts",
+     "supabase/functions/send-notification/index.ts"
+    ]
+   },
    {
     "sha": "ed72e8d",
     "date": "2026-11-22",
@@ -70261,24 +70364,12 @@
     "files": [
      "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql"
     ]
-   },
-   {
-    "sha": "d825edf",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)",
-    "files": [
-     "supabase/functions/send-notification/index.ts",
-     "supabase/functions/send-notification/quiet-hours.test.ts",
-     "supabase/functions/send-notification/quiet-hours.ts",
-     "supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    11
+    12
    ],
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -70297,6 +70388,10 @@
     3
    ],
    [
+    "supabase/functions/send-notification/index.ts",
+    2
+   ],
+   [
     "src/components/orders/AddressAutocomplete.test.tsx",
     2
    ],
@@ -70306,10 +70401,6 @@
    ],
    [
     "supabase/functions/_shared/schemas.ts",
-    2
-   ],
-   [
-    "supabase/functions/send-notification/index.ts",
     2
    ],
    [
