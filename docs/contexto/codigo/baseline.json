@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "72dd548d90c7c0762d2a0c2a88964230a418f368",
+  "commit": "1f97a5b2f6551167731143f89fa50f238a86d938",
   "branch": "main",
-  "data_commit": "2026-11-22T14:18:52-03:00",
+  "data_commit": "2026-11-22T14:21:39-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1f97a5b",
+    "data": "2026-11-22",
+    "assunto": "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)"
+   },
    {
     "sha": "72dd548",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "e21df07",
     "data": "2026-11-22",
     "assunto": "fix: geocode fallback com persist e mini-mapa por provider (#274)"
-   },
-   {
-    "sha": "124e628",
-    "data": "2026-11-22",
-    "assunto": "docs(agentes): registra pendencias do dono (#273)"
    }
   ],
-  "arquivos_mudados_7d": 344,
+  "arquivos_mudados_7d": 347,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -172,6 +172,10 @@
     "mudancas": 14
    },
    {
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 13
+   },
+   {
     "pasta": "supabase/functions/job-worker",
     "mudancas": 13
    },
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 12
-   },
-   {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 12
    },
    {
@@ -218,11 +218,11 @@
     "mudancas": 16
    },
    {
-    "arquivo": "docs/MAPBOX.md",
-    "mudancas": 12
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 13
    },
    {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "arquivo": "docs/MAPBOX.md",
     "mudancas": 12
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 199
+    "commits": 200
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1057,
-  "arquivos_codigo": 656,
-  "linhas_codigo": 129019,
+  "arquivos_total": 1058,
+  "arquivos_codigo": 657,
+  "linhas_codigo": 129102,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 156,
+  "testes": 157,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -519,12 +519,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 160,
-   "linhas": 29493
+   "arquivos": 161,
+   "linhas": 29575
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19012
+   "linhas": 19013
   },
   "src/i18n": {
    "arquivos": 1,

@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 156,
+ "total": 157,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 26,
   "guard (node --test)": 34,
-  "unit (vitest)": 78
+  "unit (vitest)": 79
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 10
+   "arquivos": 11
   },
   {
    "padrao": "e2e/",
@@ -543,6 +543,15 @@
     "src/components/admin/telemetry/TelemetryCharts.tsx"
    ],
    "casos": 17
+  },
+  {
+   "arquivo": "src/components/auth/ProtectedRoute.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 82,
+   "testa": [
+    "src/components/auth/ProtectedRoute.tsx"
+   ],
+   "casos": 3
   },
   {
    "arquivo": "src/components/map/__tests__/googleLayers.test.ts",
@@ -1454,6 +1463,7 @@
   "scripts/ui-audit/width-check.mjs": 1,
   "scripts/vercel/verify-release-targets.mjs": 1,
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
+  "src/components/auth/ProtectedRoute.tsx": 1,
   "src/components/map/GoogleMapsCanvas.tsx": 1,
   "src/components/map/MapHUD.tsx": 1,
   "src/components/map/MapHistoryPanel.tsx": 1,

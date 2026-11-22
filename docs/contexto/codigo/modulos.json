@@ -214,7 +214,7 @@
   {
    "modulo": "components/auth",
    "arquivos": 9,
-   "testes": 0,
+   "testes": 1,
    "linhas": 1285,
    "itens_menu": [],
    "telas": [],
@@ -1658,7 +1658,7 @@
    "modulo": "hooks",
    "arquivos": 86,
    "testes": 1,
-   "linhas": 15581,
+   "linhas": 15582,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `72dd548d90` · branch `main` · 2026-11-22 17:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1f97a5b2f6` · branch `main` · 2026-11-22 17:22 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -346,6 +346,7 @@
 | /permissions | ProtectedRoute | admin | `src/App.tsx` |
 | /preferences | ProtectedRoute | viewer | `src/App.tsx` |
 | /profile | ProtectedRoute |  | `src/App.tsx` |
+| /protected | ProtectedRoute |  | `src/components/auth/ProtectedRoute.test.tsx` |
 | /rate-limiting | ProtectedRoute | admin | `src/App.tsx` |
 | /reports | ProtectedRoute | viewer | `src/App.tsx` |
 | /reports/advanced | ProtectedRoute | viewer | `src/App.tsx` |

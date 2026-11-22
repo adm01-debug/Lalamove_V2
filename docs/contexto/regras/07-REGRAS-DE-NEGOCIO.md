@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `72dd548d90` · branch `main` · 2026-11-22 17:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1f97a5b2f6` · branch `main` · 2026-11-22 17:22 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1964,7 +1964,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1236 testes em 106 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1240 testes em 107 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2059,6 +2059,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
+| `src/components/auth/ProtectedRoute.test.tsx` | 4 | ProtectedRoute · não renderiza o filho enquanto o AAL está carregando (loadingAAL true) · renderiza o filho quando tudo carrega e não exige verificação MFA · redireciona para /mfa-verify quando requireMFA e needsMFAVerification |
 | `src/hooks/__tests__/useDashboardStats.test.ts` | 4 | useDashboardStats · deve retornar stats padrão quando supabase retorna zeros · deve calcular onTimeRate corretamente com dados de entrega · deve consultar 7 queries do supabase |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |

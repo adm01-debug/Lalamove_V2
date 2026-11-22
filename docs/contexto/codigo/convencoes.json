@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)",
    "fix: instancia cliente Resend no new-device-alert (item 19) (#297)",
    "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)",
    "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)",
-   "feat: campos de token como password e sem autofill (#294)",
-   "fix: validar origem do postMessage do Bitrix24 (#293)"
+   "feat: campos de token como password e sem autofill (#294)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
