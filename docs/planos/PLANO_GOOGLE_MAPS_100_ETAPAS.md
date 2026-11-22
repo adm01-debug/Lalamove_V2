@@ -492,8 +492,9 @@ correta no plano.
 
 ### 44 — Recalcular rota quando sai do caminho ✅
 - [x] Se `distance_to_route_m > off_route_threshold` (de `map_settings_overrides`, padrão 300 m) por 2 ciclos → job `route_plan` novo (máx 1 a cada 5 min por pedido)
-- **Evidência:** o trigger conta `off_route_cycles` (`20261122130100:468`: zera quando `is_on_route`, incrementa quando não) e o agendador exige `off_route_cycles >= 2` **e** `route_computed_at < now() - 5 minutes` (`20261121194500:70,78`) — exatamente o "2 ciclos" e o teto de 1 a cada 5 min do plano. O limite vem de `geo_defaults.off_route_threshold_m` (`:50`, default 300).
-- **Correção de premissa:** o plano diz `map_settings_overrides`; a fonte real é `geo_defaults` (singleton) com override por pedido em `lalamove_orders.off_*`. `map_settings_overrides` não existe no schema.
+- **Evidência:** `20261122131000_geo_route_replan_and_eta_delay.sql:109-134` — quando `off_route_cycles >= 2`, o trigger enfileira `route_plan` em `job_queue` com `dedup_key = route_plan:<order>:<YYYYMMDDHH24MI>`, guard de 5 min por pedido (`NOT EXISTS ... created_at > now() - interval '5 minutes'`) e `ON CONFLICT DO NOTHING` para a UNIQUE parcial `uq_job_queue_dedup_open`; em seguida zera `off_route_cycles` para reavaliar no próximo par de ciclos. O `route_plan` já era consumido por `job-worker/index.ts:420` (`processRoutePlan`).
+  Validado em Postgres 16 descartável: ciclo 1 fora da rota → 0 jobs; ciclo 2 → 1 `route_plan` (`reason=off_route`, `distance_to_route_m=11778`) e contador zerado; ciclos 3-4 dentro de 5 min → continua 1 job; job marcado `COMPLETED` → o ciclo seguinte cria 1 novo; pedido distinto → job próprio (isolamento por `payload->>'orderId'`).
+- **Correção de premissa:** o plano diz `map_settings_overrides`; a fonte real é `geo_defaults` (singleton) com override por pedido em `lalamove_orders.off_*`, e o contador `off_route_cycles` é mantido por `geo_evaluate_tracking` (`20261122130100:468`). `map_settings_overrides` não existe no schema.
 
 ### 45 — Função SQL `geo_update_route_metrics()` ✅
 - [x] No trigger da etapa 20: calcular `distance_to_route_m = geo_point_to_polyline_m(...)`, `distance_to_next_stop_m = geo_haversine_m(... stop[next_stop_index])`, `is_on_route = distance_to_route_m <= threshold`
@@ -537,6 +538,11 @@ tempo decorrido, cai em 30 km/h (média urbana de Curitiba) — e o mesmo fallba
 velocidade `< 0,5 m/s`, para motorista parado não gerar ETA absurdo. O valor sai em
 `results[].local_eta_minutes` nos ciclos pulados, então o campo não envelhece até o
 próximo recálculo pago.
+
+### 50 — `ETA_DELAY`
+- [x] Se `now() + eta_minutes > scheduled_at + late_delivery_threshold` (de `alert_configurations.LATE_DELIVERY`, padrão 15 min) → evento `ETA_DELAY` (1× por pedido por parada)
+- **Evidência:** `20261122131000_geo_route_replan_and_eta_delay.sql` — `geo_defaults.late_tolerance_min integer NOT NULL DEFAULT 15` (a tolerância é de negócio; `alert_configurations.min_interval_seconds` é intervalo entre alertas, não tolerância, por isso a coluna própria). No trigger: `v_eta_at := now() + make_interval(mins => NEW.eta_minutes)`, `v_late_limit := o.scheduled_at + make_interval(mins => d.late_tolerance_min)`, emite `ETA_DELAY` via `geo_emit_event` quando `v_eta_at > v_late_limit`, sob `o.scheduled_at IS NOT NULL AND NEW.eta_minutes IS NOT NULL AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER','PICKED_UP','DELIVERING')`.
+  Validado em Postgres 16 descartável: `scheduled_at` 60 min no passado + `eta_minutes=30` → 1 evento `ETA_DELAY` (`late_minutes=90`, `late_tolerance_min=15`) + 1 alerta; segundo UPDATE → continua 1 (UNIQUE `order_id,event_type,stop_index`); pedido no prazo → 0; pedido sem `scheduled_at` → 0 (não quebra).
 
 **Correção de premissa:** os pontos ficam em `driver_locations.latitude/longitude/
 recorded_at` (tabela alimentada pelo webhook, PR #236), **não** em
