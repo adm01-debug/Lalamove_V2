@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ad064830fba46345f1a59c3bc702cfcab280ed6a",
+  "sha": "f973d92c0e701244e9f6da174ef5a49a8f47f1d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 00:41 UTC",
+  "generated_at": "2026-11-22 00:47 UTC",
   "files_total": 966,
   "code_files": 794,
-  "code_lines": 136961
+  "code_lines": 136981
  },
  "version": "1.3.2",
- "facts_hash": "0a35562374431cec",
+ "facts_hash": "912a2457638a3009",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21105,7 +21105,7 @@
   {
    "module": "supabase/functions",
    "files": 51,
-   "lines": 13797,
+   "lines": 13817,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -37456,6 +37456,10 @@
    {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
     "name": "geocode-batch: item sem address nem structured é recusado antes de chamar o provedor"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "geocode-batch: endereço livre vai em "
    },
    {
     "file": "supabase/functions/geo-gateway/polyline.test.ts",
@@ -65574,7 +65578,7 @@
   },
   "supabase/functions/geo-gateway/mapbox.test.ts": {
    "path": "supabase/functions/geo-gateway/mapbox.test.ts",
-   "lines": 203,
+   "lines": 220,
    "is_test": true,
    "doc": "deno test --allow-net --allow-env supabase/functions/geo-gateway/mapbox.test.ts",
    "tests": [
@@ -65589,7 +65593,8 @@
     "429: lê X-Rate-Limit-Reset e vira GEO_RATE_LIMITED com retryAfter; token recusado vira GEO_NOT_CONFIGURED",
     "static: monta overlay com path simplificado + pinos, auto bounds, devolve PNG base64",
     "geocode-batch (etapa 25): POST com array, ordem preservada, item vazio vira not_found sem derrubar o lote",
-    "geocode-batch: item sem address nem structured é recusado antes de chamar o provedor"
+    "geocode-batch: item sem address nem structured é recusado antes de chamar o provedor",
+    "geocode-batch: endereço livre vai em "
    ]
   },
   "supabase/functions/geo-gateway/metering.ts": {
@@ -65710,7 +65715,7 @@
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "lines": 409,
+   "lines": 412,
    "exports": [
     "const MAPBOX_RATE_LIMITS",
     "interface MapboxOptions",
@@ -68159,10 +68164,20 @@
   }
  },
  "git": {
-  "sha": "ad064830fba46345f1a59c3bc702cfcab280ed6a",
+  "sha": "f973d92c0e701244e9f6da174ef5a49a8f47f1d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "f973d92",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)",
+    "files": [
+     "supabase/functions/geo-gateway/mapbox.test.ts",
+     "supabase/functions/geo-gateway/providers/mapbox.ts"
+    ]
+   },
    {
     "sha": "ad06483",
     "date": "2026-11-21",
@@ -68512,22 +68527,16 @@
      "docs/MAPBOX.md",
      "supabase/functions/check-external-api/index.ts"
     ]
-   },
-   {
-    "sha": "896743f",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(simulacao): corrige regressão que bloqueava admin/manager também (#164)",
-    "files": [
-     "src/pages/LiveMapPage.tsx",
-     "supabase/functions/simulate-driver-movement/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
     5
+   ],
+   [
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    4
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
@@ -68542,11 +68551,11 @@
     4
    ],
    [
-    "supabase/functions/_shared/schemas.ts",
+    "supabase/functions/geo-gateway/mapbox.test.ts",
     3
    ],
    [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "supabase/functions/_shared/schemas.ts",
     3
    ],
    [
@@ -68563,10 +68572,6 @@
    ],
    [
     "docs/GEO_PROVIDERS.md",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
     2
    ],
    [

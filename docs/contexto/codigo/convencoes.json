@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)",
    "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)",
    "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)",
    "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)",
-   "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)",
-   "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)"
+   "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

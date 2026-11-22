@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ad064830fba46345f1a59c3bc702cfcab280ed6a",
+  "commit": "f973d92c0e701244e9f6da174ef5a49a8f47f1d6",
   "branch": "main",
-  "data_commit": "2026-11-21T21:40:46-03:00",
+  "data_commit": "2026-11-21T21:46:59-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f973d92",
+    "data": "2026-11-21",
+    "assunto": "fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)"
+   },
    {
     "sha": "ad06483",
     "data": "2026-11-21",
@@ -126,18 +131,13 @@
     "sha": "641034b",
     "data": "2026-11-21",
     "assunto": "feat(mapas): tela de provedores de mapa em /settings/maps (#168)"
-   },
-   {
-    "sha": "808653c",
-    "data": "2026-11-21",
-    "assunto": "fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)"
    }
   ],
   "arquivos_mudados_7d": 195,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 32
+    "mudancas": 34
    },
    {
     "pasta": "src/components/map",
@@ -254,6 +254,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "mudancas": 5
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
     "mudancas": 5
    },
@@ -286,22 +290,18 @@
     "mudancas": 4
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
     "mudancas": 4
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 96
+    "commits": 97
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 971,
   "arquivos_codigo": 605,
-  "linhas_codigo": 118402,
+  "linhas_codigo": 118422,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13797
+   "linhas": 13817
   },
   "tailwind.config.ts": {
    "arquivos": 1,

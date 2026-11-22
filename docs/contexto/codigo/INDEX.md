@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ad064830fba46345f1a59c3bc702cfcab280ed6a` (2026-11-21T21:40:46-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `f973d92c0e701244e9f6da174ef5a49a8f47f1d6` (2026-11-21T21:46:59-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 971 |
 | arquivos_codigo | 605 |
-| linhas_codigo | 118402 |
+| linhas_codigo | 118422 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7492 nós · 15913 arestas · 552 comunidades · grafo do commit `ad064830`
+- 7492 nós · 15913 arestas · 552 comunidades · grafo do commit `f973d92c`
 - comunidades maiores: cn (235), react (128), badge.tsx (107), snapshot.py (102), ref_node_path (101), client.ts (90), RateLimitDashboardPage.tsx (82), dependencies (80), LiveMap.tsx (76), gerar.mjs (76), package.json (75), generate.py (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts)
 
@@ -291,7 +291,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - src/pages/LiveMapPage.tsx (5)
 - supabase/functions/_shared/schemas.ts (5)
 - supabase/functions/geo-gateway/index.ts (5)
-- supabase/functions/geo-gateway/resolver.test.ts (5)
+- supabase/functions/geo-gateway/providers/mapbox.ts (5)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `f973d92` fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)
 - 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
 - 2026-11-21 `d62d6d8` feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)
 - 2026-11-21 `3ab9d64` test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `c2ae0ba` fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)
 - 2026-11-21 `39f672a` chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)
 - 2026-11-21 `a9a3ba5` ci: inclui os testes do roteador do gateway nos contract tests (#134)
-- 2026-11-21 `e0ebbdb` fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
