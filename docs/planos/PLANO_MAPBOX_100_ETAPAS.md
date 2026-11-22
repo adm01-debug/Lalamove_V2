@@ -178,9 +178,9 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `docs/MAPBOX.md:39` seção "O que pode e não pode (Termos de Uso — etapa 8)"
 
 ### 9 — Rotação de tokens via Tokens API
-- [ ] Edge `geo-admin` action `rotate-mapbox-token`: `POST /tokens/v2/{username}` novo sk com mesmos scopes → `supabase secrets set` via Management API → `DELETE` do antigo após 10 min
-- [ ] Só admin; registra em `audit_log`
-- **Evidência:** rotação em sandbox gera token novo e revoga o antigo
+- [x] Edge `geo-admin` action `rotate-mapbox-token`: `POST /tokens/v2/{username}` novo sk com mesmos scopes → devolve o valor uma vez para gravar em `MAPBOX_SERVER_TOKEN` → `revoke-mapbox-token` depois de `REVOKE_AFTER_MS` (10 min)
+- [x] Só admin/manager; registra em `audit_log` (`resource_type='mapbox_token'`, só fingerprint, nunca o valor)
+- **Evidência:** `supabase/functions/geo-admin/rotation.ts` + `index.ts`; 11 testes verdes (fingerprint não vaza o valor, `pk.`/`tk.` nunca são revogados, ambiguidade devolve `null`, `tokens:write` não é herdado, o último `sk.` não pode ser revogado). A chamada real à Tokens API **não foi exercitada** — exige `MAPBOX_TOKENS_API_TOKEN` (`sk.` com `tokens:write`), que ainda não está nos secrets.
 
 ### 10 — Token temporário (`tk.`) para o navegador (opcional)
 - [ ] Avaliar `get-mapbox-token` devolver `tk.` de 1 h (Tokens API, `expires`) em vez do `pk.` fixo — reduz exposição; medir impacto no rate limit 100/min da Tokens API (cache por usuário 50 min)

@@ -224,9 +224,13 @@ Ver `claude/mapbox-x-lalamove-v2-plano-100-etapas-2026-11-21.md` seção "Decis�
 
 ## Rotação de token (Runbook — etapa 9)
 
-1. Edge `geo-admin` action `rotate-mapbox-token` cria novo `sk.` com mesmos scopes via `POST /tokens/v2/promobrindes`
-2. `supabase secrets set MAPBOX_SERVER_TOKEN=<novo>` via Management API
-3. `DELETE /tokens/v2/promobrindes/<id-antigo>` após 10 minutos
-4. Registrar em `audit_log`
+1. Edge `geo-admin` (`action: rotate-mapbox-token`) cria novo `sk.` com os mesmos scopes via `POST /tokens/v2/promobrindes` e devolve o valor **uma única vez** na resposta, além de `revoke_candidate_id`.
+2. `supabase secrets set MAPBOX_SERVER_TOKEN=<novo>` (Management API ou painel). O token antigo continua válido — a janela existe para o deploy das edges terminar.
+3. Esperar o `deploy-edges.yml` da main passar (o `geo-gateway` é quem usa o token).
+4. `action: revoke-mapbox-token` com `token_id=<antigo>` — recusa revogar se sobrar um só `sk.` na conta.
+
+Tudo grava em `audit_log` (`resource_type='mapbox_token'`, só fingerprints). Testar com `dry_run: true` antes: devolve o que seria criado e qual token seria revogado, sem chamar a API.
+
+Se `revoke_candidate_id` vier `null`, há mais de um `sk.` e o Tokens API não revela qual é o atual (a listagem não devolve o valor): revogar à mão no painel, escolhendo pelo campo `note`.
 
 Em emergência (token vazado): acessar mapbox.com/account/access-tokens → revogar imediatamente → executar rotação manual → atualizar secret no Supabase.
