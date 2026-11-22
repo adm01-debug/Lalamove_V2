@@ -20,10 +20,10 @@
 | `evaluate-driver` | `alerts`, `driver_approval_queue`, `driver_evaluations`, `driver_incidents`, `drivers`, `lalamove_orders`, `risk_rules` |
 | `external-companies` | `carriers`, `companies`, `contacts`, `customers`, `suppliers` |
 | `external-db-bridge` | `query_telemetry` |
-| `geo-gateway` | `geo_cache`, `geo_price_list`, `geo_settings`, `geo_usage_month` |
+| `geo-gateway` | `alerts`, `geo_budget`, `geo_cache`, `geo_price_list`, `geo_settings`, `geo_usage_month`, `query_telemetry` |
 | `get-mapbox-token` | — |
-| `job-worker` | — |
-| `lalamove-api` | `drivers`, `lalamove_orders`, `lalamove_priority_fee_history`, `lalamove_rate_limits`, `lalamove_status_history` |
+| `job-worker` | `active_tracking`, `lalamove_orders`, `lalamove_stops`, `tracking_events` |
+| `lalamove-api` | `drivers`, `lalamove_orders`, `lalamove_priority_fee_history`, `lalamove_rate_limits`, `lalamove_status_history`, `lalamove_stops` |
 | `lalamove-gateway` | `alerts`, `lalamove_rate_limits`, `query_telemetry` |
 | `lalamove-token-refresh` | `alerts`, `lalamove_uapi_sessions` |
 | `lalamove-uapi` | `lalamove_orders`, `lalamove_uapi_sessions` |
@@ -34,17 +34,17 @@
 | `rotate-tokens` | `alerts`, `bitrix24_tokens` |
 | `route-analyzer` | `alerts`, `drivers`, `lalamove_orders` |
 | `seed-fix-rls` | — |
-| `send-notification` | `alert_configurations`, `alerts`, `alerts_sent`, `bitrix24_tokens` |
-| `simulate-driver-movement` | `active_tracking`, `tracking_events` |
+| `send-notification` | `alert_configurations`, `alerts`, `alerts_sent`, `bitrix24_tokens`, `geo_defaults`, `job_queue`, `order_geo_events` |
+| `simulate-driver-movement` | `active_tracking`, `tracking_events`, `user_roles` |
 | `test-notification` | `bitrix24_tokens` |
 
 ## Por tabela
 
 | Tabela | Funções |
 |---|---|
-| `active_tracking` | `check-driver-alerts`, `lalamove-webhook`, `simulate-driver-movement` |
+| `active_tracking` | `check-driver-alerts`, `job-worker`, `lalamove-webhook`, `simulate-driver-movement` |
 | `alert_configurations` | `check-driver-alerts`, `send-notification` |
-| `alerts` | `check-driver-alerts`, `evaluate-driver`, `lalamove-gateway`, `lalamove-token-refresh`, `lalamove-webhook`, `rotate-tokens`, `route-analyzer`, `send-notification` |
+| `alerts` | `check-driver-alerts`, `evaluate-driver`, `geo-gateway`, `lalamove-gateway`, `lalamove-token-refresh`, `lalamove-webhook`, `rotate-tokens`, `route-analyzer`, `send-notification` |
 | `alerts_sent` | `send-notification` |
 | `auth_logs` | `new-device-alert` |
 | `bitrix24_activities` | `bitrix24-process-queue`, `bitrix24-sync` |
@@ -60,22 +60,27 @@
 | `driver_incidents` | `evaluate-driver` |
 | `driver_locations` | `lalamove-webhook` |
 | `drivers` | `evaluate-driver`, `lalamove-api`, `lalamove-webhook`, `route-analyzer` |
+| `geo_budget` | `geo-gateway` |
 | `geo_cache` | `geo-gateway` |
+| `geo_defaults` | `send-notification` |
 | `geo_price_list` | `geo-gateway` |
 | `geo_settings` | `geo-gateway` |
 | `geo_usage_month` | `geo-gateway` |
+| `job_queue` | `send-notification` |
 | `lalamove_order_replacements` | `lalamove-webhook` |
-| `lalamove_orders` | `bitrix24-sync`, `evaluate-driver`, `lalamove-api`, `lalamove-uapi`, `lalamove-webhook`, `route-analyzer` |
+| `lalamove_orders` | `bitrix24-sync`, `evaluate-driver`, `job-worker`, `lalamove-api`, `lalamove-uapi`, `lalamove-webhook`, `route-analyzer` |
 | `lalamove_priority_fee_history` | `lalamove-api` |
 | `lalamove_rate_limits` | `lalamove-api`, `lalamove-gateway` |
 | `lalamove_status_history` | `lalamove-api`, `lalamove-webhook` |
 | `lalamove_stop_proofs` | `lalamove-webhook` |
-| `lalamove_stops` | `lalamove-webhook` |
+| `lalamove_stops` | `job-worker`, `lalamove-api`, `lalamove-webhook` |
 | `lalamove_uapi_sessions` | `lalamove-token-refresh`, `lalamove-uapi` |
 | `new_device_alerts` | `new-device-alert` |
-| `query_telemetry` | `external-db-bridge`, `lalamove-gateway`, `mcp-query` |
+| `order_geo_events` | `send-notification` |
+| `query_telemetry` | `external-db-bridge`, `geo-gateway`, `lalamove-gateway`, `mcp-query` |
 | `risk_rules` | `evaluate-driver` |
 | `suppliers` | `external-companies` |
-| `tracking_events` | `lalamove-webhook`, `simulate-driver-movement` |
+| `tracking_events` | `job-worker`, `lalamove-webhook`, `simulate-driver-movement` |
 | `user_devices` | `new-device-alert` |
+| `user_roles` | `simulate-driver-movement` |
 | `webhook_events` | `lalamove-webhook` |

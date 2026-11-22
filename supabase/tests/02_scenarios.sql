@@ -431,6 +431,76 @@ BEGIN
     'cenario 11: telefone do destinatario vem do contato da parada (recebido '||coalesce(v_rec->>'to','null')||')');
 END $$;
 
+-- ═══════════════════════════════════════════════════════════════════════════
+-- Cenario 12: etapa 59 (D1) — resolucao do destinatario da COLETA.
+-- Ordem: pickup_contact_phone -> supplier_contact (so com auto_notify_supplier)
+-- -> lalamove_stops[0].contact_phone. Antes, supplier_contact entrava so no
+-- `name`, entao pedido sem pickup_contact_phone e sem contato na parada montava
+-- destinatario com nome e `to: null` (WhatsApp nunca saia).
+-- ═══════════════════════════════════════════════════════════════════════════
+DO $$ DECLARE
+  v_order uuid := 'dddddddd-0000-4000-8000-000000000012';
+  v_rec jsonb;
+BEGIN
+
+  DELETE FROM order_geo_events WHERE order_id = v_order;
+  DELETE FROM active_tracking WHERE order_id = v_order;
+  DELETE FROM lalamove_stops WHERE order_id = v_order;
+  DELETE FROM lalamove_orders WHERE id = v_order;
+
+  -- Caso A: so supplier_contact, com auto_notify_supplier ligado.
+  INSERT INTO lalamove_orders (id, lalamove_id, lalamove_status, status,
+      pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude,
+      supplier_contact, auto_notify_supplier)
+  VALUES (v_order, 'LM-DEST-12', 'ON_GOING', 'ON_GOING',
+      -25.4295963, -49.2712724, -25.4433, -49.2288, '+5541999990099', true);
+
+  INSERT INTO active_tracking (order_id, driver_id, current_latitude, current_longitude,
+      eta_minutes, tracking_status, next_stop_index)
+  VALUES (v_order, '33333333-0000-4000-8000-000000000012',
+      -25.42960, -49.27127, 5, 'ACTIVE', 0);
+
+  SELECT payload->'recipients'->0 INTO v_rec FROM order_geo_events
+   WHERE order_id = v_order AND event_type = 'DRIVER_APPROACHING_PICKUP' LIMIT 1;
+  PERFORM public.assert_true(v_rec->>'to' = '+5541999990099',
+    'cenario 12: supplier_contact vira destinatario quando auto_notify_supplier=true (recebido '||coalesce(v_rec->>'to','null')||')');
+
+  -- Caso B: auto_notify_supplier desligado -> fornecedor NAO recebe.
+  DELETE FROM order_geo_events WHERE order_id = v_order;
+  DELETE FROM active_tracking WHERE order_id = v_order;
+  UPDATE lalamove_orders SET auto_notify_supplier = false WHERE id = v_order;
+  INSERT INTO active_tracking (order_id, driver_id, current_latitude, current_longitude,
+      eta_minutes, tracking_status, next_stop_index)
+  VALUES (v_order, '33333333-0000-4000-8000-000000000012',
+      -25.42960, -49.27127, 5, 'ACTIVE', 0);
+
+  SELECT payload->'recipients'->0 INTO v_rec FROM order_geo_events
+   WHERE order_id = v_order AND event_type = 'DRIVER_APPROACHING_PICKUP' LIMIT 1;
+  PERFORM public.assert_true((v_rec->>'to') IS NULL,
+    'cenario 12: com auto_notify_supplier=false o fornecedor nao e usado (recebido '||coalesce(v_rec->>'to','null')||')');
+
+  -- Caso C: pickup_contact_phone tem precedencia sobre supplier_contact.
+  DELETE FROM order_geo_events WHERE order_id = v_order;
+  DELETE FROM active_tracking WHERE order_id = v_order;
+  UPDATE lalamove_orders
+     SET auto_notify_supplier = true, pickup_contact_phone = '+5541999990011'
+   WHERE id = v_order;
+  INSERT INTO active_tracking (order_id, driver_id, current_latitude, current_longitude,
+      eta_minutes, tracking_status, next_stop_index)
+  VALUES (v_order, '33333333-0000-4000-8000-000000000012',
+      -25.42960, -49.27127, 5, 'ACTIVE', 0);
+
+  SELECT payload->'recipients'->0 INTO v_rec FROM order_geo_events
+   WHERE order_id = v_order AND event_type = 'DRIVER_APPROACHING_PICKUP' LIMIT 1;
+  PERFORM public.assert_true(v_rec->>'to' = '+5541999990011',
+    'cenario 12: pickup_contact_phone tem precedencia (recebido '||coalesce(v_rec->>'to','null')||')');
+
+  DELETE FROM order_geo_events WHERE order_id = v_order;
+  DELETE FROM active_tracking WHERE order_id = v_order;
+  DELETE FROM lalamove_stops WHERE order_id = v_order;
+  DELETE FROM lalamove_orders WHERE id = v_order;
+END $$;
+
 \echo ''
 \echo '================================================'
 \echo ' TUDO OK — todos os cenarios passaram'

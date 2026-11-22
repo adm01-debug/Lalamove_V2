@@ -219,7 +219,14 @@ BEGIN
         WHEN NEW.next_stop_index = 0 THEN jsonb_build_array(jsonb_build_object(
             'role', 'pickup_contact', 'channel', 'whatsapp',
             'name', COALESCE(o.pickup_contact_name, o.supplier_contact),
-            'to',   COALESCE(o.pickup_contact_phone, (SELECT contact_phone FROM lalamove_stops WHERE order_id = o.id AND stop_index = 0 LIMIT 1))))
+            -- D1 (etapa 59): pickup_contact_phone -> supplier_contact (só com
+            -- auto_notify_supplier) -> lalamove_stops[0].contact_phone. Sem o
+            -- supplier_contact aqui, pedido que só tem fornecedor cadastrado
+            -- montava destinatário com nome e to=null.
+            'to',   COALESCE(
+                      o.pickup_contact_phone,
+                      CASE WHEN o.auto_notify_supplier THEN o.supplier_contact ELSE NULL END,
+                      (SELECT contact_phone FROM lalamove_stops WHERE order_id = o.id AND stop_index = 0 LIMIT 1))))
         ELSE jsonb_build_array(jsonb_build_object(
             'role', 'delivery_contact', 'channel', 'whatsapp',
             'name', (SELECT contact_name  FROM lalamove_stops WHERE order_id = o.id AND stop_index = NEW.next_stop_index LIMIT 1),

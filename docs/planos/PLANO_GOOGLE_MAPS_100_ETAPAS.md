@@ -697,6 +697,8 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 ### 64 — Testes do bloco
 - [x] pgTAP/`DO` para `geo_evaluate_events` (6 cenários) + Deno para resolução de destinatário e janela
 - **Evidência:** CI verde
+  > **Auditada 2026-11-22.** Harness SQL em `supabase/tests/` com **12 cenários / 30 asserções** (bem acima dos 6), rodando em job dedicado `SQL Geo Trigger Tests` no CI. Deno: `quiet-hours.test.ts` 8/8 e `coordinates.test.ts` 8/8.
+- **Evidência:** job `SQL Geo Trigger Tests` verde no run `44981311884`; `deno test` 25/25.
 
 **Executado (2026-11-22).** Testes SQL de comportamento do trigger, além dos testes puros de
 geometria da etapa 17:

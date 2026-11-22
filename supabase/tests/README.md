@@ -23,7 +23,7 @@ gravado no banco de produção e o container é removido ao final.
 | `00_stubs.sql` | DDL mínimo das tabelas reais (`lalamove_orders`, `active_tracking`, `order_geo_events`, `job_queue`, …) com os tipos de produção. Não é migration. |
 | `01_functions.sql` | **Gerado.** Cópia literal das funções reais extraídas das migrations — garante que o teste exercita o código que vai para produção. |
 | `03_fixture.sql` | **Gerado.** Converte `fixtures/route_curitiba.json` em tabela. |
-| `02_scenarios.sql` | Os 11 cenários (27 asserções). Falha = `RAISE EXCEPTION` + `ON_ERROR_STOP`. |
+| `02_scenarios.sql` | Os 12 cenários (30 asserções). Falha = `RAISE EXCEPTION` + `ON_ERROR_STOP`. |
 
 Porta padrão `55433`; use `PG_TEST_PORT` para trocar.
 
