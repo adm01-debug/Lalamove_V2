@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)",
+   "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)",
    "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)",
    "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)",
-   "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)",
-   "fix: fechar ciclo de notification_status dos eventos geo (#181)",
-   "infra: cron horario de refresh das materialized views de cache (#180)"
+   "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

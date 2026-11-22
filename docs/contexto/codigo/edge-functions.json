@@ -372,7 +372,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 7,
-   "linhas": 1322,
+   "linhas": 1414,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -458,7 +458,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 734,
+   "linhas": 789,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

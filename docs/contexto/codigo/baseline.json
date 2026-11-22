@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3ab9d6462eb4493ce7a22d3eda91f507ce3b380f",
+  "commit": "ad064830fba46345f1a59c3bc702cfcab280ed6a",
   "branch": "main",
-  "data_commit": "2026-11-21T21:28:56-03:00",
+  "data_commit": "2026-11-21T21:40:46-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ad06483",
+    "data": "2026-11-21",
+    "assunto": "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)"
+   },
+   {
+    "sha": "d62d6d8",
+    "data": "2026-11-21",
+    "assunto": "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)"
+   },
    {
     "sha": "3ab9d64",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "808653c",
     "data": "2026-11-21",
     "assunto": "fix(simulacao): bloqueia produção e corrige intervalo órfão no Simular Movimento (#167)"
-   },
-   {
-    "sha": "7fa1073",
-    "data": "2026-11-21",
-    "assunto": "feat(mapa): usa a rota planejada no servidor em vez de chamar Directions no browser (#153)"
-   },
-   {
-    "sha": "6407f62",
-    "data": "2026-11-21",
-    "assunto": "chore(config): declara verify_jwt explicito para mapbox-proxy (#142)"
    }
   ],
-  "arquivos_mudados_7d": 194,
+  "arquivos_mudados_7d": 195,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 26
+    "mudancas": 32
    },
    {
     "pasta": "src/components/map",
@@ -172,6 +172,10 @@
     "mudancas": 6
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 6
+   },
+   {
     "pasta": "supabase/functions/lalamove-webhook",
     "mudancas": 6
    },
@@ -181,10 +185,6 @@
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 5
-   },
-   {
-    "pasta": "supabase/functions/_shared",
     "mudancas": 5
    },
    {
@@ -246,6 +246,22 @@
     "mudancas": 5
    },
    {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/resolver.ts",
+    "mudancas": 5
+   },
+   {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 5
    },
@@ -270,38 +286,22 @@
     "mudancas": 4
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 4
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/resolver.ts",
+    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 4
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
     "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 94
+    "commits": 96
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 970,
-  "arquivos_codigo": 604,
-  "linhas_codigo": 118017,
+  "arquivos_total": 971,
+  "arquivos_codigo": 605,
+  "linhas_codigo": 118402,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -326,7 +326,7 @@
   "cron_jobs": 21,
   "testes": 118,
   "workflows": 5,
-  "scripts": 105,
+  "scripts": 106,
   "docs_md": 99
  },
  "por_pasta": {
@@ -455,8 +455,8 @@
    "linhas": 22
   },
   "scripts/geo": {
-   "arquivos": 1,
-   "linhas": 83
+   "arquivos": 2,
+   "linhas": 241
   },
   "scripts/inventario": {
    "arquivos": 4,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13570
+   "linhas": 13797
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -617,12 +617,12 @@
    "linhas": 793
   },
   {
-   "arquivo": "src/pages/AdvancedReportsPage.tsx",
-   "linhas": 750
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 789
   },
   {
-   "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 734
+   "arquivo": "src/pages/AdvancedReportsPage.tsx",
+   "linhas": 750
   },
   {
    "arquivo": "supabase/functions/send-notification/index.ts",
@@ -678,8 +678,8 @@
   }
  ],
  "qualidade": {
-  "any": 110,
-  "console_log": 403,
+  "any": 112,
+  "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 3,

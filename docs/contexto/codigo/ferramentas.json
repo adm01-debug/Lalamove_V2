@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (493)",
+   "TypeScript (494)",
    "SQL (180)",
    "JavaScript (112)",
    "Markdown (99)",
@@ -386,7 +386,7 @@
   {
    "arquivo": "docs/GEO_PROVIDERS.md",
    "titulo": "Como adicionar um provedor de mapa (HERE, TomTom, …)",
-   "linhas": 56
+   "linhas": 59
   },
   {
    "arquivo": "docs/JOB_QUEUE_SYSTEM.md",
@@ -789,7 +789,7 @@
    },
    {
     "host": "api.mapbox.com",
-    "arquivos": 3
+    "arquivos": 4
    },
    {
     "host": "supabase.com",
@@ -873,6 +873,10 @@
    },
    {
     "host": "lovable.dev",
+    "arquivos": 1
+   },
+   {
+    "host": "routes.googleapis.com",
     "arquivos": 1
    },
    {

@@ -1060,13 +1060,13 @@
   {
    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 169,
+   "linhas": 203,
    "testa": [
     "supabase/functions/geo-gateway/polyline.ts",
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     "supabase/functions/geo-gateway/providers/types.ts"
    ],
-   "casos": 10
+   "casos": 12
   },
   {
    "arquivo": "supabase/functions/geo-gateway/polyline.test.ts",
@@ -1080,11 +1080,11 @@
   {
    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 135,
+   "linhas": 160,
    "testa": [
     "supabase/functions/geo-gateway/resolver.ts"
    ],
-   "casos": 13
+   "casos": 15
   },
   {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",

@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 105,
+ "total": 106,
  "nota": "scripts soltos na raiz de scripts/ são legado de sessões antigas (alguns com segredo commitado) — ver AGENTS.md; automação nova vai em scripts/<nome>/ com README.",
  "scripts": [
   {
@@ -889,6 +889,21 @@
    "npm_scripts": [],
    "workflows": [],
    "solto_na_raiz_de_scripts": true,
+   "orfao": false
+  },
+  {
+   "arquivo": "scripts/geo/eta-parity.ts",
+   "pasta": "scripts/geo",
+   "descricao": "Etapa 51 do plano Mapbox × Lalamove V2: paridade de ETA Google × Mapbox. Para cada par origem/destino: Directions `driving-traffic` do Mapbox e Routes",
+   "linhas": 158,
+   "env": [
+    "GOOGLE_MAPS_SERVER_KEY",
+    "MAPBOX_ACCESS_TOKEN",
+    "MAPBOX_SERVER_TOKEN"
+   ],
+   "npm_scripts": [],
+   "workflows": [],
+   "solto_na_raiz_de_scripts": false,
    "orfao": false
   },
   {

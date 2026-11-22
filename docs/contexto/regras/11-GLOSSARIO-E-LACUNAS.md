@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3ab9d6462e` · branch `main` · 2026-11-22 00:29 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ad064830fb` · branch `main` · 2026-11-22 00:41 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -197,6 +197,8 @@ _nenhum item encontrado_
 | status | valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `planned` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `refreshed` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
+| status | valor `geocoded` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/job-worker/index.ts` |
+| status | valor `not_found` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/job-worker/index.ts` |
 | status | valor `DRIVER_CHANGED` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/lalamove-api/index.ts` |
 | status | valor `string` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/lalamove-api/index.ts` |
 | status | valor `DELETED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/migrations/20251226020000_create_materialized_views_cache.sql` |
