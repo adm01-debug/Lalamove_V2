@@ -13,6 +13,8 @@
   "supabase/functions/_shared/contract.test.ts",
   "supabase/functions/_shared/contract.ts",
   "supabase/functions/_shared/cors.ts",
+  "supabase/functions/_shared/geo-precision.test.ts",
+  "supabase/functions/_shared/geo-precision.ts",
   "supabase/functions/_shared/logger.ts",
   "supabase/functions/_shared/schemas.ts",
   "supabase/functions/_shared/telemetry.ts"
@@ -372,7 +374,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 8,
-   "linhas": 1791,
+   "linhas": 1790,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -410,6 +412,7 @@
    "usa_shared": [
     "contract.ts",
     "cors.ts",
+    "geo-precision.ts",
     "logger.ts",
     "schemas.ts",
     "telemetry.ts"
@@ -504,7 +507,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 2,
-   "linhas": 1218,
+   "linhas": 1223,
    "verify_jwt": true,
    "metodos": [
     "GET",

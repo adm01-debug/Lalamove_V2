@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `972a37cbc1` · branch `main` · 2026-11-22 01:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7938358cda` · branch `main` · 2026-11-22 01:38 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -160,10 +160,10 @@
 | `HANDLING_INSTRUCTIONS` (TS) | 'FRAGILE_OR_HANDLE_WITH_CARE', 'DO_NOT_STACK', 'KEEP_UPRIGHT', 'KEEP_DRY', 'NO_BENDING', |  | `src/types/lalamove.ts` |
 | `UAPI_POD_STATUS` (TS) | 'PENDING', 'SIGNED', 'DELIVERED', 'FAILED', 'NOT_APPLICABLE' |  | `src/types/lalamove.ts` |
 | `ContractVersion` (TS) | v1 \| v2 |  | `supabase/functions/_shared/contract.ts` |
+| `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `supabase/functions/_shared/geo-precision.ts` |
 | `ContractName` (TS) | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway |  | `supabase/functions/_shared/schemas.ts` |
 | `ProviderName` (TS) | google \| mapbox |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |
-| `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |
 | `GatewayTarget` (TS) | unified \| uapi |  | `supabase/functions/lalamove-gateway/route.ts` |
 

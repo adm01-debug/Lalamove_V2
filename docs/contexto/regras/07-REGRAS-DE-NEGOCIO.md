@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `972a37cbc1` · branch `main` · 2026-11-22 01:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7938358cda` · branch `main` · 2026-11-22 01:38 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -880,10 +880,10 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | HANDLING_INSTRUCTIONS | 'FRAGILE_OR_HANDLE_WITH_CARE', 'DO_NOT_STACK', 'KEEP_UPRIGHT', 'KEEP_DRY', 'NO_BENDING', | `src/types/lalamove.ts` |
 | UAPI_POD_STATUS | 'PENDING', 'SIGNED', 'DELIVERED', 'FAILED', 'NOT_APPLICABLE' | `src/types/lalamove.ts` |
 | ContractVersion | v1 \| v2 | `supabase/functions/_shared/contract.ts` |
+| GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/_shared/geo-precision.ts` |
 | ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway | `supabase/functions/_shared/schemas.ts` |
 | ProviderName | google \| mapbox | `supabase/functions/geo-gateway/providers/types.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
-| GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/geo-gateway/providers/types.ts` |
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
 | GatewayTarget | unified \| uapi | `supabase/functions/lalamove-gateway/route.ts` |
 
@@ -1241,6 +1241,7 @@ _nenhum item encontrado_
 | `transition={{ delay: index * 0.1 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/pages/orders/OrderCard.tsx` |
 | `// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.` | `supabase/functions/lalamove-api/coordinates.ts` |
+| `// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// Randomly toggle off-route status (3% chance to go off, 20% to return)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Randomly toggle stopped status (5% chance)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Simulate movement - move 5-15% towards destination with some randomness` | `supabase/functions/simulate-driver-movement/index.ts` |
@@ -1801,7 +1802,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (943 testes em 80 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (946 testes em 81 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1884,6 +1885,7 @@ _nenhum item encontrado_
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |
 | `src/hooks/__tests__/useCronJobsHealth.test.ts` | 3 | useCronJobsHealth · deve retornar a saúde dos jobs de cron · deve propagar erro quando a RPC falha (ex.: sem permissão de admin) |
 | `src/hooks/__tests__/useDrivers.test.ts` | 3 | useDrivers · deve buscar e mapear motoristas corretamente · deve lidar com erro do supabase |
+| `supabase/functions/_shared/geo-precision.test.ts` | 3 | precisionFromAccuracy: mapeia o vocabulário do Geocoding v6 · precisionFromAccuracy: ausente ou fora do vocabulário nunca vira exact · ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor |
 | `supabase/functions/geo-gateway/polyline.test.ts` | 3 | polyline: exemplo oficial do Google (precisão 5) · polyline6: ida e volta preserva 6 casas · simplify: remove pontos colineares, mantém extremos e curvas |
 
 ## L. Eventos de webhook tratados (contratos com sistemas externos)
@@ -2081,6 +2083,8 @@ _nenhum item encontrado_
 | * Presente somente quando a versão usada está descontinuada. */ | `supabase/functions/_shared/contract.ts` |
 | ── Resultado de validação (puro, testável) ────────────────────────────────── | `supabase/functions/_shared/contract.ts` |
 | Falhas de validação usam SEMPRE status 422 e o formato único de erro. | `supabase/functions/_shared/contract.ts` |
+| (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. | `supabase/functions/_shared/geo-precision.ts` |
+| * Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */ | `supabase/functions/_shared/geo-precision.ts` |
 | - Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal. | `supabase/functions/_shared/telemetry.ts` |
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |

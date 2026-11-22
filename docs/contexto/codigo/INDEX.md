@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `972a37cbc15cd263321499d59a7af628d3d46e2b` (2026-11-21T22:36:40-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5` (2026-11-21T22:37:58-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (499), SQL (183), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (501), SQL (184), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 979 |
-| arquivos_codigo | 610 |
-| linhas_codigo | 119744 |
+| arquivos_total | 982 |
+| arquivos_codigo | 612 |
+| linhas_codigo | 119805 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -47,9 +47,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 88 |
-| migrations | 179 |
+| migrations | 180 |
 | cron_jobs | 21 |
-| testes | 121 |
+| testes | 122 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 99 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (126), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (12), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (12)
+- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (13)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
 | components/orders | 0 | 0 | 8 | 31 | 6 | 5 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 43 | 0 | 5 | 42 |
+| functions | 0 | 0 | 44 | 0 | 5 | 42 |
 | hooks | 0 | 0 | 86 | 209 | 14 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 194 | 13 | 46 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7548 nós · 16071 arestas · 569 comunidades · grafo do commit `972a37cb`
-- comunidades maiores: cn (244), button.tsx (145), badge.tsx (138), App.tsx (103), snapshot.py (102), DashboardRedesigned.tsx (92), client.ts (82), dependencies (80), ref_node_path (79), gerar.mjs (76), generate.py (75), package.json (70)
+- 7555 nós · 16085 arestas · 575 comunidades · grafo do commit `7938358c`
+- comunidades maiores: cn (252), button.tsx (138), lucide-react (127), App.tsx (116), snapshot.py (102), client.ts (96), ref_node_path (85), dependencies (80), DashboardRedesigned.tsx (78), gerar.mjs (76), generate.py (73), package.json (70)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -287,11 +287,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - src/components/orders/AddressAutocomplete.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
 - supabase/functions/geo-gateway/index.ts (6)
+- supabase/functions/geo-gateway/providers/mapbox.ts (6)
 - docs/pendencias/README.md (5)
 - src/components/orders/NewOrderDialog.tsx (5)
 - src/pages/LiveMapPage.tsx (5)
 - supabase/functions/_shared/schemas.ts (5)
-- supabase/functions/geo-gateway/providers/mapbox.ts (5)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -369,6 +369,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
+- 2026-11-21 `0a1c0f1` docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)
 - 2026-11-21 `972a37c` feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)
 - 2026-11-21 `a0e2990` feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)
 - 2026-11-21 `2e299d5` docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)
@@ -382,8 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
 - 2026-11-21 `d62d6d8` feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)
 - 2026-11-21 `3ab9d64` test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)
-- 2026-11-21 `3e9f386` fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)
-- 2026-11-21 `d598435` fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

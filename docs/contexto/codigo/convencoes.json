@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (12)"
+   "supabase/functions/<edge> (13)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)",
+   "docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)",
    "feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)",
    "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)",
-   "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)",
-   "fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)",
-   "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)"
+   "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

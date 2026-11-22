@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "972a37cbc15cd263321499d59a7af628d3d46e2b",
+  "commit": "7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5",
   "branch": "main",
-  "data_commit": "2026-11-21T22:36:40-03:00",
+  "data_commit": "2026-11-21T22:37:58-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "7938358",
+    "data": "2026-11-21",
+    "assunto": "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)"
+   },
+   {
+    "sha": "0a1c0f1",
+    "data": "2026-11-21",
+    "assunto": "docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)"
+   },
    {
     "sha": "972a37c",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "39f672a",
     "data": "2026-11-21",
     "assunto": "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)"
-   },
-   {
-    "sha": "a9a3ba5",
-    "data": "2026-11-21",
-    "assunto": "ci: inclui os testes do roteador do gateway nos contract tests (#134)"
-   },
-   {
-    "sha": "e0ebbdb",
-    "data": "2026-11-21",
-    "assunto": "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)"
    }
   ],
-  "arquivos_mudados_7d": 203,
+  "arquivos_mudados_7d": 206,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 37
+    "mudancas": 39
    },
    {
     "pasta": "src/components/map",
@@ -164,6 +164,10 @@
     "mudancas": 10
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 8
+   },
+   {
     "pasta": "supabase/config.toml",
     "mudancas": 7
    },
@@ -172,7 +176,7 @@
     "mudancas": 6
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "supabase/functions/lalamove-api",
     "mudancas": 6
    },
    {
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "src/hooks/__tests__",
-    "mudancas": 5
-   },
-   {
-    "pasta": "supabase/functions/lalamove-api",
     "mudancas": 5
    }
   ],
@@ -238,6 +238,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": "docs/pendencias/README.md",
     "mudancas": 5
    },
@@ -254,7 +258,7 @@
     "mudancas": 5
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 5
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 4
-   },
-   {
-    "arquivo": "src/lib/lalamoveCatalog.ts",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 106
+    "commits": 108
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 979,
-  "arquivos_codigo": 610,
-  "linhas_codigo": 119744,
+  "arquivos_total": 982,
+  "arquivos_codigo": 612,
+  "linhas_codigo": 119805,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -322,9 +322,9 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 179,
+  "migrations": 180,
   "cron_jobs": 21,
-  "testes": 121,
+  "testes": 122,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 99
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 55,
-   "linhas": 14711
+   "arquivos": 57,
+   "linhas": 14772
   },
   "tailwind.config.ts": {
    "arquivos": 1,

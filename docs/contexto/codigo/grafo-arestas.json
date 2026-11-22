@@ -2245,8 +2245,12 @@
    "supabase/functions/geo-gateway/providers/types.ts"
   ],
   "supabase/functions/geo-gateway/providers/mapbox.ts": [
+   "supabase/functions/_shared/geo-precision.ts",
    "supabase/functions/geo-gateway/polyline.ts",
    "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/geo-gateway/providers/types.ts": [
+   "supabase/functions/_shared/geo-precision.ts"
   ],
   "supabase/functions/geo-gateway/resolver.ts": [
    "supabase/functions/geo-gateway/providers/types.ts"

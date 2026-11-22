@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "972a37cbc15cd263321499d59a7af628d3d46e2b",
+  "sha": "7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 01:37 UTC",
-  "files_total": 974,
-  "code_files": 802,
-  "code_lines": 138380
+  "generated_at": "2026-11-22 01:38 UTC",
+  "files_total": 977,
+  "code_files": 805,
+  "code_lines": 138476
  },
  "version": "1.3.2",
- "facts_hash": "4d071985fda82995",
+ "facts_hash": "97628d4ad6932109",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,9 +179,9 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 270,
+   ".ts": 272,
    ".tsx": 229,
-   ".sql": 183,
+   ".sql": 184,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -14337,6 +14337,7 @@
    "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql",
    "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
    "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
+   "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -21115,8 +21116,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 55,
-   "lines": 14711,
+   "files": 57,
+   "lines": 14772,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21164,6 +21165,7 @@
    "exports": [
     "contract.ts: ContractVersion, SUPPORTED_VERSIONS, DEFAULT_VERSION, RECOMMENDED_VERSION, DEPRECATED_VERSIONS, DEPRECATION_SCHEDULE",
     "cors.ts: corsHeaders",
+    "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
     "logger.ts: logger",
     "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
     "telemetry.ts: trackContractUsage",
@@ -21175,7 +21177,7 @@
     "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, mergeSettings",
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
-    "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoPrecision, GeoSuggestion",
+    "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoSuggestion, GeoAddressComponents",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "index.ts: CHANGE_DRIVER_REASONS",
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
@@ -21188,11 +21190,12 @@
     "contract.test.ts: ============================================================================ Testes de Contrato — Validam que payloads válidos e inválidos produzem respostas CONSISTENTES em todos os webhooks e Edge Functions. Cobertura: - Payload válido → ok:true - Campos ausentes → 422 + formato único - Tipos inco …",
     "contract.ts: ============================================================================ Contract Layer — Validação de schema + formato único de erro para todas as Edge Functions e webhooks. Objetivos (Front-End/Back-End Sênior): - Formato de erro 422 CONSISTENTE em TODOS os endpoints: { error: { code, message, …",
     "cors.ts: Shared CORS headers for Edge Functions In production, you should ideally restrict 'Access-Control-Allow-Origin' to your specific frontend domain(s).",
-    "schemas.ts: ============================================================================ Schemas de Contrato — Fonte única de verdade para os payloads de TODOS os webhooks e Edge Functions. Versionados (v1/v2) para permitir evolução com compatibilidade retroativa. Convenção de versionamento: - v1: contrato orig …",
-    "telemetry.ts: ============================================================================ Telemetria de uso de versões de contrato (deprecação). Objetivo: emitir log estruturado + persistir de forma AGREGADA (best-effort) cada requisição por (contrato, versão), destacando quando uma versão DESCONTINUADA (ex.: v1 …"
+    "geo-precision.ts: Precisao de geocodificacao — fonte unica do mapeamento `accuracy` do Mapbox (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. Etapa 13 do plano de 100 etapas: o mapa vivia so dentro de `geo-gateway/providers/mapbox.ts`. Extraido para ca porque o `geo-gateway` nao e o …",
+    "schemas.ts: ============================================================================ Schemas de Contrato — Fonte única de verdade para os payloads de TODOS os webhooks e Edge Functions. Versionados (v1/v2) para permitir evolução com compatibilidade retroativa. Convenção de versionamento: - v1: contrato orig …"
    ],
    "deps": [
     "https:",
+    "jsr:@std",
     "npm:@supabase"
    ],
    "imports_modules": [],
@@ -21201,6 +21204,8 @@
     "supabase/functions/_shared/contract.test.ts",
     "supabase/functions/_shared/contract.ts",
     "supabase/functions/_shared/cors.ts",
+    "supabase/functions/_shared/geo-precision.test.ts",
+    "supabase/functions/_shared/geo-precision.ts",
     "supabase/functions/_shared/logger.ts",
     "supabase/functions/_shared/schemas.ts",
     "supabase/functions/_shared/telemetry.ts",
@@ -21256,8 +21261,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 179,
-   "lines": 12089,
+   "files": 180,
+   "lines": 12124,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -23862,6 +23867,11 @@
     "values": "v1 | v2"
    },
    {
+    "file": "supabase/functions/_shared/geo-precision.ts",
+    "name": "GeoPrecision",
+    "values": "exact | high | medium | low | unknown"
+   },
+   {
     "file": "supabase/functions/_shared/schemas.ts",
     "name": "ContractName",
     "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway"
@@ -23875,11 +23885,6 @@
     "file": "supabase/functions/geo-gateway/providers/types.ts",
     "name": "GeoFunction",
     "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
-   },
-   {
-    "file": "supabase/functions/geo-gateway/providers/types.ts",
-    "name": "GeoPrecision",
-    "values": "exact | high | medium | low | unknown"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -25932,6 +25937,14 @@
    {
     "file": "supabase/functions/_shared/contract.ts",
     "text": "Falhas de validação usam SEMPRE status 422 e o formato único de erro."
+   },
+   {
+    "file": "supabase/functions/_shared/geo-precision.ts",
+    "text": "(`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`."
+   },
+   {
+    "file": "supabase/functions/_shared/geo-precision.ts",
+    "text": "* Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */"
    },
    {
     "file": "supabase/functions/_shared/telemetry.ts",
@@ -34199,6 +34212,10 @@
     "line": "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega."
    },
    {
+    "file": "supabase/functions/lalamove-api/coordinates.ts",
+    "line": "// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto"
+   },
+   {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "line": "// Randomly toggle off-route status (3% chance to go off, 20% to return)"
    },
@@ -37515,6 +37532,18 @@
    {
     "file": "supabase/functions/_shared/contract.test.ts",
     "name": "geo-gateway place-details rejeita place_id acima de 1024"
+   },
+   {
+    "file": "supabase/functions/_shared/geo-precision.test.ts",
+    "name": "precisionFromAccuracy: mapeia o vocabulário do Geocoding v6"
+   },
+   {
+    "file": "supabase/functions/_shared/geo-precision.test.ts",
+    "name": "precisionFromAccuracy: ausente ou fora do vocabulário nunca vira exact"
+   },
+   {
+    "file": "supabase/functions/_shared/geo-precision.test.ts",
+    "name": "ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor"
    },
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
@@ -65010,6 +65039,36 @@
    ],
    "doc": "Shared CORS headers for Edge Functions In production, you should ideally restrict 'Access-Control-Allow-Origin' to your specific frontend domain(s)."
   },
+  "supabase/functions/_shared/geo-precision.test.ts": {
+   "path": "supabase/functions/_shared/geo-precision.test.ts",
+   "lines": 27,
+   "is_test": true,
+   "tests": [
+    "precisionFromAccuracy: mapeia o vocabulário do Geocoding v6",
+    "precisionFromAccuracy: ausente ou fora do vocabulário nunca vira exact",
+    "ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor"
+   ]
+  },
+  "supabase/functions/_shared/geo-precision.ts": {
+   "path": "supabase/functions/_shared/geo-precision.ts",
+   "lines": 30,
+   "exports": [
+    "type GeoPrecision",
+    "const ACCURACY_TO_PRECISION",
+    "function precisionFromAccuracy"
+   ],
+   "enums": [
+    {
+     "name": "GeoPrecision",
+     "values": "exact | high | medium | low | unknown"
+    }
+   ],
+   "rule_comments": [
+    "(`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`.",
+    "* Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */"
+   ],
+   "doc": "Precisao de geocodificacao — fonte unica do mapeamento `accuracy` do Mapbox (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. Etapa 13 do plano de 100 etapas: o mapa vivia so dentro de `geo-gateway/providers/mapbox.ts`. Extraido para ca porque o `geo-gateway` nao e o …"
+  },
   "supabase/functions/_shared/logger.ts": {
    "path": "supabase/functions/_shared/logger.ts",
    "lines": 18,
@@ -66268,7 +66327,7 @@
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "lines": 412,
+   "lines": 410,
    "exports": [
     "const MAPBOX_RATE_LIMITS",
     "interface MapboxOptions",
@@ -66296,13 +66355,12 @@
   },
   "supabase/functions/geo-gateway/providers/types.ts": {
    "path": "supabase/functions/geo-gateway/providers/types.ts",
-   "lines": 252,
+   "lines": 253,
    "exports": [
     "type ProviderName",
     "type ProviderSetting",
     "type GeoFunction",
     "interface GeoPoint",
-    "type GeoPrecision",
     "interface GeoSuggestion",
     "interface GeoAddressComponents",
     "interface GeoAddress",
@@ -66333,10 +66391,6 @@
     {
      "name": "GeoFunction",
      "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
-    },
-    {
-     "name": "GeoPrecision",
-     "values": "exact | high | medium | low | unknown"
     }
    ],
    "doc": "Interface comum dos provedores de mapa (Google / Mapbox). Tudo que o front e as outras edges consomem passa por estes tipos — nunca pelo JSON cru do provedor."
@@ -66612,7 +66666,7 @@
   },
   "supabase/functions/lalamove-api/coordinates.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.ts",
-   "lines": 80,
+   "lines": 85,
    "exports": [
     "function stopsCoords",
     "function persistOrderCoordinates"
@@ -66636,7 +66690,8 @@
     "Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove."
    ],
    "percents": [
-    "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega."
+    "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.",
+    "// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto"
    ]
   },
   "supabase/functions/lalamove-api/index.ts": {
@@ -68788,13 +68843,40 @@
   "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql": {
    "path": "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
    "lines": 19
+  },
+  "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql": {
+   "path": "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql",
+   "lines": 35
   }
  },
  "git": {
-  "sha": "972a37cbc15cd263321499d59a7af628d3d46e2b",
+  "sha": "7938358cdaf294bdd25ba0b7bbe7a3b4f507fab5",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "7938358",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)",
+    "files": [
+     "supabase/functions/_shared/geo-precision.test.ts",
+     "supabase/functions/_shared/geo-precision.ts",
+     "supabase/functions/geo-gateway/providers/mapbox.ts",
+     "supabase/functions/geo-gateway/providers/types.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql"
+    ]
+   },
+   {
+    "sha": "0a1c0f1",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)",
+    "files": [
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "972a37c",
     "date": "2026-11-21",
@@ -69120,59 +69202,28 @@
      "supabase/functions/geo-gateway/resolver.test.ts",
      "supabase/functions/geo-gateway/resolver.ts"
     ]
-   },
-   {
-    "sha": "fe9865a",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)",
-    "files": [
-     "docs/MAPBOX.md"
-    ]
-   },
-   {
-    "sha": "99e0b43",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)",
-    "files": [
-     "src/hooks/useMapbox.ts",
-     "src/lib/geo-gateway.test.ts",
-     "supabase/config.toml",
-     "supabase/functions/_shared/schemas.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/mapbox.test.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts",
-     "supabase/functions/geo-gateway/providers/types.ts",
-     "supabase/functions/geo-gateway/resolver.test.ts",
-     "supabase/functions/geo-gateway/resolver.ts"
-    ]
    }
   ],
   "hot_files": [
    [
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    4
+   ],
+   [
     "supabase/functions/geo-gateway/index.ts",
-    5
+    4
    ],
    [
     "docs/MAPBOX.md",
-    5
+    4
    ],
    [
     "supabase/functions/job-worker/index.ts",
     4
    ],
    [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
-    4
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.test.ts",
-    4
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.ts",
-    4
+    "supabase/functions/geo-gateway/providers/types.ts",
+    3
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -69183,20 +69234,24 @@
     3
    ],
    [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
+    "supabase/functions/geo-gateway/resolver.test.ts",
     3
    ],
    [
-    "supabase/functions/_shared/schemas.ts",
-    3
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/types.ts",
+    "supabase/functions/geo-gateway/resolver.ts",
     3
    ],
    [
     "src/components/map/LiveMap.tsx",
     3
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
+    2
+   ],
+   [
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    2
    ],
    [
     "src/components/orders/AddressAutocomplete.tsx",
@@ -69211,7 +69266,11 @@
     2
    ],
    [
-    "supabase/config.toml",
+    "supabase/functions/geo-gateway/mapbox.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/schemas.ts",
     2
    ],
    [
@@ -69223,12 +69282,8 @@
     2
    ],
    [
-    "src/hooks/useMapbox.ts",
-    2
-   ],
-   [
-    "src/lib/geo-gateway.test.ts",
-    2
+    "supabase/functions/_shared/geo-precision.test.ts",
+    1
    ]
   ]
  }
