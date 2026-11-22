@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { missingTemplateVars, renderTemplate, type TemplateVars } from "../_shared/template.ts";
 import {
   QUIET_HOURS_ALERT_TYPES,
   isWithinQuietHours,
@@ -187,20 +188,21 @@ serve(async (req) => {
     const dispatch = async (
       channel: string,
       recipient: string,
+      effectiveMessage: string = message,
     ): Promise<{ success: boolean; error?: string }> => {
       let result: { success: boolean; error?: string };
       switch (channel) {
         case "whatsapp":
-          result = await sendWhatsApp(recipient, severity, title, message, order_id, driver_id);
+          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id);
           break;
         case "email":
-          result = await sendEmail(recipient, severity, title, message, order_id, driver_id);
+          result = await sendEmail(recipient, severity, title, effectiveMessage, order_id, driver_id);
           break;
         case "slack":
-          result = await sendSlack(recipient, severity, title, message, order_id, driver_id);
+          result = await sendSlack(recipient, severity, title, effectiveMessage, order_id, driver_id);
           break;
         case "n8n":
-          result = await sendN8NWebhook(recipient, { type, severity, title, message, order_id, driver_id, metadata });
+          result = await sendN8NWebhook(recipient, { type, severity, title, message: effectiveMessage, order_id, driver_id, metadata });
           break;
         default:
           result = { success: false, error: `Unsupported channel: ${channel}` };
@@ -238,6 +240,42 @@ serve(async (req) => {
       return !configRows.some((c) => c.is_enabled === true && c[field] === true);
     };
 
+    // ── Variáveis de template (etapa 67 do plano Google) ───────────────────
+    // `geo_evaluate_tracking` grava em metadata tudo que o template precisa
+    // (order_ref, driver_*, share_link, endereços, distance_m, eta_min) e o
+    // nome do contato em metadata.recipients[0].name. Sem isso o operador
+    // editava `alert_configurations.message_template` na UI e o texto enviado
+    // continuava sendo o do trigger.
+    const templateVars: TemplateVars = {};
+    if (metadata && typeof metadata === 'object') {
+      const md = metadata as Record<string, unknown>;
+      for (const key of [
+        'order_ref', 'driver_name', 'driver_plate', 'share_link',
+        'pickup_address', 'delivery_address', 'static_map_url',
+      ]) {
+        const v = md[key];
+        if (typeof v === 'string' || typeof v === 'number') templateVars[key as never] = v as never;
+      }
+      if (typeof md.distance_m === 'number') templateVars.distance_m = md.distance_m;
+      if (typeof md.eta_min === 'number') templateVars.eta_min = md.eta_min;
+      const r0 = Array.isArray(md.recipients) ? md.recipients[0] : null;
+      if (r0 && typeof r0 === 'object') {
+        const role = (r0 as Record<string, unknown>).role;
+        const name = (r0 as Record<string, unknown>).name;
+        if (typeof name === 'string' && name) {
+          if (role === 'delivery_contact') templateVars.delivery_contact_name = name;
+          else templateVars.pickup_contact_name = name;
+        }
+      }
+    }
+
+    // Template de nivel de tipo, usado nos destinatarios ad-hoc (metadata.recipients),
+    // que nao tem linha de config propria para consultar.
+    const typeTemplate = configRows
+      .map((c) => c.message_template)
+      .find((t): t is string => typeof t === 'string' && t.trim() !== '') ?? null;
+    const adHocMessage = typeTemplate ? renderTemplate(typeTemplate, templateVars) : message;
+
     // Ad-hoc recipients supplied by the caller (e.g. the geo-foundation
     // trigger notifying an order's pickup/delivery contact, or
     // check-driver-alerts notifying a supplier). Independent of
@@ -255,7 +293,7 @@ serve(async (req) => {
           logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
           continue;
         }
-        await dispatch(channel, (r as { to: string }).to);
+        await dispatch(channel, (r as { to: string }).to, adHocMessage);
       } else if (r && typeof r === 'object') {
         // Sem `to` (o trigger geo grava `to: null` quando o pedido não tem
         // telefone de contato): não há como enviar, mas o descarte precisa ser
@@ -307,7 +345,20 @@ serve(async (req) => {
         escalation_slack_channels?: string[];
         fallback_channel?: string | null;
         fallback_recipients?: string[];
+        message_template?: string | null;
       };
+
+      // Template editado pelo operador vence o texto montado pelo trigger.
+      // Placeholder sem valor é preservado (renderTemplate) e logado abaixo,
+      // para o operador ver o gap em vez de receber "undefined" no WhatsApp.
+      let effectiveMessage = message;
+      if (typeof cfg.message_template === 'string' && cfg.message_template.trim() !== '') {
+        effectiveMessage = renderTemplate(cfg.message_template, templateVars);
+        const missing = missingTemplateVars(cfg.message_template, templateVars);
+        if (missing.length > 0) {
+          logger.log(`[Notification] Template de ${type} sem valor para: ${missing.join(', ')}`);
+        }
+      }
 
       // On escalation, prefer escalation recipients (fall back to normal ones).
       const whatsappNumbers = isEscalation
@@ -327,7 +378,7 @@ serve(async (req) => {
       if (cfg.notify_whatsapp && whatsappNumbers.length > 0) {
         for (const number of whatsappNumbers) {
           anyAttempted = true;
-          const r = await dispatch("whatsapp", number);
+          const r = await dispatch("whatsapp", number, effectiveMessage);
           anySucceeded = anySucceeded || r.success;
         }
       }
@@ -336,7 +387,7 @@ serve(async (req) => {
       if (cfg.notify_email && emailAddresses.length > 0) {
         for (const email of emailAddresses) {
           anyAttempted = true;
-          const r = await dispatch("email", email);
+          const r = await dispatch("email", email, effectiveMessage);
           anySucceeded = anySucceeded || r.success;
         }
       }
@@ -345,7 +396,7 @@ serve(async (req) => {
       if (cfg.notify_slack && slackChannels.length > 0) {
         for (const channel of slackChannels) {
           anyAttempted = true;
-          const r = await dispatch("slack", channel);
+          const r = await dispatch("slack", channel, effectiveMessage);
           anySucceeded = anySucceeded || r.success;
         }
       }
@@ -354,7 +405,7 @@ serve(async (req) => {
       const bitrixUserIds = cfg.bitrix24_user_ids ?? [];
       if (cfg.notify_bitrix24_task && bitrixUserIds.length > 0) {
         anyAttempted = true;
-        const result = await sendBitrix24Task(supabase, bitrixUserIds, severity, title, message, order_id);
+        const result = await sendBitrix24Task(supabase, bitrixUserIds, severity, title, effectiveMessage, order_id);
         results.push({ channel: 'bitrix24', ...result });
         await recordNotificationLog(supabase, alert_id, 'bitrix24', bitrixUserIds.join(','), result.success, result.error);
         anySucceeded = anySucceeded || result.success;
@@ -363,7 +414,7 @@ serve(async (req) => {
       // N8N Webhook
       if (cfg.notify_n8n_webhook && cfg.n8n_webhook_url) {
         anyAttempted = true;
-        const r = await dispatch("n8n", cfg.n8n_webhook_url);
+        const r = await dispatch("n8n", cfg.n8n_webhook_url, effectiveMessage);
         anySucceeded = anySucceeded || r.success;
       }
 
@@ -376,7 +427,7 @@ serve(async (req) => {
         if (fallbackRecipients.length > 0) {
           logger.log(`[Notification] Triggering fallback channel: ${cfg.fallback_channel}`);
           for (const recipient of fallbackRecipients) {
-            await dispatch(cfg.fallback_channel, recipient);
+            await dispatch(cfg.fallback_channel, recipient, effectiveMessage);
           }
         } else {
           logger.log('[Notification] Fallback channel set but no recipients configured');

@@ -432,10 +432,10 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** teste Deno com `recipients` → Evolution chamado com o número do pedido
 
 ### 67 — Templates por evento
-- [ ] `alert_configurations.message_template` com variáveis `{{driver_name}} {{driver_plate}} {{eta_min}} {{distance_m}} {{share_link}} {{order_ref}} {{pickup_address}} {{static_map_url}}`
-- [ ] Textos PT-BR iniciais: aproximação ("Olá {{pickup_contact_name}}, o motorista {{driver_name}} ({{driver_plate}}) chega em ~{{eta_min}} min para retirar o pedido {{order_ref}}. Acompanhe: {{share_link}}"), chegada, atraso
-- [ ] Render em `_shared/template.ts` (sem dependência nova)
-- **Evidência:** teste Deno de render
+- [x] `alert_configurations.message_template` com variáveis `{{driver_name}} {{driver_plate}} {{eta_min}} {{distance_m}} {{share_link}} {{order_ref}} {{pickup_address}} {{static_map_url}}`
+- [x] Textos PT-BR iniciais: aproximação ("Olá {{pickup_contact_name}}, o motorista {{driver_name}} ({{driver_plate}}) chega em ~{{eta_min}} min para retirar o pedido {{order_ref}}. Acompanhe: {{share_link}}"), chegada, atraso
+- [x] Render em `_shared/template.ts` (sem dependência nova)
+- **Evidência:** `_shared/template.test.ts` — 9 testes Deno verdes; `send-notification` usa `renderTemplate` no lugar do texto cru do trigger.
 
 ### 68 — Imagem estática no WhatsApp
 - [ ] Para `*_APPROACHING_*`: `geo-gateway static` (marker motorista + marker coleta + rota) → Evolution `sendMedia`; se orçamento bloquear, manda só texto

@@ -120,6 +120,7 @@ jobs:
         run: |
           deno test --allow-net --allow-env \
             supabase/functions/_shared/contract.test.ts \
+            supabase/functions/_shared/template.test.ts \
             supabase/functions/lalamove-webhook/security.test.ts \
             supabase/functions/lalamove-gateway/route.test.ts
       # geo-gateway concentra cache, orcamento e rate guard: sem estes testes no CI
