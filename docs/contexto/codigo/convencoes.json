@@ -40,7 +40,7 @@
    "src/components/layout/sidebar-config.ts"
   ],
   "docs": [
-   "docs (35)",
+   "docs (36)",
    "(raiz) (9)",
    ".github (1)"
   ]
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: webhook cria a linha de active_tracking no primeiro ping (#236)",
+   "docs: contrato de dados do motor geo (etapa 41) (#235)",
    "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)",
    "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)",
-   "feat: canal Zapp no send-notification (etapa 69) (#232)",
-   "feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)",
-   "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)"
+   "feat: canal Zapp no send-notification (etapa 69) (#232)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

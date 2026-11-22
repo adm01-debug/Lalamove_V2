@@ -6,7 +6,7 @@
    "TypeScript (516)",
    "SQL (188)",
    "JavaScript (112)",
-   "Markdown (102)",
+   "Markdown (103)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -378,6 +378,11 @@
    "arquivo": "docs/FUNCIONALIDADES_E_FERRAMENTAS.md",
    "titulo": "📋 Levantamento Completo de Funcionalidades e Ferramentas",
    "linhas": 725
+  },
+  {
+   "arquivo": "docs/GEO_CONTRACT.md",
+   "titulo": "Contrato de dados do motor geo",
+   "linhas": 122
   },
   {
    "arquivo": "docs/GEO_PENDENCIAS.md",

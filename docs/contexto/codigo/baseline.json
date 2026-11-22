@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a7b144f92bf5de1bcefbc49460a130b9430ccdc3",
+  "commit": "5e00e7c85bbda55f8fcb51ceadbf5a6b9a173b80",
   "branch": "main",
-  "data_commit": "2026-11-22T01:46:56-03:00",
+  "data_commit": "2026-11-22T01:51:03-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5e00e7c",
+    "data": "2026-11-22",
+    "assunto": "fix: webhook cria a linha de active_tracking no primeiro ping (#236)"
+   },
+   {
+    "sha": "bdef20a",
+    "data": "2026-11-22",
+    "assunto": "docs: contrato de dados do motor geo (etapa 41) (#235)"
+   },
    {
     "sha": "a7b144f",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "626b371",
     "data": "2026-11-21",
     "assunto": "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)"
-   },
-   {
-    "sha": "54419e1",
-    "data": "2026-11-21",
-    "assunto": "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)"
-   },
-   {
-    "sha": "2a87c43",
-    "data": "2026-11-21",
-    "assunto": "fix(migration): resolve colisao das constraints de place_id (#204)"
    }
   ],
-  "arquivos_mudados_7d": 256,
+  "arquivos_mudados_7d": 257,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 15
+    "mudancas": 16
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -206,12 +206,12 @@
     "mudancas": 31
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 16
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 15
+    "arquivo": "supabase/config.toml",
+    "mudancas": 16
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -274,6 +274,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": ".env.example",
     "mudancas": 5
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/resolver.ts",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 134
+    "commits": 136
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1004,
+  "arquivos_total": 1005,
   "arquivos_codigo": 627,
-  "linhas_codigo": 122391,
+  "linhas_codigo": 122409,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -327,7 +327,7 @@
   "testes": 133,
   "workflows": 5,
   "scripts": 106,
-  "docs_md": 102
+  "docs_md": 103
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 68,
-   "linhas": 16476
+   "linhas": 16494
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -602,7 +602,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 938
+   "linhas": 956
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
