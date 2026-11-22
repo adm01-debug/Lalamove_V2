@@ -22,17 +22,11 @@ Deno.serve(async (req) => {
       const statements = [
         `DROP POLICY IF EXISTS "Users can view their own roles" ON public.user_roles`,
         `DROP POLICY IF EXISTS "Admins can manage user roles" ON public.user_roles`,
-        `DROP POLICY IF EXISTS "Users can manage their own filters" ON public.saved_filters`,
-        `DROP POLICY IF EXISTS "Users can view entity versions" ON public.entity_versions`,
 
         `CREATE POLICY "Authenticated users can view roles" ON public.user_roles FOR SELECT TO authenticated USING (true)`,
         `CREATE POLICY "Authenticated users can insert roles" ON public.user_roles FOR INSERT TO authenticated WITH CHECK (true)`,
         `CREATE POLICY "Authenticated users can update roles" ON public.user_roles FOR UPDATE TO authenticated USING (true)`,
         `CREATE POLICY "Service role full access user_roles" ON public.user_roles FOR ALL TO service_role USING (true) WITH CHECK (true)`,
-
-        `CREATE POLICY "Authenticated users can manage filters" ON public.saved_filters FOR ALL TO authenticated USING (true) WITH CHECK (true)`,
-        `CREATE POLICY "Authenticated users can view entity versions" ON public.entity_versions FOR SELECT TO authenticated USING (true)`,
-        `CREATE POLICY "Authenticated users can insert entity versions" ON public.entity_versions FOR INSERT TO authenticated WITH CHECK (true)`,
       ]
 
       const results: string[] = []

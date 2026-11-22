@@ -4524,13 +4524,17 @@ export type Database = {
         }[]
       }
       refresh_cache_view: {
-        Args: { p_view_name?: string }
+        Args: { p_view_name?: string; p_triggered_by?: string }
         Returns: {
           duration_ms: number
           row_count: number
           status: string
           view_refreshed: string
         }[]
+      }
+      cache_view_count: {
+        Args: { p_view: string }
+        Returns: number
       }
       refresh_geo_jobs: {
         Args: never
