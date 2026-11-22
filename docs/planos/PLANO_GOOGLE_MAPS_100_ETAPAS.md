@@ -445,8 +445,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** mensagem recebida com imagem no número de teste
 
 ### 69 — Canal Zapp Web (D2, preparado)
-- [ ] Adaptador `channels/zapp.ts` com interface igual ao Evolution; ativado por `ZAPP_API_URL/ZAPP_API_KEY` quando existirem; sem secret → canal ausente
-- **Evidência:** teste Deno com fetch mockado
+- [x] Adaptador `channels/zapp.ts` com interface igual ao Evolution; ativado por `ZAPP_API_URL/ZAPP_API_KEY` quando existirem; sem secret → canal ausente
+- **Evidência:** `zapp.test.ts` 9/9 verde (Bearer, número normalizado, `instance` opcional, destinatário vazio não chama API, 401 com trecho do corpo, erro de rede sem lançar, timeout abortado, factory `null` sem secrets, `normalizeZappNumber`). `sendWhatsApp` usa o Zapp como **preferencial** e cai no Evolution quando não configurado — nenhum secret configurado continua sendo o único caso de falha. `deno check` sem erro novo (4 erros de `order_id` são pré-existentes no `main`).
 
 ### 70 — Agendar `check-driver-alerts` e `escalate-alerts`
 - [ ] 🔒 `cron.schedule('check-driver-alerts','*/1 * * * *', net.http_post(...))` e `escalate-alerts` a cada 5 min (padrão de `process_job_queue`, `20251226010001`)
@@ -454,8 +454,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `cron.job_run_details` com execuções
 
 ### 71 — `alert_configurations` dos novos tipos
-- [ ] Linhas com canais, `min_interval_seconds=300`, `dedup_window`, template; `is_enabled=true` para pickup, `false` para delivery
-- **Evidência:** `SELECT alert_type,is_enabled FROM alert_configurations`
+- [x] Linhas com canais, `min_interval_seconds=300`, `dedup_window`, template; `is_enabled=true` para pickup, `false` para delivery
+- **Evidência:** seed em `20261122130100_geo_foundation.sql:539-552` — 6 linhas (`DRIVER_APPROACHING_PICKUP`/`DRIVER_ARRIVED_PICKUP`/`ETA_DELAY`/`GEO_BUDGET_WARNING` com `is_enabled=true`; as duas de delivery com `false`), `min_interval_seconds` 300 (600 no `ETA_DELAY`, 3600 no orçamento), `message_template` com `{{variavel}}`, `ON CONFLICT (alert_type, channel) DO NOTHING`. `dedup_window_seconds` é default 300 da coluna (`20260712221144:3`) e os 6 valores do enum existem em `20261122130000_geo_alert_types.sql:7-15`. Colunas `message_template`/`min_interval_seconds`/`notify_whatsapp` existem desde `20251224181640:72-74`.
 
 ### 72 — UI de configuração dos novos alertas
 - [x] `AlertConfigCard.tsx`: suportar os 8 tipos novos; campos raio/ETA padrão; preview do template
