@@ -84,13 +84,20 @@ export class MapboxProvider implements GeoProvider {
       throw new GeoProviderError("GEO_RATE_LIMITED", `Limite local da API Mapbox ${api} atingido neste minuto`, 429, 60_000);
     }
     const sep = url.includes("?") ? "&" : "?";
-    const res = await this.fetchFn(`${url}${sep}access_token=${encodeURIComponent(this.token)}`, init);
+    const fullUrl = `${url}${sep}access_token=${encodeURIComponent(this.token)}`;
+    let res = await this.fetchFn(fullUrl, init);
+    if (res.status === 414 && (!init?.method || init.method === "GET")) {
+      // Etapa 32: 414 (URL acima de 8 KB, ex. Directions com muitas coordenadas) refaz a
+      // mesma chamada via POST antes de desistir — Directions v5 aceita POST na mesma rota,
+      // com o corpo vazio e a URL idêntica (coordenadas continuam no path).
+      res = await this.fetchFn(fullUrl, { ...init, method: "POST" });
+    }
     if (res.status === 429) {
       const reset = Number(res.headers.get("X-Rate-Limit-Reset") ?? 0) * 1000;
       throw new GeoProviderError("GEO_RATE_LIMITED", "Mapbox 429", 429, reset ? Math.max(0, reset - Date.now()) : 60_000);
     }
     if (res.status === 414) {
-      throw new GeoProviderError("GEO_INVALID_INPUT", "URL acima de 8 KB — reduza as coordenadas", 414);
+      throw new GeoProviderError("GEO_INVALID_INPUT", "URL acima de 8 KB mesmo via POST — reduza as coordenadas", 414);
     }
     const text = await res.text();
     let json: Record<string, unknown> = {};

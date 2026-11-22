@@ -254,3 +254,54 @@ Deno.test("etapa 22: place-details no modo geocoding resolve por address no v6",
   assertEquals(r.data.provider, "mapbox");
   assertEquals(r.sku, "geocoding_temporary");
 });
+
+Deno.test("reverse: lat/lng acham endereço (caso de sucesso, não só os de erro)", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: RETRIEVE }));
+  const p = new MapboxProvider({ token: "t", fetch });
+  const r = await p.reverse({ lat: -25.4296, lng: -49.2716 });
+  assert(calls[0].url.includes("/search/geocode/v6/reverse"));
+  assertEquals(r.data?.formatted, "Rua XV de Novembro 100, Centro, Curitiba");
+  assertEquals(r.data?.location, { lat: -25.4296, lng: -49.2716 });
+  assertEquals(r.sku, "geocoding_temporary");
+});
+
+Deno.test("etapa 32: 414 (URL acima de 8 KB) refaz a mesma chamada via POST antes de desistir", async () => {
+  const calls: { url: string; method?: string }[] = [];
+  const fetchFn: typeof fetch = ((input: string | URL | Request, init?: RequestInit) => {
+    const url = String(input);
+    calls.push({ url, method: init?.method });
+    if (!init?.method || init.method === "GET") return Promise.resolve(new Response("", { status: 414 }));
+    return Promise.resolve(new Response(JSON.stringify(RETRIEVE), { status: 200 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const r = await p.reverse({ lat: -25.4296, lng: -49.2716 });
+  assertEquals(calls.length, 2);
+  assertEquals(calls[0].method, undefined);
+  assertEquals(calls[1].method, "POST");
+  assertEquals(calls[1].url, calls[0].url);
+  assertEquals(r.data?.formatted, "Rua XV de Novembro 100, Centro, Curitiba");
+});
+
+Deno.test("etapa 32: 414 persiste mesmo via POST → GEO_INVALID_INPUT (não fica tentando pra sempre)", async () => {
+  const { fetch } = mockFetch(() => ({ status: 414 }));
+  const p = new MapboxProvider({ token: "t", fetch });
+  const e = await assertRejects(() => p.reverse({ lat: -25.4, lng: -49.2 }), GeoProviderError);
+  assertEquals(e.code, "GEO_INVALID_INPUT");
+});
+
+Deno.test("raw: isochrone/optimization/tilequery (pass-through sem equivalente no Google) chegam ao Mapbox", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: { ok: true } }));
+  const p = new MapboxProvider({ token: "t", fetch });
+
+  const iso = await p.raw("isochrone", { lng: -49.27, lat: -25.43, profile: "driving" });
+  assert(calls[0].url.includes("/isochrone/v1/mapbox/driving/-49.27,-25.43"));
+  assertEquals(iso.sku, "isochrone");
+
+  const opt = await p.raw("optimization", { coordinates: [[-49.27, -25.43], [-49.23, -25.44]], profile: "driving" });
+  assert(calls[1].url.includes("/optimized-trips/v1/mapbox/driving/-49.27,-25.43;-49.23,-25.44"));
+  assertEquals(opt.sku, "optimization");
+
+  const tile = await p.raw("tilequery", { lng: -49.27, lat: -25.43, tileset: "mapbox.mapbox-streets-v8" });
+  assert(calls[2].url.includes("/v4/mapbox.mapbox-streets-v8/tilequery/-49.27,-25.43.json"));
+  assertEquals(tile.sku, "tilequery");
+});
