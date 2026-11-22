@@ -318,7 +318,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 
 ### 36 — Teste de cobertura BR do Search Box (decide M1)
 - [x] Script `scripts/geo/searchbox-coverage.ts`: 50 endereços reais de Curitiba/SP/GO (clientes e fornecedores do Bitrix) → `suggest`+`retrieve`; medir % com `accuracy ∈ {rooftop,parcel,point}` e distância ao resultado Google (≤ 50 m) - **existe** (`scripts/geo/searchbox-coverage.ts` + `enderecos.sample.csv`); falta rodar com a base real
-- [ ] ≥ 90 % → Search Box fica; senão `mapbox_mode='geocoding'` (etapa 22)
+- [x] ≥ 90 % → Search Box fica; senão `mapbox_mode='geocoding'` (etapa 22)
+- **Evidência:** rodado em 2026-11-25 com o dataset de 50 endereços (`MAPBOX_ACCESS_TOKEN`): Search Box **30/50 (60 %)** e Geocoding v6 **30/50 (60 %)** com distância 0 m entre os dois em 50/50. Nenhum modo atinge 90 %, e a flag `mapbox_mode` **não muda o resultado** — decisão registrada em `docs/MAPBOX.md:103-115` (etapa 22 descartada por medição, sem implementar a flag)
 - **Evidência:** relatório em `docs/MAPBOX.md` com a tabela
 
 ### 37 — Sessões corretas (custo)
