@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)",
+   "chore: marca item XSS do plano front-end como feito (#288)",
    "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)",
    "docs(planos): plano de UX de navegacao em 200 etapas (#286)",
-   "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)",
-   "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)",
-   "docs(planos): plano front-end de 190 etapas (#280)"
+   "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

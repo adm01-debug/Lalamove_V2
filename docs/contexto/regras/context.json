@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6e6c62bd0cf1632a956706ebc113017ae7da4b17",
+  "sha": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:08 UTC",
+  "generated_at": "2026-11-22 16:24 UTC",
   "files_total": 1045,
   "code_files": 861,
-  "code_lines": 149263
+  "code_lines": 149914
  },
  "version": "1.3.2",
- "facts_hash": "40310da654e8ab57",
+ "facts_hash": "e6fc4162750ff4bd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -18086,13 +18086,13 @@
     "doc": "============================================================================ EDGE FUNCTION: Job Worker Descrição: Processa jobs da fila de forma assíncrona Versão: 1.0.0 Data: 2025-12-26 ============================================================================",
     "errors": [
      "${fn}: ${detail}",
-     "Invalid job payload: missing required fields",
      "Missing Authorization header",
      "Unknown job type: ${unknownType}",
      "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
      "geo_backfill exige payload.addresses[] ou payload.address",
      "geo_backfill orders: ${error.message}",
-     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)"
+     "pod_fetch exige payload.orderId (lalamove_id ou uuid do pedido)",
+     "pod_fetch: pedido ${key} não encontrado em lalamove_orders"
     ],
     "side_effects": [
      "invoke("
@@ -21575,7 +21575,7 @@
   {
    "module": "supabase/functions",
    "files": 81,
-   "lines": 19893,
+   "lines": 20544,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -24254,6 +24254,76 @@
     "body": "{ apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, \"event não pode ser vazio\").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }",
     "refines": [],
     "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "jobWorkerPayload",
+    "kind": "union",
+    "body": "[ z.object({}).passthrough(), z.array(z.unknown()), z.string(), z.number(), z.boolean(), z.null(), ], // o invalid_union do zod viraria \"Invalid input\" no 422; a fila precisa do motivo legível. { errorMap: () => ({ message: \"payload é obrigatório (qualquer valor JSON)\" }) },",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "jobWorkerV1",
+    "kind": "object",
+    "body": "{ // uuid de job_queue.id: exigido pelas rpc mark_job_completed/mark_job_failed (p_job_id uuid), // não pelo contrato — `.uuid()` aqui recusaria enfileiramento manual de teste. jobId: z.string().min(1, \"jobId é obrigatório\"), // Discriminador do switch; mantido aberto de propósito (ver nota acima). type: z.string().min(1, \"type é obrigatório\"), payload: jobWorkerPayload, // jsonb NOT NULL DEFAULT '{}' no banco; a edge nunca lê (única menção: index.ts:28). metadata: z.unknown().optional(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "uapiId",
+    "kind": "union",
+    "body": "[z.string().min(1, \"order_uuid é obrigatório\"), z.number()], { errorMap: () => ({ message: \"order_uuid é obrigatório\" }) },",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "uapiCursor",
+    "kind": "union",
+    "body": "[z.string(), z.number()]",
+    "refines": [],
+    "chain": [
+     "optional"
+    ]
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "uapiFid",
+    "kind": "string",
+    "body": "",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "lalamoveUapiV1",
+    "kind": "discriminatedUnion",
+    "body": "\"action\", [ // ── sessão (exigem role admin no handler, :500/:544) ── z.object({ action: z.literal(\"set-token\"), access_token: z.string().min(1, \"access_token é obrigatório\"), refresh_token: z.string().min(1, \"refresh_token é obrigatório\"), // colunas: user_fid text, ep_role integer, city_id integer // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é // string (:13), então \"21001\" e 123456 funcionam hoje. user_fid: z.union([z.string(), z.number()]).optional().nullable(), ep_role: z.coerce.number().int().optional(), city_id: z.coerce.number().int().optional(), }), z.object({ action: z.literal(\"token-status\") }), z.object({ action: z.literal(\"refresh-token\") }), // ── pedidos ── z.object({ action: z.literal(\"list-orders\"), limit: z.number().optional(), last_id: uapiCurs …",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "lalamoveApiAmount",
+    "kind": "union",
+    "body": "[z.string().min(1), z.number()]",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "lalamoveApiV1",
+    "kind": "discriminatedUnion",
+    "body": "\"action\", [ // Corpo ignorado pelo handler (index.ts:678-680, :1146-1149) → passthrough, // mesma convenção de cronWorkerBody (schemas.ts:283-288). z.object({ action: z.literal(\"cities\") }).passthrough(), z.object({ action: z.literal(\"sync\") }).passthrough(), // POST /v3/quotations — o case NÃO valida forma: o comentário em // index.ts:682-684 delega a validação à Lalamove (422 com o campo exato). // serviceType/stops ficam opcionais para não transformar erro upstream em 422 local. z.object({ action: z.literal(\"quotation\"), serviceType: z.string().min(1, \"serviceType é obrigatório\").optional(), language: z.string().optional(), scheduleAt: z.string().optional(), isRouteOptimized: z.boolean().optional(), specialRequests: z.array(z.string()).optional(), stops: z .array( z .object({ address: z …",
+    "refines": [
+     "orderId e amount são obrigatórios"
+    ],
+    "chain": [
+     "superRefine"
+    ]
    }
   ],
   "rhf": [],
@@ -24608,7 +24678,7 @@
    {
     "file": "supabase/functions/_shared/schemas.ts",
     "name": "ContractName",
-    "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement"
+    "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement | job-worker | lalamove-api | lalamove-uapi"
    },
    {
     "file": "supabase/functions/_shared/template.ts",
@@ -26017,10 +26087,6 @@
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
-    "msg": "Invalid job payload: missing required fields"
-   },
-   {
-    "file": "supabase/functions/job-worker/index.ts",
     "msg": "Missing Authorization header"
    },
    {
@@ -26804,6 +26870,18 @@
     "text": "lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream."
    },
    {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "e deixa o job em loop PROCESSING→PENDING→PROCESSING para sempre. Toda regra de negócio"
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "index.ts:682-684 delega a validação à Lalamove (422 com o campo exato)."
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "O handler DEVE remover `action`/`orderId` antes de repassar (passo 5 das notas)."
+   },
+   {
     "file": "supabase/functions/_shared/telemetry.ts",
     "text": "- Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal."
    },
@@ -27021,11 +27099,19 @@
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
-    "text": "body ja passou pelo zod (z.record(z.any())); a validacao de forma"
+    "text": "corpo, com `action` e ids apenas na query"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "text": "body ja passou pelo contrato (_shared/schemas.ts, lalamoveApiV1); a validacao de forma"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
     "text": "não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "text": "`orderId` identifica o pedido na URL do PATCH e não pode viajar"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -35326,6 +35412,10 @@
     "line": "transition={{ delay: index * 0.05 }}"
    },
    {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "line": "// merge do passo 4 das notas de integração, 100% desse tráfego vira 422."
+   },
+   {
     "file": "supabase/functions/lalamove-api/coordinates.ts",
     "line": "// Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL"
    },
@@ -35336,6 +35426,10 @@
    {
     "file": "supabase/functions/lalamove-api/coordinates.ts",
     "line": "// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "line": "// corpo transformaria 100% desse tráfego em 422 — incluindo o cartão de"
    },
    {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
@@ -39016,6 +39110,50 @@
     "name": "cobertura: todas as Edge Functions com entrada estão no registro"
    },
    {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-api] action vinda apenas da query é aceita"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-api] orderId vindo apenas da query é aceito"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-api] priority-fee aceita "
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-api] telefone fora de E.164 em "
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-api] coordenadas em string (como o front envia) são aceitas"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[job-worker] tipo desconhecido passa o contrato (falha dentro do worker)"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[job-worker] pod_fetch sem orderId passa o contrato (falha dentro do worker)"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[job-worker] payload ausente retorna 422 nomeando o campo"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-uapi] ids da UAPI aceitam string e número"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-uapi] ação inexistente retorna 422 nomeando action"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-uapi] set-token exige access_token e refresh_token"
+   },
+   {
     "file": "supabase/functions/_shared/geo-precision.test.ts",
     "name": "precisionFromAccuracy: mapeia o vocabulário do Geocoding v6"
    },
@@ -40426,6 +40564,10 @@
    {
     "file": "src/pages/alert-configurations/AlertConfigCard.tsx",
     "call": "notify_whatsapp"
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "call": "notifyDeliveryContact"
    },
    {
     "file": "supabase/functions/_shared/schemas.ts",
@@ -68016,7 +68158,7 @@
   },
   "supabase/functions/_shared/contract.test.ts": {
    "path": "supabase/functions/_shared/contract.test.ts",
-   "lines": 704,
+   "lines": 866,
    "is_test": true,
    "errors": [
     ": {\n    payload: { ...VALID_PAYLOADS[",
@@ -68076,7 +68218,18 @@
     "[external-companies] defaults do contrato (table/limit/offset) são aplicados",
     "[llm-wh] envelope cru da Lalamove passa sem perder campos",
     "[apply-fixes] única ação aceita é fix_dashboard",
-    "cobertura: todas as Edge Functions com entrada estão no registro"
+    "cobertura: todas as Edge Functions com entrada estão no registro",
+    "[lalamove-api] action vinda apenas da query é aceita",
+    "[lalamove-api] orderId vindo apenas da query é aceito",
+    "[lalamove-api] priority-fee aceita ",
+    "[lalamove-api] telefone fora de E.164 em ",
+    "[lalamove-api] coordenadas em string (como o front envia) são aceitas",
+    "[job-worker] tipo desconhecido passa o contrato (falha dentro do worker)",
+    "[job-worker] pod_fetch sem orderId passa o contrato (falha dentro do worker)",
+    "[job-worker] payload ausente retorna 422 nomeando o campo",
+    "[lalamove-uapi] ids da UAPI aceitam string e número",
+    "[lalamove-uapi] ação inexistente retorna 422 nomeando action",
+    "[lalamove-uapi] set-token exige access_token e refresh_token"
    ]
   },
   "supabase/functions/_shared/contract.ts": {
@@ -68220,7 +68373,7 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 650,
+   "lines": 1040,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
@@ -68383,22 +68536,91 @@
      "body": "{ apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, \"event não pode ser vazio\").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }",
      "refines": [],
      "chain": []
+    },
+    {
+     "name": "jobWorkerPayload",
+     "kind": "union",
+     "body": "[ z.object({}).passthrough(), z.array(z.unknown()), z.string(), z.number(), z.boolean(), z.null(), ], // o invalid_union do zod viraria \"Invalid input\" no 422; a fila precisa do motivo legível. { errorMap: () => ({ message: \"payload é obrigatório (qualquer valor JSON)\" }) },",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "jobWorkerV1",
+     "kind": "object",
+     "body": "{ // uuid de job_queue.id: exigido pelas rpc mark_job_completed/mark_job_failed (p_job_id uuid), // não pelo contrato — `.uuid()` aqui recusaria enfileiramento manual de teste. jobId: z.string().min(1, \"jobId é obrigatório\"), // Discriminador do switch; mantido aberto de propósito (ver nota acima). type: z.string().min(1, \"type é obrigatório\"), payload: jobWorkerPayload, // jsonb NOT NULL DEFAULT '{}' no banco; a edge nunca lê (única menção: index.ts:28). metadata: z.unknown().optional(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "uapiId",
+     "kind": "union",
+     "body": "[z.string().min(1, \"order_uuid é obrigatório\"), z.number()], { errorMap: () => ({ message: \"order_uuid é obrigatório\" }) },",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "uapiCursor",
+     "kind": "union",
+     "body": "[z.string(), z.number()]",
+     "refines": [],
+     "chain": [
+      "optional"
+     ]
+    },
+    {
+     "name": "uapiFid",
+     "kind": "string",
+     "body": "",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "lalamoveUapiV1",
+     "kind": "discriminatedUnion",
+     "body": "\"action\", [ // ── sessão (exigem role admin no handler, :500/:544) ── z.object({ action: z.literal(\"set-token\"), access_token: z.string().min(1, \"access_token é obrigatório\"), refresh_token: z.string().min(1, \"refresh_token é obrigatório\"), // colunas: user_fid text, ep_role integer, city_id integer // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é // string (:13), então \"21001\" e 123456 funcionam hoje. user_fid: z.union([z.string(), z.number()]).optional().nullable(), ep_role: z.coerce.number().int().optional(), city_id: z.coerce.number().int().optional(), }), z.object({ action: z.literal(\"token-status\") }), z.object({ action: z.literal(\"refresh-token\") }), // ── pedidos ── z.object({ action: z.literal(\"list-orders\"), limit: z.number().optional(), last_id: uapiCurs …",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "lalamoveApiAmount",
+     "kind": "union",
+     "body": "[z.string().min(1), z.number()]",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "lalamoveApiV1",
+     "kind": "discriminatedUnion",
+     "body": "\"action\", [ // Corpo ignorado pelo handler (index.ts:678-680, :1146-1149) → passthrough, // mesma convenção de cronWorkerBody (schemas.ts:283-288). z.object({ action: z.literal(\"cities\") }).passthrough(), z.object({ action: z.literal(\"sync\") }).passthrough(), // POST /v3/quotations — o case NÃO valida forma: o comentário em // index.ts:682-684 delega a validação à Lalamove (422 com o campo exato). // serviceType/stops ficam opcionais para não transformar erro upstream em 422 local. z.object({ action: z.literal(\"quotation\"), serviceType: z.string().min(1, \"serviceType é obrigatório\").optional(), language: z.string().optional(), scheduleAt: z.string().optional(), isRouteOptimized: z.boolean().optional(), specialRequests: z.array(z.string()).optional(), stops: z .array( z .object({ address: z …",
+     "refines": [
+      "orderId e amount são obrigatórios"
+     ],
+     "chain": [
+      "superRefine"
+     ]
     }
    ],
    "enums": [
     {
      "name": "ContractName",
-     "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement"
+     "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement | job-worker | lalamove-api | lalamove-uapi"
     }
    ],
    "rule_comments": [
     "Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway",
     "validação (ou derrubava a função em 500, quando `req.json()` falhava). O",
     "index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp",
-    "lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream."
+    "lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream.",
+    "e deixa o job em loop PROCESSING→PENDING→PROCESSING para sempre. Toda regra de negócio",
+    "index.ts:682-684 delega a validação à Lalamove (422 com o campo exato).",
+    "O handler DEVE remover `action`/`orderId` antes de repassar (passo 5 das notas)."
    ],
    "doc": "============================================================================ Schemas de Contrato — Fonte única de verdade para os payloads de TODOS os webhooks e Edge Functions. Versionados (v1/v2) para permitir evolução com compatibilidade retroativa. Convenção de versionamento: - v1: contrato orig …",
+   "percents": [
+    "// merge do passo 4 das notas de integração, 100% desse tráfego vira 422."
+   ],
    "side_effects": [
+    "notifyDeliveryContact",
     "sendNotification"
    ]
   },
@@ -70124,7 +70346,7 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1204,
+   "lines": 1246,
    "exports": [
     "function processGeoBackfillOrders",
     "function maybeEmitEtaDelay",
@@ -70278,7 +70500,6 @@
    ],
    "errors": [
     "${fn}: ${detail}",
-    "Invalid job payload: missing required fields",
     "Missing Authorization header",
     "Unknown job type: ${unknownType}",
     "eta_refresh: pedido ${payload.orderId} não encontrado em lalamove_orders",
@@ -70584,7 +70805,7 @@
   },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1184,
+   "lines": 1216,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -70743,8 +70964,10 @@
     "Re-sign each attempt: timestamp must be fresh (Lalamove rejects stale HMAC).",
     "Extract rate limit headers",
     "Guarda server-side: mesmo com validação de UI, nunca confie no cliente.",
-    "body ja passou pelo zod (z.record(z.any())); a validacao de forma",
+    "corpo, com `action` e ids apenas na query",
+    "body ja passou pelo contrato (_shared/schemas.ts, lalamoveApiV1); a validacao de forma",
     "não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode",
+    "`orderId` identifica o pedido na URL do PATCH e não pode viajar",
     "Validação numérica: > 0, até 2 casas decimais, teto de segurança R$500."
    ],
    "calc_fns": [
@@ -70753,6 +70976,9 @@
      "params": "method: string, path: string, timestamp: string, body: string",
      "body": "const rawSignature = `${timestamp}\\r\\n${method}\\r\\n${path}\\r\\n\\r\\n${body}`; const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( 'raw', encoder.encode(LALAMOVE_API_SECRET!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'] ); const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(rawSignature)); return Array.from(new Uint8Array(signatureBuffer)) .map(b => b.toString(16).padStart(2, '0')) .join('');"
     }
+   ],
+   "percents": [
+    "// corpo transformaria 100% desse tráfego em 422 — incluindo o cartão de"
    ],
    "side_effects": [
     "notifyDeliveryContact",
@@ -70929,7 +71155,7 @@
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
-   "lines": 793,
+   "lines": 818,
    "tables": [
     {
      "table": "lalamove_uapi_sessions",
@@ -73039,10 +73265,34 @@
   }
  },
  "git": {
-  "sha": "6e6c62bd0cf1632a956706ebc113017ae7da4b17",
+  "sha": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d055637",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)",
+    "files": [
+     "docs/API_CONTRACTS.md",
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "supabase/functions/_shared/contract.test.ts",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/job-worker/index.ts",
+     "supabase/functions/lalamove-api/index.ts",
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
+   {
+    "sha": "65322a8",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore: marca item XSS do plano front-end como feito (#288)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md"
+    ]
+   },
    {
     "sha": "6e6c62b",
     "date": "2026-11-22",
@@ -73358,31 +73608,16 @@
      "lalamove_bundle_import.json",
      "lalamove_f01_cotacao.json"
     ]
-   },
-   {
-    "sha": "6e48f45",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)",
-    "files": [
-     "supabase/functions/geo-gateway/mapbox.test.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts"
-    ]
-   },
-   {
-    "sha": "8b67608",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: corrige referência desatualizada no comentário do stub de migration (#263)",
-    "files": [
-     "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     9
+   ],
+   [
+    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    4
    ],
    [
     ".github/workflows/ci.yml",
@@ -73397,6 +73632,22 @@
     3
    ],
    [
+    "docs/API_CONTRACTS.md",
+    2
+   ],
+   [
+    "supabase/functions/_shared/contract.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/schemas.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-api/index.ts",
+    2
+   ],
+   [
     "supabase/functions/escalate-alerts/index.ts",
     2
    ],
@@ -73405,12 +73656,16 @@
     2
    ],
    [
-    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "supabase/functions/simulate-driver-movement/index.ts",
     2
    ],
    [
-    "supabase/functions/simulate-driver-movement/index.ts",
-    2
+    "supabase/functions/job-worker/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-uapi/index.ts",
+    1
    ],
    [
     "src/components/map/__tests__/markerFactories.test.ts",
@@ -73425,19 +73680,7 @@
     1
    ],
    [
-    "docs/API_CONTRACTS.md",
-    1
-   ],
-   [
-    "supabase/functions/_shared/contract.test.ts",
-    1
-   ],
-   [
     "supabase/functions/_shared/contract.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/schemas.ts",
     1
    ],
    [
@@ -73446,18 +73689,6 @@
    ],
    [
     "supabase/functions/bitrix24-process-queue/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/bitrix24-sync/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/check-driver-alerts/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/external-companies/index.ts",
     1
    ]
   ]

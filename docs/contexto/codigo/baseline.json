@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "6e6c62bd0cf1632a956706ebc113017ae7da4b17",
+  "commit": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
   "branch": "main",
-  "data_commit": "2026-11-22T13:07:46-03:00",
+  "data_commit": "2026-11-22T13:24:33-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d055637",
+    "data": "2026-11-22",
+    "assunto": "feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)"
+   },
+   {
+    "sha": "65322a8",
+    "data": "2026-11-22",
+    "assunto": "chore: marca item XSS do plano front-end como feito (#288)"
+   },
    {
     "sha": "6e6c62b",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "758b04c",
     "data": "2026-11-22",
     "assunto": "test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)"
-   },
-   {
-    "sha": "01eab04",
-    "data": "2026-11-22",
-    "assunto": "infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)"
-   },
-   {
-    "sha": "6831e5d",
-    "data": "2026-11-22",
-    "assunto": "fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)"
    }
   ],
-  "arquivos_mudados_7d": 328,
+  "arquivos_mudados_7d": 329,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -148,16 +148,16 @@
     "mudancas": 39
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 27
+   },
+   {
     "pasta": "src/components/orders",
     "mudancas": 25
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 25
-   },
-   {
     "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -172,15 +172,15 @@
     "mudancas": 14
    },
    {
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 13
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 12
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 12
-   },
-   {
-    "pasta": "supabase/functions/job-worker",
     "mudancas": 12
    },
    {
@@ -242,15 +242,19 @@
     "mudancas": 10
    },
    {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 9
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 9
    },
    {
@@ -259,10 +263,6 @@
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 189
+    "commits": 191
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1051,
   "arquivos_codigo": 650,
-  "linhas_codigo": 128086,
+  "linhas_codigo": 128737,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 81,
-   "linhas": 19893
+   "linhas": 20544
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -586,15 +586,19 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1204
+   "linhas": 1246
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1184
+   "linhas": 1216
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
    "linhas": 1172
+  },
+  {
+   "arquivo": "supabase/functions/_shared/schemas.ts",
+   "linhas": 1040
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
@@ -626,7 +630,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
-   "linhas": 793
+   "linhas": 818
   },
   {
    "arquivo": "src/pages/AdvancedReportsPage.tsx",
@@ -639,10 +643,6 @@
   {
    "arquivo": "scripts/ci/lint-ratchet.mjs",
    "linhas": 668
-  },
-  {
-   "arquivo": "supabase/functions/_shared/schemas.ts",
-   "linhas": 650
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",

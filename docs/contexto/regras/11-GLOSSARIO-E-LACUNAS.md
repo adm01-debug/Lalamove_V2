@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6e6c62bd0c` · branch `main` · 2026-11-22 16:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d055637fd2` · branch `main` · 2026-11-22 16:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -168,7 +168,7 @@
 | `UAPI_POD_STATUS` (TS) | 'PENDING', 'SIGNED', 'DELIVERED', 'FAILED', 'NOT_APPLICABLE' |  | `src/types/lalamove.ts` |
 | `ContractVersion` (TS) | v1 \| v2 |  | `supabase/functions/_shared/contract.ts` |
 | `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `supabase/functions/_shared/geo-precision.ts` |
-| `ContractName` (TS) | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement |  | `supabase/functions/_shared/schemas.ts` |
+| `ContractName` (TS) | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement \| job-worker \| lalamove-api \| lalamove-uapi |  | `supabase/functions/_shared/schemas.ts` |
 | `TEMPLATE_VARS` (TS) | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", |  | `supabase/functions/_shared/template.ts` |
 | `MessageRole` (TS) | driver \| pickup_contact \| delivery_contact \| internal |  | `supabase/functions/_shared/messaging/router.ts` |
 | `MessageChannel` (TS) | whatsapp \| sms \| email \| slack \| n8n |  | `supabase/functions/_shared/messaging/router.ts` |

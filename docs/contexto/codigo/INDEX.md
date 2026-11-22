@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `6e6c62bd0cf1632a956706ebc113017ae7da4b17` (2026-11-22T13:07:46-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d055637fd26ba6f57fc9af71a2dbfd3313ed9dba` (2026-11-22T13:24:33-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1051 |
 | arquivos_codigo | 650 |
-| linhas_codigo | 128086 |
+| linhas_codigo | 128737 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -274,8 +274,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8687 nós · 18114 arestas · 638 comunidades · grafo do commit `6e6c62bd`
-- comunidades maiores: cn (254), lucide-react (147), badge.tsx (120), DashboardRedesigned.tsx (101), ref_node_fs (93), geo-gateway/index.ts (87), ref_https (86), GeoBlockingPage.tsx (86), client.ts (85), dependencies (80), RateLimitDashboardPage.tsx (80), gerar.mjs (76)
+- 8699 nós · 18156 arestas · 633 comunidades · grafo do commit `d055637f`
+- comunidades maiores: cn (223), client.ts (120), lucide-react (120), snapshot.py (107), badge.tsx (96), framer-motion (93), ref_https (90), AlertsPage.tsx (87), AdvancedReportsPage.tsx (82), dependencies (80), ref_node_path (79), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -290,10 +290,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/pendencias/_ordem.md (10)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
+- supabase/functions/_shared/schemas.ts (10)
+- supabase/functions/job-worker/index.ts (10)
 - src/components/orders/NewOrderDialog.tsx (9)
-- supabase/functions/_shared/schemas.ts (9)
-- supabase/functions/job-worker/index.ts (9)
-- src/components/map/LiveMap.tsx (8)
+- supabase/functions/lalamove-api/index.ts (9)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -334,7 +334,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `SECURITY_CHECKLIST.md` — Security Checklist - Lalamove Guardian (77 linhas)
 - `docs/ACHADO_GATEWAY_PROXY_2026-11.md` — Achado: o `lalamove-gateway` aponta para um proxy que não existe (48 linhas)
 - `docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md` — Lalamove V2 — Análise Exaustiva e Plano de Integração Completo (709 linhas)
-- `docs/API_CONTRACTS.md` — 📑 Contratos de API — Webhooks & Edge Functions (197 linhas)
+- `docs/API_CONTRACTS.md` — 📑 Contratos de API — Webhooks & Edge Functions (214 linhas)
 - `docs/API_REFERENCE.md` — 📘 API Reference - Lalamove Guardian (948 linhas)
 - `docs/ARCHITECTURE.md` — 🏗️ Arquitetura - Lalamove Guardian (968 linhas)
 - `docs/AUDITORIA_PRS_FECHADAS_2026-11.md` — Auditoria das PRs fechadas sem merge — 2026-11-21 (byte a byte) (67 linhas)
@@ -377,6 +377,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `d055637` feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)
+- 2026-11-22 `65322a8` chore: marca item XSS do plano front-end como feito (#288)
 - 2026-11-22 `6e6c62b` fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)
 - 2026-11-22 `93d26a3` docs(planos): plano de UX de navegacao em 200 etapas (#286)
 - 2026-11-22 `762c4b6` fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)
@@ -390,8 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `83125d1` feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)
 - 2026-11-22 `ea8f382` fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)
 - 2026-11-22 `a9c2b2f` docs(lalamove): commita análise exaustiva e plano de integração completo (#276)
-- 2026-11-22 `e21df07` fix: geocode fallback com persist e mini-mapa por provider (#274)
-- 2026-11-22 `124e628` docs(agentes): registra pendencias do dono (#273)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

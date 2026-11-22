@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6e6c62bd0c` · branch `main` · 2026-11-22 16:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d055637fd2` · branch `main` · 2026-11-22 16:24 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -895,7 +895,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | UAPI_POD_STATUS | 'PENDING', 'SIGNED', 'DELIVERED', 'FAILED', 'NOT_APPLICABLE' | `src/types/lalamove.ts` |
 | ContractVersion | v1 \| v2 | `supabase/functions/_shared/contract.ts` |
 | GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/_shared/geo-precision.ts` |
-| ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement | `supabase/functions/_shared/schemas.ts` |
+| ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement \| job-worker \| lalamove-api \| lalamove-uapi | `supabase/functions/_shared/schemas.ts` |
 | TEMPLATE_VARS | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", | `supabase/functions/_shared/template.ts` |
 | MessageRole | driver \| pickup_contact \| delivery_contact \| internal | `supabase/functions/_shared/messaging/router.ts` |
 | MessageChannel | whatsapp \| sms \| email \| slack \| n8n | `supabase/functions/_shared/messaging/router.ts` |
@@ -1017,6 +1017,39 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```ts
   { apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, "event não pode ser vazio").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }
   ```
+- **jobWorkerPayload** (`supabase/functions/_shared/schemas.ts`, z.union):
+  ```ts
+  [ z.object({}).passthrough(), z.array(z.unknown()), z.string(), z.number(), z.boolean(), z.null(), ], // o invalid_union do zod viraria "Invalid input" no 422; a fila precisa do motivo legível. { errorMap: () => ({ message: "payload é obrigatório (qualquer valor JSON)" }) },
+  ```
+- **jobWorkerV1** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { // uuid de job_queue.id: exigido pelas rpc mark_job_completed/mark_job_failed (p_job_id uuid), // não pelo contrato — `.uuid()` aqui recusaria enfileiramento manual de teste. jobId: z.string().min(1, "jobId é obrigatório"), // Discriminador do switch; mantido aberto de propósito (ver nota acima). type: z.string().min(1, "type é obrigatório"), payload: jobWorkerPayload, // jsonb NOT NULL DEFAULT '{}' no banco; a edge nunca lê (única menção: index.ts:28). metadata: z.unknown().optional(), }
+  ```
+- **uapiId** (`supabase/functions/_shared/schemas.ts`, z.union):
+  ```ts
+  [z.string().min(1, "order_uuid é obrigatório"), z.number()], { errorMap: () => ({ message: "order_uuid é obrigatório" }) },
+  ```
+- **uapiCursor** (`supabase/functions/_shared/schemas.ts`, z.union, encadeia optional):
+  ```ts
+  [z.string(), z.number()]
+  ```
+- **uapiFid** (`supabase/functions/_shared/schemas.ts`, z.string):
+  ```ts
+  
+  ```
+- **lalamoveUapiV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
+  ```ts
+  "action", [ // ── sessão (exigem role admin no handler, :500/:544) ── z.object({ action: z.literal("set-token"), access_token: z.string().min(1, "access_token é obrigatório"), refresh_token: z.string().min(1, "refresh_token é obrigatório"), // colunas: user_fid text, ep_role integer, city_id integer // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é // string (:13), então "21001" e 123456 funcionam hoje. user_fid: z.union([z.string(), z.number()]).optional().nullable(), ep_role: z.coerce.number().int().optional(), city_id: z.coerce.number().int().optional(), }), z.object({ action: z.literal("token-status") }), z.object({ action: z.literal("refresh-token") }), // ── pedidos ── z.object({ action: z.literal("list-orders"), limit: z.number().optional(), last_id: uapiCurs …
+  ```
+- **lalamoveApiAmount** (`supabase/functions/_shared/schemas.ts`, z.union):
+  ```ts
+  [z.string().min(1), z.number()]
+  ```
+- **lalamoveApiV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion, encadeia superRefine):
+  ```ts
+  "action", [ // Corpo ignorado pelo handler (index.ts:678-680, :1146-1149) → passthrough, // mesma convenção de cronWorkerBody (schemas.ts:283-288). z.object({ action: z.literal("cities") }).passthrough(), z.object({ action: z.literal("sync") }).passthrough(), // POST /v3/quotations — o case NÃO valida forma: o comentário em // index.ts:682-684 delega a validação à Lalamove (422 com o campo exato). // serviceType/stops ficam opcionais para não transformar erro upstream em 422 local. z.object({ action: z.literal("quotation"), serviceType: z.string().min(1, "serviceType é obrigatório").optional(), language: z.string().optional(), scheduleAt: z.string().optional(), isRouteOptimized: z.boolean().optional(), specialRequests: z.array(z.string()).optional(), stops: z .array( z .object({ address: z …
+  ```
+  - Regras cruzadas (refine): “orderId e amount são obrigatórios”
 
 ### F.2 react-hook-form (register/rules)
 
@@ -1338,9 +1371,11 @@ _nenhum item encontrado_
 | `transition={{ delay: index * 0.05 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.1 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/pages/orders/OrderCard.tsx` |
+| `// merge do passo 4 das notas de integração, 100% desse tráfego vira 422.` | `supabase/functions/_shared/schemas.ts` |
 | `// Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto` | `supabase/functions/lalamove-api/coordinates.ts` |
+| `// corpo transformaria 100% desse tráfego em 422 — incluindo o cartão de` | `supabase/functions/lalamove-api/index.ts` |
 | `// Randomly toggle off-route status (3% chance to go off, 20% to return)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Randomly toggle stopped status (5% chance)` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `// Simulate movement - move 5-15% towards destination with some randomness` | `supabase/functions/simulate-driver-movement/index.ts` |
@@ -1890,7 +1925,7 @@ _nenhum item encontrado_
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
-| … +102 linhas — lista completa em `context.json` | |
+| … +101 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1928,13 +1963,13 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1206 testes em 103 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1217 testes em 103 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
+| `supabase/functions/_shared/contract.test.ts` | 56 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
-| `supabase/functions/_shared/contract.test.ts` | 45 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
@@ -2104,6 +2139,7 @@ _nenhum item encontrado_
 | `notify_n8n_webhook` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
 | `notify_slack` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
 | `notify_whatsapp` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
+| `notifyDeliveryContact` | `supabase/functions/_shared/schemas.ts` |
 | `sendNotification` | `supabase/functions/_shared/schemas.ts` |
 | `invoke(` | `supabase/functions/check-driver-alerts/index.ts` |
 | `notify` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -2255,6 +2291,9 @@ _nenhum item encontrado_
 | validação (ou derrubava a função em 500, quando `req.json()` falhava). O | `supabase/functions/_shared/schemas.ts` |
 | index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp | `supabase/functions/_shared/schemas.ts` |
 | lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream. | `supabase/functions/_shared/schemas.ts` |
+| e deixa o job em loop PROCESSING→PENDING→PROCESSING para sempre. Toda regra de negócio | `supabase/functions/_shared/schemas.ts` |
+| index.ts:682-684 delega a validação à Lalamove (422 com o campo exato). | `supabase/functions/_shared/schemas.ts` |
+| O handler DEVE remover `action`/`orderId` antes de repassar (passo 5 das notas). | `supabase/functions/_shared/schemas.ts` |
 | - Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal. | `supabase/functions/_shared/telemetry.ts` |
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
 | é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
@@ -2309,8 +2348,10 @@ _nenhum item encontrado_
 | Re-sign each attempt: timestamp must be fresh (Lalamove rejects stale HMAC). | `supabase/functions/lalamove-api/index.ts` |
 | Extract rate limit headers | `supabase/functions/lalamove-api/index.ts` |
 | Guarda server-side: mesmo com validação de UI, nunca confie no cliente. | `supabase/functions/lalamove-api/index.ts` |
-| body ja passou pelo zod (z.record(z.any())); a validacao de forma | `supabase/functions/lalamove-api/index.ts` |
+| corpo, com `action` e ids apenas na query | `supabase/functions/lalamove-api/index.ts` |
+| body ja passou pelo contrato (_shared/schemas.ts, lalamoveApiV1); a validacao de forma | `supabase/functions/lalamove-api/index.ts` |
 | não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode | `supabase/functions/lalamove-api/index.ts` |
+| `orderId` identifica o pedido na URL do PATCH e não pode viajar | `supabase/functions/lalamove-api/index.ts` |
 | Validação numérica: > 0, até 2 casas decimais, teto de segurança R$500. | `supabase/functions/lalamove-api/index.ts` |
 | `ratelimits-limit-{endpoint}` / `-remaining-` / `-reset-` (Unix seconds). | `supabase/functions/lalamove-gateway/index.ts` |
 | * Persistência best-effort da telemetria de rate limit. Nunca deve derrubar a | `supabase/functions/lalamove-gateway/index.ts` |

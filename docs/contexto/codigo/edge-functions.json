@@ -504,7 +504,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 1204,
+   "linhas": 1246,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -537,7 +537,10 @@
    ],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
@@ -550,10 +553,9 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 3,
-   "linhas": 1460,
+   "linhas": 1492,
    "verify_jwt": true,
    "metodos": [
-    "GET",
     "OPTIONS"
    ],
    "assina_hmac": true,
@@ -585,7 +587,10 @@
     "rest.lalamove.com"
    ],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [
     "src/components/orders/FetchOrderDialog.tsx",
@@ -683,10 +688,9 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-uapi/index.ts",
    "arquivos": 1,
-   "linhas": 793,
+   "linhas": 818,
    "verify_jwt": true,
    "metodos": [
-    "GET",
     "OPTIONS"
    ],
    "assina_hmac": false,
@@ -711,7 +715,10 @@
     "web.lalamove.com"
    ],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [
     "src/hooks/useLalamoveUapi.ts"
