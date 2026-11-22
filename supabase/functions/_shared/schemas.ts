@@ -140,6 +140,8 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     country: z.string().length(2).optional(),
     language: z.string().min(2).max(5).optional(),
     limit: z.number().int().min(1).max(10).optional(),
+    // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`.
+    mode: z.enum(["searchbox", "geocoding"]).optional(),
     provider: geoProvider,
   }),
   z.object({
@@ -151,6 +153,11 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     // autocomplete nunca gravava coordenada.
     place_id: z.string().min(3).max(1024),
     session_token: z.string().min(8).max(64).optional(),
+    // Etapa 22: no modo geocoding o v6 não tem retrieve por id — o detalhe vem de `address`.
+    mode: z.enum(["searchbox", "geocoding"]).optional(),
+    address: z.string().min(3).max(300).optional(),
+    country: z.string().length(2).optional(),
+    language: z.string().min(2).max(5).optional(),
     provider: geoProvider,
   }),
   z.object({
