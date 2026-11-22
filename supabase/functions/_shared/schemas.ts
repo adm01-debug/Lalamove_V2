@@ -273,6 +273,297 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
 
 const geoGatewayV2 = geoGatewayV1;
 
+// ── Edge Functions que NÃO leem o corpo (workers de cron, health check) ──────
+//
+// Antes desta camada, um corpo inesperado nessas funções passava adiante sem
+// validação (ou derrubava a função em 500, quando `req.json()` falhava). O
+// contrato aqui é "objeto JSON, ou corpo vazio": `{}` é válido e um corpo que
+// não seja objeto (array, string, número) devolve 422 no formato único.
+// `time` é o campo que o pg_cron envia em `jsonb_build_object('time', now())`
+// (supabase/migrations/20261122140000_fix_crons_dispatcher.sql).
+const cronWorkerBody = z
+  .object({
+    time: z.string().optional().nullable(),
+  })
+  .passthrough();
+
+// apply-fixes — `action` é o único campo lido (index.ts:19) e só aceita uma ação.
+const applyFixesV1 = z.object({
+  action: z.literal("fix_dashboard"),
+});
+const applyFixesV2 = applyFixesV1;
+
+// bitrix24-process-queue — processa a fila; o corpo é ignorado (index.ts:17-29).
+const bitrix24ProcessQueueV1 = cronWorkerBody;
+const bitrix24ProcessQueueV2 = bitrix24ProcessQueueV1;
+
+// check-driver-alerts — cron a cada 2 min; o corpo é ignorado.
+const checkDriverAlertsV1 = cronWorkerBody;
+const checkDriverAlertsV2 = checkDriverAlertsV1;
+
+// escalate-alerts — cron a cada 5 min; o corpo é ignorado.
+const escalateAlertsV1 = cronWorkerBody;
+const escalateAlertsV2 = escalateAlertsV1;
+
+// lalamove-token-refresh — cron horário; o corpo é ignorado.
+const lalamoveTokenRefreshV1 = cronWorkerBody;
+const lalamoveTokenRefreshV2 = lalamoveTokenRefreshV1;
+
+// rotate-tokens — rotação agendada; o corpo é ignorado.
+const rotateTokensV1 = cronWorkerBody.extend({
+  source: z.string().optional(),
+});
+const rotateTokensV2 = rotateTokensV1;
+
+// seed-fix-rls — script legado; o corpo é ignorado (index.ts:8-120).
+const seedFixRlsV1 = cronWorkerBody;
+const seedFixRlsV2 = seedFixRlsV1;
+
+// get-mapbox-token — devolve o token; `healthCheck` é o único campo que algum
+// chamador envia hoje (src/hooks/healthChecks.ts:49) e a edge não o lê.
+const getMapboxTokenV1 = cronWorkerBody.extend({
+  healthCheck: z.boolean().optional(),
+});
+const getMapboxTokenV2 = getMapboxTokenV1;
+
+// simulate-driver-movement — só em ambiente de desenvolvimento. O corpo é lido
+// desde o replay determinístico de trajeto (index.ts:39-43, 106-116): com
+// `replay: true` a fixture é obrigatória, como o próprio handler exige (:109).
+const simulateReplayPoint = z
+  .object({
+    seq: z.number(),
+    lat: z.number(),
+    lng: z.number(),
+    speed_kmh: z.number().optional(),
+    heading: z.number().optional(),
+    elapsed_s: z.number().optional(),
+  })
+  .passthrough();
+
+const simulateReplayFixture = z
+  .object({
+    name: z.string().min(1, "fixture.name é obrigatório"),
+    vehicle_type: z.string().optional(),
+    total_distance_m: z.number().optional(),
+    points: z.array(simulateReplayPoint).min(1, "fixture.points não pode ser vazio"),
+  })
+  .passthrough();
+
+const simulateDriverMovementV1 = cronWorkerBody
+  .extend({
+    replay: z.boolean().optional(),
+    fixture: simulateReplayFixture.optional().nullable(),
+    cursor: z.number().int().nonnegative().optional(),
+    steps: z.number().int().positive().optional(),
+  })
+  .refine((v) => !v.replay || Boolean(v.fixture), {
+    message: "replay:true exige `fixture` no corpo (route_curitiba.json)",
+    path: ["fixture"],
+  });
+const simulateDriverMovementV2 = simulateDriverMovementV1;
+
+// ── bitrix24-sync ────────────────────────────────────────────────────────────
+//
+// `action` é o discriminador (index.ts:44). `oauth_callback` recebe `code` e
+// `domain` pela QUERY (index.ts:71-72), por isso a edge mescla os parâmetros no
+// input antes de validar.
+const bitrix24SyncV1 = z.discriminatedUnion("action", [
+  z.object({
+    action: z.literal("get_auth_url"),
+    domain: z.string().optional(),
+  }),
+  z.object({
+    action: z.literal("oauth_callback"),
+    code: z.string().min(1, "code é obrigatório"),
+    domain: z.string().optional(),
+  }),
+  z.object({ action: z.literal("refresh_token") }),
+  // Espelha o z.object inline que já existia em index.ts:159-162.
+  z.object({
+    action: z.literal("sync_order"),
+    orderId: z.string().uuid("orderId deve ser um UUID"),
+    dealId: z.union([z.string().min(1, "dealId é obrigatório"), z.number()]),
+  }),
+  z.object({ action: z.literal("get_connection_status") }),
+  z.object({ action: z.literal("get_deals") }),
+  z.object({ action: z.literal("disconnect") }),
+]);
+const bitrix24SyncV2 = bitrix24SyncV1;
+
+// ── external-companies ───────────────────────────────────────────────────────
+//
+// `table` tem allowlist no próprio handler (index.ts:29) e `get` exige `id`
+// (index.ts:74-76). `id: 0` é rejeitado porque o handler trata falsy como ausente.
+const externalCompaniesTable = z
+  .enum(["companies", "customers", "suppliers", "carriers", "contacts"])
+  .default("companies");
+
+const externalCompaniesV1 = z.discriminatedUnion("action", [
+  z.object({
+    action: z.literal("list"),
+    table: externalCompaniesTable,
+    search: z.string().optional().nullable(),
+    limit: z.number().int().positive().max(200).default(50),
+    offset: z.number().int().nonnegative().default(0),
+  }),
+  z.object({
+    action: z.literal("get"),
+    table: externalCompaniesTable,
+    id: z.union([
+      z.string().min(1, "id é obrigatório"),
+      z.number().refine((n) => n !== 0, "id é obrigatório"),
+    ]),
+  }),
+  z.object({
+    action: z.literal("search_address"),
+    search: z.string().optional().nullable(),
+    limit: z.number().int().positive().max(200).default(20),
+  }),
+  z.object({
+    action: z.literal("schema"),
+    table: externalCompaniesTable,
+  }),
+  z.object({ action: z.literal("stats") }),
+]);
+const externalCompaniesV2 = externalCompaniesV1;
+
+// ── external-db-bridge ───────────────────────────────────────────────────────
+//
+// `operation` é o discriminador (index.ts:245-248). Os campos opcionais usam
+// `.nullish()` porque o handler trata `null` como ausente (index.ts:138-153), e
+// `update`/`delete` exigem `filters` não vazio para não varrer a tabela inteira.
+const externalDbBridgeRow = z.record(z.unknown());
+const externalDbBridgeFilters = z.record(z.unknown());
+const externalDbBridgeRequiredFilters = externalDbBridgeFilters.refine(
+  (f) => Object.keys(f).length > 0,
+  "filters é obrigatório e não pode ser vazio",
+);
+
+const externalDbBridgeV1 = z.discriminatedUnion("operation", [
+  z.object({
+    operation: z.literal("select"),
+    table: z.string().min(1, "table é obrigatório"),
+    select: z.string().nullish(),
+    filters: externalDbBridgeFilters.nullish(),
+    order: z
+      .object({
+        column: z.string().min(1, "order.column é obrigatório"),
+        ascending: z.boolean().optional(),
+      })
+      .nullish(),
+    limit: z.number().int().nonnegative().nullish(),
+    offset: z.number().int().nonnegative().nullish(),
+    count_mode: z.enum(["exact", "planned", "estimated"]).nullish(),
+  }),
+  z.object({
+    operation: z.literal("insert"),
+    table: z.string().min(1, "table é obrigatório"),
+    body: z.union([externalDbBridgeRow, z.array(externalDbBridgeRow)]).optional(),
+  }),
+  z.object({
+    operation: z.literal("update"),
+    table: z.string().min(1, "table é obrigatório"),
+    filters: externalDbBridgeRequiredFilters,
+    body: externalDbBridgeRow.optional(),
+  }),
+  z.object({
+    operation: z.literal("delete"),
+    table: z.string().min(1, "table é obrigatório"),
+    filters: externalDbBridgeRequiredFilters,
+  }),
+  z.object({
+    operation: z.literal("rpc"),
+    rpc_name: z.string().min(1, "rpc_name é obrigatório"),
+    body: externalDbBridgeRow.nullish(),
+    table: z.string().nullish(),
+  }),
+]);
+const externalDbBridgeV2 = externalDbBridgeV1;
+
+// ── mcp-query ────────────────────────────────────────────────────────────────
+//
+// `operation` espelha a allowlist de `mcp_introspect` (index.ts:20-45);
+// `params` é saneado depois (index.ts:84-110), por isso sem `.passthrough()`.
+const mcpQueryV1 = z.object({
+  operation: z.enum([
+    "connection_info",
+    "list_tables",
+    "list_columns",
+    "list_views",
+    "list_enums",
+    "list_extensions",
+    "list_indexes",
+    "list_functions",
+    "list_triggers",
+    "list_policies",
+    "constraints",
+    "relationships",
+    "sequences",
+    "migrations",
+    "db_stats",
+    "active_queries",
+    "slow_queries",
+    "locks",
+    "disk_usage",
+    "table_bloat",
+    "index_usage",
+    "seq_scans",
+    "duplicate_indexes",
+    "column_stats",
+    "pg_settings",
+  ]),
+  params: z
+    .object({
+      schema: z.string().max(128).optional(),
+      table: z.string().max(128).optional(),
+      column: z.string().max(128).optional(),
+      filter: z.string().max(128).optional(),
+      // index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp
+      // 1..200 continua no handler.
+      limit: z.union([z.number(), z.string()]).optional(),
+    })
+    .optional()
+    .nullable(),
+});
+const mcpQueryV2 = mcpQueryV1;
+
+// ── lalamove-gateway ─────────────────────────────────────────────────────────
+//
+// Espelha a interface GatewayRequest (index.ts:24-30). `action` fica string
+// livre (≤64) porque o roteamento é feito por `route.ts` e pelos proxies.
+const lalamoveGatewayV1 = z.object({
+  action: z
+    .string()
+    .trim()
+    .min(1, "action é obrigatório")
+    .max(64, "action deve ter no máximo 64 caracteres"),
+  target: z.enum(["unified", "uapi"]).optional(),
+  params: z.record(z.string()).optional(),
+  body: z.unknown().optional(),
+  method: z.enum(["GET", "POST"]).optional(),
+});
+const lalamoveGatewayV2 = lalamoveGatewayV1;
+
+// ── llm-wh ───────────────────────────────────────────────────────────────────
+//
+// Proxy do webhook da Lalamove: repassa o corpo CRU (o HMAC é calculado sobre os
+// bytes originais), então o contrato só garante "objeto JSON" — nenhum campo é
+// lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream.
+const llmWhV1 = z
+  .object({
+    apiKey: z.string().optional(),
+    timestamp: z.union([z.number(), z.string()]).optional().nullable(),
+    signature: z.string().optional(),
+    eventId: z.string().optional(),
+    eventType: z.string().optional(),
+    eventVersion: z.string().optional(),
+    event: z.string().min(1, "event não pode ser vazio").optional(),
+    orderId: z.string().optional().nullable(),
+    data: z.unknown().optional(),
+  })
+  .passthrough();
+const llmWhV2 = llmWhV1;
+
 // ── Registro central de contratos ────────────────────────────────────────────
 
 export type ContractName =
@@ -283,7 +574,22 @@ export type ContractName =
   | "route-analyzer"
   | "check-external-api"
   | "test-notification"
-  | "geo-gateway";
+  | "geo-gateway"
+  | "apply-fixes"
+  | "bitrix24-process-queue"
+  | "bitrix24-sync"
+  | "check-driver-alerts"
+  | "escalate-alerts"
+  | "external-companies"
+  | "external-db-bridge"
+  | "get-mapbox-token"
+  | "lalamove-gateway"
+  | "lalamove-token-refresh"
+  | "llm-wh"
+  | "mcp-query"
+  | "rotate-tokens"
+  | "seed-fix-rls"
+  | "simulate-driver-movement";
 
 type VersionedSchema = Record<ContractVersion, z.ZodTypeAny>;
 
@@ -296,7 +602,41 @@ export const CONTRACT_REGISTRY: Record<ContractName, VersionedSchema> = {
   "check-external-api": { v1: checkExternalApiV1, v2: checkExternalApiV2 },
   "test-notification": { v1: testNotificationV1, v2: testNotificationV2 },
   "geo-gateway": { v1: geoGatewayV1, v2: geoGatewayV2 },
+  "apply-fixes": { v1: applyFixesV1, v2: applyFixesV2 },
+  "bitrix24-process-queue": { v1: bitrix24ProcessQueueV1, v2: bitrix24ProcessQueueV2 },
+  "bitrix24-sync": { v1: bitrix24SyncV1, v2: bitrix24SyncV2 },
+  "check-driver-alerts": { v1: checkDriverAlertsV1, v2: checkDriverAlertsV2 },
+  "escalate-alerts": { v1: escalateAlertsV1, v2: escalateAlertsV2 },
+  "external-companies": { v1: externalCompaniesV1, v2: externalCompaniesV2 },
+  "external-db-bridge": { v1: externalDbBridgeV1, v2: externalDbBridgeV2 },
+  "get-mapbox-token": { v1: getMapboxTokenV1, v2: getMapboxTokenV2 },
+  "lalamove-gateway": { v1: lalamoveGatewayV1, v2: lalamoveGatewayV2 },
+  "lalamove-token-refresh": { v1: lalamoveTokenRefreshV1, v2: lalamoveTokenRefreshV2 },
+  "llm-wh": { v1: llmWhV1, v2: llmWhV2 },
+  "mcp-query": { v1: mcpQueryV1, v2: mcpQueryV2 },
+  "rotate-tokens": { v1: rotateTokensV1, v2: rotateTokensV2 },
+  "seed-fix-rls": { v1: seedFixRlsV1, v2: seedFixRlsV2 },
+  "simulate-driver-movement": { v1: simulateDriverMovementV1, v2: simulateDriverMovementV2 },
 };
+
+/**
+ * Contratos cujo CORPO É OPCIONAL: a Edge Function não lê nada da entrada
+ * (workers de cron, health check, telas que invocam sem payload), então `{}` é
+ * um payload válido. Para esses, o caso de falha equivalente a "campo
+ * obrigatório ausente" é um corpo que não seja objeto (array, string, número).
+ * Usado pelos testes de contrato para escolher o caso correto por contrato.
+ */
+export const OPTIONAL_BODY_CONTRACTS: readonly ContractName[] = [
+  "bitrix24-process-queue",
+  "check-driver-alerts",
+  "escalate-alerts",
+  "get-mapbox-token",
+  "lalamove-token-refresh",
+  "llm-wh",
+  "rotate-tokens",
+  "seed-fix-rls",
+  "simulate-driver-movement",
+] as const;
 
 /**
  * Retorna o schema de um contrato para uma versão específica.

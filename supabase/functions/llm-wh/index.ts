@@ -1,4 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import {
+  errorResponse,
+  parseJsonText,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 // This is a lightweight proxy that forwards Lalamove webhook calls
 // to the main lalamove-webhook edge function.
@@ -26,8 +34,21 @@ serve(async (req) => {
       );
     }
 
-    // Read raw body to forward
+    // Read raw body to forward — o HMAC do webhook é calculado sobre estes
+    // bytes, então o contrato valida uma CÓPIA já lida (parseJsonText) em vez
+    // de reconsumir o stream; o corpo repassado continua idêntico ao original.
     const rawBody = await req.text();
+
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("llm-wh", contractVersion);
+    const parsedBody = parseJsonText(rawBody, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("llm-wh", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
     
     // Forward all relevant headers
     const forwardHeaders: Record<string, string> = {

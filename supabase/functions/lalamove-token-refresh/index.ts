@@ -1,5 +1,13 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 /**
  * Etapa 24 — Auto-refresh do token UAPI com fallback.
@@ -72,7 +80,19 @@ Deno.serve(async (req) => {
   );
 
   try {
-    // ── 1. Sessão ativa ────────────────────────────────────────────────────
+    // ── 1. Sessão ativa     // Contrato de entrada (formato único de erro 422 + versão v1/v2):
+    // supabase/functions/_shared/contract.ts e _shared/schemas.ts.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("lalamove-token-refresh", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("lalamove-token-refresh", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+────────────────────────────────────────────────────
     const { data: sessions, error: sessionError } = await admin
       .from('lalamove_uapi_sessions')
       .select('id, token_obtained_at, last_refreshed_at, is_active')

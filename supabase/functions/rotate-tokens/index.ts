@@ -6,6 +6,14 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { logger } from '../_shared/logger.ts';
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -69,6 +77,18 @@ Deno.serve(async (req) => {
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    // Contrato de entrada (formato único de erro 422 + versão v1/v2):
+    // supabase/functions/_shared/contract.ts e _shared/schemas.ts.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("rotate-tokens", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("rotate-tokens", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);

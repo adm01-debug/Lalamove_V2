@@ -1,6 +1,14 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders as baseCorsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { isUnsupported, routeAction, translateParams } from './route.ts';
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 // Override CORS headers to include x-request-id and other custom headers
 const corsHeaders = {
@@ -237,19 +245,22 @@ Deno.serve(async (req) => {
       return json({ error: 'Unauthorized' }, 401, requestId);
     }
 
-    // ── 2. Validação de entrada ────────────────────────────────────────────
-    let payload: GatewayRequest;
-    try {
-      payload = await req.json();
-    } catch {
-      return json({ error: 'Corpo da requisição inválido (JSON esperado)' }, 400, requestId);
-    }
+    // ── 2. Validação de entrada (contrato: 422 no formato único + v1/v2) ───
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage('lalamove-gateway', contractVersion);
+    const contractHeaders = { ...corsHeaders, 'x-request-id': requestId };
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, contractHeaders);
+    const contract = validateContract(
+      getSchema('lalamove-gateway', contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, contractHeaders);
 
+    const payload = contract.data as GatewayRequest;
     const target: Target = payload.target === 'uapi' ? 'uapi' : 'unified';
-    const action = typeof payload.action === 'string' ? payload.action.trim() : '';
-    if (!action || action.length > 64) {
-      return json({ error: 'Campo "action" é obrigatório' }, 400, requestId);
-    }
+    const action = payload.action.trim();
 
     const { urlEnv, keyEnv } = TARGETS[target];
     const baseUrl = Deno.env.get(urlEnv);

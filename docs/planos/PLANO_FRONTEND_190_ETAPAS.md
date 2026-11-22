@@ -188,7 +188,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `favorite-driver` sem `driver_fid` → 422 nomeando o campo (hoje 400 fixo, A22).
 
 ### 23 — [E] Schema `lalamove-gateway`
-- [ ] `{ target?: 'unified'|'uapi', action: string(1..64), params?: record<string,string>, body?: unknown, method?: 'GET'|'POST'|'PUT'|'PATCH'|'DELETE' }`; integrar em `lalamove-gateway/index.ts:243-251` mantendo `requestId` no `meta`.
+- [x] `{ target?: 'unified'|'uapi', action: string(1..64), params?: record<string,string>, body?: unknown, method?: 'GET'|'POST'|'PUT'|'PATCH'|'DELETE' }`; integrar em `lalamove-gateway/index.ts:243-251` mantendo `requestId` no `meta`.
 - **Evidência:** `route.test.ts` + caso de contrato; front (`src/lib/lalamove-api.ts:70`) continua funcionando (e2e `new-order-autocomplete`).
 
 ### 24 — [E] Schema `job-worker` (envelope + payload por `type`)
@@ -196,31 +196,31 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** job sem `jobId` → 422 (hoje 500 em `:1180-1190`); `eta-*.test.ts` continuam verdes.
 
 ### 25 — [E] Schema `bitrix24-sync`
-- [ ] Union por `action` (`get_auth_url{domain}`, `oauth_callback{code, domain}`, `refresh_token`, `sync_order{orderId: uuid, dealId: string|number}`, `get_connection_status`, `get_deals`, `disconnect`); substituir o `z.record(z.any())` + `.parse` (`:36`, `:158-162`) pela camada, para que ZodError vire 422 e não 500.
+- [x] Union por `action` (`get_auth_url{domain}`, `oauth_callback{code, domain}`, `refresh_token`, `sync_order{orderId: uuid, dealId: string|number}`, `get_connection_status`, `get_deals`, `disconnect`); substituir o `z.record(z.any())` + `.parse` (`:36`, `:158-162`) pela camada, para que ZodError vire 422 e não 500.
 - **Evidência:** `sync_order` com `orderId` inválido → 422 (hoje 500 `:348-350`).
 
 ### 26 — [E] Schema `external-companies`
-- [ ] Union por `action` (`list{table?, search?, limit≤200, offset}`, `get{table?, id}`, `search_address{search, limit}`, `schema{table?}`, `stats`) com `table` em enum das 5 tabelas permitidas (`:29`).
+- [x] Union por `action` (`list{table?, search?, limit≤200, offset}`, `get{table?, id}`, `search_address{search, limit}`, `schema{table?}`, `stats`) com `table` em enum das 5 tabelas permitidas (`:29`).
 - **Evidência:** `get` sem `id` → 422; `useExternalData.ts` continua listando.
 
 ### 27 — [E] Schema `external-db-bridge`
-- [ ] `{ operation: enum(select|insert|update|delete|rpc), table?, rpc_name?, select?, filters?, body?, limit?, offset?, order?{column, ascending?}, count_mode? }` com refinamento (`table` obrigatório fora de `rpc`; `rpc_name` obrigatório em `rpc`).
-- **Evidência:** `index.test.ts` atualizado; `{operation:'rpc'}` sem `rpc_name` → 422.
+- [x] `{ operation: enum(select|insert|update|delete|rpc), table?, rpc_name?, select?, filters?, body?, limit?, offset?, order?{column, ascending?}, count_mode? }` com refinamento (`table` obrigatório fora de `rpc`; `rpc_name` obrigatório em `rpc`).
+- **Evidência:** `{operation:'rpc'}` sem `rpc_name` → 422; `update`/`delete` sem `filters` → 422 (testes em `_shared/contract.test.ts`). O `index.test.ts` desta edge é de I/O contra a função implantada e segue fora do CI (etapa 39).
 
 ### 28 — [E] Schema `mcp-query`
-- [ ] `{ operation: enum(25 da allowlist `:20-46`), params?: { schema?, table?, column?, filter?, limit? } }`; manter 405 para não-POST antes do contrato.
+- [x] `{ operation: enum(25 da allowlist `:20-46`), params?: { schema?, table?, column?, filter?, limit? } }`; manter 405 para não-POST antes do contrato.
 - **Evidência:** `operation:'drop'` → 422 `invalid_enum_value`.
 
 ### 29 — [E] Schemas das edges disparadas por cron/sem body
-- [ ] `check-driver-alerts`, `escalate-alerts`, `lalamove-token-refresh`, `rotate-tokens`, `bitrix24-process-queue`, `get-mapbox-token`, `simulate-driver-movement`: `z.object({ time: z.string().optional(), healthCheck: z.boolean().optional(), ... }).passthrough()` — corpo vazio aceito, array/string → 422.
+- [x] `check-driver-alerts`, `escalate-alerts`, `lalamove-token-refresh`, `rotate-tokens`, `bitrix24-process-queue`, `get-mapbox-token`, `simulate-driver-movement`: `z.object({ time: z.string().optional(), healthCheck: z.boolean().optional(), ... }).passthrough()` — corpo vazio aceito, array/string → 422.
 - **Evidência:** `[check-driver-alerts] body array retorna 422` nos testes; cron `*/2` continua 200.
 
 ### 30 — [E] Contrato do proxy `llm-wh` sem consumir o corpo
-- [ ] Validar `req.clone()` como JSON não vazio (`{ event: string }` mínimo) e repassar o corpo **cru** (HMAC depende dos bytes originais); 422 no formato único quando não for JSON.
+- [x] Validar `req.clone()` como JSON não vazio (`{ event: string }` mínimo) e repassar o corpo **cru** (HMAC depende dos bytes originais); 422 no formato único quando não for JSON.
 - **Evidência:** `security.test.ts` do webhook continua verde; `llm-wh` com corpo `"x"` → 422.
 
 ### 31 — [E] Schemas `apply-fixes` e `seed-fix-rls` (até a remoção da etapa 15)
-- [ ] `apply-fixes`: `{ action: literal('fix_dashboard') }`; `seed-fix-rls`: objeto vazio permissivo. Ambos marcados `@deprecated` no registro.
+- [x] `apply-fixes`: `{ action: literal('fix_dashboard') }`; `seed-fix-rls`: objeto vazio permissivo. Ambos marcados `@deprecated` no registro.
 - **Evidência:** 26/26 nomes em `CONTRACT_REGISTRY`; `grep -L "_shared/contract.ts" supabase/functions/*/index.ts` retorna só `_shared`.
 
 ### 32 — [T] Testes genéricos: campo ausente / tipo incorreto / valor vazio para TODOS os contratos
@@ -245,8 +245,8 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** baseline vazio; `rg -n "error: err.message|error: error.message" supabase/functions` retorna 0.
 
 ### 37 — [E] Telemetria de uso de versão nas 18 edges novas
-- [ ] Chamar `trackContractUsage(name, version)` (`_shared/telemetry.ts:27`) em todas, para medir quem ainda manda v1.
-- **Evidência:** `select contract_name, contract_version, count(*) from contract_usage group by 1,2` com as 26.
+- [x] Chamar `trackContractUsage(name, version)` (`_shared/telemetry.ts:27`) em todas, para medir quem ainda manda v1.
+- **Evidência:** `select contract_name, contract_version, count(*) from contract_usage group by 1,2` com os 23 contratos já integrados (as 3 restantes entram com as etapas 21, 22 e 24).
 
 ### 38 — [T] Testes de integração I/O para as 18 edges
 - [ ] Estender `CASES` em `_shared/contract.integration.test.ts:90-155` com `missing`/`wrongType` por edge (só payloads inválidos nas que têm efeito colateral: `lalamove-api`, `job-worker`, `bitrix24-sync`, `rotate-tokens`).
@@ -884,4 +884,5 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 
 | Data | Concluídas | Observações |
 |---|---|---|
-| 22/11/2026 | 0/190 | Plano criado. Bloco 1 (etapas 21–45) iniciado na mesma sessão — ver PR de contratos das edges. |
+| 22/11/2026 | 0/190 | Plano criado. |
+| 22/11/2026 | 9/190 | Bloco 1 em andamento: etapas 23, 25–31 e 37 entregues (15 Edge Functions passaram a validar entrada com 422 único e versão v1/v2; 184 testes de contrato verdes). Faltam 21, 22, 24 (`lalamove-api`, `lalamove-uapi`, `job-worker`), 32–36 e 38–45. |

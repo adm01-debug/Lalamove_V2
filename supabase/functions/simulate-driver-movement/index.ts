@@ -1,6 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { bearingDeg, replaySteps, type ReplayFixture } from "./replay.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,12 +44,24 @@ serve(async (req) => {
     // `route_curitiba.json` ponto a ponto (deterministico) em vez de sortear
     // o deslocamento — e o unico jeito de o trajeto passar por um caminho
     // conhecido e os eventos geo serem conferiveis.
-    let body: { replay?: boolean; fixture?: ReplayFixture; cursor?: number; steps?: number } = {};
-    try {
-      body = req.method === "POST" ? await req.json() : {};
-    } catch {
-      body = {};
-    }
+    // Contrato de entrada (422 no formato único + versão v1/v2): `replay:true`
+    // sem `fixture` agora falha na validação, não no meio do laço.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("simulate-driver-movement", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("simulate-driver-movement", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+    const body = contract.data as {
+      replay?: boolean;
+      fixture?: ReplayFixture;
+      cursor?: number;
+      steps?: number;
+    };
 
     // docs/agentes/regras-dominio.md: "simulate-driver-movement ... existe só para
     // dev ... Nunca rode contra produção". Checagem de role (admin/manager) não

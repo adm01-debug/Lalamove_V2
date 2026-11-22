@@ -15,6 +15,14 @@
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { corsHeaders } from "../_shared/cors.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 /** Operações aceitas — espelham exatamente a allowlist de `mcp_introspect`. */
 const ALLOWED_OPERATIONS = [
@@ -164,16 +172,20 @@ Deno.serve(async (req) => {
     );
   }
 
-  // ── 3. Validação de entrada ──────────────────────────────────────────────
-  const body = (await req.json().catch(() => null)) as RequestBody | null;
-  if (!body || !isOperation(body.operation)) {
-    return json(
-      { error: "Operação inválida ou ausente", allowed: ALLOWED_OPERATIONS },
-      400,
-    );
-  }
+  // ── 3. Validação de entrada (contrato: 422 no formato único + v1/v2) ─────
+  const contractVersion = resolveContractVersion(req);
+  trackContractUsage("mcp-query", contractVersion);
+  const parsedBody = await parseJsonBody(req, contractVersion);
+  if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+  const contract = validateContract(
+    getSchema("mcp-query", contractVersion),
+    parsedBody.value,
+    contractVersion,
+  );
+  if (!contract.ok) return errorResponse(contract, corsHeaders);
+  const body = contract.data as RequestBody;
 
-  const operation: Operation = body.operation;
+  const operation: Operation = body.operation as Operation;
   const params = sanitizeParams(body.params);
 
   // ── 4. Execução (único caminho: RPC de allowlist) ────────────────────────

@@ -6,9 +6,9 @@
 
 | Arquivo | Responsabilidade |
 |---|---|
-| `supabase/functions/_shared/contract.ts` | Helpers puros: `validateContract`, `parseJsonBody`, `errorResponse`, `resolveContractVersion`, formato único de erro. |
+| `supabase/functions/_shared/contract.ts` | Helpers puros: `validateContract`, `parseJsonBody`, `parseJsonText` (corpo já lido, para proxies que repassam bytes crus), `errorResponse`, `resolveContractVersion`, formato único de erro. |
 | `supabase/functions/_shared/schemas.ts` | Registro central de schemas Zod versionados (`CONTRACT_REGISTRY`, `getSchema`). |
-| `supabase/functions/_shared/contract.test.ts` | Testes de contrato (34 casos). |
+| `supabase/functions/_shared/contract.test.ts` | Testes de contrato (184 casos, gerados por contrato a partir das fixtures `VALID_PAYLOADS`, `WRONG_TYPE` e `EMPTY_VALUE`). |
 
 ## Formato único de erro (HTTP 422)
 
@@ -120,7 +120,14 @@ if (!contract.ok) return errorResponse(contract, corsHeaders);
 deno test --allow-net supabase/functions/_shared/contract.test.ts
 ```
 
-Cobertura: payload válido, campo ausente, tipo incorreto, valor vazio, JSON malformado, compat retroativa v1→v2, resolução de versão. **34/34 passando.**
+Cobertura, gerada em laço para **todos** os contratos do registro: payload válido; campo obrigatório
+ausente (ou, nos contratos de corpo opcional, corpo que não é objeto: `[]`, `"x"`, `42`, `true`); tipo
+incorreto nomeando o campo; valor vazio nomeando o campo; mesmo payload inválido rejeitado com os mesmos
+campos em v1 e v2; JSON malformado; compat retroativa v1→v2; resolução de versão; headers e `meta.deprecation`.
+**184/184 passando** (`deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts`).
+
+Adicionar um contrato ao registro sem fixture é **erro de tipo**: `VALID_PAYLOADS`, `WRONG_TYPE` e
+`EMPTY_VALUE` são `Record<ContractName, …>`, então o TypeScript cobra o caso novo.
 
 ### 2. Integração I/O real (chama as Edge Functions IMPLANTADAS)
 
@@ -141,21 +148,49 @@ Efeitos colaterais são evitados: funções que disparam e-mail/IA/notificaçõe
 > No CI, roda no job `edge-integration-tests` (push na `main`), lendo `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` dos secrets do repositório.
 
 
-## Status de integração (rollout completo)
+## Status de integração
 
-Todas as Edge Functions com payload de entrada agora consomem a camada de contrato,
-garantindo formato de erro 422 único e versionamento (v1/v2):
+| Função | Integrada | Observação |
+| ------------------------- | :-------: | --------------------------------------------------------------- |
+| lalamove-webhook          |    ✅     | + validação HMAC e gate de IP antes do contrato                  |
+| evaluate-driver           |    ✅     | —                                                                |
+| send-notification         |    ✅     | inclui `metadata` opcional no schema                             |
+| new-device-alert          |    ✅     | —                                                                |
+| route-analyzer            |    ✅     | —                                                                |
+| test-notification         |    ✅     | —                                                                |
+| check-external-api        |    ✅     | —                                                                |
+| geo-gateway               |    ✅     | `place_id` aceita `mapbox_id` real (até 1024)                    |
+| apply-fixes               |    ✅     | ação única `fix_dashboard` (edge legada, ver `AGENTS.md`)         |
+| bitrix24-process-queue    |    ✅     | corpo opcional (fila disparada pela UI)                          |
+| bitrix24-sync             |    ✅     | união por `action`; `action`/`code`/`domain` também pela query    |
+| check-driver-alerts       |    ✅     | corpo opcional (cron a cada 2 min)                               |
+| escalate-alerts           |    ✅     | corpo opcional (cron a cada 5 min)                               |
+| external-companies        |    ✅     | união por `action`; `table` com allowlist; `limit` ≤ 200          |
+| external-db-bridge        |    ✅     | união por `operation`; `update`/`delete` exigem `filters`         |
+| get-mapbox-token          |    ✅     | corpo opcional; `healthCheck` do health check do front            |
+| lalamove-gateway          |    ✅     | `action` ≤ 64; `target`/`method` em enum; `x-request-id` no erro  |
+| lalamove-token-refresh    |    ✅     | corpo opcional (cron horário)                                    |
+| llm-wh                    |    ✅     | valida uma cópia já lida; repassa o corpo **cru** (HMAC)          |
+| mcp-query                 |    ✅     | `operation` na allowlist de `mcp_introspect`; 401/403 antes       |
+| rotate-tokens             |    ✅     | corpo opcional                                                   |
+| seed-fix-rls              |    ✅     | corpo opcional (edge legada, ver `AGENTS.md`)                     |
+| simulate-driver-movement  |    ✅     | `replay:true` exige `fixture`; só em desenvolvimento              |
+| **job-worker**            |    ⏳     | união por `type` (12 tipos) — fase seguinte                      |
+| **lalamove-api**          |    ⏳     | união por `action` (~15 ações) — fase seguinte                    |
+| **lalamove-uapi**         |    ⏳     | união por `action` (24 ações) — fase seguinte                     |
 
-| Função              | Integrada | Observação                                    |
-| ------------------- | :-------: | --------------------------------------------- |
-| lalamove-webhook    |    ✅     | + validação HMAC                              |
-| evaluate-driver     |    ✅     | —                                             |
-| send-notification   |    ✅     | inclui `metadata` opcional no schema          |
-| new-device-alert    |    ✅     | —                                             |
-| route-analyzer      |    ✅     | —                                             |
-| test-notification   |    ✅     | —                                             |
-| check-external-api  |    ✅     | integrado à camada de contrato (I/O testado)  |
+**23 de 26** Edge Functions com entrada validada pela camada. As três pendentes são as de maior superfície
+(criação/cancelamento de pedido, fila de jobs e UAPI) e entram numa PR própria, com refutação dos schemas
+contra cada chamador real — ver `docs/planos/PLANO_FRONTEND_190_ETAPAS.md`, etapas 21, 22 e 24.
 
-Deploy realizado para: `send-notification`, `new-device-alert`, `route-analyzer`, `test-notification`, `check-external-api`.
+### Contratos de corpo opcional
 
-Todas as 7 funções têm cobertura de I/O real em `contract.integration.test.ts` (27 testes).
+`OPTIONAL_BODY_CONTRACTS` (em `schemas.ts`) lista os contratos cuja Edge Function **não lê a entrada**
+(workers de cron, health check, telas que invocam sem payload). Para eles `{}` é válido e o contrato garante
+apenas que o corpo seja um objeto JSON: array, string ou número agora devolvem 422 em vez de seguir adiante.
+
+### Onde o contrato roda em relação à autenticação
+
+Nas funções com gate de segurança (`lalamove-webhook` com IP/HMAC, `external-db-bridge` e `mcp-query` com
+JWT e papel), o contrato roda **depois** do gate: origem não autorizada continua recebendo 401/403, nunca um
+422 que revelaria o formato esperado do payload.
