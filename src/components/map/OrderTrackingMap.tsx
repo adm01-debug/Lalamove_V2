@@ -138,11 +138,19 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
   }
 
   return (
-    <div
-      ref={container}
-      className={`rounded-lg overflow-hidden ${className}`}
-      role="img"
-      aria-label="Mapa do trajeto do pedido com coleta, entrega e posição do motorista"
-    />
+    <div className={`relative rounded-lg overflow-hidden ${className}`}>
+      <div
+        ref={container}
+        className="w-full h-full"
+        role="img"
+        aria-label="Mapa do trajeto do pedido com coleta, entrega e posição do motorista"
+      />
+      {/* Termos Mapbox: a atribuição precisa ficar visível. O controle nativo
+          fica desligado para não competir com o HUD deste mapa pequeno, então
+          a atribuição é renderizada como texto fixo no canto. */}
+      <span className="pointer-events-none absolute bottom-0 right-0 rounded-tl bg-background/70 px-1 py-0.5 text-[10px] leading-none text-muted-foreground">
+        © Mapbox © OpenStreetMap
+      </span>
+    </div>
   );
 }
