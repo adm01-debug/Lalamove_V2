@@ -171,6 +171,27 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     provider: geoProvider,
   }), // address OU structured: o provedor devolve GEO_INVALID_INPUT quando ambos faltam
   z.object({
+    // Etapa 25: lote de até 50 consultas por chamada. Cada item aceita o mesmo formato do
+    // `geocode` unitário; o retorno preserva a ordem e cada item falha sozinho.
+    action: z.literal("geocode-batch"),
+    queries: z.array(z.object({
+      address: z.string().min(3).max(300).optional(),
+      structured: z.object({
+        address_line1: z.string().max(200).optional(),
+        postal_code: z.string().max(20).optional(),
+        city: z.string().max(100).optional(),
+        state: z.string().max(100).optional(),
+        country: z.string().length(2).optional(),
+      }).optional(),
+      bias: geoBias,
+      country: z.string().length(2).optional(),
+      language: z.string().min(2).max(5).optional(),
+      limit: z.number().int().min(1).max(10).optional(),
+    })).min(1).max(50),
+    persist: z.boolean().optional(), // default true: o caso de uso é backfill
+    provider: geoProvider,
+  }),
+  z.object({
     action: z.literal("reverse"),
     lat: z.number().min(-90).max(90),
     lng: z.number().min(-180).max(180),

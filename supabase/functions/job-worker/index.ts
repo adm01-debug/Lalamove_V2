@@ -255,6 +255,8 @@ async function processPodFetch(supabase: any, payload: any): Promise<any> {
  * payload.addresses: [{ address } | { structured, ... }] ou strings;
  * payload.persist (default true) usa o SKU permanente (permite guardar coordenada).
  * Provedor desligado/não configurado NÃO falha o job: devolve `skipped`.
+ * Etapa 25: usa `geocode-batch` do geo-gateway (até 50 por chamada) quando o provedor
+ * suporta; se o gateway devolver 501 (provedor sem lote), cai no laço unitário.
  */
 async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
   internalLogger('info', 'Processing geo_backfill job', { payload });
@@ -268,10 +270,63 @@ async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
   }
 
   const persist = payload.persist !== false;
+  const limited = raw.slice(0, 100);
+
+  // ── caminho em lote (etapa 25) ─────────────────────────────────────────────
+  // Só vale a pena quando há mais de um endereço; um item só é mais barato no unitário.
+  if (limited.length > 1) {
+    const batches: any[][] = [];
+    for (let i = 0; i < limited.length; i += 50) batches.push(limited.slice(i, i + 50));
+
+    const results: Array<Record<string, unknown>> = [];
+    let batchOk = true;
+    try {
+      for (const chunk of batches) {
+        const queries = chunk.map((item) => {
+          if (typeof item === 'string') return { address: item };
+          if (item?.structured) return { structured: item.structured };
+          if (item?.address) return { address: item.address };
+          return { address: '' }; // validado depois: o schema recusa item sem endereço
+        });
+        const body: Record<string, unknown> = { action: 'geocode-batch', queries, persist };
+        if (payload.country) body.country = payload.country;
+        if (payload.language) body.language = payload.language;
+        const data = await invokeEdge(supabase, 'geo-gateway', body);
+        const items: any[] = Array.isArray(data) ? data : (data?.items ?? []);
+        items.forEach((it, idx) => {
+          const best = it?.addresses?.[0];
+          results.push({
+            input: queries[idx]?.address ?? queries[idx]?.structured ?? null,
+            status: best?.location ? 'geocoded' : 'not_found',
+            formatted: best?.formatted ?? null,
+            location: best?.location ?? null,
+            place_id: best?.place_id ?? null,
+            provider: best?.provider ?? null,
+            precision: best?.precision ?? null,
+          });
+        });
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      // 501 = provedor sem lote; qualquer outro erro cai no unitário, que isola a falha.
+      batchOk = false;
+      internalLogger('warn', 'geocode-batch indisponível, usando laço unitário', { error: msg });
+    }
+
+    if (batchOk) {
+      const geocoded = results.filter((r) => r.status === 'geocoded').length;
+      const notFound = results.filter((r) => r.status === 'not_found').length;
+      return {
+        requested: raw.length, geocoded, not_found: notFound, skipped: 0, failed: 0,
+        mode: 'batch', batches: batches.length, results,
+      };
+    }
+  }
+
   const results: Array<Record<string, unknown>> = [];
   let done = 0, skipped = 0, failed = 0;
 
-  for (const item of raw.slice(0, 100)) {
+  for (const item of limited) {
     const body: Record<string, unknown> = { action: 'geocode', persist };
     if (typeof item === 'string') {
       body.address = item;
@@ -309,7 +364,7 @@ async function processGeoBackfill(supabase: any, payload: any): Promise<any> {
     }
   }
 
-  return { requested: raw.length, geocoded: done, skipped, failed, results };
+  return { requested: raw.length, geocoded: done, skipped, failed, mode: 'single', results };
 }
 
 /** Coordenada da próxima parada: lalamove_stops[index] com fallback nas colunas do pedido. */

@@ -3,7 +3,7 @@
 // Static Images. Token: MAPBOX_SERVER_TOKEN (sk.) com fallback para MAPBOX_ACCESS_TOKEN (pk.).
 import { decodePolyline, encodePolyline, simplify } from "../polyline.ts";
 import type {
-  AutocompleteReq, GeoAddress, GeoAddressComponents, GeoMatrix, GeoPoint, GeoPrecision, GeoProvider,
+  AutocompleteReq, GeoAddress, GeoAddressComponents, GeoBatchItem, GeoBatchQuery, GeoMatrix, GeoPoint, GeoPrecision, GeoProvider,
   GeoRoute, GeoSnapResult, GeoStaticImage, GeoSuggestion, GeocodeReq, MatrixReq, PlaceDetailsReq,
   ProviderResult, ReverseReq, RouteReq, SnapReq, StaticReq,
 } from "./types.ts";
@@ -30,8 +30,8 @@ type Fetch = typeof fetch;
 export interface MapboxOptions {
   token: string;
   fetch?: Fetch;
-  /** devolve false quando o bucket (provider:api) está vazio neste minuto */
-  rateGuard?: (api: string) => boolean;
+  /** devolve false quando o bucket (provider:api) está vazio neste minuto; `consume` = slots consumidos (lotes) */
+  rateGuard?: (api: string, consume?: number) => boolean;
 }
 
 const ROUTE_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
@@ -68,7 +68,7 @@ export class MapboxProvider implements GeoProvider {
 
   private token: string;
   private fetchFn: Fetch;
-  private rateGuard: (api: string) => boolean;
+  private rateGuard: (api: string, consume?: number) => boolean;
 
   constructor(opts: MapboxOptions) {
     this.token = opts.token;
@@ -77,8 +77,12 @@ export class MapboxProvider implements GeoProvider {
   }
 
   // ── HTTP ────────────────────────────────────────────────────────────────
-  private async call<T = Record<string, unknown>>(api: string, url: string, init?: RequestInit): Promise<T> {
-    if (!this.rateGuard(api)) {
+  /**
+   * HTTP com o token do provedor. `consume` diz quantos slots do rate limit esta chamada
+   * gasta — o lote de geocoding consome 1 por consulta, não 1 pela requisição HTTP.
+   */
+  private async call<T = Record<string, unknown>>(api: string, url: string, init?: RequestInit, consume = 1): Promise<T> {
+    if (!this.rateGuard(api, consume)) {
       throw new GeoProviderError("GEO_RATE_LIMITED", `Limite local da API Mapbox ${api} atingido neste minuto`, 429, 60_000);
     }
     const sep = url.includes("?") ? "&" : "?";
@@ -140,6 +144,55 @@ export class MapboxProvider implements GeoProvider {
     const f = json.features?.[0];
     if (!f) throw new GeoProviderError("GEO_NOT_FOUND", "Lugar não encontrado", 404);
     return { data: this.featureToAddress(f, false), sku: "searchbox_session", units: 0 };
+  }
+
+  // ── Geocoding v6 batch (etapa 25) ───────────────────────────────────────
+  /**
+   * `POST /search/geocode/v6/batch` — até 50 consultas por chamada com `permanent=true`.
+   * O Mapbox devolve um array `batch[]` na mesma ordem das consultas, então o índice é a
+   * ligação com o pedido original. Item sem resultado sai como `not_found` (não é 404 do
+   * lote inteiro, como no `forward` unitário).
+   */
+  async geocodeBatch(reqs: GeoBatchQuery[], persist: boolean): Promise<ProviderResult<GeoBatchItem[]>> {
+    const queries = reqs.map((r) => {
+      const q: Record<string, unknown> = {
+        language: r.language ?? "pt",
+        country: r.country ?? "br",
+        limit: Math.min(r.limit ?? 5, 10),
+      };
+      if (r.structured) {
+        const s = r.structured;
+        if (s.address_line1) q.address_line1 = s.address_line1;
+        if (s.postal_code) q.postcode = s.postal_code;
+        if (s.city) q.place = s.city;
+        if (s.state) q.region = s.state;
+        q.country = s.country ?? r.country ?? "br";
+      } else if (r.address) {
+        q.address_line1 = r.address;
+      } else {
+        throw new GeoProviderError("GEO_INVALID_INPUT", "cada item do lote precisa de address ou structured", 422);
+      }
+      if (r.bias) q.proximity = [r.bias.lng, r.bias.lat];
+      return q;
+    });
+
+    const json = await this.call<{ batch?: Array<{ features?: Array<Record<string, unknown>> }> }>(
+      "geocoding",
+      `${BASE}/search/geocode/v6/batch?permanent=${persist ? "true" : "false"}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(queries),
+      },
+      queries.length, // 1 slot de rate limit por consulta, não por requisição
+    );
+
+    const data: GeoBatchItem[] = reqs.map((_, i) => {
+      const features = json.batch?.[i]?.features ?? [];
+      if (features.length === 0) return { index: i, addresses: [], not_found: true };
+      return { index: i, addresses: features.map((f) => this.featureToAddress(f, persist)) };
+    });
+    return { data, sku: persist ? "geocoding_permanent" : "geocoding_temporary", units: reqs.length };
   }
 
   private featureToAddress(f: Record<string, unknown>, retainable: boolean): GeoAddress {

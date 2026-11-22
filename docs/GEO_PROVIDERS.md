@@ -12,6 +12,7 @@ Todo provedor implementa `GeoProvider` (`providers/types.ts`):
 |---|---|
 | `name` | `'mapbox' \| 'google' \| …` — vai no header `X-Geo-Provider` e em `geo_usage.provider` |
 | `geocode / reverse` | `GeocodeReq → GeoAddress[]`; sem resultado deve lançar `GEO_NOT_FOUND` (404) |
+| `geocodeBatch` | opcional — `GeoBatchQuery[] → GeoBatchItem[]` (etapa 25). Cada item devolve `addresses` (vazio + `not_found: true` quando não achou) e **falha sozinho**: um endereço ruim não derruba o lote. Ausente = o gateway responde 501 e o `geo_backfill` cai no laço unitário |
 | `route` | `RouteReq → GeoRoute` (`polyline: GeoPoint[]`, `distance_m`, `duration_s`, `legs`) |
 | `matrix` | `MatrixReq → GeoMatrix` (`durations_s`, `distances_m` NxN) |
 | `static` | `StaticReq → GeoStaticImage` (`image`: URL ou data URL) |
@@ -26,6 +27,8 @@ Regras válidas para qualquer provedor:
 3. `confidence`/campos numéricos devem ser sempre numéricos (`?? 0`) — a UI faz `* 100` e
    um `null` vira `NaN%`.
 4. O provedor **não** decide preço nem cota: isso é `geo_price_list`/`geo_usage_month`.
+5. Chamadas que agrupam N consultas (como o `geocodeBatch`) passam `consume = N` ao
+   `rateGuard`: o rate limit local conta consultas, não requisições HTTP.
 
 ## Passo a passo
 

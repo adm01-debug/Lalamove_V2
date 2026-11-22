@@ -155,13 +155,18 @@ export class ProviderResolver {
    * Token bucket por minuto: true = pode chamar. A janela é alinhada ao minuto cheio e
    * reinicia sozinha, então uma rajada no fim do minuto não afeta o próximo.
    */
-  rateGuard(provider: ProviderName, api: string, limitPerMin: number): boolean {
+  /** `consume` > 1 para lotes: um lote de 50 consultas gasta 50 slots, não 1. */
+  rateGuard(provider: ProviderName, api: string, limitPerMin: number, consume = 1): boolean {
     const key = `${provider}:${api}`;
     const minute = Math.floor(this.now() / 60_000);
     const b = this.buckets.get(key);
-    if (!b || b.minute !== minute) { this.buckets.set(key, { minute, count: 1 }); return true; }
-    if (b.count >= limitPerMin) return false;
-    b.count++;
+    if (!b || b.minute !== minute) {
+      // Um lote maior que o limite do minuto nunca cabe: recusa sem gravar o bucket.
+      if (consume > limitPerMin) return false;
+      this.buckets.set(key, { minute, count: consume }); return true;
+    }
+    if (b.count + consume > limitPerMin) return false;
+    b.count += consume;
     return true;
   }
 
