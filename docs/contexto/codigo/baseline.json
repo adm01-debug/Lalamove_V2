@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "6c065b33db34427b5520622288b29b5fec3f21e4",
+  "commit": "961964c45aa53d09e5df397345ccab0ff55055d7",
   "branch": "main",
-  "data_commit": "2026-11-22T07:44:24-03:00",
+  "data_commit": "2026-11-22T07:50:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "961964c",
+    "data": "2026-11-22",
+    "assunto": "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)"
+   },
    {
     "sha": "6c065b3",
     "data": "2026-11-22",
@@ -126,18 +131,13 @@
     "sha": "32c1842",
     "data": "2026-11-22",
     "assunto": "feat: canal Zapp no send-notification (etapa 69) (#232)"
-   },
-   {
-    "sha": "ed72e8d",
-    "data": "2026-11-22",
-    "assunto": "feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)"
    }
   ],
   "arquivos_mudados_7d": 285,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 59
+    "mudancas": 60
    },
    {
     "pasta": "src/components/map",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 155
+    "commits": 156
    },
    {
     "autor": "dependabot[bot]",

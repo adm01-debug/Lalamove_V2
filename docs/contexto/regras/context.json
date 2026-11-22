@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "6c065b33db34427b5520622288b29b5fec3f21e4",
+  "sha": "961964c45aa53d09e5df397345ccab0ff55055d7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 10:44 UTC",
+  "generated_at": "2026-11-22 10:51 UTC",
   "files_total": 1019,
   "code_files": 843,
   "code_lines": 144839
@@ -71452,10 +71452,19 @@
   }
  },
  "git": {
-  "sha": "6c065b33db34427b5520622288b29b5fec3f21e4",
+  "sha": "961964c45aa53d09e5df397345ccab0ff55055d7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "961964c",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)",
+    "files": [
+     "supabase/functions/geo-gateway/google.test.ts"
+    ]
+   },
    {
     "sha": "6c065b3",
     "date": "2026-11-22",
@@ -71808,24 +71817,12 @@
      "scripts/ci/vercel-env-baseline.json",
      "scripts/ci/vercel-env-baseline.unit.mjs"
     ]
-   },
-   {
-    "sha": "d1b6ddf",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/geo-gateway/error-monitor.test.ts",
-     "supabase/functions/geo-gateway/error-monitor.ts",
-     "supabase/functions/geo-gateway/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    24
+    23
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -71844,8 +71841,8 @@
     3
    ],
    [
-    "supabase/functions/geo-gateway/index.ts",
-    3
+    "supabase/functions/geo-gateway/google.test.ts",
+    2
    ],
    [
     "supabase/functions/geo-gateway/providers/google.ts",
@@ -71888,8 +71885,8 @@
     2
    ],
    [
-    "supabase/functions/geo-gateway/google.test.ts",
-    1
+    "supabase/functions/geo-gateway/index.ts",
+    2
    ],
    [
     "src/pages/AlertConfigurationsPage.tsx",

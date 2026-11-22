@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)",
    "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)",
    "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)",
    "feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)",
-   "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)",
-   "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)"
+   "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
