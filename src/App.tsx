@@ -14,7 +14,6 @@ import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 import { HintProvider } from "@/components/ui/contextual-hints";
 import { PageLoader } from "@/components/ui/page-loader";
 import { AchievementsProvider } from "@/hooks/useAchievementsSystem";
-import { AnimatePresence } from 'framer-motion';
 
 // Lazy loaded pages - Auth
 const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
@@ -141,8 +140,7 @@ const AppContent = () => {
                 <OfflineIndicator />
                 <InstallPrompt />
                 {!isAuthPage && <KeyboardShortcutsHelp />}
-                <AnimatePresence mode="wait">
-                  <Routes location={location} key={location.pathname}>
+                  <Routes location={location}>
                     {/* Public auth routes */}
                     <Route path="/auth" element={<SuspenseWrapper><AuthPage /></SuspenseWrapper>} />
                     <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
@@ -214,7 +212,6 @@ const AppContent = () => {
                     
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                </AnimatePresence>
               </HintProvider>
             </TooltipProvider>
           </AchievementsProvider>
