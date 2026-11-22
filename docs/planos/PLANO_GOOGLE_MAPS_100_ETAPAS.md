@@ -288,10 +288,12 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - [x] `verdict.addressComplete=false` → `address_complete=false` + `missing_components` no retorno; a UI consome quando ligada
 - **Evidência:** antes era **ação morta** (presente em `GeoFunction` mas ausente de `ACTION_FUNCTION`, `runProvider` e dos providers → 422 "action desconhecida"). Agora `GoogleProvider.validate` existe, tem SKU `address_validation` e rate limit próprio `address_validation` (300/min); 3 testes Deno em `google.test.ts`; suíte do gateway 75/75 verde
 
-### 39 — Backfill de pedidos existentes
-- [ ] Job `geo-backfill` em `job_queue` (tipo novo): para cada `lalamove_orders` com `pickup_latitude IS NULL` e `pickup_address` não vazio → `geocode` (respeita cap 1.000/dia e cache)
-- [ ] Prioridade: pedidos com status ativo primeiro; registrar em `geo_usage`
-- **Evidência:** `SELECT count(*) FROM lalamove_orders WHERE pickup_latitude IS NULL` tende a 0
+### 39 — Backfill de pedidos existentes ✅
+- [x] `geo_backfill` (tipo já existente no CHECK desde `20261122130100`) ganhou `payload.source='orders'` — antes o job só geocodificava os endereços que vinham no payload e **não gravava nada** em `lalamove_orders`: pedido sem coordenada continuava sem coordenada para sempre
+- [x] Varre `pickup_latitude IS NULL OR delivery_latitude IS NULL`, processa **status ativo primeiro**, teto de 500 por execução (default 100), endereço < 5 chars nem gasta chamada
+- [x] Grava `*_latitude/longitude`, `*_place_id` (com prefixo `google:`/`mapbox:` exigido pela constraint), `geocode_provider`, `geocode_precision`; `requires_address_review` quando precisão é `low`/`unknown` ou falta número
+- [x] O cap de 1.000/dia e o cache ficam no `geo-gateway` (orçamento + rate limit) — o job não duplica essa lógica
+- **Evidência:** `job-worker/geo-backfill-orders.test.ts` **9/9 verde** (usou precise `exact`; sem número → revisão; `low` → revisão; lado já com coordenada não é recotado; sem resultado não grava; `GEO_UNAVAILABLE` é `skipped` e não queima tentativa; ativo primeiro; endereço curto não chama provedor; `limit` limitado a 500/100)
 
 ### 40 — Importação Bitrix24 / Zapp
 - [ ] `bitrix24-sync` e `bitrix24-process-queue`: ao criar pedido a partir do SPA 1690, popular endereço e disparar geocode (etapa 37)
