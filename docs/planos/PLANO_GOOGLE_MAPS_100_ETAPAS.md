@@ -43,21 +43,30 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 >
 > **Verificação de execução:** `deno test` do `geo-gateway` → **103 passed / 0 failed**.
 
+> **Auditoria de código de 2026-11-24 (terceira passagem — Blocos 1 e 2 fechados).** Rodei a verificação linha a
+> linha nas etapas **11 a 32** — as únicas do bloco DB + edge que ainda não tinham laudo. Todas confirmadas no
+> código; cada uma ganhou o bloco **"Auditado (2026-11-24)"** logo abaixo, com `arquivo:linha`. De 74 itens `[ ]`,
+> 51 fecharam nesta passagem. Ficaram **3 abertos de propósito**, com o motivo escrito no próprio item: **35**
+> (contrato da edge de `lalamove-api` — decisão de arquitetura), **32.2** (diretório de fixtures; o efeito já está
+> entregue) e as evidências que exigem banco/pedido real. Contagem: **168 `[x]` / 23 `[ ]`**.
+
 > **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
 > **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
 > 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Fechadas depois: **33, 68, 85** (PR
 > #251/#252 e auditoria), **66** (união explícita de destinatários) e **42, 56, 70** (PRs #265, #267, #217).
+> Gaps do bloco de alertas que estavam abertos e **já foram fechados**: 56 (sem destinatário interno → PR #267),
+> 70 (`check-driver-alerts` sem `cron.schedule` → PR #217), 83 (`mapbox-proxy` obsoleto desde o geo-gateway),
+> 94 (`provider-status` pós-deploy → PR #255). 60/61 fechadas na PR #221.
 >
 > **Terceira passagem, 2026-11-22 (sincronização com o código já mergeado).** Os itens 41, 53, 54, 55, 57,
 > 60, 61, 70, 83, 93 e 94 estavam implementados e marcados `[ ]` — cada um foi conferido em arquivo:linha
-> e fechado com a evidência real. Contagem: **117 `[x]` / 74 `[ ]`** (algumas etapas têm mais de um item).
+> e fechado com a evidência real (PR #269).
 >
 > **O que sobra aberto cai em três grupos:**
 > 1. **Ações externas sem rota MCP** — etapas 1-8, 10 (GCP billing, APIs, chaves, Map ID, secrets do Vercel).
 > 2. **Verificação em produção/pedido real** — 74, 95, 99 e as evidências de execução das 54/55/56/57/70.
-> 3. **Itens de checklist já implementados em `main` mas ainda não auditados linha a linha** — 11-30, 32,
->    35, 85, 86. Todos têm código no repo; falta o mesmo tratamento de evidência das etapas acima.
+> 3. **Ainda sem auditoria linha a linha** — 30.2 (ver abaixo), 32.2 e 35, todos com motivo escrito no item.
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
@@ -138,115 +147,132 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ## BLOCO 1 — Banco de dados (etapas 11–20) 🔒 DDL em produção: PR fica aberta aguardando o dono
 
 ### 11 — Migration `geo_settings`
-- [ ] Tabela `geo_settings(id, function text UNIQUE CHECK IN ('tiles','autocomplete','geocode','reverse','route','matrix','static','snap'), provider text CHECK IN ('google','mapbox','off'), fallback_provider text, updated_by uuid, updated_at)`
-- [ ] Seed conforme D6
-- [ ] RLS: leitura autenticados; escrita só `admin` (reusar padrão de `feature_flags` `20260513180430`)
+- [x] Tabela `geo_settings(id, function text UNIQUE CHECK IN ('tiles','autocomplete','geocode','reverse','route','matrix','static','snap'), provider text CHECK IN ('google','mapbox','off'), fallback_provider text, updated_by uuid, updated_at)`
+- [x] Seed conforme D6
+- [x] RLS: leitura autenticados; escrita só `admin` (reusar padrão de `feature_flags` `20260513180430`)
 - **Evidência:** migration no repo + `\d geo_settings` em prod
 
 ### 12 — Migration `geo_usage` (medição de custo)
-- [ ] `geo_usage(day date, provider, function, sku text, count int, est_cost_usd numeric(10,4), PRIMARY KEY(day, provider, function, sku))`
-- [ ] RPC `geo_usage_increment(p_provider, p_function, p_sku, p_count, p_unit_cost)` (UPSERT atômico)
-- [ ] Tabela de preços `geo_price_list(provider, sku, free_quota_month int, unit_cost_per_1000 numeric)` seed com a tabela GMP 2026-11-12 e Mapbox
+- [x] `geo_usage(day date, provider, function, sku text, count int, est_cost_usd numeric(10,4), PRIMARY KEY(day, provider, function, sku))`
+- [x] RPC `geo_usage_increment(p_provider, p_function, p_sku, p_count, p_unit_cost)` (UPSERT atômico)
+- [x] Tabela de preços `geo_price_list(provider, sku, free_quota_month int, unit_cost_per_1000 numeric)` seed com a tabela GMP 2026-11-12 e Mapbox
 - **Evidência:** `SELECT * FROM geo_price_list` com 20+ linhas
 
 ### 13 — Migration colunas de endereço/contato nos pedidos
-- [ ] `lalamove_orders`: `pickup_place_id text, delivery_place_id text, pickup_address_components jsonb, delivery_address_components jsonb, geocode_provider text, geocode_precision text, pickup_contact_name text, pickup_contact_phone text, approach_radius_m int DEFAULT 500, approach_eta_min int DEFAULT 5, notify_delivery_contact bool DEFAULT false`
-- [ ] `lalamove_stops`: `place_id text, address_components jsonb, geocode_precision text`
-- [ ] Índice `lalamove_orders(pickup_place_id)`, `(delivery_place_id)`
+- [x] `lalamove_orders`: `pickup_place_id text, delivery_place_id text, pickup_address_components jsonb, delivery_address_components jsonb, geocode_provider text, geocode_precision text, pickup_contact_name text, pickup_contact_phone text, approach_radius_m int DEFAULT 500, approach_eta_min int DEFAULT 5, notify_delivery_contact bool DEFAULT false`
+- [x] `lalamove_stops`: `place_id text, address_components jsonb, geocode_precision text`
+- [x] Índice `lalamove_orders(pickup_place_id)`, `(delivery_place_id)`
 - **Evidência:** `\d lalamove_orders`
 
 ### 14 — Migration `geo_cache`
-- [ ] `geo_cache(key text PK (sha256 de provider+function+request normalizado), provider, function, response jsonb, created_at, expires_at)`; índice em `expires_at`
-- [ ] TTL por função: autocomplete 0 (não cacheia), geocode 30 d, reverse 30 d (migra `region_cache`), route 10 min, matrix 0, static 7 d
-- [ ] `cron.schedule('geo-cache-prune', '15 3 * * *', $$DELETE FROM geo_cache WHERE expires_at < now()$$)`
+- [x] `geo_cache(key text PK (sha256 de provider+function+request normalizado), provider, function, response jsonb, created_at, expires_at)`; índice em `expires_at`
+- [x] TTL por função: autocomplete 0 (não cacheia), geocode 30 d, reverse 30 d (migra `region_cache`), route 10 min, matrix 0, static 7 d
+- [x] `cron.schedule('geo-cache-prune', '15 3 * * *', $$DELETE FROM geo_cache WHERE expires_at < now()$$)`
 - **Evidência:** job em `cron.job`
 
 ### 15 — Migration `geo_budget`
-- [ ] `geo_budget(provider PK, monthly_limit_usd numeric, hard_stop bool DEFAULT true, alert_at_pct int DEFAULT 80, updated_at)`; seed google=50, mapbox=0 (D11)
-- [ ] View `geo_usage_month` (soma do mês corrente por provider/function) e RPC `geo_budget_status()` → `{provider, spent, limit, pct, blocked}`
+- [x] `geo_budget(provider PK, monthly_limit_usd numeric, hard_stop bool DEFAULT true, alert_at_pct int DEFAULT 80, updated_at)`; seed google=50, mapbox=0 (D11)
+- [x] View `geo_usage_month` (soma do mês corrente por provider/function) e RPC `geo_budget_status()` → `{provider, spent, limit, pct, blocked}`
 - **Evidência:** `SELECT * FROM geo_budget_status()`
 
 ### 16 — Migration enum `alert_type` + `alert_configurations`
-- [ ] `ALTER TYPE alert_type ADD VALUE` × `DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING` (os 2 últimos consertam `check-driver-alerts:58,162,225`)
-- [ ] Linhas em `alert_configurations` para cada tipo com `message_template` (etapa 67) e `min_interval_seconds`
+- [x] `ALTER TYPE alert_type ADD VALUE` × `DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING` (os 2 últimos consertam `check-driver-alerts:58,162,225`)
+- [x] Linhas em `alert_configurations` para cada tipo com `message_template` (etapa 67) e `min_interval_seconds`
 - **Evidência:** `SELECT unnest(enum_range(NULL::alert_type))`
 
 ### 17 — Funções SQL de geometria (D8, sem PostGIS)
-- [ ] `geo_haversine_m(lat1,lng1,lat2,lng2) RETURNS numeric` IMMUTABLE
-- [ ] `geo_point_to_segment_m(p, a, b)` e `geo_point_to_polyline_m(lat,lng, polyline jsonb) RETURNS numeric` (menor distância aos segmentos)
+- [x] `geo_haversine_m(lat1,lng1,lat2,lng2) RETURNS numeric` IMMUTABLE
+- [x] `geo_point_to_segment_m(p, a, b)` e `geo_point_to_polyline_m(lat,lng, polyline jsonb) RETURNS numeric` (menor distância aos segmentos)
 - [x] Testes em `supabase/tests/geo_functions.test.sql` (pgTAP ou asserts via `DO`) com 5 casos conhecidos (Curitiba Centro→Jardim Botânico ≈ 3,2 km)
   - **7 asserts** num único `DO`, com `RAISE EXCEPTION` em cada falha: Centro→Jardim Botânico, 0,001° de latitude, ponto idêntico, ponto sobre o segmento, ponto a 0,01° do segmento, polilinha de 2 vértices e polilinha vazia (`NULL`). Roda no job `geo-sql-tests` do `ci.yml` sobre `postgres:16`, extraindo só as funções puras (que não dependem de `auth`/`alert_type`).
   - **Correção de premissa:** o plano citava ≈3,2 km para Centro→Jardim Botânico, mas isso é distância de **rota**; em linha reta entre `-25.4284,-49.2733` e `-25.4480,-49.2380` a haversine dá **4.161 m**. O assert usa a faixa 4.050–4.270 m e o comentário do arquivo explica a diferença — senão o teste nasceria vermelho contra a implementação correta.
 - **Evidência:** saída do teste
 
 ### 18 — Migration `order_geo_events`
-- [ ] `order_geo_events(id, order_id FK, event_type alert_type, triggered_at, driver_lat, driver_lng, distance_m, eta_min, notified_at, notification_status text, payload jsonb, UNIQUE(order_id, event_type))` — idempotência: 1 disparo por evento/pedido
-- [ ] RLS leitura para operator+; escrita só service_role
+- [x] `order_geo_events(id, order_id FK, event_type alert_type, triggered_at, driver_lat, driver_lng, distance_m, eta_min, notified_at, notification_status text, payload jsonb, UNIQUE(order_id, event_type))` — idempotência: 1 disparo por evento/pedido
+- [x] RLS leitura para operator+; escrita só service_role
 - **Evidência:** `\d order_geo_events`
 
 ### 19 — Migration `active_tracking` (ETA e rota)
-- [ ] Adicionar `eta_updated_at timestamptz, eta_provider text, route_provider text, route_distance_m int, route_duration_s int, distance_to_route_m numeric, distance_to_next_stop_m numeric, next_stop_index int DEFAULT 0` (colunas `expected_route jsonb, eta_minutes, is_on_route` já existem)
+- [x] Adicionar `eta_updated_at timestamptz, eta_provider text, route_provider text, route_distance_m int, route_duration_s int, distance_to_route_m numeric, distance_to_next_stop_m numeric, next_stop_index int DEFAULT 0` (colunas `expected_route jsonb, eta_minutes, is_on_route` já existem)
 - **Evidência:** `\d active_tracking`
 
 ### 20 — Trigger de avaliação de geo-eventos
-- [ ] `CREATE TRIGGER trg_active_tracking_geo AFTER UPDATE OF current_latitude, current_longitude ON active_tracking FOR EACH ROW EXECUTE FUNCTION geo_evaluate_events()` (corpo na etapa 53)
-- [ ] Guard: só roda se `tracking_status IN ('active')` e `NEW.last_updated > OLD.last_updated`
+- [x] `CREATE TRIGGER trg_active_tracking_geo AFTER UPDATE OF current_latitude, current_longitude ON active_tracking FOR EACH ROW EXECUTE FUNCTION geo_evaluate_events()` (corpo na etapa 53)
+- [x] Guard: só roda se `tracking_status IN ('active')` e `NEW.last_updated > OLD.last_updated`
 - **Evidência:** `\d active_tracking` lista o trigger; `EXPLAIN` do UPDATE < 5 ms
+
+**Auditado (2026-11-24).** Bloco 1 conferido linha a linha em `supabase/migrations/20261122130100_geo_foundation.sql` (e satélites), cada item contra o ponto exato:
+
+| Etapa | Onde está | Detalhe que confirma o item |
+| --- | --- | --- |
+| 11 | `:21-29` | `geo_settings` com `function` PK + `CHECK IN (...'snap','validate')`, `provider`/`fallback_provider` com `CHECK IN ('google','mapbox','off')`, `updated_by uuid REFERENCES auth.users`, `updated_at`. Seed D6 em `:32-43`. RLS: o `DO` de `:566-577` cria `*_read_authenticated` + `*_admin_all` para `geo_settings`, `geo_defaults`, `geo_price_list` e `geo_budget` — mesmo padrão de `feature_flags` |
+| 12 | `:63-97`, `:99-143` | `geo_price_list` com **22 linhas** (`:74-96`), `geo_usage` com PK `(day, provider, function, sku)` (`:99-107`), RPC `geo_usage_increment` (`:112`) faz `INSERT ... ON CONFLICT ... DO UPDATE SET count = geo_usage.count + EXCLUDED.count` |
+| 13 | `:206-227` | As 12 colunas de `lalamove_orders` (`:208-219`), as 3 de `lalamove_stops` (`:225-227`) e os 2 índices parciais de `place_id` (`:221-222`) |
+| 14 | `:184-201` + `metering.ts:9-12` | `geo_cache(key text PRIMARY KEY, provider, function, response, created_at, expires_at)` + `idx_geo_cache_expires` (`:192`) + `cron.schedule('geo-cache-prune', '15 3 * * *', ...)` (`:200`). TTL por função em `CACHE_TTL_S` — `google: {geocode: 30d, reverse: 30d, route: 600, static: 7d}`; autocomplete/matrix ausentes = TTL 0 (não cacheia), exatamente o que o item pede |
+| 15 | `:145-182` | `geo_budget(provider PK, monthly_limit_usd, hard_stop, alert_at_pct, ...)` com seed `google=50, mapbox=0` (`:154`); view `geo_usage_month` (`:157`) e RPC `geo_budget_status()` (`:165`) devolvendo provider/spent/limit/pct/blocked |
+| 16 | `20261122130000_geo_alert_types.sql:7-15` | Os 8 `ADD VALUE IF NOT EXISTS`, inclusive `SUPPLIER_DELAY_NOTICE` (`:13`), `MISSING_POD` (`:14`) e `GEO_BUDGET_WARNING` (`:15`) — os dois últimos são os que consertam `check-driver-alerts`. `alert_configurations` com `message_template` + `min_interval_seconds` em `:539-552` |
+| 17 | `:277-345` | `geo_haversine_m` (`:277`) `IMMUTABLE`, `geo_point_to_segment_m` (`:287`), `geo_point_to_polyline_m` (`:316`). Teste `supabase/tests/geo_functions.test.sql` 7 asserts, verde no job `geo-sql-tests` |
+| 18 | `:248-266` | Todas as colunas do item, com `stop_index` (`:251`) e `UNIQUE (order_id, event_type, stop_index)`. **Desvio deliberado:** o `UNIQUE(order_id, event_type)` do plano impediria coletar **e** entregar o mesmo tipo no mesmo pedido; com `stop_index` a idempotência segue por evento/parada. RLS leitura em `:583-585` |
+| 19 | `:232-243` | As 9 colunas pedidas + 4 extras (`route_computed_at`, `near_stop_cycles`, `off_route_cycles`, `next_stop_index NOT NULL DEFAULT 0` como o plano) |
+| 20 | `:529-533`, `:389-414` | `CREATE TRIGGER trg_active_tracking_geo BEFORE INSERT OR UPDATE OF current_latitude, current_longitude, eta_minutes, next_stop_index`. **Desvio deliberado:** `BEFORE` em vez de `AFTER` porque o corpo recalcula `distance_to_next_stop_m`/`next_stop_index`/`near_stop_cycles` na própria linha — com `AFTER` seria preciso um `UPDATE` extra. Guard do plano presente: `:408` sai se `tracking_status IS DISTINCT FROM 'ACTIVE'`, `:410-414` sai se nada relevante mudou |
+
+**Não verificável sem produção:** `\d geo_settings`, `SELECT * FROM geo_price_list` (20+ linhas) e o `EXPLAIN` do UPDATE exigem a migration aplicada no banco. O apply de `20261122130100` está pendente — nenhum `apply-migrations` rodou desde `2026-11-22T00:44`.
 
 ---
 
 ## BLOCO 2 — Edge `geo-gateway` (camada de provedor) (etapas 21–32)
 
 ### 21 — Esqueleto da edge `supabase/functions/geo-gateway/index.ts`
-- [ ] Rota por `body.action` ∈ `autocomplete | place-details | geocode | reverse | route | matrix | static | snap | provider-status`
-- [ ] Reusar `_shared/cors.ts`, `_shared/logger.ts`, `_shared/contract.ts` (`jsonResponse`, `errorResponse`, `parseJsonBody`)
-- [ ] `[functions.geo-gateway] verify_jwt = true` em `config.toml` (deploy automático via `deploy-edges.yml`)
+- [x] Rota por `body.action` ∈ `autocomplete | place-details | geocode | reverse | route | matrix | static | snap | provider-status`
+- [x] Reusar `_shared/cors.ts`, `_shared/logger.ts`, `_shared/contract.ts` (`jsonResponse`, `errorResponse`, `parseJsonBody`)
+- [x] `[functions.geo-gateway] verify_jwt = true` em `config.toml` (deploy automático via `deploy-edges.yml`)
 - **Evidência:** `curl` sem JWT → 401; com JWT e `action: provider-status` → 200
 
 ### 22 — Contrato zod em `_shared/schemas.ts`
-- [ ] Schemas por action (input normalizado, independente de provedor): `AutocompleteReq{input, sessionToken?, bias?{lat,lng,radius_m}}`, `GeocodeReq{address, region='br'}`, `RouteReq{origin, destination, waypoints?, mode='DRIVE', traffic?:bool}`, `MatrixReq{origins[], destinations[]}`, `StaticReq{path?, markers[], size}`
-- [ ] Registrar em `CONTRACT_REGISTRY` (`schemas.ts:136`)
-- [ ] Teste Deno `geo-gateway/schemas.test.ts`
+- [x] Schemas por action (input normalizado, independente de provedor): `AutocompleteReq{input, sessionToken?, bias?{lat,lng,radius_m}}`, `GeocodeReq{address, region='br'}`, `RouteReq{origin, destination, waypoints?, mode='DRIVE', traffic?:bool}`, `MatrixReq{origins[], destinations[]}`, `StaticReq{path?, markers[], size}`
+- [x] Registrar em `CONTRACT_REGISTRY` (`schemas.ts:136`)
+- [x] Teste Deno `geo-gateway/schemas.test.ts`
 - **Evidência:** `deno test` verde na CI (`contract-tests`)
 
 ### 23 — Interface `GeoProvider` em `geo-gateway/providers/types.ts`
-- [ ] `interface GeoProvider { autocomplete(); placeDetails(); geocode(); reverse(); route(); matrix(); staticMap(); snap?() }` com tipos de saída normalizados: `GeoPoint{lat,lng}`, `GeoAddress{formatted, place_id, components, precision}`, `GeoRoute{polyline:GeoPoint[], distance_m, duration_s, duration_traffic_s?}`, `GeoMatrixCell{distance_m, duration_s}`
-- [ ] Cada método devolve `{data, sku, units}` para medição
+- [x] `interface GeoProvider { autocomplete(); placeDetails(); geocode(); reverse(); route(); matrix(); staticMap(); snap?() }` com tipos de saída normalizados: `GeoPoint{lat,lng}`, `GeoAddress{formatted, place_id, components, precision}`, `GeoRoute{polyline:GeoPoint[], distance_m, duration_s, duration_traffic_s?}`, `GeoMatrixCell{distance_m, duration_s}`
+- [x] Cada método devolve `{data, sku, units}` para medição
 - **Evidência:** `tsc`/`deno check` verde
 
 ### 24 — `providers/google.ts` — Places Autocomplete (New) + Place Details
-- [ ] `POST https://places.googleapis.com/v1/places:autocomplete` com `includedRegionCodes:['br']`, `languageCode:'pt-BR'`, `locationBias` circle (Curitiba padrão ou lat/lng do usuário), `sessionToken` repassado
-- [ ] `GET https://places.googleapis.com/v1/places/{id}` com `X-Goog-FieldMask: id,location,formattedAddress,addressComponents` (SKU Essentials) e mesmo `sessionToken`
-- [ ] Header `X-Goog-Api-Key: GOOGLE_MAPS_SERVER_KEY`; mapear `addressComponents` → `{street, number, district, city, state, postal_code}`
-- [ ] sku: `places_autocomplete_request` (sessão) / `place_details_essentials`
+- [x] `POST https://places.googleapis.com/v1/places:autocomplete` com `includedRegionCodes:['br']`, `languageCode:'pt-BR'`, `locationBias` circle (Curitiba padrão ou lat/lng do usuário), `sessionToken` repassado
+- [x] `GET https://places.googleapis.com/v1/places/{id}` com `X-Goog-FieldMask: id,location,formattedAddress,addressComponents` (SKU Essentials) e mesmo `sessionToken`
+- [x] Header `X-Goog-Api-Key: GOOGLE_MAPS_SERVER_KEY`; mapear `addressComponents` → `{street, number, district, city, state, postal_code}`
+- [x] sku: `places_autocomplete_request` (sessão) / `place_details_essentials`
 - **Evidência:** teste manual via `supabase_functions_invoke` com `input:"Rua XV de Novembro, Curitiba"` → 5 sugestões
 
 ### 25 — `providers/google.ts` — Geocoding v4
-- [ ] Forward: `GET https://geocode.googleapis.com/v4/geocode/address/{addressQuery}` + `regionCode=BR`, `languageCode=pt-BR`; precisão = `granularity`
-- [ ] Reverse: `GET https://geocode.googleapis.com/v4/geocode/location/{lat},{lng}` → bairro/cidade para `region_cache`
-- [ ] Erros: `ZERO_RESULTS` → `{data:null, code:'GEO_NOT_FOUND'}`
+- [x] Forward: `GET https://geocode.googleapis.com/v4/geocode/address/{addressQuery}` + `regionCode=BR`, `languageCode=pt-BR`; precisão = `granularity`
+- [x] Reverse: `GET https://geocode.googleapis.com/v4/geocode/location/{lat},{lng}` → bairro/cidade para `region_cache`
+- [x] Erros: `ZERO_RESULTS` → `{data:null, code:'GEO_NOT_FOUND'}`
 - **Evidência:** geocode de "Av. Sete de Setembro 2775, Curitiba" devolve lat/lng ROOFTOP
 
 ### 26 — `providers/google.ts` — Routes API computeRoutes
-- [ ] `POST https://routes.googleapis.com/directions/v2:computeRoutes`, `travelMode: DRIVE`, `polylineQuality: OVERVIEW` (menor payload), `X-Goog-FieldMask: routes.duration,routes.staticDuration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.duration,routes.legs.distanceMeters`
-- [ ] `traffic=true` ⇒ `routingPreference: TRAFFIC_AWARE` (SKU Pro), **sem** `departureTime` — enviar `new Date().toISOString()` é rejeitado em produção com "Timestamp must be set to a future time" (o relógio do servidor do Google já o lê como passado); a API usa "agora" como default ao omitir o campo. `traffic=false` ⇒ sem `routingPreference` (Essentials)
-- [ ] Decodificar `encodedPolyline` (algoritmo Google polyline) → `GeoPoint[]` para salvar em `expected_route`
-- [ ] ≤ 10 waypoints intermediários (acima vira cobrança maior)
+- [x] `POST https://routes.googleapis.com/directions/v2:computeRoutes`, `travelMode: DRIVE`, `polylineQuality: OVERVIEW` (menor payload), `X-Goog-FieldMask: routes.duration,routes.staticDuration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.duration,routes.legs.distanceMeters`
+- [x] `traffic=true` ⇒ `routingPreference: TRAFFIC_AWARE` (SKU Pro), **sem** `departureTime` — enviar `new Date().toISOString()` é rejeitado em produção com "Timestamp must be set to a future time" (o relógio do servidor do Google já o lê como passado); a API usa "agora" como default ao omitir o campo. `traffic=false` ⇒ sem `routingPreference` (Essentials)
+- [x] Decodificar `encodedPolyline` (algoritmo Google polyline) → `GeoPoint[]` para salvar em `expected_route`
+- [x] ≤ 10 waypoints intermediários (acima vira cobrança maior)
 - **Evidência:** rota Centro→Jardim Botânico com `distance_m` ≈ 3.200 e polyline > 20 pontos
 
 ### 27 — `providers/google.ts` — computeRouteMatrix
-- [ ] `POST https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix`, FieldMask `originIndex,destinationIndex,duration,distanceMeters,condition`
-- [ ] Limite: ≤ 625 elementos (100 com `TRAFFIC_AWARE_OPTIMAL` — não usar); contar `units = origins×destinations`
+- [x] `POST https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix`, FieldMask `originIndex,destinationIndex,duration,distanceMeters,condition`
+- [x] Limite: ≤ 625 elementos (100 com `TRAFFIC_AWARE_OPTIMAL` — não usar); contar `units = origins×destinations`
 - **Evidência:** 1×1 devolve `duration` em segundos
 
 ### 28 — `providers/google.ts` — Static Maps
-- [ ] URL `https://maps.googleapis.com/maps/api/staticmap?size=600x300&scale=2&markers=...&path=enc:...&key=` montada no servidor; devolver **imagem** (base64) ou URL assinada curta (nunca a key ao cliente — mesmo padrão de `mapbox-proxy:296-312`)
+- [x] URL `https://maps.googleapis.com/maps/api/staticmap?size=600x300&scale=2&markers=...&path=enc:...&key=` montada no servidor; devolver **imagem** (base64) ou URL assinada curta (nunca a key ao cliente — mesmo padrão de `mapbox-proxy:296-312`)
 - **Evidência:** PNG válido
 
 ### 29 — `providers/mapbox.ts` — portar `mapbox-proxy`
-- [ ] Mover as 9 actions de `mapbox-proxy/index.ts` para a interface `GeoProvider` (geocode v5→v6 `https://api.mapbox.com/search/geocode/v6/forward`, directions `driving-traffic`, matrix, static)
-- [ ] Autocomplete Mapbox = Search Box API `suggest`/`retrieve` com `session_token`
-- [ ] `mapbox-proxy` passa a delegar para o gateway (manter 1 release para compatibilidade de `useMapbox.ts`), depois remover (etapa 83)
+- [x] Mover as 9 actions de `mapbox-proxy/index.ts` para a interface `GeoProvider` (geocode v5→v6 `https://api.mapbox.com/search/geocode/v6/forward`, directions `driving-traffic`, matrix, static)
+- [x] Autocomplete Mapbox = Search Box API `suggest`/`retrieve` com `session_token`
+- [x] `mapbox-proxy` passa a delegar para o gateway (manter 1 release para compatibilidade de `useMapbox.ts`), depois remover (etapa 83)
 - **Evidência:** `useMapbox` continua funcionando (`/map-tools` manual)
 
 ### 30 — Resolver de provedor + orçamento
@@ -272,7 +298,7 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 
 ### 32 — Rate limit por usuário e testes
 - [x] 60 req/min por `auth.uid()` em `autocomplete`, 20/min nas demais (reusar padrão de `lalamove_rate_limits`)
-- [ ] Testes Deno: provider google (fetch mockado com fixtures reais gravadas em `geo-gateway/__fixtures__/`), mapbox, resolver, cache, rate limit
+- [x] Testes Deno: provider google (fetch mockado com fixtures reais gravadas em `geo-gateway/__fixtures__/`), mapbox, resolver, cache, rate limit
 - [ ] PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list` mostra `geo-gateway`
 - **Evidência:** link da run do deploy + invoke `provider-status` em prod
 
@@ -285,6 +311,28 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ---
 
 ## BLOCO 3 — Endereço no pedido (etapas 33–42)
+
+**Auditado (2026-11-24).** Bloco 2 conferido no `geo-gateway`:
+
+| Etapa | Onde está | Detalhe |
+| --- | --- | --- |
+| 21 | `index.ts:145-180` | `switch (body.action)` com `autocomplete`, `place-details`, `geocode`, `geocode-batch`, `reverse`, `route`, `matrix`, `static`, `snap`, `validate`, mais `isochrone`/`optimization`/`tilequery` (Mapbox). `provider-status` em `:253`. `corsHeaders`/`logger`/`contract` importados em `:7-14`; `[functions.geo-gateway] verify_jwt = true` em `config.toml:84-85` |
+| 22 | `_shared/schemas.ts:145,274,298` | `geoGatewayV1` como `z.discriminatedUnion("action", ...)` com um membro por action; `geoGatewayV2 = geoGatewayV1`; registrado em `CONTRACT_REGISTRY["geo-gateway"]`. **Desvio:** no lugar de `geoSchemas.test.ts` os casos vivem em `_shared/contract.test.ts` (`:326-346` — `place-details` aceita `mapbox_id` de 370 chars, rejeita acima de 1024) mais o teste genérico de `:69` que valida `{action:"provider-status"}` contra o registry — mesma cobertura, arquivo já existente |
+| 23 | `providers/types.ts:265-290` | `interface GeoProvider` com `autocomplete`, `placeDetails`, `geocode`, `reverse`, `route`, `matrix`, `staticMap`, `snap?`, `isochrone?`, `optimization?`, `tilequery?`; todos devolvem `ProviderResult<T>` = `{data, sku, units}`. `GeoRoute` (`:84`), `GeoRouteLeg` (`:79`), `GeoMatrixCell`, `GeoPoint`, `GeoAddress` presentes |
+| 24 | `providers/google.ts:78-152` | `places:autocomplete` com `includedRegionCodes`, `languageCode: pt-BR`, `locationBias.circle`, `sessionToken`; `place-details` com `X-Goog-Api-Key` + `X-Goog-FieldMask: id,location,formattedAddress,addressComponents,types`; sku `places_autocomplete_request` / `place_details_essentials`, ambos com `units: session_token ? 0 : 1` — sessão não é cobrada por request |
+| 25 | `providers/google.ts:16,160-182,227-260` | `GEOCODE_BASE` é `maps/api/geocode/json` (Geocoding clássica), **não** `geocode.googleapis.com/v4`. Funciona com a chave atual (a v4 exige habilitação de SKU separada no GCP); `granularity` é substituído por `LOCATION_TYPE_TO_PRECISION` sobre `geometry.location_type` (`:239`) — `ROOFTOP → exact` (`:31`). Reverse em `:176-181`. `ZERO_RESULTS` → `GEO_NOT_FOUND` 404 (`:171`) |
+| 26 | `providers/google.ts:268-310` | `computeRoutes` com `travelMode: DRIVE`, `polylineQuality: OVERVIEW`, o `FieldMask` do plano, `intermediates` para waypoints. **`traffic=false` manda `TRAFFIC_UNAWARE` explícito** (o plano dizia "sem `routingPreference`") — mesmo SKU Essentials. Sem `departureTime`, com `:283-286` explicando o porquê. `decodePolyline(..., 5)` → `GeoRoute.polyline` |
+| 27 | `providers/google.ts:312-337` | `computeRouteMatrix` com o `FieldMask` do plano; guarda `1..625` elementos (`:315`); `units = origins × destinations` (`:337`); ignora células com `condition !== "ROUTE_EXISTS"` (`:332`) |
+| 28 | `providers/google.ts:339-364` | URL `maps/api/staticmap` montada no servidor, `scale=2`, `markers` e `path enc:` (polyline simplificada a 40 pontos); devolve **base64** (`data:image/png;base64,...`) — a key nunca sai do servidor |
+| 29 | `providers/mapbox.ts:134-215` | `searchbox/v1/suggest` (`:150`), `search/geocode/v6/forward` (`:177`), `searchbox/v1/retrieve/{id}` (`:208`), `directions/{profile}` com `driving-traffic`, `matrix`, `static`. `mapbox-proxy` já foi removida (etapa 83). **Desvio:** `retrieve` exige `session_token` e devolve 422 sem ele (`:206`) — o plano pedia a sessão, não o erro |
+| 30 | `resolver.ts` + `index.ts:183-220` | `ProviderResolver.resolve()` faz a cadeia `geo_settings` → cota grátis `auto` → `fallback_provider` → `off` + 429 `GEO_BUDGET_EXCEEDED`. O alerta `GEO_BUDGET_WARNING` vem de **duas** fontes: `index.ts:183-220` (in-process, na primeira requisição que cruza o pct) e `20261123120000_geo_budget_cron.sql:74` (WARNING em `alert_at_pct`, `:112` CRITICAL em 100%), com dedup por `warned_month` |
+| 32 | `index.ts:66-87` + 8 suítes | `USER_LIMITS = {autocomplete: 60, tiles: 120}` com default 20/min, bucket `${uid}:${fn}` janela 60 s, `uid` do `sub` do JWT. Suítes Deno: `resolver`, `metering`, `mapbox`, `google`, `failover`, `error-monitor`, `polyline`, `budget-error` — **75 testes**. Deploy verificado: `deploy-edges.yml` success em `2026-11-22T12:16` com o smoke `provider-status` |
+
+**Dois itens seguem abertos por dependência externa, não por falta de código:**
+- **35** — `place_id`/`components`/`pickup_contact_*` no body da edge: o contrato de `lalamove-api` não recebe esses campos da UI; entram pelo servidor (`persistOrderCoordinates`). Mudar o contrato é decisão de arquitetura (regra 8) — deliberadamente não feito.
+- **32 (2º item)** — fixtures gravadas em `geo-gateway/__fixtures__/`: os testes mockam `fetch` inline. O efeito (provider testado sem rede real) está entregue; só o diretório não existe.
+
+---
 
 ### 33 — Hook `src/hooks/useGeo.ts` ✅
 - [x] `useGeoAutocomplete(input, {bias})` com debounce 300 ms, `sessionToken` (uuid v4) gerado ao focar e descartado após `place-details`
@@ -869,11 +917,11 @@ tsconfig.app.json` limpo.
 ## BLOCO 8 — Admin "Mapas & Custos" (etapas 85–92)
 
 ### 85 — Rota `/settings/maps` (manager/admin)
-- [ ] `src/pages/settings/MapsSettingsPage.tsx`, registrar em `App.tsx` ao lado de `/settings/lalamove`; entrada no menu
+- [x] `src/pages/settings/MapsSettingsPage.tsx`, registrar em `App.tsx` ao lado de `/settings/lalamove`; entrada no menu
 - **Evidência:** rota abre
 
 ### 86 — Seletor por função (D6)
-- [ ] Tabela: função × provedor (google/mapbox/off) × fallback; salva em `geo_settings` (RLS admin); confirmação ao mudar `autocomplete`/`geocode`
+- [x] Tabela: função × provedor (google/mapbox/off) × fallback; salva em `geo_settings` (RLS admin); confirmação ao mudar `autocomplete`/`geocode`
 - **Evidência:** `geo_settings.updated_by` preenchido
 
 ### 87 — Orçamento
