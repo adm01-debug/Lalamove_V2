@@ -17,6 +17,7 @@ import {
   type QuietHours,
 } from "./quiet-hours.ts";
 import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
+import { normalizePhone } from "../_shared/phone.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -294,7 +295,19 @@ serve(async (req) => {
           logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
           continue;
         }
-        await dispatch(channel, (r as { to: string }).to, adHocMessage);
+        // Etapa 59 (D1): o trigger grava `to` cru do cadastro — `(41) 99999-8888`,
+        // `+55 41 ...`, ou máscara `****`. O provedor de WhatsApp quer E.164; sem
+        // normalizar, o envio falha com 400 e o alerta morre sem rastro útil.
+        let destination = (r as { to: string }).to;
+        if (channel === 'whatsapp' || channel === 'sms') {
+          const normalized = normalizePhone(destination);
+          if (!normalized) {
+            logger.log(`[Notification] Ad-hoc recipient with unusable phone dropped: ${JSON.stringify({ channel, to: destination })}`);
+            continue;
+          }
+          destination = normalized;
+        }
+        await dispatch(channel, destination, adHocMessage);
       } else if (r && typeof r === 'object') {
         // Sem `to` (o trigger geo grava `to: null` quando o pedido não tem
         // telefone de contato): não há como enviar, mas o descarte precisa ser
