@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "fac6e491738a41ef7badb4eb68679649166ece80",
+  "sha": "c980ca70425654773c825054a9a61770e4b6bd9c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 03:08 UTC",
+  "generated_at": "2026-11-22 03:09 UTC",
   "files_total": 986,
   "code_files": 813,
-  "code_lines": 139532
+  "code_lines": 139624
  },
  "version": "1.3.2",
- "facts_hash": "b423a8da82b4c5c1",
+ "facts_hash": "3033db51b67231e5",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20379,7 +20379,7 @@
   {
    "module": "src/components",
    "files": 155,
-   "lines": 28285,
+   "lines": 28377,
    "tables": [
     "active_tracking",
     "alerts",
@@ -23044,10 +23044,10 @@
    "VITE_FEATURE_X": [
     "scripts/ai-context/cenarios.mjs"
    ],
-   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY": [
+   "VITE_GOOGLE_MAPS_BROWSER_KEY": [
     "src/components/map/hooks/useGoogleMapsLoader.ts"
    ],
-   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID": [
+   "VITE_GOOGLE_MAPS_MAP_ID": [
     "src/components/map/hooks/useGoogleMapsLoader.ts"
    ],
    "VITE_PORT": [
@@ -35661,6 +35661,14 @@
    {
     "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
     "name": "injetar o script uma vez só (singleton) e resolver pelo callback"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "etapa 75: chave propria usa v=weekly, libraries maps/marker/routes e expoe o Map ID"
+   },
+   {
+    "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+    "name": "etapa 75: sem chave propria o conector gerenciado nao recebe mapId"
    },
    {
     "file": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
@@ -54977,7 +54985,7 @@
   },
   "src/components/map/GoogleMapsCanvas.tsx": {
    "path": "src/components/map/GoogleMapsCanvas.tsx",
-   "lines": 184,
+   "lines": 237,
    "exports": [
     "function GoogleMapsCanvas"
    ]
@@ -55485,15 +55493,17 @@
   },
   "src/components/map/hooks/useGoogleMapsLoader.ts": {
    "path": "src/components/map/hooks/useGoogleMapsLoader.ts",
-   "lines": 104,
+   "lines": 123,
    "exports": [
+    "const USING_OWN_KEY",
+    "function getGoogleMapsMapId",
     "function isGoogleMapsConfigured",
     "function loadGoogleMaps",
     "function useGoogleMapsLoader"
    ],
    "env": [
-    "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
-    "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+    "VITE_GOOGLE_MAPS_BROWSER_KEY",
+    "VITE_GOOGLE_MAPS_MAP_ID"
    ],
    "hooks": [
     "useGoogleMapsLoader"
@@ -55615,7 +55625,7 @@
   },
   "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts": {
    "path": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
-   "lines": 72,
+   "lines": 92,
    "is_test": true,
    "tests": [
     "useGoogleMapsLoader",
@@ -55623,6 +55633,8 @@
     "respeita a chave injetada via env do conector",
     "resolve imediatamente quando window.google já existe",
     "injetar o script uma vez só (singleton) e resolver pelo callback",
+    "etapa 75: chave propria usa v=weekly, libraries maps/marker/routes e expoe o Map ID",
+    "etapa 75: sem chave propria o conector gerenciado nao recebe mapId",
     "rejeita e libera o singleton quando o script falha"
    ]
   },
@@ -69219,10 +69231,23 @@
   }
  },
  "git": {
-  "sha": "fac6e491738a41ef7badb4eb68679649166ece80",
+  "sha": "c980ca70425654773c825054a9a61770e4b6bd9c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c980ca7",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)",
+    "files": [
+     ".env.example",
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/components/map/GoogleMapsCanvas.tsx",
+     "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
+     "src/components/map/hooks/useGoogleMapsLoader.ts"
+    ]
+   },
    {
     "sha": "fac6e49",
     "date": "2026-11-22",
@@ -69557,16 +69582,6 @@
      "supabase/functions/geo-gateway/resolver.ts",
      "supabase/functions/job-worker/index.ts"
     ]
-   },
-   {
-    "sha": "d62d6d8",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)",
-    "files": [
-     "scripts/geo/README.md",
-     "scripts/geo/eta-parity.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -69576,7 +69591,7 @@
    ],
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    4
+    5
    ],
    [
     "supabase/functions/geo-gateway/index.ts",

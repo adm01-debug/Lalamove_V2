@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "fac6e491738a41ef7badb4eb68679649166ece80",
+  "commit": "c980ca70425654773c825054a9a61770e4b6bd9c",
   "branch": "main",
-  "data_commit": "2026-11-22T00:08:23-03:00",
+  "data_commit": "2026-11-22T00:08:27-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c980ca7",
+    "data": "2026-11-22",
+    "assunto": "feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)"
+   },
    {
     "sha": "fac6e49",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "a9a7781",
     "data": "2026-11-21",
     "assunto": "chore: registra os resultados reais do drill da etapa 72 (#194)"
-   },
-   {
-    "sha": "a76d93c",
-    "data": "2026-11-21",
-    "assunto": "feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)"
    }
   ],
-  "arquivos_mudados_7d": 229,
+  "arquivos_mudados_7d": 231,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 17
+    "mudancas": 20
    },
    {
     "pasta": "src/components/orders",
@@ -188,12 +188,12 @@
     "mudancas": 7
    },
    {
-    "pasta": "supabase/functions/lalamove-webhook",
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 6
    },
    {
-    "pasta": "docs/pendencias/README.md",
-    "mudancas": 5
+    "pasta": "supabase/functions/lalamove-webhook",
+    "mudancas": 6
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -238,6 +238,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 6
    },
@@ -262,11 +266,11 @@
     "mudancas": 6
    },
    {
-    "arquivo": "docs/pendencias/README.md",
+    "arquivo": ".env.example",
     "mudancas": 5
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "arquivo": "docs/pendencias/README.md",
     "mudancas": 5
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 124
+    "commits": 125
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 992,
   "arquivos_codigo": 617,
-  "linhas_codigo": 120510,
+  "linhas_codigo": 120602,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -516,7 +516,7 @@
   },
   "src/components": {
    "arquivos": 155,
-   "linhas": 28285
+   "linhas": 28377
   },
   "src/hooks": {
    "arquivos": 110,
@@ -809,8 +809,8 @@
    "DEV",
    "PROD",
    "VITE_APP_VERSION",
-   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
-   "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+   "VITE_GOOGLE_MAPS_BROWSER_KEY",
+   "VITE_GOOGLE_MAPS_MAP_ID"
   ],
   "ciclos_de_import": 0,
   "possiveis_segredos_no_codigo": []

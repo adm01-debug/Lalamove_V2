@@ -77,7 +77,7 @@
    "hooks_exportados": [
     "useGoogleMapsLoader"
    ],
-   "linhas": 104,
+   "linhas": 123,
    "dominio": "components/map",
    "tabelas": [],
    "rpcs": [],

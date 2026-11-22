@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `fac6e491738a41ef7badb4eb68679649166ece80` (2026-11-22T00:08:23-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c980ca70425654773c825054a9a61770e4b6bd9c` (2026-11-22T00:08:27-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 992 |
 | arquivos_codigo | 617 |
-| linhas_codigo | 120510 |
+| linhas_codigo | 120602 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -240,7 +240,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - serviços por edge: Lalamove API v3 (5), Notificações/Alertas (5), Dados externos (3), Bitrix24 (2), Manutenção/DDL (2), Motoristas (2), Fila de jobs (1), Lovable AI (custo por token) (1), Mapbox (1), Segredos/token (1)
 - hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, api.mapbox.com, maps.googleapis.com, supabase.com, www.google.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, routes.googleapis.com, wa.me, a.tile.openstreetmap.org, ai.gateway.lovable.dev, api.pwnedpasswords.com, b.tile.openstreetmap.org
 - webhooks recebidos (verify_jwt=false): lalamove-webhook, llm-wh, mcp-query
-- env de integração (só NOMES, nunca valores): BITRIX24_CLIENT_ID, BITRIX24_CLIENT_SECRET, BITRIX24_WEBHOOK_URL, EVOLUTION_API_KEY, EXTERNAL_SUPABASE_SERVICE_ROLE_KEY, EXTERNAL_SUPABASE_URL, GOOGLE_MAPS_API_KEY, LALAMOVE_API_KEY, LALAMOVE_API_SECRET, LALAMOVE_API_URL, LALAMOVE_BASE_URL, LALAMOVE_TRUSTED_IPS, LALAMOVE_UNIFIED_PROXY_KEY, LALAMOVE_UNIFIED_PROXY_URL, LOVABLE_API_KEY, MAPBOX_ACCESS_TOKEN, MAPBOX_SERVER_TOKEN, MAPBOX_TOKENS_API_TOKEN, MAPBOX_USERNAME, RESEND_API_KEY, SLACK_WEBHOOK_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY, VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_URL
+- env de integração (só NOMES, nunca valores): BITRIX24_CLIENT_ID, BITRIX24_CLIENT_SECRET, BITRIX24_WEBHOOK_URL, EVOLUTION_API_KEY, EXTERNAL_SUPABASE_SERVICE_ROLE_KEY, EXTERNAL_SUPABASE_URL, GOOGLE_MAPS_API_KEY, LALAMOVE_API_KEY, LALAMOVE_API_SECRET, LALAMOVE_API_URL, LALAMOVE_BASE_URL, LALAMOVE_TRUSTED_IPS, LALAMOVE_UNIFIED_PROXY_KEY, LALAMOVE_UNIFIED_PROXY_URL, LOVABLE_API_KEY, MAPBOX_ACCESS_TOKEN, MAPBOX_SERVER_TOKEN, MAPBOX_TOKENS_API_TOKEN, MAPBOX_USERNAME, RESEND_API_KEY, SLACK_WEBHOOK_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_URL
 
 ## RBAC
 - hierarquia: viewer=1 < operator=2 < manager=3 < admin=4
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7621 nós · 16212 arestas · 595 comunidades · grafo do commit `fac6e491`
-- comunidades maiores: cn (196), lucide-react (154), client.ts (126), react (120), ref_node_path (113), snapshot.py (102), DashboardRedesigned.tsx (100), button.tsx (86), dependencies (80), framer-motion (77), gerar.mjs (76), AppLayout.tsx (70)
+- 7629 nós · 16227 arestas · 576 comunidades · grafo do commit `c980ca70`
+- comunidades maiores: cn (199), button.tsx (168), snapshot.py (102), AlertsPage.tsx (100), badge.tsx (90), generate.py (81), dependencies (80), gerar.mjs (76), ref_node_path (75), package.json (68), client.ts (68), @tanstack/react-query (64)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -287,11 +287,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
 - src/components/orders/AddressAutocomplete.tsx (7)
 - supabase/functions/geo-gateway/providers/mapbox.ts (7)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (6)
 - src/components/map/LiveMap.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
 - src/integrations/supabase/types.ts (6)
 - supabase/functions/_shared/schemas.ts (6)
-- supabase/functions/geo-gateway/providers/types.ts (6)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -370,6 +370,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `c980ca7` feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)
 - 2026-11-22 `fac6e49` feat: renderiza message_template dos alertas geo (etapa 67) (#222)
 - 2026-11-21 `1a1f486` feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)
 - 2026-11-21 `460de12` fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)
@@ -384,7 +385,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `9710802` docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)
 - 2026-11-21 `626b371` fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)
 - 2026-11-21 `54419e1` docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)
-- 2026-11-21 `2a87c43` fix(migration): resolve colisao das constraints de place_id (#204)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

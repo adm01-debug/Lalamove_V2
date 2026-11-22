@@ -576,11 +576,11 @@
   {
    "arquivo": "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 72,
+   "linhas": 92,
    "testa": [
     "src/components/map/hooks/useGoogleMapsLoader.ts"
    ],
-   "casos": 5
+   "casos": 7
   },
   {
    "arquivo": "src/components/map/hooks/__tests__/useMapAlerts.test.ts",

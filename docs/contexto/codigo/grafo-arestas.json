@@ -490,6 +490,7 @@
   "src/components/map/GoogleMapsCanvas.tsx": [
    "src/components/map/hooks/useGoogleMapsLoader.ts",
    "src/components/map/hooks/useTrackingData.ts",
+   "src/components/map/markerFactories.ts",
    "src/components/map/types.ts"
   ],
   "src/components/map/LiveMap.tsx": [
