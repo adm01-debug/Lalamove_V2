@@ -57,13 +57,25 @@ export function ProtectedRoute({
     );
 
     if (!hasRequiredRole) {
-      return <Navigate to="/unauthorized" replace />;
+      return (
+        <Navigate
+          to="/unauthorized"
+          replace
+          state={{ attemptedPath: location.pathname, requiredRole, requiredPermission }}
+        />
+      );
     }
   }
 
   // Permission check
   if (requiredPermission && !hasPermission(requiredPermission)) {
-    return <Navigate to="/unauthorized" replace />;
+    return (
+      <Navigate
+        to="/unauthorized"
+        replace
+        state={{ attemptedPath: location.pathname, requiredRole, requiredPermission }}
+      />
+    );
   }
 
   return <>{children}</>;

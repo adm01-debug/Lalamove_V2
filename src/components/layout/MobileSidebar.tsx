@@ -6,7 +6,7 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  ChevronDown, Gauge, Database, Lock, Zap, Sparkles, Bug, ArrowLeft
+  ChevronDown, Gauge, Database, Lock, Zap, Sparkles, Bug, ArrowLeft, FileBarChart
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { BounceBadge } from '@/components/ui/micro-interactions';
@@ -47,6 +47,7 @@ const menuCategories: MenuCategory[] = [
     defaultOpen: true,
     items: [
       { id: 'dashboard', path: '/', label: 'Dashboard', icon: LayoutDashboard },
+      { id: 'dashboard-alias', path: '/dashboard', label: 'Dashboard (alias)', icon: LayoutDashboard },
       { id: 'orders', path: '/orders', label: 'Pedidos', icon: Package },
       { id: 'drivers', path: '/drivers', label: 'Motoristas', icon: Users },
     ]
@@ -59,6 +60,7 @@ const menuCategories: MenuCategory[] = [
       { id: 'approvals', path: '/approvals', label: 'Aprovações', icon: Shield, badgeType: 'approvals', requiredRole: 'manager' },
       { id: 'incidents', path: '/incidents', label: 'Incidentes', icon: AlertTriangle, badgeType: 'incidents' },
       { id: 'map', path: '/map', label: 'Mapa ao Vivo', icon: Map },
+      { id: 'live-map', path: '/live-map', label: 'Mapa ao Vivo', icon: Map },
       { id: 'evaluations', path: '/evaluations', label: 'Avaliações', icon: ClipboardCheck },
     ]
   },
@@ -68,6 +70,8 @@ const menuCategories: MenuCategory[] = [
     icon: BarChart3,
     items: [
       { id: 'metrics', path: '/metrics', label: 'Métricas', icon: BarChart3 },
+      { id: 'analytics', path: '/analytics', label: 'Dashboard Analytics', icon: BarChart3 },
+      { id: 'reports', path: '/reports', label: 'Relatórios', icon: FileBarChart },
       { id: 'delivery-metrics', path: '/delivery-metrics', label: 'Métricas Entregas', icon: Truck },
       { id: 'sla', path: '/sla', label: 'Dashboard SLA', icon: Activity },
       { id: 'heatmap', path: '/heatmap', label: 'Mapa de Calor', icon: Flame },
@@ -90,6 +94,7 @@ const menuCategories: MenuCategory[] = [
     items: [
       { id: 'webhooks', path: '/webhooks', label: 'Webhooks', icon: Webhook, requiredRole: 'manager' },
       { id: 'bitrix24', path: '/bitrix24', label: 'Bitrix24', icon: Briefcase, requiredRole: 'manager' },
+      { id: 'uapi', path: '/settings/uapi', label: 'UAPI Settings', icon: Zap, requiredRole: 'manager' },
     ]
   },
   {
@@ -113,9 +118,23 @@ const menuCategories: MenuCategory[] = [
     requiredRole: 'manager',
     items: [
       { id: 'risk-rules', path: '/risk-rules', label: 'Regras de Risco', icon: Scale },
+      { id: 'system-health', path: '/system-health', label: 'Saúde do Sistema', icon: Activity, requiredRole: 'manager' },
+      { id: 'cache-status', path: '/cache-status', label: 'Status do Cache', icon: HardDrive, requiredRole: 'manager' },
+      { id: 'job-queue', path: '/job-queue', label: 'Fila de Jobs', icon: Zap, requiredRole: 'manager' },
+      { id: 'rate-limiting', path: '/rate-limiting', label: 'Rate Limiting', icon: Gauge, requiredRole: 'admin' },
+      { id: 'lalamove-quota', path: '/lalamove-quota', label: 'Cota Lalamove', icon: Zap, requiredRole: 'admin' },
       { id: 'error-monitoring', path: '/error-monitoring', label: 'Erros Runtime', icon: Bug, requiredRole: 'manager' },
       { id: 'cache-monitoring', path: '/cache-monitoring', label: 'Cache Monitor', icon: HardDrive, requiredRole: 'manager' },
       { id: 'settings', path: '/settings', label: 'Configurações', icon: Settings },
+    ]
+  },
+  {
+    id: 'more',
+    label: 'Mais',
+    icon: Settings,
+    items: [
+      { id: 'preferences', path: '/preferences', label: 'Preferências', icon: Settings },
+      { id: 'profile', path: '/profile', label: 'Perfil', icon: Users },
     ]
   },
 ];
