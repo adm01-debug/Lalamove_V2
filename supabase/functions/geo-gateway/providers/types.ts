@@ -1,6 +1,8 @@
 // Interface comum dos provedores de mapa (Google / Mapbox).
 // Tudo que o front e as outras edges consomem passa por estes tipos — nunca pelo JSON cru do provedor.
 
+export type { GeoPrecision } from "../../_shared/geo-precision.ts";
+
 export type ProviderName = "google" | "mapbox";
 export type ProviderSetting = ProviderName | "auto" | "off";
 
@@ -22,8 +24,6 @@ export interface GeoPoint {
   lat: number;
   lng: number;
 }
-
-export type GeoPrecision = "exact" | "high" | "medium" | "low" | "unknown";
 
 export interface GeoSuggestion {
   id: string; // "<provider>:<id do provedor>"

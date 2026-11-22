@@ -3,11 +3,12 @@
 // Static Images. Token: MAPBOX_SERVER_TOKEN (sk.) com fallback para MAPBOX_ACCESS_TOKEN (pk.).
 import { decodePolyline, encodePolyline, simplify } from "../polyline.ts";
 import type {
-  AutocompleteReq, GeoAddress, GeoAddressComponents, GeoBatchItem, GeoBatchQuery, GeoMatrix, GeoPoint, GeoPrecision, GeoProvider,
+  AutocompleteReq, GeoAddress, GeoAddressComponents, GeoBatchItem, GeoBatchQuery, GeoMatrix, GeoPoint, GeoProvider,
   GeoRoute, GeoSnapResult, GeoStaticImage, GeoSuggestion, GeocodeReq, MatrixReq, PlaceDetailsReq,
   ProviderResult, ReverseReq, RouteReq, SnapReq, StaticReq,
 } from "./types.ts";
 import { GeoProviderError } from "./types.ts";
+import { MAPBOX_ACCURACY_TO_PRECISION } from "../../_shared/geo-precision.ts";
 
 const BASE = "https://api.mapbox.com";
 
@@ -37,11 +38,6 @@ export interface MapboxOptions {
 const ROUTE_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
 // Matrix não tem todos os perfis do Directions: fora desta lista cai no default.
 const MATRIX_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
-
-const ACCURACY_TO_PRECISION: Record<string, GeoPrecision> = {
-  rooftop: "exact", parcel: "exact", point: "high", interpolated: "medium", intersection: "medium",
-  approximate: "low", street: "low",
-};
 
 function fmt(p: GeoPoint) {
   return `${p.lng},${p.lat}`;
@@ -212,7 +208,7 @@ export class MapboxProvider implements GeoProvider {
       location: lat != null && lng != null ? { lat: Number(lat), lng: Number(lng) } : null,
       routable_point: rp ? { lat: rp.latitude, lng: rp.longitude } : null,
       components: toComponents(props.context as Parameters<typeof toComponents>[0]),
-      precision: ACCURACY_TO_PRECISION[coords.accuracy ?? ""] ?? "unknown",
+      precision: MAPBOX_ACCURACY_TO_PRECISION[coords.accuracy ?? ""] ?? "unknown",
       match_confidence: match?.confidence,
       provider: "mapbox",
       retainable,
