@@ -292,7 +292,7 @@ serve(async (req) => {
           result = await sendSlack(recipient, severity, title, effectiveMessage, order_id, driver_id);
           break;
         case "sms":
-          result = await sendSms(recipient, title, effectiveMessage, order_id);
+          result = await sendSms(recipient, title, effectiveMessage, order_id, shareLink);
           break;
         case "n8n":
           result = await sendN8NWebhook(recipient, { type, severity, title, message: effectiveMessage, order_id, driver_id, metadata });
@@ -308,7 +308,7 @@ serve(async (req) => {
       const waErrorCode = (result as { errorCode?: string }).errorCode;
       if (channel === "whatsapp" && !result.success && needsImmediateFallback(waErrorCode) && smsChannelFromEnv()) {
         logger.log(`[WhatsApp] ${waErrorCode} — contingencia imediata por SMS (etapa 91)`);
-        const smsResult = await sendSms(recipient, title, effectiveMessage, order_id);
+        const smsResult = await sendSms(recipient, title, effectiveMessage, order_id, shareLink);
         await recordNotificationLog(supabase, alert_id, "sms", recipient, smsResult.success, smsResult.error);
         results.push({ channel: `sms:${recipient}`, ...smsResult });
         if (smsResult.success) result = { success: true };
@@ -376,6 +376,13 @@ serve(async (req) => {
         }
       }
     }
+
+    // Etapa 125: o link de acompanhamento vai no SMS mesmo que o template nao o
+    // inclua — SMS nao leva o mapa estatico, entao sem link o aviso nao mostra
+    // trajeto nenhum.
+    const shareLink = typeof templateVars.share_link === "string" && templateVars.share_link.trim() !== ""
+      ? templateVars.share_link.trim()
+      : null;
 
     // Template de nivel de tipo, usado nos destinatarios ad-hoc (metadata.recipients),
     // que nao tem linha de config propria para consultar.
@@ -914,9 +921,10 @@ async function sendSms(
   title: string,
   message: string,
   orderId?: string | null,
+  shareLink?: string | null,
 ): Promise<{ success: boolean; error?: string }> {
   const channel = smsChannelFromEnv();
-  const result = await dispatchSms({ channel, number, title, message, orderId });
+  const result = await dispatchSms({ channel, number, title, message, orderId, shareLink });
   if (result.success) {
     logger.log(`[SMS] Sent via ${channel?.name} to ${number.replace(/\D/g, '')} (${result.segments ?? '?'} segmento(s))`);
     return { success: true };

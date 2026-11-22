@@ -58,3 +58,29 @@ Deno.test("dispatchSms propaga a falha do provedor com o texto que tentou", asyn
   assertEquals(result.error, "Comtele API error: 401");
   assertEquals(result.text, "T. M");
 });
+Deno.test("etapa 125: share_link acompanha o SMS, mesmo fora do template", async () => {
+  const sent: string[] = [];
+  const fake = {
+    name: "fake",
+    send: (to: string, text: string) => {
+      sent.push(text);
+      return Promise.resolve({ success: true, segments: 1 });
+    },
+    parseDeliveryReport: () => null,
+    parseInbound: () => null,
+  };
+  await dispatchSms({
+    channel: fake as never,
+    number: "5511999998888",
+    title: "Motorista a caminho",
+    message: "Chega em 10 min",
+    orderId: "ORD-1",
+    shareLink: "https://lalamo.ve/abc",
+  });
+  assertEquals(sent[0], "Motorista a caminho. Chega em 10 min. Pedido: ORD-1. https://lalamo.ve/abc");
+});
+
+Deno.test("etapa 125: link vazio nao deixa separador solto", () => {
+  assertEquals(buildSmsBody("Titulo", "Corpo", "ORD-1", null), "Titulo. Corpo. Pedido: ORD-1");
+  assertEquals(buildSmsBody("Titulo", "Corpo", null, "   "), "Titulo. Corpo");
+});

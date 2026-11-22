@@ -647,8 +647,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `toGsm7`/`smsSegments`/`composeSmsText` em `_shared/channels/sms.ts`; `sms.test.ts` prova 160 no 1º segmento e 153 nos seguintes, e que acento não cai para UCS-2 (PR #281)
 
 ### 125 — [L] Link curto no SMS
-- [ ] Usar `share_link` da Lalamove ou rota curta própria para detalhes
-- **Evidência:** link abre o acompanhamento
+- [x] Usar `share_link` da Lalamove ou rota curta própria para detalhes
+- **Evidência:** `shareLink` em `send-notification/sms-dispatch.ts` (`buildSmsBody`) entra sempre no fim do SMS — mesmo quando o template do operador não inclui `{{share_link}}` — porque o SMS não leva o mapa estático do WhatsApp. `send-notification/index.ts` lê de `metadata.share_link`; 2 testes em `sms-dispatch.test.ts`. **Falta:** rota curta própria (`lalamo.ve/…`) — hoje o link da Lalamove tem ~90 caracteres e come um segmento do SMS.
 
 ### 126 — [L] Edge `sms-callback`
 - [ ] Recibo de entrega (DLR) com verificação da assinatura do provedor → ledger

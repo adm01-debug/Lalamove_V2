@@ -13,6 +13,8 @@ export interface SmsDispatchInput {
   title: string;
   message: string;
   orderId?: string | null;
+  /** Link de acompanhamento (etapa 125). Sem ele o SMS e um aviso cego. */
+  shareLink?: string | null;
 }
 
 export interface SmsDispatchResult {
@@ -28,11 +30,23 @@ export interface SmsDispatchResult {
  * SMS nao tem markdown nem emoji de severidade: o texto e `titulo. mensagem.
  * Pedido: <id>`, unido por ". " e sem partes vazias. Quem corta e translitera
  * e o canal (`composeSmsText`).
+ *
+ * Etapa 125: o `share_link` entra por ultimo, e e o trecho que sobrevive ao
+ * corte. SMS nao carrega o mapa estatico do WhatsApp, entao o link e a unica
+ * forma de o destinatario ver o trajeto — e um link truncado no meio nao abre.
  */
-export function buildSmsBody(title: string, message: string, orderId?: string | null): string {
-  return [title, message, orderId ? `Pedido: ${orderId}` : ""]
+export function buildSmsBody(
+  title: string,
+  message: string,
+  orderId?: string | null,
+  shareLink?: string | null,
+): string {
+  const head = [title, message, orderId ? `Pedido: ${orderId}` : ""]
     .filter((part) => part && part.trim() !== "")
     .join(". ");
+  const link = typeof shareLink === "string" ? shareLink.trim() : "";
+  if (!link) return head;
+  return head ? `${head}. ${link}` : link;
 }
 
 export async function dispatchSms(input: SmsDispatchInput): Promise<SmsDispatchResult> {
@@ -41,7 +55,7 @@ export async function dispatchSms(input: SmsDispatchInput): Promise<SmsDispatchR
   // e deixar o alerta morrer sem rastro em `alerts_sent`.
   if (!channel) return { success: false, error: "SMS provider not configured" };
 
-  const text = buildSmsBody(title, message, orderId);
+  const text = buildSmsBody(title, message, orderId, input.shareLink);
   const result = await channel.send(number, text, orderId ?? undefined);
   if (!result.success) return { success: false, error: result.error, text };
   return { success: true, segments: result.segments, text };
