@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 17:12 UTC
+
+- **functions** alterado (1): `public.mark_job_failed(p_job_id uuid, p_error_message text, p_error_stack text)`
+
 ## 2026-11-22 14:17 UTC
 
 - **colunas** adicionado (5): `public.geo_defaults.late_tolerance_min`, `public.notification_optouts.created_at`, `public.notification_optouts.created_by`, `public.notification_optouts.phone`, `public.notification_optouts.reason`

@@ -20027,7 +20027,7 @@
           "code": [
             {
               "file": "supabase/functions/job-worker/index.ts",
-              "hits": 1
+              "hits": 2
             },
             {
               "file": "supabase/migrations/20251226000003_create_job_queue.sql",
