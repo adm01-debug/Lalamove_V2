@@ -1296,11 +1296,11 @@
   {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 92,
+   "linhas": 114,
    "testa": [
     "supabase/functions/lalamove-api/coordinates.ts"
    ],
-   "casos": 9
+   "casos": 11
   },
   {
    "arquivo": "supabase/functions/lalamove-api/geocode-fallback.test.ts",

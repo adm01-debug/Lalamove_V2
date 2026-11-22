@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "1e2d9ce4c7a0d6f16b4e9ea0b4a2b846dfd1e123",
+  "sha": "affd0df91ee9299d6c403bdc5f11e76574940b76",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 07:35 UTC",
+  "generated_at": "2026-11-22 07:44 UTC",
   "files_total": 1019,
   "code_files": 843,
-  "code_lines": 144795
+  "code_lines": 144837
  },
  "version": "1.3.2",
- "facts_hash": "dac31cf86b8464b2",
+ "facts_hash": "b89f309b03a0349c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21235,7 +21235,7 @@
   {
    "module": "supabase/functions",
    "files": 77,
-   "lines": 18094,
+   "lines": 18136,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -26488,6 +26488,10 @@
    {
     "file": "supabase/functions/lalamove-api/index.ts",
     "text": "body ja passou pelo zod (z.record(z.any())); a validacao de forma"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/index.ts",
+    "text": "não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -39084,6 +39088,14 @@
    {
     "file": "supabase/functions/lalamove-api/coordinates.test.ts",
     "name": "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "persistOrderCoordinates nao sobrescreve o provedor do autocomplete para "
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "persistOrderCoordinates mantem "
    },
    {
     "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
@@ -69028,7 +69040,7 @@
   },
   "supabase/functions/lalamove-api/coordinates.test.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.test.ts",
-   "lines": 92,
+   "lines": 114,
    "is_test": true,
    "rule_comments": [
     "── Etapa 36: place_id do provedor não pode ser sobrescrito pelo id da parada ──"
@@ -69042,12 +69054,14 @@
     "stopsCoords devolve lista vazia para undefined",
     "persistOrderCoordinates mantem o place_id resolvido no formulario",
     "persistOrderCoordinates usa lalamove:<stopId> quando nao ha place_id do provedor",
-    "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id"
+    "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id",
+    "persistOrderCoordinates nao sobrescreve o provedor do autocomplete para ",
+    "persistOrderCoordinates mantem "
    ]
   },
   "supabase/functions/lalamove-api/coordinates.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.ts",
-   "lines": 99,
+   "lines": 112,
    "exports": [
     "function stopsCoords",
     "function persistOrderCoordinates"
@@ -69112,7 +69126,7 @@
   },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1173,
+   "lines": 1180,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -69272,6 +69286,7 @@
     "Extract rate limit headers",
     "Guarda server-side: mesmo com validação de UI, nunca confie no cliente.",
     "body ja passou pelo zod (z.record(z.any())); a validacao de forma",
+    "não pode ser sobrescrita para 'lalamove' — sem isso o custo do geocode",
     "Validação numérica: > 0, até 2 casas decimais, teto de segurança R$500."
    ],
    "calc_fns": [
@@ -71437,10 +71452,21 @@
   }
  },
  "git": {
-  "sha": "1e2d9ce4c7a0d6f16b4e9ea0b4a2b846dfd1e123",
+  "sha": "affd0df91ee9299d6c403bdc5f11e76574940b76",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "affd0df",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)",
+    "files": [
+     "supabase/functions/lalamove-api/coordinates.test.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/functions/lalamove-api/index.ts"
+    ]
+   },
    {
     "sha": "1e2d9ce",
     "date": "2026-11-22",
@@ -71797,33 +71823,24 @@
      "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
      "src/components/map/hooks/useGoogleMapsLoader.ts"
     ]
-   },
-   {
-    "sha": "fac6e49",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: renderiza message_template dos alertas geo (etapa 67) (#222)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/_shared/template.test.ts",
-     "supabase/functions/_shared/template.ts",
-     "supabase/functions/send-notification/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    26
+    25
    ],
    [
     "supabase/functions/send-notification/index.ts",
-    5
+    4
    ],
    [
     "supabase/functions/job-worker/index.ts",
     4
+   ],
+   [
+    "supabase/functions/lalamove-api/index.ts",
+    3
    ],
    [
     "src/components/map/GoogleMapsCanvas.tsx",
@@ -71836,6 +71853,14 @@
    [
     "supabase/functions/geo-gateway/index.ts",
     3
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
+    2
    ],
    [
     "supabase/functions/_shared/schemas.ts",
@@ -71854,19 +71879,11 @@
     2
    ],
    [
-    "supabase/functions/lalamove-api/index.ts",
-    2
-   ],
-   [
     "src/components/map/MapHUD.tsx",
     2
    ],
    [
     "src/components/orders/AddressAutocomplete.tsx",
-    2
-   ],
-   [
-    ".github/workflows/ci.yml",
     2
    ],
    [
@@ -71887,10 +71904,6 @@
    ],
    [
     "supabase/functions/send-notification/static-map.ts",
-    1
-   ],
-   [
-    "src/hooks/__tests__/useGeo.contract.test.ts",
     1
    ]
   ]

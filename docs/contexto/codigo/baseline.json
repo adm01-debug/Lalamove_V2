@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1e2d9ce4c7a0d6f16b4e9ea0b4a2b846dfd1e123",
+  "commit": "affd0df91ee9299d6c403bdc5f11e76574940b76",
   "branch": "main",
-  "data_commit": "2026-11-22T04:35:01-03:00",
+  "data_commit": "2026-11-22T04:43:36-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "affd0df",
+    "data": "2026-11-22",
+    "assunto": "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)"
+   },
    {
     "sha": "1e2d9ce",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "b5b3088",
     "data": "2026-11-22",
     "assunto": "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)"
-   },
-   {
-    "sha": "a08dd87",
-    "data": "2026-11-22",
-    "assunto": "feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)"
    }
   ],
   "arquivos_mudados_7d": 285,
@@ -156,6 +156,10 @@
     "mudancas": 20
    },
    {
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 16
+   },
+   {
     "pasta": "package.json",
     "mudancas": 15
    },
@@ -166,10 +170,6 @@
    {
     "pasta": "package-lock.json",
     "mudancas": 14
-   },
-   {
-    "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 13
    },
    {
     "pasta": "docs/MAPBOX.md",
@@ -266,15 +266,15 @@
     "mudancas": 7
    },
    {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 6
    },
    {
     "arquivo": "src/integrations/supabase/types.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 153
+    "commits": 154
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1025,
   "arquivos_codigo": 646,
-  "linhas_codigo": 125718,
+  "linhas_codigo": 125760,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18094
+   "linhas": 18136
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1173
+   "linhas": 1180
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
