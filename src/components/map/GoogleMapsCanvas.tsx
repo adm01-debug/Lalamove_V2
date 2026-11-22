@@ -3,6 +3,14 @@ import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTrackingData } from './hooks/useTrackingData';
 import { getGoogleMapsMapId, useGoogleMapsLoader } from './hooks/useGoogleMapsLoader';
 import { createDriverMarkerElement } from './markerFactories';
+import { useTrackingTrails } from './hooks/useTrackingTrails';
+import {
+  DRIVER_ANIM_MS,
+  buildTrailPath,
+  interpolatePosition,
+  toGooglePath,
+  type LatLngLiteral,
+} from './googleLayers';
 import type { VehicleFilter, StatusFilter } from './types';
 
 interface GoogleMapsCanvasProps {
@@ -15,8 +23,6 @@ interface GoogleMapsCanvasProps {
   onSelect?: (id: string | null) => void;
 }
 
-type LatLngLiteral = { lat: number; lng: number };
-
 interface GoogleMapInstance {
   panTo(pos: LatLngLiteral): void;
   setZoom(z: number): void;
@@ -28,6 +34,11 @@ interface GoogleMarkerInstance {
   setMap(map: unknown): void;
   addListener(event: string, cb: () => void): void;
   getPosition(): LatLngLiteral | null;
+}
+
+interface GooglePolylineInstance {
+  setPath(path: LatLngLiteral[]): void;
+  setMap(map: unknown): void;
 }
 
 interface GoogleAdvancedMarkerInstance {
@@ -62,6 +73,15 @@ function markerIcon(color: string): string {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
+/** Cancela o `requestAnimationFrame` pendente de um motorista, se houver. */
+function cancelAnimation(animations: Map<string, number>, id: string): void {
+  const handle = animations.get(id);
+  if (handle !== undefined) {
+    cancelAnimationFrame(handle);
+    animations.delete(id);
+  }
+}
+
 export function GoogleMapsCanvas({
   className = '',
   initialCenter,
@@ -76,9 +96,18 @@ export function GoogleMapsCanvas({
   const markersRef = useRef<Map<string, GoogleMarkerInstance | GoogleAdvancedMarkerInstance>>(new Map());
   const selectedIdRef = useRef<string | null>(null);
   const infoRef = useRef<{ open: (m: unknown, mk: unknown) => void; setContent: (c: string) => void; close: () => void } | null>(null);
+  // Etapa 77: Polyline da rota planejada + trilha percorrida, por pedido.
+  const routeLinesRef = useRef<Map<string, GooglePolylineInstance>>(new Map());
+  const trailLinesRef = useRef<Map<string, GooglePolylineInstance>>(new Map());
+  // Posicao anterior de cada motorista: base da interpolacao de 10 s.
+  const prevPositionsRef = useRef<Map<string, { pos: LatLngLiteral; at: number }>>(new Map());
+  // `requestAnimationFrame` por motorista: cancela a animacao anterior antes de
+  // comecar outra, senao dois loops escrevem a mesma posicao.
+  const animationsRef = useRef<Map<string, number>>(new Map());
 
   const { ready, error, configured } = useGoogleMapsLoader();
   const { trackingData } = useTrackingData(vehicleFilter, statusFilter);
+  const trails = useTrackingTrails(trackingData.map((t) => t.order_id));
 
   // Initialize map
   useEffect(() => {
@@ -135,8 +164,34 @@ export function GoogleMapsCanvas({
           setIcon?: (i: unknown) => void;
           content?: HTMLElement;
         };
-        if (upd.setPosition) upd.setPosition(position);
-        else upd.position = position;
+        const applyPosition = (p: LatLngLiteral) => {
+          if (upd.setPosition) upd.setPosition(p);
+          else upd.position = p;
+        };
+        // Etapa 77: o polling de `active_tracking` chega em saltos de 5 s; mover o
+        // marker direto faz o carro teleportar. Interpola da posicao anterior ate a
+        // nova ao longo de DRIVER_ANIM_MS.
+        const prev = prevPositionsRef.current.get(t.id);
+        const now = Date.now();
+        const startPos = prev?.pos ?? position;
+        prevPositionsRef.current.set(t.id, { pos: position, at: now });
+        cancelAnimation(animationsRef.current, t.id);
+        if (prev) {
+          const startedAt = now;
+          const step = () => {
+            if (!markersRef.current.has(t.id)) return;
+            const elapsed = Date.now() - startedAt;
+            applyPosition(interpolatePosition(startPos, position, elapsed, DRIVER_ANIM_MS));
+            if (elapsed < DRIVER_ANIM_MS) {
+              animationsRef.current.set(t.id, requestAnimationFrame(step));
+            } else {
+              animationsRef.current.delete(t.id);
+            }
+          };
+          animationsRef.current.set(t.id, requestAnimationFrame(step));
+        } else {
+          applyPosition(position);
+        }
         if (useAdvanced) {
           upd.content = createDriverMarkerElement(t, t.id === selectedIdRef.current);
         } else if (upd.setIcon) {
@@ -194,10 +249,81 @@ export function GoogleMapsCanvas({
     }
   }, [ready, trackingData, onSelect]);
 
+  // Etapa 77: Polyline da rota planejada (`active_tracking.expected_route`) e
+  // trilha percorrida (`tracking_events`). Recriar a Polyline a cada tick pisca o
+  // tracado, entao a instancia e reaproveitada e so o `path` muda.
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const g = window.google as unknown as {
+      maps: { Polyline: new (opts: unknown) => GooglePolylineInstance };
+    };
+    if (!g.maps?.Polyline) return;
+
+    const ensureLine = (
+      store: Map<string, GooglePolylineInstance>,
+      orderId: string,
+      options: { strokeColor: string; strokeOpacity: number; strokeWeight: number; zIndex: number },
+    ): GooglePolylineInstance => {
+      const existing = store.get(orderId);
+      if (existing) return existing;
+      const line = new g.maps.Polyline({ ...options, path: [], map: mapRef.current });
+      store.set(orderId, line);
+      return line;
+    };
+
+    const seenRoutes = new Set<string>();
+    const seenTrails = new Set<string>();
+
+    for (const t of trackingData) {
+      const routePath = toGooglePath(t.expected_route);
+      if (routePath.length >= 2) {
+        seenRoutes.add(t.order_id);
+        ensureLine(routeLinesRef.current, t.order_id, {
+          strokeColor: STATUS_COLORS[t.order?.status ?? ''] || '#3b82f6',
+          strokeOpacity: 0.75,
+          strokeWeight: 5,
+          zIndex: 1,
+        }).setPath(routePath);
+      }
+
+      const trailPath = buildTrailPath(trails[t.order_id]);
+      if (trailPath.length >= 2) {
+        seenTrails.add(t.order_id);
+        ensureLine(trailLinesRef.current, t.order_id, {
+          strokeColor: '#10b981',
+          strokeOpacity: 0.55,
+          strokeWeight: 3,
+          zIndex: 2,
+        }).setPath(trailPath);
+      }
+    }
+
+    // Polyline de pedido encerrado/sem rota sai do mapa em vez de congelar na tela.
+    for (const [orderId, line] of routeLinesRef.current) {
+      if (!seenRoutes.has(orderId)) {
+        line.setMap(null);
+        routeLinesRef.current.delete(orderId);
+      }
+    }
+    for (const [orderId, line] of trailLinesRef.current) {
+      if (!seenTrails.has(orderId)) {
+        line.setMap(null);
+        trailLinesRef.current.delete(orderId);
+      }
+    }
+  }, [ready, trackingData, trails]);
+
   useEffect(() => {
     return () => {
       for (const marker of markersRef.current.values()) marker.setMap(null);
       markersRef.current.clear();
+      for (const line of routeLinesRef.current.values()) line.setMap(null);
+      routeLinesRef.current.clear();
+      for (const line of trailLinesRef.current.values()) line.setMap(null);
+      trailLinesRef.current.clear();
+      for (const handle of animationsRef.current.values()) cancelAnimationFrame(handle);
+      animationsRef.current.clear();
+      prevPositionsRef.current.clear();
     };
   }, []);
 

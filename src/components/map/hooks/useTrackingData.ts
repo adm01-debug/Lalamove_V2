@@ -15,6 +15,12 @@ export interface TrackingData {
   is_stopped: boolean | null;
   eta_minutes: number | null;
   /**
+   * Etapa 77: distancia ate a proxima parada, calculada no backend pelo trigger
+   * `geo_evaluate_tracking` (migracao `20261122130100:453`). Vem no `*` do select
+   * mas nao esta em `types.ts` porque a coluna foi criada por migration manual.
+   */
+  distance_to_next_stop_m?: number | null;
+  /**
    * Polyline calculada no servidor pelo job `route_plan`. Vem como `jsonb` do banco,
    * por isso `unknown` — normalizada por `parseExpectedRoute()` em `useMapMarkers`.
    * Evita chamar Directions no browser.
