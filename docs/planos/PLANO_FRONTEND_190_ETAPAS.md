@@ -126,8 +126,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** teste unitário com `a,b)c` gera filtro válido; busca com vírgula não gera erro 400 na aba Network.
 
 ### 11 — [F] Validar a origem do `postMessage` do Bitrix24
-- [ ] `src/hooks/useBitrix24.ts:112`: aceitar só `event.origin === window.location.origin` (ou o domínio do callback); limpar o `setTimeout` de 120 s no cleanup; tratar `popup === null` (bloqueado) com toast.
-- **Evidência:** `postMessage('bitrix24_connected','*')` de outra origem no console não dispara o sucesso.
+- [x] `src/hooks/useBitrix24.ts:112`: aceitar só `event.origin === window.location.origin` (ou o domínio do callback); limpar o `setTimeout` de 120 s no cleanup; tratar `popup === null` (bloqueado) com toast.
+- **Evidência:** `postMessage('bitrix24_connected','*')` de outra origem no console não dispara o sucesso. `src/lib/postMessage.ts` expõe `isTrustedBitrix24Origin` (aceita `window.location.origin` e a origem do `SUPABASE_URL` — o callback da edge `bitrix24-sync` roda na origem do Supabase); 5 testes em `src/lib/__tests__/postMessage.test.ts` cobrem origem própria, origem Supabase, origem maliciosa, URL inválida e esquema diferente.
 
 ### 12 — [F] `window.open` sempre com `noopener,noreferrer`
 - [x] `MapHUD.tsx:61, 67, 351`, `BatchActionsToolbar.tsx:44, 49`, `MapProviderSelector.tsx:99-135`, `exportUtils.ts:119`, `markerFactories.ts:325`: usar helper `openExternal(url)` em `src/lib/html.ts`.
