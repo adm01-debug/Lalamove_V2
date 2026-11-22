@@ -97,19 +97,24 @@ export function AddressAutocomplete({
     if (address.precision && (address.precision === 'medium' || address.precision === 'low')) {
       toast.warning('Endereço localizado com precisão aproximada — confira o ponto no mapa antes de salvar.');
     }
+    // Sem coordenada o retrieve não localizou o ponto: nunca propagar [0,0] (que cai no
+    // Golfo da Guiné e vira ponto de entrega inválido). Só o texto fica preenchido.
+    if (!address.location) {
+      toast.warning('Endereço encontrado sem coordenada — selecione outro resultado ou marque o ponto no mapa.');
+      setOpen(false);
+      return;
+    }
     if (onSelectMapbox || onCoordinatesChange) {
       const feature: MapboxFeature = {
         id: address.place_id ?? suggestion.id,
         place_name: address.formatted,
         text: suggestion.main_text,
-        center: address.location ? [address.location.lng, address.location.lat] : [0, 0],
+        center: [address.location.lng, address.location.lat],
         place_type: [suggestion.type],
-        geometry: { type: 'Point', coordinates: address.location ? [address.location.lng, address.location.lat] : [0, 0] },
+        geometry: { type: 'Point', coordinates: [address.location.lng, address.location.lat] },
       };
       onSelectMapbox?.(feature);
-      if (address.location && onCoordinatesChange) {
-        onCoordinatesChange(address.location.lat, address.location.lng);
-      }
+      onCoordinatesChange?.(address.location.lat, address.location.lng);
     }
     setOpen(false);
   };
