@@ -478,8 +478,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 7 — Lalamove: motor de comunicação (85–98)
 
 ### 85 — [L] Módulo `_shared/messaging/`
-- [ ] Extrair de `send-notification` o despacho WhatsApp/SMS para `channels/`, `router.ts`, `ledger.ts` — e-mail, Slack, Bitrix24 e n8n ficam onde estão
-- **Evidência:** testes atuais de `send-notification` verdes sem alteração
+- [x] Extrair de `send-notification` o despacho WhatsApp/SMS para `channels/`, `router.ts`, `ledger.ts` — e-mail, Slack, Bitrix24 e n8n ficam onde estão
+- **Evidência:** `_shared/messaging/` tem `router.ts` (roteamento, silêncio, teto, dedup: 19 testes), `inbound.ts` (10 testes) e `_shared/channels/{zapp,sms}.ts` com suas interfaces; `send-notification` importa os helpers puros e mantém só o I/O. Testes do `send-notification` seguem verdes (40 passed). **Falta:** `ledger.ts` — sai junto com a migration `20261125120000` (PR #283), porque sem a tabela `notification_messages` não há onde escrever.
 
 ### 86 — [L] Canal Zapp completo
 - [x] `zapp.ts` envia `client_message_id`, `correlation`, `expires_at`; lê `202 {message_id}`; mapeia os códigos da etapa 14
@@ -489,9 +489,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [ ] `ZAPP_API_URL`, `ZAPP_API_KEY` (chave `zik_` da etapa 22), `ZAPP_CALLBACK_SECRET` nas edges
 - **Evidência:** `list_secrets` mostra os 3 nomes
 
-### 88 — [L] Roteador evento × papel
-- [ ] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
-- **Evidência:** teste: `ORDER_CANCELLED/driver` → `[sms, whatsapp]`
+### 88 — [~] Roteador evento × papel
+- [~] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
+- **Evidência:** `_shared/messaging/router.ts` (`RouteRule`, `DEFAULT_ROUTES`, `resolveChannels`, `findRoute`), 19 testes cobrindo `ORDER_CANCELLED/driver` → `["whatsapp","sms"]`, rota inexistente → `[]`, rota desabilitada → `[]`. **Falta:** ler da tabela `notification_routes` (DDL do Bloco 6) e usar a lista no despacho — hoje o despacho escolhe canal por `alert_configurations`, não pela rota.
 
 ### 89 — [L] Idempotência
 - [x] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
@@ -500,13 +500,14 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ### 90 — [L] Fallback temporizado
 - [ ] WhatsApp sem `delivered` em `sms_fallback_after_min` → `job_queue` tipo `message_fallback` envia SMS
 - **Evidência:** teste com Zapp sem callback → SMS sai no prazo
+- **Estado:** a regra pura já existe e está testada (`shouldFallback` em `_shared/messaging/router.ts`), mas o disparo depende de três peças que ainda não existem: `sms_fallback_after_min` (coluna — hoje só no catálogo `DEFAULT_ROUTES`), o tipo `message_fallback` no CHECK de `job_queue` (o `job-worker/index.ts:1013-1075` tem `switch` exaustivo com `never`, então um tipo novo não compila) e o `delivered` do callback (PR #283). É DDL — não sai sem a sua liberação.
 
 ### 91 — [L] Fallback imediato
 - [x] `invalid_number`, `instance_unavailable`, `recipient_blocked`, `channel.status=down` → SMS na hora
 - **Evidência:** `_shared/messaging/router.ts` (`IMMEDIATE_FALLBACK_REASONS`, `needsImmediateFallback`); `zapp.ts` mapeia o código → `errorCode`; `send-notification/index.ts` (dentro do `dispatch`) troca por SMS quando o código está naquela lista e o canal SMS existe; os 4 códigos e o negativo (`timeout`) testados em `router.test.ts`
 
-### 92 — [L] Opt-out unificado
-- [ ] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
+### 92 — [~] Opt-out unificado
+- [~] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
 - **Evidência:** número em opt-out → `suppressed` no ledger
 - **Estado:** consulta aplicada aos **dois** caminhos de destinatário em `send-notification/index.ts` (ad-hoc e `alert_configurations`, canais WhatsApp/SMS) — antes só o ad-hoc consultava. Falta o alerta interno à operação e a linha `suppressed` no ledger (depende da migration `20261125120000`, PR #283).
 
