@@ -60,8 +60,21 @@ Deno.test("geocodeAddress devolve null quando o provedor nao acha nada", async (
   assertEquals(r, null);
 });
 
-Deno.test("geocodeOrderFallback grava coleta e entrega com provedor do gateway", async () => {
-  const patch = await geocodeOrderFallback("Rua A 1", "Rua B 2", deps(hit()));
+Deno.test("geocodeAddress pede persist=true ao gateway (retencao permanente no Mapbox)", async () => {
+  let enviado: Record<string, unknown> = {};
+  const r = await geocodeAddress("Rua XV de Novembro 1000, Curitiba", {
+    supabaseUrl: "https://x.supabase.co",
+    serviceRoleKey: "k",
+    fetchFn: ((_u: string, init: { body: string }) => {
+      enviado = JSON.parse(init.body);
+      return Promise.resolve(new Response(JSON.stringify(hit()), { status: 200 }));
+    }) as unknown as typeof fetch,
+  });
+  assert(r?.lat != null);
+  assertEquals(enviado.persist, true);
+});
+
+Deno.test("geocodeOrderFallback grava coleta e entrega com provedor do gateway", async () => {  const patch = await geocodeOrderFallback("Rua A 1", "Rua B 2", deps(hit()));
   assertEquals(patch.pickup_latitude, -25.4284);
   assertEquals(patch.delivery_latitude, -25.4284);
   assertEquals(patch.geocode_provider, "mapbox");

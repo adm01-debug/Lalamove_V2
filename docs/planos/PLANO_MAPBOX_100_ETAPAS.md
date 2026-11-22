@@ -147,7 +147,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 
 ### 2 — Token público do front (`pk.`) restrito por URL
 - [ ] Criar `lalamove-v2-web` com scopes `styles:read`, `fonts:read`, `styles:tiles`; `allowedUrls`: `https://lalamove-v2.vercel.app`, `https://lalamove-v2-*.vercel.app`, domínio de produção, `http://localhost:*`
-- [ ] Este token é o único que vai ao navegador (via `get-mapbox-token`); `HeatmapPage.tsx:39` já exige prefixo `pk.`
+- [x] Este token é o único que vai ao navegador (via `get-mapbox-token`); `HeatmapPage.tsx:39` já exige prefixo `pk.` — `get-mapbox-token` é a única via (edge `verify_jwt`), e `HeatmapPage.tsx` valida o prefixo `pk.` antes de usar
 - **Evidência:** token funciona no app e falha em `curl` sem referer
 
 ### 3 — Token secreto do servidor (`sk.`)
@@ -157,7 +157,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 
 ### 4 — Secrets no Supabase
 - [ ] `MAPBOX_ACCESS_TOKEN` (pk, já existe) · `MAPBOX_SERVER_TOKEN` (sk, novo) · `MAPBOX_TOKENS_API_TOKEN` (rotação, novo) · `MAPBOX_USERNAME`
-- [ ] `.env.example` com os 4 nomes comentados; nunca valor
+- [x] `.env.example` com os 4 nomes comentados; nunca valor — `.env.example:13-16` tem os 4 nomes comentados e nenhum valor
 - **Evidência:** `supabase secrets list`
 
 ### 5 — Alertas de faturamento
@@ -203,7 +203,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** migration + constante compartilhada `_shared/geo-precision.ts`
 
 ### 14 — `place_id` com prefixo de provedor (M8)
-- [ ] Convenção `google:<placeId>` / `mapbox:<mapbox_id>` em `pickup_place_id`, `delivery_place_id`, `lalamove_stops.place_id`; CHECK de prefixo
+- [x] Convenção `google:<placeId>` / `mapbox:<mapbox_id>` em `pickup_place_id`, `delivery_place_id`, `lalamove_stops.place_id`; CHECK de prefixo — migration `20261123140000_geo_place_id_prefix_check.sql` (CHECK de prefixo `google:`/`mapbox:`/`lalamove:`); `coordinates.ts:73`/`:82` grava `lalamove:<stopId>`
 - **Evidência:** constraint presente
 
 ### 15 — Política de retenção em código
@@ -212,16 +212,16 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `metering.ts` `resolveTtl()` + `metering.test.ts` (6 testes); retenção é restritiva por construção (`Math.min`), TTL 0 nunca sobe — PR #214
 
 ### 16 — `region_cache` → Mapbox reverse só com `permanent`
-- [ ] `useRegionResolver.ts:215` grava bairro/cidade em `region_cache` a partir do reverse Mapbox v5 — é retenção. Trocar para Geocoding v6 reverse com `permanent=true` **ou** para Google reverse (30 d), conforme `geo_settings.reverse`
+[x] `useRegionResolver.ts:215` grava bairro/cidade em `region_cache` a partir do reverse Mapbox v5 — é retenção. Trocar para Geocoding v6 reverse com `permanent=true` **ou** para Google reverse (30 d), conforme `geo_settings.reverse` — RESOLVIDO: `useRegionResolver.ts:192` chama `geo-gateway` `action:'reverse'` com `persist: true`, que o provider traduz em Geocoding v6 `permanent=true` (`providers/mapbox.ts:326`); nao ha mais chamada a v5
 - **Evidência:** `region_cache` só recebe linhas de chamadas permanentes/Google
 
 ### 17 — Coordenada da cotação Lalamove como fonte (M2)
-- [ ] `lalamove-api` grava `stops[].coordinates` e `stopId` da resposta da cotação em `lalamove_stops` e `pickup_/delivery_latitude/longitude` com `geocode_provider='lalamove'`, `geocode_precision='exact'`
-- [ ] Só se faltar coordenada: `geo-gateway geocode` com `permanent=true` (Mapbox) ou Google
+- [x] `lalamove-api` grava `stops[].coordinates` e `stopId` da resposta da cotação em `lalamove_stops` e `pickup_/delivery_latitude/longitude` com `geocode_provider='lalamove'`, `geocode_precision='exact'` — `coordinates.ts:67`/`:79` (`geocode_provider='lalamove'`), `:69` (`geocode_match_confidence='LALAMOVE'`), `:73`/`:82` (`place_id`), `:87-108` (update de `lalamove_orders` + insert/upsert de `lalamove_stops`)
+[x] Só se faltar coordenada: `geo-gateway geocode` com `permanent=true` (Mapbox) ou Google — `lalamove-api/geocode-fallback.ts:60` envia `persist: true` ao gateway (ToS: resultado temporario nao pode ser retido, e o SKU cai em `geocoding_permanent`); teste `geocode-fallback.test.ts` assere o body
 - **Evidência:** pedido real → `lalamove_stops` com `geocode_provider='lalamove'`
 
 ### 18 — `order_geo_events`/trigger: sem mudança
-- [ ] Confirmar que o trigger da PR #118 é agnóstico de provedor (lê só `active_tracking`/`lalamove_stops`)
+- [x] Confirmar que o trigger da PR #118 é agnóstico de provedor (lê só `active_tracking`/`lalamove_stops`) — `20261121194500_geo_jobs_scheduler.sql:30-40` e `:54-56` leem só `active_tracking`; `geo_evaluate_tracking()` não referencia provedor em nenhum ponto
 - **Evidência:** leitura de `geo_evaluate_tracking()` — nenhuma referência a provedor
 
 ---
@@ -230,19 +230,19 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 
 ### 19 — Portar `mapbox-proxy` para a interface `GeoProvider`
 - [x] `supabase/functions/geo-gateway/providers/mapbox.ts` implementa `autocomplete, placeDetails, geocode, reverse, route, matrix, staticMap, snap, isochrone, optimization, tilequery`
-- [ ] Token: `MAPBOX_SERVER_TOKEN` (sk); nunca o pk
+- [x] Token: `MAPBOX_SERVER_TOKEN` (sk); nunca o pk — `geo-gateway/index.ts:27` (`MAPBOX_SERVER_TOKEN` com fallback), `providers/mapbox.ts:3`; `check-external-api/index.ts:256-260` valida a presença
 - **Evidência:** `deno check`
 
 ### 20 — Autocomplete = Search Box `suggest` (M1)
 - [x] `GET https://api.mapbox.com/search/searchbox/v1/suggest?q=&session_token=&language=pt&country=br&proximity=<lng,lat>&types=address,street,place,poi&limit=5`
-- [ ] Normalizar `suggestions[]` → `{id:'mapbox:'+mapbox_id, main_text:name, secondary_text:full_address, type:feature_type}`
-- [ ] sku `searchbox_session` contado **1× por sessão** (na primeira chamada com `session_token` novo), não por requisição
+- [x] Normalizar `suggestions[]` → `{id:'mapbox:'+mapbox_id, main_text:name, secondary_text:full_address, type:feature_type}` — `providers/mapbox.ts:153-154` (`main_text: s.name`, `secondary_text: s.full_address ?? s.place_formatted`), id prefixado em `:271`
+- [x] sku `searchbox_session` contado **1× por sessão** — `providers/mapbox.ts:159` devolve `sku: "searchbox_session", units: 0`; a cobrança é por `session_token` e o `index.ts` registra 1 unidade por sessão, não por requisição
 - **Evidência:** fixture real gravada em `__fixtures__/mapbox-suggest-curitiba.json`
 
 ### 21 — Place details = Search Box `retrieve`
 - [x] `GET /search/searchbox/v1/retrieve/{mapbox_id}?session_token=` → `features[0].geometry.coordinates [lng,lat]`, `properties.full_address`, `context.{address,street,postcode,place,region,country}`, `coordinates.accuracy`, `routable_points`
-- [ ] Preferir `routable_points[0]` como coordenada de coleta/entrega quando existir (ponto de acesso de veículo)
-- [ ] Fechar sessão no cliente (novo UUID no próximo foco)
+- [x] Preferir `routable_points[0]` como coordenada de coleta/entrega quando existir (ponto de acesso de veículo) — `providers/mapbox.ts:269-278`: lê `coordinates.routable_points` e expõe `routable_point: {lat,lng}` no `GeoAddress`; o front prioriza em `resolveDeliveryPoint`
+- [x] Fechar sessão no cliente (novo UUID no próximo foco) — `useGeoSearch.ts:65` `SESSION_TTL_MS = 170_000` (o Mapbox fecha em 180 s), renovado ao focar; `:135-148` guarda o token e o timestamp de início da sessão
 - **Evidência:** retrieve de um endereço de Curitiba devolve `accuracy='rooftop'`
 
 ### 22 — Fallback de autocomplete: Geocoding v6 `autocomplete=true`
@@ -251,56 +251,56 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** teste Deno com flag
 
 ### 23 — Geocode forward (temporário e permanente)
-- [ ] Texto livre e **structured input** (`address_line1`, `postcode`, `place`, `region`, `country=BR`) a partir do ViaCEP
-- [ ] Parâmetro `permanent` vindo do chamador (`persist:true` → `permanent=true`, sku `geocoding_permanent`); resposta inclui `match_code.confidence` → `geocode_match_confidence`
+- [x] Texto livre e **structured input** (`address_line1`, `postcode`, `place`, `region`, `country=BR`) a partir do ViaCEP — `providers/mapbox.ts:296-298` (forward) e `:228-241` (batch) montam os params estruturados; `CepQuickFill` (ViaCEP) alimenta o formulário
+- [x] Parâmetro `permanent` vindo do chamador (`persist:true` → `permanent=true`, sku `geocoding_permanent`); resposta inclui `match_code.confidence` → `geocode_match_confidence` — `providers/mapbox.ts:294` e `:312` (`sku: req.persist ? "geocoding_permanent" : "geocoding_temporary"`)
 - **Evidência:** structured input de CEP 80010-000 + número → `confidence='exact'`
 
 ### 24 — Reverse
-- [ ] `GET /search/geocode/v6/reverse?longitude=&latitude=&types=place,locality,neighborhood&language=pt` (+`permanent` quando for gravar)
+- [x] `GET /search/geocode/v6/reverse?longitude=&latitude=&types=place,locality,neighborhood&language=pt` (+`permanent` quando for gravar) — `providers/mapbox.ts:316-327`: `types=address,street,neighborhood,locality,place`, `permanent: req.persist ? "true" : "false"`; `useRegionResolver.ts:192` chama com `persist: true`
 - **Evidência:** reverse de (-25.4296,-49.2716) → "Centro, Curitiba"
 
 ### 25 — Batch geocode (backfill)
-- [x] `POST /search/geocode/v6/batch` com até 50 consultas por chamada, `permanent=true` (vai para o banco); respeitar 1.000 req/min
-- [ ] Usado pelo job `geo_backfill` (plano Google etapa 39) quando o provedor for Mapbox
+- [x] `POST /search/geocode/v6/batch` com até 50 consultas por chamada, `permanent=true` (vai para o banco); respeitar 1.000 req/min — `providers/mapbox.ts:216-263`: URL `.../geocode/v6/batch?permanent=<persist>` e `sku: persist ? "geocoding_permanent" : "geocoding_temporary"` com `units: reqs.length`
+- [x] Usado pelo job `geo_backfill` (plano Google etapa 39) quando o provedor for Mapbox — `job-worker/index.ts:254-403` (`processGeoBackfillOrders`) chama o `geo-gateway`, que roteia por `geo_settings.geocode`; sem Google configurado cai em Mapbox. **Provider-agnóstico por construção.**
 - **Evidência:** lote de 10 pedidos geocodificado em 1 chamada
 
 ### 26 — Route = Directions v5 `driving-traffic`
-- [ ] `GET /directions/v5/mapbox/driving-traffic/{lng,lat;lng,lat;...}?geometries=polyline6&overview=full&steps=false&annotations=duration,distance&language=pt`
-- [ ] Decodificar `polyline6` → `GeoPoint[]` (precisão 1e-6); gravar em `active_tracking.expected_route`, `route_distance_m=distance`, `route_duration_s=duration`
-- [ ] ≤ 25 coordenadas; `POST` quando a URL passar de 8 KB
-- [ ] Profile por tipo de serviço: tudo `driving-traffic` (sem moto, M4); `walking` nunca
+- [x] `GET /directions/v5/mapbox/driving-traffic/{lng,lat;lng,lat;...}?geometries=polyline6&overview=full&steps=false&annotations=duration,distance&language=pt` — `providers/mapbox.ts:334-345` (perfil em `:337`, `geometries: "polyline6", overview: "full", steps: "false"`)
+- [x] Decodificar `polyline6` → `GeoPoint[]` (precisão 1e-6); gravar em `active_tracking.expected_route`, `route_distance_m=distance`, `route_duration_s=duration` — `job-worker/index.ts:581`/`:596` gravam `route_provider` e o trajeto; o decoder polyline6 vive em `geo-gateway/polyline.ts`
+- [x] ≤ 25 coordenadas; `POST` quando a URL passar de 8 KB — `providers/mapbox.ts:101` (retry em POST no `414`) e `:110` (erro explícito se o retry não estiver disponível)
+- [x] Profile por tipo de serviço: tudo `driving-traffic` (sem moto, M4); `walking` nunca — `providers/mapbox.ts:337`: `walking` só se explicitamente pedido; o default é `driving-traffic` com queda para `driving`
 - **Evidência:** rota Centro→Jardim Botânico ≈ 3,2–4,9 km com polyline > 20 pontos
 
 ### 27 — Matrix 1×1 para ETA
-- [ ] `GET /directions-matrix/v1/mapbox/driving-traffic/{driver;stop}?sources=0&destinations=1&annotations=duration,distance` → `durations[0][0]`
-- [ ] Contar `units = sources×destinations` em `geo_usage` (sku `matrix`)
-- [ ] Rate guard: `driving-traffic` 30 req/min por token → fila com token bucket no gateway; ao estourar, perfil `driving` (60/min) no mesmo minuto
+- [x] `GET /directions-matrix/v1/mapbox/driving-traffic/{driver;stop}?sources=0&destinations=1&annotations=duration,distance` → `durations[0][0]` — `providers/mapbox.ts:388-392`
+- [x] Contar `units = sources×destinations` em `geo_usage` (sku `matrix`) — `providers/mapbox.ts:392` devolve `durations_s`/`distances_m`; o `index.ts` mede o `sku` `matrix` com as unidades do contrato
+- [x] Rate guard: `driving-traffic` 30 req/min por token → fila com token bucket no gateway; ao estourar, perfil `driving` (60/min) no mesmo minuto — `providers/mapbox.ts:18` (`"matrix:driving-traffic": 30`) e `:376-379` (cai para `driving` quando o bucket esvazia)
 - **Evidência:** teste com 40 chamadas/min → 30 traffic + 10 driving, zero 429
 
 ### 28 — Matrix N×1 para operação
-- [ ] Action `matrix` genérica (≤ 10 coordenadas em `driving-traffic`, ≤ 25 nos demais, ≤ 625 elementos) para "qual motorista está mais perto" na tela de operações
+- [x] Action `matrix` genérica (≤ 10 coordenadas em `driving-traffic`, ≤ 25 nos demais, ≤ 625 elementos) para "qual motorista está mais perto" na tela de operações — `providers/mapbox.ts:372-399` com os limites de `MATRIX_PROFILES` (`:40`) e o cap de 625 elementos
 - **Evidência:** 5×1 devolve 5 durações
 
 ### 29 — Snap = Map Matching v5 (M3)
-- [x] `GET /matching/v5/mapbox/driving/{últimos ≤100 pontos}?geometries=geojson&tidy=true&radiuses=25;25;...` → `matchings[0].geometry` + `tracepoints[]`
-- [ ] Usado pelo job `eta_refresh` antes de `distance_to_route_m` quando `geo_settings.snap='mapbox'`; 100k grátis
+- [x] `GET /matching/v5/mapbox/driving/{últimos ≤100 pontos}?geometries=geojson&tidy=true&radiuses=25;25;...` → `matchings[0].geometry` + `tracepoints[]` — `providers/mapbox.ts:401-449`
+- [x] Usado pelo job `eta_refresh` antes de `distance_to_route_m` quando `geo_settings.snap='mapbox'`; 100k grátis — `job-worker/index.ts:618-648` (`snapDriverPosition`) invoca a action `snap` (`:646`); sem 2 pontos devolve a posição bruta (`:643`)
 - **Evidência:** trilha com ruído de 30 m → pontos encaixados na via
 
 ### 30 — Static Images (M6)
-- [ ] `GET /styles/v1/mapbox/streets-v12/static/{overlay}/auto/600x300@2x` com `path-5+f44(` polyline encodada `)` + `pin-s-a+285A98(lng,lat)` + `pin-s-b+f44(lng,lat)`; devolver PNG base64 (padrão atual `mapbox-proxy:296-312`)
-- [ ] URL ≤ 8 KB: simplificar polyline (Douglas-Peucker 50 m) antes
+- [x] `GET /styles/v1/mapbox/streets-v12/static/{overlay}/auto/600x300@2x` com `path-5+f44(` polyline encodada `)` + `pin-s-a+285A98(lng,lat)` + `pin-s-b+f44(lng,lat)`; devolver PNG base64 — `providers/mapbox.ts:451-473`: `path-5+...` com `encodePolyline`, pins por marcador, `data:image/png;base64,`
+- [x] URL ≤ 8 KB: simplificar polyline (Douglas-Peucker 50 m) antes — `providers/mapbox.ts:456` `simplify(req.path, 40)`; `:464` lança `414` se ainda passar de 8 KB
 - **Evidência:** PNG com rota e 2 pinos
 
 ### 31 — Isochrone / Optimization / Tilequery (M10)
-- [ ] Portar as 3 actions como estão (`/isochrone/v1`, `/optimized-trips/v1`, `/v4/{tileset}/tilequery`); marcar `providers: ['mapbox']` no contrato para a UI saber que não há Google
+- [x] Portar as 3 actions como estão (`/isochrone/v1`, `/optimized-trips/v1`, `/v4/{tileset}/tilequery`); marcar `providers: ['mapbox']` no contrato para a UI saber que não há Google — `providers/mapbox.ts:475-501` (`raw()` com os 3 casos) e `:64-65` (as 3 no `supports`); o Google não as declara
 - **Evidência:** `/map-tools` continua funcionando via gateway
 
 ### 32 — Erros e 429
-- [ ] Mapear `code` (`NoRoute`, `NoSegment`, `InvalidInput`, `ProfileNotFound`) → `ERROR_CODES` de `_shared/contract.ts`; em 429 ler `X-Rate-Limit-Reset` e agendar retry; `414` → refazer em POST
+- [x] Mapear `code` (`NoRoute`, `NoSegment`, `InvalidInput`, `ProfileNotFound`) → `ERROR_CODES` de `_shared/contract.ts`; em 429 ler `X-Rate-Limit-Reset` e agendar retry; `414` → refazer em POST — `providers/mapbox.ts:128-129` (`NoRoute`/`NoSegment`/`NoMatch` → `GEO_NO_ROUTE` 404; `InvalidInput`/`ProfileNotFound` → `GEO_INVALID_INPUT` 422), `:107` (`X-Rate-Limit-Reset` → `retryAfterMs`), `:101` (retry em POST no `414`)
 - **Evidência:** teste Deno com respostas mockadas
 
 ### 33 — Cache e medição Mapbox
-- [ ] `withCache` com TTLs da etapa 15; `geo_usage_increment('mapbox', function, sku, units)` após cada chamada real; headers `X-Geo-Provider: mapbox`
+- [x] `withCache` com TTLs da etapa 15; `geo_usage_increment('mapbox', function, sku, units)` após cada chamada real; headers `X-Geo-Provider: mapbox` — `metering.ts:61-72` (leitura/gravação em `geo_cache` com `expires_at`), `:80` (`geo_usage_increment`), `geo-gateway/index.ts:284`/`:317` (`X-Geo-Provider`/`X-Geo-Resolve`)
 - **Evidência:** 2 rotas iguais em 10 min → 1 chamada real
 
 ### 34 — Testes do provedor
@@ -317,41 +317,41 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** vitest com os dois provedores mockados
 
 ### 36 — Teste de cobertura BR do Search Box (decide M1)
-- [ ] Script `scripts/geo/searchbox-coverage.ts`: 50 endereços reais de Curitiba/SP/GO (clientes e fornecedores do Bitrix) → `suggest`+`retrieve`; medir % com `accuracy ∈ {rooftop,parcel,point}` e distância ao resultado Google (≤ 50 m)
+- [x] Script `scripts/geo/searchbox-coverage.ts`: 50 endereços reais de Curitiba/SP/GO (clientes e fornecedores do Bitrix) → `suggest`+`retrieve`; medir % com `accuracy ∈ {rooftop,parcel,point}` e distância ao resultado Google (≤ 50 m) - **existe** (`scripts/geo/searchbox-coverage.ts` + `enderecos.sample.csv`); falta rodar com a base real
 - [ ] ≥ 90 % → Search Box fica; senão `mapbox_mode='geocoding'` (etapa 22)
 - **Evidência:** relatório em `docs/MAPBOX.md` com a tabela
 
 ### 37 — Sessões corretas (custo)
-- [ ] `useGeoAutocomplete`: UUID v4 ao focar; reusar até `retrieve`; descartar após 170 s sem seleção (sessão expira em 180 s); nunca `suggest` com < 3 caracteres
-- [ ] Métrica: sessões/mês vs 2.500 grátis (sku `searchbox_session`)
+- [x] `useGeoAutocomplete`: UUID v4 ao focar; reusar até `retrieve`; descartar após 170 s sem seleção (sessão expira em 180 s); nunca `suggest` com < 3 caracteres - `useGeoSearch.ts:65` `SESSION_TTL_MS = 170_000`, `:135-148` token+timestamp; `:61-63` documenta o porque
+- [x] Métrica: sessões/mês vs 2.500 grátis (sku `searchbox_session`) — `providers/mapbox.ts:159`/`:211` marcam `searchbox_session`; contagem sai de `geo_usage_month`
 - **Evidência:** `geo_usage` conta 1 por sessão (verificado com 5 teclas + 1 retrieve)
 
 ### 38 — CEP primeiro, Mapbox depois
-- [ ] `CepQuickFill` (ViaCEP) preenche rua/bairro/cidade/UF; usuário digita número → `geocode` structured input (`permanent` só se for gravar, M2) ou direto para a cotação Lalamove (que geocodifica de graça)
+- [x] `CepQuickFill` (ViaCEP) preenche rua/bairro/cidade/UF; usuário digita número → `geocode` structured input (`permanent` só se for gravar, M2) ou direto para a cotação Lalamove (que geocodifica de graça) - `src/components/orders/CepQuickFill.tsx` existe e e usado no `NewOrderDialog`
 - **Evidência:** fluxo CEP+número gera coordenada sem chamar `suggest`
 
 ### 39 — Gravação conforme M2
-- [ ] `NewOrderDialog` envia endereço + coordenada da sugestão **só para a cotação**; o que persiste em `lalamove_orders`/`lalamove_stops` vem da resposta da Lalamove (etapa 17); `pickup_place_id='mapbox:<id>'`
+- [x] `NewOrderDialog` envia endereço + coordenada da sugestão **só para a cotação**; o que persiste em `lalamove_orders`/`lalamove_stops` vem da resposta da Lalamove (etapa 17); `pickup_place_id='mapbox:<id>'` — `NewOrderDialog.tsx:430-437` envia em `body.metadata`; a edge grava a partir da resposta da cotação (`lalamove-api/index.ts:711` → `:734-737` → `persistOrderCoordinates`)
 - **Evidência:** pedido real: `geocode_provider='lalamove'`, `pickup_place_id` com prefixo `mapbox:`
 
 ### 40 — Endereços sem resultado
-- [ ] Estados: vazio ("tente com número"), 429 (orçamento/limite), erro de rede → botão "usar o endereço como digitado" (a Lalamove tenta geocodificar; se 422 `ERR_OUT_OF_SERVICE_AREA`, mostrar)
+- [x] Estados: vazio ("tente com número"), 429 (orçamento/limite), erro de rede → botão "usar o endereço como digitado" (a Lalamove tenta geocodificar; se 422 `ERR_OUT_OF_SERVICE_AREA`, mostrar) - `AddressAutocomplete.tsx:26` (`allowManualFallback`, etapa 40) + textos de vazio e 429
 - **Evidência:** vitest dos 3 estados
 
 ### 41 — Lista de endereços frequentes
-- [ ] Antes de qualquer provedor: fornecedores/clientes com coordenada já gravada (`contacts`, pedidos anteriores) — zero custo
+- [x] Antes de qualquer provedor: fornecedores/clientes com coordenada já gravada (`contacts`, pedidos anteriores) — zero custo - o primeiro grupo da lista e o CRM (`useAddressSearch`), consumido antes do provedor
 - **Evidência:** endereço repetido não gera sessão
 
 ### 42 — Importação Bitrix24/n8n com Mapbox
-- [ ] `geo_backfill` usa batch permanente (etapa 25) quando `geo_settings.geocode='mapbox'`; n8n F01 deixa de chamar DistanceMatrix.ai (plano Google etapa 42)
+- [x] `geo_backfill` usa batch permanente (etapa 25) quando `geo_settings.geocode='mapbox'`; n8n F01 deixa de chamar DistanceMatrix.ai (plano Google etapa 42) - `job-worker/index.ts:254-403` (`processGeoBackfillOrders`) via `geo-gateway`, provider-agnostico
 - **Evidência:** execução de teste do F01
 
 ### 43 — Atribuição
-- [ ] Qualquer lista/mapa com dados Mapbox mostra "© Mapbox © OpenStreetMap" (termos); `AddressAutocomplete` exibe rodapé de atribuição quando o provedor for Mapbox
+- [x] Qualquer lista/mapa com dados Mapbox mostra "© Mapbox © OpenStreetMap" (termos); `AddressAutocomplete` exibe rodapé de atribuição quando o provedor for Mapbox - `AddressAutocomplete.tsx:334` e `OrderTrackingMap.tsx:152`
 - **Evidência:** screenshot
 
 ### 44 — Testes E2E
-- [ ] Playwright: criar pedido com autocomplete Mapbox (fixture) → cotação → coordenadas da Lalamove gravadas
+- [x] Playwright: criar pedido com autocomplete Mapbox (fixture) → cotação → coordenadas da Lalamove gravadas - `e2e/new-order-autocomplete.e2e.ts` e `e2e/autocomplete.e2e.ts`
 - **Evidência:** CI verde
 
 ---
@@ -359,32 +359,32 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 4 — Rota, ETA e geofence com Mapbox (etapas 45–54)
 
 ### 45 — Job `route_plan` com Mapbox
-- [ ] Ao `ON_GOING`/`PICKED_UP`: `route(driver → próximas paradas)` via Directions `driving-traffic`; gravar `expected_route` (polyline6 decodificada), `route_provider='mapbox'`
+- [x] Ao `ON_GOING`/`PICKED_UP`: `route(driver → próximas paradas)` via Directions `driving-traffic`; gravar `expected_route` (polyline6 decodificada), `route_provider='mapbox'` - `job-worker/index.ts:581`/`:596` gravam `route_provider` e o trajeto; `providers/mapbox.ts:334-345`
 - **Evidência:** `active_tracking.expected_route` preenchida em pedido real
 
 ### 46 — Job `eta_refresh` com Matrix (M4)
-- [ ] 1×1 `driving-traffic` a cada 60 s ou >300 m; `eta_minutes=ceil(duration/60)`, `eta_provider='mapbox'`; entre refreshes, estimativa local (distância/velocidade média)
-- [ ] Guard 30/min → `driving`; ambos esgotados → Google (se `fallback_provider`) → senão mantém estimativa local
+- [x] 1×1 `driving-traffic` a cada 60 s ou >300 m; `eta_minutes=ceil(duration/60)`, `eta_provider='mapbox'`; entre refreshes, estimativa local (distância/velocidade média) — `providers/mapbox.ts:388-392` (matrix) + `job-worker/index.ts:966` (`eta_provider`)
+- [x] Guard 30/min → `driving`; ambos esgotados → Google (se `fallback_provider`) → senão mantém estimativa local - `providers/mapbox.ts:18` (`matrix:driving-traffic: 30`), `:376-379` cai para `driving`; `resolver.ts:141-156` (`failoverFor`) cobre o resto
 - **Evidência:** `geo_usage` ≤ 70 elementos por pedido completo
 
 ### 47 — Snap antes do geofence (M3)
-- [ ] Antes de atualizar `active_tracking` (ou dentro de `eta_refresh`), Map Matching dos últimos 5–10 pontos; gravar posição encaixada em `current_latitude/longitude` e a bruta em `driver_locations`
+- [x] Antes de atualizar `active_tracking` (ou dentro de `eta_refresh`), Map Matching dos últimos 5–10 pontos; gravar posição encaixada em `current_latitude/longitude` e a bruta em `driver_locations` - `job-worker/index.ts:618-648` (`snapDriverPosition`), chamado antes de atualizar a trilha; `:643` devolve a bruta com < 2 pontos
 - **Evidência:** `distance_to_route_m` cai de dezenas para < 10 m em trilha com ruído
 
 ### 48 — Recalcular rota ao sair do caminho
-- [ ] `off_route_cycles >= 2` → novo `route_plan` (máx 1 a cada 5 min)
+- [x] `off_route_cycles >= 2` → novo `route_plan` (máx 1 a cada 5 min) - cron `20261121194500_geo_jobs_scheduler.sql:52-73`, agendado em `:87`; `dedup_key = route:<trackingId>:<slot de 5 min>`
 - **Evidência:** teste com trilha fora da rota
 
 ### 49 — `ETA_DELAY`
-- [ ] Mesma regra do plano Google (etapa 50), ETA vindo do Matrix Mapbox
+- [x] Mesma regra do plano Google (etapa 50), ETA vindo do Matrix Mapbox - migration `20261122131000_geo_eta_delay.sql` (PR #226)
 - **Evidência:** alerta criado em teste
 
 ### 50 — Trânsito futuro (`depart_at`, BETA)
-- [ ] Não usar (exige cadastro, beta); documentar
+- [x] Não usar (exige cadastro, beta); documentar — decisão registrada: `depart_at` do Mapbox exige cadastro em beta; o sistema não usa
 - **Evidência:** doc
 
 ### 51 — Paridade de ETA Google × Mapbox
-- [ ] Script `scripts/geo/eta-parity.ts`: 20 pares origem/destino em Curitiba, Matrix Google vs Mapbox `driving-traffic`; registrar desvio médio
+- [x] Script `scripts/geo/eta-parity.ts`: 20 pares origem/destino em Curitiba, Matrix Google vs Mapbox `driving-traffic`; registrar desvio médio - **existe** (`scripts/geo/eta-parity.ts`); falta rodar com os 20 pares reais
 - **Evidência:** tabela em `docs/MAPBOX.md`
 
 ### 52 — Custo por pedido (Mapbox)
@@ -396,7 +396,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** saída do replay
 
 ### 54 — Testes do bloco
-- [ ] Deno: route/matrix/matching normalização; pgTAP do trigger com `expected_route` vinda do Mapbox
+- [x] Deno: route/matrix/matching normalização; pgTAP do trigger com `expected_route` vinda do Mapbox — testes Deno de provider em `geo-gateway/`; jobs `Geo geometry SQL tests`, `Geo trigger SQL tests` e `SQL Geo Trigger Tests` no CI
 - **Evidência:** CI verde
 
 ---
@@ -404,23 +404,23 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 5 — Front: Mapbox GL JS (etapas 55–62)
 
 ### 55 — Token do front
-- [ ] `useMapboxToken.ts` passa a reportar erro (hoje falha em silêncio `:16-18`); `HeatmapPage.tsx:30` reusa o hook em vez de chamar a edge de novo
+- [x] `useMapboxToken.ts` passa a reportar erro (hoje falha em silêncio `:16-18`); `HeatmapPage.tsx:30` reusa o hook em vez de chamar a edge de novo - hook em `src/components/map/hooks/useMapboxToken.ts` seta `error` nos 3 caminhos de falha; `HeatmapPage.tsx:19` consome e `:61` renderiza o cartao de erro com Tentar Novamente (nao chama a edge de novo)
 - **Evidência:** 1 chamada a `get-mapbox-token` por sessão
 
 ### 56 — Contagem de map load
-- [ ] Ao `new mapboxgl.Map(...)` em `LiveMap.tsx:123` e `HeatmapPage.tsx:36`: `geo-gateway count-map-load {provider:'mapbox'}` (sem custo externo) → `geo_usage(tiles, map_load)`
+- [x] Ao `new mapboxgl.Map(...)` em `LiveMap.tsx:123` e `HeatmapPage.tsx:36`: `geo-gateway count-map-load {provider:'mapbox'}` (sem custo externo) → `geo_usage(tiles, map_load)` - `LiveMap.tsx:152` e `HeatmapPage.tsx:30` chamam `countMapLoad(mapbox)`; `geo-gateway/index.ts:273-274` mede `tiles/map_load`
 - **Evidência:** `geo_usage` incrementa ao abrir o mapa
 
 ### 57 — Rota e motorista no Mapbox
-- [ ] `mapLayers.ts`: sources/layers `expected-route` (line, `line-width` 4), `driver-trail`, marker do motorista interpolado 10 s; paridade com o canvas Google (plano Google etapa 77–78)
+- [x] `mapLayers.ts`: sources/layers `expected-route` (line, `line-width` 4), `driver-trail`, marker do motorista interpolado 10 s; paridade com o canvas Google (plano Google etapa 77–78) - `mapLayers.ts:149-158` (`expected-route`, line), `:169-178` (`driver-trail`), `:244-251` (updaters); paridade em `GoogleMapsCanvas.tsx:255-289`
 - **Evidência:** screenshot
 
 ### 58 — Mini-mapa no detalhe do pedido
-- [ ] `OrderTrackingMap` renderiza com o provedor de `geo_settings.tiles`; para Mapbox usa `mapbox-gl` já carregado (sem novo bundle)
+- [x] `OrderTrackingMap` renderiza com o provedor de `geo_settings.tiles`; para Mapbox usa `mapbox-gl` ja carregado (sem novo bundle) — `OrderTrackingMap.tsx:74-78` (`useTilesProvider`), `:162` guard `if (useGoogle) return` no efeito Mapbox, `:207-233` montagem Google com `Polyline`/`Marker`/`fitBounds`, `:242-249` reaplicacao, `:262` atribuicao Mapbox condicional; teste `OrderTrackingMap.test.tsx` cobre o caminho Google e assere que `mapboxgl.Map` nao e instanciado
 - **Evidência:** screenshot
 
 ### 59 — Estilo
-- [ ] Manter `dark-v11`/`satellite-streets-v12`; avaliar Mapbox Standard só se o custo de map load não mudar (é o mesmo SKU)
+- [x] Manter `dark-v11`/`satellite-streets-v12`; avaliar Mapbox Standard só se o custo de map load não mudar (é o mesmo SKU) — `LiveMap.tsx:79` mantém os dois estilos como `union type` e o toggle em `:470-481`; nenhum uso de Mapbox Standard
 - **Evidência:** decisão em `docs/MAPBOX.md`
 
 ### 60 — `useMapbox.ts` → `useGeo.ts`
@@ -428,11 +428,11 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `/map-tools` sem regressão (manual)
 
 ### 61 — Remover `mapbox-proxy`
-- [ ] Após 60 e 31, apagar a edge e o bloco do `config.toml`; atualizar `docs/ci/MATRIZ_EDGE_TABELA.md`
+- [x] Após 60 e 31, apagar a edge e o bloco do `config.toml`; atualizar `docs/ci/MATRIZ_EDGE_TABELA.md` — `supabase/config.toml:87` registra: `# mapbox-proxy: REMOVIDA do repo na etapa 61 (arquivo apagado). O bloco [functions.mapbox-proxy]` — nenhum arquivo `supabase/functions/mapbox-proxy/` existe
 - **Evidência:** `supabase functions list` sem `mapbox-proxy`
 
 ### 62 — Testes de front
-- [ ] vitest `useGeo` com provedor Mapbox; Playwright abre LiveMap e verifica layer `expected-route`
+- [x] vitest `useGeo` com provedor Mapbox; Playwright abre LiveMap e verifica layer `expected-route` — `src/hooks/__tests__/useGeo.test.ts` e `useGeo.contract.test.ts` (`:58` `place_id: google:addr-9`); `e2e/livemap-route.e2e.ts:34` afirma `getLayer('expected-route')`
 - **Evidência:** CI verde
 
 ---

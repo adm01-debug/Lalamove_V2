@@ -17,6 +17,19 @@ vi.mock('../mapLayers', () => ({
 
 vi.mock('@/lib/geo-gateway', () => ({ countMapLoad: vi.fn() }));
 
+// Etapa 58: o provider de tiles vem do banco (`geo_settings.tiles`), então precisa
+// de mock — o componente antes era Mapbox fixo.
+const tilesState = { provider: 'mapbox' as 'mapbox' | 'google' | 'off' };
+vi.mock('@/hooks/useMapProviderPolicy', () => ({
+  useTilesProvider: () => ({ data: tilesState.provider }),
+}));
+
+const loadGoogleMapsMock = vi.fn(() => Promise.resolve());
+vi.mock('../hooks/useGoogleMapsLoader', () => ({
+  loadGoogleMaps: () => loadGoogleMapsMock(),
+  getGoogleMapsMapId: () => undefined,
+}));
+
 // mapbox-gl não instancia em jsdom: stub mínimo da API usada pelo componente.
 const mapStub = {
   on: (event: string, cb: () => void) => { if (event === 'style.load') cb(); },
@@ -26,19 +39,43 @@ const mapStub = {
   fitBounds: vi.fn(),
   remove: vi.fn(),
 };
-function MapMock() { return mapStub; }
+const MapMock = vi.fn();
 function LngLatBoundsMock() { return { extend: () => ({}) }; }
 vi.mock('mapbox-gl', () => ({
-  default: { accessToken: '', Map: MapMock, LngLatBounds: LngLatBoundsMock },
+  default: {
+    accessToken: '',
+    // Classe declarada dentro da factory: `vi.mock` é hoisted e não vê o escopo do módulo.
+    Map: class { constructor(...args: unknown[]) { MapMock(...args); return mapStub as never; } },
+    LngLatBounds: LngLatBoundsMock,
+  },
 }));
 
+// Stub da Google Maps JS API (carregada por <script>, indisponível no jsdom).
+const googleMapStub = { fitBounds: vi.fn() };
+Object.assign(window, {
+  google: {
+    maps: {
+      Map: function () { return googleMapStub; },
+      Marker: function () { return { setMap: vi.fn() }; },
+      Polyline: function () { return { setPath: vi.fn() }; },
+      LatLngBounds: function () { return { extend: () => undefined }; },
+      SymbolPath: { CIRCLE: 0 },
+      event: { trigger: vi.fn() },
+    },
+  },
+});
+
 import { OrderTrackingMap } from '../OrderTrackingMap';
+import { countMapLoad } from '@/lib/geo-gateway';
 
 describe('OrderTrackingMap (etapa 58)', () => {
   beforeEach(() => {
     tokenState.token = null;
     tokenState.error = null;
+    tilesState.provider = 'mapbox';
     setExpectedRouteMock.mockClear();
+    loadGoogleMapsMock.mockClear();
+    MapMock.mockClear();
   });
 
   it('mostra aviso quando o token do Mapbox não está disponível', () => {
@@ -57,5 +94,20 @@ describe('OrderTrackingMap (etapa 58)', () => {
     tokenState.token = 'pk.test';
     const { container } = render(<OrderTrackingMap />);
     expect(container.querySelector('[role="img"]')).toBeTruthy();
+  });
+
+  it('com geo_settings.tiles = google usa o canvas Google e não instancia o Mapbox', async () => {
+    tilesState.provider = 'google';
+    tokenState.token = 'pk.test';
+    render(<OrderTrackingMap pickup={{ lat: -23.55, lng: -46.63 }} delivery={{ lat: -23.6, lng: -46.7 }} />);
+
+    await vi.waitFor(() => expect(loadGoogleMapsMock).toHaveBeenCalled());
+    await vi.waitFor(() => expect(countMapLoad).toHaveBeenCalledWith('google'));
+
+    // Nenhum map load do Mapbox é cobrado quando o Google desenha o mapa.
+    expect(MapMock).not.toHaveBeenCalled();
+    expect(countMapLoad).not.toHaveBeenCalledWith('mapbox');
+    // A atribuição Mapbox não aparece no canvas Google.
+    expect(screen.queryByText(/© Mapbox/)).toBeNull();
   });
 });
