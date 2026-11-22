@@ -1,20 +1,21 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate, matchPath } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronDown, LogOut, User, ChevronRight, Moon, Sun, Circle, Truck, Sparkles, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 import { usePrefetch } from '@/hooks/usePrefetch';
 import { menuCategories, getRoleDisplayName, getRoleColor, type MenuItem } from './sidebar-config';
-import { meetsRole } from '@/lib/roles';
+import { meetsRole, getHighestRole } from '@/lib/roles';
+import { usePermissions } from '@/hooks/usePermissions';
+import { useSidebarCounts } from '@/hooks/useSidebarCounts';
+import { useSidebarCountsRealtime } from '@/hooks/useRealtimeSubscriptions';
 import { BounceBadge } from '@/components/ui/micro-interactions';
 import { getDisplayName, getDisplayInitials } from '@/lib/user-display';
 
@@ -26,36 +27,14 @@ export function Sidebar() {
   const { getPrefetchProps } = usePrefetch();
   const [collapsed, setCollapsed] = useState(false);
   const [openCategories, setOpenCategories] = useState<string[]>(['main']);
-  const [unreadAlerts, setUnreadAlerts] = useState(0);
-  const [pendingApprovals, setPendingApprovals] = useState(0);
-  const [openIncidents, setOpenIncidents] = useState(0);
-  const [userRole, setUserRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      if (!user?.id) return;
-      const { data } = await supabase.from('user_roles').select('role').eq('user_id', user.id).single();
-      if (data) setUserRole(data.role);
-    };
-    fetchUserRole();
-  }, [user?.id]);
+  const { userRoles } = usePermissions();
+  const userRole = getHighestRole(userRoles);
 
   const getUserInitials = () => getDisplayInitials(user);
 
-  const fetchCounts = useCallback(async () => {
-    const { count: alertsCount } = await supabase.from('alerts').select('*', { count: 'exact', head: true }).eq('is_read', false).eq('is_dismissed', false);
-    setUnreadAlerts(alertsCount || 0);
-    const { count: approvalsCount } = await supabase.from('driver_approval_queue').select('*', { count: 'exact', head: true }).eq('status', 'PENDING');
-    setPendingApprovals(approvalsCount || 0);
-    const { count: incidentsCount } = await supabase.from('driver_incidents').select('*', { count: 'exact', head: true }).eq('resolved', false);
-    setOpenIncidents(incidentsCount || 0);
-  }, []);
-
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { fetchCounts(); }, [fetchCounts]);
-  useSidebarCountsRealtime(fetchCounts);
-
-  const isActive = (path: string) => path === '/' ? location.pathname === '/' : location.pathname === path;
+  const { unreadAlerts, pendingApprovals, openIncidents, refetchCounts } = useSidebarCounts();
+  useSidebarCountsRealtime(refetchCounts);
+  const isActive = (path: string) => path === '/' ? location.pathname === '/' : !!matchPath({ path, end: false }, location.pathname);
 
   useEffect(() => {
     menuCategories.forEach(cat => { if (cat.items.some(item => isActive(item.path))) setOpenCategories(prev => prev.includes(cat.id) ? prev : [...prev, cat.id]); });

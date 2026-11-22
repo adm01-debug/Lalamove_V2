@@ -28,6 +28,19 @@ export function meetsRole(role: string | null | undefined, required?: AppRole): 
   return roleLevel(role) >= roleHierarchy[required];
 }
 
+/** Retorna o papel de maior nível entre os roles ativos do usuário (null se nenhum). */
+export function getHighestRole(roles: { role: AppRole; is_active: boolean }[] | null | undefined): AppRole | null {
+  if (!roles) return null;
+  let highest: AppRole | null = null;
+  let highestLevel = 0;
+  for (const r of roles) {
+    if (!r.is_active) continue;
+    const level = roleHierarchy[r.role] ?? 0;
+    if (level > highestLevel) { highestLevel = level; highest = r.role; }
+  }
+  return highest;
+}
+
 /** `true` se o usuário tem o papel exato `role` ativo (ex.: `hasRole('admin')`). */
 export function hasRole(userRoles: { role: AppRole; is_active: boolean }[] | null | undefined, role: AppRole): boolean {
   if (!userRoles) return false;

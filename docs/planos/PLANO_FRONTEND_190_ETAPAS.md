@@ -312,15 +312,15 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** usuário sem linha em `user_roles` não vê KPIs.
 
 ### 52 — [F] Role via `usePermissions` (cache) em vez de `.single()` nas sidebars
-- [ ] `Sidebar.tsx:34-40` e `MobileSidebar.tsx:137-147`: remover a query própria de `user_roles` (quebra com 2 roles) e usar `usePermissions`.
+- [x] `Sidebar.tsx:34-40` e `MobileSidebar.tsx:137-147`: remover a query própria de `user_roles` (quebra com 2 roles) e usar `usePermissions`.
 - **Evidência:** usuário com 2 roles vê seções de admin; 1 request a `user_roles` por sessão.
 
 ### 53 — [F] Contadores da sidebar no React Query, em paralelo
-- [ ] `Sidebar.tsx:44-50` / `MobileSidebar.tsx:167-189`: hook `useSidebarCounts()` com `useQueries` (3 counts em paralelo, `staleTime` 30 s) compartilhado.
+- [x] `Sidebar.tsx:44-50` / `MobileSidebar.tsx:167-189`: hook `useSidebarCounts()` com `useQueries` (3 counts em paralelo, `staleTime` 30 s) compartilhado.
 - **Evidência:** aba Network: 3 requests simultâneos, não 3 sequenciais repetidos por sidebar.
 
 ### 54 — [F] Sidebar destaca rotas aninhadas
-- [ ] `Sidebar.tsx:56`: `matchPath({ path, end: false })` em vez de `===`.
+- [x] `Sidebar.tsx:56`: `matchPath({ path, end: false })` em vez de `===`.
 - **Evidência:** `/reports/advanced` e `/settings/maps` destacam o item pai.
 
 ### 55 — [F] Login respeita a rota de origem
