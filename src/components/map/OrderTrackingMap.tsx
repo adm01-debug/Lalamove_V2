@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useMapboxToken } from './hooks/useMapboxToken';
+import { getGoogleMapsMapId, loadGoogleMaps } from './hooks/useGoogleMapsLoader';
 import { parseExpectedRoute } from './hooks/useMapMarkers';
+import { toGooglePath, type LatLngLiteral } from './googleLayers';
 import { setExpectedRoute } from './mapLayers';
 import { countMapLoad } from '@/lib/geo-gateway';
+import { useTilesProvider } from '@/hooks/useMapProviderPolicy';
 
 export interface OrderTrackingMapProps {
   /** Coordenadas de coleta (colunas `pickup_latitude`/`pickup_longitude` do pedido). */
@@ -19,6 +22,25 @@ export interface OrderTrackingMapProps {
 }
 
 const EMPTY: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+
+/** Subconjunto da Google Maps JS API usado por este mini-mapa (etapa 58). */
+interface GoogleMapsNamespace {
+  Map: new (el: HTMLElement, opts: unknown) => GoogleMapInstance;
+  Marker: new (opts: unknown) => GoogleMarkerInstance;
+  Polyline: new (opts: unknown) => GooglePolylineInstance;
+  LatLngBounds: new () => { extend(p: LatLngLiteral): void };
+  SymbolPath: { CIRCLE: unknown };
+  event: { trigger(instance: unknown, name: string): void };
+}
+interface GoogleMapInstance {
+  fitBounds(bounds: unknown, padding?: number): void;
+}
+interface GoogleMarkerInstance {
+  setMap(map: unknown): void;
+}
+interface GooglePolylineInstance {
+  setPath(path: LatLngLiteral[]): void;
+}
 
 function pointFeature(lng: number, lat: number, color: string): GeoJSON.FeatureCollection {
   return {
@@ -46,6 +68,17 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
   const map = useRef<mapboxgl.Map | null>(null);
   const ready = useRef(false);
   const { mapboxToken, error } = useMapboxToken();
+
+  // Etapa 58: o mapa base segue `geo_settings.tiles` (mesma política do `LiveMap`).
+  // Com Google ativo o `mapboxgl.Map` não é instanciado — sem isso cada mini-mapa
+  // queimaria um map load do Mapbox sem estar visível.
+  const { data: tilesProvider } = useTilesProvider();
+  const useGoogle = tilesProvider === 'google';
+  const googleMap = useRef<GoogleMapInstance | null>(null);
+  const googleRoute = useRef<GooglePolylineInstance | null>(null);
+  const googleMarkers = useRef<GoogleMarkerInstance[]>([]);
+  const [googleReady, setGoogleReady] = useState(false);
+  const [googleError, setGoogleError] = useState(false);
 
   const points: [number, number][] = [];
   if (pickup && valid(pickup.lat, pickup.lng)) points.push([pickup.lng!, pickup.lat!]);
@@ -77,7 +110,52 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
     }
   };
 
+  /** Mesma semântica do `apply`, no canvas Google. */
+  const applyGoogle = () => {
+    const m = googleMap.current;
+    if (!m) return;
+    const g = window.google as unknown as { maps: GoogleMapsNamespace };
+    const path = toGooglePath(expectedRoute);
+
+    if (googleRoute.current) {
+      googleRoute.current.setPath(path);
+    } else if (path.length > 1) {
+      googleRoute.current = new g.maps.Polyline({
+        path, map: m, strokeColor: '#38bdf8', strokeWeight: 4, strokeOpacity: 0.9,
+      });
+    }
+
+    const wanted = [
+      { lat: pickup?.lat ?? null, lng: pickup?.lng ?? null, color: '#22c55e' },
+      { lat: delivery?.lat ?? null, lng: delivery?.lng ?? null, color: '#f97316' },
+      { lat: driver?.lat ?? null, lng: driver?.lng ?? null, color: '#38bdf8' },
+    ];
+    googleMarkers.current.forEach((mk) => mk.setMap(null));
+    googleMarkers.current = wanted
+      .filter((w) => valid(w.lat, w.lng))
+      .map((w) => new g.maps.Marker({
+        position: { lat: w.lat!, lng: w.lng! },
+        map: m,
+        icon: {
+          path: g.maps.SymbolPath.CIRCLE,
+          scale: 7,
+          fillColor: w.color,
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        },
+      }));
+
+    if (points.length >= 2) {
+      g.maps.event.trigger(m, 'resize');
+      const bounds = new g.maps.LatLngBounds();
+      points.forEach((p) => bounds.extend({ lat: p[1], lng: p[0] }));
+      m.fitBounds(bounds, 48);
+    }
+  };
+
   useEffect(() => {
+    if (useGoogle) return;
     if (!container.current || !mapboxToken || map.current) return;
     mapboxgl.accessToken = mapboxToken;
 
@@ -129,7 +207,48 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pickup?.lat, pickup?.lng, delivery?.lat, delivery?.lng, driver?.lat, driver?.lng, expectedRoute]);
 
-  if (error) {
+  // Etapa 58: montagem do canvas Google. Só roda quando `geo_settings.tiles = google`,
+  // então o bundle/`mapbox-gl` continua sendo o único caminho padrão.
+  useEffect(() => {
+    if (!useGoogle || !container.current || googleMap.current) return;
+    let cancelled = false;
+    loadGoogleMaps()
+      .then(() => {
+        if (cancelled || !container.current || googleMap.current) return;
+        const g = window.google as unknown as { maps: GoogleMapsNamespace };
+        const mapId = getGoogleMapsMapId();
+        googleMap.current = new g.maps.Map(container.current, {
+          center: { lat: center[1], lng: center[0] },
+          zoom: points.length > 1 ? 10 : 13,
+          disableDefaultUI: true,
+          gestureHandling: 'cooperative',
+          ...(mapId ? { mapId } : {}),
+        });
+        // Etapa 80: o load é cobrado do provedor que desenhou o mapa.
+        countMapLoad('google');
+        setGoogleReady(true);
+      })
+      .catch(() => {
+        if (!cancelled) setGoogleError(true);
+      });
+    return () => {
+      cancelled = true;
+      googleRoute.current = null;
+      googleMarkers.current = [];
+      googleMap.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useGoogle]);
+
+  useEffect(() => {
+    if (!googleReady) return;
+    applyGoogle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [googleReady, pickup?.lat, pickup?.lng, delivery?.lat, delivery?.lng, driver?.lat, driver?.lng, expectedRoute]);
+
+  const mapError = useGoogle ? googleError : Boolean(error);
+
+  if (mapError) {
     return (
       <div className={`flex items-center justify-center rounded-lg bg-secondary/40 text-xs text-muted-foreground ${className}`}>
         Mapa indisponível no momento.
@@ -147,10 +266,13 @@ export function OrderTrackingMap({ pickup, delivery, driver, expectedRoute, clas
       />
       {/* Termos Mapbox: a atribuição precisa ficar visível. O controle nativo
           fica desligado para não competir com o HUD deste mapa pequeno, então
-          a atribuição é renderizada como texto fixo no canto. */}
-      <span className="pointer-events-none absolute bottom-0 right-0 rounded-tl bg-background/70 px-1 py-0.5 text-[10px] leading-none text-muted-foreground">
-        © Mapbox © OpenStreetMap
-      </span>
+          a atribuição é renderizada como texto fixo no canto. Com o canvas
+          Google o provedor desenha a própria atribuição. */}
+      {!useGoogle && (
+        <span className="pointer-events-none absolute bottom-0 right-0 rounded-tl bg-background/70 px-1 py-0.5 text-[10px] leading-none text-muted-foreground">
+          © Mapbox © OpenStreetMap
+        </span>
+      )}
     </div>
   );
 }

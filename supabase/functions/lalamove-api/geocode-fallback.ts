@@ -57,7 +57,11 @@ export async function geocodeAddress(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${deps.serviceRoleKey}`,
       },
-      body: JSON.stringify({ action: 'geocode', address: query, country: 'br', limit: 1 }),
+      // `persist: true` e obrigatorio aqui: o resultado vai para colunas de
+      // `lalamove_orders` (retencao permanente). Sem ele o Mapbox devolve o SKU
+      // `geocoding_temporary`, cujo ToS proibe armazenar — e o custo cai no free
+      // tier de 100k em vez do `geocoding_permanent` (5,00/1k) que o pedido usa.
+      body: JSON.stringify({ action: 'geocode', address: query, country: 'br', limit: 1, persist: true }),
     });
     if (!res.ok) {
       logger.error(`[geocode-fallback] geo-gateway respondeu ${res.status}`);
