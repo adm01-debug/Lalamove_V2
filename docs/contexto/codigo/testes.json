@@ -14,10 +14,10 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 140,
+ "total": 141,
  "por_tipo": {
   "contrato (deno)": 2,
-  "e2e (playwright)": 7,
+  "e2e (playwright)": 8,
   "edge (deno)": 22,
   "guard (node --test)": 34,
   "unit (vitest)": 74
@@ -41,7 +41,7 @@
   },
   {
    "padrao": "e2e/",
-   "arquivos": 7
+   "arquivos": 8
   },
   {
    "padrao": "outro",
@@ -85,6 +85,15 @@
    "linhas": 51,
    "testa": [],
    "casos": 4
+  },
+  {
+   "arquivo": "e2e/new-order-autocomplete.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 148,
+   "testa": [
+    "src/lib/geo-gateway.ts"
+   ],
+   "casos": 3
   },
   {
    "arquivo": "e2e/password-reset.e2e.ts",
@@ -1402,7 +1411,7 @@
   "src/hooks/useWebhookEvents.ts": 1,
   "src/i18n/index.ts": 1,
   "src/integrations/supabase/client.ts": 14,
-  "src/lib/geo-gateway.ts": 3,
+  "src/lib/geo-gateway.ts": 4,
   "src/lib/lalamoveCatalog.ts": 3,
   "src/lib/lalamoveErrors.ts": 1,
   "src/lib/lalamoveGuards.ts": 1,

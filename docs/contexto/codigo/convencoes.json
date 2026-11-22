@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)",
    "feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)",
    "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)",
    "feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)",
-   "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)",
-   "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)"
+   "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

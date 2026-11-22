@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "250e9353cc3976be29d4f1a666aef2ea2f1fa8a8",
+  "commit": "57c28e4adc629780e6b39c24ddf7173ccb9901c3",
   "branch": "main",
-  "data_commit": "2026-11-22T02:24:40-03:00",
+  "data_commit": "2026-11-22T02:33:33-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "57c28e4",
+    "data": "2026-11-22",
+    "assunto": "test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)"
+   },
    {
     "sha": "250e935",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "845586a",
     "data": "2026-11-21",
     "assunto": "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)"
-   },
-   {
-    "sha": "c9424eb",
-    "data": "2026-11-21",
-    "assunto": "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)"
    }
   ],
-  "arquivos_mudados_7d": 276,
+  "arquivos_mudados_7d": 277,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "pasta": "src/components/orders",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 144
+    "commits": 145
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1017,
-  "arquivos_codigo": 638,
-  "linhas_codigo": 124198,
+  "arquivos_total": 1018,
+  "arquivos_codigo": 639,
+  "linhas_codigo": 124346,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 140,
+  "testes": 141,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -349,6 +349,10 @@
   "e2e/mfa.e2e.ts": {
    "arquivos": 1,
    "linhas": 51
+  },
+  "e2e/new-order-autocomplete.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 148
   },
   "e2e/password-reset.e2e.ts": {
    "arquivos": 1,
