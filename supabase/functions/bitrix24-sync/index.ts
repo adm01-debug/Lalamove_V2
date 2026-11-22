@@ -1,7 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -27,21 +34,34 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    let rawBody;
-    try {
-      rawBody = await req.json();
-    } catch {
-      rawBody = {};
+    // Contrato de entrada (422 no formato único + versão v1/v2). `action`,
+    // `code` e `domain` também são aceitos pela query porque o redirect do
+    // OAuth do Bitrix24 chega como GET `?action=oauth_callback&code=...`.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("bitrix24-sync", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+
+    const requestUrl = new URL(req.url);
+    const bodyRecord = (parsedBody.value ?? {}) as Record<string, unknown>;
+    const contractInput: Record<string, unknown> = { ...bodyRecord };
+    if (typeof contractInput.action !== "string") {
+      const queryAction = requestUrl.searchParams.get("action");
+      if (queryAction) contractInput.action = queryAction;
     }
-    const bodyResult = z.record(z.any()).safeParse(rawBody);
-    if (!bodyResult.success) {
-      return new Response(
-        JSON.stringify({ error: "Invalid request body" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    if (contractInput.action === "oauth_callback") {
+      contractInput.code = contractInput.code ?? requestUrl.searchParams.get("code") ?? undefined;
+      contractInput.domain = contractInput.domain ?? requestUrl.searchParams.get("domain") ?? undefined;
     }
 
-    const { action, ...params } = bodyResult.data;
+    const contract = validateContract(
+      getSchema("bitrix24-sync", contractVersion),
+      contractInput,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+
+    const { action, ...params } = contract.data as { action: string } & Record<string, unknown>;
 
     switch (action) {
       case "get_auth_url": {
@@ -156,10 +176,9 @@ serve(async (req) => {
       }
 
       case "sync_order": {
-        const { orderId, dealId } = z.object({
-          orderId: z.string().uuid(),
-          dealId: z.union([z.string(), z.number()])
-        }).parse(params);
+        // Já validado pelo contrato (orderId uuid + dealId string|number):
+        // antes, um orderId inválido lançava ZodError e virava 500.
+        const { orderId, dealId } = params as { orderId: string; dealId: string | number };
         
         const { data: tokenData } = await supabase
           .from("bitrix24_tokens")

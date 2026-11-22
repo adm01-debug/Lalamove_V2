@@ -1,4 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,6 +21,18 @@ serve(async (req) => {
 
   try {
     const mapboxToken = Deno.env.get('MAPBOX_ACCESS_TOKEN');
+    // Contrato de entrada (formato único de erro 422 + versão v1/v2):
+    // supabase/functions/_shared/contract.ts e _shared/schemas.ts.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("get-mapbox-token", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("get-mapbox-token", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
 
     if (!mapboxToken) {
       console.error('MAPBOX_ACCESS_TOKEN not configured');

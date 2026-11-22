@@ -280,12 +280,21 @@ export function errorResponse(
 export async function parseJsonBody(
   req: Request,
   version: ContractVersion,
-): Promise<
-  | { ok: true; value: unknown }
-  | { ok: false; status: number; body: ContractErrorBody; version: ContractVersion }
-> {
+): Promise<JsonParseResult> {
+  return parseJsonText(await req.text(), version);
+}
+
+/**
+ * Mesma validação de `parseJsonBody`, mas sobre um corpo JÁ LIDO. Usada pelos
+ * proxies que precisam repassar os bytes originais (o HMAC do webhook da
+ * Lalamove é calculado sobre o corpo cru), portanto não podem reconsumir o
+ * stream da requisição.
+ */
+export function parseJsonText(
+  text: string,
+  version: ContractVersion,
+): JsonParseResult {
   try {
-    const text = await req.text();
     const value = text ? JSON.parse(text) : {};
     return { ok: true, value };
   } catch {
@@ -302,6 +311,10 @@ export async function parseJsonBody(
     };
   }
 }
+
+export type JsonParseResult =
+  | { ok: true; value: unknown }
+  | { ok: false; status: number; body: ContractErrorBody; version: ContractVersion };
 
 function safeUrl(url: string): URL | null {
   try {

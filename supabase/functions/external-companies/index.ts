@@ -1,5 +1,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,7 +31,19 @@ serve(async (req) => {
 
   try {
     const externalClient = createClient(externalUrl, externalKey);
-    const { action, ...params } = await req.json();
+    // Contrato de entrada (422 no formato único + versão v1/v2).
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("external-companies", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("external-companies", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+
+    const { action, ...params } = contract.data as { action: string } & Record<string, any>;
 
     // Supported tables
     const ALLOWED_TABLES = ['companies', 'customers', 'suppliers', 'carriers', 'contacts'] as const;

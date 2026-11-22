@@ -1,4 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -239,14 +247,19 @@ Deno.serve(async (req) => {
     }
     const userId = user.id;
 
-    // Parse payload
-    const payload: QueryPayload = await req.json();
-    if (!payload.operation) {
-      return new Response(JSON.stringify({ error: "Missing operation" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Contrato de entrada (422 no formato único + versão v1/v2). Roda DEPOIS
+    // da autenticação para que origem não autorizada continue recebendo 401.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage("external-db-bridge", contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+    const contract = validateContract(
+      getSchema("external-db-bridge", contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+    const payload = contract.data as QueryPayload;
 
     // External DB client
     const externalUrl = Deno.env.get("EXTERNAL_SUPABASE_URL");

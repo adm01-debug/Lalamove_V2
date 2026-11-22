@@ -42,6 +42,7 @@ import {
   CONTRACT_REGISTRY,
   type ContractName,
   getSchema,
+  OPTIONAL_BODY_CONTRACTS,
 } from "./schemas.ts";
 
 // ── Fixtures: payloads válidos mínimos por contrato ───────────────────────────
@@ -67,6 +68,119 @@ const VALID_PAYLOADS: Record<ContractName, Record<string, unknown>> = {
   "check-external-api": { service: "lalamove" },
   "test-notification": { channel: "email", alertType: "STOP" },
   "geo-gateway": { action: "provider-status" },
+  "apply-fixes": { action: "fix_dashboard" },
+  // Contratos de corpo opcional: a Edge Function não lê a entrada, então `{}`
+  // é o payload mínimo válido (ver OPTIONAL_BODY_CONTRACTS em schemas.ts).
+  "bitrix24-process-queue": {},
+  "check-driver-alerts": {},
+  "escalate-alerts": {},
+  "get-mapbox-token": {},
+  "lalamove-token-refresh": {},
+  "rotate-tokens": {},
+  "seed-fix-rls": {},
+  "simulate-driver-movement": {},
+  "llm-wh": {
+    eventType: "ORDER_STATUS_CHANGED",
+    eventId: "evt-1",
+    data: { order: { orderId: "ORD-1", status: "ON_GOING" } },
+  },
+  "bitrix24-sync": { action: "get_connection_status" },
+  "external-companies": { action: "stats" },
+  "external-db-bridge": { operation: "select", table: "drivers" },
+  "lalamove-gateway": { action: "cities" },
+  "mcp-query": { operation: "list_tables" },
+};
+
+/** Caso de falha por contrato: payload + campo que deve aparecer em `error.fields`. */
+interface FieldCase {
+  payload: unknown;
+  field: string;
+}
+
+/** TIPO INCORRETO (número onde se espera string, enum inválido, etc.). */
+const WRONG_TYPE: Record<ContractName, FieldCase> = {
+  "lalamove-webhook": { payload: { event: 123 }, field: "event" },
+  "evaluate-driver": { payload: { driverId: "d1", rating: "cinco" }, field: "rating" },
+  "send-notification": {
+    payload: { ...VALID_PAYLOADS["send-notification"], severity: "FATAL" },
+    field: "severity",
+  },
+  "new-device-alert": {
+    payload: { ...VALID_PAYLOADS["new-device-alert"], userEmail: 42 },
+    field: "userEmail",
+  },
+  "route-analyzer": { payload: { action: 123 }, field: "action" },
+  "check-external-api": { payload: { service: 123 }, field: "service" },
+  "test-notification": {
+    payload: { channel: "pombo-correio", alertType: "STOP" },
+    field: "channel",
+  },
+  "geo-gateway": { payload: { action: "place-details", place_id: 123 }, field: "place_id" },
+  "apply-fixes": { payload: { action: 123 }, field: "action" },
+  "bitrix24-process-queue": { payload: { time: 123 }, field: "time" },
+  "check-driver-alerts": { payload: { time: 123 }, field: "time" },
+  "escalate-alerts": { payload: { time: 123 }, field: "time" },
+  "get-mapbox-token": { payload: { healthCheck: "true" }, field: "healthCheck" },
+  "lalamove-token-refresh": { payload: { time: 123 }, field: "time" },
+  "rotate-tokens": { payload: { source: 123 }, field: "source" },
+  "seed-fix-rls": { payload: { time: 123 }, field: "time" },
+  "simulate-driver-movement": { payload: { cursor: "1" }, field: "cursor" },
+  "llm-wh": { payload: { event: 123 }, field: "event" },
+  "bitrix24-sync": {
+    payload: { action: "sync_order", orderId: 123, dealId: 42 },
+    field: "orderId",
+  },
+  "external-companies": {
+    payload: { action: "list", table: "companies", limit: "cinquenta" },
+    field: "limit",
+  },
+  "external-db-bridge": {
+    payload: { operation: "select", table: "drivers", limit: "50" },
+    field: "limit",
+  },
+  "lalamove-gateway": { payload: { action: 123 }, field: "action" },
+  "mcp-query": { payload: { operation: 123 }, field: "operation" },
+};
+
+/**
+ * VALOR VAZIO (string vazia, `null` em campo não-nulável, zero onde se exige
+ * positivo). `null` quando o contrato não tem campo cujo vazio seja inválido.
+ */
+const EMPTY_VALUE: Record<ContractName, FieldCase | null> = {
+  "lalamove-webhook": { payload: { event: "" }, field: "event" },
+  "evaluate-driver": { payload: { driverId: "" }, field: "driverId" },
+  "send-notification": {
+    payload: { ...VALID_PAYLOADS["send-notification"], title: "" },
+    field: "title",
+  },
+  "new-device-alert": {
+    payload: { ...VALID_PAYLOADS["new-device-alert"], userEmail: "" },
+    field: "userEmail",
+  },
+  "route-analyzer": { payload: { action: "" }, field: "action" },
+  "check-external-api": { payload: { service: "" }, field: "service" },
+  "test-notification": { payload: { channel: "", alertType: "STOP" }, field: "channel" },
+  "geo-gateway": { payload: { action: "place-details", place_id: "" }, field: "place_id" },
+  "apply-fixes": { payload: { action: "" }, field: "action" },
+  // Contratos de corpo opcional não leem campo nenhum: `null` em campo tipado
+  // é o único "vazio" que o contrato rejeita.
+  "bitrix24-process-queue": { payload: { time: 123 }, field: "time" },
+  "check-driver-alerts": { payload: { time: 123 }, field: "time" },
+  "escalate-alerts": { payload: { time: 123 }, field: "time" },
+  "get-mapbox-token": { payload: { healthCheck: null }, field: "healthCheck" },
+  "lalamove-token-refresh": { payload: { time: 123 }, field: "time" },
+  "rotate-tokens": { payload: { source: 123 }, field: "source" },
+  "seed-fix-rls": { payload: { time: 123 }, field: "time" },
+  "simulate-driver-movement": { payload: { steps: 0 }, field: "steps" },
+  "llm-wh": { payload: { event: "" }, field: "event" },
+  "bitrix24-sync": {
+    payload: { action: "sync_order", orderId: "", dealId: 42 },
+    field: "orderId",
+  },
+  "external-companies": { payload: { action: "get", table: "companies", id: "" }, field: "id" },
+  "external-db-bridge": { payload: { operation: "select", table: "" }, field: "table" },
+  "lalamove-gateway": { payload: { action: "   " }, field: "action" },
+  "mcp-query": { payload: { operation: "" }, field: "operation" },
 };
 
 const ALL_CONTRACTS = Object.keys(CONTRACT_REGISTRY) as ContractName[];
@@ -99,7 +213,34 @@ for (const name of ALL_CONTRACTS) {
 
 // ── Campos ausentes → 422 + formato único ─────────────────────────────────────
 
+// Contratos de corpo OPCIONAL (workers de cron, health check: a Edge Function
+// não lê a entrada) aceitam `{}` por definição. Para eles, o caso equivalente a
+// "campo obrigatório ausente" é um corpo que NÃO é objeto — array, string ou
+// número —, que antes passava adiante sem validação alguma.
+const OPTIONAL_BODY = new Set<ContractName>(OPTIONAL_BODY_CONTRACTS);
+const NON_OBJECT_BODIES: readonly unknown[] = [[], "x", 42, true];
+
 for (const name of ALL_CONTRACTS) {
+  if (OPTIONAL_BODY.has(name)) {
+    Deno.test(`[${name}] corpo vazio é aceito (contrato de corpo opcional)`, () => {
+      const result = validateContract(getSchema(name, "v1"), {}, "v1");
+      assert(result.ok, `esperado ok=true para ${name} com {}`);
+    });
+
+    Deno.test(`[${name}] corpo que não é objeto retorna 422 no formato único`, () => {
+      for (const body of NON_OBJECT_BODIES) {
+        const result = validateContract(getSchema(name, "v1"), body, "v1");
+        assert(!result.ok, `esperado 422 para ${name} com ${JSON.stringify(body)}`);
+        if (!result.ok) {
+          assertEquals(result.status, 422);
+          assertEquals(result.body.error.code, ERROR_CODES.VALIDATION_FAILED);
+          assert(result.body.error.fields.length > 0);
+        }
+      }
+    });
+    continue;
+  }
+
   Deno.test(`[${name}] campo ausente retorna 422 no formato único`, () => {
     const result = validateContract(getSchema(name, "v1"), {}, "v1");
     assert(!result.ok, `esperado falha para ${name} com payload vazio`);
@@ -112,6 +253,62 @@ for (const name of ALL_CONTRACTS) {
         assertExists(f.message);
         assertExists(f.code);
       }
+    }
+  });
+}
+
+// ── Tipos incorretos → 422 nomeando o campo (TODOS os contratos) ─────────────
+for (const name of ALL_CONTRACTS) {
+  Deno.test(`[${name}] tipo incorreto retorna 422 nomeando o campo`, () => {
+    const { payload, field } = WRONG_TYPE[name];
+    const result = validateContract(getSchema(name, "v1"), payload, "v1");
+    assert(!result.ok, `esperado 422 para ${name} com tipo incorreto`);
+    if (!result.ok) {
+      assertEquals(result.status, 422);
+      assertEquals(result.body.error.code, ERROR_CODES.VALIDATION_FAILED);
+      assert(
+        result.body.error.fields.some((f) => f.field === field),
+        `esperado campo '${field}' em ${name}, veio: ${
+          result.body.error.fields.map((f) => f.field).join(", ")
+        }`,
+      );
+    }
+  });
+}
+
+// ── Valores vazios → 422 nomeando o campo (TODOS os contratos) ───────────────
+for (const name of ALL_CONTRACTS) {
+  const empty = EMPTY_VALUE[name];
+  if (!empty) continue;
+  Deno.test(`[${name}] valor vazio retorna 422 nomeando o campo`, () => {
+    const result = validateContract(getSchema(name, "v1"), empty.payload, "v1");
+    assert(!result.ok, `esperado 422 para ${name} com valor vazio`);
+    if (!result.ok) {
+      assertEquals(result.status, 422);
+      assert(
+        result.body.error.fields.some((f) => f.field === empty.field),
+        `esperado campo '${empty.field}' em ${name}, veio: ${
+          result.body.error.fields.map((f) => f.field).join(", ")
+        }`,
+      );
+    }
+  });
+}
+
+// ── Mesmo payload inválido → MESMOS campos em v1 e v2 ────────────────────────
+for (const name of ALL_CONTRACTS) {
+  Deno.test(`[${name}] payload inválido é rejeitado de forma idêntica em v1 e v2`, () => {
+    const { payload } = WRONG_TYPE[name];
+    const v1 = validateContract(getSchema(name, "v1"), payload, "v1");
+    const v2 = validateContract(getSchema(name, "v2"), payload, "v2");
+    assert(!v1.ok && !v2.ok, `esperado 422 nas duas versões para ${name}`);
+    if (!v1.ok && !v2.ok) {
+      assertEquals(v1.status, v2.status);
+      assertEquals(v1.body.error.code, v2.body.error.code);
+      assertEquals(
+        v1.body.error.fields.map((f) => f.field).sort(),
+        v2.body.error.fields.map((f) => f.field).sort(),
+      );
     }
   });
 }
@@ -346,4 +543,161 @@ Deno.test("geo-gateway place-details rejeita place_id acima de 1024", () => {
     "v1",
   );
   assert(!result.ok);
+});
+// ── Casos específicos das Edge Functions recém-cobertas ──────────────────────
+
+Deno.test("[simulate-driver-movement] replay:true sem fixture retorna 422", () => {
+  const result = validateContract(
+    getSchema("simulate-driver-movement", "v1"),
+    { replay: true },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assertEquals(result.status, 422);
+    assert(result.body.error.fields.some((f) => f.field === "fixture"));
+  }
+});
+
+Deno.test("[simulate-driver-movement] replay com fixture válida é aceito", () => {
+  const result = validateContract(
+    getSchema("simulate-driver-movement", "v1"),
+    {
+      replay: true,
+      fixture: { name: "route_curitiba", points: [{ seq: 0, lat: -25.43, lng: -49.27 }] },
+      cursor: 0,
+      steps: 1,
+    },
+    "v1",
+  );
+  assert(result.ok, JSON.stringify(result));
+});
+
+Deno.test("[external-db-bridge] update/delete sem filters retorna 422", () => {
+  for (const operation of ["update", "delete"]) {
+    const result = validateContract(
+      getSchema("external-db-bridge", "v1"),
+      { operation, table: "drivers", filters: {} },
+      "v1",
+    );
+    assert(!result.ok, `esperado 422 para ${operation} sem filtros`);
+    if (!result.ok) {
+      assert(result.body.error.fields.some((f) => f.field === "filters"));
+    }
+  }
+});
+
+Deno.test("[external-db-bridge] null em campo opcional é aceito (handler trata como ausente)", () => {
+  const result = validateContract(
+    getSchema("external-db-bridge", "v1"),
+    {
+      operation: "select",
+      table: "drivers",
+      select: null,
+      filters: null,
+      order: null,
+      limit: null,
+      offset: null,
+      count_mode: null,
+    },
+    "v1",
+  );
+  assert(result.ok, JSON.stringify(result));
+});
+
+Deno.test("[mcp-query] operação fora da allowlist retorna 422", () => {
+  const result = validateContract(getSchema("mcp-query", "v1"), { operation: "drop_table" }, "v1");
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "operation"));
+  }
+});
+
+Deno.test("[lalamove-gateway] action acima de 64 caracteres retorna 422", () => {
+  const result = validateContract(
+    getSchema("lalamove-gateway", "v1"),
+    { action: "a".repeat(65) },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "action"));
+  }
+});
+
+Deno.test("[bitrix24-sync] oauth_callback sem code retorna 422", () => {
+  const result = validateContract(
+    getSchema("bitrix24-sync", "v1"),
+    { action: "oauth_callback" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "code"));
+  }
+});
+
+Deno.test("[bitrix24-sync] ação desconhecida retorna 422 nomeando action", () => {
+  const result = validateContract(
+    getSchema("bitrix24-sync", "v1"),
+    { action: "drop_everything" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "action"));
+  }
+});
+
+Deno.test("[external-companies] tabela fora da allowlist retorna 422", () => {
+  const result = validateContract(
+    getSchema("external-companies", "v1"),
+    { action: "list", table: "pg_shadow" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "table"));
+  }
+});
+
+Deno.test("[external-companies] defaults do contrato (table/limit/offset) são aplicados", () => {
+  const result = validateContract(getSchema("external-companies", "v1"), { action: "list" }, "v1");
+  assert(result.ok);
+  if (result.ok) {
+    assertEquals((result.data as Record<string, unknown>).table, "companies");
+    assertEquals((result.data as Record<string, unknown>).limit, 50);
+    assertEquals((result.data as Record<string, unknown>).offset, 0);
+  }
+});
+
+Deno.test("[llm-wh] envelope cru da Lalamove passa sem perder campos", () => {
+  const envelope = {
+    apiKey: "k",
+    timestamp: 1775027436,
+    signature: "sig",
+    eventId: "evt-1",
+    eventType: "ORDER_STATUS_CHANGED",
+    eventVersion: "v3",
+    data: { order: { orderId: "ORD-1" } },
+  };
+  const result = validateContract(getSchema("llm-wh", "v1"), envelope, "v1");
+  assert(result.ok);
+  if (result.ok) {
+    // passthrough: o proxy repassa o corpo cru, nada é descartado na validação.
+    assertEquals(result.data, envelope);
+  }
+});
+
+Deno.test("[apply-fixes] única ação aceita é fix_dashboard", () => {
+  assert(validateContract(getSchema("apply-fixes", "v1"), { action: "fix_dashboard" }, "v1").ok);
+  const bad = validateContract(getSchema("apply-fixes", "v1"), { action: "fix_rls" }, "v1");
+  assert(!bad.ok);
+  if (!bad.ok) assert(bad.body.error.fields.some((f) => f.field === "action"));
+});
+
+Deno.test("cobertura: todas as Edge Functions com entrada estão no registro", () => {
+  // Guarda contra regressão: 23 contratos cobertos nesta fase (8 anteriores + 15
+  // desta PR). job-worker, lalamove-api e lalamove-uapi entram na fase seguinte.
+  assertEquals(Object.keys(CONTRACT_REGISTRY).length, 23);
 });
