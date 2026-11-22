@@ -14,18 +14,18 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 137,
+ "total": 138,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
   "edge (deno)": 22,
   "guard (node --test)": 33,
-  "unit (vitest)": 72
+  "unit (vitest)": 73
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 48
+   "arquivos": 49
   },
   {
    "padrao": "guards em scripts/",
@@ -525,6 +525,15 @@
     "src/components/admin/telemetry/TelemetryCharts.tsx"
    ],
    "casos": 17
+  },
+  {
+   "arquivo": "src/components/map/__tests__/googleLayers.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 112,
+   "testa": [
+    "src/components/map/googleLayers.ts"
+   ],
+   "casos": 14
   },
   {
    "arquivo": "src/components/map/__tests__/mapLayers.test.ts",
@@ -1326,6 +1335,7 @@
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
   "src/components/map/MapSettingsPanel.tsx": 1,
   "src/components/map/OrderTrackingMap.tsx": 1,
+  "src/components/map/googleLayers.ts": 1,
   "src/components/map/hooks/useGoogleMapsLoader.ts": 1,
   "src/components/map/hooks/useMapAlerts.ts": 1,
   "src/components/map/hooks/useMapMarkers.ts": 2,
@@ -1468,6 +1478,7 @@
    "scripts/ai-context/cenarios.mjs",
    "src/components/alerts/AlertsAdvanced.tsx",
    "src/components/ErrorBoundary.tsx",
+   "src/components/map/hooks/useTrackingTrails.ts",
    "src/components/ui/contextual-hints.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
    "src/components/ui/keyboard-shortcuts-help.tsx",

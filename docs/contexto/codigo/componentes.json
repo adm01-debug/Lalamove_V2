@@ -828,11 +828,12 @@
     "GoogleMapsCanvas"
    ],
    "export_default": null,
-   "linhas": 237,
+   "linhas": 363,
    "dominio": "components/map",
    "hooks_locais": [
     "useGoogleMapsLoader",
-    "useTrackingData"
+    "useTrackingData",
+    "useTrackingTrails"
    ],
    "tabelas": [],
    "edges": [],
@@ -881,7 +882,7 @@
     "MapHUD"
    ],
    "export_default": null,
-   "linhas": 346,
+   "linhas": 359,
    "dominio": "components/map",
    "hooks_locais": [],
    "tabelas": [],

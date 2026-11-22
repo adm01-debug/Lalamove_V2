@@ -320,6 +320,7 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
     "useV3Call",
@@ -749,6 +750,7 @@
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUapiCoupons",
     "useUapiFleet",
     "useUapiOrderHistory",
@@ -908,9 +910,9 @@
   },
   {
    "modulo": "components/map",
-   "arquivos": 18,
-   "testes": 10,
-   "linhas": 3994,
+   "arquivos": 20,
+   "testes": 11,
+   "linhas": 4308,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -936,14 +938,16 @@
     "useMapboxToken",
     "useTilesProvider",
     "useTrackingData",
-    "useTrackingHistory"
+    "useTrackingHistory",
+    "useTrackingTrails"
    ],
    "hooks_definidos": [
     "useGoogleMapsLoader",
     "useMapAlerts",
     "useMapboxToken",
     "useMapMarkers",
-    "useTrackingData"
+    "useTrackingData",
+    "useTrackingTrails"
    ],
    "edges": [
     "geo-gateway",
@@ -978,7 +982,8 @@
      "get-mapbox-token"
     ],
     "tabelas": [
-     "active_tracking"
+     "active_tracking",
+     "tracking_events"
     ],
     "rpcs": []
    },
@@ -1826,6 +1831,7 @@
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUAPIOrders",
     "useUAPIStatus",
     "useUAPITest",
@@ -2796,6 +2802,7 @@
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUAPIOrders",
     "useUAPIStatus",
     "useUAPITest",

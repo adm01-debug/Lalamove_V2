@@ -100,6 +100,7 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useTransform",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
@@ -168,6 +169,7 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
     "useV3Call",
@@ -221,7 +223,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 93
+   "arquivos_puxados": 95
   },
   {
    "caminho": "/*",
@@ -855,6 +857,7 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useTransform",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
@@ -923,6 +926,7 @@
     "useTilesProvider",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUpdateUapiToken",
     "useUpdateV3Keys",
     "useV3Call",
@@ -976,7 +980,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 93
+   "arquivos_puxados": 95
   },
   {
    "caminho": "/delivery-metrics",
@@ -1662,7 +1666,8 @@
     "useState",
     "useTilesProvider",
     "useTrackingData",
-    "useTrackingHistory"
+    "useTrackingHistory",
+    "useTrackingTrails"
    ],
    "hooks_locais": [
     "useAllowedMapProviders",
@@ -1687,7 +1692,8 @@
     "useMapboxToken",
     "useTilesProvider",
     "useTrackingData",
-    "useTrackingHistory"
+    "useTrackingHistory",
+    "useTrackingTrails"
    ],
    "tabelas": [
     "active_tracking",
@@ -1714,7 +1720,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 41
+   "arquivos_puxados": 43
   },
   {
    "caminho": "/map",
@@ -1764,7 +1770,8 @@
     "useState",
     "useTilesProvider",
     "useTrackingData",
-    "useTrackingHistory"
+    "useTrackingHistory",
+    "useTrackingTrails"
    ],
    "hooks_locais": [
     "useAllowedMapProviders",
@@ -1789,7 +1796,8 @@
     "useMapboxToken",
     "useTilesProvider",
     "useTrackingData",
-    "useTrackingHistory"
+    "useTrackingHistory",
+    "useTrackingTrails"
    ],
    "tabelas": [
     "active_tracking",
@@ -1816,7 +1824,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 41
+   "arquivos_puxados": 43
   },
   {
    "caminho": "/map-tools",
@@ -3467,6 +3475,7 @@
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useTransform",
     "useTranslation",
     "useUapiCoupons",
@@ -3642,6 +3651,7 @@
     "useTopDrivers",
     "useTrackingData",
     "useTrackingHistory",
+    "useTrackingTrails",
     "useUapiCoupons",
     "useUapiFleet",
     "useUapiOrderHistory",
@@ -3762,7 +3772,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 275
+   "arquivos_puxados": 277
   }
  ],
  "menu": [

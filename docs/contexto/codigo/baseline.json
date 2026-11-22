@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "619f4497dab221c7ddbcfcdfc7a02b022a44dde9",
+  "commit": "a067e02e828a79ed72be57616ea9982a072a944b",
   "branch": "main",
-  "data_commit": "2026-11-22T02:20:11-03:00",
+  "data_commit": "2026-11-22T02:20:20-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a067e02",
+    "data": "2026-11-22",
+    "assunto": "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)"
+   },
    {
     "sha": "619f449",
     "data": "2026-11-22",
@@ -126,26 +131,21 @@
     "sha": "c194d15",
     "data": "2026-11-21",
     "assunto": "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)"
-   },
-   {
-    "sha": "1eeeb96",
-    "data": "2026-11-21",
-    "assunto": "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)"
    }
   ],
-  "arquivos_mudados_7d": 263,
+  "arquivos_mudados_7d": 267,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
     "mudancas": 57
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 21
+    "pasta": "src/components/map",
+    "mudancas": 26
    },
    {
-    "pasta": "src/components/map",
-    "mudancas": 20
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 22
    },
    {
     "pasta": "src/components/orders",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 142
+    "commits": 143
    },
    {
     "autor": "dependabot[bot]",
@@ -310,21 +310,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1011,
-  "arquivos_codigo": 632,
-  "linhas_codigo": 123420,
+  "arquivos_total": 1014,
+  "arquivos_codigo": 635,
+  "linhas_codigo": 123846,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
   "itens_menu": 38,
   "modulos": 43,
   "componentes": 217,
-  "hooks": 100,
+  "hooks": 101,
   "edge_functions": 26,
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 137,
+  "testes": 138,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 103
@@ -515,8 +515,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 155,
-   "linhas": 28519
+   "arquivos": 158,
+   "linhas": 28945
   },
   "src/hooks": {
    "arquivos": 110,

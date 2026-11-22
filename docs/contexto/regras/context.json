@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "619f4497dab221c7ddbcfcdfc7a02b022a44dde9",
+  "sha": "a067e02e828a79ed72be57616ea9982a072a944b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 05:20 UTC",
-  "files_total": 1005,
-  "code_files": 829,
-  "code_lines": 142497
+  "generated_at": "2026-11-22 05:21 UTC",
+  "files_total": 1008,
+  "code_files": 832,
+  "code_lines": 142923
  },
  "version": "1.3.2",
- "facts_hash": "9b577cada79e10d3",
+ "facts_hash": "2d41827618ff07a7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 288,
+   ".ts": 291,
    ".tsx": 233,
    ".sql": 188,
    ".mjs": 107,
@@ -16861,7 +16861,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 90
+    "deps_count": 92
    },
    {
     "path": "",
@@ -17036,7 +17036,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 40
+    "deps_count": 42
    },
    {
     "path": "",
@@ -18928,7 +18928,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 156,
+  "components_count": 159,
   "hooks": [
    {
     "name": "useOrders",
@@ -18957,6 +18957,10 @@
    {
     "name": "useTrackingData",
     "file": "src/components/map/hooks/useTrackingData.ts"
+   },
+   {
+    "name": "useTrackingTrails",
+    "file": "src/components/map/hooks/useTrackingTrails.ts"
    },
    {
     "name": "useHints",
@@ -20403,8 +20407,8 @@
   },
   {
    "module": "src/components",
-   "files": 155,
-   "lines": 28519,
+   "files": 158,
+   "lines": 28945,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20414,6 +20418,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "order_geo_events",
+    "tracking_events",
     "user_roles",
     "webhook_events"
    ],
@@ -20561,11 +20566,13 @@
     "src/components/map/MapSearchPanel.tsx",
     "src/components/map/MapSettingsPanel.tsx",
     "src/components/map/OrderTrackingMap.tsx",
+    "src/components/map/googleLayers.ts",
     "src/components/map/mapLayers.ts",
     "src/components/map/markerFactories.ts",
     "src/components/map/types.ts",
     "src/components/map/__tests__/MapSettingsPanel.test.tsx",
     "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "src/components/map/__tests__/googleLayers.test.ts",
     "src/components/map/__tests__/mapLayers.test.ts",
     "src/components/map/__tests__/markerFactories.test.ts",
     "src/components/map/hooks/useGoogleMapsLoader.ts",
@@ -20573,13 +20580,11 @@
     "src/components/map/hooks/useMapMarkers.ts",
     "src/components/map/hooks/useMapboxToken.ts",
     "src/components/map/hooks/useTrackingData.ts",
+    "src/components/map/hooks/useTrackingTrails.ts",
     "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
     "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
     "src/components/map/hooks/__tests__/useMapAlerts.test.ts",
-    "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
-    "src/components/map/hooks/__tests__/useMapboxToken.test.ts",
-    "src/components/map/hooks/__tests__/useTrackingData.test.ts",
-    "src/components/notifications/NotificationPreferences.tsx"
+    "src/components/map/hooks/__tests__/useMapMarkers.test.ts"
    ]
   },
   {
@@ -22193,6 +22198,7 @@
     ],
     "select": [
      "scripts/seed-database.ts",
+     "src/components/map/hooks/useTrackingTrails.ts",
      "src/hooks/useTrackingHistory.ts",
      "supabase/functions/job-worker/index.ts"
     ]
@@ -25837,6 +25843,14 @@
     "text": "Estatísticas: considera apenas leituras de velocidade válidas (não-nulas),"
    },
    {
+    "file": "src/components/map/googleLayers.ts",
+    "text": "* Maximo de pontos de trilha por pedido: `tracking_events` cresce sem limite. */"
+   },
+   {
+    "file": "src/components/map/googleLayers.ts",
+    "text": "* `expected_route` chega como `jsonb` do banco. Delega a validacao para"
+   },
+   {
     "file": "src/components/map/mapLayers.ts",
     "text": "* Deve ser chamada dentro do handler `style.load` do Mapbox, pois camadas só"
    },
@@ -29385,6 +29399,26 @@
     "file": "src/components/map/LiveMap.tsx",
     "name": "VERY_FAR_ZOOM_THRESHOLD",
     "value": "9.5"
+   },
+   {
+    "file": "src/components/map/googleLayers.ts",
+    "name": "DRIVER_ANIM_MS",
+    "value": "10"
+   },
+   {
+    "file": "src/components/map/googleLayers.ts",
+    "name": "TRAIL_MAX_POINTS",
+    "value": "60"
+   },
+   {
+    "file": "src/components/map/hooks/useTrackingTrails.ts",
+    "name": "POINTS_PER_ORDER",
+    "value": "60"
+   },
+   {
+    "file": "src/components/map/hooks/useTrackingTrails.ts",
+    "name": "REFRESH_MS",
+    "value": "15"
    },
    {
     "file": "src/components/orders/NewOrderDialog.tsx",
@@ -33755,6 +33789,12 @@
     "body": ""
    },
    {
+    "file": "src/components/map/GoogleMapsCanvas.tsx",
+    "name": "applyPosition",
+    "params": "p: LatLngLiteral",
+    "body": "if (upd.setPosition) upd.setPosition(p); else upd.position = p;"
+   },
+   {
     "file": "src/components/map/LiveMap.tsx",
     "name": "apply",
     "params": "",
@@ -35831,6 +35871,82 @@
    {
     "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
     "name": "não quebra sem coordenadas nem rota"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "toGooglePath (etapa 77)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "converte expected_route em path do Google"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "buildTrailPath (etapa 77)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "ordena cronologicamente mesmo recebendo o mais novo primeiro"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "descarta pontos sem coordenada valida"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "corta a trilha em ${TRAIL_MAX_POINTS} pontos mantendo os mais recentes"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "trilha vazia nao desenha nada"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "interpolatePosition (etapa 77)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "comeca na posicao anterior e termina exatamente na nova"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "meio caminho em metade da janela de 10 s"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "elapsed maior que a janela nao passa do destino (evita overshoot)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "janela zero desativa a animacao e posiciona direto"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "formatRouteBadge (etapa 77)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "metros abaixo de 1 km e km acima"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "sem distancia informada mostra apenas o ETA"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "haversineM (etapa 77)"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "1 grau de latitude ~ 111 km"
+   },
+   {
+    "file": "src/components/map/__tests__/googleLayers.test.ts",
+    "name": "mesmo ponto = 0"
    },
    {
     "file": "src/components/map/__tests__/mapLayers.test.ts",
@@ -55782,9 +55898,16 @@
   },
   "src/components/map/GoogleMapsCanvas.tsx": {
    "path": "src/components/map/GoogleMapsCanvas.tsx",
-   "lines": 237,
+   "lines": 363,
    "exports": [
     "function GoogleMapsCanvas"
+   ],
+   "calc_fns": [
+    {
+     "name": "applyPosition",
+     "params": "p: LatLngLiteral",
+     "body": "if (upd.setPosition) upd.setPosition(p); else upd.position = p;"
+    }
    ]
   },
   "src/components/map/LiveMap.tsx": {
@@ -55845,7 +55968,7 @@
   },
   "src/components/map/MapHUD.tsx": {
    "path": "src/components/map/MapHUD.tsx",
-   "lines": 346,
+   "lines": 359,
    "exports": [
     "function MapHUD"
    ],
@@ -55997,6 +56120,34 @@
      "params": "",
      "body": "const m = map.current; if (!m || !ready.current) return; const set = (id: string, data: GeoJSON.FeatureCollection) => { const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined; src?.setData(data); }; set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY); set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY); set('driver-point', driver && valid(driver.lat, …"
     }
+   ]
+  },
+  "src/components/map/googleLayers.ts": {
+   "path": "src/components/map/googleLayers.ts",
+   "lines": 93,
+   "exports": [
+    "type LatLngLiteral",
+    "const DRIVER_ANIM_MS",
+    "const TRAIL_MAX_POINTS",
+    "function toGooglePath",
+    "function buildTrailPath",
+    "function interpolatePosition",
+    "function haversineM",
+    "function formatRouteBadge"
+   ],
+   "params": [
+    {
+     "name": "DRIVER_ANIM_MS",
+     "value": "10"
+    },
+    {
+     "name": "TRAIL_MAX_POINTS",
+     "value": "60"
+    }
+   ],
+   "rule_comments": [
+    "* Maximo de pontos de trilha por pedido: `tracking_events` cresce sem limite. */",
+    "* `expected_route` chega como `jsonb` do banco. Delega a validacao para"
    ]
   },
   "src/components/map/mapLayers.ts": {
@@ -56240,6 +56391,32 @@
     "não quebra sem coordenadas nem rota"
    ]
   },
+  "src/components/map/__tests__/googleLayers.test.ts": {
+   "path": "src/components/map/__tests__/googleLayers.test.ts",
+   "lines": 112,
+   "is_test": true,
+   "tests": [
+    "toGooglePath (etapa 77)",
+    "converte expected_route em path do Google",
+    "devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada)",
+    "buildTrailPath (etapa 77)",
+    "ordena cronologicamente mesmo recebendo o mais novo primeiro",
+    "descarta pontos sem coordenada valida",
+    "corta a trilha em ${TRAIL_MAX_POINTS} pontos mantendo os mais recentes",
+    "trilha vazia nao desenha nada",
+    "interpolatePosition (etapa 77)",
+    "comeca na posicao anterior e termina exatamente na nova",
+    "meio caminho em metade da janela de 10 s",
+    "elapsed maior que a janela nao passa do destino (evita overshoot)",
+    "janela zero desativa a animacao e posiciona direto",
+    "formatRouteBadge (etapa 77)",
+    "metros abaixo de 1 km e km acima",
+    "sem distancia informada mostra apenas o ETA",
+    "haversineM (etapa 77)",
+    "1 grau de latitude ~ 111 km",
+    "mesmo ponto = 0"
+   ]
+  },
   "src/components/map/__tests__/mapLayers.test.ts": {
    "path": "src/components/map/__tests__/mapLayers.test.ts",
    "lines": 138,
@@ -56392,7 +56569,7 @@
   },
   "src/components/map/hooks/useTrackingData.ts": {
    "path": "src/components/map/hooks/useTrackingData.ts",
-   "lines": 107,
+   "lines": 113,
    "exports": [
     "interface TrackingData",
     "function useTrackingData"
@@ -56408,6 +56585,41 @@
    ],
    "hooks": [
     "useTrackingData"
+   ]
+  },
+  "src/components/map/hooks/useTrackingTrails.ts": {
+   "path": "src/components/map/hooks/useTrackingTrails.ts",
+   "lines": 76,
+   "exports": [
+    "interface TrailPoint",
+    "function useTrackingTrails"
+   ],
+   "tables": [
+    {
+     "table": "tracking_events",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "tracking_events": [
+     "created_at",
+     "latitude",
+     "longitude",
+     "order_id"
+    ]
+   },
+   "params": [
+    {
+     "name": "POINTS_PER_ORDER",
+     "value": "60"
+    },
+    {
+     "name": "REFRESH_MS",
+     "value": "15"
+    }
+   ],
+   "hooks": [
+    "useTrackingTrails"
    ]
   },
   "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts": {
@@ -70578,10 +70790,25 @@
   }
  },
  "git": {
-  "sha": "619f4497dab221c7ddbcfcdfc7a02b022a44dde9",
+  "sha": "a067e02e828a79ed72be57616ea9982a072a944b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a067e02",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/components/map/GoogleMapsCanvas.tsx",
+     "src/components/map/MapHUD.tsx",
+     "src/components/map/__tests__/googleLayers.test.ts",
+     "src/components/map/googleLayers.ts",
+     "src/components/map/hooks/useTrackingData.ts",
+     "src/components/map/hooks/useTrackingTrails.ts"
+    ]
+   },
    {
     "sha": "619f449",
     "date": "2026-11-22",
@@ -70945,16 +71172,6 @@
      "supabase/migrations/20261123160000_job_queue_processing_log.sql",
      "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
     ]
-   },
-   {
-    "sha": "9710802",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
@@ -70979,8 +71196,8 @@
     3
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    3
+    "src/components/map/GoogleMapsCanvas.tsx",
+    2
    ],
    [
     "src/components/orders/NewOrderDialog.tsx",
@@ -71011,6 +71228,10 @@
     2
    ],
    [
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    2
+   ],
+   [
     "supabase/.temp/anc.py",
     2
    ],
@@ -71032,10 +71253,6 @@
    ],
    [
     "supabase/.temp/project-ref",
-    2
-   ],
-   [
-    "supabase/.temp/rest-version",
     2
    ]
   ]

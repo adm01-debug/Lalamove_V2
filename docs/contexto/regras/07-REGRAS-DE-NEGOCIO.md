@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `619f4497da` · branch `main` · 2026-11-22 05:20 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a067e02e82` · branch `main` · 2026-11-22 05:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1022,6 +1022,10 @@ _nenhum item encontrado_
   ```
   
   ```
+- **applyPosition(p: LatLngLiteral)** — `src/components/map/GoogleMapsCanvas.tsx`
+  ```
+  if (upd.setPosition) upd.setPosition(p); else upd.position = p;
+  ```
 - **apply()** — `src/components/map/LiveMap.tsx`
   ```
   if (map.current) applyRasterOverlay(map.current, rasterProvider);
@@ -1273,6 +1277,10 @@ _nenhum item encontrado_
 | `DEFAULT_ZOOM` | `12` | `src/components/map/LiveMap.tsx` |
 | `FAR_ZOOM_THRESHOLD` | `11.5` | `src/components/map/LiveMap.tsx` |
 | `VERY_FAR_ZOOM_THRESHOLD` | `9.5` | `src/components/map/LiveMap.tsx` |
+| `DRIVER_ANIM_MS` | `10` | `src/components/map/googleLayers.ts` |
+| `TRAIL_MAX_POINTS` | `60` | `src/components/map/googleLayers.ts` |
+| `POINTS_PER_ORDER` | `60` | `src/components/map/hooks/useTrackingTrails.ts` |
+| `REFRESH_MS` | `15` | `src/components/map/hooks/useTrackingTrails.ts` |
 | `QUOTE_SAFETY_MARGIN_MS` | `45` | `src/components/orders/NewOrderDialog.tsx` |
 | `HEATMAP_LAYER` | `'deliveries-heat'` | `src/components/reports/GeoHeatmap.tsx` |
 | `CLUSTER_SOURCE` | `'deliveries-clustered'` | `src/components/reports/GeoHeatmap.tsx` |
@@ -1833,7 +1841,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1079 testes em 95 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1098 testes em 96 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1847,6 +1855,7 @@ _nenhum item encontrado_
 | `src/utils/__tests__/exportUtils.test.ts` | 23 | exportToCSV · não deve fazer nada com array vazio · deve gerar CSV com headers corretos · deve escapar valores com vírgula … |
 | `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
+| `src/components/map/__tests__/googleLayers.test.ts` | 19 | toGooglePath (etapa 77) · converte expected_route em path do Google · devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada) · buildTrailPath (etapa 77) … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
@@ -2051,6 +2060,8 @@ _nenhum item encontrado_
 | Enable audio on first user interaction (required by browsers) | `src/components/layout/AppLayout.tsx` |
 | Densidade adaptativa: atualiza a banda de zoom apenas quando cruza o limiar, | `src/components/map/LiveMap.tsx` |
 | Estatísticas: considera apenas leituras de velocidade válidas (não-nulas), | `src/components/map/MapHistoryPanel.tsx` |
+| * Maximo de pontos de trilha por pedido: `tracking_events` cresce sem limite. */ | `src/components/map/googleLayers.ts` |
+| * `expected_route` chega como `jsonb` do banco. Delega a validacao para | `src/components/map/googleLayers.ts` |
 | * Deve ser chamada dentro do handler `style.load` do Mapbox, pois camadas só | `src/components/map/mapLayers.ts` |
 | Lista completa de veículos no tooltip (sem limite de 3). | `src/components/map/markerFactories.ts` |
 | * Destroi todos os markers e limpa refs internas. Deve ser invocada no | `src/components/map/hooks/useMapMarkers.ts` |
