@@ -546,9 +546,37 @@ correta no plano.
 - [ ] Contar map load: `geo-gateway` action `count-map-load` (sem custo externo) ao inicializar o mapa → `geo_usage(tiles)`
 - **Evidência:** admin muda para `google` → novo usuário abre em Google
 
-### 81 — Autocomplete com viés de localização
-- [ ] `locationBias` = centro do mapa atual ou coordenada do último pedido do cliente
+### 81 — Autocomplete com viés de localização ✅
+- [x] `locationBias` = centro do mapa atual ou coordenada do último pedido do cliente
 - **Evidência:** sugestões de Curitiba primeiro
+
+**Executado.** A cadeia `schemas.ts:139` → `providers/mapbox.ts:127` (`proximity`) /
+`providers/google.ts:86` (`locationBias.circle`) já existia desde a #197; o elo que
+faltava era o front, que chamava o `geo-gateway` sem `bias` e recebia a ordenação
+nacional do provedor.
+
+- `useAddressSearchBox(query, enabled, bias?)` — `src/hooks/useGeoSearch.ts:131`.
+  O `bias` entra também na `queryKey` (`:160`): sem isso o React Query devolveria a
+  lista do cliente anterior ao trocar de pedido.
+- `useCustomerSearchBias(customerPhone)` (`:94`) resolve o viés pelo **último pedido
+  do cliente**, lendo `lalamove_orders.pickup_latitude/longitude` com fallback para
+  `delivery_*`. Usa `customer_phone`, não `customer_id` — essa coluna não existe.
+- `AddressAutocomplete` recebe `customerPhone` (`:74`) e repassa ao hook; sem
+  histórico de pedido, **nenhum `bias` é enviado** e a busca continua global.
+- `NewOrderDialog` passa `form.senderPhone` na coleta; na entrega só depois que
+  `pickupGeo` existe (entrega costuma ser na mesma região, mas o destinatário pode
+  ser de outra cidade — viesar por um dado não confirmado pioraria o resultado).
+- Raio padrão `DEFAULT_BIAS_RADIUS_M = 50_000` (50 km) quando o caller não informa.
+
+**Sobre a 1ª caixa:** das duas fontes citadas (centro do mapa / último pedido do
+cliente), foi implementada a do cliente. O `NewOrderDialog` não renderiza mapa, então
+não há centro de mapa a usar nesse fluxo; quando houver, é só passar o ponto como
+`bias` — o hook já aceita qualquer coordenada.
+
+**Testes:** `src/hooks/useGeoSearch.test.tsx` — 4 casos novos (bias enviado com raio
+padrão, ausência da chave `bias` sem região, resolução por `customer_phone` com
+`limit(1)`, telefone vazio sem request). Arquivo **15/15 verde**; `tsc -p
+tsconfig.app.json` limpo.
 
 ### 82 — Acessibilidade e i18n
 - [ ] Strings novas em `src/i18n/locales/{pt-BR,en,es}`; componentes com `aria-label`
