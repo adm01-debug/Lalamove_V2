@@ -25,6 +25,10 @@ Terceiro provedor (HERE/TomTom): `docs/GEO_PROVIDERS.md`.
 
 **`allowedUrls` do `pk.`:** `https://lalamove-v2.vercel.app`, `https://lalamove-v2-*.vercel.app`, domínio de produção, `http://localhost:*`.
 
+### Por que o navegador usa `pk.` fixo e não `tk.` (etapa 10 do plano)
+
+Avaliado e **descartado**. O `pk.` é público por construção: ele vai no `access_token` de cada requisição de tile e os scopes são só de leitura de estilo. Um `tk.` de 1 h não esconde nada que o DevTools não mostre hoje, e em troca custaria uma chamada à Tokens API por usuário por hora (limite de 100/min, o mesmo da rotação da etapa 9), um cache que morre a cada cold start da edge e mais um jeito de o mapa abrir em branco para o operador. O risco real de vazamento está no `sk.`, que nunca sai do servidor — é esse que a etapa 9 rotaciona.
+
 ## Secrets (etapa 4)
 
 ```
