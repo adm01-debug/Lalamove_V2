@@ -454,8 +454,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `cron.job_run_details` com execuções
 
 ### 71 — `alert_configurations` dos novos tipos
-- [ ] Linhas com canais, `min_interval_seconds=300`, `dedup_window`, template; `is_enabled=true` para pickup, `false` para delivery
-- **Evidência:** `SELECT alert_type,is_enabled FROM alert_configurations`
+- [x] Linhas com canais, `min_interval_seconds=300`, `dedup_window`, template; `is_enabled=true` para pickup, `false` para delivery
+- **Evidência:** seed em `20261122130100_geo_foundation.sql:539-552` — 6 linhas (`DRIVER_APPROACHING_PICKUP`/`DRIVER_ARRIVED_PICKUP`/`ETA_DELAY`/`GEO_BUDGET_WARNING` com `is_enabled=true`; as duas de delivery com `false`), `min_interval_seconds` 300 (600 no `ETA_DELAY`, 3600 no orçamento), `message_template` com `{{variavel}}`, `ON CONFLICT (alert_type, channel) DO NOTHING`. `dedup_window_seconds` é default 300 da coluna (`20260712221144:3`) e os 6 valores do enum existem em `20261122130000_geo_alert_types.sql:7-15`. Colunas `message_template`/`min_interval_seconds`/`notify_whatsapp` existem desde `20251224181640:72-74`.
 
 ### 72 — UI de configuração dos novos alertas
 - [x] `AlertConfigCard.tsx`: suportar os 8 tipos novos; campos raio/ETA padrão; preview do template
