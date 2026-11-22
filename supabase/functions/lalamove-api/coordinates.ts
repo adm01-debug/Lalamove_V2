@@ -13,6 +13,7 @@ import { logger } from '../_shared/logger.ts';
 // Mapbox, que proíbem reter coordenada de geocode temporário.
 export function stopsCoords(stops: Array<Record<string, unknown>> | undefined): Array<{
   stopId: string | null; lat: number | null; lng: number | null; address: string | null;
+  name: string | null; phone: string | null;
 }> {
   return (stops ?? []).map((s) => {
     const c = (s.coordinates ?? {}) as Record<string, unknown>;
@@ -24,6 +25,8 @@ export function stopsCoords(stops: Array<Record<string, unknown>> | undefined): 
       lat: Number.isFinite(lat) && !(lat === 0 && lng === 0) ? lat : null,
       lng: Number.isFinite(lng) && !(lat === 0 && lng === 0) ? lng : null,
       address: (s.address as string) ?? null,
+      name: (s.name as string) || null,
+      phone: (s.phone as string) || null,
     };
   });
 }
@@ -56,7 +59,9 @@ export async function persistOrderCoordinates(
   const coords = stopsCoords(stops);
   const first = coords[0];
   const second = coords[1];
-  if (!first?.lat && !second?.lat) return;
+  // A parada pode ter contato sem coordenada (cotação rejeitou 0,0). Nesse caso ainda
+  // vale gravar o contato: é ele que define o destinatário do alerta.
+  if (!first?.lat && !second?.lat && !first?.phone && !first?.name) return;
 
   const patch: Record<string, unknown> = {};
   if (first?.lat !== null && first?.lat !== undefined) {
@@ -84,6 +89,14 @@ export async function persistOrderCoordinates(
   }
   if (Object.keys(patch).length === 0) return;
 
+  // O alerta de COLETA usa COALESCE(o.pickup_contact_name, o.supplier_contact) e
+  // COALESCE(o.pickup_contact_phone, stops[0].contact_phone) (geo_foundation.sql:480-481).
+  // As duas colunas pickup_contact_* de lalamove_orders nunca foram escritas por ninguém
+  // no repo, então o nome do fornecedor caía em supplier_contact (NULL quando o pedido
+  // veio da UI). A cotação já traz name/phone na parada 0: gravar aqui é gratuito.
+  if (first?.name) patch.pickup_contact_name = first.name;
+  if (first?.phone) patch.pickup_contact_phone = first.phone;
+
   const { error } = await supabase.from("lalamove_orders").update(patch).eq("id", orderId);
   if (error) { logger.error("Error saving order coordinates:", error); return; }
 
@@ -98,6 +111,13 @@ export async function persistOrderCoordinates(
       longitude: c.lng,
       geocode_precision: "LALAMOVE",
       geocode_match_confidence: "LALAMOVE",
+      // Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL
+      // (nenhum escritor no repo), e o trigger geo_evaluate_tracking monta os
+      // destinatários da notificação de aproximação/chegada da ENTREGA lendo
+      // exatamente estas duas colunas (geo_foundation.sql:484-485). Sem elas o alerta
+      // saía sem `to` e o envio por WhatsApp falhava silenciosamente em toda entrega.
+      ...(c.name ? { contact_name: c.name } : {}),
+      ...(c.phone ? { contact_phone: c.phone } : {}),
       ...(c.stopId ? { place_id: `lalamove:${c.stopId}` } : {}),
     }));
   if (rows.length > 0) {

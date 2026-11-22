@@ -402,10 +402,14 @@ consumidor existente mudou de import:
 - **Evidência:** `stopCoordinates` é função pura coberta pelos testes de `AddressAutocomplete` (emissão com e sem coordenada); `tsc --noEmit` e `eslint` limpos
 
 ### 36 — `lalamove-api`: persistir endereço completo
-- [x] Em `order` (`lalamove-api/index.ts:692-704`) e `upsertOrderToDatabase`: gravar `pickup_/delivery_latitude/longitude`, `*_place_id`, `*_address_components`, `geocode_provider`, `geocode_precision`, `pickup_contact_*`
-- [x] **Inserir `lalamove_stops`** (hoje nenhuma edge insere) com `stop_id` da cotação (coluna criada no #107), `latitude/longitude`, `place_id`, `contact_*`
-- [x] Teste Deno do mapeamento quotation→stops
-- **Evidência:** `SELECT * FROM lalamove_stops WHERE order_id = ...` com 2 linhas após pedido real
+- [x] `lalamove_stops` **já recebe INSERT**: `persistOrderCoordinates` (`coordinates.ts:80-82`) faz upsert de uma linha por parada com `order_id`, `stop_index`, `address`, `latitude`, `longitude`, `place_id`, `geocode_precision`, `geocode_match_confidence`. Chamado nos 3 caminhos: criação (`lalamove-api/index.ts:736`), `upsertOrderToDatabase` (`:603`) e sync de pedido existente (`:517`). (A anotação anterior do plano — "nenhuma edge insere" — estava errada: o grep só olhava `lalamove-webhook`.)
+- [x] **`pickup_/delivery_latitude/longitude`, `*_place_id`, `geocode_provider`, `geocode_precision`**: gravados em `coordinates.ts:41-63`.
+- [x] **`contact_name`/`contact_phone` de `lalamove_stops` — GAP FECHADO NESTA RODADA.** O trigger `geo_evaluate_tracking` monta o destinatário do alerta de aproximação/chegada da ENTREGA lendo exatamente essas duas colunas (`geo_foundation.sql:482-485`). `persistOrderCoordinates` gravava coordenada e `place_id` mas nunca o contato, então `recipients[0].to` saía `null` em 100% das entregas e o envio por WhatsApp falhava sem erro. Agora `stopsCoords` extrai `name`/`phone` (`coordinates.ts:14-34`) e o upsert grava as colunas (`:76-84`).
+- [x] Teste Deno do mapeamento quotation→stops: `coordinates.test.ts` **8/8 verdes** (2 novos: extração de contato e normalização de vazio/ausente).
+- [x] Cenário 11 do harness SQL prova o efeito de ponta a ponta: `DRIVER_APPROACHING_DELIVERY` emite `recipients[0]` com `role='delivery_contact'`, `name='Cliente Final'`, `to='+5541999990022'`.
+- [ ] Continua aberto: `*_address_components` (a Lalamove não devolve componentes estruturados; exigiria geocode reverso pago — decisão de custo).
+- [ ] Continua aberto: `pickup_contact_*` em `lalamove_orders` (hoje só `customer_*` da entrega).
+- **Evidência:** `deno test supabase/functions/lalamove-api/coordinates.test.ts` → 8/8; `bash supabase/tests/run.sh` → 27/27 asserções, incluindo o cenário 11.
 
 **Auditado (2026-11-22).** `persistOrderCoordinates` (`lalamove-api/coordinates.ts:35-95`):
 - Grava `pickup_/delivery_latitude/longitude`, `geocode_provider='lalamove'`, `geocode_precision='LALAMOVE'`, `geocode_match_confidence='LALAMOVE'` e `pickup_/delivery_place_id` — este último **preserva** o `place_id` do autocomplete quando o pedido veio do formulário (`preferred`, `coordinates.ts:41-43,55-56`), só caindo em `lalamove:<stopId>` quando não há provedor.
@@ -492,8 +496,8 @@ correta no plano.
 
 ### 44 — Recalcular rota quando sai do caminho ✅
 - [x] Se `distance_to_route_m > off_route_threshold` (de `map_settings_overrides`, padrão 300 m) por 2 ciclos → job `route_plan` novo (máx 1 a cada 5 min por pedido)
-- **Evidência:** o trigger conta `off_route_cycles` (`20261122130100:468`: zera quando `is_on_route`, incrementa quando não) e o agendador exige `off_route_cycles >= 2` **e** `route_computed_at < now() - 5 minutes` (`20261121194500:70,78`) — exatamente o "2 ciclos" e o teto de 1 a cada 5 min do plano. O limite vem de `geo_defaults.off_route_threshold_m` (`:50`, default 300).
-- **Correção de premissa:** o plano diz `map_settings_overrides`; a fonte real é `geo_defaults` (singleton) com override por pedido em `lalamove_orders.off_*`. `map_settings_overrides` não existe no schema.
+- **Evidência:** já estava implementada — **não no trigger**, e sim no cron `geo-jobs-refresh` (`20261121194500_geo_jobs_scheduler.sql:52-73`, agendado em `:87` a cada 5 min): enfileira `route_plan` quando `COALESCE(t.off_route_cycles,0) >= 2`, com `dedup_key = route:<trackingId>:<slot de 5 min>` (rate de 1 job/5 min por pedido) e `max_attempts=2`. O contador é acumulado pelo trigger em `geo_foundation.sql:468` e só zera quando o motorista volta à rota, então o replanejamento se repete a cada janela enquanto o desvio persistir. O `processRoutePlan` (`job-worker/index.ts:419`) consome o tipo e grava `expected_route`/`route_computed_at`.
+  **Correção de rumo:** a primeira versão desta entrega enfileirava `route_plan` também dentro do trigger. Isso criava **2 jobs por desvio** (`route_plan:<order>:<minuto>` no trigger vs. `route:<trackingId>:<slot>` no cron) → 2 chamadas pagas ao provedor. O bloco foi removido e a migration ficou só com a etapa 50. Verificado em Postgres 16 descartável: após os cenários de ETA_DELAY, `SELECT count(*) FROM job_queue WHERE type='route_plan'` = **0**.
 
 ### 45 — Função SQL `geo_update_route_metrics()` ✅
 - [x] No trigger da etapa 20: calcular `distance_to_route_m = geo_point_to_polyline_m(...)`, `distance_to_next_stop_m = geo_haversine_m(... stop[next_stop_index])`, `is_on_route = distance_to_route_m <= threshold`
@@ -503,8 +507,9 @@ correta no plano.
 
 ### 46 — Avanço de parada ✅
 - [x] `distance_to_next_stop_m < 100` por ≥ 2 ciclos ou status Lalamove `PICKED_UP` → `next_stop_index += 1`, `lalamove_stops.arrived_at = now()`
-- **Evidência:** `near_stop_cycles` incrementa quando `v_dist <= d.arrived_radius_m` (`20261122130100:454-457`, default 100 m em `:48`) e `DRIVER_ARRIVED_PICKUP` só emite com `near_stop_cycles >= 2` (`:497`). O avanço de `next_stop_index` acompanha o `lalamove_status` (`:489` trata `=0` para `ON_GOING/MATCHED/ASSIGNING_DRIVER`; `:508` trata a última parada para `PICKED_UP/ON_GOING`).
-- **Correção de premissa:** o trigger **não escreve** `next_stop_index += 1` nem `arrived_at`; ele lê `next_stop_index` para decidir qual evento emitir. O avanço da parada vem do `lalamove_status` via webhook. `arrived_at` é escrito por `POD_STATUS_CHANGED`, não pelo trigger geo.
+- **Evidência:** `20261122131000_geo_eta_delay.sql:205-224` — 2º ciclo no raio move `next_stop_index` 0→1, grava `arrived_at` na coleta, zera `near_stop_cycles` e recalcula `distance_to_next_stop_m` para a entrega; `PICKED_UP` avança no 1º ciclo. Cenários 4 e 5 de `supabase/tests/02_scenarios.sql`.
+- **Por que importa:** antes deste bloco **nada no repositório escrevia `next_stop_index`** — ele nascia em 0 e ficava em 0, e como o bloco de ENTREGA do trigger (`geo_foundation.sql:508`) exige `next_stop_index >= 1`, nenhum pedido gerava `DRIVER_APPROACHING_DELIVERY` nem `DRIVER_ARRIVED_DELIVERY`.
+- **Correção de premissa (superada):** a auditoria anterior dizia que o trigger só lia `next_stop_index`. Depois da migration `20261122131000` ele passou a escrevê-lo.
 
 ### 47 — ETA por Route Matrix ✅
 - [x] Job `eta_refresh`: `matrix(origins=[driverPos], destinations=[next_stop])` → `eta_minutes = ceil(duration_s/60)`, `eta_updated_at`, `eta_provider`
@@ -537,6 +542,11 @@ tempo decorrido, cai em 30 km/h (média urbana de Curitiba) — e o mesmo fallba
 velocidade `< 0,5 m/s`, para motorista parado não gerar ETA absurdo. O valor sai em
 `results[].local_eta_minutes` nos ciclos pulados, então o campo não envelhece até o
 próximo recálculo pago.
+
+### 50 — `ETA_DELAY`
+- [x] Se `now() + eta_minutes > scheduled_at + late_delivery_threshold` (de `alert_configurations.LATE_DELIVERY`, padrão 15 min) → evento `ETA_DELAY` (1× por pedido por parada)
+- **Evidência:** `20261122131000_geo_eta_delay.sql` — `geo_defaults.late_tolerance_min integer NOT NULL DEFAULT 15` (a tolerância é de negócio; `alert_configurations.min_interval_seconds` é intervalo entre alertas, não tolerância, por isso a coluna própria). No trigger: `v_eta_at := now() + make_interval(mins => NEW.eta_minutes)`, `v_late_limit := o.scheduled_at + make_interval(mins => d.late_tolerance_min)`, emite `ETA_DELAY` via `geo_emit_event` quando `v_eta_at > v_late_limit`, sob `o.scheduled_at IS NOT NULL AND NEW.eta_minutes IS NOT NULL AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER','PICKED_UP','DELIVERING')`.
+  Validado em Postgres 16 descartável: `scheduled_at` 60 min no passado + `eta_minutes=30` → 1 evento `ETA_DELAY` (`late_minutes=90`, `late_tolerance_min=15`) + 1 alerta; segundo UPDATE → continua 1 (UNIQUE `order_id,event_type,stop_index`); pedido no prazo → 0; pedido sem `scheduled_at` → 0 (não quebra); `job_queue` sem `route_plan` (não interfere na etapa 44).
 
 **Correção de premissa:** os pontos ficam em `driver_locations.latitude/longitude/
 recorded_at` (tabela alimentada pelo webhook, PR #236), **não** em
@@ -572,9 +582,8 @@ velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
 
 ### 52 — Testes do bloco ✅
 - [x] Fixture de trajeto real (Centro→Jardim Botânico, 40 pontos) em `supabase/tests/fixtures/route_curitiba.json`; replay via `simulate-driver-movement` (já exige JWT) → verificar `is_on_route`, `next_stop_index`, `eta_minutes`
-- **Evidência:** `supabase/tests/fixtures/route_curitiba.json` — 40 pontos, **3.983 m** reais (soma haversine dos segmentos), velocidade e heading por ponto. Replay determinístico em `job-worker/route-fixture-replay.test.ts`: **7 testes verde** — ordem de `seq`/`elapsed_s`, distância declarada × soma dos segmentos (1 %), todos os 40 vértices a < 1 m da própria rota (prova o `point_to_polyline`), ponto a 600 m conta como desvio, ponto a 278 m dentro do limite de 300 m, chegada no destino e ETA local plausível.
+- **Evidência (dupla):** `supabase/tests/fixtures/route_curitiba.json` — 40 pontos, **3.983 m** reais (soma haversine dos segmentos), velocidade e heading por ponto. (1) Replay em `job-worker/route-fixture-replay.test.ts`: **7 testes verde** — ordem de `seq`/`elapsed_s`, distância declarada × soma dos segmentos (1 %), os 40 vértices a < 1 m da própria rota, ponto a 600 m conta como desvio, ponto a 278 m dentro do limite de 300 m, chegada no destino e ETA local plausível. (2) Harness SQL `bash supabase/tests/run.sh`: **23 asserções verdes**, incluindo os 40 pontos com `is_on_route=true`, `next_stop_index` 0→1 e desvio de 500 m marcando `is_on_route=false`; extrai as funções reais das migrations e roda num Postgres 16 descartável.
 - **Correção de premissa:** o `simulate-driver-movement` **não aceita fixture** — ele move o pino aleatoriamente (`5-15 %` por ciclo + `randomOffset()`) e só roda em ambiente de desenvolvimento (`:35-38`). Replay determinístico é o teste, não a edge.
-
 ---
 
 ## BLOCO 5 — Motor de geo-eventos (etapas 53–64)
@@ -688,6 +697,8 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 ### 64 — Testes do bloco
 - [x] pgTAP/`DO` para `geo_evaluate_events` (6 cenários) + Deno para resolução de destinatário e janela
 - **Evidência:** CI verde
+  > **Auditada 2026-11-22.** Harness SQL em `supabase/tests/` com **12 cenários / 30 asserções** (bem acima dos 6), rodando em job dedicado `SQL Geo Trigger Tests` no CI. Deno: `quiet-hours.test.ts` 8/8 e `coordinates.test.ts` 8/8.
+- **Evidência:** job `SQL Geo Trigger Tests` verde no run `44981311884`; `deno test` 25/25.
 
 **Executado (2026-11-22).** Testes SQL de comportamento do trigger, além dos testes puros de
 geometria da etapa 17:

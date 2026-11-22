@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Contrato de dados do motor geo
 
 O motor geo (`geo_evaluate_tracking` → `geo_emit_event` → `alerts` + `job_queue`) **não
@@ -119,3 +120,192 @@ ORDER BY triggered_at DESC;
 
 `last_updated` parado há mais de 2 min num pedido `ON_GOING` significa que **o produtor
 de posição parou**, não o motor geo.
+=======
+# Contrato de posição — UAPI → Lalamove_V2
+
+Este documento é o **contrato** entre o projeto que produz a posição do motorista
+(chat da UAPI, que fala com a Lalamove v3) e o motor geo deste repo (trigger, cron,
+job-worker, alertas, ETA e rota).
+
+O lado de cá **só lê**. Nada aqui é escrito pelas edge functions deste repo: se a
+UAPI parar de atualizar `active_tracking`, o geo para. Por isso o contrato precisa
+estar explícito dos dois lados.
+
+Etapa 41 do `docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md`.
+
+---
+
+## 1. O que este repo lê
+
+### 1.1 `public.active_tracking` — uma linha por pedido
+
+`order_id` é `UNIQUE NOT NULL` (`20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:191`).
+Uma linha por pedido, não um histórico.
+
+| Coluna | Tipo | Origem | Uso no motor geo |
+|---|---|---|---|
+| `order_id` | `uuid NOT NULL UNIQUE` | UAPI | Chave do UPSERT e do dedupe de eventos |
+| `driver_id` | `uuid NOT NULL` | UAPI (FK `drivers`) | Copiado para `order_geo_events.driver_id` |
+| `current_latitude` | `numeric(10,8) NOT NULL` | UAPI | Entrada de `geo_haversine_m` / `geo_point_to_polyline_m` |
+| `current_longitude` | `numeric(11,8) NOT NULL` | UAPI | Idem |
+| `heading` | `numeric(5,2)` | UAPI | Informativo; gravado mas sem uso em decisão |
+| `speed` | `numeric(6,2)` | UAPI | Informativo |
+| `eta_minutes` | `integer` | UAPI **ou** `job-worker` (`eta_refresh`) | Dispara `ETA_DELAY` e avisos de aproximação |
+| `expected_route` | `jsonb` | `job-worker` (`route_plan`/`route_plan` inicial) | Lista `[{"lat":..,"lng":..}, ...]`; base de `distance_to_route_m` |
+| `tracking_status` | `text DEFAULT 'ACTIVE'` | UAPI | Gate de todo o trigger (só `'ACTIVE'` avalia) |
+| `last_updated` | `timestamptz NOT NULL DEFAULT now()` | **UAPI** | Janela de 2 h do cron `geo_jobs_scheduler` |
+
+Colunas derivadas que o trigger preenche — a UAPI **não deve escrever**:
+
+`distance_to_route_m`, `distance_to_next_stop_m`, `is_on_route`, `near_stop_cycles`,
+`off_route_cycles`, `next_stop_index`, `eta_updated_at`, `eta_provider`,
+`route_provider`, `route_distance_m`, `route_duration_s`, `route_computed_at`.
+
+### 1.2 `public.lalamove_orders` — somente leitura
+
+| Coluna | Uso |
+|---|---|
+| `status` | Gate dos blocos de COLETA e ENTREGA (`ON_GOING`, `MATCHED`, `ASSIGNING_DRIVER`, `PICKED_UP`, `DELIVERING`) |
+| `lalamove_status` | Status cru da Lalamove; lido em mensagens e no fallback de status |
+| `driver_lalamove_id` | ID do motorista **na Lalamove** (numérico v3 ou `driver_fid` UAPI) — nunca o UUID local |
+| `scheduled_at` | Prazo de referência do `ETA_DELAY`. **Nulo para pedido imediato**: nesse caso o alerta não é emitido |
+
+### 1.3 `public.lalamove_stops` — somente leitura
+
+| Coluna | Uso |
+|---|---|
+| `stop_index` | Índice da parada; `0` = coleta, `max` = entrega |
+| `latitude` / `longitude` | Alvo de `distance_to_next_stop_m` |
+| `contact_name` / `contact_phone` | Destinatário da notificação |
+| `arrived_at` | Preenchido no avanço de parada (etapa 46) |
+
+### 1.4 `public.geo_defaults` — somente leitura
+
+`approach_radius_m`, `approach_eta_min`, `arrived_radius_m`, `off_route_threshold_m`,
+`late_tolerance_min`. Todos com default; a linha única (`id = true`) precisa existir.
+`late_tolerance_min` é a tolerância de atraso de negócio (default 15 min) — não
+confundir com `alert_configurations.min_interval_seconds`, que é intervalo entre
+alertas.
+
+---
+
+## 2. O que a UAPI deve garantir
+
+### 2.1 UPSERT a cada ciclo de 10–15 s
+
+**É o `UPDATE` de `active_tracking` que dispara o motor.** Sem ele não há métrica,
+evento, alerta, ETA recalculado nem replanejamento de rota.
+
+```sql
+INSERT INTO public.active_tracking
+  (order_id, driver_id, current_latitude, current_longitude,
+   heading, speed, eta_minutes, tracking_status, last_updated)
+VALUES ($1, $2, $3, $4, $5, $6, $7, 'ACTIVE', now())
+ON CONFLICT (order_id) DO UPDATE SET
+  current_latitude  = EXCLUDED.current_latitude,
+  current_longitude = EXCLUDED.current_longitude,
+  heading           = EXCLUDED.heading,
+  speed             = EXCLUDED.speed,
+  eta_minutes       = EXCLUDED.eta_minutes,
+  last_updated      = now();
+```
+
+`tracking_status` **não** entra no `SET` do UPSERT de posição: só muda nas transições
+da seção 2.3. `driver_id` também não muda (o motorista não troca no meio do pedido).
+
+### 2.2 Triggers: os disparadores reais
+
+```sql
+-- metricas + eventos (20261122130100_geo_foundation.sql:530)
+CREATE TRIGGER trg_active_tracking_geo
+  BEFORE INSERT OR UPDATE OF current_latitude, current_longitude,
+                             eta_minutes, next_stop_index
+  ON public.active_tracking
+  FOR EACH ROW EXECUTE FUNCTION public.geo_evaluate_tracking();
+```
+
+Consequências diretas do `UPDATE OF`:
+
+- Mudar **só** `heading`, `speed` ou `last_updated` **não** dispara nada. Um ciclo de
+  posição sem mudança de coordenada é inócuo por desenho.
+- `next_stop_index` está na lista para o avanço de parada (etapa 46) reavaliar o bloco
+  de COLETA/ENTREGA sem depender de nova coordenada.
+
+### 2.3 Ciclo de vida da linha
+
+| Evento da Lalamove | O que escrever |
+|---|---|
+| `DRIVER_ASSIGNED` | Criar a linha: `tracking_status='ACTIVE'`, `tracking_started_at=now()`, coordenada do motorista |
+| `ON_GOING` (se ainda não existe) | Criar a linha como acima |
+| `PICKED_UP`, `DELIVERING` | Nada além do UPSERT de posição |
+| `COMPLETED` | `tracking_status='ENDED'`, `tracking_ended_at=now()` |
+| `CANCELED` | `tracking_status='ENDED'`, `tracking_ended_at=now()` |
+
+`'ENDED'` sai do gate do trigger (`geo_foundation.sql:408`) e das duas consultas do
+cron (`geo_jobs_scheduler.sql:35,55`), encerrando ETA e rota para aquele pedido. A
+linha **não** deve ser deletada: `order_geo_events` referencia o histórico e o
+`processEtaRefresh` usa `trackingId`.
+
+### 2.4 `last_updated` é responsabilidade do produtor
+
+`last_updated` tem `DEFAULT now()` **na criação apenas** — não há trigger de
+`updated_at` nesta tabela. O cron `geo_jobs_scheduler` só considera tracking "vivo"
+quando `last_updated > now() - interval '2 hours'` (`:35,55`). Portanto:
+
+> Se o UPSERT não atualizar `last_updated = now()` a cada ciclo, o pedido para de
+> receber `eta_refresh` e `route_plan` depois de 2 h, mesmo com o motorista em rota.
+
+### 2.5 `expected_route` — quem escreve
+
+`expected_route` é do motor geo, não da UAPI:
+
+- o cron enfileira `route_plan` quando `expected_route IS NULL`, quando
+  `route_computed_at` está velho, ou quando há desvio repetido (`off_route_cycles >= 2`);
+- `job-worker` (`processRoutePlan`, `index.ts:420`) grava a rota e `route_computed_at`.
+
+A UAPI pode ler `expected_route` para desenhar no mapa. Se escrever, o próximo ciclo do
+worker sobrescreve.
+
+---
+
+## 3. Diagnóstico rápido
+
+```sql
+-- tracking vivo?
+SELECT count(*) FROM active_tracking WHERE tracking_status = 'ACTIVE';
+
+-- travado por falta de last_updated (sintoma de UPSERT incompleto)?
+SELECT order_id, last_updated, now() - last_updated AS idade
+  FROM active_tracking
+ WHERE tracking_status = 'ACTIVE'
+   AND last_updated < now() - interval '2 hours';
+
+-- o trigger está produzindo?
+SELECT event_type, count(*) FROM order_geo_events
+ WHERE triggered_at > now() - interval '1 hour'
+ GROUP BY 1 ORDER BY 2 DESC;
+
+-- ETA sendo recalculado?
+SELECT count(*) FROM active_tracking
+ WHERE tracking_status = 'ACTIVE' AND eta_updated_at > now() - interval '10 minutes';
+
+-- rota calculada?
+SELECT count(*) FROM active_tracking
+ WHERE tracking_status = 'ACTIVE' AND route_computed_at IS NOT NULL;
+```
+
+Se `tracking vivo > 0` mas `eventos = 0` e `eta_updated_at` antigo, o suspeito é o
+UPSERT da UAPI — confira `last_updated` antes de investigar o trigger.
+
+---
+
+## 4. Referências
+
+- `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:189` — DDL original de `active_tracking`
+- `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql:30-40` — `expected_route`, `tracking_status`, `tracking_*_at`
+- `supabase/migrations/20261122130100_geo_foundation.sql:389-533` — trigger, métricas e eventos
+- `supabase/migrations/20261122131000_geo_route_replan_and_eta_delay.sql` — `route_plan` por desvio e `ETA_DELAY`
+- `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` — cron de `eta_refresh` / `route_plan`
+- `supabase/functions/job-worker/index.ts:420,567` — `processRoutePlan`, `processEtaRefresh`
+- `docs/GEO_PROVIDERS.md`, `docs/GOOGLE_MAPS.md`, `docs/MAPBOX.md`
+>>>>>>> 19bc3bf (fix: escopo da migration de ETA_DELAY e contrato de posicao da UAPI (etapas 44/50/41))

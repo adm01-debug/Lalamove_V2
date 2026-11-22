@@ -128,6 +128,35 @@ jobs:
       - name: Run geo-gateway tests (resolver, metering, polyline, provider)
         run: deno test --allow-all supabase/functions/geo-gateway/
 
+  sql-geo-tests:
+    name: SQL Geo Trigger Tests
+    runs-on: ubuntu-24.04
+    # O trigger geo_evaluate_tracking e o codigo que decide aproximacao, chegada,
+    # avanco de parada e atraso. Nenhum outro job executa SQL, entao uma regressao
+    # aqui (ex.: next_stop_index que nao avanca, ETA_DELAY que nunca dispara) so
+    # apareceria com o motorista na rua. Este job roda o harness de verdade.
+    services:
+      postgres:
+        image: postgres:16-alpine@sha256:f2f98726820d0342055351c6e9d36e705f5bfffb3dd53ff556325114b08afb6d
+        env:
+          POSTGRES_PASSWORD: x
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: x
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run SQL geo trigger harness
+        run: bash supabase/tests/run.sh
+
   edge-integration-tests:
     name: Deno Edge Function I/O Integration Tests
     runs-on: ubuntu-24.04
@@ -157,7 +186,7 @@ jobs:
     needs: lint-and-typecheck
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine@sha256:f2f98726820d0342055351c6e9d36e705f5bfffb3dd53ff556325114b08afb6d
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: geotest
@@ -189,7 +218,7 @@ jobs:
     needs: lint-and-typecheck
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine@sha256:f2f98726820d0342055351c6e9d36e705f5bfffb3dd53ff556325114b08afb6d
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: geotest
