@@ -471,12 +471,12 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ## BLOCO 7 — Front: mapas (etapas 75–84)
 
 ### 75 — `useGoogleMapsLoader.ts` para chave própria
-- [ ] `VITE_GOOGLE_MAPS_BROWSER_KEY` + `VITE_GOOGLE_MAPS_MAP_ID` (fallback para `VITE_LOVABLE_CONNECTOR_*` durante transição); `v=weekly`, `libraries=maps,marker,routes`; remover comentário "política do conector" (`:8`)
-- **Evidência:** console sem `InvalidKeyMapError`
+- [x] `VITE_GOOGLE_MAPS_BROWSER_KEY` + `VITE_GOOGLE_MAPS_MAP_ID` (fallback para `VITE_LOVABLE_CONNECTOR_*` durante transição); `v=weekly`, `libraries=maps,marker,routes`; remover comentário "política do conector" (`:8`)
+- **Evidência:** `useGoogleMapsLoader.test.ts` — 7 testes verdes, incluindo `v=weekly` + `libraries=maps,marker,routes` com chave própria e ausência de `mapId` no modo conector.
 
 ### 76 — `GoogleMapsCanvas.tsx` com Advanced Markers
-- [ ] `mapId` no `google.maps.Map`; `google.maps.marker.AdvancedMarkerElement` em vez de `Marker` (legado, `:66,88`); ícones reaproveitando `markerFactories.ts`
-- **Evidência:** marcadores renderizam; `tsc` verde
+- [x] `mapId` no `google.maps.Map`; `google.maps.marker.AdvancedMarkerElement` em vez de `Marker` (legado, `:66,88`); ícones reaproveitando `markerFactories.ts`
+- **Evidência:** `createDriverMarkerElement` usado no lugar do SVG inline; `mapId` só entra com chave própria (o conector proíbe a API). `tsc --noEmit -p tsconfig.app.json` limpo; suite 979/979.
 
 ### 77 — Polyline da rota + motorista + ETA no Google
 - [ ] Desenhar `active_tracking.expected_route` (`google.maps.Polyline`) e trilha `tracking_events`; marker do motorista animado entre pontos (interpolação 10 s)

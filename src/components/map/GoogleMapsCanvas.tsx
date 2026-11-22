@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Loader2, AlertTriangle } from 'lucide-react';
 import { useTrackingData } from './hooks/useTrackingData';
-import { useGoogleMapsLoader } from './hooks/useGoogleMapsLoader';
+import { getGoogleMapsMapId, useGoogleMapsLoader } from './hooks/useGoogleMapsLoader';
+import { createDriverMarkerElement } from './markerFactories';
 import type { VehicleFilter, StatusFilter } from './types';
 
 interface GoogleMapsCanvasProps {
@@ -20,12 +21,30 @@ interface GoogleMapInstance {
   panTo(pos: LatLngLiteral): void;
   setZoom(z: number): void;
   setMapTypeId(id: string): void;
+  getDiv?: () => HTMLElement;
 }
 
 interface GoogleMarkerInstance {
   setMap(map: unknown): void;
   addListener(event: string, cb: () => void): void;
   getPosition(): LatLngLiteral | null;
+}
+
+interface GoogleAdvancedMarkerInstance {
+  setMap(map: unknown): void;
+  addListener(event: string, cb: () => void): void;
+  content: HTMLElement;
+  position: LatLngLiteral;
+}
+
+/** Nome de motorista vem da API da Lalamove: escapar antes de ir para innerHTML. */
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -54,7 +73,8 @@ export function GoogleMapsCanvas({
 }: GoogleMapsCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<GoogleMapInstance | null>(null);
-  const markersRef = useRef<Map<string, GoogleMarkerInstance>>(new Map());
+  const markersRef = useRef<Map<string, GoogleMarkerInstance | GoogleAdvancedMarkerInstance>>(new Map());
+  const selectedIdRef = useRef<string | null>(null);
   const infoRef = useRef<{ open: (m: unknown, mk: unknown) => void; setContent: (c: string) => void; close: () => void } | null>(null);
 
   const { ready, error, configured } = useGoogleMapsLoader();
@@ -64,6 +84,7 @@ export function GoogleMapsCanvas({
   useEffect(() => {
     if (!ready || !containerRef.current || mapRef.current) return;
     const g = (window.google as unknown as { maps: { Map: new (el: HTMLElement, opts: unknown) => GoogleMapInstance; InfoWindow: new () => typeof infoRef.current } }).maps;
+    const mapId = getGoogleMapsMapId();
     mapRef.current = new g.Map(containerRef.current, {
       center: { lat: initialCenter[1], lng: initialCenter[0] },
       zoom: initialZoom,
@@ -73,6 +94,9 @@ export function GoogleMapsCanvas({
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: true,
+      // Etapa 76: com chave propria o estilo vem do Map ID da nuvem; sem ele
+      // (conector gerenciado) o mapTypeId manda, como antes.
+      ...(mapId ? { mapId } : {}),
     });
     infoRef.current = new g.InfoWindow();
   }, [ready, initialCenter, initialZoom, mapTypeId]);
@@ -82,10 +106,20 @@ export function GoogleMapsCanvas({
     if (mapRef.current) mapRef.current.setMapTypeId(mapTypeId);
   }, [mapTypeId]);
 
-  // Sync markers
+  // Sync markers — etapa 76: `AdvancedMarkerElement` quando ha Map ID
+  // (chave propria); o conector gerenciado proibe a API e cai no `Marker` legado.
   useEffect(() => {
     if (!ready || !mapRef.current) return;
-    const gAny = (window.google as unknown as { maps: { Marker: new (opts: unknown) => GoogleMarkerInstance; Size: new (w: number, h: number) => unknown; Point: new (x: number, y: number) => unknown } }).maps;
+    const g = window.google as unknown as {
+      maps: {
+        Marker: new (opts: unknown) => GoogleMarkerInstance;
+        Size: new (w: number, h: number) => unknown;
+        Point: new (x: number, y: number) => unknown;
+        marker?: { AdvancedMarkerElement: new (opts: unknown) => GoogleAdvancedMarkerInstance };
+      };
+    };
+    const hasMapId = Boolean(getGoogleMapsMapId());
+    const useAdvanced = hasMapId && Boolean(g.maps.marker?.AdvancedMarkerElement);
     const seen = new Set<string>();
 
     for (const t of trackingData) {
@@ -95,39 +129,58 @@ export function GoogleMapsCanvas({
       const color = STATUS_COLORS[t.order?.status ?? ''] || '#6b7280';
 
       if (existing) {
-        const existingWithSet = existing as unknown as { setPosition: (p: LatLngLiteral) => void; setIcon: (i: unknown) => void };
-        existingWithSet.setPosition(position);
-        existingWithSet.setIcon({
-          url: markerIcon(color),
-          scaledSize: new gAny.Size(36, 44),
-          anchor: new gAny.Point(18, 44),
-        });
-      } else {
-        const marker = new gAny.Marker({
-          position,
-          map: mapRef.current,
-          icon: {
+        const upd = existing as unknown as {
+          setPosition?: (p: LatLngLiteral) => void;
+          position?: LatLngLiteral;
+          setIcon?: (i: unknown) => void;
+          content?: HTMLElement;
+        };
+        if (upd.setPosition) upd.setPosition(position);
+        else upd.position = position;
+        if (useAdvanced) {
+          upd.content = createDriverMarkerElement(t, t.id === selectedIdRef.current);
+        } else if (upd.setIcon) {
+          upd.setIcon({
             url: markerIcon(color),
-            scaledSize: new gAny.Size(36, 44),
-            anchor: new gAny.Point(18, 44),
-          },
-          title: t.driver?.name ?? 'Motorista',
-        });
-        marker.addListener('click', () => {
+            scaledSize: new g.maps.Size(36, 44),
+            anchor: new g.maps.Point(18, 44),
+          });
+        }
+      } else {
+        const onMarkerClick = () => {
+          selectedIdRef.current = t.id;
           if (infoRef.current) {
             const html = `<div style="font-family:system-ui;padding:4px;min-width:180px">
-              <strong>${t.driver?.name ?? 'Motorista'}</strong><br/>
-              <small style="color:#666">${t.order?.status ?? ''}</small><br/>
+              <strong>${escapeHtml(t.driver?.name ?? 'Motorista')}</strong><br/>
+              <small style="color:#666">${escapeHtml(t.order?.status ?? '')}</small><br/>
               <button id="lm-sel-${t.id}" style="margin-top:6px;padding:4px 10px;background:${color};color:white;border:0;border-radius:4px;cursor:pointer;font-size:12px">Selecionar</button>
             </div>`;
             infoRef.current.setContent(html);
-            infoRef.current.open(mapRef.current, marker);
+            infoRef.current.open(mapRef.current, marker as unknown);
             setTimeout(() => {
               const btn = document.getElementById(`lm-sel-${t.id}`);
               if (btn) btn.onclick = () => onSelect?.(t.id);
             }, 60);
           }
-        });
+        };
+        const marker = useAdvanced
+          ? new g.maps.marker!.AdvancedMarkerElement({
+              position,
+              map: mapRef.current,
+              title: t.driver?.name ?? 'Motorista',
+              content: createDriverMarkerElement(t),
+            })
+          : new g.maps.Marker({
+              position,
+              map: mapRef.current,
+              icon: {
+                url: markerIcon(color),
+                scaledSize: new g.maps.Size(36, 44),
+                anchor: new g.maps.Point(18, 44),
+              },
+              title: t.driver?.name ?? 'Motorista',
+            });
+        marker.addListener('click', onMarkerClick);
         markersRef.current.set(t.id, marker);
       }
     }
@@ -135,7 +188,7 @@ export function GoogleMapsCanvas({
     // Remove stale
     for (const [id, marker] of markersRef.current) {
       if (!seen.has(id)) {
-        marker.setMap(null);
+        (marker as unknown as { setMap: (m: unknown) => void }).setMap(null);
         markersRef.current.delete(id);
       }
     }
