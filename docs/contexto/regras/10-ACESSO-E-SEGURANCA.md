@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ea8f382bfa` · branch `main` · 2026-11-22 13:27 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d7c05ddb37` · branch `main` · 2026-11-22 13:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -10,7 +10,7 @@
 - Tabelas de perfil/permissão: `user_roles`, `permissions`, `role_permissions`
 - Colunas de perfil: `user_roles.role` (app_role NOT NULL DEFAULT 'viewer'), `role_permissions.role` (app_role NOT NULL)
 - Claims do JWT usados em políticas/funções: `aal`
-- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `can_run_db_diagnostics`, `has_permission`, `has_role`
+- Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `can_run_db_diagnostics`, `has_permission`, `has_role`, `uid`
 
 ## Matriz tabela × operação → quem pode (derivada das políticas RLS)
 
@@ -46,6 +46,7 @@
 | `drivers_safe_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `email_verifications` | enabled | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `feature_flags` | enabled | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true )<br>authenticated: true | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) |
+| `fixture_route_curitiba` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `geo_blocks` | não encontrado | sem RLS | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `geo_budget` | enabled | — | — | — | — |
 | `geo_cache` | enabled | — | — | — | — |

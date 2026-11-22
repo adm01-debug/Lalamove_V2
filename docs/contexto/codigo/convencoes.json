@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)",
+   "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)",
    "fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)",
    "docs(lalamove): commita análise exaustiva e plano de integração completo (#276)",
-   "fix: geocode fallback com persist e mini-mapa por provider (#274)",
-   "docs(agentes): registra pendencias do dono (#273)",
-   "docs: fecha 6 itens com evidencia de producao (#272)"
+   "fix: geocode fallback com persist e mini-mapa por provider (#274)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

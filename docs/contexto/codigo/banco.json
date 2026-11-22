@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 189,
+ "migrations": 191,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -4940,6 +4940,13 @@
      "default": "true",
      "ref": null
     },
+    "late_tolerance_min": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "15",
+     "ref": null
+    },
     "notify_delivery_contact": {
      "tipo": "boolean",
      "nn": true,
@@ -5011,7 +5018,9 @@
     "updated_by": "string | null"
    },
    "drift": {
-    "so_na_migration": [],
+    "so_na_migration": [
+     "late_tolerance_min"
+    ],
     "so_no_types": []
    },
    "usada_no_front": 1,

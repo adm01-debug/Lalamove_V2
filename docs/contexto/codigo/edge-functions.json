@@ -520,7 +520,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 3,
-   "linhas": 1440,
+   "linhas": 1460,
    "verify_jwt": true,
    "metodos": [
     "GET",

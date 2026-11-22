@@ -14,7 +14,7 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 147,
+ "total": 151,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
@@ -1297,11 +1297,11 @@
   {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 114,
+   "linhas": 134,
    "testa": [
     "supabase/functions/lalamove-api/coordinates.ts"
    ],
-   "casos": 11
+   "casos": 13
   },
   {
    "arquivo": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
@@ -1360,6 +1360,10 @@
   }
  ],
  "sql": [
+  "supabase/tests/00_stubs.sql",
+  "supabase/tests/01_functions.sql",
+  "supabase/tests/02_scenarios.sql",
+  "supabase/tests/03_fixture.sql",
   "supabase/tests/fixtures/geo_trigger_schema.sql",
   "supabase/tests/geo_functions.test.sql",
   "supabase/tests/geo_trigger.test.sql"

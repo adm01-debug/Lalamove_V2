@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ea8f382bfa07ec186bd6581e25739edefd6b71b0",
+  "sha": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 13:27 UTC",
-  "files_total": 1029,
-  "code_files": 851,
-  "code_lines": 146291
+  "generated_at": "2026-11-22 13:30 UTC",
+  "files_total": 1038,
+  "code_files": 857,
+  "code_lines": 147625
  },
  "version": "1.3.2",
- "facts_hash": "dd8bfba9b15f9d53",
+ "facts_hash": "bd01ff6381ad8c18",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -183,7 +183,7 @@
   "languages": {
    ".ts": 298,
    ".tsx": 235,
-   ".sql": 196,
+   ".sql": 202,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -6344,6 +6344,21 @@
     "comment": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
     "origin": "migration"
    },
+   "fixture_route_curitiba": {
+    "columns": [
+     {
+      "name": "rota",
+      "type": "jsonb NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/tests/03_fixture.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/tests/03_fixture.sql",
+    "comment": "",
+    "origin": "migration"
+   },
    "auth.users": {
     "columns": [
      {
@@ -11997,7 +12012,7 @@
     "args": "lat1 double precision, lng1 double precision, lat2 double precision, lng2 double precision",
     "returns": "double",
     "lang": "sql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "SELECT 2 * 6371008.8 * asin( LEAST(1.0, sqrt( power(sin(radians(lat2 - lat1) / 2), 2) + cos(radians(lat1)) * cos(radians(lat2)) * power(sin(radians(lng2 - lng1) / 2), 2) )));",
@@ -12008,7 +12023,7 @@
     "args": "plat double precision, plng double precision, alat double precision, alng double precision, blat double precision, blng double precision",
     "returns": "double",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "DECLARE k double precision := cos(radians(plat)); v_ax double precision := (alng - plng) * k; v_ay double precision := (alat - plat); v_bx double precision := (blng - plng) * k; v_by double precision := (blat - plat); v_dx double precision; v_dy double precision; len2 double precision; t double precision; cx double precision; cy double precision; BEGIN v_dx := v_bx - v_ax; v_dy := v_by - v_ay; len2 := v_dx*v_dx + v_dy*v_dy; IF len2 = 0 THEN RETURN geo_haversine_m(plat, plng, alat, alng); END IF; t := GREATEST(0, LEAST(1, -(v_ax*v_dx + v_ay*v_dy) / len2)); cx := v_ax + t*v_dx; cy := v_ay + t*v_dy; RETURN geo_haversine_m(plat, plng, plat + cy, plng + cx / k); END;",
@@ -12019,7 +12034,7 @@
     "args": "plat double precision, plng double precision, polyline jsonb",
     "returns": "double",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "DECLARE n integer; i integer; best double precision := NULL; d double precision; a jsonb; b jsonb; BEGIN IF polyline IS NULL OR jsonb_typeof(polyline) <> 'array' THEN RETURN NULL; END IF; n := jsonb_array_length(polyline); IF n = 0 THEN RETURN NULL; END IF; IF n = 1 THEN a := polyline->0; RETURN geo_haversine_m(plat, plng, (a->>'lat')::double precision, (a->>'lng')::double precision); END IF; FOR i IN 0 .. n-2 LOOP a := polyline->i; b := polyline->(i+1); d := geo_point_to_segment_m(plat, plng, (a->>'lat')::double precision, (a->>'lng')::double precision, (b->>'lat')::double precision, (b->>'lng')::double precision); IF best IS NULL OR d < best THEN best := d; END IF; END LOOP; RETURN best; E …",
@@ -12030,7 +12045,7 @@
     "args": "p_order_id uuid, p_driver_id uuid, p_event public.alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boole …",
     "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": true,
     "search_path": true,
     "body": "DECLARE v_event_id uuid; v_alert_id uuid; v_job_id uuid; BEGIN INSERT INTO order_geo_events (order_id, event_type, stop_index, driver_lat, driver_lng, distance_m, eta_min, payload, notification_status) VALUES (p_order_id, p_event, p_stop_index, p_lat, p_lng, p_distance_m, p_eta_min, p_metadata, CASE WHEN p_enqueue THEN 'queued' ELSE 'skipped' END) ON CONFLICT (order_id, event_type, stop_index) DO NOTHING RETURNING id INTO v_event_id; IF v_event_id IS NULL THEN RETURN NULL; END IF; INSERT INTO alerts (type, severity, title, message, order_id, driver_id, metadata) VALUES (p_event, 'INFO', p_title, p_message, p_order_id, p_driver_id, p_metadata || jsonb_build_object('geo_event_id', v_event_id, …",
@@ -12046,10 +12061,10 @@
     "args": "",
     "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE o record; d record; v_status text; v_stop_lat double precision; v_stop_lng double precision; v_last_index integer; v_dist double precision; v_radius integer; v_eta_min integer; v_arrived_m integer; v_off_m integer; v_notify_del boolean; v_meta jsonb; v_driver_name text; BEGIN IF NEW.tracking_status IS DISTINCT FROM 'ACTIVE' THEN RETURN NEW; END IF; IF NEW.current_latitude IS NULL OR NEW.current_longitude IS NULL THEN RETURN NEW; END IF; IF TG_OP = 'UPDATE' AND NEW.current_latitude = OLD.current_latitude AND NEW.current_longitude = OLD.current_longitude AND NEW.eta_minutes IS NOT DISTINCT FROM OLD.eta_minutes AND NEW.next_stop_index = OLD.next_stop_index THEN RETURN NEW; END IF; SELEC …",
+    "body": "DECLARE o record; d record; v_status text; v_stop_lat double precision; v_stop_lng double precision; v_last_index integer; v_dist double precision; v_radius integer; v_eta_min integer; v_arrived_m integer; v_off_m integer; v_notify_del boolean; v_meta jsonb; v_driver_name text; v_eta_at timestamptz; v_late_limit timestamptz; BEGIN IF NEW.tracking_status IS DISTINCT FROM 'ACTIVE' THEN RETURN NEW; END IF; IF NEW.current_latitude IS NULL OR NEW.current_longitude IS NULL THEN RETURN NEW; END IF; IF TG_OP = 'UPDATE' AND NEW.current_latitude = OLD.current_latitude AND NEW.current_longitude = OLD.current_longitude AND NEW.eta_minutes IS NOT DISTINCT FROM OLD.eta_minutes AND NEW.next_stop_index = OL …",
     "raises": [],
     "tables": [
      "OLD",
@@ -12173,6 +12188,30 @@
     "tables": [
      "NEW"
     ]
+   },
+   "uid": {
+    "args": "",
+    "returns": "uuid",
+    "lang": "sql",
+    "src": "supabase/tests/00_stubs.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "SELECT NULL::uuid",
+    "raises": [],
+    "tables": []
+   },
+   "assert_true": {
+    "args": "p_ok boolean, p_msg text",
+    "returns": "void",
+    "lang": "plpgsql",
+    "src": "supabase/tests/02_scenarios.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN IF p_ok IS NOT TRUE THEN RAISE EXCEPTION 'FALHOU: %', p_msg; END IF; RAISE NOTICE 'ok: %', p_msg; END;",
+    "raises": [
+     "FALHOU: %"
+    ],
+    "tables": []
    },
    "Args": {
     "args": "",
@@ -14192,6 +14231,14 @@
     "unique": false,
     "where": "",
     "src": "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
+   },
+   {
+    "name": "uq_job_queue_dedup_open",
+    "table": "job_queue",
+    "columns": "dedup_key",
+    "unique": true,
+    "where": "WHERE dedup_key IS NOT NULL AND status IN ('PENDING','PROCESSING')",
+    "src": "supabase/tests/00_stubs.sql"
    }
   ],
   "cron_jobs": [
@@ -14459,6 +14506,7 @@
    "supabase/migrations/20261122130000_geo_alert_types.sql",
    "supabase/migrations/20261122130100_geo_foundation.sql",
    "supabase/migrations/20261122130200_alert_type_driver_assigned.sql",
+   "supabase/migrations/20261122131000_geo_eta_delay.sql",
    "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
    "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
    "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
@@ -14476,6 +14524,11 @@
    "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
    "supabase/migrations/20261123190002_geo_maps_permissions.sql",
    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+   "supabase/migrations/20261124120000_internal_alert_channels.sql",
+   "supabase/tests/00_stubs.sql",
+   "supabase/tests/01_functions.sql",
+   "supabase/tests/02_scenarios.sql",
+   "supabase/tests/03_fixture.sql",
    "supabase/tests/fixtures/geo_trigger_schema.sql",
    "supabase/tests/geo_functions.test.sql",
    "supabase/tests/geo_trigger.test.sql",
@@ -16827,6 +16880,11 @@
     "function": "mcp_introspect",
     "msg": "Operação não permitida: %",
     "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "assert_true",
+    "msg": "FALHOU: %",
+    "src": "supabase/tests/02_scenarios.sql"
    }
   ],
   "seed": [],
@@ -16940,6 +16998,7 @@
    "table:geo_budget": "Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso.",
    "table:geo_cache": "Cache de respostas de geocode/rota/static por hash de request (TTL por funcao).",
    "table:order_geo_events": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada).",
+   "column:geo_defaults.late_tolerance_min": "Minutos de atraso tolerados antes de emitir ETA_DELAY (etapa 50). Junto com lalamove_orders.scheduled_at.",
    "column:geo_settings.provider": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox.",
    "table:cache_refresh_log": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
    "table:job_queue_processing_log": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao).",
@@ -21518,7 +21577,7 @@
   {
    "module": "supabase/functions",
    "files": 77,
-   "lines": 18338,
+   "lines": 18378,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21692,8 +21751,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 189,
-   "lines": 12903,
+   "files": 191,
+   "lines": 13193,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21784,14 +21843,18 @@
   },
   {
    "module": "supabase/tests",
-   "files": 3,
-   "lines": 433,
+   "files": 7,
+   "lines": 1437,
    "tables": [],
    "exports": [],
    "docs": [],
    "deps": [],
    "imports_modules": [],
    "file_list": [
+    "supabase/tests/00_stubs.sql",
+    "supabase/tests/01_functions.sql",
+    "supabase/tests/02_scenarios.sql",
+    "supabase/tests/03_fixture.sql",
     "supabase/tests/geo_functions.test.sql",
     "supabase/tests/geo_trigger.test.sql",
     "supabase/tests/fixtures/geo_trigger_schema.sql"
@@ -23908,6 +23971,7 @@
    "cron_job_logs",
    "drivers_safe_view",
    "email_verifications",
+   "fixture_route_curitiba",
    "geo_usage",
    "job_queue_processing_log",
    "lalamove_webhook_config",
@@ -29520,6 +29584,11 @@
     "rule": "default now()"
    },
    {
+    "table": "fixture_route_curitiba",
+    "column": "rota",
+    "rule": "obrigatório"
+   },
+   {
     "table": "auth.users",
     "column": "id",
     "rule": "PK"
@@ -35031,6 +35100,10 @@
    },
    {
     "file": "supabase/functions/lalamove-api/coordinates.ts",
+    "line": "// Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.ts",
     "line": "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega."
    },
    {
@@ -39396,6 +39469,14 @@
     "name": "persistOrderCoordinates mantem "
    },
    {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords extrai nome e telefone do contato da parada"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "stopsCoords normaliza contato ausente ou vazio para null"
+   },
+   {
     "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
     "name": "geocodeAddress devolve coordenada e place_id do gateway"
    },
@@ -40072,6 +40153,10 @@
     "call": "notify_whatsapp"
    },
    {
+    "file": "supabase/migrations/20261122131000_geo_eta_delay.sql",
+    "call": "notify_delivery_contact"
+   },
+   {
     "file": "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
     "call": "notify_whatsapp"
    },
@@ -40082,6 +40167,14 @@
    {
     "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
     "call": "notify"
+   },
+   {
+    "file": "supabase/migrations/20261124120000_internal_alert_channels.sql",
+    "call": "notify_slack"
+   },
+   {
+    "file": "supabase/migrations/20261124120000_internal_alert_channels.sql",
+    "call": "notify_whatsapp"
    }
   ],
   "db_policies": [
@@ -43742,7 +43835,7 @@
     "args": "lat1 double precision, lng1 double precision, lat2 double precision, lng2 double precision",
     "returns": "double",
     "lang": "sql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "SELECT 2 * 6371008.8 * asin( LEAST(1.0, sqrt( power(sin(radians(lat2 - lat1) / 2), 2) + cos(radians(lat1)) * cos(radians(lat2)) * power(sin(radians(lng2 - lng1) / 2), 2) )));",
@@ -43753,7 +43846,7 @@
     "args": "plat double precision, plng double precision, alat double precision, alng double precision, blat double precision, blng double precision",
     "returns": "double",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "DECLARE k double precision := cos(radians(plat)); v_ax double precision := (alng - plng) * k; v_ay double precision := (alat - plat); v_bx double precision := (blng - plng) * k; v_by double precision := (blat - plat); v_dx double precision; v_dy double precision; len2 double precision; t double precision; cx double precision; cy double precision; BEGIN v_dx := v_bx - v_ax; v_dy := v_by - v_ay; len2 := v_dx*v_dx + v_dy*v_dy; IF len2 = 0 THEN RETURN geo_haversine_m(plat, plng, alat, alng); END IF; t := GREATEST(0, LEAST(1, -(v_ax*v_dx + v_ay*v_dy) / len2)); cx := v_ax + t*v_dx; cy := v_ay + t*v_dy; RETURN geo_haversine_m(plat, plng, plat + cy, plng + cx / k); END;",
@@ -43764,7 +43857,7 @@
     "args": "plat double precision, plng double precision, polyline jsonb",
     "returns": "double",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": false,
     "search_path": false,
     "body": "DECLARE n integer; i integer; best double precision := NULL; d double precision; a jsonb; b jsonb; BEGIN IF polyline IS NULL OR jsonb_typeof(polyline) <> 'array' THEN RETURN NULL; END IF; n := jsonb_array_length(polyline); IF n = 0 THEN RETURN NULL; END IF; IF n = 1 THEN a := polyline->0; RETURN geo_haversine_m(plat, plng, (a->>'lat')::double precision, (a->>'lng')::double precision); END IF; FOR i IN 0 .. n-2 LOOP a := polyline->i; b := polyline->(i+1); d := geo_point_to_segment_m(plat, plng, (a->>'lat')::double precision, (a->>'lng')::double precision, (b->>'lat')::double precision, (b->>'lng')::double precision); IF best IS NULL OR d < best THEN best := d; END IF; END LOOP; RETURN best; E …",
@@ -43775,7 +43868,7 @@
     "args": "p_order_id uuid, p_driver_id uuid, p_event public.alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boole …",
     "returns": "uuid",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": true,
     "search_path": true,
     "body": "DECLARE v_event_id uuid; v_alert_id uuid; v_job_id uuid; BEGIN INSERT INTO order_geo_events (order_id, event_type, stop_index, driver_lat, driver_lng, distance_m, eta_min, payload, notification_status) VALUES (p_order_id, p_event, p_stop_index, p_lat, p_lng, p_distance_m, p_eta_min, p_metadata, CASE WHEN p_enqueue THEN 'queued' ELSE 'skipped' END) ON CONFLICT (order_id, event_type, stop_index) DO NOTHING RETURNING id INTO v_event_id; IF v_event_id IS NULL THEN RETURN NULL; END IF; INSERT INTO alerts (type, severity, title, message, order_id, driver_id, metadata) VALUES (p_event, 'INFO', p_title, p_message, p_order_id, p_driver_id, p_metadata || jsonb_build_object('geo_event_id', v_event_id, …",
@@ -43791,10 +43884,10 @@
     "args": "",
     "returns": "trigger",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122130100_geo_foundation.sql",
+    "src": "supabase/tests/01_functions.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE o record; d record; v_status text; v_stop_lat double precision; v_stop_lng double precision; v_last_index integer; v_dist double precision; v_radius integer; v_eta_min integer; v_arrived_m integer; v_off_m integer; v_notify_del boolean; v_meta jsonb; v_driver_name text; BEGIN IF NEW.tracking_status IS DISTINCT FROM 'ACTIVE' THEN RETURN NEW; END IF; IF NEW.current_latitude IS NULL OR NEW.current_longitude IS NULL THEN RETURN NEW; END IF; IF TG_OP = 'UPDATE' AND NEW.current_latitude = OLD.current_latitude AND NEW.current_longitude = OLD.current_longitude AND NEW.eta_minutes IS NOT DISTINCT FROM OLD.eta_minutes AND NEW.next_stop_index = OLD.next_stop_index THEN RETURN NEW; END IF; SELEC …",
+    "body": "DECLARE o record; d record; v_status text; v_stop_lat double precision; v_stop_lng double precision; v_last_index integer; v_dist double precision; v_radius integer; v_eta_min integer; v_arrived_m integer; v_off_m integer; v_notify_del boolean; v_meta jsonb; v_driver_name text; v_eta_at timestamptz; v_late_limit timestamptz; BEGIN IF NEW.tracking_status IS DISTINCT FROM 'ACTIVE' THEN RETURN NEW; END IF; IF NEW.current_latitude IS NULL OR NEW.current_longitude IS NULL THEN RETURN NEW; END IF; IF TG_OP = 'UPDATE' AND NEW.current_latitude = OLD.current_latitude AND NEW.current_longitude = OLD.current_longitude AND NEW.eta_minutes IS NOT DISTINCT FROM OLD.eta_minutes AND NEW.next_stop_index = OL …",
     "raises": [],
     "tables": [
      "OLD",
@@ -43918,6 +44011,30 @@
     "tables": [
      "NEW"
     ]
+   },
+   "uid": {
+    "args": "",
+    "returns": "uuid",
+    "lang": "sql",
+    "src": "supabase/tests/00_stubs.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "SELECT NULL::uuid",
+    "raises": [],
+    "tables": []
+   },
+   "assert_true": {
+    "args": "p_ok boolean, p_msg text",
+    "returns": "void",
+    "lang": "plpgsql",
+    "src": "supabase/tests/02_scenarios.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN IF p_ok IS NOT TRUE THEN RAISE EXCEPTION 'FALHOU: %', p_msg; END IF; RAISE NOTICE 'ok: %', p_msg; END;",
+    "raises": [
+     "FALHOU: %"
+    ],
+    "tables": []
    },
    "Args": {
     "args": "",
@@ -44118,6 +44235,11 @@
     "function": "mcp_introspect",
     "msg": "Operação não permitida: %",
     "src": "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+   },
+   {
+    "function": "assert_true",
+    "msg": "FALHOU: %",
+    "src": "supabase/tests/02_scenarios.sql"
    }
   ],
   "db_generated": [],
@@ -45516,7 +45638,8 @@
   "policy_fns": [
    "can_run_db_diagnostics",
    "has_permission",
-   "has_role"
+   "has_role",
+   "uid"
   ],
   "matrix": {
    "active_tracking": {
@@ -45894,6 +46017,13 @@
     "DELETE": [
      "public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true )"
     ]
+   },
+   "fixture_route_curitiba": {
+    "rls": "não encontrado",
+    "SELECT": [],
+    "INSERT": [],
+    "UPDATE": [],
+    "DELETE": []
    },
    "geo_blocks": {
     "rls": "não encontrado",
@@ -50127,6 +50257,7 @@
     "created_at",
     "created_by"
    ],
+   "fixture_route_curitiba": [],
    "auth.users": [],
    "geo_blocks": [
     "created_at",
@@ -51201,7 +51332,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "19/89 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status` …",
+   "20/90 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -69653,7 +69784,7 @@
   },
   "supabase/functions/lalamove-api/coordinates.test.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.test.ts",
-   "lines": 114,
+   "lines": 134,
    "is_test": true,
    "rule_comments": [
     "── Etapa 36: place_id do provedor não pode ser sobrescrito pelo id da parada ──"
@@ -69669,12 +69800,14 @@
     "persistOrderCoordinates usa lalamove:<stopId> quando nao ha place_id do provedor",
     "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id",
     "persistOrderCoordinates nao sobrescreve o provedor do autocomplete para ",
-    "persistOrderCoordinates mantem "
+    "persistOrderCoordinates mantem ",
+    "stopsCoords extrai nome e telefone do contato da parada",
+    "stopsCoords normaliza contato ausente ou vazio para null"
    ]
   },
   "supabase/functions/lalamove-api/coordinates.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.ts",
-   "lines": 112,
+   "lines": 132,
    "exports": [
     "function stopsCoords",
     "function persistOrderCoordinates"
@@ -69699,6 +69832,7 @@
     "Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove."
    ],
    "percents": [
+    "// Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL",
     "// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.",
     "// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto"
    ]
@@ -72004,6 +72138,13 @@
    "path": "supabase/migrations/20261122130200_alert_type_driver_assigned.sql",
    "lines": 5
   },
+  "supabase/migrations/20261122131000_geo_eta_delay.sql": {
+   "path": "supabase/migrations/20261122131000_geo_eta_delay.sql",
+   "lines": 257,
+   "side_effects": [
+    "notify_delivery_contact"
+   ]
+  },
   "supabase/migrations/20261122140000_fix_crons_dispatcher.sql": {
    "path": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
    "lines": 161,
@@ -72096,6 +72237,45 @@
    "lines": 133,
    "uses_service_role": true
   },
+  "supabase/migrations/20261124120000_internal_alert_channels.sql": {
+   "path": "supabase/migrations/20261124120000_internal_alert_channels.sql",
+   "lines": 33,
+   "side_effects": [
+    "notify_slack",
+    "notify_whatsapp"
+   ]
+  },
+  "supabase/tests/00_stubs.sql": {
+   "path": "supabase/tests/00_stubs.sql",
+   "lines": 146,
+   "is_test": true,
+   "side_effects": [
+    "notify_delivery_contact"
+   ]
+  },
+  "supabase/tests/01_functions.sql": {
+   "path": "supabase/tests/01_functions.sql",
+   "lines": 348,
+   "is_test": true,
+   "side_effects": [
+    "notify_delivery_contact"
+   ]
+  },
+  "supabase/tests/02_scenarios.sql": {
+   "path": "supabase/tests/02_scenarios.sql",
+   "lines": 507,
+   "is_test": true,
+   "temporal": [
+    "-25.4295963, -49.2712724, -25.4433, -49.2288, now() + interval '30 minutes');",
+    "-25.4295963, -49.2712724, -25.4433, -49.2288, now() - interval '90 minutes');",
+    "now() - interval '60 minutes', 'Motorista ETA', 'ETA1A23');"
+   ]
+  },
+  "supabase/tests/03_fixture.sql": {
+   "path": "supabase/tests/03_fixture.sql",
+   "lines": 3,
+   "is_test": true
+  },
   "supabase/tests/geo_functions.test.sql": {
    "path": "supabase/tests/geo_functions.test.sql",
    "lines": 55,
@@ -72119,10 +72299,43 @@
   }
  },
  "git": {
-  "sha": "ea8f382bfa07ec186bd6581e25739edefd6b71b0",
+  "sha": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d7c05dd",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)",
+    "files": [
+     ".github/toolchain.json",
+     ".github/workflows/ci.yml",
+     "docs/GEO_CONTRACT.md",
+     "docs/ci/MATRIZ_EDGE_TABELA.md",
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "scripts/ci/check-workflow-pins.mjs",
+     "supabase/functions/lalamove-api/coordinates.test.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/migrations/20261122131000_geo_eta_delay.sql",
+     "supabase/tests/00_stubs.sql",
+     "supabase/tests/01_functions.sql",
+     "supabase/tests/02_scenarios.sql",
+     "supabase/tests/03_fixture.sql",
+     "supabase/tests/README.md",
+     "supabase/tests/fixtures/route_curitiba_geo.json",
+     "supabase/tests/run.sh"
+    ]
+   },
+   {
+    "sha": "83125d1",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)",
+    "files": [
+     "supabase/migrations/20261124120000_internal_alert_channels.sql"
+    ]
+   },
    {
     "sha": "ea8f382",
     "date": "2026-11-22",
@@ -72405,33 +72618,12 @@
      "supabase/functions/send-notification/static-map.test.ts",
      "supabase/functions/send-notification/static-map.ts"
     ]
-   },
-   {
-    "sha": "5984867",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "src/hooks/__tests__/useGeo.contract.test.ts",
-     "src/hooks/useGeo.ts",
-     "src/types/geo.ts"
-    ]
-   },
-   {
-    "sha": "4ad97ef",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    12
+    11
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -72442,6 +72634,18 @@
     3
    ],
    [
+    ".github/workflows/ci.yml",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
+    2
+   ],
+   [
     "supabase/functions/lalamove-api/index.ts",
     2
    ],
@@ -72450,63 +72654,51 @@
     2
    ],
    [
-    "supabase/migrations/20261123190002_geo_maps_permissions.sql",
+    ".github/toolchain.json",
     1
    ],
    [
-    "docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md",
+    "docs/GEO_CONTRACT.md",
     1
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "docs/ci/MATRIZ_EDGE_TABELA.md",
     1
    ],
    [
-    "src/components/map/OrderTrackingMap.tsx",
+    "scripts/ci/check-workflow-pins.mjs",
     1
    ],
    [
-    "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "supabase/migrations/20261122131000_geo_eta_delay.sql",
     1
    ],
    [
-    "supabase/functions/lalamove-api/geocode-fallback.test.ts",
+    "supabase/tests/00_stubs.sql",
     1
    ],
    [
-    "supabase/functions/lalamove-api/geocode-fallback.ts",
+    "supabase/tests/01_functions.sql",
     1
    ],
    [
-    "docs/agentes/pendencias-dono.md",
+    "supabase/tests/02_scenarios.sql",
     1
    ],
    [
-    "supabase/functions/lalamove-webhook/index.ts",
+    "supabase/tests/03_fixture.sql",
     1
    ],
    [
-    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+    "supabase/tests/README.md",
     1
    ],
    [
-    "src/components/orders/NewOrderDialog.tsx",
+    "supabase/tests/fixtures/route_curitiba_geo.json",
     1
    ],
    [
-    "src/hooks/useGeoAdmin.ts",
-    1
-   ],
-   [
-    "src/pages/MapsSettingsPage.tsx",
-    1
-   ],
-   [
-    "supabase/migrations/20261123190000_geo_maps_permissions.sql",
-    1
-   ],
-   [
-    "supabase/migrations/20261123120000_geo_budget_cron.sql",
+    "supabase/tests/run.sh",
     1
    ]
   ]

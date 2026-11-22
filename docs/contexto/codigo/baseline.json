@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ea8f382bfa07ec186bd6581e25739edefd6b71b0",
+  "commit": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
   "branch": "main",
-  "data_commit": "2026-11-22T10:26:55-03:00",
+  "data_commit": "2026-11-22T10:27:44-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d7c05dd",
+    "data": "2026-11-22",
+    "assunto": "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)"
+   },
+   {
+    "sha": "83125d1",
+    "data": "2026-11-22",
+    "assunto": "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)"
+   },
    {
     "sha": "ea8f382",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "961964c",
     "data": "2026-11-22",
     "assunto": "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)"
-   },
-   {
-    "sha": "6c065b3",
-    "data": "2026-11-22",
-    "assunto": "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)"
-   },
-   {
-    "sha": "affd0df",
-    "data": "2026-11-22",
-    "assunto": "fix: preserva a atribuicao do geocode do autocomplete no pedido (etapas 35/36/93) (#257)"
    }
   ],
-  "arquivos_mudados_7d": 298,
+  "arquivos_mudados_7d": 308,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 38
+    "mudancas": 39
    },
    {
     "pasta": "src/components/map",
@@ -152,12 +152,12 @@
     "mudancas": 23
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 20
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 21
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 19
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 20
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -180,12 +180,12 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 10
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 9
+    "pasta": "docs/pendencias/_ordem.md",
+    "mudancas": 10
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -199,7 +199,7 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 38
+    "mudancas": 39
    },
    {
     "arquivo": "package.json",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -286,22 +286,22 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/lalamove-api/coordinates.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": ".env.example",
     "mudancas": 5
    },
    {
     "arquivo": "docs/pendencias/README.md",
     "mudancas": 5
-   },
-   {
-    "arquivo": "src/components/orders/OrderDetailModal.tsx",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 178
+    "commits": 180
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1035,
+  "arquivos_total": 1044,
   "arquivos_codigo": 646,
-  "linhas_codigo": 126408,
+  "linhas_codigo": 126448,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -322,12 +322,12 @@
   "hooks": 101,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 189,
+  "migrations": 191,
   "cron_jobs": 23,
-  "testes": 147,
+  "testes": 151,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 105
+  "docs_md": 106
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18338
+   "linhas": 18378
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -762,6 +762,7 @@
   "tabelas_com_drift_migration_vs_types": [
    "geo_budget",
    "geo_cache",
+   "geo_defaults",
    "mfa_sessions"
   ],
   "rpcs_sem_definicao": [

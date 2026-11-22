@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ea8f382bfa07ec186bd6581e25739edefd6b71b0` (2026-11-22T10:26:55-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d` (2026-11-22T10:27:44-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (533), SQL (196), JavaScript (114), Markdown (105), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (533), SQL (202), JavaScript (114), Markdown (106), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1035 |
+| arquivos_total | 1044 |
 | arquivos_codigo | 646 |
-| linhas_codigo | 126408 |
+| linhas_codigo | 126448 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -47,12 +47,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 101 |
 | edge_functions | 26 |
 | tabelas | 88 |
-| migrations | 189 |
+| migrations | 191 |
 | cron_jobs | 23 |
-| testes | 147 |
+| testes | 151 |
 | workflows | 5 |
 | scripts | 107 |
-| docs_md | 105 |
+| docs_md | 106 |
 
 ## Onde ficam as coisas
 - telas: src/pages (53)
@@ -263,7 +263,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 0
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
-- tabelas_com_drift_migration_vs_types: 3 — ex.: geo_budget, geo_cache, mfa_sessions
+- tabelas_com_drift_migration_vs_types: 4 — ex.: geo_budget, geo_cache, geo_defaults
 - rpcs_sem_definicao: 1 — ex.: exec
 - componentes_orfaos: 4 — ex.: src/components/approvals/SwipeableApprovalCard.tsx, src/components/debug/AuditReportGenerator.tsx, src/components/ui/chart.tsx
 - componentes_com_nome_duplicado: 5 — ex.: ExtendedFAB, MiniFAB, QuickActionsPanel
@@ -274,16 +274,16 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7980 nós · 16993 arestas · 611 comunidades · grafo do commit `ea8f382b`
-- comunidades maiores: cn (190), button.tsx (158), snapshot.py (104), lucide-react (95), badge.tsx (94), ref_node_path (92), DashboardRedesigned.tsx (90), providers/types.ts (88), Sidebar.tsx (80), dependencies (80), gerar.mjs (76), PermissionsPage.tsx (75)
+- 8032 nós · 17048 arestas · 617 comunidades · grafo do commit `d7c05ddb`
+- comunidades maiores: cn (200), react (146), lucide-react (122), RateLimitDashboardPage.tsx (102), ref_node_path (94), client.ts (93), contract.ts (91), DashboardRedesigned.tsx (90), dependencies (80), gerar.mjs (76), generate.py (75), badge.tsx (71)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (38)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (39)
 - package.json (32)
 - package-lock.json (31)
 - supabase/config.toml (16)
-- .github/workflows/ci.yml (13)
+- .github/workflows/ci.yml (14)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
@@ -346,7 +346,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/DEPLOYMENT.md` — 🚀 Deployment - Lalamove Guardian (89 linhas)
 - `docs/EDGE_DEPLOY_PIPELINE.md` — Pipeline de deploy das edge functions — 2026-11 (49 linhas)
 - `docs/FUNCIONALIDADES_E_FERRAMENTAS.md` — 📋 Levantamento Completo de Funcionalidades e Ferramentas (725 linhas)
-- `docs/GEO_CONTRACT.md` — Contrato de dados do motor geo (122 linhas)
+- `docs/GEO_CONTRACT.md` — Contrato de dados do motor geo (312 linhas)
 - `docs/GEO_PENDENCIAS.md` — O que ficou desligado ou para depois (41 linhas)
 - `docs/GEO_PROVIDERS.md` — Como adicionar um provedor de mapa (HERE, TomTom, …) (59 linhas)
 - `docs/GOOGLE_MAPS.md` — Google Maps na Lalamove V2 (157 linhas)
@@ -377,6 +377,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `d7c05dd` feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)
+- 2026-11-22 `83125d1` feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)
 - 2026-11-22 `ea8f382` fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)
 - 2026-11-22 `a9c2b2f` docs(lalamove): commita análise exaustiva e plano de integração completo (#276)
 - 2026-11-22 `e21df07` fix: geocode fallback com persist e mini-mapa por provider (#274)
@@ -390,8 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `eb1ea10` feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)
 - 2026-11-22 `758b04c` test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)
 - 2026-11-22 `01eab04` infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)
-- 2026-11-22 `6831e5d` fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)
-- 2026-11-22 `555a756` infra: agenda o cron check-driver-alerts (etapa 70) (#217)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

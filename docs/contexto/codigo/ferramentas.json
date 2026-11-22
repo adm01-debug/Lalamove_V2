@@ -4,11 +4,11 @@
  "stack": {
   "linguagens": [
    "TypeScript (533)",
-   "SQL (196)",
+   "SQL (202)",
    "JavaScript (114)",
-   "Markdown (105)",
-   "JSON (35)",
-   "Shell (9)",
+   "Markdown (106)",
+   "JSON (36)",
+   "Shell (10)",
    "Python (8)",
    "YAML (8)"
   ],
@@ -158,6 +158,7 @@
     "guard-agents-md",
     "security",
     "contract-tests",
+    "sql-geo-tests",
     "edge-integration-tests",
     "geo-sql-tests",
     "geo-trigger-sql-tests",
@@ -392,7 +393,7 @@
   {
    "arquivo": "docs/GEO_CONTRACT.md",
    "titulo": "Contrato de dados do motor geo",
-   "linhas": 122
+   "linhas": 312
   },
   {
    "arquivo": "docs/GEO_PENDENCIAS.md",

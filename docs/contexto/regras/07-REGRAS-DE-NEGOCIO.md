@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ea8f382bfa` · branch `main` · 2026-11-22 13:27 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d7c05ddb37` · branch `main` · 2026-11-22 13:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -535,7 +535,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `created_at` | default now() |
 | `login_attempts` | `id` | PK; default gen_random_uuid() |
 | `login_attempts` | `email` | obrigatório |
-| … +265 linhas — lista completa em `context.json` | | |
+| … +266 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -590,6 +590,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `mcp_introspect` | Parâmetro "table" obrigatório | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 | `mcp_introspect` | Parâmetros "table" e "column" obrigatórios | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 | `mcp_introspect` | Operação não permitida: % | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
+| `assert_true` | FALHOU: % | `supabase/tests/02_scenarios.sql` |
 
 ## E. Estados, máquinas de estado e transições
 
@@ -1279,6 +1280,7 @@ _nenhum item encontrado_
 | `transition={{ delay: index * 0.05 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.1 }}` | `src/pages/SecurityDashboardPage.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/pages/orders/OrderCard.tsx` |
+| `// Etapa 36: `contact_name`/`contact_phone` de `lalamove_stops` eram 100% NULL` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// ficavam NULL em 100% dos pedidos e o /map não desenhava coleta nem entrega.` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto` | `supabase/functions/lalamove-api/coordinates.ts` |
 | `// Randomly toggle off-route status (3% chance to go off, 20% to return)` | `supabase/functions/simulate-driver-movement/index.ts` |
@@ -1865,7 +1867,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1152 testes em 101 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1154 testes em 101 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1901,6 +1903,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/job-worker/eta-delay.test.ts` | 13 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
+| `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `supabase/functions/_shared/channels/zapp.test.ts` | 12 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 12 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
@@ -1908,7 +1911,6 @@ _nenhum item encontrado_
 | `supabase/functions/send-notification/static-map.test.ts` | 12 | só as aproximações levam imagem · markers na ordem coleta → entrega → motorista, com rota quando há 2+ pontos · rota de um ponto só não vira path (path exige 2) · sem nenhum ponto não gera request (Google exige center/markers/path) … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
-| `supabase/functions/lalamove-api/coordinates.test.ts` | 11 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
@@ -2080,9 +2082,12 @@ _nenhum item encontrado_
 | `notify_whatsapp` | `supabase/migrations/20261121193000_fix_escalation_pipeline.sql` |
 | `notify_delivery_contact` | `supabase/migrations/20261122130100_geo_foundation.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122130100_geo_foundation.sql` |
+| `notify_delivery_contact` | `supabase/migrations/20261122131000_geo_eta_delay.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql` |
 | `notify` | `supabase/migrations/20261123120000_geo_budget_cron.sql` |
+| `notify_slack` | `supabase/migrations/20261124120000_internal_alert_channels.sql` |
+| `notify_whatsapp` | `supabase/migrations/20261124120000_internal_alert_channels.sql` |
 
 ## N. Regras citadas em comentários do código
 
