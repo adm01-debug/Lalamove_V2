@@ -52,7 +52,7 @@ describe('AddressAutocomplete — estados de falha (etapa 40)', () => {
       { wrapper },
     );
 
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Rua Sem Retorno' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Rua Sem Retorno' } });
 
     await waitFor(() => expect(screen.getByText('Limite de busca atingido')).toBeTruthy());
     fireEvent.click(screen.getByRole('button', { name: /usar o endereço como digitado/i }));
@@ -63,7 +63,7 @@ describe('AddressAutocomplete — estados de falha (etapa 40)', () => {
     invokeMock.mockResolvedValue({ data: null, error: new Error('network down') });
     render(<AddressAutocomplete value="" onChange={() => {}} />, { wrapper });
 
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Rua Sem Retorno' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Rua Sem Retorno' } });
 
     await waitFor(() => expect(screen.getByText('Busca indisponível')).toBeTruthy());
   });
@@ -72,7 +72,7 @@ describe('AddressAutocomplete — estados de falha (etapa 40)', () => {
     invokeMock.mockResolvedValue({ data: [], error: null });
     render(<AddressAutocomplete value="" onChange={() => {}} />, { wrapper });
 
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Rua Inexistente' } });
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Rua Inexistente' } });
 
     await waitFor(() => expect(screen.getByText(/Nenhum resultado para/)).toBeTruthy());
     expect(screen.getByText(/incluir o número do imóvel ou o CEP/i)).toBeTruthy();
@@ -107,7 +107,7 @@ describe('AddressAutocomplete — endereços frequentes (etapa 41)', () => {
       { wrapper },
     );
 
-    fireEvent.focus(screen.getByRole('textbox'));
+    fireEvent.focus(screen.getByRole('combobox'));
 
     await waitFor(() => expect(screen.getByText('Já usados (1)')).toBeTruthy());
     fireEvent.click(screen.getByText('Av. Paulista, 1000'));
