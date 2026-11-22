@@ -863,11 +863,11 @@
   {
    "arquivo": "src/hooks/useGeoSearch.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 185,
+   "linhas": 239,
    "testa": [
     "src/hooks/useGeoSearch.ts"
    ],
-   "casos": 11
+   "casos": 15
   },
   {
    "arquivo": "src/lib/__tests__/filterValidSpecialRequests.test.ts",

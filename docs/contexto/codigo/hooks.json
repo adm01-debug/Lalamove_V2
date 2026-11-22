@@ -1352,9 +1352,10 @@
    "arquivo": "src/hooks/useGeoSearch.ts",
    "hooks_exportados": [
     "useAddressSearchBox",
+    "useCustomerSearchBias",
     "useFrequentAddresses"
    ],
-   "linhas": 200,
+   "linhas": 270,
    "dominio": "hooks",
    "tabelas": [
     "lalamove_orders"

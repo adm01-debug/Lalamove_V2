@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "40e2adbabfb45b270a236e343a843e8110c85775",
+  "commit": "619f4497dab221c7ddbcfcdfc7a02b022a44dde9",
   "branch": "main",
-  "data_commit": "2026-11-22T02:06:45-03:00",
+  "data_commit": "2026-11-22T02:20:11-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "619f449",
+    "data": "2026-11-22",
+    "assunto": "feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)"
+   },
    {
     "sha": "40e2adb",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "1eeeb96",
     "data": "2026-11-21",
     "assunto": "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)"
-   },
-   {
-    "sha": "c7d9fce",
-    "data": "2026-11-21",
-    "assunto": "chore: destrackear supabase/.temp e ignorar (#212)"
    }
   ],
   "arquivos_mudados_7d": 263,
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "pasta": "src/components/map",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 18
+    "mudancas": 20
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "arquivo": "supabase/config.toml",
@@ -230,12 +230,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/job-worker/index.ts",
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 9
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 8
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
@@ -243,6 +243,10 @@
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 7
    },
    {
@@ -259,10 +263,6 @@
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 141
+    "commits": 142
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1011,
   "arquivos_codigo": 632,
-  "linhas_codigo": 123277,
+  "linhas_codigo": 123420,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -516,11 +516,11 @@
   },
   "src/components": {
    "arquivos": 155,
-   "linhas": 28500
+   "linhas": 28519
   },
   "src/hooks": {
    "arquivos": 110,
-   "linhas": 18477
+   "linhas": 18601
   },
   "src/i18n": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1092
+   "linhas": 1097
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",

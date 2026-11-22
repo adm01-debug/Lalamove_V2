@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `40e2adbabf` · branch `main` · 2026-11-22 05:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `619f4497da` · branch `main` · 2026-11-22 05:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1285,6 +1285,7 @@ _nenhum item encontrado_
 | `TREND_RISE_THRESHOLD` | `0.5` | `src/hooks/useContractVersionUsage.ts` |
 | `SUSTAINED_MIN_DAYS` | `3` | `src/hooks/useContractVersionUsage.ts` |
 | `SESSION_TTL_MS` | `170` | `src/hooks/useGeoSearch.ts` |
+| `DEFAULT_BIAS_RADIUS_M` | `50` | `src/hooks/useGeoSearch.ts` |
 | `MAX_RECENT` | `10` | `src/hooks/useGlobalSearch.ts` |
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useLalamoveUapi.ts` |
@@ -1466,6 +1467,7 @@ _nenhum item encontrado_
 | 1 | `src/hooks/useDriverEvaluations.ts` |
 | 100 | `src/hooks/useDriverEvaluations.ts` |
 | 10 | `src/hooks/useGeoAdmin.ts` |
+| 1 | `src/hooks/useGeoSearch.ts` |
 | 500 | `src/hooks/useGeoSearch.ts` |
 | 10 | `src/hooks/useGlobalSearch.ts` |
 | 1 | `src/hooks/useJobQueue.ts` |
@@ -1831,7 +1833,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1074 testes em 95 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1079 testes em 95 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1843,6 +1845,7 @@ _nenhum item encontrado_
 | `supabase/functions/external-db-bridge/index.test.ts` | 24 | classifySeverity: error takes priority · classifySeverity: very_slow threshold at 8000ms · classifySeverity: slow threshold at 3000ms · classifySeverity: normal for fast queries … |
 | `src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx` | 23 | AdminTelemetriaPage · renders page header · renders stat cards · renders filter controls … |
 | `src/utils/__tests__/exportUtils.test.ts` | 23 | exportToCSV · não deve fazer nada com array vazio · deve gerar CSV com headers corretos · deve escapar valores com vírgula … |
+| `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
@@ -1854,7 +1857,6 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/mapbox.test.ts` | 16 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
 | `scripts/db-audit/check-grants-fresh.test.mjs` | 15 | aceita baselines identicas · ignora mudanca so em metadados (generated_at/note/how_to_regenerate) · falha quando um grant novo aparece no banco (anon_execute) · falha quando um grant e removido do banco (anon_table_select) … |
 | `scripts/db-audit/check-manifest-fresh.test.mjs` | 15 | aceita manifesto identico apesar da ordem e do generated_at · detecta objeto novo na secao  · detecta alteracao de default pelo hash · detecta constraint removida do banco … |
-| `src/hooks/useGeoSearch.test.tsx` | 15 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/hooks/__tests__/useContractVersionUsage.trend.test.ts` | 15 | detectTrend — alerta de reversão de uso v1 · marca amostra insuficiente com menos de 4 pontos válidos · não alerta quando a proporção está descendo · não alerta quando a proporção é estável em zero … |
 | `src/lib/utils.test.ts` | 15 | deve combinar classes simples · deve lidar com valores undefined · deve lidar com valores null · deve lidar com condicionais … |
 | `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
@@ -2081,6 +2083,7 @@ _nenhum item encontrado_
 | * Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */ | `src/hooks/useGeoAdmin.ts` |
 | retrieve (regra de cobrança por sessão do Search Box, ToS etapa 8). | `src/hooks/useGeoSearch.ts` |
 | inflando o sku `searchbox_session`. Renovamos aos 170 s para nunca chegar no limite. | `src/hooks/useGeoSearch.ts` |
+| sugestões, então o cache não pode devolver a lista do centro anterior. | `src/hooks/useGeoSearch.ts` |
 | v2: além do lockout por e-mail, considera bloqueio/rate-limit por IP. | `src/hooks/useLoginLockout.ts` |
 | v2: rate-limit progressivo + detecção de atividade suspeita por IP. | `src/hooks/useLoginLockout.ts` |
 | Verificar se usuário tem uma permissão específica | `src/hooks/usePermissions.ts` |

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `40e2adbabfb45b270a236e343a843e8110c85775` (2026-11-22T02:06:45-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `619f4497dab221c7ddbcfcdfc7a02b022a44dde9` (2026-11-22T02:20:11-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1011 |
 | arquivos_codigo | 632 |
-| linhas_codigo | 123277 |
+| linhas_codigo | 123420 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -74,14 +74,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
 | components/dashboard | 0 | 0 | 13 | 42 | 4 | 5 |
-| components/layout | 0 | 0 | 6 | 170 | 14 | 36 |
+| components/layout | 0 | 0 | 6 | 171 | 14 | 36 |
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
-| components/orders | 0 | 0 | 9 | 31 | 7 | 6 |
+| components/orders | 0 | 0 | 9 | 32 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 49 | 0 | 6 | 42 |
-| hooks | 0 | 0 | 86 | 210 | 15 | 47 |
+| hooks | 0 | 0 | 86 | 211 | 15 | 47 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 195 | 14 | 47 |
+| pages | 37 | 55 | 55 | 196 | 14 | 47 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -272,26 +272,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7746 nós · 16461 arestas · 576 comunidades · grafo do commit `40e2adba`
-- comunidades maiores: cn (203), App.tsx (165), button.tsx (124), ref_node_path (101), snapshot.py (100), client.ts (97), badge.tsx (95), react (82), dependencies (80), gerar.mjs (76), generate.py (75), useRealtimeSubscriptions.ts (70)
+- 7748 nós · 16468 arestas · 588 comunidades · grafo do commit `619f4497`
+- comunidades maiores: cn (164), react (156), AlertsPage.tsx (149), lucide-react (146), card.tsx (142), ref_https (110), snapshot.py (102), NotificationHistoryPage.tsx (101), ref_node_url (91), providers/types.ts (87), App.tsx (87), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
 - package.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (20)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (21)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
+- src/components/orders/AddressAutocomplete.tsx (9)
 - supabase/functions/job-worker/index.ts (9)
-- src/components/orders/AddressAutocomplete.tsx (8)
 - supabase/functions/send-notification/index.ts (8)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
+- src/components/orders/NewOrderDialog.tsx (7)
 - supabase/functions/_shared/schemas.ts (7)
 - supabase/functions/geo-gateway/providers/mapbox.ts (7)
-- supabase/functions/geo-gateway/providers/types.ts (7)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -372,6 +372,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `619f449` feat: vies de localizacao no autocomplete de endereco (etapa 81) (#242)
 - 2026-11-22 `40e2adb` feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)
 - 2026-11-22 `2809b60` feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)
 - 2026-11-22 `d725090` docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)
@@ -386,7 +387,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `b5b3088` feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)
 - 2026-11-22 `a08dd87` feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)
 - 2026-11-22 `f7d18db` feat(geo): geocode server-side de fallback e action validate (etapas 37/38) (#228)
-- 2026-11-22 `0029ab4` chore: remove chave DistanceMatrix.ai do repo e documenta Google Maps (etapas 8-10) (#225)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
