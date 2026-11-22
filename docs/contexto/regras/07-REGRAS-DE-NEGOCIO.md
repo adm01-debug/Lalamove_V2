@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `626b37154d` · branch `main` · 2026-11-22 01:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e38c6470f5` · branch `main` · 2026-11-22 02:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -12,8 +12,6 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | Tabela | Política | Comando | Roles | Modo | USING | WITH CHECK |
 |---|---|---|---|---|---|---|
 | `saved_filters` | Users can insert own filters | INSERT | public | permissive |  | `auth.uid() = user_id` |
-| `entity_versions` | Users can view versions | SELECT | public | permissive | `true` |  |
-| `entity_versions` | Users can insert versions | INSERT | public | permissive |  | `auth.uid() = changed_by OR changed_by IS NULL` |
 | `saved_filters` | Users can view own filters | SELECT | public | permissive | `auth.uid() = user_id` |  |
 | `saved_filters` | Users can create own filters | INSERT | public | permissive |  | `auth.uid() = user_id` |
 | `saved_filters` | Users can update own filters | UPDATE | public | permissive | `auth.uid() = user_id` |  |
@@ -244,20 +242,11 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `saved_filters` | `created_at` | default NOW() |
 | `saved_filters` | `updated_at` | default NOW() |
 | `saved_filters` | `(tabela)` | CONSTRAINT unique_filter_name_per_user UNIQUE (user_id, entity_type, name) |
-| `entity_versions` | `id` | PK; default gen_random_uuid() |
-| `entity_versions` | `entity_type` | obrigatório |
-| `entity_versions` | `entity_id` | obrigatório |
-| `entity_versions` | `version_number` | obrigatório |
-| `entity_versions` | `data` | default '{}'::jsonb |
-| `entity_versions` | `changed_by` | FK → users.id |
-| `entity_versions` | `changed_at` | default NOW() |
-| `entity_versions` | `(tabela)` | CONSTRAINT unique_entity_version UNIQUE (entity_type, entity_id, version_number) |
 | `cache_refresh_log` | `id` | PK; default gen_random_uuid() |
 | `cache_refresh_log` | `view_name` | obrigatório |
 | `cache_refresh_log` | `refresh_started_at` | default NOW() |
 | `cache_refresh_log` | `status` | default 'running'; CHECK status IN ('running', 'success', 'failed') |
 | `cache_refresh_log` | `triggered_by` | default 'system' |
-| `cache_refresh_log` | `(tabela)` | CONSTRAINT unique_running_refresh UNIQUE (view_name, status) DEFERRABLE INITIALLY DEFERRED |
 | `drivers` | `id` | PK; default gen_random_uuid() |
 | `drivers` | `lalamove_id` | único |
 | `drivers` | `name` | obrigatório |
@@ -535,7 +524,16 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `new_device_alerts` | `id` | PK; default gen_random_uuid() |
 | `new_device_alerts` | `user_id` | obrigatório |
 | `new_device_alerts` | `device_id` | FK → user_devices.id ON DELETE CASCADE |
-| … +285 linhas — lista completa em `context.json` | | |
+| `new_device_alerts` | `email_sent` | default false |
+| `new_device_alerts` | `created_at` | default now() |
+| `user_passkeys` | `id` | PK; default gen_random_uuid() |
+| `user_passkeys` | `user_id` | obrigatório |
+| `user_passkeys` | `credential_id` | obrigatório; único |
+| `user_passkeys` | `public_key` | obrigatório |
+| `user_passkeys` | `counter` | default 0 |
+| `user_passkeys` | `backed_up` | default false |
+| `user_passkeys` | `created_at` | default now() |
+| … +276 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -977,7 +975,7 @@ _nenhum item encontrado_
 | View | SELECT |
 |---|---|
 | `job_queue_stats` | `SELECT type, status, COUNT(*) as count, AVG(EXTRACT(EPOCH FROM (COALESCE(completed_at, NOW()) - created_at))) as avg_duration_seconds, MAX(created_at) as last_created_at FROM job_queue WHERE created_at > NOW() - INTERVAL '24 hours' GROUP BY type, status` |
-| `cache_status` | `SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT …` |
+| `cache_status` | `SELECT v.view_name, CASE WHEN lr.refresh_completed_at IS NULL THEN public.cache_view_count(v.view_name) ELSE lr.row_count END AS row_count, lr.refresh_completed_at AS last_refresh, lr.refresh_duration_ms, (lr.refresh_completed_at IS NULL OR lr.refresh_completed_at < now() - interval '1 hour') AS is_ …` |
 | `cron_job_run_history` | `SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr. …` |
 | `driver_stats_cache` | `SELECT d.id as driver_id, d.name, d.lalamove_driver_id, d.phone, d.vehicle_plate, d.vehicle_type, d.status, d.risk_score, d.risk_level, d.is_whitelist, d.is_blacklist, COUNT(DISTINCT lo.id) as total_deliveries, COUNT(DISTINCT lo.id) FILTER (WHERE lo.status = 'DELIVERED') as successful_deliveries, CO …` |
 | `delivery_hourly_stats_cache` | `SELECT DATE_TRUNC('hour', created_at) as hour, COUNT(*) as total_orders, COUNT(*) FILTER (WHERE status = 'DELIVERED') as delivered_count, COUNT(*) FILTER (WHERE status = 'CANCELLED') as cancelled_count, COUNT(*) FILTER (WHERE status = 'FAILED') as failed_count, COALESCE(AVG(delay_minutes), 0) as avg …` |
@@ -1420,6 +1418,9 @@ _nenhum item encontrado_
 | `AND t.last_updated > now() - interval '2 hours'` | `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` |
 | `OR t.route_computed_at < now() - interval '30 minutes'` | `supabase/migrations/20261121194500_geo_jobs_scheduler.sql` |
 | `AND started_at < now() - interval '10 minutes'` | `supabase/migrations/20261122140000_fix_crons_dispatcher.sql` |
+| `OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale,` | `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql` |
+| `WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale'` | `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql` |
+| `AND started_at < now() - interval '10 minutes'` | `supabase/migrations/20261123160000_job_queue_processing_log.sql` |
 
 ### H.3 Limites de paginação
 

@@ -554,8 +554,5 @@
   "Pedidos -> /orders (menu: todos; rota: operator)"
  ],
  "menu_mais_restrito_que_a_rota": [],
- "tabelas_sem_rls": [
-  "cache_refresh_log",
-  "job_queue_processing_log"
- ]
+ "tabelas_sem_rls": []
 }

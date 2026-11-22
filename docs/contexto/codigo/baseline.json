@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "626b37154dade68ca9e8c21a8d7bf75d4b4edf44",
+  "commit": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
   "branch": "main",
-  "data_commit": "2026-11-21T22:48:20-03:00",
+  "data_commit": "2026-11-21T23:08:44-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e38c647",
+    "data": "2026-11-21",
+    "assunto": "fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)"
+   },
+   {
+    "sha": "9710802",
+    "data": "2026-11-21",
+    "assunto": "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)"
+   },
    {
     "sha": "626b371",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "3e6683c",
     "data": "2026-11-21",
     "assunto": "infra: cron horario de refresh das materialized views de cache (#180)"
-   },
-   {
-    "sha": "2847da1",
-    "data": "2026-11-21",
-    "assunto": "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)"
-   },
-   {
-    "sha": "06bcb9f",
-    "data": "2026-11-21",
-    "assunto": "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)"
    }
   ],
-  "arquivos_mudados_7d": 206,
+  "arquivos_mudados_7d": 211,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -192,7 +192,7 @@
     "mudancas": 5
    },
    {
-    "pasta": "src/hooks/__tests__",
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 5
    }
   ],
@@ -246,7 +246,15 @@
     "mudancas": 5
    },
    {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 5
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 5
    },
    {
@@ -288,20 +296,12 @@
    {
     "arquivo": "AGENTS.md",
     "mudancas": 4
-   },
-   {
-    "arquivo": "docs/agentes/banco.md",
-    "mudancas": 4
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 112
+    "commits": 114
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 982,
+  "arquivos_total": 984,
   "arquivos_codigo": 612,
-  "linhas_codigo": 119810,
+  "linhas_codigo": 119808,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -321,8 +321,8 @@
   "componentes": 216,
   "hooks": 100,
   "edge_functions": 26,
-  "tabelas": 88,
-  "migrations": 180,
+  "tabelas": 87,
+  "migrations": 182,
   "cron_jobs": 21,
   "testes": 122,
   "workflows": 5,
@@ -528,7 +528,7 @@
   },
   "src/integrations": {
    "arquivos": 4,
-   "linhas": 4946
+   "linhas": 4950
   },
   "src/lib": {
    "arquivos": 36,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 57,
-   "linhas": 14777
+   "linhas": 14771
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -578,7 +578,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 4801
+   "linhas": 4805
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
@@ -742,10 +742,7 @@
    "llm-wh",
    "mcp-query"
   ],
-  "tabelas_sem_rls": [
-   "cache_refresh_log",
-   "job_queue_processing_log"
-  ],
+  "tabelas_sem_rls": [],
   "tabelas_usadas_sem_definicao": [
    "carriers",
    "companies",

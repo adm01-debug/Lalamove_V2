@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `626b37154d` · branch `main` · 2026-11-22 01:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e38c6470f5` · branch `main` · 2026-11-22 02:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -20,7 +20,7 @@
 | `bitrix24_sync` | Registro de sincronizacao de deals com o Bitrix24. | 9 colunas | migration |
 | `bitrix24_tokens` | Tokens OAuth2 do Bitrix24 com refresh. | 7 colunas | migration |
 | `blocked_ips` | IPs bloqueados por rate limit/seguranca com motivo e expiracao. | 11 colunas | migration |
-| `cache_refresh_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 9 colunas | migration |
+| `cache_refresh_log` | Historico de refresh das materialized views de cache (inicio, fim, duracao, erro). | 9 colunas | migration |
 | `cache_status` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `contacts` | Contatos cadastrados (empresas/parceiros) para integracao externa. | 10 colunas | migration |
 | `contract_version_usage` | Uso de versoes de contrato por periodo. | 8 colunas | migration |
@@ -35,7 +35,6 @@
 | `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 32 colunas | migration |
 | `drivers_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | types.ts |
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
-| `entity_versions` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
 | `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
 | `geo_budget` | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. | 7 colunas | migration |
@@ -48,7 +47,7 @@
 | `hourly_metrics_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | types.ts |
 | `ip_whitelist` | IPs autorizados com CIDR para acesso privilegiado. | 8 colunas | migration |
 | `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 17 colunas | migration |
-| `job_queue_processing_log` | _(sem COMMENT ON TABLE — significado não documentado)_ | 8 colunas | migration |
+| `job_queue_processing_log` | Historico das rodadas do processador de fila (processados, sucesso, falha, duracao). | 8 colunas | migration |
 | `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
 | `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 71 colunas | migration |
 | `lalamove_priority_fee_history` | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. | 9 colunas | migration |
@@ -304,7 +303,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 21/88 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12` …
+- 18/87 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status`, `delivery_metrics_cache` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

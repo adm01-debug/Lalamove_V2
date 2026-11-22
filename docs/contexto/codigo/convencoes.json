@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)",
+   "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)",
    "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)",
    "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)",
-   "fix(migration): resolve colisao das constraints de place_id (#204)",
-   "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)",
-   "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)"
+   "fix(migration): resolve colisao das constraints de place_id (#204)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

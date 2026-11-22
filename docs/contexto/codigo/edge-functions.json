@@ -25,7 +25,7 @@
    "servico": "Manutenção/DDL",
    "entrada": "supabase/functions/apply-fixes/index.ts",
    "arquivos": 1,
-   "linhas": 65,
+   "linhas": 59,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

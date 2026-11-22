@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "626b37154dade68ca9e8c21a8d7bf75d4b4edf44",
+  "sha": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 01:48 UTC",
-  "files_total": 977,
-  "code_files": 805,
-  "code_lines": 138494
+  "generated_at": "2026-11-22 02:09 UTC",
+  "files_total": 979,
+  "code_files": 807,
+  "code_lines": 138808
  },
  "version": "1.3.2",
- "facts_hash": "a2c695fb9aa8fde6",
+ "facts_hash": "db5e83ba10ef0ac2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   "languages": {
    ".ts": 272,
    ".tsx": 229,
-   ".sql": 184,
+   ".sql": 186,
    ".mjs": 107,
    ".py": 8,
    ".js": 4,
@@ -268,72 +268,6 @@
     "comment": "Armazena filtros salvos pelos usuários para diferentes entidades",
     "origin": "migration"
    },
-   "entity_versions": {
-    "columns": [
-     {
-      "name": "id",
-      "type": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "entity_type",
-      "type": "TEXT NOT NULL",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "entity_id",
-      "type": "UUID NOT NULL",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "version_number",
-      "type": "INT NOT NULL",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "data",
-      "type": "JSONB NOT NULL DEFAULT '{}'::jsonb",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "changed_by",
-      "type": "UUID REFERENCES auth.users(id)",
-      "fk": "users.id",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "changed_at",
-      "type": "TIMESTAMPTZ NOT NULL DEFAULT NOW()",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     },
-     {
-      "name": "change_summary",
-      "type": "TEXT",
-      "fk": "",
-      "generated": "",
-      "src": "supabase/migrations/20241231000001_entity_versions.sql"
-     }
-    ],
-    "constraints": [
-     "CONSTRAINT unique_entity_version UNIQUE (entity_type, entity_id, version_number)"
-    ],
-    "src": "supabase/migrations/20241231000001_entity_versions.sql",
-    "comment": "",
-    "origin": "migration"
-   },
    "cache_refresh_log": {
     "columns": [
      {
@@ -341,70 +275,68 @@
       "type": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "view_name",
       "type": "TEXT NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "refresh_started_at",
       "type": "TIMESTAMPTZ NOT NULL DEFAULT NOW()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "refresh_completed_at",
       "type": "TIMESTAMPTZ",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "refresh_duration_ms",
       "type": "INTEGER",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "row_count",
-      "type": "INTEGER",
+      "type": "BIGINT",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "status",
-      "type": "TEXT CHECK (status IN ('running', 'success', 'failed')) DEFAULT 'running'",
+      "type": "TEXT NOT NULL DEFAULT 'running' CHECK (status IN ('running', 'success', 'failed'))",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "error_message",
       "type": "TEXT",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      },
      {
       "name": "triggered_by",
-      "type": "TEXT DEFAULT 'system'",
+      "type": "TEXT NOT NULL DEFAULT 'system'",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20250102000002_cache_system_complete.sql"
+      "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
      }
     ],
-    "constraints": [
-     "CONSTRAINT unique_running_refresh UNIQUE (view_name, status) DEFERRABLE INITIALLY DEFERRED"
-    ],
-    "src": "supabase/migrations/20250102000002_cache_system_complete.sql",
-    "comment": "",
+    "constraints": [],
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "comment": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
     "origin": "migration"
    },
    "drivers": {
@@ -3094,61 +3026,61 @@
       "type": "UUID PRIMARY KEY DEFAULT gen_random_uuid()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "run_at",
-      "type": "TIMESTAMPTZ DEFAULT NOW()",
+      "type": "TIMESTAMPTZ NOT NULL DEFAULT NOW()",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "processed",
       "type": "INTEGER NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "succeeded",
       "type": "INTEGER NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "failed",
       "type": "INTEGER NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "skipped",
       "type": "INTEGER NOT NULL",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "duration_ms",
       "type": "INTEGER",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      },
      {
       "name": "metadata",
-      "type": "JSONB DEFAULT '{}'::jsonb",
+      "type": "JSONB NOT NULL DEFAULT '{}'::jsonb",
       "fk": "",
       "generated": "",
-      "src": "supabase/migrations/20251226010001_configure_pg_cron.sql"
+      "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
      }
     ],
     "constraints": [],
-    "src": "supabase/migrations/20251226010001_configure_pg_cron.sql",
-    "comment": "",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+    "comment": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao).",
     "origin": "migration"
    },
    "user_roles": {
@@ -8342,26 +8274,6 @@
     "src": "supabase/migrations/20241231000000_saved_filters.sql"
    },
    {
-    "name": "Users can view versions",
-    "table": "entity_versions",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "true",
-    "check": "",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
-   },
-   {
-    "name": "Users can insert versions",
-    "table": "entity_versions",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "auth.uid() = changed_by OR changed_by IS NULL",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
-   },
-   {
     "name": "Users can view own filters",
     "table": "saved_filters",
     "cmd": "SELECT",
@@ -10933,21 +10845,6 @@
      "latest_refreshes"
     ]
    },
-   "refresh_cache_view": {
-    "args": "p_view_name TEXT DEFAULT NULL",
-    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count BIGINT,\n  status TEXT\n)",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20261122090000_cache_system_backend.sql",
-    "security_definer": true,
-    "search_path": true,
-    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM refresh_cache_view(v_name); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; v_start := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', p_view_name); v_dur := EXTRACT(MILLISECONDS FROM clock_timestamp() - v_start)::INTEGER; EXECUTE format('SELECT COU …",
-    "raises": [],
-    "tables": [
-     "clock_timestamp",
-     "refresh_cache_view",
-     "v_count"
-    ]
-   },
    "trigger_bitrix24_sync": {
     "args": "",
     "returns": "trigger",
@@ -11085,14 +10982,16 @@
     "args": "p_limit integer DEFAULT 10",
     "returns": "TABLE(processed integer, requeued integer)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_key text; v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() WHERE status = 'PROCESSING' AND started_at < now() - interval '10 minutes' RETURNING 1 ) S …",
+    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_failed integer := 0; v_skipped integer := 0; v_key text; v_start TIMESTAMPTZ := clock_timestamp(); v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() W …",
     "raises": [],
     "tables": [
+     "clock_timestamp",
      "get_next_jobs",
      "job_queue",
+     "job_queue_processing_log",
      "stale",
      "v_key",
      "v_requeued",
@@ -11221,10 +11120,10 @@
     "args": "",
     "returns": "INTEGER",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010001_configure_pg_cron.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM job_queue_processing_log WHERE run_at < NOW() - INTERVAL '7 days'; GET DIAGNOSTICS v_deleted = ROW_COUNT; RETURN v_deleted; END;",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM public.job_queue_processing_log WHERE run_at < NOW() - INTERVAL '7 days'; GET DIAGNOSTICS v_deleted = ROW_COUNT; RETURN v_deleted; END;",
     "raises": [],
     "tables": [
      "job_queue_processing_log"
@@ -12070,6 +11969,37 @@
      "audit_log"
     ]
    },
+   "refresh_cache_view": {
+    "args": "p_view_name text DEFAULT NULL, p_triggered_by text DEFAULT 'system'",
+    "returns": "TABLE(view_refreshed text, duration_ms integer, row_count bigint, status text)",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; v_log_id UUID; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM public.refresh_cache_view(v_name, p_triggered_by); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; INSERT INTO public.cache_refresh_log (view_name, status, triggered_by) VALUES (p_view_name, 'running', p_triggered_by) RETURNING id INTO v_log_id; v_start := clock_timestam …",
+    "raises": [],
+    "tables": [
+     "cache_refresh_log",
+     "clock_timestamp",
+     "refresh_cache_view",
+     "v_count",
+     "v_log_id"
+    ]
+   },
+   "cache_view_count": {
+    "args": "p_view text",
+    "returns": "bigint",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count bigint; BEGIN IF p_view NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN 0; END IF; EXECUTE format('SELECT count(*) FROM public.%I', p_view) INTO v_count; RETURN COALESCE(v_count, 0); END;",
+    "raises": [],
+    "tables": [
+     "public",
+     "v_count"
+    ]
+   },
    "Args": {
     "args": "",
     "returns": "?",
@@ -12261,22 +12191,6 @@
     "unique": false,
     "where": "WHERE is_default = true",
     "src": "supabase/migrations/20241231000000_saved_filters.sql"
-   },
-   {
-    "name": "idx_versions_entity",
-    "table": "entity_versions",
-    "columns": "entity_type, entity_id",
-    "unique": false,
-    "where": "",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
-   },
-   {
-    "name": "idx_versions_date",
-    "table": "entity_versions",
-    "columns": "changed_at DESC",
-    "unique": false,
-    "where": "",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
    },
    {
     "name": "idx_saved_filters_user",
@@ -14061,6 +13975,54 @@
     "unique": false,
     "where": "",
     "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+   },
+   {
+    "name": "idx_cache_refresh_log_running",
+    "table": "cache_refresh_log",
+    "columns": "view_name",
+    "unique": true,
+    "where": "WHERE status = 'running'",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "name": "idx_cache_refresh_log_view",
+    "table": "cache_refresh_log",
+    "columns": "view_name, refresh_started_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "name": "idx_cache_refresh_log_status",
+    "table": "cache_refresh_log",
+    "columns": "status, refresh_started_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "name": "idx_job_queue_processing_log_run_at",
+    "table": "job_queue_processing_log",
+    "columns": "run_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   },
+   {
+    "name": "idx_order_geo_events_alert_id",
+    "table": "order_geo_events",
+    "columns": "alert_id",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
+   },
+   {
+    "name": "idx_job_queue_created_by",
+    "table": "job_queue",
+    "columns": "created_by",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
    }
   ],
   "cron_jobs": [
@@ -14119,8 +14081,8 @@
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
    },
    "cache_status": {
-    "body": "SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT 'driver_stats_cache' AS view_name, (SELECT COUNT(*) FROM driver_stats_cache) AS row_count, (SELECT MAX(cached_at) FROM driver_stats_cache) AS last_refresh, NULL::INTEGER AS refresh_duration_ms UNION ALL SELECT 'delivery_metrics_cache', (SELECT COUNT(*) FROM delivery_metrics_cache), (SELECT MAX(cache …",
-    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+    "body": "SELECT v.view_name, CASE WHEN lr.refresh_completed_at IS NULL THEN public.cache_view_count(v.view_name) ELSE lr.row_count END AS row_count, lr.refresh_completed_at AS last_refresh, lr.refresh_duration_ms, (lr.refresh_completed_at IS NULL OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale, CASE WHEN lr.refresh_completed_at IS NULL THEN 'never_refreshed' WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale' ELSE 'success' END AS status FROM (VALUES ('driver_stats_cache'), ('delivery_metrics_cache'), ('hourly_metrics_cache') ) AS v(view_name) LEFT JOIN LATERAL ( S …",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
    },
    "cron_job_run_history": {
     "body": "SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr.start_time DESC LIMIT 100",
@@ -14157,7 +14119,6 @@
   },
   "sources": [
    "supabase/migrations/20241231000000_saved_filters.sql",
-   "supabase/migrations/20241231000001_entity_versions.sql",
    "supabase/migrations/20250102000001_saved_filters.sql",
    "supabase/migrations/20250102000002_cache_system_complete.sql",
    "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
@@ -14336,11 +14297,13 @@
    "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
    "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql",
    "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql",
+   "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+   "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+   "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
    "saved_filters": "enabled",
-   "entity_versions": "enabled",
    "drivers": "enabled",
    "lalamove_orders": "enabled",
    "lalamove_stops": "enabled",
@@ -14409,7 +14372,9 @@
    "geo_usage": "enabled",
    "geo_budget": "enabled",
    "geo_cache": "enabled",
-   "order_geo_events": "enabled"
+   "order_geo_events": "enabled",
+   "cache_refresh_log": "enabled",
+   "job_queue_processing_log": "enabled"
   },
   "grants": [
    {
@@ -16467,6 +16432,70 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated",
     "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "cache_refresh_log",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "cache_refresh_log",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "job_queue_processing_log",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "job_queue_processing_log",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
    }
   ],
   "raises": [
@@ -16627,7 +16656,9 @@
    "table:geo_budget": "Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso.",
    "table:geo_cache": "Cache de respostas de geocode/rota/static por hash de request (TTL por funcao).",
    "table:order_geo_events": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada).",
-   "column:geo_settings.provider": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox."
+   "column:geo_settings.provider": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox.",
+   "table:cache_refresh_log": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
+   "table:job_queue_processing_log": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao)."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -20731,7 +20762,7 @@
   {
    "module": "src/integrations",
    "files": 4,
-   "lines": 4946,
+   "lines": 4950,
    "tables": [],
    "exports": [
     "index.ts: lovable",
@@ -21115,7 +21146,7 @@
   {
    "module": "supabase/functions",
    "files": 57,
-   "lines": 14777,
+   "lines": 14771,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21259,8 +21290,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 180,
-   "lines": 12137,
+   "files": 182,
+   "lines": 12453,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -21268,7 +21299,6 @@
    "imports_modules": [],
    "file_list": [
     "supabase/migrations/20241231000000_saved_filters.sql",
-    "supabase/migrations/20241231000001_entity_versions.sql",
     "supabase/migrations/20250102000001_saved_filters.sql",
     "supabase/migrations/20250102000002_cache_system_complete.sql",
     "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
@@ -21346,7 +21376,8 @@
     "supabase/migrations/20260712115352_f2e122a3-0fb1-45e2-878c-d5b1c726e753.sql",
     "supabase/migrations/20260712115419_13f7b360-c360-415a-8e19-fd5a59d701eb.sql",
     "supabase/migrations/20260712115647_ca94455a-fb7b-4bf3-b990-14efd298a5b1.sql",
-    "supabase/migrations/20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql"
+    "supabase/migrations/20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql",
+    "supabase/migrations/20260712194831_1bd67c8e-482f-4a15-abfc-6f3986b33611.sql"
    ]
   }
  ],
@@ -23389,7 +23420,6 @@
    "cron_job_logs",
    "drivers_safe_view",
    "email_verifications",
-   "entity_versions",
    "geo_usage",
    "job_queue_processing_log",
    "lalamove_webhook_config",
@@ -26232,46 +26262,6 @@
     "rule": "CONSTRAINT unique_filter_name_per_user UNIQUE (user_id, entity_type, name)"
    },
    {
-    "table": "entity_versions",
-    "column": "id",
-    "rule": "PK; default gen_random_uuid()"
-   },
-   {
-    "table": "entity_versions",
-    "column": "entity_type",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "entity_versions",
-    "column": "entity_id",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "entity_versions",
-    "column": "version_number",
-    "rule": "obrigatório"
-   },
-   {
-    "table": "entity_versions",
-    "column": "data",
-    "rule": "default '{}'::jsonb"
-   },
-   {
-    "table": "entity_versions",
-    "column": "changed_by",
-    "rule": "FK → users.id"
-   },
-   {
-    "table": "entity_versions",
-    "column": "changed_at",
-    "rule": "default NOW()"
-   },
-   {
-    "table": "entity_versions",
-    "column": "(tabela)",
-    "rule": "CONSTRAINT unique_entity_version UNIQUE (entity_type, entity_id, version_number)"
-   },
-   {
     "table": "cache_refresh_log",
     "column": "id",
     "rule": "PK; default gen_random_uuid()"
@@ -26295,11 +26285,6 @@
     "table": "cache_refresh_log",
     "column": "triggered_by",
     "rule": "default 'system'"
-   },
-   {
-    "table": "cache_refresh_log",
-    "column": "(tabela)",
-    "rule": "CONSTRAINT unique_running_refresh UNIQUE (view_name, status) DEFERRABLE INITIALLY DEFERRED"
    },
    {
     "table": "drivers",
@@ -34096,6 +34081,18 @@
    {
     "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
     "line": "AND started_at < now() - interval '10 minutes'"
+   },
+   {
+    "file": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "line": "OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale,"
+   },
+   {
+    "file": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "line": "WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale'"
+   },
+   {
+    "file": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+    "line": "AND started_at < now() - interval '10 minutes'"
    }
   ],
   "percents": [
@@ -38406,26 +38403,6 @@
     "src": "supabase/migrations/20241231000000_saved_filters.sql"
    },
    {
-    "name": "Users can view versions",
-    "table": "entity_versions",
-    "cmd": "SELECT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "true",
-    "check": "",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
-   },
-   {
-    "name": "Users can insert versions",
-    "table": "entity_versions",
-    "cmd": "INSERT",
-    "roles": "public",
-    "mode": "permissive",
-    "using": "",
-    "check": "auth.uid() = changed_by OR changed_by IS NULL",
-    "src": "supabase/migrations/20241231000001_entity_versions.sql"
-   },
-   {
     "name": "Users can view own filters",
     "table": "saved_filters",
     "cmd": "SELECT",
@@ -40997,21 +40974,6 @@
      "latest_refreshes"
     ]
    },
-   "refresh_cache_view": {
-    "args": "p_view_name TEXT DEFAULT NULL",
-    "returns": "TABLE (\n  view_refreshed TEXT,\n  duration_ms INTEGER,\n  row_count BIGINT,\n  status TEXT\n)",
-    "lang": "plpgsql",
-    "src": "supabase/migrations/20261122090000_cache_system_backend.sql",
-    "security_definer": true,
-    "search_path": true,
-    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM refresh_cache_view(v_name); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; v_start := clock_timestamp(); BEGIN EXECUTE format('REFRESH MATERIALIZED VIEW CONCURRENTLY %I', p_view_name); v_dur := EXTRACT(MILLISECONDS FROM clock_timestamp() - v_start)::INTEGER; EXECUTE format('SELECT COU …",
-    "raises": [],
-    "tables": [
-     "clock_timestamp",
-     "refresh_cache_view",
-     "v_count"
-    ]
-   },
    "trigger_bitrix24_sync": {
     "args": "",
     "returns": "trigger",
@@ -41149,14 +41111,16 @@
     "args": "p_limit integer DEFAULT 10",
     "returns": "TABLE(processed integer, requeued integer)",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
     "security_definer": true,
     "search_path": true,
-    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_key text; v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() WHERE status = 'PROCESSING' AND started_at < now() - interval '10 minutes' RETURNING 1 ) S …",
+    "body": "DECLARE v_job RECORD; v_processed integer := 0; v_requeued integer := 0; v_failed integer := 0; v_skipped integer := 0; v_key text; v_start TIMESTAMPTZ := clock_timestamp(); v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1'; BEGIN SELECT decrypted_secret INTO v_key FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1; WITH stale AS ( UPDATE job_queue SET status = CASE WHEN attempts >= max_attempts THEN 'FAILED' ELSE 'PENDING' END, next_retry_at = now(), error_message = COALESCE(error_message, 'Requeued by process_job_queue: stuck in PROCESSING > 10 min'), completed_at = CASE WHEN attempts >= max_attempts THEN now() ELSE completed_at END, updated_at = now() W …",
     "raises": [],
     "tables": [
+     "clock_timestamp",
      "get_next_jobs",
      "job_queue",
+     "job_queue_processing_log",
      "stale",
      "v_key",
      "v_requeued",
@@ -41285,10 +41249,10 @@
     "args": "",
     "returns": "INTEGER",
     "lang": "plpgsql",
-    "src": "supabase/migrations/20251226010001_configure_pg_cron.sql",
-    "security_definer": false,
-    "search_path": false,
-    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM job_queue_processing_log WHERE run_at < NOW() - INTERVAL '7 days'; GET DIAGNOSTICS v_deleted = ROW_COUNT; RETURN v_deleted; END;",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_deleted INTEGER; BEGIN DELETE FROM public.job_queue_processing_log WHERE run_at < NOW() - INTERVAL '7 days'; GET DIAGNOSTICS v_deleted = ROW_COUNT; RETURN v_deleted; END;",
     "raises": [],
     "tables": [
      "job_queue_processing_log"
@@ -42134,6 +42098,37 @@
      "audit_log"
     ]
    },
+   "refresh_cache_view": {
+    "args": "p_view_name text DEFAULT NULL, p_triggered_by text DEFAULT 'system'",
+    "returns": "TABLE(view_refreshed text, duration_ms integer, row_count bigint, status text)",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_name TEXT; v_start TIMESTAMPTZ; v_dur INTEGER; v_count BIGINT; v_log_id UUID; BEGIN IF p_view_name IS NULL THEN FOR v_name IN SELECT unnest(ARRAY['driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache']) LOOP RETURN QUERY SELECT * FROM public.refresh_cache_view(v_name, p_triggered_by); END LOOP; RETURN; END IF; IF p_view_name NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN QUERY SELECT p_view_name, NULL::INTEGER, NULL::BIGINT, 'failed'::TEXT; RETURN; END IF; INSERT INTO public.cache_refresh_log (view_name, status, triggered_by) VALUES (p_view_name, 'running', p_triggered_by) RETURNING id INTO v_log_id; v_start := clock_timestam …",
+    "raises": [],
+    "tables": [
+     "cache_refresh_log",
+     "clock_timestamp",
+     "refresh_cache_view",
+     "v_count",
+     "v_log_id"
+    ]
+   },
+   "cache_view_count": {
+    "args": "p_view text",
+    "returns": "bigint",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count bigint; BEGIN IF p_view NOT IN ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache') THEN RETURN 0; END IF; EXECUTE format('SELECT count(*) FROM public.%I', p_view) INTO v_count; RETURN COALESCE(v_count, 0); END;",
+    "raises": [],
+    "tables": [
+     "public",
+     "v_count"
+    ]
+   },
    "Args": {
     "args": "",
     "returns": "?",
@@ -42347,8 +42342,8 @@
     "src": "supabase/migrations/20251226000003_create_job_queue.sql"
    },
    "cache_status": {
-    "body": "SELECT view_name, row_count, last_refresh, refresh_duration_ms, (last_refresh IS NULL OR last_refresh < NOW() - INTERVAL '1 hour') AS is_stale, CASE WHEN last_refresh IS NULL THEN 'never_refreshed' WHEN last_refresh < NOW() - INTERVAL '1 hour' THEN 'stale' ELSE 'success' END AS status FROM ( SELECT 'driver_stats_cache' AS view_name, (SELECT COUNT(*) FROM driver_stats_cache) AS row_count, (SELECT MAX(cached_at) FROM driver_stats_cache) AS last_refresh, NULL::INTEGER AS refresh_duration_ms UNION ALL SELECT 'delivery_metrics_cache', (SELECT COUNT(*) FROM delivery_metrics_cache), (SELECT MAX(cache …",
-    "src": "supabase/migrations/20261122090000_cache_system_backend.sql"
+    "body": "SELECT v.view_name, CASE WHEN lr.refresh_completed_at IS NULL THEN public.cache_view_count(v.view_name) ELSE lr.row_count END AS row_count, lr.refresh_completed_at AS last_refresh, lr.refresh_duration_ms, (lr.refresh_completed_at IS NULL OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale, CASE WHEN lr.refresh_completed_at IS NULL THEN 'never_refreshed' WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale' ELSE 'success' END AS status FROM (VALUES ('driver_stats_cache'), ('delivery_metrics_cache'), ('hourly_metrics_cache') ) AS v(view_name) LEFT JOIN LATERAL ( S …",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
    },
    "cron_job_run_history": {
     "body": "SELECT jr.jobid, j.jobname, jr.runid, jr.job_pid, jr.database, jr.username, jr.command, jr.status, jr.return_message, jr.start_time, jr.end_time, EXTRACT(EPOCH FROM (jr.end_time - jr.start_time)) as duration_seconds FROM cron.job_run_details jr LEFT JOIN cron.job j ON j.jobid = jr.jobid ORDER BY jr.start_time DESC LIMIT 100",
@@ -42553,7 +42548,7 @@
       "success"
      ],
      "default": "running",
-     "type": "TEXT CHECK (status IN ('running', 'success', 'failed')) DEFAULT 'running'"
+     "type": "TEXT NOT NULL DEFAULT 'running' CHECK (status IN ('running', 'success', 'failed'))"
     },
     {
      "table": "drivers",
@@ -43897,7 +43892,7 @@
     ]
    },
    "cache_refresh_log": {
-    "rls": "não encontrado",
+    "rls": "enabled",
     "SELECT": [],
     "INSERT": [],
     "UPDATE": [],
@@ -44069,17 +44064,6 @@
      "authenticated: public.has_role(auth.uid(), 'admin')"
     ]
    },
-   "entity_versions": {
-    "rls": "enabled",
-    "SELECT": [
-     "public: true"
-    ],
-    "INSERT": [
-     "public: auth.uid() = changed_by OR changed_by IS NULL"
-    ],
-    "UPDATE": [],
-    "DELETE": []
-   },
    "feature_flags": {
     "rls": "enabled",
     "SELECT": [
@@ -44210,7 +44194,7 @@
     ]
    },
    "job_queue_processing_log": {
-    "rls": "não encontrado",
+    "rls": "enabled",
     "SELECT": [],
     "INSERT": [],
     "UPDATE": [],
@@ -44996,11 +44980,14 @@
    "supabase/migrations/20261122090000_cache_system_backend.sql",
    "supabase/migrations/20261122120200_job_queue_system.sql",
    "supabase/migrations/20261122130100_geo_foundation.sql",
-   "supabase/migrations/20261122150100_fix_public_rls_bypass.sql"
+   "supabase/migrations/20261122150100_fix_public_rls_bypass.sql",
+   "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+   "supabase/migrations/20261123160000_job_queue_processing_log.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
    "add_job",
+   "cache_view_count",
    "can_run_db_diagnostics",
    "check_login_lockout",
    "check_login_lockout_v2",
@@ -45012,6 +44999,7 @@
    "cleanup_old_observability_logs",
    "cleanup_old_region_cache",
    "cleanup_old_system_logs",
+   "cleanup_processing_logs",
    "clear_login_attempts",
    "create_audit_log",
    "ensure_tracking_events_partition",
@@ -47122,6 +47110,70 @@
     "objkind": "function",
     "roles": "PUBLIC, anon, authenticated",
     "src": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "cache_refresh_log",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "cache_refresh_log",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "execute",
+    "object": "refresh_cache_view",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cache_view_count",
+    "objkind": "function",
+    "roles": "authenticated, service_role",
+    "src": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "select",
+    "object": "job_queue_processing_log",
+    "objkind": "table",
+    "roles": "authenticated",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "all",
+    "object": "job_queue_processing_log",
+    "objkind": "table",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "cleanup_processing_logs",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261123160000_job_queue_processing_log.sql"
    }
   ],
   "guards": [
@@ -47914,7 +47966,6 @@
     "created_at",
     "updated_at"
    ],
-   "entity_versions": [],
    "cache_refresh_log": [],
    "drivers": [
     "created_at",
@@ -49156,7 +49207,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED', 'QUOTED', 'ASSIGNING_DRIVER', 'DELIVERING'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "21/88 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `entity_versions`, `cache_refresh_log`, `job_queue_processing_log`, `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12` …",
+   "18/87 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01`, `cache_status`, `delivery_metrics_cache` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -61906,7 +61957,7 @@
   },
   "src/integrations/supabase/types.ts": {
    "path": "src/integrations/supabase/types.ts",
-   "lines": 4801,
+   "lines": 4805,
    "exports": [
     "type Json",
     "type Database",
@@ -65194,7 +65245,7 @@
   },
   "supabase/functions/apply-fixes/index.ts": {
    "path": "supabase/functions/apply-fixes/index.ts",
-   "lines": 65,
+   "lines": 59,
    "rpc": [
     "exec"
    ],
@@ -67959,10 +68010,6 @@
    "path": "supabase/migrations/20241231000000_saved_filters.sql",
    "lines": 108
   },
-  "supabase/migrations/20241231000001_entity_versions.sql": {
-   "path": "supabase/migrations/20241231000001_entity_versions.sql",
-   "lines": 21
-  },
   "supabase/migrations/20250102000001_saved_filters.sql": {
    "path": "supabase/migrations/20250102000001_saved_filters.sql",
    "lines": 67
@@ -68852,13 +68899,58 @@
   "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql": {
    "path": "supabase/migrations/20261123140000_geo_place_id_prefix_check.sql",
    "lines": 35
+  },
+  "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql": {
+   "path": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+   "lines": 176,
+   "temporal": [
+    "OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale,",
+    "WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale'"
+   ],
+   "uses_service_role": true
+  },
+  "supabase/migrations/20261123160000_job_queue_processing_log.sql": {
+   "path": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+   "lines": 144,
+   "temporal": [
+    "AND started_at < now() - interval '10 minutes'"
+   ],
+   "uses_service_role": true
+  },
+  "supabase/migrations/20261123170000_indices_fk_faltantes.sql": {
+   "path": "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
+   "lines": 17
   }
  },
  "git": {
-  "sha": "626b37154dade68ca9e8c21a8d7bf75d4b4edf44",
+  "sha": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e38c647",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)",
+    "files": [
+     "src/integrations/supabase/types.ts",
+     "supabase/functions/apply-fixes/index.ts",
+     "supabase/migrations/20241231000001_entity_versions.sql",
+     "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+     "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+     "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
+    ]
+   },
+   {
+    "sha": "9710802",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "626b371",
     "date": "2026-11-21",
@@ -69181,24 +69273,6 @@
      "src/lib/__tests__/statusPalette.test.ts",
      "src/lib/statusPalette.ts"
     ]
-   },
-   {
-    "sha": "39f672a",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)",
-    "files": [
-     "supabase/migrations/20261121201800_indices_alert_id_created_by.sql"
-    ]
-   },
-   {
-    "sha": "a9a3ba5",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "ci: inclui os testes do roteador do gateway nos contract tests (#134)",
-    "files": [
-     ".github/workflows/ci.yml"
-    ]
    }
   ],
   "hot_files": [
@@ -69207,16 +69281,16 @@
     5
    ],
    [
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    4
+   ],
+   [
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     4
    ],
    [
     "supabase/functions/job-worker/index.ts",
     4
-   ],
-   [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    3
    ],
    [
     "supabase/functions/geo-gateway/providers/types.ts",
@@ -69233,6 +69307,10 @@
    [
     "docs/GEO_PROVIDERS.md",
     3
+   ],
+   [
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    2
    ],
    [
     "supabase/functions/geo-gateway/google.test.ts",
@@ -69272,10 +69350,6 @@
    ],
    [
     "supabase/functions/geo-gateway/resolver.ts",
-    2
-   ],
-   [
-    ".github/workflows/ci.yml",
     2
    ],
    [

@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `626b37154d` · branch `main` · 2026-11-22 01:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e38c6470f5` · branch `main` · 2026-11-22 02:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -29,7 +29,7 @@
 | `bitrix24_sync` | enabled | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
 | `bitrix24_tokens` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `blocked_ips` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin') |
-| `cache_refresh_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `cache_refresh_log` | enabled | — | — | — | — |
 | `cache_status` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `contacts` | enabled | public: auth.uid() = owner_id | public: auth.uid() = owner_id | public: auth.uid() = owner_id | public: auth.uid() = owner_id |
 | `contract_version_usage` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | — | — | — |
@@ -44,7 +44,6 @@
 | `drivers` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `drivers_safe_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `email_verifications` | enabled | public: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
-| `entity_versions` | enabled | public: true | public: auth.uid() = changed_by OR changed_by IS NULL | — | — |
 | `feature_flags` | enabled | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true )<br>authenticated: true | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) | public: EXISTS ( SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin' AND ur.is_active = true ) |
 | `geo_blocks` | não encontrado | sem RLS | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `geo_budget` | enabled | — | — | — | — |
@@ -57,7 +56,7 @@
 | `hourly_metrics_cache` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `ip_whitelist` | enabled | public: public.has_role(auth.uid(), 'admin')<br>public: public.has_role(auth.uid(), 'manager') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') | public: public.has_role(auth.uid(), 'admin')<br>authenticated: public.has_role(auth.uid(), 'admin') |
 | `job_queue` | enabled | public: auth.role() = 'authenticated'<br>public: auth.role() = 'service_role'<br>public: auth.uid() = created_by OR auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true<br>authenticated: public.has_role(auth.uid(), 'admin'::app_role) | public: auth.role() = 'service_role'<br>public: auth.uid() IN ( SELECT id FROM auth.users WHERE raw_user_meta_data->>'role' = 'admin' )<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true | public: auth.role() = 'service_role'<br>service_role: true |
-| `job_queue_processing_log` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
+| `job_queue_processing_log` | enabled | — | — | — | — |
 | `lalamove_order_replacements` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) OR public.has_role(auth.uid(), 'manager'::app_role) OR public.has_role(auth.ui | — | — | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `lalamove_orders` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role)<br>authenticated: public.has_role(auth.uid(), 'viewer'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') |
 | `lalamove_priority_fee_history` | enabled | public: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | public: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | — | — |
@@ -107,7 +106,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 116 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 118 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -225,11 +224,14 @@
 - `supabase/migrations/20261122120200_job_queue_system.sql`
 - `supabase/migrations/20261122130100_geo_foundation.sql`
 - `supabase/migrations/20261122150100_fix_public_rls_bypass.sql`
+- `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql`
+- `supabase/migrations/20261123160000_job_queue_processing_log.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
 - `acknowledge_alert`
 - `add_job`
+- `cache_view_count`
 - `can_run_db_diagnostics`
 - `check_login_lockout`
 - `check_login_lockout_v2`
@@ -241,6 +243,7 @@
 - `cleanup_old_observability_logs`
 - `cleanup_old_region_cache`
 - `cleanup_old_system_logs`
+- `cleanup_processing_logs`
 - `clear_login_attempts`
 - `create_audit_log`
 - `ensure_tracking_events_partition`
@@ -368,19 +371,19 @@ Middleware matcher (Next.js): nenhum
 | grant | anon, authenticated, service_role | execute | `check_login_lockout_v2`, `record_failed_login_v2` |
 | grant | authenticated | all | `public`, `public` |
 | grant | authenticated | execute | `refresh_cache_view`, `is_aal2`, `log_mfa_session`, `get_cron_jobs_health`, `get_contract_v1_sunset_readiness`, `get_contract_v1_sunset_readiness`, `acknowledge_alert`, `mcp_introspect`, `can_run_db_diagnostics` |
-| grant | authenticated | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view`, `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `lalamove_order_replacements`, `lalamove_rate_limits` |
+| grant | authenticated | select | `drivers_safe_view`, `orders_safe_view`, `orders_operator_view`, `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `lalamove_order_replacements`, `lalamove_rate_limits`, `cache_refresh_log`, `job_queue_processing_log` |
 | grant | authenticated | select, insert | `lalamove_rate_limits`, `lalamove_priority_fee_history` |
 | grant | authenticated | select, insert, update | `region_cache` |
 | grant | authenticated | select, insert, update, delete | `report_presets`, `lalamove_stop_proofs`, `contacts`, `mcp_diagnostics_grants` |
 | grant | authenticated, anon | execute | `get_driver_stats_cached`, `get_delivery_metrics_cached`, `get_hourly_metrics_cached`, `get_top_drivers_by_metric`, `cache_status` |
 | grant | authenticated, anon | select | `mv_driver_stats`, `mv_delivery_metrics`, `mv_hourly_metrics` |
 | grant | authenticated, anon, service_role | select | `driver_stats_cache`, `delivery_metrics_cache`, `hourly_metrics_cache`, `cache_status` |
-| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +3 |
+| grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +5 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
-| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants` |
-| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +29 |
+| grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
+| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +30 |
 | revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs` |
-| revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view` |
+| revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
 | revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +10 |
 | revoke | PUBLIC, anon, authenticated | execute | `ensure_tracking_events_partition`, `provision_tracking_partitions`, `prune_tracking_events_partitions`, `cleanup_old_region_cache`, `check_login_lockout`, `record_failed_login`, `has_role`, `has_permission`, `is_aal2`, `get_user_roles`, `is_token_valid`, `use_reset_token`, `notify_lalamove_quota_low`, `notify_webhook_security_event`, `cleanup_old_audit_logs` |
