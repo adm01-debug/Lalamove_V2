@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 05:13 UTC
+
+- **functions** alterado (1): `public.geo_emit_event(p_order_id uuid, p_driver_id uuid, p_event alert_type, p_stop_index integer, p_lat numeric, p_lng numeric, p_distance_m numeric, p_eta_min integer, p_title text, p_message text, p_enqueue boolean, p_metadata jsonb)`
+
 ## 2026-11-22 02:19 UTC
 
 - **colunas** adicionado (19): `public.cache_refresh_log.error_message`, `public.cache_refresh_log.id`, `public.cache_refresh_log.refresh_completed_at`, `public.cache_refresh_log.refresh_duration_ms`, `public.cache_refresh_log.refresh_started_at`, `public.cache_refresh_log.row_count`, `public.cache_refresh_log.status`, `public.cache_refresh_log.triggered_by`, `public.cache_refresh_log.view_name`, `public.job_queue_processing_log.duration_ms`, `public.job_queue_processing_log.failed`, `public.job_queue_processing_log.id`, `public.job_queue_processing_log.metadata`, `public.job_queue_processing_log.processed`, `public.job_queue_processing_log.run_at`, `public.job_queue_processing_log.skipped`, `public.job_queue_processing_log.succeeded`, `public.lalamove_orders.geocode_match_confidence`, `public.lalamove_stops.geocode_match_confidence`

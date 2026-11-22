@@ -18751,6 +18751,10 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/functions/job-worker/index.ts",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261122130100_geo_foundation.sql",
               "hits": 4
             },
@@ -18759,7 +18763,7 @@
               "hits": 1
             }
           ],
-          "code_total_files": 2,
+          "code_total_files": 3,
           "cron": [],
           "db": [
             "public.geo_evaluate_tracking"

@@ -72,42 +72,42 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 04:15:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 04:10:00 | succeeded | 0.03 | 1 row |
-| 2026-11-22 04:05:00 | succeeded | 0.05 | 1 row |
+| 2026-11-22 05:10:00 | succeeded | 0.03 | 1 row |
+| 2026-11-22 05:05:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 05:00:00 | succeeded | 0.03 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-22 04:17:00 | succeeded | 0.02 | 1 row |
 | 2026-11-22 03:17:00 | succeeded | 0.02 | 1 row |
 | 2026-11-22 02:17:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 01:17:00 | succeeded | 0.01 | 1 row |
 
 
 ## 20 · process-job-queue
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 04:15:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 04:14:00 | succeeded | 0.02 | 1 row |
-| 2026-11-22 04:13:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 05:13:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 05:12:00 | succeeded | 0.16 | 1 row |
+| 2026-11-22 05:11:00 | succeeded | 0.02 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-22 04:11:00 | succeeded | 0.05 | 1 row |
-| 2026-11-22 04:06:00 | succeeded | 0.05 | 1 row |
-| 2026-11-22 04:01:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 05:11:00 | succeeded | 0.02 | 1 row |
+| 2026-11-22 05:06:00 | succeeded | 0.03 | 1 row |
+| 2026-11-22 05:01:00 | succeeded | 0.07 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-22 05:03:00 | succeeded | 0.22 | 3 rows |
 | 2026-11-22 04:03:00 | succeeded | 0.25 | 3 rows |
 | 2026-11-22 03:03:00 | succeeded | 0.22 | 3 rows |
-| 2026-11-22 02:03:00 | succeeded | 0.06 | 3 rows |
