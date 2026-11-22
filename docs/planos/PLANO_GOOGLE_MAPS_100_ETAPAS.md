@@ -473,9 +473,38 @@ velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
 - **Evidência:** teste com relógio mockado
 
 ### 59 — Resolução do destinatário (D1)
-- [ ] Ordem: `pickup_contact_phone` → `supplier_contact` (se `auto_notify_supplier`) → `lalamove_stops[0].contact_phone`; normalizar E.164 (`+55…`), rejeitar máscara `****`
-- [ ] Sem destinatário válido → `notification_status='no_recipient'` + alerta interno
+- [x] Ordem: `pickup_contact_phone` → `supplier_contact` (se `auto_notify_supplier`) → `lalamove_stops[0].contact_phone`; normalizar E.164 (`+55…`), rejeitar máscara `****`
+- [x] Sem destinatário válido → `notification_status='no_recipient'` + alerta interno
 - **Evidência:** teste com 3 cenários
+
+**Executado.** Não existia normalização de telefone em nenhum ponto do repo (`grep`
+por `E.164`/`+55`/`normalizePhone` retornava vazio): o trigger gravava
+`metadata.recipients[].to` cru do cadastro e o `send-notification` repassava ao provedor —
+que recusa `(41) 99999-8888` com 400 e o alerta morria com erro opaco.
+
+`supabase/functions/_shared/phone.ts` (novo):
+- **`normalizePhone()`** devolve E.164 ou `null`. Tira não-dígitos, remove `00` de
+  operadora e `0` de discagem, aceita com/sem DDI 55, exige **10 (fixo) ou 11
+  (celular)** dígitos, **DDD entre 11 e 99**, celular com `9` após o DDD e fixo
+  começando com 2-5. **Rejeita máscara antes de limpar os dígitos** — senão `****`
+  viraria string vazia e o `null` aconteceria por acidente, não por regra.
+- **`resolveGeoRecipient()`** aplica a ordem do plano: contato da coleta →
+  fornecedor **só se `auto_notify_supplier`** → telefone da parada. Devolve também
+  `source`, para o log dizer de onde veio o número.
+- **`isDeliverablePhone()`** para os pontos que só decidem sim/não.
+
+**Integração** em `send-notification/index.ts` (bloco de destinatários ad-hoc): canal
+`whatsapp`/`sms` passa por `normalizePhone` antes do `dispatch`; número inutilizável é
+**descartado com log explícito** em vez de virar 400 do provedor. Com isso o
+`no_recipient` de `geoDeliveryStatus()` (`:42`, quando `results.length === 0`) passa a
+significar de fato "não havia telefone válido" — antes o caso podia terminar como
+`failed` genérico.
+
+**Testes:** `_shared/phone.test.ts` — **14 casos verde**: máscara, DDI, zero de
+discagem, fixo, `****`/`##`/`x`, vazio/número, contagem de dígitos, DDD inválido, `9`
+obrigatório no celular, e os 3 cenários de resolução (prioridade da coleta, fornecedor
+só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
+`deno check` mantém os **4 `TS2345` pré-existentes** de `send-notification` (baseline).
 
 ### 60 — Opt-out e dedup
 - [ ] Tabela `notification_optouts(phone PK, reason, created_at)`; checar antes de enviar
