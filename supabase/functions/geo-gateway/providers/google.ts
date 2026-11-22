@@ -231,7 +231,10 @@ export class GoogleProvider implements GeoProvider {
       units: "METRIC",
     };
     if (req.waypoints?.length) body.intermediates = req.waypoints.map(toWaypoint);
-    if (traffic) body.departureTime = new Date().toISOString();
+    // Sem departureTime: a Routes API usa "agora" por padrão com TRAFFIC_AWARE.
+    // Enviar new Date().toISOString() explicitamente foi rejeitado em produção com
+    // "Timestamp must be set to a future time" — a hora chega ao servidor do Google
+    // já no passado pelo relógio dele, mesmo tendo sido "agora" no momento do envio.
     const json = await this.call<{
       routes?: Array<{
         duration?: string; distanceMeters?: number;

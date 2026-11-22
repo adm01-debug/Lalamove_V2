@@ -156,7 +156,9 @@ Deno.test("route: computeRoutes decodifica polyline, soma legs, marca duration_t
   assertEquals(calls[0].headers["X-Goog-FieldMask"]?.includes("routes.polyline.encodedPolyline"), true);
   const body = calls[0].body as { routingPreference?: string; departureTime?: string };
   assertEquals(body.routingPreference, "TRAFFIC_AWARE");
-  assert(body.departureTime);
+  // Sem departureTime: a API rejeita "agora" em produção ("Timestamp must be set to
+  // a future time") — deixa o default dela decidir, não envia o campo.
+  assertEquals(body.departureTime, undefined);
 });
 
 Deno.test("route: traffic=false usa TRAFFIC_UNAWARE e não marca duration_traffic_s nem departureTime", async () => {
