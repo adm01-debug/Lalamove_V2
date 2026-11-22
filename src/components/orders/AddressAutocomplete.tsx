@@ -6,7 +6,7 @@ import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigat
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
-import { useAddressSearchBox, useFrequentAddresses, resolveDeliveryPoint, normalizeAddressKey, type GeoSuggestion, type FrequentAddress, type GeoAddress } from '@/hooks/useGeoSearch';
+import { useAddressSearchBox, useCustomerSearchBias, useFrequentAddresses, resolveDeliveryPoint, normalizeAddressKey, type GeoSuggestion, type FrequentAddress, type GeoAddress } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -25,6 +25,12 @@ interface AddressAutocompleteProps {
   onAddressSelected?: (address: GeoAddress) => void;
   /** Etapa 40: habilita "usar o endereço como digitado" quando a busca falha. */
   onUseTypedAddress?: (value: string) => void;
+  /**
+   * Etapa 81: telefone do cliente já escolhido no formulário. A busca usa o
+   * último pedido dele como viés, para "Rua XV de Novembro" sugerir Curitiba
+   * primeiro em vez de um homônimo de outra capital.
+   */
+  customerPhone?: string | null;
   placeholder?: string;
   className?: string;
 }
@@ -72,6 +78,7 @@ export function AddressAutocomplete({
   onCoordinatesChange,
   onAddressSelected,
   onUseTypedAddress,
+  customerPhone,
   placeholder = 'Buscar endereço...',
   className,
 }: AddressAutocompleteProps) {
@@ -85,7 +92,14 @@ export function AddressAutocomplete({
   const { data: crmData, isLoading: crmLoading } = useAddressSearch(debouncedSearch, open && debouncedSearch.length >= 2);
   
   // Mapbox Search Box (sugestões + retrieve, sessão cobrada por token)
-  const { suggestions: mapboxResults, isLoading: mapboxLoading, isError: mapboxError, error: mapboxFailure, retrieve } = useAddressSearchBox(debouncedSearch, open && debouncedSearch.length >= 3);
+  // Etapa 81: viés de localização. Sem histórico do cliente o buscador cai no
+  // comportamento global de antes (nenhum bias), não num ponto arbitrário.
+  const searchBias = useCustomerSearchBias(customerPhone);
+  const { suggestions: mapboxResults, isLoading: mapboxLoading, isError: mapboxError, error: mapboxFailure, retrieve } = useAddressSearchBox(
+    debouncedSearch,
+    open && debouncedSearch.length >= 3,
+    searchBias,
+  );
   const searchFailure = mapboxError ? geoSearchFailure(mapboxFailure) : null;
   // Etapa 41: endereços com coordenada já gravada, mostrados antes de qualquer provedor.
   const { data: frequentAddresses } = useFrequentAddresses(open);
