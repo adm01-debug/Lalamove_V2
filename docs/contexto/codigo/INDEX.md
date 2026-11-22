@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `945a0a5e15d26eaa7b3e3b0aa5e55a149b43c3b4` (2026-11-22T15:40:37-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `5672ef043aa80199748583973cca853e57e42886` (2026-11-22T15:42:39-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (547), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (548), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1061 |
-| arquivos_codigo | 660 |
-| linhas_codigo | 128928 |
+| arquivos_total | 1062 |
+| arquivos_codigo | 661 |
+| linhas_codigo | 129013 |
 | rotas | 56 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 88 |
 | migrations | 191 |
 | cron_jobs | 23 |
-| testes | 159 |
+| testes | 160 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 109 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (126), src/pages (87), src/hooks (3)
 - hooks: src/hooks (84), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (27), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (56), guards em scripts/ (47), supabase/functions/<edge> (28)
+- testes: co-localizado (__tests__) (57), guards em scripts/ (47), supabase/functions/<edge> (28)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -149,20 +149,20 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - Mais → `#more` — **SEM ROTA**
 - Relatórios → `/reports`
 - [Analytics] Dashboard SLA → `/sla`
-- [Analytics] Ferramentas Mapa → `/map-tools`
+- [Analytics] Ferramentas Mapa → `/map-tools` (papel manager)
 - [Analytics] Mapa de Calor → `/heatmap`
 - [Analytics] Métricas → `/metrics`
 - [Analytics] Métricas Entregas → `/delivery-metrics`
 - [Analytics] Relatórios Avançados → `/reports/advanced`
-- [Integrações] Base CRM → `/external-data`
-- [Integrações] Bitrix24 → `/bitrix24`
-- [Integrações] Lalamove API → `/settings/lalamove`
-- [Integrações] Provedores de Mapa → `/settings/maps`
-- [Integrações] Webhooks → `/webhooks`
+- [Integrações] Base CRM → `/external-data` (papel manager)
+- [Integrações] Bitrix24 → `/bitrix24` (papel manager)
+- [Integrações] Lalamove API → `/settings/lalamove` (papel manager)
+- [Integrações] Provedores de Mapa → `/settings/maps` (papel manager)
+- [Integrações] Webhooks → `/webhooks` (papel manager)
 - [Notificações] Alertas → `/alerts`
-- [Notificações] Config. Alertas → `/alert-configurations`
+- [Notificações] Config. Alertas → `/alert-configurations` (papel manager)
 - [Notificações] Histórico → `/notification-history`
-- [Operações] Aprovações → `/approvals`
+- [Operações] Aprovações → `/approvals` (papel manager)
 - [Operações] Avaliações → `/evaluations`
 - [Operações] Incidentes → `/incidents`
 - [Operações] Mapa ao Vivo → `/map`
@@ -256,7 +256,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Alertas (baseline.json → alertas)
 - rotas_sem_arquivo: 0
 - rotas_sem_protecao: 3 — ex.: /, /dashboard, /mfa-enroll
-- menu_visivel_sem_acesso: 15 — ex.: Ferramentas Mapa -> /map-tools (menu: todos; rota: manager), Base CRM -> /external-data (menu: todos; rota: manager), Bitrix24 -> /bitrix24 (menu: todos; rota: manager)
+- menu_visivel_sem_acesso: 7 — ex.: Alertas -> /alerts (menu: todos; rota: operator), Avaliações -> /evaluations (menu: todos; rota: operator), Incidentes -> /incidents (menu: todos; rota: operator)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
 - edges_orfas: 4 — ex.: apply-fixes, external-db-bridge, rotate-tokens
@@ -275,15 +275,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8716 nós · 18216 arestas · 653 comunidades · grafo do commit `945a0a5e`
-- comunidades maiores: cn (261), lucide-react (165), react (138), button.tsx (125), App.tsx (123), snapshot.py (100), ref_https (95), ref_node_fs (89), dependencies (80), geo-gateway/index.ts (78), gerar.mjs (76), seed-database.ts (67)
+- 8719 nós · 18220 arestas · 637 comunidades · grafo do commit `5672ef04`
+- comunidades maiores: cn (223), react (153), App.tsx (139), lucide-react (122), DashboardRedesigned.tsx (108), ref_node_fs (96), dependencies (80), ref_https (79), gerar.mjs (76), package.json (74), generate.py (73), AlertsPage.tsx (69)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (39)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (20)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (21)
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
 - docs/MAPBOX.md (12)
@@ -378,6 +378,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `5672ef0` feat: menu alinhado às rotas (item 49) (#306)
 - 2026-11-22 `945a0a5` feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)
 - 2026-11-22 `a7e7d11` feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)
 - 2026-11-22 `62a5161` feat: hierarquia de papeis numa unica fonte (item 48) (#303)
@@ -392,7 +393,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `ca2061f` feat: campos de token como password e sem autofill (#294)
 - 2026-11-22 `a388d1d` fix: validar origem do postMessage do Bitrix24 (#293)
 - 2026-11-22 `ba39240` fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)
-- 2026-11-22 `79fecdf` chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

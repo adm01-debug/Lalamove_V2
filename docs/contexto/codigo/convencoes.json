@@ -21,7 +21,7 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (56)",
+   "co-localizado (__tests__) (57)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (28)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: menu alinhado às rotas (item 49) (#306)",
    "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)",
    "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)",
    "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
-   "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)",
-   "feat: desligar auto-cadastro no front (item 9) (#300)"
+   "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

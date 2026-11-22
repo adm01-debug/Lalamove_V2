@@ -3878,11 +3878,13 @@
    "destino": "/map-tools",
    "grupo": "Analytics",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/MapToolsPage.tsx"
   },
   {
@@ -3938,11 +3940,13 @@
    "destino": "/external-data",
    "grupo": "Integrações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/ExternalDataPage.tsx"
   },
   {
@@ -3950,11 +3954,13 @@
    "destino": "/bitrix24",
    "grupo": "Integrações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/Bitrix24Page.tsx"
   },
   {
@@ -3962,11 +3968,13 @@
    "destino": "/settings/lalamove",
    "grupo": "Integrações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/LalamoveSettingsPage.tsx"
   },
   {
@@ -3974,11 +3982,13 @@
    "destino": "/settings/maps",
    "grupo": "Integrações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/MapsSettingsPage.tsx"
   },
   {
@@ -3986,11 +3996,13 @@
    "destino": "/webhooks",
    "grupo": "Integrações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/WebhooksPage.tsx"
   },
   {
@@ -4010,11 +4022,13 @@
    "destino": "/alert-configurations",
    "grupo": "Notificações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/AlertConfigurationsPage.tsx"
   },
   {
@@ -4034,11 +4048,13 @@
    "destino": "/approvals",
    "grupo": "Operações",
    "papel_do_grupo": null,
-   "papeis": [],
+   "papeis": [
+    "manager"
+   ],
    "papeis_nao_resolvidos": null,
    "badge": "approvals",
    "definido_em": "src/components/layout/sidebar-config.ts",
-   "papel_efetivo": null,
+   "papel_efetivo": "manager",
    "resolve_para": "src/pages/ApprovalsPage.tsx"
   },
   {

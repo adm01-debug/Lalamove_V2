@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "945a0a5e15d26eaa7b3e3b0aa5e55a149b43c3b4",
+  "commit": "5672ef043aa80199748583973cca853e57e42886",
   "branch": "main",
-  "data_commit": "2026-11-22T15:40:37-03:00",
+  "data_commit": "2026-11-22T15:42:39-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5672ef0",
+    "data": "2026-11-22",
+    "assunto": "feat: menu alinhado às rotas (item 49) (#306)"
+   },
    {
     "sha": "945a0a5",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "d6f59de",
     "data": "2026-11-22",
     "assunto": "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)"
-   },
-   {
-    "sha": "4ee7ef0",
-    "data": "2026-11-22",
-    "assunto": "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)"
    }
   ],
-  "arquivos_mudados_7d": 361,
+  "arquivos_mudados_7d": 362,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 207
+    "commits": 208
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1061,
-  "arquivos_codigo": 660,
-  "linhas_codigo": 128928,
+  "arquivos_total": 1062,
+  "arquivos_codigo": 661,
+  "linhas_codigo": 129013,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 159,
+  "testes": 160,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 46,
-   "linhas": 4046
+   "arquivos": 47,
+   "linhas": 4131
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -723,15 +723,7 @@
    "/mfa-enroll"
   ],
   "menu_visivel_sem_acesso": [
-   "Ferramentas Mapa -> /map-tools (menu: todos; rota: manager)",
-   "Base CRM -> /external-data (menu: todos; rota: manager)",
-   "Bitrix24 -> /bitrix24 (menu: todos; rota: manager)",
-   "Lalamove API -> /settings/lalamove (menu: todos; rota: manager)",
-   "Provedores de Mapa -> /settings/maps (menu: todos; rota: manager)",
-   "Webhooks -> /webhooks (menu: todos; rota: manager)",
    "Alertas -> /alerts (menu: todos; rota: operator)",
-   "Config. Alertas -> /alert-configurations (menu: todos; rota: manager)",
-   "Aprovações -> /approvals (menu: todos; rota: manager)",
    "Avaliações -> /evaluations (menu: todos; rota: operator)",
    "Incidentes -> /incidents (menu: todos; rota: operator)",
    "Contatos -> /contacts (menu: todos; rota: operator)",

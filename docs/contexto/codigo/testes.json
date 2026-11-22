@@ -14,18 +14,18 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 159,
+ "total": 160,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 26,
   "guard (node --test)": 34,
-  "unit (vitest)": 81
+  "unit (vitest)": 82
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 56
+   "arquivos": 57
   },
   {
    "padrao": "guards em scripts/",
@@ -1043,6 +1043,13 @@
     "src/lib/roles.ts"
    ],
    "casos": 10
+  },
+  {
+   "arquivo": "src/lib/__tests__/sidebarRoutes.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 85,
+   "testa": [],
+   "casos": 2
   },
   {
    "arquivo": "src/lib/__tests__/statusPalette.test.ts",
