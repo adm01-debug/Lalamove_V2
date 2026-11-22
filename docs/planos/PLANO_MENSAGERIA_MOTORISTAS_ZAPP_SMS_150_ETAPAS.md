@@ -431,7 +431,7 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 
 ### 74 — [L] Máquina de estados
 - [~] `queued → sent → delivered → read`; `failed`, `uncertain`, `expired`, `suppressed` terminais; transição inválida rejeitada por função
-- **Evidência:** `notification_status_transition_allowed(from,to)` na mesma migration é `IMMUTABLE` e testável sem tabela: `('sent','delivered')` → true, `('read','sent')` → false. **Falta:** merge/aplicação da migration.
+- **Evidência:** `notification_status_transition_allowed(from,to)` na mesma migration é `IMMUTABLE` e testável sem tabela: `('sent','delivered')` → true, `('read','sent')` → false. Implementação em `nextStatus()` de `zapp-callback/payload.ts` (teste `nextStatus nao ressuscita mensagem falhada`). **Falta:** merge/aplicação da migration e o teste SQL em Postgres descartável.
 
 ### 75 — [L] `messaging_settings` (linha única) 🔒
 - [ ] `whatsapp_provider (zapp|evolution|off)`, `sms_provider`, `sms_fallback_after_min`, `monthly_budget_cents`, `quiet_hours_by_role jsonb`, `pilot_mode`, `shadow_mode`
@@ -524,9 +524,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `_shared/messaging/router.ts` (`DRIVER_RATE_LIMIT`, `isRateLimited`, `RATE_LIMIT_EXEMPT_EVENTS`); ligado no despacho em `send-notification/index.ts` (`isDriverRateLimited`, conta `alerts_sent` por telefone normalizado — a tabela não tem `driver_id`); 5 testes em `router.test.ts`
 
 ### 96 — [L] Edge `zapp-callback`
-- [ ] Verifica HMAC e janela anti-replay; atualiza ledger (status/sequência); grava inbound; responde 2xx rápido
-- [ ] Rota de leitura para o cartão do Zapp (etapa 67), autenticada pela mesma chave
-- **Evidência:** callback assinado → 200; assinatura errada → 401
+- [x] Verifica HMAC e janela anti-replay; atualiza ledger (status/sequência); grava inbound; responde 2xx rápido
+- [x] Rota de leitura para o cartão do Zapp (etapa 67), autenticada pela mesma chave
+- **Evidência:** `supabase/functions/zapp-callback/` — `security.ts` (HMAC `${t}.${corpoCru}`, janela 5 min simétrica, fail-closed sem `ZAPP_CALLBACK_SECRET`), `payload.ts` (3 eventos, tabela código→ação da etapa 14, `nextStatus` que não regride), `ledger.ts` (status/inbound/outbound_manual com idempotência). 42 testes verdes; `deno check` limpo; `GET ?order_id=` autenticado pela mesma chave.
 
 ### 97 — [L] Compatibilidade com `alerts_sent`
 - [x] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
