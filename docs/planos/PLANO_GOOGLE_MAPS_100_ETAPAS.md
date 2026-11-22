@@ -671,9 +671,22 @@ padrão, ausência da chave `bias` sem região, resolução por `customer_phone`
 `limit(1)`, telefone vazio sem request). Arquivo **15/15 verde**; `tsc -p
 tsconfig.app.json` limpo.
 
-### 82 — Acessibilidade e i18n
-- [ ] Strings novas em `src/i18n/locales/{pt-BR,en,es}`; componentes com `aria-label`
-- **Evidência:** lint i18n verde
+### 82 — Acessibilidade e i18n ✅
+- [x] Strings novas em `src/i18n/locales/{pt-BR,en,es}`; componentes com `aria-label`
+- **Evidência:** lint i18n verde — `node scripts/ci/check-i18n-parity.mjs` → `3 locales em paridade (232 chaves cada)`; `node scripts/ci/a11y-button-name-ratchet.mjs` → `82` (baseline `82`)
+
+**Executado.** O bloco de mapas era o ponto cego de a11y do sistema: `node scripts/ci/a11y-button-name-ratchet.mjs` media **92** violações contra baseline **89** (`exit 1`), e **10** delas eram de `src/components/map/` — `LiveMap.tsx:450,459,467,476,485,494`, `MapHUD.tsx:99,110,121`, `MapHistoryPanel.tsx:143`. Nenhum componente do diretório importava `useTranslation` (`grep -rn "useTranslation" src/components/map` → vazio), então todo rótulo do mapa era string fixa em PT-BR.
+
+- **Chaves novas** — 13 em `map.actions` (`settings`, `styleDark`, `styleSatellite`, `traffic`, `followDriver`, `focusDriver`, `streetView`, `whatsapp`, `criticalAlert`, `closeHistory`, `clearSearch`, `centerOnTarget`, `nearStop`), as mesmas nos três locales.
+- **`aria-label` + `aria-pressed`** — `LiveMap` (6 toggles), `MapHUD` (Street View, WhatsApp, alerta crítico), `MapHistoryPanel` (fechar), `MapSearchPanel` (limpar busca, centralizar — eram strings PT fixas inline).
+- **`aria-pressed`** só nos controles que são de fato alternância de estado (`showSettings`, `mapStyle`, `showTraffic`, `isFollowing`, `focusMode`). Botão de ação (WhatsApp, alerta) não recebe — leitor de tela anunciaria um toggle que não existe.
+- **`title={t('map.actions.nearStop')}`** em `MapHUD` substituiu um `title` com texto sem acento — o valor passou a vir do locale.
+- **`scripts/ci/check-i18n-parity.mjs`** (novo) — é o "lint i18n" que o plano pede e o repo não tinha. Compara as chaves dos três locales e falha em: chave faltando, chave sobrando, valor vazio e placeholder divergente (`{{count}}` vs `{{total}}`). O verificador existe porque `fallbackLng: 'pt-BR'` (`src/i18n/index.ts`) faz a chave ausente cair silenciosamente no português — a tela "funciona" no idioma errado, e é exatamente esse o risco quando se adiciona `aria-label` traduzido.
+- **`npm run lint:i18n`** e **`npm run lint:a11y`** no `package.json`; baseline do ratchet **89 → 82**.
+
+**Verificado:** `npx tsc --noEmit -p tsconfig.app.json` → exit 0; `npx vitest run src/components/map src/i18n` → 11 arquivos, **68/68**; `node --test scripts/ci/check-i18n-parity.unit.mjs` → **11/11**; `npx eslint src/components/map` → **0 erros**. `src/components/map/__tests__/mapA11yNames.test.tsx` (novo, 6 testes) troca para `en` e exige `getByRole('button', { name: 'Close driver history' })` — prova que o nome acessível acompanha o idioma, não só que o atributo existe.
+
+**Ressalvas honestas.** O ratchet continua **fora do CI** (`grep -rn a11y .github/workflows` → vazio); ligá-lo é mudança de workflow e fica para a etapa que trata de CI (regra 8). E restam **82** violações fora de `src/components/map/`, herdadas — não entram nesta etapa.
 
 ### 83 — Remover `mapbox-proxy` e `get-mapbox-token` redundantes
 - [ ] Após `useMapbox.ts` migrar para `useGeo.ts`: apagar `mapbox-proxy` (token Mapbox continua via `get-mapbox-token` só para tiles)
