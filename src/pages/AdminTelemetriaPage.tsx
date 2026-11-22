@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -43,6 +44,8 @@ export default function AdminTelemetriaPage() {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("24h");
   const [customDateFrom, setCustomDateFrom] = useState<Date | undefined>();
   const [customDateTo, setCustomDateTo] = useState<Date | undefined>();
+  const [cleanupOpen, setCleanupOpen] = useState(false);
+  const [isCleaning, setIsCleaning] = useState(false);
 
   const getTimeThreshold = (): { from: string; to: string } => {
     const now = new Date();
@@ -80,10 +83,13 @@ export default function AdminTelemetriaPage() {
 
       const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/query_telemetry?${params}`;
       const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error("Sessão não autenticada");
+      }
       const res = await fetch(url, {
         headers: {
           'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${session.access_token}`,
         },
       });
       if (!res.ok) throw new Error(`Telemetry fetch failed: ${res.status}`);
@@ -94,21 +100,34 @@ export default function AdminTelemetriaPage() {
   });
 
   const handleCleanup = async () => {
-    const threshold = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const { data: { session } } = await supabase.auth.getSession();
-    const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/query_telemetry?created_at=lt.${threshold}`;
-    const res = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-        'Authorization': `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-      },
-    });
-    if (!res.ok) {
+    if (!session?.access_token) {
+      toast.error("Sessão não autenticada");
+      setCleanupOpen(false);
+      return;
+    }
+    setIsCleaning(true);
+    try {
+      const threshold = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/query_telemetry?created_at=lt.${threshold}`;
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+      if (!res.ok) {
+        toast.error("Erro ao limpar dados antigos");
+      } else {
+        toast.success("Dados com mais de 7 dias removidos");
+        refetch();
+      }
+    } catch {
       toast.error("Erro ao limpar dados antigos");
-    } else {
-      toast.success("Dados com mais de 7 dias removidos");
-      refetch();
+    } finally {
+      setIsCleaning(false);
+      setCleanupOpen(false);
     }
   };
 
@@ -255,7 +274,7 @@ export default function AdminTelemetriaPage() {
             <FileText className="h-3.5 w-3.5 mr-1.5" />
             PDF
           </Button>
-          <Button variant="outline" size="sm" onClick={handleCleanup}>
+          <Button variant="outline" size="sm" onClick={() => setCleanupOpen(true)} disabled={isCleaning}>
             <Trash2 className="h-3.5 w-3.5 mr-1.5" />
             Limpar +7d
           </Button>
@@ -493,6 +512,28 @@ export default function AdminTelemetriaPage() {
           )}
         </CardContent>
       </Card>
+
+      <AlertDialog open={cleanupOpen} onOpenChange={setCleanupOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Limpar telemetria antiga</AlertDialogTitle>
+            <AlertDialogDescription>
+              Isso apaga todos os registros de telemetria com mais de 7 dias. Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isCleaning}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleCleanup}
+              disabled={isCleaning}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isCleaning && <RefreshCw className="w-4 h-4 mr-2 animate-spin" />}
+              Apagar +7d
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
