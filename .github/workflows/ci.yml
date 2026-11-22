@@ -183,6 +183,44 @@ jobs:
           PGPASSWORD: postgres
         run: psql -h localhost -U postgres -d geotest -v ON_ERROR_STOP=1 -f supabase/tests/geo_functions.test.sql
 
+  geo-trigger-sql-tests:
+    name: Geo trigger SQL tests
+    runs-on: ubuntu-24.04
+    needs: lint-and-typecheck
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: geotest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Create the schema the geo trigger depends on
+        env:
+          PGPASSWORD: postgres
+        run: |
+          # O trigger geo_evaluate_tracking toca lalamove_orders, active_tracking,
+          # alerts e job_queue, então precisa de um schema mínimo antes das
+          # funções da migration. Etapa 64 do plano Google Maps.
+          MIG=supabase/migrations/20261122130100_geo_foundation.sql
+          psql -h localhost -U postgres -d geotest -q -v ON_ERROR_STOP=1 \
+            -f supabase/tests/fixtures/geo_trigger_schema.sql
+          for range in 277,341 347,387 389,533; do
+            sed -n "${range}p" "$MIG" \
+              | psql -h localhost -U postgres -d geotest -q -v ON_ERROR_STOP=1
+          done
+      - name: Run geo trigger behaviour asserts
+        env:
+          PGPASSWORD: postgres
+        run: psql -h localhost -U postgres -d geotest -v ON_ERROR_STOP=1 -f supabase/tests/geo_trigger.test.sql
+
   deploy:
     needs: build
     runs-on: ubuntu-24.04
