@@ -216,7 +216,7 @@ export function createDriverMarkerElement(tracking: TrackingData, isSelected: bo
         <!-- Label with Status Indicator -->
         ${isCompact ? '' : `<div class="marker-label-container" style="margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:2px;">
           <div class="marker-label" style="background:rgba(15,23,42,0.9);backdrop-filter:blur(8px);color:white;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.15);transition:all 0.3s ease;">
-            ${tracking.driver?.name?.split(' ')[0].toUpperCase() || 'DRIVER'}
+            ${escapeHtml((tracking.driver?.name?.split(' ')[0] || 'DRIVER').toUpperCase())}
           </div>
           ${tracking.is_stopped ? `
             <div style="font-size:9px;color:${statusHsl('attention')};font-weight:900;background:${statusHsl('attention',0.1)};padding:1px 6px;border-radius:4px;border:1px solid ${statusHsl('attention',0.2)};"><span aria-hidden="true">${statusGlyph('attention')}</span> PARADO</div>
@@ -240,7 +240,7 @@ export function createPickupMarkerElement(tracking: TrackingData): HTMLDivElemen
       <div style="width:36px;height:36px;background:linear-gradient(135deg,${statusHsl('operational')},${statusHsl('operational',0.85)});border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px ${statusHsl('operational',0.4)};border:2px solid white;">
         <span style="transform:rotate(45deg);font-size:16px;">📦</span>
       </div>
-      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('operational')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
+      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('operational')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${escapeHtml(locationName)}</div>
     </div>`;
   return el;
 }
@@ -257,7 +257,7 @@ export function createDeliveryMarkerElement(tracking: TrackingData): HTMLDivElem
       <div style="width:36px;height:36px;background:linear-gradient(135deg,${statusHsl('critical')},${statusHsl('critical',0.85)});border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px ${statusHsl('critical',0.4)};border:2px solid white;">
         <span style="transform:rotate(45deg);font-size:16px;">📍</span>
       </div>
-      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('critical')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${locationName}</div>
+      <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:${statusHsl('critical')};color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,0.2);">${escapeHtml(locationName)}</div>
     </div>`;
   return el;
 }
@@ -292,28 +292,29 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
   if (tracking.is_stopped) { statusText = 'Parado'; statusColor = statusHsl('attention'); }
   else if (!tracking.is_on_route) { statusText = 'Fora da rota'; statusColor = statusHsl('critical'); }
 
-  return new mapboxgl.Popup({ offset: 30, closeButton: true, className: 'custom-popup' }).setHTML(`
+  const popup = new mapboxgl.Popup({ offset: 30, closeButton: true, className: 'custom-popup' });
+  popup.setHTML(`
     <div style="background:linear-gradient(145deg,#1a1a2e,#16162a);color:white;padding:16px;border-radius:12px;min-width:280px;font-family:system-ui;box-shadow:0 8px 32px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1);">
         <div style="width:44px;height:44px;background:${vehicleColors[vehicleType] || '#00d9ff'};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;">${vehicleIcons[vehicleType] || '🚗'}</div>
         <div>
-          <div style="font-weight:700;font-size:16px;margin-bottom:2px;">${driverName}</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:2px;">${escapeHtml(driverName)}</div>
           <div style="font-size:11px;color:${statusColor};font-weight:600;">● ${statusText}</div>
         </div>
       </div>
       <div style="margin-bottom:12px;">
         <div style="font-size:11px;color:#888;margin-bottom:4px;">PEDIDO</div>
-        <div style="font-size:13px;font-weight:600;font-family:monospace;">${orderId}</div>
-        <div style="font-size:12px;color:#aaa;margin-top:2px;">Cliente: ${customerName}</div>
+        <div style="font-size:13px;font-weight:600;font-family:monospace;">${escapeHtml(String(orderId))}</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px;">Cliente: ${escapeHtml(customerName)}</div>
       </div>
       <div style="margin-bottom:12px;">
         <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
           <span style="font-size:14px;">📦</span>
-          <div><div style="font-size:10px;color:${statusHsl('operational')};font-weight:600;">COLETA</div><div style="font-size:12px;color:#ddd;">${pickupAddress}</div></div>
+          <div><div style="font-size:10px;color:${statusHsl('operational')};font-weight:600;">COLETA</div><div style="font-size:12px;color:#ddd;">${escapeHtml(pickupAddress)}</div></div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:8px;">
           <span style="font-size:14px;">📍</span>
-          <div><div style="font-size:10px;color:${statusHsl('critical')};font-weight:600;">ENTREGA</div><div style="font-size:12px;color:#ddd;">${deliveryAddress}</div></div>
+          <div><div style="font-size:10px;color:${statusHsl('critical')};font-weight:600;">ENTREGA</div><div style="font-size:12px;color:#ddd;">${escapeHtml(deliveryAddress)}</div></div>
         </div>
       </div>
       <div style="display:flex;gap:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
@@ -321,10 +322,28 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
         <div><div style="font-size:10px;color:#888;">ETA</div><div style="font-size:14px;font-weight:700;color:${statusHsl('info')};">${eta}</div></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px;">
-        <button onclick="window.dispatchEvent(new CustomEvent('show-driver-history',{detail:{driverId:'${tracking.driver_id}',orderId:'${tracking.order_id}',driverName:'${driverName}'}}))" style="flex:1;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📍 Trajeto</button>
-        <button onclick="window.open('https://www.google.com/maps/search/?api=1&query=${tracking.current_latitude},${tracking.current_longitude}', '_blank')" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🌐 Google</button>
+        <button type="button" data-action="show-driver-history" data-driver-id="${escapeHtml(String(tracking.driver_id))}" data-order-id="${escapeHtml(String(tracking.order_id))}" data-driver-name="${escapeHtml(driverName)}" style="flex:1;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📍 Trajeto</button>
+        <button type="button" data-action="open-google-maps" data-lat="${tracking.current_latitude}" data-lng="${tracking.current_longitude}" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">🌐 Google</button>
       </div>
 
     </div>
   `);
+
+  // Substitui o antigo `onclick` inline (que interpolava `driverName` numa string JS,
+  // permitindo injeção de código) por listeners que leem os dados de atributos `data-*`.
+  const root = popup.getElement();
+  const historyBtn = root.querySelector<HTMLButtonElement>('[data-action="show-driver-history"]');
+  historyBtn?.addEventListener('click', () => {
+    const { driverId, orderId, driverName: name } = historyBtn.dataset;
+    window.dispatchEvent(new CustomEvent('show-driver-history', {
+      detail: { driverId, orderId, driverName: name },
+    }));
+  });
+  const mapsBtn = root.querySelector<HTMLButtonElement>('[data-action="open-google-maps"]');
+  mapsBtn?.addEventListener('click', () => {
+    const { lat, lng } = mapsBtn.dataset;
+    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+  });
+
+  return popup;
 }
