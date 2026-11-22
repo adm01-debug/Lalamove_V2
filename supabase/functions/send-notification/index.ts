@@ -213,6 +213,19 @@ serve(async (req) => {
       logger.log(`[Notification] No active configurations for: ${type}`);
       const successCount = results.filter(r => r.success).length;
       const failCount = results.filter(r => !r.success).length;
+      // Sem linha ativa em alert_configurations o alerta não sai por canal nenhum.
+      // Antes isso retornava success:true sem deixar rastro e o alerta morria em
+      // silêncio em `alerts` (foi o caso de 1.306 INTEGRATION_FAILURE sem entrega).
+      if (successCount === 0) {
+        await recordNotificationLog(
+          supabase,
+          alert_id,
+          'none',
+          '',
+          false,
+          `Sem canal de notificação ativo em alert_configurations para ${type}`,
+        );
+      }
       await recordGeoEventStatus(supabase, metadata, geoDeliveryStatus(results));
       return new Response(
         JSON.stringify({ success: true, message: 'No notification channels configured', results, summary: { sent: successCount, failed: failCount } }),
@@ -316,6 +329,20 @@ serve(async (req) => {
 
     const successCount = results.filter(r => r.success).length;
     const failCount = results.filter(r => !r.success).length;
+
+    // Configuração ativa, porém nenhum canal com destinatário (ex.: notify_whatsapp
+    // ligado e whatsapp_numbers vazio, e-mail/slack/n8n desligados): nada foi
+    // enviado. Registra o motivo em alerts_sent para o alerta não sumir sem rastro.
+    if (successCount === 0 && failCount === 0) {
+      await recordNotificationLog(
+        supabase,
+        alert_id,
+        'none',
+        '',
+        false,
+        `Configuração ativa para ${type} sem canal com destinatário — nada foi enviado`,
+      );
+    }
 
     // Mark the alert as escalated so the escalation worker does not re-process it.
     if (isEscalation) {
