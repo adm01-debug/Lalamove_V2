@@ -564,6 +564,390 @@ const llmWhV1 = z
   .passthrough();
 const llmWhV2 = llmWhV1;
 
+// ── job-worker ───────────────────────────────────────────────────────────────
+// Envelope montado por process_job_queue() (pg_cron, 1 min) a partir de job_queue:
+// { jobId, type, payload, metadata } — migration 20261123160000_job_queue_processing_log.sql:111-125.
+//
+// Por que o contrato valida SÓ o envelope e não o shape por tipo:
+// `mark_job_processing` não incrementa `attempts` (20261122120200_job_queue_system.sql:105-111) e o
+// requeue de PROCESSING>10min só marca FAILED quando `attempts >= max_attempts`
+// (20261123160000_job_queue_processing_log.sql:87-96). Logo um 422 devolvido ANTES de processJob()
+// nunca passa por `mark_job_failed` (job-worker/index.ts:1116, só alcançado pelo catch de processJob)
+// e deixa o job em loop PROCESSING→PENDING→PROCESSING para sempre. Toda regra de negócio
+// (pod_fetch exige orderId — index.ts:215; geo_backfill exige addresses[] — index.ts:276; tipo
+// desconhecido — index.ts:1078) tem de continuar sendo `throw` DENTRO de processJob, que grava
+// error_message e termina em FAILED após max_attempts.
+// Os 12 tipos aceitos ficam no CHECK job_queue_type_check (20261122130100_geo_foundation.sql:270-272)
+// e no switch de index.ts:1027-1079: webhook, notification, evaluation, bitrix_sync, email, whatsapp,
+// slack, lalamove_sync, pod_fetch, geo_backfill, route_plan, eta_refresh.
+
+// `job_queue.payload` é jsonb NOT NULL sem checagem de tipo (20261122120200:20); o handler só exige
+// a chave presente (index.ts:1158). Qualquer valor JSON é aceito: um payload absurdo falha dentro de
+// processJob (→ mark_job_failed → FAILED), nunca em 422.
+const jobWorkerPayload = z.union(
+  [
+    z.object({}).passthrough(),
+    z.array(z.unknown()),
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+  ],
+  // o invalid_union do zod viraria "Invalid input" no 422; a fila precisa do motivo legível.
+  { errorMap: () => ({ message: "payload é obrigatório (qualquer valor JSON)" }) },
+);
+
+const jobWorkerV1 = z
+  .object({
+    // uuid de job_queue.id: exigido pelas rpc mark_job_completed/mark_job_failed (p_job_id uuid),
+    // não pelo contrato — `.uuid()` aqui recusaria enfileiramento manual de teste.
+    jobId: z.string().min(1, "jobId é obrigatório"),
+    // Discriminador do switch; mantido aberto de propósito (ver nota acima).
+    type: z.string().min(1, "type é obrigatório"),
+    payload: jobWorkerPayload,
+    // jsonb NOT NULL DEFAULT '{}' no banco; a edge nunca lê (única menção: index.ts:28).
+    metadata: z.unknown().optional(),
+  })
+  .passthrough(); // o dispatcher legado manda `attempts` (20251226000003_create_job_queue.sql:272-284)
+const jobWorkerV2 = jobWorkerV1; // envelope fixado por process_job_queue() no banco
+
+// ── lalamove-uapi ────────────────────────────────────────────────────────────
+//
+// Discriminador: `action` — a edge resolve `url.searchParams.get('action') ||
+// rawBody.action` (index.ts:493) e remove `action` do corpo (index.ts:495)
+// ANTES de validar; o input validado é `{ action, ...body }`.
+//
+// Fidelidade ao handler (index.ts:491-792, lido em 2026-11-22):
+//  - ids da UAPI (`order_uuid`, `last_id`) aceitam string OU número: o guard é
+//    falsy (`!body.order_uuid` em :589/:599/:613/:623/:676/:700) e o valor vem
+//    cru da resposta do portal (useLalamoveUapi.ts:102 → :95). Sem amostra de
+//    `order_list_new` no repo, o tipo do portal é NÃO VERIFICADO — a união
+//    evita 422 em payload que hoje funciona.
+//  - paginação sem `.positive()`/`.int()`: o handler trata 0 como "use o
+//    default" (`|| 20`, `|| 50`, `|| 10` em :229/:273-274/:288-289/:398-399) e
+//    repassa float sem inspecionar.
+//  - `rating` só precisa não ser `undefined` (:676), logo aceita null/string.
+//  - `fleet_type_code` é declarado porque `{ fleet_type_code: N, ...body }`
+//    (:647/:651) deixa o corpo sobrescrever o tipo de frota.
+//  - `search-orders` repassa o corpo inteiro para `order_search` (:609 → :258),
+//    sem ler campo algum → só discriminador + passthrough.
+//  - `favorite-driver`/`block-driver`: o handler exige `body.action` (:655/:661,
+//    :665/:671), campo que :495 SEMPRE remove do corpo — o guard é inalcançável
+//    e as duas ações devolvem 400 em qualquer payload. `driver_action` é o campo
+//    do contrato futuro e fica OPCIONAL: torná-lo obrigatório só é fiel no mesmo
+//    PR que editar index.ts:655/:661/:665/:671 e useLalamoveUapi.ts:267-271.
+//  - ramos 'add'/'remove'/'block'/'unblock': é o que o front envia HOJE, porque
+//    o spread de useLalamoveUapi.ts:39 (`{ action, ...body }`) sobrescreve o
+//    nome da ação. Aceitar aqui mantém o 400 'Invalid action' atual (:762) em
+//    vez de trocá-lo por 422. Remover junto com o fix do hook.
+const uapiId = z.union(
+  [z.string().min(1, "order_uuid é obrigatório"), z.number()],
+  { errorMap: () => ({ message: "order_uuid é obrigatório" }) },
+);
+const uapiCursor = z.union([z.string(), z.number()]).optional();
+const uapiFid = z.string().min(1, "driver_fid é obrigatório");
+const uapiPage = {
+  page_no: z.number().optional(),
+  page_size: z.number().optional(),
+};
+
+const lalamoveUapiV1 = z.discriminatedUnion("action", [
+  // ── sessão (exigem role admin no handler, :500/:544) ──
+  z.object({
+    action: z.literal("set-token"),
+    access_token: z.string().min(1, "access_token é obrigatório"),
+    refresh_token: z.string().min(1, "refresh_token é obrigatório"),
+    // colunas: user_fid text, ep_role integer, city_id integer
+    // (20260315165451_...sql:7-9); o handler usa `||` (:520-522) e CITY_ID é
+    // string (:13), então "21001" e 123456 funcionam hoje.
+    user_fid: z.union([z.string(), z.number()]).optional().nullable(),
+    ep_role: z.coerce.number().int().optional(),
+    city_id: z.coerce.number().int().optional(),
+  }),
+  z.object({ action: z.literal("token-status") }),
+  z.object({ action: z.literal("refresh-token") }),
+  // ── pedidos ──
+  z.object({
+    action: z.literal("list-orders"),
+    limit: z.number().optional(),
+    last_id: uapiCursor,
+    order_statuses: z.array(z.number()).optional(),
+  }),
+  z.object({ action: z.literal("order-detail"), order_uuid: uapiId }),
+  z.object({ action: z.literal("order-status"), order_uuid: uapiId }),
+  z.object({ action: z.literal("search-orders") }).passthrough(),
+  z.object({
+    action: z.literal("cancel-order"),
+    order_uuid: uapiId,
+    reason: z.string().optional(),
+    reason_id: z.number().optional(),
+  }),
+  z.object({ action: z.literal("cancel-eligibility"), order_uuid: uapiId }),
+  z.object({ action: z.literal("last-order") }),
+  // ── carteira ──
+  z.object({ action: z.literal("wallet-balance") }),
+  z.object({
+    action: z.literal("wallet-transactions"),
+    start_time: z.string().optional(),
+    end_time: z.string().optional(),
+    ...uapiPage,
+  }),
+  // ── frota ──
+  z.object({
+    action: z.literal("fleet-favorites"),
+    search: z.string().optional(),
+    fleet_type_code: z.number().optional(),
+    ...uapiPage,
+  }),
+  z.object({
+    action: z.literal("fleet-blocked"),
+    search: z.string().optional(),
+    fleet_type_code: z.number().optional(),
+    ...uapiPage,
+  }),
+  z.object({
+    action: z.literal("favorite-driver"),
+    driver_fid: uapiFid,
+    driver_action: z.string().min(1).optional(),
+  }).passthrough(),
+  z.object({
+    action: z.literal("block-driver"),
+    driver_fid: uapiFid,
+    driver_action: z.string().min(1).optional(),
+  }).passthrough(),
+  // ramos de compatibilidade com o bug de useLalamoveUapi.ts:39 (hoje → 400)
+  z.object({ action: z.literal("add") }).passthrough(),
+  z.object({ action: z.literal("remove") }).passthrough(),
+  z.object({ action: z.literal("block") }).passthrough(),
+  z.object({ action: z.literal("unblock") }).passthrough(),
+  z.object({
+    action: z.literal("rate-driver"),
+    order_uuid: uapiId,
+    driver_fid: uapiFid,
+    // :676 só rejeita `undefined`; null/string chegam crus à UAPI (:313)
+    rating: z.union([z.number(), z.string(), z.null()]),
+    comment_ids: z.array(z.number()).optional(),
+    custom_comment: z.string().optional(),
+  }),
+  // ── conta ──
+  z.object({ action: z.literal("user-info") }),
+  z.object({ action: z.literal("corporate-info") }),
+  z.object({ action: z.literal("city-info") }),
+  // ── recibos / cupons ──
+  z.object({ action: z.literal("download-receipt"), order_uuid: uapiId }),
+  z.object({
+    action: z.literal("coupons"),
+    search: z.array(z.string()).optional(),
+    ...uapiPage,
+  }),
+  z.object({ action: z.literal("exchange-coupon"), code: z.string().min(1, "code é obrigatório") }),
+  // ── importação em massa ──
+  z.object({
+    action: z.literal("bulk-import"),
+    maxPages: z.number().optional(),
+    pageSize: z.number().optional(),
+  }),
+]);
+const lalamoveUapiV2 = lalamoveUapiV1; // sem evolução: v2 === v1
+
+// ── lalamove-api ─────────────────────────────────────────────────────────────
+// ATENÇÃO: este contrato é validado sobre o input MESCLADO (query + corpo), não
+// sobre o corpo cru. Todo o tráfego vindo da lalamove-gateway é GET sem corpo,
+// com `action` e ids só na query (lalamove-gateway/index.ts:295,306,322). Sem o
+// merge do passo 4 das notas de integração, 100% desse tráfego vira 422.
+
+const lalamoveApiE164 = /^\+[1-9]\d{7,14}$/;
+const lalamoveApiAmount = z.union([z.string().min(1), z.number()]);
+
+const lalamoveApiV1 = z
+  .discriminatedUnion("action", [
+    // Corpo ignorado pelo handler (index.ts:678-680, :1146-1149) → passthrough,
+    // mesma convenção de cronWorkerBody (schemas.ts:283-288).
+    z.object({ action: z.literal("cities") }).passthrough(),
+    z.object({ action: z.literal("sync") }).passthrough(),
+
+    // POST /v3/quotations — o case NÃO valida forma: o comentário em
+    // index.ts:682-684 delega a validação à Lalamove (422 com o campo exato).
+    // serviceType/stops ficam opcionais para não transformar erro upstream em 422 local.
+    z.object({
+      action: z.literal("quotation"),
+      serviceType: z.string().min(1, "serviceType é obrigatório").optional(),
+      language: z.string().optional(),
+      scheduleAt: z.string().optional(),
+      isRouteOptimized: z.boolean().optional(),
+      specialRequests: z.array(z.string()).optional(),
+      stops: z
+        .array(
+          z
+            .object({
+              address: z.string().optional(),
+              coordinates: z
+                .object({
+                  lat: z.union([z.string(), z.number()]),
+                  lng: z.union([z.string(), z.number()]),
+                })
+                .passthrough()
+                .optional(),
+            })
+            .passthrough(),
+        )
+        .optional(),
+      item: z
+        .object({
+          quantity: z.string().optional(),
+          weight: z.string().optional(),
+          categories: z.array(z.string()).optional(),
+          handlingInstructions: z.array(z.string()).optional(),
+        })
+        .passthrough()
+        .optional(),
+    }),
+
+    z.object({
+      action: z.literal("get-quotation"),
+      quotationId: z.string().min(1, "quotationId é obrigatório"),
+    }),
+
+    // POST /v3/orders — createOrder (index.ts:377-391). O único check runtime é
+    // assertE164 no telefone; name/stopId/recipients NÃO são exigidos pelo
+    // handler (optional chaining em :378-379) → optional aqui também.
+    z.object({
+      action: z.literal("order"),
+      quotationId: z.string().min(1, "quotationId é obrigatório"),
+      isPODEnabled: z.boolean().optional(),
+      serviceType: z.string().optional(),
+      sender: z
+        .object({
+          stopId: z.string().optional(),
+          name: z.string().optional(),
+          phone: z
+            .string()
+            .regex(lalamoveApiE164, "Telefone inválido em sender: esperado formato E.164 (+5511...)"),
+        })
+        .passthrough(),
+      recipients: z
+        .array(
+          z
+            .object({
+              stopId: z.string().optional(),
+              name: z.string().optional(),
+              phone: z
+                .string()
+                .regex(lalamoveApiE164, "Telefone inválido em recipients: esperado formato E.164 (+5511...)"),
+              remarks: z.string().optional(),
+            })
+            .passthrough(),
+        )
+        .optional(),
+      metadata: z
+        .object({
+          internalOrderId: z.string().optional(),
+          autoNotifySupplier: z.boolean().optional(),
+          supplierContact: z.string().optional(),
+          stalledThresholdMinutes: z.number().optional(),
+          requiresPod: z.boolean().optional(),
+          pickupPlaceId: z.string().optional(),
+          deliveryPlaceId: z.string().optional(),
+          pickupAddressComponents: z.record(z.unknown()).optional(),
+          deliveryAddressComponents: z.record(z.unknown()).optional(),
+          pickupGeocodePrecision: z.string().optional(),
+          deliveryGeocodePrecision: z.string().optional(),
+          geocodeProvider: z.string().optional(),
+          approachRadiusM: z.number().optional(),
+          approachEtaMin: z.number().optional(),
+          notifyDeliveryContact: z.boolean().optional(),
+        })
+        .passthrough()
+        .optional(),
+    }),
+
+    z.object({
+      action: z.literal("get-order"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+    }),
+    z.object({
+      action: z.literal("fetch-order"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+    }),
+    // O handler trunca silenciosamente em 50 (index.ts:829) → recusar explicitamente.
+    z.object({
+      action: z.literal("fetch-orders-bulk"),
+      orderIds: z
+        .array(z.string().min(1))
+        .min(1, "orderIds array is required")
+        .max(50, "máximo 50 orderIds por chamada"),
+    }),
+
+    // PATCH /v3/orders/{id} — editOrder (index.ts:405-407) manda o corpo como `data`.
+    // O handler DEVE remover `action`/`orderId` antes de repassar (passo 5 das notas).
+    z
+      .object({
+        action: z.literal("edit-order"),
+        orderId: z.string().min(1, "orderId é obrigatório"),
+      })
+      .passthrough(),
+
+    z.object({
+      action: z.literal("cancel"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+      // qualquer string: fora de VALID_CANCEL_REASONS vira 'OTHER' (index.ts:867-877)
+      reason: z.string().optional(),
+      notes: z.string().optional(),
+    }),
+
+    // `fee` é o nome que o gateway manda na query (src/lib/lalamove-api.ts:133).
+    // Valor > 0, ≤ 500 e aumento monotônico continuam no handler (:924-945).
+    z.object({
+      action: z.literal("priority-fee"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+      amount: lalamoveApiAmount.optional(),
+      priorityFee: lalamoveApiAmount.optional(),
+      fee: lalamoveApiAmount.optional(),
+      reason: z.string().optional(),
+    }),
+
+    z.object({
+      action: z.literal("get-driver"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+      driverId: z.string().min(1, "driverId é obrigatório"),
+    }),
+    z.object({
+      action: z.literal("change-driver"),
+      orderId: z.string().min(1, "orderId é obrigatório"),
+      driverId: z.string().min(1, "driverId é obrigatório"),
+      reason: z.enum([
+        "DRIVER_UNRESPONSIVE",
+        "DRIVER_LATE",
+        "DRIVER_ASKED_CHANGE",
+        "DRIVER_RUDE",
+        "DRIVER_ASKED_FOR_MORE_MONEY",
+      ]),
+    }),
+
+    z.object({
+      action: z.literal("set-webhook"),
+      url: z.string().min(1, "url é obrigatório"),
+    }),
+    z.object({
+      action: z.literal("webhook-selftest"),
+      orderId: z.string().startsWith("E2E-SELFTEST-", "orderId deve comecar com E2E-SELFTEST-"),
+      eventType: z.string().optional(),
+      status: z.string().optional(),
+    }),
+  ])
+  .superRefine((v, ctx) => {
+    // "amount OU priorityFee OU fee" — verificado: zod 3.22.4 NÃO aceita
+    // ZodEffects como membro de discriminatedUnion, então o refine fica no topo.
+    if (v.action === "priority-fee" && (v.amount ?? v.priorityFee ?? v.fee) == null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["amount"],
+        message: "orderId e amount são obrigatórios",
+      });
+    }
+  });
+const lalamoveApiV2 = lalamoveApiV1; // sem evolução: v2 === v1 (v1 é ZodEffects, sem .extend())
+
 // ── Registro central de contratos ────────────────────────────────────────────
 
 export type ContractName =
@@ -589,7 +973,10 @@ export type ContractName =
   | "mcp-query"
   | "rotate-tokens"
   | "seed-fix-rls"
-  | "simulate-driver-movement";
+  | "simulate-driver-movement"
+  | "job-worker"
+  | "lalamove-api"
+  | "lalamove-uapi";
 
 type VersionedSchema = Record<ContractVersion, z.ZodTypeAny>;
 
@@ -617,6 +1004,9 @@ export const CONTRACT_REGISTRY: Record<ContractName, VersionedSchema> = {
   "rotate-tokens": { v1: rotateTokensV1, v2: rotateTokensV2 },
   "seed-fix-rls": { v1: seedFixRlsV1, v2: seedFixRlsV2 },
   "simulate-driver-movement": { v1: simulateDriverMovementV1, v2: simulateDriverMovementV2 },
+  "job-worker": { v1: jobWorkerV1, v2: jobWorkerV2 },
+  "lalamove-api": { v1: lalamoveApiV1, v2: lalamoveApiV2 },
+  "lalamove-uapi": { v1: lalamoveUapiV1, v2: lalamoveUapiV2 },
 };
 
 /**

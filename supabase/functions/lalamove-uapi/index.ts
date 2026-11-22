@@ -1,6 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { logger } from "../_shared/logger.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -488,11 +496,28 @@ serve(async (req) => {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   try {
-    const rawBody = req.method !== 'GET' ? await req.json().catch(() => ({})) : {};
+    // Contrato de entrada (422 no formato único + versão v1/v2). `action` vem
+    // da query OU do corpo (a query tem precedência, como antes), por isso o
+    // contrato é validado sobre o input MESCLADO, não sobre o corpo cru.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage('lalamove-uapi', contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+
     const url = new URL(req.url);
-    const action = url.searchParams.get('action') || rawBody.action || null;
+    const rawBody = (parsedBody.value ?? {}) as Record<string, unknown>;
+    const action = url.searchParams.get('action') || (rawBody.action as string | undefined) || null;
+    const contract = validateContract(
+      getSchema('lalamove-uapi', contractVersion),
+      { ...rawBody, ...(action ? { action } : {}) },
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+
     // deno-lint-ignore no-explicit-any
-    const body: any = rawBody.action ? (({ action: _a, ...rest }: Record<string, unknown>) => rest)(rawBody) : rawBody;
+    const body: any = (({ action: _a, ...rest }: Record<string, unknown>) => rest)(
+      contract.data as Record<string, unknown>,
+    );
 
     // Special action: set initial token — requer role admin para evitar que
     // qualquer usuário autenticado sobrescreva a sessão UAPI ativa.
