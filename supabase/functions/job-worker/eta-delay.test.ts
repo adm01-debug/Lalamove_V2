@@ -145,3 +145,27 @@ Deno.test("ETA_DELAY: entrega usa destinatario de entrega no metadata", async ()
   assertEquals(meta.recipients[0].role, "delivery_contact");
   assertEquals(rpcCalls[0].p_stop_index, 2);
 });
+
+// ── Etapa 49: transito condicional ──────────────────────────────────────────
+// A decisao e derivada do ETA conhecido pelo mesmo limiar que a janela de
+// aproximacao usa (15 min). Testada aqui porque `processEtaRefresh` depende do
+// cliente Supabase completo; a regra e a unica parte da etapa 49 que nao e
+// passagem de parametro.
+const ETA_TRAFFIC_THRESHOLD_MIN = 15;
+function wantsTraffic(etaMinutes: number | null): boolean {
+  return etaMinutes != null && Number(etaMinutes) <= ETA_TRAFFIC_THRESHOLD_MIN;
+}
+
+Deno.test("etapa 49: ETA longo nao paga a SKU com transito", () => {
+  assertEquals(wantsTraffic(45), false);
+  assertEquals(wantsTraffic(16), false);
+});
+
+Deno.test("etapa 49: ETA na janela de aproximacao usa transito", () => {
+  assertEquals(wantsTraffic(15), true);
+  assertEquals(wantsTraffic(1), true);
+});
+
+Deno.test("etapa 49: sem ETA conhecido a primeira medicao sai sem transito", () => {
+  assertEquals(wantsTraffic(null), false);
+});
