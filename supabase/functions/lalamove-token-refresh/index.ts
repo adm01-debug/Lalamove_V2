@@ -80,7 +80,7 @@ Deno.serve(async (req) => {
   );
 
   try {
-    // ── 1. Sessão ativa     // Contrato de entrada (formato único de erro 422 + versão v1/v2):
+    // Contrato de entrada (formato único de erro 422 + versão v1/v2):
     // supabase/functions/_shared/contract.ts e _shared/schemas.ts.
     const contractVersion = resolveContractVersion(req);
     trackContractUsage("lalamove-token-refresh", contractVersion);
@@ -92,7 +92,8 @@ Deno.serve(async (req) => {
       contractVersion,
     );
     if (!contract.ok) return errorResponse(contract, corsHeaders);
-────────────────────────────────────────────────────
+
+    // ── 1. Sessão ativa ────────────────────────────────────────────────────
     const { data: sessions, error: sessionError } = await admin
       .from('lalamove_uapi_sessions')
       .select('id, token_obtained_at, last_refreshed_at, is_active')

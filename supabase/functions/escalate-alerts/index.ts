@@ -44,7 +44,6 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = createClient(
     // Contrato de entrada (formato único de erro 422 + versão v1/v2):
     // supabase/functions/_shared/contract.ts e _shared/schemas.ts.
     const contractVersion = resolveContractVersion(req);
@@ -57,6 +56,8 @@ serve(async (req) => {
       contractVersion,
     );
     if (!contract.ok) return errorResponse(contract, corsHeaders);
+
+    const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
