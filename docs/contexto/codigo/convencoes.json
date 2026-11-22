@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (23)"
+   "supabase/functions/<edge> (24)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)",
    "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)",
    "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)",
    "docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)",
-   "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)",
-   "fix: webhook cria a linha de active_tracking no primeiro ping (#236)"
+   "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

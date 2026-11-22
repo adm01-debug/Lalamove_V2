@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2809b605af` · branch `main` · 2026-11-22 05:07 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `40e2adbabf` · branch `main` · 2026-11-22 05:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1831,7 +1831,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1060 testes em 94 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1074 testes em 95 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1860,6 +1860,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
+| `supabase/functions/_shared/phone.test.ts` | 14 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
 | `supabase/functions/geo-gateway/error-monitor.test.ts` | 14 | shouldAlert: taxa abaixo do limite não dispara · shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=) · shouldAlert: taxa acima do limite dispara · shouldAlert: amostra pequena não dispara mesmo com 100% de erro … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |

@@ -18,6 +18,8 @@
   "supabase/functions/_shared/geo-precision.test.ts",
   "supabase/functions/_shared/geo-precision.ts",
   "supabase/functions/_shared/logger.ts",
+  "supabase/functions/_shared/phone.test.ts",
+  "supabase/functions/_shared/phone.ts",
   "supabase/functions/_shared/schemas.ts",
   "supabase/functions/_shared/telemetry.ts",
   "supabase/functions/_shared/template.test.ts",
@@ -954,7 +956,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 2,
-   "linhas": 930,
+   "linhas": 943,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -992,6 +994,7 @@
    "usa_shared": [
     "contract.ts",
     "logger.ts",
+    "phone.ts",
     "schemas.ts",
     "telemetry.ts",
     "template.ts",

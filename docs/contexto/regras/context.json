@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2809b605af6671f48495e724e8025fb0c812fb18",
+  "sha": "40e2adbabfb45b270a236e343a843e8110c85775",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 05:07 UTC",
-  "files_total": 1003,
-  "code_files": 827,
-  "code_lines": 142144
+  "generated_at": "2026-11-22 05:08 UTC",
+  "files_total": 1005,
+  "code_files": 829,
+  "code_lines": 142354
  },
  "version": "1.3.2",
- "facts_hash": "45ea237e05a54aa3",
+ "facts_hash": "57398dad3b06a3ff",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 286,
+   ".ts": 288,
    ".tsx": 233,
    ".sql": 188,
    ".mjs": 107,
@@ -21189,8 +21189,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 71,
-   "lines": 17152,
+   "files": 73,
+   "lines": 17362,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21240,6 +21240,7 @@
     "cors.ts: corsHeaders",
     "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
     "logger.ts: logger",
+    "phone.ts: normalizePhone, isDeliverablePhone, resolveGeoRecipient",
     "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
@@ -21287,6 +21288,8 @@
     "supabase/functions/_shared/geo-precision.test.ts",
     "supabase/functions/_shared/geo-precision.ts",
     "supabase/functions/_shared/logger.ts",
+    "supabase/functions/_shared/phone.test.ts",
+    "supabase/functions/_shared/phone.ts",
     "supabase/functions/_shared/schemas.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/_shared/template.test.ts",
@@ -37964,6 +37967,62 @@
    {
     "file": "supabase/functions/_shared/geo-precision.test.ts",
     "name": "ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "normaliza celular com máscara"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "normaliza celular já com DDI"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "normaliza celular cru e remove zero de discagem"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "normaliza telefone fixo de 10 dígitos"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "rejeita máscara censurada"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "rejeita vazio, null, undefined e não-string"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "rejeita quantidade de dígitos inválida"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "rejeita DDD inexistente"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "celular de 11 dígitos precisa ter 9 após o DDD"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "isDeliverablePhone reflete normalizePhone"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "resolve: contato da coleta tem prioridade"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "resolve: fornecedor só entra com auto_notify_supplier"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "resolve: cai no telefone da parada quando os demais falham"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "resolve: nenhum candidato válido devolve null (vira no_recipient)"
    },
    {
     "file": "supabase/functions/_shared/template.test.ts",
@@ -66122,6 +66181,36 @@
     "SUPABASE_URL"
    ]
   },
+  "supabase/functions/_shared/phone.test.ts": {
+   "path": "supabase/functions/_shared/phone.test.ts",
+   "lines": 106,
+   "is_test": true,
+   "tests": [
+    "normaliza celular com máscara",
+    "normaliza celular já com DDI",
+    "normaliza celular cru e remove zero de discagem",
+    "normaliza telefone fixo de 10 dígitos",
+    "rejeita máscara censurada",
+    "rejeita vazio, null, undefined e não-string",
+    "rejeita quantidade de dígitos inválida",
+    "rejeita DDD inexistente",
+    "celular de 11 dígitos precisa ter 9 após o DDD",
+    "isDeliverablePhone reflete normalizePhone",
+    "resolve: contato da coleta tem prioridade",
+    "resolve: fornecedor só entra com auto_notify_supplier",
+    "resolve: cai no telefone da parada quando os demais falham",
+    "resolve: nenhum candidato válido devolve null (vira no_recipient)"
+   ]
+  },
+  "supabase/functions/_shared/phone.ts": {
+   "path": "supabase/functions/_shared/phone.ts",
+   "lines": 91,
+   "exports": [
+    "function normalizePhone",
+    "function isDeliverablePhone",
+    "function resolveGeoRecipient"
+   ]
+  },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
    "lines": 297,
@@ -69259,7 +69348,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 819,
+   "lines": 832,
    "tables": [
     {
      "table": "geo_defaults",
@@ -70431,10 +70520,22 @@
   }
  },
  "git": {
-  "sha": "2809b605af6671f48495e724e8025fb0c812fb18",
+  "sha": "40e2adbabfb45b270a236e343a843e8110c85775",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "40e2adb",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: normalizacao E.164 e resolucao de destinatario do aviso geo (etapa 59) (#241)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/_shared/phone.test.ts",
+     "supabase/functions/_shared/phone.ts",
+     "supabase/functions/send-notification/index.ts"
+    ]
+   },
    {
     "sha": "2809b60",
     "date": "2026-11-22",
@@ -70794,21 +70895,12 @@
      "supabase/functions/geo-gateway/google.test.ts",
      "supabase/functions/geo-gateway/providers/google.ts"
     ]
-   },
-   {
-    "sha": "54419e1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)",
-    "files": [
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    18
+    19
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
@@ -70819,19 +70911,19 @@
     4
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    4
+    "supabase/functions/send-notification/index.ts",
+    3
    ],
    [
     "supabase/functions/geo-gateway/providers/google.ts",
     3
    ],
    [
-    ".github/workflows/ci.yml",
-    2
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    3
    ],
    [
-    "supabase/functions/send-notification/index.ts",
+    ".github/workflows/ci.yml",
     2
    ],
    [
