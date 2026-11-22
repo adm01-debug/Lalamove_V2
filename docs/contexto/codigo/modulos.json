@@ -1437,9 +1437,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 45,
-   "testes": 15,
-   "linhas": 12842,
+   "arquivos": 46,
+   "testes": 16,
+   "linhas": 13026,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

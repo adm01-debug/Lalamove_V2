@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c980ca70425654773c825054a9a61770e4b6bd9c",
+  "sha": "d1b6ddfaddd42a8addd766dfe028e30322ec244c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 03:09 UTC",
-  "files_total": 986,
-  "code_files": 813,
-  "code_lines": 139624
+  "generated_at": "2026-11-22 03:17 UTC",
+  "files_total": 988,
+  "code_files": 815,
+  "code_lines": 139993
  },
  "version": "1.3.2",
- "facts_hash": "3033db51b67231e5",
+ "facts_hash": "f663b655c3b27bab",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 275,
+   ".ts": 277,
    ".tsx": 231,
    ".sql": 187,
    ".mjs": 107,
@@ -21165,8 +21165,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 60,
-   "lines": 15140,
+   "files": 62,
+   "lines": 15509,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21220,6 +21220,7 @@
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
+    "error-monitor.ts: ERROR_RATE_THRESHOLD, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_WINDOW_MINUTES, ERROR_ALERT_COOLDOWN_MINUTES, ErrorOutcome, recordProviderFailure",
     "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
     "index.ts: DEFAULT_SETTINGS",
     "metering.ts: CACHE_TTL_S, resolveTtl, sha256, stableStringify, cacheKey, cacheGet",
@@ -21271,6 +21272,8 @@
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.test.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "supabase/functions/geo-gateway/error-monitor.ts",
     "supabase/functions/geo-gateway/failover.test.ts",
     "supabase/functions/geo-gateway/failover.ts",
     "supabase/functions/geo-gateway/google.test.ts",
@@ -21457,6 +21460,7 @@
      "scripts/seed-database.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/evaluate-driver/index.ts",
+     "supabase/functions/geo-gateway/error-monitor.ts",
      "supabase/functions/geo-gateway/index.ts",
      "supabase/functions/lalamove-gateway/index.ts",
      "supabase/functions/lalamove-token-refresh/index.ts",
@@ -21767,8 +21771,18 @@
     ]
    },
    "geo_cache": {
+    "insert": [
+     "supabase/functions/geo-gateway/error-monitor.ts"
+    ],
     "select": [
+     "supabase/functions/geo-gateway/error-monitor.ts",
      "supabase/functions/geo-gateway/metering.ts"
+    ],
+    "update": [
+     "supabase/functions/geo-gateway/error-monitor.ts"
+    ],
+    "delete": [
+     "supabase/functions/geo-gateway/error-monitor.ts"
     ],
     "ref": [
      "supabase/functions/geo-gateway/metering.ts"
@@ -21999,10 +22013,12 @@
    "query_telemetry": {
     "select": [
      "src/hooks/useGeoAdmin.ts",
-     "src/hooks/useSLOMetrics.ts"
+     "src/hooks/useSLOMetrics.ts",
+     "supabase/functions/geo-gateway/error-monitor.ts"
     ],
     "insert": [
      "supabase/functions/external-db-bridge/index.ts",
+     "supabase/functions/geo-gateway/error-monitor.ts",
      "supabase/functions/mcp-query/index.ts"
     ],
     "ref": [
@@ -22523,6 +22539,7 @@
     "created_at",
     "duration_ms",
     "error_message",
+    "id",
     "operation",
     "rpc_name",
     "severity",
@@ -23945,6 +23962,11 @@
     "values": "\"pickup_contact_name\", \"delivery_contact_name\", \"driver_name\", \"driver_plate\", \"eta_min\", \"distance_m\", \"share_link\", \"order_ref\", \"pickup_address\", \"delivery_address\", \"static_map_url\","
    },
    {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "ErrorOutcome",
+    "values": "ok | error | skipped"
+   },
+   {
     "file": "supabase/functions/geo-gateway/providers/types.ts",
     "name": "ProviderName",
     "values": "google | mapbox"
@@ -25231,6 +25253,10 @@
     "msg": "Unknown service: ${service}"
    },
    {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "msg": ",\n        response: {},\n        expires_at: expiresAt,\n      })\n      .select("
+   },
+   {
     "file": "supabase/functions/geo-gateway/index.ts",
     "msg": "GEO_INVALID_INPUT"
    },
@@ -26049,6 +26075,18 @@
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
     "text": "Add rule factors to reasons"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "text": "sozinho quando o cooldown expira."
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "text": "Nunca lança: observabilidade não pode derrubar a requisição de mapa."
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "text": "* Decide se deve alertar. Puro — testável sem banco. */"
    },
    {
     "file": "supabase/functions/geo-gateway/failover.ts",
@@ -29354,6 +29392,26 @@
     "file": "supabase/functions/check-external-api/index.ts",
     "name": "HEALTH_ADDRESS",
     "value": "'Avenida Paulista 1578, São Paulo'"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "ERROR_RATE_THRESHOLD",
+    "value": "0.05"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "ERROR_RATE_MIN_SAMPLES",
+    "value": "20"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "ERROR_RATE_WINDOW_MINUTES",
+    "value": "60"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "ERROR_ALERT_COOLDOWN_MINUTES",
+    "value": "60"
    },
    {
     "file": "supabase/functions/geo-gateway/providers/google.ts",
@@ -33035,6 +33093,12 @@
     "kind": "compara"
    },
    {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "field": "type",
+    "value": "INTEGRATION_FAILURE",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/functions/geo-gateway/index.ts",
     "field": "type",
     "value": "GEO_BUDGET_WARNING",
@@ -33701,6 +33765,12 @@
     "name": "calculateStatsFromDriver",
     "params": "driver: Driver",
     "body": "const total = driver.total_deliveries || 0; const completed = driver.completed_deliveries || 0; const failed = driver.failed_deliveries || 0; const cancelled = driver.cancelled_deliveries || 0; return { totalDeliveries: total, completedDeliveries: completed, failedDeliveries: failed, cancelledDeliveries: cancelled, successRate: driver.success_rate || (total > 0 ? (completed / total) * 100 : 0), failureRate: driver.failure_rate || (total > 0 ? (failed / total) * 100 : 0), incidentCount: 0, avgDel …"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.ts",
+    "name": "shouldAlert",
+    "params": "sample: ErrorRateSample",
+    "body": "const pct = sample.total > 0 ? Math.round((sample.errors / sample.total) * 10000) / 100 : 0; const fire = sample.total >= ERROR_RATE_MIN_SAMPLES && sample.errors / sample.total > ERROR_RATE_THRESHOLD; return { fire, total: sample.total, errors: sample.errors, pct };"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -37761,6 +37831,62 @@
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
     "name": "telemetry response shape includes duration and severity"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: taxa abaixo do limite não dispara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: taxa acima do limite dispara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: amostra pequena não dispara mesmo com 100% de erro"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: amostra no mínimo dispara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: janela vazia não dispara e não divide por zero"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: percentual é arredondado a 2 casas"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "shouldAlert: limite é o dobro do plano quando o provedor está muito pior"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "evaluateProviderErrors: taxa normal não grava alerta"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "evaluateProviderErrors: taxa alta grava INTEGRATION_FAILURE com metadados"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "evaluateProviderErrors: >=50% é CRITICAL"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "evaluateProviderErrors: cooldown impede segundo alerta"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "evaluateProviderErrors: provedores têm slots independentes"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
+    "name": "releaseAlertSlot apaga o registro de cooldown"
    },
    {
     "file": "supabase/functions/geo-gateway/failover.test.ts",
@@ -43370,6 +43496,12 @@
      "APPROVAL_REQUIRED": [
       "escreve:supabase/functions/evaluate-driver/index.ts"
      ],
+     "INTEGRATION_FAILURE": [
+      "escreve:supabase/functions/geo-gateway/error-monitor.ts",
+      "escreve:supabase/functions/lalamove-gateway/index.ts",
+      "escreve:supabase/functions/lalamove-token-refresh/index.ts",
+      "escreve:supabase/functions/rotate-tokens/index.ts"
+     ],
      "GEO_BUDGET_WARNING": [
       "escreve:supabase/functions/geo-gateway/index.ts"
      ],
@@ -43399,11 +43531,6 @@
      ],
      "eta_refresh": [
       "compara:supabase/functions/job-worker/index.ts"
-     ],
-     "INTEGRATION_FAILURE": [
-      "escreve:supabase/functions/lalamove-gateway/index.ts",
-      "escreve:supabase/functions/lalamove-token-refresh/index.ts",
-      "escreve:supabase/functions/rotate-tokens/index.ts"
      ],
      "TEST": [
       "escreve:supabase/functions/test-notification/index.ts"
@@ -66319,6 +66446,132 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/geo-gateway/error-monitor.test.ts": {
+   "path": "supabase/functions/geo-gateway/error-monitor.test.ts",
+   "lines": 185,
+   "is_test": true,
+   "doc": "Etapa 96 do plano Google Maps — testes do alarme de integração.",
+   "tests": [
+    "shouldAlert: taxa abaixo do limite não dispara",
+    "shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=)",
+    "shouldAlert: taxa acima do limite dispara",
+    "shouldAlert: amostra pequena não dispara mesmo com 100% de erro",
+    "shouldAlert: amostra no mínimo dispara",
+    "shouldAlert: janela vazia não dispara e não divide por zero",
+    "shouldAlert: percentual é arredondado a 2 casas",
+    "shouldAlert: limite é o dobro do plano quando o provedor está muito pior",
+    "evaluateProviderErrors: taxa normal não grava alerta",
+    "evaluateProviderErrors: taxa alta grava INTEGRATION_FAILURE com metadados",
+    "evaluateProviderErrors: >=50% é CRITICAL",
+    "evaluateProviderErrors: cooldown impede segundo alerta",
+    "evaluateProviderErrors: provedores têm slots independentes",
+    "releaseAlertSlot apaga o registro de cooldown"
+   ]
+  },
+  "supabase/functions/geo-gateway/error-monitor.ts": {
+   "path": "supabase/functions/geo-gateway/error-monitor.ts",
+   "lines": 170,
+   "exports": [
+    "const ERROR_RATE_THRESHOLD",
+    "const ERROR_RATE_MIN_SAMPLES",
+    "const ERROR_RATE_WINDOW_MINUTES",
+    "const ERROR_ALERT_COOLDOWN_MINUTES",
+    "type ErrorOutcome",
+    "function recordProviderFailure",
+    "interface ErrorRateSample",
+    "function readErrorRate",
+    "interface ErrorAlertDecision",
+    "function shouldAlert",
+    "function claimAlertSlot",
+    "function releaseAlertSlot",
+    "function evaluateProviderErrors"
+   ],
+   "tables": [
+    {
+     "table": "query_telemetry",
+     "op": "insert"
+    },
+    {
+     "table": "query_telemetry",
+     "op": "select"
+    },
+    {
+     "table": "geo_cache",
+     "op": "insert,select"
+    },
+    {
+     "table": "geo_cache",
+     "op": "select,update"
+    },
+    {
+     "table": "geo_cache",
+     "op": "delete"
+    },
+    {
+     "table": "alerts",
+     "op": "insert"
+    }
+   ],
+   "table_cols": {
+    "query_telemetry": [
+     "created_at",
+     "id",
+     "operation",
+     "table_name"
+    ],
+    "geo_cache": [
+     "expires_at",
+     "key"
+    ]
+   },
+   "errors": [
+    ",\n        response: {},\n        expires_at: expiresAt,\n      })\n      .select("
+   ],
+   "enums": [
+    {
+     "name": "ErrorOutcome",
+     "values": "ok | error | skipped"
+    }
+   ],
+   "params": [
+    {
+     "name": "ERROR_RATE_THRESHOLD",
+     "value": "0.05"
+    },
+    {
+     "name": "ERROR_RATE_MIN_SAMPLES",
+     "value": "20"
+    },
+    {
+     "name": "ERROR_RATE_WINDOW_MINUTES",
+     "value": "60"
+    },
+    {
+     "name": "ERROR_ALERT_COOLDOWN_MINUTES",
+     "value": "60"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "INTEGRATION_FAILURE",
+     "kind": "escreve"
+    }
+   ],
+   "rule_comments": [
+    "sozinho quando o cooldown expira.",
+    "Nunca lança: observabilidade não pode derrubar a requisição de mapa.",
+    "* Decide se deve alertar. Puro — testável sem banco. */"
+   ],
+   "doc": "Etapa 96 do plano Google Maps — alarme de integração por taxa de erro. O `GEO_BUDGET_WARNING` cobre custo; nada cobria disponibilidade. Se o provedor começa a devolver 4xx/5xx em série, o operador só descobria quando o mapa quebrava. Aqui cada falha do provedor entra em `query_telemetry` com `severi …",
+   "calc_fns": [
+    {
+     "name": "shouldAlert",
+     "params": "sample: ErrorRateSample",
+     "body": "const pct = sample.total > 0 ? Math.round((sample.errors / sample.total) * 10000) / 100 : 0; const fire = sample.total >= ERROR_RATE_MIN_SAMPLES && sample.errors / sample.total > ERROR_RATE_THRESHOLD; return { fire, total: sample.total, errors: sample.errors, pct };"
+    }
+   ]
+  },
   "supabase/functions/geo-gateway/failover.test.ts": {
    "path": "supabase/functions/geo-gateway/failover.test.ts",
    "lines": 84,
@@ -66376,7 +66629,7 @@
   },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 338,
+   "lines": 352,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -69231,10 +69484,22 @@
   }
  },
  "git": {
-  "sha": "c980ca70425654773c825054a9a61770e4b6bd9c",
+  "sha": "d1b6ddfaddd42a8addd766dfe028e30322ec244c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d1b6ddf",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/geo-gateway/error-monitor.test.ts",
+     "supabase/functions/geo-gateway/error-monitor.ts",
+     "supabase/functions/geo-gateway/index.ts"
+    ]
+   },
    {
     "sha": "c980ca7",
     "date": "2026-11-22",
@@ -69565,33 +69830,16 @@
      "supabase/functions/geo-gateway/mapbox.test.ts",
      "supabase/functions/geo-gateway/providers/mapbox.ts"
     ]
-   },
-   {
-    "sha": "ad06483",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)",
-    "files": [
-     "docs/GEO_PROVIDERS.md",
-     "supabase/functions/_shared/schemas.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/mapbox.test.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts",
-     "supabase/functions/geo-gateway/providers/types.ts",
-     "supabase/functions/geo-gateway/resolver.test.ts",
-     "supabase/functions/geo-gateway/resolver.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     6
    ],
    [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    5
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    6
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
@@ -69602,23 +69850,11 @@
     4
    ],
    [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
-    4
-   ],
-   [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
-    3
-   ],
-   [
     "supabase/functions/geo-gateway/providers/google.ts",
     3
    ],
    [
-    "supabase/functions/geo-gateway/providers/types.ts",
-    3
-   ],
-   [
-    "supabase/functions/job-worker/index.ts",
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
     3
    ],
    [
@@ -69663,6 +69899,18 @@
    ],
    [
     "supabase/.temp/rest-version",
+    2
+   ],
+   [
+    "supabase/.temp/storage-migration",
+    2
+   ],
+   [
+    "supabase/.temp/storage-version",
+    2
+   ],
+   [
+    "src/integrations/supabase/types.ts",
     2
    ]
   ]

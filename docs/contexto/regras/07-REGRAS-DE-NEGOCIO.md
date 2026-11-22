@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c980ca7042` · branch `main` · 2026-11-22 03:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d1b6ddfadd` · branch `main` · 2026-11-22 03:17 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -644,7 +644,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `FeatureCollection` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
 | `type` | `GEO_BUDGET_WARNING` | escreve | `supabase/functions/geo-gateway/index.ts` |
 | `type` | `GET_VERSION` | compara, escreve | `public/sw.js`<br>`src/hooks/useServiceWorker.ts` |
-| `type` | `INTEGRATION_FAILURE` | escreve | `supabase/functions/lalamove-gateway/index.ts`<br>`supabase/functions/lalamove-token-refresh/index.ts`<br>`supabase/functions/rotate-tokens/index.ts` |
+| `type` | `INTEGRATION_FAILURE` | escreve | `supabase/functions/geo-gateway/error-monitor.ts`<br>`supabase/functions/lalamove-gateway/index.ts`<br>`supabase/functions/lalamove-token-refresh/index.ts`<br>`supabase/functions/rotate-tokens/index.ts` |
 | `type` | `LineString` | escreve | `src/components/map/hooks/useMapMarkers.ts`<br>`src/components/map/mapLayers.ts`<br>`src/hooks/useMapbox.ts` |
 | `type` | `MISSING_POD` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `MOTORCYCLE` | compara | `src/components/map/MapLegend.tsx` |
@@ -883,6 +883,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/_shared/geo-precision.ts` |
 | ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway | `supabase/functions/_shared/schemas.ts` |
 | TEMPLATE_VARS | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", | `supabase/functions/_shared/template.ts` |
+| ErrorOutcome | ok \| error \| skipped | `supabase/functions/geo-gateway/error-monitor.ts` |
 | ProviderName | google \| mapbox | `supabase/functions/geo-gateway/providers/types.ts` |
 | GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `supabase/functions/geo-gateway/providers/types.ts` |
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
@@ -1182,6 +1183,10 @@ _nenhum item encontrado_
   ```
   const total = driver.total_deliveries || 0; const completed = driver.completed_deliveries || 0; const failed = driver.failed_deliveries || 0; const cancelled = driver.cancelled_deliveries || 0; return { totalDeliveries: total, completedDeliveries: completed, failedDeliveries: failed, cancelledDeliveries: cancelled, successRate: driver.success_rate || (total > 0 ? (completed / total) * 100 : 0), failureRate: driver.failure_rate || (total > 0 ? (failed / total) * 100 : 0), incidentCount: 0, avgDel …
   ```
+- **shouldAlert(sample: ErrorRateSample)** — `supabase/functions/geo-gateway/error-monitor.ts`
+  ```
+  const pct = sample.total > 0 ? Math.round((sample.errors / sample.total) * 10000) / 100 : 0; const fire = sample.total >= ERROR_RATE_MIN_SAMPLES && sample.errors / sample.total > ERROR_RATE_THRESHOLD; return { fire, total: sample.total, errors: sample.errors, pct };
+  ```
 - **generateSignature(method: string, path: string, timestamp: string, body: string)** — `supabase/functions/lalamove-api/index.ts`
   ```
   const rawSignature = `${timestamp}\r\n${method}\r\n${path}\r\n\r\n${body}`; const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( 'raw', encoder.encode(LALAMOVE_API_SECRET!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'] ); const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(rawSignature)); return Array.from(new Uint8Array(signatureBuffer)) .map(b => b.toString(16).padStart(2, '0')) .join('');
@@ -1296,6 +1301,10 @@ _nenhum item encontrado_
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
 | `HEALTH_ADDRESS` | `'Avenida Paulista 1578, São Paulo'` | `supabase/functions/check-external-api/index.ts` |
+| `ERROR_RATE_THRESHOLD` | `0.05` | `supabase/functions/geo-gateway/error-monitor.ts` |
+| `ERROR_RATE_MIN_SAMPLES` | `20` | `supabase/functions/geo-gateway/error-monitor.ts` |
+| `ERROR_RATE_WINDOW_MINUTES` | `60` | `supabase/functions/geo-gateway/error-monitor.ts` |
+| `ERROR_ALERT_COOLDOWN_MINUTES` | `60` | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `PLACES_BASE` | `"https://places.googleapis.com/v1"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `GEOCODE_BASE` | `"https://maps.googleapis.com/maps/api/geocode/json"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `STATIC_BASE` | `"https://maps.googleapis.com/maps/api/staticmap"` | `supabase/functions/geo-gateway/providers/google.ts` |
@@ -1774,7 +1783,7 @@ _nenhum item encontrado_
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
-| … +96 linhas — lista completa em `context.json` | |
+| … +97 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1808,7 +1817,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (971 testes em 84 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (985 testes em 85 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1837,6 +1846,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
+| `supabase/functions/geo-gateway/error-monitor.test.ts` | 14 | shouldAlert: taxa abaixo do limite não dispara · shouldAlert: taxa exatamente no limite não dispara (é > 5%, não >=) · shouldAlert: taxa acima do limite dispara · shouldAlert: amostra pequena não dispara mesmo com 100% de erro … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
@@ -2102,6 +2112,9 @@ _nenhum item encontrado_
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
+| sozinho quando o cooldown expira. | `supabase/functions/geo-gateway/error-monitor.ts` |
+| Nunca lança: observabilidade não pode derrubar a requisição de mapa. | `supabase/functions/geo-gateway/error-monitor.ts` |
+| * Decide se deve alertar. Puro — testável sem banco. */ | `supabase/functions/geo-gateway/error-monitor.ts` |
 | timeout, credencial revogada, rate limit), a requisição morria em 502. Este módulo faz a segunda | `supabase/functions/geo-gateway/failover.ts` |
 | * Vale tentar outro provedor? Falha do provedor (5xx), credencial, rate limit e rede/timeout sim. */ | `supabase/functions/geo-gateway/failover.ts` |
 | * Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */ | `supabase/functions/geo-gateway/index.ts` |

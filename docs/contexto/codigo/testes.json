@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 125,
+ "total": 126,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 13,
+  "edge (deno)": 14,
   "guard (node --test)": 33,
   "unit (vitest)": 70
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 15
+   "arquivos": 16
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1084,6 +1084,15 @@
    "casos": 24
   },
   {
+   "arquivo": "supabase/functions/geo-gateway/error-monitor.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 185,
+   "testa": [
+    "supabase/functions/geo-gateway/error-monitor.ts"
+   ],
+   "casos": 14
+  },
+  {
    "arquivo": "supabase/functions/geo-gateway/failover.test.ts",
    "tipo": "edge (deno)",
    "linhas": 84,
@@ -1283,6 +1292,7 @@
   "supabase/functions/_shared/geo-precision.ts": 1,
   "supabase/functions/_shared/schemas.ts": 2,
   "supabase/functions/_shared/template.ts": 1,
+  "supabase/functions/geo-gateway/error-monitor.ts": 1,
   "supabase/functions/geo-gateway/failover.ts": 1,
   "supabase/functions/geo-gateway/metering.ts": 1,
   "supabase/functions/geo-gateway/polyline.ts": 3,

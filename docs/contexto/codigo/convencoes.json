@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (15)"
+   "supabase/functions/<edge> (16)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)",
    "feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)",
    "feat: renderiza message_template dos alertas geo (etapa 67) (#222)",
    "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)",
-   "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
-   "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)"
+   "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

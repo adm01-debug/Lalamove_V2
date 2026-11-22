@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c980ca70425654773c825054a9a61770e4b6bd9c",
+  "commit": "d1b6ddfaddd42a8addd766dfe028e30322ec244c",
   "branch": "main",
-  "data_commit": "2026-11-22T00:08:27-03:00",
+  "data_commit": "2026-11-22T00:17:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d1b6ddf",
+    "data": "2026-11-22",
+    "assunto": "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)"
+   },
    {
     "sha": "c980ca7",
     "data": "2026-11-22",
@@ -126,18 +131,13 @@
     "sha": "d825edf",
     "data": "2026-11-21",
     "assunto": "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)"
-   },
-   {
-    "sha": "a9a7781",
-    "data": "2026-11-21",
-    "assunto": "chore: registra os resultados reais do drill da etapa 72 (#194)"
    }
   ],
-  "arquivos_mudados_7d": 231,
+  "arquivos_mudados_7d": 233,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 49
+    "mudancas": 52
    },
    {
     "pasta": "src/components/map",
@@ -172,6 +172,10 @@
     "mudancas": 7
    },
    {
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 7
+   },
+   {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 7
    },
@@ -186,10 +190,6 @@
    {
     "pasta": "supabase/functions/send-notification",
     "mudancas": 7
-   },
-   {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 6
    },
    {
     "pasta": "supabase/functions/lalamove-webhook",
@@ -223,7 +223,11 @@
    },
    {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
-    "mudancas": 8
+    "mudancas": 9
+   },
+   {
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 7
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -236,10 +240,6 @@
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 7
-   },
-   {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 6
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 125
+    "commits": 126
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 992,
-  "arquivos_codigo": 617,
-  "linhas_codigo": 120602,
+  "arquivos_total": 994,
+  "arquivos_codigo": 619,
+  "linhas_codigo": 120971,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 125,
+  "testes": 126,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 101
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 60,
-   "linhas": 15140
+   "arquivos": 62,
+   "linhas": 15509
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 114,
+  "any": 118,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,

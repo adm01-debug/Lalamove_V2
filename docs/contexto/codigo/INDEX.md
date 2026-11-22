@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c980ca70425654773c825054a9a61770e4b6bd9c` (2026-11-22T00:08:27-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d1b6ddfaddd42a8addd766dfe028e30322ec244c` (2026-11-22T00:17:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (506), SQL (187), JavaScript (112), Markdown (101), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (508), SQL (187), JavaScript (112), Markdown (101), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 992 |
-| arquivos_codigo | 617 |
-| linhas_codigo | 120602 |
+| arquivos_total | 994 |
+| arquivos_codigo | 619 |
+| linhas_codigo | 120971 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 125 |
+| testes | 126 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 101 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (127), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (12), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (15)
+- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (16)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 31 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 45 | 0 | 5 | 42 |
+| functions | 0 | 0 | 46 | 0 | 5 | 42 |
 | hooks | 0 | 0 | 86 | 209 | 15 | 47 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 194 | 14 | 47 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7629 nós · 16227 arestas · 576 comunidades · grafo do commit `c980ca70`
-- comunidades maiores: cn (199), button.tsx (168), snapshot.py (102), AlertsPage.tsx (100), badge.tsx (90), generate.py (81), dependencies (80), gerar.mjs (76), ref_node_path (75), package.json (68), client.ts (68), @tanstack/react-query (64)
+- 7649 nós · 16264 arestas · 580 comunidades · grafo do commit `d1b6ddfa`
+- comunidades maiores: cn (205), button.tsx (152), badge.tsx (134), lucide-react (134), snapshot.py (102), client.ts (93), contract.ts (89), ref_node_path (86), mapbox.ts (80), App.tsx (80), dependencies (80), geo-gateway/index.ts (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -283,11 +283,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/MAPBOX.md (12)
 - .github/workflows/ci.yml (11)
 - docs/pendencias/_ordem.md (10)
-- supabase/functions/geo-gateway/index.ts (8)
+- supabase/functions/geo-gateway/index.ts (9)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (7)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
 - src/components/orders/AddressAutocomplete.tsx (7)
 - supabase/functions/geo-gateway/providers/mapbox.ts (7)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (6)
 - src/components/map/LiveMap.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
 - src/integrations/supabase/types.ts (6)
@@ -370,6 +370,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `d1b6ddf` feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)
 - 2026-11-22 `c980ca7` feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)
 - 2026-11-22 `fac6e49` feat: renderiza message_template dos alertas geo (etapa 67) (#222)
 - 2026-11-21 `1a1f486` feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)
@@ -384,7 +385,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `e38c647` fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)
 - 2026-11-21 `9710802` docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)
 - 2026-11-21 `626b371` fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)
-- 2026-11-21 `54419e1` docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
