@@ -46,12 +46,12 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
 > **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
-> 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Contagem: **87 `[x]` / 103 `[ ]`**.
-> Gaps reais confirmados que seguem abertos:
-> 56 (sem destinatário interno), 60 (`notification_optouts` só na PR #221), 61 (`tracking_status='ended'` só
-> na PR #221), 66 (união ad-hoc × `alert_configurations` ainda não explícita), 68 (`sendMedia` inexistente),
-> 70 (`check-driver-alerts` sem `cron.schedule`), 83 (`mapbox-proxy`/`get-mapbox-token` ainda no ar),
-> 85 (rota existe, entrada de menu não), 94 (`provider-status` pós-deploy ausente).
+> 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Fechadas depois: **33, 68, 85** (PR
+> #251/#252 e auditoria) e **66** (união explícita de destinatários). Contagem: **93 `[x]` / 97 `[ ]`**
+> (algumas etapas têm mais de um item de checklist).
+> Gaps reais confirmados que seguem abertos: 56 (sem destinatário interno), 60 (`notification_optouts` só na
+> PR #221), 61 (`tracking_status='ended'` só na PR #221), 70 (`check-driver-alerts` sem `cron.schedule`, PR
+> #217), 83 (`mapbox-proxy` ainda no ar), 94 (`provider-status` pós-deploy ausente).
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
@@ -603,9 +603,16 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - `check-driver-alerts` emite `DRIVER_STOPPED` (`:142`), `SUPPLIER_DELAY_NOTICE` (`:164`), `ROUTE_DEVIATION` (`:198`) e `MISSING_POD` (`:227`) — todos no enum depois da etapa 16 (`20261122130000_geo_alert_types.sql`).
 
 ### 66 — `send-notification`: destinatários por pedido
-- [ ] Schema v2: `recipients?: [{channel:'whatsapp'|'email', to, role:'pickup_contact'|'delivery_contact'|'internal'}]`; quando presente, **une** com os de `alert_configurations` (hoje ignora `metadata.contact`, `:109-113`)
-- [ ] Manter v1 intacto (contrato versionado em `_shared/contract.ts`)
-- **Evidência:** teste Deno com `recipients` → Evolution chamado com o número do pedido
+- [x] Schema v2: `recipients?: [{channel:'whatsapp'|'email', to, role:'pickup_contact'|'delivery_contact'|'internal'}]`; quando presente, **une** com os de `alert_configurations`
+- [x] Manter v1 intacto (contrato versionado em `_shared/contract.ts`)
+- **Evidência:** `send-notification/recipients.test.ts` — 7 testes Deno verdes. `deno test _shared/contract.test.ts` 48/48 (o v2 com `recipients` valida no contrato).
+
+**Executado (2026-11-22).** O módulo `send-notification/recipients.ts` concentra a união e a deduplicação; o handler passou a usá-lo em dois pontos:
+- `index.ts:299-307` — os destinatários do pedido saem da **união** do corpo v2 (`recipients`) com o legado v1 (`metadata.recipients`), deduplicados por `canal+destino`; o `Set` `orderRecipientsDelivered` (:307) guarda o que já foi despachado.
+- `index.ts:414-425` — `dispatchIfNew` na configuração consulta `orderRecipientsDelivered` **e** `configRecipientsDelivered` (:362), então um contato que está no pedido **e** em `alert_configurations` recebe uma vez só.
+- `index.ts:418-421` — a comparação normaliza o telefone da configuração (`(41) 99999-8888` → `+5541999998888`) antes de montar a chave; sem isso o mesmo contato entraria como dois destinos distintos.
+- `_shared/schemas.ts` — `sendNotificationV2` ganhou `recipients` (array de `{channel, to, role?, name?}`).
+- v1 intacto: quem não manda `recipients` continua lendo só `metadata.recipients`, com o mesmo comportamento de antes.
 
 ### 67 — Templates por evento
 - [x] `alert_configurations.message_template` com variáveis `{{driver_name}} {{driver_plate}} {{eta_min}} {{distance_m}} {{share_link}} {{order_ref}} {{pickup_address}} {{static_map_url}}`

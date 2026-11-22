@@ -19,6 +19,11 @@ import {
 import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
 import { normalizePhone } from "../_shared/phone.ts";
 import {
+  normalizeRecipients,
+  recipientKey,
+  unionRecipients,
+} from "./recipients.ts";
+import {
   buildStaticMapRequestFromRows,
   fetchStaticMap,
   shouldAttachStaticMap,
@@ -119,6 +124,8 @@ serve(async (req) => {
       dedup_key?: string | null;
       skip_dedup?: boolean | null;
       is_escalation?: boolean | null;
+      // Só existe no contrato v2 (etapa 66).
+      recipients?: unknown;
     };
     const metadata = extra.metadata;
     const isEscalation = extra.is_escalation === true;
@@ -324,36 +331,45 @@ serve(async (req) => {
     // alert_configurations, since these recipients vary per request and
     // have no reason to live in a static per-type config row — but an
     // operator-disabled channel still wins over an ad-hoc recipient.
-    // Contract: metadata.recipients = [{ channel: string, to: string, ... }]
-    const metadataRecipients = isServiceRoleCaller(req) && Array.isArray(metadata?.recipients)
-      ? metadata.recipients
+    //
+    // Etapa 66: os dois conjuntos **se unem**, não se substituem. O pedido vem
+    // do corpo v2 (`recipients`) ou do `metadata.recipients` do v1; a
+    // deduplicação por canal+destino evita que o mesmo telefone cadastrado na
+    // configuração e presente no pedido receba o alerta duas vezes.
+    const requestRecipients = isServiceRoleCaller(req)
+      ? normalizeRecipients(extra.recipients)
       : [];
-    for (const r of metadataRecipients) {
-      if (r && typeof r === 'object' && typeof (r as Record<string, unknown>).channel === 'string' && typeof (r as Record<string, unknown>).to === 'string') {
-        const channel = (r as { channel: string }).channel;
-        if (isChannelDisabled(channel)) {
-          logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
+    const metadataRecipients = isServiceRoleCaller(req)
+      ? normalizeRecipients(metadata?.recipients)
+      : [];
+    const orderRecipients = unionRecipients(requestRecipients, metadataRecipients);
+    /** Já despachado nesta requisição — guarda contra o mesmo destino repetido. */
+    const orderRecipientsDelivered = new Set<string>();
+
+    for (const r of orderRecipients) {
+      const channel = r.channel;
+      if (isChannelDisabled(channel)) {
+        logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
+        continue;
+      }
+      // Etapa 59 (D1): o trigger grava `to` cru do cadastro — `(41) 99999-8888`,
+      // `+55 41 ...`, ou máscara `****`. O provedor de WhatsApp quer E.164; sem
+      // normalizar, o envio falha com 400 e o alerta morre sem rastro útil.
+      let destination = r.to;
+      if (channel === 'whatsapp' || channel === 'sms') {
+        const normalized = normalizePhone(destination);
+        if (!normalized) {
+          logger.log(`[Notification] Ad-hoc recipient with unusable phone dropped: ${JSON.stringify({ channel, to: destination })}`);
           continue;
         }
-        // Etapa 59 (D1): o trigger grava `to` cru do cadastro — `(41) 99999-8888`,
-        // `+55 41 ...`, ou máscara `****`. O provedor de WhatsApp quer E.164; sem
-        // normalizar, o envio falha com 400 e o alerta morre sem rastro útil.
-        let destination = (r as { to: string }).to;
-        if (channel === 'whatsapp' || channel === 'sms') {
-          const normalized = normalizePhone(destination);
-          if (!normalized) {
-            logger.log(`[Notification] Ad-hoc recipient with unusable phone dropped: ${JSON.stringify({ channel, to: destination })}`);
-            continue;
-          }
-          destination = normalized;
-        }
-        await dispatch(channel, destination, adHocMessage);
-      } else if (r && typeof r === 'object') {
-        // Sem `to` (o trigger geo grava `to: null` quando o pedido não tem
-        // telefone de contato): não há como enviar, mas o descarte precisa ser
-        // visível — antes ele era silencioso e o alerta morria sem rastro.
-        logger.log(`[Notification] Ad-hoc recipient ignored (no destination): ${JSON.stringify(r)}`);
+        destination = normalized;
       }
+      if (orderRecipientsDelivered.has(recipientKey(channel, destination))) {
+        logger.log(`[Notification] Destinatário repetido ignorado: ${channel}:${destination}`);
+        continue;
+      }
+      orderRecipientsDelivered.add(recipientKey(channel, destination));
+      await dispatch(channel, destination, adHocMessage);
     }
 
     const configs = configRows.filter((c) => c.is_enabled);
@@ -381,6 +397,9 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    /** Destinos já despachados pelas linhas de `alert_configurations`. */
+    const configRecipientsDelivered = new Set<string>();
 
     for (const config of configs) {
       const cfg = config as {
@@ -428,30 +447,47 @@ serve(async (req) => {
       let anyAttempted = false;
       let anySucceeded = false;
 
+      // Etapa 66: a configuração **une** com o que o pedido já pediu, não
+      // substitui. Um destino que o pedido já recebeu nesta requisição não é
+      // reenviado, e o mesmo destino repetido dentro da própria config também
+      // não. Sem isso o contato da coleta podia receber o alerta duas vezes
+      // quando estava nos dois lugares.
+      const dispatchIfNew = async (channel: string, destination: string) => {
+        anyAttempted = true;
+        // A configuração guarda o telefone como o operador digitou; o pedido
+        // chega já em E.164. Sem normalizar dos dois lados, o mesmo contato
+        // entraria na dedup como dois destinos diferentes.
+        const comparable = (channel === 'whatsapp' || channel === 'sms')
+          ? (normalizePhone(destination) ?? destination)
+          : destination;
+        const key = recipientKey(channel, comparable);
+        if (orderRecipientsDelivered.has(key) || configRecipientsDelivered.has(key)) {
+          logger.log(`[Notification] Destinatário repetido ignorado: ${channel}:${destination}`);
+          return;
+        }
+        configRecipientsDelivered.add(key);
+        const r = await dispatch(channel, destination, effectiveMessage);
+        anySucceeded = anySucceeded || r.success;
+      };
+
       // WhatsApp
       if (cfg.notify_whatsapp && whatsappNumbers.length > 0) {
         for (const number of whatsappNumbers) {
-          anyAttempted = true;
-          const r = await dispatch("whatsapp", number, effectiveMessage);
-          anySucceeded = anySucceeded || r.success;
+          await dispatchIfNew("whatsapp", number);
         }
       }
 
       // Email
       if (cfg.notify_email && emailAddresses.length > 0) {
         for (const email of emailAddresses) {
-          anyAttempted = true;
-          const r = await dispatch("email", email, effectiveMessage);
-          anySucceeded = anySucceeded || r.success;
+          await dispatchIfNew("email", email);
         }
       }
 
       // Slack
       if (cfg.notify_slack && slackChannels.length > 0) {
         for (const channel of slackChannels) {
-          anyAttempted = true;
-          const r = await dispatch("slack", channel, effectiveMessage);
-          anySucceeded = anySucceeded || r.success;
+          await dispatchIfNew("slack", channel);
         }
       }
 

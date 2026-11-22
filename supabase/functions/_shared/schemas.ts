@@ -68,6 +68,19 @@ const sendNotificationV2 = sendNotificationV1.extend({
   channels: z
     .array(z.enum(["whatsapp", "email", "slack", "bitrix24", "n8n"]))
     .optional(),
+  // Etapa 66: destinatários do pedido no corpo (o v1 só aceitava via
+  // `metadata.recipients`). São **unidos** aos de `alert_configurations`,
+  // nunca substitutos — ver `send-notification/recipients.ts`.
+  recipients: z
+    .array(
+      z.object({
+        channel: z.enum(["whatsapp", "email", "sms", "slack", "n8n"]),
+        to: z.string().min(1),
+        role: z.enum(["pickup_contact", "delivery_contact", "internal"]).optional(),
+        name: z.string().optional(),
+      }),
+    )
+    .optional(),
 });
 
 // ── new-device-alert ─────────────────────────────────────────────────────────
