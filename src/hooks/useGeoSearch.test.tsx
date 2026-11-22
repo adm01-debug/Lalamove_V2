@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { useAddressSearchBox, resolveDeliveryPoint, useFrequentAddresses } from './useGeoSearch';
+import { useAddressSearchBox, useCustomerSearchBias, resolveDeliveryPoint, useFrequentAddresses } from './useGeoSearch';
 
 const invokeMock = vi.fn();
 const orderQueryMock = vi.fn();
@@ -181,5 +181,58 @@ describe('resolveDeliveryPoint', () => {
   it('devolve null sem coordenada nenhuma (nunca [0,0])', () => {
     expect(resolveDeliveryPoint({ ...base, location: null })).toBeNull();
     expect(resolveDeliveryPoint({ ...base, location: null, routable_point: null })).toBeNull();
+  });
+});
+describe('useAddressSearchBox — viés de localização (etapa 81)', () => {
+  beforeEach(() => {
+    invokeMock.mockReset();
+    orderQueryMock.mockReset();
+  });
+
+  it('envia bias com raio padrão quando o caller informa uma região', async () => {
+    invokeMock.mockResolvedValue({ data: [], error: null });
+
+    renderHook(() => useAddressSearchBox('Rua XV', true, { lat: -25.43, lng: -49.27 }), { wrapper });
+    await waitFor(() => expect(invokeMock).toHaveBeenCalled());
+
+    const body = invokeMock.mock.calls[0][1].body as Record<string, unknown>;
+    expect(body.bias).toEqual({ lat: -25.43, lng: -49.27, radius_m: 50_000 });
+  });
+
+  it('não envia bias sem região conhecida (mantém a busca global)', async () => {
+    invokeMock.mockResolvedValue({ data: [], error: null });
+
+    renderHook(() => useAddressSearchBox('Rua XV', true, null), { wrapper });
+    await waitFor(() => expect(invokeMock).toHaveBeenCalled());
+
+    const body = invokeMock.mock.calls[0][1].body as Record<string, unknown>;
+    expect('bias' in body).toBe(false);
+  });
+
+  it('useCustomerSearchBias usa o último pedido do telefone informado', async () => {
+    const chain = {
+      select: vi.fn(() => chain),
+      eq: vi.fn(() => chain),
+      order: vi.fn(() => chain),
+      limit: vi.fn(() => chain),
+      maybeSingle: vi.fn(async () => ({
+        data: { pickup_latitude: -25.44, pickup_longitude: -49.28, delivery_latitude: null, delivery_longitude: null },
+        error: null,
+      })),
+    };
+    orderQueryMock.mockReturnValue(chain);
+
+    const { result } = renderHook(() => useCustomerSearchBias('+5541999998888'), { wrapper });
+    await waitFor(() => expect(result.current).toEqual({ lat: -25.44, lng: -49.28, radius_m: 50_000 }));
+
+    expect(orderQueryMock).toHaveBeenCalledWith('lalamove_orders');
+    expect(chain.eq).toHaveBeenCalledWith('customer_phone', '+5541999998888');
+    expect(chain.limit).toHaveBeenCalledWith(1);
+  });
+
+  it('useCustomerSearchBias devolve null sem telefone, sem forçar request', async () => {
+    const { result } = renderHook(() => useCustomerSearchBias(null), { wrapper });
+    expect(result.current).toBeNull();
+    expect(orderQueryMock).not.toHaveBeenCalled();
   });
 });

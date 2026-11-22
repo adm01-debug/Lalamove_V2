@@ -626,6 +626,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     if (pickupGeo && val !== pickupGeo.formatted) setPickupGeo(null);
                   }}
                   onAddressSelected={setPickupGeo}
+                  customerPhone={form.senderPhone || null}
                   placeholder="Endereço de coleta"
                 />
               </div>
@@ -690,6 +691,10 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     if (deliveryGeo && val !== deliveryGeo.formatted) setDeliveryGeo(null);
                   }}
                   onAddressSelected={setDeliveryGeo}
+                  // Etapa 81: entrega costuma ser na mesma regiao da coleta —
+                  // a coordenada ja escolhida e o vies mais fiel que o historico
+                  // do remetente (o destinatario pode ser de outra cidade).
+                  customerPhone={pickupGeo ? form.senderPhone || null : null}
                   placeholder="Endereço de entrega"
                 />
               </div>

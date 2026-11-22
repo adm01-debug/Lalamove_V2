@@ -64,7 +64,74 @@ function newSessionToken(): string {
  */
 const SESSION_TTL_MS = 170_000;
 
-export function useAddressSearchBox(query: string, enabled: boolean) {
+/**
+ * Etapa 81 do plano Google Maps — viés de localização do autocomplete.
+ *
+ * Sem `proximity`, o Search Box do Mapbox ordena por relevância global e um
+ * endereço de Curitiba ("Rua XV de Novembro") perde para homônimos de outras
+ * capitais. O viés vem do mapa que o operador está olhando: passar o centro do
+ * mapa é mais fiel à intenção dele do que fixar a sede da empresa.
+ *
+ * `radius_m` fica em 50 km: cobre a região metropolitana sem descartar o
+ * interior próximo, e é o teto que o Mapbox usa para `proximity` sem penalizar
+ * resultados fora do raio (ele só reordena — não filtra).
+ */
+export interface SearchBias {
+  lat: number;
+  lng: number;
+  radius_m?: number;
+}
+
+const DEFAULT_BIAS_RADIUS_M = 50_000;
+
+/**
+ * Etapa 81: viés a partir do último pedido do cliente/fornecedor.
+ *
+ * Quando o operador está criando pedido para alguém que já comprou, a região do
+ * último pedido é o palpite certo — melhor que o centro do mapa vazio ou a sede
+ * da empresa. Devolve `null` sem histórico, e quem chama cai no centro do mapa.
+ */
+export function useCustomerSearchBias(customerPhone?: string | null): SearchBias | null {
+  const { data } = useQuery<SearchBias | null>({
+    queryKey: ['geo-search', 'customer-bias', customerPhone ?? null],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('lalamove_orders')
+        // `pickup_latitude/longitude` é a geocodificação da coleta (etapa 37).
+        // `delivery_*` como fallback cobre pedido cuja coleta não foi geocodificada.
+        .select('pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude, created_at')
+        // `lalamove_orders` não tem `customer_id`: o cliente é identificado por
+        // `customer_name`/`customer_phone`. O telefone é o que não muda quando o
+        // operador digita o nome com variação de grafia.
+        .eq('customer_phone', customerPhone as string)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) return null;
+      const row = data as {
+        pickup_latitude?: number | null;
+        pickup_longitude?: number | null;
+        delivery_latitude?: number | null;
+        delivery_longitude?: number | null;
+      } | null;
+      if (!row) return null;
+      const lat = row.pickup_latitude ?? row.delivery_latitude;
+      const lng = row.pickup_longitude ?? row.delivery_longitude;
+      if (typeof lat !== 'number' || typeof lng !== 'number') return null;
+      return { lat, lng, radius_m: DEFAULT_BIAS_RADIUS_M };
+    },
+    enabled: !!customerPhone,
+    staleTime: 5 * 60_000,
+    retry: false,
+  });
+  return data ?? null;
+}
+
+export function useAddressSearchBox(
+  query: string,
+  enabled: boolean,
+  bias?: SearchBias | null,
+) {
   const sessionTokenRef = useRef<string>(newSessionToken());
   // Marca de início preguiçosa: ler o relógio no render violaria a pureza do componente.
   const sessionStartedAtRef = useRef<number | null>(null);
@@ -88,7 +155,9 @@ export function useAddressSearchBox(query: string, enabled: boolean) {
   }, [query, renewSession]);
 
   const { data, isLoading, isError, error } = useQuery<GeoSuggestion[]>({
-    queryKey: ['geo-search', 'autocomplete', query],
+    // O viés entra na queryKey: mudar o centro do mapa muda a ordem das
+    // sugestões, então o cache não pode devolver a lista do centro anterior.
+    queryKey: ['geo-search', 'autocomplete', query, bias?.lat ?? null, bias?.lng ?? null],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke('geo-gateway', {
         body: {
@@ -98,6 +167,7 @@ export function useAddressSearchBox(query: string, enabled: boolean) {
           country: 'br',
           language: 'pt',
           limit: 5,
+          ...(bias ? { bias: { lat: bias.lat, lng: bias.lng, radius_m: bias.radius_m ?? DEFAULT_BIAS_RADIUS_M } } : {}),
         },
       });
       if (error) throw error;
