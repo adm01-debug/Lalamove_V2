@@ -1183,10 +1183,18 @@ Deno.serve(async (req: Request) => {
       // Envelope inválido: tira a linha do limbo de 10 min quando há jobId.
       const rejectedJobId = (parsedBody.value as { jobId?: unknown } | null)?.jobId;
       if (typeof rejectedJobId === 'string' && rejectedJobId) {
-        await createSupabaseClient().rpc('mark_job_failed', {
-          p_job_id: rejectedJobId,
-          p_error_message: 'Envelope do job rejeitado pelo contrato (422)',
-        }).catch(() => undefined);
+        // best-effort: o 422 é devolvido mesmo se a marcação falhar.
+        try {
+          await createSupabaseClient().rpc('mark_job_failed', {
+            p_job_id: rejectedJobId,
+            p_error_message: 'Envelope do job rejeitado pelo contrato (422)',
+          });
+        } catch (markError) {
+          internalLogger('warn', 'Falha ao marcar job rejeitado como FAILED', {
+            jobId: rejectedJobId,
+            error: markError instanceof Error ? markError.message : String(markError),
+          });
+        }
       }
       return errorResponse(contract, jobWorkerCorsHeaders);
     }

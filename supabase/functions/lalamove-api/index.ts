@@ -692,7 +692,10 @@ serve(async (req) => {
     );
     if (!contract.ok) return errorResponse(contract, corsHeaders);
 
-    const { action, ...body } = contract.data as { action: string } & Record<string, unknown>;
+    // `any` no corpo validado preserva os acessos encadeados que já existiam
+    // (ex.: body.recipients?.[0]?.name); a FORMA já foi garantida pelo contrato.
+    // deno-lint-ignore no-explicit-any
+    const { action, ...body } = contract.data as { action: string } & Record<string, any>;
 
     let result: ApiResult;
 
