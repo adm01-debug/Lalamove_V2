@@ -10,7 +10,6 @@ import { useAccessibility, SkipLink, useAnnounce } from '@/hooks/useAccessibilit
 import { useContextualHints } from '@/hooks/useContextualHints';
 import { FloatingActionButton, FloatingActionButtonRef } from '@/components/ui/floating-action-button';
 import { KeyboardShortcutsModal } from '@/components/ui/keyboard-shortcuts-modal';
-import { GlobalSearchAdvanced } from '@/components/GlobalSearchAdvanced';
 import { useActiveAlerts } from '@/hooks/useActiveAlerts';
 import { useApprovalStats } from '@/hooks/usePendingApprovals';
 import { enableAudioOnInteraction } from '@/utils/alertSounds';
@@ -56,7 +55,6 @@ export function AppLayout() {
   const fabRef = useRef<FloatingActionButtonRef>(null);
   const [fabOpen, setFabOpen] = useState(false);
   const [shortcutsModalOpen, setShortcutsModalOpen] = useState(false);
-  const [globalSearchOpen, setGlobalSearchOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [gKeyPressed, setGKeyPressed] = useState(false);
   const gKeyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -204,13 +202,6 @@ export function AppLayout() {
       e.preventDefault();
       setShortcutsModalOpen(true);
       announce('Abrindo guia de atalhos do teclado', 'polite');
-      return;
-    }
-    
-    // Ctrl+K or Cmd+K to open global search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      setGlobalSearchOpen(true);
       return;
     }
     
@@ -384,11 +375,6 @@ export function AppLayout() {
         onOpenChange={setShortcutsModalOpen} 
       />
 
-      {/* Global Search Advanced */}
-      <GlobalSearchAdvanced 
-        open={globalSearchOpen} 
-        onOpenChange={setGlobalSearchOpen} 
-      />
     </div>
   );
 }
