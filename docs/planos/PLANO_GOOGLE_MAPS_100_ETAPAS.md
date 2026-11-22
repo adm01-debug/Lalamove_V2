@@ -178,7 +178,7 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 
 ### 26 — `providers/google.ts` — Routes API computeRoutes
 - [ ] `POST https://routes.googleapis.com/directions/v2:computeRoutes`, `travelMode: DRIVE`, `polylineQuality: OVERVIEW` (menor payload), `X-Goog-FieldMask: routes.duration,routes.staticDuration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs.duration,routes.legs.distanceMeters`
-- [ ] `traffic=true` ⇒ `routingPreference: TRAFFIC_AWARE` + `departureTime: now` (SKU Pro); `false` ⇒ sem (Essentials)
+- [ ] `traffic=true` ⇒ `routingPreference: TRAFFIC_AWARE` (SKU Pro), **sem** `departureTime` — enviar `new Date().toISOString()` é rejeitado em produção com "Timestamp must be set to a future time" (o relógio do servidor do Google já o lê como passado); a API usa "agora" como default ao omitir o campo. `traffic=false` ⇒ sem `routingPreference` (Essentials)
 - [ ] Decodificar `encodedPolyline` (algoritmo Google polyline) → `GeoPoint[]` para salvar em `expected_route`
 - [ ] ≤ 10 waypoints intermediários (acima vira cobrança maior)
 - **Evidência:** rota Centro→Jardim Botânico com `distance_m` ≈ 3.200 e polyline > 20 pontos
