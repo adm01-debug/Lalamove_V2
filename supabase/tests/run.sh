@@ -63,10 +63,11 @@ PY
 python3 - "$HERE" <<'PY'
 import sys, json, pathlib
 here = pathlib.Path(sys.argv[1])
-f = json.loads((here / 'fixtures' / 'route_curitiba.json').read_text(encoding='utf-8'))
-# O fixture e compartilhado com o replay do job-worker
-# (supabase/functions/job-worker/route-fixture-replay.test.ts), que le `points`.
-# Aceita os dois formatos para nao quebrar quando um lado evolui.
+f = json.loads((here / 'fixtures' / 'route_curitiba_geo.json').read_text(encoding='utf-8'))
+# `route_curitiba.json` (formato `points`) pertence ao replay do job-worker
+# (supabase/functions/job-worker/route-fixture-replay.test.ts), que termina em outro
+# ponto da cidade. Este harness usa `route_curitiba_geo.json`, cujo ultimo ponto e a
+# entrega do cenario 8 (obrigatorio para o bloco de ENTREGA do trigger).
 pts = f.get('route') or f.get('points')
 assert pts and len(pts) == 40, f"fixture deve ter 40 pontos, tem {len(pts or [])}"
 rota = json.dumps([{'lat': p['lat'], 'lng': p['lng']} for p in pts], ensure_ascii=False)
@@ -75,7 +76,7 @@ sql = (
     f"INSERT INTO public.fixture_route_curitiba (rota) VALUES ('{rota}'::jsonb);\n"
 )
 (here / '03_fixture.sql').write_text(sql, encoding='utf-8')
-print(f"03_fixture.sql gerado a partir de fixtures/route_curitiba.json ({len(pts)} pontos)")
+print(f"03_fixture.sql gerado a partir de fixtures/route_curitiba_geo.json ({len(pts)} pontos)")
 PY
 
 # --- 3. sobe o Postgres descartavel (ou usa o service container do CI) -----

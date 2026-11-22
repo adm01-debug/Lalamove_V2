@@ -1,0 +1,205 @@
+{
+  "_meta": {
+    "nome": "route_curitiba",
+    "descricao": "Trajeto Centro (Praca Tiradentes) -> Jardim Botanico, Curitiba/PR. 40 pontos, para replay do trigger geo_evaluate_tracking (etapa 52 do plano Google Maps).",
+    "origem": "Praca Tiradentes (-25.4295963,-49.2712724)",
+    "destino": "Jardim Botanico (-25.4433000,-49.2288000)",
+    "distancia_total_m": 4881.4,
+    "intervalo_s": 15,
+    "crs": "WGS84",
+    "finalidade": "Replay deterministico: verificar is_on_route, next_stop_index e eta_minutes sem depender de posicao real de motorista."
+  },
+  "order": {
+    "id": "52a2a2a2-0000-4000-8000-000000000052",
+    "lalamove_id": "LM-FIXTURE-52",
+    "status": "ON_GOING",
+    "lalamove_status": "ON_GOING",
+    "scheduled_at_offset_min": 90,
+    "driver_name": "Motorista Fixture",
+    "driver_plate": "FIX5T52"
+  },
+  "stops": [
+    {
+      "stop_index": 0,
+      "latitude": -25.4295963,
+      "longitude": -49.2712724,
+      "contact_name": "Fornecedor Fixture",
+      "contact_phone": "+5541999990052"
+    },
+    {
+      "stop_index": 1,
+      "latitude": -25.4433,
+      "longitude": -49.2288,
+      "contact_name": "Cliente Fixture",
+      "contact_phone": "+5541999991052"
+    }
+  ],
+  "route": [
+    {
+      "lat": -25.4295963,
+      "lng": -49.2712724
+    },
+    {
+      "lat": -25.4301658,
+      "lng": -49.2709822
+    },
+    {
+      "lat": -25.4307353,
+      "lng": -49.270692
+    },
+    {
+      "lat": -25.4313048,
+      "lng": -49.2704018
+    },
+    {
+      "lat": -25.4318744,
+      "lng": -49.2701117
+    },
+    {
+      "lat": -25.4324439,
+      "lng": -49.2698215
+    },
+    {
+      "lat": -25.4330134,
+      "lng": -49.2695313
+    },
+    {
+      "lat": -25.4335829,
+      "lng": -49.2692411
+    },
+    {
+      "lat": -25.4341524,
+      "lng": -49.2689509
+    },
+    {
+      "lat": -25.4347219,
+      "lng": -49.2686607
+    },
+    {
+      "lat": -25.4352915,
+      "lng": -49.2683706
+    },
+    {
+      "lat": -25.435861,
+      "lng": -49.2680804
+    },
+    {
+      "lat": -25.4364305,
+      "lng": -49.2677902
+    },
+    {
+      "lat": -25.437,
+      "lng": -49.2675
+    },
+    {
+      "lat": -25.4374615,
+      "lng": -49.2656154
+    },
+    {
+      "lat": -25.4379231,
+      "lng": -49.2637308
+    },
+    {
+      "lat": -25.4383846,
+      "lng": -49.2618462
+    },
+    {
+      "lat": -25.4388462,
+      "lng": -49.2599615
+    },
+    {
+      "lat": -25.4393077,
+      "lng": -49.2580769
+    },
+    {
+      "lat": -25.4397692,
+      "lng": -49.2561923
+    },
+    {
+      "lat": -25.4402308,
+      "lng": -49.2543077
+    },
+    {
+      "lat": -25.4406923,
+      "lng": -49.2524231
+    },
+    {
+      "lat": -25.4411538,
+      "lng": -49.2505385
+    },
+    {
+      "lat": -25.4416154,
+      "lng": -49.2486538
+    },
+    {
+      "lat": -25.4420769,
+      "lng": -49.2467692
+    },
+    {
+      "lat": -25.4425385,
+      "lng": -49.2448846
+    },
+    {
+      "lat": -25.443,
+      "lng": -49.243
+    },
+    {
+      "lat": -25.4430231,
+      "lng": -49.2419077
+    },
+    {
+      "lat": -25.4430462,
+      "lng": -49.2408154
+    },
+    {
+      "lat": -25.4430692,
+      "lng": -49.2397231
+    },
+    {
+      "lat": -25.4430923,
+      "lng": -49.2386308
+    },
+    {
+      "lat": -25.4431154,
+      "lng": -49.2375385
+    },
+    {
+      "lat": -25.4431385,
+      "lng": -49.2364462
+    },
+    {
+      "lat": -25.4431615,
+      "lng": -49.2353538
+    },
+    {
+      "lat": -25.4431846,
+      "lng": -49.2342615
+    },
+    {
+      "lat": -25.4432077,
+      "lng": -49.2331692
+    },
+    {
+      "lat": -25.4432308,
+      "lng": -49.2320769
+    },
+    {
+      "lat": -25.4432538,
+      "lng": -49.2309846
+    },
+    {
+      "lat": -25.4432769,
+      "lng": -49.2298923
+    },
+    {
+      "lat": -25.4433,
+      "lng": -49.2288
+    }
+  ],
+  "expectativas": {
+    "is_on_route_ao_longo_do_trajeto": true,
+    "next_stop_index_final": 1,
+    "eta_minutes_decrescente": true,
+    "observacao": "Consumindo exatamente os pontos da rota, distance_to_route_m deve ficar ~0 e is_on_route=true em todos os ciclos; o avanco de parada (etapa 46) move next_stop_index de 0 para 1 quando o ultimo ponto entra no arrived_radius_m da entrega."
+  }
+}
