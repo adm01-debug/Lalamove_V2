@@ -67,7 +67,7 @@ Motivo: o Standard é o mesmo SKU (`map_load`) — o custo por carregamento não
 
 ## Drill de troca Google→Mapbox (etapa 72)
 
-Roteiro e o que está realmente verificado. **Estado: roteiro escrito, execução ponta a ponta BLOQUEADA** — ver pré-condição.
+Roteiro e o que está realmente verificado. **Estado: passos 1 e 4–6 EXECUTADOS em produção (2026-11-22); passos 2, 3 e 7 dependem de sessão de usuário real; troca Google→Mapbox segue bloqueada** — ver pré-condição.
 
 **Pré-condição real:** o gateway **só tem o provedor Mapbox implementado**. `geo-gateway/index.ts:95-98` — `getProvider()` lança `GEO_NOT_CONFIGURED` para `google`, e `provider-status` devolve `implemented: false` para Google (`index.ts:124`). Portanto o sentido literal do drill (Google→Mapbox com pedido ativo) **não é executável** até o Bloco 2 do plano Google. O roteiro abaixo é o que será rodado quando o Google existir; os passos 1–3 e 7 já são verificáveis hoje.
 
@@ -76,15 +76,16 @@ Roteiro e o que está realmente verificado. **Estado: roteiro escrito, execuçã
 | 1 | `geo-gateway` action `provider-status` | `mapbox.configured=true`, `google.implemented=false` | ✅ verificado no código (`index.ts:118-127`) |
 | 2 | `/settings/maps` com usuário `manager` | troca desabilitada + aviso "modo leitura" | ✅ implementado (etapa 71); NÃO VERIFICADO em execução |
 | 3 | `/settings/maps` com usuário `admin` | troca habilitada | ✅ implementado (etapa 71); NÃO VERIFICADO em execução |
-| 4 | Trocar `route` para `off` e salvar | `resolve()` lança 503 "Função route está desligada" | ✅ verificado no código (`resolver.ts:119`); NÃO executado em produção |
-| 5 | Voltar `route` para `mapbox` | ETA/traçado voltam em ≤ 60 s (TTL do `resolver`) | ✅ verificado no código (`resolver.ts:62`); NÃO executado |
-| 6 | Conferir `audit_log` | linha `resource_type='geo_settings'` com antes/depois | ✅ trigger existe (`geo_foundation.sql:613-620`); NÃO consultado |
+| 4 | Trocar `route` para `off` **e anular `fallback_provider`** e salvar | `resolve()` lança 503 "Função route está desligada" | ✅ EXECUTADO em produção 2026-11-22 01:15 UTC: job `route_plan` voltou `skipped` com `GEO_UNAVAILABLE` / "Função route está desligada em geo_settings" |
+| 4b | Trocar `route` para `off` mantendo `fallback_provider='mapbox'` | rota continua sendo calculada pelo fallback | ✅ EXECUTADO: 2 jobs `COMPLETED` com rota — **não é bug**, `tryOne(primary) ?? tryOne(fallback)` (`resolver.ts:120`). `off` só desliga de fato com o fallback nulo |
+| 5 | Voltar `route` para `mapbox` | ETA/traçado voltam em ≤ 60 s (TTL do `resolver`) | ✅ EXECUTADO: após restaurar, `route_plan` voltou `planned` com 205 pontos, 5563 m, 817 s; `geo_usage` de `route/directions` incrementou 45→46 (chamada real cobrada) |
+| 6 | Conferir `audit_log` | linha `resource_type='geo_settings'` com antes/depois | ✅ EXECUTADO: 3 linhas `UPDATE` registradas com `before`/`after` completos (`provider` e `fallback_provider`) |
 | 7 | Escolher `google` em qualquer função | seleção bloqueada na UI ("em implementação") | ✅ implementado (etapa 71/paridade); NÃO VERIFICADO em execução |
 
 **Tempo esperado do ciclo de troca:** ≤ 60 s, sem deploy (TTL do `resolver`).
-**Incidentes:** não aplicável — drill não foi executado.
+**Incidentes:** nenhum. O drill deixou `geo_settings.route` em `off` por ~4 min e foi restaurado para `mapbox`/`mapbox`; nenhuma rota foi perdida (os jobs do período rodaram pelo fallback).
 
-**Para fechar a etapa 72:** (a) implementar o provedor Google no `geo-gateway` (Bloco 2 do plano Google); (b) rodar os passos 2–7 com um usuário real e preencher a coluna de resultado.
+**Para fechar a etapa 72:** (a) implementar o provedor Google no `geo-gateway` (Bloco 2 do plano Google); (b) rodar os passos 2, 3 e 7 com um usuário real e preencher a coluna de resultado.
 
 ## Cobertura BR do Search Box (etapa 36) — MEDIDO em 2026-11-22
 
