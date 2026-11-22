@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `f973d92c0e701244e9f6da174ef5a49a8f47f1d6` (2026-11-21T21:46:59-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `fe2ee4a3f2815ef4d2169f666939aeed86f47c1e` (2026-11-21T21:58:18-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 971 |
 | arquivos_codigo | 605 |
-| linhas_codigo | 118422 |
+| linhas_codigo | 118496 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -196,7 +196,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `external-db-bridge` [Dados externos] — tabelas: query_telemetry; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `geo-gateway` — tabelas: alerts, geo_budget, geo_cache, geo_price_list, geo_settings, geo_usage_month, query_telemetry; chamada por 4 arquivo(s) do front
 - `get-mapbox-token` [Mapbox] — tabelas: -; chamada por 3 arquivo(s) do front
-- `job-worker` [Fila de jobs] — tabelas: active_tracking, lalamove_orders, lalamove_stops; chamada por 0 arquivo(s) do front, por SQL/cron
+- `job-worker` [Fila de jobs] — tabelas: active_tracking, lalamove_orders, lalamove_stops, tracking_events; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lalamove-api` [Lalamove API v3] — tabelas: drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history, lalamove_stops; chamada por 4 arquivo(s) do front
 - `lalamove-gateway` [Lalamove API v3] — tabelas: alerts, lalamove_rate_limits, query_telemetry; chamada por 1 arquivo(s) do front
 - `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions; chamada por 0 arquivo(s) do front, por SQL/cron
@@ -272,9 +272,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7492 nós · 15913 arestas · 552 comunidades · grafo do commit `f973d92c`
-- comunidades maiores: cn (235), react (128), badge.tsx (107), snapshot.py (102), ref_node_path (101), client.ts (90), RateLimitDashboardPage.tsx (82), dependencies (80), LiveMap.tsx (76), gerar.mjs (76), package.json (75), generate.py (73)
-- símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts)
+- 7493 nós · 15917 arestas · 564 comunidades · grafo do commit `fe2ee4a3`
+- comunidades maiores: cn (297), react (146), button.tsx (141), card.tsx (124), snapshot.py (102), client.ts (101), contract.ts (89), ref_node_path (85), dependencies (80), gerar.mjs (76), @tanstack/react-query (73), package.json (72)
+- símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts), uniq() (scripts/ai-context/gerar.mjs)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `fe2ee4a` feat: eta_refresh encaixa o motorista na via antes do geofence (#188)
 - 2026-11-21 `f973d92` fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)
 - 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
 - 2026-11-21 `d62d6d8` feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `e616ccf` fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)
 - 2026-11-21 `c2ae0ba` fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)
 - 2026-11-21 `39f672a` chore(db): adiciona índices em order_geo_events.alert_id e job_queue.created_by (#165)
-- 2026-11-21 `a9a3ba5` ci: inclui os testes do roteador do gateway nos contract tests (#134)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

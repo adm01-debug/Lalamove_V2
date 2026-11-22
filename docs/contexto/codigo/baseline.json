@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f973d92c0e701244e9f6da174ef5a49a8f47f1d6",
+  "commit": "fe2ee4a3f2815ef4d2169f666939aeed86f47c1e",
   "branch": "main",
-  "data_commit": "2026-11-21T21:46:59-03:00",
+  "data_commit": "2026-11-21T21:58:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "fe2ee4a",
+    "data": "2026-11-21",
+    "assunto": "feat: eta_refresh encaixa o motorista na via antes do geofence (#188)"
+   },
    {
     "sha": "f973d92",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "96b1253",
     "data": "2026-11-21",
     "assunto": "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)"
-   },
-   {
-    "sha": "641034b",
-    "data": "2026-11-21",
-    "assunto": "feat(mapas): tela de provedores de mapa em /settings/maps (#168)"
    }
   ],
   "arquivos_mudados_7d": 195,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 97
+    "commits": 98
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 971,
   "arquivos_codigo": 605,
-  "linhas_codigo": 118422,
+  "linhas_codigo": 118496,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13817
+   "linhas": 13891
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -605,6 +605,10 @@
    "linhas": 901
   },
   {
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 863
+  },
+  {
    "arquivo": "supabase/functions/evaluate-driver/index.ts",
    "linhas": 844
   },
@@ -615,10 +619,6 @@
   {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
    "linhas": 793
-  },
-  {
-   "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 789
   },
   {
    "arquivo": "src/pages/AdvancedReportsPage.tsx",
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 112,
+  "any": 113,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,

@@ -458,7 +458,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 789,
+   "linhas": 863,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -468,7 +468,8 @@
    "tabelas": [
     "active_tracking",
     "lalamove_orders",
-    "lalamove_stops"
+    "lalamove_stops",
+    "tracking_events"
    ],
    "rpcs": [
     "mark_job_completed",

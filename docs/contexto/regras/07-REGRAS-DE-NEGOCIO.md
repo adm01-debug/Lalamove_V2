@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f973d92c0e` · branch `main` · 2026-11-22 00:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fe2ee4a3f2` · branch `main` · 2026-11-22 00:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1446,6 +1446,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/check-driver-alerts/index.ts` |
 | 50 | `supabase/functions/evaluate-driver/index.ts` |
 | 3 | `supabase/functions/external-companies/index.ts` |
+| 9 | `supabase/functions/job-worker/index.ts` |
 | 1 | `supabase/functions/lalamove-token-refresh/index.ts` |
 | 20 | `supabase/functions/route-analyzer/index.ts` |
 | 1 | `supabase/functions/send-notification/index.ts` |
