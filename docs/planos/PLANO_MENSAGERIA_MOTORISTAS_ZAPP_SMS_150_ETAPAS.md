@@ -620,8 +620,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** badge no pedido
 
 ### 116 — [L] Mídia recebida
-- [ ] Foto como comprovante → `lalamove_stop_proofs` (pendente de validação); avaria → anexo do incidente
-- **Evidência:** foto do piloto aparece no pedido
+- [x] Foto como comprovante → `lalamove_stop_proofs` (pendente de validação); avaria → anexo do incidente
+- **Evidência:** `classifyInboundMedia` em `_shared/messaging/inbound.ts` + `inbound-actions.ts` (etapa 116): foto sem texto vira `stop_proof` quando há parada; sem parada vira badge `media_avaria`/`media_comprovante`; texto com foto mantém o intent. 49 passed em `_shared/messaging/` (PR #281).
 
 ### 117 — [L] Opt-out do motorista
 - [~] Callback `contact.optout` → `notification_optouts` + alerta interno
