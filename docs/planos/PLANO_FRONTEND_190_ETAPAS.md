@@ -179,12 +179,12 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 `src/hooks/useBitrix24.ts:44`), então 400→422 não muda UX.
 
 ### 21 — [E] Schemas `lalamove-api` (discriminador `action` de query **ou** body)
-- [ ] Em `_shared/schemas.ts`: `z.discriminatedUnion('action', [...])` com as ~15 ações e campos que o código exige (`quotationId` em `order`, `orderId` em `fetch-order`/`cancel`/`priority-fee`/`change-driver`, `orderIds[]` em `fetch-orders-bulk`, `url` em `set-webhook`…), `.passthrough()` nos corpos repassados à Lalamove.
-- [ ] `lalamove-api/index.ts:~663-669`: montar `input = { ...body, action: body.action ?? url.searchParams.get('action') }` e validar; remover os 15 `return 400 '<x> is required'`.
+- [x] Em `_shared/schemas.ts`: `z.discriminatedUnion('action', [...])` com as ~15 ações e campos que o código exige (`quotationId` em `order`, `orderId` em `fetch-order`/`cancel`/`priority-fee`/`change-driver`, `orderIds[]` em `fetch-orders-bulk`, `url` em `set-webhook`…), `.passthrough()` nos corpos repassados à Lalamove.
+- [x] `lalamove-api/index.ts:~663-669`: montar `input = { ...body, action: body.action ?? url.searchParams.get('action') }` e validar; remover os 15 `return 400 '<x> is required'`.
 - **Evidência:** `[lalamove-api]` nos testes de contrato; `order` sem `quotationId` → 422 com `fields[0].field === 'quotationId'`.
 
 ### 22 — [E] Schemas `lalamove-uapi` (24 ações)
-- [ ] Discriminated union por `action` (query ou body) com `order_uuid`, `driver_fid`, `rating`, `code`, `access_token`/`refresh_token`, `user_fid`, `ep_role`, `city_id`, paginação; integrar em `lalamove-uapi/index.ts:~493`.
+- [x] Discriminated union por `action` (query ou body) com `order_uuid`, `driver_fid`, `rating`, `code`, `access_token`/`refresh_token`, `user_fid`, `ep_role`, `city_id`, paginação; integrar em `lalamove-uapi/index.ts:~493`.
 - **Evidência:** `favorite-driver` sem `driver_fid` → 422 nomeando o campo (hoje 400 fixo, A22).
 
 ### 23 — [E] Schema `lalamove-gateway`
@@ -192,7 +192,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `route.test.ts` + caso de contrato; front (`src/lib/lalamove-api.ts:70`) continua funcionando (e2e `new-order-autocomplete`).
 
 ### 24 — [E] Schema `job-worker` (envelope + payload por `type`)
-- [ ] `{ jobId: string, type: enum(12), payload: object, metadata?: object }` com `payload` refinado por tipo (`orderId`/`lalamove_id`, `driverId`, `trackingId`, `addresses[]`, `alert_id`…), `.passthrough()`; integrar em `job-worker/index.ts:~1149-1160` substituindo o 500 por 422.
+- [x] `{ jobId: string, type: enum(12), payload: object, metadata?: object }` com `payload` refinado por tipo (`orderId`/`lalamove_id`, `driverId`, `trackingId`, `addresses[]`, `alert_id`…), `.passthrough()`; integrar em `job-worker/index.ts:~1149-1160` substituindo o 500 por 422.
 - **Evidência:** job sem `jobId` → 422 (hoje 500 em `:1180-1190`); `eta-*.test.ts` continuam verdes.
 
 ### 25 — [E] Schema `bitrix24-sync`
@@ -885,4 +885,5 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 | Data | Concluídas | Observações |
 |---|---|---|
 | 22/11/2026 | 0/190 | Plano criado. |
+| 22/11/2026 | 12/190 | Bloco 1: **as 26 Edge Functions com entrada passaram a validar payload** (etapas 21–31 e 37). `job-worker` valida só o envelope de propósito (um 422 antes de `processJob` deixaria o job preso na fila) e `lalamove-api`/`lalamove-uapi` validam o input mesclado query+corpo, porque é assim que o gateway chama. 213 testes de contrato verdes. Faltam 32–36 e 38–45. |
 | 22/11/2026 | 9/190 | Bloco 1 em andamento: etapas 23, 25–31 e 37 entregues (15 Edge Functions passaram a validar entrada com 422 único e versão v1/v2; 184 testes de contrato verdes). Faltam 21, 22, 24 (`lalamove-api`, `lalamove-uapi`, `job-worker`), 32–36 e 38–45. |

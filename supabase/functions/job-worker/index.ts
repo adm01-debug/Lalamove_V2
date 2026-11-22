@@ -7,7 +7,14 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { logger } from '../_shared/logger.ts';
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 // ============================================================================
 // TIPOS
@@ -1128,6 +1135,13 @@ async function processJob(jobPayload: JobPayload): Promise<JobResult> {
   }
 }
 
+const jobWorkerCorsHeaders: Record<string, string> = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST',
+  'Access-Control-Allow-Headers':
+    'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+};
+
 // ============================================================================
 // HANDLER PRINCIPAL
 // ============================================================================
@@ -1137,9 +1151,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', {
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+        ...jobWorkerCorsHeaders,
       }
     });
   }
@@ -1151,13 +1163,43 @@ Deno.serve(async (req: Request) => {
       throw new Error('Missing Authorization header');
     }
     
-    // Parse request body
-    const jobPayload: JobPayload = await req.json();
-    
-    // Validar payload
-    if (!jobPayload.jobId || !jobPayload.type || !jobPayload.payload) {
-      throw new Error('Invalid job payload: missing required fields');
+    // Contrato de entrada (422 no formato único + versão v1/v2). O contrato
+    // valida SÓ o envelope { jobId, type, payload }: as regras por tipo (ex.:
+    // pod_fetch exige orderId) continuam como throw DENTRO de processJob,
+    // porque um 422 devolvido antes dele não passa por `mark_job_failed` e
+    // `mark_job_processing` não incrementa `attempts`
+    // (supabase/migrations/20261122120200_job_queue_system.sql:105-111),
+    // o que deixaria o job em loop PROCESSING→PENDING.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage('job-worker', contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, jobWorkerCorsHeaders);
+    const contract = validateContract(
+      getSchema('job-worker', contractVersion),
+      parsedBody.value,
+      contractVersion,
+    );
+    if (!contract.ok) {
+      // Envelope inválido: tira a linha do limbo de 10 min quando há jobId.
+      const rejectedJobId = (parsedBody.value as { jobId?: unknown } | null)?.jobId;
+      if (typeof rejectedJobId === 'string' && rejectedJobId) {
+        // best-effort: o 422 é devolvido mesmo se a marcação falhar.
+        try {
+          await createSupabaseClient().rpc('mark_job_failed', {
+            p_job_id: rejectedJobId,
+            p_error_message: 'Envelope do job rejeitado pelo contrato (422)',
+          });
+        } catch (markError) {
+          internalLogger('warn', 'Falha ao marcar job rejeitado como FAILED', {
+            jobId: rejectedJobId,
+            error: markError instanceof Error ? markError.message : String(markError),
+          });
+        }
+      }
+      return errorResponse(contract, jobWorkerCorsHeaders);
     }
+
+    const jobPayload = contract.data as JobPayload;
     
     internalLogger('info', 'Job worker invoked', {
       jobId: jobPayload.jobId,

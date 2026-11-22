@@ -1,9 +1,16 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
 import { persistOrderCoordinates, stopsCoords } from './coordinates.ts';
 import { geocodeOrderFallback } from './geocode-fallback.ts';
+import {
+  errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
+} from "../_shared/contract.ts";
+import { getSchema } from "../_shared/schemas.ts";
+import { trackContractUsage } from "../_shared/telemetry.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -655,19 +662,40 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const bodyResult = z.record(z.any()).safeParse(req.method !== 'GET' ? await req.json().catch(() => ({})) : {});
-    
-    if (!bodyResult.success) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid request body' }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
 
-    const rawBody = bodyResult.data;
-    // Accept action from query string OR body
-    const action = url.searchParams.get('action') || rawBody.action || null;
-    const body = rawBody.action ? (({ action: _a, ...rest }: Record<string, unknown>) => rest)(rawBody) : rawBody;
+    // Contrato de entrada (422 no formato único + versão v1/v2).
+    //
+    // ATENÇÃO: o contrato é validado sobre o input MESCLADO (query + corpo), não
+    // sobre o corpo cru. Todo o tráfego vindo da `lalamove-gateway` é GET sem
+    // corpo, com `action` e ids apenas na query
+    // (supabase/functions/lalamove-gateway/index.ts:295,306,322): validar só o
+    // corpo transformaria 100% desse tráfego em 422 — incluindo o cartão de
+    // status do dashboard e o cancelamento de pedido.
+    const contractVersion = resolveContractVersion(req);
+    trackContractUsage('lalamove-api', contractVersion);
+    const parsedBody = await parseJsonBody(req, contractVersion);
+    if (!parsedBody.ok) return errorResponse(parsedBody, corsHeaders);
+
+    const rawBody = (parsedBody.value ?? {}) as Record<string, unknown>;
+    // A query tem precedência sobre o corpo, como antes desta camada.
+    const QUERY_KEYS = ['action', 'orderId', 'driverId', 'quotationId', 'fee'] as const;
+    const fromQuery = Object.fromEntries(
+      QUERY_KEYS.flatMap((key) => {
+        const value = url.searchParams.get(key);
+        return value !== null ? [[key, value] as [string, string]] : [];
+      }),
+    );
+    const contract = validateContract(
+      getSchema('lalamove-api', contractVersion),
+      { ...rawBody, ...fromQuery },
+      contractVersion,
+    );
+    if (!contract.ok) return errorResponse(contract, corsHeaders);
+
+    // `any` no corpo validado preserva os acessos encadeados que já existiam
+    // (ex.: body.recipients?.[0]?.name); a FORMA já foi garantida pelo contrato.
+    // deno-lint-ignore no-explicit-any
+    const { action, ...body } = contract.data as { action: string } & Record<string, any>;
 
     let result: ApiResult;
 
@@ -679,13 +707,13 @@ serve(async (req) => {
 
       // --- Quotations ---
       case 'quotation':
-        // body ja passou pelo zod (z.record(z.any())); a validacao de forma
+        // body ja passou pelo contrato (_shared/schemas.ts, lalamoveApiV1); a validacao de forma
         // fica com a propria API (422 com o campo exato).
         result = await createQuotation(body as unknown as QuotationRequest);
         break;
 
       case 'get-quotation': {
-        const qId = url.searchParams.get('quotationId');
+        const qId = (body.quotationId as string | undefined) ?? null;
         if (!qId) {
           return new Response(
             JSON.stringify({ error: 'quotationId is required' }),
@@ -786,7 +814,7 @@ serve(async (req) => {
       }
 
       case 'get-order': {
-        const orderId = url.searchParams.get('orderId');
+        const orderId = (body.orderId as string | undefined) ?? null;
         if (!orderId) {
           return new Response(
             JSON.stringify({ error: 'orderId is required' }),
@@ -802,7 +830,7 @@ serve(async (req) => {
 
       // Fetch order from Lalamove by ID and UPSERT into database (for importing history)
       case 'fetch-order': {
-        const fetchOrderId = url.searchParams.get('orderId') || body.orderId as string;
+        const fetchOrderId = body.orderId as string;
         if (!fetchOrderId) {
           return new Response(
             JSON.stringify({ error: 'orderId is required' }),
@@ -843,19 +871,22 @@ serve(async (req) => {
       }
 
       case 'edit-order': {
-        const editOrderId = url.searchParams.get('orderId');
+        const editOrderId = (body.orderId as string | undefined) ?? null;
         if (!editOrderId) {
           return new Response(
             JSON.stringify({ error: 'orderId is required' }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        result = await editOrder(editOrderId, body);
+        // `orderId` identifica o pedido na URL do PATCH e não pode viajar
+        // dentro do `data` enviado à Lalamove.
+        const { orderId: _editOrderIdField, ...editPatch } = body;
+        result = await editOrder(editOrderId, editPatch);
         break;
       }
 
       case 'cancel': {
-        const cancelOrderId = url.searchParams.get('orderId') || body.orderId;
+        const cancelOrderId = body.orderId as string;
         if (!cancelOrderId) {
           return new Response(
             JSON.stringify({ error: 'orderId is required' }),
@@ -909,8 +940,9 @@ serve(async (req) => {
 
       // --- Priority Fee (Doc §5) — só pode aumentar, nunca reduzir. ---
       case 'priority-fee': {
-        const pfOrderId = url.searchParams.get('orderId') || (body.orderId as string);
-        const rawAmount = body.amount ?? body.priorityFee;
+        const pfOrderId = body.orderId as string;
+        // `fee` é o nome que a lalamove-gateway envia na query (src/lib/lalamove-api.ts:133).
+        const rawAmount = body.amount ?? body.priorityFee ?? body.fee;
         const reason = typeof body.reason === 'string' ? body.reason.slice(0, 200) : null;
 
         if (!pfOrderId || rawAmount === undefined || rawAmount === null) {
@@ -986,8 +1018,8 @@ serve(async (req) => {
 
       // --- Driver ---
       case 'get-driver': {
-        const dOrderId = url.searchParams.get('orderId');
-        const dDriverId = url.searchParams.get('driverId');
+        const dOrderId = (body.orderId as string | undefined) ?? null;
+        const dDriverId = (body.driverId as string | undefined) ?? null;
         if (!dOrderId || !dDriverId) {
           return new Response(
             JSON.stringify({ error: 'orderId and driverId are required' }),
@@ -1007,8 +1039,8 @@ serve(async (req) => {
 
       // --- Change Driver (Doc Section 6) ---
       case 'change-driver': {
-        const cdOrderId = url.searchParams.get('orderId') || (body.orderId as string);
-        const cdDriverId = url.searchParams.get('driverId') || (body.driverId as string);
+        const cdOrderId = body.orderId as string;
+        const cdDriverId = body.driverId as string;
         const cdReason = (body.reason as string) || '';
         if (!cdOrderId || !cdDriverId || !cdReason) {
           return new Response(

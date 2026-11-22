@@ -89,6 +89,14 @@ const VALID_PAYLOADS: Record<ContractName, Record<string, unknown>> = {
   "external-db-bridge": { operation: "select", table: "drivers" },
   "lalamove-gateway": { action: "cities" },
   "mcp-query": { operation: "list_tables" },
+  "job-worker": {
+    jobId: "9c1f6e2a-3b4d-4e5f-8a9b-0c1d2e3f4a5b",
+    type: "lalamove_sync",
+    payload: {},
+  },
+  // `action` pode chegar pela query: o payload validado é o input MESCLADO.
+  "lalamove-api": { action: "fetch-order", orderId: "1234567890" },
+  "lalamove-uapi": { action: "list-orders", limit: 20, last_id: "" },
 };
 
 /** Caso de falha por contrato: payload + campo que deve aparecer em `error.fields`. */
@@ -140,6 +148,18 @@ const WRONG_TYPE: Record<ContractName, FieldCase> = {
   },
   "lalamove-gateway": { payload: { action: 123 }, field: "action" },
   "mcp-query": { payload: { operation: 123 }, field: "operation" },
+  "job-worker": {
+    payload: { jobId: 123, type: "webhook", payload: {} },
+    field: "jobId",
+  },
+  "lalamove-api": {
+    payload: { action: "fetch-orders-bulk", orderIds: "1234567890" },
+    field: "orderIds",
+  },
+  "lalamove-uapi": {
+    payload: { action: "list-orders", limit: "20" },
+    field: "limit",
+  },
 };
 
 /**
@@ -181,6 +201,15 @@ const EMPTY_VALUE: Record<ContractName, FieldCase | null> = {
   "external-db-bridge": { payload: { operation: "select", table: "" }, field: "table" },
   "lalamove-gateway": { payload: { action: "   " }, field: "action" },
   "mcp-query": { payload: { operation: "" }, field: "operation" },
+  "job-worker": {
+    payload: { jobId: "", type: "webhook", payload: {} },
+    field: "jobId",
+  },
+  "lalamove-api": { payload: { action: "fetch-order", orderId: "" }, field: "orderId" },
+  "lalamove-uapi": {
+    payload: { action: "order-detail", order_uuid: "" },
+    field: "order_uuid",
+  },
 };
 
 const ALL_CONTRACTS = Object.keys(CONTRACT_REGISTRY) as ContractName[];
@@ -697,7 +726,140 @@ Deno.test("[apply-fixes] única ação aceita é fix_dashboard", () => {
 });
 
 Deno.test("cobertura: todas as Edge Functions com entrada estão no registro", () => {
-  // Guarda contra regressão: 23 contratos cobertos nesta fase (8 anteriores + 15
-  // desta PR). job-worker, lalamove-api e lalamove-uapi entram na fase seguinte.
-  assertEquals(Object.keys(CONTRACT_REGISTRY).length, 23);
+  // Guarda contra regressão: as 26 Edge Functions com entrada estão cobertas.
+  // Uma função nova sem contrato tem de falhar aqui (e nas fixtures tipadas).
+  assertEquals(Object.keys(CONTRACT_REGISTRY).length, 26);
+});
+
+// ── lalamove-api: o input validado é query + corpo (a query vence) ───────────
+//
+// Todo o tráfego vindo da `lalamove-gateway` é GET sem corpo, com `action` e ids
+// só na query. Estes casos travam o contrato no formato que a edge monta ANTES
+// de validar; sem eles, o teste genérico de "corpo vazio → 422" canonizaria
+// justamente o payload que funciona em produção.
+Deno.test("[lalamove-api] action vinda apenas da query é aceita", () => {
+  for (const action of ["cities", "sync"]) {
+    const merged = { ...{}, action }; // corpo {} + query ?action=
+    const result = validateContract(getSchema("lalamove-api", "v1"), merged, "v1");
+    assert(result.ok, `esperado ok para action=${action}: ${JSON.stringify(result)}`);
+  }
+});
+
+Deno.test("[lalamove-api] orderId vindo apenas da query é aceito", () => {
+  const merged = { action: "cancel", orderId: "LAL-123", reason: "OTHER" };
+  const result = validateContract(getSchema("lalamove-api", "v1"), merged, "v1");
+  assert(result.ok, JSON.stringify(result));
+});
+
+Deno.test("[lalamove-api] priority-fee aceita `fee` (nome usado pelo gateway)", () => {
+  const okFee = validateContract(
+    getSchema("lalamove-api", "v1"),
+    { action: "priority-fee", orderId: "LAL-1", fee: "5" },
+    "v1",
+  );
+  assert(okFee.ok, JSON.stringify(okFee));
+  const semValor = validateContract(
+    getSchema("lalamove-api", "v1"),
+    { action: "priority-fee", orderId: "LAL-1" },
+    "v1",
+  );
+  assert(!semValor.ok);
+  if (!semValor.ok) assert(semValor.body.error.fields.some((f) => f.field === "amount"));
+});
+
+Deno.test("[lalamove-api] telefone fora de E.164 em `order` retorna 422 nomeando o campo", () => {
+  const result = validateContract(
+    getSchema("lalamove-api", "v1"),
+    {
+      action: "order",
+      quotationId: "q1",
+      sender: { stopId: "s1", name: "Remetente", phone: "11999998888" },
+      recipients: [{ stopId: "s2", name: "Destino", phone: "+5511999998888" }],
+    },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) {
+    assert(result.body.error.fields.some((f) => f.field === "sender.phone"));
+  }
+});
+
+Deno.test("[lalamove-api] coordenadas em string (como o front envia) são aceitas", () => {
+  const result = validateContract(
+    getSchema("lalamove-api", "v1"),
+    {
+      action: "quotation",
+      serviceType: "LALAGO",
+      stops: [
+        { address: "A", coordinates: { lat: "-25.42", lng: "-49.27" } },
+        { address: "B", coordinates: { lat: "-25.43", lng: "-49.28" } },
+      ],
+    },
+    "v1",
+  );
+  assert(result.ok, JSON.stringify(result));
+});
+
+// ── job-worker: contrato valida SÓ o envelope ────────────────────────────────
+//
+// As regras por tipo continuam dentro de processJob: um 422 antes dele não passa
+// por `mark_job_failed` e deixaria o job em loop PROCESSING→PENDING.
+Deno.test("[job-worker] tipo desconhecido passa o contrato (falha dentro do worker)", () => {
+  const result = validateContract(
+    getSchema("job-worker", "v1"),
+    { jobId: "job-1", type: "tipo_inexistente", payload: {} },
+    "v1",
+  );
+  assert(result.ok, JSON.stringify(result));
+});
+
+Deno.test("[job-worker] pod_fetch sem orderId passa o contrato (falha dentro do worker)", () => {
+  const result = validateContract(
+    getSchema("job-worker", "v1"),
+    { jobId: "job-2", type: "pod_fetch", payload: {} },
+    "v1",
+  );
+  assert(result.ok, JSON.stringify(result));
+});
+
+Deno.test("[job-worker] payload ausente retorna 422 nomeando o campo", () => {
+  const result = validateContract(
+    getSchema("job-worker", "v1"),
+    { jobId: "job-3", type: "webhook" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) assert(result.body.error.fields.some((f) => f.field === "payload"));
+});
+
+// ── lalamove-uapi ────────────────────────────────────────────────────────────
+Deno.test("[lalamove-uapi] ids da UAPI aceitam string e número", () => {
+  for (const orderUuid of ["abc-123", 987654321]) {
+    const result = validateContract(
+      getSchema("lalamove-uapi", "v1"),
+      { action: "order-detail", order_uuid: orderUuid },
+      "v1",
+    );
+    assert(result.ok, `order_uuid=${orderUuid}: ${JSON.stringify(result)}`);
+  }
+});
+
+Deno.test("[lalamove-uapi] ação inexistente retorna 422 nomeando action", () => {
+  const result = validateContract(
+    getSchema("lalamove-uapi", "v1"),
+    { action: "drop-table" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) assert(result.body.error.fields.some((f) => f.field === "action"));
+});
+
+Deno.test("[lalamove-uapi] set-token exige access_token e refresh_token", () => {
+  const result = validateContract(
+    getSchema("lalamove-uapi", "v1"),
+    { action: "set-token", access_token: "a" },
+    "v1",
+  );
+  assert(!result.ok);
+  if (!result.ok) assert(result.body.error.fields.some((f) => f.field === "refresh_token"));
 });

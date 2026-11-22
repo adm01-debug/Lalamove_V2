@@ -175,13 +175,30 @@ Efeitos colaterais são evitados: funções que disparam e-mail/IA/notificaçõe
 | rotate-tokens             |    ✅     | corpo opcional                                                   |
 | seed-fix-rls              |    ✅     | corpo opcional (edge legada, ver `AGENTS.md`)                     |
 | simulate-driver-movement  |    ✅     | `replay:true` exige `fixture`; só em desenvolvimento              |
-| **job-worker**            |    ⏳     | união por `type` (12 tipos) — fase seguinte                      |
-| **lalamove-api**          |    ⏳     | união por `action` (~15 ações) — fase seguinte                    |
-| **lalamove-uapi**         |    ⏳     | união por `action` (24 ações) — fase seguinte                     |
+| job-worker                |    ✅     | valida só o envelope `{jobId,type,payload}` — ver nota abaixo     |
+| lalamove-api              |    ✅     | união por `action`; input MESCLADO (query + corpo)                |
+| lalamove-uapi             |    ✅     | união por `action` (24 ações); input mesclado (query + corpo)      |
 
-**23 de 26** Edge Functions com entrada validada pela camada. As três pendentes são as de maior superfície
-(criação/cancelamento de pedido, fila de jobs e UAPI) e entram numa PR própria, com refutação dos schemas
-contra cada chamador real — ver `docs/planos/PLANO_FRONTEND_190_ETAPAS.md`, etapas 21, 22 e 24.
+**26 de 26** Edge Functions com entrada validada pela camada. `contract.test.ts` tem um teste que falha se o
+registro deixar de cobrir 26 contratos, e as fixtures são `Record<ContractName, …>`: uma função nova sem
+contrato não compila o job `Deno Contract Tests`.
+
+### Entrada mesclada: query + corpo (`lalamove-api`, `lalamove-uapi`)
+
+Nessas duas funções `action` e os identificadores podem chegar pela **query**, e é assim que todo o tráfego da
+`lalamove-gateway` chega: GET sem corpo, com `?action=...` (`lalamove-gateway/index.ts:295,306,322`). Por isso o
+contrato é validado sobre o input **mesclado** — `{ ...corpo, ...query }`, com a query vencendo, como já era a
+precedência antes da camada. Validar apenas o corpo transformaria 100% desse tráfego em 422, incluindo o cartão
+de status do dashboard (consulta a cada 60 s) e o cancelamento de pedido. Há testes que travam esse formato.
+
+### `job-worker`: contrato de envelope, regras de negócio dentro do worker
+
+O contrato valida `{ jobId, type, payload }` e nada além disso. As regras por tipo (`pod_fetch` exige `orderId`,
+`geo_backfill` exige endereços, tipo desconhecido) continuam como exceção **dentro** de `processJob`, porque um
+422 devolvido antes dele não passa por `mark_job_failed` e `mark_job_processing` não incrementa `attempts`
+(`supabase/migrations/20261122120200_job_queue_system.sql:105-111`): o job ficaria em loop PROCESSING→PENDING
+para sempre. Quando o envelope é rejeitado e há `jobId`, a função chama `mark_job_failed` antes de responder 422,
+para a linha não ficar presa nos 10 minutos de limbo.
 
 ### Contratos de corpo opcional
 
