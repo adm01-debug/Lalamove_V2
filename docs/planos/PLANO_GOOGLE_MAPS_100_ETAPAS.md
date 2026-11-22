@@ -445,8 +445,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** mensagem recebida com imagem no número de teste
 
 ### 69 — Canal Zapp Web (D2, preparado)
-- [ ] Adaptador `channels/zapp.ts` com interface igual ao Evolution; ativado por `ZAPP_API_URL/ZAPP_API_KEY` quando existirem; sem secret → canal ausente
-- **Evidência:** teste Deno com fetch mockado
+- [x] Adaptador `channels/zapp.ts` com interface igual ao Evolution; ativado por `ZAPP_API_URL/ZAPP_API_KEY` quando existirem; sem secret → canal ausente
+- **Evidência:** `zapp.test.ts` 9/9 verde (Bearer, número normalizado, `instance` opcional, destinatário vazio não chama API, 401 com trecho do corpo, erro de rede sem lançar, timeout abortado, factory `null` sem secrets, `normalizeZappNumber`). `sendWhatsApp` usa o Zapp como **preferencial** e cai no Evolution quando não configurado — nenhum secret configurado continua sendo o único caso de falha. `deno check` sem erro novo (4 erros de `order_id` são pré-existentes no `main`).
 
 ### 70 — Agendar `check-driver-alerts` e `escalate-alerts`
 - [ ] 🔒 `cron.schedule('check-driver-alerts','*/1 * * * *', net.http_post(...))` e `escalate-alerts` a cada 5 min (padrão de `process_job_queue`, `20251226010001`)

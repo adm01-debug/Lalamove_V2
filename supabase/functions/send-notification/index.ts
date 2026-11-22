@@ -16,6 +16,7 @@ import {
   nextAllowedTime,
   type QuietHours,
 } from "./quiet-hours.ts";
+import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -560,6 +561,26 @@ async function sendWhatsApp(
   const evolutionKey = Deno.env.get("EVOLUTION_API_KEY");
   const instanceName = Deno.env.get("EVOLUTION_INSTANCE_NAME") || "lalamove";
   
+  // Etapa 69 do plano Google Maps: o Zapp (WhatsApp Web da Promo Brindes) entra
+  // como canal preferencial quando `ZAPP_API_URL`/`ZAPP_API_KEY` existem. Sem os
+  // secrets o factory devolve null e o Evolution continua sendo o caminho —
+  // nenhum dos dois configurado é o único caso de falha.
+  const zapp = zappChannelFromEnv();
+  if (zapp) {
+    const emoji = getSeverityEmoji(severity);
+    const text = `${emoji} *${title}*\n\n${message}\n\n` +
+      (orderId ? `📦 *Pedido:* ${orderId}\n` : '') +
+      (driverId ? `🚗 *Motorista:* ${driverId}\n` : '') +
+      `\n⏰ ${new Date().toLocaleString('pt-BR')}`;
+    const zappResult = await zapp.sendText(number, text);
+    if (zappResult.success) {
+      logger.log(`[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}`);
+    } else {
+      logger.error('[WhatsApp] Erro no Zapp:', zappResult.error);
+    }
+    return zappResult;
+  }
+
   if (!evolutionUrl || !evolutionKey) {
     logger.log('[WhatsApp] Evolution API not configured');
     return { success: false, error: 'Evolution API not configured' };
