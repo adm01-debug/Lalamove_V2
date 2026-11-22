@@ -144,8 +144,11 @@ interpolada), não de endpoint. Caminhos efetivos, em ordem de custo:
 
 1. Enriquecer a base de entrada (o CSV é amostra genérica; a lista real vem do Bitrix24 com CEP).
    Com CEP, o `structured` do Geocoding v6 sobe de `interpolated` para `rooftop`.
-2. Google Geocoding v4 (etapa 94) como `fallback_provider` para `autocomplete` — hoje bloqueada por
-   ausência de `GOOGLE_MAPS_SERVER_KEY`.
+2. Google Geocoding v4 (etapa 94) como `fallback_provider` para `autocomplete` — **já ativo**:
+   `GOOGLE_MAPS_SERVER_KEY` está configurado e `provider-status` mostra `google configured=true`.
+   O caminho existe (`resolver.failoverFor`) e foi exercitado em produção (geocode Google devolvendo
+   `precision=exact`). O que falta não é a chave e sim medir se o Google erra nos mesmos 6 casos que
+   a Mapbox erra — o doc registra que nos casos reconferidos ele erra igual.
 3. Pedir correção da malha à Mapbox para os eixos críticos.
 
 Regenerar a medição: `MAPBOX_SERVER_TOKEN=<pk|sk> deno run --allow-net --allow-env --allow-read scripts/geo/searchbox-coverage.ts scripts/geo/enderecos.sample.csv`

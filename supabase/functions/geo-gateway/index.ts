@@ -140,11 +140,18 @@ async function runProvider(
 ): Promise<ProviderResult<unknown>> {
   switch (action) {
     case "autocomplete": {
-      const r = await provider.autocomplete(body);
-      if (body.session_token && await registerSession(db, name, body.session_token)) r.units = 1; // 1 por sessão
+      // Etapa 22: o modo vem de `geo_settings.autocomplete.config.mode`; o corpo pode sobrescrever.
+      const mode = body.mode ?? (resolver.setting("autocomplete")?.config as { mode?: string } | undefined)?.mode;
+      const payload = mode === "geocoding" ? { ...body, mode } : body;
+      const r = await provider.autocomplete(payload);
+      // No modo geocoding a cobrança é por requisição (units=1 do provider), não por sessão.
+      if (payload.session_token && mode !== "geocoding" && await registerSession(db, name, payload.session_token)) r.units = 1;
       return r;
     }
-    case "place-details": return await provider.placeDetails(body);
+    case "place-details": {
+      const pdMode = body.mode ?? (resolver.setting("autocomplete")?.config as { mode?: string } | undefined)?.mode;
+      return await provider.placeDetails(pdMode === "geocoding" ? { ...body, mode: pdMode } : body);
+    }
     case "geocode": return await provider.geocode(body);
     case "geocode-batch": {
       if (!provider.geocodeBatch) throw new GeoProviderError("GEO_NOT_SUPPORTED", `geocode-batch não disponível em ${name}`, 501);

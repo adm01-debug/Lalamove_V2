@@ -185,12 +185,16 @@ export class GoogleProvider implements GeoProvider {
     address_components?: Array<{ long_name: string; short_name: string; types: string[] }>;
   }, retainable: boolean): GeoAddress {
     const loc = r.geometry?.location;
+    const locationType = r.geometry?.location_type;
     return {
       formatted: r.formatted_address ?? "",
       place_id: r.place_id ? `google:${r.place_id}` : null,
       location: loc ? { lat: loc.lat, lng: loc.lng } : null,
       components: componentsFromGeocode(r.address_components),
-      precision: LOCATION_TYPE_TO_PRECISION[r.geometry?.location_type ?? ""] ?? "unknown",
+      precision: LOCATION_TYPE_TO_PRECISION[locationType ?? ""] ?? "unknown",
+      // Etapa 13: o Google não tem `match_code.confidence`; o valor bruto equivalente é
+      // o `location_type`, que é o que se audita depois quando a precisão sai baixa.
+      match_confidence: locationType,
       provider: "google",
       retainable,
     };

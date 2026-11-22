@@ -199,7 +199,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `SELECT * FROM geo_price_list WHERE provider='mapbox'`
 
 ### 13 — `geocode_precision` com valores Mapbox
-- [ ] Documentar o mapeamento `rooftop|parcel|point|interpolated|approximate|intersection` (Mapbox) e `ROOFTOP|RANGE_INTERPOLATED|GEOMETRIC_CENTER|APPROXIMATE` (Google) → escala interna `exact|high|medium|low` em `geocode_precision`; adicionar `geocode_match_confidence text`
+- [x] Documentar o mapeamento `rooftop|parcel|point|interpolated|approximate|intersection` (Mapbox) e `ROOFTOP|RANGE_INTERPOLATED|GEOMETRIC_CENTER|APPROXIMATE` (Google) → escala interna `exact|high|medium|low` em `geocode_precision`; adicionar `geocode_match_confidence text`
 - **Evidência:** migration + constante compartilhada `_shared/geo-precision.ts`
 
 ### 14 — `place_id` com prefixo de provedor (M8)
@@ -229,25 +229,25 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)
 
 ### 19 — Portar `mapbox-proxy` para a interface `GeoProvider`
-- [ ] `supabase/functions/geo-gateway/providers/mapbox.ts` implementa `autocomplete, placeDetails, geocode, reverse, route, matrix, staticMap, snap, isochrone, optimization, tilequery`
+- [x] `supabase/functions/geo-gateway/providers/mapbox.ts` implementa `autocomplete, placeDetails, geocode, reverse, route, matrix, staticMap, snap, isochrone, optimization, tilequery`
 - [ ] Token: `MAPBOX_SERVER_TOKEN` (sk); nunca o pk
 - **Evidência:** `deno check`
 
 ### 20 — Autocomplete = Search Box `suggest` (M1)
-- [ ] `GET https://api.mapbox.com/search/searchbox/v1/suggest?q=&session_token=&language=pt&country=br&proximity=<lng,lat>&types=address,street,place,poi&limit=5`
+- [x] `GET https://api.mapbox.com/search/searchbox/v1/suggest?q=&session_token=&language=pt&country=br&proximity=<lng,lat>&types=address,street,place,poi&limit=5`
 - [ ] Normalizar `suggestions[]` → `{id:'mapbox:'+mapbox_id, main_text:name, secondary_text:full_address, type:feature_type}`
 - [ ] sku `searchbox_session` contado **1× por sessão** (na primeira chamada com `session_token` novo), não por requisição
 - **Evidência:** fixture real gravada em `__fixtures__/mapbox-suggest-curitiba.json`
 
 ### 21 — Place details = Search Box `retrieve`
-- [ ] `GET /search/searchbox/v1/retrieve/{mapbox_id}?session_token=` → `features[0].geometry.coordinates [lng,lat]`, `properties.full_address`, `context.{address,street,postcode,place,region,country}`, `coordinates.accuracy`, `routable_points`
+- [x] `GET /search/searchbox/v1/retrieve/{mapbox_id}?session_token=` → `features[0].geometry.coordinates [lng,lat]`, `properties.full_address`, `context.{address,street,postcode,place,region,country}`, `coordinates.accuracy`, `routable_points`
 - [ ] Preferir `routable_points[0]` como coordenada de coleta/entrega quando existir (ponto de acesso de veículo)
 - [ ] Fechar sessão no cliente (novo UUID no próximo foco)
 - **Evidência:** retrieve de um endereço de Curitiba devolve `accuracy='rooftop'`
 
 ### 22 — Fallback de autocomplete: Geocoding v6 `autocomplete=true`
-- [ ] `GET /search/geocode/v6/forward?q=&autocomplete=true&country=br&language=pt&proximity=&limit=5&types=address,street,place`
-- [ ] Ativado quando `geo_settings.autocomplete.config.mapbox_mode='geocoding'` (resultado da etapa 36); sku `geocoding_temporary` por requisição
+- [x] `GET /search/geocode/v6/forward?q=&autocomplete=true&country=br&language=pt&proximity=&limit=5&types=address,street,place`
+- [x] Ativado quando `geo_settings.autocomplete.config.mode='geocoding'` (resultado da etapa 36); sku `geocoding_temporary` por requisição — implementado em `providers/mapbox.ts` (`autocompleteGeocoding`) + switch no `index.ts`; `place-details` resolve por `address` no v6 porque o v6 não tem retrieve por id
 - **Evidência:** teste Deno com flag
 
 ### 23 — Geocode forward (temporário e permanente)
@@ -260,7 +260,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** reverse de (-25.4296,-49.2716) → "Centro, Curitiba"
 
 ### 25 — Batch geocode (backfill)
-- [ ] `POST /search/geocode/v6/batch` com até 50 consultas por chamada, `permanent=true` (vai para o banco); respeitar 1.000 req/min
+- [x] `POST /search/geocode/v6/batch` com até 50 consultas por chamada, `permanent=true` (vai para o banco); respeitar 1.000 req/min
 - [ ] Usado pelo job `geo_backfill` (plano Google etapa 39) quando o provedor for Mapbox
 - **Evidência:** lote de 10 pedidos geocodificado em 1 chamada
 
@@ -282,7 +282,7 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** 5×1 devolve 5 durações
 
 ### 29 — Snap = Map Matching v5 (M3)
-- [ ] `GET /matching/v5/mapbox/driving/{últimos ≤100 pontos}?geometries=geojson&tidy=true&radiuses=25;25;...` → `matchings[0].geometry` + `tracepoints[]`
+- [x] `GET /matching/v5/mapbox/driving/{últimos ≤100 pontos}?geometries=geojson&tidy=true&radiuses=25;25;...` → `matchings[0].geometry` + `tracepoints[]`
 - [ ] Usado pelo job `eta_refresh` antes de `distance_to_route_m` quando `geo_settings.snap='mapbox'`; 100k grátis
 - **Evidência:** trilha com ruído de 30 m → pontos encaixados na via
 
@@ -304,8 +304,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** 2 rotas iguais em 10 min → 1 chamada real
 
 ### 34 — Testes do provedor
-- [ ] Fixtures reais (gravadas 1× com token de dev) para suggest/retrieve/forward/reverse/directions/matrix/matching/static; testes Deno de normalização, rate guard, erros, retenção
-- [ ] CI `contract-tests` inclui `geo-gateway/providers/mapbox.test.ts`
+- [x] Fixtures reais (gravadas 1× com token de dev) para suggest/retrieve/forward/reverse/directions/matrix/matching/static; testes Deno de normalização, rate guard, erros, retenção
+- [x] CI `contract-tests` inclui `geo-gateway/providers/mapbox.test.ts`
 - **Evidência:** run verde
 
 ---
