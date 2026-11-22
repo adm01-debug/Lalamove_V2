@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
+  "commit": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
   "branch": "main",
-  "data_commit": "2026-11-22T13:24:33-03:00",
+  "data_commit": "2026-11-22T13:25:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "6d201eb",
+    "data": "2026-11-22",
+    "assunto": "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)"
+   },
    {
     "sha": "d055637",
     "data": "2026-11-22",
@@ -126,25 +131,20 @@
     "sha": "eb1ea10",
     "data": "2026-11-22",
     "assunto": "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)"
-   },
-   {
-    "sha": "758b04c",
-    "data": "2026-11-22",
-    "assunto": "test: cobre o trigger geo_evaluate_tracking com 8 cenarios (etapa 64) (#254)"
    }
   ],
-  "arquivos_mudados_7d": 329,
+  "arquivos_mudados_7d": 331,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
     "mudancas": 62
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 39
+    "pasta": "src/components/map",
+    "mudancas": 41
    },
    {
-    "pasta": "src/components/map",
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 39
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 191
+    "commits": 192
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1051,
-  "arquivos_codigo": 650,
-  "linhas_codigo": 128737,
+  "arquivos_total": 1053,
+  "arquivos_codigo": 652,
+  "linhas_codigo": 128768,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 153,
+  "testes": 154,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29520
+   "linhas": 29503
   },
   "src/hooks": {
    "arquivos": 111,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 36,
-   "linhas": 3626
+   "arquivos": 38,
+   "linhas": 3674
   },
   "src/main.tsx": {
    "arquivos": 1,

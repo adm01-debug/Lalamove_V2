@@ -1,11 +1,11 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 38,
+ "total": 39,
  "por_camada": {
   "i18n": 1,
   "integrations": 4,
-  "lib": 22,
+  "lib": 23,
   "services": 1,
   "types": 4,
   "utils": 6
@@ -243,6 +243,29 @@
     "pages"
    ],
    "coberto_por_testes": 6,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/html.ts",
+   "camada": "lib",
+   "exports": [
+    "escapeHtml"
+   ],
+   "export_default": null,
+   "linhas": 16,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "components/map"
+   ],
+   "coberto_por_testes": 1,
    "orfao": false
   },
   {

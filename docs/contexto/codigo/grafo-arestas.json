@@ -495,7 +495,8 @@
    "src/components/map/hooks/useTrackingTrails.ts",
    "src/components/map/markerFactories.ts",
    "src/components/map/types.ts",
-   "src/lib/geo-gateway.ts"
+   "src/lib/geo-gateway.ts",
+   "src/lib/html.ts"
   ],
   "src/components/map/LiveMap.tsx": [
    "src/components/map/Google3DCanvas.tsx",
@@ -596,6 +597,7 @@
   "src/components/map/markerFactories.ts": [
    "src/components/map/hooks/useTrackingData.ts",
    "src/components/map/types.ts",
+   "src/lib/html.ts",
    "src/lib/statusPalette.ts"
   ],
   "src/components/notifications/NotificationPreferences.tsx": [

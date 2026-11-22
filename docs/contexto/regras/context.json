@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
+  "sha": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:24 UTC",
-  "files_total": 1045,
-  "code_files": 861,
-  "code_lines": 149914
+  "generated_at": "2026-11-22 16:26 UTC",
+  "files_total": 1047,
+  "code_files": 863,
+  "code_lines": 149945
  },
  "version": "1.3.2",
- "facts_hash": "e6fc4162750ff4bd",
+ "facts_hash": "c600dad03bae8646",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 302,
+   ".ts": 304,
    ".tsx": 235,
    ".sql": 202,
    ".mjs": 109,
@@ -17190,7 +17190,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 92
+    "deps_count": 93
    },
    {
     "path": "",
@@ -17365,7 +17365,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 42
+    "deps_count": 43
    },
    {
     "path": "",
@@ -20780,7 +20780,7 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29520,
+   "lines": 29503,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21213,13 +21213,14 @@
   },
   {
    "module": "src/lib",
-   "files": 36,
-   "lines": 3626,
+   "files": 38,
+   "lines": 3674,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
     "cep.ts: CepValidation, sanitizeCep, maskCep, validateCep, ViaCepAddress, lookupCep",
     "geo-gateway.ts: GeoFieldError, GeoGatewayError, callGeo, countMapLoad",
+    "html.ts: escapeHtml",
     "lalamove-api.ts: LalamoveApiResponse, LalamoveStatusResponse, LalamoveWalletHistoryResponse, LalamoveGatewayError, callLalamoveGateway, QuoteParams",
     "lalamove-config.ts: isLalamoveConfigured, setLalamoveConfigured",
     "lalamoveCatalog.ts: ServiceSpec, SERVICE_CATALOG, SPECIAL_REQUESTS_BY_SERVICE, SPECIAL_REQUEST_CITY_RESTRICTIONS, ITEM_WEIGHT_RANGES, isServiceType",
@@ -21243,10 +21244,10 @@
    "docs": [
     "bitrix-config.ts: Verifica se as credenciais Bitrix24 estão configuradas no backend Usado para desabilitar chamadas que retornariam 500",
     "cep.ts: Utilidades para CEP brasileiro: - Validação de formato (8 dígitos, não sequencial) - Máscara automática (00000-000) - Consulta ViaCEP com timeout e normalização de endereço",
+    "html.ts: Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). Fonte de verdade única para o escape de valores de usuário (nomes, endereços, IDs) antes de interpolação em `innerHTML`/`setHTML`. Cobre as 5 entidades essenciais de HTML.",
     "lalamove-config.ts: Verifica se as credenciais Lalamove estão configuradas no backend Usado para desabilitar chamadas que retornariam 500",
     "lalamoveCatalog.ts: Catálogo oficial Lalamove BR (Etapa 4 do roteiro). Fonte: `docs/LALAMOVE_MASTER_ANALYSIS.md` §4 — 14 serviceTypes, 16 cidades, matriz de special requests por veículo e faixas de peso do `item`. Este catálogo é a fonte de verdade **oficial da API**. O módulo `lalamoveValidation.ts` mantém a matriz hi …",
-    "lalamoveErrors.ts: Mapa canônico de erros Lalamove (Etapa 5 do roteiro). Cobre as duas superfícies: - REST v3: envelope `{ errors: [{ id, message, detail }] }`; - UAPI: código numérico `ret`. Toda mensagem exibida ao usuário nasce aqui — nenhum componente inventa texto.",
-    "lalamoveGuards.ts: Guardas de errata de produção Lalamove (Etapa 3 do roteiro). A documentação oficial diverge do comportamento real da API BR em alguns pontos. Estas funções isolam essas divergências para que nenhum componente volte a assumir a forma \"documentada\". Errata coberta: 1. `driverId` é sempre `string`; aus …"
+    "lalamoveErrors.ts: Mapa canônico de erros Lalamove (Etapa 5 do roteiro). Cobre as duas superfícies: - REST v3: envelope `{ errors: [{ id, message, detail }] }`; - UAPI: código numérico `ret`. Toda mensagem exibida ao usuário nasce aqui — nenhum componente inventa texto."
    ],
    "deps": [
     "@supabase/supabase-js",
@@ -21269,6 +21270,7 @@
     "src/lib/cep.ts",
     "src/lib/geo-gateway.test.ts",
     "src/lib/geo-gateway.ts",
+    "src/lib/html.ts",
     "src/lib/lalamove-api.ts",
     "src/lib/lalamove-config.ts",
     "src/lib/lalamoveCatalog.ts",
@@ -21293,6 +21295,7 @@
     "src/lib/utils.test.ts",
     "src/lib/utils.ts",
     "src/lib/__tests__/filterValidSpecialRequests.test.ts",
+    "src/lib/__tests__/html.test.ts",
     "src/lib/__tests__/lalamoveCanonical.test.ts",
     "src/lib/__tests__/lalamoveCatalogCities.test.ts",
     "src/lib/__tests__/lalamoveContract.test.ts",
@@ -38168,6 +38171,26 @@
    {
     "file": "src/lib/__tests__/filterValidSpecialRequests.test.ts",
     "name": "lista vazia permanece vazia"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "escapeHtml"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "escapa as 5 entidades de HTML"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "escapa cada símbolo individualmente"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "não altera strings sem caracteres especiais"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "impede criação de elemento a partir de payload XSS"
    },
    {
     "file": "src/lib/__tests__/lalamoveCanonical.test.ts",
@@ -57569,7 +57592,7 @@
   },
   "src/components/map/GoogleMapsCanvas.tsx": {
    "path": "src/components/map/GoogleMapsCanvas.tsx",
-   "lines": 366,
+   "lines": 358,
    "exports": [
     "function GoogleMapsCanvas"
    ],
@@ -57993,7 +58016,7 @@
   },
   "src/components/map/markerFactories.ts": {
    "path": "src/components/map/markerFactories.ts",
-   "lines": 351,
+   "lines": 342,
    "exports": [
     "type MarkerDensity",
     "interface ClusterInfo",
@@ -65144,6 +65167,14 @@
     "invoke("
    ]
   },
+  "src/lib/html.ts": {
+   "path": "src/lib/html.ts",
+   "lines": 16,
+   "exports": [
+    "function escapeHtml"
+   ],
+   "doc": "Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). Fonte de verdade única para o escape de valores de usuário (nomes, endereços, IDs) antes de interpolação em `innerHTML`/`setHTML`. Cobre as 5 entidades essenciais de HTML."
+  },
   "src/lib/lalamove-api.ts": {
    "path": "src/lib/lalamove-api.ts",
    "lines": 163,
@@ -65628,6 +65659,18 @@
     "mantém special requests sem restrição de cidade",
     "remove special request incompatível com o serviço independente da cidade",
     "lista vazia permanece vazia"
+   ]
+  },
+  "src/lib/__tests__/html.test.ts": {
+   "path": "src/lib/__tests__/html.test.ts",
+   "lines": 32,
+   "is_test": true,
+   "tests": [
+    "escapeHtml",
+    "escapa as 5 entidades de HTML",
+    "escapa cada símbolo individualmente",
+    "não altera strings sem caracteres especiais",
+    "impede criação de elemento a partir de payload XSS"
    ]
   },
   "src/lib/__tests__/lalamoveCanonical.test.ts": {
@@ -73265,10 +73308,23 @@
   }
  },
  "git": {
-  "sha": "d055637fd26ba6f57fc9af71a2dbfd3313ed9dba",
+  "sha": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "6d201eb",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/components/map/GoogleMapsCanvas.tsx",
+     "src/components/map/markerFactories.ts",
+     "src/lib/__tests__/html.test.ts",
+     "src/lib/html.ts"
+    ]
+   },
    {
     "sha": "d055637",
     "date": "2026-11-22",
@@ -73597,27 +73653,16 @@
     "files": [
      "docs/CRON_JOBS.md"
     ]
-   },
-   {
-    "sha": "6c13bec",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "lalamove_bundle_import.json",
-     "lalamove_f01_cotacao.json"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    9
+    8
    ],
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    4
+    5
    ],
    [
     ".github/workflows/ci.yml",
@@ -73630,6 +73675,10 @@
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     3
+   ],
+   [
+    "src/components/map/markerFactories.ts",
+    2
    ],
    [
     "docs/API_CONTRACTS.md",
@@ -73660,6 +73709,18 @@
     2
    ],
    [
+    "src/components/map/GoogleMapsCanvas.tsx",
+    1
+   ],
+   [
+    "src/lib/__tests__/html.test.ts",
+    1
+   ],
+   [
+    "src/lib/html.ts",
+    1
+   ],
+   [
     "supabase/functions/job-worker/index.ts",
     1
    ],
@@ -73672,23 +73733,7 @@
     1
    ],
    [
-    "src/components/map/markerFactories.ts",
-    1
-   ],
-   [
     "docs/planos/PLANO_UX_NAVEGACAO_200_ETAPAS.md",
-    1
-   ],
-   [
-    "supabase/functions/_shared/contract.ts",
-    1
-   ],
-   [
-    "supabase/functions/apply-fixes/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/bitrix24-process-queue/index.ts",
     1
    ]
   ]

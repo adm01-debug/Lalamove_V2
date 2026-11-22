@@ -828,7 +828,7 @@
     "GoogleMapsCanvas"
    ],
    "export_default": null,
-   "linhas": 366,
+   "linhas": 358,
    "dominio": "components/map",
    "hooks_locais": [
     "useGoogleMapsLoader",

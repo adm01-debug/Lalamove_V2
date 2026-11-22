@@ -224,7 +224,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 95
+   "arquivos_puxados": 96
   },
   {
    "caminho": "/*",
@@ -982,7 +982,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 95
+   "arquivos_puxados": 96
   },
   {
    "caminho": "/delivery-metrics",
@@ -1723,7 +1723,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 43
+   "arquivos_puxados": 44
   },
   {
    "caminho": "/map",
@@ -1828,7 +1828,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 43
+   "arquivos_puxados": 44
   },
   {
    "caminho": "/map-tools",
@@ -2167,7 +2167,7 @@
     "listbox",
     "option"
    ],
-   "arquivos_puxados": 72
+   "arquivos_puxados": 73
   },
   {
    "caminho": "/password-reset-approvals",
@@ -3793,7 +3793,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 277
+   "arquivos_puxados": 278
   }
  ],
  "menu": [
