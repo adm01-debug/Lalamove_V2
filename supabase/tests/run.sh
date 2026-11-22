@@ -7,7 +7,7 @@
 # das migrations + a fixture de trajeto, e roda supabase/tests/02_scenarios.sql.
 #
 # Uso:  bash supabase/tests/run.sh
-# Requer: docker
+# Requer: docker  OU  psql + PGHOST/PGPORT/PGUSER/PGPASSWORD (service container do CI)
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,7 +16,11 @@ MIG="$REPO/supabase/migrations"
 CONT="pg_lalamove_validate_$$"
 PORT="${PG_TEST_PORT:-55433}"
 
-cleanup() { docker rm -f "$CONT" >/dev/null 2>&1 || true; }
+# No CI existe um service container do Postgres: basta apontar PGHOST e nao ha docker.
+EXTERNAL_PG=0
+if [ -n "${PGHOST:-}" ]; then EXTERNAL_PG=1; fi
+
+cleanup() { [ "$EXTERNAL_PG" = 1 ] || docker rm -f "$CONT" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 
 # --- 1. regenera 01_functions.sql a partir das migrations ------------------
@@ -74,19 +78,32 @@ sql = (
 print(f"03_fixture.sql gerado a partir de fixtures/route_curitiba.json ({len(pts)} pontos)")
 PY
 
-# --- 3. sobe o Postgres descartavel ---------------------------------------
-echo "subindo $CONT (postgres:16-alpine na porta $PORT)..."
-docker run -d --rm --name "$CONT" -e POSTGRES_PASSWORD=x -p "$PORT:5432" postgres:16-alpine >/dev/null
-for _ in $(seq 1 60); do
-  if docker exec "$CONT" pg_isready -U postgres -q 2>/dev/null; then break; fi
-  sleep 1
-done
-docker exec "$CONT" pg_isready -U postgres -q || { echo "Postgres nao subiu"; exit 1; }
+# --- 3. sobe o Postgres descartavel (ou usa o service container do CI) -----
+run_sql() {
+  if [ "$EXTERNAL_PG" = 1 ]; then
+    psql -q -v ON_ERROR_STOP=1 -f -
+  else
+    docker exec -i "$CONT" psql -U postgres -q -v ON_ERROR_STOP=1 -f -
+  fi
+}
+
+if [ "$EXTERNAL_PG" = 1 ]; then
+  echo "usando Postgres externo em $PGHOST:${PGPORT:-5432}"
+  pg_isready -q || { echo "Postgres externo nao respondeu"; exit 1; }
+else
+  echo "subindo $CONT (postgres:16-alpine na porta $PORT)..."
+  docker run -d --rm --name "$CONT" -e POSTGRES_PASSWORD=x -p "$PORT:5432" postgres:16-alpine >/dev/null
+  for _ in $(seq 1 60); do
+    if docker exec "$CONT" pg_isready -U postgres -q 2>/dev/null; then break; fi
+    sleep 1
+  done
+  docker exec "$CONT" pg_isready -U postgres -q || { echo "Postgres nao subiu"; exit 1; }
+fi
 
 # --- 4. roda stubs -> funcoes -> fixture -> cenarios ----------------------
 for f in 00_stubs.sql 01_functions.sql 03_fixture.sql 02_scenarios.sql; do
   echo "--- $f"
-  docker exec -i "$CONT" psql -U postgres -q -v ON_ERROR_STOP=1 -f - < "$HERE/$f"
+  run_sql < "$HERE/$f"
 done
 
 echo "OK — harness completo"
