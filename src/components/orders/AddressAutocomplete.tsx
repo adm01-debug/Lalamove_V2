@@ -323,6 +323,17 @@ export function AddressAutocomplete({
                     <Badge variant="outline" className="text-[10px] px-1.5 py-0 flex-shrink-0">
                       {suggestion.type || 'local'}
                     </Badge>
+                    {/* Etapa 316 do plano Mapbox: a origem do resultado precisa
+                        ser visivel — com `auto` ligado o mesmo campo alterna entre
+                        Google e Mapbox, e sem o rotulo nao da para saber qual
+                        provedor respondeu (nem conferir a fatura). */}
+                    <Badge
+                      variant="secondary"
+                      className="text-[10px] px-1.5 py-0 flex-shrink-0 uppercase"
+                      title={suggestion.provider === 'google' ? 'Google Maps' : 'Mapbox'}
+                    >
+                      {suggestion.provider === 'google' ? 'GOOGLE' : 'MAPBOX'}
+                    </Badge>
                   </div>
                 </button>
               ))}

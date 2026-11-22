@@ -196,3 +196,31 @@ describe('AddressAutocomplete — onAddressSelected (etapa 34)', () => {
     expect(onCoordinatesChange).not.toHaveBeenCalled();
   });
 });
+
+describe('AddressAutocomplete — origem do resultado (etapa 316 do plano Mapbox)', () => {
+  beforeEach(() => {
+    invokeMock.mockReset();
+    orderQueryMock.mockReset();
+    noOrders();
+  });
+
+  it('rotula cada sugestao com o provedor que respondeu', async () => {
+    // `auto` alterna entre Google e Mapbox na mesma sessao de busca: sem o
+    // rotulo nao da para saber qual provedor respondeu (nem conferir a fatura).
+    invokeMock.mockResolvedValue({
+      data: [
+        { id: 'google:1', main_text: 'Rua Google', secondary_text: 'Curitiba', type: 'address', provider: 'google' },
+        { id: 'mapbox:2', main_text: 'Rua Mapbox', secondary_text: 'Curitiba', type: 'address', provider: 'mapbox' },
+      ],
+      error: null,
+    });
+
+    render(<AddressAutocomplete value="" onChange={() => {}} />, { wrapper });
+
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Rua XV' } });
+
+    await waitFor(() => expect(screen.getByText('Rua Google')).toBeTruthy());
+    expect(screen.getByText('GOOGLE')).toBeTruthy();
+    expect(screen.getByText('MAPBOX')).toBeTruthy();
+  });
+});

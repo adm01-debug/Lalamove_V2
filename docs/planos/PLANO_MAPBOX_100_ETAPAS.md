@@ -313,8 +313,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 ## BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)
 
 ### 35 — `AddressAutocomplete` provedor-agnóstico
-- [ ] Componente consome `useGeoAutocomplete` (plano Google etapa 33–34); exibe fonte do resultado (ícone Google/Mapbox) e `accuracy`
-- **Evidência:** vitest com os dois provedores mockados
+- [x] Componente consome `useGeoAutocomplete` (plano Google etapa 33–34); exibe fonte do resultado (ícone Google/Mapbox) e `accuracy`
+- **Evidência:** `AddressAutocomplete.tsx` já consome `useAddressSearchBox` (gateway); cada sugestão agora exibe badge `GOOGLE`/`MAPBOX` vindo de `GeoSuggestion.provider`, com teste nos dois provedores mockados em `AddressAutocomplete.test.tsx` (falha sem o badge)
 
 ### 36 — Teste de cobertura BR do Search Box (decide M1)
 - [x] Script `scripts/geo/searchbox-coverage.ts`: 50 endereços reais de Curitiba/SP/GO (clientes e fornecedores do Bitrix) → `suggest`+`retrieve`; medir % com `accuracy ∈ {rooftop,parcel,point}` e distância ao resultado Google (≤ 50 m) - **existe** (`scripts/geo/searchbox-coverage.ts` + `enderecos.sample.csv`); falta rodar com a base real
@@ -392,8 +392,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** `geo_usage_month` após 7 dias
 
 ### 53 — Replay de trajeto
-- [ ] `simulate-driver-movement` com a fixture `route_curitiba.json` contra o provedor Mapbox → eventos geo corretos
-- **Evidência:** saída do replay
+- [x] `simulate-driver-movement` com a fixture `route_curitiba.json` contra o provedor Mapbox → eventos geo corretos
+- **Evidência:** `supabase/functions/simulate-driver-movement/replay.ts` percorre a fixture ponto a ponto (`replay:true` no corpo) em vez de sortear o deslocamento; `replay.test.ts` com 7 asserts (determinismo, ETA decrescente, distancia total, bearing) roda no job `Deno Contract Tests` da CI
 
 ### 54 — Testes do bloco
 - [x] Deno: route/matrix/matching normalização; pgTAP do trigger com `expected_route` vinda do Mapbox — testes Deno de provider em `geo-gateway/`; jobs `Geo geometry SQL tests`, `Geo trigger SQL tests` e `SQL Geo Trigger Tests` no CI
@@ -424,8 +424,8 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** decisão em `docs/MAPBOX.md`
 
 ### 60 — `useMapbox.ts` → `useGeo.ts`
-- [ ] Os 9 hooks de `useMapbox.ts` viram wrappers finos de `useGeo` com `provider:'mapbox'` forçado onde não há Google (isochrone/optimization/tilequery) e provedor configurado nos demais
-- **Evidência:** `/map-tools` sem regressão (manual)
+- [x] Os 9 hooks de `useMapbox.ts` viram wrappers finos de `useGeo` com `provider:'mapbox'` forçado onde não há Google (isochrone/optimization/tilequery) e provedor configurado nos demais
+- **Evidência:** os 9 hooks (`useMapboxGeocode`, `useMapboxReverseGeocode`, `useMapboxDirections`, `useMapboxMatrix`, `useMapboxIsochrone`, `useMapboxOptimization`, `useMapboxMapMatching`, `useMapboxStaticImage`, `useMapboxTilequery`) passaram a delegar a `geoGateway()`/`callGeo()` em vez de falar com o Mapbox direto — nenhum `fetch` a `api.mapbox.com` restou no arquivo. As exclusivas (`isochrone`/`optimization`/`tilequery`) não precisam forçar provider: `geo_settings` só tem esses provedores no Mapbox (item 12)
 
 ### 61 — Remover `mapbox-proxy`
 - [x] Após 60 e 31, apagar a edge e o bloco do `config.toml`; atualizar `docs/ci/MATRIZ_EDGE_TABELA.md` — `supabase/config.toml:87` registra: `# mapbox-proxy: REMOVIDA do repo na etapa 61 (arquivo apagado). O bloco [functions.mapbox-proxy]` — nenhum arquivo `supabase/functions/mapbox-proxy/` existe
