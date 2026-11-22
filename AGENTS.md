@@ -108,7 +108,8 @@ Suplemento operacional do Hermes: `.hermes.md` (pastas de chat, cadeado do proje
   `MAPBOX_ACCESS_TOKEN` nunca no front.
 - **Bitrix24** — edges `bitrix24-sync` e `bitrix24-process-queue` (fila + OAuth2); segredos nas edges.
 - **Notificações** — edge `send-notification` (WhatsApp/e-mail/Slack/Bitrix24/n8n) e `escalate-alerts`;
-  chamadas internas usam `service_role`.
+  chamadas internas usam `service_role`. Mensageria com motorista (Zapp/WhatsApp + SMS de
+  contingência, respostas, opt-out, ledger): ler `docs/agentes/mensageria.md` antes de mexer.
 - **Lovable AI** — `route-analyzer` consome `LOVABLE_API_KEY` com **custo por token**: nunca invoque em
   massa para "testar".
 - **GitHub/CI** — ler `docs/agentes/github-ci.md` ao mexer em settings, branch protection ou workflows.

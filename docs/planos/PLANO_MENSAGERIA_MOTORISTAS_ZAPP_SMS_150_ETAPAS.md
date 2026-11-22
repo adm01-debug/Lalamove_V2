@@ -758,8 +758,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** checklist assinado na PR; `security` do CI verde
 
 ### 144 — [L][Z] Runbook
-- [ ] `docs/agentes/mensageria.md`: número banido, conexão caída, provedor SMS fora, fila morta, rotação de chave
-- **Evidência:** arquivo mergeado e listado no `AGENTS.md`
+- [x] `docs/agentes/mensageria.md`: número banido, conexão caída, provedor SMS fora, fila morta, rotação de chave
+- **Evidência:** `docs/agentes/mensageria.md` criado e referenciado em `AGENTS.md` > "Serviços" (PR #281);
+  guarda `scripts/ci/check-agents-md-integrity.mjs` passa com 8 seções
 
 ## Bloco 13 — Testes, piloto e liberação (145–150)
 
