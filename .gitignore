@@ -53,3 +53,6 @@ __pycache__/
 
 # Lockfile do Deno: a CI roda deno v1.x e nao le lockfile v5 gerado pelo deno 2.x
 deno.lock
+
+# Artefatos locais do CLI do Supabase (link do projeto, versoes de servico)
+supabase/.temp/
