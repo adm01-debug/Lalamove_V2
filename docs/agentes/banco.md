@@ -66,7 +66,7 @@ dono), toda afirmação sobre tabelas, RLS, policies, funções, crons e ledger 
    é feito por inserção direta, como `docs/CRON_JOBS.md` registra ("o agendamento contém segredos … não via
    migração — para não vazar em remixes").
 
-## Segredos commitados — código limpo em 2026-11-08; `service_role` legada já rotacionada; PAT e migrate-helper em produção ainda sem confirmação
+## Segredos commitados — código limpo em 2026-11-08; migrate-helper confirmado fora da produção; `service_role`/`anon` provavelmente ainda NÃO rotacionadas
 
 Varredura em 2026-11-08 no HEAD `924454e` achou segredo hardcoded em 19 arquivos de `scripts/` (13 com o
 JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-helper`
@@ -80,27 +80,38 @@ JWT `service_role`, 6 com o PAT `sbp_…` da Management API) e na edge `migrate-
   de seed em `test-user-permissions.ts`;
 - removeu `supabase/functions/migrate-helper/` e sua entrada em `supabase/config.toml`.
 
-**Já feito (confirmado por fonte independente, com uma ressalva de horário):** o commit `b819be8`
-(2026-11-21, corrige os crons 18/19) registra evidência de produção — "78/78 respostas 401 em
-`net._http_response` desde [horário]" — porque esses crons embutiam a `anon` JWT legada, confirmando que a
-chave antiga **parou de funcionar de fato em 2026-11-20**. A PR #93 (mergeada 2026-11-20T19:13Z) cita o
-horário exato "17:25Z, 20/11" para a rotação, mas essa PR não anexa log/query para esse horário específico —
-**o dia está confirmado por evidência de produção; o horário "17:25Z" é só citação de outra PR, sem
-confirmação independente (NÃO VERIFICADO nesse detalhe).** A PR #108 (mergeada 2026-11-21) já se refere à
-chave nova no formato `sb_secret_…`. **Isso resolve o vazamento do `service_role`/`anon` legado que estava
-hardcoded nos 19 arquivos** — quem leu o histórico do Git fica com um valor já invalidado desde 20/11.
+**Confirmado em produção em 2026-11-22** (`GET /v1/projects/iecgydonctmabiijadsf/edge-functions` via
+Management API, sessão com MCP `SUPABASE_-_LALAMOVE_V2_-_MCP`): a função `migrate-helper` não existe mais
+na lista de 27 edge functions ativas do projeto — a remoção do código (etapa acima) foi de fato implantada,
+não só removida do repo.
 
-**Ainda pendente, ação do dono — sem confirmação direta:**
+**Rotação de `service_role`/`anon`: a conclusão anterior deste doc ("já feito, confirmado") está
+provavelmente ERRADA — corrigindo aqui.** Verificação em 2026-11-22 via `GET
+/v1/projects/iecgydonctmabiijadsf/api-keys`: o JWT `service_role`/`anon` ativo hoje tem `iat` idêntico ao
+`created_at` do projeto (`2026-08-02T11:25:56Z`, confirmado em `GET /v1/projects/iecgydonctmabiijadsf`) —
+ou seja, é a chave **original da criação do projeto**, não uma chave nova. Se tivesse havido rotação do JWT
+secret em 20/11 (como este doc chegou a afirmar), a chave ativa teria `iat` de 20/11, não da criação do
+projeto. O commit `b819be8` (78/78 respostas 401 nos crons 18/19) é evidência real de algo quebrando em
+produção em 20/11, mas não prova rotação de chave — pode ter outra causa (ex.: GRANT revogado de `anon`
+pela migration `20260902000000_harden_revoke_anon_grants.sql`, que gera erro de permissão no Postgres, não
+necessariamente 401 de JWT inválido no gateway). **Tratar como NÃO VERIFICADO que a chave vazada em 08/11
+tenha sido invalidada — ela muito provavelmente continua válida hoje.** O dono foi consultado em 2026-11-22
+sobre rotacionar agora (a sessão tem acesso via Management API) e decidiu não rotacionar neste momento;
+decisão registrada, risco do vazamento permanece aberto até o dono decidir de outra forma.
 
-1. **PAT `sbp_…` da Management API** (6 arquivos tinham esse valor) — nenhuma PR encontrada confirma rotação
-   dele especificamente; a rotação de 20/11 foi descrita como das "legacy keys" (anon/service_role), que é
-   uma credencial diferente do PAT de Management API. Rotacionar em
-   https://supabase.com/dashboard/account/tokens se ainda não foi feito.
-2. Confirmar que `migrate-helper` foi removida **da produção** (painel Supabase ou CLI) — apagar o arquivo
-   do repo não a desimplanta, porque não há deploy automático de edge function aqui
-   (`docs/agentes/deploy.md`; a PR #108 criou `deploy-edges.yml`, mas isso não reverte uma função já no ar
-   antes dele).
-3. Scripts que ainda forem usados precisam de `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_ACCESS_TOKEN` /
+A PR #108 (mergeada 2026-11-21) já se refere à chave nova no formato `sb_secret_…` — mas essa chave também
+já existia desde a criação do projeto (`inserted_at` igual ao `created_at`, 2026-08-02); trocar a
+*referência no código* para o formato novo não invalida o JWT legado antigo, que continua aceito pelo
+projeto a menos que as legacy keys sejam desativadas (não verificado) ou o JWT secret seja de fato
+rotacionado.
+
+**Ainda pendente, ação do dono:**
+
+1. **Rotacionar `service_role`/`anon` (JWT secret) e o PAT `sbp_…` da Management API** — ambos continuam,
+   pelo que a evidência de 2026-11-22 mostra, com os mesmos valores que vazaram em 08/11. Rotação do JWT
+   secret: painel Supabase do projeto `iecgydonctmabiijadsf` (Settings → API) ou Management API; PAT:
+   https://supabase.com/dashboard/account/tokens.
+2. Scripts que ainda forem usados precisam de `SUPABASE_SERVICE_ROLE_KEY` / `SUPABASE_ACCESS_TOKEN` /
    `SEED_TI_PASSWORD` exportados no ambiente antes de rodar.
 
 Regra para qualquer agente: **nunca imprima esses valores** (nem em chat, commit, PR ou relatório) — cite
