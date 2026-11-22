@@ -2270,7 +2270,7 @@
     "AlertConfigCard"
    ],
    "export_default": null,
-   "linhas": 122,
+   "linhas": 188,
    "dominio": "pages/alert-configurations",
    "hooks_locais": [
     "useDeleteAlertConfiguration",

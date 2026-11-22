@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a08dd878de7484247f24bb1add51921958147ab6",
+  "sha": "b5b308837ba8fe5764cbf78352e610a5b412366f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 04:09 UTC",
-  "files_total": 992,
-  "code_files": 818,
-  "code_lines": 140753
+  "generated_at": "2026-11-22 04:21 UTC",
+  "files_total": 993,
+  "code_files": 819,
+  "code_lines": 140905
  },
  "version": "1.3.2",
- "facts_hash": "7da7fa081341ecf9",
+ "facts_hash": "8dc3b2b0de19d711",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -180,7 +180,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 280,
-   ".tsx": 231,
+   ".tsx": 232,
    ".sql": 187,
    ".mjs": 107,
    ".py": 8,
@@ -20902,8 +20902,8 @@
   },
   {
    "module": "src/pages",
-   "files": 87,
-   "lines": 19244,
+   "files": 88,
+   "lines": 19396,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -20962,6 +20962,7 @@
    ],
    "deps": [
     "@tanstack/react-query",
+    "@testing-library/react",
     "date-fns",
     "framer-motion",
     "lucide-react",
@@ -20972,6 +20973,7 @@
     "react-router-dom",
     "recharts",
     "sonner",
+    "vitest",
     "web-vitals",
     "zod"
    ],
@@ -21040,6 +21042,7 @@
     "src/pages/UnauthorizedPage.tsx",
     "src/pages/UserPreferencesPage.tsx",
     "src/pages/WebhooksPage.tsx",
+    "src/pages/alert-configurations/AlertConfigCard.test.tsx",
     "src/pages/alert-configurations/AlertConfigCard.tsx",
     "src/pages/approvals/ApprovalCard.tsx",
     "src/pages/bitrix24/Bitrix24SubComponents.tsx",
@@ -21063,8 +21066,7 @@
     "src/pages/permissions/PermissionModuleList.tsx",
     "src/pages/ratelimit/RateLimitDialogs.tsx",
     "src/pages/reports/ReportDistributionTab.tsx",
-    "src/pages/reports/ReportDriversTab.tsx",
-    "src/pages/reports/ReportOverviewTab.tsx"
+    "src/pages/reports/ReportDriversTab.tsx"
    ]
   },
   {
@@ -37357,6 +37359,22 @@
    {
     "file": "src/lib/__tests__/uapiErrors.test.ts",
     "name": "sucesso é ret 0"
+   },
+   {
+    "file": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+    "name": "AlertConfigCard — eventos geo (etapa 72)"
+   },
+   {
+    "file": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+    "name": "mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru"
+   },
+   {
+    "file": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+    "name": "renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto"
+   },
+   {
+    "file": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+    "name": "preserva variável desconhecida no preview em vez de apagar"
    },
    {
     "file": "src/types/__tests__/types.test.ts",
@@ -64533,9 +64551,27 @@
     "Falha ao reprocessar webhook"
    ]
   },
+  "src/pages/alert-configurations/AlertConfigCard.test.tsx": {
+   "path": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+   "lines": 86,
+   "is_test": true,
+   "tests": [
+    "AlertConfigCard — eventos geo (etapa 72)",
+    "mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru",
+    "renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto",
+    "preserva variável desconhecida no preview em vez de apagar"
+   ],
+   "side_effects": [
+    "notify_bitrix24_task",
+    "notify_email",
+    "notify_n8n_webhook",
+    "notify_slack",
+    "notify_whatsapp"
+   ]
+  },
   "src/pages/alert-configurations/AlertConfigCard.tsx": {
    "path": "src/pages/alert-configurations/AlertConfigCard.tsx",
-   "lines": 122,
+   "lines": 188,
    "exports": [
     "function AlertConfigCard"
    ],
@@ -69802,10 +69838,21 @@
   }
  },
  "git": {
-  "sha": "a08dd878de7484247f24bb1add51921958147ab6",
+  "sha": "b5b308837ba8fe5764cbf78352e610a5b412366f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b5b3088",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+     "src/pages/alert-configurations/AlertConfigCard.tsx"
+    ]
+   },
    {
     "sha": "a08dd87",
     "date": "2026-11-22",
@@ -70154,26 +70201,12 @@
     "files": [
      "docs/MAPBOX.md"
     ]
-   },
-   {
-    "sha": "a76d93c",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)",
-    "files": [
-     "docs/MAPBOX.md",
-     "src/components/orders/AddressAutocomplete.test.tsx",
-     "src/components/orders/AddressAutocomplete.tsx",
-     "src/hooks/useGeoSearch.test.tsx",
-     "src/hooks/useGeoSearch.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    9
+    10
    ],
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -70188,23 +70221,19 @@
     4
    ],
    [
-    "docs/MAPBOX.md",
-    4
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.test.tsx",
-    3
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.tsx",
-    3
-   ],
-   [
     "supabase/functions/geo-gateway/providers/types.ts",
     3
    ],
    [
-    "supabase/functions/job-worker/index.ts",
+    "docs/MAPBOX.md",
+    3
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.test.tsx",
+    2
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.tsx",
     2
    ],
    [
@@ -70249,6 +70278,10 @@
    ],
    [
     "supabase/.temp/storage-migration",
+    2
+   ],
+   [
+    "supabase/.temp/storage-version",
     2
    ]
   ]

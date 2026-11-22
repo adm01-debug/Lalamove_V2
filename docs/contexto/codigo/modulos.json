@@ -3015,8 +3015,8 @@
   {
    "modulo": "pages/alert-configurations",
    "arquivos": 1,
-   "testes": 0,
-   "linhas": 122,
+   "testes": 1,
+   "linhas": 188,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

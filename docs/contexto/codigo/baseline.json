@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a08dd878de7484247f24bb1add51921958147ab6",
+  "commit": "b5b308837ba8fe5764cbf78352e610a5b412366f",
   "branch": "main",
-  "data_commit": "2026-11-22T01:08:59-03:00",
+  "data_commit": "2026-11-22T01:21:31-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b5b3088",
+    "data": "2026-11-22",
+    "assunto": "feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)"
+   },
    {
     "sha": "a08dd87",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "972a37c",
     "data": "2026-11-21",
     "assunto": "feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)"
-   },
-   {
-    "sha": "a0e2990",
-    "data": "2026-11-21",
-    "assunto": "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)"
    }
   ],
-  "arquivos_mudados_7d": 246,
+  "arquivos_mudados_7d": 247,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -164,11 +164,11 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 11
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
@@ -218,11 +218,11 @@
     "mudancas": 11
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 11
    },
    {
-    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 129
+    "commits": 130
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 998,
-  "arquivos_codigo": 622,
-  "linhas_codigo": 121731,
+  "arquivos_total": 999,
+  "arquivos_codigo": 623,
+  "linhas_codigo": 121883,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 128,
+  "testes": 129,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 102
@@ -539,8 +539,8 @@
    "linhas": 28
   },
   "src/pages": {
-   "arquivos": 87,
-   "linhas": 19244
+   "arquivos": 88,
+   "linhas": 19396
   },
   "src/services": {
    "arquivos": 1,

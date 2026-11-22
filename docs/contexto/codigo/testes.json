@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 128,
+ "total": 129,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
   "edge (deno)": 16,
   "guard (node --test)": 33,
-  "unit (vitest)": 70
+  "unit (vitest)": 71
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 8
+   "arquivos": 9
   },
   {
    "padrao": "e2e/",
@@ -1005,6 +1005,16 @@
    "casos": 15
   },
   {
+   "arquivo": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 86,
+   "testa": [
+    "src/hooks/useAlertConfigurations.ts",
+    "src/pages/alert-configurations/AlertConfigCard.tsx"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/test/setup.ts",
    "tipo": "unit (vitest)",
    "linhas": 16,
@@ -1262,6 +1272,7 @@
   "src/components/ui/select.tsx": 1,
   "src/components/ui/tabs.tsx": 1,
   "src/hooks/useActiveAlerts.ts": 1,
+  "src/hooks/useAlertConfigurations.ts": 1,
   "src/hooks/useContractVersionUsage.ts": 1,
   "src/hooks/useContractVersionUsageMonthly.ts": 1,
   "src/hooks/useCronJobsHealth.ts": 1,
@@ -1302,6 +1313,7 @@
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,
+  "src/pages/alert-configurations/AlertConfigCard.tsx": 1,
   "src/types/index.ts": 1,
   "src/types/lalamove.ts": 3,
   "src/utils/exportUtils.ts": 1,
@@ -1394,7 +1406,6 @@
    "src/hooks/useAccessibility.tsx",
    "src/hooks/useAchievementsSystem.tsx",
    "src/hooks/useAdvancedReports.ts",
-   "src/hooks/useAlertConfigurations.ts",
    "src/hooks/useAlertGrouping.ts",
    "src/hooks/useAlertSettings.ts",
    "src/hooks/useAnalyticsData.ts",

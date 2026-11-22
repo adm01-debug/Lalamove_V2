@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a08dd878de7484247f24bb1add51921958147ab6` (2026-11-22T01:08:59-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b5b308837ba8fe5764cbf78352e610a5b412366f` (2026-11-22T01:21:31-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (511), SQL (187), JavaScript (112), Markdown (102), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (512), SQL (187), JavaScript (112), Markdown (102), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 998 |
-| arquivos_codigo | 622 |
-| linhas_codigo | 121731 |
+| arquivos_total | 999 |
+| arquivos_codigo | 623 |
+| linhas_codigo | 121883 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 128 |
+| testes | 129 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 102 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7680 nós · 16324 arestas · 575 comunidades · grafo do commit `a08dd878`
-- comunidades maiores: cn (147), react (140), client.ts (109), card.tsx (107), snapshot.py (102), contract.ts (90), providers/types.ts (88), utils.ts (88), ref_node_path (86), AdvancedReportsPage.tsx (82), dependencies (80), lucide-react (80)
+- 7685 nós · 16336 arestas · 568 comunidades · grafo do commit `b5b30883`
+- comunidades maiores: cn (208), button.tsx (112), App.tsx (109), react (106), card.tsx (106), snapshot.py (104), ref_node_path (85), dependencies (80), @tanstack/react-query (78), gerar.mjs (76), generate.py (73), package.json (69)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -282,8 +282,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/config.toml (16)
 - docs/MAPBOX.md (12)
 - .github/workflows/ci.yml (11)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (11)
 - docs/pendencias/_ordem.md (10)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (10)
 - supabase/functions/geo-gateway/index.ts (10)
 - src/components/orders/AddressAutocomplete.tsx (8)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
@@ -371,6 +371,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `b5b3088` feat(alerts): rótulos dos 8 eventos geo e preview do template (etapa 72) (#230)
 - 2026-11-22 `a08dd87` feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)
 - 2026-11-22 `f7d18db` feat(geo): geocode server-side de fallback e action validate (etapas 37/38) (#228)
 - 2026-11-22 `0029ab4` chore: remove chave DistanceMatrix.ai do repo e documenta Google Maps (etapas 8-10) (#225)
@@ -385,7 +386,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `1eeeb96` docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)
 - 2026-11-21 `c7d9fce` chore: destrackear supabase/.temp e ignorar (#212)
 - 2026-11-21 `1d97ccb` feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)
-- 2026-11-21 `933f4d6` docs: auditoria do ledger de migrations x schema real (#210)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
