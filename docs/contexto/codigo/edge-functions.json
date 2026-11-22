@@ -374,7 +374,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 8,
-   "linhas": 1856,
+   "linhas": 1885,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -426,7 +426,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 6
+   "testes": 7
   },
   {
    "nome": "get-mapbox-token",

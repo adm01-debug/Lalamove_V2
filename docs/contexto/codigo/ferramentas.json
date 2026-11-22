@@ -3,10 +3,10 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (501)",
+   "TypeScript (502)",
    "SQL (187)",
    "JavaScript (112)",
-   "Markdown (100)",
+   "Markdown (101)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -442,6 +442,11 @@
    "arquivo": "docs/QUEUE_SYSTEM.md",
    "titulo": "🔄 Sistema de Filas Assíncronas",
    "linhas": 612
+  },
+  {
+   "arquivo": "docs/RUNBOOK_GOOGLE_MAPS.md",
+   "titulo": "RUNBOOK — Google Maps Platform (operação)",
+   "linhas": 120
   },
   {
    "arquivo": "docs/RUNBOOK_LALAMOVE.md",

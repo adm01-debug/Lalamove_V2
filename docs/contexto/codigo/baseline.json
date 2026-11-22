@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
+  "commit": "c194d15334790960c91078ac92e34e75ab066a2f",
   "branch": "main",
-  "data_commit": "2026-11-21T23:28:31-03:00",
+  "data_commit": "2026-11-21T23:33:04-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c194d15",
+    "data": "2026-11-21",
+    "assunto": "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)"
+   },
+   {
+    "sha": "1eeeb96",
+    "data": "2026-11-21",
+    "assunto": "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)"
+   },
    {
     "sha": "c7d9fce",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "d62d6d8",
     "data": "2026-11-21",
     "assunto": "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)"
-   },
-   {
-    "sha": "3ab9d64",
-    "data": "2026-11-21",
-    "assunto": "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)"
-   },
-   {
-    "sha": "3e9f386",
-    "data": "2026-11-21",
-    "assunto": "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)"
    }
   ],
-  "arquivos_mudados_7d": 223,
+  "arquivos_mudados_7d": 225,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 46
+    "mudancas": 49
    },
    {
     "pasta": "src/components/map",
@@ -223,7 +223,7 @@
    },
    {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 117
+    "commits": 119
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 986,
-  "arquivos_codigo": 612,
-  "linhas_codigo": 119924,
+  "arquivos_total": 988,
+  "arquivos_codigo": 613,
+  "linhas_codigo": 119996,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,10 +324,10 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 122,
+  "testes": 123,
   "workflows": 5,
   "scripts": 106,
-  "docs_md": 100
+  "docs_md": 101
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 57,
-   "linhas": 14881
+   "arquivos": 58,
+   "linhas": 14953
   },
   "tailwind.config.ts": {
    "arquivos": 1,

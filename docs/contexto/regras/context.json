@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
+  "sha": "c194d15334790960c91078ac92e34e75ab066a2f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:29 UTC",
-  "files_total": 980,
-  "code_files": 808,
-  "code_lines": 138946
+  "generated_at": "2026-11-22 02:33 UTC",
+  "files_total": 982,
+  "code_files": 809,
+  "code_lines": 139018
  },
  "version": "1.3.2",
- "facts_hash": "ff8ab2a49886d173",
+ "facts_hash": "0eca26a6a2e915ea",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 272,
+   ".ts": 273,
    ".tsx": 229,
    ".sql": 187,
    ".mjs": 107,
@@ -21162,8 +21162,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 57,
-   "lines": 14881,
+   "files": 58,
+   "lines": 14953,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21218,7 +21218,7 @@
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
     "failover.ts: isFailoverWorthy, FailoverResolver, FailoverDeps, FailoverOutcome, callWithFailover",
     "index.ts: DEFAULT_SETTINGS",
-    "metering.ts: CACHE_TTL_S, sha256, stableStringify, cacheKey, cacheGet, cachePut",
+    "metering.ts: CACHE_TTL_S, resolveTtl, sha256, stableStringify, cacheKey, cacheGet",
     "polyline.ts: decodePolyline, encodePolyline, simplify",
     "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, mergeSettings",
     "google.ts: GoogleOptions, GoogleProvider",
@@ -21270,6 +21270,7 @@
     "supabase/functions/geo-gateway/google.test.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/geo-gateway/mapbox.test.ts",
+    "supabase/functions/geo-gateway/metering.test.ts",
     "supabase/functions/geo-gateway/metering.ts",
     "supabase/functions/geo-gateway/polyline.test.ts",
     "supabase/functions/geo-gateway/polyline.ts",
@@ -26058,6 +26059,10 @@
    {
     "file": "supabase/functions/geo-gateway/metering.ts",
     "text": "* TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.ts",
+    "text": "* Etapa 15/211 do plano Mapbox: o TTL não pode ser só constante de código — a política de"
    },
    {
     "file": "supabase/functions/geo-gateway/resolver.ts",
@@ -37798,6 +37803,30 @@
    {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
     "name": "etapa 22: place-details no modo geocoding resolve por address no v6"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "resolveTtl sem config usa o TTL de codigo"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "geocode Mapbox temporario nunca cacheia (termos Mapbox)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "config.retention reduz o TTL de codigo"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "config.retention nao aumenta o TTL acima do padrao"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "config.retention invalido cai no TTL de codigo"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/metering.test.ts",
+    "name": "retention por provedor vence a chave plana"
    },
    {
     "file": "supabase/functions/geo-gateway/polyline.test.ts",
@@ -66128,7 +66157,7 @@
   },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 336,
+   "lines": 338,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -66238,11 +66267,28 @@
     "etapa 22: place-details no modo geocoding resolve por address no v6"
    ]
   },
+  "supabase/functions/geo-gateway/metering.test.ts": {
+   "path": "supabase/functions/geo-gateway/metering.test.ts",
+   "lines": 43,
+   "is_test": true,
+   "rule_comments": [
+    "Tentar reter 90 dias um limite de 30 dias e recusado: vale o de codigo."
+   ],
+   "tests": [
+    "resolveTtl sem config usa o TTL de codigo",
+    "geocode Mapbox temporario nunca cacheia (termos Mapbox)",
+    "config.retention reduz o TTL de codigo",
+    "config.retention nao aumenta o TTL acima do padrao",
+    "config.retention invalido cai no TTL de codigo",
+    "retention por provedor vence a chave plana"
+   ]
+  },
   "supabase/functions/geo-gateway/metering.ts": {
    "path": "supabase/functions/geo-gateway/metering.ts",
-   "lines": 90,
+   "lines": 117,
    "exports": [
     "const CACHE_TTL_S",
+    "function resolveTtl",
     "function sha256",
     "function stableStringify",
     "function cacheKey",
@@ -66285,7 +66331,8 @@
     "geo_usage_increment"
    ],
    "rule_comments": [
-    "* TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */"
+    "* TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */",
+    "* Etapa 15/211 do plano Mapbox: o TTL não pode ser só constante de código — a política de"
    ],
    "doc": "Cache (geo_cache), medição (geo_usage_increment) e registro de sessões de autocomplete. Recebe um client Supabase service_role; nunca lança — falha de medição não derruba a resposta.",
    "uses_service_role": true
@@ -68959,10 +69006,30 @@
   }
  },
  "git": {
-  "sha": "c7d9fceeedc3a2c32417c259a31e41af36335d63",
+  "sha": "c194d15334790960c91078ac92e34e75ab066a2f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c194d15",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)",
+    "files": [
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/metering.test.ts",
+     "supabase/functions/geo-gateway/metering.ts"
+    ]
+   },
+   {
+    "sha": "1eeeb96",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)",
+    "files": [
+     "docs/RUNBOOK_GOOGLE_MAPS.md"
+    ]
+   },
    {
     "sha": "c7d9fce",
     "date": "2026-11-21",
@@ -69283,66 +69350,15 @@
     "files": [
      "supabase/migrations/20261123110000_cron_refresh_cache_views.sql"
     ]
-   },
-   {
-    "sha": "2847da1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)",
-    "files": [
-     "supabase/config.toml"
-    ]
-   },
-   {
-    "sha": "06bcb9f",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "CHANGELOG.md",
-     "docs/GEO_PROVIDERS.md",
-     "docs/MAPBOX.md",
-     "docs/RUNBOOK_MAPBOX.md",
-     "docs/ci/MATRIZ_EDGE_TABELA.md",
-     "scripts/inventario/banco.sql",
-     "src/components/map/LiveMap.tsx",
-     "src/components/map/OrderTrackingMap.tsx",
-     "src/components/map/__tests__/OrderTrackingMap.test.tsx",
-     "src/components/map/__tests__/mapLayers.test.ts",
-     "src/components/map/mapLayers.ts",
-     "src/components/orders/OrderDetailModal.tsx",
-     "src/hooks/__tests__/useGeo.test.ts",
-     "src/hooks/__tests__/useGeoAdmin.latency.test.ts",
-     "src/hooks/useGeo.ts",
-     "src/hooks/useGeoAdmin.ts",
-     "src/hooks/useMapbox.ts",
-     "src/lib/geo-gateway.test.ts",
-     "src/lib/geo-gateway.ts",
-     "src/pages/MapsSettingsPage.tsx",
-     "supabase/functions/check-external-api/index.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/metering.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts",
-     "supabase/functions/geo-gateway/providers/types.ts",
-     "supabase/functions/geo-gateway/resolver.test.ts",
-     "supabase/functions/geo-gateway/resolver.ts",
-     "supabase/functions/mapbox-proxy/index.ts",
-     "supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
-    6
-   ],
-   [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     5
    ],
    [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     5
    ],
    [
@@ -69350,7 +69366,7 @@
     4
    ],
    [
-    "supabase/functions/geo-gateway/providers/types.ts",
+    "supabase/functions/geo-gateway/providers/mapbox.ts",
     4
    ],
    [
@@ -69366,15 +69382,15 @@
     3
    ],
    [
+    "supabase/functions/geo-gateway/providers/types.ts",
+    3
+   ],
+   [
     "supabase/functions/send-notification/index.ts",
     3
    ],
    [
     "supabase/functions/job-worker/index.ts",
-    3
-   ],
-   [
-    "docs/GEO_PROVIDERS.md",
     3
    ],
    [
@@ -69411,6 +69427,10 @@
    ],
    [
     "supabase/.temp/storage-version",
+    2
+   ],
+   [
+    "src/integrations/supabase/types.ts",
     2
    ]
   ]
