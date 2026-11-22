@@ -286,7 +286,8 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 ## Bloco 2 — Rotas, RBAC e navegação (46–60)
 
 ### 46 — [F] Parar de remontar o `AppLayout` a cada navegação
-- [ ] `src/App.tsx:138`: tirar `key={location.pathname}` do `<Routes>`; animar só o `<Outlet>` interno do `AppLayout` (`AppLayout.tsx:320-322`) com `AnimatePresence` + `key` local.
+- [x] `src/App.tsx:138`: tirar `key={location.pathname}` do `<Routes>`; animar só o `<Outlet>` interno do `AppLayout` (`AppLayout.tsx:320-322`) com `AnimatePresence` + `key` local.
+  - **Validação:** tsc 0, eslint 0, build OK, vitest 1057/1057 (67 arquivos). AnimatePresence movido para dentro do AppLayout; App.tsx não importa mais framer-motion.
 - **Evidência:** React DevTools: `Sidebar`/`Header` não desmontam ao trocar de rota; uma única subscription realtime por sessão (`supabase.getChannels().length` estável).
 
 ### 47 — [F] Uma única busca global (Ctrl+K)
