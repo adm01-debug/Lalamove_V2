@@ -258,7 +258,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 2,
+   "usado_por": 1,
    "orfao": false
   },
   {
@@ -2082,7 +2082,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 14,
+   "usado_por": 13,
    "orfao": false
   },
   {
@@ -2226,7 +2226,7 @@
     "AuthProvider"
    ],
    "export_default": null,
-   "linhas": 88,
+   "linhas": 77,
    "dominio": "hooks",
    "hooks_locais": [
     "useAuth"
@@ -2378,7 +2378,7 @@
     "AuthPage"
    ],
    "export_default": null,
-   "linhas": 415,
+   "linhas": 305,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `97b9d2e309` · branch `main` · 2026-11-22 17:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6487163744` · branch `main` · 2026-11-22 17:43 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -916,10 +916,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```ts
   { email: z.string().email('Email inválido'), password: z.string().min(1, 'Senha é obrigatória'), }
   ```
-- **signupSchema** (`src/pages/AuthPage.tsx`, z.object):
-  ```ts
-  { email: z.string().email('Email inválido'), password: z.string() .min(8, 'A senha deve ter pelo menos 8 caracteres') .regex(/[^A-Za-z0-9]/, 'A senha deve ter pelo menos um caractere especial'), }
-  ```
 - **emailSchema** (`src/pages/ForgotPasswordPage.tsx`, z.string):
   ```ts
   
@@ -1060,7 +1056,6 @@ _nenhum item encontrado_
 | Campo | Restrições | Arquivo |
 |---|---|---|
 | `login-email` | type=email | `src/pages/AuthPage.tsx` |
-| `signup-email` | type=email | `src/pages/AuthPage.tsx` |
 | `edit-phone` | disabled, readOnly | `src/pages/ContactsPage.tsx` |
 | `email` | type=email | `src/pages/ForgotPasswordPage.tsx` |
 | `def-approach-radius` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
@@ -1251,10 +1246,6 @@ _nenhum item encontrado_
 - **validateLoginForm()** — `src/pages/AuthPage.tsx`
   ```
   const result = loginSchema.safeParse({ email, password }); if (!result.success) { const firstError = result.error.issues[0]; toast.error(firstError.message); return false; } return true;
-  ```
-- **validateSignupForm()** — `src/pages/AuthPage.tsx`
-  ```
-  const result = signupSchema.safeParse({ email, password }); if (!result.success) { const firstError = result.error.issues[0]; toast.error(firstError.message); return false; } if (isPasswordBreached) { toast.error('Esta senha foi exposta em vazamentos. Escolha outra senha.'); return false; } return true;
   ```
 - **validatePassword()** — `src/pages/ResetPasswordPage.tsx`
   ```
@@ -1891,11 +1882,8 @@ _nenhum item encontrado_
 | Conta temporariamente bloqueada. Tente novamente em ${formatRemainingTime(status.remainingSeconds)}. | `src/pages/AuthPage.tsx` |
 | Email ou senha incorretos. | `src/pages/AuthPage.tsx` |
 | Email ou senha incorretos. ${attemptsLeft} tentativa${attemptsLeft !== 1 ?  | `src/pages/AuthPage.tsx` |
-| Erro ao criar conta:  | `src/pages/AuthPage.tsx` |
 | Erro ao entrar com Google:  | `src/pages/AuthPage.tsx` |
 | Erro ao fazer login:  | `src/pages/AuthPage.tsx` |
-| Esta senha foi exposta em vazamentos. Escolha outra senha. | `src/pages/AuthPage.tsx` |
-| Este email já está cadastrado | `src/pages/AuthPage.tsx` |
 | Erro ao processar fila | `src/pages/Bitrix24Page.tsx` |
 | ; import { Badge } from  | `src/pages/CacheStatusPage.tsx` |
 | Falha ao atualizar | `src/pages/ContactsPage.tsx` |
@@ -1926,7 +1914,10 @@ _nenhum item encontrado_
 | Erro ao alterar senha. Tente novamente. | `src/pages/ResetPasswordPage.tsx` |
 | Falha ao atualizar regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
-| … +105 linhas — lista completa em `context.json` | |
+| Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
+| Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
+| Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
+| … +102 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "97b9d2e309ba6466fd774e29e96bc0ca12bf881c",
+  "commit": "64871637446708ea08fd2b661eabbd6d39d52a01",
   "branch": "main",
-  "data_commit": "2026-11-22T14:41:59-03:00",
+  "data_commit": "2026-11-22T14:42:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "6487163",
+    "data": "2026-11-22",
+    "assunto": "feat: desligar auto-cadastro no front (item 9) (#300)"
+   },
    {
     "sha": "97b9d2e",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "83125d1",
     "data": "2026-11-22",
     "assunto": "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)"
-   },
-   {
-    "sha": "ea8f382",
-    "data": "2026-11-22",
-    "assunto": "fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)"
    }
   ],
-  "arquivos_mudados_7d": 353,
+  "arquivos_mudados_7d": 355,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -160,12 +160,12 @@
     "mudancas": 22
    },
    {
-    "pasta": "supabase/functions/send-notification",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 16
    },
    {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 15
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 16
    },
    {
     "pasta": "package.json",
@@ -214,12 +214,12 @@
     "mudancas": 16
    },
    {
-    "arquivo": "supabase/config.toml",
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 16
    },
    {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 15
+    "arquivo": "supabase/config.toml",
+    "mudancas": 16
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 202
+    "commits": 203
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1061,
   "arquivos_codigo": 660,
-  "linhas_codigo": 129298,
+  "linhas_codigo": 129177,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19034
+   "linhas": 19023
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19800
+   "linhas": 19690
   },
   "src/services": {
    "arquivos": 1,

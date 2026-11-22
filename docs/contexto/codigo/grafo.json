@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "nos": 509,
- "arestas": 1690,
+ "arestas": 1688,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -77,12 +77,12 @@
    "importado_por": 17
   },
   {
-   "arquivo": "src/components/ui/tabs.tsx",
+   "arquivo": "src/hooks/useFuseSearch.ts",
    "importado_por": 15
   },
   {
-   "arquivo": "src/hooks/useFuseSearch.ts",
-   "importado_por": 15
+   "arquivo": "src/components/ui/tabs.tsx",
+   "importado_por": 14
   },
   {
    "arquivo": "src/lib/geo-gateway.ts",

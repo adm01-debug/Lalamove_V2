@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `97b9d2e309ba6466fd774e29e96bc0ca12bf881c` (2026-11-22T14:41:59-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `64871637446708ea08fd2b661eabbd6d39d52a01` (2026-11-22T14:42:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1061 |
 | arquivos_codigo | 660 |
-| linhas_codigo | 129298 |
+| linhas_codigo | 129177 |
 | rotas | 56 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -275,8 +275,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8729 nós · 18269 arestas · 645 comunidades · grafo do commit `97b9d2e3`
-- comunidades maiores: cn (267), button.tsx (132), badge.tsx (130), snapshot.py (107), NewOrderDialog.tsx (105), DashboardRedesigned.tsx (99), ref_https (83), @tanstack/react-query (82), dependencies (80), ref_node_path (80), App.tsx (79), gerar.mjs (76)
+- 8728 nós · 18262 arestas · 639 comunidades · grafo do commit `64871637`
+- comunidades maiores: cn (148), Button (134), utils.ts (130), snapshot.py (107), ref_node_fs (93), ref_https (92), geo-gateway/index.ts (89), IncidentsPage.tsx (84), @tanstack/react-query (83), button.tsx (82), App.tsx (81), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -284,8 +284,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (32)
 - package-lock.json (31)
 - .github/workflows/ci.yml (16)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (16)
 - supabase/config.toml (16)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (15)
 - docs/MAPBOX.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
@@ -378,6 +378,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `6487163` feat: desligar auto-cadastro no front (item 9) (#300)
 - 2026-11-22 `97b9d2e` feat: cliente do front entende o formato único de erro (item 42) (#301)
 - 2026-11-22 `035a7c6` feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)
 - 2026-11-22 `1f97a5b` fix: fechar janela de bypass de MFA no ProtectedRoute (#298)
@@ -392,7 +393,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `d055637` feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)
 - 2026-11-22 `65322a8` chore: marca item XSS do plano front-end como feito (#288)
 - 2026-11-22 `6e6c62b` fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)
-- 2026-11-22 `93d26a3` docs(planos): plano de UX de navegacao em 200 etapas (#286)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

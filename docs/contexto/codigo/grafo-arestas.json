@@ -1439,13 +1439,11 @@
   ],
   "src/pages/AuthPage.tsx": [
    "src/components/auth/PasskeyLoginButton.tsx",
-   "src/components/auth/PasswordStrengthIndicator.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/label.tsx",
    "src/components/ui/separator.tsx",
-   "src/components/ui/tabs.tsx",
    "src/hooks/useAuth.tsx",
    "src/hooks/useLoginLockout.ts",
    "src/integrations/lovable/index.ts"

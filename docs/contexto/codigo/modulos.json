@@ -1658,7 +1658,7 @@
    "modulo": "hooks",
    "arquivos": 86,
    "testes": 1,
-   "linhas": 15603,
+   "linhas": 15592,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2563,7 +2563,7 @@
    "modulo": "pages",
    "arquivos": 56,
    "testes": 1,
-   "linhas": 16274,
+   "linhas": 16164,
    "itens_menu": [
     "Relatórios",
     "Dashboard SLA",
