@@ -836,11 +836,11 @@
   {
    "arquivo": "src/hooks/useGeoSearch.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 74,
+   "linhas": 103,
    "testa": [
     "src/hooks/useGeoSearch.ts"
    ],
-   "casos": 4
+   "casos": 7
   },
   {
    "arquivo": "src/lib/__tests__/filterValidSpecialRequests.test.ts",
@@ -1024,12 +1024,12 @@
   {
    "arquivo": "supabase/functions/_shared/contract.test.ts",
    "tipo": "contrato (deno)",
-   "linhas": 325,
+   "linhas": 349,
    "testa": [
     "supabase/functions/_shared/contract.ts",
     "supabase/functions/_shared/schemas.ts"
    ],
-   "casos": 25
+   "casos": 27
   },
   {
    "arquivo": "supabase/functions/external-db-bridge/index.test.ts",

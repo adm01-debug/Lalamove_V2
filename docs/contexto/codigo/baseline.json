@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5281908a84b0d36d0c53b7aba621a21c966c9e9e",
+  "commit": "d598435fa1163218de7538a604ab2b379dec4fa4",
   "branch": "main",
-  "data_commit": "2026-11-21T20:48:30-03:00",
+  "data_commit": "2026-11-21T21:10:50-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d598435",
+    "data": "2026-11-21",
+    "assunto": "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)"
+   },
    {
     "sha": "5281908",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "125ec8c",
     "data": "2026-11-21",
     "assunto": "fix(check-external-api): corrige nome do secret do health check Mapbox (#140)"
-   },
-   {
-    "sha": "896743f",
-    "data": "2026-11-21",
-    "assunto": "fix(simulacao): corrige regressão que bloqueava admin/manager também (#164)"
    }
   ],
   "arquivos_mudados_7d": 193,
@@ -157,11 +157,11 @@
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "pasta": "supabase/config.toml",
@@ -184,16 +184,16 @@
     "mudancas": 5
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 5
+   },
+   {
     "pasta": "supabase/functions/lalamove-api",
     "mudancas": 5
    },
    {
     "pasta": "supabase/functions/lalamove-gateway",
     "mudancas": 5
-   },
-   {
-    "pasta": "src/lib/__tests__",
-    "mudancas": 4
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -219,7 +219,7 @@
    },
    {
     "arquivo": "docs/MAPBOX.md",
-    "mudancas": 7
+    "mudancas": 8
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -231,6 +231,10 @@
    },
    {
     "arquivo": "docs/pendencias/README.md",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 5
    },
    {
@@ -254,10 +258,6 @@
     "mudancas": 4
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 4
-   },
-   {
     "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 4
    },
@@ -267,6 +267,10 @@
    },
    {
     "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
+    "mudancas": 4
+   },
+   {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 4
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": ".github/workflows/contexto.yml",
     "mudancas": 3
-   },
-   {
-    "arquivo": ".github/workflows/deploy-edges.yml",
-    "mudancas": 3
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 91
+    "commits": 92
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 969,
   "arquivos_codigo": 603,
-  "linhas_codigo": 117779,
+  "linhas_codigo": 117882,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -452,7 +452,7 @@
   },
   "scripts/geo": {
    "arquivos": 1,
-   "linhas": 71
+   "linhas": 83
   },
   "scripts/inventario": {
    "arquivos": 4,
@@ -512,11 +512,11 @@
   },
   "src/components": {
    "arquivos": 152,
-   "linhas": 27701
+   "linhas": 27713
   },
   "src/hooks": {
    "arquivos": 110,
-   "linhas": 18196
+   "linhas": 18246
   },
   "src/i18n": {
    "arquivos": 1,
@@ -556,7 +556,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13514
+   "linhas": 13543
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -675,7 +675,7 @@
  ],
  "qualidade": {
   "any": 110,
-  "console_log": 399,
+  "console_log": 403,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 3,

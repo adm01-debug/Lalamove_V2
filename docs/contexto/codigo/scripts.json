@@ -895,7 +895,7 @@
    "arquivo": "scripts/geo/searchbox-coverage.ts",
    "pasta": "scripts/geo",
    "descricao": "Etapa 36 do plano Mapbox × Lalamove V2: cobertura BR do Search Box. Para cada endereço do CSV: Search Box suggest → retrieve (sessão) e, como controle, Geocoding v6",
-   "linhas": 71,
+   "linhas": 83,
    "env": [
     "GOOGLE_MAPS_SERVER_KEY",
     "MAPBOX_ACCESS_TOKEN",

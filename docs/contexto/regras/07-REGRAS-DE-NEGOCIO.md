@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5281908a84` · branch `main` · 2026-11-21 23:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d598435fa1` · branch `main` · 2026-11-22 00:11 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -941,7 +941,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
   ```
 - **geoGatewayV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
   ```ts
-  "action", [ z.object({ action: z.literal("provider-status"), provider: geoProvider }), z.object({ action: z.literal("count-map-load"), provider: z.enum(["google", "mapbox"]) }), z.object({ action: z.literal("autocomplete"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), provider: geoProvider, }), z.object({ action: z.literal("place-details"), place_id: z.string().min(3).max(200), session_token: z.string().min(8).max(64).optional(), provider: geoProvider, }), z.object({ action: z.literal("geocode"), address: z.string().min(3).max(300).optional(), structured: z.object({ address_line1: z.string().max …
+  "action", [ z.object({ action: z.literal("provider-status"), provider: geoProvider }), z.object({ action: z.literal("count-map-load"), provider: z.enum(["google", "mapbox"]) }), z.object({ action: z.literal("autocomplete"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), provider: geoProvider, }), z.object({ action: z.literal("place-details"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e até 574 em Curitiba/Goiânia // (endereço completo com distrito e CEP), medido em produção em 2026-11-22. Com // max(200) o …
   ```
 
 ### F.2 react-hook-form (register/rules)
@@ -1213,6 +1213,7 @@ _nenhum item encontrado_
 | `transition={{ delay: index * 0.1 }}` | `src/components/dashboard/DashboardHeroSection.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/components/layout/Header.tsx` |
 | `const arrowLength = Math.min(speed * 0.8, 60);` | `src/components/map/markerFactories.ts` |
+| `// 40 % dos endereços BR medidos (etapa 36) caem em `interpolated`; sem isto o operador` | `src/components/orders/AddressAutocomplete.tsx` |
 | `const angle = ((index / actions.length) * Math.PI * 0.75) + Math.PI * 0.625;` | `src/components/ui/fab-variants.tsx` |
 | `transition={{ delay: index * 0.02 }}` | `src/components/ui/keyboard-shortcuts-help.tsx` |
 | `delay: index * 0.1,` | `src/components/ui/motion.tsx` |
@@ -1590,6 +1591,8 @@ _nenhum item encontrado_
 | Erro ao Salvar | `src/components/map/MapSettingsPanel.tsx` |
 | ,     label:  | `src/components/notifications/NotificationPreferences.tsx` |
 | Não foi possível enviar a notificação | `src/components/notifications/SoundSettingsPanel.tsx` |
+| Endereço encontrado sem coordenada — selecione outro resultado ou marque o ponto no mapa. | `src/components/orders/AddressAutocomplete.tsx` |
+| Endereço localizado com precisão aproximada — confira o ponto no mapa antes de salvar. | `src/components/orders/AddressAutocomplete.tsx` |
 | Não foi possível buscar os detalhes deste endereço. Tente novamente. | `src/components/orders/AddressAutocomplete.tsx` |
 | Erro ao buscar corrida | `src/components/orders/FetchOrderDialog.tsx` |
 | Erro ao ler CSV | `src/components/orders/ImportCSVDialog.tsx` |
@@ -1750,9 +1753,7 @@ _nenhum item encontrado_
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
 | Falha ao marcar webhook | `src/pages/WebhooksPage.tsx` |
-| Falha ao remover webhook | `src/pages/WebhooksPage.tsx` |
-| Falha ao reprocessar webhook | `src/pages/WebhooksPage.tsx` |
-| … +88 linhas — lista completa em `context.json` | |
+| … +90 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1785,14 +1786,14 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (897 testes em 77 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (903 testes em 77 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
-| `supabase/functions/_shared/contract.test.ts` | 25 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] campo ausente retorna 422 no formato único · [evaluate-driver] tipo incorreto (rating string) retorna 422 … |
+| `supabase/functions/_shared/contract.test.ts` | 27 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] campo ausente retorna 422 no formato único · [evaluate-driver] tipo incorreto (rating string) retorna 422 … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
 | `supabase/functions/external-db-bridge/index.test.ts` | 24 | classifySeverity: error takes priority · classifySeverity: very_slow threshold at 8000ms · classifySeverity: slow threshold at 3000ms · classifySeverity: normal for fast queries … |
 | `src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx` | 23 | AdminTelemetriaPage · renders page header · renders stat cards · renders filter controls … |
@@ -1824,6 +1825,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/mapbox.test.ts` | 10 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
+| `src/hooks/useGeoSearch.test.tsx` | 9 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
 | `src/hooks/__tests__/useGeo.test.ts` | 9 | useGeo · geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete) · geocode 404 vira lista vazia (estado vazio da UI, não erro) · directions monta origin/destination/waypoints e preserva perfil explícito … |
 | `src/hooks/__tests__/useMapSettings.test.ts` | 9 | useMapSettings Persistence · should load default values initially · should update state when setters are called · should load settings from supabase for a specific context (driver/delivery) … |
@@ -1851,7 +1853,6 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 6 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
-| `src/hooks/useGeoSearch.test.tsx` | 5 | useAddressSearchBox · busca sugestões com action autocomplete e session_token · isError fica true quando a busca de sugestões falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão … |
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |

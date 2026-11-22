@@ -1025,7 +1025,7 @@
     "AddressAutocomplete"
    ],
    "export_default": null,
-   "linhas": 220,
+   "linhas": 232,
    "dominio": "components/orders",
    "hooks_locais": [
     "useAddressSearch",
