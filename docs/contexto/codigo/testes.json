@@ -14,10 +14,10 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 117,
+ "total": 118,
  "por_tipo": {
   "contrato (deno)": 2,
-  "e2e (playwright)": 6,
+  "e2e (playwright)": 7,
   "edge (deno)": 8,
   "guard (node --test)": 33,
   "unit (vitest)": 68
@@ -36,11 +36,11 @@
    "arquivos": 10
   },
   {
-   "padrao": "co-localizado (*.test)",
-   "arquivos": 6
+   "padrao": "e2e/",
+   "arquivos": 7
   },
   {
-   "padrao": "e2e/",
+   "padrao": "co-localizado (*.test)",
    "arquivos": 6
   },
   {
@@ -49,6 +49,15 @@
   }
  ],
  "arquivos": [
+  {
+   "arquivo": "e2e/autocomplete.e2e.ts",
+   "tipo": "e2e (playwright)",
+   "linhas": 108,
+   "testa": [
+    "src/lib/geo-gateway.ts"
+   ],
+   "casos": 3
+  },
   {
    "arquivo": "e2e/helpers/auth.ts",
    "tipo": "e2e (playwright)",
@@ -1184,7 +1193,7 @@
   "src/hooks/useTrackingHistory.ts": 1,
   "src/hooks/useWebhookEvents.ts": 1,
   "src/integrations/supabase/client.ts": 14,
-  "src/lib/geo-gateway.ts": 2,
+  "src/lib/geo-gateway.ts": 3,
   "src/lib/lalamoveCatalog.ts": 3,
   "src/lib/lalamoveErrors.ts": 1,
   "src/lib/lalamoveGuards.ts": 1,

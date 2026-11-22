@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
+  "commit": "3ab9d6462eb4493ce7a22d3eda91f507ce3b380f",
   "branch": "main",
-  "data_commit": "2026-11-21T21:23:51-03:00",
+  "data_commit": "2026-11-21T21:28:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3ab9d64",
+    "data": "2026-11-21",
+    "assunto": "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)"
+   },
    {
     "sha": "3e9f386",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "6407f62",
     "data": "2026-11-21",
     "assunto": "chore(config): declara verify_jwt explicito para mapbox-proxy (#142)"
-   },
-   {
-    "sha": "7c69b82",
-    "data": "2026-11-21",
-    "assunto": "fix(geo): region_cache passa a usar reverse geocode permanente (#139)"
    }
   ],
-  "arquivos_mudados_7d": 193,
+  "arquivos_mudados_7d": 194,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 93
+    "commits": 94
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 969,
-  "arquivos_codigo": 603,
-  "linhas_codigo": 117909,
+  "arquivos_total": 970,
+  "arquivos_codigo": 604,
+  "linhas_codigo": 118017,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,12 +324,16 @@
   "tabelas": 88,
   "migrations": 176,
   "cron_jobs": 21,
-  "testes": 117,
+  "testes": 118,
   "workflows": 5,
   "scripts": 105,
   "docs_md": 99
  },
  "por_pasta": {
+  "e2e/autocomplete.e2e.ts": {
+   "arquivos": 1,
+   "linhas": 108
+  },
   "e2e/helpers": {
    "arquivos": 1,
    "linhas": 55

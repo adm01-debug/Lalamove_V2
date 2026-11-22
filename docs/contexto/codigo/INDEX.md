@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e9f386a005026da0aea339cb9bd4a7aa076bd36` (2026-11-21T21:23:51-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3ab9d6462eb4493ce7a22d3eda91f507ce3b380f` (2026-11-21T21:28:56-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (492), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (493), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 969 |
-| arquivos_codigo | 603 |
-| linhas_codigo | 117909 |
+| arquivos_total | 970 |
+| arquivos_codigo | 604 |
+| linhas_codigo | 118017 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 88 |
 | migrations | 176 |
 | cron_jobs | 21 |
-| testes | 117 |
+| testes | 118 |
 | workflows | 5 |
 | scripts | 105 |
 | docs_md | 99 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7471 nós · 15881 arestas · 558 comunidades · grafo do commit `3e9f386a`
-- comunidades maiores: cn (200), button.tsx (147), client.ts (112), snapshot.py (102), ref_node_path (85), GeoBlockingPage.tsx (85), framer-motion (83), DashboardRedesigned.tsx (82), dependencies (80), react (79), package.json (76), gerar.mjs (76)
+- 7477 nós · 15891 arestas · 555 comunidades · grafo do commit `3ab9d646`
+- comunidades maiores: cn (208), button.tsx (150), badge.tsx (130), snapshot.py (104), ref_node_fs (99), DashboardRedesigned.tsx (85), dependencies (80), client.ts (77), gerar.mjs (76), lint-ratchet.mjs (75), generate.py (73), AdvancedReportsPage.tsx (71)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `3ab9d64` test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)
 - 2026-11-21 `3e9f386` fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)
 - 2026-11-21 `d598435` fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)
 - 2026-11-21 `5281908` fix: fechar ciclo de notification_status dos eventos geo (#181)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `e0ebbdb` fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)
 - 2026-11-21 `00e2fb7` feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)
 - 2026-11-21 `ad0ba32` fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)
-- 2026-11-21 `339acda` feat: failover de provedor em runtime no geo-gateway (#175)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

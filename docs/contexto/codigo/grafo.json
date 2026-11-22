@@ -145,6 +145,10 @@
    "importado_por": 8
   },
   {
+   "arquivo": "src/lib/geo-gateway.ts",
+   "importado_por": 8
+  },
+  {
    "arquivo": "supabase/functions/_shared/telemetry.ts",
    "importado_por": 8
   },
@@ -158,10 +162,6 @@
   },
   {
    "arquivo": "src/components/ui/collapsible.tsx",
-   "importado_por": 7
-  },
-  {
-   "arquivo": "src/components/ui/pull-to-refresh.tsx",
    "importado_por": 7
   }
  ],

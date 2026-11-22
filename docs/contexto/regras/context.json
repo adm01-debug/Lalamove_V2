@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
+  "sha": "3ab9d6462eb4493ce7a22d3eda91f507ce3b380f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 00:24 UTC",
-  "files_total": 964,
-  "code_files": 792,
-  "code_lines": 136468
+  "generated_at": "2026-11-22 00:29 UTC",
+  "files_total": 965,
+  "code_files": 793,
+  "code_lines": 136576
  },
  "version": "1.3.2",
- "facts_hash": "c3bf215a8c3befec",
+ "facts_hash": "bed36d09fc7edaf7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 264,
+   ".ts": 265,
    ".tsx": 228,
    ".sql": 180,
    ".mjs": 107,
@@ -20026,8 +20026,8 @@
   },
   {
    "module": "e2e",
-   "files": 6,
-   "lines": 551,
+   "files": 7,
+   "lines": 659,
    "tables": [],
    "exports": [
     "auth.ts: InjectedSession, getInjectedSession, restoreSession, ensureSignedOut, expectRedirectToAuth"
@@ -20038,6 +20038,7 @@
    ],
    "imports_modules": [],
    "file_list": [
+    "e2e/autocomplete.e2e.ts",
     "e2e/livemap-route.e2e.ts",
     "e2e/login-lockout.e2e.ts",
     "e2e/mfa.e2e.ts",
@@ -48759,6 +48760,10 @@
     "VITE_SUPABASE_URL"
    ]
   },
+  "e2e/autocomplete.e2e.ts": {
+   "path": "e2e/autocomplete.e2e.ts",
+   "lines": 108
+  },
   "e2e/livemap-route.e2e.ts": {
    "path": "e2e/livemap-route.e2e.ts",
    "lines": 117,
@@ -68048,10 +68053,19 @@
   }
  },
  "git": {
-  "sha": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
+  "sha": "3ab9d6462eb4493ce7a22d3eda91f507ce3b380f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3ab9d64",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)",
+    "files": [
+     "e2e/autocomplete.e2e.ts"
+    ]
+   },
    {
     "sha": "3e9f386",
     "date": "2026-11-21",
@@ -68395,15 +68409,6 @@
      "src/components/orders/AddressAutocomplete.tsx",
      "src/hooks/useGeoSearch.test.tsx",
      "src/hooks/useGeoSearch.ts"
-    ]
-   },
-   {
-    "sha": "49fc8f0",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs: registra estado, recuperação de branches e bloqueios de 21/11 (#145)",
-    "files": [
-     "docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md"
     ]
    }
   ],
