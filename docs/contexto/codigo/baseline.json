@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "2a4d1b1826707c4588901f261887e3058487c5dd",
+  "commit": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
   "branch": "main",
-  "data_commit": "2026-11-22T08:18:41-03:00",
+  "data_commit": "2026-11-22T08:25:09-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2b6eeeb",
+    "data": "2026-11-22",
+    "assunto": "fix(geo): evita colisão de versão de migration com a PR #246 (#262)"
+   },
    {
     "sha": "2a4d1b1",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "bdef20a",
     "data": "2026-11-22",
     "assunto": "docs: contrato de dados do motor geo (etapa 41) (#235)"
-   },
-   {
-    "sha": "a7b144f",
-    "data": "2026-11-22",
-    "assunto": "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)"
    }
   ],
-  "arquivos_mudados_7d": 287,
+  "arquivos_mudados_7d": 288,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 158
+    "commits": 159
    },
    {
     "autor": "dependabot[bot]",

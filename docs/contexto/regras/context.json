@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "2a4d1b1826707c4588901f261887e3058487c5dd",
+  "sha": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 11:19 UTC",
+  "generated_at": "2026-11-22 11:25 UTC",
   "files_total": 1021,
   "code_files": 845,
-  "code_lines": 144865
+  "code_lines": 144869
  },
  "version": "1.3.2",
- "facts_hash": "58269f59dda4bf84",
+ "facts_hash": "9005020d58270bc2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -14318,7 +14318,7 @@
    "supabase/migrations/20261123160000_job_queue_processing_log.sql",
    "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
    "supabase/migrations/20261123180000_geocode_match_confidence.sql",
-   "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql",
+   "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
    "supabase/tests/geo_functions.test.sql",
    "src/integrations/supabase/types.ts"
   ],
@@ -16523,7 +16523,7 @@
     "object": "geo_audit_config",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -16531,7 +16531,7 @@
     "object": "geo_budget_status",
     "objkind": "function",
     "roles": "public, anon",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -16539,7 +16539,7 @@
     "object": "geo_emit_event",
     "objkind": "function",
     "roles": "anon",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -16547,7 +16547,7 @@
     "object": "geo_evaluate_tracking",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -16555,7 +16555,7 @@
     "object": "geo_usage_increment",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    }
   ],
   "raises": [
@@ -21452,7 +21452,7 @@
   {
    "module": "supabase/migrations",
    "files": 185,
-   "lines": 12501,
+   "lines": 12505,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -48628,7 +48628,7 @@
     "object": "geo_audit_config",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -48636,7 +48636,7 @@
     "object": "geo_budget_status",
     "objkind": "function",
     "roles": "public, anon",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -48644,7 +48644,7 @@
     "object": "geo_emit_event",
     "objkind": "function",
     "roles": "anon",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -48652,7 +48652,7 @@
     "object": "geo_evaluate_tracking",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    },
    {
     "kind": "revoke",
@@ -48660,7 +48660,7 @@
     "object": "geo_usage_increment",
     "objkind": "function",
     "roles": "public, anon, authenticated",
-    "src": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql"
+    "src": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
    }
   ],
   "guards": [
@@ -71531,9 +71531,9 @@
    "path": "supabase/migrations/20261123180000_geocode_match_confidence.sql",
    "lines": 22
   },
-  "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql": {
-   "path": "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql",
-   "lines": 18
+  "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql": {
+   "path": "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
+   "lines": 22
   },
   "supabase/tests/geo_functions.test.sql": {
    "path": "supabase/tests/geo_functions.test.sql",
@@ -71542,10 +71542,19 @@
   }
  },
  "git": {
-  "sha": "2a4d1b1826707c4588901f261887e3058487c5dd",
+  "sha": "2b6eeebbc2f72ecf9cd915b281c3c8715f1860c9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "2b6eeeb",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix(geo): evita colisão de versão de migration com a PR #246 (#262)",
+    "files": [
+     "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql"
+    ]
+   },
    {
     "sha": "2a4d1b1",
     "date": "2026-11-22",
@@ -71877,26 +71886,12 @@
      "src/pages/alert-configurations/AlertConfigCard.test.tsx",
      "src/pages/alert-configurations/AlertConfigCard.tsx"
     ]
-   },
-   {
-    "sha": "a08dd87",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "src/components/orders/AddressAutocomplete.test.tsx",
-     "src/components/orders/AddressAutocomplete.tsx",
-     "src/components/orders/NewOrderDialog.tsx",
-     "supabase/functions/job-worker/geo-backfill-orders.test.ts",
-     "supabase/functions/job-worker/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    21
+    20
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -71904,10 +71899,6 @@
    ],
    [
     "supabase/functions/job-worker/index.ts",
-    4
-   ],
-   [
-    "src/components/orders/NewOrderDialog.tsx",
     3
    ],
    [
@@ -71947,12 +71938,16 @@
     2
    ],
    [
+    "src/components/orders/NewOrderDialog.tsx",
+    2
+   ],
+   [
     "src/components/map/MapHUD.tsx",
     2
    ],
    [
-    "src/components/orders/AddressAutocomplete.tsx",
-    2
+    "supabase/migrations/20261123190001_revoke_anon_geo_rpcs.sql",
+    1
    ],
    [
     "supabase/migrations/20261123190000_revoke_anon_geo_rpcs.sql",
