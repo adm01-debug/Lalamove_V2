@@ -733,17 +733,37 @@ tsconfig.app.json` limpo.
 - [ ] Botão "Testar Google" → `geo-gateway provider-status` (geocode de endereço fixo, conta 1 uso) → latência e SKU; idem Mapbox; integrar em `check-external-api/index.ts` (hoje só Mapbox `:232`)
 - **Evidência:** status verde/vermelho na UI
 
-### 90 — Parâmetros de geofence globais
-- [ ] Editar padrões `approach_radius_m`, `approach_eta_min`, horário silencioso, `notify_delivery_contact` padrão; override por pedido continua em `NewOrderDialog` (campo avançado)
-- **Evidência:** novo pedido herda padrão
+### 90 — Parâmetros de geofence globais ✅
+- [x] Editar padrões `approach_radius_m`, `approach_eta_min`, horário silencioso, `notify_delivery_contact` padrão; override por pedido continua em `NewOrderDialog` (campo avançado)
+- **Evidência:** card "Padrões de aviso do rastreio" em `/settings/maps` envia só o diff e grava `updated_by`; `NewOrderDialog` manda `approachRadiusM`/`approachEtaMin`/`notifyDeliveryContact` no `metadata` e `lalamove-api:713-731` persiste as 3 colunas
+
+**Executado (PR #246).** A metade de baixo do cano já existia: o trigger `geo_evaluate_tracking` lê `lalamove_orders.approach_radius_m`, `approach_eta_min` e `notify_delivery_contact` com `COALESCE` sobre `geo_defaults` (`20261122130100_geo_foundation.sql:429-433`), e `geo_defaults` existe desde a etapa 15 (`:45-58`). Faltavam as duas pontas que tornavam isso inalcançável:
+
+1. **Nenhuma tela escrevia em `geo_defaults`.** `grep -rn geo_defaults src/` retornava só `src/integrations/supabase/types.ts` — o padrão era sempre o de fábrica, então "pedido novo herda o padrão" era impossível de conferir.
+2. **Override por pedido nunca chegava ao banco.** `NewOrderDialog` não tinha os campos e `lalamove-api/index.ts:713-731` inseria o pedido sem ler nada de `metadata` a respeito — mesmo que o operador quisesse um raio próprio, ele morria no front.
+
+- **`useGeoDefaults()` / `useUpdateGeoDefaults()`** (`src/hooks/useGeoAdmin.ts`) — leem a linha singleton (`id = true`) e gravam `updated_by` com `auth.getUser()`, que é a evidência pedida pelo plano. Invalidam `['geo','defaults']`.
+- **Card em `/settings/maps`** — 4 raios (aproximação, ETA, chegada, fora de rota), janela silenciosa (início/fim/fuso) e o toggle do contato de entrega. `handleSaveDefaults` envia **só os campos que mudaram** (diff contra `defaults.data`); sem mudança, avisa e não chama o banco. Desabilitado para quem não é admin, coerente com a policy.
+- **Campo avançado no `NewOrderDialog`** — bloco "Avisos de aproximação" dentro do card do Guardian, com raio, ETA e um seletor de três estados (`inherit` / `yes` / `no`) para o contato de entrega. Três estados em vez de um checkbox porque "não avisar" e "herdar" precisam ser distinguíveis.
+- **Persistência** — `lalamove-api` grava as 3 colunas no `insert` do pedido.
+
+**Decisão que evita regressão:** o campo vai como `null` explícito quando o operador não preencheu, nunca `?? 500`. Gravar o default numérico da coluna transformaria o override em valor fixo por pedido e o padrão global deixaria de valer para todo pedido novo — que é exatamente o que a etapa pede.
 
 ### 91 — Auditoria
 - [ ] Toda mudança em `geo_settings`/`geo_budget` → `audit_log` (`20251226000002`) com antes/depois
 - **Evidência:** linha no `audit_log`
 
-### 92 — Permissões
-- [ ] `permissions`/`role_permissions`: `maps.settings.write` só admin; `maps.usage.read` manager+
-- **Evidência:** viewer recebe 403 na edge e UI oculta
+### 92 — Permissões ✅
+- [x] `permissions`/`role_permissions`: `maps.settings.write` só admin; `maps.usage.read` manager+
+- **Evidência:** migration `20261123190000_geo_maps_permissions.sql` — em Postgres 16, `SELECT` final devolve `admin:maps.settings.write`, `admin:maps.usage.read`, `manager:maps.usage.read`; policy `geo_usage_read_manager` = `has_role(admin) OR has_role(manager) OR has_permission('maps.usage.read')`
+
+**Executado (PR #246).** O admin de mapas estava protegido **só** por `has_role('admin')` nas policies (`20261122130100:568-575`) e por `isAdmin()` na tela — `grep -rn "maps.settings.write\|maps.usage.read" src/ supabase/` não achava nada. Sem permissão nomeada não havia como dar leitura de custo ao manager sem dar escrita junto.
+
+- **Permissões** — `maps.settings.write` → `admin`; `maps.usage.read` → `admin` e `manager`, com `ON CONFLICT DO NOTHING` para ser idempotente.
+- **Policy** — `geo_usage_read_manager` mantém `has_role(admin)` e `has_role(manager)` e **acrescenta** a permissão. O OR é deliberado: se a migration rodar antes de algum backfill de `role_permissions`, ninguém perde acesso.
+- **Validação** — Postgres 16 descartável com stub de `permissions`, `role_permissions`, `geo_usage`, `auth.uid()`, `has_role()` e `has_permission()`. Duas execuções seguidas: a segunda faz `INSERT 0 0`, sem erro. `pg_policies` confirma o `qual` final.
+
+**Ressalva:** o `403` de viewer acontece no banco/edge (RLS), não numa checagem de edge function — a edge `geo-gateway` já roda como `service_role`. Ocultar a UI para viewer já era o comportamento (`canWrite`), então nada regrediu.
 
 ---
 
