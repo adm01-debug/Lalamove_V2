@@ -127,6 +127,11 @@ jobs:
       # uma regressao de custo so aparece na fatura do Mapbox.
       - name: Run geo-gateway tests (resolver, metering, polyline, provider)
         run: deno test --allow-all supabase/functions/geo-gateway/
+      # Motor de comunicacao (etapas 88-95 do plano de mensageria): idempotencia,
+      # fallback temporizado e imediato, silencio noturno por papel e limite por
+      # motorista. Regressao aqui manda 20 SMS em rajada ou cala o motorista as 3h.
+      - name: Run messaging router tests
+        run: deno test supabase/functions/_shared/messaging/
       # job-worker, send-notification e lalamove-api tinham testes no repo que
       # nenhum workflow executava: ETA, cadencia, replay de trajeto, opt-out e
       # fallback de geocode podiam quebrar sem o CI ficar vermelho.
