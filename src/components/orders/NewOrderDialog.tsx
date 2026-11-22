@@ -418,6 +418,17 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
           serviceType: form.vehicleType,
           metadata: {
             ...(form.internalOrderId.trim() && { internalOrderId: form.internalOrderId.trim() }),
+            // Etapa 13/36: o que o autocomplete resolveu (place_id, componentes,
+            // precisão, provedor) não tem como a edge redescobrir — o endereço
+            // chega lá como texto livre, e geocodificar de novo gastaria chamada
+            // paga e poderia cair em outro ponto. Vai junto, só quando existe.
+            ...(pickupGeo?.place_id && { pickupPlaceId: pickupGeo.place_id }),
+            ...(deliveryGeo?.place_id && { deliveryPlaceId: deliveryGeo.place_id }),
+            ...(pickupGeo?.components && { pickupAddressComponents: pickupGeo.components }),
+            ...(deliveryGeo?.components && { deliveryAddressComponents: deliveryGeo.components }),
+            ...(pickupGeo?.precision && { pickupGeocodePrecision: pickupGeo.precision }),
+            ...(deliveryGeo?.precision && { deliveryGeocodePrecision: deliveryGeo.precision }),
+            ...(pickupGeo?.provider && { geocodeProvider: pickupGeo.provider }),
             // Guardian Metadata
             autoNotifySupplier: form.autoNotifySupplier,
             supplierContact: form.supplierContact.trim(),
