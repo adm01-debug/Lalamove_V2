@@ -31,10 +31,10 @@ describe('NotificationHistoryPage — avisos geo pendentes (etapa 73)', () => {
       }],
     });
     renderPage();
-    expect(screen.getByText('Motorista aproximando da coleta')).toBeInTheDocument();
-    expect(screen.getByText('Adiado')).toBeInTheDocument();
-    expect(screen.getByText('820 m')).toBeInTheDocument();
-    expect(screen.getByText('ETA 6 min')).toBeInTheDocument();
+    expect(screen.getByText('Motorista aproximando da coleta')).toBeTruthy();
+    expect(screen.getByText('Adiado')).toBeTruthy();
+    expect(screen.getByText('820 m')).toBeTruthy();
+    expect(screen.getByText('ETA 6 min')).toBeTruthy();
   });
 
   it('mostra no_recipient e failed como casos que exigem ação', () => {
@@ -46,14 +46,14 @@ describe('NotificationHistoryPage — avisos geo pendentes (etapa 73)', () => {
       ],
     });
     renderPage();
-    expect(screen.getByText('Sem destinatário')).toBeInTheDocument();
-    expect(screen.getByText('Falhou')).toBeInTheDocument();
-    expect(screen.getByText('Motorista chegou na entrega')).toBeInTheDocument();
+    expect(screen.getByText('Sem destinatário')).toBeTruthy();
+    expect(screen.getByText('Falhou')).toBeTruthy();
+    expect(screen.getByText('Motorista chegou na entrega')).toBeTruthy();
   });
 
   it('não renderiza o card quando não há evento pendente', () => {
     mockPending.mockReturnValue({ isLoading: false, data: [] });
     renderPage();
-    expect(screen.queryByText(/Avisos geo que não chegaram/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Avisos geo que não chegaram/)).toBeNull();
   });
 });
