@@ -519,8 +519,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** ETA oscilando gera 1 mensagem por janela
 
 ### 95 — [L] Limite por motorista
-- [ ] No máximo 6 mensagens automáticas a cada 10 min por motorista (exceto M8)
-- **Evidência:** teste de rajada
+- [x] No máximo 6 mensagens automáticas a cada 10 min por motorista (exceto M8)
+- **Evidência:** `_shared/messaging/router.ts` (`DRIVER_RATE_LIMIT`, `isRateLimited`, `RATE_LIMIT_EXEMPT_EVENTS`); ligado no despacho em `send-notification/index.ts` (`isDriverRateLimited`, conta `alerts_sent` por telefone normalizado — a tabela não tem `driver_id`); 5 testes em `router.test.ts`
 
 ### 96 — [L] Edge `zapp-callback`
 - [ ] Verifica HMAC e janela anti-replay; atualiza ledger (status/sequência); grava inbound; responde 2xx rápido

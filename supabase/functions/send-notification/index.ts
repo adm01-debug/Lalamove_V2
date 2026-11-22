@@ -19,6 +19,7 @@ import {
 import { zappChannelFromEnv, type SendOptions } from "../_shared/channels/zapp.ts";
 import { smsChannelFromEnv } from "../_shared/channels/sms.ts";
 import { dispatchSms } from "./sms-dispatch.ts";
+import { isRateLimited, DRIVER_RATE_LIMIT, RATE_LIMIT_EXEMPT_EVENTS } from "../_shared/messaging/router.ts";
 
 import { buildClientMessageId, buildCorrelation } from "./message-id.ts";
 import { normalizePhone } from "../_shared/phone.ts";
@@ -378,6 +379,42 @@ serve(async (req) => {
       }
     };
 
+    /**
+     * Etapa 95: teto de 6 mensagens automaticas por motorista a cada 10 min.
+     * Conta `alerts_sent` porque e o unico registro de envio que ja existe em
+     * producao — o ledger novo (etapa 73) ainda nao esta em uso. A tabela nao
+     * tem `driver_id` (migration 20251224143803), entao a chave e o telefone
+     * normalizado — `recipient` guarda o destino exato que foi enviado, que e
+     * o que o limite precisa contar. Falha de leitura nao bloqueia: sem o dado
+     * o alerta sai (nunca calar o motorista por erro de infraestrutura).
+     */
+    const isDriverRateLimited = async (driverPhone: string): Promise<boolean> => {
+      if (!driver_id) return false;
+      if ((RATE_LIMIT_EXEMPT_EVENTS as readonly string[]).includes(type)) return false;
+      try {
+        const since = new Date(Date.now() - DRIVER_RATE_LIMIT.windowMs).toISOString();
+        const { data, error } = await supabase
+          .from('alerts_sent')
+          .select('sent_at, recipient')
+          .eq('channel', 'whatsapp')
+          .gte('sent_at', since);
+        if (error) {
+          logger.error('[Notification] Rate limit query failed, proceeding:', error);
+          return false;
+        }
+        const digits = (v: string | null) => (v ?? '').replace(/\D/g, '');
+        const target = digits(driverPhone);
+        const recentSends = ((data ?? []) as Array<{ sent_at: string | null; recipient: string | null }>)
+          .filter((r) => target && digits(r.recipient).endsWith(target.slice(-11)))
+          .map((r) => r.sent_at ? new Date(r.sent_at) : null)
+          .filter((d): d is Date => d !== null && !Number.isNaN(d.getTime()));
+        return isRateLimited({ recentSends, now: new Date(), event: type });
+      } catch (e) {
+        logger.error('[Notification] Rate limit check threw, proceeding:', e);
+        return false;
+      }
+    };
+
     const metadataRecipients = isServiceRoleCaller(req)
       ? normalizeRecipients(metadata?.recipients)
       : [];
@@ -526,6 +563,13 @@ serve(async (req) => {
           if (await isPhoneOptedOut(optedPhone)) {
             logger.log(`[Notification] Destinatário em opt-out ignorado: ${channel}`);
             results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
+            return;
+          }
+          // Etapa 95: rajada para o mesmo motorista. Sem isso o ETA oscilando
+          // dispara dezenas de WhatsApps e o numero e bloqueado pelo provedor.
+          if (await isDriverRateLimited(optedPhone)) {
+            logger.log(`[Notification] Limite de ${DRIVER_RATE_LIMIT.maxMessages}/10min atingido para o motorista — ${channel} ignorado`);
+            results.push({ channel: `${channel}:rate_limited`, success: false, error: 'rate_limited' });
             return;
           }
         }
