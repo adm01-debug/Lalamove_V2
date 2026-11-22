@@ -304,11 +304,13 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** teste `sidebar-config.test.ts` verde; operador não vê links que levam a `/unauthorized`.
 
 ### 50 — [F] Rotas sem entrada no menu
-- [ ] Adicionar ao menu (ou documentar como "acesso por link") `/analytics`, `/reports`, `/system-health(-expanded)`, `/cache-status`, `/job-queue`, `/rate-limiting`, `/lalamove-quota`, `/settings/uapi`, `/preferences`, `/profile`; remover o alias `/map` de `/live-map` (`App.tsx:183-184`) com redirect.
+- [x] Adicionar ao menu (ou documentar como "acesso por link") `/analytics`, `/reports`, `/system-health(-expanded)`, `/cache-status`, `/job-queue`, `/rate-limiting`, `/lalamove-quota`, `/settings/uapi`, `/preferences`, `/profile`; remover o alias `/map` de `/live-map` (`App.tsx:183-184`) com redirect.
+  - **Evidência:** `sidebar-config.ts` e `MobileSidebar.tsx` ganharam entradas para as rotas acima e nova categoria `more` (preferences/profile); `/map` virou `<Navigate to="/live-map" replace />` em `App.tsx:192`; teste da etapa 49 verde.
 - **Evidência:** cada rota de `App.tsx` tem item de menu ou está em "Mais" (teste da etapa 49 cobre).
 
 ### 51 — [F] Dashboard e perfil com papel mínimo
-- [ ] `App.tsx:149-150` (`/`, `/dashboard`) e `/profile`: `ProtectedRoute requiredRole="viewer"`; usuário sem role vai para `/unauthorized` com texto "peça acesso ao administrador".
+- [x] `App.tsx:149-150` (`/`, `/dashboard`) e `/profile`: `ProtectedRoute requiredRole="viewer"`; usuário sem role vai para `/unauthorized` com texto "peça acesso ao administrador".
+  - **Evidência:** `/`, `/dashboard` e `/profile` agora usam `ProtectedRoute requiredRole="viewer"`; tela `/unauthorized` (item 59) mostra a rota tentada + papel exigido.
 - **Evidência:** usuário sem linha em `user_roles` não vê KPIs.
 
 ### 52 — [F] Role via `usePermissions` (cache) em vez de `.single()` nas sidebars
@@ -332,15 +334,18 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** trocar de página longa volta ao topo.
 
 ### 57 — [F] Retry de chunk após deploy
-- [ ] `src/lib/lazyWithRetry.ts`: `lazy(() => import(...).catch(() => { sessionStorage flag; location.reload() }))`; aplicar nos 50 `lazy()` de `App.tsx:20-81`.
+- [x] `src/lib/lazyWithRetry.ts`: `lazy(() => import(...).catch(() => { sessionStorage flag; location.reload() }))`; aplicar nos 50 `lazy()` de `App.tsx:20-81`.
+  - **Evidência:** criado `src/lib/lazyWithRetry.ts` (flag `lazy-retry-flag` na sessão, reload único, sem loop); os 54 `lazy()` de `App.tsx` agora usam `lazyWithRetry` (incluindo `NotFound`, item 58).
 - **Evidência:** simular `ChunkLoadError` recarrega uma vez e não cai no `ErrorBoundary`.
 
 ### 58 — [F] Página 404 lazy e com link de volta
-- [ ] `NotFound` passa a `lazy` (hoje import estático) e usa `useNavigate(-1)` + link para o dashboard.
+- [x] `NotFound` passa a `lazy` (hoje import estático) e usa `useNavigate(-1)` + link para o dashboard.
+  - **Evidência:** `App.tsx:84-85` usa `const NotFound = lazyWithRetry(() => import("./pages/NotFound"))`; `NotFound.tsx` usa `useNavigate(-1)` + `<Link to="/">` (botão dashboard).
 - **Evidência:** `App.tsx` sem import estático de página além dos públicos.
 
 ### 59 — [F] `/unauthorized` com contexto
-- [ ] Mostrar a rota tentada e o papel exigido (vem do `state` do `ProtectedRoute`) e botão "solicitar acesso" (abre e-mail/Slack configurado).
+- [x] Mostrar a rota tentada e o papel exigido (vem do `state` do `ProtectedRoute`) e botão "solicitar acesso" (abre e-mail/Slack configurado).
+  - **Evidência:** `ProtectedRoute.tsx` passa `state={{ attemptedPath, requiredRole, requiredPermission }}`; `UnauthorizedPage.tsx` exibe rota/papel/permissão e botão `mailto:` "Solicitar acesso".
 - **Evidência:** tela exibe "Você precisa do papel manager para /webhooks".
 
 ### 60 — [T] E2E de RBAC cobrindo as 57 rotas

@@ -1,8 +1,9 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
+import { lazyWithRetry } from '@/lib/lazyWithRetry';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { DeviceDetector } from "@/components/auth/DeviceDetector";
@@ -16,72 +17,72 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { AchievementsProvider } from "@/hooks/useAchievementsSystem";
 
 // Lazy loaded pages - Auth
-const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
-const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
-const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
-const MFAVerifyPage = lazy(() => import('./pages/MFAVerifyPage'));
-const MFAEnrollPage = lazy(() => import('./pages/MFAEnrollPage'));
-const UnauthorizedPage = lazy(() => import('./pages/UnauthorizedPage'));
+const AuthPage = lazyWithRetry(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const ForgotPasswordPage = lazyWithRetry(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazyWithRetry(() => import('./pages/ResetPasswordPage'));
+const MFAVerifyPage = lazyWithRetry(() => import('./pages/MFAVerifyPage'));
+const MFAEnrollPage = lazyWithRetry(() => import('./pages/MFAEnrollPage'));
+const UnauthorizedPage = lazyWithRetry(() => import('./pages/UnauthorizedPage'));
 
 // Lazy loaded pages - Dashboard
-const DashboardRedesigned = lazy(() => import('./pages/DashboardRedesigned').then(m => ({ default: m.DashboardRedesigned })));
+const DashboardRedesigned = lazyWithRetry(() => import('./pages/DashboardRedesigned').then(m => ({ default: m.DashboardRedesigned })));
 
 // Lazy loaded pages - Main Features
-const OrdersPage = lazy(() => import('./pages/OrdersPage').then(m => ({ default: m.OrdersPage })));
-const DriversPage = lazy(() => import('./pages/DriversPage').then(m => ({ default: m.DriversPage })));
-const ApprovalsPage = lazy(() => import('./pages/ApprovalsPage').then(m => ({ default: m.ApprovalsPage })));
-const IncidentsPage = lazy(() => import('./pages/IncidentsPage').then(m => ({ default: m.IncidentsPage })));
-const MetricsPage = lazy(() => import('./pages/MetricsPage').then(m => ({ default: m.MetricsPage })));
-const AlertsPage = lazy(() => import('./pages/AlertsPage').then(m => ({ default: m.AlertsPage })));
-const LiveMapPage = lazy(() => import('./pages/LiveMapPage').then(m => ({ default: m.LiveMapPage })));
-const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
-const ReportsPage = lazy(() => import('./pages/ReportsPage').then(m => ({ default: m.ReportsPage })));
-const AdvancedReportsPage = lazy(() => import('./pages/AdvancedReportsPage'));
-const HeatmapPage = lazy(() => import('./pages/HeatmapPage').then(m => ({ default: m.HeatmapPage })));
-const SLADashboardPage = lazy(() => import('./pages/SLADashboardPage').then(m => ({ default: m.SLADashboardPage })));
-const RiskRulesPage = lazy(() => import('./pages/RiskRulesPage').then(m => ({ default: m.RiskRulesPage })));
-const WebhooksPage = lazy(() => import('./pages/WebhooksPage').then(m => ({ default: m.WebhooksPage })));
-const Bitrix24Page = lazy(() => import('./pages/Bitrix24Page'));
-const UAPISettingsPage = lazy(() => import('./pages/UAPISettingsPage'));
-const LalamoveSettingsPage = lazy(() => import('./pages/LalamoveSettingsPage'));
-const MapsSettingsPage = lazy(() => import('./pages/MapsSettingsPage'));
-const AlertConfigurationsPage = lazy(() => import('./pages/AlertConfigurationsPage').then(m => ({ default: m.AlertConfigurationsPage })));
-const NotificationHistoryPage = lazy(() => import('./pages/NotificationHistoryPage').then(m => ({ default: m.NotificationHistoryPage })));
-const DeliveryMetricsPage = lazy(() => import('./pages/DeliveryMetricsPage').then(m => ({ default: m.DeliveryMetricsPage })));
-const EvaluationsPage = lazy(() => import('./pages/EvaluationsPage').then(m => ({ default: m.EvaluationsPage })));
-const UserPreferencesPage = lazy(() => import('./pages/UserPreferencesPage'));
-const AnalyticsDashboardPage = lazy(() => import('./pages/AnalyticsDashboardPage'));
-const ProfilePage = lazy(() => import('./pages/ProfilePage'));
-const ExternalDataPage = lazy(() => import('./pages/ExternalDataPage'));
-const MapToolsPage = lazy(() => import('./pages/MapToolsPage'));
-const LalamoveQuotaPage = lazy(() => import('./pages/LalamoveQuotaPage'));
-const LalamoveOperationsPage = lazy(() => import('./pages/LalamoveOperationsPage'));
+const OrdersPage = lazyWithRetry(() => import('./pages/OrdersPage').then(m => ({ default: m.OrdersPage })));
+const DriversPage = lazyWithRetry(() => import('./pages/DriversPage').then(m => ({ default: m.DriversPage })));
+const ApprovalsPage = lazyWithRetry(() => import('./pages/ApprovalsPage').then(m => ({ default: m.ApprovalsPage })));
+const IncidentsPage = lazyWithRetry(() => import('./pages/IncidentsPage').then(m => ({ default: m.IncidentsPage })));
+const MetricsPage = lazyWithRetry(() => import('./pages/MetricsPage').then(m => ({ default: m.MetricsPage })));
+const AlertsPage = lazyWithRetry(() => import('./pages/AlertsPage').then(m => ({ default: m.AlertsPage })));
+const LiveMapPage = lazyWithRetry(() => import('./pages/LiveMapPage').then(m => ({ default: m.LiveMapPage })));
+const SettingsPage = lazyWithRetry(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const ReportsPage = lazyWithRetry(() => import('./pages/ReportsPage').then(m => ({ default: m.ReportsPage })));
+const AdvancedReportsPage = lazyWithRetry(() => import('./pages/AdvancedReportsPage'));
+const HeatmapPage = lazyWithRetry(() => import('./pages/HeatmapPage').then(m => ({ default: m.HeatmapPage })));
+const SLADashboardPage = lazyWithRetry(() => import('./pages/SLADashboardPage').then(m => ({ default: m.SLADashboardPage })));
+const RiskRulesPage = lazyWithRetry(() => import('./pages/RiskRulesPage').then(m => ({ default: m.RiskRulesPage })));
+const WebhooksPage = lazyWithRetry(() => import('./pages/WebhooksPage').then(m => ({ default: m.WebhooksPage })));
+const Bitrix24Page = lazyWithRetry(() => import('./pages/Bitrix24Page'));
+const UAPISettingsPage = lazyWithRetry(() => import('./pages/UAPISettingsPage'));
+const LalamoveSettingsPage = lazyWithRetry(() => import('./pages/LalamoveSettingsPage'));
+const MapsSettingsPage = lazyWithRetry(() => import('./pages/MapsSettingsPage'));
+const AlertConfigurationsPage = lazyWithRetry(() => import('./pages/AlertConfigurationsPage').then(m => ({ default: m.AlertConfigurationsPage })));
+const NotificationHistoryPage = lazyWithRetry(() => import('./pages/NotificationHistoryPage').then(m => ({ default: m.NotificationHistoryPage })));
+const DeliveryMetricsPage = lazyWithRetry(() => import('./pages/DeliveryMetricsPage').then(m => ({ default: m.DeliveryMetricsPage })));
+const EvaluationsPage = lazyWithRetry(() => import('./pages/EvaluationsPage').then(m => ({ default: m.EvaluationsPage })));
+const UserPreferencesPage = lazyWithRetry(() => import('./pages/UserPreferencesPage'));
+const AnalyticsDashboardPage = lazyWithRetry(() => import('./pages/AnalyticsDashboardPage'));
+const ProfilePage = lazyWithRetry(() => import('./pages/ProfilePage'));
+const ExternalDataPage = lazyWithRetry(() => import('./pages/ExternalDataPage'));
+const MapToolsPage = lazyWithRetry(() => import('./pages/MapToolsPage'));
+const LalamoveQuotaPage = lazyWithRetry(() => import('./pages/LalamoveQuotaPage'));
+const LalamoveOperationsPage = lazyWithRetry(() => import('./pages/LalamoveOperationsPage'));
 
-const ContactsPage = lazy(() => import('./pages/ContactsPage'));
+const ContactsPage = lazyWithRetry(() => import('./pages/ContactsPage'));
 
 
 // Lazy loaded pages - System
-const SystemHealthPage = lazy(() => import('./pages/SystemHealthPage').then(m => ({ default: m.SystemHealthPage })));
-const SystemHealthExpandedPage = lazy(() => import('./pages/SystemHealthExpandedPage'));
-const CacheStatusPage = lazy(() => import('./pages/CacheStatusPage'));
-const JobQueuePage = lazy(() => import('./pages/JobQueuePage'));
-const CacheMonitoringPage = lazy(() => import('./pages/CacheMonitoringPage').then(m => ({ default: m.CacheMonitoringPage })));
-const PerformanceDashboardPage = lazy(() => import('./pages/PerformanceDashboardPage').then(m => ({ default: m.PerformanceDashboardPage })));
-const ErrorMonitoringPage = lazy(() => import('./pages/ErrorMonitoringPage'));
-const AdminTelemetriaPage = lazy(() => import('./pages/AdminTelemetriaPage'));
-const SLODashboardPage = lazy(() => import('./pages/SLODashboardPage'));
+const SystemHealthPage = lazyWithRetry(() => import('./pages/SystemHealthPage').then(m => ({ default: m.SystemHealthPage })));
+const SystemHealthExpandedPage = lazyWithRetry(() => import('./pages/SystemHealthExpandedPage'));
+const CacheStatusPage = lazyWithRetry(() => import('./pages/CacheStatusPage'));
+const JobQueuePage = lazyWithRetry(() => import('./pages/JobQueuePage'));
+const CacheMonitoringPage = lazyWithRetry(() => import('./pages/CacheMonitoringPage').then(m => ({ default: m.CacheMonitoringPage })));
+const PerformanceDashboardPage = lazyWithRetry(() => import('./pages/PerformanceDashboardPage').then(m => ({ default: m.PerformanceDashboardPage })));
+const ErrorMonitoringPage = lazyWithRetry(() => import('./pages/ErrorMonitoringPage'));
+const AdminTelemetriaPage = lazyWithRetry(() => import('./pages/AdminTelemetriaPage'));
+const SLODashboardPage = lazyWithRetry(() => import('./pages/SLODashboardPage'));
 
 // Lazy loaded pages - Security
-const RolesPage = lazy(() => import('./pages/RolesPage'));
-const PermissionsPage = lazy(() => import('./pages/PermissionsPage'));
-const IPWhitelistPage = lazy(() => import('./pages/IPWhitelistPage'));
-const RateLimitDashboardPage = lazy(() => import('./pages/RateLimitDashboardPage'));
-const SecurityDashboardPage = lazy(() => import('./pages/SecurityDashboardPage'));
-const GeoBlockingPage = lazy(() => import('./pages/GeoBlockingPage').then(m => ({ default: m.GeoBlockingPage })));
-const PasswordResetApprovalsPage = lazy(() => import('./pages/PasswordResetApprovalsPage').then(m => ({ default: m.PasswordResetApprovalsPage })));
+const RolesPage = lazyWithRetry(() => import('./pages/RolesPage'));
+const PermissionsPage = lazyWithRetry(() => import('./pages/PermissionsPage'));
+const IPWhitelistPage = lazyWithRetry(() => import('./pages/IPWhitelistPage'));
+const RateLimitDashboardPage = lazyWithRetry(() => import('./pages/RateLimitDashboardPage'));
+const SecurityDashboardPage = lazyWithRetry(() => import('./pages/SecurityDashboardPage'));
+const GeoBlockingPage = lazyWithRetry(() => import('./pages/GeoBlockingPage').then(m => ({ default: m.GeoBlockingPage })));
+const PasswordResetApprovalsPage = lazyWithRetry(() => import('./pages/PasswordResetApprovalsPage').then(m => ({ default: m.PasswordResetApprovalsPage })));
 
-// NotFound - keep direct import for immediate feedback
-import NotFound from "./pages/NotFound";
+// NotFound (item 58) - lazy + com retry de chunk
+const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
 
 const makeQueryClient = () =>
   new QueryClient({
@@ -151,9 +152,9 @@ const AppContent = () => {
                     
                     {/* Protected routes with layout */}
                     <Route element={<AppLayout />}>
-                      {/* Dashboard */}
-                      <Route path="/" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
-                      <Route path="/dashboard" element={<SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper>} />
+                      {/* Dashboard (item 51 — papel mínimo viewer) */}
+                      <Route path="/" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/dashboard" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><DashboardRedesigned /></SuspenseWrapper></ProtectedRoute>} />
                       
                       {/* Security routes - Admin only */}
                       <Route path="/security" element={<ProtectedRoute requiredRole="admin"><SuspenseWrapper><SecurityDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
@@ -186,8 +187,9 @@ const AppContent = () => {
                       <Route path="/alerts" element={<ProtectedRoute requiredRole="operator"><SuspenseWrapper><AlertsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/alert-configurations" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><AlertConfigurationsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/notification-history" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><NotificationHistoryPage /></SuspenseWrapper></ProtectedRoute>} />
-                      <Route path="/map" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><LiveMapPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/live-map" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><LiveMapPage /></SuspenseWrapper></ProtectedRoute>} />
+                      {/* item 50 — /map é alias legado de /live-map; redireciona para a rota canônica */}
+                      <Route path="/map" element={<Navigate to="/live-map" replace />} />
                       <Route path="/heatmap" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><HeatmapPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/sla" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><SLADashboardPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/risk-rules" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><RiskRulesPage /></SuspenseWrapper></ProtectedRoute>} />
@@ -200,7 +202,7 @@ const AppContent = () => {
                       <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports/advanced" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AdvancedReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
-                      <Route path="/profile" element={<ProtectedRoute><SuspenseWrapper><ProfilePage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/profile" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ProfilePage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/preferences" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><UserPreferencesPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/analytics" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AnalyticsDashboardPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/external-data" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><ExternalDataPage /></SuspenseWrapper></ProtectedRoute>} />
