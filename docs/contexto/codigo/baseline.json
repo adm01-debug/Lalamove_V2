@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "8f42f4fce4ac10f29d48824ecc56c5d59d877530",
+  "commit": "1e2d9ce4c7a0d6f16b4e9ea0b4a2b846dfd1e123",
   "branch": "main",
-  "data_commit": "2026-11-22T03:47:57-03:00",
+  "data_commit": "2026-11-22T04:35:01-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1e2d9ce",
+    "data": "2026-11-22",
+    "assunto": "feat: permite criar configuracao de alerta geo na UI (etapas 56/72) (#256)"
+   },
    {
     "sha": "8f42f4f",
     "data": "2026-11-22",
@@ -126,11 +131,6 @@
     "sha": "a08dd87",
     "data": "2026-11-22",
     "assunto": "feat(orders): usa a coordenada escolhida no autocomplete na cotação (etapas 34/35) (#229)"
-   },
-   {
-    "sha": "f7d18db",
-    "data": "2026-11-22",
-    "assunto": "feat(geo): geocode server-side de fallback e action validate (etapas 37/38) (#228)"
    }
   ],
   "arquivos_mudados_7d": 285,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 152
+    "commits": 153
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1025,
   "arquivos_codigo": 646,
-  "linhas_codigo": 125706,
+  "linhas_codigo": 125718,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 89,
-   "linhas": 19524
+   "linhas": 19536
   },
   "src/services": {
    "arquivos": 1,

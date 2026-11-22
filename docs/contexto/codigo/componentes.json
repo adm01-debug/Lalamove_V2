@@ -2290,7 +2290,7 @@
     "AlertConfigurationsPage"
    ],
    "export_default": null,
-   "linhas": 167,
+   "linhas": 179,
    "dominio": "pages",
    "hooks_locais": [
     "useAlertConfigurations",
