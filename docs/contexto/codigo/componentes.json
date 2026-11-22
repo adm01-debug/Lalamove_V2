@@ -2872,7 +2872,7 @@
     "LalamoveSettingsPage"
    ],
    "export_default": "LalamoveSettingsPage",
-   "linhas": 457,
+   "linhas": 483,
    "dominio": "pages",
    "hooks_locais": [
     "useLalamoveStatus",
@@ -3612,7 +3612,7 @@
     "UAPISettingsPage"
    ],
    "export_default": "UAPISettingsPage",
-   "linhas": 164,
+   "linhas": 176,
    "dominio": "pages",
    "hooks_locais": [
     "useUAPIStatus",

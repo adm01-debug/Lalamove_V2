@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
+  "commit": "ca2061f433ce40cb1522920da3e43a8882870985",
   "branch": "main",
-  "data_commit": "2026-11-22T13:56:19-03:00",
+  "data_commit": "2026-11-22T14:00:32-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ca2061f",
+    "data": "2026-11-22",
+    "assunto": "feat: campos de token como password e sem autofill (#294)"
+   },
    {
     "sha": "a388d1d",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "aedf1ee",
     "data": "2026-11-22",
     "assunto": "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)"
-   },
-   {
-    "sha": "2bd22c2",
-    "data": "2026-11-22",
-    "assunto": "docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)"
    }
   ],
-  "arquivos_mudados_7d": 339,
+  "arquivos_mudados_7d": 341,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -193,7 +193,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 8
+    "mudancas": 9
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -250,16 +250,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 9
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 9
-   },
-   {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 8
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 195
+    "commits": 196
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1057,
   "arquivos_codigo": 656,
-  "linhas_codigo": 128889,
+  "linhas_codigo": 128927,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 89,
-   "linhas": 19697
+   "linhas": 19735
   },
   "src/services": {
    "arquivos": 1,
@@ -677,7 +677,7 @@
    "linhas": 494
   },
   {
-   "arquivo": "src/pages/NotificationHistoryPage.tsx",
+   "arquivo": "src/pages/LalamoveSettingsPage.tsx",
    "linhas": 483
   }
  ],

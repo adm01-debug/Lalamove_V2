@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
+  "sha": "ca2061f433ce40cb1522920da3e43a8882870985",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:57 UTC",
+  "generated_at": "2026-11-22 17:01 UTC",
   "files_total": 1051,
   "code_files": 867,
-  "code_lines": 150066
+  "code_lines": 150104
  },
  "version": "1.3.2",
- "facts_hash": "2af9096c17eb5c96",
+ "facts_hash": "c592c760eeca9d6a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21315,7 +21315,7 @@
   {
    "module": "src/pages",
    "files": 89,
-   "lines": 19697,
+   "lines": 19735,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -66652,7 +66652,7 @@
   },
   "src/pages/LalamoveSettingsPage.tsx": {
    "path": "src/pages/LalamoveSettingsPage.tsx",
-   "lines": 457,
+   "lines": 483,
    "exports": [
     "function LalamoveSettingsPage"
    ],
@@ -67193,7 +67193,7 @@
   },
   "src/pages/UAPISettingsPage.tsx": {
    "path": "src/pages/UAPISettingsPage.tsx",
-   "lines": 164,
+   "lines": 176,
    "exports": [
     "function UAPISettingsPage"
    ],
@@ -73436,10 +73436,21 @@
   }
  },
  "git": {
-  "sha": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
+  "sha": "ca2061f433ce40cb1522920da3e43a8882870985",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "ca2061f",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: campos de token como password e sem autofill (#294)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/pages/LalamoveSettingsPage.tsx",
+     "src/pages/UAPISettingsPage.tsx"
+    ]
+   },
    {
     "sha": "a388d1d",
     "date": "2026-11-22",
@@ -73784,26 +73795,16 @@
      "supabase/tests/fixtures/geo_trigger_schema.sql",
      "supabase/tests/geo_trigger.test.sql"
     ]
-   },
-   {
-    "sha": "01eab04",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "infra: smoke test do geo-gateway logo apos o deploy (etapa 94) (#255)",
-    "files": [
-     ".github/workflows/deploy-edges.yml",
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    8
+    9
    ],
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    8
+    7
    ],
    [
     ".github/workflows/ci.yml",
@@ -73858,6 +73859,14 @@
     2
    ],
    [
+    "src/pages/LalamoveSettingsPage.tsx",
+    1
+   ],
+   [
+    "src/pages/UAPISettingsPage.tsx",
+    1
+   ],
+   [
     "src/hooks/useBitrix24.ts",
     1
    ],
@@ -73867,14 +73876,6 @@
    ],
    [
     "src/lib/postMessage.ts",
-    1
-   ],
-   [
-    "src/hooks/useCommandPaletteSearch.ts",
-    1
-   ],
-   [
-    "src/hooks/useGlobalSearch.ts",
     1
    ]
   ]
