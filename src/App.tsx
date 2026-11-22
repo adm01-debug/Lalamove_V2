@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { DeviceDetector } from "@/components/auth/DeviceDetector";
@@ -115,10 +115,16 @@ function SuspenseWrapper({ children }: { children: React.ReactNode }) {
 const AppContent = () => {
   const queryClient = getQueryClient();
   const location = useLocation();
+  const navigationType = useNavigationType();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+    // Rola o container principal (não a janela) e não restaura o topo em
+    // navegação POP (voltar/avançar) para preservar a posição de scroll.
+    if (navigationType === 'POP') return;
+    const main = document.getElementById('main-content');
+    if (main) main.scrollTo(0, 0);
+    else window.scrollTo(0, 0);
+  }, [location.pathname, navigationType]);
 
   const isAuthPage = location.pathname.startsWith('/auth');
 
