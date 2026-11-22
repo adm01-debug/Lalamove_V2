@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5e00e7c85b` · branch `main` · 2026-11-22 04:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2d6c7b1dda` · branch `main` · 2026-11-22 04:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -221,6 +221,8 @@ _nenhum item encontrado_
 | coluna | coluna `state` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `zip_code` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `count` usada no código não existe no schema de `drivers` |  |
+| coluna | coluna `delivery_contact_name` usada no código não existe no schema de `lalamove_orders` |  |
+| coluna | coluna `delivery_contact_phone` usada no código não existe no schema de `lalamove_orders` |  |
 | tabela | tabela `a` usada no código não existe nas migrations/types do repo | `scripts/ci/gerar-matriz-edge-tabela.unit.mjs` |
 | tabela | tabela `carriers` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |
 | tabela | tabela `companies` usada no código não existe nas migrations/types do repo | `supabase/functions/external-companies/index.ts` |

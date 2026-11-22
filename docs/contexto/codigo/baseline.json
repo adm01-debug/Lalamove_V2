@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5e00e7c85bbda55f8fcb51ceadbf5a6b9a173b80",
+  "commit": "2d6c7b1dda2af23010d04ee163905d7573449232",
   "branch": "main",
-  "data_commit": "2026-11-22T01:51:03-03:00",
+  "data_commit": "2026-11-22T01:53:33-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2d6c7b1",
+    "data": "2026-11-22",
+    "assunto": "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)"
+   },
    {
     "sha": "5e00e7c",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "9710802",
     "data": "2026-11-21",
     "assunto": "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)"
-   },
-   {
-    "sha": "626b371",
-    "data": "2026-11-21",
-    "assunto": "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)"
    }
   ],
-  "arquivos_mudados_7d": 257,
+  "arquivos_mudados_7d": 258,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -176,6 +176,10 @@
     "mudancas": 10
    },
    {
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 9
+   },
+   {
     "pasta": ".github/workflows/ci.yml",
     "mudancas": 8
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "supabase/config.toml",
-    "mudancas": 7
-   },
-   {
-    "pasta": "supabase/functions/job-worker",
     "mudancas": 7
    }
   ],
@@ -234,6 +234,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 8
+   },
+   {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 7
    },
@@ -247,10 +251,6 @@
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 136
+    "commits": 137
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1005,
-  "arquivos_codigo": 627,
-  "linhas_codigo": 122409,
+  "arquivos_total": 1006,
+  "arquivos_codigo": 628,
+  "linhas_codigo": 122695,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 133,
+  "testes": 134,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 103
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 68,
-   "linhas": 16494
+   "arquivos": 69,
+   "linhas": 16780
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -589,16 +589,16 @@
    "linhas": 1092
   },
   {
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 1082
+  },
+  {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",
    "linhas": 1007
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
    "linhas": 991
-  },
-  {
-   "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 968
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 123,
+  "any": 124,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,

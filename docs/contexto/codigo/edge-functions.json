@@ -471,7 +471,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 968,
+   "linhas": 1082,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -480,11 +480,13 @@
    "usa_service_role": true,
    "tabelas": [
     "active_tracking",
+    "alert_configurations",
     "lalamove_orders",
     "lalamove_stops",
     "tracking_events"
    ],
    "rpcs": [
+    "geo_emit_event",
     "mark_job_completed",
     "mark_job_failed"
    ],
@@ -507,7 +509,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": true,
    "orfa": false,
-   "testes": 1
+   "testes": 2
   },
   {
    "nome": "lalamove-api",

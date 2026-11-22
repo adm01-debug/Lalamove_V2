@@ -1242,6 +1242,7 @@
    "usada_no_front": 2,
    "usada_em_edges": [
     "check-driver-alerts",
+    "job-worker",
     "send-notification"
    ],
    "triggers": [
@@ -11244,6 +11245,11 @@
    "nome": "geo_budget_status",
    "definida": true,
    "usada_em": 2
+  },
+  {
+   "nome": "geo_emit_event",
+   "definida": true,
+   "usada_em": 1
   },
   {
    "nome": "geo_usage_increment",

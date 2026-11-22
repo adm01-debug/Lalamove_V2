@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5e00e7c85b` · branch `main` · 2026-11-22 04:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2d6c7b1dda` · branch `main` · 2026-11-22 04:54 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -785,10 +785,11 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
 | `role` | `admin` | compara, filtra | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/lalamove-uapi/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
-| `role` | `delivery_contact` | compara | `supabase/functions/send-notification/index.ts` |
+| `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `role` | `manager` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `operator` | compara | `src/components/layout/sidebar-config.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
+| `role` | `pickup_contact` | escreve | `supabase/functions/job-worker/index.ts` |
 | `role` | `service_role` | compara | `supabase/functions/send-notification/index.ts`<br>`supabase/functions/simulate-driver-movement/index.ts` |
 | `role` | `supplier` | escreve | `supabase/functions/check-driver-alerts/index.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `role` | `system` | escreve | `supabase/functions/route-analyzer/index.ts` |
@@ -1317,6 +1318,7 @@ _nenhum item encontrado_
 | `STATIC_BASE` | `"https://maps.googleapis.com/maps/api/staticmap"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `ADDRESS_VALIDATION_BASE` | `"https://addressvalidation.googleapis.com/v1:validateAddress"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `BASE` | `"https://api.mapbox.com"` | `supabase/functions/geo-gateway/providers/mapbox.ts` |
+| `ETA_TRAFFIC_THRESHOLD_MIN` | `15` | `supabase/functions/job-worker/index.ts` |
 | `LALAMOVE_MARKET` | `'BR'` | `supabase/functions/lalamove-api/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-gateway/index.ts` |
 | `REFRESH_AFTER_HOURS` | `20` | `supabase/functions/lalamove-token-refresh/index.ts` |
@@ -1826,7 +1828,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1028 testes em 91 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1041 testes em 92 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1859,6 +1861,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
+| `supabase/functions/job-worker/eta-delay.test.ts` | 13 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
@@ -2157,7 +2160,7 @@ _nenhum item encontrado_
 | - `limit` default 100, teto de 500 por execução — o cap diário do provedor é | `supabase/functions/job-worker/index.ts` |
 | controlado pelo `geo-gateway` (orçamento + rate limit), não aqui; | `supabase/functions/job-worker/index.ts` |
 | coordenada aproximada não pode passar como exata num pedido que será despachado. | `supabase/functions/job-worker/index.ts` |
-| Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego. | `supabase/functions/job-worker/index.ts` |
+| Etapa 49: `traffic:false` explícito no tracado. O polilinha de longo prazo | `supabase/functions/job-worker/index.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |
 | Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove. | `supabase/functions/lalamove-api/coordinates.ts` |
 | * Nunca lanca: devolve `null` quando o endereco nao pode ser resolvido, para o pedido | `supabase/functions/lalamove-api/geocode-fallback.ts` |

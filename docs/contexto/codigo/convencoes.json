@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (20)"
+   "supabase/functions/<edge> (21)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)",
    "fix: webhook cria a linha de active_tracking no primeiro ping (#236)",
    "docs: contrato de dados do motor geo (etapa 41) (#235)",
    "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)",
-   "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)",
-   "feat: canal Zapp no send-notification (etapa 69) (#232)"
+   "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
