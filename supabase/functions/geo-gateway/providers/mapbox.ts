@@ -8,6 +8,7 @@ import type {
   ProviderResult, ReverseReq, RouteReq, SnapReq, StaticReq,
 } from "./types.ts";
 import { GeoProviderError } from "./types.ts";
+import { precisionFromAccuracy } from "../../_shared/geo-precision.ts";
 
 const BASE = "https://api.mapbox.com";
 
@@ -38,10 +39,7 @@ const ROUTE_PROFILES = new Set(["driving-traffic", "driving", "walking", "cyclin
 // Matrix não tem todos os perfis do Directions: fora desta lista cai no default.
 const MATRIX_PROFILES = new Set(["driving-traffic", "driving", "walking", "cycling"]);
 
-const ACCURACY_TO_PRECISION: Record<string, GeoPrecision> = {
-  rooftop: "exact", parcel: "exact", point: "high", interpolated: "medium", intersection: "medium",
-  approximate: "low", street: "low",
-};
+
 
 function fmt(p: GeoPoint) {
   return `${p.lng},${p.lat}`;
@@ -212,7 +210,7 @@ export class MapboxProvider implements GeoProvider {
       location: lat != null && lng != null ? { lat: Number(lat), lng: Number(lng) } : null,
       routable_point: rp ? { lat: rp.latitude, lng: rp.longitude } : null,
       components: toComponents(props.context as Parameters<typeof toComponents>[0]),
-      precision: ACCURACY_TO_PRECISION[coords.accuracy ?? ""] ?? "unknown",
+      precision: precisionFromAccuracy(coords.accuracy),
       match_confidence: match?.confidence,
       provider: "mapbox",
       retainable,

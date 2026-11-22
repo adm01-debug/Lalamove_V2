@@ -44,12 +44,17 @@ export async function persistOrderCoordinates(supabase: any, orderId: string, st
     patch.pickup_longitude = first.lng;
     patch.geocode_provider = "lalamove";
     patch.geocode_precision = "LALAMOVE";
+    // Etapa 14: `pickup_place_id`/`delivery_place_id` existem desde a geo_foundation mas
+    // nunca eram escritos (100% NULL em produção) — ficavam como coluna morta e o ponto
+    // de coleta/entrega não tinha identidade estável por provedor.
+    if (first.stopId) patch.pickup_place_id = `lalamove:${first.stopId}`;
   }
   if (second?.lat !== null && second?.lat !== undefined) {
     patch.delivery_latitude = second.lat;
     patch.delivery_longitude = second.lng;
     patch.geocode_provider = "lalamove";
     patch.geocode_precision = "LALAMOVE";
+    if (second.stopId) patch.delivery_place_id = `lalamove:${second.stopId}`;
   }
   if (Object.keys(patch).length === 0) return;
 
