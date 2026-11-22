@@ -100,6 +100,7 @@ describe('AdminTelemetriaPage', () => {
   it('calls cleanup endpoint on button click', async () => {
     const { getByText } = render(createElement(AdminTelemetriaPage), { wrapper: createWrapper() });
     await act(async () => { getByText('Limpar +7d').click(); });
+    await act(async () => { getByText('Apagar +7d').click(); });
     await vi.waitFor(() => {
       const deleteCalls = mockFetch.mock.calls.filter(
         (call: unknown[]) => typeof call[1] === 'object' && (call[1] as Record<string, string>).method === 'DELETE'
@@ -113,6 +114,7 @@ describe('AdminTelemetriaPage', () => {
     mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve([]) });
     const { getByText } = render(createElement(AdminTelemetriaPage), { wrapper: createWrapper() });
     await act(async () => { getByText('Limpar +7d').click(); });
+    await act(async () => { getByText('Apagar +7d').click(); });
     await vi.waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith('Dados com mais de 7 dias removidos');
     });
@@ -125,6 +127,7 @@ describe('AdminTelemetriaPage', () => {
       .mockResolvedValueOnce({ ok: false, status: 403 });
     const { getByText } = render(createElement(AdminTelemetriaPage), { wrapper: createWrapper() });
     await act(async () => { getByText('Limpar +7d').click(); });
+    await act(async () => { getByText('Apagar +7d').click(); });
     await vi.waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Erro ao limpar dados antigos');
     });

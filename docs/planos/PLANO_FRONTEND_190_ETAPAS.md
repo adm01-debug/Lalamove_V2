@@ -138,8 +138,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** inputs com `type="password"`; texto de DevTools ausente. `LalamoveSettingsPage.tsx` (UAPI token, V3 Key e V3 Secret) e `UAPISettingsPage.tsx` (UAPI token) usam `type={show ? 'text' : 'password'}` + `autoComplete="off"` + botão `Eye/EyeOff`; instrução "DevTools → get_user_info → token" removida das duas páginas.
 
 ### 14 — [F] Telemetria admin sem fallback para chave pública e com confirmação
-- [ ] `src/pages/AdminTelemetriaPage.tsx:86, 104`: falhar com toast se não houver `session.access_token` (nunca `|| VITE_SUPABASE_PUBLISHABLE_KEY`); `handleCleanup` (`:96-110`) com `try/catch` e `AlertDialog` "isso apaga 7 dias de telemetria".
-- **Evidência:** sem sessão a tela mostra erro e não dispara `fetch`.
+- [x] `src/pages/AdminTelemetriaPage.tsx:86, 104`: falhar com toast se não houver `session.access_token` (nunca `|| VITE_SUPABASE_PUBLISHABLE_KEY`); `handleCleanup` (`:96-110`) com `try/catch` e `AlertDialog` "isso apaga 7 dias de telemetria".
+- **Evidência:** sem sessão a tela mostra erro e não dispara `fetch`. As duas chamadas (query e DELETE) usam só `Bearer ${session.access_token}`; `handleCleanup` tem `try/catch`/`finally` e o botão "Limpar +7d" abre `AlertDialog` com a confirmação "Isso apaga todos os registros com mais de 7 dias".
 
 ### 15 — [E][D] Remover `apply-fixes` e `seed-fix-rls` (D1) 🔒
 - [ ] Apagar `supabase/functions/apply-fixes/` e `supabase/functions/seed-fix-rls/`; limpar `scripts/db-audit/known-violations.json:6-7` e `scripts/ci/check-edge-error-exposure-baseline.json:5,25`; `supabase functions delete` nas duas (dono).
