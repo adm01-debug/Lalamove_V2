@@ -538,7 +538,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 8 — Lalamove: eventos ao motorista (99–112)
 
 ### 99 — [L] Telefone do motorista confiável
-- [ ] Em `DRIVER_ASSIGNED`: buscar dados do motorista na API v3, gravar `lalamove_orders.driver_phone` e `drivers.phone` normalizados; UAPI como reserva
+- [x] Em `DRIVER_ASSIGNED`: buscar dados do motorista na API v3, gravar `lalamove_orders.driver_phone` e `drivers.phone` normalizados; UAPI como reserva
+- **Evidência:** `lalamove-webhook/index.ts` (`normalizePhone(driverData.driverPhone)`; `drivers.phone` na criação e atualizado quando o v3 manda outro número — antes o motorista antigo ficava com o telefone do primeiro cadastro; `lalamove_orders.driver_phone` gravado no vínculo do pedido; telefone com máscara (`****`) é descartado com log em vez de virar 400 no provedor); 17 testes do webhook verdes
 - **Evidência:** pedido novo com `driver_phone` em E.164 (consulta)
 
 ### 100 — [L] Troca de motorista
