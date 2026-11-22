@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select';
 import {
   MapPin,
+  Bell,
   Clock,
   Phone,
   User,
@@ -45,6 +46,7 @@ import { RiskScoreGauge } from '@/components/dashboard/RiskScoreGauge';
 import { supabase } from '@/integrations/supabase/client';
 import { StatusTimeline } from './StatusTimeline';
 import { OrderTrackingMap } from '@/components/map/OrderTrackingMap';
+import { OrderGeoEvents } from './OrderGeoEvents';
 import { evaluateOrderOperation, validatePriorityFee } from '@/lib/lalamoveOrderEdit';
 import { changeDriverReasonOptions, cancelOrderReasonOptions } from '@/lib/lalamoveReasons';
 import { useFleetMutation, UapiError } from '@/hooks/useLalamoveUapi';
@@ -964,6 +966,16 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                 </div>
               </div>
             )}
+
+            {/* Eventos geográficos: aproximação/chegada do motorista + reenvio
+                manual do aviso (etapas 62/63 do plano Google). */}
+            <div className="glass-card p-4 rounded-lg">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+                <Bell className="w-4 h-4" />
+                Eventos de rastreio
+              </h3>
+              <OrderGeoEvents orderId={order.id} driverId={order.driverId} />
+            </div>
 
             {/* Timeline de Status (auditável) */}
             <StatusTimeline orderId={order.id} />
