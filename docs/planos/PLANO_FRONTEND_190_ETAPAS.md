@@ -76,11 +76,11 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 
 ## Bloco 0 — Segurança e dado errado (1–20)
 
-### 1 — [F] Escapar HTML nos popups e marcadores do mapa
-- [ ] Em `src/components/map/markerFactories.ts`, aplicar `escapeHtml` (`:26`) em `driverName`, `customerName`, `pickupAddress`, `deliveryAddress` (`:300-316`), no nome do marcador (`:219`) e em `locationName` (`:243`, `:257`).
-- [ ] Trocar o `onclick="...'${driverName}'"` inline (`:324-325`) por `data-*` + `addEventListener` após `setDOMContent`, eliminando string JS com dado do usuário.
-- [ ] Teste em `src/components/map/__tests__/markerFactories.test.ts`: nome `<img src=x onerror=alert(1)>` vira texto escapado.
-- **Evidência:** `rg -n "\\$\\{(driverName|customerName|pickupAddress|deliveryAddress|locationName)\\}" src/components/map/markerFactories.ts` só dentro de `escapeHtml(...)`; teste verde.
+### 1 — [F] Escapar HTML nos popups e marcadores do mapa ✅
+- [x] Em `src/components/map/markerFactories.ts`, aplicar `escapeHtml` (`:26`) em `driverName`, `customerName`, `pickupAddress`, `deliveryAddress` (`:300-316`), no nome do marcador (`:219`) e em `locationName` (`:243`, `:257`).
+- [x] Trocar o `onclick="...'${driverName}'"` inline (`:324-325`) por `data-*` + `addEventListener` após `setHTML`, eliminando string JS com dado do usuário.
+- [x] Teste em `src/components/map/__tests__/markerFactories.test.ts`: nome `<img src=x onerror=alert(1)>` vira texto escapado.
+- **Evidência:** `rg -n "\\$\\{(driverName|customerName|pickupAddress|deliveryAddress|locationName)\\}" src/components/map/markerFactories.ts` só dentro de `escapeHtml(...)`; teste verde. PR #287 mergeada (`6e6c62b`), CI main 100% verde (12 jobs).
 
 ### 2 — [F] Unificar `escapeHtml` em `src/lib/html.ts`
 - [ ] Mover o helper duplicado (`markerFactories.ts:26` e `GoogleMapsCanvas.tsx:53`) para `src/lib/html.ts` com teste de 5 entidades.
