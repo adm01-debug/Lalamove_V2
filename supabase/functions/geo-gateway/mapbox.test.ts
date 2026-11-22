@@ -166,3 +166,38 @@ Deno.test("static: monta overlay com path simplificado + pinos, auto bounds, dev
   assert(r.data.image.startsWith("data:image/png;base64,iVBORw"));
   assertEquals(r.sku, "static_image");
 });
+
+Deno.test("geocode-batch (etapa 25): POST com array, ordem preservada, item vazio vira not_found sem derrubar o lote", async () => {
+  const { fetch, calls } = mockFetch(() => ({
+    body: {
+      batch: [
+        { type: "FeatureCollection", features: [RETRIEVE.features[0]] },
+        { type: "FeatureCollection", features: [] },
+        { type: "FeatureCollection", features: [RETRIEVE.features[0], RETRIEVE.features[0]] },
+      ],
+    },
+  }));
+  const p = new MapboxProvider({ token: "sk.test", fetch });
+  const r = await p.geocodeBatch(
+    [{ address: "Rua XV de Novembro 100, Curitiba" }, { address: "zzzqqq nao existe" }, { structured: { address_line1: "Rua XV 100", city: "Curitiba" } }],
+    true,
+  );
+  assertEquals(calls[0].url.includes("/search/geocode/v6/batch?permanent=true"), true);
+  // ordem é a ligação entre consulta e resultado: index 0,1,2 batem com a entrada
+  assertEquals(r.data.map((d) => d.index), [0, 1, 2]);
+  assertEquals(r.data[0].addresses[0].location, { lat: -25.4296, lng: -49.2716 });
+  assertEquals(r.data[1].addresses.length, 0);
+  assertEquals(r.data[1].not_found, true);
+  assertEquals(r.data[2].addresses.length, 2);
+  // cobra por consulta, não por requisição HTTP
+  assertEquals(r.sku, "geocoding_permanent");
+  assertEquals(r.units, 3);
+});
+
+Deno.test("geocode-batch: item sem address nem structured é recusado antes de chamar o provedor", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: { batch: [] } }));
+  const p = new MapboxProvider({ token: "sk.test", fetch });
+  const e = await assertRejects(() => p.geocodeBatch([{ limit: 3 }], true), GeoProviderError);
+  assertEquals(e.code, "GEO_INVALID_INPUT");
+  assertEquals(calls.length, 0);
+});

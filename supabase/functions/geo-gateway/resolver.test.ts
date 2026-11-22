@@ -132,3 +132,29 @@ Deno.test("waitForCapacity: bucket com folga libera imediatamente", async () => 
   });
   assertEquals(await r.waitForCapacity("mapbox", "directions", 300), true);
 });
+
+Deno.test("rateGuard com consume: lote de 50 gasta 50 slots (geocoding tem 1000/min), não 1", () => {
+  let t = 0;
+  const r = new ProviderResolver({
+    loadSettings: () => Promise.resolve([]), loadBudget: () => Promise.resolve([]), loadQuota: () => Promise.resolve([]),
+    isConfigured: () => true, supports: () => true, now: () => t,
+  });
+  // 19 lotes de 50 = 950 slots; o 20º (1000) ainda cabe
+  for (let i = 0; i < 19; i++) assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 50), true);
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 50), true);
+  // 1000/1000 consumidos: o próximo lote é recusado inteiro, sem consumo parcial
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 50), false);
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 1), false);
+  t = 61_000;
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 50), true);
+});
+
+Deno.test("rateGuard com consume: lote maior que o limite inteiro é recusado de imediato", () => {
+  const r = new ProviderResolver({
+    loadSettings: () => Promise.resolve([]), loadBudget: () => Promise.resolve([]), loadQuota: () => Promise.resolve([]),
+    isConfigured: () => true, supports: () => true, now: () => 0,
+  });
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000, 1500), false);
+  // e não deixa o bucket corrompido: a próxima chamada normal passa
+  assertEquals(r.rateGuard("mapbox", "geocoding", 1000), true);
+});

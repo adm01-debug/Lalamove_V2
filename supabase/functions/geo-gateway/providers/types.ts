@@ -168,6 +168,29 @@ export interface StaticReq {
   style?: string;
 }
 
+/** Um item do lote de `geocode-batch`: mesmo contrato do `geocode` individual. */
+export interface GeoBatchQuery {
+  address?: string;
+  structured?: {
+    address_line1?: string;
+    postal_code?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  bias?: { lat: number; lng: number };
+  country?: string;
+  language?: string;
+  limit?: number;
+}
+
+/** Resultado por item: `addresses` vazio (com `not_found`) quando nada foi encontrado. */
+export interface GeoBatchItem {
+  index: number;
+  addresses: GeoAddress[];
+  not_found?: boolean;
+}
+
 export interface SnapReq {
   points: GeoPoint[];
   timestamps?: number[];
@@ -212,6 +235,12 @@ export interface GeoProvider {
   autocomplete(req: AutocompleteReq): Promise<ProviderResult<GeoSuggestion[]>>;
   placeDetails(req: PlaceDetailsReq): Promise<ProviderResult<GeoAddress>>;
   geocode(req: GeocodeReq): Promise<ProviderResult<GeoAddress[]>>;
+  /**
+   * Etapa 25: geocodificação em lote. Opcional — o gateway devolve 501 quando ausente
+   * em vez de degradar em N chamadas silenciosas. Cada item falha sozinho: um endereço
+   * não encontrado não derruba o lote.
+   */
+  geocodeBatch?(reqs: GeoBatchQuery[], persist: boolean): Promise<ProviderResult<GeoBatchItem[]>>;
   reverse(req: ReverseReq): Promise<ProviderResult<GeoAddress | null>>;
   route(req: RouteReq): Promise<ProviderResult<GeoRoute>>;
   matrix(req: MatrixReq): Promise<ProviderResult<GeoMatrix>>;

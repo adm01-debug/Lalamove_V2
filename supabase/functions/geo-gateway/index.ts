@@ -28,7 +28,7 @@ const GOOGLE_KEY = Deno.env.get("GOOGLE_MAPS_SERVER_KEY") ?? "";
 const db = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
 const ACTION_FUNCTION: Record<string, GeoFunction> = {
-  "autocomplete": "autocomplete", "place-details": "autocomplete", "geocode": "geocode", "reverse": "reverse",
+  "autocomplete": "autocomplete", "place-details": "autocomplete", "geocode": "geocode", "geocode-batch": "geocode", "reverse": "reverse",
   "route": "route", "matrix": "matrix", "static": "static", "snap": "snap",
   "isochrone": "isochrone", "optimization": "optimization", "tilequery": "tilequery", "count-map-load": "tiles",
 };
@@ -97,7 +97,7 @@ const resolver: ProviderResolver = new ProviderResolver({
 
 const mapbox: MapboxProvider = new MapboxProvider({
   token: MAPBOX_TOKEN,
-  rateGuard: (api: string): boolean => resolver.rateGuard("mapbox", api, MAPBOX_RATE_LIMITS[api] ?? 300),
+  rateGuard: (api: string, consume?: number): boolean => resolver.rateGuard("mapbox", api, MAPBOX_RATE_LIMITS[api] ?? 300, consume),
 });
 
 function getProvider(name: ProviderName): GeoProvider {
@@ -121,6 +121,11 @@ async function runProvider(
     }
     case "place-details": return await provider.placeDetails(body);
     case "geocode": return await provider.geocode(body);
+    case "geocode-batch": {
+      if (!provider.geocodeBatch) throw new GeoProviderError("GEO_NOT_SUPPORTED", `geocode-batch não disponível em ${name}`, 501);
+      // `persist` default true: o lote existe para backfill, que precisa reter a coordenada.
+      return await provider.geocodeBatch(body.queries, body.persist !== false);
+    }
     case "reverse": return await provider.reverse(body);
     case "route": return await provider.route(body);
     case "matrix": return await provider.matrix(body);
