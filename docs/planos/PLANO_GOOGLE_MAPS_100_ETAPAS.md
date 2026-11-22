@@ -693,9 +693,21 @@ tsconfig.app.json` limpo.
 - [ ] Atualizar `docs/ci/MATRIZ_EDGE_TABELA.md`
 - **Evidência:** `supabase_functions_list` sem `mapbox-proxy`
 
-### 84 — Testes de front
-- [ ] vitest: `useGeo`, `AddressAutocomplete`, `OrderTrackingMap` (mock do loader); Playwright `e2e/`: criar pedido com autocomplete → coordenadas preenchidas
-- **Evidência:** CI verde
+### 84 — Testes de front ✅
+- [x] vitest: `useGeo`, `AddressAutocomplete`, `OrderTrackingMap` (mock do loader); Playwright `e2e/`: criar pedido com autocomplete → coordenadas preenchidas
+- **Evidência:** CI verde — `npx vitest run src/hooks/__tests__/useGeo.test.ts src/components/orders/AddressAutocomplete.test.tsx src/components/map/__tests__/OrderTrackingMap.test.tsx` → 3 arquivos verdes; `npx playwright test --list` → `new-order-autocomplete.e2e.ts:60` listado; `npx tsc --noEmit -p tsconfig.node.json` → exit 0
+
+**Executado.** Os três alvos de vitest **já existiam** e não precisaram de código novo: `src/hooks/__tests__/useGeo.test.ts` (8 `it`), `src/components/orders/AddressAutocomplete.test.tsx` (6 `it`) e `src/components/map/__tests__/OrderTrackingMap.test.tsx` (3 `it`, com o loader mockado). O que faltava de verdade era o e2e.
+
+- **`e2e/new-order-autocomplete.e2e.ts`** (novo) — abre `/orders`, digita os endereços nos campos de coleta e entrega, **clica na sugestão da lista** (`role="option"`) e então captura o corpo da cotação com `page.route('**/functions/v1/lalamove-api')`.
+- **Por que interceptar a edge:** o `NewOrderDialog` **não exibe** a coordenada escolhida — `pickupGeo`/`deliveryGeo` são só estado (`:173-174`) e viram `stops[i].coordinates` no corpo da cotação (`:308-309`). Nenhum seletor provaria "coordenadas preenchidas"; o corpo do request prova.
+- **A cotação real não é chamada** — a resposta é `route.fulfill` com o contrato mínimo (`quotationId`, `expiresAt`, `priceBreakdown`, `stops[].stopId`). Rodar a cotação a cada push custaria dinheiro e dependeria de serviço ativo na praça.
+- **Asserções:** duas paradas; cada uma com `coordinates` presente, numérica e **não `0,0`** (o placeholder que a Lalamove devolve `422 ERR_OUT_OF_SERVICE_AREA`); e `lat`/`lng` da coleta e da entrega iguais ao ponto que o `place-details` do provedor devolveu (`toBeCloseTo` em 5 casas).
+- **Degradação:** sem `LOVABLE_BROWSER_SUPABASE_*` a sessão não é injetada e o teste é `skip`; se o gateway não devolver coordenada para os endereços de teste, também `skip` em vez de falhar por ambiente — mesmo padrão do `autocomplete.e2e.ts`.
+
+**Verificado:** `npx playwright test --list` lista o teste (7 arquivos, 26 testes); `npx tsc --noEmit -p tsconfig.node.json` → exit 0; `npx eslint e2e/new-order-autocomplete.e2e.ts` → 0 erros.
+
+**Ressalva honesta.** Execução real do e2e depende das variáveis de sessão injetada, que só o CI de produção possui — localmente ele aparece como `skip`. Isso não é "verificado em execução": está verificado que compila, que é descoberto pelo Playwright e que o caminho do teste corresponde ao fluxo real do diálogo (conferido em `NewOrderDialog.tsx:296-330`).
 
 ---
 
