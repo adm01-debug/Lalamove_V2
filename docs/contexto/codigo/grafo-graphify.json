@@ -4,11 +4,11 @@
  "presente": true,
  "como_gerar": "npm run graph:setup (uma vez) e `graphify update .` depois de mexer no código; saída em graphify-out/, não versionada. Consulta: graphify query/path/explain.",
  "relatorio": null,
- "commit_do_grafo": "ca2061f433ce40cb1522920da3e43a8882870985",
+ "commit_do_grafo": "b05e2b0de600ed0d90806e763d8356f5cf3fcc3b",
  "grafo_atual": true,
  "nos": 8710,
- "arestas": 18205,
- "comunidades_total": 638,
+ "arestas": 18214,
+ "comunidades_total": 639,
  "relacoes": {
   "calls": 2418,
   "case_of": 41,
@@ -17,8 +17,8 @@
   "defines": 11,
   "dynamic_import": 110,
   "implements": 2,
-  "imports": 3618,
-  "imports_from": 3274,
+  "imports": 3626,
+  "imports_from": 3275,
   "indexes": 230,
   "indirect_call": 127,
   "inherits": 13,
@@ -30,7 +30,7 @@
   "triggers": 32
  },
  "origem": {
-  "EXTRACTED": 17383,
+  "EXTRACTED": 17392,
   "INFERRED": 822
  },
  "comunidades": [
@@ -70,6 +70,23 @@
   },
   {
    "id": 2,
+   "nome": "react",
+   "nos": 148,
+   "callables": 47,
+   "arquivos": 34,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/App.tsx",
+    "src/components/auth/PermissionGate.tsx",
+    "src/components/map/MapHistoryPanel.tsx",
+    "src/components/orders/FetchOrderDialog.tsx",
+    "src/components/orders/ImportCSVDialog.tsx",
+    "src/components/ui/highlight-match.tsx",
+    "src/components/ui/keyboard-shortcuts-help.tsx"
+   ]
+  },
+  {
+   "id": 3,
    "nome": "client.ts",
    "nos": 124,
    "callables": 66,
@@ -86,24 +103,24 @@
    ]
   },
   {
-   "id": 3,
-   "nome": "App.tsx",
-   "nos": 103,
-   "callables": 44,
-   "arquivos": 26,
+   "id": 4,
+   "nome": "GeoBlockingPage.tsx",
+   "nos": 95,
+   "callables": 43,
+   "arquivos": 28,
    "exemplos_arquivos": [
+    "jspdf",
+    "jspdf-autotable",
     "src/App.tsx",
-    "src/components/auth/MFAEnroll.tsx",
     "src/components/auth/MFASettings.tsx",
-    "src/components/auth/MFAVerify.tsx",
-    "src/components/auth/PasskeyLoginButton.tsx",
     "src/components/auth/PasskeySettings.tsx",
-    "src/components/auth/PermissionGate.tsx",
-    "src/components/auth/ProtectedRoute.tsx"
+    "src/components/drivers/BulkActions.tsx",
+    "src/components/drivers/DriverProfileModal.tsx",
+    "src/components/drivers/DriverProfileTabs.tsx"
    ]
   },
   {
-   "id": 4,
+   "id": 5,
    "nome": "ref_https",
    "nos": 93,
    "callables": 49,
@@ -117,23 +134,6 @@
     "supabase/functions/_shared/schemas.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/apply-fixes/index.ts"
-   ]
-  },
-  {
-   "id": 5,
-   "nome": "react",
-   "nos": 90,
-   "callables": 31,
-   "arquivos": 27,
-   "exemplos_arquivos": [
-    "package.json",
-    "src/App.tsx",
-    "src/components/map/MapHistoryPanel.tsx",
-    "src/components/orders/FetchOrderDialog.tsx",
-    "src/components/orders/ImportCSVDialog.tsx",
-    "src/components/ui/highlight-match.tsx",
-    "src/components/ui/scroll-area.tsx",
-    "src/components/ui/search-help-tooltip.tsx"
    ]
   },
   {
@@ -172,23 +172,6 @@
   },
   {
    "id": 8,
-   "nome": "GeoBlockingPage.tsx",
-   "nos": 88,
-   "callables": 40,
-   "arquivos": 25,
-   "exemplos_arquivos": [
-    "src/App.tsx",
-    "src/components/auth/MFASettings.tsx",
-    "src/components/auth/PasskeySettings.tsx",
-    "src/components/drivers/BulkActions.tsx",
-    "src/components/drivers/DriverProfileModal.tsx",
-    "src/components/drivers/DriverProfileTabs.tsx",
-    "src/components/orders/FetchOrderDialog.tsx",
-    "src/components/orders/ImportCSVDialog.tsx"
-   ]
-  },
-  {
-   "id": 9,
    "nome": "geo-gateway/index.ts",
    "nos": 82,
    "callables": 38,
@@ -205,7 +188,7 @@
    ]
   },
   {
-   "id": 10,
+   "id": 9,
    "nome": "dependencies",
    "nos": 80,
    "callables": 0,
@@ -215,7 +198,7 @@
    ]
   },
   {
-   "id": 11,
+   "id": 10,
    "nome": "gerar.mjs",
    "nos": 76,
    "callables": 13,
@@ -225,7 +208,7 @@
    ]
   },
   {
-   "id": 12,
+   "id": 11,
    "nome": "generate.py",
    "nos": 73,
    "callables": 64,
@@ -235,7 +218,7 @@
    ]
   },
   {
-   "id": 13,
+   "id": 12,
    "nome": "job-worker/index.ts",
    "nos": 73,
    "callables": 35,
@@ -251,7 +234,7 @@
    ]
   },
   {
-   "id": 14,
+   "id": 13,
    "nome": "package.json",
    "nos": 72,
    "callables": 0,
@@ -264,7 +247,7 @@
    ]
   },
   {
-   "id": 15,
+   "id": 14,
    "nome": "useRealtimeSubscriptions.ts",
    "nos": 69,
    "callables": 52,
@@ -281,7 +264,7 @@
    ]
   },
   {
-   "id": 16,
+   "id": 15,
    "nome": "seed-database.ts",
    "nos": 67,
    "callables": 34,
@@ -298,24 +281,7 @@
    ]
   },
   {
-   "id": 17,
-   "nome": "lucide-react",
-   "nos": 65,
-   "callables": 36,
-   "arquivos": 22,
-   "exemplos_arquivos": [
-    "jspdf",
-    "jspdf-autotable",
-    "package.json",
-    "src/App.tsx",
-    "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
-    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
-    "src/components/admin/telemetry/TelemetryCharts.tsx",
-    "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx"
-   ]
-  },
-  {
-   "id": 18,
+   "id": 16,
    "nome": "lint-ratchet.mjs",
    "nos": 64,
    "callables": 45,
@@ -327,7 +293,7 @@
    ]
   },
   {
-   "id": 19,
+   "id": 17,
    "nome": "utils/logger.ts",
    "nos": 64,
    "callables": 28,
@@ -344,7 +310,7 @@
    ]
   },
   {
-   "id": 20,
+   "id": 18,
    "nome": "send-notification/index.ts",
    "nos": 61,
    "callables": 33,
@@ -361,7 +327,7 @@
    ]
   },
   {
-   "id": 21,
+   "id": 19,
    "nome": "lalamove-api/index.ts",
    "nos": 55,
    "callables": 37,
@@ -377,7 +343,7 @@
    ]
   },
   {
-   "id": 22,
+   "id": 20,
    "nome": "check-migration-drift.mjs",
    "nos": 55,
    "callables": 38,
@@ -390,7 +356,7 @@
    ]
   },
   {
-   "id": 23,
+   "id": 21,
    "nome": "types/index.ts",
    "nos": 52,
    "callables": 41,
@@ -407,7 +373,7 @@
    ]
   },
   {
-   "id": 24,
+   "id": 22,
    "nome": "useMapbox.ts",
    "nos": 51,
    "callables": 37,
@@ -421,7 +387,24 @@
    ]
   },
   {
-   "id": 25,
+   "id": 23,
+   "nome": "lucide-react",
+   "nos": 50,
+   "callables": 27,
+   "arquivos": 17,
+   "exemplos_arquivos": [
+    "package.json",
+    "src/App.tsx",
+    "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
+    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
+    "src/components/dashboard/UAPIStatusCards.tsx",
+    "src/components/health/CronJobsHealthPanel.tsx",
+    "src/components/lalamove/UapiCouponsPanel.tsx",
+    "src/components/lalamove/UapiFleetPanel.tsx"
+   ]
+  },
+  {
+   "id": 24,
    "nome": "actions-kpi.mjs",
    "nos": 48,
    "callables": 29,
@@ -435,7 +418,7 @@
    ]
   },
   {
-   "id": 26,
+   "id": 25,
    "nome": "check-screen-permission-db-guards.mjs",
    "nos": 47,
    "callables": 20,
@@ -448,7 +431,7 @@
    ]
   },
   {
-   "id": 27,
+   "id": 26,
    "nome": "snapshot.py",
    "nos": 46,
    "callables": 34,
@@ -458,7 +441,7 @@
    ]
   },
   {
-   "id": 28,
+   "id": 27,
    "nome": "🔍 Sistema de Screening - Lalamove Guardian",
    "nos": 46,
    "callables": 0,
@@ -468,7 +451,7 @@
    ]
   },
   {
-   "id": 29,
+   "id": 28,
    "nome": "AlertsPage.tsx",
    "nos": 46,
    "callables": 23,
@@ -482,6 +465,23 @@
     "src/pages/AlertsPage.tsx",
     "src/pages/ApprovalsPage.tsx",
     "src/pages/MetricsPage.panels.tsx"
+   ]
+  },
+  {
+   "id": 29,
+   "nome": "SecurityDashboardPage.tsx",
+   "nos": 45,
+   "callables": 28,
+   "arquivos": 18,
+   "exemplos_arquivos": [
+    "src/App.tsx",
+    "src/components/auth/MFAEnroll.tsx",
+    "src/components/auth/MFASettings.tsx",
+    "src/components/auth/MFAVerify.tsx",
+    "src/components/auth/PasskeyLoginButton.tsx",
+    "src/components/auth/PasskeySettings.tsx",
+    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/notifications/PushNotificationSettings.tsx"
    ]
   },
   {
@@ -1200,7 +1200,7 @@
    "rotulo": "App.tsx",
    "arquivo": "src/App.tsx",
    "grau": 143,
-   "comunidade": "App.tsx"
+   "comunidade": "react"
   },
   {
    "id": "src_components_ui_button",
@@ -1483,6 +1483,13 @@
    "comunidade": "GeoBlockingPage.tsx"
   },
   {
+   "id": "src_pages_admintelemetriapage",
+   "rotulo": "AdminTelemetriaPage.tsx",
+   "arquivo": "src/pages/AdminTelemetriaPage.tsx",
+   "grau": 55,
+   "comunidade": "GeoBlockingPage.tsx"
+  },
+  {
    "id": "src_pages_alert_configurations_alertconfigcard",
    "rotulo": "AlertConfigCard.tsx",
    "arquivo": "src/pages/alert-configurations/AlertConfigCard.tsx",
@@ -1579,13 +1586,6 @@
    "arquivo": "src/utils/logger.ts",
    "grau": 48,
    "comunidade": "utils/logger.ts"
-  },
-  {
-   "id": "ref_node_test",
-   "rotulo": "ref_node_test",
-   "arquivo": null,
-   "grau": 47,
-   "comunidade": "ref_node_fs"
   }
  ],
  "mais_chamados": [
@@ -2081,7 +2081,7 @@
   "docs/pendencias/_regras-de-negocio.md": "Regras de negócio (resumo para executar pendências)",
   "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md": "Google Maps Platform × Mapbox × Lalamove V2 — análise (21/11/2026)",
   "docs/planos/PLANO_FRONTEND_190_ETAPAS.md": "cn",
-  "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md": "useGeo.contract.test.ts",
+  "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md": "job-worker/index.ts",
   "docs/planos/PLANO_MAPBOX_100_ETAPAS.md": "job-worker/index.ts",
   "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md": "Bloco 3 — Zapp: envio (33–50)",
   "docs/planos/PLANO_UX_NAVEGACAO_200_ETAPAS.md": "Bloco 6 — Fluxos complexos: wizard, rascunho e guarda de saída (117–144)",
@@ -2098,8 +2098,8 @@
   "geo-gateway.ts": "auth.ts",
   "https://esm.sh/@supabase/supabase-js@2.39.3": "ref_https",
   "inventario/estado/README.md": "Bloco 2 — Rotas, RBAC e navegação (46–60)",
-  "jspdf": "lucide-react",
-  "jspdf-autotable": "lucide-react",
+  "jspdf": "GeoBlockingPage.tsx",
+  "jspdf-autotable": "GeoBlockingPage.tsx",
   "lalamove_cron_setup.sh": "lalamove_cron_setup.sh",
   "lalamove_n8n_integration.md": "Integração n8n ↔ Lalamove Token Manager",
   "lalamove_order_history_full.md": "Lalamove Brasil — Histórico Completo de Pedidos",
@@ -2115,7 +2115,7 @@
   "scripts/add-security-manage.ts": "add-security-manage.ts",
   "scripts/ai-context/README.md": "utils/logger.ts",
   "scripts/ai-context/cenarios.mjs": "cenarios.mjs",
-  "scripts/ai-context/gerar.mjs": "has",
+  "scripts/ai-context/gerar.mjs": "gerar.mjs",
   "scripts/ai-context/gerar.unit.mjs": "gerar.unit.mjs",
   "scripts/ai-context/lib/y": "cenarios.mjs",
   "scripts/ai-context/pages/AuthPage": "gerar.unit.mjs",
@@ -2297,9 +2297,9 @@
   "src/components/GlobalSearchAdvanced.tsx": "button.tsx",
   "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": "lucide-react",
   "src/components/admin/telemetry/ContractVersionUsagePanel.tsx": "lucide-react",
-  "src/components/admin/telemetry/TelemetryCharts.tsx": "lucide-react",
+  "src/components/admin/telemetry/TelemetryCharts.tsx": "TelemetryCharts.tsx",
   "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx": "client.ts",
-  "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx": "lucide-react",
+  "src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx": "TelemetryCharts.tsx",
   "src/components/alerts/AlertsAdvanced.tsx": "AlertsAdvanced.tsx",
   "src/components/alerts/PredictiveAlerts.tsx": "badge.tsx",
   "src/components/approvals/SwipeableApprovalCard.tsx": "types/index.ts",
@@ -2307,13 +2307,13 @@
   "src/components/approvals/WaitingTimeCounter.tsx": "WaitingTimeCounter.tsx",
   "src/components/auth/DeviceDetector.tsx": "utils/logger.ts",
   "src/components/auth/MFAEnroll.tsx": "button.tsx",
-  "src/components/auth/MFASettings.tsx": "App.tsx",
+  "src/components/auth/MFASettings.tsx": "SecurityDashboardPage.tsx",
   "src/components/auth/MFAVerify.tsx": "button.tsx",
-  "src/components/auth/PasskeyLoginButton.tsx": "App.tsx",
-  "src/components/auth/PasskeySettings.tsx": "App.tsx",
+  "src/components/auth/PasskeyLoginButton.tsx": "SecurityDashboardPage.tsx",
+  "src/components/auth/PasskeySettings.tsx": "SecurityDashboardPage.tsx",
   "src/components/auth/PasswordStrengthIndicator.tsx": "cn",
-  "src/components/auth/PermissionGate.tsx": "App.tsx",
-  "src/components/auth/ProtectedRoute.tsx": "App.tsx",
+  "src/components/auth/PermissionGate.tsx": "react",
+  "src/components/auth/ProtectedRoute.tsx": "SecurityDashboardPage.tsx",
   "src/components/dashboard/AIRouteChatbot.tsx": "button.tsx",
   "src/components/dashboard/AlertActionCard.tsx": "cn",
   "src/components/dashboard/AlertsPanel.tsx": "AlertsAdvanced.tsx",
@@ -2377,7 +2377,7 @@
   "src/components/map/markerFactories.ts": "useMapMarkers.ts",
   "src/components/map/types.ts": "Google3DCanvas.tsx",
   "src/components/notifications/NotificationPreferences.tsx": "cn",
-  "src/components/notifications/PushNotificationSettings.tsx": "App.tsx",
+  "src/components/notifications/PushNotificationSettings.tsx": "SecurityDashboardPage.tsx",
   "src/components/notifications/SoundSettingsPanel.tsx": "cn",
   "src/components/orders/AddressAutocomplete.test.tsx": "AddressAutocomplete.test.tsx",
   "src/components/orders/AddressAutocomplete.tsx": "AddressAutocomplete.tsx",
@@ -2386,7 +2386,7 @@
   "src/components/orders/FetchOrderDialog.tsx": "GeoBlockingPage.tsx",
   "src/components/orders/ImportCSVDialog.tsx": "GeoBlockingPage.tsx",
   "src/components/orders/NewOrderDialog.tsx": "NewOrderDialog.tsx",
-  "src/components/orders/OrderDetailModal.tsx": "lucide-react",
+  "src/components/orders/OrderDetailModal.tsx": "types/index.ts",
   "src/components/orders/OrderGeoEvents.test.tsx": "client.ts",
   "src/components/orders/OrderGeoEvents.tsx": "lucide-react",
   "src/components/orders/StatusTimeline.tsx": "StatusTimeline.tsx",
@@ -2407,7 +2407,7 @@
   "src/components/ui/checkbox.tsx": "cn",
   "src/components/ui/collapsible.tsx": "cn",
   "src/components/ui/command.tsx": "CommandPaletteEnhanced.tsx",
-  "src/components/ui/contextual-hints.tsx": "App.tsx",
+  "src/components/ui/contextual-hints.tsx": "SecurityDashboardPage.tsx",
   "src/components/ui/data-refresh-indicator.tsx": "badge.tsx",
   "src/components/ui/dialog.tsx": "GeoBlockingPage.tsx",
   "src/components/ui/drawer.tsx": "cn",
@@ -2425,7 +2425,7 @@
   "src/components/ui/micro-interactions.tsx": "micro-interactions.tsx",
   "src/components/ui/motion-variants.ts": "motion.tsx",
   "src/components/ui/motion.tsx": "motion.tsx",
-  "src/components/ui/page-loader.tsx": "App.tsx",
+  "src/components/ui/page-loader.tsx": "react",
   "src/components/ui/popover.tsx": "cn",
   "src/components/ui/prediction-card.tsx": "cn",
   "src/components/ui/progress.tsx": "badge.tsx",
@@ -2496,7 +2496,7 @@
   "src/hooks/useCachedStats.ts": "useCachedStats.ts",
   "src/hooks/useCommandPaletteSearch.ts": "useCommandPaletteSearch.ts",
   "src/hooks/useContacts.ts": "CommandPaletteEnhanced.tsx",
-  "src/hooks/useContextualHints.ts": "App.tsx",
+  "src/hooks/useContextualHints.ts": "SecurityDashboardPage.tsx",
   "src/hooks/useContractV1SunsetReadiness.ts": "client.ts",
   "src/hooks/useContractVersionUsage.ts": "useContractVersionUsage.ts",
   "src/hooks/useContractVersionUsageMonthly.ts": "client.ts",
@@ -2508,7 +2508,7 @@
   "src/hooks/useDeliveryMetrics.ts": "useDeliveryMetrics.ts",
   "src/hooks/useDeviceDetection.ts": "utils/logger.ts",
   "src/hooks/useDriverEvaluations.ts": "useDriverEvaluations.ts",
-  "src/hooks/useDrivers.ts": "useDrivers.ts",
+  "src/hooks/useDrivers.ts": "GeoBlockingPage.tsx",
   "src/hooks/useErrorLogs.ts": "Descartados como utilitarios genericos nao adotados",
   "src/hooks/useEvaluateDriver.ts": "Descartados como utilitarios genericos nao adotados",
   "src/hooks/useExternalData.ts": "useExternalData.ts",
@@ -2526,7 +2526,7 @@
   "src/hooks/useLalamoveQuota.ts": "client.ts",
   "src/hooks/useLalamoveUapi.ts": "lalamoveReasons.ts",
   "src/hooks/useLoginLockout.ts": "client.ts",
-  "src/hooks/useMFA.ts": "App.tsx",
+  "src/hooks/useMFA.ts": "SecurityDashboardPage.tsx",
   "src/hooks/useMapProviderPolicy.ts": "dropdown-menu.tsx",
   "src/hooks/useMapSettings.ts": "dropdown-menu.tsx",
   "src/hooks/useMapbox.ts": "useMapbox.ts",
@@ -2612,7 +2612,7 @@
   "src/lib/utils.ts": "cn",
   "src/main.tsx": "webVitals.ts",
   "src/pages/A": "cenarios.mjs",
-  "src/pages/AdminTelemetriaPage.tsx": "lucide-react",
+  "src/pages/AdminTelemetriaPage.tsx": "GeoBlockingPage.tsx",
   "src/pages/AdvancedReportsPage.tsx": "AdvancedReportsPage.tsx",
   "src/pages/AlertConfigurationsPage.tsx": "button.tsx",
   "src/pages/AlertsPage.tsx": "AlertsPage.tsx",
@@ -2633,14 +2633,14 @@
   "src/pages/ForgotPasswordPage.tsx": "button.tsx",
   "src/pages/GeoBlockingPage.tsx": "GeoBlockingPage.tsx",
   "src/pages/HeatmapPage.tsx": "LiveMap.tsx",
-  "src/pages/IPWhitelistPage.tsx": "App.tsx",
+  "src/pages/IPWhitelistPage.tsx": "react",
   "src/pages/IncidentsPage.tsx": "useIncidents.ts",
   "src/pages/JobQueuePage.tsx": "useJobQueue.ts",
   "src/pages/LalamoveOperationsPage.tsx": "Bloco 2 — Rotas, RBAC e navegação (46–60)",
   "src/pages/LalamoveQuotaPage.tsx": "react",
   "src/pages/LalamoveSettingsPage.tsx": "button.tsx",
   "src/pages/LiveMapPage.tsx": "LiveMapPage.tsx",
-  "src/pages/MFAVerifyPage.tsx": "App.tsx",
+  "src/pages/MFAVerifyPage.tsx": "SecurityDashboardPage.tsx",
   "src/pages/MapToolsPage.tsx": "button.tsx",
   "src/pages/MapsSettingsPage.tsx": "useGeoAdmin.ts",
   "src/pages/MetricsPage.panels.tsx": "AlertsPage.tsx",
@@ -2651,17 +2651,17 @@
   "src/pages/OrdersPage.tsx": "AppLayout",
   "src/pages/PasswordResetApprovalsPage.tsx": "react",
   "src/pages/PerformanceDashboardPage.tsx": "badge.tsx",
-  "src/pages/PermissionsPage.tsx": "App.tsx",
+  "src/pages/PermissionsPage.tsx": "react",
   "src/pages/ProfilePage.tsx": "utils/logger.ts",
-  "src/pages/RateLimitDashboardPage.tsx": "App.tsx",
+  "src/pages/RateLimitDashboardPage.tsx": "react",
   "src/pages/ReportsPage.tsx": "AdvancedReportsPage.tsx",
   "src/pages/ResetPasswordPage.tsx": "cn",
   "src/pages/RiskRulesPage.dialogs.tsx": "GeoBlockingPage.tsx",
   "src/pages/RiskRulesPage.tsx": "supabase/types.ts",
-  "src/pages/RolesPage.tsx": "App.tsx",
+  "src/pages/RolesPage.tsx": "SecurityDashboardPage.tsx",
   "src/pages/SLADashboardPage.tsx": "badge.tsx",
   "src/pages/SLODashboardPage.tsx": "useSLOMetrics.ts",
-  "src/pages/SecurityDashboardPage.tsx": "App.tsx",
+  "src/pages/SecurityDashboardPage.tsx": "SecurityDashboardPage.tsx",
   "src/pages/SettingsPage.tsx": "useRealtimeSubscriptions.ts",
   "src/pages/SystemHealthExpandedPage.tsx": "Sidebar",
   "src/pages/SystemHealthPage.tsx": "Sidebar",
@@ -2751,7 +2751,7 @@
   "supabase/functions/geo-gateway/failover.test.ts": "ProviderResult",
   "supabase/functions/geo-gateway/failover.ts": "ProviderResult",
   "supabase/functions/geo-gateway/google.test.ts": "GeoProviderError",
-  "supabase/functions/geo-gateway/index.ts": "MAPBOX — Inventário e Referência (21/11/2026)",
+  "supabase/functions/geo-gateway/index.ts": "geo-gateway/index.ts",
   "supabase/functions/geo-gateway/mapbox.test.ts": "mapbox.test.ts",
   "supabase/functions/geo-gateway/metering.test.ts": "geo-gateway/index.ts",
   "supabase/functions/geo-gateway/metering.ts": "geo-gateway/index.ts",

@@ -1,30 +1,29 @@
 # Graph Report - Lalamove_V2  (2026-11-22)
 
 ## Corpus Check
-- 1014 files · ~819,063 words
+- 1014 files · ~819,229 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 8710 nodes · 18205 edges · 638 communities (438 shown, 200 thin omitted)
+- 8710 nodes · 18214 edges · 639 communities (439 shown, 200 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 822 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ca2061f4`
+- Built from commit: `b05e2b0d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - cn
 - button.tsx
-- client.ts
-- App.tsx
-- ref_https
 - react
+- client.ts
+- GeoBlockingPage.tsx
+- ref_https
 - badge.tsx
 - ref_node_fs
-- GeoBlockingPage.tsx
 - geo-gateway/index.ts
 - dependencies
 - gerar.mjs
@@ -33,7 +32,6 @@
 - package.json
 - useRealtimeSubscriptions.ts
 - seed-database.ts
-- lucide-react
 - lint-ratchet.mjs
 - utils/logger.ts
 - send-notification/index.ts
@@ -41,11 +39,13 @@
 - check-migration-drift.mjs
 - types/index.ts
 - useMapbox.ts
+- lucide-react
 - actions-kpi.mjs
 - check-screen-permission-db-guards.mjs
 - snapshot.py
 - 🔍 Sistema de Screening - Lalamove Guardian
 - AlertsPage.tsx
+- SecurityDashboardPage.tsx
 - contract.ts
 - 🏗️ Arquitetura - Lalamove Guardian
 - AppLayout
@@ -327,6 +327,7 @@
 - 📊 Diagramas de Fluxo
 - publish.sh
 - run
+- TelemetryCharts.tsx
 - DeliveryOutcome
 - public.contacts
 - 20261123150000_cache_refresh_log_restaurado.sql
@@ -565,7 +566,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (638 total, 200 thin omitted)
+## Communities (639 total, 200 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
@@ -575,21 +576,21 @@ Nodes (218): 103 — [F] Suspense granular por painel, Dashboard, react-router-d
 Cohesion: 0.07
 Nodes (96): framer-motion, react-i18next, sonner, zod, MapToolsPage, SettingsPage, MFAEnrollProps, MFAVerifyProps (+88 more)
 
-### Community 2 - "client.ts"
+### Community 2 - "react"
+Cohesion: 0.03
+Nodes (120): date-fns, react, AlertConfigurationsPage, AnalyticsDashboardPage, AppContent(), AuthPage, Bitrix24Page, CacheMonitoringPage (+112 more)
+
+### Community 3 - "client.ts"
 Cohesion: 0.03
 Nodes (68): Resolvidos — PR #125 (squash `53b286b`), @lovable.dev/cloud-auth-js, @tanstack/react-query, @testing-library/react, vitest, mockFetch, baseEvent, invokeMock (+60 more)
 
-### Community 3 - "App.tsx"
-Cohesion: 0.03
-Nodes (89): AlertConfigurationsPage, AnalyticsDashboardPage, AppContent(), AuthPage, Bitrix24Page, CacheMonitoringPage, ContactsPage, DeliveryMetricsPage (+81 more)
+### Community 4 - "GeoBlockingPage.tsx"
+Cohesion: 0.06
+Nodes (71): AdminTelemetriaPage, RiskRulesPage, BulkActionsProps, DriverProfileModalProps, DriverStatus, statusConfig, vehicleLabels, HistoryTab() (+63 more)
 
-### Community 4 - "ref_https"
+### Community 5 - "ref_https"
 Cohesion: 0.05
 Nodes (55): Componentes, 21 — Esqueleto da edge `supabase/functions/geo-gateway/index.ts`, ref_https, ref_npm_supabase, corsHeaders, corsHeaders, BitrixTokens, corsHeaders (+47 more)
-
-### Community 5 - "react"
-Cohesion: 0.05
-Nodes (67): date-fns, react, EvaluationsPage, OrdersPage, MapHistoryPanelProps, FetchOrderDialog(), ImportCSVDialog(), src_components_ui_dialog_dialogtrigger (+59 more)
 
 ### Community 6 - "badge.tsx"
 Cohesion: 0.04
@@ -599,93 +600,93 @@ Nodes (73): PerformanceDashboardPage, impactConfig, PredictiveAlerts, Predictive
 Cohesion: 0.04
 Nodes (57): ref_node_assert, ref_node_fs, ref_node_os, ref_node_path, ref_node_test, AQUI, fixture(), preparar() (+49 more)
 
-### Community 8 - "GeoBlockingPage.tsx"
-Cohesion: 0.06
-Nodes (67): RiskRulesPage, BulkActionsProps, DriverProfileModalProps, DriverStatus, statusConfig, vehicleLabels, HistoryTab(), OverviewTab() (+59 more)
-
-### Community 9 - "geo-gateway/index.ts"
+### Community 8 - "geo-gateway/index.ts"
 Cohesion: 0.05
 Nodes (63): 30 — Resolver de provedor + orçamento, 31 — Cache + medição, 32 — Rate limit por usuário e testes, 38 — Address Validation (D7: desligado, pronto para ligar) ✅, 96 — Alertas operacionais, 11 — `geo_settings.provider` aceita `auto` (M9), 12 — `geo_price_list` Mapbox completa, 13 — `geocode_precision` com valores Mapbox (+55 more)
 
-### Community 10 - "dependencies"
+### Community 9 - "dependencies"
 Cohesion: 0.03
 Nodes (80): dependencies, class-variance-authority, clsx, cmdk, date-fns, @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities (+72 more)
 
-### Community 11 - "gerar.mjs"
+### Community 10 - "gerar.mjs"
 Cohesion: 0.03
 Nodes (64): AGG_KEYS, aliasesByBase, ALL, allDocs, ambiguos, args, banco, bancoOut (+56 more)
 
-### Community 12 - "generate.py"
+### Community 11 - "generate.py"
 Cohesion: 0.08
 Nodes (72): collections, analyze_code_file(), balanced(), build_access(), build_audit(), build_dataflow(), chain(), collect_existing_docs() (+64 more)
 
-### Community 13 - "job-worker/index.ts"
+### Community 12 - "job-worker/index.ts"
 Cohesion: 0.05
 Nodes (64): 1.1 `public.active_tracking` — uma linha por pedido, 1.2 `public.lalamove_orders` — somente leitura, 1.3 `public.lalamove_stops` — somente leitura, 1.4 `public.geo_defaults` — somente leitura, 1. O que este repo lê, 2.1 UPSERT a cada ciclo de 10–15 s, 2.2 Triggers: os disparadores reais, 2.3 Ciclo de vida da linha (+56 more)
 
-### Community 14 - "package.json"
+### Community 13 - "package.json"
 Cohesion: 0.03
 Nodes (68): name, private, type, version, autoprefixer, @axe-core/playwright, clsx, @dnd-kit/core (+60 more)
 
-### Community 15 - "useRealtimeSubscriptions.ts"
+### Community 14 - "useRealtimeSubscriptions.ts"
 Cohesion: 0.06
 Nodes (61): Adicionado, 112 — [F] Preferência de tamanho de fonte da app, 154 — [F] Abas internas na URL, 75 — [F] Preferência de usuário "reduzir animações" aplicada de verdade, getQuietHours(), isInQuietHours(), isTypeEnabled(), NotificationPreferences() (+53 more)
 
-### Community 16 - "seed-database.ts"
+### Community 15 - "seed-database.ts"
 Cohesion: 0.06
 Nodes (48): @supabase/supabase-js, supabase, supabase, supabase, supabase, supabase, ADDRESSES, FIRST_NAMES (+40 more)
 
-### Community 17 - "lucide-react"
-Cohesion: 0.06
-Nodes (45): lucide-react, recharts, AdminTelemetriaPage, SystemHealthPage, ContractVersionMonthlyTrend(), formatMonth(), ContractVersionUsagePanel(), formatDate() (+37 more)
-
-### Community 18 - "lint-ratchet.mjs"
+### Community 16 - "lint-ratchet.mjs"
 Cohesion: 0.06
 Nodes (58): 1. Contrato (em memória, sem I/O), 2. Integração I/O real (chama as Edge Functions IMPLANTADAS), Contratos cobertos, 📑 Contratos de API — Webhooks & Edge Functions, Contratos de corpo opcional, Entrada mesclada: query + corpo (`lalamove-api`, `lalamove-uapi`), Estratégia de deprecação, Formato único de erro (HTTP 422) (+50 more)
 
-### Community 19 - "utils/logger.ts"
+### Community 17 - "utils/logger.ts"
 Cohesion: 0.05
 Nodes (47): 137 — [F] Demais formulários em RHF + zod, 182 — [T] Testes de autenticação e RBAC, 1. Estado real em 22/11/2026 (o ponto de partida), 3 — [F] Fechar a janela de bypass de MFA, 59 — [F] `/unauthorized` com contexto, 121 — [F] Rascunho não guarda dado além do necessário, 2 — [F] Derivar as rotas do `App.tsx` da config, ai-context — contexto de código do Lalamove V2 para agentes de IA (+39 more)
 
-### Community 20 - "send-notification/index.ts"
+### Community 18 - "send-notification/index.ts"
 Cohesion: 0.06
 Nodes (49): 12.1 Segurança e segredos, 53 — Função `geo_evaluate_events()` (corpo do trigger da etapa 20), 54 — `DRIVER_APPROACHING_PICKUP` (D4), 55 — `DRIVER_ARRIVED_PICKUP`, 56 — Aviso também para a equipe interna, 57 — `DRIVER_APPROACHING_DELIVERY` / `DRIVER_ARRIVED_DELIVERY` (D5), 58 — Janela de horário (D3), 59 — Resolução do destinatário (D1) (+41 more)
 
-### Community 21 - "lalamove-api/index.ts"
+### Community 19 - "lalamove-api/index.ts"
 Cohesion: 0.06
 Nodes (46): 6. Divergências e bugs encontrados, Fase 2 — REST v3 correto de ponta a ponta (`lalamove-api`), 36 — `lalamove-api`: persistir endereço completo, Auditoria de branches órfãs — nada de outro agente foi perdido, persistOrderCoordinates(), stopsCoords(), geocodeAddress(), GeocodeFallbackDeps (+38 more)
 
-### Community 22 - "check-migration-drift.mjs"
+### Community 20 - "check-migration-drift.mjs"
 Cohesion: 0.07
 Nodes (51): canonicalSql(), canonicalStatements(), collectHashMarkers(), compare(), divergenceLine(), hasExactKeys(), hasSqlCode(), LEDGER_RETRY_DELAYS_MS (+43 more)
 
-### Community 23 - "types/index.ts"
+### Community 21 - "types/index.ts"
 Cohesion: 0.07
 Nodes (42): Adicionado, 132 — [F] Aprovação de motorista com próximo-da-fila explícito, CardInnerProps, CompactApprovalCardProps, SwipeableApprovalCardProps, ApprovalQueueProps, BatchActionsToolbarProps, DashboardHeroSectionProps (+34 more)
 
-### Community 24 - "useMapbox.ts"
+### Community 22 - "useMapbox.ts"
 Cohesion: 0.06
 Nodes (48): O que já existe no repo (Mapbox), 60 — `useMapbox.ts` → `useGeo.ts`, O que já existe no repo (Mapbox), ADDRESS, geo, Impl, src_hooks_usegeo_geocodeaddress, src_hooks_usegeo_getdirections (+40 more)
 
-### Community 25 - "actions-kpi.mjs"
+### Community 23 - "lucide-react"
+Cohesion: 0.08
+Nodes (36): lucide-react, recharts, SystemHealthPage, ContractVersionMonthlyTrend(), formatMonth(), ContractVersionUsagePanel(), formatDate(), RANGE_OPTIONS (+28 more)
+
+### Community 24 - "actions-kpi.mjs"
 Cohesion: 0.08
 Nodes (41): ADR-0001, ADR-0002, ADR-0009, agregar(), CABECALHOS(), CANCELADOS, coletarJobs(), coletarRuns() (+33 more)
 
-### Community 26 - "check-screen-permission-db-guards.mjs"
+### Community 25 - "check-screen-permission-db-guards.mjs"
 Cohesion: 0.05
 Nodes (33): canon(), committed, fresh, isSortedUniqueStrings(), METADADOS, valid(), args, arquivosDeTela (+25 more)
 
-### Community 27 - "snapshot.py"
+### Community 26 - "snapshot.py"
 Cohesion: 0.12
 Nodes (44): Connection, decimal, hashlib, psycopg, psycopg_rows, excluded_sql(), get_columns(), get_constraints() (+36 more)
 
-### Community 28 - "🔍 Sistema de Screening - Lalamove Guardian"
+### Community 27 - "🔍 Sistema de Screening - Lalamove Guardian"
 Cohesion: 0.04
 Nodes (45): 1. Taxa de Falha (25%), 2. Incidentes (20%), 3. Atraso Médio (15%), 4. Avaliação (15%), 5. Volume (10%), 6. Recência (15%), Adicionar à Whitelist, Ajustar Pesos dos Fatores (+37 more)
 
-### Community 29 - "AlertsPage.tsx"
+### Community 28 - "AlertsPage.tsx"
 Cohesion: 0.05
 Nodes (39): AlertsPage, ApprovalsPage, MetricsPage, AlertGroupHeader(), AlertsToolbar(), DataRefreshIndicator(), PullToRefresh(), PullToRefreshProps (+31 more)
+
+### Community 29 - "SecurityDashboardPage.tsx"
+Cohesion: 0.06
+Nodes (36): MFAVerifyPage, SecurityDashboardPage, MFAEnroll(), MFASettings(), MFAVerify(), PasskeyLoginButton, PasskeyLoginButtonProps, PasskeySettings() (+28 more)
 
 ### Community 30 - "contract.ts"
 Cohesion: 0.07
@@ -1795,527 +1796,531 @@ Nodes (7): assert_no_foreign_staged_changes(), discard_generated_output_commit()
 Cohesion: 0.25
 Nodes (6): db_stats_case(), recovery_case(), run(), section(), source_freshness_case(), run()
 
-### Community 311 - "DeliveryOutcome"
+### Community 311 - "TelemetryCharts.tsx"
+Cohesion: 0.36
+Nodes (5): formatBucketTime(), getBucketMs(), Props, TelemetryCharts(), TelemetryRow
+
+### Community 312 - "DeliveryOutcome"
 Cohesion: 0.25
 Nodes (8): DeliveryOutcome, CUSTOMER_UNAVAILABLE, DAMAGED, FAILED, LATE, STOLEN, SUCCESS, WRONG_ADDRESS
 
-### Community 312 - "public.contacts"
+### Community 313 - "public.contacts"
 Cohesion: 0.32
 Nodes (7): idx_contacts_owner_last_used, idx_contacts_owner_name, public.contacts, auth, auth.users, public.update_updated_at_column, trg_contacts_updated_at
 
-### Community 313 - "20261123150000_cache_refresh_log_restaurado.sql"
+### Community 314 - "20261123150000_cache_refresh_log_restaurado.sql"
 Cohesion: 0.39
 Nodes (5): idx_cache_refresh_log_running, idx_cache_refresh_log_status, idx_cache_refresh_log_view, public.cache_refresh_log, public.cache_status
 
-### Community 315 - "compilerOptions"
+### Community 316 - "compilerOptions"
 Cohesion: 0.25
 Nodes (7): compilerOptions, allowJs, paths, skipLibCheck, strict, files, references
 
-### Community 316 - "Deploy (Vercel + Lovable) — referência para agentes"
+### Community 317 - "Deploy (Vercel + Lovable) — referência para agentes"
 Cohesion: 0.29
 Nodes (6): Deploy (Vercel + Lovable) — referência para agentes, Edge functions, Front, Lovable, Pendências de Vercel (ação no dashboard, com o dono), Regras de env var no Vercel
 
-### Community 317 - "12. Matriz de melhorias pré-produção por camada"
+### Community 318 - "12. Matriz de melhorias pré-produção por camada"
 Cohesion: 0.29
 Nodes (7): 12.2 Banco de dados, 12.3 Edge functions, 12.5 n8n e Bitrix24, 12.6 CI/CD e ambientes, 12.7 Observabilidade e operação, 12.8 Documentação e processo, 12. Matriz de melhorias pré-produção por camada
 
-### Community 318 - "14. Checklist de go-live"
+### Community 319 - "14. Checklist de go-live"
 Cohesion: 0.29
 Nodes (7): 14. Checklist de go-live, Notificações, Bitrix24, n8n, Operação, Segurança e base, Sources, UAPI (sessão logada), v3 (cotar → pedir → rastrear)
 
-### Community 319 - "Auditoria de validação — 21/11/2026"
+### Community 320 - "Auditoria de validação — 21/11/2026"
 Cohesion: 0.29
 Nodes (6): 1. Lógica do allowlist (`external-bridge-allowlist.ts`), 2. Execução real dos testes em CI, 3. Script da PR 4.1 (`scripts/migracao/reconcilia-produtos-pim.mjs`), 4. Checklist (`docs/pendencias/integracao-pim-promo-supply.md`), 5. CI quebrada na PR #151 deste repo, Auditoria de validação — 21/11/2026
 
-### Community 320 - "Tabelas Principais"
+### Community 321 - "Tabelas Principais"
 Cohesion: 0.29
 Nodes (6): `alerts`, 📖 Dicionário de Dados — Lalamove Intelligence, `drivers`, `lalamove_orders`, Tabelas Principais, `tracking_events`
 
-### Community 321 - "11. Métricas e Analytics"
+### Community 322 - "11. Métricas e Analytics"
 Cohesion: 0.29
 Nodes (7): 11.1 Métricas Gerais, 11.2 Métricas de Entregas, 11.3 Dashboard SLA, 11.4 Dashboard de Analytics, 11.5 Dashboard Stats (Cache), 11.6 Relatórios, 11. Métricas e Analytics
 
-### Community 322 - "4. Gestão de Pedidos"
+### Community 323 - "4. Gestão de Pedidos"
 Cohesion: 0.29
 Nodes (7): 4.1 Listagem e Filtros, 4.2 Detalhes do Pedido, 4.3 Buscar Pedido da Lalamove, 4.4 Importação CSV, 4.5 Campos Customizados, 4. Gestão de Pedidos, Página: `/orders` → `OrdersPage.tsx`
 
-### Community 323 - "6. Sistema de Screening e Risco"
+### Community 324 - "6. Sistema de Screening e Risco"
 Cohesion: 0.29
 Nodes (7): 6.1 Cálculo de Risco (6 Fatores), 6.2 Níveis de Risco, 6.3 Avaliação de Motorista, 6.4 Regras Customizadas, 6.5 Histórico de Avaliações, 6. Sistema de Screening e Risco, Documentação: `docs/SCREENING_SYSTEM.md`
 
-### Community 324 - "7. Fila de Aprovações"
+### Community 325 - "7. Fila de Aprovações"
 Cohesion: 0.29
 Nodes (7): 7.1 Fila de Aprovação, 7.2 Ações de Aprovação, 7.3 Prioridade de Aprovação, 7.4 Indicadores em Tempo Real, 7.5 Card com Swipe (Mobile), 7. Fila de Aprovações, Página: `/approvals` → `ApprovalsPage.tsx`
 
-### Community 325 - "9. Rastreamento e Mapas"
+### Community 326 - "9. Rastreamento e Mapas"
 Cohesion: 0.29
 Nodes (7): 9.1 Mapa Ao Vivo, 9.2 Mapa de Calor (Heatmap), 9.3 Tracking Ativo, 9.4 Histórico de Localizações, 9.5 Simulação de Movimento, 9.6 Análise de Rotas (IA), 9. Rastreamento e Mapas
 
-### Community 326 - "Reconciliação ledger × schema × repo — 2026-11-21"
+### Community 327 - "Reconciliação ledger × schema × repo — 2026-11-21"
 Cohesion: 0.29
 Nodes (6): 4 versões no ledger sem arquivo (entradas de reparo, `statements = NULL`), Como foi medido (reproduzível), DDL no ledger como aplicado, mas AUSENTE na produção, Decisão (fechada em 2026-11-21), Números, Reconciliação ledger × schema × repo — 2026-11-21
 
-### Community 327 - "P-13-comment-on-table-faltantes.md"
+### Community 328 - "P-13-comment-on-table-faltantes.md"
 Cohesion: 0.29
 Nodes (6): Impacto no negócio, O que fazer, O que é, Observação de protocolo, Resultado (2026-11-21, após merge + apply), Status atual (verificado 2026-11-21)
 
-### Community 328 - "BLOCO 3 — Endereço no pedido (etapas 33–42)"
+### Community 329 - "BLOCO 3 — Endereço no pedido (etapas 33–42)"
 Cohesion: 0.29
 Nodes (7): 37 — Geocodificação server-side de fallback ✅, 39 — Backfill de pedidos existentes ✅, 40 — Importação Bitrix24 / Zapp, 41 — Contrato de posição com a UAPI (outro chat), 42 — n8n F01 sem DistanceMatrix.ai, BLOCO 3 — Endereço no pedido (etapas 33–42), exact()
 
-### Community 329 - "Bloco 9 — Lalamove: respostas do motorista (113–118)"
+### Community 330 - "Bloco 9 — Lalamove: respostas do motorista (113–118)"
 Cohesion: 0.29
 Nodes (7): 113 — [L] Interpretador de respostas, 114 — [L] Ações por resposta, 115 — [L] Texto livre, 116 — [L] Mídia recebida, 117 — [L] Opt-out do motorista, 118 — [L] Registro no Bitrix24, Bloco 9 — Lalamove: respostas do motorista (113–118)
 
-### Community 330 - "Bloco 13 — Testes, piloto e liberação (145–150)"
+### Community 331 - "Bloco 13 — Testes, piloto e liberação (145–150)"
 Cohesion: 0.29
 Nodes (7): 145 — [L] Feature flags e modo sombra, 146 — [L][Z] E2E ponta a ponta, 147 — [L] Piloto interno, 148 — [L] Piloto real, 149 — [L] Liberação gradual, 150 — [L][Z] Revisão de 30 dias e encerramento do plano, Bloco 13 — Testes, piloto e liberação (145–150)
 
-### Community 331 - "useQuotationExpiry.ts"
+### Community 332 - "useQuotationExpiry.ts"
 Cohesion: 0.38
 Nodes (6): 141 — [F] Timeout de cotação com caminho de saída, 29 — [F] Voltar no wizard volta uma etapa, QuotedStep(), formatMMSS(), QuotationExpiryState, useQuotationExpiry()
 
-### Community 332 - "Lalamove_V2 — Regras da Casa (Hermes) — suplemento"
+### Community 333 - "Lalamove_V2 — Regras da Casa (Hermes) — suplemento"
 Cohesion: 0.29
 Nodes (6): Barreiras (cadeado físico), Comandos usuais, Identidade, Lalamove_V2 — Regras da Casa (Hermes) — suplemento, Padrão de Chat (Hermes) — subpasta por sessão, Regra de Ouro (casa do Joaquim)
 
-### Community 333 - "i18n/index.ts"
+### Community 334 - "i18n/index.ts"
 Cohesion: 0.29
 Nodes (6): i18next, i18next-browser-languagedetector, resources, src_i18n_locales_en, src_i18n_locales_es, src_i18n_locales_pt_br
 
-### Community 334 - "scripts/vercel — automação de deploy"
+### Community 335 - "scripts/vercel — automação de deploy"
 Cohesion: 0.29
 Nodes (6): Confirmando um deploy depois do merge, Códigos de saída, Diferenças em relação ao Zapp Web V2, Ligar o `ignore-build.sh`, Proteção de acesso (importante), scripts/vercel — automação de deploy
 
-### Community 335 - "20251226000001_create_system_logs.sql"
+### Community 336 - "20251226000001_create_system_logs.sql"
 Cohesion: 0.43
 Nodes (5): public.system_logs, auth.users, system_logs_created_at_idx, system_logs_level_idx, system_logs_source_idx
 
-### Community 336 - "20251231121414_f2fd5361-347b-4762-a085-7cb787a4effa.sql"
+### Community 337 - "20251231121414_f2fd5361-347b-4762-a085-7cb787a4effa.sql"
 Cohesion: 0.52
 Nodes (6): idx_new_device_alerts_user, idx_user_devices_last_seen, idx_user_devices_user_fingerprint, public.is_known_device(), public.new_device_alerts, public.user_devices
 
-### Community 337 - "20251231124540_2e008d82-c4a5-4717-aed9-a718562523ab.sql"
+### Community 338 - "20251231124540_2e008d82-c4a5-4717-aed9-a718562523ab.sql"
 Cohesion: 0.43
 Nodes (6): idx_user_passkeys_credential_id, idx_user_passkeys_user_id, idx_webauthn_challenges_expires, public.user_passkeys, public.webauthn_challenges, auth.users
 
-### Community 338 - "20251231132341_0338fc6c-b0df-47d7-8654-d5a5f4795c13.sql"
+### Community 339 - "20251231132341_0338fc6c-b0df-47d7-8654-d5a5f4795c13.sql"
 Cohesion: 0.48
 Nodes (5): idx_login_attempts_email, idx_login_attempts_locked_until, public.check_login_lockout(), public.login_attempts, public.record_failed_login()
 
-### Community 339 - "20260109205309_5747a020-5d75-4401-a623-b5688143f754.sql"
+### Community 340 - "20260109205309_5747a020-5d75-4401-a623-b5688143f754.sql"
 Cohesion: 0.38
 Nodes (3): idx_cron_job_logs_created_at, idx_cron_job_logs_job_name, public.cron_job_logs
 
-### Community 340 - "20260513180030_3a03a8ee-3caf-4bb7-8b67-f570b71539b5.sql"
+### Community 341 - "20260513180030_3a03a8ee-3caf-4bb7-8b67-f570b71539b5.sql"
 Cohesion: 0.29
 Nodes (6): idx_alerts_not_dismissed, idx_lalamove_orders_driver_status_updated, idx_tracking_events_order_created, public.alerts, public.lalamove_orders, public.tracking_events
 
-### Community 341 - "20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql"
+### Community 342 - "20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql"
 Cohesion: 0.33
 Nodes (6): idx_contract_version_usage_monthly_month, public.contract_version_usage_monthly, public.rollup_contract_version_usage(), public.contract_version_usage, public.update_updated_at_column, update_contract_version_usage_monthly_updated_at
 
-### Community 342 - "20260722195904_cbd79628-458e-41b7-947d-6ee03cce1610.sql"
+### Community 343 - "20260722195904_cbd79628-458e-41b7-947d-6ee03cce1610.sql"
 Cohesion: 0.48
 Nodes (6): idx_query_telemetry_errors, idx_query_telemetry_rpc_created, idx_query_telemetry_severity_created, idx_query_telemetry_slow, idx_query_telemetry_table_created, public.query_telemetry
 
-### Community 343 - "20261121192500_restore_audit_log.sql"
+### Community 344 - "20261121192500_restore_audit_log.sql"
 Cohesion: 0.43
 Nodes (5): audit_log_created_at_idx, audit_log_resource_idx, audit_log_user_id_idx, public.audit_log, auth.users
 
-### Community 344 - "ECC for Codex CLI"
+### Community 345 - "ECC for Codex CLI"
 Cohesion: 0.33
 Nodes (5): ECC for Codex CLI, MCP Baseline, Multi-Agent Support, Repo Skill, Workflow Files
 
-### Community 345 - "ADR 001: Arquitetura de Segurança RLS-First"
+### Community 346 - "ADR 001: Arquitetura de Segurança RLS-First"
 Cohesion: 0.33
 Nodes (5): ADR 001: Arquitetura de Segurança RLS-First, Consequências, Contexto, Decisão, Status
 
-### Community 346 - "GitHub (perímetro, CI, workflows) — referência para agentes"
+### Community 347 - "GitHub (perímetro, CI, workflows) — referência para agentes"
 Cohesion: 0.33
 Nodes (5): Escrita no GitHub, GitHub (perímetro, CI, workflows) — referência para agentes, Guards que você pode rodar antes do PR, Perímetro do GitHub — estado canônico (lido em 2026-11-08, HEAD `924454e`), Workflows
 
-### Community 347 - "4. Inventário micro do repositório (`adm01-debug/Lalamove_V2`, `main` @ `18c9d83`)"
+### Community 348 - "4. Inventário micro do repositório (`adm01-debug/Lalamove_V2`, `main` @ `18c9d83`)"
 Cohesion: 0.33
 Nodes (6): 4.1 Edge functions ligadas à Lalamove, 4.2 Front (`src/`), 4.3 Tabelas (produção), 4.4 Artefatos n8n/Python na raiz (fora do build), 4.5 Docs internos relevantes, 4. Inventário micro do repositório (`adm01-debug/Lalamove_V2`, `main` @ `18c9d83`)
 
-### Community 348 - "Pipeline de deploy das edge functions — 2026-11"
+### Community 349 - "Pipeline de deploy das edge functions — 2026-11"
 Cohesion: 0.33
 Nodes (5): Como funciona, Mapa de verify_jwt (resumo), Pipeline de deploy das edge functions — 2026-11, Pré-requisito (uma vez), Segredos a rotacionar (ação do dono)
 
-### Community 349 - "4. Pedidos (Orders)"
+### Community 350 - "4. Pedidos (Orders)"
 Cohesion: 0.33
 Nodes (6): 4. Pedidos (Orders), Campos críticos confirmados em produção, `DELETE /v3/orders/{orderId}` — Cancelar pedido, Fluxo de status, `PATCH /v3/orders/{orderId}` — Editar pedido, `POST /v3/orders`
 
-### Community 350 - "10. Roteiro de 30 etapas"
+### Community 351 - "10. Roteiro de 30 etapas"
 Cohesion: 0.33
 Nodes (6): 10. Roteiro de 30 etapas, Bloco A — Fundação e conformidade, Bloco B — Cotação e pedido, Bloco C — Operação e rastreio, Bloco D — UAPI, Bloco E — Qualidade e observabilidade
 
-### Community 351 - "12. Integrações Externas"
+### Community 352 - "12. Integrações Externas"
 Cohesion: 0.33
 Nodes (6): 12.1 Lalamove API v3, 12.2 Bitrix24 CRM, 12.3 Mapbox, 12.4 Empresas Externas, 12.5 Lovable AI (LLM), 12. Integrações Externas
 
-### Community 352 - "8. Incidentes"
+### Community 353 - "8. Incidentes"
 Cohesion: 0.33
 Nodes (6): 8.1 Registro de Incidentes, 8.2 Tipos de Incidentes, 8.3 Severidade, 8.4 Resolução, 8. Incidentes, Página: `/incidents` → `IncidentsPage.tsx`
 
-### Community 353 - "P-05-snapshot-banco-nao-gerado.md"
+### Community 354 - "P-05-snapshot-banco-nao-gerado.md"
 Cohesion: 0.33
 Nodes (5): Bloqueio, Estado (2026-11-21), Evidência, Impacto no negócio, Problema
 
-### Community 354 - "20260306004012_acbbc4a1-3054-4255-8915-cfee02487a00.sql"
+### Community 355 - "20260306004012_acbbc4a1-3054-4255-8915-cfee02487a00.sql"
 Cohesion: 0.33
 Nodes (4): public.sanitize_auth_log_metadata, public.orders_operator_view, sanitize_auth_log_metadata_trigger, public.lalamove_orders
 
-### Community 355 - "🧩 Componentes"
+### Community 356 - "🧩 Componentes"
 Cohesion: 0.33
 Nodes (6): Approvals, 🧩 Componentes, Layout, Map, Notifications, Orders
 
-### Community 356 - "vite.config.ts"
+### Community 357 - "vite.config.ts"
 Cohesion: 0.40
 Nodes (4): lovable-tagger, ref_path, vite, @vitejs/plugin-react-swc
 
-### Community 357 - "is_caller_source"
+### Community 358 - "is_caller_source"
 Cohesion: 0.33
 Nodes (6): is_caller_source(), prepare_output_directory(), Path, Histórico, testes e fixtures não demonstram uso atual pela aplicação., Recusa alvos amplos ou alheios antes de qualquer coleta/limpeza., valid_previous_snapshot()
 
-### Community 359 - "ApprovalPriority"
+### Community 360 - "ApprovalPriority"
 Cohesion: 0.33
 Nodes (6): ApprovalPriority, CRITICAL, HIGH, LOW, MEDIUM, URGENT
 
-### Community 360 - "20260306010726_5cbbb02c-7796-45ef-8cc4-ba1187998111.sql"
+### Community 361 - "20260306010726_5cbbb02c-7796-45ef-8cc4-ba1187998111.sql"
 Cohesion: 0.60
 Nodes (5): idx_runtime_error_logs_created_at, idx_runtime_error_logs_fingerprint, idx_runtime_error_logs_resolved, idx_runtime_error_logs_severity, public.runtime_error_logs
 
-### Community 361 - "20260315150331_b9c9e775-0e56-4fe5-a8ff-37e807a3436b.sql"
+### Community 362 - "20260315150331_b9c9e775-0e56-4fe5-a8ff-37e807a3436b.sql"
 Cohesion: 0.40
 Nodes (5): public.drivers_safe_view, public.orders_operator_view, public.orders_safe_view, drivers, lalamove_orders
 
-### Community 362 - "20260315204037_141bd3c8-a60f-4d99-9e9b-8dfb511cb1ac.sql"
+### Community 363 - "20260315204037_141bd3c8-a60f-4d99-9e9b-8dfb511cb1ac.sql"
 Cohesion: 0.40
 Nodes (5): public.drivers_safe_view, public.orders_operator_view, public.orders_safe_view, drivers, lalamove_orders
 
-### Community 363 - "public.tracking_events"
+### Community 364 - "public.tracking_events"
 Cohesion: 0.47
 Nodes (5): idx_tracking_events_created_at, idx_tracking_events_order_id, public.tracking_events, public.drivers, public.lalamove_orders
 
-### Community 364 - "20260520211741_b4954224-5626-4651-972f-14a0d2c8fff1.sql"
+### Community 365 - "20260520211741_b4954224-5626-4651-972f-14a0d2c8fff1.sql"
 Cohesion: 0.33
 Nodes (4): public.map_settings_overrides, auth.users, update_updated_at_column, update_map_settings_overrides_updated_at
 
-### Community 365 - "public.get_user_permissions"
+### Community 366 - "public.get_user_permissions"
 Cohesion: 0.40
 Nodes (5): public.get_user_permissions(), public.get_user_roles(), public.permissions, public.role_permissions, public.user_roles
 
-### Community 366 - "public.has_permission"
+### Community 367 - "public.has_permission"
 Cohesion: 0.40
 Nodes (5): public.has_permission(), public.has_role(), public.permissions, public.role_permissions, public.user_roles
 
-### Community 367 - "20260712231241_f7f824c7-4bd9-4648-812b-9aa57732088c.sql"
+### Community 368 - "20260712231241_f7f824c7-4bd9-4648-812b-9aa57732088c.sql"
 Cohesion: 0.40
 Nodes (5): idx_report_presets_user_id, public.report_presets, auth, public.update_updated_at_column, update_report_presets_updated_at
 
-### Community 368 - "20260715180622_1da937b3-8707-4e64-8c34-e3d0f788792f.sql"
+### Community 369 - "20260715180622_1da937b3-8707-4e64-8c34-e3d0f788792f.sql"
 Cohesion: 0.53
 Nodes (5): idx_alerts_driver_active, idx_alerts_order_active, idx_alerts_pending_escalation, idx_alerts_unread, public.alerts
 
-### Community 369 - "public.lalamove_order_replacements"
+### Community 370 - "public.lalamove_order_replacements"
 Cohesion: 0.53
 Nodes (5): idx_order_replacements_new_id, idx_order_replacements_order_id, idx_order_replacements_prev_id, public.lalamove_order_replacements, public.lalamove_orders
 
-### Community 370 - "20260723131806_a3854e60-0935-4d4c-be8a-51b57157d413.sql"
+### Community 371 - "20260723131806_a3854e60-0935-4d4c-be8a-51b57157d413.sql"
 Cohesion: 0.60
 Nodes (5): idx_lalamove_rate_limits_created, idx_lalamove_rate_limits_endpoint_created, idx_lalamove_rate_limits_errors, idx_lalamove_rate_limits_low_remaining, public.lalamove_rate_limits
 
-### Community 371 - "20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
+### Community 372 - "20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql"
 Cohesion: 0.40
 Nodes (4): public.can_run_db_diagnostics(), public.mcp_diagnostics_grants, public.update_updated_at_column, trg_mcp_diagnostics_grants_updated_at
 
-### Community 372 - "20261123160000_job_queue_processing_log.sql"
+### Community 373 - "20261123160000_job_queue_processing_log.sql"
 Cohesion: 0.40
 Nodes (4): idx_job_queue_processing_log_run_at, public.job_queue_processing_log, public.process_job_queue(), vault.decrypted_secrets
 
-### Community 373 - "20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql"
+### Community 374 - "20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql"
 Cohesion: 0.40
 Nodes (4): bitrix24_sync, on_order_status_change_sync_bitrix24, public.trigger_bitrix24_sync(), trigger_bitrix24_sync
 
-### Community 374 - "Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)"
+### Community 375 - "Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)"
 Cohesion: 0.40
 Nodes (4): Decisões embutidas (M1–M10; mude pelo código), Dependências e ordem, Fatos da Mapbox que decidem o desenho (doc oficial), Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)
 
-### Community 375 - "API Lalamove (v3 + UAPI) — referência para agentes"
+### Community 376 - "API Lalamove (v3 + UAPI) — referência para agentes"
 Cohesion: 0.40
 Nodes (4): API Lalamove (v3 + UAPI) — referência para agentes, As cinco edges e o que cada uma faz, Fora do front: token manager + n8n, Regras
 
-### Community 376 - "1. Autenticação HMAC SHA256"
+### Community 377 - "1. Autenticação HMAC SHA256"
 Cohesion: 0.40
 Nodes (5): 1. Autenticação HMAC SHA256, Algoritmo de assinatura, Cabeçalhos obrigatórios, Implementação Node.js, Implementação Python
 
-### Community 377 - "_linha-de-base.md"
+### Community 378 - "_linha-de-base.md"
 Cohesion: 0.40
 Nodes (4): Comandos de validação (rodados nesta sessão, na branch de trabalho), Documentos de auditoria (origem do backlog), Inventário do sistema (estado atual, com evidência), Itens NÃO VERIFICADOS (motivo)
 
-### Community 378 - "P-01-rls-query-telemetria-grant-only.md"
+### Community 379 - "P-01-rls-query-telemetria-grant-only.md"
 Cohesion: 0.40
 Nodes (4): Impacto no negócio, Problema, Resolução (2026-11-21), Validação
 
-### Community 379 - "P-02-app-mobile-motoristas.md"
+### Community 380 - "P-02-app-mobile-motoristas.md"
 Cohesion: 0.40
 Nodes (4): Decisão (2026-11-21, dono), Evidência do estado atual (2026-11-26), Impacto no negócio, O que a auditoria pede
 
-### Community 380 - "P-03-chat-cliente-motorista.md"
+### Community 381 - "P-03-chat-cliente-motorista.md"
 Cohesion: 0.40
 Nodes (4): Decisão (2026-11-21, dono), Evidência do estado atual (2026-11-26), Impacto no negócio, O que a auditoria pede
 
-### Community 381 - "P-04-rotacionar-jwt-secret-painel.md"
+### Community 382 - "P-04-rotacionar-jwt-secret-painel.md"
 Cohesion: 0.40
 Nodes (4): Contexto, Decisão pendente, Impacto no negócio, Relacionado
 
-### Community 382 - "P-06-vulns-npm-restantes.md"
+### Community 383 - "P-06-vulns-npm-restantes.md"
 Cohesion: 0.40
 Nodes (4): Evidência real, Histórico, Regra 8, Resolução (PR #99, commit f1218b2)
 
-### Community 383 - "pendencias/README.md"
+### Community 384 - "pendencias/README.md"
 Cohesion: 0.40
 Nodes (4): Adiados para a V3 (decisão do dono, 2026-11-21), Itens, Obsoleto / descartado (com motivo), Trabalho de agentes JÁ incorporado a main (não perder, não reexecutar)
 
-### Community 384 - ".matrix"
+### Community 385 - ".matrix"
 Cohesion: 0.60
 Nodes (3): Orçamento e consumo, GeoMatrix, MatrixReq
 
-### Community 385 - "AdminTelemetriaPage"
+### Community 386 - "AdminTelemetriaPage"
 Cohesion: 0.40
 Nodes (5): 143 — [F] Tabelas responsivas, 168 — [F] KPI 1 — uso do Voltar da app × Voltar do navegador, jspdf, jspdf-autotable, AdminTelemetriaPage()
 
-### Community 386 - "PULL_REQUEST_TEMPLATE.md"
+### Community 387 - "PULL_REQUEST_TEMPLATE.md"
 Cohesion: 0.40
 Nodes (4): Checklist, Description, Screenshots (if applicable), Type of Change
 
-### Community 387 - "02_scenarios.sql"
+### Community 388 - "02_scenarios.sql"
 Cohesion: 0.40
 Nodes (4): order_geo_events, public.geo_evaluate_tracking, public.assert_true(), trg_active_tracking_geo
 
-### Community 388 - "20260723174146_a04919d9-4e74-4dd7-bf64-b65d78a91dea.sql"
+### Community 389 - "20260723174146_a04919d9-4e74-4dd7-bf64-b65d78a91dea.sql"
 Cohesion: 0.40
 Nodes (4): public.lalamove_priority_fee_history, idx_lalamove_orders_cancelled_by, idx_lalamove_priority_fee_history_changed_by, public.lalamove_orders
 
-### Community 389 - "20260723174310_cda85f06-6820-474f-ba32-909ff8ce703d.sql"
+### Community 390 - "20260723174310_cda85f06-6820-474f-ba32-909ff8ce703d.sql"
 Cohesion: 0.50
 Nodes (3): public.runtime_error_logs, idx_runtime_error_logs_fingerprint_created, idx_runtime_error_logs_unresolved_recent
 
-### Community 390 - "🔧 Serviços"
+### Community 391 - "🔧 Serviços"
 Cohesion: 0.40
 Nodes (5): ApprovalService, DriverEvaluatorService, IncidentService, RiskCalculatorService, 🔧 Serviços
 
-### Community 391 - "🔗 Integrações"
+### Community 392 - "🔗 Integrações"
 Cohesion: 0.40
 Nodes (5): Bitrix24 API, 🔗 Integrações, Lalamove API, Lovable AI Gateway, Mapbox GL JS
 
-### Community 394 - "scripts/qa — contraste WCAG e tipografia"
+### Community 395 - "scripts/qa — contraste WCAG e tipografia"
 Cohesion: 0.40
 Nodes (4): Decisões de adaptação, Estado atual (medido, não estimado), O que NÃO foi portado do Zapp (e por quê), scripts/qa — contraste WCAG e tipografia
 
-### Community 396 - "IncidentSeverity"
+### Community 397 - "IncidentSeverity"
 Cohesion: 0.40
 Nodes (5): IncidentSeverity, CRITICAL, HIGH, LOW, MEDIUM
 
-### Community 397 - "RiskLevel"
+### Community 398 - "RiskLevel"
 Cohesion: 0.40
 Nodes (5): RiskLevel, CRITICAL, HIGH, LOW, MEDIUM
 
-### Community 398 - "mapbox.test.ts"
+### Community 399 - "mapbox.test.ts"
 Cohesion: 0.40
 Nodes (3): Call, RETRIEVE, SUGGEST
 
-### Community 399 - "20260306010037_87ad0845-cb3e-48ca-a18d-a40f44d2422e.sql"
+### Community 400 - "20260306010037_87ad0845-cb3e-48ca-a18d-a40f44d2422e.sql"
 Cohesion: 0.40
 Nodes (4): public.drivers_safe_view, public.orders_safe_view, public.drivers, public.lalamove_orders
 
-### Community 401 - "20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql"
+### Community 402 - "20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql"
 Cohesion: 0.60
 Nodes (3): idx_contract_version_usage_deprecated, idx_contract_version_usage_version, public.contract_version_usage
 
-### Community 402 - "20260723113228_98f88a15-54b8-4641-92fc-ea635f5e1b37.sql"
+### Community 403 - "20260723113228_98f88a15-54b8-4641-92fc-ea635f5e1b37.sql"
 Cohesion: 0.60
 Nodes (4): idx_auth_logs_event_created, idx_auth_logs_failures, idx_auth_logs_user_created, public.auth_logs
 
-### Community 403 - "public.lalamove_priority_fee_history"
+### Community 404 - "public.lalamove_priority_fee_history"
 Cohesion: 0.50
 Nodes (4): idx_priority_fee_history_order, public.lalamove_priority_fee_history, auth.users, public.lalamove_orders
 
-### Community 404 - "20261121201800_indices_alert_id_created_by.sql"
+### Community 405 - "20261121201800_indices_alert_id_created_by.sql"
 Cohesion: 0.40
 Nodes (4): idx_job_queue_created_by, idx_order_geo_events_alert_id, public.job_queue, public.order_geo_events
 
-### Community 405 - "20261123170000_indices_fk_faltantes.sql"
+### Community 406 - "20261123170000_indices_fk_faltantes.sql"
 Cohesion: 0.40
 Nodes (4): idx_job_queue_created_by, idx_order_geo_events_alert_id, public.job_queue, public.order_geo_events
-
-### Community 406 - "Lalamove V2 — convenções"
-Cohesion: 0.50
-Nodes (3): Commits, Código, Lalamove V2 — convenções
 
 ### Community 407 - "Lalamove V2 — convenções"
 Cohesion: 0.50
 Nodes (3): Commits, Código, Lalamove V2 — convenções
 
-### Community 408 - "Pendências do dono — Lalamove V2"
+### Community 408 - "Lalamove V2 — convenções"
+Cohesion: 0.50
+Nodes (3): Commits, Código, Lalamove V2 — convenções
+
+### Community 409 - "Pendências do dono — Lalamove V2"
 Cohesion: 0.50
 Nodes (3): Pendências do dono — Lalamove V2, PRs abertas aguardando decisão, Tabelas de migration sem correspondência em produção
 
-### Community 409 - "5. Catálogo exaustivo de endpoints do sistema original e cobertura real"
+### Community 410 - "5. Catálogo exaustivo de endpoints do sistema original e cobertura real"
 Cohesion: 0.50
 Nodes (4): 5.1 REST API v3 (`https://rest.lalamove.com`, sandbox `https://rest.sandbox.lalamove.com`), 5.2 Webhook v3 (Lalamove → nós), 5.3 UAPI interna (`https://br-uapi.lalamove.com/index.php?_m={m}`), 5. Catálogo exaustivo de endpoints do sistema original e cobertura real
 
-### Community 410 - "1. Resumo Executivo"
+### Community 411 - "1. Resumo Executivo"
 Cohesion: 0.50
 Nodes (4): 1. Resumo Executivo, 🚩 Principais Achados, 💡 Recomendações, 🎯 Visão Geral
 
-### Community 411 - "📊 Sistema de Cache - Materialized Views"
+### Community 412 - "📊 Sistema de Cache - Materialized Views"
 Cohesion: 0.50
 Nodes (3): 📊 Benchmarks, 🎯 Quick Start, 📊 Sistema de Cache - Materialized Views
 
-### Community 412 - "Matriz edge function x tabela"
+### Community 413 - "Matriz edge function x tabela"
 Cohesion: 0.50
 Nodes (3): Matriz edge function x tabela, Por função, Por tabela
 
-### Community 413 - "🎯 Resumo de Tecnologias"
+### Community 414 - "🎯 Resumo de Tecnologias"
 Cohesion: 0.50
 Nodes (4): Backend, Frontend, Integrações, 🎯 Resumo de Tecnologias
 
-### Community 414 - "🛠️ Stack Tecnológico"
+### Community 415 - "🛠️ Stack Tecnológico"
 Cohesion: 0.50
 Nodes (4): Backend (Lovable Cloud/Supabase), Fontes, Frontend, 🛠️ Stack Tecnológico
 
-### Community 415 - "⚠️ ERRATA — Correções vs Documentação Oficial"
+### Community 416 - "⚠️ ERRATA — Correções vs Documentação Oficial"
 Cohesion: 0.50
 Nodes (4): Correção 1 — Campo de serviços: `services`, não `serviceTypes`, Correção 2 — `driverId`: sempre string `""`, nunca `null`, Correção 3 — `cancelParty` e `cancelledReason`: campos não existem na API BR, ⚠️ ERRATA — Correções vs Documentação Oficial
 
-### Community 416 - "15. PWA e Experiência Mobile"
+### Community 417 - "15. PWA e Experiência Mobile"
 Cohesion: 0.50
 Nodes (4): 15.1 Progressive Web App, 15.2 Offline, 15.3 Mobile, 15. PWA e Experiência Mobile
 
-### Community 417 - "16. Internacionalização (i18n)"
+### Community 418 - "16. Internacionalização (i18n)"
 Cohesion: 0.50
 Nodes (4): 16.1 Idiomas Suportados, 16.2 Seletor de Idioma, 16.3 Configuração, 16. Internacionalização (i18n)
 
-### Community 418 - "P-07-security-definer-search-path.md"
+### Community 419 - "P-07-security-definer-search-path.md"
 Cohesion: 0.50
 Nodes (3): Ação sugerida (fatia de segurança), Impacto no negócio, Problema
 
-### Community 419 - "P-08-geo-blocks-sem-rls.md"
+### Community 420 - "P-08-geo-blocks-sem-rls.md"
 Cohesion: 0.50
 Nodes (3): Ação, Impacto no negócio, Problema
 
-### Community 420 - "P-09-transicoes-status-sem-check.md"
+### Community 421 - "P-09-transicoes-status-sem-check.md"
 Cohesion: 0.50
 Nodes (3): Ação, Impacto no negócio, Problema
 
-### Community 421 - "P-10-scripts-chaves-legacy.md"
+### Community 422 - "P-10-scripts-chaves-legacy.md"
 Cohesion: 0.50
 Nodes (3): Contexto, Decisão (registrada), Impacto no negócio
 
-### Community 422 - "P-11-mfa-webauthn.md"
+### Community 423 - "P-11-mfa-webauthn.md"
 Cohesion: 0.50
 Nodes (3): Decisão, Evidência real no código (main, HEAD 75b7bef), O que a auditoria afirma
 
-### Community 423 - "lalamove_cron_setup.sh"
+### Community 424 - "lalamove_cron_setup.sh"
 Cohesion: 0.50
 Nodes (3): LALAMOVE_LOG_FILE, LALAMOVE_SESSION_FILE, lalamove_cron_setup.sh script
 
-### Community 424 - "public.prune_tracking_events_partitions"
+### Community 425 - "public.prune_tracking_events_partitions"
 Cohesion: 0.50
 Nodes (3): pg_class, pg_inherits, public.prune_tracking_events_partitions()
 
-### Community 425 - "20260513180724_3f8df4ed-2b79-4254-a66e-c07ac0297cfe.sql"
+### Community 426 - "20260513180724_3f8df4ed-2b79-4254-a66e-c07ac0297cfe.sql"
 Cohesion: 0.50
 Nodes (3): pg_tables, public.run_rls_security_audit(), public.security_test_logs
 
-### Community 426 - "public.contacts"
+### Community 427 - "public.contacts"
 Cohesion: 0.67
 Nodes (3): public.contacts, idx_contacts_name_trgm, idx_contacts_phone_trgm
 
-### Community 427 - "public.webhook_events"
+### Community 428 - "public.webhook_events"
 Cohesion: 0.67
 Nodes (3): public.webhook_events, idx_webhook_events_event_type_received_at, idx_webhook_events_idempotency_key
 
-### Community 428 - "🛠 Stack Tecnológico"
+### Community 429 - "🛠 Stack Tecnológico"
 Cohesion: 0.50
 Nodes (4): Backend (Supabase), Frontend, Integrações, 🛠 Stack Tecnológico
 
-### Community 429 - "⚙️ Instalação e Configuração"
+### Community 430 - "⚙️ Instalação e Configuração"
 Cohesion: 0.50
 Nodes (4): ⚙️ Instalação e Configuração, Instalação Local, Pré-requisitos, Scripts Disponíveis
 
-### Community 430 - "resolveImport"
+### Community 431 - "resolveImport"
 Cohesion: 0.50
 Nodes (4): aliasesFor(), componentFile(), isAliasSpec(), resolveImport()
 
-### Community 431 - "isSrc"
+### Community 432 - "isSrc"
 Cohesion: 0.50
 Nodes (4): appFiles, envUsadas, isSrc(), routeFiles
 
-### Community 432 - "scripts/lib — infraestrutura compartilhada dos scripts"
+### Community 433 - "scripts/lib — infraestrutura compartilhada dos scripts"
 Cohesion: 0.50
 Nodes (3): Como rodar, Por que existe, scripts/lib — infraestrutura compartilhada dos scripts
 
-### Community 433 - "20260315165451_86aebbac-da62-421e-b90c-59196d72b2da.sql"
+### Community 434 - "20260315165451_86aebbac-da62-421e-b90c-59196d72b2da.sql"
 Cohesion: 0.83
 Nodes (3): idx_uapi_sessions_active, public.get_active_uapi_token(), public.lalamove_uapi_sessions
 
-### Community 434 - "20260323120518_3b6de716-fc7b-4d8d-a0e9-3503c86411ce.sql"
+### Community 435 - "20260323120518_3b6de716-fc7b-4d8d-a0e9-3503c86411ce.sql"
 Cohesion: 0.83
 Nodes (3): idx_query_telemetry_created_at, idx_query_telemetry_severity, public.query_telemetry
 
-### Community 435 - "20260513180430_c3906a74-efff-4053-8845-8bde91f86251.sql"
+### Community 436 - "20260513180430_c3906a74-efff-4053-8845-8bde91f86251.sql"
 Cohesion: 0.50
 Nodes (3): public.feature_flags, public.update_updated_at_column, update_feature_flags_updated_at
 
-### Community 436 - "public.get_cron_jobs_health"
+### Community 437 - "public.get_cron_jobs_health"
 Cohesion: 0.50
 Nodes (3): public.get_cron_jobs_health(), cron.job, cron.job_run_details
 
-### Community 437 - "20260713105232_bcde1a1f-2639-4851-a868-1c9f2fbf028f.sql"
+### Community 438 - "20260713105232_bcde1a1f-2639-4851-a868-1c9f2fbf028f.sql"
 Cohesion: 0.50
 Nodes (3): public.region_cache, public.update_updated_at_column, update_region_cache_updated_at
 
-### Community 439 - "20260715185635_81965383-5741-4723-8c89-5df9ddfa80d6.sql"
+### Community 440 - "20260715185635_81965383-5741-4723-8c89-5df9ddfa80d6.sql"
 Cohesion: 0.67
 Nodes (3): idx_driver_approval_queue_pending_priority, idx_driver_approval_queue_pending_recent, public.driver_approval_queue
 
-### Community 440 - "20260715203300_db9b1a86-3d89-46a8-b2a9-bb21e579b57e.sql"
+### Community 441 - "20260715203300_db9b1a86-3d89-46a8-b2a9-bb21e579b57e.sql"
 Cohesion: 0.67
 Nodes (3): idx_alerts_sent_channel_recent, idx_alerts_sent_failed_retry, public.alerts_sent
 
-### Community 441 - "20260716164533_f833f67c-b8bc-4ea2-8990-72065037e351.sql"
+### Community 442 - "20260716164533_f833f67c-b8bc-4ea2-8990-72065037e351.sql"
 Cohesion: 0.67
 Nodes (3): idx_alert_dedup_suppressed, idx_alert_dedup_type_notified, public.alert_dedup
 
-### Community 442 - "20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql"
+### Community 443 - "20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql"
 Cohesion: 0.67
 Nodes (3): idx_lalamove_orders_cancellation_reason, idx_lalamove_orders_cancelled_at, public.lalamove_orders
 
-### Community 443 - "20260723173926_e865613f-5d81-4126-9bb9-a4aae51b628d.sql"
+### Community 444 - "20260723173926_e865613f-5d81-4126-9bb9-a4aae51b628d.sql"
 Cohesion: 0.67
 Nodes (3): idx_lalamove_orders_open_status, idx_lalamove_orders_status_created, public.lalamove_orders
 
-### Community 445 - "public.get_pending_escalations"
+### Community 446 - "public.get_pending_escalations"
 Cohesion: 0.50
 Nodes (3): public.get_pending_escalations(), public.alert_configurations, public.alerts
 
-### Community 446 - "Testes SQL das funções geo"
+### Community 447 - "Testes SQL das funções geo"
 Cohesion: 0.50
 Nodes (3): Cenários cobertos, Como funciona, Testes SQL das funções geo
 
-### Community 450 - "overrides"
+### Community 451 - "overrides"
 Cohesion: 0.67
 Nodes (3): overrides, esbuild, postcss-selector-parser
 
-### Community 453 - "scrub_value"
+### Community 454 - "scrub_value"
 Cohesion: 0.67
 Nodes (3): Redige segredos em texto vindo do banco (comandos de cron, corpos de função,…, scrub(), scrub_value()
 
-### Community 459 - "auth.users"
+### Community 460 - "auth.users"
 Cohesion: 0.67
 Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
@@ -2327,11 +2332,11 @@ Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `button.tsx`, `AdminTelemetriaPage`, `App.tsx`, `useWebhookEvents.ts`, `react`, `badge.tsx`, `GeoBlockingPage.tsx`, `useRealtimeSubscriptions.ts`, `lucide-react`, `LiveMapPage.tsx`, `types/index.ts`, `AlertsPage.tsx`, `AppLayout`, `motion.tsx`, `smart-breadcrumbs.tsx`, `dropdown-menu.tsx`, `useCachedStats.ts`, `AddressAutocomplete.tsx`, `micro-interactions.tsx`, `supabase/types.ts`, `AdvancedReportsPage.tsx`, `CommandPaletteEnhanced.tsx`, `useDrivers.ts`, `WaitingTimeCounter.tsx`, `Bloco 7 — Integração: URL como estado, modais endereçáveis e multi-aba (145–164)`, `useIncidents.ts`, `Bloco 5 — Acessibilidade da navegação (97–116)`, `Bloco 8 — Métricas, telemetria e iteração (165–182)`, `OfflineIndicator.tsx`, `chart.tsx`, `useMetrics.ts`, `AlertsAdvanced.tsx`, `layout-guard.mjs`, `StatusTimeline.tsx`, `Sidebar`?**
+- **Why does `cn()` connect `cn` to `button.tsx`, `react`, `AdminTelemetriaPage`, `GeoBlockingPage.tsx`, `useWebhookEvents.ts`, `badge.tsx`, `useRealtimeSubscriptions.ts`, `LiveMapPage.tsx`, `types/index.ts`, `lucide-react`, `AlertsPage.tsx`, `SecurityDashboardPage.tsx`, `AppLayout`, `motion.tsx`, `smart-breadcrumbs.tsx`, `dropdown-menu.tsx`, `useCachedStats.ts`, `AddressAutocomplete.tsx`, `micro-interactions.tsx`, `supabase/types.ts`, `AdvancedReportsPage.tsx`, `CommandPaletteEnhanced.tsx`, `useDrivers.ts`, `WaitingTimeCounter.tsx`, `Bloco 7 — Integração: URL como estado, modais endereçáveis e multi-aba (145–164)`, `useIncidents.ts`, `Bloco 5 — Acessibilidade da navegação (97–116)`, `Bloco 8 — Métricas, telemetria e iteração (165–182)`, `OfflineIndicator.tsx`, `chart.tsx`, `useMetrics.ts`, `AlertsAdvanced.tsx`, `layout-guard.mjs`, `StatusTimeline.tsx`, `Sidebar`?**
   _High betweenness centrality (0.146) - this node is a cross-community bridge._
-- **Why does `react` connect `react` to `cn`, `button.tsx`, `client.ts`, `App.tsx`, `useGeo.contract.test.ts`, `useWebhookEvents.ts`, `badge.tsx`, `GeoBlockingPage.tsx`, `package.json`, `useRealtimeSubscriptions.ts`, `lucide-react`, `utils/logger.ts`, `LiveMapPage.tsx`, `types/index.ts`, `useMapbox.ts`, `ReportDistributionTab.tsx`, `AlertsPage.tsx`, `AppLayout`, `motion.tsx`, `smart-breadcrumbs.tsx`, `LiveMap.tsx`, `useMapMarkers.ts`, `useGlobalSearch.ts`, `dropdown-menu.tsx`, `useAdvancedReports.ts`, `errorMonitoring.ts`, `GoogleMapsCanvas.tsx`, `useDriverEvaluations.ts`, `useCachedStats.ts`, `Descartados como utilitarios genericos nao adotados`, `NewOrderDialog.tsx`, `AddressAutocomplete.tsx`, `micro-interactions.tsx`, `supabase/types.ts`, `AdvancedReportsPage.tsx`, `CommandPaletteEnhanced.tsx`, `useOfflineStorage.ts`, `useTrackingData.ts`, `useQuotationExpiry.ts`, `useAchievementsSystem.tsx`, `WaitingTimeCounter.tsx`, `useLalamoveUapi.ts`, `useIncidents.ts`, `Bloco 5 — Acessibilidade da navegação (97–116)`, `OfflineIndicator.tsx`, `chart.tsx`, `useDeliveryMetrics.ts`, `OrderTrackingMap.tsx`, `AddressAutocomplete.test.tsx`, `AlertsAdvanced.tsx`, `useCommandPaletteSearch.ts`, `StatusTimeline.tsx`, `Google3DCanvas.tsx`, `webVitals.ts`?**
+- **Why does `react` connect `react` to `cn`, `button.tsx`, `useGeo.contract.test.ts`, `client.ts`, `GeoBlockingPage.tsx`, `useWebhookEvents.ts`, `badge.tsx`, `package.json`, `useRealtimeSubscriptions.ts`, `utils/logger.ts`, `LiveMapPage.tsx`, `useMapbox.ts`, `lucide-react`, `types/index.ts`, `ReportDistributionTab.tsx`, `AlertsPage.tsx`, `SecurityDashboardPage.tsx`, `AppLayout`, `motion.tsx`, `smart-breadcrumbs.tsx`, `LiveMap.tsx`, `useMapMarkers.ts`, `useGlobalSearch.ts`, `dropdown-menu.tsx`, `useAdvancedReports.ts`, `errorMonitoring.ts`, `GoogleMapsCanvas.tsx`, `useDriverEvaluations.ts`, `useCachedStats.ts`, `Descartados como utilitarios genericos nao adotados`, `NewOrderDialog.tsx`, `AddressAutocomplete.tsx`, `micro-interactions.tsx`, `supabase/types.ts`, `AdvancedReportsPage.tsx`, `CommandPaletteEnhanced.tsx`, `useOfflineStorage.ts`, `useTrackingData.ts`, `useQuotationExpiry.ts`, `useAchievementsSystem.tsx`, `WaitingTimeCounter.tsx`, `useLalamoveUapi.ts`, `useIncidents.ts`, `Bloco 5 — Acessibilidade da navegação (97–116)`, `OfflineIndicator.tsx`, `chart.tsx`, `useDeliveryMetrics.ts`, `OrderTrackingMap.tsx`, `AddressAutocomplete.test.tsx`, `AlertsAdvanced.tsx`, `useCommandPaletteSearch.ts`, `StatusTimeline.tsx`, `Google3DCanvas.tsx`, `webVitals.ts`?**
   _High betweenness centrality (0.053) - this node is a cross-community bridge._
-- **Why does `Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)` connect `Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)` to `OrderTrackingMap.tsx`, `App.tsx`, `BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)`, `BLOCO 6 — Seletor no admin: Google ↔ Mapbox (etapas 63–72)`, `LiveMap.tsx`, `BLOCO 4 — Rota, ETA e geofence com Mapbox (etapas 45–54)`, `geo-gateway/index.ts`, `MapboxProvider`, `BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)`, `CepQuickFill`, `lalamove-api/index.ts`, `useMapbox.ts`, `BLOCO 0 — Conta, tokens e segredos (etapas 1–10)`, `BLOCO 8 — Qualidade, CI, deploy (etapas 83–92)`, `AddressAutocomplete.tsx`, `BLOCO 9 — Aceite e fechamento (etapas 93–100)`?**
+- **Why does `Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)` connect `Plano Mapbox × Lalamove V2 — 100 etapas com checklists (21/11/2026)` to `OrderTrackingMap.tsx`, `BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)`, `BLOCO 6 — Seletor no admin: Google ↔ Mapbox (etapas 63–72)`, `LiveMap.tsx`, `geo-gateway/index.ts`, `BLOCO 4 — Rota, ETA e geofence com Mapbox (etapas 45–54)`, `MapboxProvider`, `BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)`, `CepQuickFill`, `SecurityDashboardPage.tsx`, `lalamove-api/index.ts`, `useMapbox.ts`, `BLOCO 0 — Conta, tokens e segredos (etapas 1–10)`, `BLOCO 8 — Qualidade, CI, deploy (etapas 83–92)`, `AddressAutocomplete.tsx`, `BLOCO 9 — Aceite e fechamento (etapas 93–100)`?**
   _High betweenness centrality (0.047) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**
   _`cn()` has 2 INFERRED edges - model-reasoned connections that need verification._

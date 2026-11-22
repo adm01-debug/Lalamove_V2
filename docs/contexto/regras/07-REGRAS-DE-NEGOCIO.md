@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ca2061f433` · branch `main` · 2026-11-22 17:01 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b05e2b0de6` · branch `main` · 2026-11-22 17:19 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1885,6 +1885,7 @@ _nenhum item encontrado_
 | Erro ao gerar PDF | `src/pages/AdminTelemetriaPage.tsx` |
 | Erro ao limpar dados antigos | `src/pages/AdminTelemetriaPage.tsx` |
 | Nenhum dado para exportar | `src/pages/AdminTelemetriaPage.tsx` |
+| Sessão não autenticada | `src/pages/AdminTelemetriaPage.tsx` |
 | Telemetry fetch failed: ${res.status} | `src/pages/AdminTelemetriaPage.tsx` |
 | Conta bloqueada por ${formatRemainingTime(lockResult.remainingSeconds)} após ${lockResult.attemptCount} tentativas falhadas. | `src/pages/AuthPage.tsx` |
 | Conta temporariamente bloqueada. Tente novamente em ${formatRemainingTime(status.remainingSeconds)}. | `src/pages/AuthPage.tsx` |
@@ -1925,8 +1926,7 @@ _nenhum item encontrado_
 | Erro ao alterar senha. Tente novamente. | `src/pages/ResetPasswordPage.tsx` |
 | Falha ao atualizar regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
-| Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
-| … +102 linhas — lista completa em `context.json` | |
+| … +103 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

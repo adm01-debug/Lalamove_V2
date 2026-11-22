@@ -529,7 +529,7 @@
   {
    "arquivo": "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 263,
+   "linhas": 266,
    "testa": [
     "src/pages/AdminTelemetriaPage.tsx"
    ],

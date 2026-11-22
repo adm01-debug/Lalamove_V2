@@ -1288,7 +1288,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 7,
+   "usado_por": 8,
    "orfao": false
   },
   {
@@ -2242,7 +2242,7 @@
     "AdminTelemetriaPage"
    ],
    "export_default": "AdminTelemetriaPage",
-   "linhas": 499,
+   "linhas": 540,
    "dominio": "pages",
    "hooks_locais": [],
    "tabelas": [],

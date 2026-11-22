@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)",
    "feat: campos de token como password e sem autofill (#294)",
    "fix: validar origem do postMessage do Bitrix24 (#293)",
    "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)",
-   "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)",
-   "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)"
+   "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

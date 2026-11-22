@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "nos": 507,
- "arestas": 1683,
+ "arestas": 1684,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -145,6 +145,10 @@
    "importado_por": 8
   },
   {
+   "arquivo": "src/components/ui/alert-dialog.tsx",
+   "importado_por": 8
+  },
+  {
    "arquivo": "src/components/ui/separator.tsx",
    "importado_por": 8
   },
@@ -155,10 +159,6 @@
   {
    "arquivo": "src/hooks/useDrivers.ts",
    "importado_por": 8
-  },
-  {
-   "arquivo": "src/components/ui/alert-dialog.tsx",
-   "importado_por": 7
   },
   {
    "arquivo": "src/components/ui/collapsible.tsx",

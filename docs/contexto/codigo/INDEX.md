@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ca2061f433ce40cb1522920da3e43a8882870985` (2026-11-22T14:00:32-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b05e2b0de600ed0d90806e763d8356f5cf3fcc3b` (2026-11-22T14:18:43-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1057 |
 | arquivos_codigo | 656 |
-| linhas_codigo | 128927 |
+| linhas_codigo | 128971 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -274,8 +274,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8710 nós · 18205 arestas · 638 comunidades · grafo do commit `ca2061f4`
-- comunidades maiores: cn (270), button.tsx (156), client.ts (124), App.tsx (103), ref_https (93), react (90), badge.tsx (90), ref_node_fs (89), GeoBlockingPage.tsx (88), geo-gateway/index.ts (82), dependencies (80), gerar.mjs (76)
+- 8710 nós · 18214 arestas · 639 comunidades · grafo do commit `b05e2b0d`
+- comunidades maiores: cn (270), button.tsx (156), react (148), client.ts (124), GeoBlockingPage.tsx (95), ref_https (93), badge.tsx (90), ref_node_fs (89), geo-gateway/index.ts (82), dependencies (80), gerar.mjs (76), generate.py (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -288,11 +288,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
 - docs/pendencias/_ordem.md (10)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (10)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
 - supabase/functions/_shared/schemas.ts (10)
 - supabase/functions/job-worker/index.ts (10)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (9)
 - src/components/orders/NewOrderDialog.tsx (9)
 
 ## Workflows
@@ -377,6 +377,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `b05e2b0` feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)
 - 2026-11-22 `ca2061f` feat: campos de token como password e sem autofill (#294)
 - 2026-11-22 `a388d1d` fix: validar origem do postMessage do Bitrix24 (#293)
 - 2026-11-22 `ba39240` fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)
@@ -391,7 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `572af27` docs(planos): plano front-end de 190 etapas (#280)
 - 2026-11-22 `d6f59de` feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)
 - 2026-11-22 `4ee7ef0` docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)
-- 2026-11-22 `03b0ca8` feat: replay deterministico do trajeto e 100 testes na CI (#277)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

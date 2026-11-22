@@ -1357,6 +1357,7 @@
   "src/pages/AdminTelemetriaPage.tsx": [
    "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
    "src/components/admin/telemetry/TelemetryCharts.tsx",
+   "src/components/ui/alert-dialog.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ca2061f433ce40cb1522920da3e43a8882870985",
+  "commit": "b05e2b0de600ed0d90806e763d8356f5cf3fcc3b",
   "branch": "main",
-  "data_commit": "2026-11-22T14:00:32-03:00",
+  "data_commit": "2026-11-22T14:18:43-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b05e2b0",
+    "data": "2026-11-22",
+    "assunto": "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)"
+   },
    {
     "sha": "ca2061f",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "9218d1b",
     "data": "2026-11-22",
     "assunto": "docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)"
-   },
-   {
-    "sha": "aedf1ee",
-    "data": "2026-11-22",
-    "assunto": "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)"
    }
   ],
-  "arquivos_mudados_7d": 341,
+  "arquivos_mudados_7d": 343,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -188,12 +188,12 @@
     "mudancas": 10
    },
    {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 10
    },
    {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 9
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 10
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -234,6 +234,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 10
+   },
+   {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 10
    },
@@ -248,10 +252,6 @@
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 9
    },
    {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 196
+    "commits": 197
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1057,
   "arquivos_codigo": 656,
-  "linhas_codigo": 128927,
+  "linhas_codigo": 128971,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29490
+   "linhas": 29493
   },
   "src/hooks": {
    "arquivos": 111,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 89,
-   "linhas": 19735
+   "linhas": 19776
   },
   "src/services": {
    "arquivos": 1,
@@ -649,6 +649,10 @@
    "linhas": 602
   },
   {
+   "arquivo": "src/pages/AdminTelemetriaPage.tsx",
+   "linhas": 540
+  },
+  {
    "arquivo": "src/hooks/useAdvancedReports.ts",
    "linhas": 539
   },
@@ -669,10 +673,6 @@
    "linhas": 500
   },
   {
-   "arquivo": "src/pages/AdminTelemetriaPage.tsx",
-   "linhas": 499
-  },
-  {
    "arquivo": "src/hooks/useMapbox.ts",
    "linhas": 494
   },
@@ -687,7 +687,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,
-  "arquivos_acima_500_linhas": 21
+  "arquivos_acima_500_linhas": 22
  },
  "todos": [
   {
