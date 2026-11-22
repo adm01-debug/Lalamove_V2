@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 129,
+ "total": 130,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
   "edge (deno)": 16,
   "guard (node --test)": 33,
-  "unit (vitest)": 71
+  "unit (vitest)": 72
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 9
+   "arquivos": 10
   },
   {
    "padrao": "e2e/",
@@ -1015,6 +1015,16 @@
    "casos": 3
   },
   {
+   "arquivo": "src/pages/NotificationHistoryPage.geo.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 60,
+   "testa": [
+    "src/hooks/useNotificationHistory.ts",
+    "src/pages/NotificationHistoryPage.tsx"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/test/setup.ts",
    "tipo": "unit (vitest)",
    "linhas": 16,
@@ -1288,6 +1298,7 @@
   "src/hooks/useMapProviderPolicy.ts": 1,
   "src/hooks/useMapSettings.ts": 2,
   "src/hooks/useMapbox.ts": 1,
+  "src/hooks/useNotificationHistory.ts": 1,
   "src/hooks/usePendingApprovals.ts": 1,
   "src/hooks/usePermissions.ts": 1,
   "src/hooks/useRateLimiting.ts": 1,
@@ -1313,6 +1324,7 @@
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,
+  "src/pages/NotificationHistoryPage.tsx": 1,
   "src/pages/alert-configurations/AlertConfigCard.tsx": 1,
   "src/types/index.ts": 1,
   "src/types/lalamove.ts": 3,
@@ -1371,7 +1383,6 @@
    "src/pages/MapsSettingsPage.tsx",
    "src/pages/MetricsPage.tsx",
    "src/pages/NotFound.tsx",
-   "src/pages/NotificationHistoryPage.tsx",
    "src/pages/OrdersPage.tsx",
    "src/pages/PasswordResetApprovalsPage.tsx",
    "src/pages/PerformanceDashboardPage.tsx",
@@ -1438,7 +1449,6 @@
    "src/hooks/useLalamoveUapi.ts",
    "src/hooks/useMetrics.ts",
    "src/hooks/useMFA.ts",
-   "src/hooks/useNotificationHistory.ts",
    "src/hooks/useOfflineStorage.ts",
    "src/hooks/usePasswordResetActions.ts",
    "src/hooks/usePredictiveAnalysis.ts",

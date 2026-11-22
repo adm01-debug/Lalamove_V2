@@ -3126,11 +3126,12 @@
     "NotificationHistoryPage"
    ],
    "export_default": null,
-   "linhas": 415,
+   "linhas": 483,
    "dominio": "pages",
    "hooks_locais": [
     "useNotificationHistory",
-    "useNotificationStats"
+    "useNotificationStats",
+    "usePendingGeoEvents"
    ],
    "tabelas": [],
    "edges": [],

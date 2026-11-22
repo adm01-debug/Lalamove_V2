@@ -1749,12 +1749,14 @@
    "arquivo": "src/hooks/useNotificationHistory.ts",
    "hooks_exportados": [
     "useNotificationHistory",
-    "useNotificationStats"
+    "useNotificationStats",
+    "usePendingGeoEvents"
    ],
-   "linhas": 102,
+   "linhas": 150,
    "dominio": "hooks",
    "tabelas": [
-    "alerts_sent"
+    "alerts_sent",
+    "order_geo_events"
    ],
    "rpcs": [],
    "edges": [],
@@ -1766,7 +1768,7 @@
    "usado_por_arquivos": [
     "src/pages/NotificationHistoryPage.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useOfflineStorage.ts",

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b5b308837b` · branch `main` · 2026-11-22 04:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ed72e8d632` · branch `main` · 2026-11-22 04:22 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1465,6 +1465,7 @@ _nenhum item encontrado_
 | 10 | `src/hooks/useGlobalSearch.ts` |
 | 1 | `src/hooks/useJobQueue.ts` |
 | 2000 | `src/hooks/useLalamoveQuota.ts` |
+| 100 | `src/hooks/useNotificationHistory.ts` |
 | 200 | `src/hooks/useNotificationHistory.ts` |
 | 50 | `src/hooks/usePendingApprovals.ts` |
 | 100 | `src/hooks/usePredictiveAnalysis.ts` |
@@ -1824,7 +1825,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1012 testes em 88 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1016 testes em 89 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1909,6 +1910,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
+| `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |

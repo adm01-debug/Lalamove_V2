@@ -1984,15 +1984,18 @@
    "hooks": [
     "useNotificationHistory",
     "useNotificationStats",
+    "usePendingGeoEvents",
     "useQuery",
     "useState"
    ],
    "hooks_locais": [
     "useNotificationHistory",
-    "useNotificationStats"
+    "useNotificationStats",
+    "usePendingGeoEvents"
    ],
    "tabelas": [
-    "alerts_sent"
+    "alerts_sent",
+    "order_geo_events"
    ],
    "rpcs": [],
    "edges": [],
@@ -3417,6 +3420,7 @@
     "useOrderGet",
     "usePasswordResetActions",
     "usePendingApprovals",
+    "usePendingGeoEvents",
     "usePermissions",
     "usePredictiveAnalysis",
     "usePrefetch",
@@ -3596,6 +3600,7 @@
     "useOrderGet",
     "usePasswordResetActions",
     "usePendingApprovals",
+    "usePendingGeoEvents",
     "usePermissions",
     "usePredictiveAnalysis",
     "usePrefetch",
