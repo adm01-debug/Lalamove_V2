@@ -19,13 +19,9 @@ const loginSchema = z.object({
 });
 
 export function AuthPage() {
-<<<<<<< Updated upstream
   const { user, loading, signIn } = useAuth();
-=======
-  const { user, loading, signIn, signUp } = useAuth();
   const location = useLocation();
   const from = (location.state?.from as { pathname?: string } | null)?.pathname ?? '/';
->>>>>>> Stashed changes
   const { lockoutStatus, checkLockout, recordFailedAttempt, clearAttempts, formatRemainingTime } = useLoginLockout();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
