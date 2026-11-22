@@ -1590,7 +1590,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 7,
+   "usada_no_front": 6,
    "usada_em_edges": [
     "check-driver-alerts",
     "evaluate-driver",
@@ -3513,7 +3513,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 10,
+   "usada_no_front": 9,
    "usada_em_edges": [
     "evaluate-driver"
    ],
@@ -3934,7 +3934,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 7,
+   "usada_no_front": 6,
    "usada_em_edges": [
     "evaluate-driver"
    ],
@@ -11037,7 +11037,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 4,
+   "usada_no_front": 2,
    "usada_em_edges": [
     "simulate-driver-movement"
    ],

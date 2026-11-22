@@ -1702,6 +1702,7 @@
    "src/hooks/useScheduledTheme.ts",
    "src/hooks/useSecurityPushNotifications.ts",
    "src/hooks/useServiceWorker.ts",
+   "src/hooks/useSidebarCounts.ts",
    "src/hooks/useSLOMetrics.ts",
    "src/hooks/useSoundSettings.ts",
    "src/hooks/useSystemHealth.ts",

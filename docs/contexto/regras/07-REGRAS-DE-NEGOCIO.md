@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5672ef043a` · branch `main` · 2026-11-22 18:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `23148972fd` · branch `main` · 2026-11-22 19:04 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -747,7 +747,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `ON_GOING` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/components/orders/OrderDetailModal.tsx`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/usePredictiveAnalysis.ts`<br>`src/pages/orders/OrderCard.tsx`<br>… +3 |
 | `status` | `OPEN` | compara | `src/pages/IncidentsPage.tsx` |
 | `status` | `OVER_QUERY_LIMIT` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
-| `status` | `PENDING` | compara, escreve, filtra | `src/components/layout/MobileSidebar.tsx`<br>`src/components/layout/Sidebar.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>… +9 |
+| `status` | `PENDING` | compara, escreve, filtra | `src/hooks/useAnalyticsData.ts`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/useJobQueue.ts`<br>… +8 |
 | `status` | `PENDING_APPROVAL` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +3 |
 | `status` | `PICKED_UP` | compara, escreve | `src/components/dashboard/OrdersTable.tsx`<br>`src/lib/lalamoveOrderEdit.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `status` | `PROCESSING` | compara | `src/pages/JobQueuePage.tsx` |
@@ -1412,6 +1412,7 @@ _nenhum item encontrado_
 | `MAX_PER_RUN` | `60` | `src/hooks/useRegionResolver.ts` |
 | `CONCURRENCY` | `5` | `src/hooks/useRegionResolver.ts` |
 | `BACKEND_CHUNK` | `100` | `src/hooks/useRegionResolver.ts` |
+| `STALE_TIME_MS` | `30` | `src/hooks/useSidebarCounts.ts` |
 | `RESULT` | `'lovable-preview-auth:result'` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `TIMEOUT` | `2000` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `RETRY_DELAY` | `250` | `src/integrations/supabase/previewAuthStorage.ts` |

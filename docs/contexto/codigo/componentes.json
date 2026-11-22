@@ -750,17 +750,14 @@
     "MobileSidebar"
    ],
    "export_default": null,
-   "linhas": 333,
+   "linhas": 292,
    "dominio": "components/layout",
    "hooks_locais": [
-    "useAuth"
+    "usePermissions",
+    "useSidebarCounts",
+    "useSidebarCountsRealtime"
    ],
-   "tabelas": [
-    "alerts",
-    "driver_approval_queue",
-    "driver_incidents",
-    "user_roles"
-   ],
+   "tabelas": [],
    "edges": [],
    "usado_por": 1,
    "orfao": false
@@ -771,20 +768,17 @@
     "Sidebar"
    ],
    "export_default": null,
-   "linhas": 195,
+   "linhas": 174,
    "dominio": "components/layout",
    "hooks_locais": [
     "useAuth",
+    "usePermissions",
     "usePrefetch",
+    "useSidebarCounts",
     "useSidebarCountsRealtime",
     "useTheme"
    ],
-   "tabelas": [
-    "alerts",
-    "driver_approval_queue",
-    "driver_incidents",
-    "user_roles"
-   ],
+   "tabelas": [],
    "edges": [],
    "usado_por": 1,
    "orfao": false
@@ -2217,7 +2211,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 19,
+   "usado_por": 18,
    "orfao": false
   },
   {

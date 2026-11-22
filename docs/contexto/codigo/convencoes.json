@@ -11,7 +11,7 @@
    "src/hooks (3)"
   ],
   "hooks": [
-   "src/hooks (84)",
+   "src/hooks (85)",
    "src/components (13)",
    "scripts/ai-context (1)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)",
    "feat: menu alinhado às rotas (item 49) (#306)",
    "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)",
    "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)",
-   "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
-   "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)"
+   "feat: hierarquia de papeis numa unica fonte (item 48) (#303)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

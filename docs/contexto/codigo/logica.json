@@ -87,10 +87,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 90,
+   "usado_por": 89,
    "usado_por_modulos": [
     "components/dashboard",
-    "components/layout",
     "components/map",
     "components/orders",
     "components/webhooks",
@@ -703,6 +702,7 @@
    "exports": [
     "AppRole",
     "ROLE_ORDER",
+    "getHighestRole",
     "getRoleColor",
     "getRoleDisplayName",
     "hasRole",
@@ -711,7 +711,7 @@
     "roleLevel"
    ],
    "export_default": null,
-   "linhas": 55,
+   "linhas": 68,
    "tabelas": [],
    "rpcs": [],
    "edges": [],

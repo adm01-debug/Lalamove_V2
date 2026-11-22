@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 100,
+ "total": 101,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -662,13 +662,12 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 19,
+   "usado_por": 18,
    "usado_por_arquivos": [
     "src/App.tsx",
     "src/components/auth/ProtectedRoute.tsx",
     "src/components/layout/AppLayout.tsx",
     "src/components/layout/Header.tsx",
-    "src/components/layout/MobileSidebar.tsx",
     "src/components/layout/Sidebar.tsx",
     "src/hooks/useActiveAlerts.ts",
     "src/hooks/useAuthLogs.ts",
@@ -1876,10 +1875,12 @@
     "useQueryClient"
    ],
    "canais_realtime": [],
-   "usado_por": 10,
+   "usado_por": 12,
    "usado_por_arquivos": [
     "src/components/auth/PermissionGate.tsx",
     "src/components/auth/ProtectedRoute.tsx",
+    "src/components/layout/MobileSidebar.tsx",
+    "src/components/layout/Sidebar.tsx",
     "src/hooks/useContextualHints.ts",
     "src/hooks/useRole.ts",
     "src/pages/MapsSettingsPage.tsx",
@@ -2039,8 +2040,9 @@
     "sidebar-counts-consolidated",
     "sla-metrics-consolidated"
    ],
-   "usado_por": 4,
+   "usado_por": 5,
    "usado_por_arquivos": [
+    "src/components/layout/MobileSidebar.tsx",
     "src/components/layout/Sidebar.tsx",
     "src/hooks/useActiveAlerts.ts",
     "src/hooks/useApprovalRealtime.ts",
@@ -2244,6 +2246,32 @@
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/pwa/OfflineIndicator.tsx"
+   ],
+   "coberto_por_testes": 0
+  },
+  {
+   "arquivo": "src/hooks/useSidebarCounts.ts",
+   "hooks_exportados": [
+    "useSidebarCounts"
+   ],
+   "linhas": 59,
+   "dominio": "hooks",
+   "tabelas": [
+    "alerts",
+    "driver_approval_queue",
+    "driver_incidents"
+   ],
+   "rpcs": [],
+   "edges": [],
+   "hooks_internos": [
+    "useCallback",
+    "useQueries"
+   ],
+   "canais_realtime": [],
+   "usado_por": 2,
+   "usado_por_arquivos": [
+    "src/components/layout/MobileSidebar.tsx",
+    "src/components/layout/Sidebar.tsx"
    ],
    "coberto_por_testes": 0
   },

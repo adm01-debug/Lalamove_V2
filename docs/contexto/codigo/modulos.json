@@ -588,7 +588,7 @@
    "modulo": "components/layout",
    "arquivos": 6,
    "testes": 0,
-   "linhas": 1776,
+   "linhas": 1714,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -735,6 +735,7 @@
     "useScheduledTheme",
     "useSecurityPushNotifications",
     "useServiceAreas",
+    "useSidebarCounts",
     "useSidebarCountsRealtime",
     "useSoundSettings",
     "useSystemHealth",
@@ -878,19 +879,13 @@
    ],
    "diretos": {
     "edges": [],
-    "tabelas": [
-     "alerts",
-     "driver_approval_queue",
-     "driver_incidents",
-     "user_roles"
-    ],
+    "tabelas": [],
     "rpcs": []
    },
    "importado_por_outros_modulos": [],
    "depende_de_modulos": [
     "components/ui",
     "hooks",
-    "integrations/supabase",
     "lib",
     "utils"
    ],
@@ -1650,9 +1645,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 85,
+   "arquivos": 86,
    "testes": 1,
-   "linhas": 15395,
+   "linhas": 15454,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1836,6 +1831,7 @@
     "useSecurityPushNotifications",
     "useServiceAreas",
     "useServiceWorker",
+    "useSidebarCounts",
     "useSidebarCountsRealtime",
     "useSoundSettings",
     "useStaticMap",
@@ -2073,6 +2069,7 @@
     "useScheduledTheme",
     "useSecurityPushNotifications",
     "useServiceWorker",
+    "useSidebarCounts",
     "useSLAMetrics",
     "useSLOMetrics",
     "useSoundSettings",
@@ -2452,7 +2449,6 @@
    "importado_por_outros_modulos": [
     "components/dashboard",
     "components/drivers",
-    "components/layout",
     "components/map",
     "components/orders",
     "components/webhooks",
@@ -2473,7 +2469,7 @@
    "modulo": "lib",
    "arquivos": 27,
    "testes": 6,
-   "linhas": 2517,
+   "linhas": 2530,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

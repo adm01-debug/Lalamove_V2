@@ -452,8 +452,9 @@
    "src/components/ui/micro-interactions.tsx",
    "src/components/ui/scroll-area.tsx",
    "src/components/ui/sheet.tsx",
-   "src/hooks/useAuth.tsx",
-   "src/integrations/supabase/client.ts",
+   "src/hooks/usePermissions.ts",
+   "src/hooks/useRealtimeSubscriptions.ts",
+   "src/hooks/useSidebarCounts.ts",
    "src/lib/roles.ts",
    "src/lib/utils.ts"
   ],
@@ -466,10 +467,11 @@
    "src/components/ui/micro-interactions.tsx",
    "src/components/ui/tooltip.tsx",
    "src/hooks/useAuth.tsx",
+   "src/hooks/usePermissions.ts",
    "src/hooks/usePrefetch.ts",
    "src/hooks/useRealtimeSubscriptions.ts",
+   "src/hooks/useSidebarCounts.ts",
    "src/hooks/useTheme.ts",
-   "src/integrations/supabase/client.ts",
    "src/lib/roles.ts",
    "src/lib/user-display.ts",
    "src/lib/utils.ts"
@@ -1258,6 +1260,9 @@
   ],
   "src/hooks/useServiceWorker.ts": [
    "src/utils/logger.ts"
+  ],
+  "src/hooks/useSidebarCounts.ts": [
+   "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useSoundSettings.ts": [
    "src/utils/logger.ts"

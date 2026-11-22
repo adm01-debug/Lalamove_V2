@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 508,
- "arestas": 1678,
+ "nos": 509,
+ "arestas": 1681,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -18,7 +18,7 @@
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 104
+   "importado_por": 103
   },
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -65,11 +65,11 @@
    "importado_por": 23
   },
   {
-   "arquivo": "src/hooks/useAuth.tsx",
-   "importado_por": 19
+   "arquivo": "src/components/ui/switch.tsx",
+   "importado_por": 18
   },
   {
-   "arquivo": "src/components/ui/switch.tsx",
+   "arquivo": "src/hooks/useAuth.tsx",
    "importado_por": 18
   },
   {
@@ -93,6 +93,10 @@
    "importado_por": 13
   },
   {
+   "arquivo": "src/hooks/usePermissions.ts",
+   "importado_por": 13
+  },
+  {
    "arquivo": "src/components/map/hooks/useTrackingData.ts",
    "importado_por": 12
   },
@@ -110,10 +114,6 @@
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
-   "importado_por": 11
-  },
-  {
-   "arquivo": "src/hooks/usePermissions.ts",
    "importado_por": 11
   },
   {
@@ -217,7 +217,7 @@
   {
    "modulo": "integrations/supabase",
    "depende_de": 0,
-   "importado_por": 13
+   "importado_por": 12
   },
   {
    "modulo": "types",
@@ -280,9 +280,9 @@
    "importado_por": 1
   },
   {
-   "modulo": "components/layout",
-   "depende_de": 5,
-   "importado_por": 0
+   "modulo": "pages/orders",
+   "depende_de": 4,
+   "importado_por": 1
   }
  ],
  "arestas_em": "docs/contexto/codigo/grafo-arestas.json"

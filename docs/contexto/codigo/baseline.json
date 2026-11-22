@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5672ef043aa80199748583973cca853e57e42886",
+  "commit": "23148972fd2c0832d397ddb1f2869ed3521142eb",
   "branch": "main",
-  "data_commit": "2026-11-22T15:42:39-03:00",
+  "data_commit": "2026-11-22T16:03:36-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2314897",
+    "data": "2026-11-22",
+    "assunto": "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)"
+   },
    {
     "sha": "5672ef0",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "572af27",
     "data": "2026-11-22",
     "assunto": "docs(planos): plano front-end de 190 etapas (#280)"
-   },
-   {
-    "sha": "d6f59de",
-    "data": "2026-11-22",
-    "assunto": "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)"
    }
   ],
-  "arquivos_mudados_7d": 362,
+  "arquivos_mudados_7d": 363,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -156,12 +156,12 @@
     "mudancas": 25
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 22
    },
    {
-    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 21
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 22
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 21
+    "mudancas": 22
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 208
+    "commits": 209
    },
    {
     "autor": "dependabot[bot]",
@@ -310,16 +310,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1062,
-  "arquivos_codigo": 661,
-  "linhas_codigo": 129013,
+  "arquivos_total": 1063,
+  "arquivos_codigo": 662,
+  "linhas_codigo": 129023,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
   "itens_menu": 38,
   "modulos": 43,
   "componentes": 217,
-  "hooks": 100,
+  "hooks": 101,
   "edge_functions": 26,
   "tabelas": 88,
   "migrations": 191,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29412
+   "linhas": 29350
   },
   "src/hooks": {
-   "arquivos": 110,
-   "linhas": 18826
+   "arquivos": 111,
+   "linhas": 18885
   },
   "src/i18n": {
    "arquivos": 1,
@@ -536,7 +536,7 @@
   },
   "src/lib": {
    "arquivos": 47,
-   "linhas": 4131
+   "linhas": 4144
   },
   "src/main.tsx": {
    "arquivos": 1,

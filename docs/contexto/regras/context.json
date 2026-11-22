@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5672ef043aa80199748583973cca853e57e42886",
+  "sha": "23148972fd2c0832d397ddb1f2869ed3521142eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 18:43 UTC",
-  "files_total": 1056,
-  "code_files": 872,
-  "code_lines": 150190
+  "generated_at": "2026-11-22 19:04 UTC",
+  "files_total": 1057,
+  "code_files": 873,
+  "code_lines": 150200
  },
  "version": "1.3.2",
- "facts_hash": "d01d812587a563a4",
+ "facts_hash": "b8852f757d14f93a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 312,
+   ".ts": 313,
    ".tsx": 236,
    ".sql": 202,
    ".mjs": 109,
@@ -20143,6 +20143,10 @@
     "file": "src/hooks/useServiceWorker.ts"
    },
    {
+    "name": "useSidebarCounts",
+    "file": "src/hooks/useSidebarCounts.ts"
+   },
+   {
     "name": "useSoundSettings",
     "file": "src/hooks/useSoundSettings.ts"
    },
@@ -20840,18 +20844,14 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29412,
+   "lines": 29350,
    "tables": [
     "active_tracking",
-    "alerts",
-    "driver_approval_queue",
-    "driver_incidents",
     "lalamove_orders",
     "lalamove_status_history",
     "lalamove_stops",
     "order_geo_events",
     "tracking_events",
-    "user_roles",
     "webhook_events"
    ],
    "exports": [
@@ -21021,8 +21021,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 110,
-   "lines": 18826,
+   "files": 111,
+   "lines": 18885,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21217,11 +21217,11 @@
     "src/hooks/useScheduledTheme.ts",
     "src/hooks/useSecurityPushNotifications.ts",
     "src/hooks/useServiceWorker.ts",
+    "src/hooks/useSidebarCounts.ts",
     "src/hooks/useSoundSettings.ts",
     "src/hooks/useSystemHealth.ts",
     "src/hooks/useSystemHealthExpanded.ts",
-    "src/hooks/useTestNotification.ts",
-    "src/hooks/useTheme.ts"
+    "src/hooks/useTestNotification.ts"
    ]
   },
   {
@@ -21274,7 +21274,7 @@
   {
    "module": "src/lib",
    "files": 47,
-   "lines": 4131,
+   "lines": 4144,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -21296,7 +21296,7 @@
     "phone.ts: PhoneValidationResult, validateBrazilianPhone, maskBrazilianPhone",
     "postMessage.ts: BITRIX24_CONNECTED, isTrustedBitrix24Origin",
     "postgrest.ts: escapeIlike, buildOrIlike",
-    "roles.ts: AppRole, ROLE_ORDER, roleHierarchy, roleLevel, meetsRole, hasRole",
+    "roles.ts: AppRole, ROLE_ORDER, roleHierarchy, roleLevel, meetsRole, getHighestRole",
     "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, statusColorCss, STATUS_GLYPH, STATUS_A11Y_LABEL",
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
     "uapiErrors.ts: UapiErrorInfo, UAPI_ERROR_MAP, resolveUapiError, isUapiAuthFailure",
@@ -22006,13 +22006,12 @@
     ],
     "select": [
      "scripts/seed-database.ts",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/Sidebar.tsx",
      "src/hooks/useActiveAlerts.ts",
      "src/hooks/useAnalyticsData.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useSLAMetrics.ts",
+     "src/hooks/useSidebarCounts.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/route-analyzer/index.ts"
@@ -22171,15 +22170,14 @@
     ],
     "select": [
      "scripts/seed-database.ts",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/Sidebar.tsx",
      "src/hooks/useAnalyticsData.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useMetrics.ts",
      "src/hooks/usePendingApprovals.ts",
      "src/hooks/usePredictiveAnalysis.ts",
-     "src/hooks/useSLAMetrics.ts"
+     "src/hooks/useSLAMetrics.ts",
+     "src/hooks/useSidebarCounts.ts"
     ],
     "update": [
      "src/hooks/useApprovalActions.ts"
@@ -22205,12 +22203,11 @@
     ],
     "select": [
      "scripts/seed-database.ts",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/Sidebar.tsx",
      "src/hooks/useDrivers.ts",
      "src/hooks/useIncidents.ts",
      "src/hooks/useMetrics.ts",
      "src/hooks/usePredictiveAnalysis.ts",
+     "src/hooks/useSidebarCounts.ts",
      "src/pages/reports/useReportData.ts",
      "supabase/functions/evaluate-driver/index.ts"
     ],
@@ -22715,8 +22712,6 @@
      "scripts/diagnose-rpc.ts",
      "scripts/fix-admin-role-active.ts",
      "scripts/set-user-admin.ts",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/Sidebar.tsx",
      "src/hooks/usePermissions.ts",
      "src/hooks/useRole.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
@@ -30314,6 +30309,11 @@
     "value": "100"
    },
    {
+    "file": "src/hooks/useSidebarCounts.ts",
+    "name": "STALE_TIME_MS",
+    "value": "30"
+   },
+   {
     "file": "src/integrations/supabase/previewAuthStorage.ts",
     "name": "RESULT",
     "value": "'lovable-preview-auth:result'"
@@ -30856,22 +30856,10 @@
     "kind": "escreve"
    },
    {
-    "file": "src/components/layout/MobileSidebar.tsx",
-    "field": "status",
-    "value": "PENDING",
-    "kind": "filtra"
-   },
-   {
     "file": "src/components/layout/Sidebar.tsx",
     "field": "type",
     "value": "spring",
     "kind": "escreve"
-   },
-   {
-    "file": "src/components/layout/Sidebar.tsx",
-    "field": "status",
-    "value": "PENDING",
-    "kind": "filtra"
    },
    {
     "file": "src/components/map/LiveMap.tsx",
@@ -32828,6 +32816,12 @@
     "field": "state",
     "value": "installed",
     "kind": "compara"
+   },
+   {
+    "file": "src/hooks/useSidebarCounts.ts",
+    "field": "status",
+    "value": "PENDING",
+    "kind": "filtra"
    },
    {
     "file": "src/hooks/useSoundSettings.ts",
@@ -46021,23 +46015,6 @@
       "escreve:src/hooks/useDrivers.ts",
       "escreve:supabase/functions/evaluate-driver/index.ts"
      ],
-     "PENDING": [
-      "compara:src/hooks/useAnalyticsData.ts",
-      "compara:src/hooks/useJobQueue.ts",
-      "compara:src/hooks/useMetrics.ts",
-      "compara:src/pages/JobQueuePage.tsx",
-      "escreve:src/hooks/useApprovalActions.ts",
-      "escreve:src/hooks/usePendingApprovals.ts",
-      "escreve:src/types/index.ts",
-      "escreve:supabase/functions/evaluate-driver/index.ts",
-      "filtra:src/components/layout/MobileSidebar.tsx",
-      "filtra:src/components/layout/Sidebar.tsx",
-      "filtra:src/hooks/useCommandPaletteSearch.ts",
-      "filtra:src/hooks/useDashboardStats.ts",
-      "filtra:src/hooks/usePendingApprovals.ts",
-      "filtra:src/hooks/usePredictiveAnalysis.ts",
-      "filtra:src/hooks/useSLAMetrics.ts"
-     ],
      "synced": [
       "escreve:src/components/ui/data-refresh-indicator.tsx"
      ],
@@ -46091,6 +46068,22 @@
       "compara:src/hooks/useAdvancedReports.ts",
       "compara:src/pages/AdvancedReportsPage.tsx",
       "escreve:src/hooks/useAdvancedReports.ts"
+     ],
+     "PENDING": [
+      "compara:src/hooks/useAnalyticsData.ts",
+      "compara:src/hooks/useJobQueue.ts",
+      "compara:src/hooks/useMetrics.ts",
+      "compara:src/pages/JobQueuePage.tsx",
+      "escreve:src/hooks/useApprovalActions.ts",
+      "escreve:src/hooks/usePendingApprovals.ts",
+      "escreve:src/types/index.ts",
+      "escreve:supabase/functions/evaluate-driver/index.ts",
+      "filtra:src/hooks/useCommandPaletteSearch.ts",
+      "filtra:src/hooks/useDashboardStats.ts",
+      "filtra:src/hooks/usePendingApprovals.ts",
+      "filtra:src/hooks/usePredictiveAnalysis.ts",
+      "filtra:src/hooks/useSLAMetrics.ts",
+      "filtra:src/hooks/useSidebarCounts.ts"
      ],
      "REJECTED": [
       "compara:src/hooks/useDeliveryMetrics.ts",
@@ -57649,97 +57642,24 @@
   },
   "src/components/layout/MobileSidebar.tsx": {
    "path": "src/components/layout/MobileSidebar.tsx",
-   "lines": 333,
+   "lines": 292,
    "exports": [
     "function MobileSidebar"
    ],
-   "tables": [
-    {
-     "table": "user_roles",
-     "op": "select"
-    },
-    {
-     "table": "alerts",
-     "op": "select"
-    },
-    {
-     "table": "driver_approval_queue",
-     "op": "select"
-    },
-    {
-     "table": "driver_incidents",
-     "op": "select"
-    }
-   ],
-   "table_cols": {
-    "user_roles": [
-     "role",
-     "user_id"
-    ],
-    "alerts": [
-     "is_dismissed",
-     "is_read"
-    ],
-    "driver_approval_queue": [
-     "status"
-    ],
-    "driver_incidents": [
-     "resolved"
-    ]
-   },
    "status_values": [
     {
      "field": "type",
      "value": "spring",
      "kind": "escreve"
-    },
-    {
-     "field": "status",
-     "value": "PENDING",
-     "kind": "filtra"
     }
    ]
   },
   "src/components/layout/Sidebar.tsx": {
    "path": "src/components/layout/Sidebar.tsx",
-   "lines": 195,
+   "lines": 174,
    "exports": [
     "function Sidebar"
    ],
-   "tables": [
-    {
-     "table": "user_roles",
-     "op": "select"
-    },
-    {
-     "table": "alerts",
-     "op": "select"
-    },
-    {
-     "table": "driver_approval_queue",
-     "op": "select"
-    },
-    {
-     "table": "driver_incidents",
-     "op": "select"
-    }
-   ],
-   "table_cols": {
-    "user_roles": [
-     "role",
-     "user_id"
-    ],
-    "alerts": [
-     "is_dismissed",
-     "is_read"
-    ],
-    "driver_approval_queue": [
-     "status"
-    ],
-    "driver_incidents": [
-     "resolved"
-    ]
-   },
    "navigates": [
     "/profile",
     "/settings"
@@ -57749,11 +57669,6 @@
      "field": "type",
      "value": "spring",
      "kind": "escreve"
-    },
-    {
-     "field": "status",
-     "value": "PENDING",
-     "kind": "filtra"
     }
    ]
   },
@@ -64231,6 +64146,55 @@
     }
    ]
   },
+  "src/hooks/useSidebarCounts.ts": {
+   "path": "src/hooks/useSidebarCounts.ts",
+   "lines": 59,
+   "exports": [
+    "function useSidebarCounts"
+   ],
+   "tables": [
+    {
+     "table": "alerts",
+     "op": "select"
+    },
+    {
+     "table": "driver_approval_queue",
+     "op": "select"
+    },
+    {
+     "table": "driver_incidents",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "alerts": [
+     "is_dismissed",
+     "is_read"
+    ],
+    "driver_approval_queue": [
+     "status"
+    ],
+    "driver_incidents": [
+     "resolved"
+    ]
+   },
+   "params": [
+    {
+     "name": "STALE_TIME_MS",
+     "value": "30"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "PENDING",
+     "kind": "filtra"
+    }
+   ],
+   "hooks": [
+    "useSidebarCounts"
+   ]
+  },
   "src/hooks/useSoundSettings.ts": {
    "path": "src/hooks/useSoundSettings.ts",
    "lines": 152,
@@ -65623,13 +65587,14 @@
   },
   "src/lib/roles.ts": {
    "path": "src/lib/roles.ts",
-   "lines": 55,
+   "lines": 68,
    "exports": [
     "type AppRole",
     "const ROLE_ORDER",
     "const roleHierarchy",
     "function roleLevel",
     "function meetsRole",
+    "function getHighestRole",
     "function hasRole",
     "function getRoleDisplayName",
     "function getRoleColor"
@@ -73529,10 +73494,23 @@
   }
  },
  "git": {
-  "sha": "5672ef043aa80199748583973cca853e57e42886",
+  "sha": "23148972fd2c0832d397ddb1f2869ed3521142eb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "2314897",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/components/layout/MobileSidebar.tsx",
+     "src/components/layout/Sidebar.tsx",
+     "src/hooks/useSidebarCounts.ts",
+     "src/lib/roles.ts"
+    ]
+   },
    {
     "sha": "5672ef0",
     "date": "2026-11-22",
@@ -73902,21 +73880,16 @@
      "supabase/tests/fixtures/route_curitiba_geo.json",
      "supabase/tests/run.sh"
     ]
-   },
-   {
-    "sha": "83125d1",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)",
-    "files": [
-     "supabase/migrations/20261124120000_internal_alert_channels.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    21
+    22
+   ],
+   [
+    "src/components/layout/MobileSidebar.tsx",
+    3
    ],
    [
     "src/App.tsx",
@@ -73939,7 +73912,11 @@
     3
    ],
    [
-    "src/components/layout/MobileSidebar.tsx",
+    "src/components/layout/Sidebar.tsx",
+    2
+   ],
+   [
+    "src/lib/roles.ts",
     2
    ],
    [
@@ -73984,14 +73961,6 @@
    ],
    [
     "docs/API_CONTRACTS.md",
-    2
-   ],
-   [
-    "supabase/functions/_shared/contract.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/schemas.ts",
     2
    ]
   ]

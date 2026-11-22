@@ -3500,6 +3500,7 @@
     "useProcessQueue",
     "usePullToRefresh",
     "usePushNotifications",
+    "useQueries",
     "useQuery",
     "useQueryClient",
     "useQueueStatistics",
@@ -3525,6 +3526,7 @@
     "useSearchParams",
     "useSecurityPushNotifications",
     "useServiceAreas",
+    "useSidebarCounts",
     "useSidebarCountsRealtime",
     "useSoundSettings",
     "useSpring",
@@ -3702,6 +3704,7 @@
     "useScheduledTheme",
     "useSecurityPushNotifications",
     "useServiceAreas",
+    "useSidebarCounts",
     "useSidebarCountsRealtime",
     "useSoundSettings",
     "useSystemHealth",
@@ -3833,7 +3836,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 279
+   "arquivos_puxados": 280
   }
  ],
  "menu": [
