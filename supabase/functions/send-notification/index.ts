@@ -19,7 +19,12 @@ import {
 import { zappChannelFromEnv, type SendOptions } from "../_shared/channels/zapp.ts";
 import { smsChannelFromEnv } from "../_shared/channels/sms.ts";
 import { dispatchSms } from "./sms-dispatch.ts";
-import { isRateLimited, DRIVER_RATE_LIMIT, RATE_LIMIT_EXEMPT_EVENTS } from "../_shared/messaging/router.ts";
+import {
+  isRateLimited,
+  DRIVER_RATE_LIMIT,
+  RATE_LIMIT_EXEMPT_EVENTS,
+  needsImmediateFallback,
+} from "../_shared/messaging/router.ts";
 
 import { buildClientMessageId, buildCorrelation } from "./message-id.ts";
 import { normalizePhone } from "../_shared/phone.ts";
@@ -290,6 +295,20 @@ serve(async (req) => {
         default:
           result = { success: false, error: `Unsupported channel: ${channel}` };
       }
+
+      // Etapa 91: recusa definitiva do WhatsApp (numero invalido, instancia fora,
+      // destinatario bloqueado) nao espera o fallback temporizado — o texto sai
+      // por SMS agora, senao o motorista so descobre que perdeu a entrega quando
+      // o cliente liga. Motivo transitorio (429/5xx) continua no WhatsApp.
+      const waErrorCode = (result as { errorCode?: string }).errorCode;
+      if (channel === "whatsapp" && !result.success && needsImmediateFallback(waErrorCode) && smsChannelFromEnv()) {
+        logger.log(`[WhatsApp] ${waErrorCode} — contingencia imediata por SMS (etapa 91)`);
+        const smsResult = await sendSms(recipient, title, effectiveMessage, order_id);
+        await recordNotificationLog(supabase, alert_id, "sms", recipient, smsResult.success, smsResult.error);
+        results.push({ channel: `sms:${recipient}`, ...smsResult });
+        if (smsResult.success) result = { success: true };
+      }
+
       results.push({ channel: `${channel}:${recipient}`, ...result });
       await recordNotificationLog(supabase, alert_id, channel, recipient, result.success, result.error);
       return result;

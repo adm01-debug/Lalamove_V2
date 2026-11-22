@@ -502,8 +502,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** teste com Zapp sem callback → SMS sai no prazo
 
 ### 91 — [L] Fallback imediato
-- [ ] `invalid_number`, `instance_unavailable`, `recipient_blocked`, `channel.status=down` → SMS na hora
-- **Evidência:** cada código testado
+- [x] `invalid_number`, `instance_unavailable`, `recipient_blocked`, `channel.status=down` → SMS na hora
+- **Evidência:** `_shared/messaging/router.ts` (`IMMEDIATE_FALLBACK_REASONS`, `needsImmediateFallback`); `zapp.ts` mapeia o código → `errorCode`; `send-notification/index.ts` (dentro do `dispatch`) troca por SMS quando o código está naquela lista e o canal SMS existe; os 4 códigos e o negativo (`timeout`) testados em `router.test.ts`
 
 ### 92 — [L] Opt-out unificado
 - [ ] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
