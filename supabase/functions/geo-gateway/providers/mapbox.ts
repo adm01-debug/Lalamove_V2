@@ -341,13 +341,17 @@ export class MapboxProvider implements GeoProvider {
       annotations: "duration,distance", language: req.language ?? "pt",
     });
     const coords = pts.map(fmt).join(";");
+    // POST do Directions (docs.mapbox.com/api/navigation/http-post/): só access_token
+    // fica na query; coordinates e TODO o resto de `p` (geometries, overview, steps,
+    // alternatives, annotations, language) vão no corpo application/x-www-form-urlencoded.
+    const postBody = new URLSearchParams(p);
+    postBody.set("coordinates", coords);
     const json = await this.call<{ routes?: Array<Record<string, unknown>> }>(
       "directions",
       `${BASE}/directions/v5/mapbox/${profile}/${coords}?${p}`,
       undefined,
       1,
-      // POST do Directions não leva coordenadas no caminho — só no corpo.
-      { url: `${BASE}/directions/v5/mapbox/${profile}?${p}`, body: `coordinates=${encodeURIComponent(coords)}` },
+      { url: `${BASE}/directions/v5/mapbox/${profile}`, body: postBody.toString() },
     );
     const r = json.routes?.[0];
     if (!r) throw new GeoProviderError("GEO_NO_ROUTE", "Sem rota", 404);
@@ -417,8 +421,13 @@ export class MapboxProvider implements GeoProvider {
       `${BASE}/matching/v5/mapbox/${snapProfile}/${pts.map(fmt).join(";")}?${p}`,
       undefined,
       1,
-      // POST do Map Matching, igual Directions: coordenadas só no corpo.
-      { url: `${BASE}/matching/v5/mapbox/${snapProfile}?${p}`, body: `coordinates=${encodeURIComponent(pts.map(fmt).join(";"))}` },
+      // Mesmo contrato do Directions: só access_token na query, resto de `p`
+      // (geometries, overview, steps, tidy, radiuses, timestamps) + coordinates no corpo.
+      (() => {
+        const postBody = new URLSearchParams(p);
+        postBody.set("coordinates", pts.map(fmt).join(";"));
+        return { url: `${BASE}/matching/v5/mapbox/${snapProfile}`, body: postBody.toString() };
+      })(),
     );
     const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
     const m = json.matchings?.[0];

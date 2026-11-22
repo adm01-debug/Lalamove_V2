@@ -284,8 +284,15 @@ Deno.test("etapa 32: route() com 414 (URL acima de 8 KB) refaz como POST — coo
   assertEquals(calls[0].method, undefined);
   assert(calls[0].url.includes(`/directions/v5/mapbox/driving-traffic/-49.27,-25.43;-49.23,-25.44`), "GET leva as coordenadas no caminho");
   assertEquals(calls[1].method, "POST");
-  assert(!calls[1].url.includes("-49.27,-25.43;-49.23,-25.44"), "POST não repete as coordenadas na URL");
-  assertEquals(calls[1].body, "coordinates=-49.27%2C-25.43%3B-49.23%2C-25.44");
+  assert(calls[1].url === `https://api.mapbox.com/directions/v5/mapbox/driving-traffic?access_token=t`, "POST só leva access_token na URL");
+  // docs.mapbox.com/api/navigation/http-post/: coordinates + todas as outras opções no corpo
+  const body = new URLSearchParams(calls[1].body ?? "");
+  assertEquals(body.get("coordinates"), "-49.27,-25.43;-49.23,-25.44");
+  assertEquals(body.get("geometries"), "polyline6");
+  assertEquals(body.get("overview"), "full");
+  assertEquals(body.get("alternatives"), "false");
+  assertEquals(body.get("annotations"), "duration,distance");
+  assertEquals(body.get("language"), "pt");
   assertEquals(r.data.distance_m, 1000);
 });
 
@@ -302,8 +309,11 @@ Deno.test("etapa 32: snap() com 414 refaz como POST — mesmo contrato do Direct
   assertEquals(calls.length, 2);
   assert(calls[0].url.includes("/matching/v5/mapbox/driving/-49.27,-25.43;-49.23,-25.44"));
   assertEquals(calls[1].method, "POST");
-  assert(!calls[1].url.includes("-49.27,-25.43;-49.23,-25.44"), "POST não repete as coordenadas na URL");
-  assertEquals(calls[1].body, "coordinates=-49.27%2C-25.43%3B-49.23%2C-25.44");
+  assert(calls[1].url === `https://api.mapbox.com/matching/v5/mapbox/driving?access_token=t`, "POST só leva access_token na URL");
+  const body = new URLSearchParams(calls[1].body ?? "");
+  assertEquals(body.get("coordinates"), "-49.27,-25.43;-49.23,-25.44");
+  assertEquals(body.get("geometries"), "geojson");
+  assertEquals(body.get("radiuses"), "25;25");
 });
 
 Deno.test("etapa 32: 414 persiste mesmo via POST → GEO_INVALID_INPUT (um retry só, não fica tentando pra sempre)", async () => {
