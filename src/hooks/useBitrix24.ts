@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { BITRIX24_CONNECTED, isTrustedBitrix24Origin } from "@/lib/postMessage";
 
 interface ConnectionStatus {
   connected: boolean;
@@ -108,20 +109,27 @@ export function useBitrix24() {
       if (error) throw error;
       
       const popup = window.open(data.auth_url, "bitrix24_auth", "width=600,height=700");
-      
+
+      if (!popup) {
+        setIsConnecting(false);
+        toast.error("Não foi possível abrir a janela de autenticação. Permita pop-ups para continuar.");
+        return;
+      }
+
       const handleMessage = (event: MessageEvent) => {
-        if (event.data === "bitrix24_connected") {
-          queryClient.invalidateQueries({ queryKey: ["bitrix24-connection"] });
-          toast.success("Bitrix24 conectado com sucesso!");
-          window.removeEventListener("message", handleMessage);
-          setIsConnecting(false);
-        }
+        if (event.data !== BITRIX24_CONNECTED) return;
+        if (!isTrustedBitrix24Origin(event.origin, window.location.origin, import.meta.env.VITE_SUPABASE_URL)) return;
+        queryClient.invalidateQueries({ queryKey: ["bitrix24-connection"] });
+        toast.success("Bitrix24 conectado com sucesso!");
+        window.removeEventListener("message", handleMessage);
+        clearTimeout(timeoutId);
+        setIsConnecting(false);
       };
       
       window.addEventListener("message", handleMessage);
       
       // Fallback timeout
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         window.removeEventListener("message", handleMessage);
         setIsConnecting(false);
       }, 120000);
