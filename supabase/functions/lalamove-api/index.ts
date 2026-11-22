@@ -735,6 +735,10 @@ serve(async (req) => {
             delivery_place_id: (requestMetadata?.deliveryPlaceId as string) ?? null,
             pickup_address_components: (requestMetadata?.pickupAddressComponents as Record<string, string>) ?? null,
             delivery_address_components: (requestMetadata?.deliveryAddressComponents as Record<string, string>) ?? null,
+            // Etapa 90: override por pedido dos padroes de geo_defaults. NULL = herda.
+            approach_radius_m: typeof requestMetadata?.approachRadiusM === 'number' ? requestMetadata.approachRadiusM as number : null,
+            approach_eta_min: typeof requestMetadata?.approachEtaMin === 'number' ? requestMetadata.approachEtaMin as number : null,
+            notify_delivery_contact: typeof requestMetadata?.notifyDeliveryContact === 'boolean' ? requestMetadata.notifyDeliveryContact as boolean : null,
           }).select('id').single();
 
           // As coordenadas reais vêm da resposta da Lalamove (a cotação geocodifica).

@@ -164,6 +164,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     supplierContact: '',
     stalledThreshold: 15,
     requiresPod: true,
+    // Etapa 90: override por pedido dos padrões globais de `geo_defaults`.
+    // Vazio = herda o padrão; preenchido = vale só para este pedido.
+    approachRadius: '' as string,
+    approachEta: '' as string,
+    notifyDeliveryContact: 'inherit' as 'inherit' | 'yes' | 'no',
   });
 
   // Etapa 35: coordenada escolhida no autocomplete. A cotação aceita só texto (a
@@ -433,7 +438,15 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
             autoNotifySupplier: form.autoNotifySupplier,
             supplierContact: form.supplierContact.trim(),
             stalledThresholdMinutes: form.stalledThreshold,
-            requiresPod: form.requiresPod
+            requiresPod: form.requiresPod,
+            // Etapa 90: o backend grava estes em lalamove_orders; o trigger
+            // geo_evaluate_tracking usa o valor do pedido e cai em geo_defaults
+            // quando vem null. Vazio = herda o padrão global.
+            ...(form.approachRadius.trim() && { approachRadiusM: Number(form.approachRadius) }),
+            ...(form.approachEta.trim() && { approachEtaMin: Number(form.approachEta) }),
+            ...(form.notifyDeliveryContact !== 'inherit' && {
+              notifyDeliveryContact: form.notifyDeliveryContact === 'yes',
+            }),
           },
         },
       });
@@ -519,6 +532,9 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
       supplierContact: '',
       stalledThreshold: 15,
       requiresPod: true,
+      approachRadius: '',
+      approachEta: '',
+      notifyDeliveryContact: 'inherit' as 'inherit' | 'yes' | 'no',
     });
   };
 
@@ -960,6 +976,54 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              {/* Etapa 90: override dos padrões globais de aviso por pedido. */}
+              <div className="pt-2 border-t border-border/50 space-y-3">
+                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Avisos de aproximação</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs">Raio de aproximação (m)</Label>
+                    <Input
+                      className="h-8 text-xs"
+                      type="number"
+                      min={0}
+                      placeholder="Padrão do sistema"
+                      value={form.approachRadius}
+                      onChange={e => updateField('approachRadius', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">ETA de aproximação (min)</Label>
+                    <Input
+                      className="h-8 text-xs"
+                      type="number"
+                      min={0}
+                      placeholder="Padrão do sistema"
+                      value={form.approachEta}
+                      onChange={e => updateField('approachEta', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Avisar contato de entrega</Label>
+                  <Select
+                    value={form.notifyDeliveryContact}
+                    onValueChange={(v) => updateField('notifyDeliveryContact', v)}
+                  >
+                    <SelectTrigger className="h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="inherit">Usar o padrão do sistema</SelectItem>
+                      <SelectItem value="yes">Sim, avisar neste pedido</SelectItem>
+                      <SelectItem value="no">Não avisar neste pedido</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <p className="text-[10px] text-muted-foreground">
+                  Em branco, o pedido herda o padrão global configurado em Provedores de mapa.
+                </p>
               </div>
             </div>
 
