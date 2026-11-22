@@ -29,6 +29,27 @@ export interface GeoAddress {
     country?: string;
   };
   provider: 'google' | 'mapbox';
+  /** Precisão do provedor: exact | high | medium | low | unknown (etapa 20) */
+  precision?: string;
+  /**
+   * Ponto de acesso do veículo (etapa 21). O Mapbox devolve `routable_points[]`
+   * quando a rua não é acessível no número exato — condomínio, viela, rodovia.
+   * Sempre que existir, é a coordenada correta para coleta/entrega: é onde o
+   * motorista consegue parar, não o centroide do imóvel.
+   */
+  routable_point?: { lat: number; lng: number } | null;
+}
+
+/**
+ * Coordenada de coleta/entrega: prioriza o ponto roteável e cai para o centroide.
+ * Retorna `null` quando o provedor não devolveu nenhum dos dois — nunca `[0,0]`,
+ * que viraria pedido no Golfo da Guiné.
+ */
+export function resolveDeliveryPoint(address: GeoAddress): { lat: number; lng: number } | null {
+  if (address.routable_point?.lat != null && address.routable_point?.lng != null) {
+    return address.routable_point;
+  }
+  return address.location ?? null;
 }
 
 function newSessionToken(): string {

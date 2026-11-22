@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { useAddressSearchBox } from './useGeoSearch';
+import { useAddressSearchBox, resolveDeliveryPoint } from './useGeoSearch';
 
 const invokeMock = vi.fn();
 
@@ -24,7 +24,7 @@ describe('useAddressSearchBox', () => {
     invokeMock.mockReset();
   });
 
-  it('busca sugestões com action autocomplete e session_token', async () => {
+  it('busca sugestÃµes com action autocomplete e session_token', async () => {
     invokeMock.mockResolvedValue({ data: [{ id: 'mapbox:1', main_text: 'Rua A', secondary_text: 'Curitiba', type: 'address', provider: 'mapbox' }], error: null });
 
     const { result } = renderHook(() => useAddressSearchBox('Rua A', true), { wrapper });
@@ -37,7 +37,7 @@ describe('useAddressSearchBox', () => {
     expect((opts.body.session_token as string).length).toBeGreaterThanOrEqual(8);
   });
 
-  it('isError fica true quando a busca de sugestões falha (ex.: 429)', async () => {
+  it('isError fica true quando a busca de sugestÃµes falha (ex.: 429)', async () => {
     invokeMock.mockResolvedValue({ data: null, error: new Error('rate limited') });
 
     const { result } = renderHook(() => useAddressSearchBox('Rua A', true), { wrapper });
@@ -45,7 +45,7 @@ describe('useAddressSearchBox', () => {
     expect(result.current.suggestions).toEqual([]);
   });
 
-  it('retrieve manda o mesmo session_token do autocomplete e depois renova para a próxima sessão', async () => {
+  it('retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o', async () => {
     invokeMock.mockResolvedValue({ data: [], error: null });
     const { result } = renderHook(() => useAddressSearchBox('Rua A', true), { wrapper });
     await waitFor(() => expect(invokeMock).toHaveBeenCalled());
@@ -69,5 +69,35 @@ describe('useAddressSearchBox', () => {
     const { result } = renderHook(() => useAddressSearchBox('', false), { wrapper });
 
     await expect(result.current.retrieve('mapbox:1')).rejects.toThrow('network down');
+  });
+});
+
+describe('resolveDeliveryPoint', () => {
+  const base = {
+    formatted: 'Rua A, 1',
+    place_id: 'mapbox:1',
+    components: {},
+    provider: 'mapbox' as const,
+  };
+
+  it('prefere o ponto roteÃ¡vel ao centroide do imÃ³vel', () => {
+    // Caso real medido: Av. Paulista 1578 devolve centroide no imÃ³vel e ponto
+    // roteÃ¡vel na via â€” o motorista precisa do segundo.
+    const point = resolveDeliveryPoint({
+      ...base,
+      location: { lat: -23.561459, lng: -46.655928 },
+      routable_point: { lat: -23.561655, lng: -46.656126 },
+    });
+    expect(point).toEqual({ lat: -23.561655, lng: -46.656126 });
+  });
+
+  it('cai para o centroide quando nÃ£o hÃ¡ ponto roteÃ¡vel', () => {
+    const point = resolveDeliveryPoint({ ...base, location: { lat: -25.4, lng: -49.2 } });
+    expect(point).toEqual({ lat: -25.4, lng: -49.2 });
+  });
+
+  it('devolve null sem coordenada nenhuma (nunca [0,0])', () => {
+    expect(resolveDeliveryPoint({ ...base, location: null })).toBeNull();
+    expect(resolveDeliveryPoint({ ...base, location: null, routable_point: null })).toBeNull();
   });
 });

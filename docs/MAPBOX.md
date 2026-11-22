@@ -83,19 +83,49 @@ Roteiro e o que está realmente verificado. **Estado: roteiro escrito, execuçã
 
 **Para fechar a etapa 72:** (a) implementar o provedor Google no `geo-gateway` (Bloco 2 do plano Google); (b) rodar os passos 2–7 com um usuário real e preencher a coluna de resultado.
 
-## Cobertura BR do Search Box (etapa 36)
+## Cobertura BR do Search Box (etapa 36) — MEDIDO em 2026-11-22
 
-NÃO VERIFICADO — executar `scripts/geo/searchbox-coverage.ts` após criar `MAPBOX_SERVER_TOKEN`.
+Critério de aceite: ≥ 90 % dos endereços com `accuracy ∈ {rooftop, parcel, point}` e distância ≤ 50 m do controle.
 
-Critério de aceite: ≥ 90 % dos endereços com `accuracy ∈ {rooftop, parcel, point}` e distância ≤ 50 m do resultado Google.
-Se reprovar: `geo_settings.autocomplete.config.mapbox_mode = 'geocoding'` → Geocoding v6 `autocomplete=true`.
+**Resultado: REPROVADO.** 30/50 endereços (60 %) em Curitiba, São Paulo e Goiânia
+(`scripts/geo/enderecos.sample.csv`, 50 sessões Search Box consumidas, custo US$ 0,00).
+
+| Cidade | Aprovação | Padrão observado |
+|---|---|---|
+| São Paulo | 11/11 (100 %) | `rooftop`/`point`, desvio 0 m |
+| Curitiba | ~40 % | misto `point`/`interpolated` |
+| Goiânia | ~20 % | quase tudo `interpolated` |
+
+### Etapa 22 (fallback Geocoding v6) — DESCARTADA por medição
+
+O script mede **os dois modos no mesmo dataset**, colunas `Search Box accuracy` e `Geocoding v6 accuracy`:
+
+| Modo | Aprovação | d(SB, v6) |
+|---|---|---|
+| Search Box (`searchbox/v1/suggest` + `retrieve`) | 30/50 (60 %) | — |
+| Geocoding v6 (`geocode/v6/forward?autocomplete=true`) | 30/50 (60 %) | **0 m em 50/50** |
+
+Conclusão: **implementar `mapbox_mode='geocoding'` não muda nada** — os dois modos devolvem
+exatamente as mesmas coordenadas com a mesma classe de acurácia. A flag `mapbox_mode` nunca foi
+implementada no `geo-gateway` e **não deve ser**: não há ganho a capturar.
+
+O gap de cobertura é de **dados** (a malha de numeração da Mapbox para Goiânia e parte de Curitiba é
+interpolada), não de endpoint. Caminhos efetivos, em ordem de custo:
+
+1. Enriquecer a base de entrada (o CSV é amostra genérica; a lista real vem do Bitrix24 com CEP).
+   Com CEP, o `structured` do Geocoding v6 sobe de `interpolated` para `rooftop`.
+2. Google Geocoding v4 (etapa 94) como `fallback_provider` para `autocomplete` — hoje bloqueada por
+   ausência de `GOOGLE_MAPS_SERVER_KEY`.
+3. Pedir correção da malha à Mapbox para os eixos críticos.
+
+Regenerar a medição: `MAPBOX_SERVER_TOKEN=<pk|sk> deno run --allow-net --allow-env --allow-read scripts/geo/searchbox-coverage.ts scripts/geo/enderecos.sample.csv`
 
 ## Estado real da camada geo (medido em 2026-11-22)
 
 | Item | Valor observado |
 |---|---|
 | Conta Mapbox | `promobrindes` (token `pk.` público do front, sem restrição de URL) |
-| `MAPBOX_SERVER_TOKEN` (`sk.`) | **ausente** — `provider-status` sinaliza, e toda chamada de servidor usa o `pk.` |
+| `MAPBOX_SERVER_TOKEN` (`sk.`) | **ausente** — `provider-status` sinaliza, e toda chamada de servidor usa o `pk.` de `MAPBOX_ACCESS_TOKEN` |
 | Provedor padrão por função | `mapbox` em todas; `fallback_provider = google` |
 | Google | sem `GOOGLE_MAPS_SERVER_KEY` — nunca ativado em produção |
 | Único caminho de código do front | `geo-gateway` (o `mapbox-proxy` ficou sem chamador após a etapa 60/61) |
@@ -142,6 +172,9 @@ Acima desse volume o modo `auto` deve desviar autocomplete para Google (US$ 2,83
 ## Paridade ETA Google × Mapbox (etapa 51)
 
 NÃO VERIFICADO — executar `scripts/geo/eta-parity.ts` após criar `MAPBOX_SERVER_TOKEN`.
+
+> Nota (2026-11-22): o token que está em produção é um `pk.` (público) — ver "Estado real". Enquanto
+> não existir `sk.`, todo tráfego de servidor sai com o token público, que não tem escopo de servidor.
 
 ## Decisões de arquitetura (M1–M10)
 

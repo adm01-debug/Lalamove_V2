@@ -5,7 +5,7 @@ import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigat
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
-import { useAddressSearchBox, type GeoSuggestion } from '@/hooks/useGeoSearch';
+import { useAddressSearchBox, resolveDeliveryPoint, type GeoSuggestion } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -91,19 +91,31 @@ export function AddressAutocomplete({
     if (!address) return;
     setInputValue(address.formatted);
     onChange(address.formatted);
+    // Etapa 20: avisa quando o provedor devolveu coordenada interpolada/aproximada —
+    // 40 % dos endereços BR medidos (etapa 36) caem em `interpolated`; sem isto o operador
+    // grava um ponto a centenas de metros do imóvel sem saber.
+    if (address.precision && (address.precision === 'medium' || address.precision === 'low')) {
+      toast.warning('Endereço localizado com precisão aproximada — confira o ponto no mapa antes de salvar.');
+    }
+    // Sem coordenada o retrieve não localizou o ponto: nunca propagar [0,0] (que cai no
+    // Golfo da Guiné e vira ponto de entrega inválido). Só o texto fica preenchido.
+    const point = resolveDeliveryPoint(address);
+    if (!point) {
+      toast.warning('Endereço encontrado sem coordenada — selecione outro resultado ou marque o ponto no mapa.');
+      setOpen(false);
+      return;
+    }
     if (onSelectMapbox || onCoordinatesChange) {
       const feature: MapboxFeature = {
         id: address.place_id ?? suggestion.id,
         place_name: address.formatted,
         text: suggestion.main_text,
-        center: address.location ? [address.location.lng, address.location.lat] : [0, 0],
+        center: [point.lng, point.lat],
         place_type: [suggestion.type],
-        geometry: { type: 'Point', coordinates: address.location ? [address.location.lng, address.location.lat] : [0, 0] },
+        geometry: { type: 'Point', coordinates: [point.lng, point.lat] },
       };
       onSelectMapbox?.(feature);
-      if (address.location && onCoordinatesChange) {
-        onCoordinatesChange(address.location.lat, address.location.lng);
-      }
+      onCoordinatesChange?.(point.lat, point.lng);
     }
     setOpen(false);
   };

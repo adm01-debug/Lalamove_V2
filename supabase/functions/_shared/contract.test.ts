@@ -322,3 +322,28 @@ Deno.test("buildContractUsageEvent: deprecated reflete DEPRECATED_VERSIONS", () 
     assertEquals(ev.deprecated, DEPRECATED_VERSIONS.includes("v1"));
   }
 });
+
+// ── geo-gateway place-details: aceita `mapbox_id` real ───────────────────────
+// Os IDs do Search Box e do Geocoding v6 são base64url opacos: 292 caracteres em
+// sugestão de rua e ~370 em endereço (medido em produção em 2026-11-22). Com
+// max(200) toda seleção de endereço no autocomplete falhava em 422 e nenhuma
+// coordenada era gravada.
+Deno.test("geo-gateway place-details aceita mapbox_id de 370 caracteres", () => {
+  const mapboxId = `mapbox:${"dXJuOm1ieGFkci1pdHA6".repeat(18)}`;
+  assert(mapboxId.length > 300);
+  const result = validateContract(
+    getSchema("geo-gateway", "v1"),
+    { action: "place-details", place_id: mapboxId },
+    "v1",
+  );
+  assert(result.ok, `payload com mapbox_id real foi rejeitado: ${JSON.stringify(result)}`);
+});
+
+Deno.test("geo-gateway place-details rejeita place_id acima de 1024", () => {
+  const result = validateContract(
+    getSchema("geo-gateway", "v1"),
+    { action: "place-details", place_id: "x".repeat(1025) },
+    "v1",
+  );
+  assert(!result.ok);
+});

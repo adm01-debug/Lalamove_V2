@@ -144,7 +144,12 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
   }),
   z.object({
     action: z.literal("place-details"),
-    place_id: z.string().min(3).max(200),
+    // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o
+    // tamanho do endereço: 70 chars em SP (rodovia/POI) e até 574 em Curitiba/Goiânia
+    // (endereço completo com distrito e CEP), medido em produção em 2026-11-22. Com
+    // max(200) o retrieve de endereço fora de SP falhava em 422 e a seleção no
+    // autocomplete nunca gravava coordenada.
+    place_id: z.string().min(3).max(1024),
     session_token: z.string().min(8).max(64).optional(),
     provider: geoProvider,
   }),
