@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { supabase } from '@/integrations/supabase/client';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { buildOrIlike } from '@/lib/postgrest';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 import {
   LayoutDashboard, Package, Users, Map, Bell, Settings,
@@ -186,15 +187,18 @@ export function useCommandPaletteSearch() {
     const searchDatabase = async () => {
       setIsSearching(true);
       const results: SearchResult[] = [];
-      const searchTerm = `%${debouncedQuery}%`;
       try {
-        const { data: orders } = await supabase.from('lalamove_orders').select('id, lalamove_id, customer_name, delivery_address, status, created_at').or(`customer_name.ilike.${searchTerm},lalamove_id.ilike.${searchTerm},delivery_address.ilike.${searchTerm}`).order('created_at', { ascending: false }).limit(5);
+        const { data: orders, error: ordersError } = await supabase.from('lalamove_orders').select('id, lalamove_id, customer_name, delivery_address, status, created_at').or(buildOrIlike(['customer_name', 'lalamove_id', 'delivery_address'], debouncedQuery)).order('created_at', { ascending: false }).limit(5);
+        if (ordersError) logger.error('Busca de pedidos falhou:', ordersError);
         orders?.forEach(order => results.push({ id: order.id, type: 'order', title: order.customer_name, subtitle: order.lalamove_id, badge: { label: order.status, variant: order.status === 'COMPLETED' ? 'default' : order.status === 'CANCELLED' ? 'destructive' : 'secondary' }, path: `/orders?highlight=${order.id}`, timestamp: order.created_at }));
-        const { data: drivers } = await supabase.from('drivers').select('id, name, phone, vehicle_type, status, risk_level').or(`name.ilike.${searchTerm},phone.ilike.${searchTerm},vehicle_plate.ilike.${searchTerm}`).limit(5);
+        const { data: drivers, error: driversError } = await supabase.from('drivers').select('id, name, phone, vehicle_type, status, risk_level').or(buildOrIlike(['name', 'phone', 'vehicle_plate'], debouncedQuery)).limit(5);
+        if (driversError) logger.error('Busca de motoristas falhou:', driversError);
         drivers?.forEach(driver => results.push({ id: driver.id, type: 'driver', title: driver.name, subtitle: driver.phone || driver.vehicle_type, badge: { label: driver.risk_level || driver.status, variant: driver.status === 'BLOCKED' || driver.risk_level === 'HIGH' ? 'destructive' : driver.status === 'APPROVED' ? 'default' : 'secondary' }, path: `/drivers?highlight=${driver.id}` }));
-        const { data: alerts } = await supabase.from('alerts').select('id, title, message, severity, type, created_at, is_read').or(`title.ilike.${searchTerm},message.ilike.${searchTerm}`).order('created_at', { ascending: false }).limit(5);
+        const { data: alerts, error: alertsError } = await supabase.from('alerts').select('id, title, message, severity, type, created_at, is_read').or(buildOrIlike(['title', 'message'], debouncedQuery)).order('created_at', { ascending: false }).limit(5);
+        if (alertsError) logger.error('Busca de alertas falhou:', alertsError);
         alerts?.forEach(alert => results.push({ id: alert.id, type: 'alert', title: alert.title, subtitle: alert.message?.substring(0, 50), badge: { label: alert.severity, variant: alert.severity === 'CRITICAL' ? 'destructive' : alert.severity === 'WARNING' ? 'secondary' : 'outline' }, path: `/alerts?highlight=${alert.id}`, timestamp: alert.created_at }));
-        const { data: approvals } = await supabase.from('driver_approval_queue').select('id, driver_name, driver_id, status, risk_score, requested_at').eq('status', 'PENDING').or(`driver_name.ilike.${searchTerm}`).limit(3);
+        const { data: approvals, error: approvalsError } = await supabase.from('driver_approval_queue').select('id, driver_name, driver_id, status, risk_score, requested_at').eq('status', 'PENDING').or(buildOrIlike(['driver_name'], debouncedQuery)).limit(3);
+        if (approvalsError) logger.error('Busca de aprovações falhou:', approvalsError);
         approvals?.forEach(approval => results.push({ id: approval.id, type: 'approval', title: approval.driver_name || 'Motorista', subtitle: `Risco: ${approval.risk_score}`, badge: { label: 'PENDENTE', variant: 'secondary' }, path: `/approvals?highlight=${approval.id}`, timestamp: approval.requested_at }));
         setSearchResults(results);
       } catch (error) { logger.error('Search error:', error); } finally { setIsSearching(false); }

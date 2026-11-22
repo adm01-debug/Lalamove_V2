@@ -121,8 +121,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `rg -n "signUp" src` retorna 0; tela `/auth` só com login/esqueci a senha.
 
 ### 10 — [F] Sanitizar a busca global contra injeção de filtro PostgREST
-- [ ] Criar `src/lib/postgrest.ts` com `escapeIlike(q)` (remove `,`, `(`, `)`, `.`, `%`, `\\`) e `buildOrIlike(fields, q)`.
-- [ ] Usar em `src/hooks/useGlobalSearch.ts:123-135` e `src/hooks/useCommandPaletteSearch.ts:191-197`; tratar `error` das 4 queries.
+- [x] Criar `src/lib/postgrest.ts` com `escapeIlike(q)` (remove `,`, `(`, `)`, `.`, `%`, `\\`) e `buildOrIlike(fields, q)`.
+- [x] Usar em `src/hooks/useGlobalSearch.ts:123-135` e `src/hooks/useCommandPaletteSearch.ts:191-197`; tratar `error` das 4 queries.
 - **Evidência:** teste unitário com `a,b)c` gera filtro válido; busca com vírgula não gera erro 400 na aba Network.
 
 ### 11 — [F] Validar a origem do `postMessage` do Bitrix24
