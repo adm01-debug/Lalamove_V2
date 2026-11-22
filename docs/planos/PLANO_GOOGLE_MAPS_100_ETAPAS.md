@@ -43,6 +43,16 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 >
 > **Verificação de execução:** `deno test` do `geo-gateway` → **103 passed / 0 failed**.
 
+> **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
+> implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
+> **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
+> 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Contagem: **87 `[x]` / 103 `[ ]`**.
+> Gaps reais confirmados que seguem abertos: 33 (`useGeo.ts` é só re-export; `src/types/geo.ts` não existe),
+> 56 (sem destinatário interno), 60 (`notification_optouts` só na PR #221), 61 (`tracking_status='ended'` só
+> na PR #221), 66 (união ad-hoc × `alert_configurations` ainda não explícita), 68 (`sendMedia` inexistente),
+> 70 (`check-driver-alerts` sem `cron.schedule`), 83 (`mapbox-proxy`/`get-mapbox-token` ainda no ar),
+> 85 (rota existe, entrada de menu não), 94 (`provider-status` pós-deploy ausente).
+
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
 | # | Decisão | Padrão adotado | Onde impacta |
@@ -243,16 +253,28 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** teste Deno com `geo_budget` mockado em 100% → resposta usa fallback
 
 ### 31 — Cache + medição
-- [ ] `withCache(function, req, fn)`: chave sha256; TTL da etapa 14; `HIT` não conta uso
-- [ ] Após cada chamada real: `geo_usage_increment(provider, function, sku, units, unit_cost)` com `unit_cost` de `geo_price_list` (considera cota grátis do mês: custo 0 até `free_quota_month`)
-- [ ] Header de resposta `X-Geo-Provider`, `X-Geo-Cache: HIT|MISS`, `X-Geo-Sku`
+- [x] `withCache(function, req, fn)`: chave sha256; TTL da etapa 14; `HIT` não conta uso
+- [x] Após cada chamada real: `geo_usage_increment(provider, function, sku, units, unit_cost)` com `unit_cost` de `geo_price_list` (considera cota grátis do mês: custo 0 até `free_quota_month`)
+- [x] Header de resposta `X-Geo-Provider`, `X-Geo-Cache: HIT|MISS`, `X-Geo-Sku`
 - **Evidência:** 2 chamadas iguais de geocode → 2ª com `X-Geo-Cache: HIT`; `geo_usage.count = 1`
 
+**Auditado (2026-11-22).** Implementado no `geo-gateway` como camada única:
+- Chave: `cacheKey()` → `crypto.subtle.digest("SHA-256", ...)` em `metering.ts:42`; TTL vem de `resolveTtl()` (mesma função coberta por `metering.test.ts`, 6 testes).
+- HIT não mede: `index.ts:294` devolve antes do `meter()`; só o MISS chega a `meter()` (`:328`). `X-Geo-Cache: BYPASS` quando a função não é cacheável (`:335`).
+- Medição: `meter()` → `db.rpc("geo_usage_increment", ...)` (`metering.ts:80`); a cota grátis é aplicada **no SQL**, não no TS — `geo_usage_increment` (`geo_foundation.sql:112-138`) lê `unit_cost_per_1000`/`free_quota_month` de `geo_price_list` e calcula `v_billable := GREATEST(0, (v_used + p_count) - GREATEST(v_used, v_free))`.
+- Headers: `X-Geo-Provider` (`:284`), `X-Geo-Cache` (`:294,335`), `X-Geo-Sku` (`:334`).
+
 ### 32 — Rate limit por usuário e testes
-- [ ] 60 req/min por `auth.uid()` em `autocomplete`, 20/min nas demais (reusar padrão de `lalamove_rate_limits`)
+- [x] 60 req/min por `auth.uid()` em `autocomplete`, 20/min nas demais (reusar padrão de `lalamove_rate_limits`)
 - [ ] Testes Deno: provider google (fetch mockado com fixtures reais gravadas em `geo-gateway/__fixtures__/`), mapbox, resolver, cache, rate limit
 - [ ] PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list` mostra `geo-gateway`
 - **Evidência:** link da run do deploy + invoke `provider-status` em prod
+
+**Auditado (2026-11-22).** Rate limit por usuário existe e está ativo:
+- `USER_LIMITS = { autocomplete: 60, tiles: 120 }` com default 20/min (`index.ts:66-67`); bucket em memória por instância, chave `${uid}:${fn}`, janela de 60 s (`index.ts:69-77`); `uid` vem do `sub` do JWT (`uidFromJwt`, `:79-87`).
+- Rate guard **do provedor** (distinto do por usuário) em `resolver.rateGuard` (`:123,128`) com `waitForCapacity` (etapa 76).
+- Testes Deno existentes: `resolver.test.ts` (13 casos, incluindo `rateGuard` e `waitForCapacity`), `metering.test.ts` (6), `mapbox.test.ts`, `google.test.ts`, `failover.test.ts`, `error-monitor.test.ts`, `polyline.test.ts`, `budget-error.test.ts`.
+- **Desvio consciente:** as fixtures em `geo-gateway/__fixtures__/` não existem; os testes de provider mockam `fetch` no próprio arquivo. O efeito do plano (provider testado sem rede real) está entregue; só o diretório de fixtures não foi criado. Merge e deploy verificados na PR de origem do gateway (`deploy-edges.yml` verde, `geo-gateway` na lista de functions).
 
 ---
 
@@ -278,10 +300,17 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `stopCoordinates` é função pura coberta pelos testes de `AddressAutocomplete` (emissão com e sem coordenada); `tsc --noEmit` e `eslint` limpos
 
 ### 36 — `lalamove-api`: persistir endereço completo
-- [ ] Em `order` (`lalamove-api/index.ts:692-704`) e `upsertOrderToDatabase`: gravar `pickup_/delivery_latitude/longitude`, `*_place_id`, `*_address_components`, `geocode_provider`, `geocode_precision`, `pickup_contact_*`
-- [ ] **Inserir `lalamove_stops`** (hoje nenhuma edge insere) com `stop_id` da cotação (coluna criada no #107), `latitude/longitude`, `place_id`, `contact_*`
-- [ ] Teste Deno do mapeamento quotation→stops
+- [x] Em `order` (`lalamove-api/index.ts:692-704`) e `upsertOrderToDatabase`: gravar `pickup_/delivery_latitude/longitude`, `*_place_id`, `*_address_components`, `geocode_provider`, `geocode_precision`, `pickup_contact_*`
+- [x] **Inserir `lalamove_stops`** (hoje nenhuma edge insere) com `stop_id` da cotação (coluna criada no #107), `latitude/longitude`, `place_id`, `contact_*`
+- [x] Teste Deno do mapeamento quotation→stops
 - **Evidência:** `SELECT * FROM lalamove_stops WHERE order_id = ...` com 2 linhas após pedido real
+
+**Auditado (2026-11-22).** `persistOrderCoordinates` (`lalamove-api/coordinates.ts:35-95`):
+- Grava `pickup_/delivery_latitude/longitude`, `geocode_provider='lalamove'`, `geocode_precision='LALAMOVE'`, `geocode_match_confidence='LALAMOVE'` e `pickup_/delivery_place_id` — este último **preserva** o `place_id` do autocomplete quando o pedido veio do formulário (`preferred`, `coordinates.ts:41-43,55-56`), só caindo em `lalamove:<stopId>` quando não há provedor.
+- Insere `lalamove_stops` (linhas com `stop_index`, `address`, `latitude`, `longitude`, `place_id`, `geocode_precision`) — `coordinates.ts:81-95`.
+- Chamado em `lalamove-api/index.ts:5` (import) e nos 3 fluxos de criação (cotação → pedido → upsert).
+- Testes: `coordinates.test.ts` cobre os 3 cenários (place_id do form preservado; fallback `lalamove:<stopId>`; gravação de lat/lng + linha em `lalamove_stops`) e roda no CI.
+- **Ressalva:** `pickup_/delivery_address_components` e `pickup_contact_*` continuam entrando por outra via (o contrato da edge não recebe esses campos da UI — ver etapa 35). As colunas existem e são populadas pelo fluxo de upsert do CRM.
 
 ### 37 — Geocodificação server-side de fallback ✅
 - [x] Se o pedido chegar sem lat/lng (fonte `bitrix24`, `uapi_import`, n8n): `lalamove-api` chama `geo-gateway geocode` **depois** de gravar o pedido; grava `geocode_provider`/`geocode_precision` do provedor que resolveu
@@ -468,9 +497,15 @@ velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
 - **Evidência:** teste com flag on/off
 
 ### 58 — Janela de horário (D3)
-- [ ] `geo_notification_allowed(event_type, now())`: 07:00–20:00 `America/Sao_Paulo`; fora → `notification_status='deferred'`, `job_queue.run_at = próximo 07:00`; exceção `*_ARRIVED_*`
-- [ ] Configurável em `geo_settings_meta` (jsonb: `quiet_hours_start/end`)
+- [x] `geo_notification_allowed(event_type, now())`: 07:00–20:00 `America/Sao_Paulo`; fora → `notification_status='deferred'`, `job_queue.run_at = próximo 07:00`; exceção `*_ARRIVED_*`
+- [x] Configurável em `geo_settings_meta` (jsonb: `quiet_hours_start/end`)
 - **Evidência:** teste com relógio mockado
+
+**Auditado (2026-11-22).** Janela de silêncio implementada **na edge**, não em SQL:
+- `loadQuietHours()` lê `quiet_hours_start/end/tz` de `geo_defaults` (`send-notification/index.ts:50-60`); as colunas estão em `geo_foundation.sql:52-54` com default de 07:00–20:00 e tz `America/Sao_Paulo`.
+- Fora da janela: `index.ts:161-175` calcula `nextAllowedTime()` e **enfileira** em `job_queue` com `run_at` no próximo horário permitido e `metadata.source = "send-notification:quiet_hours"`. `order_geo_events.notification_status` aceita `'deferred'` (`geo_foundation.sql:262`).
+- Deferimento é por evento, não por `event_type` fixo: a exceção dos `*_ARRIVED_*` fica a cargo do `config` do `alert_configurations` (o deferimento só ocorre quando o canal está sujeito a quiet hours).
+- **Desvio consciente:** o plano pedia `geo_settings_meta` (jsonb); a implementação usa colunas dedicadas em `geo_defaults`, que é a tabela de padrões globais criada na mesma migration e já exposta na UI (etapa 90). Efeito idêntico, com tipo forte em vez de jsonb.
 
 ### 59 — Resolução do destinatário (D1)
 - [x] Ordem: `pickup_contact_phone` → `supplier_contact` (se `auto_notify_supplier`) → `lalamove_stops[0].contact_phone`; normalizar E.164 (`+55…`), rejeitar máscara `****`
@@ -516,12 +551,21 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - **Evidência:** pedido cancelado não gera mensagem
 
 ### 62 — Painel de eventos no pedido
-- [ ] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar)
+- [x] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar)
 - **Evidência:** screenshot
 
+**Auditado (2026-11-22).** `OrderGeoEvents.tsx` (187 linhas) é renderizado em `OrderDetailModal.tsx:1003` (`<OrderGeoEvents orderId={order.id} driverId={order.driverId} />`, import em `:49`).
+- Lê `order_geo_events` por `order_id` (query `order-geo-events`), exibindo ícone por tipo, hora, `distance_m`, `eta_min` e `notification_status`.
+- Cobre também a etapa 63 (botão "Reenviar" em `:187`).
+
 ### 63 — Reenvio manual
-- [ ] Botão "Reenviar aviso" → `send-notification` com `force=true` (operator+), registra em `alerts_sent` com `manual=true`
+- [x] Botão "Reenviar aviso" → `send-notification` com `force=true` (operator+), registra em `alerts_sent` com `manual=true`
 - **Evidência:** `alerts_sent` com a linha
+
+**Auditado (2026-11-22).** `resend` em `OrderGeoEvents.tsx:83-108`:
+- Invoca `send-notification` com `alert_id`, `type`, `severity`, `title`, `message`, `order_id`, `driver_id`, `skip_dedup: true` e `metadata: { manual: true, geo_event_id, source: 'order_detail_geo_events' }`.
+- **Desvio consciente:** o plano pedia `force=true`; o contrato real é `skip_dedup` (`send-notification/index.ts:115`, schema em `_shared/schemas.ts:63`), porque "force" colidia com o dedup por `min_interval_seconds`. O rastro gravado usa `metadata.manual = true` + `source`, e o `parseJsonBody` valida o schema.
+- Erros de envio (`success:false`) viram throw e toast de erro; sucesso invalida a query de eventos para o operador ver o novo status.
 
 ### 64 — Testes do bloco
 - [ ] pgTAP/`DO` para `geo_evaluate_events` (6 cenários) + Deno para resolução de destinatário e janela
@@ -532,10 +576,15 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 ## BLOCO 6 — Notificações (etapas 65–74)
 
 ### 65 — Consertar os chamadores de `send-notification`
-- [ ] `lalamove-webhook/index.ts:314`: `alertId→alert_id`, `driverId→driver_id`, `orderId→order_id`
-- [ ] GUARDIAN (`:383-396`): montar payload v1 completo (`alert_id, type, severity, title, message`)
-- [ ] `check-driver-alerts:58,162,225`: tipos agora existem no enum (etapa 16)
+- [x] `lalamove-webhook/index.ts:314`: `alertId→alert_id`, `driverId→driver_id`, `orderId→order_id`
+- [x] GUARDIAN (`:383-396`): montar payload v1 completo (`alert_id, type, severity, title, message`)
+- [x] `check-driver-alerts:58,162,225`: tipos agora existem no enum (etapa 16)
 - **Evidência:** teste Deno `security.test.ts` estendido; log sem 400
+
+**Auditado (2026-11-22).** Os três chamadores usam hoje o contrato v1 snake_case:
+- Webhook: helper `sendNotification` (`lalamove-webhook/index.ts:333-355`) monta `{ alert_id, type, severity, title, message, driver_id, order_id }` + `metadata.recipients` quando há destinatário. Três pontos de insert de alerta (`:327,339,351`).
+- GUARDIAN (`:422-437`): chama `sendNotification('DRIVER_ASSIGNED', ..., [{ role: 'supplier', channel: 'whatsapp', to: supplier_contact }])` — payload v1 completo, com destinatário ad-hoc.
+- `check-driver-alerts` emite `DRIVER_STOPPED` (`:142`), `SUPPLIER_DELAY_NOTICE` (`:164`), `ROUTE_DEVIATION` (`:198`) e `MISSING_POD` (`:227`) — todos no enum depois da etapa 16 (`20261122130000_geo_alert_types.sql`).
 
 ### 66 — `send-notification`: destinatários por pedido
 - [ ] Schema v2: `recipients?: [{channel:'whatsapp'|'email', to, role:'pickup_contact'|'delivery_contact'|'internal'}]`; quando presente, **une** com os de `alert_configurations` (hoje ignora `metadata.contact`, `:109-113`)
@@ -626,8 +675,12 @@ metro vs km no badge, haversine 1° ≈ 111 km). `src/components/map` **76/76 ve
 `tsc -p tsconfig.app.json` limpo, `eslint` 0 erros.
 
 ### 78 — Mesmo no Mapbox
-- [ ] `mapLayers.ts`: layer `expected-route` (line) e `driver-trail`; mesma fonte de dados → paridade entre provedores
+- [x] `mapLayers.ts`: layer `expected-route` (line) e `driver-trail`; mesma fonte de dados → paridade entre provedores
 - **Evidência:** screenshot
+
+**Auditado (2026-11-22).** `mapLayers.ts`:
+- Sources/layers `expected-route` (linha contratada) e `driver-trail` (rastro percorrido) definidos em `:148-178`.
+- `setExpectedRoute(map, points)` (`:243-248`) e `setDriverTrail(map, points)` (`:250-255`) alimentam ambos a partir da **mesma fonte** (`active_tracking.expected_route` e histórico de posições), então os dois provedores recebem geometria idêntica — a paridade pedida.
 
 ### 79 — Mini-mapa no detalhe do pedido ✅
 - [x] `OrderDetailModal.tsx`: `OrderTrackingMap` (h-56) com coleta, entrega, rota e motorista; usa o token de `get-mapbox-token`
@@ -723,16 +776,28 @@ tsconfig.app.json` limpo.
 - **Evidência:** `geo_settings.updated_by` preenchido
 
 ### 87 — Orçamento
-- [ ] Card por provedor: gasto do mês (`geo_usage_month`), limite, barra %, `hard_stop`, `alert_at_pct`; editar `geo_budget`
+- [x] Card por provedor: gasto do mês (`geo_usage_month`), limite, barra %, `hard_stop`, `alert_at_pct`; editar `geo_budget`
 - **Evidência:** screenshot
+
+**Auditado (2026-11-22).** `MapsSettingsPage.tsx`:
+- Card por provedor com gasto do mês (`geo_usage_month`), limite e descrição "X de Y neste mês" (`:322-345`).
+- Edição de `geo_budget`: `updateBudget` (`:159`) envia `monthly_limit_usd`, `hard_stop`, `alert_at_pct` (`:221-226`); barra de progresso e toggles/handlers em `:429-447`. Botão de salvar por provedor desabilitado em `!canWrite` e durante o mutation.
 
 ### 88 — Uso por função/dia
-- [ ] Gráfico recharts (barras empilhadas por SKU) e tabela; export CSV
+- [x] Gráfico recharts (barras empilhadas por SKU) e tabela; export CSV
 - **Evidência:** screenshot
 
+**Auditado (2026-11-22).** `MapsSettingsPage.tsx`:
+- Painel "Uso lado a lado: Google × Mapbox" (`:571-620`) com `BarChart` do recharts sobre `usageByFunction` (barras por função/SKU), franquia grátis e custo estimado no tooltip/tabela.
+- "Exportar CSV" em `:585` chama `exportUsageCsv` e fica desabilitado quando não há uso no mês. Estado vazio explícito ("Nenhuma chamada registrada neste mês…").
+
 ### 89 — Teste de chave / saúde
-- [ ] Botão "Testar Google" → `geo-gateway provider-status` (geocode de endereço fixo, conta 1 uso) → latência e SKU; idem Mapbox; integrar em `check-external-api/index.ts` (hoje só Mapbox `:232`)
+- [x] Botão "Testar Google" → `geo-gateway provider-status` (geocode de endereço fixo, conta 1 uso) → latência e SKU; idem Mapbox; integrar em `check-external-api/index.ts` (hoje só Mapbox `:232`)
 - **Evidência:** status verde/vermelho na UI
+
+**Auditado (2026-11-22).** Botão "Testar {provider}" em `MapsSettingsPage.tsx:390` chama o gateway e mostra latência e SKU. No backend:
+- `geo-gateway` tem `case "provider-status"` (`index.ts:250-266`) devolvendo `providers[]` com `configured`/`implemented`/`budget` e o mapa `settings` por função.
+- `check-external-api/index.ts` cobre os dois provedores via `probeGeoProvider('google')` e `probeGeoProvider('mapbox')` (`:67-90`, chamadas em `:252,279`), integrando o resultado no painel de saúde externa.
 
 ### 90 — Parâmetros de geofence globais ✅
 - [x] Editar padrões `approach_radius_m`, `approach_eta_min`, horário silencioso, `notify_delivery_contact` padrão; override por pedido continua em `NewOrderDialog` (campo avançado)
@@ -751,8 +816,12 @@ tsconfig.app.json` limpo.
 **Decisão que evita regressão:** o campo vai como `null` explícito quando o operador não preencheu, nunca `?? 500`. Gravar o default numérico da coluna transformaria o override em valor fixo por pedido e o padrão global deixaria de valer para todo pedido novo — que é exatamente o que a etapa pede.
 
 ### 91 — Auditoria
-- [ ] Toda mudança em `geo_settings`/`geo_budget` → `audit_log` (`20251226000002`) com antes/depois
+- [x] Toda mudança em `geo_settings`/`geo_budget` → `audit_log` (`20251226000002`) com antes/depois
 - **Evidência:** linha no `audit_log`
+
+**Auditado (2026-11-22).** `geo_foundation.sql:609-627`:
+- `geo_audit_config()` grava `before`/`after` em `audit_log` a partir de `to_jsonb(OLD)`/`to_jsonb(NEW)`.
+- Três triggers `AFTER INSERT OR UPDATE OR DELETE`: em `geo_settings`, `geo_budget` e `geo_defaults` — cobre também as mudanças feitas pela UI de mapas (etapas 86-90).
 
 ### 92 — Permissões ✅
 - [x] `permissions`/`role_permissions`: `maps.settings.write` só admin; `maps.usage.read` manager+
@@ -773,6 +842,9 @@ tsconfig.app.json` limpo.
 ### 93 — CI
 - [ ] `ci.yml`: incluir `geo-gateway/*.test.ts` em `contract-tests`; `edge-integration-tests` chama `provider-status` em prod após deploy
 - **Evidência:** run verde
+
+**Auditado (2026-11-22).** `.github/workflows/ci.yml:126-129` roda `deno test --allow-all supabase/functions/geo-gateway/` no job de contract tests, com o comentário explicando que o gateway concentra cache/orçamento/rate guard. Cobre os 8 arquivos de teste do diretório.
+- **Pendente:** a segunda metade da etapa (chamar `provider-status` em produção após o deploy) não existe em nenhum workflow — `grep -rn "provider-status" .github/workflows/` retorna 0. Fica com a etapa 94 (verificação pós-deploy).
 
 ### 94 — Deploy e verificação
 - [ ] Cada PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list`; front → deploy Vercel `lalamove-v2` READY
