@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c9424ebbc36c61996fec0713a3853b46feec1c95",
+  "sha": "460de121e3e8f5beb3af05f5c5ed2d7f59a2374e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:43 UTC",
+  "generated_at": "2026-11-22 02:47 UTC",
   "files_total": 982,
   "code_files": 809,
-  "code_lines": 139026
+  "code_lines": 139043
  },
  "version": "1.3.2",
- "facts_hash": "ccbfa48ce8854a69",
+ "facts_hash": "59535ca4c3447ee0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20377,7 +20377,7 @@
   {
    "module": "src/components",
    "files": 153,
-   "lines": 27966,
+   "lines": 27983,
    "tables": [
     "active_tracking",
     "alerts",
@@ -55624,7 +55624,7 @@
   },
   "src/components/orders/AddressAutocomplete.tsx": {
    "path": "src/components/orders/AddressAutocomplete.tsx",
-   "lines": 358,
+   "lines": 375,
    "exports": [
     "function AddressAutocomplete"
    ],
@@ -69006,10 +69006,32 @@
   }
  },
  "git": {
-  "sha": "c9424ebbc36c61996fec0713a3853b46feec1c95",
+  "sha": "460de121e3e8f5beb3af05f5c5ed2d7f59a2374e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "460de12",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
+    "files": [
+     "src/components/orders/AddressAutocomplete.test.tsx",
+     "src/components/orders/AddressAutocomplete.tsx"
+    ]
+   },
+   {
+    "sha": "845586a",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)",
+    "files": [
+     "docs/RUNBOOK_GOOGLE_MAPS.md",
+     "docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md",
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "c9424eb",
     "date": "2026-11-21",
@@ -69326,43 +69348,19 @@
     "files": [
      "supabase/functions/send-notification/index.ts"
     ]
-   },
-   {
-    "sha": "d598435",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)",
-    "files": [
-     "docs/MAPBOX.md",
-     "scripts/geo/searchbox-coverage.ts",
-     "src/components/orders/AddressAutocomplete.tsx",
-     "src/hooks/useGeoSearch.test.tsx",
-     "src/hooks/useGeoSearch.ts",
-     "supabase/functions/_shared/contract.test.ts",
-     "supabase/functions/_shared/schemas.ts"
-    ]
-   },
-   {
-    "sha": "5281908",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: fechar ciclo de notification_status dos eventos geo (#181)",
-    "files": [
-     "supabase/functions/send-notification/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
-    "docs/MAPBOX.md",
-    5
-   ],
-   [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    5
+    6
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
+    4
+   ],
+   [
+    "docs/MAPBOX.md",
     4
    ],
    [
@@ -69370,7 +69368,7 @@
     4
    ],
    [
-    "supabase/functions/_shared/schemas.ts",
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     3
    ],
    [
@@ -69386,12 +69384,20 @@
     3
    ],
    [
-    "supabase/functions/send-notification/index.ts",
+    "supabase/functions/job-worker/index.ts",
     3
    ],
    [
-    "supabase/functions/job-worker/index.ts",
-    3
+    "src/components/orders/AddressAutocomplete.test.tsx",
+    2
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.tsx",
+    2
+   ],
+   [
+    "docs/RUNBOOK_GOOGLE_MAPS.md",
+    2
    ],
    [
     "supabase/.temp/anc.py",
@@ -69423,14 +69429,6 @@
    ],
    [
     "supabase/.temp/storage-migration",
-    2
-   ],
-   [
-    "supabase/.temp/storage-version",
-    2
-   ],
-   [
-    "src/integrations/supabase/types.ts",
     2
    ]
   ]

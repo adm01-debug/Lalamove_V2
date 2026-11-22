@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
+   "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)",
    "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)",
    "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)",
-   "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)",
-   "chore: destrackear supabase/.temp e ignorar (#212)",
-   "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)"
+   "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

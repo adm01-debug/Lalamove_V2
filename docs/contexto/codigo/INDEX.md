@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c9424ebbc36c61996fec0713a3853b46feec1c95` (2026-11-21T23:42:28-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `460de121e3e8f5beb3af05f5c5ed2d7f59a2374e` (2026-11-21T23:47:08-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 988 |
 | arquivos_codigo | 613 |
-| linhas_codigo | 120004 |
+| linhas_codigo | 120021 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7593 nós · 16142 arestas · 588 comunidades · grafo do commit `c9424ebb`
-- comunidades maiores: cn (204), lucide-react (121), snapshot.py (104), ref_node_path (101), RateLimitDashboardPage.tsx (92), framer-motion (90), contract.ts (89), badge.tsx (88), client.ts (87), mapbox.ts (84), dependencies (80), react (79)
+- 7600 nós · 16161 arestas · 574 comunidades · grafo do commit `460de121`
+- comunidades maiores: cn (233), card.tsx (154), client.ts (113), badge.tsx (105), snapshot.py (102), button.tsx (100), contract.ts (89), mapbox.ts (85), react (84), dependencies (80), gerar.mjs (76), lint-ratchet.mjs (75)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -284,10 +284,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - .github/workflows/ci.yml (10)
 - docs/pendencias/_ordem.md (10)
 - supabase/functions/geo-gateway/index.ts (8)
+- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
+- src/components/orders/AddressAutocomplete.tsx (7)
 - supabase/functions/geo-gateway/providers/mapbox.ts (7)
-- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (6)
 - src/components/map/LiveMap.tsx (6)
-- src/components/orders/AddressAutocomplete.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
 - src/integrations/supabase/types.ts (6)
 - supabase/functions/_shared/schemas.ts (6)
@@ -354,7 +354,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
-- `docs/RUNBOOK_GOOGLE_MAPS.md` — RUNBOOK — Google Maps Platform (operação) (120 linhas)
+- `docs/RUNBOOK_GOOGLE_MAPS.md` — RUNBOOK — Google Maps Platform (operação) (136 linhas)
 - `docs/RUNBOOK_LALAMOVE.md` — Runbook — Integração Lalamove (v3 REST + UAPI) (126 linhas)
 - `docs/RUNBOOK_MAPBOX.md` — RUNBOOK — Mapbox (operação) (78 linhas)
 - `docs/SCREENING_SYSTEM.md` — 🔍 Sistema de Screening - Lalamove Guardian (717 linhas)
@@ -370,6 +370,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `460de12` fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)
+- 2026-11-21 `845586a` docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)
 - 2026-11-21 `c9424eb` fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)
 - 2026-11-21 `c194d15` feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)
 - 2026-11-21 `1eeeb96` docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)
@@ -383,8 +385,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `2a87c43` fix(migration): resolve colisao das constraints de place_id (#204)
 - 2026-11-21 `e0bceb0` docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)
 - 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
-- 2026-11-21 `0a1c0f1` docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)
-- 2026-11-21 `972a37c` feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

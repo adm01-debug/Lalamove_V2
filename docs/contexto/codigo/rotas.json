@@ -2039,6 +2039,7 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
+    "useId",
     "useMapMarkers",
     "useMapboxDirections",
     "useMapboxGeocode",
@@ -2130,7 +2131,10 @@
    "flags": [],
    "papeis": [
     "alert",
-    "img"
+    "combobox",
+    "img",
+    "listbox",
+    "option"
    ],
    "arquivos_puxados": 67
   },
@@ -3369,6 +3373,7 @@
     "useGoogleMapsLoader",
     "useHints",
     "useHourlyMetricsCache",
+    "useId",
     "useImperativeHandle",
     "useInView",
     "useIncidentMetrics",
@@ -3727,9 +3732,11 @@
     "admin",
     "alert",
     "assistant",
+    "combobox",
     "group",
     "img",
     "list",
+    "listbox",
     "listitem",
     "main",
     "manager",

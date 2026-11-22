@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c9424ebbc36c61996fec0713a3853b46feec1c95",
+  "commit": "460de121e3e8f5beb3af05f5c5ed2d7f59a2374e",
   "branch": "main",
-  "data_commit": "2026-11-21T23:42:28-03:00",
+  "data_commit": "2026-11-21T23:47:08-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "460de12",
+    "data": "2026-11-21",
+    "assunto": "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)"
+   },
+   {
+    "sha": "845586a",
+    "data": "2026-11-21",
+    "assunto": "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)"
+   },
    {
     "sha": "c9424eb",
     "data": "2026-11-21",
@@ -121,16 +131,6 @@
     "sha": "fe2ee4a",
     "data": "2026-11-21",
     "assunto": "feat: eta_refresh encaixa o motorista na via antes do geofence (#188)"
-   },
-   {
-    "sha": "f973d92",
-    "data": "2026-11-21",
-    "assunto": "fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)"
-   },
-   {
-    "sha": "ad06483",
-    "data": "2026-11-21",
-    "assunto": "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)"
    }
   ],
   "arquivos_mudados_7d": 225,
@@ -156,16 +156,20 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "src/components/orders",
+    "mudancas": 12
    },
    {
-    "pasta": "src/components/orders",
+    "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
     "pasta": "supabase/functions/_shared",
     "mudancas": 9
+   },
+   {
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 7
    },
    {
     "pasta": "supabase/config.toml",
@@ -177,10 +181,6 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 6
-   },
-   {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 6
    },
    {
@@ -226,19 +226,19 @@
     "mudancas": 8
    },
    {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 7
    },
    {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 6
-   },
-   {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 120
+    "commits": 122
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 988,
   "arquivos_codigo": 613,
-  "linhas_codigo": 120004,
+  "linhas_codigo": 120021,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -516,7 +516,7 @@
   },
   "src/components": {
    "arquivos": 153,
-   "linhas": 27966
+   "linhas": 27983
   },
   "src/hooks": {
    "arquivos": 110,
