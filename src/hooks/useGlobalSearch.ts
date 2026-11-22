@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Fuse from 'fuse.js';
 import { supabase } from "@/integrations/supabase/client";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { buildOrIlike } from "@/lib/postgrest";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -120,19 +121,23 @@ export function useGlobalSearch(open?: boolean, onOpenChange?: (open: boolean) =
     const searchResults: SearchResult[] = [];
     try {
       if (activeTab === "all" || activeTab === "order") {
-        const { data: orders } = await supabase.from("lalamove_orders").select("id, lalamove_id, customer_name, status, delivery_address, created_at").or(`lalamove_id.ilike.%${searchQuery}%,customer_name.ilike.%${searchQuery}%,delivery_address.ilike.%${searchQuery}%`).limit(10);
+        const { data: orders, error } = await supabase.from("lalamove_orders").select("id, lalamove_id, customer_name, status, delivery_address, created_at").or(buildOrIlike(["lalamove_id", "customer_name", "delivery_address"], searchQuery)).limit(10);
+        if (error) logger.error("Busca de pedidos falhou:", error);
         orders?.forEach(order => searchResults.push({ id: order.id, type: "order", title: `#${order.lalamove_id}`, subtitle: order.customer_name, meta: format(new Date(order.created_at), "dd MMM yyyy", { locale: ptBR }), path: `/orders?id=${order.id}`, data: order }));
       }
       if (activeTab === "all" || activeTab === "driver") {
-        const { data: drivers } = await supabase.from("drivers").select("id, name, phone, status, risk_level, vehicle_plate").or(`name.ilike.%${searchQuery}%,phone.ilike.%${searchQuery}%,vehicle_plate.ilike.%${searchQuery}%`).limit(10);
+        const { data: drivers, error } = await supabase.from("drivers").select("id, name, phone, status, risk_level, vehicle_plate").or(buildOrIlike(["name", "phone", "vehicle_plate"], searchQuery)).limit(10);
+        if (error) logger.error("Busca de motoristas falhou:", error);
         drivers?.forEach(driver => searchResults.push({ id: driver.id, type: "driver", title: driver.name, subtitle: driver.phone || driver.vehicle_plate || undefined, meta: driver.risk_level || driver.status, path: `/drivers?id=${driver.id}`, data: driver }));
       }
       if (activeTab === "all" || activeTab === "alert") {
-        const { data: alerts } = await supabase.from("alerts").select("id, title, message, severity, type, created_at").or(`title.ilike.%${searchQuery}%,message.ilike.%${searchQuery}%`).eq("is_dismissed", false).limit(10);
+        const { data: alerts, error } = await supabase.from("alerts").select("id, title, message, severity, type, created_at").or(buildOrIlike(["title", "message"], searchQuery)).eq("is_dismissed", false).limit(10);
+        if (error) logger.error("Busca de alertas falhou:", error);
         alerts?.forEach(alert => searchResults.push({ id: alert.id, type: "alert", title: alert.title, subtitle: alert.message, meta: alert.severity, path: `/alerts?id=${alert.id}`, data: alert }));
       }
       if (activeTab === "all" || activeTab === "approval") {
-        const { data: approvals } = await supabase.from("driver_approval_queue").select("id, driver_name, order_id, status, risk_score, requested_at").or(`driver_name.ilike.%${searchQuery}%,order_id.ilike.%${searchQuery}%`).limit(10);
+        const { data: approvals, error } = await supabase.from("driver_approval_queue").select("id, driver_name, order_id, status, risk_score, requested_at").or(buildOrIlike(["driver_name", "order_id"], searchQuery)).limit(10);
+        if (error) logger.error("Busca de aprovações falhou:", error);
         approvals?.forEach(approval => searchResults.push({ id: approval.id, type: "approval", title: approval.driver_name || "Motorista", subtitle: `Pedido: ${approval.order_id.substring(0, 8)}...`, meta: `Risco: ${approval.risk_score}`, path: `/approvals?id=${approval.id}`, data: approval }));
       }
       if (activeTab === "all" || activeTab === "page") {
