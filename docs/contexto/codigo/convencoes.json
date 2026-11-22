@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (14)"
+   "supabase/functions/<edge> (15)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: renderiza message_template dos alertas geo (etapa 67) (#222)",
    "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)",
    "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
    "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)",
-   "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)",
-   "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)"
+   "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

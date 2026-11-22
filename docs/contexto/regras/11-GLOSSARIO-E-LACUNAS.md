@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1a1f4865fb` · branch `main` · 2026-11-22 02:59 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `fac6e49173` · branch `main` · 2026-11-22 03:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -161,6 +161,7 @@
 | `ContractVersion` (TS) | v1 \| v2 |  | `supabase/functions/_shared/contract.ts` |
 | `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `supabase/functions/_shared/geo-precision.ts` |
 | `ContractName` (TS) | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway |  | `supabase/functions/_shared/schemas.ts` |
+| `TEMPLATE_VARS` (TS) | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", |  | `supabase/functions/_shared/template.ts` |
 | `ProviderName` (TS) | google \| mapbox |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |

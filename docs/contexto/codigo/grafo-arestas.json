@@ -2312,6 +2312,7 @@
    "supabase/functions/_shared/logger.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/_shared/template.ts",
    "supabase/functions/send-notification/quiet-hours.ts"
   ],
   "supabase/functions/test-notification/index.ts": [

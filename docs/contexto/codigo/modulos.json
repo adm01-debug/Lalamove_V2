@@ -1437,9 +1437,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 44,
-   "testes": 14,
-   "linhas": 12721,
+   "arquivos": 45,
+   "testes": 15,
+   "linhas": 12842,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1545,6 +1545,7 @@
    "flags": [],
    "papeis": [
     "admin",
+    "delivery_contact",
     "service_role",
     "supplier",
     "system",

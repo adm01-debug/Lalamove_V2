@@ -17,7 +17,9 @@
   "supabase/functions/_shared/geo-precision.ts",
   "supabase/functions/_shared/logger.ts",
   "supabase/functions/_shared/schemas.ts",
-  "supabase/functions/_shared/telemetry.ts"
+  "supabase/functions/_shared/telemetry.ts",
+  "supabase/functions/_shared/template.test.ts",
+  "supabase/functions/_shared/template.ts"
  ],
  "edges": [
   {
@@ -942,7 +944,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 2,
-   "linhas": 858,
+   "linhas": 909,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -981,7 +983,8 @@
     "contract.ts",
     "logger.ts",
     "schemas.ts",
-    "telemetry.ts"
+    "telemetry.ts",
+    "template.ts"
    ],
    "chamada_pelo_front": [
     "src/components/orders/OrderGeoEvents.tsx"

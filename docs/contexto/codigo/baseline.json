@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1a1f4865fbf7eb0b1b84a233178c2066dc498341",
+  "commit": "fac6e491738a41ef7badb4eb68679649166ece80",
   "branch": "main",
-  "data_commit": "2026-11-21T23:58:41-03:00",
+  "data_commit": "2026-11-22T00:08:23-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "fac6e49",
+    "data": "2026-11-22",
+    "assunto": "feat: renderiza message_template dos alertas geo (etapa 67) (#222)"
+   },
    {
     "sha": "1a1f486",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "a76d93c",
     "data": "2026-11-21",
     "assunto": "feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)"
-   },
-   {
-    "sha": "0aa60dd",
-    "data": "2026-11-21",
-    "assunto": "docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)"
    }
   ],
-  "arquivos_mudados_7d": 227,
+  "arquivos_mudados_7d": 229,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -160,12 +160,16 @@
     "mudancas": 12
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 11
+   },
+   {
     "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 9
+    "pasta": ".github/workflows/ci.yml",
+    "mudancas": 7
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -180,15 +184,11 @@
     "mudancas": 7
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 6
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 7
    },
    {
     "pasta": "supabase/functions/lalamove-webhook",
-    "mudancas": 6
-   },
-   {
-    "pasta": "supabase/functions/send-notification",
     "mudancas": 6
    },
    {
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
@@ -258,7 +258,15 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": "docs/pendencias/README.md",
+    "mudancas": 5
+   },
+   {
+    "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 5
    },
    {
@@ -288,20 +296,12 @@
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/send-notification/index.ts",
-    "mudancas": 5
-   },
-   {
-    "arquivo": ".env.example",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 123
+    "commits": 124
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 990,
-  "arquivos_codigo": 615,
-  "linhas_codigo": 120323,
+  "arquivos_total": 992,
+  "arquivos_codigo": 617,
+  "linhas_codigo": 120510,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 124,
+  "testes": 125,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 101
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 58,
-   "linhas": 14953
+   "arquivos": 60,
+   "linhas": 15140
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -617,16 +617,16 @@
    "linhas": 803
   },
   {
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 798
+  },
+  {
    "arquivo": "supabase/functions/lalamove-uapi/index.ts",
    "linhas": 793
   },
   {
    "arquivo": "src/pages/AdvancedReportsPage.tsx",
    "linhas": 750
-  },
-  {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 747
   },
   {
    "arquivo": "scripts/ci/lint-ratchet.mjs",
