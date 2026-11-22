@@ -615,8 +615,14 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** foto do piloto aparece no pedido
 
 ### 117 — [L] Opt-out do motorista
-- [ ] Callback `contact.optout` → `notification_optouts` + alerta interno
-- **Evidência:** "SAIR" no aparelho cria a linha
+- [~] Callback `contact.optout` → `notification_optouts` + alerta interno
+- **Estado real:** o reconhecimento do pedido de saída está feito e testado
+  (`isOptOutKeyword`/`classifyInbound` → `intent: "optout"`, PR #281); a tabela e a RLS
+  existem desde `20261123200000_optout_and_tracking_end.sql` e o leitor
+  `is_phone_opted_out()` já é chamado no `send-notification:413`. Falta o evento
+  `contact.optout` do `zapp-callback` (PR #283) gravar a linha e abrir o alerta interno —
+  os dois lados são DDL/edge da #283, não código novo deste PR.
+- **Evidência:** `_shared/messaging/inbound.test.ts` — testes "SAIR e PARAR sao pedido de descadastro" e "CANCELAR nao descadastra"
 
 ### 118 — [L] Registro no Bitrix24
 - [ ] Mensagens enviadas/recebidas viram atividade no item SPA 1690 (`bitrix24_activities`, fila existente)
@@ -661,8 +667,16 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** resposta "1" por SMS confirma
 
 ### 128 — [L] Opt-out por SMS
-- [ ] "SAIR" → `notification_optouts`; texto de saída no 1º SMS ao número
-- **Evidência:** teste com "SAIR"
+- [~] "SAIR" → `notification_optouts`; texto de saída no 1º SMS ao número
+- **Estado real:** o reconhecimento existe e está testado — `isOptOutKeyword()` e
+  `classifyInbound()` em `_shared/messaging/inbound.ts` devolvem `intent: "optout"` para
+  SAIR/PARAR/descadastrar e **não** para CANCELAR (que segue sendo recusa de corrida do
+  motorista). Falta o consumidor gravar: o `zapp-callback` (branch da PR #283) normaliza o
+  inbound mas ainda não chama `classifyInbound` nem grava em `notification_optouts` — a
+  tabela já existe (`20261123200000_optout_and_tracking_end.sql`) e o leitor
+  `is_phone_opted_out()` já é usado no `send-notification:413`. O 1º SMS também ainda não
+  carrega o rodapé de saída.
+- **Evidência:** `_shared/messaging/inbound.test.ts` — 4 testes de opt-out (PR #281)
 
 ### 129 — [L] Custo e teto (Z5)
 - [ ] Custo por segmento → `messaging_usage`; 80 % alerta, 100 % bloqueia (exceto M8)

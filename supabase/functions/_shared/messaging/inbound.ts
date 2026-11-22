@@ -19,6 +19,7 @@ export interface InboundChoice {
 
 /** Intencoes reconhecidas em texto (etapa 114 decide o efeito de cada uma). */
 export type InboundIntent =
+  | "optout"
   | "problem"
   | "arrived"
   | "collected"
@@ -30,6 +31,30 @@ export type InboundResult =
   | { kind: "choice"; optionId: string; digit: string; text: string }
   | { kind: "intent"; intent: InboundIntent; text: string }
   | { kind: "free_text"; text: string };
+
+/**
+ * Etapas 117 e 128: pedido de descadastro por palavra-chave.
+ *
+ * "CANCELAR" fica de fora de proposito. No Zapp ele e palavra de opt-out, mas aqui
+ * o remetente e o motorista falando de um pedido — "cancelar" tem que continuar
+ * caindo em `decline`, senao um motorista cancelando uma corrida se descadastra
+ * sozinho e nunca mais recebe briefing. Quem quiser sair escreve SAIR ou PARAR.
+ */
+export const OPTOUT_KEYWORDS = [
+  "sair",
+  "parar",
+  "descadastrar",
+  "nao quero mais",
+] as const;
+
+/** Texto que pede descadastro — usado antes de qualquer outra classificacao. */
+export function isOptOutKeyword(raw: string): boolean {
+  const text = normalizeInboundText(raw ?? "");
+  if (!text) return false;
+  return (OPTOUT_KEYWORDS as readonly string[]).some((k) =>
+    containsPhrase(text, k)
+  );
+}
 
 /**
  * Frases por intencao, ja sem acento. A ordem dos grupos define prioridade:
@@ -139,13 +164,17 @@ export function classifyInbound(
     return { kind: "choice", optionId: byDigit.id, digit: byDigit.digit, text };
   }
 
-  // 3. palavras-chave, na ordem de prioridade de INTENT_PHRASES.
+  // 3. pedido de descadastro vence palavra-chave comum: quem escreveu SAIR nao
+  //    pode ser lido como "sim"/"nao" de um pedido.
+  if (isOptOutKeyword(text)) return { kind: "intent", intent: "optout", text };
+
+  // 4. palavras-chave, na ordem de prioridade de INTENT_PHRASES.
   for (const group of INTENT_PHRASES) {
     if (group.phrases.some((p) => containsPhrase(text, p))) {
       return { kind: "intent", intent: group.intent, text };
     }
   }
 
-  // 4. texto livre: segue para a timeline e para o humano no inbox.
+  // 5. texto livre: segue para a timeline e para o humano no inbox.
   return { kind: "free_text", text };
 }

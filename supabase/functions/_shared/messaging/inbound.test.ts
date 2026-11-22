@@ -10,6 +10,7 @@ import { assertEquals } from "jsr:@std/assert@1";
 import {
   classifyInbound,
   type InboundChoice,
+  isOptOutKeyword,
   normalizeInboundText,
 } from "./inbound.ts";
 
@@ -88,4 +89,40 @@ Deno.test("etapa 113: texto livre preserva o original para o operador ler", () =
 Deno.test("etapa 113: mensagem vazia nao quebra", () => {
   assertEquals(classifyInbound("   ").kind, "free_text");
   assertEquals(classifyInbound("").kind, "free_text");
+});
+
+Deno.test("etapa 128: SAIR e PARAR sao pedido de descadastro, nao intencao", () => {
+  for (
+    const raw of ["SAIR", "sair", "  Parar ", "descadastrar", "não quero mais"]
+  ) {
+    assertEquals(isOptOutKeyword(raw), true);
+    const r = classifyInbound(raw);
+    assertEquals(r.kind, "intent");
+    if (r.kind === "intent") assertEquals(r.intent, "optout");
+  }
+});
+
+Deno.test("etapa 128: CANCELAR nao descadastra — continua sendo recusa de corrida", () => {
+  // Palavra de opt-out do Zapp, mas do motorista significa "nao vou fazer esse pedido".
+  assertEquals(isOptOutKeyword("cancelar"), false);
+  const r = classifyInbound("vou cancelar essa corrida");
+  assertEquals(r.kind, "intent");
+  if (r.kind === "intent") assertEquals(r.intent, "decline");
+});
+
+Deno.test("etapa 128: SAIR dentro de outra palavra nao descadastra", () => {
+  // "sairei" nao e "sair" — fronteira de palavra vale aqui tambem.
+  assertEquals(isOptOutKeyword("sairei mais tarde"), false);
+  assertEquals(isOptOutKeyword(""), false);
+});
+
+Deno.test("etapa 128: opt-out vence o mapa de opcoes so quando nao ha digito", () => {
+  const choices = [{ id: "opt-1", digit: "1" }];
+  // digit continua ganhando: o sistema ofereceu a lista, o "1" e resposta a ela.
+  const digit = classifyInbound("1", choices);
+  assertEquals(digit.kind, "choice");
+  // sem digito, SAIR prevalece sobre qualquer palavra-chave.
+  const optout = classifyInbound("sair agora", choices);
+  assertEquals(optout.kind, "intent");
+  if (optout.kind === "intent") assertEquals(optout.intent, "optout");
 });
