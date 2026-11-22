@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d899883254db3b7fb14e5b4f0f5dcc3b25d15c37",
+  "commit": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
   "branch": "main",
-  "data_commit": "2026-11-22T16:45:34-03:00",
+  "data_commit": "2026-11-22T19:42:26-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "7f6a42b",
+    "data": "2026-11-22",
+    "assunto": "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)"
+   },
    {
     "sha": "d899883",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "93d26a3",
     "data": "2026-11-22",
     "assunto": "docs(planos): plano de UX de navegacao em 200 etapas (#286)"
-   },
-   {
-    "sha": "762c4b6",
-    "data": "2026-11-22",
-    "assunto": "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)"
    }
   ],
-  "arquivos_mudados_7d": 369,
+  "arquivos_mudados_7d": 380,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 27
+    "mudancas": 39
    },
    {
     "pasta": "src/components/orders",
@@ -165,7 +165,7 @@
    },
    {
     "pasta": "supabase/functions/send-notification",
-    "mudancas": 16
+    "mudancas": 21
    },
    {
     "pasta": "package.json",
@@ -176,12 +176,12 @@
     "mudancas": 14
    },
    {
-    "pasta": "supabase/functions/job-worker",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 13
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 12
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 13
    },
    {
     "pasta": "docs/MAPBOX.md",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/config.toml",
@@ -226,11 +226,11 @@
     "mudancas": 12
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
-    "mudancas": 11
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 12
    },
    {
-    "arquivo": "supabase/functions/send-notification/index.ts",
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 11
    },
    {
@@ -270,15 +270,15 @@
     "mudancas": 8
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 8
+   },
+   {
     "arquivo": "src/App.tsx",
     "mudancas": 7
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 211
+    "commits": 212
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1064,
-  "arquivos_codigo": 663,
-  "linhas_codigo": 129235,
+  "arquivos_total": 1075,
+  "arquivos_codigo": 673,
+  "linhas_codigo": 131798,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -324,10 +324,10 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 160,
+  "testes": 165,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 109
+  "docs_md": 110
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 81,
-   "linhas": 20592
+   "arquivos": 91,
+   "linhas": 23155
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -583,6 +583,10 @@
   {
    "arquivo": "src/integrations/supabase/types.ts",
    "linhas": 4811
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 1471
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
@@ -610,15 +614,11 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 967
+   "linhas": 990
   },
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",
    "linhas": 964
-  },
-  {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 947
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -682,7 +682,7 @@
   }
  ],
  "qualidade": {
-  "any": 129,
+  "any": 132,
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,

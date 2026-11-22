@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d899883254` · branch `main` · 2026-11-22 19:46 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7f6a42bbf0` · branch `main` · 2026-11-22 22:42 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -171,10 +171,16 @@
 | `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `supabase/functions/_shared/geo-precision.ts` |
 | `ContractName` (TS) | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement \| job-worker \| lalamove-api \| lalamove-uapi |  | `supabase/functions/_shared/schemas.ts` |
 | `TEMPLATE_VARS` (TS) | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", |  | `supabase/functions/_shared/template.ts` |
+| `DeliveryStatus` (TS) | sent \| delivered \| failed \| unknown |  | `supabase/functions/_shared/channels/sms.ts` |
+| `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/_shared/channels/zapp.ts` |
+| `IncidentType` (TS) | LATE_DELIVERY \| DAMAGE \| CUSTOMER_COMPLAINT \| OTHER |  | `supabase/functions/_shared/messaging/inbound-actions.ts` |
+| `InboundIntent` (TS) | optout \| problem \| arrived \| collected \| on_the_way \| decline \| confirm |  | `supabase/functions/_shared/messaging/inbound.ts` |
+| `InboundMediaKind` (TS) | proof \| damage \| other |  | `supabase/functions/_shared/messaging/inbound.ts` |
+| `OPTOUT_KEYWORDS` (TS) | "sair", "parar", "descadastrar", "nao quero mais", |  | `supabase/functions/_shared/messaging/inbound.ts` |
 | `MessageRole` (TS) | driver \| pickup_contact \| delivery_contact \| internal |  | `supabase/functions/_shared/messaging/router.ts` |
 | `MessageChannel` (TS) | whatsapp \| sms \| email \| slack \| n8n |  | `supabase/functions/_shared/messaging/router.ts` |
 | `IMMEDIATE_FALLBACK_REASONS` (TS) | "invalid_number", "instance_unavailable", "recipient_blocked", "channel_down", |  | `supabase/functions/_shared/messaging/router.ts` |
-| `RATE_LIMIT_EXEMPT_EVENTS` (TS) | "DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY" |  | `supabase/functions/_shared/messaging/router.ts` |
+| `RATE_LIMIT_EXEMPT_EVENTS` (TS) | "DRIVER_ARRIVED_PICKUP", "DRIVER_ARRIVED_DELIVERY", |  | `supabase/functions/_shared/messaging/router.ts` |
 | `ErrorOutcome` (TS) | ok \| error \| skipped |  | `supabase/functions/geo-gateway/error-monitor.ts` |
 | `ProviderName` (TS) | google \| mapbox |  | `supabase/functions/geo-gateway/providers/types.ts` |
 | `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `supabase/functions/geo-gateway/providers/types.ts` |
@@ -210,6 +216,9 @@ _nenhum item encontrado_
 | status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
 | status | valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/JobQueuePage.tsx` |
+| status | valor `entregue` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
+| status | valor `falha` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
+| status | valor `enviado` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
 | status | valor `ZERO_RESULTS` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `OVER_QUERY_LIMIT` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `REQUEST_DENIED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |

@@ -4494,7 +4494,8 @@
     "evaluate-driver",
     "lalamove-api",
     "lalamove-webhook",
-    "route-analyzer"
+    "route-analyzer",
+    "send-notification"
    ],
    "triggers": [
     "audit_drivers_trigger",

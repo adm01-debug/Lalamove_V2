@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (57)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (28)"
+   "supabase/functions/<edge> (33)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)",
    "feat: hardening de dados, erros e estados (itens 67/68/70/73/74/75/76) (#310)",
    "feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)",
    "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)",
-   "feat: menu alinhado às rotas (item 49) (#306)",
-   "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)"
+   "feat: menu alinhado às rotas (item 49) (#306)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
@@ -97,6 +97,7 @@
   "docs/agentes/github-ci.md",
   "docs/agentes/lalamove-api.md",
   "docs/agentes/mapa-repo.md",
+  "docs/agentes/mensageria.md",
   "docs/agentes/pendencias-dono.md",
   "docs/agentes/regras-dominio.md"
  ],

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d899883254db3b7fb14e5b4f0f5dcc3b25d15c37",
+  "sha": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 19:46 UTC",
-  "files_total": 1058,
-  "code_files": 874,
-  "code_lines": 150412
+  "generated_at": "2026-11-22 22:42 UTC",
+  "files_total": 1069,
+  "code_files": 884,
+  "code_lines": 152975
  },
  "version": "1.3.2",
- "facts_hash": "51c7eeb07002bb6a",
+ "facts_hash": "29dcbd6464d783f9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 314,
+   ".ts": 324,
    ".tsx": 236,
    ".sql": 202,
    ".mjs": 109,
@@ -18432,6 +18432,7 @@
      "alerts",
      "alerts_sent",
      "bitrix24_tokens",
+     "drivers",
      "geo_defaults",
      "job_queue",
      "lalamove_orders",
@@ -18471,9 +18472,11 @@
      "notify_email",
      "notify_n8n_webhook",
      "notify_slack",
+     "notify_sms",
      "notify_whatsapp",
      "notifying",
      "sendEmail",
+     "sendSms",
      "sendWhatsApp"
     ],
     "webhook_events": [],
@@ -21660,8 +21663,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 81,
-   "lines": 20592,
+   "files": 91,
+   "lines": 23155,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21711,11 +21714,14 @@
     "cors.ts: corsHeaders",
     "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
     "logger.ts: logger",
-    "phone.ts: normalizePhone, isDeliverablePhone, resolveGeoRecipient",
+    "phone.ts: normalizePhone, maskPhone, isDeliverablePhone, resolveGeoRecipient",
     "schemas.ts: ContractName, CONTRACT_REGISTRY, OPTIONAL_BODY_CONTRACTS, getSchema",
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
-    "zapp.ts: TextChannelResult, TextChannel, ZappConfig, normalizeZappNumber, createZappChannel, zappChannelFromEnv",
+    "sms.ts: TextChannelResult, DeliveryStatus, SmsSendResult, SmsInbound, SmsChannel, toGsm7",
+    "zapp.ts: ErrorAction, ERROR_CODE_ACTIONS, actionForErrorCode, SendOptions, TextChannelResult, TextChannel",
+    "inbound-actions.ts: InboundContext, IncidentType, InboundEffect, InboundPlan, planInboundAction",
+    "inbound.ts: InboundChoice, InboundIntent, InboundResult, OPTOUT_KEYWORDS, isOptOutKeyword, InboundMediaKind",
     "router.ts: MessageRole, MessageChannel, IMMEDIATE_FALLBACK_REASONS, ImmediateFallbackReason, RouteRule, DEFAULT_ROUTES",
     "index.ts: classifySeverity, buildTelemetry, emitTelemetry",
     "error-monitor.ts: ERROR_RATE_THRESHOLD, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_WINDOW_MINUTES, ERROR_ALERT_COOLDOWN_MINUTES, ErrorOutcome, recordProviderFailure",
@@ -21734,8 +21740,10 @@
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
     "normalize.ts: normalizeLalamoveV3Payload",
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
+    "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation",
     "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
     "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole",
+    "sms-dispatch.ts: SmsDispatchInput, SmsDispatchResult, buildSmsBody, dispatchSms",
     "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute",
     "replay.ts: ReplayPoint, ReplayFixture, ReplayStep, bearingDeg, remainingM, replaySteps"
    ],
@@ -21769,8 +21777,14 @@
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/_shared/template.test.ts",
     "supabase/functions/_shared/template.ts",
+    "supabase/functions/_shared/channels/sms.test.ts",
+    "supabase/functions/_shared/channels/sms.ts",
     "supabase/functions/_shared/channels/zapp.test.ts",
     "supabase/functions/_shared/channels/zapp.ts",
+    "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "supabase/functions/_shared/messaging/inbound.test.ts",
+    "supabase/functions/_shared/messaging/inbound.ts",
     "supabase/functions/_shared/messaging/router.test.ts",
     "supabase/functions/_shared/messaging/router.ts",
     "supabase/functions/apply-fixes/index.ts",
@@ -21827,15 +21841,9 @@
     "supabase/functions/route-analyzer/index.ts",
     "supabase/functions/seed-fix-rls/index.ts",
     "supabase/functions/send-notification/index.ts",
-    "supabase/functions/send-notification/quiet-hours.test.ts",
-    "supabase/functions/send-notification/quiet-hours.ts",
-    "supabase/functions/send-notification/recipients.test.ts",
-    "supabase/functions/send-notification/recipients.ts",
-    "supabase/functions/send-notification/static-map.test.ts",
-    "supabase/functions/send-notification/static-map.ts",
-    "supabase/functions/simulate-driver-movement/index.ts",
-    "supabase/functions/simulate-driver-movement/replay.test.ts",
-    "supabase/functions/simulate-driver-movement/replay.ts"
+    "supabase/functions/send-notification/message-id.test.ts",
+    "supabase/functions/send-notification/message-id.ts",
+    "supabase/functions/send-notification/quiet-hours.test.ts"
    ]
   },
   {
@@ -22037,7 +22045,8 @@
    },
    "alerts_sent": {
     "select": [
-     "src/hooks/useNotificationHistory.ts"
+     "src/hooks/useNotificationHistory.ts",
+     "supabase/functions/send-notification/index.ts"
     ],
     "insert": [
      "supabase/functions/send-notification/index.ts"
@@ -22265,7 +22274,8 @@
      "supabase/functions/evaluate-driver/index.ts",
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/route-analyzer/index.ts"
+     "supabase/functions/route-analyzer/index.ts",
+     "supabase/functions/send-notification/index.ts"
     ],
     "update": [
      "src/hooks/useApprovalActions.ts",
@@ -22821,6 +22831,8 @@
    ],
    "alerts_sent": [
     "channel",
+    "recipient",
+    "sent_at",
     "status"
    ],
    "bitrix24_stage_mappings": [
@@ -24757,6 +24769,36 @@
     "values": "\"pickup_contact_name\", \"delivery_contact_name\", \"driver_name\", \"driver_plate\", \"eta_min\", \"distance_m\", \"share_link\", \"order_ref\", \"pickup_address\", \"delivery_address\", \"static_map_url\","
    },
    {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "name": "DeliveryStatus",
+    "values": "sent | delivered | failed | unknown"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "name": "ErrorAction",
+    "values": "fallback | retry | give_up | alert"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "name": "IncidentType",
+    "values": "LATE_DELIVERY | DAMAGE | CUSTOMER_COMPLAINT | OTHER"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.ts",
+    "name": "InboundIntent",
+    "values": "optout | problem | arrived | collected | on_the_way | decline | confirm"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.ts",
+    "name": "InboundMediaKind",
+    "values": "proof | damage | other"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.ts",
+    "name": "OPTOUT_KEYWORDS",
+    "values": "\"sair\", \"parar\", \"descadastrar\", \"nao quero mais\","
+   },
+   {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "name": "MessageRole",
     "values": "driver | pickup_contact | delivery_contact | internal"
@@ -24774,7 +24816,7 @@
    {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "name": "RATE_LIMIT_EXEMPT_EVENTS",
-    "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\""
+    "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\","
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
@@ -26069,6 +26111,30 @@
     "msg": ": { v1: newDeviceAlertV1, v2: newDeviceAlertV2 },\n  "
    },
    {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": " = avisar a operação (o destinatário precisa de\n * outro meio).\n */\nexport type ErrorAction = "
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": " };\n      }\n\n      return await post("
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": ",\n  expired: "
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": ",\n  provider_rejected: "
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": ";\n\nexport const ERROR_CODE_ACTIONS: Record<string, ErrorAction> = {\n  invalid_number: "
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "msg": ";\n}\n\n/**\n * Etapa 86: metadados de correlação da etapa 89. "
+   },
+   {
     "file": "supabase/functions/bitrix24-sync/index.ts",
     "msg": "Authorization code missing"
    },
@@ -26985,12 +27051,32 @@
     "text": "Ambiente sem credenciais (ex.: testes): apenas log."
    },
    {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "text": "coleta - via Avenida\" com um \"A\" acentuado custa 2. A regra e agressiva de"
+   },
+   {
     "file": "supabase/functions/_shared/channels/zapp.ts",
     "text": "é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais."
    },
    {
     "file": "supabase/functions/_shared/channels/zapp.ts",
+    "text": "Sem prazo explícito vale o TTL padrão: alerta de pedido entregue meia"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
     "text": "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "text": "sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato —"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.ts",
+    "text": "* A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.ts",
+    "text": "não deve virar confirmação de chegada. Quem decide onde gravar (stop_proofs ou"
    },
    {
     "file": "supabase/functions/_shared/messaging/router.ts",
@@ -27299,6 +27385,10 @@
    {
     "file": "supabase/functions/send-notification/index.ts",
     "text": "lets the caller pick an arbitrary destination, so it must be restricted to"
+   },
+   {
+    "file": "supabase/functions/send-notification/index.ts",
+    "text": "O limite e por PESSOA, nao por pedido: um motorista com 20 entregas no"
    },
    {
     "file": "supabase/functions/send-notification/recipients.ts",
@@ -30391,9 +30481,19 @@
     "value": "\"v2\""
    },
    {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "name": "DEFAULT_TIMEOUT_MS",
+    "value": "10"
+   },
+   {
     "file": "supabase/functions/_shared/channels/zapp.ts",
     "name": "DEFAULT_TIMEOUT_MS",
     "value": "15"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.ts",
+    "name": "DEFAULT_TTL_MINUTES",
+    "value": "30"
    },
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
@@ -33787,6 +33887,60 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "type",
+    "value": "text",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "type",
+    "value": "text",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "delivered",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "entregue",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "failed",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "falha",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "sent",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.ts",
+    "field": "status",
+    "value": "enviado",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "field": "type",
+    "value": "DAMAGE",
+    "kind": "compara"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "field": "role",
     "value": "driver",
@@ -34821,6 +34975,12 @@
     "body": "const weights = { LCP: 0.25, INP: 0.30, // INP is now a Core Web Vital CLS: 0.25, FCP: 0.10, TTFB: 0.10, }; let score = 0; let totalWeight = 0; for (const [name, weight] of Object.entries(weights)) { const metric = metrics[name]; if (metric) { const metricRating = metric.rating; const metricScore = metricRating === 'good' ? 100 : metricRating === 'needs-improvement' ? 50 : 0; score += metricScore * weight; totalWeight += weight; } } return totalWeight > 0 ? Math.round(score / totalWeight * 100) …"
    },
    {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "name": "canTrack",
+    "params": "ctx: InboundContext",
+    "body": "return Boolean(ctx.driverId) && ctx.hasDriverPosition;"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "name": "shouldFallback",
     "params": "sentAt: Date | null, now: Date, fallbackAfterMin: number,",
@@ -34830,7 +34990,7 @@
     "file": "supabase/functions/_shared/messaging/router.ts",
     "name": "applyQuietHours",
     "params": "role: MessageRole, at: Date, hasActiveOrder: boolean, quiet: QuietHours = DEFAULT_QUIET_HOURS,",
-    "body": "if (role === \"driver\" && hasActiveOrder) return { suppressed: false, releaseAt: null }; if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000)); return { suppressed: true, releaseAt };"
+    "body": "if (role === \"driver\" && hasActiveOrder) { return { suppressed: false, releaseAt: null }; } if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date( at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000), ); return { suppressed: true, releas …"
    },
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
@@ -39441,6 +39601,18 @@
     "name": "resolve: nenhum candidato válido devolve null (vira no_recipient)"
    },
    {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "etapa 142: log leva telefone mascarado, com DDD e os 2 ultimos"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "etapa 142: telefone invalido nao vira mascara falsa"
+   },
+   {
+    "file": "supabase/functions/_shared/phone.test.ts",
+    "name": "etapa 142: mascara nao deixa vazar o numero completo"
+   },
+   {
     "file": "supabase/functions/_shared/template.test.ts",
     "name": "renderTemplate: substitui as variaveis do template PT-BR de coleta"
    },
@@ -39475,6 +39647,50 @@
    {
     "file": "supabase/functions/_shared/template.test.ts",
     "name": "missingTemplateVars: template completo devolve lista vazia"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "toGsm7 remove acento para nao pagar 2 segmentos"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "smsSegments conta 160 no primeiro e 153 nos seguintes"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "composeSmsText corta no espaco e sinaliza truncamento"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "composeSmsText nao trunca mensagem curta"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "normalizeSmsNumber deixa so digitos"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "Comtele envia transliterado e devolve providerId e segmentos"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "Comtele devolve erro legivel quando o provedor recusa"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "canal sem destinatario nao chama a API"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "Comtele interpreta DLR em portugues e resposta inbound"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "Zenvia prefixa 55 sem duplicar e interpreta os codigos de status"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/sms.test.ts",
+    "name": "seletor devolve null sem secret e escolhe por SMS_PROVIDER"
    },
    {
     "file": "supabase/functions/_shared/channels/zapp.test.ts",
@@ -39523,6 +39739,170 @@
    {
     "file": "supabase/functions/_shared/channels/zapp.test.ts",
     "name": "zapp: sendMedia com destinatário vazio não chama a API"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: envia client_message_id, correlation e expires_at"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: ttlMinutes vira expires_at calculado sobre o relógio injetado"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: sem options o corpo não ganha campo de correlação"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: lê 202 {message_id} e devolve providerMessageId"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: 202 sem id aceita o envio e não inventa id"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: 404 vira invalid_number com fallback imediato para SMS"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: 401 vira unauthorized com give_up (não adianta repetir)"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: 429 vira rate_limited com retry"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: 503 vira instance_unavailable com fallback"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: error.code do corpo tem precedência sobre o status HTTP"
+   },
+   {
+    "file": "supabase/functions/_shared/channels/zapp.test.ts",
+    "name": "etapa 86: código desconhecido pede alerta à operação"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: confirmacao carimba o pedido e abre evento de rastreio"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: chegada carimba driver_arrived_at"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: problema abre incidente, nao confirmacao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: atraso sem avaria e LATE_DELIVERY e severidade MEDIUM"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: recusa nao vira incidente — vira carimbo e badge"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: sem posicao conhecida nao inventa tracking_event"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: sem motorista o tracking_event tambem nao existe"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: problema sem motorista vira badge, nao incidente orfao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: sem pedido nada e gravado, mas o motivo fica registrado"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: opt-out vale sem pedido — e do telefone, nao da corrida"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: texto livre (etapa 115) vira badge para o operador"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 114: opcao numerada vira badge com o digito escolhido"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 116: foto sem texto vira comprovante quando ha parada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 116: foto de avaria sem parada vira badge de media_avaria"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 116: foto de comprovante sem parada vira badge de media_comprovante"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+    "name": "etapa 116: texto com foto ainda classifica o texto, e a foto vira comprovante"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: id da opcao tem prioridade sobre qualquer palavra"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: digito escolhe a opcao oferecida no envio"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: digito sem mapa de opcoes nao vira escolha"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: variacoes de chegada caem na mesma intencao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: coletado e a caminho sao intencoes distintas"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: "
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: acento e caixa alta nao mudam a classificacao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: palavra dentro de outra palavra nao casa"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: texto livre preserva o original para o operador ler"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 113: mensagem vazia nao quebra"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 128: SAIR e PARAR sao pedido de descadastro, nao intencao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 128: CANCELAR nao descadastra — continua sendo recusa de corrida"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 128: SAIR dentro de outra palavra nao descadastra"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound.test.ts",
+    "name": "etapa 128: opt-out vence o mapa de opcoes so quando nao ha digito"
    },
    {
     "file": "supabase/functions/_shared/messaging/router.test.ts",
@@ -39595,6 +39975,10 @@
    {
     "file": "supabase/functions/_shared/messaging/router.test.ts",
     "name": "etapa 92: opt-out vence o limite de taxa na razao registrada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/router.test.ts",
+    "name": "etapa 94: evento de rastreio nao leva severidade na chave de dedup"
    },
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
@@ -40409,6 +40793,42 @@
     "name": "[v3 normalize] timestamp epoch em segundos vira ISO quando nao ha updatedAt"
    },
    {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: mesmo evento devolve o mesmo id (idempotência)"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: telefone com máscara não muda o id"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: eventos diferentes geram ids diferentes"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: papéis diferentes no mesmo telefone geram ids diferentes"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: telefones diferentes geram ids diferentes"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: seq diferente gera id diferente (reenvio explícito)"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 89: id é curto e legível, não uuid completo"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 86: correlação identifica evento, pedido, papel e canal"
+   },
+   {
+    "file": "supabase/functions/send-notification/message-id.test.ts",
+    "name": "etapa 86: sem pedido a correlação usa o telefone"
+   },
+   {
     "file": "supabase/functions/send-notification/quiet-hours.test.ts",
     "name": "[quiet-hours] dentro da janela (10:00 UTC = 07:00 local, início inclusive)"
    },
@@ -40467,6 +40887,30 @@
    {
     "file": "supabase/functions/send-notification/recipients.test.ts",
     "name": "primeiro por papel alimenta o template"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "buildSmsBody junta titulo, mensagem e pedido sem partes vazias"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "sem provedor configurado devolve erro explicito e nao envia"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "dispatchSms repassa o texto montado e a referencia do pedido"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "dispatchSms propaga a falha do provedor com o texto que tentou"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "etapa 125: share_link acompanha o SMS, mesmo fora do template"
+   },
+   {
+    "file": "supabase/functions/send-notification/sms-dispatch.test.ts",
+    "name": "etapa 125: link vazio nao deixa separador solto"
    },
    {
     "file": "supabase/functions/send-notification/static-map.test.ts",
@@ -40862,6 +41306,10 @@
    },
    {
     "file": "supabase/functions/send-notification/index.ts",
+    "call": "notify_sms"
+   },
+   {
+    "file": "supabase/functions/send-notification/index.ts",
     "call": "notify_whatsapp"
    },
    {
@@ -40871,6 +41319,10 @@
    {
     "file": "supabase/functions/send-notification/index.ts",
     "call": "sendEmail"
+   },
+   {
+    "file": "supabase/functions/send-notification/index.ts",
+    "call": "sendSms"
    },
    {
     "file": "supabase/functions/send-notification/index.ts",
@@ -45867,6 +46319,12 @@
      "web-vitals": [
       "escreve:src/utils/webVitals.ts"
      ],
+     "text": [
+      "escreve:supabase/functions/_shared/channels/sms.ts"
+     ],
+     "DAMAGE": [
+      "compara:supabase/functions/_shared/messaging/inbound-actions.ts"
+     ],
      "DRIVER_STOPPED": [
       "escreve:supabase/functions/check-driver-alerts/index.ts",
       "filtra:supabase/functions/check-driver-alerts/index.ts"
@@ -46063,7 +46521,8 @@
       "compara:src/hooks/useCacheViews.ts",
       "compara:src/hooks/useNotificationHistory.ts",
       "compara:src/pages/CacheMonitoringPage.tsx",
-      "compara:src/pages/CacheStatusPage.tsx"
+      "compara:src/pages/CacheStatusPage.tsx",
+      "compara:supabase/functions/_shared/channels/sms.ts"
      ],
      "in_progress": [
       "compara:src/components/ui/timeline-item.tsx"
@@ -46150,10 +46609,12 @@
       "compara:src/pages/OrdersPage.tsx"
      ],
      "sent": [
-      "compara:src/hooks/useNotificationHistory.ts"
+      "compara:src/hooks/useNotificationHistory.ts",
+      "compara:supabase/functions/_shared/channels/sms.ts"
      ],
      "delivered": [
-      "compara:src/hooks/useNotificationHistory.ts"
+      "compara:src/hooks/useNotificationHistory.ts",
+      "compara:supabase/functions/_shared/channels/sms.ts"
      ],
      "approved": [
       "compara:src/pages/PasswordResetApprovalsPage.tsx",
@@ -46192,6 +46653,15 @@
      ],
      "healthy": [
       "compara:src/pages/SLODashboardPage.tsx"
+     ],
+     "entregue": [
+      "compara:supabase/functions/_shared/channels/sms.ts"
+     ],
+     "falha": [
+      "compara:supabase/functions/_shared/channels/sms.ts"
+     ],
+     "enviado": [
+      "compara:supabase/functions/_shared/channels/sms.ts"
      ],
      "ZERO_RESULTS": [
       "compara:supabase/functions/geo-gateway/providers/google.ts"
@@ -51563,6 +52033,27 @@
     "msg": "valor `PROCESSING` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/pages/JobQueuePage.tsx"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `entregue` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/_shared/channels/sms.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `falha` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/_shared/channels/sms.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `enviado` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/_shared/channels/sms.ts"
     ]
    },
    {
@@ -68625,7 +69116,7 @@
   },
   "supabase/functions/_shared/phone.test.ts": {
    "path": "supabase/functions/_shared/phone.test.ts",
-   "lines": 106,
+   "lines": 139,
    "is_test": true,
    "tests": [
     "normaliza celular com máscara",
@@ -68641,14 +69132,18 @@
     "resolve: contato da coleta tem prioridade",
     "resolve: fornecedor só entra com auto_notify_supplier",
     "resolve: cai no telefone da parada quando os demais falham",
-    "resolve: nenhum candidato válido devolve null (vira no_recipient)"
+    "resolve: nenhum candidato válido devolve null (vira no_recipient)",
+    "etapa 142: log leva telefone mascarado, com DDD e os 2 ultimos",
+    "etapa 142: telefone invalido nao vira mascara falsa",
+    "etapa 142: mascara nao deixa vazar o numero completo"
    ]
   },
   "supabase/functions/_shared/phone.ts": {
    "path": "supabase/functions/_shared/phone.ts",
-   "lines": 91,
+   "lines": 117,
    "exports": [
     "function normalizePhone",
+    "function maskPhone",
     "function isDeliverablePhone",
     "function resolveGeoRecipient"
    ]
@@ -68960,9 +69455,104 @@
    ],
    "doc": "Renderizador dos templates de alerta (etapa 67 do plano Google). `alert_configurations.message_template` guarda textos PT-BR com variáveis `{{nome}}` editáveis pelo operador na UI de configurações. Sem este módulo o texto do template era ignorado: o trigger `geo_evaluate_tracking` montava a mensagem …"
   },
+  "supabase/functions/_shared/channels/sms.test.ts": {
+   "path": "supabase/functions/_shared/channels/sms.test.ts",
+   "lines": 139,
+   "is_test": true,
+   "tests": [
+    "toGsm7 remove acento para nao pagar 2 segmentos",
+    "smsSegments conta 160 no primeiro e 153 nos seguintes",
+    "composeSmsText corta no espaco e sinaliza truncamento",
+    "composeSmsText nao trunca mensagem curta",
+    "normalizeSmsNumber deixa so digitos",
+    "Comtele envia transliterado e devolve providerId e segmentos",
+    "Comtele devolve erro legivel quando o provedor recusa",
+    "canal sem destinatario nao chama a API",
+    "Comtele interpreta DLR em portugues e resposta inbound",
+    "Zenvia prefixa 55 sem duplicar e interpreta os codigos de status",
+    "seletor devolve null sem secret e escolhe por SMS_PROVIDER"
+   ]
+  },
+  "supabase/functions/_shared/channels/sms.ts": {
+   "path": "supabase/functions/_shared/channels/sms.ts",
+   "lines": 281,
+   "exports": [
+    "interface TextChannelResult",
+    "type DeliveryStatus",
+    "interface SmsSendResult",
+    "interface SmsInbound",
+    "interface SmsChannel",
+    "function toGsm7",
+    "function smsSegments",
+    "function composeSmsText",
+    "function normalizeSmsNumber",
+    "interface SmsConfig",
+    "function createComteleChannel",
+    "function createZenviaChannel",
+    "function smsChannelFromEnv"
+   ],
+   "enums": [
+    {
+     "name": "DeliveryStatus",
+     "values": "sent | delivered | failed | unknown"
+    }
+   ],
+   "params": [
+    {
+     "name": "DEFAULT_TIMEOUT_MS",
+     "value": "10"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "text",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "text",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "delivered",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "entregue",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "failed",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "falha",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "sent",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "enviado",
+     "kind": "compara"
+    }
+   ],
+   "rule_comments": [
+    "coleta - via Avenida\" com um \"A\" acentuado custa 2. A regra e agressiva de"
+   ],
+   "doc": "Etapas 119, 120 e 124 do plano de mensageria: canal SMS de contingencia. O SMS so existe para quando o WhatsApp falha — motorista sem internet, sessao do Zapp caida, numero que nunca instalou o app. Por isso a interface e a mesma do canal Zapp (`{success, error?}`) e o despacho troca de canal sem ra …"
+  },
   "supabase/functions/_shared/channels/zapp.test.ts": {
    "path": "supabase/functions/_shared/channels/zapp.test.ts",
-   "lines": 182,
+   "lines": 327,
    "is_test": true,
    "tests": [
     "zapp: envia POST com Bearer, número só com dígitos e corpo JSON",
@@ -68976,35 +69566,188 @@
     "normalizeZappNumber remove máscara e não-dígitos",
     "zapp: sendMedia envia imagem com caption e mimetype extraído do data URL",
     "zapp: sendMedia recusa mídia que não é data URL de imagem",
-    "zapp: sendMedia com destinatário vazio não chama a API"
+    "zapp: sendMedia com destinatário vazio não chama a API",
+    "etapa 86: envia client_message_id, correlation e expires_at",
+    "etapa 86: ttlMinutes vira expires_at calculado sobre o relógio injetado",
+    "etapa 86: sem options o corpo não ganha campo de correlação",
+    "etapa 86: lê 202 {message_id} e devolve providerMessageId",
+    "etapa 86: 202 sem id aceita o envio e não inventa id",
+    "etapa 86: 404 vira invalid_number com fallback imediato para SMS",
+    "etapa 86: 401 vira unauthorized com give_up (não adianta repetir)",
+    "etapa 86: 429 vira rate_limited com retry",
+    "etapa 86: 503 vira instance_unavailable com fallback",
+    "etapa 86: error.code do corpo tem precedência sobre o status HTTP",
+    "etapa 86: código desconhecido pede alerta à operação"
    ]
   },
   "supabase/functions/_shared/channels/zapp.ts": {
    "path": "supabase/functions/_shared/channels/zapp.ts",
-   "lines": 178,
+   "lines": 341,
    "exports": [
+    "type ErrorAction",
+    "const ERROR_CODE_ACTIONS",
+    "function actionForErrorCode",
+    "interface SendOptions",
     "interface TextChannelResult",
     "interface TextChannel",
     "interface ZappConfig",
     "function normalizeZappNumber",
+    "function correlationFields",
+    "function parseZappAccepted",
+    "function errorCodeFromResponse",
     "function createZappChannel",
     "function zappChannelFromEnv"
+   ],
+   "errors": [
+    " = avisar a operação (o destinatário precisa de\n * outro meio).\n */\nexport type ErrorAction = ",
+    " };\n      }\n\n      return await post(",
+    ",\n  expired: ",
+    ",\n  provider_rejected: ",
+    ";\n\nexport const ERROR_CODE_ACTIONS: Record<string, ErrorAction> = {\n  invalid_number: ",
+    ";\n}\n\n/**\n * Etapa 86: metadados de correlação da etapa 89. "
+   ],
+   "enums": [
+    {
+     "name": "ErrorAction",
+     "values": "fallback | retry | give_up | alert"
+    }
    ],
    "params": [
     {
      "name": "DEFAULT_TIMEOUT_MS",
      "value": "15"
+    },
+    {
+     "name": "DEFAULT_TTL_MINUTES",
+     "value": "30"
     }
    ],
    "rule_comments": [
     "é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais.",
+    "Sem prazo explícito vale o TTL padrão: alerta de pedido entregue meia",
     "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
    ],
    "doc": "Etapa 69 do plano Google Maps (decisão D2): canal Zapp Web. O Zapp é o provedor de WhatsApp Web da Promo Brindes. A interface é deliberadamente igual à do Evolution em `send-notification` — mesma assinatura `sendText(number, text)` devolvendo `{success, error?}` — para que o despacho troque de canal …"
   },
+  "supabase/functions/_shared/messaging/inbound-actions.test.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+   "lines": 164,
+   "is_test": true,
+   "tests": [
+    "etapa 114: confirmacao carimba o pedido e abre evento de rastreio",
+    "etapa 114: chegada carimba driver_arrived_at",
+    "etapa 114: problema abre incidente, nao confirmacao",
+    "etapa 114: atraso sem avaria e LATE_DELIVERY e severidade MEDIUM",
+    "etapa 114: recusa nao vira incidente — vira carimbo e badge",
+    "etapa 114: sem posicao conhecida nao inventa tracking_event",
+    "etapa 114: sem motorista o tracking_event tambem nao existe",
+    "etapa 114: problema sem motorista vira badge, nao incidente orfao",
+    "etapa 114: sem pedido nada e gravado, mas o motivo fica registrado",
+    "etapa 114: opt-out vale sem pedido — e do telefone, nao da corrida",
+    "etapa 114: texto livre (etapa 115) vira badge para o operador",
+    "etapa 114: opcao numerada vira badge com o digito escolhido",
+    "etapa 116: foto sem texto vira comprovante quando ha parada",
+    "etapa 116: foto de avaria sem parada vira badge de media_avaria",
+    "etapa 116: foto de comprovante sem parada vira badge de media_comprovante",
+    "etapa 116: texto com foto ainda classifica o texto, e a foto vira comprovante"
+   ]
+  },
+  "supabase/functions/_shared/messaging/inbound-actions.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound-actions.ts",
+   "lines": 257,
+   "exports": [
+    "interface InboundContext",
+    "type IncidentType",
+    "type InboundEffect",
+    "interface InboundPlan",
+    "function planInboundAction"
+   ],
+   "enums": [
+    {
+     "name": "IncidentType",
+     "values": "LATE_DELIVERY | DAMAGE | CUSTOMER_COMPLAINT | OTHER"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "DAMAGE",
+     "kind": "compara"
+    }
+   ],
+   "rule_comments": [
+    "sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato —"
+   ],
+   "calc_fns": [
+    {
+     "name": "canTrack",
+     "params": "ctx: InboundContext",
+     "body": "return Boolean(ctx.driverId) && ctx.hasDriverPosition;"
+    }
+   ]
+  },
+  "supabase/functions/_shared/messaging/inbound.test.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound.test.ts",
+   "lines": 129,
+   "is_test": true,
+   "rule_comments": [
+    "\"assim\" contem \"sim\" — nao pode virar confirmacao."
+   ],
+   "doc": "Etapa 113: tabela de casos do interpretador de respostas. Cada caso aqui e uma frase que motorista de verdade manda no WhatsApp. O que importa nao e o texto casar bonito, e sim a ordem: numero de opcao vence palavra-chave, palavra-chave vence texto livre, e \"nao consigo chegar\" e problema — nunca co …",
+   "tests": [
+    "etapa 113: id da opcao tem prioridade sobre qualquer palavra",
+    "etapa 113: digito escolhe a opcao oferecida no envio",
+    "etapa 113: digito sem mapa de opcoes nao vira escolha",
+    "etapa 113: variacoes de chegada caem na mesma intencao",
+    "etapa 113: coletado e a caminho sao intencoes distintas",
+    "etapa 113: ",
+    "etapa 113: acento e caixa alta nao mudam a classificacao",
+    "etapa 113: palavra dentro de outra palavra nao casa",
+    "etapa 113: texto livre preserva o original para o operador ler",
+    "etapa 113: mensagem vazia nao quebra",
+    "etapa 128: SAIR e PARAR sao pedido de descadastro, nao intencao",
+    "etapa 128: CANCELAR nao descadastra — continua sendo recusa de corrida",
+    "etapa 128: SAIR dentro de outra palavra nao descadastra",
+    "etapa 128: opt-out vence o mapa de opcoes so quando nao ha digito"
+   ]
+  },
+  "supabase/functions/_shared/messaging/inbound.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound.ts",
+   "lines": 218,
+   "exports": [
+    "interface InboundChoice",
+    "type InboundIntent",
+    "type InboundResult",
+    "const OPTOUT_KEYWORDS",
+    "function isOptOutKeyword",
+    "type InboundMediaKind",
+    "function classifyInboundMedia",
+    "function normalizeInboundText",
+    "function classifyInbound"
+   ],
+   "enums": [
+    {
+     "name": "InboundIntent",
+     "values": "optout | problem | arrived | collected | on_the_way | decline | confirm"
+    },
+    {
+     "name": "InboundMediaKind",
+     "values": "proof | damage | other"
+    },
+    {
+     "name": "OPTOUT_KEYWORDS",
+     "values": "\"sair\", \"parar\", \"descadastrar\", \"nao quero mais\","
+    }
+   ],
+   "rule_comments": [
+    "* A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave",
+    "não deve virar confirmação de chegada. Quem decide onde gravar (stop_proofs ou"
+   ],
+   "doc": "Interpretador de respostas do motorista (etapa 113 do plano de mensageria). A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave -> texto livre. Um \"2\" que casa com o mapa de opcoes do `send-choice` (etapa 44) vale mais que qualquer palavra-chave, porque foi o proprio siste …"
+  },
   "supabase/functions/_shared/messaging/router.test.ts": {
    "path": "supabase/functions/_shared/messaging/router.test.ts",
-   "lines": 135,
+   "lines": 206,
    "is_test": true,
    "doc": "Etapas 88-95: cada teste aqui representa um caso que ja custou (ou custaria) dinheiro ou credibilidade com o motorista — mensagem duplicada, rajada de 20 SMS, aviso as 3h da manha, fallback que nunca dispara.",
    "tests": [
@@ -69025,12 +69768,13 @@
     "etapa 95: sexta mensagem em 10 min ainda passa, setima bloqueia",
     "etapa 95: envios fora da janela de 10 min nao contam",
     "etapa 95: motorista chegou (M8) fura o limite — o aviso e o que importa",
-    "etapa 92: opt-out vence o limite de taxa na razao registrada"
+    "etapa 92: opt-out vence o limite de taxa na razao registrada",
+    "etapa 94: evento de rastreio nao leva severidade na chave de dedup"
    ]
   },
   "supabase/functions/_shared/messaging/router.ts": {
    "path": "supabase/functions/_shared/messaging/router.ts",
-   "lines": 198,
+   "lines": 320,
    "exports": [
     "type MessageRole",
     "type MessageChannel",
@@ -69053,6 +69797,7 @@
     "const RATE_LIMIT_EXEMPT_EVENTS",
     "interface RateLimitInput",
     "function isRateLimited",
+    "const DEDUP_SEVERITY_FREE_EVENTS",
     "function suppressionReason"
    ],
    "enums": [
@@ -69070,7 +69815,7 @@
     },
     {
      "name": "RATE_LIMIT_EXEMPT_EVENTS",
-     "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\""
+     "values": "\"DRIVER_ARRIVED_PICKUP\", \"DRIVER_ARRIVED_DELIVERY\","
     }
    ],
    "status_values": [
@@ -69144,7 +69889,7 @@
     {
      "name": "applyQuietHours",
      "params": "role: MessageRole, at: Date, hasActiveOrder: boolean, quiet: QuietHours = DEFAULT_QUIET_HOURS,",
-     "body": "if (role === \"driver\" && hasActiveOrder) return { suppressed: false, releaseAt: null }; if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date(at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000)); return { suppressed: true, releaseAt };"
+     "body": "if (role === \"driver\" && hasActiveOrder) { return { suppressed: false, releaseAt: null }; } if (!isInQuietHours(at, quiet)) return { suppressed: false, releaseAt: null }; const hour = localHour(at, quiet.timezoneOffsetMinutes); // Quantas horas faltam para `endHour`. const hoursUntilOpen = quiet.endHour > hour ? quiet.endHour - hour : 24 - hour + quiet.endHour; const releaseAt = new Date( at.getTime() + hoursUntilOpen * 3_600_000 - (at.getTime() % 3_600_000), ); return { suppressed: true, releas …"
     }
    ]
   },
@@ -71543,7 +72288,7 @@
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
-   "lines": 967,
+   "lines": 990,
    "tables": [
     {
      "table": "webhook_events",
@@ -71588,6 +72333,10 @@
     {
      "table": "drivers",
      "op": "select"
+    },
+    {
+     "table": "drivers",
+     "op": "update"
     },
     {
      "table": "drivers",
@@ -71731,6 +72480,7 @@
      "id",
      "lalamove_id",
      "name",
+     "phone",
      "risk_level",
      "risk_score",
      "status",
@@ -72131,7 +72881,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 947,
+   "lines": 1471,
    "tables": [
     {
      "table": "geo_defaults",
@@ -72151,6 +72901,14 @@
     },
     {
      "table": "alert_configurations",
+     "op": "select"
+    },
+    {
+     "table": "drivers",
+     "op": "select"
+    },
+    {
+     "table": "alerts_sent",
      "op": "select"
     },
     {
@@ -72192,6 +72950,14 @@
     ],
     "alert_configurations": [
      "alert_type"
+    ],
+    "drivers": [
+     "id",
+     "phone"
+    ],
+    "alerts_sent": [
+     "recipient",
+     "sent_at"
     ],
     "alerts": [
      "id"
@@ -72259,7 +73025,8 @@
    ],
    "rule_comments": [
     "verify_jwt=true so a valid JWT is required, but that includes ordinary",
-    "lets the caller pick an arbitrary destination, so it must be restricted to"
+    "lets the caller pick an arbitrary destination, so it must be restricted to",
+    "O limite e por PESSOA, nao por pedido: um motorista com 20 entregas no"
    ],
    "side_effects": [
     "invoke(",
@@ -72268,15 +73035,42 @@
     "notify_email",
     "notify_n8n_webhook",
     "notify_slack",
+    "notify_sms",
     "notify_whatsapp",
     "notifying",
     "sendEmail",
+    "sendSms",
     "sendWhatsApp"
    ],
    "pagination": [
     "1"
    ],
    "uses_service_role": true
+  },
+  "supabase/functions/send-notification/message-id.test.ts": {
+   "path": "supabase/functions/send-notification/message-id.test.ts",
+   "lines": 60,
+   "is_test": true,
+   "tests": [
+    "etapa 89: mesmo evento devolve o mesmo id (idempotência)",
+    "etapa 89: telefone com máscara não muda o id",
+    "etapa 89: eventos diferentes geram ids diferentes",
+    "etapa 89: papéis diferentes no mesmo telefone geram ids diferentes",
+    "etapa 89: telefones diferentes geram ids diferentes",
+    "etapa 89: seq diferente gera id diferente (reenvio explícito)",
+    "etapa 89: id é curto e legível, não uuid completo",
+    "etapa 86: correlação identifica evento, pedido, papel e canal",
+    "etapa 86: sem pedido a correlação usa o telefone"
+   ]
+  },
+  "supabase/functions/send-notification/message-id.ts": {
+   "path": "supabase/functions/send-notification/message-id.ts",
+   "lines": 59,
+   "exports": [
+    "interface MessageIdParts",
+    "function buildClientMessageId",
+    "function buildCorrelation"
+   ]
   },
   "supabase/functions/send-notification/quiet-hours.test.ts": {
    "path": "supabase/functions/send-notification/quiet-hours.test.ts",
@@ -72352,6 +73146,30 @@
     "descarta o que não dá para enviar — entrada inválida nunca deve lançar, senão",
     "destinos que são URLs/canais, mas a mesma regra de chave vale."
    ]
+  },
+  "supabase/functions/send-notification/sms-dispatch.test.ts": {
+   "path": "supabase/functions/send-notification/sms-dispatch.test.ts",
+   "lines": 87,
+   "is_test": true,
+   "tests": [
+    "buildSmsBody junta titulo, mensagem e pedido sem partes vazias",
+    "sem provedor configurado devolve erro explicito e nao envia",
+    "dispatchSms repassa o texto montado e a referencia do pedido",
+    "dispatchSms propaga a falha do provedor com o texto que tentou",
+    "etapa 125: share_link acompanha o SMS, mesmo fora do template",
+    "etapa 125: link vazio nao deixa separador solto"
+   ]
+  },
+  "supabase/functions/send-notification/sms-dispatch.ts": {
+   "path": "supabase/functions/send-notification/sms-dispatch.ts",
+   "lines": 62,
+   "exports": [
+    "interface SmsDispatchInput",
+    "interface SmsDispatchResult",
+    "function buildSmsBody",
+    "function dispatchSms"
+   ],
+   "doc": "Despacho de SMS do `send-notification` (etapas 119/120/124 do plano de mensageria). Fica fora do `index.ts` porque la o `serve()` roda no import e nada e testavel. O canal entra por parametro, entao o teste injeta um fake e confere o texto exato que sai — que e onde o custo mora: um acento a mais do …"
   },
   "supabase/functions/send-notification/static-map.test.ts": {
    "path": "supabase/functions/send-notification/static-map.test.ts",
@@ -73557,10 +74375,40 @@
   }
  },
  "git": {
-  "sha": "d899883254db3b7fb14e5b4f0f5dcc3b25d15c37",
+  "sha": "7f6a42bbf0dd74ff24e49ca6082143cf66072a8e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "7f6a42b",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "AGENTS.md",
+     "docs/agentes/mensageria.md",
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/_shared/channels/sms.test.ts",
+     "supabase/functions/_shared/channels/sms.ts",
+     "supabase/functions/_shared/channels/zapp.test.ts",
+     "supabase/functions/_shared/channels/zapp.ts",
+     "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+     "supabase/functions/_shared/messaging/inbound-actions.ts",
+     "supabase/functions/_shared/messaging/inbound.test.ts",
+     "supabase/functions/_shared/messaging/inbound.ts",
+     "supabase/functions/_shared/messaging/router.test.ts",
+     "supabase/functions/_shared/messaging/router.ts",
+     "supabase/functions/_shared/phone.test.ts",
+     "supabase/functions/_shared/phone.ts",
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/send-notification/index.ts",
+     "supabase/functions/send-notification/message-id.test.ts",
+     "supabase/functions/send-notification/message-id.ts",
+     "supabase/functions/send-notification/sms-dispatch.test.ts",
+     "supabase/functions/send-notification/sms-dispatch.ts"
+    ]
+   },
    {
     "sha": "d899883",
     "date": "2026-11-22",
@@ -73926,21 +74774,6 @@
     "files": [
      "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "03b0ca8",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: replay deterministico do trajeto e 100 testes na CI (#277)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-     "src/components/orders/AddressAutocomplete.test.tsx",
-     "src/components/orders/AddressAutocomplete.tsx",
-     "supabase/functions/simulate-driver-movement/index.ts",
-     "supabase/functions/simulate-driver-movement/replay.test.ts",
-     "supabase/functions/simulate-driver-movement/replay.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -73967,6 +74800,18 @@
    [
     "src/components/map/markerFactories.ts",
     3
+   ],
+   [
+    ".github/workflows/ci.yml",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/router.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/router.ts",
+    2
    ],
    [
     "src/components/dashboard/BatchActionsToolbar.tsx",
@@ -74010,18 +74855,6 @@
    ],
    [
     "src/hooks/useMFA.ts",
-    2
-   ],
-   [
-    "supabase/functions/external-companies/index.ts",
-    2
-   ],
-   [
-    "src/lib/__tests__/html.test.ts",
-    2
-   ],
-   [
-    "src/lib/html.ts",
     2
    ]
   ]

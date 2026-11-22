@@ -9,6 +9,8 @@
   "mcp-query"
  ],
  "shared": [
+  "supabase/functions/_shared/channels/sms.test.ts",
+  "supabase/functions/_shared/channels/sms.ts",
   "supabase/functions/_shared/channels/zapp.test.ts",
   "supabase/functions/_shared/channels/zapp.ts",
   "supabase/functions/_shared/contract.integration.test.ts",
@@ -18,6 +20,10 @@
   "supabase/functions/_shared/geo-precision.test.ts",
   "supabase/functions/_shared/geo-precision.ts",
   "supabase/functions/_shared/logger.ts",
+  "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+  "supabase/functions/_shared/messaging/inbound-actions.ts",
+  "supabase/functions/_shared/messaging/inbound.test.ts",
+  "supabase/functions/_shared/messaging/inbound.ts",
   "supabase/functions/_shared/messaging/router.test.ts",
   "supabase/functions/_shared/messaging/router.ts",
   "supabase/functions/_shared/phone.test.ts",
@@ -735,7 +741,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 3,
-   "linhas": 1136,
+   "linhas": 1159,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
@@ -774,6 +780,7 @@
    "usa_shared": [
     "contract.ts",
     "logger.ts",
+    "phone.ts",
     "schemas.ts",
     "telemetry.ts"
    ],
@@ -1020,8 +1027,8 @@
    "nome": "send-notification",
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
-   "arquivos": 4,
-   "linhas": 1308,
+   "arquivos": 6,
+   "linhas": 1953,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1034,6 +1041,7 @@
     "alerts",
     "alerts_sent",
     "bitrix24_tokens",
+    "drivers",
     "geo_defaults",
     "job_queue",
     "lalamove_orders",
@@ -1065,7 +1073,9 @@
     "contract.ts",
     "logger.ts",
     "phone.ts",
+    "router.ts",
     "schemas.ts",
+    "sms.ts",
     "telemetry.ts",
     "template.ts",
     "zapp.ts"
@@ -1081,7 +1091,7 @@
    ],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 3
+   "testes": 5
   },
   {
    "nome": "simulate-driver-movement",

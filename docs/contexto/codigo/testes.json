@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 160,
+ "total": 165,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 26,
+  "edge (deno)": 31,
   "guard (node --test)": 34,
   "unit (vitest)": 82
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 28
+   "arquivos": 33
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1179,13 +1179,22 @@
    "casos": 17
   },
   {
+   "arquivo": "supabase/functions/_shared/channels/sms.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 139,
+   "testa": [
+    "supabase/functions/_shared/channels/sms.ts"
+   ],
+   "casos": 11
+  },
+  {
    "arquivo": "supabase/functions/_shared/channels/zapp.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 182,
+   "linhas": 327,
    "testa": [
     "supabase/functions/_shared/channels/zapp.ts"
    ],
-   "casos": 12
+   "casos": 23
   },
   {
    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
@@ -1217,22 +1226,41 @@
    "casos": 3
   },
   {
+   "arquivo": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 164,
+   "testa": [
+    "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "supabase/functions/_shared/messaging/inbound.ts"
+   ],
+   "casos": 16
+  },
+  {
+   "arquivo": "supabase/functions/_shared/messaging/inbound.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 129,
+   "testa": [
+    "supabase/functions/_shared/messaging/inbound.ts"
+   ],
+   "casos": 14
+  },
+  {
    "arquivo": "supabase/functions/_shared/messaging/router.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 135,
+   "linhas": 206,
    "testa": [
     "supabase/functions/_shared/messaging/router.ts"
    ],
-   "casos": 18
+   "casos": 19
   },
   {
    "arquivo": "supabase/functions/_shared/phone.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 106,
+   "linhas": 139,
    "testa": [
     "supabase/functions/_shared/phone.ts"
    ],
-   "casos": 14
+   "casos": 17
   },
   {
    "arquivo": "supabase/functions/_shared/template.test.ts",
@@ -1402,6 +1430,15 @@
    "casos": 17
   },
   {
+   "arquivo": "supabase/functions/send-notification/message-id.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 60,
+   "testa": [
+    "supabase/functions/send-notification/message-id.ts"
+   ],
+   "casos": 10
+  },
+  {
    "arquivo": "supabase/functions/send-notification/quiet-hours.test.ts",
    "tipo": "edge (deno)",
    "linhas": 49,
@@ -1418,6 +1455,16 @@
     "supabase/functions/send-notification/recipients.ts"
    ],
    "casos": 7
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/sms-dispatch.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 87,
+   "testa": [
+    "supabase/functions/_shared/channels/sms.ts",
+    "supabase/functions/send-notification/sms-dispatch.ts"
+   ],
+   "casos": 6
   },
   {
    "arquivo": "supabase/functions/send-notification/static-map.test.ts",
@@ -1563,9 +1610,12 @@
   "src/types/lalamove.ts": 3,
   "src/utils/exportUtils.ts": 1,
   "src/utils/timeUtils.ts": 1,
+  "supabase/functions/_shared/channels/sms.ts": 2,
   "supabase/functions/_shared/channels/zapp.ts": 1,
   "supabase/functions/_shared/contract.ts": 3,
   "supabase/functions/_shared/geo-precision.ts": 1,
+  "supabase/functions/_shared/messaging/inbound-actions.ts": 1,
+  "supabase/functions/_shared/messaging/inbound.ts": 2,
   "supabase/functions/_shared/messaging/router.ts": 1,
   "supabase/functions/_shared/phone.ts": 1,
   "supabase/functions/_shared/schemas.ts": 2,
@@ -1584,8 +1634,10 @@
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1,
+  "supabase/functions/send-notification/message-id.ts": 1,
   "supabase/functions/send-notification/quiet-hours.ts": 1,
   "supabase/functions/send-notification/recipients.ts": 1,
+  "supabase/functions/send-notification/sms-dispatch.ts": 1,
   "supabase/functions/send-notification/static-map.ts": 1,
   "supabase/functions/simulate-driver-movement/replay.ts": 1,
   "supabase/tests/fixtures/route_curitiba.json": 2
