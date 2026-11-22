@@ -1036,10 +1036,11 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 4,
+   "usado_por": 5,
    "usado_por_arquivos": [
     "src/components/orders/AddressAutocomplete.tsx",
     "src/hooks/useCommandPaletteSearch.ts",
+    "src/hooks/useGeo.ts",
     "src/hooks/useGlobalSearch.ts",
     "src/pages/ExternalDataPage.tsx"
    ],
@@ -1319,17 +1320,27 @@
   },
   {
    "arquivo": "src/hooks/useGeo.ts",
-   "hooks_exportados": [],
-   "linhas": 6,
+   "hooks_exportados": [
+    "useGeoAutocomplete",
+    "useGeoPlaceDetails",
+    "useGeocode",
+    "useMatrix",
+    "useRoute",
+    "useStaticMap"
+   ],
+   "linhas": 174,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
    "edges": [],
-   "hooks_internos": [],
+   "hooks_internos": [
+    "useAddressSearchBox",
+    "useDebouncedValue"
+   ],
    "canais_realtime": [],
    "usado_por": 0,
    "usado_por_arquivos": [],
-   "coberto_por_testes": 1
+   "coberto_por_testes": 2
   },
   {
    "arquivo": "src/hooks/useGeoAdmin.ts",
@@ -1392,10 +1403,11 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/components/orders/AddressAutocomplete.tsx",
-    "src/components/orders/NewOrderDialog.tsx"
+    "src/components/orders/NewOrderDialog.tsx",
+    "src/hooks/useGeo.ts"
    ],
    "coberto_por_testes": 1
   },

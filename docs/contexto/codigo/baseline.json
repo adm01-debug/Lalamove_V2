@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
+  "commit": "5984867fca25657c8c8fa5415672d91411a817e8",
   "branch": "main",
-  "data_commit": "2026-11-22T03:15:09-03:00",
+  "data_commit": "2026-11-22T03:40:10-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5984867",
+    "data": "2026-11-22",
+    "assunto": "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)"
+   },
+   {
+    "sha": "4ad97ef",
+    "data": "2026-11-22",
+    "assunto": "chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)"
+   },
    {
     "sha": "b59c51c",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "d1b6ddf",
     "data": "2026-11-22",
     "assunto": "feat: alerta INTEGRATION_FAILURE por taxa de erro do provedor geo (etapa 96) (#224)"
-   },
-   {
-    "sha": "c980ca7",
-    "data": "2026-11-22",
-    "assunto": "feat: chave propria do Google Maps e Advanced Markers (etapas 75/76) (#223)"
-   },
-   {
-    "sha": "fac6e49",
-    "data": "2026-11-22",
-    "assunto": "feat: renderiza message_template dos alertas geo (etapa 67) (#222)"
    }
   ],
-  "arquivos_mudados_7d": 279,
+  "arquivos_mudados_7d": 281,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 26
+    "mudancas": 28
    },
    {
     "pasta": "src/components/orders",
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 26
+    "mudancas": 28
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 148
+    "commits": 150
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1019,
-  "arquivos_codigo": 640,
-  "linhas_codigo": 124522,
+  "arquivos_total": 1021,
+  "arquivos_codigo": 642,
+  "linhas_codigo": 125045,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 142,
+  "testes": 143,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 103
@@ -523,8 +523,8 @@
    "linhas": 29159
   },
   "src/hooks": {
-   "arquivos": 110,
-   "linhas": 18601
+   "arquivos": 111,
+   "linhas": 18948
   },
   "src/i18n": {
    "arquivos": 1,
@@ -555,8 +555,8 @@
    "linhas": 16
   },
   "src/types": {
-   "arquivos": 4,
-   "linhas": 895
+   "arquivos": 5,
+   "linhas": 1071
   },
   "src/utils": {
    "arquivos": 8,

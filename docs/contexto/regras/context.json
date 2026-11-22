@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
+  "sha": "5984867fca25657c8c8fa5415672d91411a817e8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 06:15 UTC",
-  "files_total": 1013,
-  "code_files": 837,
-  "code_lines": 143599
+  "generated_at": "2026-11-22 06:40 UTC",
+  "files_total": 1015,
+  "code_files": 839,
+  "code_lines": 144122
  },
  "version": "1.3.2",
- "facts_hash": "2ae29bb6159a6f5a",
+ "facts_hash": "079ac7df4e292fb7",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 292,
+   ".ts": 294,
    ".tsx": 235,
    ".sql": 188,
    ".mjs": 109,
@@ -19297,6 +19297,30 @@
     "file": "src/hooks/useFuseSearch.ts"
    },
    {
+    "name": "useGeoAutocomplete",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
+    "name": "useGeoPlaceDetails",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
+    "name": "useGeocode",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
+    "name": "useRoute",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
+    "name": "useMatrix",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
+    "name": "useStaticMap",
+    "file": "src/hooks/useGeo.ts"
+   },
+   {
     "name": "useGeoProviderStatus",
     "file": "src/hooks/useGeoAdmin.ts"
    },
@@ -20592,8 +20616,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 110,
-   "lines": 18601,
+   "files": 111,
+   "lines": 18948,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -20678,9 +20702,9 @@
     "useExternalData.ts: ExternalTable, ExternalRecord, AddressSearchResult, useExternalList, useExternalRecord, useAddressSearch",
     "useFeatureFlags.ts: FeatureFlag, useFeatureFlags, useFeatureFlag",
     "useFuseSearch.ts: WithMatches, useFuseSearch, useFuseSearchWithMatches, FusePreset, useFuseSearchWithPreset, fuseSearch",
+    "useGeo.ts: UseGeoAutocompleteOptions, UseGeoAutocompleteResult, useGeoAutocomplete, useGeoPlaceDetails, GeoPlaceDetailsVars, useGeocode",
     "useGeoAdmin.ts: GeoProviderName, GeoSettingProvider, GeoFunction, GeoSettingRow, GeoProviderStatus, GeoProviderStatusResponse",
-    "useGeoSearch.ts: GeoSuggestion, GeoAddress, resolveDeliveryPoint, SearchBias, useCustomerSearchBias, useAddressSearchBox",
-    "useGlobalSearch.ts: SearchResult, SearchFilter, RecentSearch, PAGES, typeIcons, typeColors"
+    "useGeoSearch.ts: GeoSuggestion, GeoAddress, resolveDeliveryPoint, SearchBias, useCustomerSearchBias, useAddressSearchBox"
    ],
    "docs": [
     "useApprovalRealtime.ts: Re-export from centralized realtime subscriptions This file is kept for backward compatibility",
@@ -21137,16 +21161,18 @@
   },
   {
    "module": "src/types",
-   "files": 4,
-   "lines": 895,
+   "files": 5,
+   "lines": 1071,
    "tables": [],
    "exports": [
     "driver.ts: DriverStatus, RiskLevel, DeliveryOutcome, ApprovalPriority, IncidentType, IncidentSeverity",
+    "geo.ts: ProviderName, GeoFunction, GeoPrecision, GeoPoint, GeoBias, GeoSuggestion",
     "index.ts: Order, OrderStatus, VehicleType, Driver, DriverStatus, DriverIncident",
     "lalamove.ts: SERVICE_TYPES, LalamoveServiceType, CITY_CODES, LalamoveCityCode, ORDER_STATUSES, LalamoveOrderStatus"
    ],
    "docs": [
     "driver.ts: ============================================= DRIVER TYPES - Baseado no projeto Claude =============================================",
+    "geo.ts: Tipos do contrato do `geo-gateway` no front. Espelha `supabase/functions/_shared/schemas.ts` (bloco \"geo-gateway\") e os payloads de resposta de `supabase/functions/geo-gateway/providers/types.ts`. Quando o contrato do edge mudar, este arquivo muda junto — os hooks de `src/hooks/useGeo.ts` são tipado …",
     "lalamove.ts: Tipos canônicos e enums da integração Lalamove (REST v3 + UAPI). Etapa 2 (tipos canônicos) + Etapa 6 (enums centralizados) do roteiro `docs/LALAMOVE_MASTER_ANALYSIS.md`. Este é o **único** módulo autorizado a declarar a forma dos payloads Lalamove — qualquer outro arquivo importa daqui. ERRATA DE PR …"
    ],
    "deps": [
@@ -21155,6 +21181,7 @@
    "imports_modules": [],
    "file_list": [
     "src/types/driver.ts",
+    "src/types/geo.ts",
     "src/types/index.ts",
     "src/types/lalamove.ts",
     "src/types/__tests__/types.test.ts"
@@ -23995,6 +24022,31 @@
     "values": "LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL'"
    },
    {
+    "file": "src/types/geo.ts",
+    "name": "ProviderName",
+    "values": "google | mapbox"
+   },
+   {
+    "file": "src/types/geo.ts",
+    "name": "GeoFunction",
+    "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
+   },
+   {
+    "file": "src/types/geo.ts",
+    "name": "GeoPrecision",
+    "values": "exact | high | medium | low | unknown"
+   },
+   {
+    "file": "src/types/geo.ts",
+    "name": "GeoMode",
+    "values": "searchbox | geocoding"
+   },
+   {
+    "file": "src/types/geo.ts",
+    "name": "GeoProfile",
+    "values": "driving-traffic | driving | walking | cycling"
+   },
+   {
     "file": "src/types/index.ts",
     "name": "OrderStatus",
     "values": "PENDING | MATCHED | ON_GOING | PICKED_UP | COMPLETED | CANCELLED | REJECTED | EXPIRED | QUOTED | ASSIGNING_DRIVER | DELIVERING"
@@ -25978,6 +26030,10 @@
     "text": "How close the match must be to the location"
    },
    {
+    "file": "src/hooks/useGeo.ts",
+    "text": "`place-details` (ou quando o campo é limpo): é a regra de cobrança por sessão do"
+   },
+   {
     "file": "src/hooks/useGeoAdmin.ts",
     "text": "* Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */"
    },
@@ -26140,6 +26196,10 @@
    {
     "file": "src/pages/evaluations/EvaluationDetails.tsx",
     "text": "Action Required */}"
+   },
+   {
+    "file": "src/types/geo.ts",
+    "text": "* Precisão de geocodificação — mesmo vocabulário de negócio do edge. */"
    },
    {
     "file": "src/types/lalamove.ts",
@@ -36612,6 +36672,42 @@
    {
     "file": "src/hooks/__tests__/useFeatureFlags.test.ts",
     "name": "cai para false quando a flag não existe (kill-switch seguro)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "etapa 33 — hooks do contrato do geo-gateway"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useGeocode devolve GeoAddress[] cru com o lugar tipado"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useGeocode 404 vira lista vazia e não dispara abaixo de 3 caracteres"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useRoute envia origin/destination/waypoints como objetos"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useMatrix preserva célula nula (par inalcançável)"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useStaticMap devolve o data URL PNG"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useGeoPlaceDetails chama place-details com session_token e normaliza precision"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useGeoAutocomplete segura a digitação pelo debounce antes de chamar o gateway"
+   },
+   {
+    "file": "src/hooks/__tests__/useGeo.contract.test.ts",
+    "name": "useGeoAutocomplete retrieve normaliza precision ausente para unknown"
    },
    {
     "file": "src/hooks/__tests__/useGeo.test.ts",
@@ -60214,8 +60310,30 @@
   },
   "src/hooks/useGeo.ts": {
    "path": "src/hooks/useGeo.ts",
-   "lines": 6,
-   "doc": "Implementação única dos hooks de mapa. `useMapbox.ts` é o módulo que fala com o geo-gateway (camada única de provedores: cache, orçamento e `geo_settings`), e este arquivo existe para que consumidores novos importem de `@/hooks/useGeo`. Ver docs/planos/PLANO_MAPBOX_100_ETAPAS.md, etapas 60 e 83."
+   "lines": 174,
+   "exports": [
+    "interface UseGeoAutocompleteOptions",
+    "interface UseGeoAutocompleteResult",
+    "function useGeoAutocomplete",
+    "function useGeoPlaceDetails",
+    "interface GeoPlaceDetailsVars",
+    "function useGeocode",
+    "function useRoute",
+    "function useMatrix",
+    "function useStaticMap"
+   ],
+   "rule_comments": [
+    "`place-details` (ou quando o campo é limpo): é a regra de cobrança por sessão do"
+   ],
+   "doc": "Implementação única dos hooks de mapa. `useMapbox.ts` é o módulo que fala com o geo-gateway (camada única de provedores: cache, orçamento e `geo_settings`), e este arquivo existe para que consumidores novos importem de `@/hooks/useGeo`. Ver docs/planos/PLANO_MAPBOX_100_ETAPAS.md, etapas 60 e 83.",
+   "hooks": [
+    "useGeoAutocomplete",
+    "useGeoPlaceDetails",
+    "useGeocode",
+    "useRoute",
+    "useMatrix",
+    "useStaticMap"
+   ]
   },
   "src/hooks/useGeoAdmin.ts": {
    "path": "src/hooks/useGeoAdmin.ts",
@@ -63140,6 +63258,25 @@
     "cai para false quando a flag não existe (kill-switch seguro)"
    ]
   },
+  "src/hooks/__tests__/useGeo.contract.test.ts": {
+   "path": "src/hooks/__tests__/useGeo.contract.test.ts",
+   "lines": 179,
+   "is_test": true,
+   "rule_comments": [
+    "Precisão ausente nunca vira \"exact\": o consumidor não pode tratar como rooftop."
+   ],
+   "tests": [
+    "etapa 33 — hooks do contrato do geo-gateway",
+    "useGeocode devolve GeoAddress[] cru com o lugar tipado",
+    "useGeocode 404 vira lista vazia e não dispara abaixo de 3 caracteres",
+    "useRoute envia origin/destination/waypoints como objetos",
+    "useMatrix preserva célula nula (par inalcançável)",
+    "useStaticMap devolve o data URL PNG",
+    "useGeoPlaceDetails chama place-details com session_token e normaliza precision",
+    "useGeoAutocomplete segura a digitação pelo debounce antes de chamar o gateway",
+    "useGeoAutocomplete retrieve normaliza precision ausente para unknown"
+   ]
+  },
   "src/hooks/__tests__/useGeo.test.ts": {
    "path": "src/hooks/__tests__/useGeo.test.ts",
    "lines": 189,
@@ -66056,6 +66193,58 @@
     }
    ],
    "doc": "============================================= DRIVER TYPES - Baseado no projeto Claude ============================================="
+  },
+  "src/types/geo.ts": {
+   "path": "src/types/geo.ts",
+   "lines": 176,
+   "exports": [
+    "type ProviderName",
+    "type GeoFunction",
+    "type GeoPrecision",
+    "interface GeoPoint",
+    "type GeoBias",
+    "interface GeoSuggestion",
+    "interface GeoAddressComponents",
+    "interface GeoAddress",
+    "interface GeoRouteLeg",
+    "interface GeoRoute",
+    "interface GeoMatrix",
+    "interface GeoStaticImage",
+    "type GeoMode",
+    "type GeoProfile",
+    "type GeoAutocompleteRequest",
+    "type GeoPlaceDetailsRequest",
+    "type GeoGeocodeRequest",
+    "type GeoRouteRequest",
+    "type GeoMatrixRequest",
+    "type GeoStaticRequest"
+   ],
+   "enums": [
+    {
+     "name": "ProviderName",
+     "values": "google | mapbox"
+    },
+    {
+     "name": "GeoFunction",
+     "values": "tiles | autocomplete | geocode | reverse | route | matrix | static | snap | validate | isochrone | optimization | tilequery"
+    },
+    {
+     "name": "GeoPrecision",
+     "values": "exact | high | medium | low | unknown"
+    },
+    {
+     "name": "GeoMode",
+     "values": "searchbox | geocoding"
+    },
+    {
+     "name": "GeoProfile",
+     "values": "driving-traffic | driving | walking | cycling"
+    }
+   ],
+   "rule_comments": [
+    "* Precisão de geocodificação — mesmo vocabulário de negócio do edge. */"
+   ],
+   "doc": "Tipos do contrato do `geo-gateway` no front. Espelha `supabase/functions/_shared/schemas.ts` (bloco \"geo-gateway\") e os payloads de resposta de `supabase/functions/geo-gateway/providers/types.ts`. Quando o contrato do edge mudar, este arquivo muda junto — os hooks de `src/hooks/useGeo.ts` são tipado …"
   },
   "src/types/index.ts": {
    "path": "src/types/index.ts",
@@ -70956,10 +71145,31 @@
   }
  },
  "git": {
-  "sha": "b59c51ca8f6e32ad9e5761adb98e96663da5275d",
+  "sha": "5984867fca25657c8c8fa5415672d91411a817e8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "5984867",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "src/hooks/__tests__/useGeo.contract.test.ts",
+     "src/hooks/useGeo.ts",
+     "src/types/geo.ts"
+    ]
+   },
+   {
+    "sha": "4ad97ef",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "b59c51c",
     "date": "2026-11-22",
@@ -71305,39 +71515,15 @@
      "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
      "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "c9424eb",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)",
-    "files": [
-     "src/components/map/OrderTrackingMap.tsx"
-    ]
-   },
-   {
-    "sha": "c194d15",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)",
-    "files": [
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/metering.test.ts",
-     "supabase/functions/geo-gateway/metering.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    23
+    25
    ],
    [
     "supabase/functions/job-worker/index.ts",
-    4
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
     4
    ],
    [
@@ -71354,6 +71540,10 @@
    ],
    [
     "supabase/functions/send-notification/index.ts",
+    3
+   ],
+   [
+    "supabase/functions/geo-gateway/index.ts",
     3
    ],
    [
@@ -71381,6 +71571,18 @@
     2
    ],
    [
+    "src/hooks/__tests__/useGeo.contract.test.ts",
+    1
+   ],
+   [
+    "src/hooks/useGeo.ts",
+    1
+   ],
+   [
+    "src/types/geo.ts",
+    1
+   ],
+   [
     "src/components/map/Google3DCanvas.tsx",
     1
    ],
@@ -71394,18 +71596,6 @@
    ],
    [
     "supabase/functions/lalamove-api/coordinates.ts",
-    1
-   ],
-   [
-    "e2e/new-order-autocomplete.e2e.ts",
-    1
-   ],
-   [
-    "package.json",
-    1
-   ],
-   [
-    "scripts/ci/a11y-button-name-baseline.json",
     1
    ]
   ]

@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b59c51ca8f` · branch `main` · 2026-11-22 06:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5984867fca` · branch `main` · 2026-11-22 06:40 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -146,6 +146,11 @@
 | `ApprovalPriority` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', URGENT = 'URGENT', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
 | `IncidentType` (TS) | DELAY = 'DELAY', DAMAGE = 'DAMAGE', THEFT = 'THEFT', RUDE_BEHAVIOR = 'RUDE_BEHAVIOR', WRONG_DELIVERY = 'WRONG_DELIVERY', NO_SHOW = 'NO_SHOW', UNSAFE_DRIVING = 'UNSAFE_DRIVING', // Compatibilidade com sistema atual ROUTE_DEVIATION = 'ROUTE_DEVIATION', LONG_STOP = 'LONG_STOP', LATE_DELIVERY = 'LATE_DE … |  | `src/types/driver.ts` |
 | `IncidentSeverity` (TS) | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' |  | `src/types/driver.ts` |
+| `ProviderName` (TS) | google \| mapbox |  | `src/types/geo.ts` |
+| `GeoFunction` (TS) | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery |  | `src/types/geo.ts` |
+| `GeoPrecision` (TS) | exact \| high \| medium \| low \| unknown |  | `src/types/geo.ts` |
+| `GeoMode` (TS) | searchbox \| geocoding |  | `src/types/geo.ts` |
+| `GeoProfile` (TS) | driving-traffic \| driving \| walking \| cycling |  | `src/types/geo.ts` |
 | `OrderStatus` (TS) | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED \| QUOTED \| ASSIGNING_DRIVER \| DELIVERING |  | `src/types/index.ts` |
 | `VehicleType` (TS) | MOTORCYCLE \| CAR \| VAN \| TRUCK |  | `src/types/index.ts` |
 | `DriverStatus` (TS) | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST |  | `src/types/index.ts` |

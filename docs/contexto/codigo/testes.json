@@ -14,9 +14,9 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 142,
+ "total": 143,
  "por_tipo": {
-  "contrato (deno)": 2,
+  "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 22,
   "guard (node --test)": 34,
@@ -25,7 +25,7 @@
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 51
+   "arquivos": 52
   },
   {
    "padrao": "guards em scripts/",
@@ -763,6 +763,16 @@
    "casos": 3
   },
   {
+   "arquivo": "src/hooks/__tests__/useGeo.contract.test.ts",
+   "tipo": "contrato (deno)",
+   "linhas": 179,
+   "testa": [
+    "src/hooks/useGeo.ts",
+    "src/lib/geo-gateway.ts"
+   ],
+   "casos": 8
+  },
+  {
    "arquivo": "src/hooks/__tests__/useGeo.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 189,
@@ -1401,7 +1411,7 @@
   "src/hooks/useDeliveryMetrics.ts": 1,
   "src/hooks/useDrivers.ts": 1,
   "src/hooks/useFeatureFlags.ts": 1,
-  "src/hooks/useGeo.ts": 1,
+  "src/hooks/useGeo.ts": 2,
   "src/hooks/useGeoAdmin.ts": 1,
   "src/hooks/useGeoSearch.ts": 1,
   "src/hooks/useIncidents.ts": 1,
@@ -1421,7 +1431,7 @@
   "src/hooks/useWebhookEvents.ts": 1,
   "src/i18n/index.ts": 1,
   "src/integrations/supabase/client.ts": 14,
-  "src/lib/geo-gateway.ts": 4,
+  "src/lib/geo-gateway.ts": 5,
   "src/lib/lalamoveCatalog.ts": 3,
   "src/lib/lalamoveErrors.ts": 1,
   "src/lib/lalamoveGuards.ts": 1,

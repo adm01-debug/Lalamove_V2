@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b59c51ca8f` · branch `main` · 2026-11-22 06:15 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5984867fca` · branch `main` · 2026-11-22 06:40 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -870,6 +870,11 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | ApprovalPriority | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', URGENT = 'URGENT', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
 | IncidentType | DELAY = 'DELAY', DAMAGE = 'DAMAGE', THEFT = 'THEFT', RUDE_BEHAVIOR = 'RUDE_BEHAVIOR', WRONG_DELIVERY = 'WRONG_DELIVERY', NO_SHOW = 'NO_SHOW', UNSAFE_DRIVING = 'UNSAFE_DRIVING', // Compatibilidade com sistema atual ROUTE_DEVIATION = 'ROUTE_DEVIATION', LONG_STOP = 'LONG_STOP', LATE_DELIVERY = 'LATE_DE … | `src/types/driver.ts` |
 | IncidentSeverity | LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', CRITICAL = 'CRITICAL' | `src/types/driver.ts` |
+| ProviderName | google \| mapbox | `src/types/geo.ts` |
+| GeoFunction | tiles \| autocomplete \| geocode \| reverse \| route \| matrix \| static \| snap \| validate \| isochrone \| optimization \| tilequery | `src/types/geo.ts` |
+| GeoPrecision | exact \| high \| medium \| low \| unknown | `src/types/geo.ts` |
+| GeoMode | searchbox \| geocoding | `src/types/geo.ts` |
+| GeoProfile | driving-traffic \| driving \| walking \| cycling | `src/types/geo.ts` |
 | OrderStatus | PENDING \| MATCHED \| ON_GOING \| PICKED_UP \| COMPLETED \| CANCELLED \| REJECTED \| EXPIRED \| QUOTED \| ASSIGNING_DRIVER \| DELIVERING | `src/types/index.ts` |
 | VehicleType | MOTORCYCLE \| CAR \| VAN \| TRUCK | `src/types/index.ts` |
 | DriverStatus | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST | `src/types/index.ts` |
@@ -1841,7 +1846,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1111 testes em 98 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1120 testes em 99 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1890,6 +1895,7 @@ _nenhum item encontrado_
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
 | `src/components/orders/AddressAutocomplete.test.tsx` | 9 | AddressAutocomplete — estados de falha (etapa 40) · 429 mostra  · erro sem status (rede) tem mensagem distinta do 429 · sem resultado e sem falha sugere incluir número ou CEP … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
+| `src/hooks/__tests__/useGeo.contract.test.ts` | 9 | etapa 33 — hooks do contrato do geo-gateway · useGeocode devolve GeoAddress[] cru com o lugar tipado · useGeocode 404 vira lista vazia e não dispara abaixo de 3 caracteres · useRoute envia origin/destination/waypoints como objetos … |
 | `src/hooks/__tests__/useGeo.test.ts` | 9 | useGeo · geocode converte GeoAddress[] em features no formato v5 (picker e autocomplete) · geocode 404 vira lista vazia (estado vazio da UI, não erro) · directions monta origin/destination/waypoints e preserva perfil explícito … |
 | `src/hooks/__tests__/useMapSettings.test.ts` | 9 | useMapSettings Persistence · should load default values initially · should update state when setters are called · should load settings from supabase for a specific context (driver/delivery) … |
 | `src/hooks/__tests__/usePendingApprovals.test.ts` | 9 | usePendingApprovals · deve buscar e mapear aprovações pendentes · deve lidar com driver e order null · deve propagar erro do supabase … |
@@ -2093,6 +2099,7 @@ _nenhum item encontrado_
 | - !term     : Negation (items must NOT include "term") | `src/hooks/useFuseSearch.ts` |
 | - 'term     : Include match (items must include "term") | `src/hooks/useFuseSearch.ts` |
 | How close the match must be to the location | `src/hooks/useFuseSearch.ts` |
+| `place-details` (ou quando o campo é limpo): é a regra de cobrança por sessão do | `src/hooks/useGeo.ts` |
 | * Geocoda um endereço fixo no provedor e devolve latência, SKU e rate limit. */ | `src/hooks/useGeoAdmin.ts` |
 | retrieve (regra de cobrança por sessão do Search Box, ToS etapa 8). | `src/hooks/useGeoSearch.ts` |
 | inflando o sku `searchbox_session`. Renovamos aos 170 s para nunca chegar no limite. | `src/hooks/useGeoSearch.ts` |
@@ -2134,6 +2141,7 @@ _nenhum item encontrado_
 | existiam apenas no backend: histórico por cursor, extrato/comprovantes, | `src/pages/LalamoveOperationsPage.tsx` |
 | * Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */ | `src/pages/MapsSettingsPage.tsx` |
 | Action Required */} | `src/pages/evaluations/EvaluationDetails.tsx` |
+| * Precisão de geocodificação — mesmo vocabulário de negócio do edge. */ | `src/types/geo.ts` |
 | * Presente somente quando o cliente habilita POD. */ | `src/types/lalamove.ts` |
 | * JSON pointer — presente apenas em `ERR_INVALID_FIELD`. */ | `src/types/lalamove.ts` |
 | Resume audio context if suspended (required by browsers) | `src/utils/alertSounds.ts` |

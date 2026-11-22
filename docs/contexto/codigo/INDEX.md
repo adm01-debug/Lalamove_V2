@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b59c51ca8f6e32ad9e5761adb98e96663da5275d` (2026-11-22T03:15:09-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `5984867fca25657c8c8fa5415672d91411a817e8` (2026-11-22T03:40:10-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (527), SQL (188), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (529), SQL (188), JavaScript (114), Markdown (103), JSON (35), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1019 |
-| arquivos_codigo | 640 |
-| linhas_codigo | 124522 |
+| arquivos_total | 1021 |
+| arquivos_codigo | 642 |
+| linhas_codigo | 125045 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 142 |
+| testes | 143 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 103 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (127), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (51), guards em scripts/ (47), supabase/functions/<edge> (24)
+- testes: co-localizado (__tests__) (52), guards em scripts/ (47), supabase/functions/<edge> (24)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -79,7 +79,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/orders | 0 | 0 | 9 | 32 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 49 | 0 | 6 | 42 |
-| hooks | 0 | 0 | 86 | 212 | 15 | 47 |
+| hooks | 0 | 0 | 86 | 218 | 15 | 47 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 197 | 14 | 47 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
@@ -272,14 +272,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7796 nós · 16616 arestas · 587 comunidades · grafo do commit `b59c51ca`
-- comunidades maiores: cn (134), ref_https (118), lucide-react (97), App.tsx (96), providers/types.ts (90), Button (89), ref_node_path (85), client.ts (85), button.tsx (85), dependencies (80), gerar.mjs (76), generate.py (73)
+- 7835 nós · 16723 arestas · 580 comunidades · grafo do commit `5984867f`
+- comunidades maiores: cn (183), react (155), lucide-react (138), ref_node_path (110), snapshot.py (100), MapsSettingsPage.tsx (100), client.ts (100), dependencies (80), gerar.mjs (76), generate.py (75), DashboardRedesigned.tsx (75), contract.ts (74)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (26)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (28)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
@@ -374,6 +374,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `5984867` feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)
+- 2026-11-22 `4ad97ef` chore: sincroniza o plano Google Maps com a auditoria de código (etapas 31/36/58/62/63/65/78/87/88/89/91) (#250)
 - 2026-11-22 `b59c51c` feat: contabilizar map load do Google e mini-mapa lazy no detalhe do pedido (#249)
 - 2026-11-22 `9af8801` feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)
 - 2026-11-22 `e0e0118` docs: etapas 90 e 92 marcadas como executadas no plano (#247)
@@ -387,8 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `5937457` docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)
 - 2026-11-22 `2d6c7b1` feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)
 - 2026-11-22 `5e00e7c` fix: webhook cria a linha de active_tracking no primeiro ping (#236)
-- 2026-11-22 `bdef20a` docs: contrato de dados do motor geo (etapa 41) (#235)
-- 2026-11-22 `a7b144f` feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

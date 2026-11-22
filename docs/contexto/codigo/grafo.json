@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 499,
- "arestas": 1610,
+ "nos": 500,
+ "arestas": 1614,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -77,6 +77,10 @@
    "importado_por": 13
   },
   {
+   "arquivo": "src/lib/geo-gateway.ts",
+   "importado_por": 13
+  },
+  {
    "arquivo": "supabase/functions/_shared/contract.ts",
    "importado_por": 13
   },
@@ -106,10 +110,6 @@
   },
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "importado_por": 11
-  },
-  {
-   "arquivo": "src/lib/geo-gateway.ts",
    "importado_por": 11
   },
   {

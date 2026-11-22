@@ -1084,7 +1084,11 @@
    "src/utils/logger.ts"
   ],
   "src/hooks/useGeo.ts": [
-   "src/hooks/useMapbox.ts"
+   "src/hooks/useDebouncedValue.ts",
+   "src/hooks/useGeoSearch.ts",
+   "src/hooks/useMapbox.ts",
+   "src/lib/geo-gateway.ts",
+   "src/types/geo.ts"
   ],
   "src/hooks/useGeoAdmin.ts": [
    "src/integrations/supabase/client.ts"
