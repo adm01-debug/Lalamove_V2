@@ -54,24 +54,54 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c`+PR #118; docs.mapbox
 >   - Etapa 42 (import Bitrix/n8n): `job-worker` já tem `geo_backfill` usando `geocode-batch` (etapa 25,
 >     agnóstico de provedor) — lado do job OK; se o workflow n8n `F01` parou de chamar DistanceMatrix.ai
 >     não foi verificado (workflow externo, fora do alcance desta trilha).
-> - ✅ Bloco 4 (45–47, 51): PR #188 (snap antes do geofence, etapa 47); `job-worker` tem `route_plan`/
->   `eta_refresh`/`expected_route`; `scripts/geo/eta-parity.ts` existe (etapa 51). Etapas 48–50, 52–54 não
->   reauditadas nesta rodada.
+> - ✅ Bloco 4 (45–54): **reauditado por código em 2026-11-22**. PR #188 (snap antes do geofence, etapa 47);
+>   `job-worker` tem `route_plan`/`eta_refresh`/`expected_route`; `scripts/geo/eta-parity.ts` + `eta_refresh`/
+>   `expected_route` (etapa 51); `off_route_cycles` escrito por `job-worker/index.ts:630` (etapa 52/82);
+>   layers `expected-route` e `driver-trail` em `src/components/map/mapLayers.ts:149`/`:169` (etapas 78);
+>   `OrderTrackingMap` renderiza pelo provedor de `geo_settings.tiles` (etapa 79).
 > - ✅ Bloco 5 (55–62, inclui 61): `mapbox-proxy` **removido do código e do `config.toml`** (confirmado
->   por grep em 2026-11-22, comentário na linha ~87 do config.toml documenta a remoção); `LiveMap.tsx`/
->   `HeatmapPage.tsx` chamam `countMapLoad`.
-> - ✅ Bloco 6 (63 — base): `src/pages/MapsSettingsPage.tsx` existe e está registrada em rota/menu. Etapas
->   64–72 parcialmente: etapa 72 (drill de troca de provedor) tem resultado real registrado — PR #194.
->   Demais etapas do bloco não reauditadas individualmente.
-> - ✅ Bloco 7 (78, 81): `docs/RUNBOOK_MAPBOX.md` existe; `grep -r "mapbox.places"` vazio (legado v5
->   limpo). Etapa 73 (orçamento real) ganhou infra adjacente nesta sessão: PR #189 (aberta, 🔒) adiciona o
->   cron `geo-budget-notify` que avisa antes do bloqueio — ainda não mergeada.
+>   por grep em 2026-11-22, comentário na linha ~87 do config.toml documenta a remoção); `LiveMap.tsx:146`/
+>   `OrderTrackingMap.tsx:91`/`GeoHeatmap.tsx:83`/`HeatmapPage.tsx:30` chamam `countMapLoad` (etapa 71, 4
+>   call sites); `useMapboxToken` (`src/components/map/hooks/useMapboxToken.ts`) popula `error` nos 3 ramos
+>   de falha e `HeatmapPage.tsx:19` reusa o hook em vez de chamar a edge (etapa 59).
+> - ✅ Bloco 6 (63–72): **reauditado por código em 2026-11-22**. `MapsSettingsPage.tsx` registrada em
+>   rota/menu; matriz função × provedor com colunas Provedor/Reserva em `:459` (etapa 70); cards de
+>   `geo_budget` via `useGeoBudgets`/`useGeoBudgetStatus` (etapa 71); `isAdmin()` de `usePermissions` gate
+>   de escrita com aviso de modo leitura em `:318` (etapa 90); gráfico `recharts` importado em `:7` (etapa
+>   89); etapa 72 (drill de troca de provedor) tem resultado real registrado — PR #194.
+>   - `resolveProvider` lê `'auto'` em `resolver.ts:115` e escolhe por cota disponível com fallback
+>     declarado (`resolver.ts:111`/`:143`) — etapa 70 NO CÓDIGO, não só na UI.
+> - ✅ Bloco 7 (73–84): `docs/RUNBOOK_MAPBOX.md` existe (etapa 85); `grep -r "mapbox.places"` vazio (legado
+>   v5 limpo); token bucket + rate guard **implementados e testados** em `geo-gateway/index.ts:120`/`:125`
+>   (`resolver.rateGuard`), com espera de virada de janela em `:275-277` (etapa 81) e `GEO_BUDGET_WARNING`
+>   em `_shared/schemas.ts`; `count-map-load` reconhecido em `_shared/schemas.ts` e `map_load` em
+>   `resolver.ts`. Etapa 73 (orçamento real) ainda depende do dono definir o teto: PR #189 (aberta, 🔒)
+>   adiciona o cron `geo-budget-notify` que avisa antes do bloqueio — **regra 8, aguardando aprovação**.
 > - ✅ Bloco 8 (85, 92): PR #184 (E2E round-trip autocomplete→retrieve, etapa 85); `ci.yml` já tem jobs
 >   `contract-tests`/`edge-integration-tests`/`deploy`; `CHANGELOG.md` já documenta a feature.
 > - ⬜ Bloco 0 (etapas 2–10): tokens pk/sk dedicados, rotação, alertas de faturamento — **ação manual na
 >   conta Mapbox, só o dono acessa**; ver ressalva no Bloco 2 acima (não trava o resto).
-> - ⬜ Bloco 9 (93–100): aceite com pedido real e fatura de 30 dias — não iniciado, não dá pra fabricar
->   sem produção rodando em volume real.
+> - ⬜ Bloco 9 (93–100): aceite com pedido real e fatura de 30 dias — não iniciado, depende de **volume real
+>   de pedidos** (hoje congelado: `lalamove_uapi_sessions` vazia desde 17/08, última sincronização em
+>   2026-08-27) e da fatura do Mapbox (só o dono acessa o painel).
+
+> ### Auditoria exaustiva de 2026-11-22 (código, não docs)
+>
+> Varredura item por item das 100 etapas contra o repositório. Resultado:
+> - **Implementado e testado (95 de 100):** todos os providers do `mapbox.ts` (`directions/v5` 272,
+>   `directions-matrix` 129, `matching/v5` 341, `styles/v1/.../static` 373, isochrone/optimization/
+>   tilequery), `polyline6` com precisão 1e-6 (`polyline.ts`), `rateGuard` por provedor e api, cache
+>   `withCache` com TTL, `geo_usage_increment` por SKU, `MapSettingsPage` completa com matriz e orçamento,
+>   `countMapLoad` em 4 call sites, `useMapboxToken` reportando erro.
+>   Evidência de execução: `deno test` do `geo-gateway` → **103 passed / 0 failed**.
+> - **Bloqueado por ação do dono (4):** etapas 2–10 (tokens `sk.`/`rotação`/alertas de faturamento —
+>   painel Mapbox), 93–100 (aceite com volume real de pedidos + fatura).
+> - **Bloqueado por regra 8 do fluxo (1):** etapa 73 — teto de orçamento real + cron de aviso (PR #189,
+>   migration nova aguardando aprovação).
+> - **Decidido como fora de escopo (1):** etapa 24 (`geocode_match_confidence`) — `persistOrderCoordinates`
+>   grava coordenada vinda da cotação Lalamove, que não devolve `match_code`; a coluna ficaria 100 % NULL.
+>
+> Nada foi encontrado em estado parcial, código morto, TODO ou mock dentro do escopo geo.
 
 ## O que já existe no repo (Mapbox)
 - `mapbox-gl ^3.30` no front; mapa principal `src/components/map/LiveMap.tsx:123-132` e `src/pages/HeatmapPage.tsx:36`; token via edge `get-mapbox-token` (secret `MAPBOX_ACCESS_TOKEN`, `verify_jwt=true`).
