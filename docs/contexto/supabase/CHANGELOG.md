@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-22 01:14 UTC
+
+- **migrations** adicionado (3): `20261122005314_fix_alert_configs_anon_insert`, `20261122005320_fix_public_rls_bypass`, `20261122130200_alert_type_driver_assigned`
+
 ## 2026-11-22 00:36 UTC
 
 - **colunas** alterado (1): `public.geo_settings.provider`

@@ -171,6 +171,8 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261121192500 | [restore_audit_log](migrations/20261121192500_restore_audit_log.sql) | 0 |
 | 20261121193000 | [fix_escalation_pipeline](migrations/20261121193000_fix_escalation_pipeline.sql) | 0 |
 | 20261121194500 | [geo_jobs_scheduler](migrations/20261121194500_geo_jobs_scheduler.sql) | 0 |
+| 20261122005314 | [fix_alert_configs_anon_insert](migrations/20261122005314_fix_alert_configs_anon_insert.sql) | 1 |
+| 20261122005320 | [fix_public_rls_bypass](migrations/20261122005320_fix_public_rls_bypass.sql) | 1 |
 | 20261122090000 | [cache_system_backend](migrations/20261122090000_cache_system_backend.sql) | 0 |
 | 20261122120000 | [baseline_order_status_values](migrations/20261122120000_baseline_order_status_values.sql) | 1 |
 | 20261122120100 | [lalamove_integration_columns](migrations/20261122120100_lalamove_integration_columns.sql) | 1 |
@@ -178,4 +180,5 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122120300 | [validate_service_type_constraint](migrations/20261122120300_validate_service_type_constraint.sql) | 0 |
 | 20261122130000 | [geo_alert_types](migrations/20261122130000_geo_alert_types.sql) | 0 |
 | 20261122130100 | [geo_foundation](migrations/20261122130100_geo_foundation.sql) | 0 |
+| 20261122130200 | [alert_type_driver_assigned](migrations/20261122130200_alert_type_driver_assigned.sql) | 0 |
 | 20261122140000 | [fix_crons_dispatcher](migrations/20261122140000_fix_crons_dispatcher.sql) | 0 |

@@ -28015,6 +28015,18 @@
         "version": "20261121194500"
       },
       {
+        "name": "fix_alert_configs_anon_insert",
+        "statements": 1,
+        "statements_sha": "23f3a7cfe3823b36",
+        "version": "20261122005314"
+      },
+      {
+        "name": "fix_public_rls_bypass",
+        "statements": 1,
+        "statements_sha": "fa368a65c6c46ff8",
+        "version": "20261122005320"
+      },
+      {
         "name": "cache_system_backend",
         "statements": null,
         "version": "20261122090000"
@@ -28051,6 +28063,11 @@
         "name": "geo_foundation",
         "statements": null,
         "version": "20261122130100"
+      },
+      {
+        "name": "alert_type_driver_assigned",
+        "statements": null,
+        "version": "20261122130200"
       },
       {
         "name": "fix_crons_dispatcher",
