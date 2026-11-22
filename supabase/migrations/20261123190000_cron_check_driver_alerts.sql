@@ -12,17 +12,49 @@
 -- de ela virar CRITICAL em 10 min, sem custo relevante (a edge so faz SELECTs e
 -- so cria alerta quando o limiar e realmente cruzado).
 --
+-- A chave vem de `vault.decrypted_secrets` (nome `dispatcher_key`), igual a
+-- `process_job_queue` em `20261122140000_fix_crons_dispatcher.sql` - nunca
+-- embutida no SQL.
+--
 -- Idempotente: `cron.schedule` com o mesmo jobname substitui o agendamento
 -- existente em vez de duplicar.
 
-SELECT cron.schedule(
-  'check-driver-alerts',
-  '*/2 * * * *',
-  $$
-  select net.http_post(
-    url:='https://iecgydonctmabiijadsf.supabase.co/functions/v1/check-driver-alerts',
-    headers:='{"Content-Type": "application/json", "apikey": "sb_publishable_3Hefdii3_kdWpyxdGKkaWQ_6sJhd8yB"}'::jsonb,
-    body:=concat('{"time": "', now(), '"}')::jsonb
-  ) as request_id;
-  $$
-);
+DO $do$
+DECLARE
+  v_key text;
+  v_url text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1';
+BEGIN
+  SELECT decrypted_secret INTO v_key
+    FROM vault.decrypted_secrets WHERE name = 'dispatcher_key' LIMIT 1;
+
+  IF v_key IS NULL THEN
+    RAISE WARNING 'cron check-driver-alerts: vault.dispatcher_key ausente; agendamento nao criado';
+    RETURN;
+  END IF;
+
+  PERFORM cron.unschedule('check-driver-alerts')
+    WHERE EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'check-driver-alerts');
+
+  PERFORM cron.schedule(
+    'check-driver-alerts',
+    '*/2 * * * *',
+    format(
+      $cron$
+      select net.http_post(
+        url := %L,
+        headers := jsonb_build_object(
+          'Content-Type','application/json',
+          'apikey', %L,
+          'Authorization','Bearer ' || %L
+        ),
+        body := jsonb_build_object('time', now()),
+        timeout_milliseconds := 25000
+      ) as request_id;
+      $cron$,
+      v_url || '/check-driver-alerts', v_key, v_key
+    )
+  );
+END $do$;
+
+-- Verificacao pos-apply (rodar manualmente no SQL editor):
+--   select jobname, schedule, active from cron.job where jobname = 'check-driver-alerts';
