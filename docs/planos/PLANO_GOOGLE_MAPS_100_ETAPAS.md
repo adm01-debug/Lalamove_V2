@@ -567,8 +567,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** tabela comparativa em `docs/GOOGLE_MAPS.md`
 
 ### 96 — Alertas operacionais
-- [ ] `GEO_BUDGET_WARNING` → Slack interno; erro 4xx/5xx do Google > 5%/h → `INTEGRATION_FAILURE`
-- **Evidência:** alerta de teste recebido
+- [x] `GEO_BUDGET_WARNING` → Slack interno; erro 4xx/5xx do Google > 5%/h → `INTEGRATION_FAILURE`
+- **Evidência:** custo já estava em `geo-gateway/index.ts:181-215` (`warnBudgetOnce`). Disponibilidade entregue na PR #224: `geo-gateway/error-monitor.ts` grava cada falha de provedor em `query_telemetry` (`severity='error'`) e, quando a taxa da última hora passa de 5% com amostra ≥ 20, emite `INTEGRATION_FAILURE` (`WARNING` até 50%, `CRITICAL` acima). Cooldown de 1h por provedor via `geo_cache` (PK atômica, sem DDL). **14 testes** em `error-monitor.test.ts`, todos verdes.
 
 ### 97 — Runbook
 - [x] `docs/RUNBOOK_GOOGLE_MAPS.md`: chave vazada (rotação em 2 chaves), orçamento estourado, Google fora (forçar Mapbox), Mapbox fora (forçar Google), `geo_cache` corrompido

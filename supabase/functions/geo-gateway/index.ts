@@ -20,6 +20,7 @@ import { callWithFailover } from "./failover.ts";
 import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
 import { cacheGet, cacheKey, cachePut, meter, recordLatency, registerSession, resolveTtl } from "./metering.ts";
+import { evaluateProviderErrors, recordProviderFailure } from "./error-monitor.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -237,6 +238,11 @@ Deno.serve(async (req) => {
   const action = body.action as string;
   const uid = uidFromJwt(req);
 
+  // Etapa 96: o provedor/função que falhou precisam chegar no último catch para
+  // registrar a falha e avaliar a taxa de erro da última hora.
+  let failedProvider: ProviderName | undefined;
+  let failedFn: string | undefined;
+
   try {
     // ── status ─────────────────────────────────────────────────────────────
     if (action === "provider-status") {
@@ -265,6 +271,8 @@ Deno.serve(async (req) => {
     }
 
     const { provider: name, reason } = await resolver.resolve(fn, body.provider);
+    failedProvider = name;
+    failedFn = fn;
     const provider = getProvider(name);
     // Etapa 75: avisa o dono antes do bloqueio duro por orçamento.
     await warnBudgetOnce(name, resolver.budgetOf(name));
@@ -323,6 +331,12 @@ Deno.serve(async (req) => {
     return jsonResponse(result.data, 200, headers, version);
   } catch (err) {
     if (err instanceof GeoProviderError) {
+      // Etapa 96: falha do provedor entra na conta da taxa de erro (4xx/5xx contam;
+      // 429 é capacidade local, não integração quebrada).
+      if (failedProvider && err.status !== 429) {
+        await recordProviderFailure(db, failedProvider, failedFn ?? action, err.code, err.status);
+        await evaluateProviderErrors(db, failedProvider, failedFn ?? action);
+      }
       const h: Record<string, string> = { ...corsHeaders };
       if (err.retryAfterMs) h["Retry-After"] = String(Math.ceil(err.retryAfterMs / 1000));
       const code = err.status === 429 ? ERROR_CODES.RATE_LIMITED : err.status < 500 ? ERROR_CODES.VALIDATION_FAILED : ERROR_CODES.INTERNAL_ERROR;
