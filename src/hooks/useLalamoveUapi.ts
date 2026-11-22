@@ -9,6 +9,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { resolveUapiError } from '@/lib/uapiErrors';
 import { isLalamoveConfigured } from '@/lib/lalamove-config';
+import { parseEdgeError } from '@/lib/edge-error';
 
 /**
  * Camada de acesso às operações UAPI já expostas pela Edge Function
@@ -39,7 +40,10 @@ async function invokeUapi<T>(action: string, body: Record<string, unknown> = {})
     body: { action, ...body },
   });
 
-  if (error) throw new UapiError(-1, error.message || 'Falha ao contatar a Lalamove');
+  if (error) {
+    const edge = await parseEdgeError(error);
+    throw new UapiError(-1, edge?.message || error.message || 'Falha ao contatar a Lalamove');
+  }
 
   const envelope = data as (UapiEnvelope<T> & { error?: string }) | null;
   if (!envelope) throw new UapiError(-1, 'Resposta vazia da Lalamove');

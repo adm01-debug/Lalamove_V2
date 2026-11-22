@@ -267,9 +267,9 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `curl ...?contract=schema` devolve `{ versions: { v1, v2 }, default, deprecated }`.
 
 ### 42 — [F] Cliente do front entende o formato único de erro
-- [ ] `src/lib/edge-error.ts`: `parseEdgeError(error, data)` que lê `error.context.json()` (FunctionsHttpError) e devolve `{ code, message, fields }`; toasts mostram `fields[0].field: message` em vez de "Edge Function returned a non-2xx status code".
-- [ ] Aplicar em `useBitrix24.ts`, `useExternalData.ts`, `useLalamoveUapi.ts:42-46`, `src/lib/lalamove-api.ts:70-88`.
-- **Evidência:** teste unitário; toast com "quotationId: quotationId é obrigatório" ao forçar o erro.
+- [x] `src/lib/edge-error.ts`: `parseEdgeError(error)` que lê `error.context.json()` (FunctionsHttpError) e devolve `{ code, message, fields }`; `formatEdgeError` mostra `fields[0].field: message`. Evidência: `src/lib/edge-error.ts:11-36`, teste `src/lib/edge-error.test.ts` 6/6 passando.
+- [x] Aplicar em `useBitrix24.ts`, `useExternalData.ts`, `useLalamoveUapi.ts:42-46`, `src/lib/lalamove-api.ts:70-88`. Evidência: `useLalamoveUapi.ts:43-46`, `lalamove-api.ts:76-82`, `useBitrix24.ts` (connect catch + syncOrder onError), `useExternalData.ts` (edgeThrow nos 4 queryFns).
+- **Evidência:** `npx tsc --noEmit -p tsconfig.app.json` 0 erros; `npx eslint` 0 erros; `npx vitest run src/lib/edge-error.test.ts` 6/6; `npm run build` OK.
 
 ### 43 — [F] Formulários do front usam o **mesmo** schema das edges
 - [ ] Publicar os schemas v2 de `lalamove-api`/`send-notification` em `src/contracts/` (zod 4 no front vs 3.22 na edge: gerar JSON Schema na etapa 41 e consumir com `zod-from-json-schema`, ou duplicar com teste de paridade por fixture).
