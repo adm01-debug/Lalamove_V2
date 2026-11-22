@@ -16,12 +16,12 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (23)",
+   "src/lib (24)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (53)",
+   "co-localizado (__tests__) (54)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (28)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)",
    "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)",
    "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)",
    "feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)",
-   "chore: marca item XSS do plano front-end como feito (#288)",
-   "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)"
+   "chore: marca item XSS do plano front-end como feito (#288)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

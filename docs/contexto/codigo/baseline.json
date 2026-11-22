@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "79fecdfd51567104b22111027520bdb19063b700",
+  "commit": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
   "branch": "main",
-  "data_commit": "2026-11-22T13:38:57-03:00",
+  "data_commit": "2026-11-22T13:45:54-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ba39240",
+    "data": "2026-11-22",
+    "assunto": "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)"
+   },
    {
     "sha": "79fecdf",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "58a4500",
     "data": "2026-11-22",
     "assunto": "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)"
-   },
-   {
-    "sha": "062c6b7",
-    "data": "2026-11-22",
-    "assunto": "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)"
    }
   ],
-  "arquivos_mudados_7d": 332,
+  "arquivos_mudados_7d": 336,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -266,16 +266,16 @@
     "mudancas": 8
    },
    {
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 7
-   },
-   {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 6
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 193
+    "commits": 194
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1053,
-  "arquivos_codigo": 652,
-  "linhas_codigo": 128776,
+  "arquivos_total": 1055,
+  "arquivos_codigo": 654,
+  "linhas_codigo": 128834,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 154,
+  "testes": 155,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 18995
+   "linhas": 19004
   },
   "src/i18n": {
    "arquivos": 1,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 38,
-   "linhas": 3695
+   "arquivos": 40,
+   "linhas": 3744
   },
   "src/main.tsx": {
    "arquivos": 1,

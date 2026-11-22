@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `79fecdfd51` · branch `main` · 2026-11-22 16:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ba39240965` · branch `main` · 2026-11-22 16:46 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1817,7 +1817,7 @@ _nenhum item encontrado_
 | Aprovação Manual Necessária | `src/hooks/useEvaluateDriver.ts` |
 | Erro na Avaliação | `src/hooks/useEvaluateDriver.ts` |
 | Motorista Bloqueado | `src/hooks/useEvaluateDriver.ts` |
-| ) {         const { data: alerts } = await supabase.from( | `src/hooks/useGlobalSearch.ts` |
+| ) {         const { data: alerts, error } = await supabase.from( | `src/hooks/useGlobalSearch.ts` |
 | , title: alert.title, subtitle: alert.message, meta: alert.severity, path:  | `src/hooks/useGlobalSearch.ts` |
 | Erro ao desfazer ação | `src/hooks/useGlobalUndo.tsx` |
 | Falha ao atualizar incidente. | `src/hooks/useIncidents.ts` |
@@ -1963,7 +1963,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1224 testes em 104 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1230 testes em 105 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2047,6 +2047,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
+| `src/lib/__tests__/postgrest.test.ts` | 6 | escapeIlike · remove caracteres com significado no DSL do PostgREST · mantém caracteres comuns de busca · buildOrIlike … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |

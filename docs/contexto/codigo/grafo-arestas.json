@@ -1030,6 +1030,7 @@
    "src/hooks/useFuseSearch.ts",
    "src/hooks/useTheme.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/postgrest.ts",
    "src/utils/logger.ts"
   ],
   "src/hooks/useContacts.ts": [
@@ -1107,6 +1108,7 @@
   "src/hooks/useGlobalSearch.ts": [
    "src/hooks/useDebouncedValue.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/postgrest.ts",
    "src/utils/logger.ts"
   ],
   "src/hooks/useIncidents.ts": [

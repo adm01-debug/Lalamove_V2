@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "79fecdfd51567104b22111027520bdb19063b700",
+  "sha": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:42 UTC",
-  "files_total": 1047,
-  "code_files": 863,
-  "code_lines": 149953
+  "generated_at": "2026-11-22 16:46 UTC",
+  "files_total": 1049,
+  "code_files": 865,
+  "code_lines": 150011
  },
  "version": "1.3.2",
- "facts_hash": "2e0ca462b9250fb5",
+ "facts_hash": "342db19d74a47829",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 304,
+   ".ts": 306,
    ".tsx": 235,
    ".sql": 202,
    ".mjs": 109,
@@ -20962,7 +20962,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 18995,
+   "lines": 19004,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21213,8 +21213,8 @@
   },
   {
    "module": "src/lib",
-   "files": 38,
-   "lines": 3695,
+   "files": 40,
+   "lines": 3744,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -21233,6 +21233,7 @@
     "lalamoveValidation.ts: ScheduleAtValidation, validateScheduleAt, SPECIAL_REQUESTS_BY_VEHICLE, SpecialRequestValidation, validateSpecialRequests",
     "orderErrors.ts: OrderErrorField, ParsedOrderError, parseOrderError",
     "phone.ts: PhoneValidationResult, validateBrazilianPhone, maskBrazilianPhone",
+    "postgrest.ts: escapeIlike, buildOrIlike",
     "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, statusColorCss, STATUS_GLYPH, STATUS_A11Y_LABEL",
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
     "uapiErrors.ts: UapiErrorInfo, UAPI_ERROR_MAP, resolveUapiError, isUapiAuthFailure",
@@ -21286,6 +21287,7 @@
     "src/lib/orderErrors.ts",
     "src/lib/phone.test.ts",
     "src/lib/phone.ts",
+    "src/lib/postgrest.ts",
     "src/lib/statusPalette.ts",
     "src/lib/uapi-proxy.ts",
     "src/lib/uapiErrors.ts",
@@ -21302,6 +21304,7 @@
     "src/lib/__tests__/lalamoveOrderEdit.test.ts",
     "src/lib/__tests__/lalamoveReasons.test.ts",
     "src/lib/__tests__/lalamoveTimeline.test.ts",
+    "src/lib/__tests__/postgrest.test.ts",
     "src/lib/__tests__/statusPalette.test.ts",
     "src/lib/__tests__/uapiErrors.test.ts"
    ]
@@ -25510,7 +25513,7 @@
    },
    {
     "file": "src/hooks/useGlobalSearch.ts",
-    "msg": ") {\n        const { data: alerts } = await supabase.from("
+    "msg": ") {\n        const { data: alerts, error } = await supabase.from("
    },
    {
     "file": "src/hooks/useGlobalSearch.ts",
@@ -38575,6 +38578,30 @@
    {
     "file": "src/lib/__tests__/lalamoveTimeline.test.ts",
     "name": "formata %s"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "escapeIlike"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "remove caracteres com significado no DSL do PostgREST"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "mantém caracteres comuns de busca"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "buildOrIlike"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "monta filtro ilike válido para vários campos"
+   },
+   {
+    "file": "src/lib/__tests__/postgrest.test.ts",
+    "name": "escapa o termo antes de interpolar"
    },
    {
     "file": "src/lib/__tests__/statusPalette.test.ts",
@@ -60880,7 +60907,7 @@
   },
   "src/hooks/useCommandPaletteSearch.ts": {
    "path": "src/hooks/useCommandPaletteSearch.ts",
-   "lines": 226,
+   "lines": 230,
    "exports": [
     "interface SearchResult",
     "interface RecentSearch",
@@ -62051,7 +62078,7 @@
   },
   "src/hooks/useGlobalSearch.ts": {
    "path": "src/hooks/useGlobalSearch.ts",
-   "lines": 192,
+   "lines": 197,
    "exports": [
     "interface SearchResult",
     "interface SearchFilter",
@@ -62116,7 +62143,7 @@
     ]
    },
    "errors": [
-    ") {\n        const { data: alerts } = await supabase.from(",
+    ") {\n        const { data: alerts, error } = await supabase.from(",
     ", title: alert.title, subtitle: alert.message, meta: alert.severity, path: "
    ],
    "params": [
@@ -65544,6 +65571,15 @@
     }
    ]
   },
+  "src/lib/postgrest.ts": {
+   "path": "src/lib/postgrest.ts",
+   "lines": 23,
+   "exports": [
+    "function escapeIlike",
+    "function buildOrIlike"
+   ],
+   "doc": "Escapa um termo de busca para uso em filtros `ilike` do PostgREST. PostgREST interpreta `,`, `(`, `)`, `.` e `%` como operadores/estrutura no filtro `.or(...)`. Sem escapar, um termo de usuário como `a,b)c` quebra o filtro ou injeta uma condição arbitrária. Remove os caracteres que têm significado n …"
+  },
   "src/lib/statusPalette.ts": {
    "path": "src/lib/statusPalette.ts",
    "lines": 133,
@@ -65827,6 +65863,19 @@
     "preserva status desconhecido como rótulo bruto",
     "formatDuration",
     "formata %s"
+   ]
+  },
+  "src/lib/__tests__/postgrest.test.ts": {
+   "path": "src/lib/__tests__/postgrest.test.ts",
+   "lines": 26,
+   "is_test": true,
+   "tests": [
+    "escapeIlike",
+    "remove caracteres com significado no DSL do PostgREST",
+    "mantém caracteres comuns de busca",
+    "buildOrIlike",
+    "monta filtro ilike válido para vários campos",
+    "escapa o termo antes de interpolar"
    ]
   },
   "src/lib/__tests__/statusPalette.test.ts": {
@@ -73319,10 +73368,23 @@
   }
  },
  "git": {
-  "sha": "79fecdfd51567104b22111027520bdb19063b700",
+  "sha": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "ba39240",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/hooks/useCommandPaletteSearch.ts",
+     "src/hooks/useGlobalSearch.ts",
+     "src/lib/__tests__/postgrest.test.ts",
+     "src/lib/postgrest.ts"
+    ]
+   },
    {
     "sha": "79fecdf",
     "date": "2026-11-22",
@@ -73661,15 +73723,6 @@
     "files": [
      ".github/workflows/apply-migrations.yml"
     ]
-   },
-   {
-    "sha": "555a756",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "infra: agenda o cron check-driver-alerts (etapa 70) (#217)",
-    "files": [
-     "supabase/migrations/20261123190000_cron_check_driver_alerts.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -73679,7 +73732,7 @@
    ],
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    6
+    7
    ],
    [
     ".github/workflows/ci.yml",
@@ -73734,23 +73787,23 @@
     2
    ],
    [
+    "src/hooks/useCommandPaletteSearch.ts",
+    1
+   ],
+   [
+    "src/hooks/useGlobalSearch.ts",
+    1
+   ],
+   [
+    "src/lib/__tests__/postgrest.test.ts",
+    1
+   ],
+   [
+    "src/lib/postgrest.ts",
+    1
+   ],
+   [
     "src/components/dashboard/BatchActionsToolbar.tsx",
-    1
-   ],
-   [
-    "src/components/map/MapHUD.tsx",
-    1
-   ],
-   [
-    "src/components/map/MapProviderSelector.tsx",
-    1
-   ],
-   [
-    "src/components/map/GoogleMapsCanvas.tsx",
-    1
-   ],
-   [
-    "supabase/functions/job-worker/index.ts",
     1
    ]
   ]

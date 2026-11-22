@@ -807,7 +807,7 @@
    "hooks_exportados": [
     "useCommandPaletteSearch"
    ],
-   "linhas": 226,
+   "linhas": 230,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -1420,7 +1420,7 @@
    "hooks_exportados": [
     "useGlobalSearch"
    ],
-   "linhas": 192,
+   "linhas": 197,
    "dominio": "hooks",
    "tabelas": [
     "alerts",

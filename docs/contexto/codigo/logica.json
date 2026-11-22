@@ -1,11 +1,11 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 39,
+ "total": 40,
  "por_camada": {
   "i18n": 1,
   "integrations": 4,
-  "lib": 23,
+  "lib": 24,
   "services": 1,
   "types": 4,
   "utils": 6
@@ -616,6 +616,30 @@
    "usado_por_modulos": [
     "components/orders",
     "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/lib/postgrest.ts",
+   "camada": "lib",
+   "exports": [
+    "buildOrIlike",
+    "escapeIlike"
+   ],
+   "export_default": null,
+   "linhas": 23,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 2,
+   "usado_por_modulos": [
+    "hooks"
    ],
    "coberto_por_testes": 1,
    "orfao": false
