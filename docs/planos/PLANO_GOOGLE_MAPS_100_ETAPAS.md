@@ -462,8 +462,9 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** screenshot
 
 ### 73 — Histórico
-- [ ] `NotificationHistoryPage.tsx` + `useNotificationHistory`: filtrar por pedido e por tipo geo; mostrar `deferred/no_recipient`
-- **Evidência:** screenshot
+- [x] `NotificationHistoryPage.tsx` + `useNotificationHistory`: filtrar por pedido e por tipo geo; mostrar `deferred/no_recipient`
+- **Evidência:** `NotificationHistoryPage.geo.test.tsx` — 3 testes verdes: evento `deferred` aparece com rótulo PT-BR, distância e ETA; `no_recipient` e `failed` aparecem como casos que exigem ação; o card some quando não há evento pendente.
+- **Correção embutida:** a página lia só `alerts_sent`, que registra apenas o que foi despachado. `queued`/`deferred`/`no_recipient` não têm linha lá — então a tela mostrava tudo entregue justamente quando o cliente não recebeu nada. Novo `usePendingGeoEvents()` lê `order_geo_events` filtrando os 4 status acionáveis, com `refetchInterval` de 30 s.
 
 ### 74 — Teste ponta a ponta de notificação
 - [ ] Pedido real barato (R$ ~9,52, já validado no E2E) com `pickup_contact_phone` = número de teste da Promo Brindes → receber "aproximando" e "chegou"

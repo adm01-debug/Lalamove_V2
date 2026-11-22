@@ -99,3 +99,51 @@ export function useNotificationStats() {
     refetchInterval: 60000,
   });
 }
+
+/**
+ * Etapa 73 do plano Google Maps: eventos geo que **não** viraram mensagem.
+ *
+ * `alerts_sent` só registra o que foi efetivamente despachado — enquanto o aviso
+ * está na fila (`queued`), fora da janela de silêncio (`deferred`) ou o pedido não
+ * tinha destinatário válido (`no_recipient`), não existe linha lá. Esses três são
+ * justamente os casos em que o operador precisa agir, então o histórico da página
+ * `alerts_sent` sozinho mostrava tudo "verde" enquanto o cliente não recebia nada.
+ */
+export interface GeoEventPending {
+  id: string;
+  order_id: string;
+  event_type: string;
+  stop_index: number;
+  triggered_at: string;
+  distance_m: number | null;
+  eta_min: number | null;
+  notification_status: string;
+  notified_at: string | null;
+}
+
+const ACTIONABLE_GEO_STATUSES = ['queued', 'deferred', 'no_recipient', 'failed'] as const;
+
+async function fetchPendingGeoEvents(orderId?: string): Promise<GeoEventPending[]> {
+  let query = supabase
+    .from('order_geo_events')
+    .select('id, order_id, event_type, stop_index, triggered_at, distance_m, eta_min, notification_status, notified_at')
+    .in('notification_status', ACTIONABLE_GEO_STATUSES as unknown as string[])
+    .order('triggered_at', { ascending: false })
+    .limit(100);
+
+  if (orderId) {
+    query = query.eq('order_id', orderId);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data || []) as GeoEventPending[];
+}
+
+export function usePendingGeoEvents(orderId?: string) {
+  return useQuery({
+    queryKey: ['pending-geo-events', orderId ?? 'all'],
+    queryFn: () => fetchPendingGeoEvents(orderId),
+    refetchInterval: 30000,
+  });
+}

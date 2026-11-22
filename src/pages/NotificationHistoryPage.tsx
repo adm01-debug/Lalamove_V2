@@ -15,9 +15,13 @@ import {
   RefreshCw,
   Filter,
   AlertTriangle,
+  MapPin,
+  MapPinOff,
+  UserX,
+  Hourglass,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useNotificationHistory, useNotificationStats, NotificationSent } from '@/hooks/useNotificationHistory';
+import { useNotificationHistory, useNotificationStats, usePendingGeoEvents, NotificationSent } from '@/hooks/useNotificationHistory';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -289,6 +293,68 @@ function NotificationRow({ notification }: { notification: NotificationSent }) {
   );
 }
 
+const geoEventLabels: Record<string, string> = {
+  DRIVER_APPROACHING_PICKUP: 'Motorista aproximando da coleta',
+  DRIVER_ARRIVED_PICKUP: 'Motorista chegou na coleta',
+  DRIVER_APPROACHING_DELIVERY: 'Motorista aproximando da entrega',
+  DRIVER_ARRIVED_DELIVERY: 'Motorista chegou na entrega',
+};
+
+const geoStatusConfig: Record<string, { label: string; icon: React.ElementType; className: string; hint: string }> = {
+  queued: { label: 'Na fila', icon: Hourglass, className: 'bg-info/10 text-info border-info/30', hint: 'Aguardando o job de notificação' },
+  deferred: { label: 'Adiado', icon: Clock, className: 'bg-warning/10 text-warning border-warning/30', hint: 'Fora da janela de silêncio, dispara no próximo horário permitido' },
+  no_recipient: { label: 'Sem destinatário', icon: UserX, className: 'bg-destructive/10 text-destructive border-destructive/30', hint: 'Nenhum telefone válido encontrado para o evento' },
+  failed: { label: 'Falhou', icon: XCircle, className: 'bg-destructive/10 text-destructive border-destructive/30', hint: 'O envio retornou erro' },
+};
+
+/**
+ * Etapa 73: o histórico lia só `alerts_sent`, então os eventos que nunca chegaram a
+ * ser despachados (fila, janela de silêncio, sem destinatário) eram invisíveis — a
+ * tela mostrava tudo entregue enquanto o cliente não recebia nada.
+ */
+function PendingGeoEventsCard({ orderId }: { orderId?: string }) {
+  const { data: events, isLoading } = usePendingGeoEvents(orderId);
+
+  if (isLoading) return <Skeleton className="h-24 w-full" />;
+  if (!events || events.length === 0) return null;
+
+  return (
+    <Card className="border-warning/40">
+      <CardHeader className="pb-3">
+        <div className="flex items-center gap-2">
+          <MapPinOff className="w-4 h-4 text-warning" />
+          <CardTitle className="text-base">Avisos geo que não chegaram ao destinatário</CardTitle>
+        </div>
+        <CardDescription>
+          {events.length} evento(s) ainda não entregue(s). Adiados voltam sozinhos no horário permitido;
+          os sem destinatário precisam de um telefone válido no pedido.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {events.map((event) => {
+          const status = geoStatusConfig[event.notification_status] ?? geoStatusConfig.queued;
+          const StatusIcon = status.icon;
+          return (
+            <div key={event.id} className="flex flex-wrap items-center gap-3 rounded-xl border border-border/60 bg-secondary/30 p-3 text-sm">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+              <span className="font-medium">{geoEventLabels[event.event_type] ?? event.event_type}</span>
+              <span className="text-muted-foreground">
+                parada {event.stop_index} · {format(new Date(event.triggered_at), "dd/MM 'às' HH:mm", { locale: ptBR })}
+              </span>
+              {event.distance_m !== null && <span className="text-muted-foreground">{Math.round(Number(event.distance_m))} m</span>}
+              {event.eta_min !== null && <span className="text-muted-foreground">ETA {event.eta_min} min</span>}
+              <Badge variant="outline" className={cn('gap-1 ml-auto', status.className)} title={status.hint}>
+                <StatusIcon className="w-3 h-3" />
+                {status.label}
+              </Badge>
+            </div>
+          );
+        })}
+      </CardContent>
+    </Card>
+  );
+}
+
 export function NotificationHistoryPage() {
   const [channelFilter, setChannelFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -316,6 +382,8 @@ export function NotificationHistoryPage() {
 
       {/* Stats */}
       <StatsCards />
+
+      <PendingGeoEventsCard />
 
       {/* Filters */}
       <Card>
