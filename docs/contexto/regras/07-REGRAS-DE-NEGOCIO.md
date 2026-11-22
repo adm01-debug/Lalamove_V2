@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `762c4b67a2` · branch `main` · 2026-11-22 15:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `6e6c62bd0c` · branch `main` · 2026-11-22 16:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1928,7 +1928,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1199 testes em 103 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1206 testes em 103 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1936,6 +1936,7 @@ _nenhum item encontrado_
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
 | `supabase/functions/_shared/contract.test.ts` | 45 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
+| `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
 | `supabase/functions/external-db-bridge/index.test.ts` | 24 | classifySeverity: error takes priority · classifySeverity: very_slow threshold at 8000ms · classifySeverity: slow threshold at 3000ms · classifySeverity: normal for fast queries … |
 | `src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx` | 23 | AdminTelemetriaPage · renders page header · renders stat cards · renders filter controls … |
@@ -1948,7 +1949,6 @@ _nenhum item encontrado_
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
 | `supabase/functions/_shared/messaging/router.test.ts` | 18 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
-| `src/components/map/__tests__/markerFactories.test.ts` | 17 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
 | `supabase/functions/lalamove-webhook/security.test.ts` | 17 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |
 | `src/lib/__tests__/lalamoveCatalogCities.test.ts` | 16 | matriz servico x cidade (conferida com a API real) · Curitiba oferece exatamente os 6 servicos que a API lista · Sao Paulo oferece os 14 servicos · LALAGOFOUR existe so em RIO e SAO (nao em BHZ/CWB) … |

@@ -6,7 +6,7 @@
    "TypeScript (537)",
    "SQL (202)",
    "JavaScript (114)",
-   "Markdown (108)",
+   "Markdown (109)",
    "JSON (36)",
    "Shell (10)",
    "Python (8)",
@@ -537,7 +537,7 @@
   },
   {
    "pasta": "docs/planos",
-   "arquivos_md": 6
+   "arquivos_md": 7
   },
   {
    "pasta": "docs/adr",

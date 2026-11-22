@@ -596,12 +596,12 @@
   {
    "arquivo": "src/components/map/__tests__/markerFactories.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 153,
+   "linhas": 217,
    "testa": [
     "src/components/map/hooks/useTrackingData.ts",
     "src/components/map/markerFactories.ts"
    ],
-   "casos": 12
+   "casos": 18
   },
   {
    "arquivo": "src/components/map/__tests__/OrderTrackingMap.test.tsx",

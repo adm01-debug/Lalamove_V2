@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "762c4b67a2b6ee69b4f1b5b70872e9e5f3e6d406",
+  "commit": "6e6c62bd0cf1632a956706ebc113017ae7da4b17",
   "branch": "main",
-  "data_commit": "2026-11-22T12:37:22-03:00",
+  "data_commit": "2026-11-22T13:07:46-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "6e6c62b",
+    "data": "2026-11-22",
+    "assunto": "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)"
+   },
+   {
+    "sha": "93d26a3",
+    "data": "2026-11-22",
+    "assunto": "docs(planos): plano de UX de navegacao em 200 etapas (#286)"
+   },
    {
     "sha": "762c4b6",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "6831e5d",
     "data": "2026-11-22",
     "assunto": "fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)"
-   },
-   {
-    "sha": "555a756",
-    "data": "2026-11-22",
-    "assunto": "infra: agenda o cron check-driver-alerts (etapa 70) (#217)"
-   },
-   {
-    "sha": "cdaaa4f",
-    "data": "2026-11-22",
-    "assunto": "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)"
    }
   ],
-  "arquivos_mudados_7d": 325,
+  "arquivos_mudados_7d": 328,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 37
+    "mudancas": 39
    },
    {
     "pasta": "src/components/orders",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 187
+    "commits": 189
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1050,
+  "arquivos_total": 1051,
   "arquivos_codigo": 650,
-  "linhas_codigo": 128002,
+  "linhas_codigo": 128086,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -327,7 +327,7 @@
   "testes": 153,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 108
+  "docs_md": 109
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29436
+   "linhas": 29520
   },
   "src/hooks": {
    "arquivos": 111,
