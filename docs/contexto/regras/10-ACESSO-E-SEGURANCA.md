@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a76d93c972` · branch `main` · 2026-11-22 01:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d825edfc3c` · branch `main` · 2026-11-22 01:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -406,6 +406,7 @@ Middleware matcher (Next.js): nenhum
 | `geo_blocks` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
 | `geo_budget` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | `geo_cache` | RLS ligado sem nenhuma política → só service_role acessa |  |
+| `geo_defaults` | RLS ligado sem nenhuma política → só service_role acessa |  |
 | `geo_price_list` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | `geo_settings` | RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useMapProviderPolicy.ts` |
 | `geo_usage_month` | acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |

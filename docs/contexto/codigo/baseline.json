@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a76d93c972c1d330fc2bbebf747bb0d0b73ddb69",
+  "commit": "d825edfc3cea6e6c678620ab2c176e975bd5c677",
   "branch": "main",
-  "data_commit": "2026-11-21T22:10:53-03:00",
+  "data_commit": "2026-11-21T22:28:47-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d825edf",
+    "data": "2026-11-21",
+    "assunto": "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)"
+   },
+   {
+    "sha": "a9a7781",
+    "data": "2026-11-21",
+    "assunto": "chore: registra os resultados reais do drill da etapa 72 (#194)"
+   },
    {
     "sha": "a76d93c",
     "data": "2026-11-21",
@@ -121,19 +131,9 @@
     "sha": "fe9865a",
     "data": "2026-11-21",
     "assunto": "docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)"
-   },
-   {
-    "sha": "99e0b43",
-    "data": "2026-11-21",
-    "assunto": "feat(mapa): /map-tools migra para o geo-gateway e respeita o perfil escolhido (#177)"
-   },
-   {
-    "sha": "658445d",
-    "data": "2026-11-21",
-    "assunto": "docs(mapa): registra custo real, retencao zero e o que ficou desligado (#178)"
    }
   ],
-  "arquivos_mudados_7d": 196,
+  "arquivos_mudados_7d": 199,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -152,16 +152,16 @@
     "mudancas": 14
    },
    {
+    "pasta": "docs/MAPBOX.md",
+    "mudancas": 10
+   },
+   {
     "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
     "pasta": "src/components/orders",
     "mudancas": 10
-   },
-   {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 9
    },
    {
     "pasta": "supabase/config.toml",
@@ -180,6 +180,10 @@
     "mudancas": 6
    },
    {
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 6
+   },
+   {
     "pasta": "docs/pendencias/README.md",
     "mudancas": 5
    },
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 5
-   },
-   {
-    "pasta": "supabase/functions/lalamove-gateway",
     "mudancas": 5
    }
   ],
@@ -214,12 +214,12 @@
     "mudancas": 10
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
+    "arquivo": "docs/MAPBOX.md",
     "mudancas": 10
    },
    {
-    "arquivo": "docs/MAPBOX.md",
-    "mudancas": 9
+    "arquivo": "docs/pendencias/_ordem.md",
+    "mudancas": 10
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -274,6 +274,10 @@
     "mudancas": 5
    },
    {
+    "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 5
+   },
+   {
     "arquivo": ".env.example",
     "mudancas": 4
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/lib/lalamoveCatalog.ts",
     "mudancas": 4
-   },
-   {
-    "arquivo": "supabase/functions/_shared/contract.integration.test.ts",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 100
+    "commits": 102
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 972,
-  "arquivos_codigo": 606,
-  "linhas_codigo": 118928,
+  "arquivos_total": 975,
+  "arquivos_codigo": 608,
+  "linhas_codigo": 119145,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -322,9 +322,9 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 176,
+  "migrations": 177,
   "cron_jobs": 21,
-  "testes": 119,
+  "testes": 120,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 99
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 51,
-   "linhas": 13895
+   "arquivos": 53,
+   "linhas": 14112
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -626,7 +626,7 @@
   },
   {
    "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 690
+   "linhas": 747
   },
   {
    "arquivo": "scripts/ci/lint-ratchet.mjs",
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 113,
+  "any": 114,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,

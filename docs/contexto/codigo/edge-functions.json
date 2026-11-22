@@ -935,8 +935,8 @@
    "nome": "send-notification",
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
-   "arquivos": 1,
-   "linhas": 690,
+   "arquivos": 2,
+   "linhas": 858,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -948,6 +948,8 @@
     "alerts",
     "alerts_sent",
     "bitrix24_tokens",
+    "geo_defaults",
+    "job_queue",
     "order_geo_events"
    ],
    "rpcs": [
@@ -984,7 +986,7 @@
    ],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 0
+   "testes": 1
   },
   {
    "nome": "simulate-driver-movement",

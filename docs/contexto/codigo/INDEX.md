@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a76d93c972c1d330fc2bbebf747bb0d0b73ddb69` (2026-11-21T22:10:53-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d825edfc3cea6e6c678620ab2c176e975bd5c677` (2026-11-21T22:28:47-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (495), SQL (180), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (497), SQL (181), JavaScript (112), Markdown (99), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 972 |
-| arquivos_codigo | 606 |
-| linhas_codigo | 118928 |
+| arquivos_total | 975 |
+| arquivos_codigo | 608 |
+| linhas_codigo | 119145 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -47,9 +47,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 88 |
-| migrations | 176 |
+| migrations | 177 |
 | cron_jobs | 21 |
-| testes | 119 |
+| testes | 120 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 99 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (126), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (12), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (10)
+- testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (11)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (28), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
 | components/orders | 0 | 0 | 8 | 31 | 6 | 5 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
-| functions | 0 | 0 | 41 | 0 | 5 | 40 |
+| functions | 0 | 0 | 42 | 0 | 5 | 42 |
 | hooks | 0 | 0 | 86 | 209 | 14 | 46 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
 | pages | 37 | 55 | 55 | 194 | 13 | 46 |
@@ -208,7 +208,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `rotate-tokens` [Segredos/token] — tabelas: alerts, bitrix24_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `route-analyzer` [Lovable AI (custo por token)] — tabelas: alerts, drivers, lalamove_orders; chamada por 1 arquivo(s) do front
 - `seed-fix-rls` [Manutenção/DDL] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens, order_geo_events; chamada por 0 arquivo(s) do front
+- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens, geo_defaults, job_queue, order_geo_events; chamada por 0 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 1 arquivo(s) do front
 
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7506 nós · 15946 arestas · 567 comunidades · grafo do commit `a76d93c9`
-- comunidades maiores: cn (151), utils.ts (148), lucide-react (145), ref_node_path (105), button.tsx (102), RateLimitDashboardPage.tsx (101), snapshot.py (100), App.tsx (84), client.ts (80), dependencies (80), gerar.mjs (76), generate.py (75)
+- 7519 nós · 15971 arestas · 565 comunidades · grafo do commit `d825edfc`
+- comunidades maiores: cn (264), lucide-react (153), snapshot.py (102), ref_node_path (94), RateLimitDashboardPage.tsx (91), badge.tsx (90), generate.py (81), dependencies (80), gerar.mjs (76), client.ts (75), package.json (75), NotificationPreferences.tsx (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts), uniq() (scripts/ai-context/gerar.mjs)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -281,8 +281,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (31)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (10)
+- docs/MAPBOX.md (10)
 - docs/pendencias/_ordem.md (10)
-- docs/MAPBOX.md (9)
 - src/components/map/LiveMap.tsx (6)
 - src/components/orders/AddressAutocomplete.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
@@ -350,7 +350,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (203 linhas)
+- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (204 linhas)
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
@@ -369,6 +369,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `d825edf` feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)
+- 2026-11-21 `a9a7781` chore: registra os resultados reais do drill da etapa 72 (#194)
 - 2026-11-21 `a76d93c` feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)
 - 2026-11-21 `0aa60dd` docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)
 - 2026-11-21 `fe2ee4a` feat: eta_refresh encaixa o motorista na via antes do geofence (#188)
@@ -382,8 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `3e6683c` infra: cron horario de refresh das materialized views de cache (#180)
 - 2026-11-21 `2847da1` fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)
 - 2026-11-21 `06bcb9f` feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)
-- 2026-11-21 `554e68b` ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)
-- 2026-11-21 `e616ccf` fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 176,
+ "migrations": 177,
  "seeds": [],
  "avisos": [
   "14 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -5063,13 +5063,15 @@
     "so_no_types": []
    },
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "send-notification"
+   ],
    "triggers": [
     "trg_geo_defaults_audit",
     "update_geo_defaults_updated_at"
    ],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "geo_price_list": {
    "colunas": {
@@ -5677,13 +5679,15 @@
     "so_no_types": []
    },
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "send-notification"
+   ],
    "triggers": [
     "trigger_job_queue_updated_at",
     "trigger_update_job_queue_updated_at"
    ],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "job_queue_processing_log": {
    "colunas": {

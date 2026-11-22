@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a76d93c972` · branch `main` · 2026-11-22 01:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d825edfc3c` · branch `main` · 2026-11-22 01:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -237,6 +237,7 @@ _nenhum item encontrado_
 | rls | `geo_blocks`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/pages/GeoBlockingPage.tsx` |
 | rls | `geo_budget`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_cache`: RLS ligado sem nenhuma política → só service_role acessa |  |
+| rls | `geo_defaults`: RLS ligado sem nenhuma política → só service_role acessa |  |
 | rls | `geo_price_list`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts` |
 | rls | `geo_settings`: RLS ligado sem nenhuma política → só service_role acessa | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useMapProviderPolicy.ts` |
 | rls | `geo_usage_month`: acessada do front (1 arquivo(s)) sem RLS (não encontrado) | `src/hooks/useGeoAdmin.ts` |

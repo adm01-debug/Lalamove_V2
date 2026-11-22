@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a76d93c972` · branch `main` · 2026-11-22 01:11 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d825edfc3c` · branch `main` · 2026-11-22 01:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -693,7 +693,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `neighborhood` | escreve | `src/hooks/useMapbox.ts` |
 | `type` | `network` | escreve | `src/components/orders/AddressAutocomplete.tsx` |
 | `type` | `new_device` | compara, escreve | `src/hooks/useSecurityPushNotifications.ts` |
-| `type` | `notification` | compara, escreve | `src/hooks/useSoundSettings.ts`<br>`supabase/functions/job-worker/index.ts` |
+| `type` | `notification` | compara, escreve | `src/hooks/useSoundSettings.ts`<br>`supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
 | `type` | `order` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`supabase/functions/lalamove-uapi/index.ts` |
 | `type` | `page` | escreve | `src/hooks/useGlobalSearch.ts` |
 | `type` | `ping` | escreve | `src/hooks/useSoundSettings.ts` |
@@ -1794,7 +1794,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (920 testes em 78 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (928 testes em 79 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1846,6 +1846,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
 | `src/hooks/__tests__/useLoginLockout.test.ts` | 8 | useLoginLockout · deve mapear checkLockout corretamente · deve retornar fallback no erro de checkLockout · deve mapear recordFailedAttempt corretamente … |
 | `src/lib/phone.test.ts` | 8 | validateBrazilianPhone — casos válidos · aceita %s (nacional cru) · aceita 55 sem + como código do país · validateBrazilianPhone — rejeições … |
+| `supabase/functions/send-notification/quiet-hours.test.ts` | 8 | [quiet-hours] dentro da janela (10:00 UTC = 07:00 local, início inclusive) · [quiet-hours] 1 min antes do início é fora da janela · [quiet-hours] fim é exclusivo (23:00 UTC = 20:00 local) · [quiet-hours] madrugada (01:00 UTC = 22:00 local do dia anterior) é fora da janela … |
 | `scripts/db-audit/catalog-from-types.test.mjs` | 7 | catalogoDeTypes le tabelas, views, funcoes e enums do schema public · catalogoDeTypes para no export const Constants (nao reabre Enums) · catalogoDeTypes ignora campos internos (Row/Args/Returns) como objetos · catalogoDeTypes devolve a forma esperada pelo supabase-usage-guard … |
 | `scripts/db-audit/psql-safe.test.mjs` | 7 | forwards flags/args to psql without the connection string in argv · propagates psql stdin (heredoc), stdout and stderr, and its exit code · propagates a non-zero psql exit code unchanged · derives PGHOST/PGPORT/PGUSER/PGDATABASE/PGPASSFILE from DESTINO_URL and never leaks DESTINO_URL to the child … |
 | `src/components/map/hooks/__tests__/useTrackingData.test.ts` | 7 | useTrackingData · faz o fetch inicial e popula trackingData/allTrackingData · filtra por tipo de veículo · filtra por status STOPPED … |
@@ -1978,6 +1979,7 @@ _nenhum item encontrado_
 | `notify_delivery_contact` | `supabase/migrations/20261122130100_geo_foundation.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122130100_geo_foundation.sql` |
 | `notify_whatsapp` | `supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql` |
+| `notify_whatsapp` | `supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql` |
 
 ## N. Regras citadas em comentários do código
 

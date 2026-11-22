@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 119,
+ "total": 120,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 8,
+  "edge (deno)": 9,
   "guard (node --test)": 33,
   "unit (vitest)": 69
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 10
+   "arquivos": 11
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1122,6 +1122,15 @@
     "supabase/functions/lalamove-webhook/security.ts"
    ],
    "casos": 17
+  },
+  {
+   "arquivo": "supabase/functions/send-notification/quiet-hours.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 49,
+   "testa": [
+    "supabase/functions/send-notification/quiet-hours.ts"
+   ],
+   "casos": 8
   }
  ],
  "sql": [],
@@ -1232,7 +1241,8 @@
   "supabase/functions/lalamove-api/coordinates.ts": 1,
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
-  "supabase/functions/lalamove-webhook/security.ts": 1
+  "supabase/functions/lalamove-webhook/security.ts": 1,
+  "supabase/functions/send-notification/quiet-hours.ts": 1
  },
  "sem_teste": {
   "telas": [
@@ -1380,7 +1390,6 @@
    "rotate-tokens",
    "route-analyzer",
    "seed-fix-rls",
-   "send-notification",
    "simulate-driver-movement",
    "test-notification"
   ],
