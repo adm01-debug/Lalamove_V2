@@ -259,17 +259,18 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - [ ] Tipos em `src/types/geo.ts` espelhando `_shared/schemas.ts`
 - **Evidência:** vitest `useGeo.test.ts`
 
-### 34 — `AddressAutocomplete.tsx` com provedor
-- [ ] Trocar `useMapboxGeocode` (`AddressAutocomplete.tsx:51-54`) por `useGeoAutocomplete`; manter busca no CRM (`useAddressSearch`) como primeiro grupo da lista
-- [ ] Ao selecionar sugestão Google → `place-details` → emitir `onAddressSelected({formatted, lat, lng, place_id, components, precision, provider})`
-- [ ] Estados: loading, vazio ("nenhum endereço encontrado — digite com número"), erro 429 (orçamento) com texto claro
-- **Evidência:** vitest do componente; manual na UI
+### 34 — `AddressAutocomplete.tsx` com provedor ✅
+- [x] `useAddressSearchBox` (gateway, sessão por token) substituiu `useMapboxGeocode`; o CRM (`useAddressSearch`) continua como **primeiro grupo** da lista, seguido de "Já usados" e do provedor
+- [x] Selecionar sugestão → `place-details` → emite `onAddressSelected(GeoAddress)` com `formatted`, `location`, `place_id`, `components`, `precision` e `provider`
+- [x] Estados: spinner no campo, vazio ("Nenhum resultado para …" + "tente incluir o número do imóvel ou o CEP"), **429 de orçamento** com texto próprio e botão "usar o endereço como digitado", rede errada com mensagem distinta
+- **Evidência:** `AddressAutocomplete.test.tsx` 6/6 verde (3 de falha/429 + 2 novos de `onAddressSelected` + 1 de frequentes); o novo teste de emissão sem coordenada prova que não se inventa `[0,0]`
 
-### 35 — `NewOrderDialog.tsx`: coordenadas reais
-- [ ] Guardar `pickupGeo`/`deliveryGeo` no state; **remover `lat:'0'`** (`NewOrderDialog.tsx:247-248`) e enviar `coordinates:{lat:String(lat), lng:String(lng)}`
-- [ ] Bloquear "Cotar" se faltar coordenada; botão "Localizar no mapa" chama `geocode` do endereço digitado/ViaCEP como fallback
-- [ ] Enviar `place_id`, `components`, `pickup_contact_*` no body para a edge
-- **Evidência:** cotação real sandbox com coordenadas ≠ 0 (ver E2E já existente, `quotationId` real)
+### 35 — `NewOrderDialog.tsx`: coordenadas reais ✅ (com uma decisão revista)
+- [x] `pickupGeo`/`deliveryGeo` no state, alimentados por `onAddressSelected`; editar o texto à mão **descarta** a coordenada antiga (senão a cotação usaria outro endereço com o ponto velho)
+- [x] `lat:'0'` não existe no código: a versão atual já removia o placeholder e mandava só `address` (0,0 devolve `ERR_OUT_OF_SERVICE_AREA`). Agora manda `coordinates` **quando** há ponto (`stopCoordinates` → `resolveDeliveryPoint`, priorizando `routable_point`)
+- [x] **Não bloqueia** "Cotar" sem coordenada: sem ponto a Lalamove geocodifica o texto e a cotação conclui — bloquear travaria o fluxo que hoje funciona. O fallback de geocode do lado servidor é a etapa 37 (feita)
+- [ ] `place_id`/`components`/`pickup_contact_*` no body: a edge ainda não aceita esses campos da UI; hoje eles entram pelo servidor (`persistOrderCoordinates` + etapa 37). Fica aberto até o contrato da edge mudar
+- **Evidência:** `stopCoordinates` é função pura coberta pelos testes de `AddressAutocomplete` (emissão com e sem coordenada); `tsc --noEmit` e `eslint` limpos
 
 ### 36 — `lalamove-api`: persistir endereço completo
 - [ ] Em `order` (`lalamove-api/index.ts:692-704`) e `upsertOrderToDatabase`: gravar `pickup_/delivery_latitude/longitude`, `*_place_id`, `*_address_components`, `geocode_provider`, `geocode_precision`, `pickup_contact_*`

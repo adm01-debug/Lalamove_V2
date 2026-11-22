@@ -10,6 +10,7 @@ import { Loader2, MapPin, User, Phone, Package, Truck, DollarSign, Zap, CheckCir
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { AddressAutocomplete } from './AddressAutocomplete';
+import { resolveDeliveryPoint, type GeoAddress } from '@/hooks/useGeoSearch';
 import { CepQuickFill } from './CepQuickFill';
 import { useQuotationExpiry } from '@/hooks/useQuotationExpiry';
 import { validateBrazilianPhone, maskBrazilianPhone } from '@/lib/phone';
@@ -81,8 +82,21 @@ const handlingInstructionOptions = HANDLING_INSTRUCTIONS.map(value => ({
 
 type Step = 'form' | 'quoting' | 'quoted' | 'creating' | 'done';
 
-interface QuotationResult {
-  quotationId: string;
+/**
+ * Etapa 35: coordenada da parada para a cotação.
+ *
+ * A Lalamove aceita parada só com endereço (ela geocodifica para cobrar a distância) e
+ * **rejeita** lat/lng 0,0 com `ERR_OUT_OF_SERVICE_AREA` — por isso este helper devolve
+ * `{}` em vez de um placeholder quando não há ponto. Quando o operador escolheu uma
+ * sugestão, mandamos o ponto exato: o que ele viu no mapa é o que a API cota.
+ */
+function stopCoordinates(address: GeoAddress | null): { coordinates?: { lat: string; lng: string } } {
+  const point = address ? resolveDeliveryPoint(address) : null;
+  if (!point) return {};
+  return { coordinates: { lat: String(point.lat), lng: String(point.lng) } };
+}
+
+interface QuotationResult {  quotationId: string;
   stopIds: string[];
   totalFee: string;
   totalFeeCurrency: string;
@@ -151,6 +165,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     stalledThreshold: 15,
     requiresPod: true,
   });
+
+  // Etapa 35: coordenada escolhida no autocomplete. A cotação aceita só texto (a
+  // Lalamove geocodifica para cobrar a distância), mas quando o operador já escolheu
+  // uma sugestão nós mandamos a coordenada real: elimina divergência entre o ponto
+  // que o operador viu e o que a API resolveu, e evita cair fora da área de serviço.
+  const [pickupGeo, setPickupGeo] = useState<GeoAddress | null>(null);
+  const [deliveryGeo, setDeliveryGeo] = useState<GeoAddress | null>(null);
 
   const updateField = (field: string, value: string | boolean | string[] | number) => {
     // Limpa o erro específico do servidor quando o campo relacionado é editado.
@@ -227,8 +248,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
 
   // `deliveryItemSpecification` só é processado por alguns serviços (errata BR).
   const acceptsItem = serviceAcceptsItem(activeService);
-  const weightOptions = (ITEM_WEIGHT_RANGES[activeService] ?? []).map(value => ({
-    value,
+  const weightOptions = (ITEM_WEIGHT_RANGES[activeService] ?? []).map(value => ({    value,
     label: humanizeWeightRange(value),
   }));
 
@@ -285,8 +305,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
         // geocodificacao no formulario, enviamos apenas o endereco — a API
         // resolve e devolve as coordenadas reais na cotacao.
         stops: [
-          { address: form.pickupAddress.trim() },
-          { address: form.deliveryAddress.trim() },
+          { address: form.pickupAddress.trim(), ...stopCoordinates(pickupGeo) },
+          { address: form.deliveryAddress.trim(), ...stopCoordinates(deliveryGeo) },
         ],
         ...(form.specialRequests.length > 0 && { specialRequests: form.specialRequests }),
         ...(scheduleValidation.iso && { scheduleAt: scheduleValidation.iso }),
@@ -463,6 +483,8 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     setQuotation(null);
     setError(null);
     setServerFieldError(null);
+    setPickupGeo(null);
+    setDeliveryGeo(null);
     setForm({
       senderName: '',
       senderPhone: '',
@@ -597,7 +619,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 />
                 <AddressAutocomplete
                   value={form.pickupAddress}
-                  onChange={val => updateField('pickupAddress', val)}
+                  onChange={val => {
+                    updateField('pickupAddress', val);
+                    // Texto editado à mão invalida a coordenada que veio do provedor:
+                    // manter o ponto antigo faria a cotação usar outro endereço.
+                    if (pickupGeo && val !== pickupGeo.formatted) setPickupGeo(null);
+                  }}
+                  onAddressSelected={setPickupGeo}
                   placeholder="Endereço de coleta"
                 />
               </div>
@@ -657,7 +685,11 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 />
                 <AddressAutocomplete
                   value={form.deliveryAddress}
-                  onChange={val => updateField('deliveryAddress', val)}
+                  onChange={val => {
+                    updateField('deliveryAddress', val);
+                    if (deliveryGeo && val !== deliveryGeo.formatted) setDeliveryGeo(null);
+                  }}
+                  onAddressSelected={setDeliveryGeo}
                   placeholder="Endereço de entrega"
                 />
               </div>

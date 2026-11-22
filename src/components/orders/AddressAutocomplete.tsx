@@ -6,7 +6,7 @@ import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigat
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
-import { useAddressSearchBox, useFrequentAddresses, resolveDeliveryPoint, normalizeAddressKey, type GeoSuggestion, type FrequentAddress } from '@/hooks/useGeoSearch';
+import { useAddressSearchBox, useFrequentAddresses, resolveDeliveryPoint, normalizeAddressKey, type GeoSuggestion, type FrequentAddress, type GeoAddress } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +16,13 @@ interface AddressAutocompleteProps {
   onSelectRecord?: (record: AddressSearchResult) => void;
   onSelectMapbox?: (feature: MapboxFeature) => void;
   onCoordinatesChange?: (lat: number, lng: number) => void;
+  /**
+   * Etapa 34: entrega o endereço completo resolvido pelo provedor (formatted, lat/lng,
+   * place_id, components, precision, provider). `onSelectMapbox` existe para os
+   * consumidores antigos que só precisam do formato `MapboxFeature`; este é o contrato
+   * novo e carrega o que a cotação e a auditoria exigem.
+   */
+  onAddressSelected?: (address: GeoAddress) => void;
   /** Etapa 40: habilita "usar o endereço como digitado" quando a busca falha. */
   onUseTypedAddress?: (value: string) => void;
   placeholder?: string;
@@ -63,6 +70,7 @@ export function AddressAutocomplete({
   onSelectRecord,
   onSelectMapbox,
   onCoordinatesChange,
+  onAddressSelected,
   onUseTypedAddress,
   placeholder = 'Buscar endereço...',
   className,
@@ -118,6 +126,9 @@ export function AddressAutocomplete({
     if (!address) return;
     setInputValue(address.formatted);
     onChange(address.formatted);
+    // Emite o endereço resolvido mesmo sem coordenada: o texto e os componentes
+    // (cidade/UF/CEP) já valem, e o consumidor decide o que fazer com a falta de ponto.
+    onAddressSelected?.(address);
     // Etapa 20: avisa quando o provedor devolveu coordenada interpolada/aproximada —
     // 40 % dos endereços BR medidos (etapa 36) caem em `interpolated`; sem isto o operador
     // grava um ponto a centenas de metros do imóvel sem saber.
