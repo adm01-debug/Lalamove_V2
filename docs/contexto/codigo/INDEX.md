@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d6f59de0a9c37000528d1dc56b6446d2cd76017c` (2026-11-22T11:08:18-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7e572fecb0e4fa0549071927623d1e56b00f22c1` (2026-11-22T12:30:14-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (537), SQL (202), JavaScript (114), Markdown (107), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (537), SQL (202), JavaScript (114), Markdown (108), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1049 |
+| arquivos_total | 1050 |
 | arquivos_codigo | 650 |
-| linhas_codigo | 127016 |
+| linhas_codigo | 128000 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -52,7 +52,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | testes | 153 |
 | workflows | 5 |
 | scripts | 107 |
-| docs_md | 107 |
+| docs_md | 108 |
 
 ## Onde ficam as coisas
 - telas: src/pages (53)
@@ -274,8 +274,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8236 nós · 17298 arestas · 617 comunidades · grafo do commit `d6f59de0`
-- comunidades maiores: cn (155), lucide-react (137), ref_https (110), utils.ts (108), button.tsx (108), snapshot.py (106), framer-motion (106), ref_node_path (100), App.tsx (96), providers/types.ts (87), dependencies (80), react (80)
+- 8469 nós · 17771 arestas · 630 comunidades · grafo do commit `7e572fec`
+- comunidades maiores: cn (201), client.ts (130), button.tsx (121), RateLimitDashboardPage.tsx (116), snapshot.py (107), lucide-react (98), ref_node_path (97), react (91), badge.tsx (88), ref_https (81), DashboardRedesigned.tsx (80), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -291,9 +291,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
 - src/components/orders/NewOrderDialog.tsx (9)
+- supabase/functions/_shared/schemas.ts (9)
 - supabase/functions/job-worker/index.ts (9)
 - src/components/map/LiveMap.tsx (8)
-- supabase/functions/_shared/schemas.ts (8)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -334,7 +334,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `SECURITY_CHECKLIST.md` — Security Checklist - Lalamove Guardian (77 linhas)
 - `docs/ACHADO_GATEWAY_PROXY_2026-11.md` — Achado: o `lalamove-gateway` aponta para um proxy que não existe (48 linhas)
 - `docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md` — Lalamove V2 — Análise Exaustiva e Plano de Integração Completo (709 linhas)
-- `docs/API_CONTRACTS.md` — 📑 Contratos de API — Webhooks & Edge Functions (162 linhas)
+- `docs/API_CONTRACTS.md` — 📑 Contratos de API — Webhooks & Edge Functions (197 linhas)
 - `docs/API_REFERENCE.md` — 📘 API Reference - Lalamove Guardian (948 linhas)
 - `docs/ARCHITECTURE.md` — 🏗️ Arquitetura - Lalamove Guardian (968 linhas)
 - `docs/AUDITORIA_PRS_FECHADAS_2026-11.md` — Auditoria das PRs fechadas sem merge — 2026-11-21 (byte a byte) (67 linhas)
@@ -373,10 +373,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove_n8n_integration.md` — Integração n8n ↔ Lalamove Token Manager (141 linhas)
 - `lalamove_order_history_full.md` — Lalamove Brasil — Histórico Completo de Pedidos (116 linhas)
 - `lalamove_suplemento_v2.md` — Lalamove Brasil — Suplemento Técnico v2 (772 linhas)
-- subpastas de docs/: docs/pendencias (20), docs/agentes (7), docs/planos (5), docs/adr (2), docs/backups (2), docs/contexto (2), docs/auditorias (1), docs/ci (1)
+- subpastas de docs/: docs/pendencias (20), docs/agentes (7), docs/planos (6), docs/adr (2), docs/backups (2), docs/contexto (2), docs/auditorias (1), docs/ci (1)
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `7e572fe` feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)
+- 2026-11-22 `572af27` docs(planos): plano front-end de 190 etapas (#280)
 - 2026-11-22 `d6f59de` feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)
 - 2026-11-22 `4ee7ef0` docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)
 - 2026-11-22 `03b0ca8` feat: replay deterministico do trajeto e 100 testes na CI (#277)
@@ -390,8 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `83fe5ba` docs: fecha 6 itens com evidencia de producao (#272)
 - 2026-11-22 `9218d1b` docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)
 - 2026-11-22 `aedf1ee` docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)
-- 2026-11-22 `2bd22c2` docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)
-- 2026-11-22 `58a4500` feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

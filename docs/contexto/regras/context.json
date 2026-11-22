@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
+  "sha": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 14:13 UTC",
-  "files_total": 1043,
+  "generated_at": "2026-11-22 15:30 UTC",
+  "files_total": 1044,
   "code_files": 861,
-  "code_lines": 148193
+  "code_lines": 149177
  },
  "version": "1.3.2",
- "facts_hash": "2bc3554f377ccc8b",
+ "facts_hash": "543a4ad1a1e04768",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -18044,7 +18044,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "n/d",
+    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
     "tables": [],
     "env": [
      "MAPBOX_ACCESS_TOKEN"
@@ -18159,9 +18159,7 @@
     "doc": "",
     "errors": [],
     "side_effects": [],
-    "webhook_events": [
-     "string"
-    ],
+    "webhook_events": [],
     "idempotency": true
    },
    {
@@ -18470,8 +18468,7 @@
     "name": "simulate-driver-movement",
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "methods": [
-     "OPTIONS",
-     "POST"
+     "OPTIONS"
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
@@ -21578,7 +21575,7 @@
   {
    "module": "supabase/functions",
    "files": 81,
-   "lines": 18907,
+   "lines": 19891,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21629,7 +21626,7 @@
     "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
     "logger.ts: logger",
     "phone.ts: normalizePhone, isDeliverablePhone, resolveGeoRecipient",
-    "schemas.ts: ContractName, CONTRACT_REGISTRY, getSchema",
+    "schemas.ts: ContractName, CONTRACT_REGISTRY, OPTIONAL_BODY_CONTRACTS, getSchema",
     "telemetry.ts: trackContractUsage",
     "template.ts: TEMPLATE_VARS, TemplateVar, TemplateVars, renderTemplate, missingTemplateVars",
     "zapp.ts: TextChannelResult, TextChannel, ZappConfig, normalizeZappNumber, createZappChannel, zappChannelFromEnv",
@@ -24165,6 +24162,98 @@
     "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`. mode: z.enum([\"searchbox\", \"geocoding\"]).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e …",
     "refines": [],
     "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "cronWorkerBody",
+    "kind": "object",
+    "body": "{ time: z.string().optional().nullable(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "applyFixesV1",
+    "kind": "object",
+    "body": "{ action: z.literal(\"fix_dashboard\"), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "simulateReplayPoint",
+    "kind": "object",
+    "body": "{ seq: z.number(), lat: z.number(), lng: z.number(), speed_kmh: z.number().optional(), heading: z.number().optional(), elapsed_s: z.number().optional(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "simulateReplayFixture",
+    "kind": "object",
+    "body": "{ name: z.string().min(1, \"fixture.name é obrigatório\"), vehicle_type: z.string().optional(), total_distance_m: z.number().optional(), points: z.array(simulateReplayPoint).min(1, \"fixture.points não pode ser vazio\"), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "bitrix24SyncV1",
+    "kind": "discriminatedUnion",
+    "body": "\"action\", [ z.object({ action: z.literal(\"get_auth_url\"), domain: z.string().optional(), }), z.object({ action: z.literal(\"oauth_callback\"), code: z.string().min(1, \"code é obrigatório\"), domain: z.string().optional(), }), z.object({ action: z.literal(\"refresh_token\") }), // Espelha o z.object inline que já existia em index.ts:159-162. z.object({ action: z.literal(\"sync_order\"), orderId: z.string().uuid(\"orderId deve ser um UUID\"), dealId: z.union([z.string().min(1, \"dealId é obrigatório\"), z.number()]), }), z.object({ action: z.literal(\"get_connection_status\") }), z.object({ action: z.literal(\"get_deals\") }), z.object({ action: z.literal(\"disconnect\") }), ]",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "externalCompaniesTable",
+    "kind": "enum",
+    "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\"]",
+    "refines": [],
+    "chain": [
+     "default"
+    ]
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "externalCompaniesV1",
+    "kind": "discriminatedUnion",
+    "body": "\"action\", [ z.object({ action: z.literal(\"list\"), table: externalCompaniesTable, search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(50), offset: z.number().int().nonnegative().default(0), }), z.object({ action: z.literal(\"get\"), table: externalCompaniesTable, id: z.union([ z.string().min(1, \"id é obrigatório\"), z.number().refine((n) => n !== 0, \"id é obrigatório\"), ]), }), z.object({ action: z.literal(\"search_address\"), search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(20), }), z.object({ action: z.literal(\"schema\"), table: externalCompaniesTable, }), z.object({ action: z.literal(\"stats\") }), ]",
+    "refines": [
+     "id é obrigatório"
+    ],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "externalDbBridgeV1",
+    "kind": "discriminatedUnion",
+    "body": "\"operation\", [ z.object({ operation: z.literal(\"select\"), table: z.string().min(1, \"table é obrigatório\"), select: z.string().nullish(), filters: externalDbBridgeFilters.nullish(), order: z .object({ column: z.string().min(1, \"order.column é obrigatório\"), ascending: z.boolean().optional(), }) .nullish(), limit: z.number().int().nonnegative().nullish(), offset: z.number().int().nonnegative().nullish(), count_mode: z.enum([\"exact\", \"planned\", \"estimated\"]).nullish(), }), z.object({ operation: z.literal(\"insert\"), table: z.string().min(1, \"table é obrigatório\"), body: z.union([externalDbBridgeRow, z.array(externalDbBridgeRow)]).optional(), }), z.object({ operation: z.literal(\"update\"), table: z.string().min(1, \"table é obrigatório\"), filters: externalDbBridgeRequiredFilters, body: externalDb …",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "mcpQueryV1",
+    "kind": "object",
+    "body": "{ operation: z.enum([ \"connection_info\", \"list_tables\", \"list_columns\", \"list_views\", \"list_enums\", \"list_extensions\", \"list_indexes\", \"list_functions\", \"list_triggers\", \"list_policies\", \"constraints\", \"relationships\", \"sequences\", \"migrations\", \"db_stats\", \"active_queries\", \"slow_queries\", \"locks\", \"disk_usage\", \"table_bloat\", \"index_usage\", \"seq_scans\", \"duplicate_indexes\", \"column_stats\", \"pg_settings\", ]), params: z .object({ schema: z.string().max(128).optional(), table: z.string().max(128).optional(), column: z.string().max(128).optional(), filter: z.string().max(128).optional(), // index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp // 1..200 continua no handler. limit: z.union([z.number(), z.string()]).optional(), }) .optional() .nullable(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "lalamoveGatewayV1",
+    "kind": "object",
+    "body": "{ action: z .string() .trim() .min(1, \"action é obrigatório\") .max(64, \"action deve ter no máximo 64 caracteres\"), target: z.enum([\"unified\", \"uapi\"]).optional(), params: z.record(z.string()).optional(), body: z.unknown().optional(), method: z.enum([\"GET\", \"POST\"]).optional(), }",
+    "refines": [],
+    "chain": []
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "name": "llmWhV1",
+    "kind": "object",
+    "body": "{ apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, \"event não pode ser vazio\").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }",
+    "refines": [],
+    "chain": []
    }
   ],
   "rhf": [],
@@ -24519,7 +24608,7 @@
    {
     "file": "supabase/functions/_shared/schemas.ts",
     "name": "ContractName",
-    "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway"
+    "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement"
    },
    {
     "file": "supabase/functions/_shared/template.ts",
@@ -26687,6 +26776,10 @@
     "text": "Falhas de validação usam SEMPRE status 422 e o formato único de erro."
    },
    {
+    "file": "supabase/functions/_shared/contract.ts",
+    "text": "* Mesma validação de `parseJsonBody`, mas sobre um corpo JÁ LIDO. Usada pelos"
+   },
+   {
     "file": "supabase/functions/_shared/geo-precision.ts",
     "text": "(`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`."
    },
@@ -26697,6 +26790,18 @@
    {
     "file": "supabase/functions/_shared/schemas.ts",
     "text": "Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway"
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "validação (ou derrubava a função em 500, quando `req.json()` falhava). O"
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp"
+   },
+   {
+    "file": "supabase/functions/_shared/schemas.ts",
+    "text": "lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream."
    },
    {
     "file": "supabase/functions/_shared/telemetry.ts",
@@ -26944,7 +27049,7 @@
    },
    {
     "file": "supabase/functions/lalamove-gateway/index.ts",
-    "text": "── 2. Validação de entrada ────────────────────────────────────────────"
+    "text": "── 2. Validação de entrada (contrato: 422 no formato único + v1/v2) ───"
    },
    {
     "file": "supabase/functions/lalamove-gateway/index.ts",
@@ -26996,7 +27101,7 @@
    },
    {
     "file": "supabase/functions/mcp-query/index.ts",
-    "text": "── 3. Validação de entrada ──────────────────────────────────────────────"
+    "text": "── 3. Validação de entrada (contrato: 422 no formato único + v1/v2) ─────"
    },
    {
     "file": "supabase/functions/rotate-tokens/index.ts",
@@ -27025,6 +27130,10 @@
    {
     "file": "supabase/functions/send-notification/static-map.ts",
     "text": "imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/index.ts",
+    "text": "sem `fixture` agora falha na validação, não no meio do laço."
    },
    {
     "file": "supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql",
@@ -38708,7 +38817,27 @@
    },
    {
     "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[${name}] corpo vazio é aceito (contrato de corpo opcional)"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[${name}] corpo que não é objeto retorna 422 no formato único"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
     "name": "[${name}] campo ausente retorna 422 no formato único"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[${name}] tipo incorreto retorna 422 nomeando o campo"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[${name}] valor vazio retorna 422 nomeando o campo"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[${name}] payload inválido é rejeitado de forma idêntica em v1 e v2"
    },
    {
     "file": "supabase/functions/_shared/contract.test.ts",
@@ -38805,6 +38934,58 @@
    {
     "file": "supabase/functions/_shared/contract.test.ts",
     "name": "geo-gateway place-details rejeita place_id acima de 1024"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[simulate-driver-movement] replay:true sem fixture retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[simulate-driver-movement] replay com fixture válida é aceito"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-db-bridge] update/delete sem filters retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-db-bridge] null em campo opcional é aceito (handler trata como ausente)"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[mcp-query] operação fora da allowlist retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-gateway] action acima de 64 caracteres retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[bitrix24-sync] oauth_callback sem code retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[bitrix24-sync] ação desconhecida retorna 422 nomeando action"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-companies] tabela fora da allowlist retorna 422"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[external-companies] defaults do contrato (table/limit/offset) são aplicados"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[llm-wh] envelope cru da Lalamove passa sem perder campos"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[apply-fixes] única ação aceita é fix_dashboard"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "cobertura: todas as Edge Functions com entrada estão no registro"
    },
    {
     "file": "supabase/functions/_shared/geo-precision.test.ts",
@@ -39983,10 +40164,6 @@
    {
     "file": "public/sw.js",
     "event": "dismiss"
-   },
-   {
-    "file": "supabase/functions/lalamove-gateway/index.ts",
-    "event": "string"
    }
   ],
   "side_effects": [
@@ -67804,17 +67981,30 @@
   },
   "supabase/functions/_shared/contract.test.ts": {
    "path": "supabase/functions/_shared/contract.test.ts",
-   "lines": 349,
+   "lines": 704,
    "is_test": true,
    "errors": [
+    ": {\n    payload: { ...VALID_PAYLOADS[",
     ": {\n    userId: ",
-    "], userEmail: "
+    "], userEmail: ",
+    "], userEmail: 42 },\n    field: "
+   ],
+   "rule_comments": [
+    "é o payload mínimo válido (ver OPTIONAL_BODY_CONTRACTS em schemas.ts).",
+    "* Caso de falha por contrato: payload + campo que deve aparecer em `error.fields`. */",
+    "número —, que antes passava adiante sem validação alguma.",
+    "passthrough: o proxy repassa o corpo cru, nada é descartado na validação."
    ],
    "doc": "============================================================================ Testes de Contrato — Validam que payloads válidos e inválidos produzem respostas CONSISTENTES em todos os webhooks e Edge Functions. Cobertura: - Payload válido → ok:true - Campos ausentes → 422 + formato único - Tipos inco …",
    "tests": [
     "formato único de erro: estrutura consistente",
     "[${name}] payload válido é aceito (v1)",
+    "[${name}] corpo vazio é aceito (contrato de corpo opcional)",
+    "[${name}] corpo que não é objeto retorna 422 no formato único",
     "[${name}] campo ausente retorna 422 no formato único",
+    "[${name}] tipo incorreto retorna 422 nomeando o campo",
+    "[${name}] valor vazio retorna 422 nomeando o campo",
+    "[${name}] payload inválido é rejeitado de forma idêntica em v1 e v2",
     "[evaluate-driver] tipo incorreto (rating string) retorna 422",
     "[send-notification] enum inválido (severity) retorna 422",
     "[lalamove-webhook] event vazio retorna 422",
@@ -67838,12 +68028,25 @@
     "buildContractUsageEvent marca deprecated=false para v2",
     "buildContractUsageEvent: deprecated reflete DEPRECATED_VERSIONS",
     "geo-gateway place-details aceita mapbox_id de 370 caracteres",
-    "geo-gateway place-details rejeita place_id acima de 1024"
+    "geo-gateway place-details rejeita place_id acima de 1024",
+    "[simulate-driver-movement] replay:true sem fixture retorna 422",
+    "[simulate-driver-movement] replay com fixture válida é aceito",
+    "[external-db-bridge] update/delete sem filters retorna 422",
+    "[external-db-bridge] null em campo opcional é aceito (handler trata como ausente)",
+    "[mcp-query] operação fora da allowlist retorna 422",
+    "[lalamove-gateway] action acima de 64 caracteres retorna 422",
+    "[bitrix24-sync] oauth_callback sem code retorna 422",
+    "[bitrix24-sync] ação desconhecida retorna 422 nomeando action",
+    "[external-companies] tabela fora da allowlist retorna 422",
+    "[external-companies] defaults do contrato (table/limit/offset) são aplicados",
+    "[llm-wh] envelope cru da Lalamove passa sem perder campos",
+    "[apply-fixes] única ação aceita é fix_dashboard",
+    "cobertura: todas as Edge Functions com entrada estão no registro"
    ]
   },
   "supabase/functions/_shared/contract.ts": {
    "path": "supabase/functions/_shared/contract.ts",
-   "lines": 313,
+   "lines": 326,
    "exports": [
     "type ContractVersion",
     "const SUPPORTED_VERSIONS",
@@ -67868,7 +68071,9 @@
     "function validateContract",
     "function jsonResponse",
     "function errorResponse",
-    "function parseJsonBody"
+    "function parseJsonBody",
+    "function parseJsonText",
+    "type JsonParseResult"
    ],
    "enums": [
     {
@@ -67891,7 +68096,8 @@
     "* Versão para a qual o integrador deve migrar. */",
     "* Presente somente quando a versão usada está descontinuada. */",
     "── Resultado de validação (puro, testável) ──────────────────────────────────",
-    "Falhas de validação usam SEMPRE status 422 e o formato único de erro."
+    "Falhas de validação usam SEMPRE status 422 e o formato único de erro.",
+    "* Mesma validação de `parseJsonBody`, mas sobre um corpo JÁ LIDO. Usada pelos"
    ],
    "doc": "============================================================================ Contract Layer — Validação de schema + formato único de erro para todas as Edge Functions e webhooks. Objetivos (Front-End/Back-End Sênior): - Formato de erro 422 CONSISTENTE em TODOS os endpoints: { error: { code, message, …"
   },
@@ -67979,10 +68185,11 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 310,
+   "lines": 650,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
+    "const OPTIONAL_BODY_CONTRACTS",
     "function getSchema"
    ],
    "errors": [
@@ -68060,16 +68267,100 @@
      "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`. mode: z.enum([\"searchbox\", \"geocoding\"]).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e …",
      "refines": [],
      "chain": []
+    },
+    {
+     "name": "cronWorkerBody",
+     "kind": "object",
+     "body": "{ time: z.string().optional().nullable(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "applyFixesV1",
+     "kind": "object",
+     "body": "{ action: z.literal(\"fix_dashboard\"), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "simulateReplayPoint",
+     "kind": "object",
+     "body": "{ seq: z.number(), lat: z.number(), lng: z.number(), speed_kmh: z.number().optional(), heading: z.number().optional(), elapsed_s: z.number().optional(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "simulateReplayFixture",
+     "kind": "object",
+     "body": "{ name: z.string().min(1, \"fixture.name é obrigatório\"), vehicle_type: z.string().optional(), total_distance_m: z.number().optional(), points: z.array(simulateReplayPoint).min(1, \"fixture.points não pode ser vazio\"), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "bitrix24SyncV1",
+     "kind": "discriminatedUnion",
+     "body": "\"action\", [ z.object({ action: z.literal(\"get_auth_url\"), domain: z.string().optional(), }), z.object({ action: z.literal(\"oauth_callback\"), code: z.string().min(1, \"code é obrigatório\"), domain: z.string().optional(), }), z.object({ action: z.literal(\"refresh_token\") }), // Espelha o z.object inline que já existia em index.ts:159-162. z.object({ action: z.literal(\"sync_order\"), orderId: z.string().uuid(\"orderId deve ser um UUID\"), dealId: z.union([z.string().min(1, \"dealId é obrigatório\"), z.number()]), }), z.object({ action: z.literal(\"get_connection_status\") }), z.object({ action: z.literal(\"get_deals\") }), z.object({ action: z.literal(\"disconnect\") }), ]",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "externalCompaniesTable",
+     "kind": "enum",
+     "body": "[\"companies\", \"customers\", \"suppliers\", \"carriers\", \"contacts\"]",
+     "refines": [],
+     "chain": [
+      "default"
+     ]
+    },
+    {
+     "name": "externalCompaniesV1",
+     "kind": "discriminatedUnion",
+     "body": "\"action\", [ z.object({ action: z.literal(\"list\"), table: externalCompaniesTable, search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(50), offset: z.number().int().nonnegative().default(0), }), z.object({ action: z.literal(\"get\"), table: externalCompaniesTable, id: z.union([ z.string().min(1, \"id é obrigatório\"), z.number().refine((n) => n !== 0, \"id é obrigatório\"), ]), }), z.object({ action: z.literal(\"search_address\"), search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(20), }), z.object({ action: z.literal(\"schema\"), table: externalCompaniesTable, }), z.object({ action: z.literal(\"stats\") }), ]",
+     "refines": [
+      "id é obrigatório"
+     ],
+     "chain": []
+    },
+    {
+     "name": "externalDbBridgeV1",
+     "kind": "discriminatedUnion",
+     "body": "\"operation\", [ z.object({ operation: z.literal(\"select\"), table: z.string().min(1, \"table é obrigatório\"), select: z.string().nullish(), filters: externalDbBridgeFilters.nullish(), order: z .object({ column: z.string().min(1, \"order.column é obrigatório\"), ascending: z.boolean().optional(), }) .nullish(), limit: z.number().int().nonnegative().nullish(), offset: z.number().int().nonnegative().nullish(), count_mode: z.enum([\"exact\", \"planned\", \"estimated\"]).nullish(), }), z.object({ operation: z.literal(\"insert\"), table: z.string().min(1, \"table é obrigatório\"), body: z.union([externalDbBridgeRow, z.array(externalDbBridgeRow)]).optional(), }), z.object({ operation: z.literal(\"update\"), table: z.string().min(1, \"table é obrigatório\"), filters: externalDbBridgeRequiredFilters, body: externalDb …",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "mcpQueryV1",
+     "kind": "object",
+     "body": "{ operation: z.enum([ \"connection_info\", \"list_tables\", \"list_columns\", \"list_views\", \"list_enums\", \"list_extensions\", \"list_indexes\", \"list_functions\", \"list_triggers\", \"list_policies\", \"constraints\", \"relationships\", \"sequences\", \"migrations\", \"db_stats\", \"active_queries\", \"slow_queries\", \"locks\", \"disk_usage\", \"table_bloat\", \"index_usage\", \"seq_scans\", \"duplicate_indexes\", \"column_stats\", \"pg_settings\", ]), params: z .object({ schema: z.string().max(128).optional(), table: z.string().max(128).optional(), column: z.string().max(128).optional(), filter: z.string().max(128).optional(), // index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp // 1..200 continua no handler. limit: z.union([z.number(), z.string()]).optional(), }) .optional() .nullable(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "lalamoveGatewayV1",
+     "kind": "object",
+     "body": "{ action: z .string() .trim() .min(1, \"action é obrigatório\") .max(64, \"action deve ter no máximo 64 caracteres\"), target: z.enum([\"unified\", \"uapi\"]).optional(), params: z.record(z.string()).optional(), body: z.unknown().optional(), method: z.enum([\"GET\", \"POST\"]).optional(), }",
+     "refines": [],
+     "chain": []
+    },
+    {
+     "name": "llmWhV1",
+     "kind": "object",
+     "body": "{ apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, \"event não pode ser vazio\").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }",
+     "refines": [],
+     "chain": []
     }
    ],
    "enums": [
     {
      "name": "ContractName",
-     "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway"
+     "values": "lalamove-webhook | evaluate-driver | send-notification | new-device-alert | route-analyzer | check-external-api | test-notification | geo-gateway | apply-fixes | bitrix24-process-queue | bitrix24-sync | check-driver-alerts | escalate-alerts | external-companies | external-db-bridge | get-mapbox-token | lalamove-gateway | lalamove-token-refresh | llm-wh | mcp-query | rotate-tokens | seed-fix-rls | simulate-driver-movement"
     }
    ],
    "rule_comments": [
-    "Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway"
+    "Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway",
+    "validação (ou derrubava a função em 500, quando `req.json()` falhava). O",
+    "index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp",
+    "lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream."
    ],
    "doc": "============================================================================ Schemas de Contrato — Fonte única de verdade para os payloads de TODOS os webhooks e Edge Functions. Versionados (v1/v2) para permitir evolução com compatibilidade retroativa. Convenção de versionamento: - v1: contrato orig …",
    "side_effects": [
@@ -68320,7 +68611,7 @@
   },
   "supabase/functions/apply-fixes/index.ts": {
    "path": "supabase/functions/apply-fixes/index.ts",
-   "lines": 59,
+   "lines": 79,
    "rpc": [
     "exec"
    ],
@@ -68332,7 +68623,7 @@
   },
   "supabase/functions/bitrix24-process-queue/index.ts": {
    "path": "supabase/functions/bitrix24-process-queue/index.ts",
-   "lines": 261,
+   "lines": 281,
    "tables": [
     {
      "table": "bitrix24_sync",
@@ -68420,7 +68711,7 @@
   },
   "supabase/functions/bitrix24-sync/index.ts": {
    "path": "supabase/functions/bitrix24-sync/index.ts",
-   "lines": 354,
+   "lines": 373,
    "tables": [
     {
      "table": "bitrix24_tokens",
@@ -68499,7 +68790,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 261,
+   "lines": 281,
    "tables": [
     {
      "table": "alert_configurations",
@@ -68786,7 +69077,7 @@
   },
   "supabase/functions/escalate-alerts/index.ts": {
    "path": "supabase/functions/escalate-alerts/index.ts",
-   "lines": 101,
+   "lines": 121,
    "rpc": [
     "get_pending_escalations"
    ],
@@ -68952,7 +69243,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 261,
+   "lines": 281,
    "tables": [
     {
      "table": "companies",
@@ -69095,7 +69386,7 @@
   },
   "supabase/functions/external-db-bridge/index.ts": {
    "path": "supabase/functions/external-db-bridge/index.ts",
-   "lines": 307,
+   "lines": 320,
    "exports": [
     "function classifySeverity",
     "function buildTelemetry",
@@ -69712,7 +70003,7 @@
   },
   "supabase/functions/get-mapbox-token/index.ts": {
    "path": "supabase/functions/get-mapbox-token/index.ts",
-   "lines": 47,
+   "lines": 67,
    "env": [
     "MAPBOX_ACCESS_TOKEN"
    ]
@@ -70436,7 +70727,7 @@
   },
   "supabase/functions/lalamove-gateway/index.ts": {
    "path": "supabase/functions/lalamove-gateway/index.ts",
-   "lines": 398,
+   "lines": 409,
    "tables": [
     {
      "table": "lalamove_rate_limits",
@@ -70477,12 +70768,9 @@
     "* Persistência best-effort da telemetria de rate limit. Nunca deve derrubar a",
     "requisição principal — falhas são apenas logadas.",
     "Best-effort: nunca deve derrubar a requisição principal.",
-    "── 2. Validação de entrada ────────────────────────────────────────────",
+    "── 2. Validação de entrada (contrato: 422 no formato único + v1/v2) ───",
     "── 4. Chamada com deadline ────────────────────────────────────────────",
     "── 5. Telemetria de rate limit (Etapa 14) ─────────────────────────────"
-   ],
-   "webhook_events": [
-    "string"
    ],
    "uses_service_role": true
   },
@@ -70539,7 +70827,7 @@
   },
   "supabase/functions/lalamove-token-refresh/index.ts": {
    "path": "supabase/functions/lalamove-token-refresh/index.ts",
-   "lines": 193,
+   "lines": 213,
    "tables": [
     {
      "table": "alerts",
@@ -71072,7 +71360,7 @@
   },
   "supabase/functions/llm-wh/index.ts": {
    "path": "supabase/functions/llm-wh/index.ts",
-   "lines": 79,
+   "lines": 100,
    "env": [
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
@@ -71081,7 +71369,7 @@
   },
   "supabase/functions/mcp-query/index.ts": {
    "path": "supabase/functions/mcp-query/index.ts",
-   "lines": 222,
+   "lines": 234,
    "tables": [
     {
      "table": "query_telemetry",
@@ -71113,7 +71401,7 @@
     "3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe",
     "`mcp_introspect`, que aceita apenas operações de uma allowlist fixa.",
     "* Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e",
-    "── 3. Validação de entrada ──────────────────────────────────────────────"
+    "── 3. Validação de entrada (contrato: 422 no formato único + v1/v2) ─────"
    ],
    "doc": "============================================================================ mcp-query — introspecção e diagnóstico de banco para administradores. Modelo de segurança (mesmo padrão do external-db-bridge / migrate-helper): 1. Exige `Authorization: Bearer <JWT>` válido (validado em código, pois a funç …"
   },
@@ -71169,7 +71457,7 @@
   },
   "supabase/functions/rotate-tokens/index.ts": {
    "path": "supabase/functions/rotate-tokens/index.ts",
-   "lines": 204,
+   "lines": 224,
    "tables": [
     {
      "table": "alerts",
@@ -71278,7 +71566,7 @@
   },
   "supabase/functions/seed-fix-rls/index.ts": {
    "path": "supabase/functions/seed-fix-rls/index.ts",
-   "lines": 133,
+   "lines": 153,
    "rpc": [
     "exec"
    ],
@@ -71569,7 +71857,7 @@
   },
   "supabase/functions/simulate-driver-movement/index.ts": {
    "path": "supabase/functions/simulate-driver-movement/index.ts",
-   "lines": 286,
+   "lines": 306,
    "tables": [
     {
      "table": "user_roles",
@@ -71623,6 +71911,9 @@
    ],
    "role_checks": [
     "service_role"
+   ],
+   "rule_comments": [
+    "sem `fixture` agora falha na validação, não no meio do laço."
    ],
    "percents": [
     "// Randomly toggle off-route status (3% chance to go off, 20% to return)",
@@ -72713,10 +73004,48 @@
   }
  },
  "git": {
-  "sha": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
+  "sha": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "7e572fe",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)",
+    "files": [
+     "docs/API_CONTRACTS.md",
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "supabase/functions/_shared/contract.test.ts",
+     "supabase/functions/_shared/contract.ts",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/apply-fixes/index.ts",
+     "supabase/functions/bitrix24-process-queue/index.ts",
+     "supabase/functions/bitrix24-sync/index.ts",
+     "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/escalate-alerts/index.ts",
+     "supabase/functions/external-companies/index.ts",
+     "supabase/functions/external-db-bridge/index.ts",
+     "supabase/functions/get-mapbox-token/index.ts",
+     "supabase/functions/lalamove-gateway/index.ts",
+     "supabase/functions/lalamove-token-refresh/index.ts",
+     "supabase/functions/llm-wh/index.ts",
+     "supabase/functions/mcp-query/index.ts",
+     "supabase/functions/rotate-tokens/index.ts",
+     "supabase/functions/seed-fix-rls/index.ts",
+     "supabase/functions/simulate-driver-movement/index.ts"
+    ]
+   },
+   {
+    "sha": "572af27",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs(planos): plano front-end de 190 etapas (#280)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "docs/planos/README.md"
+    ]
+   },
    {
     "sha": "d6f59de",
     "date": "2026-11-22",
@@ -73011,25 +73340,6 @@
     "files": [
      "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql"
     ]
-   },
-   {
-    "sha": "961964c",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)",
-    "files": [
-     "supabase/functions/geo-gateway/google.test.ts"
-    ]
-   },
-   {
-    "sha": "6c065b3",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix(geo): reconhece bairro sublocality_level_1 em placeDetails do Google (#258)",
-    "files": [
-     "supabase/functions/geo-gateway/google.test.ts",
-     "supabase/functions/geo-gateway/providers/google.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -73050,67 +73360,67 @@
     3
    ],
    [
-    "supabase/functions/geo-gateway/google.test.ts",
+    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     2
    ],
    [
-    "supabase/functions/_shared/messaging/router.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/_shared/messaging/router.ts",
-    1
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.test.tsx",
-    1
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.tsx",
-    1
-   ],
-   [
     "supabase/functions/simulate-driver-movement/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/simulate-driver-movement/replay.test.ts",
-    1
-   ],
-   [
-    "supabase/functions/simulate-driver-movement/replay.ts",
-    1
-   ],
-   [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    1
+    2
    ],
    [
     "docs/planos/README.md",
+    2
+   ],
+   [
+    "docs/API_CONTRACTS.md",
     1
    ],
    [
-    ".github/toolchain.json",
+    "supabase/functions/_shared/contract.test.ts",
     1
    ],
    [
-    "docs/GEO_CONTRACT.md",
+    "supabase/functions/_shared/contract.ts",
     1
    ],
    [
-    "docs/ci/MATRIZ_EDGE_TABELA.md",
+    "supabase/functions/_shared/schemas.ts",
     1
    ],
    [
-    "scripts/ci/check-workflow-pins.mjs",
+    "supabase/functions/apply-fixes/index.ts",
     1
    ],
    [
-    "supabase/functions/lalamove-api/coordinates.test.ts",
+    "supabase/functions/bitrix24-process-queue/index.ts",
     1
    ],
    [
-    "supabase/functions/lalamove-api/coordinates.ts",
+    "supabase/functions/bitrix24-sync/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/check-driver-alerts/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/escalate-alerts/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/external-companies/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/external-db-bridge/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/get-mapbox-token/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-gateway/index.ts",
     1
    ]
   ]

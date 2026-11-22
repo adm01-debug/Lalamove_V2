@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d6f59de0a9c37000528d1dc56b6446d2cd76017c",
+  "commit": "7e572fecb0e4fa0549071927623d1e56b00f22c1",
   "branch": "main",
-  "data_commit": "2026-11-22T11:08:18-03:00",
+  "data_commit": "2026-11-22T12:30:14-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "7e572fe",
+    "data": "2026-11-22",
+    "assunto": "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)"
+   },
+   {
+    "sha": "572af27",
+    "data": "2026-11-22",
+    "assunto": "docs(planos): plano front-end de 190 etapas (#280)"
+   },
    {
     "sha": "d6f59de",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "6c13bec",
     "data": "2026-11-22",
     "assunto": "fix: n8n F01 usa geo-gateway no lugar do DistanceMatrix.ai (etapa 42) (#265)"
-   },
-   {
-    "sha": "6e48f45",
-    "data": "2026-11-22",
-    "assunto": "fix(geo): mapbox retenta via POST em 414 e cobre reverse/raw em teste (#264)"
-   },
-   {
-    "sha": "8b67608",
-    "data": "2026-11-22",
-    "assunto": "docs: corrige referência desatualizada no comentário do stub de migration (#263)"
    }
   ],
-  "arquivos_mudados_7d": 313,
+  "arquivos_mudados_7d": 325,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 22
+    "mudancas": 25
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -246,15 +246,15 @@
     "mudancas": 9
    },
    {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 9
+   },
+   {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 9
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 8
    },
    {
@@ -290,18 +290,18 @@
     "mudancas": 6
    },
    {
-    "arquivo": ".env.example",
-    "mudancas": 5
+    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
+    "mudancas": 6
    },
    {
-    "arquivo": "docs/pendencias/README.md",
+    "arquivo": ".env.example",
     "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 184
+    "commits": 186
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1049,
+  "arquivos_total": 1050,
   "arquivos_codigo": 650,
-  "linhas_codigo": 127016,
+  "linhas_codigo": 128000,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -327,7 +327,7 @@
   "testes": 153,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 107
+  "docs_md": 108
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 81,
-   "linhas": 18907
+   "linhas": 19891
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -641,6 +641,10 @@
    "linhas": 668
   },
   {
+   "arquivo": "supabase/functions/_shared/schemas.ts",
+   "linhas": 650
+  },
+  {
    "arquivo": "src/pages/AlertsPage.tsx",
    "linhas": 602
   },
@@ -675,10 +679,6 @@
   {
    "arquivo": "src/pages/NotificationHistoryPage.tsx",
    "linhas": 483
-  },
-  {
-   "arquivo": "src/pages/RateLimitDashboardPage.tsx",
-   "linhas": 478
   }
  ],
  "qualidade": {
@@ -687,7 +687,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,
-  "arquivos_acima_500_linhas": 20
+  "arquivos_acima_500_linhas": 21
  },
  "todos": [
   {

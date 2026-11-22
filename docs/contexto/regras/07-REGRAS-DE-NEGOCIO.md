@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d6f59de0a9` · branch `main` · 2026-11-22 14:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7e572fecb0` · branch `main` · 2026-11-22 15:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -895,7 +895,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | UAPI_POD_STATUS | 'PENDING', 'SIGNED', 'DELIVERED', 'FAILED', 'NOT_APPLICABLE' | `src/types/lalamove.ts` |
 | ContractVersion | v1 \| v2 | `supabase/functions/_shared/contract.ts` |
 | GeoPrecision | exact \| high \| medium \| low \| unknown | `supabase/functions/_shared/geo-precision.ts` |
-| ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway | `supabase/functions/_shared/schemas.ts` |
+| ContractName | lalamove-webhook \| evaluate-driver \| send-notification \| new-device-alert \| route-analyzer \| check-external-api \| test-notification \| geo-gateway \| apply-fixes \| bitrix24-process-queue \| bitrix24-sync \| check-driver-alerts \| escalate-alerts \| external-companies \| external-db-bridge \| get-mapbox-token \| lalamove-gateway \| lalamove-token-refresh \| llm-wh \| mcp-query \| rotate-tokens \| seed-fix-rls \| simulate-driver-movement | `supabase/functions/_shared/schemas.ts` |
 | TEMPLATE_VARS | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", | `supabase/functions/_shared/template.ts` |
 | MessageRole | driver \| pickup_contact \| delivery_contact \| internal | `supabase/functions/_shared/messaging/router.ts` |
 | MessageChannel | whatsapp \| sms \| email \| slack \| n8n | `supabase/functions/_shared/messaging/router.ts` |
@@ -971,6 +971,51 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 - **geoGatewayV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
   ```ts
   "action", [ z.object({ action: z.literal("provider-status"), provider: geoProvider }), z.object({ action: z.literal("count-map-load"), provider: z.enum(["google", "mapbox"]) }), z.object({ action: z.literal("autocomplete"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`. mode: z.enum(["searchbox", "geocoding"]).optional(), provider: geoProvider, }), z.object({ action: z.literal("place-details"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e …
+  ```
+- **cronWorkerBody** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { time: z.string().optional().nullable(), }
+  ```
+- **applyFixesV1** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { action: z.literal("fix_dashboard"), }
+  ```
+- **simulateReplayPoint** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { seq: z.number(), lat: z.number(), lng: z.number(), speed_kmh: z.number().optional(), heading: z.number().optional(), elapsed_s: z.number().optional(), }
+  ```
+- **simulateReplayFixture** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { name: z.string().min(1, "fixture.name é obrigatório"), vehicle_type: z.string().optional(), total_distance_m: z.number().optional(), points: z.array(simulateReplayPoint).min(1, "fixture.points não pode ser vazio"), }
+  ```
+- **bitrix24SyncV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
+  ```ts
+  "action", [ z.object({ action: z.literal("get_auth_url"), domain: z.string().optional(), }), z.object({ action: z.literal("oauth_callback"), code: z.string().min(1, "code é obrigatório"), domain: z.string().optional(), }), z.object({ action: z.literal("refresh_token") }), // Espelha o z.object inline que já existia em index.ts:159-162. z.object({ action: z.literal("sync_order"), orderId: z.string().uuid("orderId deve ser um UUID"), dealId: z.union([z.string().min(1, "dealId é obrigatório"), z.number()]), }), z.object({ action: z.literal("get_connection_status") }), z.object({ action: z.literal("get_deals") }), z.object({ action: z.literal("disconnect") }), ]
+  ```
+- **externalCompaniesTable** (`supabase/functions/_shared/schemas.ts`, z.enum, encadeia default):
+  ```ts
+  ["companies", "customers", "suppliers", "carriers", "contacts"]
+  ```
+- **externalCompaniesV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
+  ```ts
+  "action", [ z.object({ action: z.literal("list"), table: externalCompaniesTable, search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(50), offset: z.number().int().nonnegative().default(0), }), z.object({ action: z.literal("get"), table: externalCompaniesTable, id: z.union([ z.string().min(1, "id é obrigatório"), z.number().refine((n) => n !== 0, "id é obrigatório"), ]), }), z.object({ action: z.literal("search_address"), search: z.string().optional().nullable(), limit: z.number().int().positive().max(200).default(20), }), z.object({ action: z.literal("schema"), table: externalCompaniesTable, }), z.object({ action: z.literal("stats") }), ]
+  ```
+  - Regras cruzadas (refine): “id é obrigatório”
+- **externalDbBridgeV1** (`supabase/functions/_shared/schemas.ts`, z.discriminatedUnion):
+  ```ts
+  "operation", [ z.object({ operation: z.literal("select"), table: z.string().min(1, "table é obrigatório"), select: z.string().nullish(), filters: externalDbBridgeFilters.nullish(), order: z .object({ column: z.string().min(1, "order.column é obrigatório"), ascending: z.boolean().optional(), }) .nullish(), limit: z.number().int().nonnegative().nullish(), offset: z.number().int().nonnegative().nullish(), count_mode: z.enum(["exact", "planned", "estimated"]).nullish(), }), z.object({ operation: z.literal("insert"), table: z.string().min(1, "table é obrigatório"), body: z.union([externalDbBridgeRow, z.array(externalDbBridgeRow)]).optional(), }), z.object({ operation: z.literal("update"), table: z.string().min(1, "table é obrigatório"), filters: externalDbBridgeRequiredFilters, body: externalDb …
+  ```
+- **mcpQueryV1** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { operation: z.enum([ "connection_info", "list_tables", "list_columns", "list_views", "list_enums", "list_extensions", "list_indexes", "list_functions", "list_triggers", "list_policies", "constraints", "relationships", "sequences", "migrations", "db_stats", "active_queries", "slow_queries", "locks", "disk_usage", "table_bloat", "index_usage", "seq_scans", "duplicate_indexes", "column_stats", "pg_settings", ]), params: z .object({ schema: z.string().max(128).optional(), table: z.string().max(128).optional(), column: z.string().max(128).optional(), filter: z.string().max(128).optional(), // index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp // 1..200 continua no handler. limit: z.union([z.number(), z.string()]).optional(), }) .optional() .nullable(), }
+  ```
+- **lalamoveGatewayV1** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { action: z .string() .trim() .min(1, "action é obrigatório") .max(64, "action deve ter no máximo 64 caracteres"), target: z.enum(["unified", "uapi"]).optional(), params: z.record(z.string()).optional(), body: z.unknown().optional(), method: z.enum(["GET", "POST"]).optional(), }
+  ```
+- **llmWhV1** (`supabase/functions/_shared/schemas.ts`, z.object):
+  ```ts
+  { apiKey: z.string().optional(), timestamp: z.union([z.number(), z.string()]).optional().nullable(), signature: z.string().optional(), eventId: z.string().optional(), eventType: z.string().optional(), eventVersion: z.string().optional(), event: z.string().min(1, "event não pode ser vazio").optional(), orderId: z.string().optional().nullable(), data: z.unknown().optional(), }
   ```
 
 ### F.2 react-hook-form (register/rules)
@@ -1883,14 +1928,14 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1181 testes em 103 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1199 testes em 103 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
+| `supabase/functions/_shared/contract.test.ts` | 45 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
-| `supabase/functions/_shared/contract.test.ts` | 27 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] campo ausente retorna 422 no formato único · [evaluate-driver] tipo incorreto (rating string) retorna 422 … |
 | `src/lib/__tests__/lalamoveOrderEdit.test.ts` | 24 | normalizeOrderStatus · mapeia aliases legados para o enum canônico · devolve null para valores desconhecidos · isTerminalStatus … |
 | `supabase/functions/external-db-bridge/index.test.ts` | 24 | classifySeverity: error takes priority · classifySeverity: very_slow threshold at 8000ms · classifySeverity: slow threshold at 3000ms · classifySeverity: normal for fast queries … |
 | `src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx` | 23 | AdminTelemetriaPage · renders page header · renders stat cards · renders filter controls … |
@@ -1996,7 +2041,6 @@ _nenhum item encontrado_
 | Evento | Arquivo |
 |---|---|
 | `dismiss` | `public/sw.js` |
-| `string` | `supabase/functions/lalamove-gateway/index.ts` |
 
 ## M. Efeitos colaterais (e-mail, SMS, cobrança, fila — não são idempotentes por padrão)
 
@@ -2204,9 +2248,13 @@ _nenhum item encontrado_
 | * Presente somente quando a versão usada está descontinuada. */ | `supabase/functions/_shared/contract.ts` |
 | ── Resultado de validação (puro, testável) ────────────────────────────────── | `supabase/functions/_shared/contract.ts` |
 | Falhas de validação usam SEMPRE status 422 e o formato único de erro. | `supabase/functions/_shared/contract.ts` |
+| * Mesma validação de `parseJsonBody`, mas sobre um corpo JÁ LIDO. Usada pelos | `supabase/functions/_shared/contract.ts` |
 | (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. | `supabase/functions/_shared/geo-precision.ts` |
 | * Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */ | `supabase/functions/_shared/geo-precision.ts` |
 | Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway | `supabase/functions/_shared/schemas.ts` |
+| validação (ou derrubava a função em 500, quando `req.json()` falhava). O | `supabase/functions/_shared/schemas.ts` |
+| index.ts:104 usa Number(src.limit): string numérica é aceita e o clamp | `supabase/functions/_shared/schemas.ts` |
+| lido aqui. A validação roda sobre o texto já lido, sem reconsumir o stream. | `supabase/functions/_shared/schemas.ts` |
 | - Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal. | `supabase/functions/_shared/telemetry.ts` |
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
 | é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
@@ -2268,7 +2316,7 @@ _nenhum item encontrado_
 | * Persistência best-effort da telemetria de rate limit. Nunca deve derrubar a | `supabase/functions/lalamove-gateway/index.ts` |
 | requisição principal — falhas são apenas logadas. | `supabase/functions/lalamove-gateway/index.ts` |
 | Best-effort: nunca deve derrubar a requisição principal. | `supabase/functions/lalamove-gateway/index.ts` |
-| ── 2. Validação de entrada ──────────────────────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
+| ── 2. Validação de entrada (contrato: 422 no formato único + v1/v2) ─── | `supabase/functions/lalamove-gateway/index.ts` |
 | ── 4. Chamada com deadline ──────────────────────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | ── 5. Telemetria de rate limit (Etapa 14) ───────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | * Ação conhecida mas que não pode ser atendida sem o proxy externo. */ | `supabase/functions/lalamove-gateway/route.ts` |
@@ -2281,7 +2329,7 @@ _nenhum item encontrado_
 | 3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe | `supabase/functions/mcp-query/index.ts` |
 | `mcp_introspect`, que aceita apenas operações de uma allowlist fixa. | `supabase/functions/mcp-query/index.ts` |
 | * Normaliza os parâmetros: apenas campos conhecidos, tipos coagidos e | `supabase/functions/mcp-query/index.ts` |
-| ── 3. Validação de entrada ────────────────────────────────────────────── | `supabase/functions/mcp-query/index.ts` |
+| ── 3. Validação de entrada (contrato: 422 no formato único + v1/v2) ───── | `supabase/functions/mcp-query/index.ts` |
 | Deve ser chamada periodicamente (ex: a cada hora via cron job externo) | `supabase/functions/rotate-tokens/index.ts` |
 | verify_jwt=true so a valid JWT is required, but that includes ordinary | `supabase/functions/send-notification/index.ts` |
 | lets the caller pick an arbitrary destination, so it must be restricted to | `supabase/functions/send-notification/index.ts` |
@@ -2289,6 +2337,7 @@ _nenhum item encontrado_
 | destinos que são URLs/canais, mas a mesma regra de chave vale. | `supabase/functions/send-notification/recipients.ts` |
 | fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da | `supabase/functions/send-notification/static-map.ts` |
 | imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode | `supabase/functions/send-notification/static-map.ts` |
+| sem `fixture` agora falha na validação, não no meio do laço. | `supabase/functions/simulate-driver-movement/index.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |

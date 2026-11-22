@@ -2223,14 +2223,28 @@
   "supabase/functions/_shared/telemetry.ts": [
    "supabase/functions/_shared/contract.ts"
   ],
+  "supabase/functions/apply-fixes/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
   "supabase/functions/bitrix24-process-queue/index.ts": [
-   "supabase/functions/_shared/logger.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/bitrix24-sync/index.ts": [
-   "supabase/functions/_shared/logger.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/check-driver-alerts/index.ts": [
-   "supabase/functions/_shared/logger.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/check-external-api/index.ts": [
    "supabase/functions/_shared/contract.ts",
@@ -2239,11 +2253,24 @@
    "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/escalate-alerts/index.ts": [
-   "supabase/functions/_shared/logger.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/evaluate-driver/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/external-companies/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/external-db-bridge/index.ts": [
+   "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
@@ -2288,6 +2315,11 @@
   "supabase/functions/geo-gateway/resolver.ts": [
    "supabase/functions/geo-gateway/providers/types.ts"
   ],
+  "supabase/functions/get-mapbox-token/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
   "supabase/functions/job-worker/index.ts": [
    "supabase/functions/_shared/logger.ts"
   ],
@@ -2303,7 +2335,15 @@
    "supabase/functions/lalamove-api/geocode-fallback.ts"
   ],
   "supabase/functions/lalamove-gateway/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/lalamove-gateway/route.ts"
+  ],
+  "supabase/functions/lalamove-token-refresh/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/lalamove-uapi/index.ts": [
    "supabase/functions/_shared/logger.ts"
@@ -2319,8 +2359,16 @@
   "supabase/functions/lalamove-webhook/security.ts": [
    "supabase/functions/_shared/logger.ts"
   ],
+  "supabase/functions/llm-wh/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
   "supabase/functions/mcp-query/index.ts": [
-   "supabase/functions/_shared/cors.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/cors.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/new-device-alert/index.ts": [
    "supabase/functions/_shared/contract.ts",
@@ -2329,9 +2377,17 @@
    "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/rotate-tokens/index.ts": [
-   "supabase/functions/_shared/logger.ts"
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
   ],
   "supabase/functions/route-analyzer/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/seed-fix-rls/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
@@ -2352,6 +2408,9 @@
    "supabase/functions/_shared/logger.ts"
   ],
   "supabase/functions/simulate-driver-movement/index.ts": [
+   "supabase/functions/_shared/contract.ts",
+   "supabase/functions/_shared/schemas.ts",
+   "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/simulate-driver-movement/replay.ts"
   ],
   "supabase/functions/test-notification/index.ts": [

@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)",
+   "docs(planos): plano front-end de 190 etapas (#280)",
    "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)",
    "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)",
-   "feat: replay deterministico do trajeto e 100 testes na CI (#277)",
-   "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)",
-   "feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)"
+   "feat: replay deterministico do trajeto e 100 testes na CI (#277)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

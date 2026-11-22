@@ -33,7 +33,7 @@
    "servico": "Manutenção/DDL",
    "entrada": "supabase/functions/apply-fixes/index.ts",
    "arquivos": 1,
-   "linhas": 59,
+   "linhas": 79,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -51,7 +51,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
@@ -63,7 +67,7 @@
    "servico": "Bitrix24",
    "entrada": "supabase/functions/bitrix24-process-queue/index.ts",
    "arquivos": 1,
-   "linhas": 261,
+   "linhas": 281,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -88,7 +92,10 @@
    "chama_edges": [],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [
     "src/pages/Bitrix24Page.tsx"
@@ -103,7 +110,7 @@
    "servico": "Bitrix24",
    "entrada": "supabase/functions/bitrix24-sync/index.ts",
    "arquivos": 1,
-   "linhas": 354,
+   "linhas": 373,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -129,7 +136,10 @@
    "chama_edges": [],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [
     "src/hooks/useBitrix24.ts"
@@ -146,7 +156,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/check-driver-alerts/index.ts",
    "arquivos": 1,
-   "linhas": 261,
+   "linhas": 281,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -170,7 +180,10 @@
    ],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [
@@ -231,7 +244,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/escalate-alerts/index.ts",
    "arquivos": 1,
-   "linhas": 101,
+   "linhas": 121,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -253,7 +266,10 @@
    ],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
@@ -313,7 +329,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-companies/index.ts",
    "arquivos": 1,
-   "linhas": 261,
+   "linhas": 281,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -335,7 +351,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [
     "src/hooks/useExternalData.ts"
    ],
@@ -349,7 +369,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-db-bridge/index.ts",
    "arquivos": 1,
-   "linhas": 307,
+   "linhas": 320,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -370,7 +390,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
@@ -445,7 +469,7 @@
    "servico": "Mapbox",
    "entrada": "supabase/functions/get-mapbox-token/index.ts",
    "arquivos": 1,
-   "linhas": 47,
+   "linhas": 67,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -460,7 +484,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [
     "src/components/map/hooks/useMapboxToken.ts",
     "src/hooks/healthChecks.ts",
@@ -575,7 +603,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-gateway/index.ts",
    "arquivos": 2,
-   "linhas": 544,
+   "linhas": 555,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -598,7 +626,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [
     "src/lib/lalamove-api.ts"
    ],
@@ -612,7 +644,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
    "arquivos": 1,
-   "linhas": 193,
+   "linhas": 213,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -635,7 +667,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": true,
@@ -746,7 +782,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/llm-wh/index.ts",
    "arquivos": 1,
-   "linhas": 79,
+   "linhas": 100,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
@@ -764,7 +800,11 @@
     "lalamove-webhook"
    ],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
@@ -776,7 +816,7 @@
    "servico": null,
    "entrada": "supabase/functions/mcp-query/index.ts",
    "arquivos": 1,
-   "linhas": 222,
+   "linhas": 234,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS",
@@ -799,7 +839,10 @@
    "chama_edges": [],
    "hosts_externos": [],
    "usa_shared": [
-    "cors.ts"
+    "contract.ts",
+    "cors.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
@@ -854,7 +897,7 @@
    "servico": "Segredos/token",
    "entrada": "supabase/functions/rotate-tokens/index.ts",
    "arquivos": 1,
-   "linhas": 204,
+   "linhas": 224,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -877,7 +920,10 @@
    "chama_edges": [],
    "hosts_externos": [],
    "usa_shared": [
-    "logger.ts"
+    "contract.ts",
+    "logger.ts",
+    "schemas.ts",
+    "telemetry.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
@@ -931,7 +977,7 @@
    "servico": "Manutenção/DDL",
    "entrada": "supabase/functions/seed-fix-rls/index.ts",
    "arquivos": 1,
-   "linhas": 133,
+   "linhas": 153,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -949,7 +995,11 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
@@ -1028,11 +1078,10 @@
    "servico": "Motoristas",
    "entrada": "supabase/functions/simulate-driver-movement/index.ts",
    "arquivos": 2,
-   "linhas": 379,
+   "linhas": 399,
    "verify_jwt": true,
    "metodos": [
-    "OPTIONS",
-    "POST"
+    "OPTIONS"
    ],
    "assina_hmac": false,
    "usa_service_role": true,
@@ -1052,7 +1101,11 @@
     "check-driver-alerts"
    ],
    "hosts_externos": [],
-   "usa_shared": [],
+   "usa_shared": [
+    "contract.ts",
+    "schemas.ts",
+    "telemetry.ts"
+   ],
    "chamada_pelo_front": [
     "src/pages/LiveMapPage.tsx"
    ],
