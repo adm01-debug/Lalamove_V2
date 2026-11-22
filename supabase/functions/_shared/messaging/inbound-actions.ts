@@ -14,7 +14,7 @@
  *   conhecida nao ha evento de rastreio, so o carimbo no pedido.
  */
 
-import type { InboundResult } from "./inbound.ts";
+import { classifyInboundMedia, type InboundResult } from "./inbound.ts";
 
 /** O que o pedido precisa ter para cada efeito ser gravavel. */
 export interface InboundContext {
@@ -25,6 +25,10 @@ export interface InboundContext {
    * `driver_id` NOT NULL, entao isto so vale quando ha motorista E posicao.
    */
   hasDriverPosition: boolean;
+  /** Parada a que a mensagem se refere — ancora comprovante (foto) ou avaria. */
+  stopId?: string | null;
+  /** Mídia enviada junto, quando a resposta veio com foto (etapa 116). */
+  mediaUrl?: string | null;
 }
 
 export type IncidentType =
@@ -42,7 +46,8 @@ export type InboundEffect =
   }
   | { kind: "order_metadata"; key: string; value: string }
   | { kind: "tracking_event"; eventType: string }
-  | { kind: "operator_badge"; reason: string };
+  | { kind: "operator_badge"; reason: string }
+  | { kind: "stop_proof"; stopId: string; imageUrl: string | null };
 
 export interface InboundPlan {
   /** Efeitos na ordem em que devem ser gravados. Vazio = nada a fazer. */
@@ -113,6 +118,30 @@ export function planInboundAction(
   }
 
   if (result.kind === "free_text") {
+    // Foto enviada sem texto vira comprovante quando ha parada; sem parada vira
+    // badge para o operador, que abre o anexo no Zapp e decide (etapa 116).
+    if (ctx.mediaUrl) {
+      const media = classifyInboundMedia(ctx.mediaUrl);
+      if (ctx.stopId) {
+        return {
+          effects: [{
+            kind: "stop_proof",
+            stopId: ctx.stopId,
+            imageUrl: ctx.mediaUrl,
+          }],
+          skipped: media === "damage"
+            ? [{ reason: "media_avaria", effect: "stop_proof" }]
+            : EMPTY_SKIPPED,
+        };
+      }
+      return {
+        effects: [{
+          kind: "operator_badge",
+          reason: media === "damage" ? "media_avaria" : "media_comprovante",
+        }],
+        skipped: EMPTY_SKIPPED,
+      };
+    }
     return {
       effects: [{ kind: "operator_badge", reason: "texto_livre" }],
       skipped: EMPTY_SKIPPED,

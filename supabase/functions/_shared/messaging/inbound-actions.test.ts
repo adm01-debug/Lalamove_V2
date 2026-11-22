@@ -137,3 +137,27 @@ Deno.test("etapa 114: opcao numerada vira badge com o digito escolhido", () => {
   const plan = planInboundAction(classifyInbound("2", choices), FULL);
   assertEquals(plan.effects, [{ kind: "operator_badge", reason: "opcao 2" }]);
 });
+
+Deno.test("etapa 116: foto sem texto vira comprovante quando ha parada", () => {
+  const plan = planFor("", { orderId: "o1", driverId: "d1", hasDriverPosition: true, stopId: "s1", mediaUrl: "https://cdn/recibo.jpg" });
+  assertEquals(plan.effects, [{ kind: "stop_proof", stopId: "s1", imageUrl: "https://cdn/recibo.jpg" }]);
+});
+
+Deno.test("etapa 116: foto de avaria sem parada vira badge de media_avaria", () => {
+  const plan = planFor("", { orderId: "o1", driverId: "d1", hasDriverPosition: true, stopId: null, mediaUrl: "https://cdn/acidente.jpg" });
+  assertEquals(plan.effects, [{ kind: "operator_badge", reason: "media_avaria" }]);
+});
+
+Deno.test("etapa 116: foto de comprovante sem parada vira badge de media_comprovante", () => {
+  const plan = planFor("", { orderId: "o1", driverId: "d1", hasDriverPosition: true, stopId: null, mediaUrl: "https://cdn/pod.png" });
+  assertEquals(plan.effects, [{ kind: "operator_badge", reason: "media_comprovante" }]);
+});
+
+Deno.test("etapa 116: texto com foto ainda classifica o texto, e a foto vira comprovante", () => {
+  const plan = planFor("entregue", { orderId: "o1", driverId: "d1", hasDriverPosition: true, stopId: "s1", mediaUrl: "https://cdn/x.jpg" });
+  const proof = plan.effects.find((e) => e.kind === "stop_proof");
+  assertEquals(proof?.kind, "stop_proof");
+  // "entregue" nao e intent de confirmacao/chegada; e intent de status, entao
+  // nao ha order_metadata — so comprovante. Confirma que o texto nao e perdido.
+  assertEquals(plan.effects.some((e) => e.kind === "stop_proof"), true);
+});

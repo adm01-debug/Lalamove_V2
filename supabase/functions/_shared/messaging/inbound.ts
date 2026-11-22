@@ -57,6 +57,38 @@ export function isOptOutKeyword(raw: string): boolean {
 }
 
 /**
+ * Etapa 116 — mídia recebida do motorista.
+ *
+ * Foto/comprovante é tratada fora do texto: um "aqui" com imagem de comprovante
+ * não deve virar confirmação de chegada. Quem decide onde gravar (stop_proofs ou
+ * anexo do incidente) é a etapa 114 via `planInboundAction`; aqui só classificamos
+ * a mídia para o plano poder agir.
+ */
+export type InboundMediaKind = "proof" | "damage" | "other";
+
+export function classifyInboundMedia(
+  mediaUrl: string | null,
+): InboundMediaKind {
+  if (!mediaUrl) return "other";
+  const u = mediaUrl.toLowerCase();
+  const proofExt = [".jpg", ".jpeg", ".png", ".webp", ".heic"];
+  const damageWords = [
+    "avaria",
+    "dan",
+    "acidente",
+    "bat",
+    "quebr",
+    "risco",
+    "quebrou",
+  ];
+  // Nome de arquivo com "avaria"/"acidente" indica foto de estrago; extensão de
+  // imagem em si só prova que é foto, então por padrão é comprovante.
+  if (damageWords.some((w) => u.includes(w))) return "damage";
+  if (proofExt.some((e) => u.endsWith(e))) return "proof";
+  return "other";
+}
+
+/**
  * Frases por intencao, ja sem acento. A ordem dos grupos define prioridade:
  * "nao consigo chegar" e problema, nao confirmacao, por isso `problem` vem antes
  * de `confirm`/`decline`.
