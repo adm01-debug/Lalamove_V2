@@ -24,7 +24,7 @@ const IMAGE_DIGEST = /@sha256:[a-f0-9]{64}/u;
 
 export const TOOLCHAIN_PATH = '.github/toolchain.json';
 /** Ferramentas cuja versão aparece literal em algum workflow deste repo. */
-export const TOOLCHAIN_KEYS = ['node', 'deno'];
+export const TOOLCHAIN_KEYS = ['node', 'deno', 'postgres-image'];
 
 const SCALAR = /^(?:'([^']*)'|"([^"]*)"|([^\s#'"]+))(?:\s+#.*)?$/u;
 const USES_LINE = /^\s*(?:-\s*)?(?:uses|["']uses["'])\s*:\s*(.*)$/u;

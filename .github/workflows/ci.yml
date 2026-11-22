@@ -137,7 +137,7 @@ jobs:
     # apareceria com o motorista na rua. Este job roda o harness de verdade.
     services:
       postgres:
-        image: postgres:16-alpine
+        image: postgres:16-alpine@sha256:f2f98726820d0342055351c6e9d36e705f5bfffb3dd53ff556325114b08afb6d
         env:
           POSTGRES_PASSWORD: x
         ports:
@@ -186,7 +186,7 @@ jobs:
     needs: lint-and-typecheck
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16-alpine@sha256:f2f98726820d0342055351c6e9d36e705f5bfffb3dd53ff556325114b08afb6d
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: geotest
