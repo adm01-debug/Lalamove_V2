@@ -245,6 +245,18 @@ serve(async (req) => {
       effectiveMessage: string = message,
       role: string = "recipient",
     ): Promise<{ success: boolean; error?: string }> => {
+      // Etapa 95: ponto unico de saida — o teto do motorista vale para o
+      // caminho ad-hoc e o caminho de `alert_configurations`, e so quando o
+      // destino e o telefone do proprio motorista.
+      if (channel === 'whatsapp' || channel === 'sms') {
+        if (await isDriverRateLimited(recipient)) {
+          logger.log(`[Notification] Limite de ${DRIVER_RATE_LIMIT.maxMessages}/10min atingido para o motorista — ${channel} ignorado`);
+          const limited = { success: false, error: 'rate_limited' };
+          results.push({ channel: `${channel}:${recipient}`, ...limited });
+          await recordNotificationLog(supabase, alert_id, channel, recipient, false, 'rate_limited');
+          return limited;
+        }
+      }
       let result: { success: boolean; error?: string };
       switch (channel) {
         case "whatsapp":
@@ -381,32 +393,66 @@ serve(async (req) => {
 
     /**
      * Etapa 95: teto de 6 mensagens automaticas por motorista a cada 10 min.
-     * Conta `alerts_sent` porque e o unico registro de envio que ja existe em
-     * producao — o ledger novo (etapa 73) ainda nao esta em uso. A tabela nao
-     * tem `driver_id` (migration 20251224143803), entao a chave e o telefone
-     * normalizado — `recipient` guarda o destino exato que foi enviado, que e
-     * o que o limite precisa contar. Falha de leitura nao bloqueia: sem o dado
-     * o alerta sai (nunca calar o motorista por erro de infraestrutura).
+     * O limite e por PESSOA, nao por pedido: um motorista com 20 entregas no
+     * dia recebe o mesmo teto. Por isso a checagem so vale quando o destino e
+     * o telefone do proprio motorista — fornecedor e cliente seguem sem teto.
+     *
+     * Fonte do numero: `drivers.phone` (o `driver_id` vem no payload). Conta
+     * `alerts_sent` porque o ledger novo (etapa 73) ainda nao esta em uso, e a
+     * tabela nao tem `driver_id` (migration 20251224143803) — `recipient`
+     * guarda o destino exato enviado, que e o que precisa ser contado.
+     * Falha de leitura nao bloqueia: sem o dado o alerta sai, porque calar o
+     * motorista por erro de infraestrutura custa mais que a rajada.
      */
-    const isDriverRateLimited = async (driverPhone: string): Promise<boolean> => {
+    let driverPhoneCache: Promise<string | null> | null = null;
+    const loadDriverPhone = (): Promise<string | null> => {
+      if (!driver_id) return Promise.resolve(null);
+      if (driverPhoneCache) return driverPhoneCache;
+      driverPhoneCache = (async () => {
+        try {
+          const { data, error } = await supabase
+            .from('drivers')
+            .select('phone')
+            .eq('id', driver_id)
+            .maybeSingle();
+          if (error) {
+            logger.error('[Notification] Falha ao ler telefone do motorista:', error);
+            return null;
+          }
+          return (data as { phone?: string | null } | null)?.phone ?? null;
+        } catch (e) {
+          logger.error('[Notification] Telefone do motorista indisponivel:', e);
+          return null;
+        }
+      })();
+      return driverPhoneCache;
+    };
+
+    const isDriverRateLimited = async (recipient: string): Promise<boolean> => {
       if (!driver_id) return false;
       if ((RATE_LIMIT_EXEMPT_EVENTS as readonly string[]).includes(type)) return false;
+      const digits = (v: string | null | undefined) => (v ?? '').replace(/\D/g, '');
+      const driverDigits = digits(await loadDriverPhone());
+      const targetDigits = digits(recipient);
+      // Destino que nao e o motorista (fornecedor, cliente, operacao) nao entra
+      // no teto — senao um pedido barulhento silenciaria o cliente.
+      if (!driverDigits || !targetDigits || !targetDigits.endsWith(driverDigits.slice(-11))) return false;
       try {
         const since = new Date(Date.now() - DRIVER_RATE_LIMIT.windowMs).toISOString();
         const { data, error } = await supabase
           .from('alerts_sent')
           .select('sent_at, recipient')
-          .eq('channel', 'whatsapp')
           .gte('sent_at', since);
         if (error) {
           logger.error('[Notification] Rate limit query failed, proceeding:', error);
           return false;
         }
-        const digits = (v: string | null) => (v ?? '').replace(/\D/g, '');
-        const target = digits(driverPhone);
         const recentSends = ((data ?? []) as Array<{ sent_at: string | null; recipient: string | null }>)
-          .filter((r) => target && digits(r.recipient).endsWith(target.slice(-11)))
-          .map((r) => r.sent_at ? new Date(r.sent_at) : null)
+          .filter((r) => {
+            const d = digits(r.recipient);
+            return d !== '' && d.endsWith(driverDigits.slice(-11));
+          })
+          .map((r) => (r.sent_at ? new Date(r.sent_at) : null))
           .filter((d): d is Date => d !== null && !Number.isNaN(d.getTime()));
         return isRateLimited({ recentSends, now: new Date(), event: type });
       } catch (e) {
@@ -563,13 +609,6 @@ serve(async (req) => {
           if (await isPhoneOptedOut(optedPhone)) {
             logger.log(`[Notification] Destinatário em opt-out ignorado: ${channel}`);
             results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
-            return;
-          }
-          // Etapa 95: rajada para o mesmo motorista. Sem isso o ETA oscilando
-          // dispara dezenas de WhatsApps e o numero e bloqueado pelo provedor.
-          if (await isDriverRateLimited(optedPhone)) {
-            logger.log(`[Notification] Limite de ${DRIVER_RATE_LIMIT.maxMessages}/10min atingido para o motorista — ${channel} ignorado`);
-            results.push({ channel: `${channel}:rate_limited`, success: false, error: 'rate_limited' });
             return;
           }
         }
