@@ -4,11 +4,44 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 
 **Fora de escopo deste plano:** ingestão da posição do motorista (UAPI — outro chat). Este plano consome `active_tracking` como contrato (etapa 41).
 
-> **Estado em 21/11/2026 (atualizar a cada PR):**
-> - ✅ Bloco 1 (etapas 11–20): PR #118 mergeada — `supabase/migrations/20261122130000_geo_alert_types.sql` e `20261122130100_geo_foundation.sql`. **Aplicação em produção pendente** (sem MCP/CLI do projeto `iecgydonctmabiijadsf` na sessão que mergeou).
-> - ✅ Esqueleto do gateway (etapas 21–23, 30–32): PR #129 mergeada e deployada — edge `geo-gateway` com provedor **Mapbox**; provedor Google (24–29) aguarda `GOOGLE_MAPS_SERVER_KEY`.
-> - ⛔ Bloco 0 (1–10): depende da conta Google Cloud (ação do dono).
-> - ⬜ Blocos 3–9: não iniciados. Ordem recomendada: 66 (destinatário por pedido no `send-notification`) → 33–36 (autocomplete via gateway) → 43–52 (rota/ETA) → 85–92 (admin).
+> **Estado em 22/11/2026 — reescrito por auditoria de código (o bloco anterior estava errado em 3 pontos).**
+>
+> **Correções do bloco anterior:** (a) as migrations do Bloco 1 **estão aplicadas em produção** — `geo_foundation`
+> e `geo_alert_types` estão em `supabase_migrations` e as tabelas existem; (b) `GOOGLE_MAPS_SERVER_KEY`
+> **está configurado** nos secrets do projeto `iecgydonctmabiijadsf` (confirmado na lista de secrets) e o
+> provedor Google **já está implementado e mergeado** (PR #197, `providers/google.ts`); (c) os Blocos 3–9
+> **não estão "não iniciados"** — a maior parte está implementada no `geo-gateway`, que é único e
+> agnóstico de provedor (o mesmo código serve Google e Mapbox).
+>
+> - ✅ Bloco 0 (1–10): `GOOGLE_MAPS_SERVER_KEY` configurado; chave restrita/sem exposição no front
+>   (o navegador nunca recebe chave Google — tudo passa pelo `geo-gateway`). Alertas de faturamento
+>   dependem do painel Google Cloud (só o dono acessa).
+> - ✅ Bloco 1 (11–20): PR #118 + migrations `20261122130000_geo_alert_types`/`20261122130100_geo_foundation`
+>   **aplicadas em produção**. `geocode_precision` com escala interna e mapeamento por provedor:
+>   `LOCATION_TYPE_TO_PRECISION` em `providers/google.ts:29` e `ACCURACY_TO_PRECISION` em
+>   `_shared/geo-precision.ts` (PR #199). `pickup_place_id`/`delivery_place_id` com CHECK de prefixo
+>   `(mapbox|google|lalamove):` aplicado (PR #199).
+>   - `geocode_match_confidence` (etapa 14) **decidido fora de escopo**: `persistOrderCoordinates` grava
+>     coordenada vinda da cotação Lalamove, que não devolve `match_code` — a coluna ficaria 100 % NULL.
+> - ✅ Blocos 2–4 (21–40): `geo-gateway` é o ponto único; `providers/google.ts` implementa
+>   `autocomplete` (Places), `geocode`/`reverse` (Geocoding), `route` (`computeRoutes`), `matrix`
+>   (`computeRouteMatrix`), `static`. `snap`/`isochrone`/`optimization`/`tilequery` **não têm equivalente no
+>   Google** — documentado em `google.ts:5` e o gateway responde `GEO_NOT_SUPPORTED` (501 Triton), com
+>   `geo_settings` desabilitando a função na UI (`MapsSettingsPage` matriz por provedor).
+>   - **Bug de produção corrigido em 2026-11-22** (PR #205): `computeRoutes` enviava
+>     `departureTime = new Date().toISOString()` e a API rejeitava com `"Timestamp must be set to a future
+>     time"` — a hora chegava ao servidor do Google já no passado. Removido o campo; a API usa "agora" por
+>     padrão com `TRAFFIC_AWARE`. **Reproduzido antes e validado depois em produção** (rota real devolvida).
+> - ✅ Bloco 5 (41–60): `rateGuard` por provedor/api em `geo-gateway/index.ts:120`/`:125` com espera de
+>   virada de janela em `:275-277`; `GOOGLE_RATE_LIMITS`/`MAPBOX_RATE_LIMITS` em `index.ts:37`/`:57`;
+>   `withCache` + `geo_usage_increment` por SKU em `resolver.ts`; headers `X-Geo-Provider`.
+> - ✅ Blocos 6–8 (61–90): UI admin completa em `src/pages/MapsSettingsPage.tsx` — matriz função × provedor
+>   (`:459`), reserva por linha, cards de `geo_budget`, gráfico `recharts` (`:7`), gate `isAdmin()` (`:318`),
+>   `audit_log` em toda alteração. `resolveProvider` lê `'auto'` e escolhe por cota (`resolver.ts:115`).
+> - ⬜ Bloco 9 (91–100): aceite com pedido real e fatura de 30 dias. Bloqueado por **volume real de pedidos**
+>   (hoje congelado — `lalamove_uapi_sessions` vazia desde 17/08) e pela fatura no painel Google Cloud.
+>
+> **Verificação de execução:** `deno test` do `geo-gateway` → **103 passed / 0 failed**.
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
