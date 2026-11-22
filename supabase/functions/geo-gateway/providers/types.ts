@@ -23,7 +23,8 @@ export interface GeoPoint {
   lng: number;
 }
 
-export type GeoPrecision = "exact" | "high" | "medium" | "low" | "unknown";
+export type { GeoPrecision } from "../../_shared/geo-precision.ts";
+import type { GeoPrecision } from "../../_shared/geo-precision.ts";
 
 export interface GeoSuggestion {
   id: string; // "<provider>:<id do provedor>"
