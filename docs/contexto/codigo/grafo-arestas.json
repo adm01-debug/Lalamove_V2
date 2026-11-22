@@ -1014,7 +1014,8 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useBitrix24.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/postMessage.ts"
   ],
   "src/hooks/useCacheViews.ts": [
    "src/integrations/supabase/client.ts",

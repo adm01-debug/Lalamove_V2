@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (541)",
+   "TypeScript (543)",
    "SQL (202)",
    "JavaScript (114)",
    "Markdown (109)",
@@ -865,6 +865,10 @@
     "arquivos": 1
    },
    {
+    "host": "abc.supabase.co",
+    "arquivos": 1
+   },
+   {
     "host": "addressvalidation.googleapis.com",
     "arquivos": 1
    },
@@ -874,6 +878,10 @@
    },
    {
     "host": "api.pwnedpasswords.com",
+    "arquivos": 1
+   },
+   {
+    "host": "app.lalamove.com",
     "arquivos": 1
    },
    {

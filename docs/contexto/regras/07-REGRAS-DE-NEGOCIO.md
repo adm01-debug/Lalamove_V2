@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ba39240965` · branch `main` · 2026-11-22 16:46 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a388d1dffa` · branch `main` · 2026-11-22 16:57 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1426,6 +1426,7 @@ _nenhum item encontrado_
 | `TIMEOUT` | `2000` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `RETRY_DELAY` | `250` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `MAX_PRIORITY_FEE_BRL` | `500` | `src/lib/lalamoveOrderEdit.ts` |
+| `BITRIX24_CONNECTED` | `"bitrix24_connected"` | `src/lib/postMessage.ts` |
 | `PAGE_SIZE` | `25` | `src/pages/ExternalDataPage.tsx` |
 | `OPTIMIZATION_THRESHOLD_PCT` | `5` | `src/pages/map-tools/OptimizationTab.tsx` |
 | `DEDUP_WINDOW_MS` | `30` | `src/services/errorMonitoring.ts` |
@@ -1802,6 +1803,7 @@ _nenhum item encontrado_
 | Erro ao conectar | `src/hooks/useBitrix24.ts` |
 | Erro ao sincronizar | `src/hooks/useBitrix24.ts` |
 | Erro ao vincular | `src/hooks/useBitrix24.ts` |
+| Não foi possível abrir a janela de autenticação. Permita pop-ups para continuar. | `src/hooks/useBitrix24.ts` |
 | Erro ao atualizar cache | `src/hooks/useCacheViews.ts` |
 | , title: alert.title, subtitle: alert.message?.substring(0, 50), badge: { label: alert.severity, variant: alert.severity ===  | `src/hooks/useCommandPaletteSearch.ts` |
 | Usuário não autenticado | `src/hooks/useContacts.ts` |
@@ -1924,8 +1926,7 @@ _nenhum item encontrado_
 | Falha ao atualizar regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
-| Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
-| … +101 linhas — lista completa em `context.json` | |
+| … +102 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1963,7 +1964,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1230 testes em 105 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1236 testes em 106 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2047,6 +2048,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/usePermissions.test.ts` | 6 | usePermissions · deve carregar roles e permissões do usuário · deve retornar false para permissões inexistentes · deve suportar usuário não autenticado sem quebrar … |
 | `src/hooks/__tests__/useTrackingHistory.test.ts` | 6 | useTrackingHistory · deve buscar histórico de tracking · deve lidar com erro graciosamente · deve limpar histórico … |
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
+| `src/lib/__tests__/postMessage.test.ts` | 6 | isTrustedBitrix24Origin · aceita a origem da própria página · aceita a origem do Supabase (callback da edge function) · rejeita origem desconhecida (XSS por postMessage) … |
 | `src/lib/__tests__/postgrest.test.ts` | 6 | escapeIlike · remove caracteres com significado no DSL do PostgREST · mantém caracteres comuns de busca · buildOrIlike … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
+  "commit": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
   "branch": "main",
-  "data_commit": "2026-11-22T13:45:54-03:00",
+  "data_commit": "2026-11-22T13:56:19-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a388d1d",
+    "data": "2026-11-22",
+    "assunto": "fix: validar origem do postMessage do Bitrix24 (#293)"
+   },
    {
     "sha": "ba39240",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "2bd22c2",
     "data": "2026-11-22",
     "assunto": "docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)"
-   },
-   {
-    "sha": "58a4500",
-    "data": "2026-11-22",
-    "assunto": "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)"
    }
   ],
-  "arquivos_mudados_7d": 336,
+  "arquivos_mudados_7d": 339,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -192,7 +192,7 @@
     "mudancas": 10
    },
    {
-    "pasta": "supabase/functions/lalamove-webhook",
+    "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     "mudancas": 8
    }
   ],
@@ -258,16 +258,16 @@
     "mudancas": 9
    },
    {
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 8
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
-   },
-   {
-    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 7
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 194
+    "commits": 195
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1055,
-  "arquivos_codigo": 654,
-  "linhas_codigo": 128834,
+  "arquivos_total": 1057,
+  "arquivos_codigo": 656,
+  "linhas_codigo": 128889,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 155,
+  "testes": 156,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 109
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19004
+   "linhas": 19012
   },
   "src/i18n": {
    "arquivos": 1,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 40,
-   "linhas": 3744
+   "arquivos": 42,
+   "linhas": 3791
   },
   "src/main.tsx": {
    "arquivos": 1,

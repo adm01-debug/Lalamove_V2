@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
+  "sha": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:46 UTC",
-  "files_total": 1049,
-  "code_files": 865,
-  "code_lines": 150011
+  "generated_at": "2026-11-22 16:57 UTC",
+  "files_total": 1051,
+  "code_files": 867,
+  "code_lines": 150066
  },
  "version": "1.3.2",
- "facts_hash": "342db19d74a47829",
+ "facts_hash": "2af9096c17eb5c96",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 306,
+   ".ts": 308,
    ".tsx": 235,
    ".sql": 202,
    ".mjs": 109,
@@ -17123,7 +17123,7 @@
      "bitrix24-sync"
     ],
     "rpc_transitive": [],
-    "deps_count": 13
+    "deps_count": 14
    },
    {
     "path": "",
@@ -20962,7 +20962,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 19004,
+   "lines": 19012,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21213,8 +21213,8 @@
   },
   {
    "module": "src/lib",
-   "files": 40,
-   "lines": 3744,
+   "files": 42,
+   "lines": 3791,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
@@ -21233,6 +21233,7 @@
     "lalamoveValidation.ts: ScheduleAtValidation, validateScheduleAt, SPECIAL_REQUESTS_BY_VEHICLE, SpecialRequestValidation, validateSpecialRequests",
     "orderErrors.ts: OrderErrorField, ParsedOrderError, parseOrderError",
     "phone.ts: PhoneValidationResult, validateBrazilianPhone, maskBrazilianPhone",
+    "postMessage.ts: BITRIX24_CONNECTED, isTrustedBitrix24Origin",
     "postgrest.ts: escapeIlike, buildOrIlike",
     "statusPalette.ts: StatusLevel, STATUS_PALETTE, statusColor, statusColorCss, STATUS_GLYPH, STATUS_A11Y_LABEL",
     "uapi-proxy.ts: UAPIResponse, UAPIUserData, ProxySession, uapi",
@@ -21287,6 +21288,7 @@
     "src/lib/orderErrors.ts",
     "src/lib/phone.test.ts",
     "src/lib/phone.ts",
+    "src/lib/postMessage.ts",
     "src/lib/postgrest.ts",
     "src/lib/statusPalette.ts",
     "src/lib/uapi-proxy.ts",
@@ -21304,6 +21306,7 @@
     "src/lib/__tests__/lalamoveOrderEdit.test.ts",
     "src/lib/__tests__/lalamoveReasons.test.ts",
     "src/lib/__tests__/lalamoveTimeline.test.ts",
+    "src/lib/__tests__/postMessage.test.ts",
     "src/lib/__tests__/postgrest.test.ts",
     "src/lib/__tests__/statusPalette.test.ts",
     "src/lib/__tests__/uapiErrors.test.ts"
@@ -23585,6 +23588,7 @@
    ],
    "VITE_SUPABASE_URL": [
     "scripts/ai-context/gerar.unit.mjs",
+    "src/hooks/useBitrix24.ts",
     "src/hooks/useErrorLogs.ts",
     "src/integrations/supabase/client.ts",
     "src/pages/AdminTelemetriaPage.tsx",
@@ -25450,6 +25454,10 @@
    {
     "file": "src/hooks/useBitrix24.ts",
     "msg": "Erro ao vincular"
+   },
+   {
+    "file": "src/hooks/useBitrix24.ts",
+    "msg": "Não foi possível abrir a janela de autenticação. Permita pop-ups para continuar."
    },
    {
     "file": "src/hooks/useCacheViews.ts",
@@ -30261,6 +30269,11 @@
     "file": "src/lib/lalamoveOrderEdit.ts",
     "name": "MAX_PRIORITY_FEE_BRL",
     "value": "500"
+   },
+   {
+    "file": "src/lib/postMessage.ts",
+    "name": "BITRIX24_CONNECTED",
+    "value": "\"bitrix24_connected\""
    },
    {
     "file": "src/pages/ExternalDataPage.tsx",
@@ -38578,6 +38591,30 @@
    {
     "file": "src/lib/__tests__/lalamoveTimeline.test.ts",
     "name": "formata %s"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "isTrustedBitrix24Origin"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "aceita a origem da própria página"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "aceita a origem do Supabase (callback da edge function)"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "rejeita origem desconhecida (XSS por postMessage)"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "rejeita quando a SUPABASE_URL é inválida"
+   },
+   {
+    "file": "src/lib/__tests__/postMessage.test.ts",
+    "name": "rejeita origem com esquema diferente"
    },
    {
     "file": "src/lib/__tests__/postgrest.test.ts",
@@ -60646,7 +60683,7 @@
   },
   "src/hooks/useBitrix24.ts": {
    "path": "src/hooks/useBitrix24.ts",
-   "lines": 248,
+   "lines": 256,
    "exports": [
     "function useBitrix24"
    ],
@@ -60699,10 +60736,14 @@
    "invokes": [
     "bitrix24-sync"
    ],
+   "env": [
+    "VITE_SUPABASE_URL"
+   ],
    "errors": [
     "Erro ao conectar",
     "Erro ao sincronizar",
-    "Erro ao vincular"
+    "Erro ao vincular",
+    "Não foi possível abrir a janela de autenticação. Permita pop-ups para continuar."
    ],
    "status_values": [
     {
@@ -65571,6 +65612,20 @@
     }
    ]
   },
+  "src/lib/postMessage.ts": {
+   "path": "src/lib/postMessage.ts",
+   "lines": 22,
+   "exports": [
+    "const BITRIX24_CONNECTED",
+    "function isTrustedBitrix24Origin"
+   ],
+   "params": [
+    {
+     "name": "BITRIX24_CONNECTED",
+     "value": "\"bitrix24_connected\""
+    }
+   ]
+  },
   "src/lib/postgrest.ts": {
    "path": "src/lib/postgrest.ts",
    "lines": 23,
@@ -65863,6 +65918,19 @@
     "preserva status desconhecido como rótulo bruto",
     "formatDuration",
     "formata %s"
+   ]
+  },
+  "src/lib/__tests__/postMessage.test.ts": {
+   "path": "src/lib/__tests__/postMessage.test.ts",
+   "lines": 25,
+   "is_test": true,
+   "tests": [
+    "isTrustedBitrix24Origin",
+    "aceita a origem da própria página",
+    "aceita a origem do Supabase (callback da edge function)",
+    "rejeita origem desconhecida (XSS por postMessage)",
+    "rejeita quando a SUPABASE_URL é inválida",
+    "rejeita origem com esquema diferente"
    ]
   },
   "src/lib/__tests__/postgrest.test.ts": {
@@ -73368,10 +73436,22 @@
   }
  },
  "git": {
-  "sha": "ba39240965376b4ee8886157a0d42ce6b3bf55a9",
+  "sha": "a388d1dffa8306f9f44d24ebf1e98a7b5749bbbb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a388d1d",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: validar origem do postMessage do Bitrix24 (#293)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/hooks/useBitrix24.ts",
+     "src/lib/__tests__/postMessage.test.ts",
+     "src/lib/postMessage.ts"
+    ]
+   },
    {
     "sha": "ba39240",
     "date": "2026-11-22",
@@ -73714,25 +73794,16 @@
      ".github/workflows/deploy-edges.yml",
      "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "6831e5d",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix(ci): corrige quoting SQL no ledger de apply-migrations.yml (#191)",
-    "files": [
-     ".github/workflows/apply-migrations.yml"
-    ]
    }
   ],
   "hot_files": [
    [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
     8
    ],
    [
-    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    7
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    8
    ],
    [
     ".github/workflows/ci.yml",
@@ -73787,23 +73858,23 @@
     2
    ],
    [
+    "src/hooks/useBitrix24.ts",
+    1
+   ],
+   [
+    "src/lib/__tests__/postMessage.test.ts",
+    1
+   ],
+   [
+    "src/lib/postMessage.ts",
+    1
+   ],
+   [
     "src/hooks/useCommandPaletteSearch.ts",
     1
    ],
    [
     "src/hooks/useGlobalSearch.ts",
-    1
-   ],
-   [
-    "src/lib/__tests__/postgrest.test.ts",
-    1
-   ],
-   [
-    "src/lib/postgrest.ts",
-    1
-   ],
-   [
-    "src/components/dashboard/BatchActionsToolbar.tsx",
     1
    ]
   ]

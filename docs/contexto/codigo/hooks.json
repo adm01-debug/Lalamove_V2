@@ -715,7 +715,7 @@
    "hooks_exportados": [
     "useBitrix24"
    ],
-   "linhas": 248,
+   "linhas": 256,
    "dominio": "hooks",
    "tabelas": [
     "bitrix24_stage_mappings",
