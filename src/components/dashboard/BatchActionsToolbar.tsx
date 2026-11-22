@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Order } from '@/types';
 import { openExternal } from '@/lib/html';
+import { toWhatsAppUrl } from '@/lib/phone';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -39,15 +40,17 @@ export function BatchActionsToolbar({ selectedOrders, onClear, onStatusUpdate }:
     ordersWithContact.forEach((order, index) => {
       const phone = order.supplier_contact || order.customerPhone;
       const message = `Olá! O motorista ${order.driverName || 'atribuído'} está a caminho para a coleta do pedido ${order.internalOrderId || order.lalamoveId}.`;
-      const link = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-      
+      const link = toWhatsAppUrl(phone, message);
+
       if (index === 0) {
-        openExternal(link);
+        if (link) openExternal(link);
+        else toast.error(`Telefone inválido para o pedido ${order.internalOrderId || order.lalamoveId}.`);
       } else {
         // Delay others or use a different approach
         setTimeout(() => {
           if (confirm(`Deseja enviar mensagem para o próximo pedido (${order.internalOrderId || order.lalamoveId})?`)) {
-            openExternal(link);
+            if (link) openExternal(link);
+            else toast.error(`Telefone inválido para o pedido ${order.internalOrderId || order.lalamoveId}.`);
           }
         }, 500 * index);
       }
@@ -55,9 +58,13 @@ export function BatchActionsToolbar({ selectedOrders, onClear, onStatusUpdate }:
   };
 
   const handleShareTracking = () => {
-    const trackingLinks = selectedOrders.map(o => `${o.internalOrderId}: https://track.lalamove.com/${o.lalamoveId}`).join('\n');
-    navigator.clipboard.writeText(trackingLinks);
-    toast.success('Links de rastreamento copiados para a área de transferência!');
+    const trackingLinks = selectedOrders
+      .map((o) => `${o.internalOrderId}: ${o.shareLink || `https://track.lalamove.com/${o.lalamoveId}`}`)
+      .join('\n');
+    navigator.clipboard.writeText(trackingLinks).then(
+      () => toast.success('Links de rastreamento copiados para a área de transferência!'),
+      () => toast.error('Não foi possível copiar os links.'),
+    );
   };
 
   return (

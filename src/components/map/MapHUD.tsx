@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { openExternal } from '@/lib/html';
+import { toWhatsAppUrl } from '@/lib/phone';
 import { 
   Tooltip,
   TooltipContent,
@@ -64,9 +65,8 @@ export function MapHUD({
 
   const sendWhatsApp = () => {
     const phone = selectedTracking.driver?.phone || '';
-    if (phone) {
-      openExternal(`https://wa.me/${phone.replace(/\D/g, '')}`);
-    }
+    const link = toWhatsAppUrl(phone);
+    if (link) openExternal(link);
   };
 
   return (

@@ -379,7 +379,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** falha forçada na segunda escrita não deixa fila "aprovada" com motorista "pendente".
 
 ### 67 — [F] `AuthProvider` nunca fica carregando para sempre
-- [ ] `useAuth.tsx:35`: `.catch(() => setLoading(false))` + `finally`; `value` com `useMemo` (`:75`).
+- [x] `useAuth.tsx:35`: `.catch(() => setLoading(false))` + `finally`; `value` com `useMemo` (`:75`).
 - **Evidência:** rejeitar `getSession` em teste → `loading=false` e tela de login.
 
 ### 68 — [F] Logout limpa o cache e os canais
@@ -391,7 +391,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** desligar rede → banner aparece; religar → some.
 
 ### 70 — [F] Paradas do pedido tratam erro
-- [ ] `OrderDetailModal.tsx:481-485`: ler `error`; mostrar "não foi possível carregar paradas" em vez de "sem paradas".
+- [x] `OrderDetailModal.tsx:481-485`: ler `error`; mostrar "não foi possível carregar paradas" em vez de "sem paradas".
 - **Evidência:** erro simulado → mensagem correta.
 
 ### 71 — [F] Busca global: cancelamento e paralelismo
@@ -403,11 +403,11 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** StrictMode não dispara `checkLockout` 2×; digitar não reinicia a contagem.
 
 ### 73 — [F] Conquistas: `JSON.parse` protegido e por usuário
-- [ ] `useAchievementsSystem.tsx:254-256`: `try/catch` + chave `achievements:<userId>`; (ou remover o provider — etapa 170).
+- [x] `useAchievementsSystem.tsx:254-256`: `try/catch` + chave `achievements:<userId>`; (ou remover o provider — etapa 170).
 - **Evidência:** `localStorage.setItem('achievements','{')` não derruba a app.
 
 ### 74 — [F] Listener do Service Worker sem acúmulo
-- [ ] `useServiceWorker.ts:170`: registrar `controllerchange` uma vez (`useEffect` com cleanup).
+- [x] `useServiceWorker.ts:170`: registrar `controllerchange` uma vez (`useEffect` com cleanup).
 - **Evidência:** 3 cliques em "atualizar" = 1 listener (`getEventListeners` no DevTools).
 
 ### 75 — [F] Clipboard assíncrono com tratamento
@@ -415,7 +415,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** permissão negada → toast de erro, não de sucesso.
 
 ### 76 — [F] Telefone e link de rastreamento pelas fontes oficiais
-- [ ] `BatchActionsToolbar.tsx:41, 57` e `MapHUD.tsx:67`: `toWhatsAppUrl(phone)` de `src/lib/phone.ts` (DDI 55) e `order.shareLink` em vez de `track.lalamove.com/<id>`.
+- [x] `BatchActionsToolbar.tsx:41, 57` e `MapHUD.tsx:67`: `toWhatsAppUrl(phone)` de `src/lib/phone.ts` (DDI 55) e `order.shareLink` em vez de `track.lalamove.com/<id>`.
 - **Evidência:** `rg -n "wa.me/|track.lalamove.com" src` só em `src/lib/phone.ts`/tipos.
 
 ### 77 — [F] `useQuery` com `isError` visível em todas as páginas
