@@ -5,6 +5,7 @@ import { getGoogleMapsMapId, useGoogleMapsLoader } from './hooks/useGoogleMapsLo
 import { createDriverMarkerElement } from './markerFactories';
 import { useTrackingTrails } from './hooks/useTrackingTrails';
 import { countMapLoad } from '@/lib/geo-gateway';
+import { escapeHtml } from '@/lib/html';
 import {
   DRIVER_ANIM_MS,
   buildTrailPath,
@@ -50,15 +51,6 @@ interface GoogleAdvancedMarkerInstance {
 }
 
 /** Nome de motorista vem da API da Lalamove: escapar antes de ir para innerHTML. */
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 const STATUS_COLORS: Record<string, string> = {
   ASSIGNING_DRIVER: '#f59e0b',
   ON_GOING: '#3b82f6',
