@@ -29,6 +29,8 @@ export interface GeoAddress {
     country?: string;
   };
   provider: 'google' | 'mapbox';
+  /** Precisão do provedor: exact | high | medium | low | unknown (etapa 20) */
+  precision?: string;
 }
 
 function newSessionToken(): string {

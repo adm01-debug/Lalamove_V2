@@ -91,6 +91,12 @@ export function AddressAutocomplete({
     if (!address) return;
     setInputValue(address.formatted);
     onChange(address.formatted);
+    // Etapa 20: avisa quando o provedor devolveu coordenada interpolada/aproximada —
+    // 40 % dos endereços BR medidos (etapa 36) caem em `interpolated`; sem isto o operador
+    // grava um ponto a centenas de metros do imóvel sem saber.
+    if (address.precision && (address.precision === 'medium' || address.precision === 'low')) {
+      toast.warning('Endereço localizado com precisão aproximada — confira o ponto no mapa antes de salvar.');
+    }
     if (onSelectMapbox || onCoordinatesChange) {
       const feature: MapboxFeature = {
         id: address.place_id ?? suggestion.id,

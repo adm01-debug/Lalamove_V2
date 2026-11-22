@@ -144,7 +144,10 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
   }),
   z.object({
     action: z.literal("place-details"),
-    place_id: z.string().min(3).max(200),
+    // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e passam de 300
+    // caracteres (medido: 292 em rua, 370 em endereço). Com max(200) o retrieve de
+    // qualquer sugestão de endereço falhava em 422 e a seleção não gravava coordenada.
+    place_id: z.string().min(3).max(1024),
     session_token: z.string().min(8).max(64).optional(),
     provider: geoProvider,
   }),
