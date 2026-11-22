@@ -23,6 +23,25 @@ export interface GeoPoint {
   lng: number;
 }
 
+/**
+ * Etapa 38 do plano de 100 etapas: resultado de validação de endereço.
+ * `D7` mantém a função desligada por padrão (`geo_settings.validate='off'`); quando
+ * ligada, o gateway só reporta — nunca corrige o endereço do pedido por conta própria.
+ */
+export interface GeoValidation {
+  /** endereço normalizado pelo provedor (pode diferir do enviado) */
+  formatted: string;
+  /** `verdict.addressComplete=false` significa que falta número/rua — a UI avisa */
+  address_complete: boolean;
+  /** componentes ausentes segundo o provedor (`street_number`, `route`, ...) */
+  missing_components: string[];
+  /** `verdict.validationGranularity` (Google: PREMISE, ROUTE, OTHER…) */
+  granularity: string | null;
+  /** lat/lng já corrigidos pelo provedor, quando ele devolve */
+  location: GeoPoint | null;
+  provider: ProviderName;
+}
+
 export type { GeoPrecision } from "../../_shared/geo-precision.ts";
 import type { GeoPrecision } from "../../_shared/geo-precision.ts";
 
@@ -123,9 +142,16 @@ export interface PlaceDetailsReq {
   language?: string;
 }
 
+export interface ValidateReq {
+  /** endereço em texto livre a validar */
+  address: string;
+  /** `regionCode` do provedor; default `BR` (plano etapa 38) */
+  region?: string;
+  language?: string;
+}
+
 export interface GeocodeReq {
-  address?: string;
-  structured?: {
+  address?: string;  structured?: {
     address_line1?: string;
     postal_code?: string;
     city?: string;
@@ -254,6 +280,11 @@ export interface GeoProvider {
   matrix(req: MatrixReq): Promise<ProviderResult<GeoMatrix>>;
   staticMap(req: StaticReq): Promise<ProviderResult<GeoStaticImage>>;
   snap?(req: SnapReq): Promise<ProviderResult<GeoSnapResult>>;
+  /**
+   * Etapa 38: validação de endereço. Opcional — o gateway devolve 501 quando ausente,
+   * igual a `snap`/`geocodeBatch`, em vez de degradar silenciosamente.
+   */
+  validate?(req: ValidateReq): Promise<ProviderResult<GeoValidation>>;
   /** pass-through de APIs sem equivalente no outro provedor (Mapbox-only) */
   raw?(action: "isochrone" | "optimization" | "tilequery", body: Record<string, unknown>): Promise<ProviderResult<unknown>>;
 }
