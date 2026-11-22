@@ -79,25 +79,40 @@ export class MapboxProvider implements GeoProvider {
    * HTTP com o token do provedor. `consume` diz quantos slots do rate limit esta chamada
    * gasta — o lote de geocoding consome 1 por consulta, não 1 pela requisição HTTP.
    */
-  private async call<T = Record<string, unknown>>(api: string, url: string, init?: RequestInit, consume = 1): Promise<T> {
+  private async call<T = Record<string, unknown>>(
+    api: string,
+    url: string,
+    init?: RequestInit,
+    consume = 1,
+    // Etapa 32: 414 (URL acima de 8 KB — Directions/Map Matching com muitas coordenadas)
+    // refaz a chamada como POST antes de desistir. O contrato de POST do Mapbox
+    // (docs.mapbox.com/api/navigation/http-post/) exige uma URL SEM as coordenadas no
+    // caminho e as coordenadas no corpo `application/x-www-form-urlencoded` — repetir a
+    // mesma URL longa com method:POST não é um retry válido. Só route()/snap() (os únicos
+    // endpoints cuja URL cresce com a quantidade de pontos) passam isto.
+    postRetry?: { url: string; body: string },
+  ): Promise<T> {
     if (!this.rateGuard(api, consume)) {
       throw new GeoProviderError("GEO_RATE_LIMITED", `Limite local da API Mapbox ${api} atingido neste minuto`, 429, 60_000);
     }
     const sep = url.includes("?") ? "&" : "?";
     const fullUrl = `${url}${sep}access_token=${encodeURIComponent(this.token)}`;
     let res = await this.fetchFn(fullUrl, init);
-    if (res.status === 414 && (!init?.method || init.method === "GET")) {
-      // Etapa 32: 414 (URL acima de 8 KB, ex. Directions com muitas coordenadas) refaz a
-      // mesma chamada via POST antes de desistir — Directions v5 aceita POST na mesma rota,
-      // com o corpo vazio e a URL idêntica (coordenadas continuam no path).
-      res = await this.fetchFn(fullUrl, { ...init, method: "POST" });
+    if (res.status === 414 && postRetry) {
+      const sep2 = postRetry.url.includes("?") ? "&" : "?";
+      const postUrl = `${postRetry.url}${sep2}access_token=${encodeURIComponent(this.token)}`;
+      res = await this.fetchFn(postUrl, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: postRetry.body });
     }
     if (res.status === 429) {
       const reset = Number(res.headers.get("X-Rate-Limit-Reset") ?? 0) * 1000;
       throw new GeoProviderError("GEO_RATE_LIMITED", "Mapbox 429", 429, reset ? Math.max(0, reset - Date.now()) : 60_000);
     }
     if (res.status === 414) {
-      throw new GeoProviderError("GEO_INVALID_INPUT", "URL acima de 8 KB mesmo via POST — reduza as coordenadas", 414);
+      throw new GeoProviderError(
+        "GEO_INVALID_INPUT",
+        postRetry ? "URL acima de 8 KB mesmo via POST — reduza as coordenadas" : "URL acima de 8 KB — reduza as coordenadas",
+        414,
+      );
     }
     const text = await res.text();
     let json: Record<string, unknown> = {};
@@ -326,7 +341,14 @@ export class MapboxProvider implements GeoProvider {
       annotations: "duration,distance", language: req.language ?? "pt",
     });
     const coords = pts.map(fmt).join(";");
-    const json = await this.call<{ routes?: Array<Record<string, unknown>> }>("directions", `${BASE}/directions/v5/mapbox/${profile}/${coords}?${p}`);
+    const json = await this.call<{ routes?: Array<Record<string, unknown>> }>(
+      "directions",
+      `${BASE}/directions/v5/mapbox/${profile}/${coords}?${p}`,
+      undefined,
+      1,
+      // POST do Directions não leva coordenadas no caminho — só no corpo.
+      { url: `${BASE}/directions/v5/mapbox/${profile}?${p}`, body: `coordinates=${encodeURIComponent(coords)}` },
+    );
     const r = json.routes?.[0];
     if (!r) throw new GeoProviderError("GEO_NO_ROUTE", "Sem rota", 404);
     const legs = ((r.legs ?? []) as Array<{ distance: number; duration: number }>).map((l) => ({ distance_m: Math.round(l.distance), duration_s: Math.round(l.duration) }));
@@ -390,7 +412,14 @@ export class MapboxProvider implements GeoProvider {
         legs?: Array<{ distance: number; duration: number }>;
       }>;
       tracepoints?: Array<{ location: [number, number] } | null>;
-    }>("matching", `${BASE}/matching/v5/mapbox/${snapProfile}/${pts.map(fmt).join(";")}?${p}`);
+    }>(
+      "matching",
+      `${BASE}/matching/v5/mapbox/${snapProfile}/${pts.map(fmt).join(";")}?${p}`,
+      undefined,
+      1,
+      // POST do Map Matching, igual Directions: coordenadas só no corpo.
+      { url: `${BASE}/matching/v5/mapbox/${snapProfile}?${p}`, body: `coordinates=${encodeURIComponent(pts.map(fmt).join(";"))}` },
+    );
     const points = (json.tracepoints ?? []).map((tp, i) => tp ? { lat: tp.location[1], lng: tp.location[0] } : pts[i]);
     const m = json.matchings?.[0];
     const geom = m?.geometry?.coordinates ?? [];

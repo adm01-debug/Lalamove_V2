@@ -265,28 +265,68 @@ Deno.test("reverse: lat/lng acham endereço (caso de sucesso, não só os de err
   assertEquals(r.sku, "geocoding_temporary");
 });
 
-Deno.test("etapa 32: 414 (URL acima de 8 KB) refaz a mesma chamada via POST antes de desistir", async () => {
-  const calls: { url: string; method?: string }[] = [];
+Deno.test("etapa 32: route() com 414 (URL acima de 8 KB) refaz como POST — coordenadas no corpo, não na URL", async () => {
+  const calls: { url: string; method?: string; body?: string }[] = [];
   const fetchFn: typeof fetch = ((input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
-    calls.push({ url, method: init?.method });
-    if (!init?.method || init.method === "GET") return Promise.resolve(new Response("", { status: 414 }));
-    return Promise.resolve(new Response(JSON.stringify(RETRIEVE), { status: 200 }));
+    calls.push({ url, method: init?.method, body: init?.body ? String(init.body) : undefined });
+    if (!init?.method) return Promise.resolve(new Response("", { status: 414 }));
+    return Promise.resolve(new Response(JSON.stringify({
+      routes: [{ geometry: encodePolyline([{ lat: -25.43, lng: -49.27 }, { lat: -25.44, lng: -49.23 }], 6), distance: 1000, duration: 120, legs: [{ distance: 1000, duration: 120 }] }],
+    }), { status: 200 }));
   });
   const p = new MapboxProvider({ token: "t", fetch: fetchFn });
-  const r = await p.reverse({ lat: -25.4296, lng: -49.2716 });
+  const origin = { lat: -25.43, lng: -49.27 };
+  const destination = { lat: -25.44, lng: -49.23 };
+  const r = await p.route({ origin, destination });
+  // exatamente 1 tentativa GET + 1 retry POST — nunca mais que isso
   assertEquals(calls.length, 2);
   assertEquals(calls[0].method, undefined);
+  assert(calls[0].url.includes(`/directions/v5/mapbox/driving-traffic/-49.27,-25.43;-49.23,-25.44`), "GET leva as coordenadas no caminho");
   assertEquals(calls[1].method, "POST");
-  assertEquals(calls[1].url, calls[0].url);
-  assertEquals(r.data?.formatted, "Rua XV de Novembro 100, Centro, Curitiba");
+  assert(!calls[1].url.includes("-49.27,-25.43;-49.23,-25.44"), "POST não repete as coordenadas na URL");
+  assertEquals(calls[1].body, "coordinates=-49.27%2C-25.43%3B-49.23%2C-25.44");
+  assertEquals(r.data.distance_m, 1000);
 });
 
-Deno.test("etapa 32: 414 persiste mesmo via POST → GEO_INVALID_INPUT (não fica tentando pra sempre)", async () => {
-  const { fetch } = mockFetch(() => ({ status: 414 }));
+Deno.test("etapa 32: snap() com 414 refaz como POST — mesmo contrato do Directions", async () => {
+  const calls: { url: string; method?: string; body?: string }[] = [];
+  const fetchFn: typeof fetch = ((input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ url: String(input), method: init?.method, body: init?.body ? String(init.body) : undefined });
+    if (!init?.method) return Promise.resolve(new Response("", { status: 414 }));
+    return Promise.resolve(new Response(JSON.stringify({ matchings: [{ confidence: 0.8 }], tracepoints: [null, null] }), { status: 200 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const points = [{ lat: -25.43, lng: -49.27 }, { lat: -25.44, lng: -49.23 }];
+  await p.snap({ points });
+  assertEquals(calls.length, 2);
+  assert(calls[0].url.includes("/matching/v5/mapbox/driving/-49.27,-25.43;-49.23,-25.44"));
+  assertEquals(calls[1].method, "POST");
+  assert(!calls[1].url.includes("-49.27,-25.43;-49.23,-25.44"), "POST não repete as coordenadas na URL");
+  assertEquals(calls[1].body, "coordinates=-49.27%2C-25.43%3B-49.23%2C-25.44");
+});
+
+Deno.test("etapa 32: 414 persiste mesmo via POST → GEO_INVALID_INPUT (um retry só, não fica tentando pra sempre)", async () => {
+  const calls: { method?: string }[] = [];
+  const fetchFn: typeof fetch = ((_input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ method: init?.method });
+    return Promise.resolve(new Response("", { status: 414 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const e = await assertRejects(
+    () => p.route({ origin: { lat: -25.43, lng: -49.27 }, destination: { lat: -25.44, lng: -49.23 } }),
+    GeoProviderError,
+  );
+  assertEquals(e.code, "GEO_INVALID_INPUT");
+  assertEquals(calls.length, 2, "GET + 1 retry POST, nunca um segundo retry");
+});
+
+Deno.test("reverse: 414 não tenta POST (sem variante POST documentada p/ reverse geocode de 1 ponto)", async () => {
+  const { fetch, calls } = mockFetch(() => ({ status: 414 }));
   const p = new MapboxProvider({ token: "t", fetch });
   const e = await assertRejects(() => p.reverse({ lat: -25.4, lng: -49.2 }), GeoProviderError);
   assertEquals(e.code, "GEO_INVALID_INPUT");
+  assertEquals(calls.length, 1, "não existe retry para reverse — a URL de 1 ponto nunca passa de 8 KB de verdade");
 });
 
 Deno.test("raw: isochrone/optimization/tilequery (pass-through sem equivalente no Google) chegam ao Mapbox", async () => {
