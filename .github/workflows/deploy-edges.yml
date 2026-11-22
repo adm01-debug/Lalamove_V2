@@ -27,6 +27,8 @@ jobs:
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       PROJECT_REF: iecgydonctmabiijadsf
+      SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      ANON_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,3 +48,32 @@ jobs:
 
       - name: List deployed functions
         run: supabase functions list --project-ref "$PROJECT_REF"
+
+      # Etapa 94 do plano Google Maps: o deploy verde sozinho nao prova que a
+      # function respondeu. provider-status e read-only (nao chama provedor pago,
+      # nao grava geo_usage) e devolve o mapa de provedor por funcao, entao serve
+      # como smoke test do gateway recem-implantado. Falha aqui = deploy sem efeito.
+      - name: Smoke test geo-gateway (provider-status)
+        run: |
+          set -euo pipefail
+          resp=$(curl -sS -w '\n%{http_code}' -X POST "$SUPABASE_URL/functions/v1/geo-gateway" \
+            -H "Authorization: Bearer $ANON_KEY" \
+            -H "apikey: $ANON_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"action":"provider-status"}')
+          code=$(printf '%s' "$resp" | tail -n1)
+          body=$(printf '%s' "$resp" | sed '$d')
+          echo "HTTP $code"
+          echo "$body"
+          [ "$code" = "200" ] || { echo "geo-gateway nao respondeu 200 apos o deploy"; exit 1; }
+          printf '%s' "$body" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          provs = d.get("providers") or []
+          ok = [p for p in provs if p.get("configured")]
+          if not provs:
+              sys.exit("provider-status sem lista de provedores")
+          if not ok:
+              sys.exit("nenhum provedor configurado: o gateway nao tem token e toda chamada vai falhar")
+          print("provedores configurados:", ", ".join(p["provider"] for p in ok))
+          '
