@@ -201,3 +201,20 @@ Deno.test("geocode-batch: item sem address nem structured é recusado antes de c
   assertEquals(e.code, "GEO_INVALID_INPUT");
   assertEquals(calls.length, 0);
 });
+Deno.test("geocode-batch: endereço livre vai em `q`, não em `address_line1` (cidade embutida é respeitada)", async () => {
+  // Medido em produção: com `address_line1` o Mapbox descarta a cidade da string e
+  // "Rua XV de Novembro 1000, Curitiba" volta como Joinville/SC. Só `q` faz busca livre.
+  let sent: Array<Record<string, unknown>> = [];
+  const fetchFn: typeof fetch = ((_input: string | URL | Request, init?: RequestInit) => {
+    sent = JSON.parse(String(init?.body ?? "[]"));
+    return Promise.resolve(new Response(JSON.stringify({ batch: [{ features: [] }] }), { status: 200 }));
+  });
+  const p = new MapboxProvider({ token: "sk.test", fetch: fetchFn });
+  await p.geocodeBatch([{ address: "Rua XV de Novembro 1000, Curitiba" }, { structured: { address_line1: "Rua XV 100", city: "Curitiba" } }], true);
+  assertEquals(sent[0].q, "Rua XV de Novembro 1000, Curitiba");
+  assertEquals(sent[0].address_line1, undefined);
+  // structured continua usando os campos estruturados
+  assertEquals(sent[1].address_line1, "Rua XV 100");
+  assertEquals(sent[1].place, "Curitiba");
+  assertEquals(sent[1].q, undefined);
+});

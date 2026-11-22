@@ -168,7 +168,10 @@ export class MapboxProvider implements GeoProvider {
         if (s.state) q.region = s.state;
         q.country = s.country ?? r.country ?? "br";
       } else if (r.address) {
-        q.address_line1 = r.address;
+        // `q` é o campo de busca livre do batch. Em `address_line1` o Mapbox descarta a
+        // cidade embutida na string e devolve endereço de outra cidade (medido em produção:
+        // "Rua XV de Novembro 1000, Curitiba" voltou Joinville/SC).
+        q.q = r.address;
       } else {
         throw new GeoProviderError("GEO_INVALID_INPUT", "cada item do lote precisa de address ou structured", 422);
       }
