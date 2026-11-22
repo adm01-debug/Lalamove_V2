@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "b7a81367fa7b7b14963dba0cb08d977096090315",
+  "commit": "a0e29908737ab462cda2bc58c265ea170d2e815a",
   "branch": "main",
-  "data_commit": "2026-11-21T22:30:00-03:00",
+  "data_commit": "2026-11-21T22:33:35-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a0e2990",
+    "data": "2026-11-21",
+    "assunto": "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)"
+   },
+   {
+    "sha": "2e299d5",
+    "data": "2026-11-21",
+    "assunto": "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)"
+   },
    {
     "sha": "b7a8136",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "00e2fb7",
     "data": "2026-11-21",
     "assunto": "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)"
-   },
-   {
-    "sha": "ad0ba32",
-    "data": "2026-11-21",
-    "assunto": "fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)"
-   },
-   {
-    "sha": "339acda",
-    "data": "2026-11-21",
-    "assunto": "feat: failover de provedor em runtime no geo-gateway (#175)"
    }
   ],
-  "arquivos_mudados_7d": 200,
+  "arquivos_mudados_7d": 202,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 34
+    "mudancas": 37
    },
    {
     "pasta": "src/components/map",
@@ -234,6 +234,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": "docs/pendencias/README.md",
     "mudancas": 5
    },
@@ -247,10 +251,6 @@
    },
    {
     "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 5
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 103
+    "commits": 105
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 976,
-  "arquivos_codigo": 608,
-  "linhas_codigo": 119145,
+  "arquivos_total": 978,
+  "arquivos_codigo": 610,
+  "linhas_codigo": 119744,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 88,
   "migrations": 178,
   "cron_jobs": 21,
-  "testes": 120,
+  "testes": 121,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 99
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 53,
-   "linhas": 14112
+   "arquivos": 55,
+   "linhas": 14711
   },
   "tailwind.config.ts": {
    "arquivos": 1,

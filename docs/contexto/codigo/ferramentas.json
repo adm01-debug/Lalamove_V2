@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (497)",
+   "TypeScript (499)",
    "SQL (182)",
    "JavaScript (112)",
    "Markdown (99)",
@@ -792,6 +792,10 @@
     "arquivos": 4
    },
    {
+    "host": "maps.googleapis.com",
+    "arquivos": 3
+   },
+   {
     "host": "supabase.com",
     "arquivos": 3
    },
@@ -808,11 +812,11 @@
     "arquivos": 2
    },
    {
-    "host": "maps.googleapis.com",
+    "host": "rest.lalamove.com",
     "arquivos": 2
    },
    {
-    "host": "rest.lalamove.com",
+    "host": "routes.googleapis.com",
     "arquivos": 2
    },
    {
@@ -876,7 +880,7 @@
     "arquivos": 1
    },
    {
-    "host": "routes.googleapis.com",
+    "host": "places.googleapis.com",
     "arquivos": 1
    },
    {

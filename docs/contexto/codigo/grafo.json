@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 488,
- "arestas": 1582,
+ "nos": 489,
+ "arestas": 1585,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -125,6 +125,10 @@
    "importado_por": 10
   },
   {
+   "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
+   "importado_por": 10
+  },
+  {
    "arquivo": "src/components/ui/search-help-tooltip.tsx",
    "importado_por": 9
   },
@@ -150,10 +154,6 @@
   },
   {
    "arquivo": "supabase/functions/_shared/telemetry.ts",
-   "importado_por": 8
-  },
-  {
-   "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
    "importado_por": 8
   },
   {

@@ -2229,6 +2229,7 @@
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/geo-gateway/failover.ts",
    "supabase/functions/geo-gateway/metering.ts",
+   "supabase/functions/geo-gateway/providers/google.ts",
    "supabase/functions/geo-gateway/providers/mapbox.ts",
    "supabase/functions/geo-gateway/providers/types.ts",
    "supabase/functions/geo-gateway/resolver.ts"
@@ -2237,6 +2238,10 @@
    "supabase/functions/geo-gateway/providers/types.ts"
   ],
   "supabase/functions/geo-gateway/polyline.ts": [
+   "supabase/functions/geo-gateway/providers/types.ts"
+  ],
+  "supabase/functions/geo-gateway/providers/google.ts": [
+   "supabase/functions/geo-gateway/polyline.ts",
    "supabase/functions/geo-gateway/providers/types.ts"
   ],
   "supabase/functions/geo-gateway/providers/mapbox.ts": [

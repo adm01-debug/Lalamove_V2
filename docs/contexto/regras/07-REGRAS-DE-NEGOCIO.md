@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b7a81367fa` · branch `main` · 2026-11-22 01:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a0e2990873` · branch `main` · 2026-11-22 01:34 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -742,14 +742,18 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `Entregue` | compara | `src/components/ui/hover-preview.tsx` |
 | `status` | `FAILED` | compara | `src/hooks/useJobQueue.ts`<br>`src/pages/JobQueuePage.tsx` |
 | `status` | `MATCHED` | escreve | `supabase/functions/lalamove-webhook/index.ts` |
+| `status` | `OK` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
 | `status` | `ON_GOING` | compara, escreve, filtra | `src/components/dashboard/OrdersTable.tsx`<br>`src/components/orders/OrderDetailModal.tsx`<br>`src/hooks/useDashboardStats.ts`<br>`src/hooks/usePredictiveAnalysis.ts`<br>`src/pages/orders/OrderCard.tsx`<br>… +3 |
 | `status` | `OPEN` | compara | `src/pages/IncidentsPage.tsx` |
+| `status` | `OVER_QUERY_LIMIT` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
 | `status` | `PENDING` | compara, escreve, filtra | `src/components/layout/MobileSidebar.tsx`<br>`src/components/layout/Sidebar.tsx`<br>`src/hooks/useAnalyticsData.ts`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useCommandPaletteSearch.ts`<br>… +9 |
 | `status` | `PENDING_APPROVAL` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +3 |
 | `status` | `PICKED_UP` | compara, escreve | `src/components/dashboard/OrdersTable.tsx`<br>`src/lib/lalamoveOrderEdit.ts`<br>`supabase/functions/lalamove-webhook/index.ts` |
 | `status` | `PROCESSING` | compara | `src/pages/JobQueuePage.tsx` |
 | `status` | `REJECTED` | compara, escreve, filtra | `src/hooks/useApprovalActions.ts`<br>`src/hooks/useDeliveryMetrics.ts`<br>`src/hooks/useMetrics.ts`<br>`src/hooks/usePendingApprovals.ts`<br>`src/hooks/useRealtimeSubscriptions.ts` |
+| `status` | `REQUEST_DENIED` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
 | `status` | `WHITELIST` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +2 |
+| `status` | `ZERO_RESULTS` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
 | `status` | `all` | compara, escreve | `src/hooks/useAdvancedReports.ts`<br>`src/pages/AdvancedReportsPage.tsx` |
 | `status` | `approved` | compara, escreve | `src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `at_risk` | compara | `src/pages/SLODashboardPage.tsx` |
@@ -1290,6 +1294,9 @@ _nenhum item encontrado_
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
 | `HEALTH_ADDRESS` | `'Avenida Paulista 1578, São Paulo'` | `supabase/functions/check-external-api/index.ts` |
+| `PLACES_BASE` | `"https://places.googleapis.com/v1"` | `supabase/functions/geo-gateway/providers/google.ts` |
+| `GEOCODE_BASE` | `"https://maps.googleapis.com/maps/api/geocode/json"` | `supabase/functions/geo-gateway/providers/google.ts` |
+| `STATIC_BASE` | `"https://maps.googleapis.com/maps/api/staticmap"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `BASE` | `"https://api.mapbox.com"` | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | `LALAMOVE_MARKET` | `'BR'` | `supabase/functions/lalamove-api/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-gateway/index.ts` |
@@ -1761,7 +1768,7 @@ _nenhum item encontrado_
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
 | Falha ao marcar webhook | `src/pages/WebhooksPage.tsx` |
-| … +90 linhas — lista completa em `context.json` | |
+| … +95 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1794,7 +1801,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (928 testes em 79 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (943 testes em 80 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1819,6 +1826,7 @@ _nenhum item encontrado_
 | `src/hooks/useGeoSearch.test.tsx` | 15 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/hooks/__tests__/useContractVersionUsage.trend.test.ts` | 15 | detectTrend — alerta de reversão de uso v1 · marca amostra insuficiente com menos de 4 pontos válidos · não alerta quando a proporção está descendo · não alerta quando a proporção é estável em zero … |
 | `src/lib/utils.test.ts` | 15 | deve combinar classes simples · deve lidar com valores undefined · deve lidar com valores null · deve lidar com condicionais … |
+| `supabase/functions/geo-gateway/google.test.ts` | 15 | autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão · autocomplete: sem session_token conta units=1 (sem sessão paga) · placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true · geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code … |
 | `supabase/functions/geo-gateway/resolver.test.ts` | 15 | primário configurado é escolhido; Google sem chave cai para fallback Mapbox · orçamento estourado: fallback usável assume; sem fallback → 429 · off → 503 com mensagem clara; validate só existe no Google · auto: escolhe quem tem cota grátis; empate → mapbox; sem cota → o primeiro usável … |
 | `src/lib/__tests__/lalamoveTimeline.test.ts` | 14 | normalizeOrderStatus · mapeia aliases legados e UAPI · retorna null para valores inválidos · buildOrderTimeline … |
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
@@ -2083,6 +2091,8 @@ _nenhum item encontrado_
 | timeout, credencial revogada, rate limit), a requisição morria em 502. Este módulo faz a segunda | `supabase/functions/geo-gateway/failover.ts` |
 | * Vale tentar outro provedor? Falha do provedor (5xx), credencial, rate limit e rede/timeout sim. */ | `supabase/functions/geo-gateway/failover.ts` |
 | * Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */ | `supabase/functions/geo-gateway/index.ts` |
+| * Limite local por minuto das APIs do Google usadas pelo gateway — guarda de segurança própria, | `supabase/functions/geo-gateway/index.ts` |
+| * Função geo → chave de rate limit do Google (`GOOGLE_RATE_LIMITS`). */ | `supabase/functions/geo-gateway/index.ts` |
 | Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância. | `supabase/functions/geo-gateway/index.ts` |
 | Nunca lança: falha de alerta não pode derrubar a requisição de mapa. | `supabase/functions/geo-gateway/index.ts` |
 | ── rate limit do provedor (espera a virada da janela) ───────────────── | `supabase/functions/geo-gateway/index.ts` |

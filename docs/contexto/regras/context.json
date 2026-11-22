@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b7a81367fa7b7b14963dba0cb08d977096090315",
+  "sha": "a0e29908737ab462cda2bc58c265ea170d2e815a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 01:30 UTC",
-  "files_total": 971,
-  "code_files": 799,
-  "code_lines": 137755
+  "generated_at": "2026-11-22 01:34 UTC",
+  "files_total": 973,
+  "code_files": 801,
+  "code_lines": 138354
  },
  "version": "1.3.2",
- "facts_hash": "66012b9f7cfb1b7a",
+ "facts_hash": "63c452dd2ca47a82",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 268,
+   ".ts": 270,
    ".tsx": 229,
    ".sql": 182,
    ".mjs": 107,
@@ -17633,7 +17633,6 @@
     "doc": "Edge Function: geo-gateway Camada única de acesso a provedores de mapa (Mapbox hoje; Google quando GOOGLE_MAPS_SERVER_KEY existir). Lê geo_settings (provedor por função), respeita geo_budget, cacheia (geo_cache), mede (geo_usage) e aplica rate guard local. O front e as outras edges chamam só esta fu …",
     "errors": [
      "GEO_INVALID_INPUT",
-     "GEO_NOT_CONFIGURED",
      "GEO_NOT_SUPPORTED",
      "GEO_RATE_LIMITED"
     ],
@@ -21113,8 +21112,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 53,
-   "lines": 14112,
+   "files": 55,
+   "lines": 14711,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21171,6 +21170,7 @@
     "metering.ts: CACHE_TTL_S, sha256, stableStringify, cacheKey, cacheGet, cachePut",
     "polyline.ts: decodePolyline, encodePolyline, simplify",
     "resolver.ts: GeoSettingRow, BudgetRow, QuotaRow, ResolverDeps, PRIMARY_SKU, mergeSettings",
+    "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoPrecision, GeoSuggestion",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
@@ -21213,6 +21213,7 @@
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/geo-gateway/failover.test.ts",
     "supabase/functions/geo-gateway/failover.ts",
+    "supabase/functions/geo-gateway/google.test.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/geo-gateway/mapbox.test.ts",
     "supabase/functions/geo-gateway/metering.ts",
@@ -21220,6 +21221,7 @@
     "supabase/functions/geo-gateway/polyline.ts",
     "supabase/functions/geo-gateway/resolver.test.ts",
     "supabase/functions/geo-gateway/resolver.ts",
+    "supabase/functions/geo-gateway/providers/google.ts",
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     "supabase/functions/geo-gateway/providers/types.ts",
     "supabase/functions/get-mapbox-token/index.ts",
@@ -25154,10 +25156,6 @@
    },
    {
     "file": "supabase/functions/geo-gateway/index.ts",
-    "msg": "GEO_NOT_CONFIGURED"
-   },
-   {
-    "file": "supabase/functions/geo-gateway/index.ts",
     "msg": "GEO_NOT_SUPPORTED"
    },
    {
@@ -25167,6 +25165,30 @@
    {
     "file": "supabase/functions/geo-gateway/resolver.ts",
     "msg": "Provedor ${forced} indisponível para ${fn}"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_INVALID_INPUT"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_NOT_CONFIGURED"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_NOT_FOUND"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_NO_ROUTE"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_PROVIDER_ERROR"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "msg": "GEO_RATE_LIMITED"
    },
    {
     "file": "supabase/functions/geo-gateway/providers/mapbox.ts",
@@ -25947,6 +25969,14 @@
    {
     "file": "supabase/functions/geo-gateway/index.ts",
     "text": "* Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "* Limite local por minuto das APIs do Google usadas pelo gateway — guarda de segurança própria,"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "* Função geo → chave de rate limit do Google (`GOOGLE_RATE_LIMITS`). */"
    },
    {
     "file": "supabase/functions/geo-gateway/index.ts",
@@ -29265,6 +29295,21 @@
     "file": "supabase/functions/check-external-api/index.ts",
     "name": "HEALTH_ADDRESS",
     "value": "'Avenida Paulista 1578, São Paulo'"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "name": "PLACES_BASE",
+    "value": "\"https://places.googleapis.com/v1\""
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "name": "GEOCODE_BASE",
+    "value": "\"https://maps.googleapis.com/maps/api/geocode/json\""
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "name": "STATIC_BASE",
+    "value": "\"https://maps.googleapis.com/maps/api/staticmap\""
    },
    {
     "file": "supabase/functions/geo-gateway/providers/mapbox.ts",
@@ -32929,6 +32974,30 @@
     "field": "type",
     "value": "GEO_BUDGET_WARNING",
     "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "field": "status",
+    "value": "ZERO_RESULTS",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "field": "status",
+    "value": "OVER_QUERY_LIMIT",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "field": "status",
+    "value": "REQUEST_DENIED",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/providers/google.ts",
+    "field": "status",
+    "value": "OK",
+    "kind": "compara"
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -37553,6 +37622,66 @@
    {
     "file": "supabase/functions/geo-gateway/failover.test.ts",
     "name": "credencial revogada (GEO_NOT_CONFIGURED) e rate limit entram em failover; erro de rede também"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "autocomplete: sem session_token conta units=1 (sem sessão paga)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "geocode: ZERO_RESULTS vira GEO_NOT_FOUND (lista vazia)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "geocode: REQUEST_DENIED vira GEO_NOT_CONFIGURED (chave recusada)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "geocode: OVER_QUERY_LIMIT vira GEO_RATE_LIMITED"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "reverse: sem resultado devolve null (não lança)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "route: computeRoutes decodifica polyline, soma legs, marca duration_traffic_s com tráfego"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "route: traffic=false usa TRAFFIC_UNAWARE e não marca duration_traffic_s nem departureTime"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "route: sem rota devolve GEO_NO_ROUTE"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "matrix: elementos = origens×destinos; reshape do array plano pra grid por originIndex/destinationIndex"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "matrix: fora de 1..625 elementos é recusado antes de chamar o provedor"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "static: monta markers e path (polyline5); exige ao menos center/markers/path"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/google.test.ts",
+    "name": "supports: não inclui snap/isochrone/optimization/tilequery/tiles (sem equivalente no Google)"
    },
    {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
@@ -43340,6 +43469,18 @@
      "healthy": [
       "compara:src/pages/SLODashboardPage.tsx"
      ],
+     "ZERO_RESULTS": [
+      "compara:supabase/functions/geo-gateway/providers/google.ts"
+     ],
+     "OVER_QUERY_LIMIT": [
+      "compara:supabase/functions/geo-gateway/providers/google.ts"
+     ],
+     "REQUEST_DENIED": [
+      "compara:supabase/functions/geo-gateway/providers/google.ts"
+     ],
+     "OK": [
+      "compara:supabase/functions/geo-gateway/providers/google.ts"
+     ],
      "invalid": [
       "escreve:supabase/functions/job-worker/index.ts"
      ],
@@ -48419,6 +48560,34 @@
     "msg": "valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/pages/IncidentsPage.tsx"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `ZERO_RESULTS` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/geo-gateway/providers/google.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `OVER_QUERY_LIMIT` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/geo-gateway/providers/google.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `REQUEST_DENIED` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/geo-gateway/providers/google.ts"
+    ]
+   },
+   {
+    "kind": "status",
+    "msg": "valor `OK` para `status` usado no código não existe em nenhum enum do banco/TS",
+    "where": [
+     "compara:supabase/functions/geo-gateway/providers/google.ts"
     ]
    },
    {
@@ -65783,9 +65952,32 @@
    ],
    "doc": "Failover em RUNTIME do geo-gateway. O resolver só troca de provedor quando o primário está INUTILIZÁVEL antes da chamada (sem chave, sem suporte, orçamento bloqueado). Quando o primário está usável mas FALHA na chamada (5xx, timeout, credencial revogada, rate limit), a requisição morria em 502. Este …"
   },
+  "supabase/functions/geo-gateway/google.test.ts": {
+   "path": "supabase/functions/geo-gateway/google.test.ts",
+   "lines": 225,
+   "is_test": true,
+   "doc": "deno test --allow-net --allow-env supabase/functions/geo-gateway/google.test.ts",
+   "tests": [
+    "autocomplete: Places API (New) normalizado; sessionToken passado; units=0 com sessão",
+    "autocomplete: sem session_token conta units=1 (sem sessão paga)",
+    "placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true",
+    "geocode: ROOFTOP vira precisão exact; structured monta address_line1+city+state+postal_code",
+    "geocode: ZERO_RESULTS vira GEO_NOT_FOUND (lista vazia)",
+    "geocode: REQUEST_DENIED vira GEO_NOT_CONFIGURED (chave recusada)",
+    "geocode: OVER_QUERY_LIMIT vira GEO_RATE_LIMITED",
+    "reverse: sem resultado devolve null (não lança)",
+    "route: computeRoutes decodifica polyline, soma legs, marca duration_traffic_s com tráfego",
+    "route: traffic=false usa TRAFFIC_UNAWARE e não marca duration_traffic_s nem departureTime",
+    "route: sem rota devolve GEO_NO_ROUTE",
+    "matrix: elementos = origens×destinos; reshape do array plano pra grid por originIndex/destinationIndex",
+    "matrix: fora de 1..625 elementos é recusado antes de chamar o provedor",
+    "static: monta markers e path (polyline5); exige ao menos center/markers/path",
+    "supports: não inclui snap/isochrone/optimization/tilequery/tiles (sem equivalente no Google)"
+   ]
+  },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 304,
+   "lines": 329,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -65849,7 +66041,6 @@
    ],
    "errors": [
     "GEO_INVALID_INPUT",
-    "GEO_NOT_CONFIGURED",
     "GEO_NOT_SUPPORTED",
     "GEO_RATE_LIMITED"
    ],
@@ -65862,6 +66053,8 @@
    ],
    "rule_comments": [
     "* Função geo → chave de rate limit do Mapbox (`MAPBOX_RATE_LIMITS`). */",
+    "* Limite local por minuto das APIs do Google usadas pelo gateway — guarda de segurança própria,",
+    "* Função geo → chave de rate limit do Google (`GOOGLE_RATE_LIMITS`). */",
     "Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.",
     "Nunca lança: falha de alerta não pode derrubar a requisição de mapa.",
     "── rate limit do provedor (espera a virada da janela) ─────────────────",
@@ -66006,6 +66199,59 @@
     "(até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar"
    ],
    "doc": "Escolha do provedor por função: geo_settings (cache 60 s) + geo_budget_status() + modo auto + fallback. Rate guard local por (provider:api) com janela de 1 minuto."
+  },
+  "supabase/functions/geo-gateway/providers/google.ts": {
+   "path": "supabase/functions/geo-gateway/providers/google.ts",
+   "lines": 349,
+   "exports": [
+    "interface GoogleOptions",
+    "class GoogleProvider"
+   ],
+   "errors": [
+    "GEO_INVALID_INPUT",
+    "GEO_NOT_CONFIGURED",
+    "GEO_NOT_FOUND",
+    "GEO_NO_ROUTE",
+    "GEO_PROVIDER_ERROR",
+    "GEO_RATE_LIMITED"
+   ],
+   "params": [
+    {
+     "name": "PLACES_BASE",
+     "value": "\"https://places.googleapis.com/v1\""
+    },
+    {
+     "name": "GEOCODE_BASE",
+     "value": "\"https://maps.googleapis.com/maps/api/geocode/json\""
+    },
+    {
+     "name": "STATIC_BASE",
+     "value": "\"https://maps.googleapis.com/maps/api/staticmap\""
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "ZERO_RESULTS",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "OVER_QUERY_LIMIT",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "REQUEST_DENIED",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
+     "value": "OK",
+     "kind": "compara"
+    }
+   ],
+   "doc": "Provedor Google — implementa a interface GeoProvider (Bloco 2, etapas 24-29 do plano). APIs usadas: Places API (New) `autocomplete`/`places/{id}`, Geocoding API clássica (`maps/api/geocode/json`, address e latlng), Routes API `computeRoutes`/`computeRouteMatrix`, Static Maps API. Chave: GOOGLE_MAPS_ …"
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
@@ -68528,10 +68774,30 @@
   }
  },
  "git": {
-  "sha": "b7a81367fa7b7b14963dba0cb08d977096090315",
+  "sha": "a0e29908737ab462cda2bc58c265ea170d2e815a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a0e2990",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)",
+    "files": [
+     "supabase/functions/geo-gateway/google.test.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/providers/google.ts"
+    ]
+   },
+   {
+    "sha": "2e299d5",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)",
+    "files": [
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "b7a8136",
     "date": "2026-11-21",
@@ -68866,25 +69132,6 @@
      "docs/GEO_PENDENCIAS.md",
      "docs/MAPBOX.md"
     ]
-   },
-   {
-    "sha": "023202f",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(pedidos): rodape de atribuicao Mapbox fica fora da area de scroll (#173)",
-    "files": [
-     "src/components/orders/AddressAutocomplete.tsx"
-    ]
-   },
-   {
-    "sha": "96b1253",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(banco): RLS pública bypassando restrição em 10 tabelas (#148)",
-    "files": [
-     "supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql",
-     "supabase/migrations/20261122150100_fix_public_rls_bypass.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -68893,15 +69140,15 @@
     6
    ],
    [
+    "supabase/functions/geo-gateway/index.ts",
+    5
+   ],
+   [
     "supabase/functions/job-worker/index.ts",
     4
    ],
    [
     "supabase/functions/geo-gateway/providers/mapbox.ts",
-    4
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
     4
    ],
    [
@@ -68914,10 +69161,6 @@
    ],
    [
     "supabase/functions/send-notification/index.ts",
-    3
-   ],
-   [
-    "src/components/orders/AddressAutocomplete.tsx",
     3
    ],
    [
@@ -68939,6 +69182,10 @@
    [
     "src/components/map/LiveMap.tsx",
     3
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.tsx",
+    2
    ],
    [
     "src/hooks/useGeoSearch.test.tsx",

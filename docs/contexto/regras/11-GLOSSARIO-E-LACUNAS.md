@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b7a81367fa` · branch `main` · 2026-11-22 01:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a0e2990873` · branch `main` · 2026-11-22 01:34 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -194,6 +194,10 @@ _nenhum item encontrado_
 | status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
 | status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
 | status | valor `OPEN` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/IncidentsPage.tsx` |
+| status | valor `ZERO_RESULTS` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
+| status | valor `OVER_QUERY_LIMIT` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
+| status | valor `REQUEST_DENIED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
+| status | valor `OK` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `planned` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `refreshed` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
