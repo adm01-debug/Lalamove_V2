@@ -53,6 +53,29 @@ export function normalizePhone(raw: unknown): string | null {
   return `+55${digits}`;
 }
 
+/**
+ * Etapa 142 (LGPD) — telefone para log.
+ *
+ * Log de edge function fica retido e é lido por muita gente; o número completo do
+ * motorista ou do contato do cliente não precisa estar em nenhum deles. Mantém o
+ * DDI e o DDD (para achar o caso por região) e os 2 últimos dígitos (para casar
+ * com o aparelho quando o motorista liga reclamando), esconde o resto.
+ *
+ * Entrada inválida não vira máscara falsa: devolve `null` e quem loga escreve
+ * "numero invalido" em vez de fingir que existe.
+ */
+export function maskPhone(raw: unknown): string | null {
+  const e164 = normalizePhone(raw);
+  if (!e164) return null;
+  // +55 (2) + DDD (2) + assinante (8 ou 9). Máscara: +55 41 9****-8888.
+  const ddd = e164.slice(3, 5);
+  const subscriber = e164.slice(5);
+  const first = subscriber.slice(0, 1);
+  const last = subscriber.slice(-4);
+  const hidden = "*".repeat(Math.max(subscriber.length - 5, 0));
+  return `+55 ${ddd} ${first}${hidden}-${last}`;
+}
+
 /** Telefone utilizável? Atalho para os pontos que só precisam decidir. */
 export function isDeliverablePhone(raw: unknown): boolean {
   return normalizePhone(raw) !== null;
@@ -74,7 +97,10 @@ export function resolveGeoRecipient(order: {
   supplier_contact?: unknown;
   auto_notify_supplier?: unknown;
   stop_contact_phone?: unknown;
-}): { phone: string; source: "pickup_contact" | "supplier_contact" | "stop_contact" } | null {
+}): {
+  phone: string;
+  source: "pickup_contact" | "supplier_contact" | "stop_contact";
+} | null {
   const pickup = normalizePhone(order.pickup_contact_phone);
   if (pickup) return { phone: pickup, source: "pickup_contact" };
 

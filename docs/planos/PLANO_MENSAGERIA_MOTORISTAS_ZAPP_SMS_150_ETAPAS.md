@@ -744,8 +744,14 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** cada alerta disparado em simulação
 
 ### 142 — [L][Z] LGPD
-- [ ] Telefone mascarado em log (`+55 41 9****-8888`), base legal registrada, retenção (etapa 84), exclusão a pedido do titular
-- **Evidência:** busca no log sem telefone completo
+- [~] Telefone mascarado em log (`+55 41 9****-8888`), base legal registrada, retenção (etapa 84), exclusão a pedido do titular
+- **Estado real:** a máscara existe e está testada — `maskPhone()` em `_shared/phone.ts`
+  devolve `+55 41 9****-8888` e `null` para número inválido (nunca uma máscara falsa), e os
+  dois logs de envio (`[WhatsApp]` e `[SMS]` em `send-notification/index.ts`) já usam ela.
+  Retenção está resolvida pela etapa 84 (`notification_messages_scrub_bodies` + cron, na
+  migration da PR #283). **Falta:** base legal registrada em documento e o fluxo de exclusão
+  a pedido do titular — os dois são processo, não código.
+- **Evidência:** 3 testes em `_shared/phone.test.ts` (PR #281); `grep` no log de envio não mostra dígitos completos
 
 ### 143 — [L][Z] Revisão de segurança
 - [ ] HMAC nos dois sentidos, rotação de chave testada, MFA nas telas, nenhum segredo em `VITE_*`
