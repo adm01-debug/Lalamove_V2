@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 126,
+ "total": 127,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 14,
+  "edge (deno)": 15,
   "guard (node --test)": 33,
   "unit (vitest)": 70
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 16
+   "arquivos": 17
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -326,7 +326,7 @@
   {
    "arquivo": "scripts/ci/vercel-env-baseline.unit.mjs",
    "tipo": "guard (node --test)",
-   "linhas": 121,
+   "linhas": 123,
    "testa": [
     "scripts/ci/vercel-env-baseline.mjs"
    ],
@@ -1161,6 +1161,15 @@
    "casos": 6
   },
   {
+   "arquivo": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 102,
+   "testa": [
+    "supabase/functions/lalamove-api/geocode-fallback.ts"
+   ],
+   "casos": 11
+  },
+  {
    "arquivo": "supabase/functions/lalamove-gateway/route.test.ts",
    "tipo": "edge (deno)",
    "linhas": 117,
@@ -1301,6 +1310,7 @@
   "supabase/functions/geo-gateway/providers/types.ts": 3,
   "supabase/functions/geo-gateway/resolver.ts": 1,
   "supabase/functions/lalamove-api/coordinates.ts": 1,
+  "supabase/functions/lalamove-api/geocode-fallback.ts": 1,
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1,

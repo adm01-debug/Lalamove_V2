@@ -376,7 +376,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 9,
-   "linhas": 2069,
+   "linhas": 2150,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -406,6 +406,7 @@
    "buckets": [],
    "chama_edges": [],
    "hosts_externos": [
+    "addressvalidation.googleapis.com",
     "api.mapbox.com",
     "maps.googleapis.com",
     "places.googleapis.com",
@@ -425,7 +426,9 @@
     "src/hooks/useRegionResolver.ts",
     "src/lib/geo-gateway.ts"
    ],
-   "chamada_por_edges": [],
+   "chamada_por_edges": [
+    "lalamove-api"
+   ],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
    "testes": 8
@@ -508,8 +511,8 @@
    "nome": "lalamove-api",
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
-   "arquivos": 2,
-   "linhas": 1226,
+   "arquivos": 3,
+   "linhas": 1391,
    "verify_jwt": true,
    "metodos": [
     "GET",
@@ -518,6 +521,7 @@
    "assina_hmac": true,
    "usa_service_role": true,
    "tabelas": [
+    "alerts",
     "drivers",
     "lalamove_orders",
     "lalamove_priority_fee_history",
@@ -536,6 +540,7 @@
    ],
    "buckets": [],
    "chama_edges": [
+    "geo-gateway",
     "lalamove-webhook"
    ],
    "hosts_externos": [
@@ -553,7 +558,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 1
+   "testes": 2
   },
   {
    "nome": "lalamove-gateway",

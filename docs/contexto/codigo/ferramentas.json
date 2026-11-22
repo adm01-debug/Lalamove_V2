@@ -3,10 +3,10 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (508)",
+   "TypeScript (510)",
    "SQL (187)",
    "JavaScript (112)",
-   "Markdown (101)",
+   "Markdown (102)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -387,6 +387,11 @@
    "arquivo": "docs/GEO_PROVIDERS.md",
    "titulo": "Como adicionar um provedor de mapa (HERE, TomTom, …)",
    "linhas": 59
+  },
+  {
+   "arquivo": "docs/GOOGLE_MAPS.md",
+   "titulo": "Google Maps na Lalamove V2",
+   "linhas": 157
   },
   {
    "arquivo": "docs/JOB_QUEUE_SYSTEM.md",
@@ -835,7 +840,15 @@
     "arquivos": 2
    },
    {
+    "host": "x.supabase.co",
+    "arquivos": 2
+   },
+   {
     "host": "a.tile.openstreetmap.org",
+    "arquivos": 1
+   },
+   {
+    "host": "addressvalidation.googleapis.com",
     "arquivos": 1
    },
    {
@@ -924,10 +937,6 @@
    },
    {
     "host": "x.dev",
-    "arquivos": 1
-   },
-   {
-    "host": "x.supabase.co",
     "arquivos": 1
    }
   ],

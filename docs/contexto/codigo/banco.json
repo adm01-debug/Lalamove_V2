@@ -1571,6 +1571,7 @@
     "check-driver-alerts",
     "evaluate-driver",
     "geo-gateway",
+    "lalamove-api",
     "lalamove-gateway",
     "lalamove-token-refresh",
     "lalamove-webhook",

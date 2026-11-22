@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d1b6ddfadd` · branch `main` · 2026-11-22 03:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f7d18db623` · branch `main` · 2026-11-22 04:02 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -633,7 +633,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 
 | Campo | Valor | Uso | Onde |
 |---|---|---|---|
-| `type` | `APPROVAL_REQUIRED` | escreve | `supabase/functions/evaluate-driver/index.ts` |
+| `type` | `APPROVAL_REQUIRED` | escreve | `supabase/functions/evaluate-driver/index.ts`<br>`supabase/functions/lalamove-api/index.ts` |
 | `type` | `CAR` | compara | `src/components/map/MapLegend.tsx` |
 | `type` | `CLEAR_CACHE` | compara, escreve | `public/sw.js`<br>`src/hooks/useServiceWorker.ts` |
 | `type` | `Caminhão` | compara | `src/pages/reports/ReportDistributionTab.tsx` |
@@ -1187,6 +1187,10 @@ _nenhum item encontrado_
   ```
   const pct = sample.total > 0 ? Math.round((sample.errors / sample.total) * 10000) / 100 : 0; const fire = sample.total >= ERROR_RATE_MIN_SAMPLES && sample.errors / sample.total > ERROR_RATE_THRESHOLD; return { fire, total: sample.total, errors: sample.errors, pct };
   ```
+- **validate(req: ValidateReq)** — `supabase/functions/geo-gateway/providers/google.ts`
+  ```
+  const body = { address: { addressLines: [req.address], regionCode: req.region ?? "BR", languageCode: req.language ?? "pt-BR", }, }; const json = await this.call<{ result?: { verdict?: { addressComplete?: boolean; validationGranularity?: string; hasUnconfirmedComponents?: boolean; missingComponentTypes?: string[]; }; address?: { formattedAddress?: string }; geocode?: { location?: { latitude: number; longitude: number } }; }; }>("POST", ADDRESS_VALIDATION_BASE + `?key=${encodeURIComponent(this.key …
+  ```
 - **generateSignature(method: string, path: string, timestamp: string, body: string)** — `supabase/functions/lalamove-api/index.ts`
   ```
   const rawSignature = `${timestamp}\r\n${method}\r\n${path}\r\n\r\n${body}`; const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( 'raw', encoder.encode(LALAMOVE_API_SECRET!), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'] ); const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(rawSignature)); return Array.from(new Uint8Array(signatureBuffer)) .map(b => b.toString(16).padStart(2, '0')) .join('');
@@ -1308,6 +1312,7 @@ _nenhum item encontrado_
 | `PLACES_BASE` | `"https://places.googleapis.com/v1"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `GEOCODE_BASE` | `"https://maps.googleapis.com/maps/api/geocode/json"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `STATIC_BASE` | `"https://maps.googleapis.com/maps/api/staticmap"` | `supabase/functions/geo-gateway/providers/google.ts` |
+| `ADDRESS_VALIDATION_BASE` | `"https://addressvalidation.googleapis.com/v1:validateAddress"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `BASE` | `"https://api.mapbox.com"` | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | `LALAMOVE_MARKET` | `'BR'` | `supabase/functions/lalamove-api/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-gateway/index.ts` |
@@ -1817,7 +1822,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (985 testes em 85 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (996 testes em 86 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1853,6 +1858,7 @@ _nenhum item encontrado_
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
+| `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 11 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
@@ -2105,6 +2111,7 @@ _nenhum item encontrado_
 | Falhas de validação usam SEMPRE status 422 e o formato único de erro. | `supabase/functions/_shared/contract.ts` |
 | (`properties.coordinates.accuracy`) para o vocabulario de negocio `GeoPrecision`. | `supabase/functions/_shared/geo-precision.ts` |
 | * Mapeamento oficial Mapbox Geocoding v6 `accuracy` -> precisao de negocio. */ | `supabase/functions/_shared/geo-precision.ts` |
+| Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway | `supabase/functions/_shared/schemas.ts` |
 | - Fire-and-forget: NUNCA deve quebrar ou atrasar o fluxo principal. | `supabase/functions/_shared/telemetry.ts` |
 | Ambiente sem credenciais (ex.: testes): apenas log. | `supabase/functions/_shared/telemetry.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |
@@ -2128,13 +2135,18 @@ _nenhum item encontrado_
 | * Etapa 15/211 do plano Mapbox: o TTL não pode ser só constante de código — a política de | `supabase/functions/geo-gateway/metering.ts` |
 | Um lote maior que o limite do minuto nunca cabe: recusa sem gravar o bucket. | `supabase/functions/geo-gateway/resolver.ts` |
 | (até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar | `supabase/functions/geo-gateway/resolver.ts` |
+| ── Address Validation API (etapa 38; D7: desligada por padrão) ───────── | `supabase/functions/geo-gateway/providers/google.ts` |
 | "Timestamp must be set to a future time" — a hora chega ao servidor do Google | `supabase/functions/geo-gateway/providers/google.ts` |
 | * HTTP com o token do provedor. `consume` diz quantos slots do rate limit esta chamada | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | 1 slot de rate limit por consulta, não por requisição | `supabase/functions/geo-gateway/providers/mapbox.ts` |
+| * Etapa 38 do plano de 100 etapas: resultado de validação de endereço. | `supabase/functions/geo-gateway/providers/types.ts` |
+| * Etapa 38: validação de endereço. Opcional — o gateway devolve 501 quando ausente, | `supabase/functions/geo-gateway/providers/types.ts` |
 | Provedor desligado / orçamento estourado / rate limit: não é falha do job. | `supabase/functions/job-worker/index.ts` |
 | Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego. | `supabase/functions/job-worker/index.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |
 | Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove. | `supabase/functions/lalamove-api/coordinates.ts` |
+| * Nunca lanca: devolve `null` quando o endereco nao pode ser resolvido, para o pedido | `supabase/functions/lalamove-api/geocode-fallback.ts` |
+| nao pode acontecer e o pedido falhar por causa do geocode. | `supabase/functions/lalamove-api/geocode-fallback.ts` |
 | * Persist Lalamove rate-limit headers for proactive observability. | `supabase/functions/lalamove-api/index.ts` |
 | Headers follow the IETF `ratelimits-*` family (limit / remaining / reset). | `supabase/functions/lalamove-api/index.ts` |
 | BODY_JSON = "" for GET/DELETE (but \r\n\r\n must be present) | `supabase/functions/lalamove-api/index.ts` |

@@ -2274,9 +2274,13 @@
   "supabase/functions/lalamove-api/coordinates.ts": [
    "supabase/functions/_shared/logger.ts"
   ],
+  "supabase/functions/lalamove-api/geocode-fallback.ts": [
+   "supabase/functions/_shared/logger.ts"
+  ],
   "supabase/functions/lalamove-api/index.ts": [
    "supabase/functions/_shared/logger.ts",
-   "supabase/functions/lalamove-api/coordinates.ts"
+   "supabase/functions/lalamove-api/coordinates.ts",
+   "supabase/functions/lalamove-api/geocode-fallback.ts"
   ],
   "supabase/functions/lalamove-gateway/index.ts": [
    "supabase/functions/lalamove-gateway/route.ts"

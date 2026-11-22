@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d1b6ddfadd` · branch `main` · 2026-11-22 03:17 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f7d18db623` · branch `main` · 2026-11-22 04:02 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -106,7 +106,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 118 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 120 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -153,6 +153,8 @@
 - `supabase/functions/geo-gateway/index.ts`
 - `supabase/functions/geo-gateway/metering.ts`
 - `supabase/functions/job-worker/index.ts`
+- `supabase/functions/lalamove-api/geocode-fallback.test.ts`
+- `supabase/functions/lalamove-api/geocode-fallback.ts`
 - `supabase/functions/lalamove-api/index.ts`
 - `supabase/functions/lalamove-gateway/index.ts`
 - `supabase/functions/lalamove-gateway/route.test.ts`

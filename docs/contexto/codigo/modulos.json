@@ -1437,9 +1437,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 46,
-   "testes": 16,
-   "linhas": 13026,
+   "arquivos": 47,
+   "testes": 17,
+   "linhas": 13281,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1450,6 +1450,7 @@
     "bitrix24-sync",
     "check-driver-alerts",
     "evaluate-driver",
+    "geo-gateway",
     "lalamove-webhook",
     "send-notification"
    ],
@@ -1556,6 +1557,7 @@
      "bitrix24-sync",
      "check-driver-alerts",
      "evaluate-driver",
+     "geo-gateway",
      "lalamove-webhook",
      "send-notification"
     ],
