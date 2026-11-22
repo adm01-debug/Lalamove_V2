@@ -130,7 +130,7 @@ export class GoogleProvider implements GeoProvider {
     for (const c of json.addressComponents ?? []) {
       if (c.types.includes("street_number")) streetNumber = c.longText;
       else if (c.types.includes("route")) route = c.longText;
-      else if (c.types.includes("sublocality") || c.types.includes("neighborhood")) components.district = c.longText;
+      else if (c.types.includes("sublocality") || c.types.includes("sublocality_level_1") || c.types.includes("neighborhood")) components.district = c.longText;
       else if (c.types.includes("administrative_area_level_2") || c.types.includes("locality")) components.city = c.longText;
       else if (c.types.includes("administrative_area_level_1")) components.state = c.longText;
       else if (c.types.includes("postal_code")) components.postal_code = c.longText;

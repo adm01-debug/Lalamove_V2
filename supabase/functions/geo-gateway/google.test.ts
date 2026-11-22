@@ -58,7 +58,7 @@ Deno.test("autocomplete: sem session_token conta units=1 (sem sessão paga)", as
   assertEquals(r.units, 1);
 });
 
-Deno.test("placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retainable=true", async () => {
+Deno.test("placeDetails: componentes mapeados (número/rua/bairro sublocality_level_1/cidade/UF/CEP), retainable=true", async () => {
   const { fetch, calls } = mockFetch(() => ({
     body: {
       id: "ChIJ123", formattedAddress: "Rua XV de Novembro, 100, Curitiba - PR",
@@ -66,6 +66,7 @@ Deno.test("placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retai
       addressComponents: [
         { longText: "100", shortText: "100", types: ["street_number"] },
         { longText: "Rua XV de Novembro", shortText: "R. XV de Novembro", types: ["route"] },
+        { longText: "Centro", shortText: "Centro", types: ["sublocality_level_1", "sublocality", "political"] },
         { longText: "Curitiba", shortText: "Curitiba", types: ["administrative_area_level_2", "locality"] },
         { longText: "Paraná", shortText: "PR", types: ["administrative_area_level_1"] },
         { longText: "80020-310", shortText: "80020-310", types: ["postal_code"] },
@@ -78,6 +79,7 @@ Deno.test("placeDetails: componentes mapeados (número/rua/cidade/UF/CEP), retai
   assertEquals(r.data.location, { lat: -25.4296, lng: -49.2716 });
   assertEquals(r.data.components.number, "100");
   assertEquals(r.data.components.street, "Rua XV de Novembro");
+  assertEquals(r.data.components.district, "Centro");
   assertEquals(r.data.components.city, "Curitiba");
   assertEquals(r.data.components.state, "Paraná");
   assertEquals(r.data.components.postal_code, "80020-310");
