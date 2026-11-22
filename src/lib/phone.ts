@@ -88,3 +88,15 @@ export function maskBrazilianPhone(input: string): string {
   if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
+
+/**
+ * Monta a URL de abertura do WhatsApp para um número brasileiro.
+ * Garante o DDI 55 mesmo quando o número vem sem ele, e aplica E.164.
+ * Retorna `null` quando o número não é um celular BR válido.
+ */
+export function toWhatsAppUrl(phone: string, message?: string): string | null {
+  const normalized = validateBrazilianPhone(phone);
+  if (!normalized.valid) return null;
+  const base = `https://wa.me/${normalized.e164}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}

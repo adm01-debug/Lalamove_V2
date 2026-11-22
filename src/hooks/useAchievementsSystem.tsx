@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, createContext, useContext, ReactNode,
 import { toast } from 'sonner';
 import { Trophy, Star, Zap, Shield, Clock, TrendingUp, CheckCircle2, Award, Medal, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 
 // Achievement types
 export type AchievementId = 
@@ -250,12 +251,21 @@ const AchievementNotification = forwardRef<
 
 // Provider component
 export function AchievementsProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+  const userId = user?.id ?? 'anonymous';
+  const achievementsKey = `achievements:${userId}`;
+  const pointsKey = `achievement-points:${userId}`;
+
   const [unlockedAchievements, setUnlockedAchievements] = useState<Set<AchievementId>>(() => {
-    const saved = localStorage.getItem('achievements');
-    return saved ? new Set(JSON.parse(saved)) : new Set();
+    try {
+      const saved = localStorage.getItem(achievementsKey);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
   });
   const [totalPoints, setTotalPoints] = useState(() => {
-    const saved = localStorage.getItem('achievement-points');
+    const saved = localStorage.getItem(pointsKey);
     return saved ? parseInt(saved, 10) : 0;
   });
   const [currentNotification, setCurrentNotification] = useState<Achievement | null>(null);
@@ -264,12 +274,20 @@ export function AchievementsProvider({ children }: { children: ReactNode }) {
 
   // Persist to localStorage
   useEffect(() => {
-    localStorage.setItem('achievements', JSON.stringify([...unlockedAchievements]));
-  }, [unlockedAchievements]);
+    try {
+      localStorage.setItem(achievementsKey, JSON.stringify([...unlockedAchievements]));
+    } catch {
+      /* localStorage pode estar indisponível */
+    }
+  }, [unlockedAchievements, achievementsKey]);
 
   useEffect(() => {
-    localStorage.setItem('achievement-points', totalPoints.toString());
-  }, [totalPoints]);
+    try {
+      localStorage.setItem(pointsKey, totalPoints.toString());
+    } catch {
+      /* localStorage pode estar indisponível */
+    }
+  }, [totalPoints, pointsKey]);
 
   const triggerConfetti = useCallback(() => {
     setShowConfetti(true);

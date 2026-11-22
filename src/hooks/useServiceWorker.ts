@@ -166,11 +166,22 @@ export function useServiceWorker() {
     if (!waitingWorker) return;
 
     waitingWorker.postMessage({ type: 'SKIP_WAITING' });
-    
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      window.location.reload();
-    });
   }, [waitingWorker]);
+
+  // Reload a aplicação quando um novo service worker assumir o controle.
+  // Registrado uma única vez (e limpo no unmount) para não acumular listeners.
+  useEffect(() => {
+    if (!state.isSupported) return;
+
+    const handleControllerChange = () => {
+      window.location.reload();
+    };
+
+    navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+    return () => {
+      navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+    };
+  }, [state.isSupported]);
 
   // Clear cache
   const clearCache = useCallback(async () => {

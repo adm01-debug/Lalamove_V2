@@ -474,7 +474,7 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
     } | null>(null);
 
     // Fetch POD/POP stops data + proofs granulares (delivery code)
-    const { data: stopsData } = useQuery({
+    const { data: stopsData, isError: stopsError } = useQuery({
       queryKey: ['order-stops', order?.id],
       queryFn: async (): Promise<Stop[]> => {
         if (!order?.id) return [];
@@ -864,6 +864,13 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
             )}
 
             {/* Delivery Codes (Lalamove v3) */}
+            {stopsError && (
+              <div className="glass-card p-4 rounded-lg border-destructive/30">
+                <p className="text-sm text-destructive">
+                  Não foi possível carregar as paradas deste pedido.
+                </p>
+              </div>
+            )}
             {(() => {
               const stops = (stopsData ?? []) as Stop[];
               const codes = stops
@@ -922,11 +929,13 @@ export const OrderDetailModal = forwardRef<HTMLDivElement, OrderDetailModalProps
                             variant="ghost"
                             size="icon"
                             aria-label="Copiar código de entrega"
-                            onClick={() => {
-                              navigator.clipboard.writeText(c.code).then(
-                                () => toast.success('Código copiado'),
-                                () => toast.error('Não foi possível copiar'),
-                              );
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(c.code);
+                                toast.success('Código copiado');
+                              } catch {
+                                toast.error('Não foi possível copiar');
+                              }
                             }}
                           >
                             <Copy className="w-4 h-4" />
