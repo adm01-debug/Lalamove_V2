@@ -587,8 +587,38 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - Erros de envio (`success:false`) viram throw e toast de erro; sucesso invalida a query de eventos para o operador ver o novo status.
 
 ### 64 — Testes do bloco
-- [ ] pgTAP/`DO` para `geo_evaluate_events` (6 cenários) + Deno para resolução de destinatário e janela
+- [x] pgTAP/`DO` para `geo_evaluate_events` (6 cenários) + Deno para resolução de destinatário e janela
 - **Evidência:** CI verde
+
+**Executado (2026-11-22).** Testes SQL de comportamento do trigger, além dos testes puros de
+geometria da etapa 17:
+
+- `supabase/tests/fixtures/geo_trigger_schema.sql` (novo, 172 linhas): schema mínimo com `auth.users`,
+  enums `order_status`/`alert_type`/`alert_severity`, `lalamove_orders` (com as colunas geo de
+  `approach_radius_m`/`approach_eta_min`/`notify_delivery_contact`), `lalamove_stops`,
+  `active_tracking` (colunas de métrica de rota), `alerts`, `order_geo_events`, `job_queue` +
+  `add_job()`, `update_updated_at_column()` e o singleton `geo_defaults`. Coordenadas declaradas
+  `decimal(10,8)`/`decimal(11,8)` porque `geo_emit_event` recebe `numeric` e o Postgres não faz cast
+  implícito a partir de `double precision` — com `float` o `PERFORM` falha com
+  `function geo_emit_event(...) does not exist`.
+- `supabase/tests/geo_trigger.test.sql` (novo, 226 linhas): 8 casos `DO/ASSERT`, com `TRUNCATE` inicial
+  para permitir reexecução:
+  1. motorista a 200 m da coleta → 1 evento `DRIVER_APPROACHING_PICKUP`, job `geo:*`, destinatário =
+     telefone do pedido;
+  2. segunda posição dentro do raio → ainda 1 evento (idempotência via `ON CONFLICT`);
+  3. fora do raio (3 km) e ETA 40 min → 0 eventos, `distance_to_next_stop_m > 2000`;
+  4. ETA ≤ 5 min com distância grande → avisa (critério "raio **ou** ETA", decisão D4);
+  5. "chegou" exige 2 ciclos em `arrived_radius_m`: 1º ciclo 0 eventos, 2º ciclo 1 evento;
+  6. entrega desligada por padrão (D5): evento gravado com `job_id IS NULL` e
+     `notification_status='skipped'`;
+  7. pedido sem coordenada de parada → 0 eventos, sem exceção;
+  8. ponto sobre o polyline esperado → `off_route_cycles = 0`.
+- **Testes de mutação (2026-11-22, Postgres 16 em Docker, 8/8 verde):** `arrived_radius_m=1` derruba o
+  caso 5 ("veio 0"); `approach_radius_m=1, approach_eta_min=0` derruba o caso 1 ("veio 0");
+  `notify_delivery_contact=true` derruba o caso 6 ("veio 1"). Suíte roda 2× seguidas sem colidir.
+- CI: job novo `geo-trigger-sql-tests` em `.github/workflows/ci.yml` (postgres:16 como service; carrega
+  fixture + linhas 277-341, 347-387 e 389-533 da migration antes de rodar o arquivo de testes).
+  `actionlint` no `ci.yml`: só o `SC2129` pré-existente da linha 145.
 
 ---
 
