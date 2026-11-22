@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
+  "sha": "9ec9341971faa8c695a432a1d13657d96bb5535e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 04:37 UTC",
-  "files_total": 996,
-  "code_files": 822,
-  "code_lines": 141349
+  "generated_at": "2026-11-22 04:45 UTC",
+  "files_total": 997,
+  "code_files": 823,
+  "code_lines": 141413
  },
  "version": "1.3.2",
- "facts_hash": "5e44c938729d8899",
+ "facts_hash": "0f9cd1a6afbd7d80",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 282,
+   ".ts": 283,
    ".tsx": 233,
    ".sql": 187,
    ".mjs": 107,
@@ -21186,8 +21186,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 67,
-   "lines": 16412,
+   "files": 68,
+   "lines": 16476,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21298,6 +21298,7 @@
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.test.ts",
     "supabase/functions/external-db-bridge/index.ts",
+    "supabase/functions/geo-gateway/budget-error.test.ts",
     "supabase/functions/geo-gateway/error-monitor.test.ts",
     "supabase/functions/geo-gateway/error-monitor.ts",
     "supabase/functions/geo-gateway/failover.test.ts",
@@ -26172,6 +26173,10 @@
    {
     "file": "supabase/functions/geo-gateway/index.ts",
     "text": "Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/index.ts",
+    "text": "RATE_LIMITED, indistinguível do rate limit por minuto da etapa 32 — o front"
    },
    {
     "file": "supabase/functions/geo-gateway/metering.ts",
@@ -38026,6 +38031,18 @@
    {
     "file": "supabase/functions/external-db-bridge/index.test.ts",
     "name": "telemetry response shape includes duration and severity"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/budget-error.test.ts",
+    "name": "orçamento bloqueado sem fallback lança ResolveError 429"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/budget-error.test.ts",
+    "name": "o código do erro de orçamento é GEO_BUDGET_EXCEEDED, não RATE_LIMITED"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/budget-error.test.ts",
+    "name": "job-worker trata GEO_BUDGET_EXCEEDED como skip, não como falha retentável"
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.test.ts",
@@ -65749,7 +65766,7 @@
   },
   "supabase/functions/_shared/contract.ts": {
    "path": "supabase/functions/_shared/contract.ts",
-   "lines": 310,
+   "lines": 313,
    "exports": [
     "type ContractVersion",
     "const SUPPORTED_VERSIONS",
@@ -66844,6 +66861,21 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/geo-gateway/budget-error.test.ts": {
+   "path": "supabase/functions/geo-gateway/budget-error.test.ts",
+   "lines": 55,
+   "is_test": true,
+   "rule_comments": [
+    "antes ele saía como RATE_LIMITED, indistinguível do limite por minuto.",
+    "Mesma regex do job-worker: um 429 de orçamento não pode virar retry infinito."
+   ],
+   "doc": "Etapa 30: orçamento esgotado precisa de código próprio no corpo do erro. O `ResolveError` com 429 é a única fonte do 429 por orçamento no gateway; antes ele saía como RATE_LIMITED, indistinguível do limite por minuto.",
+   "tests": [
+    "orçamento bloqueado sem fallback lança ResolveError 429",
+    "o código do erro de orçamento é GEO_BUDGET_EXCEEDED, não RATE_LIMITED",
+    "job-worker trata GEO_BUDGET_EXCEEDED como skip, não como falha retentável"
+   ]
+  },
   "supabase/functions/geo-gateway/error-monitor.test.ts": {
    "path": "supabase/functions/geo-gateway/error-monitor.test.ts",
    "lines": 185,
@@ -67027,7 +67059,7 @@
   },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 357,
+   "lines": 363,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -67108,7 +67140,8 @@
     "Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.",
     "Nunca lança: falha de alerta não pode derrubar a requisição de mapa.",
     "── rate limit do provedor (espera a virada da janela) ─────────────────",
-    "Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada"
+    "Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada",
+    "RATE_LIMITED, indistinguível do rate limit por minuto da etapa 32 — o front"
    ],
    "doc": "Edge Function: geo-gateway Camada única de acesso a provedores de mapa (Mapbox hoje; Google quando GOOGLE_MAPS_SERVER_KEY existir). Lê geo_settings (provedor por função), respeita geo_budget, cacheia (geo_cache), mede (geo_usage) e aplica rate guard local. O front e as outras edges chamam só esta fu …",
    "uses_service_role": true
@@ -69998,10 +70031,23 @@
   }
  },
  "git": {
-  "sha": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
+  "sha": "9ec9341971faa8c695a432a1d13657d96bb5535e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "9ec9341",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/_shared/contract.ts",
+     "supabase/functions/geo-gateway/budget-error.test.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "32c1842",
     "date": "2026-11-22",
@@ -70355,29 +70401,20 @@
     "files": [
      "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "b7a8136",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)",
-    "files": [
-     "supabase/migrations/20261123130000_geo_price_list_skus_faltantes.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    12
+    13
+   ],
+   [
+    "supabase/functions/geo-gateway/index.ts",
+    6
    ],
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     6
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
-    5
    ],
    [
     "supabase/functions/geo-gateway/providers/google.ts",
@@ -70386,6 +70423,10 @@
    [
     "supabase/functions/geo-gateway/providers/types.ts",
     3
+   ],
+   [
+    "supabase/functions/job-worker/index.ts",
+    2
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -70441,10 +70482,6 @@
    ],
    [
     "supabase/.temp/storage-version",
-    2
-   ],
-   [
-    "docs/MAPBOX.md",
     2
    ]
   ]

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "32c18424a50fc5c054ac2cdef7d5b09a35892bd6",
+  "commit": "9ec9341971faa8c695a432a1d13657d96bb5535e",
   "branch": "main",
-  "data_commit": "2026-11-22T01:37:27-03:00",
+  "data_commit": "2026-11-22T01:44:47-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "9ec9341",
+    "data": "2026-11-22",
+    "assunto": "fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)"
+   },
    {
     "sha": "32c1842",
     "data": "2026-11-22",
@@ -126,18 +131,13 @@
     "sha": "e0bceb0",
     "data": "2026-11-21",
     "assunto": "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)"
-   },
-   {
-    "sha": "7938358",
-    "data": "2026-11-21",
-    "assunto": "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)"
    }
   ],
-  "arquivos_mudados_7d": 252,
+  "arquivos_mudados_7d": 254,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 55
+    "mudancas": 57
    },
    {
     "pasta": "src/components/map",
@@ -148,20 +148,20 @@
     "mudancas": 18
    },
    {
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 15
+   },
+   {
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 14
+   },
+   {
     "pasta": "package-lock.json",
     "mudancas": 14
    },
    {
     "pasta": "package.json",
     "mudancas": 14
-   },
-   {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 14
-   },
-   {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 13
    },
    {
     "pasta": "docs/MAPBOX.md",
@@ -193,7 +193,7 @@
    },
    {
     "pasta": "supabase/functions/job-worker",
-    "mudancas": 6
+    "mudancas": 7
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 13
+    "mudancas": 14
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -222,11 +222,11 @@
     "mudancas": 11
    },
    {
-    "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "mudancas": 11
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
@@ -250,6 +250,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 7
    },
@@ -267,10 +271,6 @@
    },
    {
     "arquivo": "src/integrations/supabase/types.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 6
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 132
+    "commits": 133
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1002,
-  "arquivos_codigo": 626,
-  "linhas_codigo": 122327,
+  "arquivos_total": 1003,
+  "arquivos_codigo": 627,
+  "linhas_codigo": 122391,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 131,
+  "testes": 132,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 102
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 67,
-   "linhas": 16412
+   "arquivos": 68,
+   "linhas": 16476
   },
   "tailwind.config.ts": {
    "arquivos": 1,

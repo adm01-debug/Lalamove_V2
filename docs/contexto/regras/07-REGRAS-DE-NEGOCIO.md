@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `32c18424a5` · branch `main` · 2026-11-22 04:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9ec9341971` · branch `main` · 2026-11-22 04:45 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1826,7 +1826,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1025 testes em 90 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1028 testes em 91 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1919,6 +1919,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useCronJobsHealth.test.ts` | 3 | useCronJobsHealth · deve retornar a saúde dos jobs de cron · deve propagar erro quando a RPC falha (ex.: sem permissão de admin) |
 | `src/hooks/__tests__/useDrivers.test.ts` | 3 | useDrivers · deve buscar e mapear motoristas corretamente · deve lidar com erro do supabase |
 | `supabase/functions/_shared/geo-precision.test.ts` | 3 | precisionFromAccuracy: mapeia o vocabulário do Geocoding v6 · precisionFromAccuracy: ausente ou fora do vocabulário nunca vira exact · ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor |
+| `supabase/functions/geo-gateway/budget-error.test.ts` | 3 | orçamento bloqueado sem fallback lança ResolveError 429 · o código do erro de orçamento é GEO_BUDGET_EXCEEDED, não RATE_LIMITED · job-worker trata GEO_BUDGET_EXCEEDED como skip, não como falha retentável |
 | `supabase/functions/geo-gateway/polyline.test.ts` | 3 | polyline: exemplo oficial do Google (precisão 5) · polyline6: ida e volta preserva 6 casas · simplify: remove pontos colineares, mantém extremos e curvas |
 
 ## L. Eventos de webhook tratados (contratos com sistemas externos)
@@ -2141,6 +2142,7 @@ _nenhum item encontrado_
 | Nunca lança: falha de alerta não pode derrubar a requisição de mapa. | `supabase/functions/geo-gateway/index.ts` |
 | ── rate limit do provedor (espera a virada da janela) ───────────────── | `supabase/functions/geo-gateway/index.ts` |
 | Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada | `supabase/functions/geo-gateway/index.ts` |
+| RATE_LIMITED, indistinguível do rate limit por minuto da etapa 32 — o front | `supabase/functions/geo-gateway/index.ts` |
 | * TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */ | `supabase/functions/geo-gateway/metering.ts` |
 | * Etapa 15/211 do plano Mapbox: o TTL não pode ser só constante de código — a política de | `supabase/functions/geo-gateway/metering.ts` |
 | Um lote maior que o limite do minuto nunca cabe: recusa sem gravar o bucket. | `supabase/functions/geo-gateway/resolver.ts` |
