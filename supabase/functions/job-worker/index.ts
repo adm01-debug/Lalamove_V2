@@ -501,6 +501,61 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
 }
 
 /**
+ * Encaixa a posição do motorista na via com Map Matching (etapa 47) antes do
+ * geofence/ETA. Sem isto o pino do GPS oscila 10–30 m e o trigger `near_stop_cycles`
+ * dispara "motorista chegou" com o veículo ainda na quadra anterior.
+ *
+ * Usa os últimos pontos de `tracking_events` + a posição atual. Best-effort: erro,
+ * menos de 2 pontos ou provedor fora do ar mantêm a posição crua do GPS.
+ */
+async function snapDriverPosition(
+  supabase: any,
+  tracking: { id: string; order_id: string; driver_id: string | null; current_latitude: unknown; current_longitude: unknown },
+  radius_m = 25,
+): Promise<{ lat: number; lng: number; confidence: number | null; snapped: boolean } | null> {
+  const curLat = Number(tracking.current_latitude);
+  const curLng = Number(tracking.current_longitude);
+  if (!Number.isFinite(curLat) || !Number.isFinite(curLng)) return null;
+
+  const { data: recent } = await supabase
+    .from('tracking_events')
+    .select('latitude, longitude, created_at')
+    .eq('order_id', tracking.order_id)
+    .not('latitude', 'is', null)
+    .not('longitude', 'is', null)
+    .order('created_at', { ascending: false })
+    .limit(9);
+
+  const points = [
+    ...((recent ?? []) as Array<{ latitude: unknown; longitude: unknown }>)
+      .reverse()
+      .map((e) => ({ lat: Number(e.latitude), lng: Number(e.longitude) })),
+    { lat: curLat, lng: curLng },
+  ].filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
+
+  if (points.length < 2) return { lat: curLat, lng: curLng, confidence: null, snapped: false };
+
+  try {
+    const res = await invokeEdge(supabase, 'geo-gateway', { action: 'snap', points, radius_m });
+    const snapped = (res?.points ?? []) as Array<{ lat: number; lng: number }>;
+    const last = snapped[snapped.length - 1];
+    const confidence = res?.confidence == null ? null : Number(res.confidence);
+    // Confiança baixa = o trace não casa com nenhuma via (GPS saltando, pontos
+    // simulados, túnel). Mover o pino nesse caso piora o geofence: mantém o cru.
+    if (!last || !Number.isFinite(Number(last.lat)) || (confidence != null && confidence < 0.3)) {
+      return { lat: curLat, lng: curLng, confidence, snapped: false };
+    }
+    return { lat: Number(last.lat), lng: Number(last.lng), confidence, snapped: true };
+  } catch (err) {
+    internalLogger('warn', 'snap indisponível; mantendo posição crua do GPS', {
+      tracking_id: tracking.id,
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return { lat: curLat, lng: curLng, confidence: null, snapped: false };
+  }
+}
+
+/**
  * `eta_refresh` — Matrix 1×1 `driving-traffic` motorista → próxima parada.
  * `eta_minutes = ceil(duration_s / 60)`; provedor desligado mantém a estimativa
  * local já calculada por `geo_evaluate_tracking` (não sobrescreve com NULL).
@@ -542,11 +597,18 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
       continue;
     }
 
+    // Etapa 47: encaixa na via antes de medir o geofence. Best-effort — sem snap
+    // o ETA sai da posição crua, como antes.
+    const rawPoint = { lat: Number(t.current_latitude), lng: Number(t.current_longitude) };
+    const snap = payload.snap === false
+      ? { ...rawPoint, confidence: null as number | null, snapped: false }
+      : (await snapDriverPosition(supabase, t)) ?? { ...rawPoint, confidence: null as number | null, snapped: false };
+
     try {
       // Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego.
       const route = await invokeEdge(supabase, 'geo-gateway', {
         action: 'route',
-        origin: { lat: Number(t.current_latitude), lng: Number(t.current_longitude) },
+        origin: { lat: snap.lat, lng: snap.lng },
         destination: stop,
         traffic: true,
       });
@@ -560,12 +622,22 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
 
       const etaMinutes = Math.max(1, Math.ceil(Number(durationS) / 60));
 
+      // Posição encaixada na via alimenta o trigger `geo_evaluate_tracking`
+      // (distance_to_route_m, off_route_cycles, near_stop_cycles). Só escreve
+      // quando o snap moveu o ponto — evita UPDATE no-op a cada ciclo.
+      const movedM = snap.snapped
+        ? Math.abs(snap.lat - Number(t.current_latitude)) + Math.abs(snap.lng - Number(t.current_longitude))
+        : 0;
+
       const { error: updErr } = await supabase
         .from('active_tracking')
         .update({
           eta_minutes: etaMinutes,
           eta_updated_at: new Date().toISOString(),
           eta_provider: route.provider ?? 'mapbox',
+          ...(snap.snapped && movedM > 0.00001
+            ? { current_latitude: snap.lat, current_longitude: snap.lng }
+            : {}),
         })
         .eq('id', t.id);
 
@@ -579,6 +651,8 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
         duration_s: durationS,
         previous_eta_minutes: t.eta_minutes,
         provider: route.provider,
+        snapped: snap.snapped,
+        snap_confidence: snap.confidence,
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
