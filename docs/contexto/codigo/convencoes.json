@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)",
    "docs: auditoria do ledger de migrations x schema real (#210)",
    "fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)",
    "docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)",
-   "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)",
-   "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)"
+   "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

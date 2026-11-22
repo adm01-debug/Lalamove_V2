@@ -1089,13 +1089,13 @@
   {
    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 220,
+   "linhas": 257,
    "testa": [
     "supabase/functions/geo-gateway/polyline.ts",
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     "supabase/functions/geo-gateway/providers/types.ts"
    ],
-   "casos": 13
+   "casos": 16
   },
   {
    "arquivo": "supabase/functions/geo-gateway/polyline.test.ts",

@@ -374,7 +374,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 8,
-   "linhas": 1793,
+   "linhas": 1856,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -507,7 +507,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 2,
-   "linhas": 1223,
+   "linhas": 1226,
    "verify_jwt": true,
    "metodos": [
     "GET",

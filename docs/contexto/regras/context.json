@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
+  "sha": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:18 UTC",
-  "files_total": 980,
-  "code_files": 807,
-  "code_lines": 138808
+  "generated_at": "2026-11-22 02:25 UTC",
+  "files_total": 990,
+  "code_files": 809,
+  "code_lines": 138958
  },
  "version": "1.3.2",
- "facts_hash": "db5e83ba10ef0ac2",
+ "facts_hash": "68cae79a24e8e6fd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,9 +181,9 @@
   "languages": {
    ".ts": 272,
    ".tsx": 229,
-   ".sql": 186,
+   ".sql": 187,
    ".mjs": 107,
-   ".py": 8,
+   ".py": 9,
    ".js": 4,
    ".cjs": 1
   },
@@ -791,6 +791,13 @@
       "src": "supabase/migrations/20261122130100_geo_foundation.sql"
      },
      {
+      "name": "geocode_match_confidence",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123180000_geocode_match_confidence.sql"
+     },
+     {
       "name": "approach_eta_min",
       "type": "number | null",
       "fk": "",
@@ -1178,6 +1185,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20261122130100_geo_foundation.sql"
+     },
+     {
+      "name": "geocode_match_confidence",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261123180000_geocode_match_confidence.sql"
      },
      {
       "name": "address_components",
@@ -14300,6 +14314,7 @@
    "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
    "supabase/migrations/20261123160000_job_queue_processing_log.sql",
    "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
+   "supabase/migrations/20261123180000_geocode_match_confidence.sql",
    "src/integrations/supabase/types.ts"
   ],
   "rls": {
@@ -16658,7 +16673,9 @@
    "table:order_geo_events": "Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada).",
    "column:geo_settings.provider": "google | mapbox | auto | off. auto = provedor com franquia gratuita sobrando para o SKU; empate -> mapbox.",
    "table:cache_refresh_log": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
-   "table:job_queue_processing_log": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao)."
+   "table:job_queue_processing_log": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao).",
+   "column:lalamove_orders.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode (Mapbox match_code.confidence / Google location_type / LALAMOVE). Complementa geocode_precision (escala normalizada).",
+   "column:lalamove_stops.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode da parada."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -20762,7 +20779,7 @@
   {
    "module": "src/integrations",
    "files": 4,
-   "lines": 4950,
+   "lines": 4956,
    "tables": [],
    "exports": [
     "index.ts: lovable",
@@ -21144,9 +21161,22 @@
    ]
   },
   {
+   "module": "supabase/.temp",
+   "files": 1,
+   "lines": 12,
+   "tables": [],
+   "exports": [],
+   "docs": [],
+   "deps": [],
+   "imports_modules": [],
+   "file_list": [
+    "supabase/.temp/anc.py"
+   ]
+  },
+  {
    "module": "supabase/functions",
    "files": 57,
-   "lines": 14771,
+   "lines": 14881,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21290,8 +21320,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 182,
-   "lines": 12453,
+   "files": 183,
+   "lines": 12475,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -23590,7 +23620,7 @@
     "file": "supabase/functions/_shared/schemas.ts",
     "name": "geoGatewayV1",
     "kind": "discriminatedUnion",
-    "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e até 574 em Curitiba/Goiânia // (endereço completo com distrito e CEP), medido em produção em 2026-11-22. Com // max(200) o …",
+    "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`. mode: z.enum([\"searchbox\", \"geocoding\"]).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e …",
     "refines": [],
     "chain": []
    }
@@ -37769,6 +37799,18 @@
    {
     "file": "supabase/functions/geo-gateway/mapbox.test.ts",
     "name": "geocode-batch: endereço livre vai em "
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "etapa 22: mode=geocoding troca o Search Box pelo v6 forward com autocomplete=true"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "etapa 22: mode=geocoding sem session_token não falha (Search Box exige, v6 não)"
+   },
+   {
+    "file": "supabase/functions/geo-gateway/mapbox.test.ts",
+    "name": "etapa 22: place-details no modo geocoding resolve por address no v6"
    },
    {
     "file": "supabase/functions/geo-gateway/polyline.test.ts",
@@ -61957,7 +61999,7 @@
   },
   "src/integrations/supabase/types.ts": {
    "path": "src/integrations/supabase/types.ts",
-   "lines": 4805,
+   "lines": 4811,
    "exports": [
     "type Json",
     "type Database",
@@ -64947,6 +64989,10 @@
     "deve formatar dias horas minutos"
    ]
   },
+  "supabase/.temp/anc.py": {
+   "path": "supabase/.temp/anc.py",
+   "lines": 12
+  },
   "supabase/functions/_shared/contract.integration.test.ts": {
    "path": "supabase/functions/_shared/contract.integration.test.ts",
    "lines": 271,
@@ -65129,7 +65175,7 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 281,
+   "lines": 288,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
@@ -65207,7 +65253,7 @@
     {
      "name": "geoGatewayV1",
      "kind": "discriminatedUnion",
-     "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e até 574 em Curitiba/Goiânia // (endereço completo com distrito e CEP), medido em produção em 2026-11-22. Com // max(200) o …",
+     "body": "\"action\", [ z.object({ action: z.literal(\"provider-status\"), provider: geoProvider }), z.object({ action: z.literal(\"count-map-load\"), provider: z.enum([\"google\", \"mapbox\"]) }), z.object({ action: z.literal(\"autocomplete\"), input: z.string().min(1).max(256), session_token: z.string().min(8).max(64).optional(), bias: geoBias, country: z.string().length(2).optional(), language: z.string().min(2).max(5).optional(), limit: z.number().int().min(1).max(10).optional(), // Etapa 22: troca o Search Box pelo Geocoding v6 `autocomplete=true`. mode: z.enum([\"searchbox\", \"geocoding\"]).optional(), provider: geoProvider, }), z.object({ action: z.literal(\"place-details\"), // Os `mapbox_id` do Search Box/Geocoding v6 são base64url opacos e variam com o // tamanho do endereço: 70 chars em SP (rodovia/POI) e …",
      "refines": [],
      "chain": []
     }
@@ -66099,7 +66145,7 @@
   },
   "supabase/functions/geo-gateway/index.ts": {
    "path": "supabase/functions/geo-gateway/index.ts",
-   "lines": 329,
+   "lines": 336,
    "exports": [
     "const DEFAULT_SETTINGS"
    ],
@@ -66187,7 +66233,7 @@
   },
   "supabase/functions/geo-gateway/mapbox.test.ts": {
    "path": "supabase/functions/geo-gateway/mapbox.test.ts",
-   "lines": 220,
+   "lines": 257,
    "is_test": true,
    "doc": "deno test --allow-net --allow-env supabase/functions/geo-gateway/mapbox.test.ts",
    "tests": [
@@ -66203,7 +66249,10 @@
     "static: monta overlay com path simplificado + pinos, auto bounds, devolve PNG base64",
     "geocode-batch (etapa 25): POST com array, ordem preservada, item vazio vira not_found sem derrubar o lote",
     "geocode-batch: item sem address nem structured é recusado antes de chamar o provedor",
-    "geocode-batch: endereço livre vai em "
+    "geocode-batch: endereço livre vai em ",
+    "etapa 22: mode=geocoding troca o Search Box pelo v6 forward com autocomplete=true",
+    "etapa 22: mode=geocoding sem session_token não falha (Search Box exige, v6 não)",
+    "etapa 22: place-details no modo geocoding resolve por address no v6"
    ]
   },
   "supabase/functions/geo-gateway/metering.ts": {
@@ -66324,7 +66373,7 @@
   },
   "supabase/functions/geo-gateway/providers/google.ts": {
    "path": "supabase/functions/geo-gateway/providers/google.ts",
-   "lines": 352,
+   "lines": 356,
    "exports": [
     "interface GoogleOptions",
     "class GoogleProvider"
@@ -66380,7 +66429,7 @@
   },
   "supabase/functions/geo-gateway/providers/mapbox.ts": {
    "path": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "lines": 410,
+   "lines": 455,
    "exports": [
     "const MAPBOX_RATE_LIMITS",
     "interface MapboxOptions",
@@ -66408,7 +66457,7 @@
   },
   "supabase/functions/geo-gateway/providers/types.ts": {
    "path": "supabase/functions/geo-gateway/providers/types.ts",
-   "lines": 253,
+   "lines": 260,
    "exports": [
     "type ProviderName",
     "type ProviderSetting",
@@ -66719,7 +66768,7 @@
   },
   "supabase/functions/lalamove-api/coordinates.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.ts",
-   "lines": 85,
+   "lines": 88,
    "exports": [
     "function stopsCoords",
     "function persistOrderCoordinates"
@@ -68920,13 +68969,45 @@
   "supabase/migrations/20261123170000_indices_fk_faltantes.sql": {
    "path": "supabase/migrations/20261123170000_indices_fk_faltantes.sql",
    "lines": 17
+  },
+  "supabase/migrations/20261123180000_geocode_match_confidence.sql": {
+   "path": "supabase/migrations/20261123180000_geocode_match_confidence.sql",
+   "lines": 22
   }
  },
  "git": {
-  "sha": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
+  "sha": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1d97ccb",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)",
+    "files": [
+     "docs/MAPBOX.md",
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+     "src/integrations/supabase/types.ts",
+     "supabase/.temp/anc.py",
+     "supabase/.temp/cli-latest",
+     "supabase/.temp/gotrue-version",
+     "supabase/.temp/pooler-url",
+     "supabase/.temp/postgres-version",
+     "supabase/.temp/project-ref",
+     "supabase/.temp/rest-version",
+     "supabase/.temp/storage-migration",
+     "supabase/.temp/storage-version",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/geo-gateway/index.ts",
+     "supabase/functions/geo-gateway/mapbox.test.ts",
+     "supabase/functions/geo-gateway/providers/google.ts",
+     "supabase/functions/geo-gateway/providers/mapbox.ts",
+     "supabase/functions/geo-gateway/providers/types.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/migrations/20261123180000_geocode_match_confidence.sql"
+    ]
+   },
    {
     "sha": "933f4d6",
     "date": "2026-11-21",
@@ -69256,41 +69337,39 @@
     "files": [
      ".github/workflows/apply-migrations.yml"
     ]
-   },
-   {
-    "sha": "e616ccf",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)",
-    "files": [
-     "supabase/functions/job-worker/index.ts",
-     "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/MAPBOX.md",
-    5
+    6
    ],
    [
     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    4
+    5
    ],
    [
     "supabase/functions/geo-gateway/providers/mapbox.ts",
-    4
+    5
    ],
    [
-    "supabase/functions/job-worker/index.ts",
+    "supabase/functions/geo-gateway/index.ts",
     4
    ],
    [
     "supabase/functions/geo-gateway/providers/types.ts",
+    4
+   ],
+   [
+    "supabase/functions/_shared/schemas.ts",
     3
    ],
    [
-    "supabase/functions/geo-gateway/index.ts",
+    "supabase/functions/geo-gateway/mapbox.test.ts",
+    3
+   ],
+   [
+    "supabase/functions/geo-gateway/providers/google.ts",
     3
    ],
    [
@@ -69298,8 +69377,20 @@
     3
    ],
    [
+    "supabase/functions/job-worker/index.ts",
+    3
+   ],
+   [
     "docs/GEO_PROVIDERS.md",
     3
+   ],
+   [
+    "src/integrations/supabase/types.ts",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-api/coordinates.ts",
+    2
    ],
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -69307,10 +69398,6 @@
    ],
    [
     "supabase/functions/geo-gateway/google.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/google.ts",
     2
    ],
    [
@@ -69330,24 +69417,8 @@
     2
    ],
    [
-    "supabase/functions/geo-gateway/mapbox.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/schemas.ts",
-    2
-   ],
-   [
     "supabase/functions/geo-gateway/resolver.test.ts",
     2
-   ],
-   [
-    "supabase/functions/geo-gateway/resolver.ts",
-    2
-   ],
-   [
-    "docs/auditorias/AUDITORIA_LEDGER_MIGRATIONS_2026-11.md",
-    1
    ]
   ]
  }

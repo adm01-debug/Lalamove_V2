@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d` (2026-11-21T23:08:54-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1d97ccb9d8527694a12408aa8ced1570d30a5375` (2026-11-21T23:25:20-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (501), SQL (186), JavaScript (112), Markdown (100), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (501), SQL (187), JavaScript (112), Markdown (100), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 985 |
+| arquivos_total | 986 |
 | arquivos_codigo | 612 |
-| linhas_codigo | 119808 |
+| linhas_codigo | 119924 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 87 |
-| migrations | 182 |
+| migrations | 183 |
 | cron_jobs | 21 |
 | testes | 122 |
 | workflows | 5 |
@@ -272,26 +272,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7577 nós · 16118 arestas · 572 comunidades · grafo do commit `933f4d64`
-- comunidades maiores: cn (178), button.tsx (159), badge.tsx (158), DashboardRedesigned.tsx (113), ref_node_path (108), snapshot.py (102), contract.ts (89), client.ts (89), App.tsx (83), mapbox.ts (81), dependencies (80), package.json (76)
+- 7582 nós · 16127 arestas · 565 comunidades · grafo do commit `1d97ccb9`
+- comunidades maiores: cn (289), button.tsx (163), App.tsx (130), ref_https (118), client.ts (111), react (106), ref_node_path (101), snapshot.py (100), mapbox.ts (85), RateLimitDashboardPage.tsx (81), dependencies (80), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package-lock.json (31)
 - package.json (31)
 - supabase/config.toml (16)
-- docs/MAPBOX.md (11)
+- docs/MAPBOX.md (12)
 - .github/workflows/ci.yml (10)
 - docs/pendencias/_ordem.md (10)
+- supabase/functions/geo-gateway/index.ts (7)
+- supabase/functions/geo-gateway/providers/mapbox.ts (7)
+- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (6)
 - src/components/map/LiveMap.tsx (6)
 - src/components/orders/AddressAutocomplete.tsx (6)
 - src/hooks/useRegionResolver.ts (6)
-- supabase/functions/geo-gateway/index.ts (6)
-- supabase/functions/geo-gateway/providers/mapbox.ts (6)
-- docs/pendencias/README.md (5)
-- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (5)
-- src/components/orders/NewOrderDialog.tsx (5)
-- src/integrations/supabase/types.ts (5)
+- src/integrations/supabase/types.ts (6)
+- supabase/functions/_shared/schemas.ts (6)
+- supabase/functions/geo-gateway/providers/types.ts (6)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -350,7 +350,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/LALAMOVE_SCORECARD.md` — Scorecard de Conformidade Lalamove — 22 dimensões (39 linhas)
 - `docs/LEVANTAMENTO_COMPLETO_FUNCIONALIDADES.md` — 📋 Levantamento Completo e Exaustivo de Funcionalidades (928 linhas)
 - `docs/LOGGING_AND_HEALTH.md` — 📊 Logging & Health Checks (529 linhas)
-- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (230 linhas)
+- `docs/MAPBOX.md` — MAPBOX — Inventário e Referência (21/11/2026) (233 linhas)
 - `docs/MIGRATION_RECONCILIATION_2026-11.md` — Reconciliação ledger × schema × repo — 2026-11-21 (70 linhas)
 - `docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md` — Lalamove V2 — estado da sessão de 21/11/2026 (continuidade) (197 linhas)
 - `docs/QUEUE_SYSTEM.md` — 🔄 Sistema de Filas Assíncronas (612 linhas)
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `1d97ccb` feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)
 - 2026-11-21 `933f4d6` docs: auditoria do ledger de migrations x schema real (#210)
 - 2026-11-21 `e38c647` fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)
 - 2026-11-21 `9710802` docs(planos): auditoria exaustiva Mapbox 95/100 + corrige estado do plano Google (#208)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `2e299d5` docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)
 - 2026-11-21 `b7a8136` fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)
 - 2026-11-21 `d825edf` feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)
-- 2026-11-21 `a9a7781` chore: registra os resultados reais do drill da etapa 72 (#194)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

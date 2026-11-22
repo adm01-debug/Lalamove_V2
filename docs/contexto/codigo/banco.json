@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 182,
+ "migrations": 183,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -6010,6 +6010,13 @@
      "default": null,
      "ref": null
     },
+    "geocode_match_confidence": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "geocode_precision": {
      "tipo": "text",
      "nn": false,
@@ -6461,6 +6468,7 @@
     "driver_plate": "string | null",
     "duration_minutes": "number | null",
     "estimated_delivery": "string | null",
+    "geocode_match_confidence": "string | null",
     "geocode_precision": "string | null",
     "geocode_provider": "string | null",
     "id": "string",
@@ -7187,6 +7195,13 @@
      "default": "now()",
      "ref": null
     },
+    "geocode_match_confidence": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "geocode_precision": {
      "tipo": "text",
      "nn": false,
@@ -7340,6 +7355,7 @@
     "contact_name": "string | null",
     "contact_phone": "string | null",
     "created_at": "string",
+    "geocode_match_confidence": "string | null",
     "geocode_precision": "string | null",
     "id": "string",
     "latitude": "number | null",

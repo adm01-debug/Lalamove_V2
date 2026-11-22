@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
+  "commit": "1d97ccb9d8527694a12408aa8ced1570d30a5375",
   "branch": "main",
-  "data_commit": "2026-11-21T23:08:54-03:00",
+  "data_commit": "2026-11-21T23:25:20-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1d97ccb",
+    "data": "2026-11-21",
+    "assunto": "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)"
+   },
    {
     "sha": "933f4d6",
     "data": "2026-11-21",
@@ -126,18 +131,13 @@
     "sha": "d598435",
     "data": "2026-11-21",
     "assunto": "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)"
-   },
-   {
-    "sha": "5281908",
-    "data": "2026-11-21",
-    "assunto": "fix: fechar ciclo de notification_status dos eventos geo (#181)"
    }
   ],
-  "arquivos_mudados_7d": 212,
+  "arquivos_mudados_7d": 222,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 41
+    "mudancas": 46
    },
    {
     "pasta": "src/components/map",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
@@ -165,10 +165,14 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "pasta": "supabase/config.toml",
+    "mudancas": 7
+   },
+   {
+    "pasta": "supabase/functions/lalamove-api",
     "mudancas": 7
    },
    {
@@ -176,7 +180,7 @@
     "mudancas": 6
    },
    {
-    "pasta": "supabase/functions/lalamove-api",
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 6
    },
    {
@@ -189,10 +193,6 @@
    },
    {
     "pasta": "docs/pendencias/README.md",
-    "mudancas": 5
-   },
-   {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 5
    }
   ],
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/MAPBOX.md",
-    "mudancas": 11
+    "mudancas": 12
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -220,6 +220,18 @@
    {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "mudancas": 7
+   },
+   {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 6
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -234,11 +246,15 @@
     "mudancas": 6
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/index.ts",
+    "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 6
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 6
    },
    {
@@ -246,15 +262,7 @@
     "mudancas": 5
    },
    {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 5
-   },
-   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "src/integrations/supabase/types.ts",
     "mudancas": 5
    },
    {
@@ -262,11 +270,7 @@
     "mudancas": 5
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
+    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
     "mudancas": 5
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": ".env.example",
     "mudancas": 4
-   },
-   {
-    "arquivo": "AGENTS.md",
-    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 115
+    "commits": 116
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 985,
+  "arquivos_total": 986,
   "arquivos_codigo": 612,
-  "linhas_codigo": 119808,
+  "linhas_codigo": 119924,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -322,7 +322,7 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 87,
-  "migrations": 182,
+  "migrations": 183,
   "cron_jobs": 21,
   "testes": 122,
   "workflows": 5,
@@ -528,7 +528,7 @@
   },
   "src/integrations": {
    "arquivos": 4,
-   "linhas": 4950
+   "linhas": 4956
   },
   "src/lib": {
    "arquivos": 36,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 57,
-   "linhas": 14771
+   "linhas": 14881
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -578,7 +578,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 4805
+   "linhas": 4811
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",

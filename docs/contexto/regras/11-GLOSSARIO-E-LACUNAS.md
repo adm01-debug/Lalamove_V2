@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `933f4d64dd` · branch `main` · 2026-11-22 02:18 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1d97ccb9d8` · branch `main` · 2026-11-22 02:25 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -49,12 +49,12 @@
 | `job_queue` | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. | 17 colunas | migration |
 | `job_queue_processing_log` | Historico das rodadas do processador de fila (processados, sucesso, falha, duracao). | 8 colunas | migration |
 | `lalamove_order_replacements` | Registro de pedidos de reposicao/reescolha na Lalamove. | 7 colunas | migration |
-| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 71 colunas | migration |
+| `lalamove_orders` | Pedidos Lalamove com campos customizados e status em tempo real. | 72 colunas | migration |
 | `lalamove_priority_fee_history` | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. | 9 colunas | migration |
 | `lalamove_rate_limits` | Controle de rate limit das chamadas a API Lalamove. | 12 colunas | migration |
 | `lalamove_status_history` | Historico de mudancas de status de cada pedido Lalamove. | 9 colunas | migration |
 | `lalamove_stop_proofs` | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. | 14 colunas | migration |
-| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 19 colunas | migration |
+| `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 20 colunas | migration |
 | `lalamove_uapi_sessions` | Sessoes da Unified API da Lalamove (token e expiracao). | 13 colunas | migration |
 | `lalamove_webhook_config` | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). | 9 colunas | migration |
 | `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
