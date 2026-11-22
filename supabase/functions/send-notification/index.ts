@@ -24,6 +24,7 @@ import {
   DRIVER_RATE_LIMIT,
   RATE_LIMIT_EXEMPT_EVENTS,
   needsImmediateFallback,
+  DEDUP_SEVERITY_FREE_EVENTS,
 } from "../_shared/messaging/router.ts";
 
 import { buildClientMessageId, buildCorrelation } from "./message-id.ts";
@@ -145,8 +146,12 @@ serve(async (req) => {
     // ── Deduplication ──────────────────────────────────────────────────────
     // Escalations always bypass dedup (they are intentional re-sends).
     if (!isEscalation && extra.skip_dedup !== true) {
-      const dedupKey = extra.dedup_key ||
-        `${type}:${order_id ?? driver_id ?? "global"}:${severity}`;
+      // Etapa 94: evento de rastreio nao leva a severidade na chave — o ETA
+      // oscila entre WARNING e CRITICAL a cada atualizacao de posicao e cada
+      // oscilacao abria uma mensagem nova para o mesmo pedido.
+      const dedupKey = extra.dedup_key || (DEDUP_SEVERITY_FREE_EVENTS.has(type)
+        ? `${type}:${order_id ?? driver_id ?? "global"}`
+        : `${type}:${order_id ?? driver_id ?? "global"}:${severity}`);
       const { data: dedupRows, error: dedupError } = await supabase.rpc(
         "claim_alert_notification",
         { p_dedup_key: dedupKey, p_alert_type: type, p_window_seconds: 300 },

@@ -14,6 +14,7 @@ import {
   isRateLimited,
   localHour,
   needsImmediateFallback,
+  DEDUP_SEVERITY_FREE_EVENTS,
   resolveChannels,
   shouldFallback,
   suppressionReason,
@@ -132,4 +133,12 @@ Deno.test("etapa 92: opt-out vence o limite de taxa na razao registrada", () => 
   assertEquals(suppressionReason(true, true), "opted_out");
   assertEquals(suppressionReason(false, true), "rate_limited");
   assertEquals(suppressionReason(false, false), null);
+});
+Deno.test("etapa 94: evento de rastreio nao leva severidade na chave de dedup", () => {
+  // ETA oscila WARNING <-> CRITICAL a cada atualizacao de posicao; sem isso cada
+  // oscilacao abriria uma mensagem nova para o mesmo pedido.
+  for (const ev of ["ETA_DELAY", "DRIVER_APPROACHING_PICKUP", "ORDER_CANCELLED"]) {
+    assert(DEDUP_SEVERITY_FREE_EVENTS.has(ev), ev);
+  }
+  assertFalse(DEDUP_SEVERITY_FREE_EVENTS.has("INTEGRATION_FAILURE"));
 });

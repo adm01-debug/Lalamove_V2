@@ -515,8 +515,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** teste às 22 h: motorista recebe, fornecedor é adiado
 
 ### 94 — [L] Deduplicação
-- [ ] `claim_alert_notification` com chave `event:order:role` para os eventos M*
-- **Evidência:** ETA oscilando gera 1 mensagem por janela
+- [x] `claim_alert_notification` com chave `event:order:role` para os eventos M*
+- **Evidência:** `claim_alert_notification` já existia (`20260712221144_...sql:58`) e a chave era `evento:pedido:severidade`; passou a `evento:pedido` sem severidade para os eventos de rastreio (`DEDUP_SEVERITY_FREE_EVENTS` em `_shared/messaging/router.ts`, consumido em `send-notification/index.ts`) — ETA oscilando entre WARNING e CRITICAL a cada atualização de posição gerava uma mensagem por oscilação. `role` fica fora da chave porque cada despacho tem um único destinatário hoje; entra junto com os templates M1–M12 (etapas 101–112).
 
 ### 95 — [L] Limite por motorista
 - [x] No máximo 6 mensagens automáticas a cada 10 min por motorista (exceto M8)

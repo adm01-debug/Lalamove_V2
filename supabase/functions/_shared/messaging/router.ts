@@ -190,6 +190,27 @@ export function isRateLimited(input: RateLimitInput): boolean {
   return inWindow.length >= maxMessages;
 }
 
+/**
+ * Etapa 94: eventos de rastreio oscilam de severidade sozinhos (ETA entre
+ * WARNING e CRITICAL a cada atualizacao de posicao). Com a severidade na chave
+ * de dedup cada oscilacao vira mensagem nova — por isso para estes eventos a
+ * chave e `evento:pedido`, uma por janela.
+ */
+export const DEDUP_SEVERITY_FREE_EVENTS: ReadonlySet<string> = new Set([
+  "DRIVER_ASSIGNED",
+  "DRIVER_APPROACHING_PICKUP",
+  "DRIVER_ARRIVED_PICKUP",
+  "DRIVER_APPROACHING_DELIVERY",
+  "DRIVER_ARRIVED_DELIVERY",
+  "DRIVER_STOPPED",
+  "ROUTE_DEVIATION",
+  "ETA_DELAY",
+  "ORDER_EDITED",
+  "ORDER_CANCELLED",
+  "ORDER_COMPLETED",
+  "MISSING_POD",
+]);
+
 /** Etapa 92: opt-out vale para todos os canais do telefone. */
 export function suppressionReason(optedOut: boolean, rateLimited: boolean): string | null {
   if (optedOut) return "opted_out";
