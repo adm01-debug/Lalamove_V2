@@ -11,6 +11,33 @@ export const CACHE_TTL_S: Record<ProviderName, Partial<Record<GeoFunction, numbe
   google: { geocode: 30 * 86400, reverse: 30 * 86400, route: 600, static: 7 * 86400 },
 };
 
+/**
+ * TTL efetivo, com override por `geo_settings.config.retention`.
+ *
+ * Etapa 15/211 do plano Mapbox: o TTL não pode ser só constante de código — a política de
+ * retenção varia por contrato de provedor e precisa mudar sem deploy. Formato aceito em
+ * `geo_settings.config.retention`: `{ "<provider>": { "<function>": <segundos> } }`, ou
+ * `{ "<function>": <segundos> }` para todos os provedores.
+ *
+ * Invariante preservada: retenção é **restritiva**, nunca permissiva. Um `config` só consegue
+ * reduzir ou manter o TTL de código; para aumentar é preciso mudar o padrão aqui — assim um
+ * erro de configuração não faz o sistema reter coordenada temporária do Mapbox, o que viola
+ * os termos da Mapbox (o `geocode` temporário tem TTL 0 e permanece 0).
+ */
+export function resolveTtl(
+  provider: ProviderName,
+  fn: GeoFunction,
+  retention?: Record<string, unknown> | null,
+): number {
+  const base = CACHE_TTL_S[provider][fn] ?? 0;
+  const flat = retention?.[fn];
+  const perProvider = (retention?.[provider] ?? {}) as Record<string, unknown>;
+  const override = perProvider?.[fn] ?? flat;
+  if (typeof override !== "number" || !Number.isFinite(override) || override < 0) return base;
+  if (base === 0) return 0;
+  return Math.min(Math.floor(override), base);
+}
+
 export async function sha256(s: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");

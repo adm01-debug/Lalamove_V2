@@ -19,7 +19,7 @@ import type { GeoFunction, GeoProvider, ProviderName, ProviderResult } from "./p
 import { callWithFailover } from "./failover.ts";
 import { mergeSettings, ProviderResolver, ResolveError } from "./resolver.ts";
 import type { BudgetRow, GeoSettingRow, QuotaRow } from "./resolver.ts";
-import { CACHE_TTL_S, cacheGet, cacheKey, cachePut, meter, recordLatency, registerSession } from "./metering.ts";
+import { cacheGet, cacheKey, cachePut, meter, recordLatency, registerSession, resolveTtl } from "./metering.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -271,7 +271,9 @@ Deno.serve(async (req) => {
     const headers: Record<string, string> = { ...corsHeaders, "X-Geo-Provider": name, "X-Geo-Resolve": reason };
 
     // ── cache ──────────────────────────────────────────────────────────────
-    const ttl = CACHE_TTL_S[name][fn] ?? 0;
+    // Etapa 15/211: o TTL de código pode ser reduzido por `geo_settings.config.retention`,
+    // nunca aumentado (retenção é restritiva). Ver `resolveTtl` em metering.ts.
+    const ttl = resolveTtl(name, fn, resolver.setting(fn)?.config?.retention as Record<string, unknown> | undefined);
     const { action: _a, provider: _p, session_token: _s, ...cacheable } = body;
     const key = ttl > 0 ? await cacheKey(name, fn, cacheable) : null;
     if (key) {
