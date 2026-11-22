@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin } from 'lucide-react';
+import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin, Eye, EyeOff } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
 
 interface Transaction {
@@ -48,6 +48,8 @@ export default function LalamoveSettingsPage() {
   const [newToken, setNewToken] = useState('');
   const [v3Key, setV3Key] = useState('');
   const [v3Secret, setV3Secret] = useState('');
+  const [showNewToken, setShowNewToken] = useState(false);
+  const [showV3Secret, setShowV3Secret] = useState(false);
   const [walletPage, setWalletPage] = useState(1);
   const { data: walletHistory, isLoading: historyLoading } = useWalletHistory(walletPage);
   const { data: vehiclesData, isLoading: vehiclesLoading } = useVehicles();
@@ -244,15 +246,27 @@ export default function LalamoveSettingsPage() {
 
           <div className="border-t border-border pt-4 space-y-3">
             <p className="text-sm text-muted-foreground">
-              Ou cole um novo token (DevTools → web.lalamove.com → Network → get_user_info → token):
+              Ou cole um novo token (ação <code className="text-xs bg-muted px-1.5 py-0.5 rounded">set-token</code>, requer perfil admin):
             </p>
             <div className="flex gap-2">
-              <Input
-                placeholder="Cole o novo token aqui..."
-                value={newToken}
-                onChange={(e) => setNewToken(e.target.value)}
-                className="font-mono text-sm"
-              />
+              <div className="relative flex-1">
+                <Input
+                  placeholder="Cole o novo token aqui..."
+                  type={showNewToken ? 'text' : 'password'}
+                  autoComplete="off"
+                  value={newToken}
+                  onChange={(e) => setNewToken(e.target.value)}
+                  className="font-mono text-sm pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewToken(!showNewToken)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  aria-label={showNewToken ? 'Ocultar token' : 'Mostrar token'}
+                >
+                  {showNewToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
               <Button onClick={handleUpdateToken} disabled={updateToken.isPending || !newToken.trim()}>
                 {updateToken.isPending ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Atualizar'}
               </Button>
@@ -275,17 +289,29 @@ export default function LalamoveSettingsPage() {
         <CardContent className="space-y-3">
           <Input
             placeholder="API Key (pk_...)"
+            autoComplete="off"
             value={v3Key}
             onChange={(e) => setV3Key(e.target.value)}
             className="font-mono text-sm"
           />
-          <Input
-            placeholder="API Secret (sk_...)"
-            type="password"
-            value={v3Secret}
-            onChange={(e) => setV3Secret(e.target.value)}
-            className="font-mono text-sm"
-          />
+          <div className="relative">
+            <Input
+              placeholder="API Secret (sk_...)"
+              type={showV3Secret ? 'text' : 'password'}
+              autoComplete="off"
+              value={v3Secret}
+              onChange={(e) => setV3Secret(e.target.value)}
+              className="font-mono text-sm pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowV3Secret(!showV3Secret)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showV3Secret ? 'Ocultar API Secret' : 'Mostrar API Secret'}
+            >
+              {showV3Secret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           <Button onClick={handleUpdateV3Keys} disabled={updateV3.isPending || !v3Key.trim() || !v3Secret.trim()}>
             {updateV3.isPending ? (
               <>

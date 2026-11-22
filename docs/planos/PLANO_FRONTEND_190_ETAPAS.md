@@ -134,8 +134,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `openExternal` usado em todos os links externos; `rg -n "window.open\(" src` só retorna o helper (`html.ts:26`) + casos intencionalmente excluídos: `exportUtils.ts:119` (janela de impressão, precisa do ref `win`) e `useBitrix24.ts:110` (popup de auth com features). `UapiOrderHistoryPanel.tsx:26` e `OrderDetailModal.tsx:583,687` já passam `'noopener,noreferrer'` inline (seguros, fora da lista do item).
 
 ### 13 — [F] Campos de token como `password` e sem autofill
-- [ ] `src/pages/LalamoveSettingsPage.tsx:250-255` e `src/pages/UAPISettingsPage.tsx:143-148`: `type="password"`, `autoComplete="off"`, botão "mostrar"; remover a instrução de raspar token via DevTools (`UAPISettingsPage.tsx:138-139`) e substituir por link para o fluxo oficial (`set-token` exige admin em `lalamove-uapi/index.ts:64-82`).
-- **Evidência:** inputs com `type="password"`; texto de DevTools ausente.
+- [x] `src/pages/LalamoveSettingsPage.tsx:250-255` e `src/pages/UAPISettingsPage.tsx:143-148`: `type="password"`, `autoComplete="off"`, botão "mostrar"; remover a instrução de raspar token via DevTools (`UAPISettingsPage.tsx:138-139`) e substituir por link para o fluxo oficial (`set-token` exige admin em `lalamove-uapi/index.ts:64-82`).
+- **Evidência:** inputs com `type="password"`; texto de DevTools ausente. `LalamoveSettingsPage.tsx` (UAPI token, V3 Key e V3 Secret) e `UAPISettingsPage.tsx` (UAPI token) usam `type={show ? 'text' : 'password'}` + `autoComplete="off"` + botão `Eye/EyeOff`; instrução "DevTools → get_user_info → token" removida das duas páginas.
 
 ### 14 — [F] Telemetria admin sem fallback para chave pública e com confirmação
 - [ ] `src/pages/AdminTelemetriaPage.tsx:86, 104`: falhar com toast se não houver `session.access_token` (nunca `|| VITE_SUPABASE_PUBLISHABLE_KEY`); `handleCleanup` (`:96-110`) com `try/catch` e `AlertDialog` "isso apaga 7 dias de telemetria".
