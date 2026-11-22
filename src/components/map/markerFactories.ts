@@ -1,6 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { vehicleIcons, vehicleColors } from './types';
 import { statusColor as statusHsl, statusGlyph, STATUS_A11Y_LABEL, type StatusLevel } from '@/lib/statusPalette';
+import { escapeHtml } from '@/lib/html';
 import type { TrackingData } from './hooks/useTrackingData';
 
 export type MarkerDensity = 'comfortable' | 'compact';
@@ -21,16 +22,6 @@ const VEHICLE_LABELS: Record<string, string> = {
   VAN: 'Van',
   TRUCK: 'Caminhão',
 };
-
-/** Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). */
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 /**
  * Cria o elemento visual de um cluster agregado (usado em zoom muito distante).

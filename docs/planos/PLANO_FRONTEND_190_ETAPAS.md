@@ -82,9 +82,9 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - [x] Teste em `src/components/map/__tests__/markerFactories.test.ts`: nome `<img src=x onerror=alert(1)>` vira texto escapado.
 - **Evidência:** `rg -n "\\$\\{(driverName|customerName|pickupAddress|deliveryAddress|locationName)\\}" src/components/map/markerFactories.ts` só dentro de `escapeHtml(...)`; teste verde. PR #287 mergeada (`6e6c62b`), CI main 100% verde (12 jobs).
 
-### 2 — [F] Unificar `escapeHtml` em `src/lib/html.ts`
-- [ ] Mover o helper duplicado (`markerFactories.ts:26` e `GoogleMapsCanvas.tsx:53`) para `src/lib/html.ts` com teste de 5 entidades.
-- **Evidência:** `rg -n "function escapeHtml" src` retorna 1 ocorrência.
+### 2 — [F] Unificar `escapeHtml` em `src/lib/html.ts` ✅
+- [x] Mover o helper duplicado (`markerFactories.ts:26` e `GoogleMapsCanvas.tsx:53`) para `src/lib/html.ts` com teste de 5 entidades.
+- **Evidência:** `rg -n "function escapeHtml" src` retorna 1 ocorrência. Teste `src/lib/__tests__/html.test.ts` (4 testes) verde; `tsc -p tsconfig.app.json` limpo.
 
 ### 3 — [F] Fechar a janela de bypass de MFA
 - [ ] `src/components/auth/ProtectedRoute.tsx:33`: incluir `aalLoading` (query `mfa-aal`, `useMFA.ts:45-56`) na condição de loading; enquanto `aalLevel === undefined` renderizar o spinner, nunca a rota.
