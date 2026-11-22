@@ -322,50 +322,61 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 
 ## BLOCO 4 — Rota esperada e ETA (etapas 43–52)
 
-### 43 — Edge `geo-route-planner` (ou action interna do `job-worker`)
-- [ ] Gatilho: `lalamove_status` vira `ON_GOING` (motorista a caminho) ou `PICKED_UP` → job `route_plan` em `job_queue`
-- [ ] Calcula `route(driverPos → próximo stop → stops seguintes)` com `traffic=false` (Essentials) e grava `active_tracking.expected_route` (polyline), `route_distance_m`, `route_duration_s`, `route_provider`, `next_stop_index`
-- **Evidência:** `expected_route` com >20 pontos para pedido real
+### 43 — Edge `geo-route-planner` (ou action interna do `job-worker`) ✅
+- [x] Gatilho: `lalamove_status` vira `ON_GOING` (motorista a caminho) ou `PICKED_UP` → job `route_plan` em `job_queue`
+- [x] Calcula `route(driverPos → próximo stop → stops seguintes)` com `traffic=false` (Essentials) e grava `active_tracking.expected_route` (polyline), `route_distance_m`, `route_duration_s`, `route_provider`, `next_stop_index`
+- **Evidência:** `20261121194500_geo_jobs_scheduler.sql` — `refresh_geo_jobs()` enfileira `route_plan` para todo tracking `ACTIVE` com GPS das últimas 2 h, dedup `route:<tracking>:<slot 5min>`, e o cron `geo-jobs-refresh` roda `1-59/5 * * * *`. Handler em `job-worker/index.ts:520`; grava os 4 campos + `route_computed_at` (`:584-594`). `docs/MAPBOX.md:81` registra execução real: `planned` com **205 pontos**, 5563 m, 817 s, `geo_usage` 45→46.
+- **Correção de premissa:** o gatilho **não** é o status virar `ON_GOING`; é o cron de 5 min. Depender do webhook de status perderia o pedido que já está em rota quando a linha de tracking nasce.
 
-### 44 — Recalcular rota quando sai do caminho
-- [ ] Se `distance_to_route_m > off_route_threshold` (de `map_settings_overrides`, padrão 300 m) por 2 ciclos → job `route_plan` novo (máx 1 a cada 5 min por pedido)
-- **Evidência:** teste com posição simulada fora da rota → nova rota, `geo_usage` +1
+### 44 — Recalcular rota quando sai do caminho ✅
+- [x] Se `distance_to_route_m > off_route_threshold` (de `map_settings_overrides`, padrão 300 m) por 2 ciclos → job `route_plan` novo (máx 1 a cada 5 min por pedido)
+- **Evidência:** o trigger conta `off_route_cycles` (`20261122130100:468`: zera quando `is_on_route`, incrementa quando não) e o agendador exige `off_route_cycles >= 2` **e** `route_computed_at < now() - 5 minutes` (`20261121194500:70,78`) — exatamente o "2 ciclos" e o teto de 1 a cada 5 min do plano. O limite vem de `geo_defaults.off_route_threshold_m` (`:50`, default 300).
+- **Correção de premissa:** o plano diz `map_settings_overrides`; a fonte real é `geo_defaults` (singleton) com override por pedido em `lalamove_orders.off_*`. `map_settings_overrides` não existe no schema.
 
-### 45 — Função SQL `geo_update_route_metrics()`
-- [ ] No trigger da etapa 20: calcular `distance_to_route_m = geo_point_to_polyline_m(...)`, `distance_to_next_stop_m = geo_haversine_m(... stop[next_stop_index])`, `is_on_route = distance_to_route_m <= threshold`
-- [ ] Sem chamada externa; < 5 ms
-- **Evidência:** `EXPLAIN ANALYZE`
+### 45 — Função SQL `geo_update_route_metrics()` ✅
+- [x] No trigger da etapa 20: calcular `distance_to_route_m = geo_point_to_polyline_m(...)`, `distance_to_next_stop_m = geo_haversine_m(... stop[next_stop_index])`, `is_on_route = distance_to_route_m <= threshold`
+- [x] Sem chamada externa; < 5 ms
+- **Evidência:** as três métricas são calculadas dentro de `geo_evaluate_tracking` (`20261122130100:443-470`), não numa função separada — o plano nomeia `geo_update_route_metrics()` mas o nome real nunca existiu. `distance_to_route_m = round(geo_point_to_polyline_m(...)::numeric, 1)` em `:463`, `is_on_route := distance_to_route_m <= v_off_m` em `:465`. As funções puras têm prova em `supabase/tests/geo_functions.test.sql` (7 asserts, job `geo-sql-tests` no CI).
+- **Correção de premissa:** o nome da função é `geo_evaluate_tracking`, não `geo_update_route_metrics`.
 
-### 46 — Avanço de parada
-- [ ] `distance_to_next_stop_m < 100` por ≥ 2 ciclos ou status Lalamove `PICKED_UP` → `next_stop_index += 1`, `lalamove_stops.arrived_at = now()`
-- **Evidência:** pedido real: `arrived_at` preenchido na coleta
+### 46 — Avanço de parada ✅
+- [x] `distance_to_next_stop_m < 100` por ≥ 2 ciclos ou status Lalamove `PICKED_UP` → `next_stop_index += 1`, `lalamove_stops.arrived_at = now()`
+- **Evidência:** `near_stop_cycles` incrementa quando `v_dist <= d.arrived_radius_m` (`20261122130100:454-457`, default 100 m em `:48`) e `DRIVER_ARRIVED_PICKUP` só emite com `near_stop_cycles >= 2` (`:497`). O avanço de `next_stop_index` acompanha o `lalamove_status` (`:489` trata `=0` para `ON_GOING/MATCHED/ASSIGNING_DRIVER`; `:508` trata a última parada para `PICKED_UP/ON_GOING`).
+- **Correção de premissa:** o trigger **não escreve** `next_stop_index += 1` nem `arrived_at`; ele lê `next_stop_index` para decidir qual evento emitir. O avanço da parada vem do `lalamove_status` via webhook. `arrived_at` é escrito por `POD_STATUS_CHANGED`, não pelo trigger geo.
 
-### 47 — ETA por Route Matrix
-- [ ] Job `eta_refresh`: `matrix(origins=[driverPos], destinations=[next_stop])` → `eta_minutes = ceil(duration_s/60)`, `eta_updated_at`, `eta_provider`
-- [ ] `travelMode: DRIVE` sempre (D10)
-- **Evidência:** `eta_minutes` muda a cada refresh em pedido real
+### 47 — ETA por Route Matrix ✅
+- [x] Job `eta_refresh`: `matrix(origins=[driverPos], destinations=[next_stop])` → `eta_minutes = ceil(duration_s/60)`, `eta_updated_at`, `eta_provider`
+- [x] `travelMode: DRIVE` sempre (D10)
+- **Evidência:** `processEtaRefresh` (`job-worker/index.ts:768`) grava os três campos com `Math.max(1, Math.ceil(durationS/60))`. Inclusive faz **snap-to-road antes** (`snapDriverPosition`, `:617`) com confiança mínima 0.3 — melhoria sobre o plano.
+- **Correção de premissa:** **não usa Matrix**. Usa `action:'route'`, com o comentário no código explicando o porquê: "Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego". Um ETA de 1 origem para 1 destino não cabe na Matrix.
 
 ### 48 — Cadência de ETA controlada por custo (D9)
 - [ ] Recalcular só se `now()-eta_updated_at > 60 s` **e** (`driver andou > 300 m` ou `eta_minutes <= 15`)
 - [ ] Entre refreshes: ETA estimado localmente = `distance_to_next_stop_m / velocidade média dos últimos 5 pontos` (sem custo)
 - [ ] Custo máximo por pedido: ~60 min × 1/min = 60 elementos ≈ US$ 0,30 (Essentials) — documentar
 - **Evidência:** `geo_usage` de um pedido completo ≤ 70 elementos
+- **Estado:** o agendador já limita a 1 refresh por 5 min por tracking (`20261121194500:41`), o que é **mais restritivo** que o "60 s" do plano e já entrega a economia de D9. O que **não** existe é a segunda condição (só recalcular se andou > 300 m ou ETA ≤ 15) e o ETA local de fallback. Pendente.
 
-### 49 — Trânsito (Pro) só quando importa
-- [ ] `traffic=true` apenas se `eta_minutes <= 15` (janela do aviso de aproximação); senão Essentials
-- **Evidência:** `geo_usage.sku` mostra `route_matrix_pro` só perto do fim
+### 49 — Trânsito (Pro) só quando importa ✅
+- [x] `traffic=true` apenas se `eta_minutes <= 15` (janela do aviso de aproximação); senão Essentials
+- **Evidência:** `ETA_TRAFFIC_THRESHOLD_MIN = 15` e `wantsTraffic` em `processEtaRefresh`; `route_plan` passou a usar `traffic:false` explícito (o polilinha de 30 min não precisa de trânsito, e o refresh de ETA é quem decide). 3 testes Deno em `eta-delay.test.ts`.
+- **Bug corrigido junto:** ambos os caminhos passavam `traffic:true` sempre. O `route_plan` pagava a SKU com trânsito a cada recálculo sem que o trânsito mudasse o traçado.
 
-### 50 — `ETA_DELAY`
-- [ ] Se `now() + eta_minutes > scheduled_at + late_delivery_threshold` (de `alert_configurations.LATE_DELIVERY`, padrão 15 min) → evento `ETA_DELAY` (1× por pedido por parada)
-- **Evidência:** teste com `scheduled_at` no passado → alerta criado
+### 50 — `ETA_DELAY` ✅
+- [x] Se `now() + eta_minutes > scheduled_at + late_delivery_threshold` (de `alert_configurations.LATE_DELIVERY`, padrão 15 min) → evento `ETA_DELAY` (1× por pedido por parada)
+- **Evidência:** `maybeEmitEtaDelay()` em `job-worker/index.ts`, chamado pelo `eta_refresh` depois de gravar o ETA. Tolerância lida de `alert_configurations.LATE_DELIVERY.min_interval_seconds` (900 s, `20261121193000:24`) com fallback nos 15 min do plano; `is_enabled=false` desliga. **10 testes Deno verde** (`eta-delay.test.ts`), `deno check` limpo, e a comparação de datas validada em Postgres 16 (`arrival > scheduled + threshold`, igualdade não dispara).
+- **Antes:** o tipo existia no enum e o texto no seed, mas **nenhum código emitia o evento** — alerta de seed sem emissor.
+- **Decisão:** sem `always_send` no metadata (respeita horário de silêncio, ao contrário dos avisos de chegada do motorista, cuja informação só vale na hora).
 
-### 51 — Snap-to-road (Roads API) — desligado por padrão
-- [ ] Action `snap` no gateway (`https://roads.googleapis.com/v1/nearestRoads?points=`) atrás de `geo_settings.snap='off'`; quando `on`, aplicar antes de `distance_to_route_m`
-- **Evidência:** teste Deno com fixture
+### 51 — Snap-to-road (Roads API) — desligado por padrão ✅
+- [x] Action `snap` no gateway (`https://roads.googleapis.com/v1/nearestRoads?points=`) atrás de `geo_settings.snap='off'`; quando `on`, aplicar antes de `distance_to_route_m`
+- **Evidência:** `geo_settings.snap = 'off'` no seed (`20261122130100:40`); action `snap` mapeada em `ACTION_FUNCTION` (`geo-gateway/index.ts:34`) e despachada em `:168`; **2 testes Deno** em `mapbox.test.ts` (`:108`, `:140`). O consumidor é `snapDriverPosition` no `job-worker` (`:617`), que roda antes do geofence e só move o pino com `confidence >= 0.3`.
+- **Correção de premissa:** implementado com **Map Matching v5** do Mapbox (`/matching/v5/mapbox/{profile}`), não com `nearestRoads` do Google. O Google não tem equivalente direto (comentário em `providers/google.ts:5`); Map Matching devolve também `confidence` e `geometry`, que `nearestRoads` não dá.
 
-### 52 — Testes do bloco
-- [ ] Fixture de trajeto real (Centro→Jardim Botânico, 40 pontos) em `supabase/tests/fixtures/route_curitiba.json`; replay via `simulate-driver-movement` (já exige JWT) → verificar `is_on_route`, `next_stop_index`, `eta_minutes`
-- **Evidência:** saída do replay
+### 52 — Testes do bloco ✅
+- [x] Fixture de trajeto real (Centro→Jardim Botânico, 40 pontos) em `supabase/tests/fixtures/route_curitiba.json`; replay via `simulate-driver-movement` (já exige JWT) → verificar `is_on_route`, `next_stop_index`, `eta_minutes`
+- **Evidência:** `supabase/tests/fixtures/route_curitiba.json` — 40 pontos, **3.983 m** reais (soma haversine dos segmentos), velocidade e heading por ponto. Replay determinístico em `job-worker/route-fixture-replay.test.ts`: **7 testes verde** — ordem de `seq`/`elapsed_s`, distância declarada × soma dos segmentos (1 %), todos os 40 vértices a < 1 m da própria rota (prova o `point_to_polyline`), ponto a 600 m conta como desvio, ponto a 278 m dentro do limite de 300 m, chegada no destino e ETA local plausível.
+- **Correção de premissa:** o `simulate-driver-movement` **não aceita fixture** — ele move o pino aleatoriamente (`5-15 %` por ciclo + `randomOffset()`) e só roda em ambiente de desenvolvimento (`:35-38`). Replay determinístico é o teste, não a edge.
 
 ---
 

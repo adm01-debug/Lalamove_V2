@@ -1,0 +1,329 @@
+{
+  "_comment": "Etapa 52 do PLANO_GOOGLE_MAPS_100_ETAPAS: trajeto real Curitiba Centro->Jardim Botanico para replay deterministico do motor geo. Coordenadas publicas (pracas), nao de pedido real. Interpoladas linearmente em 40 pontos entre 3 vertices.",
+  "name": "route_curitiba",
+  "vehicle_type": "motorcycle",
+  "scheduled_at_offset_min": 45,
+  "total_distance_m": 3983,
+  "points": [
+    {
+      "seq": 0,
+      "lat": -25.4296,
+      "lng": -49.2716,
+      "speed_kmh": 0,
+      "heading": 0.0,
+      "elapsed_s": 0
+    },
+    {
+      "seq": 1,
+      "lat": -25.4302526,
+      "lng": -49.2706211,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 8
+    },
+    {
+      "seq": 2,
+      "lat": -25.4309053,
+      "lng": -49.2696421,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 16
+    },
+    {
+      "seq": 3,
+      "lat": -25.4315579,
+      "lng": -49.2686632,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 24
+    },
+    {
+      "seq": 4,
+      "lat": -25.4322105,
+      "lng": -49.2676842,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 32
+    },
+    {
+      "seq": 5,
+      "lat": -25.4328632,
+      "lng": -49.2667053,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 40
+    },
+    {
+      "seq": 6,
+      "lat": -25.4335158,
+      "lng": -49.2657263,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 48
+    },
+    {
+      "seq": 7,
+      "lat": -25.4341684,
+      "lng": -49.2647474,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 56
+    },
+    {
+      "seq": 8,
+      "lat": -25.4348211,
+      "lng": -49.2637684,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 64
+    },
+    {
+      "seq": 9,
+      "lat": -25.4354737,
+      "lng": -49.2627895,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 72
+    },
+    {
+      "seq": 10,
+      "lat": -25.4361263,
+      "lng": -49.2618105,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 80
+    },
+    {
+      "seq": 11,
+      "lat": -25.4367789,
+      "lng": -49.2608316,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 88
+    },
+    {
+      "seq": 12,
+      "lat": -25.4374316,
+      "lng": -49.2598526,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 96
+    },
+    {
+      "seq": 13,
+      "lat": -25.4380842,
+      "lng": -49.2588737,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 104
+    },
+    {
+      "seq": 14,
+      "lat": -25.4387368,
+      "lng": -49.2578947,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 112
+    },
+    {
+      "seq": 15,
+      "lat": -25.4393895,
+      "lng": -49.2569158,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 120
+    },
+    {
+      "seq": 16,
+      "lat": -25.4400421,
+      "lng": -49.2559368,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 128
+    },
+    {
+      "seq": 17,
+      "lat": -25.4406947,
+      "lng": -49.2549579,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 136
+    },
+    {
+      "seq": 18,
+      "lat": -25.4413474,
+      "lng": -49.2539789,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 144
+    },
+    {
+      "seq": 19,
+      "lat": -25.442,
+      "lng": -49.253,
+      "speed_kmh": 34,
+      "heading": 123.7,
+      "elapsed_s": 152
+    },
+    {
+      "seq": 20,
+      "lat": -25.442,
+      "lng": -49.253,
+      "speed_kmh": 8,
+      "heading": 0.0,
+      "elapsed_s": 160
+    },
+    {
+      "seq": 21,
+      "lat": -25.4423316,
+      "lng": -49.2522105,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 168
+    },
+    {
+      "seq": 22,
+      "lat": -25.4426632,
+      "lng": -49.2514211,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 176
+    },
+    {
+      "seq": 23,
+      "lat": -25.4429947,
+      "lng": -49.2506316,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 184
+    },
+    {
+      "seq": 24,
+      "lat": -25.4433263,
+      "lng": -49.2498421,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 192
+    },
+    {
+      "seq": 25,
+      "lat": -25.4436579,
+      "lng": -49.2490526,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 200
+    },
+    {
+      "seq": 26,
+      "lat": -25.4439895,
+      "lng": -49.2482632,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 208
+    },
+    {
+      "seq": 27,
+      "lat": -25.4443211,
+      "lng": -49.2474737,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 216
+    },
+    {
+      "seq": 28,
+      "lat": -25.4446526,
+      "lng": -49.2466842,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 224
+    },
+    {
+      "seq": 29,
+      "lat": -25.4449842,
+      "lng": -49.2458947,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 232
+    },
+    {
+      "seq": 30,
+      "lat": -25.4453158,
+      "lng": -49.2451053,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 240
+    },
+    {
+      "seq": 31,
+      "lat": -25.4456474,
+      "lng": -49.2443158,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 248
+    },
+    {
+      "seq": 32,
+      "lat": -25.4459789,
+      "lng": -49.2435263,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 256
+    },
+    {
+      "seq": 33,
+      "lat": -25.4463105,
+      "lng": -49.2427368,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 264
+    },
+    {
+      "seq": 34,
+      "lat": -25.4466421,
+      "lng": -49.2419474,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 272
+    },
+    {
+      "seq": 35,
+      "lat": -25.4469737,
+      "lng": -49.2411579,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 280
+    },
+    {
+      "seq": 36,
+      "lat": -25.4473053,
+      "lng": -49.2403684,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 288
+    },
+    {
+      "seq": 37,
+      "lat": -25.4476368,
+      "lng": -49.2395789,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 296
+    },
+    {
+      "seq": 38,
+      "lat": -25.4479684,
+      "lng": -49.2387895,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 304
+    },
+    {
+      "seq": 39,
+      "lat": -25.4483,
+      "lng": -49.238,
+      "speed_kmh": 24,
+      "heading": 112.8,
+      "elapsed_s": 312
+    }
+  ]
+}
