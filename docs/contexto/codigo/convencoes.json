@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)",
    "fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)",
    "fix: fechar ciclo de notification_status dos eventos geo (#181)",
    "infra: cron horario de refresh das materialized views de cache (#180)",
-   "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)",
-   "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)"
+   "fix(infra): remove bloco [functions.mapbox-proxy] do config.toml (#179)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

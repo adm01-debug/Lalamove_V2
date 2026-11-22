@@ -1,7 +1,7 @@
 # Graph Report - Lalamove_V2  (2026-11-22)
 
 ## Corpus Check
-- 927 files · ~679,807 words
+- 927 files · ~679,931 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d598435f`
+- Built from commit: `3e9f386a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

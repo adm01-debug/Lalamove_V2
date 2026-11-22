@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d598435fa1163218de7538a604ab2b379dec4fa4",
+  "sha": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 00:11 UTC",
+  "generated_at": "2026-11-22 00:24 UTC",
   "files_total": 964,
   "code_files": 792,
-  "code_lines": 136441
+  "code_lines": 136468
  },
  "version": "1.3.2",
- "facts_hash": "440cf30bea8a105d",
+ "facts_hash": "c3bf215a8c3befec",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21104,7 +21104,7 @@
   {
    "module": "supabase/functions",
    "files": 51,
-   "lines": 13543,
+   "lines": 13570,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -66976,7 +66976,7 @@
   },
   "supabase/functions/send-notification/index.ts": {
    "path": "supabase/functions/send-notification/index.ts",
-   "lines": 663,
+   "lines": 690,
    "tables": [
     {
      "table": "alert_configurations",
@@ -68048,10 +68048,19 @@
   }
  },
  "git": {
-  "sha": "d598435fa1163218de7538a604ab2b379dec4fa4",
+  "sha": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3e9f386",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)",
+    "files": [
+     "supabase/functions/send-notification/index.ts"
+    ]
+   },
    {
     "sha": "d598435",
     "date": "2026-11-21",
@@ -68396,17 +68405,6 @@
     "files": [
      "docs/PLANO_ESTADO_LALAMOVE_V2_2026-11-21.md"
     ]
-   },
-   {
-    "sha": "d2c18d1",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(pedidos): aplica restrição de cidade a special request ao trocar praça (#162)",
-    "files": [
-     "src/components/orders/NewOrderDialog.tsx",
-     "src/lib/__tests__/filterValidSpecialRequests.test.ts",
-     "src/lib/lalamoveCatalog.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -68437,6 +68435,10 @@
    [
     "supabase/functions/geo-gateway/resolver.ts",
     3
+   ],
+   [
+    "supabase/functions/send-notification/index.ts",
+    2
    ],
    [
     "src/hooks/useGeoSearch.test.tsx",
@@ -68484,10 +68486,6 @@
    ],
    [
     "supabase/functions/check-external-api/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/mapbox.ts",
     2
    ]
   ]

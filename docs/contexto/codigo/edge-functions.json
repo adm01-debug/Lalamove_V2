@@ -935,7 +935,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/send-notification/index.ts",
    "arquivos": 1,
-   "linhas": 663,
+   "linhas": 690,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

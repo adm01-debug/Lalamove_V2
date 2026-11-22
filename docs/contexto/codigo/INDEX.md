@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d598435fa1163218de7538a604ab2b379dec4fa4` (2026-11-21T21:10:50-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3e9f386a005026da0aea339cb9bd4a7aa076bd36` (2026-11-21T21:23:51-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 969 |
 | arquivos_codigo | 603 |
-| linhas_codigo | 117882 |
+| linhas_codigo | 117909 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7471 nós · 15881 arestas · 558 comunidades · grafo do commit `d598435f`
+- 7471 nós · 15881 arestas · 558 comunidades · grafo do commit `3e9f386a`
 - comunidades maiores: cn (200), button.tsx (147), client.ts (112), snapshot.py (102), ref_node_path (85), GeoBlockingPage.tsx (85), framer-motion (83), DashboardRedesigned.tsx (82), dependencies (80), react (79), package.json (76), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), uniq() (scripts/ai-context/gerar.mjs), internalLogger() (supabase/functions/job-worker/index.ts)
 
@@ -369,6 +369,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `3e9f386` fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)
 - 2026-11-21 `d598435` fix(geo): retrieve aceita mapbox_id real (<=1024) — autocomplete gravava 0 coordenadas (#182)
 - 2026-11-21 `5281908` fix: fechar ciclo de notification_status dos eventos geo (#181)
 - 2026-11-21 `3e6683c` infra: cron horario de refresh das materialized views de cache (#180)
@@ -383,7 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `00e2fb7` feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)
 - 2026-11-21 `ad0ba32` fix: gravar coordenadas reais do pedido a partir da cotacao Lalamove (#176)
 - 2026-11-21 `339acda` feat: failover de provedor em runtime no geo-gateway (#175)
-- 2026-11-21 `fe9865a` docs(mapbox): registra decisões (10, 50, 59, 79) e confirma trigger agnóstico (18) (#141)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

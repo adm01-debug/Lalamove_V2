@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d598435fa1163218de7538a604ab2b379dec4fa4",
+  "commit": "3e9f386a005026da0aea339cb9bd4a7aa076bd36",
   "branch": "main",
-  "data_commit": "2026-11-21T21:10:50-03:00",
+  "data_commit": "2026-11-21T21:23:51-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3e9f386",
+    "data": "2026-11-21",
+    "assunto": "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)"
+   },
    {
     "sha": "d598435",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "7c69b82",
     "data": "2026-11-21",
     "assunto": "fix(geo): region_cache passa a usar reverse geocode permanente (#139)"
-   },
-   {
-    "sha": "125ec8c",
-    "data": "2026-11-21",
-    "assunto": "fix(check-external-api): corrige nome do secret do health check Mapbox (#140)"
    }
   ],
   "arquivos_mudados_7d": 193,
@@ -290,18 +290,18 @@
     "mudancas": 4
    },
    {
-    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
+    "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 4
    },
    {
-    "arquivo": ".github/workflows/contexto.yml",
-    "mudancas": 3
+    "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
+    "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 92
+    "commits": 93
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 969,
   "arquivos_codigo": 603,
-  "linhas_codigo": 117882,
+  "linhas_codigo": 117909,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -556,7 +556,7 @@
   },
   "supabase/functions": {
    "arquivos": 51,
-   "linhas": 13543
+   "linhas": 13570
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -621,12 +621,12 @@
    "linhas": 734
   },
   {
-   "arquivo": "scripts/ci/lint-ratchet.mjs",
-   "linhas": 668
+   "arquivo": "supabase/functions/send-notification/index.ts",
+   "linhas": 690
   },
   {
-   "arquivo": "supabase/functions/send-notification/index.ts",
-   "linhas": 663
+   "arquivo": "scripts/ci/lint-ratchet.mjs",
+   "linhas": 668
   },
   {
    "arquivo": "src/components/map/LiveMap.tsx",
