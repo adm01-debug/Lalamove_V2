@@ -959,7 +959,7 @@
     "OrderTrackingMapProps"
    ],
    "export_default": null,
-   "linhas": 149,
+   "linhas": 157,
    "dominio": "components/map",
    "hooks_locais": [
     "useMapboxToken"

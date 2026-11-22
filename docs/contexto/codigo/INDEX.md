@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c194d15334790960c91078ac92e34e75ab066a2f` (2026-11-21T23:33:04-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c9424ebbc36c61996fec0713a3853b46feec1c95` (2026-11-21T23:42:28-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 988 |
 | arquivos_codigo | 613 |
-| linhas_codigo | 119996 |
+| linhas_codigo | 120004 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,7 +272,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7593 nós · 16142 arestas · 588 comunidades · grafo do commit `c194d153`
+- 7593 nós · 16142 arestas · 588 comunidades · grafo do commit `c9424ebb`
 - comunidades maiores: cn (204), lucide-react (121), snapshot.py (104), ref_node_path (101), RateLimitDashboardPage.tsx (92), framer-motion (90), contract.ts (89), badge.tsx (88), client.ts (87), mapbox.ts (84), dependencies (80), react (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
@@ -370,6 +370,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `c9424eb` fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)
 - 2026-11-21 `c194d15` feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)
 - 2026-11-21 `1eeeb96` docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)
 - 2026-11-21 `c7d9fce` chore: destrackear supabase/.temp e ignorar (#212)
@@ -384,7 +385,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
 - 2026-11-21 `0a1c0f1` docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)
 - 2026-11-21 `972a37c` feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)
-- 2026-11-21 `a0e2990` feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

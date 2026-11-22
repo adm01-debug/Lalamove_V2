@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)",
    "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)",
    "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)",
    "chore: destrackear supabase/.temp e ignorar (#212)",
-   "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)",
-   "docs: auditoria do ledger de migrations x schema real (#210)"
+   "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

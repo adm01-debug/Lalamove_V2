@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c194d15334790960c91078ac92e34e75ab066a2f",
+  "commit": "c9424ebbc36c61996fec0713a3853b46feec1c95",
   "branch": "main",
-  "data_commit": "2026-11-21T23:33:04-03:00",
+  "data_commit": "2026-11-21T23:42:28-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c9424eb",
+    "data": "2026-11-21",
+    "assunto": "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)"
+   },
    {
     "sha": "c194d15",
     "data": "2026-11-21",
@@ -126,11 +131,6 @@
     "sha": "ad06483",
     "data": "2026-11-21",
     "assunto": "feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)"
-   },
-   {
-    "sha": "d62d6d8",
-    "data": "2026-11-21",
-    "assunto": "feat: script de paridade de ETA Google x Mapbox (etapa 51) (#185)"
    }
   ],
   "arquivos_mudados_7d": 225,
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "pasta": "package-lock.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 119
+    "commits": 120
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 988,
   "arquivos_codigo": 613,
-  "linhas_codigo": 119996,
+  "linhas_codigo": 120004,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -516,7 +516,7 @@
   },
   "src/components": {
    "arquivos": 153,
-   "linhas": 27958
+   "linhas": 27966
   },
   "src/hooks": {
    "arquivos": 110,
