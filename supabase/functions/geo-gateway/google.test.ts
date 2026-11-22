@@ -66,7 +66,7 @@ Deno.test("placeDetails: componentes mapeados (número/rua/bairro sublocality_le
       addressComponents: [
         { longText: "100", shortText: "100", types: ["street_number"] },
         { longText: "Rua XV de Novembro", shortText: "R. XV de Novembro", types: ["route"] },
-        { longText: "Centro", shortText: "Centro", types: ["sublocality_level_1", "sublocality", "political"] },
+        { longText: "Centro", shortText: "Centro", types: ["sublocality_level_1", "political"] },
         { longText: "Curitiba", shortText: "Curitiba", types: ["administrative_area_level_2", "locality"] },
         { longText: "Paraná", shortText: "PR", types: ["administrative_area_level_1"] },
         { longText: "80020-310", shortText: "80020-310", types: ["postal_code"] },
