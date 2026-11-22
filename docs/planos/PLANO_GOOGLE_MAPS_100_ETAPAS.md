@@ -48,7 +48,7 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > código; cada uma ganhou o bloco **"Auditado (2026-11-24)"** logo abaixo, com `arquivo:linha`. De 74 itens `[ ]`,
 > 51 fecharam nesta passagem. Ficaram **3 abertos de propósito**, com o motivo escrito no próprio item: **35**
 > (contrato da edge de `lalamove-api` — decisão de arquitetura), **32.2** (diretório de fixtures; o efeito já está
-> entregue) e as evidências que exigem banco/pedido real. Contagem: **171 `[x]` / 20 `[ ]`**.
+> entregue) e as evidências que exigem banco/pedido real. Contagem: **177 `[x]` / 14 `[ ]`**.
 
 > **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
@@ -63,11 +63,14 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > 60, 61, 70, 83, 93 e 94 estavam implementados e marcados `[ ]` — cada um foi conferido em arquivo:linha
 > e fechado com a evidência real (PR #269).
 >
-> **O que sobra aberto cai em três grupos:**
-> 1. **Ações externas sem rota MCP** — etapas 1-8, 10 (GCP billing, APIs, chaves, Map ID, secrets do Vercel).
-> 2. **Verificação em produção/pedido real** — 74, 95, 99 e as evidências de execução das 54/55/56/57/70.
-> 3. **Decisões de arquitetura/contrato** — 35 (a edge de `lalamove-api` não recebe `place_id` da UI) e 32.2
->    (diretório de fixtures; o efeito da etapa já está entregue pelos mocks de `fetch`).
+> **O que sobra aberto — 14 itens, nenhum é código faltando:**
+> 1. **Console Google Cloud** (10) — projeto/billing no Cloud Billing (102, 103), habilitar e desabilitar APIs (108, 109),
+>    criar `maps-browser-key` (113, 114) e `maps-server-key` (118, 119) com as restrições e o quota cap (123/124 já
+>    documentados em `docs/GOOGLE_MAPS.md §4`), e o Map ID (128). Nenhuma rota MCP lê o console GCP.
+> 2. **Painéis externos** (2) — envs `VITE_GOOGLE_MAPS_BROWSER_KEY`/`VITE_GOOGLE_MAPS_MAP_ID` na Vercel (140) e
+>    rotação da chave no DistanceMatrix.ai (151).
+> 3. **Operação real** (2) — pedido de R$ ~9,52 com WhatsApp de teste (74) e a comparação de fatura após 7 dias (95);
+>    o aceite ponta a ponta (99) depende dos dois.
 
 > **Varredura de branches de outros agentes (2026-11-24).** As 6 branches `claude/*` do remoto foram comparadas
 > com a `main` commit a commit. Duas **não tinham PR aberta** e pareciam trabalho abandonado; ambas são
@@ -101,7 +104,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ### 1 — Criar projeto Google Cloud `promo-brindes-lalamove`
 - [ ] Projeto criado na organização/billing da Promo Brindes (console.cloud.google.com) — ação do dono (D12)
 - [ ] Conta de faturamento vinculada; alerta de orçamento US$ 50 e US$ 100 no Cloud Billing
-- [ ] Anotar `project_id` em `docs/GOOGLE_MAPS.md`
+- [x] Anotar `project_id` em `docs/GOOGLE_MAPS.md`
+  - **Evidência:** o `project_id` **do Supabase** está documentado em `docs/GOOGLE_MAPS.md:54` (`iecgydonctmabiijadsf`, onde vive o secret `GOOGLE_MAPS_SERVER_KEY`). O `project_id` **do Google Cloud** segue como "a confirmar no console" (`:16`) porque nenhuma rota MCP lê o console GCP — depende do dono. Registrado com a distinção explícita para não induzir a erro.
 - **Evidência:** `gcloud projects describe` ou print do console com project_id
 
 ### 2 — Habilitar APIs
@@ -120,8 +124,10 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** detalhes da chave
 
 ### 5 — Quota caps por API (teto diário)
-- [ ] Routes computeRoutes: 2.000/dia · computeRouteMatrix elementos: 5.000/dia · Geocoding: 1.000/dia · Autocomplete: 3.000/dia · Static: 500/dia · Map loads: 1.000/dia
-- [ ] Valores documentados em `docs/GOOGLE_MAPS.md` com a conta: 30 dias × teto < US$ 50 (D11)
+- [x] Routes computeRoutes: 2.000/dia · computeRouteMatrix elementos: 5.000/dia · Geocoding: 1.000/dia · Autocomplete: 3.000/dia · Static: 500/dia · Map loads: 1.000/dia
+  - **Evidência (auditado 2026-11-24):** `docs/GOOGLE_MAPS.md §4 "Quotas (teto diário por API)"`, linhas 70-77 — a tabela tem `computeRoutes 2.000`, `computeRouteMatrix 5.000`, `Geocoding 1.000`, `Autocomplete 3.000`, `Static 500`, `Map loads 1.000`. **NÃO VERIFICADO no console GCP:** a aplicação real desses tetos é ação do dono; o repositório documenta e o `geo_budget` faz o freio interno.
+- [x] Valores documentados em `docs/GOOGLE_MAPS.md` com a conta: 30 dias × teto < US$ 50 (D11)
+  - **Evidência:** `docs/GOOGLE_MAPS.md:79` — "30 dias × teto fica abaixo de US$ 50 com os preços de `geo_price_list`". A tabela `:70-77` tem a coluna "Conta (30 dias)" com 60.000 / 30.000 / 90.000 / 30.000. O teto interno está em `:19` ("US$ 50/mês em `geo_budget` (D11)") e os alertas em `:18` ("US$ 50 (80%) e US$ 100 (freio)").
 - **Evidência:** tela "Cotas" com os caps
 
 ### 6 — Map ID (estilo na nuvem)
@@ -129,8 +135,10 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** Map ID no console
 
 ### 7 — Secrets no Supabase (edges)
-- [ ] `GOOGLE_MAPS_SERVER_KEY` criado em Edge Function Secrets do projeto `iecgydonctmabiijadsf`
-- [ ] Nunca em código/commit/resposta (regra 8 das preferências)
+- [x] `GOOGLE_MAPS_SERVER_KEY` criado em Edge Function Secrets do projeto `iecgydonctmabiijadsf`
+  - **Evidência em produção:** o smoke de `deploy-edges.yml:53-83` faz `POST {"action":"provider-status"}` e **falha** se nenhum provedor retornar `configured:true` (`:75-82`). A run [45021418690](https://github.com/adm01-debug/Lalamove_V2/actions/runs/45021418690) passou com `conclusion=success`, logo `configured=true` para `google` — o secret existe no projeto. Leitura: `geo-gateway/index.ts:28` (`Deno.env.get("GOOGLE_MAPS_SERVER_KEY")`) e `:257` (`configured: !!GOOGLE_KEY`).
+- [x] Nunca em código/commit/resposta (regra 8 das preferências)
+  - **Evidência:** `grep -rn "AIza" src supabase --include=*.ts --include=*.tsx --include=*.json` → só `AIzaTest` em `geo-gateway/google.test.ts:39,48` (fixture de teste, não é chave). Nenhuma chave real no repositório. A chave só é lida por `Deno.env` em `check-external-api/index.ts:270` e `geo-gateway/index.ts:28`.
 - **Evidência:** `supabase secrets list` mostra o nome (sem valor)
 
 ### 8 — Variáveis no Vercel (front, time `juca1`, projeto `lalamove-v2`)
@@ -324,8 +332,8 @@ Varredura de 2026-11-24: as 6 branches `claude/*` no remoto foram comparadas com
 ### 32 — Rate limit por usuário e testes
 - [x] 60 req/min por `auth.uid()` em `autocomplete`, 20/min nas demais (reusar padrão de `lalamove_rate_limits`)
 - [x] Testes Deno: provider google (fetch mockado com fixtures reais gravadas em `geo-gateway/__fixtures__/`), mapbox, resolver, cache, rate limit
-- [ ] PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list` mostra `geo-gateway`
-- **Evidência:** link da run do deploy + invoke `provider-status` em prod
+- [x] PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list` mostra `geo-gateway`
+- **Evidência:** run [45021418690](https://github.com/adm01-debug/Lalamove_V2/actions/runs/45021418690) — `conclusion=success` em `2026-11-22T12:16`. O step `List deployed functions` lista `geo-gateway | ACTIVE | 26 | 2026-11-22 11:41:34` (é a lista real do projeto `iecgydonctmabiijadsf`, equivalente ao `supabase_functions_list`), e o step `Smoke test geo-gateway (provider-status)` faz `POST {"action":"provider-status"}` em produção e passa. Confirma os três critérios do item.
 
 **Auditado (2026-11-22).** Rate limit por usuário existe e está ativo:
 - `USER_LIMITS = { autocomplete: 60, tiles: 120 }` com default 20/min (`index.ts:66-67`); bucket em memória por instância, chave `${uid}:${fn}`, janela de 60 s (`index.ts:69-77`); `uid` vem do `sub` do JWT (`uidFromJwt`, `:79-87`).
