@@ -87,9 +87,9 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `rg -n "function escapeHtml" src` retorna 1 ocorrência. Teste `src/lib/__tests__/html.test.ts` (4 testes) verde; `tsc -p tsconfig.app.json` limpo.
 
 ### 3 — [F] Fechar a janela de bypass de MFA
-- [ ] `src/components/auth/ProtectedRoute.tsx:33`: incluir `aalLoading` (query `mfa-aal`, `useMFA.ts:45-56`) na condição de loading; enquanto `aalLevel === undefined` renderizar o spinner, nunca a rota.
-- [ ] Teste unitário do `ProtectedRoute` com `requireMFA` e `aalLevel` pendente → não renderiza filho.
-- **Evidência:** teste `src/components/auth/__tests__/ProtectedRoute.test.tsx` verde; e2e `mfa.e2e.ts` com sessão aal1 em `/webhooks` recebe redirect para `/mfa-verify`.
+- [x] `src/components/auth/ProtectedRoute.tsx:33`: incluir `loadingAAL` (query `mfa-aal`, `useMFA.ts:45-56`) na condição de loading; enquanto `aalLevel === undefined` renderizar o spinner, nunca a rota.
+- [x] Teste unitário do `ProtectedRoute` com `requireMFA` e `aalLevel` pendente → não renderiza filho.
+- **Evidência:** `src/components/auth/ProtectedRoute.test.tsx` (3 testes) verde: `loadingAAL=true` não renderiza o filho e mostra "Verificando autenticação..."; caso normal renderiza; `needsMFAVerification` redireciona para `/mfa-verify`.
 
 ### 4 — [F][D] Exigir inscrição de MFA para rotas `requireMFA` (D4)
 - [ ] Se `nextLevel !== 'aal2'` (sem fator), redirecionar para `/mfa-enroll` com `state.from`, em vez de liberar.
