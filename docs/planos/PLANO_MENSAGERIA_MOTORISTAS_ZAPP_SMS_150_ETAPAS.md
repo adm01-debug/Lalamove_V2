@@ -482,8 +482,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** testes atuais de `send-notification` verdes sem alteração
 
 ### 86 — [L] Canal Zapp completo
-- [ ] `zapp.ts` envia `client_message_id`, `correlation`, `expires_at`; lê `202 {message_id}`; mapeia os códigos da etapa 14
-- **Evidência:** teste de unidade com `fetchImpl` injetado
+- [x] `zapp.ts` envia `client_message_id`, `correlation`, `expires_at`; lê `202 {message_id}`; mapeia os códigos da etapa 14
+- **Evidência:** `_shared/channels/zapp.ts` (`SendOptions`, `correlationFields`, `parseZappAccepted`, `errorCodeFromResponse`, `ERROR_CODE_ACTIONS`); 11 testes novos em `_shared/channels/zapp.test.ts`; `send-notification/index.ts:248` passa o id estável
 
 ### 87 — [L] Secrets do Zapp 🔒
 - [ ] `ZAPP_API_URL`, `ZAPP_API_KEY` (chave `zik_` da etapa 22), `ZAPP_CALLBACK_SECRET` nas edges
@@ -494,8 +494,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** teste: `ORDER_CANCELLED/driver` → `[sms, whatsapp]`
 
 ### 89 — [L] Idempotência
-- [ ] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
-- **Evidência:** webhook repetido gera 1 linha no ledger
+- [x] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
+- **Evidência:** `send-notification/message-id.ts` (`buildClientMessageId` determinístico, telefone normalizado antes do hash); 9 testes em `message-id.test.ts`; índice único parcial `notification_messages_client_message_id_key` na migration `20261125120000`
 
 ### 90 — [L] Fallback temporizado
 - [ ] WhatsApp sem `delivered` em `sms_fallback_after_min` → `job_queue` tipo `message_fallback` envia SMS

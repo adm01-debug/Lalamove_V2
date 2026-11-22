@@ -16,10 +16,11 @@ import {
   nextAllowedTime,
   type QuietHours,
 } from "./quiet-hours.ts";
-import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
+import { zappChannelFromEnv, type SendOptions } from "../_shared/channels/zapp.ts";
 import { smsChannelFromEnv } from "../_shared/channels/sms.ts";
 import { dispatchSms } from "./sms-dispatch.ts";
 
+import { buildClientMessageId, buildCorrelation } from "./message-id.ts";
 import { normalizePhone } from "../_shared/phone.ts";
 import {
   normalizeRecipients,
@@ -241,11 +242,25 @@ serve(async (req) => {
       channel: string,
       recipient: string,
       effectiveMessage: string = message,
+      role: string = "recipient",
     ): Promise<{ success: boolean; error?: string }> => {
       let result: { success: boolean; error?: string };
       switch (channel) {
         case "whatsapp":
-          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id, mediaDataUrl);
+          // Etapa 86/89: id estável do evento + correlação, para o callback do
+          // Zapp (etapa 96) casar a linha do ledger e não duplicar mensagem.
+          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id, mediaDataUrl, {
+            clientMessageId: buildClientMessageId({
+              orderId: order_id,
+              event: type,
+              role,
+              phone: recipient,
+            }),
+            correlation: buildCorrelation(
+              { orderId: order_id, event: type, role, phone: recipient },
+              "whatsapp",
+            ),
+          });
           break;
         case "email":
           result = await sendEmail(recipient, severity, title, effectiveMessage, order_id, driver_id);
@@ -398,7 +413,10 @@ serve(async (req) => {
         continue;
       }
       orderRecipientsDelivered.add(recipientKey(channel, destination));
-      await dispatch(channel, destination, adHocMessage);
+      // `role` do destinatário entra na chave de idempotência (etapa 89): o
+      // mesmo telefone pode ser contato de coleta e de entrega no mesmo pedido
+      // e isso são duas mensagens distintas.
+      await dispatch(channel, destination, adHocMessage, r.role ?? "recipient");
     }
 
     const configs = configRows.filter((c) => c.is_enabled);
@@ -499,7 +517,10 @@ serve(async (req) => {
           return;
         }
         configRecipientsDelivered.add(key);
-        const r = await dispatch(channel, destination, effectiveMessage);
+        // Destino que vem de `alert_configurations`, não de um contato do
+        // pedido: o papel é a própria config, para não colidir na chave de
+        // idempotência com o mesmo telefone enviado como contato de coleta.
+        const r = await dispatch(channel, destination, effectiveMessage, "config");
         anySucceeded = anySucceeded || r.success;
       };
 
@@ -686,6 +707,7 @@ async function sendWhatsApp(
   orderId?: string,
   driverId?: string,
   mediaDataUrl?: string | null,
+  options?: SendOptions,
 ): Promise<{ success: boolean; error?: string }> {
   const evolutionUrl = Deno.env.get("EVOLUTION_API_URL");
   const evolutionKey = Deno.env.get("EVOLUTION_API_KEY");
@@ -705,12 +727,18 @@ async function sendWhatsApp(
     // Etapa 68: com imagem do trajeto o caption leva o texto e o mapa vai anexo;
     // sem `sendMedia` no canal, cai no texto puro.
     const zappResult = mediaDataUrl && zapp.sendMedia
-      ? await zapp.sendMedia(number, mediaDataUrl, text)
-      : await zapp.sendText(number, text);
+      ? await zapp.sendMedia(number, mediaDataUrl, text, options)
+      : await zapp.sendText(number, text, options);
     if (zappResult.success) {
-      logger.log(`[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}${mediaDataUrl ? ' (com imagem)' : ''}`);
+      logger.log(
+        `[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}${mediaDataUrl ? ' (com imagem)' : ''}` +
+        (zappResult.providerMessageId ? ` id=${zappResult.providerMessageId}` : ''),
+      );
     } else {
-      logger.error('[WhatsApp] Erro no Zapp:', zappResult.error);
+      logger.error(
+        `[WhatsApp] Erro no Zapp (${zappResult.errorCode ?? 'sem-codigo'}/${zappResult.action ?? 'sem-acao'}):`,
+        zappResult.error,
+      );
     }
     return zappResult;
   }
