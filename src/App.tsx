@@ -21,6 +21,7 @@ const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.A
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const MFAVerifyPage = lazy(() => import('./pages/MFAVerifyPage'));
+const MFAEnrollPage = lazy(() => import('./pages/MFAEnrollPage'));
 const UnauthorizedPage = lazy(() => import('./pages/UnauthorizedPage'));
 
 // Lazy loaded pages - Dashboard
@@ -141,6 +142,7 @@ const AppContent = () => {
                     <Route path="/forgot-password" element={<SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper>} />
                     <Route path="/reset-password" element={<SuspenseWrapper><ResetPasswordPage /></SuspenseWrapper>} />
                     <Route path="/mfa-verify" element={<SuspenseWrapper><MFAVerifyPage /></SuspenseWrapper>} />
+                    <Route path="/mfa-enroll" element={<SuspenseWrapper><MFAEnrollPage /></SuspenseWrapper>} />
                     <Route path="/unauthorized" element={<SuspenseWrapper><UnauthorizedPage /></SuspenseWrapper>} />
                     
                     {/* Protected routes with layout */}

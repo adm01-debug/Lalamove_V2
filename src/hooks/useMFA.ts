@@ -56,6 +56,10 @@ export function useMFA() {
   const needsMFAVerification = aalLevel?.currentLevel === 'aal1' && 
     aalLevel?.nextLevel === 'aal2';
 
+  // Precisa inscrever um fator MFA (sem fator verificado)?
+  const needsMFAEnrollment = !!user && aalLevel?.currentLevel === 'aal1' &&
+    aalLevel?.nextLevel !== 'aal2';
+
   // Iniciar enrollment de TOTP
   const enrollMutation = useMutation({
     mutationFn: async (friendlyName: string = 'Authenticator App') => {
@@ -194,6 +198,7 @@ export function useMFA() {
     factors: factors?.totp || [],
     isMFAEnabled,
     needsMFAVerification,
+    needsMFAEnrollment,
     aalLevel,
     qrCode,
     secret,
