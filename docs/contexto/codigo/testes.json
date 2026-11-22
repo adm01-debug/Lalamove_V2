@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 134,
+ "total": 135,
  "por_tipo": {
   "contrato (deno)": 2,
   "e2e (playwright)": 7,
-  "edge (deno)": 19,
+  "edge (deno)": 20,
   "guard (node --test)": 33,
   "unit (vitest)": 72
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 21
+   "arquivos": 22
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1209,6 +1209,15 @@
    "casos": 9
   },
   {
+   "arquivo": "supabase/functions/job-worker/route-fixture-replay.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 115,
+   "testa": [
+    "supabase/tests/fixtures/route_curitiba.json"
+   ],
+   "casos": 7
+  },
+  {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
    "tipo": "edge (deno)",
    "linhas": 42,
@@ -1379,7 +1388,8 @@
   "supabase/functions/lalamove-gateway/route.ts": 1,
   "supabase/functions/lalamove-webhook/normalize.ts": 1,
   "supabase/functions/lalamove-webhook/security.ts": 1,
-  "supabase/functions/send-notification/quiet-hours.ts": 1
+  "supabase/functions/send-notification/quiet-hours.ts": 1,
+  "supabase/tests/fixtures/route_curitiba.json": 1
  },
  "sem_teste": {
   "telas": [
