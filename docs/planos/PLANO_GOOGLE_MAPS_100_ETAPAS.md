@@ -613,9 +613,30 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - [x] Render em `_shared/template.ts` (sem dependência nova)
 - **Evidência:** `_shared/template.test.ts` — 9 testes Deno verdes; `send-notification` usa `renderTemplate` no lugar do texto cru do trigger.
 
-### 68 — Imagem estática no WhatsApp
-- [ ] Para `*_APPROACHING_*`: `geo-gateway static` (marker motorista + marker coleta + rota) → Evolution `sendMedia`; se orçamento bloquear, manda só texto
-- **Evidência:** mensagem recebida com imagem no número de teste
+### 68 — Imagem estática no WhatsApp ✅
+- [x] Para `*_APPROACHING_*`: `geo-gateway static` (marker motorista + marker coleta + rota) → Evolution `sendMedia`; se orçamento bloquear, manda só texto
+- **Evidência:** `static-map.test.ts` 12/12 + `zapp.test.ts` 12/12 (Deno)
+
+**Executado (2026-11-22).** `send-notification/static-map.ts` (novo) isola a decisão:
+`shouldAttachStaticMap` libera só `DRIVER_APPROACHING_PICKUP`/`DRIVER_APPROACHING_DELIVERY`;
+`buildStaticMapRequestFromRows` lê as coordenadas do banco (`lalamove_orders` para coleta/entrega,
+`active_tracking.current_*`/`expected_route` para motorista e rota — o trigger grava endereços e contatos
+em `metadata`, não lat/lng); `fetchStaticMap` chama `geo-gateway` action `static` e **nunca lança**:
+`GEO_BUDGET_EXCEEDED`/`GEO_UNAVAILABLE`/provedor desligado caem para texto (`isNonRetryableGeoError`,
+mesmo critério de `geo-gateway/budget-error.test.ts:51`), erro real do provedor loga e também cai para texto.
+`GEO_STATIC_MAP_IN_WHATSAPP=false` desliga a imagem sem deploy.
+
+Envio: `sendWhatsApp` ganhou o parâmetro `mediaDataUrl` e usa `sendMedia` — Zapp
+(`_shared/channels/zapp.ts`, novo método opcional na interface `TextChannel`, `POST /messages/send-media`
+com mimetype/base64/caption) e Evolution (`POST /message/sendMedia/<instance>`, mesmos campos). A imagem é
+gerada **uma vez por alerta**, não por destinatário, dentro do handler antes do `dispatch`.
+
+**Verificado:** `deno test supabase/functions/send-notification/static-map.test.ts` → 12/12;
+`deno test supabase/functions/_shared/channels/zapp.test.ts` → 12/12; `deno check` em
+`send-notification/index.ts` → só os 4 erros de `order_id` pré-existentes no `main` (nenhum novo).
+
+**Pendente de validação real:** "mensagem recebida com imagem no número de teste" exige pedido real com
+motorista a caminho e secrets `EVOLUTION_*`/`ZAPP_*` — não verificável sem tráfego de produção.
 
 ### 69 — Canal Zapp Web (D2, preparado)
 - [x] Adaptador `channels/zapp.ts` com interface igual ao Evolution; ativado por `ZAPP_API_URL/ZAPP_API_KEY` quando existirem; sem secret → canal ausente
