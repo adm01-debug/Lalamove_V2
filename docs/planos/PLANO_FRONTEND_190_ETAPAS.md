@@ -130,8 +130,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `postMessage('bitrix24_connected','*')` de outra origem no console não dispara o sucesso.
 
 ### 12 — [F] `window.open` sempre com `noopener,noreferrer`
-- [ ] `MapHUD.tsx:61, 67, 351`, `BatchActionsToolbar.tsx:44, 49`, `MapProviderSelector.tsx:99-135`, `exportUtils.ts:119`, `markerFactories.ts:325`: usar helper `openExternal(url)` em `src/lib/html.ts`.
-- **Evidência:** `rg -n "window.open\\(" src | rg -v "openExternal"` retorna 0.
+- [x] `MapHUD.tsx:61, 67, 351`, `BatchActionsToolbar.tsx:44, 49`, `MapProviderSelector.tsx:99-135`, `exportUtils.ts:119`, `markerFactories.ts:325`: usar helper `openExternal(url)` em `src/lib/html.ts`.
+- **Evidência:** `openExternal` usado em todos os links externos; `rg -n "window.open\(" src` só retorna o helper (`html.ts:26`) + casos intencionalmente excluídos: `exportUtils.ts:119` (janela de impressão, precisa do ref `win`) e `useBitrix24.ts:110` (popup de auth com features). `UapiOrderHistoryPanel.tsx:26` e `OrderDetailModal.tsx:583,687` já passam `'noopener,noreferrer'` inline (seguros, fora da lista do item).
 
 ### 13 — [F] Campos de token como `password` e sem autofill
 - [ ] `src/pages/LalamoveSettingsPage.tsx:250-255` e `src/pages/UAPISettingsPage.tsx:143-148`: `type="password"`, `autoComplete="off"`, botão "mostrar"; remover a instrução de raspar token via DevTools (`UAPISettingsPage.tsx:138-139`) e substituir por link para o fluxo oficial (`set-token` exige admin em `lalamove-uapi/index.ts:64-82`).

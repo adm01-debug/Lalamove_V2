@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useMapSettings, type MapProvider } from '@/hooks/useMapSettings';
 import { useEffectiveMapProvider } from '@/hooks/useMapProviderPolicy';
+import { openExternal } from '@/lib/html';
 
 interface ProviderOption {
   id: MapProvider;
@@ -96,11 +97,7 @@ export function MapProviderSelector({ externalCoords, className = '' }: MapProvi
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() =>
-                window.open(
-                  `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
-                  '_blank',
-                  'noopener,noreferrer'
-                )
+                openExternal(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`)
               }
             >
               <MapIcon className="w-4 h-4 mr-2" />
@@ -108,11 +105,7 @@ export function MapProviderSelector({ externalCoords, className = '' }: MapProvi
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                window.open(
-                  `https://earth.google.com/web/@${lat},${lng},1000a,1500d,35y,0h,60t,0r`,
-                  '_blank',
-                  'noopener,noreferrer'
-                )
+                openExternal(`https://earth.google.com/web/@${lat},${lng},1000a,1500d,35y,0h,60t,0r`)
               }
             >
               <Globe className="w-4 h-4 mr-2" />
@@ -120,11 +113,7 @@ export function MapProviderSelector({ externalCoords, className = '' }: MapProvi
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                window.open(
-                  `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`,
-                  '_blank',
-                  'noopener,noreferrer'
-                )
+                openExternal(`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`)
               }
             >
               <ExternalLink className="w-4 h-4 mr-2" />
@@ -132,11 +121,7 @@ export function MapProviderSelector({ externalCoords, className = '' }: MapProvi
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
-                window.open(
-                  `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`,
-                  '_blank',
-                  'noopener,noreferrer'
-                )
+                openExternal(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`)
               }
             >
               <MapIcon className="w-4 h-4 mr-2" />

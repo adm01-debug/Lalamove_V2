@@ -13,3 +13,15 @@ export function escapeHtml(value: string): string {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+/**
+ * Abre uma URL externa em nova aba com `noopener,noreferrer`.
+ *
+ * `noopener` impede que a nova janela obtenha referência a `window.opener`,
+ * evitando que um site externo manipule a origem; `noreferrer` também oculta o
+ * `Referer`. Sempre usar para links externos, nunca para janelas de mesmo
+ * domínio que precisam da referência retornada (ex.: impressão).
+ */
+export function openExternal(url: string): void {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}

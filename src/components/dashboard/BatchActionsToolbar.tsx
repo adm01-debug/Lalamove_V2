@@ -10,6 +10,7 @@ import {
   X
 } from 'lucide-react';
 import { Order } from '@/types';
+import { openExternal } from '@/lib/html';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -41,12 +42,12 @@ export function BatchActionsToolbar({ selectedOrders, onClear, onStatusUpdate }:
       const link = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
       
       if (index === 0) {
-        window.open(link, '_blank');
+        openExternal(link);
       } else {
         // Delay others or use a different approach
         setTimeout(() => {
           if (confirm(`Deseja enviar mensagem para o próximo pedido (${order.internalOrderId || order.lalamoveId})?`)) {
-            window.open(link, '_blank');
+            openExternal(link);
           }
         }, 500 * index);
       }

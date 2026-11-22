@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { vehicleIcons, vehicleColors } from './types';
 import { statusColor as statusHsl, statusGlyph, STATUS_A11Y_LABEL, type StatusLevel } from '@/lib/statusPalette';
-import { escapeHtml } from '@/lib/html';
+import { escapeHtml, openExternal } from '@/lib/html';
 import type { TrackingData } from './hooks/useTrackingData';
 
 export type MarkerDensity = 'comfortable' | 'compact';
@@ -334,7 +334,7 @@ export function createDriverPopup(tracking: TrackingData): mapboxgl.Popup {
   const mapsBtn = root.querySelector<HTMLButtonElement>('[data-action="open-google-maps"]');
   mapsBtn?.addEventListener('click', () => {
     const { lat, lng } = mapsBtn.dataset;
-    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+    openExternal(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
   });
 
   return popup;
