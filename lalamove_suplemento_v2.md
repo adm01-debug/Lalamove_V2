@@ -463,7 +463,7 @@ A geocodificação de endereços usa DistanceMatrix.ai (não Google Maps diretam
 ```
 GET https://api.distancematrix.ai/maps/api/geocode/json
     ?address={ENDERECO_ENCODED}
-    &key=k2sJYgCtHGjGpE460v53qqxFpugpJnnfmotnxvSAH45tK56natXvVbMzVthT1pnz
+    &key=<DISTANCEMATRIX_API_KEY>
 ```
 
 Resposta: `results[0].geometry.location.{lat, lng}`

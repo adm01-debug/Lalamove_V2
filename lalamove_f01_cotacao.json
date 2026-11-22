@@ -59,7 +59,7 @@
       ],
       "parameters": {
         "method": "GET",
-        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_coleta)}}&key=k2sJYgCtHGjGpE460v53qqxFpugpJnnfmotnxvSAH45tK56natXvVbMzVthT1pnz",
+        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_coleta)}}&key={{ $env.DISTANCEMATRIX_API_KEY }}",
         "options": {}
       }
     },
@@ -74,7 +74,7 @@
       ],
       "parameters": {
         "method": "GET",
-        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_entrega)}}&key=k2sJYgCtHGjGpE460v53qqxFpugpJnnfmotnxvSAH45tK56natXvVbMzVthT1pnz",
+        "url": "=https://api.distancematrix.ai/maps/api/geocode/json?address={{encodeURIComponent($json.end_entrega)}}&key={{ $env.DISTANCEMATRIX_API_KEY }}",
         "options": {}
       }
     },

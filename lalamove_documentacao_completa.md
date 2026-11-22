@@ -1563,7 +1563,7 @@ def uapi_call(method, args=None, token="", city_id="21001"):
 Bitrix24:    https://promobrindes.bitrix24.com.br
 n8n webhook: https://webhook.atomicabr.com.br/webhook/cda41b4a-12c4-4d60-9e1e-5376ad1a1375
 Geocoding:   https://api.distancematrix.ai/maps/api/geocode/json
-             key: k2sJYgCtHGjGpE460v53qqxFpugpJnnfmotnxvSAH45tK56natXvVbMzVthT1pnz
+             key: <DISTANCEMATRIX_API_KEY>
 ```
 
 ### 14.3 Fluxos de Automação (Planejados)

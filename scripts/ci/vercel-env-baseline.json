@@ -1,7 +1,7 @@
 {
   "_meta": {
     "nota": "Baseline de POLITICA das variaveis de ambiente do projeto Vercel lalamove-v2 (team juca1, prj_RNi6mWRC2uXguu4HqiWhliR9Xhzv). Nao e um snapshot do que existe hoje na Vercel: as listas sao derivadas do REPOSITORIO (quem le o que) e da regra do AGENTS.md 'nunca segredo de servidor no Vercel; VITE_* e publico'.",
-    "fonte_required_optional": "grep de import.meta.env.VITE_* em src/ (medido 2026-11-08): VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY (src/integrations/supabase/client.ts, useErrorLogs.ts, errorMonitoring.ts, AdminTelemetriaPage.tsx), VITE_APP_VERSION e VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*.",
+    "fonte_required_optional": "grep de import.meta.env.VITE_* em src/ (medido 2026-11-08): VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY (src/integrations/supabase/client.ts, useErrorLogs.ts, errorMonitoring.ts, AdminTelemetriaPage.tsx), VITE_APP_VERSION, VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_* e VITE_GOOGLE_MAPS_* (chave propria, etapas 3/8 do plano Google).",
     "fonte_forbidden": "Deno.env.get() em supabase/functions/ (medido 2026-11-08): segredo de Edge Function nao tem o que fazer no Vercel, e um nome VITE_* com segredo de servidor vai para o bundle do navegador.",
     "nao_verificado": "A lista REAL de vars do projeto na Vercel nao foi lida nesta sessao: o MCP da Vercel lista o projeto mas responde 404 em GET /v10/projects/<id>/env e /v9/projects/<id> (escopo da conexao). Comparar com a realidade: vercel --scope juca1 env ls lalamove-v2 --> JSON de nomes --> node scripts/ci/vercel-env-baseline.mjs --target=production",
     "como_usar": "echo '[\"VITE_SUPABASE_URL\",...]' | node scripts/ci/vercel-env-baseline.mjs --target=production"
@@ -14,7 +14,9 @@
     "optional": [
       "VITE_APP_VERSION",
       "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
-      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID",
+      "VITE_GOOGLE_MAPS_BROWSER_KEY",
+      "VITE_GOOGLE_MAPS_MAP_ID"
     ],
     "forbidden": [
       "VITE_SUPABASE_SERVICE_ROLE_KEY",
@@ -56,7 +58,9 @@
     "optional": [
       "VITE_APP_VERSION",
       "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
-      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID",
+      "VITE_GOOGLE_MAPS_BROWSER_KEY",
+      "VITE_GOOGLE_MAPS_MAP_ID"
     ],
     "forbidden": [
       "VITE_SUPABASE_SERVICE_ROLE_KEY",
@@ -96,7 +100,9 @@
       "VITE_SUPABASE_PUBLISHABLE_KEY",
       "VITE_APP_VERSION",
       "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY",
-      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID"
+      "VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID",
+      "VITE_GOOGLE_MAPS_BROWSER_KEY",
+      "VITE_GOOGLE_MAPS_MAP_ID"
     ],
     "forbidden_nonvite": [
       "SUPABASE_SERVICE_ROLE_KEY",
