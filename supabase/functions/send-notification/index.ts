@@ -248,11 +248,33 @@ serve(async (req) => {
     const metadataRecipients = isServiceRoleCaller(req) && Array.isArray(metadata?.recipients)
       ? metadata.recipients
       : [];
+    // Opt-out (etapa 60 do plano Google): notification_optouts guarda o telefone
+    // de quem pediu para parar de receber. `isPhoneOptedOut` respeita o prefixo
+    // de nono digito e DDI, entao a comparacao nao depende da formatacao.
+    const isPhoneOptedOut = async (to: string): Promise<boolean> => {
+      try {
+        const { data, error } = await supabase.rpc('is_phone_opted_out', { p_phone: to });
+        if (error) {
+          logger.error('[Notification] Opt-out check failed, proceeding:', error);
+          return false;
+        }
+        return data === true;
+      } catch (e) {
+        logger.error('[Notification] Opt-out check threw, proceeding:', e);
+        return false;
+      }
+    };
+
     for (const r of metadataRecipients) {
       if (r && typeof r === 'object' && typeof (r as Record<string, unknown>).channel === 'string' && typeof (r as Record<string, unknown>).to === 'string') {
         const channel = (r as { channel: string }).channel;
         if (isChannelDisabled(channel)) {
           logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
+          continue;
+        }
+        if ((channel === 'whatsapp' || channel === 'sms') && await isPhoneOptedOut((r as { to: string }).to)) {
+          logger.log(`[Notification] Ad-hoc recipient opted out: ${channel}`);
+          results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
           continue;
         }
         await dispatch(channel, (r as { to: string }).to);

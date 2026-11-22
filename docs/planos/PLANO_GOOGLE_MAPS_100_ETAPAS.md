@@ -396,20 +396,22 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** teste com 3 cenários
 
 ### 60 — Opt-out e dedup
-- [ ] Tabela `notification_optouts(phone PK, reason, created_at)`; checar antes de enviar
-- [ ] `alert_dedup` já existe (`20260712221144`): chave `order_id+event_type+recipient`
+- [x] Tabela `notification_optouts(phone PK, reason, created_at)`; checar antes de enviar
+  - **FEITO:** `20261123200000_optout_and_tracking_end.sql` cria a tabela + `normalize_br_phone()` + `is_phone_opted_out()`; `send-notification/index.ts:255-270` consulta antes de cada destinatário ad-hoc de whatsapp/sms e registra `opted_out` em `alerts_sent`. Validado em Postgres 16: `+55 41 99999-8888`, `41 99999-8888` e `4199998888` bloqueiam; outro número, vazio e `****` não.
+- [x] `alert_dedup` já existe (`20260712221144`): chave `order_id+event_type+recipient` — dedup vive em `claim_alert_notification` (janela 300 s), chamada em `send-notification/index.ts:124`
 - **Evidência:** 2º envio bloqueado
 
 ### 61 — Encerramento do tracking
-- [ ] Em `COMPLETED/CANCELED/REJECTED/EXPIRED`: `tracking_status='ended'`; eventos pendentes `deferred` são cancelados
+- [x] Em `COMPLETED/CANCELED/REJECTED/EXPIRED`: `tracking_status='ended'`; eventos pendentes `deferred` são cancelados
+  - **FEITO:** `end_order_tracking(uuid, text)` + trigger `trg_close_tracking_on_order_end` na mesma migration; `lalamove-webhook/index.ts:325-333` chama a RPC nos 5 estados finais. Validado: `ON_GOING`→`COMPLETED` deixou `tracking_status='ended'` com `tracking_ended_at`, converteu `deferred`→`skipped` e preservou `sent`; segunda chamada retorna 0 (idempotente).
 - **Evidência:** pedido cancelado não gera mensagem
 
 ### 62 — Painel de eventos no pedido
-- [ ] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar)
+- [x] `OrderDetailModal.tsx`: aba "Eventos" lendo `order_geo_events` (ícone, hora, distância, ETA, status da notificação, reenviar) — PR #219 (`OrderGeoEvents.tsx`), 4 testes
 - **Evidência:** screenshot
 
 ### 63 — Reenvio manual
-- [ ] Botão "Reenviar aviso" → `send-notification` com `force=true` (operator+), registra em `alerts_sent` com `manual=true`
+- [x] Botão "Reenviar aviso" → `send-notification` com `skip_dedup=true` (equivalente ao `force`, o contrato usa `skip_dedup`) · **FEITO:** botão em `OrderGeoEvents.tsx` envia `metadata: { manual: true, geo_event_id }` e a edge grava o status de volta em `order_geo_events` via `recordGeoEventStatus`
 - **Evidência:** `alerts_sent` com a linha
 
 ### 64 — Testes do bloco

@@ -327,6 +327,17 @@ serve(async (req) => {
         order_id: orderUuid, status: newStatus, old_status: oldStatus,
         change_reason: `Webhook: ${eventType}`, metadata: metadata || {},
       });
+      // Etapa 61 do plano Google: pedido em estado final encerra o rastreio.
+      // Sem isso o job-worker continuava pedindo rota ao geo-gateway (custo
+      // Mapbox) para pedido encerrado. O trigger trg_close_tracking_on_order_end
+      // cobre o mesmo caso para quem escrever status fora do webhook.
+      if (['COMPLETED', 'CANCELLED', 'CANCELED', 'REJECTED', 'EXPIRED'].includes(newStatus)) {
+        const { error: endError } = await supabase.rpc('end_order_tracking', {
+          p_order_id: orderUuid,
+          p_reason: `webhook:${eventType}`,
+        });
+        if (endError) logger.error('[Webhook] Falha ao encerrar tracking:', endError);
+      }
       logger.log(`[Webhook] Order ${orderUuid} status: ${oldStatus} -> ${newStatus}`);
     }
     
