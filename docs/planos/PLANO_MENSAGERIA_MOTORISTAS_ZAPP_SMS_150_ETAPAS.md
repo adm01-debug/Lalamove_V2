@@ -546,6 +546,7 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ### 100 — [L] Troca de motorista
 - [ ] `ORDER_REPLACED`/`lalamove_order_replacements`: M8 ao motorista antigo e M1 ao novo
 - **Evidência:** simulação de troca gera as 2 mensagens
+- **Estado:** o lado do dado está pronto — `lalamove-webhook/index.ts:791-864` grava a trilha idempotente em `lalamove_order_replacements`, atualiza `lalamove_id` só quando ainda está no antigo e registra `ORDER_REPLACED` em `lalamove_status_history`. Faltam os dois disparos, que dependem dos templates M1/M8 (etapas 101–112 + `message_templates`, DDL do Bloco 6): hoje não existe evento de alerta para "motorista trocado".
 
 ### 101 — [L] M1 Briefing de atribuição
 - [ ] Variáveis: pedido interno, endereço/janela da coleta, responsável, instruções, link de rota (`share_link`)
