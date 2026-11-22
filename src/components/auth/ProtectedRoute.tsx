@@ -26,11 +26,11 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, loading: authLoading } = useAuth();
   const { hasRole, hasPermission, isLoading: permissionsLoading } = usePermissions();
-  const { needsMFAVerification, loadingFactors } = useMFA();
+  const { needsMFAVerification, loadingFactors, loadingAAL } = useMFA();
   const location = useLocation();
 
   // Loading state
-  if (authLoading || permissionsLoading || loadingFactors) {
+  if (authLoading || permissionsLoading || loadingFactors || loadingAAL) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

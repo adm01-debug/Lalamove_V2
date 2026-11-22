@@ -42,7 +42,7 @@ export function useMFA() {
     factors.totp.some(f => f.status === 'verified');
 
   // Verificar nível de autenticação atual
-  const { data: aalLevel } = useQuery({
+  const { data: aalLevel, isLoading: loadingAAL } = useQuery({
     queryKey: ['mfa-aal', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -198,6 +198,7 @@ export function useMFA() {
     qrCode,
     secret,
     loadingFactors,
+    loadingAAL,
 
     // Enrollment
     startEnrollment: enrollMutation.mutate,
