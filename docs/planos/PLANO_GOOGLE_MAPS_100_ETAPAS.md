@@ -301,9 +301,35 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `job-worker/geo-backfill-orders.test.ts` **9/9 verde** (usou precise `exact`; sem número → revisão; `low` → revisão; lado já com coordenada não é recotado; sem resultado não grava; `GEO_UNAVAILABLE` é `skipped` e não queima tentativa; ativo primeiro; endereço curto não chama provedor; `limit` limitado a 500/100)
 
 ### 40 — Importação Bitrix24 / Zapp
-- [ ] `bitrix24-sync` e `bitrix24-process-queue`: ao criar pedido a partir do SPA 1690, popular endereço e disparar geocode (etapa 37)
-- [ ] Gravar `place_id` de volta no campo customizado do SPA (se existir) para reaproveitar
+- [x] `bitrix24-sync` e `bitrix24-process-queue`: ao criar pedido a partir do SPA 1690, popular endereço e disparar geocode (etapa 37)
+- [x] Gravar `place_id` de volta no campo customizado do SPA (se existir) para reaproveitar
 - **Evidência:** item do SPA → pedido com coordenadas
+
+**Executado — com correção de premissa do plano.** A premissa "`bitrix24-sync` cria pedido
+a partir do SPA 1690" é **falsa**:
+- `bitrix24-sync/index.ts:205-221` monta `dealFields` a partir de uma linha **já existente**
+  de `lalamove_orders` (`.from('lalamove_orders').select(...)`) e **atualiza o deal no
+  Bitrix** — a direção é Lalamove → Bitrix, nunca Bitrix → Lalamove. Não há `insert` em
+  `lalamove_orders` nessa função.
+- `bitrix24-process-queue` **não referencia `lalamove_orders`** (zero ocorrências); ele
+  processa a fila de deals, não cria pedido.
+- O único ponto que cria pedido é `lalamove-api/index.ts:713` (`from('lalamove_orders')
+  .insert(...)`), e ele **já dispara o geocode**: `:742` chama `geocodeOrderFallback()`
+  e grava `pickup_place_id`/`delivery_place_id`, `geocode_provider`, `geocode_precision`,
+  emitindo alerta `APPROVAL_REQUIRED` quando a precisão é baixa (etapa 37).
+
+**2ª caixa — campo customizado no SPA:** **não existe** campo `place_id` no Bitrix. Os 16
+campos `UF_CRM_*` enviados em `bitrix24-sync/index.ts:208-221` são `LALAMOVE_ID`,
+`PICKUP_ADDRESS`, `DELIVERY_ADDRESS`, `VEHICLE_TYPE`, `TOTAL_COST`, `CURRENCY`, `STATUS`,
+`DRIVER_NAME`, `DRIVER_PHONE`, `SCHEDULED_AT`, `ESTIMATED_DELIVERY`, `ACTUAL_DELIVERY`,
+`DISTANCE`, `SHARE_LINK` — nenhum de coordenada ou `place_id`, e `grep -rn "place_id"
+bitrix24-sync/` retorna vazio. Criar esse campo é mudança de schema **no Bitrix (fora do
+repo)** e não é necessária: o `place_id` já vive em `lalamove_orders` e é o que o motor geo
+consome.
+
+**Resultado de negócio:** item importado do SPA → pedido com coordenadas — caminho
+existente e coberto pela etapa 37. Nada a implementar; o que faltava era a premissa
+correta no plano.
 
 ### 41 — Contrato de posição com a UAPI (outro chat)
 - [x] Documentar em `docs/GEO_CONTRACT.md` o que este plano **lê**: `active_tracking(order_id UNIQUE, current_latitude, current_longitude, heading, speed, last_updated, tracking_status='active'|'ended', driver_id)` e `lalamove_orders(lalamove_status, driver_lalamove_id, scheduled_at)`
