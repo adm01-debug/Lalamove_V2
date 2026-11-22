@@ -24,6 +24,18 @@ const ALL_ALERT_TYPES: { value: string; label: string }[] = [
   { value: 'APPROVAL_REQUIRED', label: 'Aprovacao Necessaria' },
   { value: 'ORDER_CANCELLED', label: 'Pedido Cancelado' },
   { value: 'INTEGRATION_FAILURE', label: 'Falha de Integracao' },
+  // Eventos geo (plano Google Maps, etapa 72): sem estas linhas o formulário
+  // "Nova config." não permitia criar configuração para um tipo geo — só apareciam
+  // os que já tinham seed na migration `geo_foundation`. Um tipo geo sem config
+  // (ex.: deletado pelo operador) não podia ser recriado pela UI.
+  { value: 'DRIVER_APPROACHING_PICKUP', label: 'Motorista aproximando da coleta' },
+  { value: 'DRIVER_ARRIVED_PICKUP', label: 'Motorista chegou na coleta' },
+  { value: 'DRIVER_APPROACHING_DELIVERY', label: 'Motorista aproximando da entrega' },
+  { value: 'DRIVER_ARRIVED_DELIVERY', label: 'Motorista chegou na entrega' },
+  { value: 'ETA_DELAY', label: 'Atraso previsto pelo ETA' },
+  { value: 'SUPPLIER_DELAY_NOTICE', label: 'Aviso de atraso ao fornecedor' },
+  { value: 'MISSING_POD', label: 'POD não anexado' },
+  { value: 'GEO_BUDGET_WARNING', label: 'Orçamento geo próximo do limite' },
 ];
 
 function LoadingSkeleton() {
