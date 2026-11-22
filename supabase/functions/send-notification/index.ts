@@ -9,6 +9,12 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import {
+  QUIET_HOURS_ALERT_TYPES,
+  isWithinQuietHours,
+  nextAllowedTime,
+  type QuietHours,
+} from "./quiet-hours.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -33,6 +39,22 @@ function isServiceRoleCaller(req: Request): boolean {
 function geoDeliveryStatus(results: Array<{ success: boolean }>): string {
   if (results.length === 0) return "no_recipient";
   return results.some(r => r.success) ? "sent" : "failed";
+}
+
+/** Carrega a janela de horário permitido (`geo_defaults`, linha única `id=true`). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadQuietHours(supabase: any): Promise<QuietHours | null> {
+  const { data, error } = await supabase
+    .from("geo_defaults")
+    .select("quiet_hours_start, quiet_hours_end, quiet_hours_tz")
+    .eq("id", true)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    start: String(data.quiet_hours_start),
+    end: String(data.quiet_hours_end),
+    tz: data.quiet_hours_tz,
+  };
 }
 
 interface NotificationRequest {
@@ -121,6 +143,41 @@ serve(async (req) => {
             { headers: { ...corsHeaders, "Content-Type": "application/json" } },
           );
         }
+      }
+    }
+
+    // ── Horário de silêncio (D3) ────────────────────────────────────────────
+    // Alertas geo-disparados para o fornecedor/cliente não saem fora de
+    // 07:00-20:00 America/Sao_Paulo (docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md,
+    // etapa 58). Em vez de descartar, reenfileira em job_queue para o próximo
+    // horário permitido — o cron `process-job-queue` (1 min) chama este mesmo
+    // endpoint de novo quando `next_retry_at` vencer. `metadata.always_send`
+    // (motorista chegou, gravado por `geo_emit_event`) e escalonamento
+    // (`is_escalation`) sempre furam a janela.
+    if (QUIET_HOURS_ALERT_TYPES.has(type) && metadata?.always_send !== true && !isEscalation) {
+      const quietHours = await loadQuietHours(supabase);
+      if (quietHours && !isWithinQuietHours(new Date(), quietHours)) {
+        const runAt = nextAllowedTime(new Date(), quietHours);
+        const { error: deferError } = await supabase.from("job_queue").insert({
+          type: "notification",
+          payload: { alert_id, type, severity, title, message, order_id, driver_id, metadata },
+          priority: 3,
+          max_attempts: 3,
+          dedup_key: `deferred:${alert_id}`,
+          next_retry_at: runAt.toISOString(),
+          metadata: { source: "send-notification:quiet_hours", deferred_from: new Date().toISOString() },
+        });
+        // 23505 = já existe reenvio pendente para este alerta (dedup_key) — não é erro.
+        if (deferError && (deferError as { code?: string }).code !== "23505") {
+          logger.error("[Notification] Falha ao reenfileirar fora do horário de silêncio:", deferError);
+        } else {
+          logger.log(`[Notification] ${type} fora do horário de silêncio — reenfileirado para ${runAt.toISOString()}`);
+        }
+        await recordGeoEventStatus(supabase, metadata, "deferred");
+        return new Response(
+          JSON.stringify({ success: true, deferred: true, run_at: runAt.toISOString() }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
       }
     }
 
