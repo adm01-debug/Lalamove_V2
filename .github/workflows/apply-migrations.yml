@@ -64,8 +64,8 @@ jobs:
             echo "$body" | jq -c 'if type=="array" then {rows: length} else . end'
             # Ledger: best-effort (DDL já aplicado); só version+name, colunas garantidas em qualquer versão
             echo "== ledger $version $name"
-            lresp=$(jq -n --arg v "$version" --arg n "$name" \
-              '{query: ("INSERT INTO supabase_migrations.schema_migrations (version, name) VALUES (" + ($v|@json) + ", " + ($n|@json) + ") ON CONFLICT (version) DO NOTHING")}' \
+            lresp=$(jq -n --arg v "$version" --arg n "$name" --arg sq "'" \
+              '{query: ("INSERT INTO supabase_migrations.schema_migrations (version, name) VALUES (" + $sq + ($v|gsub($sq;$sq+$sq)) + $sq + ", " + $sq + ($n|gsub($sq;$sq+$sq)) + $sq + ") ON CONFLICT (version) DO NOTHING")}' \
               | curl -sS -w '\n%{http_code}' -X POST "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
                   -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H "Content-Type: application/json" -d @-)
             lcode="${lresp##*$'\n'}"
