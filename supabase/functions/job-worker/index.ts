@@ -555,14 +555,16 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
     }
 
     try {
-      // Etapa 26: `driving-traffic` explícito. O provider cai para `driving` quando
-      // `traffic === false`; sem o campo o perfil vira implícito e uma mudança de
-      // default no provider alteraria silenciosamente a rota contratada do pedido.
+      // Etapa 49: `traffic:false` explícito no tracado. O polilinha de longo prazo
+      // do pedido nao precisa de transito — ele e recalculado a cada 30 min e a
+      // cada desvio, e o transito entra na conta pelo `eta_refresh`, que liga
+      // `traffic:true` so quando o ETA ja esta perto (<= 15 min). Passar `true`
+      // aqui pagava a SKU com transito em toda recalculada sem mudar a decisao.
       const route = await invokeEdge(supabase, 'geo-gateway', {
         action: 'route',
         origin: { lat: Number(t.current_latitude), lng: Number(t.current_longitude) },
         destination: stop,
-        traffic: true,
+        traffic: false,
       });
 
       const polyline: Array<{ lat: number; lng: number }> = route?.polyline ?? [];
@@ -661,6 +663,99 @@ async function snapDriverPosition(
 }
 
 /**
+ * ETA_DELAY (etapa 50 do plano Google): o ETA e o melhor lugar para prever atraso
+ * — `geo_evaluate_tracking` so roda quando lat/lng/eta mudam, e o atraso depende
+ * de `scheduled_at` versus `now() + eta_minutes`. Dispara pelo mesmo
+ * `geo_emit_event` dos avisos de aproximacao, que ja deduplica por
+ * (order_id, event_type, stop_index) e respeita `alert_configurations`.
+ *
+ * Teto: `alert_configurations.LATE_DELIVERY.min_interval_seconds` (default 900,
+ * `20261121193000:24`). O dedup do `geo_emit_event` e por pedido+parada para
+ * sempre, entao o alerta sai uma vez quando o atraso e detectado.
+ */
+export async function maybeEmitEtaDelay(
+  supabase: any,
+  args: {
+    trackingId: string;
+    orderId: string;
+    driverId: string | null;
+    stopIndex: number;
+    etaMinutes: number;
+    lat: number;
+    lng: number;
+  },
+): Promise<boolean> {
+  const { data: order } = await supabase
+    .from('lalamove_orders')
+    .select('scheduled_at, lalamove_id, driver_name, driver_plate, pickup_address, delivery_address, supplier_contact, pickup_contact_name, pickup_contact_phone, share_link, delivery_contact_name, delivery_contact_phone, status')
+    .eq('id', args.orderId)
+    .maybeSingle();
+  if (!order?.scheduled_at) return false;
+
+  // Alerta so faz sentido para pedido vivo: encerrado/cancelado nao atrasa.
+  const status = String(order.status ?? '').toUpperCase();
+  if (['COMPLETED', 'CANCELLED', 'CANCELED', 'REJECTED', 'EXPIRED', 'DELIVERED'].includes(status)) return false;
+
+  // Janela de tolerancia: `LATE_DELIVERY` das alert_configurations; sem linha,
+  // cai no padrao do plano (15 min) para nao ficar sem alerta por falta de seed.
+  const { data: cfg } = await supabase
+    .from('alert_configurations')
+    .select('min_interval_seconds, is_enabled')
+    .eq('alert_type', 'LATE_DELIVERY')
+    .eq('channel', 'email')
+    .maybeSingle();
+  if (cfg && cfg.is_enabled === false) return false;
+  const thresholdMin = Math.max(1, Math.round(Number(cfg?.min_interval_seconds ?? 900) / 60));
+
+  const arrivalMs = Date.now() + args.etaMinutes * 60_000;
+  const lateMs = new Date(order.scheduled_at).getTime() + thresholdMin * 60_000;
+  if (!Number.isFinite(lateMs) || arrivalMs <= lateMs) return false;
+
+  const { data: emitted, error } = await supabase.rpc('geo_emit_event', {
+    p_order_id: args.orderId,
+    p_driver_id: args.driverId,
+    p_event_type: 'ETA_DELAY',
+    p_stop_index: args.stopIndex,
+    p_latitude: args.lat,
+    p_longitude: args.lng,
+    p_distance_m: null,
+    p_eta_minutes: args.etaMinutes,
+    p_title: 'Atraso previsto',
+    p_message: `O pedido ${order.lalamove_id ?? args.orderId} deve atrasar: previsao de chegada em ${args.etaMinutes} min (agendado ${new Date(order.scheduled_at).toISOString()}).`,
+    p_notify: true,
+    // Sem `always_send`: respeita horario de silencio, ao contrario dos avisos
+    // de chegada do motorista.
+    p_metadata: {
+      order_ref: order.lalamove_id,
+      driver_name: order.driver_name,
+      driver_plate: order.driver_plate,
+      pickup_address: order.pickup_address,
+      delivery_address: order.delivery_address,
+      share_link: order.share_link,
+      scheduled_at: order.scheduled_at,
+      threshold_min: thresholdMin,
+      recipients: args.stopIndex === 0
+        ? [{ role: 'pickup_contact', channel: 'whatsapp',
+             name: order.pickup_contact_name ?? order.supplier_contact,
+             to: order.pickup_contact_phone ?? order.supplier_contact }]
+        : [{ role: 'delivery_contact', channel: 'whatsapp',
+             name: order.delivery_contact_name ?? null,
+             to: order.delivery_contact_phone ?? null }],
+    },
+  });
+
+  if (error) {
+    // Nao derruba o refresh do ETA: o alerta e efeito colateral.
+    internalLogger('warn', 'ETA_DELAY nao emitido', { tracking_id: args.trackingId, error: error.message });
+    return false;
+  }
+  return emitted != null;
+}
+
+/** Etapa 49: acima disto o refresh usa `driving` (sem transito) e economiza a SKU. */
+const ETA_TRAFFIC_THRESHOLD_MIN = 15;
+
+/**
  * `eta_refresh` — Matrix 1×1 `driving-traffic` motorista → próxima parada.
  * `eta_minutes = ceil(duration_s / 60)`; provedor desligado mantém a estimativa
  * local já calculada por `geo_evaluate_tracking` (não sobrescreve com NULL).
@@ -710,12 +805,19 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
       : (await snapDriverPosition(supabase, t)) ?? { ...rawPoint, confidence: null as number | null, snapped: false };
 
     try {
-      // Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego.
+      // Etapa 49 do plano: transito so quando importa. A janela do aviso de
+      // aproximacao e `approach_eta_min` (default 5 min), entao a rota com
+      // transito vale a pena quando o ETA ja esta em 15 min ou menos; antes
+      // disso o desvio tipico de transito em Curitiba nao muda a hora de saida
+      // e cada refresh com transito custa a SKU mais cara do provedor.
+      // A decisao usa o ETA conhecido (t.eta_minutes); sem ETA ainda, a primeira
+      // medicao sai sem transito e a proxima — dentro de 5 min — ja decide.
+      const wantsTraffic = t.eta_minutes != null && Number(t.eta_minutes) <= ETA_TRAFFIC_THRESHOLD_MIN;
       const route = await invokeEdge(supabase, 'geo-gateway', {
         action: 'route',
         origin: { lat: snap.lat, lng: snap.lng },
         destination: stop,
-        traffic: true,
+        traffic: wantsTraffic,
       });
 
       const durationS = route?.duration_traffic_s ?? route?.duration_s;
@@ -748,11 +850,23 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
 
       if (updErr) throw updErr;
 
+      const etaDelayed = await maybeEmitEtaDelay(supabase, {
+        trackingId: t.id,
+        orderId: t.order_id,
+        driverId: t.driver_id ?? null,
+        stopIndex: t.next_stop_index ?? 0,
+        etaMinutes,
+        lat: snap.lat,
+        lng: snap.lng,
+      });
+
       refreshed++;
       results.push({
         tracking_id: t.id,
         status: 'refreshed',
         eta_minutes: etaMinutes,
+        eta_delay_emitted: etaDelayed,
+        traffic: wantsTraffic,
         duration_s: durationS,
         previous_eta_minutes: t.eta_minutes,
         provider: route.provider,
