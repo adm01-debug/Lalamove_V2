@@ -754,12 +754,112 @@ export async function maybeEmitEtaDelay(
 
 /** Etapa 49: acima disto o refresh usa `driving` (sem transito) e economiza a SKU. */
 const ETA_TRAFFIC_THRESHOLD_MIN = 15;
+/** Etapa 48 (D9): janela minima entre recálculos pagos. */
+const ETA_MIN_INTERVAL_MS = 60_000;
+/** Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */
+const ETA_MIN_MOVED_M = 300;
+
+/** Distancia (m) entre dois pontos — haversine, mesma formula do SQL. */
+export function haversineM(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number },
+): number {
+  const R = 6_371_000;
+  const p1 = (a.lat * Math.PI) / 180;
+  const p2 = (b.lat * Math.PI) / 180;
+  const dp = p2 - p1;
+  const dl = ((b.lng - a.lng) * Math.PI) / 180;
+  const h = Math.sin(dp / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
 
 /**
- * `eta_refresh` — Matrix 1×1 `driving-traffic` motorista → próxima parada.
- * `eta_minutes = ceil(duration_s / 60)`; provedor desligado mantém a estimativa
- * local já calculada por `geo_evaluate_tracking` (não sobrescreve com NULL).
+ * Etapa 48 (D9): le os ultimos 5 pontos do motorista. Serve para dois calculos:
+ * deslocamento desde o ultimo recálculo pago (`movedM`) e velocidade media real
+ * (`speedMps`) — que alimenta o ETA local sem custo entre refreshes.
+ * Devolve nulls quando nao ha historico; quem chama decide o fallback.
  */
+async function recentDriverHistory(
+  supabase: any,
+  driverId: string | null | undefined,
+): Promise<{ points: Array<{ lat: number; lng: number; at: number }> }> {
+  if (!driverId) return { points: [] };
+  const { data } = await supabase
+    .from('driver_locations')
+    .select('latitude, longitude, recorded_at')
+    .eq('driver_id', driverId)
+    .order('recorded_at', { ascending: false })
+    .limit(5);
+  const points = (data ?? [])
+    .map((r: any) => ({
+      lat: Number(r.latitude),
+      lng: Number(r.longitude),
+      at: new Date(String(r.recorded_at)).getTime(),
+    }))
+    .filter((p: any) => Number.isFinite(p.lat) && Number.isFinite(p.lng) && Number.isFinite(p.at));
+  return { points };
+}
+
+/** Velocidade media (m/s) sobre os pontos do mais antigo ao mais novo. */
+export function avgSpeedMps(points: Array<{ lat: number; lng: number; at: number }>): number | null {
+  if (points.length < 2) return null;
+  const ordered = [...points].sort((a, b) => a.at - b.at);
+  let dist = 0;
+  for (let i = 1; i < ordered.length; i++) dist += haversineM(ordered[i - 1], ordered[i]);
+  const spanS = (ordered[ordered.length - 1].at - ordered[0].at) / 1000;
+  if (spanS <= 0) return null;
+  return dist / spanS;
+}
+
+/**
+ * Etapa 48: ETA local sem custo — `distance_to_next_stop_m / velocidade media
+ * dos ultimos 5 pontos`. Sem velocidade confiavel, assume 30 km/h (media urbana
+ * de Curitiba): ordem de grandeza para o campo nao ficar vazio entre refreshes.
+ */
+export function localEtaMinutes(
+  t: { distance_to_next_stop_m: unknown },
+  speedMps: number | null,
+): number | null {
+  const dist = t.distance_to_next_stop_m == null ? null : Number(t.distance_to_next_stop_m);
+  if (dist == null || !Number.isFinite(dist)) return null;
+  const v = speedMps != null && speedMps > 0.5 ? speedMps : 30_000 / 3600;
+  return Math.max(1, Math.ceil(dist / v / 60));
+}
+
+/**
+ * Etapa 48 (D9): decide se vale gastar a medicao paga. Mede sempre que:
+ *  - o ETA conhecido esta na janela de aproximacao (`<= 15 min`), onde errar o
+ *    numero quebra o aviso ao destinatario;
+ *  - nunca foi medido (`eta_updated_at` nulo);
+ *  - o motorista andou mais de 300 m desde o ultimo recálculo.
+ * Caso contrario devolve o motivo do skip (vai para o log do job).
+ */
+export async function costGuardSkipReason(
+  supabase: any,
+  t: any,
+  nowMs: number,
+): Promise<string | null> {
+  const eta = t.eta_minutes == null ? null : Number(t.eta_minutes);
+  const updatedMs = t.eta_updated_at ? new Date(String(t.eta_updated_at)).getTime() : null;
+
+  if (eta == null || updatedMs == null || !Number.isFinite(updatedMs)) return null;
+  if (eta <= ETA_TRAFFIC_THRESHOLD_MIN) return null;
+
+  const { points } = await recentDriverHistory(supabase, t.driver_id);
+  const latest = points[0];
+  const moved = latest
+    ? haversineM(latest, { lat: Number(t.current_latitude), lng: Number(t.current_longitude) })
+    : null;
+  if (moved != null && moved > ETA_MIN_MOVED_M) return null;
+
+  if (nowMs - updatedMs < ETA_MIN_INTERVAL_MS) {
+    return `eta fresco (<${ETA_MIN_INTERVAL_MS / 1000} s) fora da janela de aproximacao`;
+  }
+  return moved == null
+    ? 'sem deslocamento mensuravel desde o ultimo recalculo'
+    : `motorista andou ${Math.round(moved)} m (<${ETA_MIN_MOVED_M} m) desde o ultimo recalculo`;
+}
+
 async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
   internalLogger('info', 'Processing eta_refresh job', { payload });
 
@@ -770,7 +870,7 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
 
   const trackingQuery = supabase
     .from('active_tracking')
-    .select('id, order_id, driver_id, next_stop_index, current_latitude, current_longitude, eta_minutes')
+    .select('id, order_id, driver_id, next_stop_index, current_latitude, current_longitude, eta_minutes, eta_updated_at, distance_to_next_stop_m, last_updated, route_provider')
     .eq('tracking_status', 'ACTIVE');
 
   if (payload.trackingId) trackingQuery.eq('id', payload.trackingId);
@@ -803,6 +903,28 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
     const snap = payload.snap === false
       ? { ...rawPoint, confidence: null as number | null, snapped: false }
       : (await snapDriverPosition(supabase, t)) ?? { ...rawPoint, confidence: null as number | null, snapped: false };
+
+    // Etapa 48 do plano (D9): nao gastar chamada quando o ETA nao mudou o
+    // suficiente. Regra: so recalcula se passou mais de 60 s do ultimo refresh
+    // E (o motorista andou mais de 300 m OU o ETA ja esta em 15 min ou menos).
+    // O agendador ja limita a 1 job a cada 5 min por tracking, entao a janela de
+    // 60 s so barra reprocessamento manual; o que economiza de verdade e a
+    // segunda condicao: pedido parado no transito com ETA alto nao precisa de
+    // nova medicao paga a cada slot.
+    const nowMs = Date.now();
+    const skipReason = await costGuardSkipReason(supabase, t, nowMs);
+    if (skipReason) {
+      skipped++;
+      const { points } = await recentDriverHistory(supabase, t.driver_id);
+      results.push({
+        tracking_id: t.id,
+        status: 'skipped',
+        error: skipReason,
+        // ETA local (gratuito) para o campo nao ficar velho ate o proximo recálculo.
+        local_eta_minutes: localEtaMinutes(t, avgSpeedMps(points)),
+      });
+      continue;
+    }
 
     try {
       // Etapa 49 do plano: transito so quando importa. A janela do aviso de

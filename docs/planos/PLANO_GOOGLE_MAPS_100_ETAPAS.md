@@ -376,12 +376,47 @@ correta no plano.
 - **Evidência:** `processEtaRefresh` (`job-worker/index.ts:768`) grava os três campos com `Math.max(1, Math.ceil(durationS/60))`. Inclusive faz **snap-to-road antes** (`snapDriverPosition`, `:617`) com confiança mínima 0.3 — melhoria sobre o plano.
 - **Correção de premissa:** **não usa Matrix**. Usa `action:'route'`, com o comentário no código explicando o porquê: "Mapbox Matrix recusa 1x1 (mínimo 2 elementos) — usar route com tráfego". Um ETA de 1 origem para 1 destino não cabe na Matrix.
 
-### 48 — Cadência de ETA controlada por custo (D9)
-- [ ] Recalcular só se `now()-eta_updated_at > 60 s` **e** (`driver andou > 300 m` ou `eta_minutes <= 15`)
-- [ ] Entre refreshes: ETA estimado localmente = `distance_to_next_stop_m / velocidade média dos últimos 5 pontos` (sem custo)
-- [ ] Custo máximo por pedido: ~60 min × 1/min = 60 elementos ≈ US$ 0,30 (Essentials) — documentar
+### 48 — Cadência de ETA controlada por custo (D9) ✅
+- [x] Recalcular só se `now()-eta_updated_at > 60 s` **e** (`driver andou > 300 m` ou `eta_minutes <= 15`)
+- [x] Entre refreshes: ETA estimado localmente = `distance_to_next_stop_m / velocidade média dos últimos 5 pontos` (sem custo)
+- [x] Custo máximo por pedido: ~60 min × 1/min = 60 elementos ≈ US$ 0,30 (Essentials) — documentar
 - **Evidência:** `geo_usage` de um pedido completo ≤ 70 elementos
-- **Estado:** o agendador já limita a 1 refresh por 5 min por tracking (`20261121194500:41`), o que é **mais restritivo** que o "60 s" do plano e já entrega a economia de D9. O que **não** existe é a segunda condição (só recalcular se andou > 300 m ou ETA ≤ 15) e o ETA local de fallback. Pendente.
+
+**Executado.** `costGuardSkipReason()` é `await`ado antes da chamada paga em
+`job-worker/index.ts:906`; devolve o motivo do skip, que vai no `results[]` do job
+(`status: 'skipped'`). Regras reais:
+- **ETA `<= 15 min`** → mede sempre (`ETA_TRAFFIC_THRESHOLD_MIN`). É a janela do aviso de
+  aproximação; errar o número ali quebra o alerta ao destinatário.
+- **Nunca medido** (`eta_updated_at` nulo) → mede sempre.
+- **Andou `> 300 m`** (`ETA_MIN_MOVED_M`) desde o último recálculo → mede. O deslocamento
+  vem de `haversineM()` entre a posição atual e o ponto mais recente de `driver_locations`
+  (`recentDriverHistory()`), não de heurística de velocidade.
+- Caso contrário pula: dentro de 60 s (`ETA_MIN_INTERVAL_MS`) o motivo é "eta fresco";
+  fora, é "andou N m".
+
+**ETA local gratuito (2ª caixa):** `localEtaMinutes()` = `distance_to_next_stop_m /
+avgSpeedMps(pontos)`, com `avgSpeedMps()` medindo a velocidade real sobre **os últimos 5
+pontos** de `driver_locations` (`order by recorded_at desc limit 5`). Sem 2 pontos ou sem
+tempo decorrido, cai em 30 km/h (média urbana de Curitiba) — e o mesmo fallback vale para
+velocidade `< 0,5 m/s`, para motorista parado não gerar ETA absurdo. O valor sai em
+`results[].local_eta_minutes` nos ciclos pulados, então o campo não envelhece até o
+próximo recálculo pago.
+
+**Correção de premissa:** os pontos ficam em `driver_locations.latitude/longitude/
+recorded_at` (tabela alimentada pelo webhook, PR #236), **não** em
+`active_tracking.track_history` — essa coluna não existe. `distance_to_next_stop_m` é
+escrito pelo trigger `geo_evaluate_tracking` da migração `20261122130100:443-470`.
+
+**Custo (3ª caixa):** com o guard, um pedido de 60 min com motorista em movimento faz no
+máximo 60 medições (1/min, teto do agendador de 5 min já é mais restritivo na prática), e
+pedido parado para de custar depois da primeira medição. Teto de 70 elementos por pedido
+mantido.
+
+**Testes:** `supabase/functions/job-worker/eta-cadence.test.ts` — 12 casos (fronteira
+15/16 min, andou 334 m mede, andou 11 m pula, parado 10 min pula, ETA local com
+velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
+`haversineM` 1° = 111,2 km). Suíte `job-worker/` **34/34 verde**, `deno check` limpo.
+
 
 ### 49 — Trânsito (Pro) só quando importa ✅
 - [x] `traffic=true` apenas se `eta_minutes <= 15` (janela do aviso de aproximação); senão Essentials
