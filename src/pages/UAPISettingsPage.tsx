@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield } from 'lucide-react';
+import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Eye, EyeOff } from 'lucide-react';
 
 export default function UAPISettingsPage() {
   const { data: status, isLoading: statusLoading } = useUAPIStatus();
@@ -13,6 +13,7 @@ export default function UAPISettingsPage() {
   const { data: wallet } = useWalletBalance();
   const updateToken = useUpdateToken();
   const [newToken, setNewToken] = useState('');
+  const [showNewToken, setShowNewToken] = useState(false);
 
   const isConnected = status?.ok !== false && status?.session?.is_active;
 
@@ -135,17 +136,28 @@ export default function UAPISettingsPage() {
             Atualizar Token
           </CardTitle>
           <CardDescription>
-            Quando o token expirar (~24h), extraia um novo via DevTools do web.lalamove.com
-            (Network → get_user_info → Query Params → token) e cole abaixo.
+            Quando o token expirar (~24h), cole um novo abaixo. Use a ação <code className="text-xs bg-muted px-1.5 py-0.5 rounded">set-token</code> (requer perfil admin) para definir a sessão UAPI.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Input
-            placeholder="Cole o novo token aqui..."
-            value={newToken}
-            onChange={(e) => setNewToken(e.target.value)}
-            className="font-mono text-sm"
-          />
+          <div className="relative">
+            <Input
+              placeholder="Cole o novo token aqui..."
+              type={showNewToken ? 'text' : 'password'}
+              autoComplete="off"
+              value={newToken}
+              onChange={(e) => setNewToken(e.target.value)}
+              className="font-mono text-sm pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowNewToken(!showNewToken)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showNewToken ? 'Ocultar token' : 'Mostrar token'}
+            >
+              {showNewToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           <Button onClick={handleUpdate} disabled={updateToken.isPending || !newToken.trim()}>
             {updateToken.isPending ? (
               <>
