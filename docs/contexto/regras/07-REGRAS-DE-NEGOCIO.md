@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `b05e2b0de6` · branch `main` · 2026-11-22 17:19 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `72dd548d90` · branch `main` · 2026-11-22 17:20 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1926,7 +1926,7 @@ _nenhum item encontrado_
 | Erro ao alterar senha. Tente novamente. | `src/pages/ResetPasswordPage.tsx` |
 | Falha ao atualizar regra | `src/pages/RiskRulesPage.tsx` |
 | Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
-| … +103 linhas — lista completa em `context.json` | |
+| … +105 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2310,6 +2310,7 @@ _nenhum item encontrado_
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
+| significa que admin, manager e operator passam; apenas viewer é negado. | `supabase/functions/external-companies/index.ts` |
 | sozinho quando o cooldown expira. | `supabase/functions/geo-gateway/error-monitor.ts` |
 | Nunca lança: observabilidade não pode derrubar a requisição de mapa. | `supabase/functions/geo-gateway/error-monitor.ts` |
 | * Decide se deve alertar. Puro — testável sem banco. */ | `supabase/functions/geo-gateway/error-monitor.ts` |

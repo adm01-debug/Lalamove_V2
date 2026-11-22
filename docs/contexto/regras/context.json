@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b05e2b0de600ed0d90806e763d8356f5cf3fcc3b",
+  "sha": "72dd548d90c7c0762d2a0c2a88964230a418f368",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 17:19 UTC",
+  "generated_at": "2026-11-22 17:20 UTC",
   "files_total": 1051,
   "code_files": 867,
-  "code_lines": 150148
+  "code_lines": 150196
  },
  "version": "1.3.2",
- "facts_hash": "b474d221830d764a",
+ "facts_hash": "5ce6156f7d8cc224",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -17958,7 +17958,7 @@
     "methods": [
      "OPTIONS"
     ],
-    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
      "carriers",
      "companies",
@@ -17968,12 +17968,17 @@
     ],
     "env": [
      "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-     "EXTERNAL_SUPABASE_URL"
+     "EXTERNAL_SUPABASE_URL",
+     "SUPABASE_ANON_KEY",
+     "SUPABASE_URL"
     ],
     "external": [],
     "invokes": [],
     "doc": "",
-    "errors": [],
+    "errors": [
+     "Forbidden: operator role required",
+     "Unauthorized"
+    ],
     "side_effects": [],
     "webhook_events": [],
     "idempotency": false
@@ -18312,6 +18317,7 @@
     ],
     "env": [
      "ALLOWED_ORIGINS",
+     "RESEND_API_KEY",
      "SUPABASE_SERVICE_ROLE_KEY",
      "SUPABASE_URL"
     ],
@@ -21584,7 +21590,7 @@
   {
    "module": "supabase/functions",
    "files": 81,
-   "lines": 20544,
+   "lines": 20592,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -23411,6 +23417,7 @@
     "scripts/supabase_snapshot/snapshot.py"
    ],
    "RESEND_API_KEY": [
+    "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/test-notification/index.ts"
    ],
@@ -23456,6 +23463,7 @@
     "scripts/supabase_snapshot/snapshot.py"
    ],
    "SUPABASE_ANON_KEY": [
+    "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
     "supabase/functions/lalamove-uapi/index.ts",
@@ -23526,6 +23534,7 @@
     "supabase/functions/check-driver-alerts/index.ts",
     "supabase/functions/escalate-alerts/index.ts",
     "supabase/functions/evaluate-driver/index.ts",
+    "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/geo-gateway/index.ts",
     "supabase/functions/job-worker/index.ts",
@@ -26032,6 +26041,14 @@
     "msg": "Unknown service: ${service}"
    },
    {
+    "file": "supabase/functions/external-companies/index.ts",
+    "msg": "Forbidden: operator role required"
+   },
+   {
+    "file": "supabase/functions/external-companies/index.ts",
+    "msg": "Unauthorized"
+   },
+   {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
     "msg": ",\n        response: {},\n        expires_at: expiresAt,\n      })\n      .select("
    },
@@ -26946,6 +26963,10 @@
    {
     "file": "supabase/functions/evaluate-driver/index.ts",
     "text": "Add rule factors to reasons"
+   },
+   {
+    "file": "supabase/functions/external-companies/index.ts",
+    "text": "significa que admin, manager e operator passam; apenas viewer é negado."
    },
    {
     "file": "supabase/functions/geo-gateway/error-monitor.ts",
@@ -69676,7 +69697,7 @@
   },
   "supabase/functions/external-companies/index.ts": {
    "path": "supabase/functions/external-companies/index.ts",
-   "lines": 281,
+   "lines": 328,
    "tables": [
     {
      "table": "companies",
@@ -69755,7 +69776,16 @@
    "dyn_from": 4,
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-    "EXTERNAL_SUPABASE_URL"
+    "EXTERNAL_SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_URL"
+   ],
+   "errors": [
+    "Forbidden: operator role required",
+    "Unauthorized"
+   ],
+   "rule_comments": [
+    "significa que admin, manager e operator passam; apenas viewer é negado."
    ],
    "pagination": [
     "3"
@@ -71844,7 +71874,7 @@
   },
   "supabase/functions/new-device-alert/index.ts": {
    "path": "supabase/functions/new-device-alert/index.ts",
-   "lines": 290,
+   "lines": 291,
    "tables": [
     {
      "table": "user_devices",
@@ -71881,6 +71911,7 @@
    ],
    "env": [
     "ALLOWED_ORIGINS",
+    "RESEND_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
@@ -73441,10 +73472,30 @@
   }
  },
  "git": {
-  "sha": "b05e2b0de600ed0d90806e763d8356f5cf3fcc3b",
+  "sha": "72dd548d90c7c0762d2a0c2a88964230a418f368",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "72dd548",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: instancia cliente Resend no new-device-alert (item 19) (#297)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "supabase/functions/new-device-alert/index.ts"
+    ]
+   },
+   {
+    "sha": "07c862d",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "supabase/functions/external-companies/index.ts"
+    ]
+   },
    {
     "sha": "b05e2b0",
     "date": "2026-11-22",
@@ -73777,34 +73828,12 @@
      "supabase/functions/send-notification/index.ts",
      "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
     ]
-   },
-   {
-    "sha": "062c6b7",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)",
-    "files": [
-     "src/components/orders/NewOrderDialog.tsx",
-     "src/hooks/useGeoAdmin.ts",
-     "src/pages/MapsSettingsPage.tsx",
-     "supabase/functions/lalamove-api/index.ts",
-     "supabase/migrations/20261123190000_geo_maps_permissions.sql"
-    ]
-   },
-   {
-    "sha": "eb1ea10",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)",
-    "files": [
-     "supabase/migrations/20261123120000_geo_budget_cron.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    10
+    12
    ],
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -73827,6 +73856,10 @@
     3
    ],
    [
+    "supabase/functions/external-companies/index.ts",
+    2
+   ],
+   [
     "src/lib/__tests__/html.test.ts",
     2
    ],
@@ -73847,10 +73880,6 @@
     2
    ],
    [
-    "supabase/functions/lalamove-api/index.ts",
-    2
-   ],
-   [
     "supabase/functions/escalate-alerts/index.ts",
     2
    ],
@@ -73861,6 +73890,10 @@
    [
     "supabase/functions/simulate-driver-movement/index.ts",
     2
+   ],
+   [
+    "supabase/functions/new-device-alert/index.ts",
+    1
    ],
    [
     "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
@@ -73876,10 +73909,6 @@
    ],
    [
     "src/pages/UAPISettingsPage.tsx",
-    1
-   ],
-   [
-    "src/hooks/useBitrix24.ts",
     1
    ]
   ]

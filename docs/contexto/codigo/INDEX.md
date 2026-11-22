@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b05e2b0de600ed0d90806e763d8356f5cf3fcc3b` (2026-11-22T14:18:43-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `72dd548d90c7c0762d2a0c2a88964230a418f368` (2026-11-22T14:18:52-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1057 |
 | arquivos_codigo | 656 |
-| linhas_codigo | 128971 |
+| linhas_codigo | 129019 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -274,8 +274,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8710 nós · 18214 arestas · 639 comunidades · grafo do commit `b05e2b0d`
-- comunidades maiores: cn (270), button.tsx (156), react (148), client.ts (124), GeoBlockingPage.tsx (95), ref_https (93), badge.tsx (90), ref_node_fs (89), geo-gateway/index.ts (82), dependencies (80), gerar.mjs (76), generate.py (73)
+- 8713 nós · 18219 arestas · 622 comunidades · grafo do commit `72dd548d`
+- comunidades maiores: App.tsx (157), cn (147), lucide-react (134), RateLimitDashboardPage.tsx (128), snapshot.py (107), DashboardRedesigned.tsx (103), utils.ts (96), client.ts (94), react (85), dependencies (80), ref_node_path (80), ref_https (78)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -285,10 +285,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
 - docs/MAPBOX.md (12)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (12)
 - supabase/functions/geo-gateway/index.ts (11)
 - supabase/functions/send-notification/index.ts (11)
 - docs/pendencias/_ordem.md (10)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (10)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
 - supabase/functions/_shared/schemas.ts (10)
@@ -377,6 +377,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `72dd548` fix: instancia cliente Resend no new-device-alert (item 19) (#297)
+- 2026-11-22 `07c862d` fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)
 - 2026-11-22 `b05e2b0` feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)
 - 2026-11-22 `ca2061f` feat: campos de token como password e sem autofill (#294)
 - 2026-11-22 `a388d1d` fix: validar origem do postMessage do Bitrix24 (#293)
@@ -390,8 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `762c4b6` fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)
 - 2026-11-22 `7e572fe` feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)
 - 2026-11-22 `572af27` docs(planos): plano front-end de 190 etapas (#280)
-- 2026-11-22 `d6f59de` feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)
-- 2026-11-22 `4ee7ef0` docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

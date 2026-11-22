@@ -329,7 +329,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-companies/index.ts",
    "arquivos": 1,
-   "linhas": 281,
+   "linhas": 328,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -346,7 +346,9 @@
    "rpcs": [],
    "env": [
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
-    "EXTERNAL_SUPABASE_URL"
+    "EXTERNAL_SUPABASE_URL",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_URL"
    ],
    "buckets": [],
    "chama_edges": [],
@@ -862,7 +864,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/new-device-alert/index.ts",
    "arquivos": 1,
-   "linhas": 290,
+   "linhas": 291,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -879,6 +881,7 @@
    ],
    "env": [
     "ALLOWED_ORIGINS",
+    "RESEND_API_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
    ],
