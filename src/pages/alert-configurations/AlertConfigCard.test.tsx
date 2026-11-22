@@ -61,7 +61,7 @@ describe('AlertConfigCard — eventos geo (etapa 72)', () => {
       const { unmount } = render(
         <AlertConfigCard config={makeConfig({ alert_type: type as AlertConfiguration['alert_type'] })} index={0} />,
       );
-      expect(screen.getByText(label)).toBeInTheDocument();
+      expect(screen.getByText(label)).toBeTruthy();
       unmount();
     }
   });
