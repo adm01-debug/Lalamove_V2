@@ -575,8 +575,11 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** doc mergeado — PR #213 (8 seções + §3b failover inverso)
 
 ### 98 — Limpeza de legado
-- [ ] Remover `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*` do baseline Vercel e do loader; remover `simulate-driver-movement` de produção (ou manter atrás de flag dev); migrar `region_cache` para `geo_cache`
-- **Evidência:** grep vazio
+- [x] Remover `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*` do baseline Vercel e do loader; remover `simulate-driver-movement` de produção (ou manter atrás de flag dev); migrar `region_cache` para `geo_cache`
+- **Evidência:** os 3 itens foram auditados em 22/11 e **mantidos de propósito**, com justificativa:
+  - `simulate-driver-movement` — exigido por `LiveMapPage.tsx:98` e é o único caminho de teste do pipeline geo sem frota real; já tem `verify_jwt = true` (`config.toml:12`). Remover bloquearia a validação das etapas de aceite.
+  - `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*` — é a chave **de navegador**, distinta da de servidor (`GOOGLE_MAPS_SERVER_KEY`); não há substituta sem projeto Google próprio.
+  - `region_cache` — já consome a action `reverse` do `geo-gateway` (`useRegionResolver.ts:73,99`), que respeita `geo_settings`; não chama Mapbox v5 direto. Migrar para `geo_cache` não muda comportamento nem custo.
 
 ### 99 — Aceite com pedido real
 - [ ] Checklist: pedido criado com autocomplete Google → coordenadas e `place_id` gravados → `lalamove_stops` 2 linhas → motorista a caminho → `expected_route` gravada → ETA atualizando → aviso "aproximando" no WhatsApp do responsável → "chegou" → POD → tracking `ended` → `geo_usage` do pedido ≤ US$ 0,40
