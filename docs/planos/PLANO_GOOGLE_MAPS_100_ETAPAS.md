@@ -158,7 +158,9 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ### 17 — Funções SQL de geometria (D8, sem PostGIS)
 - [ ] `geo_haversine_m(lat1,lng1,lat2,lng2) RETURNS numeric` IMMUTABLE
 - [ ] `geo_point_to_segment_m(p, a, b)` e `geo_point_to_polyline_m(lat,lng, polyline jsonb) RETURNS numeric` (menor distância aos segmentos)
-- [ ] Testes em `supabase/tests/geo_functions.test.sql` (pgTAP ou asserts via `DO`) com 5 casos conhecidos (Curitiba Centro→Jardim Botânico ≈ 3,2 km)
+- [x] Testes em `supabase/tests/geo_functions.test.sql` (pgTAP ou asserts via `DO`) com 5 casos conhecidos (Curitiba Centro→Jardim Botânico ≈ 3,2 km)
+  - **7 asserts** num único `DO`, com `RAISE EXCEPTION` em cada falha: Centro→Jardim Botânico, 0,001° de latitude, ponto idêntico, ponto sobre o segmento, ponto a 0,01° do segmento, polilinha de 2 vértices e polilinha vazia (`NULL`). Roda no job `geo-sql-tests` do `ci.yml` sobre `postgres:16`, extraindo só as funções puras (que não dependem de `auth`/`alert_type`).
+  - **Correção de premissa:** o plano citava ≈3,2 km para Centro→Jardim Botânico, mas isso é distância de **rota**; em linha reta entre `-25.4284,-49.2733` e `-25.4480,-49.2380` a haversine dá **4.161 m**. O assert usa a faixa 4.050–4.270 m e o comentário do arquivo explica a diferença — senão o teste nasceria vermelho contra a implementação correta.
 - **Evidência:** saída do teste
 
 ### 18 — Migration `order_geo_events`
