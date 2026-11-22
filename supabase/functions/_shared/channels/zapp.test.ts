@@ -123,3 +123,59 @@ Deno.test("normalizeZappNumber remove máscara e não-dígitos", () => {
   assertEquals(normalizeZappNumber("****"), "");
   assertEquals(normalizeZappNumber(""), "");
 });
+
+// Etapa 68: imagem do trajeto. O data URL vira base64 puro + mimetype.
+Deno.test("zapp: sendMedia envia imagem com caption e mimetype extraído do data URL", async () => {
+  const captured: { url?: string; init?: RequestInit } = {};
+  const channel = createZappChannel({
+    apiUrl: "https://zapp.example.com",
+    apiKey: "key-123",
+    fetchImpl: fakeFetch(200, "{}", captured),
+  });
+
+  const result = await channel.sendMedia!(
+    "+55 (41) 99999-8888",
+    "data:image/png;base64,QUJD",
+    "Motorista a 3 min",
+  );
+
+  assertEquals(result, { success: true });
+  assertEquals(captured.url, "https://zapp.example.com/messages/send-media");
+  const headers = captured.init!.headers as Record<string, string>;
+  assertEquals(headers.Authorization, "Bearer key-123");
+  assertEquals(JSON.parse(String(captured.init!.body)), {
+    number: "5541999998888",
+    mediatype: "image",
+    mimetype: "image/png",
+    media: "QUJD",
+    caption: "Motorista a 3 min",
+  });
+});
+
+Deno.test("zapp: sendMedia recusa mídia que não é data URL de imagem", async () => {
+  const captured: { url?: string } = {};
+  const channel = createZappChannel({
+    apiUrl: "https://zapp.example.com",
+    apiKey: "k",
+    fetchImpl: fakeFetch(200, "{}", captured as never),
+  });
+
+  const result = await channel.sendMedia!("5541999998888", "https://exemplo/x.png");
+
+  assertEquals(result.success, false);
+  assertEquals(captured.url, undefined);
+});
+
+Deno.test("zapp: sendMedia com destinatário vazio não chama a API", async () => {
+  const captured: { url?: string } = {};
+  const channel = createZappChannel({
+    apiUrl: "https://zapp.example.com",
+    apiKey: "k",
+    fetchImpl: fakeFetch(200, "{}", captured as never),
+  });
+
+  const result = await channel.sendMedia!("   ", "data:image/png;base64,QUJD");
+
+  assertEquals(result.success, false);
+  assertEquals(captured.url, undefined);
+});

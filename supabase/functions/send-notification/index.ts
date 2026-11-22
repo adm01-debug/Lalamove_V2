@@ -18,6 +18,11 @@ import {
 } from "./quiet-hours.ts";
 import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
 import { normalizePhone } from "../_shared/phone.ts";
+import {
+  buildStaticMapRequestFromRows,
+  fetchStaticMap,
+  shouldAttachStaticMap,
+} from "./static-map.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -186,6 +191,41 @@ serve(async (req) => {
 
     const results: Array<{ channel: string; success: boolean; error?: string }> = [];
 
+    // ── Etapa 68: imagem do trajeto no WhatsApp ────────────────────────────
+    // Só `DRIVER_APPROACHING_*` leva mapa, e só quando o pedido tem coordenada.
+    // A imagem é gerada uma vez por alerta (não por destinatário) e é opcional:
+    // orçamento estourado ou provedor desligado ⇒ o texto sai sozinho.
+    let mediaDataUrl: string | null = null;
+    if (shouldAttachStaticMap(type) && order_id) {
+      const [{ data: orderRow }, { data: trackingRow }] = await Promise.all([
+        supabase.from('lalamove_orders')
+          .select('pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude')
+          .eq('id', order_id).maybeSingle(),
+        supabase.from('active_tracking')
+          .select('current_latitude, current_longitude, expected_route')
+          .eq('order_id', order_id).maybeSingle(),
+      ]);
+      const staticOptions = buildStaticMapRequestFromRows(orderRow, trackingRow);
+      if (staticOptions) {
+        mediaDataUrl = await fetchStaticMap({
+          invoke: async (body) => {
+            const { data, error } = await supabase.functions.invoke('geo-gateway', { body });
+            if (error) {
+              let detail = error.message ?? String(error);
+              try {
+                const raw = await (error as { context?: Response }).context?.text?.();
+                if (raw) detail = raw.slice(0, 300);
+              } catch { /* corpo indisponível */ }
+              throw new Error(`geo-gateway: ${detail}`);
+            }
+            return data;
+          },
+        }, staticOptions);
+      } else {
+        logger.log(`[Notification] Sem coordenada para imagem em ${type} (pedido ${order_id}) — só texto`);
+      }
+    }
+
     // Dispatch a single channel to a single recipient, logging the outcome.
     const dispatch = async (
       channel: string,
@@ -195,7 +235,7 @@ serve(async (req) => {
       let result: { success: boolean; error?: string };
       switch (channel) {
         case "whatsapp":
-          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id);
+          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id, mediaDataUrl);
           break;
         case "email":
           result = await sendEmail(recipient, severity, title, effectiveMessage, order_id, driver_id);
@@ -568,7 +608,8 @@ async function sendWhatsApp(
   title: string,
   message: string,
   orderId?: string,
-  driverId?: string
+  driverId?: string,
+  mediaDataUrl?: string | null,
 ): Promise<{ success: boolean; error?: string }> {
   const evolutionUrl = Deno.env.get("EVOLUTION_API_URL");
   const evolutionKey = Deno.env.get("EVOLUTION_API_KEY");
@@ -585,9 +626,13 @@ async function sendWhatsApp(
       (orderId ? `📦 *Pedido:* ${orderId}\n` : '') +
       (driverId ? `🚗 *Motorista:* ${driverId}\n` : '') +
       `\n⏰ ${new Date().toLocaleString('pt-BR')}`;
-    const zappResult = await zapp.sendText(number, text);
+    // Etapa 68: com imagem do trajeto o caption leva o texto e o mapa vai anexo;
+    // sem `sendMedia` no canal, cai no texto puro.
+    const zappResult = mediaDataUrl && zapp.sendMedia
+      ? await zapp.sendMedia(number, mediaDataUrl, text)
+      : await zapp.sendText(number, text);
     if (zappResult.success) {
-      logger.log(`[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}`);
+      logger.log(`[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}${mediaDataUrl ? ' (com imagem)' : ''}`);
     } else {
       logger.error('[WhatsApp] Erro no Zapp:', zappResult.error);
     }
@@ -608,17 +653,29 @@ async function sendWhatsApp(
       (driverId ? `🚗 *Motorista:* ${driverId}\n` : '') +
       `\n⏰ ${new Date().toLocaleString('pt-BR')}`;
     
-    const response = await fetch(`${evolutionUrl}/message/sendText/${instanceName}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
-      body: JSON.stringify({ number: formattedNumber, text }),
-    });
+    const response = mediaDataUrl
+      ? await fetch(`${evolutionUrl}/message/sendMedia/${instanceName}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
+          body: JSON.stringify({
+            number: formattedNumber,
+            mediatype: 'image',
+            mimetype: mediaDataUrl.slice(5, mediaDataUrl.indexOf(';')),
+            media: mediaDataUrl.slice(mediaDataUrl.indexOf(',') + 1),
+            caption: text,
+          }),
+        })
+      : await fetch(`${evolutionUrl}/message/sendText/${instanceName}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
+          body: JSON.stringify({ number: formattedNumber, text }),
+        });
     
     if (!response.ok) {
       throw new Error(`Evolution API error: ${response.statusText}`);
     }
     
-    logger.log(`[WhatsApp] Sent to ${formattedNumber}`);
+    logger.log(`[WhatsApp] Sent to ${formattedNumber}${mediaDataUrl ? ' (com imagem)' : ''}`);
     return { success: true };
   } catch (error: any) {
     logger.error('[WhatsApp] Error:', error);

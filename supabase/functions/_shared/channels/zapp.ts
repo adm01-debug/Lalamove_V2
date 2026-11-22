@@ -20,6 +20,12 @@ export interface TextChannel {
   /** Identifica o provedor nos logs e em `alerts_sent.channel`. */
   readonly name: string;
   sendText(number: string, text: string): Promise<TextChannelResult>;
+  /**
+   * Etapa 68: imagem do trajeto junto com o alerta. Opcional — canal que não
+   * implementa faz o despacho cair no `sendText`. `dataUrl` é o PNG em base64
+   * que o `geo-gateway` devolve (`data:image/png;base64,...`).
+   */
+  sendMedia?(number: string, dataUrl: string, caption?: string): Promise<TextChannelResult>;
 }
 
 export interface ZappConfig {
@@ -76,6 +82,57 @@ export function createZappChannel(config: ZappConfig): TextChannel {
         if (!response.ok) {
           // Corpo do erro ajuda o operador a distinguir sessão caída de número
           // inexistente — 401/403 = credencial, 4xx = destinatário.
+          const detail = await response.text().catch(() => "");
+          return {
+            success: false,
+            error: `Zapp API error: ${response.status} ${response.statusText}${detail ? ` - ${detail.slice(0, 200)}` : ""}`.trim(),
+          };
+        }
+
+        return { success: true };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return {
+          success: false,
+          error: message === "The signal has been aborted" || message.includes("abort")
+            ? `Zapp API timeout após ${timeoutMs} ms`
+            : message,
+        };
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+
+    async sendMedia(number: string, dataUrl: string, caption?: string): Promise<TextChannelResult> {
+      const formattedNumber = normalizeZappNumber(number);
+      if (!formattedNumber) {
+        return { success: false, error: "Destinatário vazio ou inválido" };
+      }
+      if (!dataUrl.startsWith("data:image/")) {
+        return { success: false, error: "Mídia não é um data URL de imagem" };
+      }
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await doFetch(`${base}/messages/send-media`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${config.apiKey}`,
+          },
+          body: JSON.stringify({
+            number: formattedNumber,
+            mediatype: "image",
+            mimetype: dataUrl.slice(5, dataUrl.indexOf(";")),
+            media: dataUrl.slice(dataUrl.indexOf(",") + 1),
+            ...(caption ? { caption } : {}),
+            ...(config.instance ? { instance: config.instance } : {}),
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
           const detail = await response.text().catch(() => "");
           return {
             success: false,
