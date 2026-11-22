@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a0e29908737ab462cda2bc58c265ea170d2e815a",
+  "commit": "972a37cbc15cd263321499d59a7af628d3d46e2b",
   "branch": "main",
-  "data_commit": "2026-11-21T22:33:35-03:00",
+  "data_commit": "2026-11-21T22:36:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "972a37c",
+    "data": "2026-11-21",
+    "assunto": "feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)"
+   },
    {
     "sha": "a0e2990",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "e0ebbdb",
     "data": "2026-11-21",
     "assunto": "fix: restaura audit_log e agenda os jobs geo (expected_route + ETA) (#152)"
-   },
-   {
-    "sha": "00e2fb7",
-    "data": "2026-11-21",
-    "assunto": "feat(mapa): seletor do usuario respeita a politica de geo_settings.tiles (#171)"
    }
   ],
-  "arquivos_mudados_7d": 202,
+  "arquivos_mudados_7d": 203,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 105
+    "commits": 106
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 978,
+  "arquivos_total": 979,
   "arquivos_codigo": 610,
   "linhas_codigo": 119744,
   "rotas": 55,
@@ -322,7 +322,7 @@
   "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
-  "migrations": 178,
+  "migrations": 179,
   "cron_jobs": 21,
   "testes": 121,
   "workflows": 5,

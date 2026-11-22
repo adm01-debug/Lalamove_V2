@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)",
    "feat(geo): implementa provider Google no geo-gateway (Bloco 2) (#197)",
    "docs(planos): atualiza tracker do plano Mapbox com estado real de producao (#196)",
    "fix: preco dos SKUs mapbox que faltavam em geo_price_list (#195)",
-   "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)",
-   "chore: registra os resultados reais do drill da etapa 72 (#194)"
+   "feat(notificacoes): respeita horario de silencio e corrige bloqueio de aviso ao fornecedor (#192)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

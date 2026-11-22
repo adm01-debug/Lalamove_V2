@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a0e2990873` · branch `main` · 2026-11-22 01:34 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `972a37cbc1` · branch `main` · 2026-11-22 01:37 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -288,6 +288,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lalamove_orders` | `requires_address_review` | obrigatório |
 | `lalamove_orders` | `(tabela)` | constraint lalamove_orders_total_cost_nonneg CHECK (total_cost >= 0), ADD CONSTRAINT lalamove_orders_distance_nonneg CHECK (distance_meters IS NULL OR distance_meters >= 0), ADD CONSTRAINT lalamove_orders_delay_nonneg CHECK (delay_minutes IS NULL OR delay_minutes >= 0), ADD CONSTRAINT lalamove_order … |
 | `lalamove_orders` | `(tabela)` | constraint lalamove_orders_cancellation_reason_check CHECK ( cancellation_reason IS NULL OR cancellation_reason IN ( 'USER_REQUESTED', 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_ASKED_CANCEL', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', 'DELIVERY_ETA_TOO_LONG', 'PRICE_TOO … |
+| `lalamove_orders` | `(tabela)` | constraint lalamove_orders_pickup_place_id_prefix_check CHECK (pickup_place_id IS NULL OR pickup_place_id ~ '^(google\|mapbox):'), ADD CONSTRAINT lalamove_orders_delivery_place_id_prefix_check CHECK (delivery_place_id IS NULL OR delivery_place_id ~ '^(google\|mapbox):') |
 | `lalamove_stops` | `id` | PK; default gen_random_uuid() |
 | `lalamove_stops` | `order_id` | obrigatório; FK → lalamove_orders.id ON DELETE CASCADE |
 | `lalamove_stops` | `stop_index` | obrigatório |
@@ -295,6 +296,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `lalamove_stops` | `created_at` | default now() |
 | `lalamove_stops` | `pod_status` | default 'NOT_REQUIRED' |
 | `lalamove_stops` | `(tabela)` | constraint lalamove_stops_stop_index_non_negative CHECK (stop_index >= 0), ADD CONSTRAINT lalamove_stops_latitude_range CHECK (latitude IS NULL OR (latitude >= -90 AND latitude <= 90)), ADD CONSTRAINT lalamove_stops_longitude_range CHECK (longitude IS NULL OR (longitude >= -180 AND longitude <= 180) … |
+| `lalamove_stops` | `(tabela)` | constraint lalamove_stops_place_id_prefix_check CHECK (place_id IS NULL OR place_id ~ '^(google\|mapbox\|lalamove):') |
 | `lalamove_status_history` | `id` | PK; default gen_random_uuid() |
 | `lalamove_status_history` | `order_id` | obrigatório; FK → lalamove_orders.id ON DELETE CASCADE |
 | `lalamove_status_history` | `status` | obrigatório |
@@ -533,9 +535,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `user_devices` | `created_at` | default now() |
 | `user_devices` | `(tabela)` | UNIQUE(user_id, device_fingerprint) |
 | `new_device_alerts` | `id` | PK; default gen_random_uuid() |
-| `new_device_alerts` | `user_id` | obrigatório |
-| `new_device_alerts` | `device_id` | FK → user_devices.id ON DELETE CASCADE |
-| … +285 linhas — lista completa em `context.json` | | |
+| … +287 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 

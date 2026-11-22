@@ -1,17 +1,17 @@
 # Graph Report - Lalamove_V2  (2026-11-22)
 
 ## Corpus Check
-- 936 files · ~690,848 words
+- 937 files · ~691,037 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 7545 nodes · 16071 edges · 566 communities (390 shown, 176 thin omitted)
+- 7548 nodes · 16071 edges · 569 communities (390 shown, 179 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 382 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a0e29908`
+- Built from commit: `972a37cb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -474,6 +474,8 @@
 - public.auth_logs
 - public.new_device_alerts
 - public.lalamove_orders
+- public.lalamove_stops
+- public.lalamove_orders
 - public.active_tracking
 - public.job_queue
 - public.lalamove_stops
@@ -505,7 +507,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (566 total, 176 thin omitted)
+## Communities (569 total, 179 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
@@ -2069,8 +2071,8 @@ Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
 ## Knowledge Gaps
 - **2669 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+2664 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3507 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **176 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3510 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **179 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -2080,7 +2082,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `Dados e Estado` connect `DashboardRedesigned.tsx` to `useIncidents.ts`, `SnapshotDBStatsTests`, `useDeliveryMetrics.ts`, `@tanstack/react-query`, `useAuth`, `🪝 Hooks Personalizados`, `bundle-budget.unit.mjs`, `lint-ratchet.mjs`, `useDrivers.ts`?**
   _High betweenness centrality (0.059) - this node is a cross-community bridge._
 - **Why does `react` connect `react` to `cn`, `button.tsx`, `badge.tsx`, `App.tsx`, `AdminTelemetriaPage.tsx`, `DashboardRedesigned.tsx`, `client.ts`, `LiveMapPage.tsx`, `useRiskRules.ts`, `package.json`, `@tanstack/react-query`, `useTheme`, `useGlobalSearch.ts`, `OrdersPage.tsx`, `errorMonitoring.ts`, `useAuth`, `useMapbox.ts`, `🪝 Hooks Personalizados`, `useLalamoveUapi.ts`, `useRealtimeSubscriptions.ts`, `types/index.ts`, `motion.tsx`, `NewOrderDialog.tsx`, `DriversPage.tsx`, `useOfflineStorage.ts`, `LiveMap.tsx`, `useTrackingData.ts`, `AdvancedReportsPage.tsx`, `useMapMarkers.ts`, `useAchievementsSystem.tsx`, `useAdvancedReports.ts`, `useCachedStats.ts`, `useDeliveryMetrics.ts`, `CommandPaletteEnhanced.tsx`, `micro-interactions.tsx`, `OfflineIndicator.tsx`, `chart.tsx`, `AddressAutocomplete.test.tsx`, `lucide-react`, `contextual-hints.tsx`, `useIncidents.ts`, `useJobQueue.ts`, `AddressAutocomplete.tsx`, `MapProviderSelector.tsx`, `StatusTimeline.tsx`, `webVitals.ts`, `floating-action-button.tsx`, `UrgencyIndicator.tsx`, `useWebhookEvents.ts`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**
   _`cn()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `session-start.sh script`, `PATH`, `$schema` to the rest of the system?**
