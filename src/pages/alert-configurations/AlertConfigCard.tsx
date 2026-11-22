@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap, Trash2 } from 'lucide-react';
+import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap, Trash2, Navigation, MapPin, Clock, FileWarning, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUpdateAlertConfiguration, useDeleteAlertConfiguration, AlertConfiguration } from '@/hooks/useAlertConfigurations';
 import { useTestNotification } from '@/hooks/useTestNotification';
@@ -14,11 +14,77 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const alertTypeLabels: Record<string, string> = { 'DRIVER_BLOCKED': 'Motorista Bloqueado', 'ROUTE_DEVIATION': 'Desvio de Rota', 'DRIVER_STOPPED': 'Motorista Parado', 'LATE_DELIVERY': 'Entrega Atrasada', 'APPROVAL_REQUIRED': 'Aprovação Necessária', 'ORDER_CANCELLED': 'Pedido Cancelado', 'INTEGRATION_FAILURE': 'Falha de Integração' };
-const alertTypeDescriptions: Record<string, string> = { 'DRIVER_BLOCKED': 'Notifica quando um motorista na blocklist é atribuído a um pedido', 'ROUTE_DEVIATION': 'Alerta quando o motorista desvia significativamente da rota esperada', 'DRIVER_STOPPED': 'Alerta quando o motorista fica parado por muito tempo', 'LATE_DELIVERY': 'Notifica quando uma entrega ultrapassa o prazo estimado', 'APPROVAL_REQUIRED': 'Avisa quando um motorista precisa de aprovação manual', 'ORDER_CANCELLED': 'Notifica sobre cancelamentos de pedidos', 'INTEGRATION_FAILURE': 'Notifica quando uma integração externa (Lalamove, UAPI, Bitrix24) falha' };
-const alertTypeIcons: Record<string, typeof Bell> = { 'DRIVER_BLOCKED': Zap, 'ROUTE_DEVIATION': Settings2, 'DRIVER_STOPPED': Bell, 'LATE_DELIVERY': Bell, 'APPROVAL_REQUIRED': Sparkles, 'ORDER_CANCELLED': Bell, 'INTEGRATION_FAILURE': Webhook };
+const alertTypeLabels: Record<string, string> = {
+  'DRIVER_BLOCKED': 'Motorista Bloqueado', 'ROUTE_DEVIATION': 'Desvio de Rota', 'DRIVER_STOPPED': 'Motorista Parado',
+  'LATE_DELIVERY': 'Entrega Atrasada', 'APPROVAL_REQUIRED': 'Aprovação Necessária', 'ORDER_CANCELLED': 'Pedido Cancelado',
+  'INTEGRATION_FAILURE': 'Falha de Integração',
+  // Eventos geo (plano Google Maps, etapa 72): sem rótulo aqui o card cai no fallback
+  // `alert_type` cru e o operador não entende o que está ativando.
+  'DRIVER_APPROACHING_PICKUP': 'Motorista aproximando da coleta',
+  'DRIVER_ARRIVED_PICKUP': 'Motorista chegou na coleta',
+  'DRIVER_APPROACHING_DELIVERY': 'Motorista aproximando da entrega',
+  'DRIVER_ARRIVED_DELIVERY': 'Motorista chegou na entrega',
+  'ETA_DELAY': 'Atraso previsto pelo ETA',
+  'SUPPLIER_DELAY_NOTICE': 'Aviso de atraso ao fornecedor',
+  'MISSING_POD': 'POD não anexado',
+  'GEO_BUDGET_WARNING': 'Orçamento geo próximo do limite',
+};
+const alertTypeDescriptions: Record<string, string> = {
+  'DRIVER_BLOCKED': 'Notifica quando um motorista na blocklist é atribuído a um pedido',
+  'ROUTE_DEVIATION': 'Alerta quando o motorista desvia significativamente da rota esperada',
+  'DRIVER_STOPPED': 'Alerta quando o motorista fica parado por muito tempo',
+  'LATE_DELIVERY': 'Notifica quando uma entrega ultrapassa o prazo estimado',
+  'APPROVAL_REQUIRED': 'Avisa quando um motorista precisa de aprovação manual',
+  'ORDER_CANCELLED': 'Notifica sobre cancelamentos de pedidos',
+  'INTEGRATION_FAILURE': 'Notifica quando uma integração externa (Lalamove, UAPI, Bitrix24) falha',
+  'DRIVER_APPROACHING_PICKUP': 'Dispara quando o motorista entra no raio de aproximação da coleta',
+  'DRIVER_ARRIVED_PICKUP': 'Dispara quando o motorista chega na coleta (fora da janela de silêncio)',
+  'DRIVER_APPROACHING_DELIVERY': 'Dispara quando o motorista entra no raio de aproximação da entrega',
+  'DRIVER_ARRIVED_DELIVERY': 'Dispara quando o motorista chega na entrega (fora da janela de silêncio)',
+  'ETA_DELAY': 'Dispara quando o ETA calculado passa do prazo combinado com o cliente',
+  'SUPPLIER_DELAY_NOTICE': 'Avisa o fornecedor que a coleta vai atrasar',
+  'MISSING_POD': 'Dispara quando o pedido é concluído sem comprovante de entrega',
+  'GEO_BUDGET_WARNING': 'Avisa quando o gasto geo cruza o percentual de alerta do orçamento',
+};
+const alertTypeIcons: Record<string, typeof Bell> = {
+  'DRIVER_BLOCKED': Zap, 'ROUTE_DEVIATION': Settings2, 'DRIVER_STOPPED': Bell, 'LATE_DELIVERY': Bell,
+  'APPROVAL_REQUIRED': Sparkles, 'ORDER_CANCELLED': Bell, 'INTEGRATION_FAILURE': Webhook,
+  // Coleta e entrega usam ícones distintos para diferenciar os 4 eventos no painel.
+  'DRIVER_APPROACHING_PICKUP': Navigation, 'DRIVER_ARRIVED_PICKUP': MapPin,
+  'DRIVER_APPROACHING_DELIVERY': Navigation, 'DRIVER_ARRIVED_DELIVERY': MapPin,
+  'ETA_DELAY': Clock, 'SUPPLIER_DELAY_NOTICE': Clock, 'MISSING_POD': FileWarning, 'GEO_BUDGET_WARNING': Wallet,
+};
 const channelIcons = { whatsapp: MessageCircle, email: Mail, slack: Hash, bitrix24: Briefcase, n8n: Webhook };
 const channelLabels = { whatsapp: 'WhatsApp', email: 'Email', slack: 'Slack', bitrix24: 'Bitrix24', n8n: 'N8N Webhook' };
+
+/**
+ * Etapa 72 do plano Google Maps: preview do template no próprio card.
+ * `message_template` usa `{{variavel}}` (renderizado por `_shared/template.ts`
+ * na edge). Antes o modal ensinava `{variavel}` com chave simples, então quem
+ * seguia a dica gravava um template que saía literal na mensagem do cliente.
+ */
+const TEMPLATE_SAMPLE: Record<string, string> = {
+  driver_name: 'João Silva',
+  driver_plate: 'ABC1D23',
+  driver_id: 'drv_123',
+  eta_min: '6',
+  distance_m: '820',
+  order_ref: '#1042',
+  order_id: '1042',
+  pickup_address: 'Rua XV de Novembro, 100 - Centro',
+  pickup_contact_name: 'Maria',
+  delivery_address: 'Av. Sete de Setembro, 3000 - Batel',
+  share_link: 'https://tinyurl.com/exemplo',
+  static_map_url: 'https://.../mapa.png',
+  risk_score: '0.82',
+  severity: 'INFO',
+};
+
+const TEMPLATE_VARIABLES = Object.keys(TEMPLATE_SAMPLE);
+
+function renderPreview(template: string): string {
+  return template.replace(/\{\{\s*([a-z_]+)\s*\}\}/gi, (match, name: string) => TEMPLATE_SAMPLE[name] ?? match);
+}
 
 export function AlertConfigCard({ config, index }: { config: AlertConfiguration; index: number }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -69,7 +135,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
           </div>
           <div className="flex items-center gap-2">
             {config.is_enabled ? <Badge variant="glow-success" size="sm" dot pulse>Ativo</Badge> : <Badge variant="inactive" size="sm">Inativo</Badge>}
-            <Button variant="ghost" size="icon-sm" onClick={() => setIsEditing(true)} className="opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></Button><Button variant="ghost" size="icon-sm" onClick={() => { if (window.confirm(`Excluir a configuração de ${alertTypeLabels[config.alert_type] || config.alert_type}? O alerta para de ser notificado.`)) deleteMutation.mutate(config.id); }} disabled={deleteMutation.isPending} title="Excluir configuração" className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="icon-sm" onClick={() => setIsEditing(true)} aria-label="Editar configuração" className="opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></Button><Button variant="ghost" size="icon-sm" onClick={() => { if (window.confirm(`Excluir a configuração de ${alertTypeLabels[config.alert_type] || config.alert_type}? O alerta para de ser notificado.`)) deleteMutation.mutate(config.id); }} disabled={deleteMutation.isPending} title="Excluir configuração" className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
             <Button variant={config.is_enabled ? "outline" : "gradient"} size="sm" onClick={handleToggleEnabled} disabled={updateMutation.isPending} className="gap-1.5">{config.is_enabled ? <><PowerOff className="w-3.5 h-3.5" />Desativar</> : <><Power className="w-3.5 h-3.5" />Ativar</>}</Button>
           </div>
         </div>
@@ -103,7 +169,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
         <DialogContent className="max-w-2xl">
           <DialogHeader><DialogTitle className="flex items-center gap-2"><div className="p-2 rounded-lg bg-primary/10"><AlertIcon className="w-5 h-5 text-primary" /></div>Editar {alertTypeLabels[config.alert_type] || config.alert_type}</DialogTitle><DialogDescription>Configure o template e os destinatários das notificações</DialogDescription></DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2"><Label>Template da Mensagem</Label><Textarea value={editedTemplate} onChange={(e) => setEditedTemplate(e.target.value)} placeholder="Use {driver_name}, {order_id}, {risk_score} como variáveis..." rows={4} className="font-mono text-sm" /><p className="text-xs text-muted-foreground">Variáveis disponíveis: {'{driver_name}'}, {'{driver_id}'}, {'{order_id}'}, {'{risk_score}'}, {'{severity}'}</p></div>
+            <div className="space-y-2"><Label>Template da Mensagem</Label><Textarea value={editedTemplate} onChange={(e) => setEditedTemplate(e.target.value)} placeholder="Use {{driver_name}}, {{order_ref}}, {{eta_min}} como variáveis..." rows={4} className="font-mono text-sm" /><p className="text-xs text-muted-foreground">Variáveis disponíveis: {TEMPLATE_VARIABLES.map((v) => `{{${v}}}`).join(', ')}</p>{editedTemplate.trim() && <div className="p-3 rounded-xl bg-secondary/50 border border-border/50 space-y-1"><Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Prévia com dados de exemplo</Label><p className="text-sm text-foreground/90 whitespace-pre-wrap">{renderPreview(editedTemplate)}</p></div>}</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2"><Label className="flex items-center gap-2"><MessageCircle className="w-4 h-4 text-success" />WhatsApp (números)</Label><Input value={editedWhatsapp} onChange={(e) => setEditedWhatsapp(e.target.value)} placeholder="5511999999999, 5511888888888" /></div>
               <div className="space-y-2"><Label className="flex items-center gap-2"><Mail className="w-4 h-4 text-info" />Email (endereços)</Label><Input value={editedEmails} onChange={(e) => setEditedEmails(e.target.value)} placeholder="email@empresa.com" /></div>
