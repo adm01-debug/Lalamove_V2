@@ -891,8 +891,11 @@ tsconfig.app.json` limpo.
 - **Pendente:** a segunda metade da etapa (chamar `provider-status` em produção após o deploy) não existe em nenhum workflow — `grep -rn "provider-status" .github/workflows/` retorna 0. Fica com a etapa 94 (verificação pós-deploy).
 
 ### 94 — Deploy e verificação
-- [ ] Cada PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list`; front → deploy Vercel `lalamove-v2` READY
-- **Evidência:** links das runs
+- [x] Cada PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list`; front → deploy Vercel `lalamove-v2` READY
+- [x] **Smoke test pós-deploy (novo).** `deploy-edges.yml:55-77` chama `geo-gateway` com `action: provider-status` assim que o deploy termina. Deploy verde não provava que a function respondia — o `supabase functions deploy` pode concluir e a function ainda devolver 401/500 (verify_jwt, secret ausente, bundle quebrado). `provider-status` é read-only (não chama provedor pago, não grava `geo_usage`), então serve de prova sem custo.
+  > **Provado com stub local** (4 cenários, script extraído do YAML e executado contra um servidor HTTP que imita a resposta real): `200` com provedor configurado → `exit 0`; `200` sem nenhum provedor configurado → `exit 1` + "nenhum provedor configurado"; `500` → `exit 1` + "não respondeu 200"; `200` com corpo sem `providers` → `exit 1` + "sem lista de provedores".
+  > **Não verificado:** a chamada contra produção real, porque o workflow exige `VITE_SUPABASE_URL`/`VITE_SUPABASE_PUBLISHABLE_KEY` como secrets do runner (existem no repo, mas o smoke só roda depois de um merge em `main`).
+- **Evidência:** `actionlint .github/workflows/deploy-edges.yml` → sem erros; stub com 4 desfechos → 1 verde e 3 vermelhos nas condições certas.
 
 ### 95 — Verificação de cotas e custo real
 - [ ] Após 7 dias: comparar `geo_usage_month` com "Relatórios" do Google Cloud Billing; ajustar `geo_price_list` se divergir > 5%
