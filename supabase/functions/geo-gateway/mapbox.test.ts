@@ -254,3 +254,104 @@ Deno.test("etapa 22: place-details no modo geocoding resolve por address no v6",
   assertEquals(r.data.provider, "mapbox");
   assertEquals(r.sku, "geocoding_temporary");
 });
+
+Deno.test("reverse: lat/lng acham endereço (caso de sucesso, não só os de erro)", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: RETRIEVE }));
+  const p = new MapboxProvider({ token: "t", fetch });
+  const r = await p.reverse({ lat: -25.4296, lng: -49.2716 });
+  assert(calls[0].url.includes("/search/geocode/v6/reverse"));
+  assertEquals(r.data?.formatted, "Rua XV de Novembro 100, Centro, Curitiba");
+  assertEquals(r.data?.location, { lat: -25.4296, lng: -49.2716 });
+  assertEquals(r.sku, "geocoding_temporary");
+});
+
+Deno.test("etapa 32: route() com 414 (URL acima de 8 KB) refaz como POST — coordenadas no corpo, não na URL", async () => {
+  const calls: { url: string; method?: string; body?: string }[] = [];
+  const fetchFn: typeof fetch = ((input: string | URL | Request, init?: RequestInit) => {
+    const url = String(input);
+    calls.push({ url, method: init?.method, body: init?.body ? String(init.body) : undefined });
+    if (!init?.method) return Promise.resolve(new Response("", { status: 414 }));
+    return Promise.resolve(new Response(JSON.stringify({
+      routes: [{ geometry: encodePolyline([{ lat: -25.43, lng: -49.27 }, { lat: -25.44, lng: -49.23 }], 6), distance: 1000, duration: 120, legs: [{ distance: 1000, duration: 120 }] }],
+    }), { status: 200 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const origin = { lat: -25.43, lng: -49.27 };
+  const destination = { lat: -25.44, lng: -49.23 };
+  const r = await p.route({ origin, destination });
+  // exatamente 1 tentativa GET + 1 retry POST — nunca mais que isso
+  assertEquals(calls.length, 2);
+  assertEquals(calls[0].method, undefined);
+  assert(calls[0].url.includes(`/directions/v5/mapbox/driving-traffic/-49.27,-25.43;-49.23,-25.44`), "GET leva as coordenadas no caminho");
+  assertEquals(calls[1].method, "POST");
+  assert(calls[1].url === `https://api.mapbox.com/directions/v5/mapbox/driving-traffic?access_token=t`, "POST só leva access_token na URL");
+  // docs.mapbox.com/api/navigation/http-post/: coordinates + todas as outras opções no corpo
+  const body = new URLSearchParams(calls[1].body ?? "");
+  assertEquals(body.get("coordinates"), "-49.27,-25.43;-49.23,-25.44");
+  assertEquals(body.get("geometries"), "polyline6");
+  assertEquals(body.get("overview"), "full");
+  assertEquals(body.get("alternatives"), "false");
+  assertEquals(body.get("annotations"), "duration,distance");
+  assertEquals(body.get("language"), "pt");
+  assertEquals(r.data.distance_m, 1000);
+});
+
+Deno.test("etapa 32: snap() com 414 refaz como POST — mesmo contrato do Directions", async () => {
+  const calls: { url: string; method?: string; body?: string }[] = [];
+  const fetchFn: typeof fetch = ((input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ url: String(input), method: init?.method, body: init?.body ? String(init.body) : undefined });
+    if (!init?.method) return Promise.resolve(new Response("", { status: 414 }));
+    return Promise.resolve(new Response(JSON.stringify({ matchings: [{ confidence: 0.8 }], tracepoints: [null, null] }), { status: 200 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const points = [{ lat: -25.43, lng: -49.27 }, { lat: -25.44, lng: -49.23 }];
+  await p.snap({ points });
+  assertEquals(calls.length, 2);
+  assert(calls[0].url.includes("/matching/v5/mapbox/driving/-49.27,-25.43;-49.23,-25.44"));
+  assertEquals(calls[1].method, "POST");
+  assert(calls[1].url === `https://api.mapbox.com/matching/v5/mapbox/driving?access_token=t`, "POST só leva access_token na URL");
+  const body = new URLSearchParams(calls[1].body ?? "");
+  assertEquals(body.get("coordinates"), "-49.27,-25.43;-49.23,-25.44");
+  assertEquals(body.get("geometries"), "geojson");
+  assertEquals(body.get("radiuses"), "25;25");
+});
+
+Deno.test("etapa 32: 414 persiste mesmo via POST → GEO_INVALID_INPUT (um retry só, não fica tentando pra sempre)", async () => {
+  const calls: { method?: string }[] = [];
+  const fetchFn: typeof fetch = ((_input: string | URL | Request, init?: RequestInit) => {
+    calls.push({ method: init?.method });
+    return Promise.resolve(new Response("", { status: 414 }));
+  });
+  const p = new MapboxProvider({ token: "t", fetch: fetchFn });
+  const e = await assertRejects(
+    () => p.route({ origin: { lat: -25.43, lng: -49.27 }, destination: { lat: -25.44, lng: -49.23 } }),
+    GeoProviderError,
+  );
+  assertEquals(e.code, "GEO_INVALID_INPUT");
+  assertEquals(calls.length, 2, "GET + 1 retry POST, nunca um segundo retry");
+});
+
+Deno.test("reverse: 414 não tenta POST (sem variante POST documentada p/ reverse geocode de 1 ponto)", async () => {
+  const { fetch, calls } = mockFetch(() => ({ status: 414 }));
+  const p = new MapboxProvider({ token: "t", fetch });
+  const e = await assertRejects(() => p.reverse({ lat: -25.4, lng: -49.2 }), GeoProviderError);
+  assertEquals(e.code, "GEO_INVALID_INPUT");
+  assertEquals(calls.length, 1, "não existe retry para reverse — a URL de 1 ponto nunca passa de 8 KB de verdade");
+});
+
+Deno.test("raw: isochrone/optimization/tilequery (pass-through sem equivalente no Google) chegam ao Mapbox", async () => {
+  const { fetch, calls } = mockFetch(() => ({ body: { ok: true } }));
+  const p = new MapboxProvider({ token: "t", fetch });
+
+  const iso = await p.raw("isochrone", { lng: -49.27, lat: -25.43, profile: "driving" });
+  assert(calls[0].url.includes("/isochrone/v1/mapbox/driving/-49.27,-25.43"));
+  assertEquals(iso.sku, "isochrone");
+
+  const opt = await p.raw("optimization", { coordinates: [[-49.27, -25.43], [-49.23, -25.44]], profile: "driving" });
+  assert(calls[1].url.includes("/optimized-trips/v1/mapbox/driving/-49.27,-25.43;-49.23,-25.44"));
+  assertEquals(opt.sku, "optimization");
+
+  const tile = await p.raw("tilequery", { lng: -49.27, lat: -25.43, tileset: "mapbox.mapbox-streets-v8" });
+  assert(calls[2].url.includes("/v4/mapbox.mapbox-streets-v8/tilequery/-49.27,-25.43.json"));
+  assertEquals(tile.sku, "tilequery");
+});
