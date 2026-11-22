@@ -1,17 +1,19 @@
--- Etapas 44 e 50 do plano Google Maps.
---
--- 44 — Recalcular rota quando o motorista sai do caminho:
---      `geo_evaluate_tracking` já calculava `is_on_route` e `off_route_cycles`, mas ninguém
---      consumia esse contador: a rota ficava velha e o ETA derivava. Agora, ao completar 2
---      ciclos fora da rota, o trigger enfileira um `route_plan` no `job_queue`. O rate de
---      1 job a cada 5 min por pedido vem do `ON CONFLICT` em `dedup_key` junto com o
---      filtro `created_at > now() - interval '5 minutes'`.
+-- Etapa 50 do plano Google Maps.
 --
 -- 50 — `ETA_DELAY`: existia no enum (`20261122130000_geo_alert_types.sql:11`) e em
 --      `alert_configurations` (`20261122130100:548-549` com `message_template`), mas
 --      nenhum código emitia o evento. Agora o trigger emite quando a previsão de chegada
 --      passa do `scheduled_at` + a tolerância de `LATE_DELIVERY`, uma vez por pedido por
 --      parada (`order_geo_events` tem UNIQUE(order_id, event_type, stop_index)).
+--
+-- Nota sobre a etapa 44 (replanejar rota fora do caminho): já estava implementada pelo
+-- cron `geo-jobs-refresh` (`20261121194500_geo_jobs_scheduler.sql:52-73`), que a cada 5 min
+-- enfileira `route_plan` quando `off_route_cycles >= 2` (o trigger acumula o contador em
+-- `geo_foundation.sql:468` e só o zera quando o motorista volta para a rota, então o
+-- replanejamento se repete a cada janela de 5 min enquanto o desvio persistir).
+-- Enfileirar também dentro do trigger criaria dois jobs com `dedup_key` diferentes para o
+-- mesmo evento — duas chamadas pagas ao provedor por desvio. Por isso esta migration NÃO
+-- toca a etapa 44.
 
 -- ----------------------------------------------------------------------------
 -- 1. Tolerância de atraso configurável
@@ -26,7 +28,7 @@ COMMENT ON COLUMN public.geo_defaults.late_tolerance_min IS
   'Minutos de atraso tolerados antes de emitir ETA_DELAY (etapa 50). Junto com lalamove_orders.scheduled_at.';
 
 -- ----------------------------------------------------------------------------
--- 2. geo_evaluate_tracking: emite ETA_DELAY e enfileira route_plan
+-- 2. geo_evaluate_tracking: emite ETA_DELAY
 -- ----------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION public.geo_evaluate_tracking()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
@@ -106,33 +108,6 @@ BEGIN
       NEW.is_on_route := NEW.distance_to_route_m <= v_off_m;
       NEW.off_route_cycles := CASE WHEN NEW.is_on_route THEN 0 ELSE COALESCE(OLD.off_route_cycles, 0) + 1 END;
     END IF;
-  END IF;
-
-  -- ---------------- ETAPA 44: replanejar rota quando sai do caminho ----------------
-  -- 2 ciclos consecutivos fora da rota (~20-30 s com a cadencia de 10-15 s da UAPI).
-  -- O guard de 5 min por pedido usa job_queue.dedup_key + created_at; sem ele, um
-  -- motorista parado fora da rota geraria um job a cada ciclo.
-  IF NEW.off_route_cycles >= 2 AND o.id IS NOT NULL THEN
-    INSERT INTO job_queue (type, payload, status, priority, max_attempts, dedup_key)
-    SELECT 'route_plan',
-           jsonb_build_object('orderId', o.id, 'trackingId', NEW.id, 'reason', 'off_route',
-                              'off_route_cycles', NEW.off_route_cycles,
-                              'distance_to_route_m', NEW.distance_to_route_m),
-           'PENDING', 5, 3,
-           'route_plan:' || o.id::text || ':' || to_char(now(), 'YYYYMMDDHH24MI')
-    WHERE NOT EXISTS (
-      SELECT 1 FROM job_queue jq
-       WHERE jq.type = 'route_plan'
-         AND jq.payload->>'orderId' = o.id::text
-         AND jq.created_at > now() - interval '5 minutes'
-    )
-    -- O dedup_key usa o minuto corrente; se um job ja existe dentro da janela mas o
-    -- guard acima nao o viu (corrida), a UNIQUE parcial levantaria excecao e abortaria
-    -- o UPDATE de tracking. DO NOTHING torna o caso uma no-op.
-    ON CONFLICT DO NOTHING;
-    -- Reativa o contador para o proximo par de ciclos; sem isso o INSERT acima nao
-    -- reavaliaria o guard e o ciclo ficaria preso em >= 2 para sempre.
-    NEW.off_route_cycles := 0;
   END IF;
 
   IF v_dist IS NULL THEN RETURN NEW; END IF;   -- sem coordenada da parada nao ha evento
@@ -221,4 +196,4 @@ BEGIN
 END; $$;
 
 COMMENT ON FUNCTION public.geo_evaluate_tracking() IS
-  'Trigger de active_tracking: calcula distancia/ETA local, emite os eventos de geofence (etapas 54-57), ETA_DELAY (etapa 50) e enfileira route_plan quando o motorista sai da rota (etapa 44).';
+  'Trigger de active_tracking: calcula distancia/ETA local, emite os eventos de geofence (etapas 54-57) e ETA_DELAY (etapa 50).';
