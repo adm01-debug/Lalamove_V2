@@ -529,8 +529,8 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** callback assinado → 200; assinatura errada → 401
 
 ### 97 — [L] Compatibilidade com `alerts_sent`
-- [ ] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
-- **Evidência:** `NotificationHistoryPage` continua mostrando envios
+- [x] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
+- **Evidência:** `send-notification/index.ts` chama `recordNotificationLog` (insert em `alerts_sent`) em todos os caminhos de despacho — whatsapp (:448), sms da contingência da etapa 91 (:435), bitrix (:930) e ad-hoc (:976); `NotificationHistoryPage` continua lendo `alerts_sent` (`useNotificationHistory`). 125 tests verdes localmente.
 
 ### 98 — [x] Testes de contrato do motor
 - [x] `deno test` para roteador, idempotência, fallback, opt-out, silêncio, limite
