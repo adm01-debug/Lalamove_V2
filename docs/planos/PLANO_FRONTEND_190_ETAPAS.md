@@ -290,8 +290,8 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** React DevTools: `Sidebar`/`Header` não desmontam ao trocar de rota; uma única subscription realtime por sessão (`supabase.getChannels().length` estável).
 
 ### 47 — [F] Uma única busca global (Ctrl+K)
-- [ ] Manter `CommandPaletteEnhanced` + `useCommandPaletteSearch`; remover `GlobalSearchAdvanced` (`AppLayout.tsx:211`) e `useGlobalSearch.ts` (ou o inverso) — decidir pelo que tem teste.
-- **Evidência:** `rg -n "key === 'k'" src` retorna 1 ocorrência; Ctrl+K abre um só diálogo.
+- [x] Manter `CommandPaletteEnhanced` + `useCommandPaletteSearch`; remover `GlobalSearchAdvanced` (`AppLayout.tsx:211`) e `useGlobalSearch.ts` (ou o inverso) — decidir pelo que tem teste.
+  - **Evidência:** `rg -n "key === 'k'" src` retorna 1 ocorrência (`useCommandPaletteSearch.ts:113`); Ctrl+K abre um só diálogo. Mantido `CommandPaletteEnhanced` (mais rico: ações rápidas, tema, logout, refresh, 27 itens de nav, busca Fuse, primitivos Command). Removidos `GlobalSearchAdvanced.tsx` e `useGlobalSearch.ts` (duplicavam Ctrl+K e `/`). Validação: tsc 0, eslint 0, build OK, vitest 1057/1057 (67 arquivos).
 
 ### 48 — [F] Hierarquia de papéis numa única fonte
 - [ ] Criar `src/lib/roles.ts` (`ROLE_ORDER`, `hasRole(userRoles, required)`) e usar em `ProtectedRoute.tsx:14`, `sidebar-config.ts:102`, `MobileSidebar.tsx:151`, `Sidebar.tsx:78-79`.
