@@ -5,7 +5,7 @@ import { Loader2, MapPin, Building2, Users, Truck, ShoppingBag, Contact, Navigat
 import { toast } from 'sonner';
 import { useAddressSearch, type AddressSearchResult, type ExternalTable } from '@/hooks/useExternalData';
 import type { MapboxFeature } from '@/hooks/useMapbox';
-import { useAddressSearchBox, type GeoSuggestion } from '@/hooks/useGeoSearch';
+import { useAddressSearchBox, resolveDeliveryPoint, type GeoSuggestion } from '@/hooks/useGeoSearch';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { cn } from '@/lib/utils';
 
@@ -99,7 +99,8 @@ export function AddressAutocomplete({
     }
     // Sem coordenada o retrieve não localizou o ponto: nunca propagar [0,0] (que cai no
     // Golfo da Guiné e vira ponto de entrega inválido). Só o texto fica preenchido.
-    if (!address.location) {
+    const point = resolveDeliveryPoint(address);
+    if (!point) {
       toast.warning('Endereço encontrado sem coordenada — selecione outro resultado ou marque o ponto no mapa.');
       setOpen(false);
       return;
@@ -109,12 +110,12 @@ export function AddressAutocomplete({
         id: address.place_id ?? suggestion.id,
         place_name: address.formatted,
         text: suggestion.main_text,
-        center: [address.location.lng, address.location.lat],
+        center: [point.lng, point.lat],
         place_type: [suggestion.type],
-        geometry: { type: 'Point', coordinates: [address.location.lng, address.location.lat] },
+        geometry: { type: 'Point', coordinates: [point.lng, point.lat] },
       };
       onSelectMapbox?.(feature);
-      onCoordinatesChange?.(address.location.lat, address.location.lng);
+      onCoordinatesChange?.(point.lat, point.lng);
     }
     setOpen(false);
   };
