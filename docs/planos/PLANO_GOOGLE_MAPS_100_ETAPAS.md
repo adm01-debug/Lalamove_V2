@@ -48,7 +48,7 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > código; cada uma ganhou o bloco **"Auditado (2026-11-24)"** logo abaixo, com `arquivo:linha`. De 74 itens `[ ]`,
 > 51 fecharam nesta passagem. Ficaram **3 abertos de propósito**, com o motivo escrito no próprio item: **35**
 > (contrato da edge de `lalamove-api` — decisão de arquitetura), **32.2** (diretório de fixtures; o efeito já está
-> entregue) e as evidências que exigem banco/pedido real. Contagem: **168 `[x]` / 23 `[ ]`**.
+> entregue) e as evidências que exigem banco/pedido real. Contagem: **170 `[x]` / 21 `[ ]`**.
 
 > **Auditoria de código de 2026-11-22 (segunda passagem).** Muitos itens marcados `[ ]` já estavam
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
@@ -66,7 +66,14 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > **O que sobra aberto cai em três grupos:**
 > 1. **Ações externas sem rota MCP** — etapas 1-8, 10 (GCP billing, APIs, chaves, Map ID, secrets do Vercel).
 > 2. **Verificação em produção/pedido real** — 74, 95, 99 e as evidências de execução das 54/55/56/57/70.
-> 3. **Ainda sem auditoria linha a linha** — 30.2 (ver abaixo), 32.2 e 35, todos com motivo escrito no item.
+> 3. **Decisões de arquitetura/contrato** — 35 (a edge de `lalamove-api` não recebe `place_id` da UI) e 32.2
+>    (diretório de fixtures; o efeito da etapa já está entregue pelos mocks de `fetch`).
+
+> **Varredura de branches de outros agentes (2026-11-24).** As 6 branches `claude/*` do remoto foram comparadas
+> com a `main` commit a commit. Duas **não tinham PR aberta** e pareciam trabalho abandonado; ambas são
+> **estritamente anteriores** à `main` e todo o conteúdo já entrou por squash — nenhuma linha exclusiva ficou
+> pendente. O laudo com `arquivo:linha` de cada uma está no início do Bloco 1. As 4 restantes são as PRs vivas
+> #270, #268, #267 e #226.
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
@@ -145,6 +152,18 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 ---
 
 ## BLOCO 1 — Banco de dados (etapas 11–20) 🔒 DDL em produção: PR fica aberta aguardando o dono
+
+### Auditoria de branches órfãs — nada de outro agente foi perdido
+
+Varredura de 2026-11-24: as 6 branches `claude/*` no remoto foram comparadas com `main` commit a commit (`git cherry`, `git diff --numstat`, e leitura das linhas `+` de cada arquivo tocado). Duas delas **não tinham PR aberta** e pareciam trabalho abandonado. Ambas são **estritamente anteriores** à `main` — todo o conteúdo já entrou por squash e a `main` está à frente.
+
+| Branch | Commits à frente | Veredito |
+| --- | --- | --- |
+| `claude/feat-geo-coordenada-cotacao-261123-0300` (`ada208f`, `fed68d8`) | 2 | **Incorporado.** `persistOrderCoordinates` está em `lalamove-api/coordinates.ts:35` e a `main` tem a versão **mais nova** — o `preferred` override que preserva o `place_id` do autocomplete (`coordinates.ts:41-43,55-56`), que a branch não tinha. O `geo_backfill` por pedidos está em `job-worker/index.ts:267-268` (gate `payload.source === 'orders'`), `:391` (`processGeoBackfillOrders`) e `:403` (erro), com o teste `geo-backfill-orders.test.ts` presente. |
+| `claude/feat-optout-e-fim-tracking-261122-0255` (`ff21d52`, `6820ab1`, `78d647c`) | 3 | **Incorporado.** `OrderGeoEvents.tsx` + `.test.tsx` existem; `20261123200000_optout_and_tracking_end.sql` existe; `isPhoneOptedOut` e `metadataRecipients` (com o descarte visível de destinatário sem destino) estão em `send-notification/index.ts`; `useGoogleMapsLoader.ts` + o teste `mapLoadBilling.test.tsx` existem, e a `main` tem adicionalmente `Google3DCanvas.tsx`. |
+
+**Conclusão:** nenhuma linha exclusiva pendente. As 4 branches com PR aberta (#270, #268, #267, #226) continuam sendo o trabalho vivo.
+
 
 ### 11 — Migration `geo_settings`
 - [x] Tabela `geo_settings(id, function text UNIQUE CHECK IN ('tiles','autocomplete','geocode','reverse','route','matrix','static','snap'), provider text CHECK IN ('google','mapbox','off'), fallback_provider text, updated_by uuid, updated_at)`
@@ -280,8 +299,14 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
   - `ProviderResolver.resolve()` já fazia a cadeia primário → `auto` (cota grátis) → `fallback_provider` → `off` com 429, mas **o código do erro saía como `RATE_LIMITED`** — indistinguível do limite por minuto da etapa 32. Adicionado `ERROR_CODES.GEO_BUDGET_EXCEEDED` em `_shared/contract.ts` e o `ResolveError` 429 agora usa esse código com `GEO_BUDGET_EXCEEDED` no `fields[].code`.
   - **Bug de integração corrigido junto:** o `job-worker` classificava erro recuperável por regex (`GEO_UNAVAILABLE|está desligada|Nenhum provedor|RATE_LIMITED|429`) em 4 pontos. `GEO_BUDGET_EXCEEDED` não casava, então um orçamento esgotado passaria a virar `status:'error'` e job retentável em vez de `skipped`. A regex foi estendida nos 4 pontos (`job-worker/index.ts:368,447,599,764`).
   - Evidência: `geo-gateway/budget-error.test.ts` 3/3 verde (429 lançado, código próprio, regex do worker casa) e suíte `geo-gateway/` **75/75**. `deno check` limpo em `index.ts` e `job-worker/index.ts`.
-- [ ] Funções críticas (`autocomplete`, `geocode`) nunca ficam `off` enquanto houver um provedor com saldo (D11)
-- [ ] Alerta `GEO_BUDGET_WARNING` ao cruzar `alert_at_pct` (1× por mês por provider)
+- [x] Funções críticas (`autocomplete`, `geocode`) nunca ficam `off` enquanto houver um provedor com saldo (D11)
+  - `resolver.ts:124`: `tryOne(primary, "primary") ?? tryOne(fallback, "fallback")`. Com `provider='off'`, `tryOne` devolve `null` no seu primeiro `if` (`:117`) e a cadeia **segue para o `fallback_provider`**; só há `ResolveError` quando os dois lados são inutilizáveis (`:126-131`). Com um provedor com saldo a função entrega.
+  - O seed garante o par nas duas funções críticas: `autocomplete` e `geocode` = `google` com `fallback_provider='mapbox'` (`20261122130100_geo_foundation.sql:34-35`). `snap` e `validate` são as únicas com `off` e sem fallback (`:40-41`), e não são críticas.
+  - **Desvio consciente:** a UI de `MapsSettingsPage.tsx:653,675` permite escolher `off` para qualquer linha, inclusive as críticas. Não há guarda bloqueando a escolha — a garantia de "nunca sem provedor" é do resolver (fallback), não da UI. Bloquear a opção exigiria mudar o contrato de `geo_settings` (onde `off` é legítimo para `snap`/`validate`).
+- [x] Alerta `GEO_BUDGET_WARNING` ao cruzar `alert_at_pct` (1× por mês por provider)
+  - `geo-gateway/index.ts:190-225` (`warnBudgetOnce`): claim atômico em `geo_budget.warned_month` (`.is("warned_month", null)` + caminho de retry `.lt("warned_month", month)`) **antes** do `INSERT` em `alerts` — chamadas concorrentes do gateway não duplicam, e a severidade vira `CRITICAL` quando `pct >= 100`.
+  - Segunda fonte, independente de requisição: `20261123120000_geo_budget_cron.sql:74` (WARNING em `alert_at_pct`) e `:112` (CRITICAL em 100%), com dedup por `warned_month`.
+  - Cobertura de teste existente: `budget-error.test.ts` (3 casos) valida o 429 `GEO_BUDGET_EXCEEDED` e a regex do `job-worker`; `error-monitor.test.ts` (14 casos) cobre a via de `INTEGRATION_FAILURE`. O caminho `warnBudgetOnce` em si não tem teste Deno dedicado — o comportamento é verificado por leitura do claim atômico, **NÃO VERIFICADO** por execução.
 - **Evidência:** teste Deno com `geo_budget` mockado em 100% → resposta usa fallback
 
 ### 31 — Cache + medição
