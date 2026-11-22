@@ -339,6 +339,23 @@ serve(async (req) => {
     const requestRecipients = isServiceRoleCaller(req)
       ? normalizeRecipients(extra.recipients)
       : [];
+    // Opt-out (etapa 60 do plano Google): notification_optouts guarda o telefone
+    // de quem pediu para parar de receber. `is_phone_opted_out` respeita o prefixo
+    // de nono digito e DDI, entao a comparacao nao depende da formatacao.
+    const isPhoneOptedOut = async (to: string): Promise<boolean> => {
+      try {
+        const { data, error } = await supabase.rpc('is_phone_opted_out', { p_phone: to });
+        if (error) {
+          logger.error('[Notification] Opt-out check failed, proceeding:', error);
+          return false;
+        }
+        return data === true;
+      } catch (e) {
+        logger.error('[Notification] Opt-out check threw, proceeding:', e);
+        return false;
+      }
+    };
+
     const metadataRecipients = isServiceRoleCaller(req)
       ? normalizeRecipients(metadata?.recipients)
       : [];
@@ -363,6 +380,11 @@ serve(async (req) => {
           continue;
         }
         destination = normalized;
+        if (await isPhoneOptedOut(destination)) {
+          logger.log(`[Notification] Ad-hoc recipient opted out: ${channel}`);
+          results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
+          continue;
+        }
       }
       if (orderRecipientsDelivered.has(recipientKey(channel, destination))) {
         logger.log(`[Notification] Destinatário repetido ignorado: ${channel}:${destination}`);
