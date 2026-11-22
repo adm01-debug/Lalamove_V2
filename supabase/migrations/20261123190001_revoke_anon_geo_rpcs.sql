@@ -3,6 +3,10 @@
 -- versao original (`20261122110913_revoke_anon_geo_rpcs.sql`) ficava ANTES na ordem de migrations e
 -- quebrava banco novo (`supabase db reset`). Idempotente: REVOKE de privilegio ja ausente nao falha.
 --
+-- Versao 20261123190001 (nao 20261123190000): a PR #246 (ainda aberta, DDL pendente de aprovacao do
+-- dono) ja documenta `20261123190000_geo_maps_permissions.sql` em docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md:872
+-- -- usar a mesma versao colidiria quando a #246 mergear. Achado do Devin Review na PR #261.
+--
 -- geo_usage_increment, geo_budget_status, geo_emit_event, geo_audit_config, geo_evaluate_tracking
 -- tinham EXECUTE para anon (e para PUBLIC, que cascata para anon/authenticated) via PostgREST RPC,
 -- permitindo chamador não autenticado forjar contadores de uso/orçamento e emitir alertas falsos de
