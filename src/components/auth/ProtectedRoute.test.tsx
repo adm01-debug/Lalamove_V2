@@ -30,6 +30,7 @@ function renderRoute(requireMFA = true) {
           }
         />
         <Route path="/mfa-verify" element={<div data-testid="mfa-verify">mfa verify</div>} />
+        <Route path="/mfa-enroll" element={<div data-testid="mfa-enroll">mfa enroll</div>} />
         <Route path="/auth" element={<div data-testid="auth">auth</div>} />
         <Route path="/unauthorized" element={<div data-testid="unauthorized">unauthorized</div>} />
       </Routes>
@@ -77,5 +78,16 @@ describe('ProtectedRoute', () => {
     });
     renderRoute();
     expect(screen.getByTestId('mfa-verify')).toBeTruthy();
+  });
+
+  it('redireciona para /mfa-enroll quando requireMFA e sem fator verificado', () => {
+    mockUseMFA.mockReturnValue({
+      needsMFAVerification: false,
+      needsMFAEnrollment: true,
+      loadingFactors: false,
+      loadingAAL: false,
+    });
+    renderRoute();
+    expect(screen.getByTestId('mfa-enroll')).toBeTruthy();
   });
 });

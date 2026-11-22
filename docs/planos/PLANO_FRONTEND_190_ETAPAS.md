@@ -92,9 +92,9 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** `src/components/auth/ProtectedRoute.test.tsx` (3 testes) verde: `loadingAAL=true` não renderiza o filho e mostra "Verificando autenticação..."; caso normal renderiza; `needsMFAVerification` redireciona para `/mfa-verify`.
 
 ### 4 — [F][D] Exigir inscrição de MFA para rotas `requireMFA` (D4)
-- [ ] Se `nextLevel !== 'aal2'` (sem fator), redirecionar para `/mfa-enroll` com `state.from`, em vez de liberar.
-- [ ] Criar rota `/mfa-enroll` reutilizando `components/auth/MFAEnroll.tsx`.
-- **Evidência:** manager sem TOTP tentando `/bitrix24` cai em `/mfa-enroll`.
+- [x] Se `nextLevel !== 'aal2'` (sem fator), redirecionar para `/mfa-enroll` com `state.from`, em vez de liberar.
+- [x] Criar rota `/mfa-enroll` reutilizando `components/auth/MFAEnroll.tsx`.
+- **Evidência:** `src/hooks/useMFA.ts` expõe `needsMFAEnrollment` (`currentLevel === 'aal1' && nextLevel !== 'aal2'`); `src/components/auth/ProtectedRoute.tsx:49-52` redireciona para `/mfa-enroll` antes da checagem de `/mfa-verify`; `src/pages/MFAEnrollPage.tsx` reutiliza `MFAEnroll` com `state.from`; rota registrada em `src/App.tsx:145`. Teste `src/components/auth/ProtectedRoute.test.tsx` (4 casos) verde.
 
 ### 5 — [B][F] Bloqueio de login no servidor 🔒
 - [ ] Migration: `record_failed_login(p_email)` e `is_login_locked(p_email)` como `SECURITY DEFINER`; revogar `EXECUTE` de `clear_login_attempts` para `anon`/`authenticated` (só trigger/edge).

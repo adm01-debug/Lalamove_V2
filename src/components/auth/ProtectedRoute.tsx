@@ -26,7 +26,7 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, loading: authLoading } = useAuth();
   const { hasRole, hasPermission, isLoading: permissionsLoading } = usePermissions();
-  const { needsMFAVerification, loadingFactors, loadingAAL } = useMFA();
+  const { needsMFAVerification, needsMFAEnrollment, loadingFactors, loadingAAL } = useMFA();
   const location = useLocation();
 
   // Loading state
@@ -44,6 +44,11 @@ export function ProtectedRoute({
   // Not authenticated
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
+
+  // MFA required but no verified factor -> must enroll first
+  if (requireMFA && needsMFAEnrollment) {
+    return <Navigate to="/mfa-enroll" state={{ from: location }} replace />;
   }
 
   // MFA required but not verified
