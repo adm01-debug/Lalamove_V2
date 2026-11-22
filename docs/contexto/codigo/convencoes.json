@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (48)",
    "guards em scripts/ (46)",
-   "supabase/functions/<edge> (22)"
+   "supabase/functions/<edge> (23)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -52,7 +52,7 @@
   "edge_functions": "kebab-case (100%)",
   "tabelas": "snake_case (94%)"
  },
- "barrels_index": 3,
+ "barrels_index": 4,
  "extensao_componentes": [
   ".tsx (217)"
  ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)",
+   "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)",
    "docs: etapas 43-47, 49-52 auditadas com evidencia; fixture do trajeto (#238)",
    "feat: ETA_DELAY previsto no refresh de ETA (etapa 50) (#237)",
-   "fix: webhook cria a linha de active_tracking no primeiro ping (#236)",
-   "docs: contrato de dados do motor geo (etapa 41) (#235)",
-   "feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)"
+   "fix: webhook cria a linha de active_tracking no primeiro ping (#236)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

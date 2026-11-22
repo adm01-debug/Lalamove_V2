@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `59374577d9` · branch `main` · 2026-11-22 04:57 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2809b605af` · branch `main` · 2026-11-22 05:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1319,6 +1319,8 @@ _nenhum item encontrado_
 | `ADDRESS_VALIDATION_BASE` | `"https://addressvalidation.googleapis.com/v1:validateAddress"` | `supabase/functions/geo-gateway/providers/google.ts` |
 | `BASE` | `"https://api.mapbox.com"` | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | `ETA_TRAFFIC_THRESHOLD_MIN` | `15` | `supabase/functions/job-worker/index.ts` |
+| `ETA_MIN_INTERVAL_MS` | `60` | `supabase/functions/job-worker/index.ts` |
+| `ETA_MIN_MOVED_M` | `300` | `supabase/functions/job-worker/index.ts` |
 | `LALAMOVE_MARKET` | `'BR'` | `supabase/functions/lalamove-api/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-gateway/index.ts` |
 | `REFRESH_AFTER_HOURS` | `20` | `supabase/functions/lalamove-token-refresh/index.ts` |
@@ -1484,6 +1486,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/check-driver-alerts/index.ts` |
 | 50 | `supabase/functions/evaluate-driver/index.ts` |
 | 3 | `supabase/functions/external-companies/index.ts` |
+| 5 | `supabase/functions/job-worker/index.ts` |
 | 9 | `supabase/functions/job-worker/index.ts` |
 | 1 | `supabase/functions/lalamove-token-refresh/index.ts` |
 | 20 | `supabase/functions/route-analyzer/index.ts` |
@@ -1828,7 +1831,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1048 testes em 93 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1060 testes em 94 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1862,6 +1865,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/job-worker/eta-delay.test.ts` | 13 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
+| `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
 | `scripts/db-audit/psql-environment.test.mjs` | 11 | separates URI parameters, preserves TLS and hides credentials in private temporary passfile · cleans the exact temporary password file on child failure · IPv6, escaped usernames/databases and empty password preserve libpq semantics · rejects URI overrides/ambiguous options: ${query.split( … |
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
@@ -2162,6 +2166,8 @@ _nenhum item encontrado_
 | controlado pelo `geo-gateway` (orçamento + rate limit), não aqui; | `supabase/functions/job-worker/index.ts` |
 | coordenada aproximada não pode passar como exata num pedido que será despachado. | `supabase/functions/job-worker/index.ts` |
 | Etapa 49: `traffic:false` explícito no tracado. O polilinha de longo prazo | `supabase/functions/job-worker/index.ts` |
+| * Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */ | `supabase/functions/job-worker/index.ts` |
+| suficiente. Regra: so recalcula se passou mais de 60 s do ultimo refresh | `supabase/functions/job-worker/index.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |
 | Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove. | `supabase/functions/lalamove-api/coordinates.ts` |
 | * Nunca lanca: devolve `null` quando o endereco nao pode ser resolvido, para o pedido | `supabase/functions/lalamove-api/geocode-fallback.ts` |

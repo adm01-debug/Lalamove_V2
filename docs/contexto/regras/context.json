@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "59374577d9c4051a953965893435d2ee409babc9",
+  "sha": "2809b605af6671f48495e724e8025fb0c812fb18",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 04:57 UTC",
-  "files_total": 1002,
-  "code_files": 826,
-  "code_lines": 141887
+  "generated_at": "2026-11-22 05:07 UTC",
+  "files_total": 1003,
+  "code_files": 827,
+  "code_lines": 142144
  },
  "version": "1.3.2",
- "facts_hash": "5fcf8a37846d356b",
+ "facts_hash": "45ea237e05a54aa3",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -179,7 +179,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 285,
+   ".ts": 286,
    ".tsx": 233,
    ".sql": 188,
    ".mjs": 107,
@@ -17735,6 +17735,7 @@
     "tables": [
      "active_tracking",
      "alert_configurations",
+     "driver_locations",
      "lalamove_orders",
      "lalamove_stops",
      "tracking_events"
@@ -21188,8 +21189,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 70,
-   "lines": 16895,
+   "files": 71,
+   "lines": 17152,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21253,7 +21254,7 @@
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoValidation, GeoSuggestion",
-    "index.ts: processGeoBackfillOrders, maybeEmitEtaDelay",
+    "index.ts: processGeoBackfillOrders, maybeEmitEtaDelay, haversineM, avgSpeedMps, localEtaMinutes, costGuardSkipReason",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -21320,6 +21321,7 @@
     "supabase/functions/geo-gateway/providers/mapbox.ts",
     "supabase/functions/geo-gateway/providers/types.ts",
     "supabase/functions/get-mapbox-token/index.ts",
+    "supabase/functions/job-worker/eta-cadence.test.ts",
     "supabase/functions/job-worker/eta-delay.test.ts",
     "supabase/functions/job-worker/geo-backfill-orders.test.ts",
     "supabase/functions/job-worker/index.ts",
@@ -21740,6 +21742,9 @@
     ]
    },
    "driver_locations": {
+    "select": [
+     "supabase/functions/job-worker/index.ts"
+    ],
     "insert": [
      "supabase/functions/lalamove-webhook/index.ts"
     ]
@@ -22289,12 +22294,16 @@
    "active_tracking": [
     "current_latitude",
     "current_longitude",
+    "distance_to_next_stop_m",
     "driver_id",
     "eta_minutes",
+    "eta_updated_at",
     "expected_route",
     "id",
+    "last_updated",
     "next_stop_index",
     "order_id",
+    "route_provider",
     "tracking_status"
    ],
    "alert_configurations": [
@@ -22437,6 +22446,12 @@
     "resolved_at",
     "severity",
     "type"
+   ],
+   "driver_locations": [
+    "driver_id",
+    "latitude",
+    "longitude",
+    "recorded_at"
    ],
    "driver_stats_cache": [
     "avg_rating",
@@ -23594,6 +23609,10 @@
    {
     "table": "lalamove_orders",
     "column": "delivery_contact_phone"
+   },
+   {
+    "table": "driver_locations",
+    "column": "driver_id"
    }
   ]
  },
@@ -26278,6 +26297,14 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "text": "Etapa 49: `traffic:false` explícito no tracado. O polilinha de longo prazo"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "* Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "text": "suficiente. Regra: so recalcula se passou mais de 60 s do ultimo refresh"
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -29574,6 +29601,16 @@
     "file": "supabase/functions/job-worker/index.ts",
     "name": "ETA_TRAFFIC_THRESHOLD_MIN",
     "value": "15"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "name": "ETA_MIN_INTERVAL_MS",
+    "value": "60"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "name": "ETA_MIN_MOVED_M",
+    "value": "300"
    },
    {
     "file": "supabase/functions/lalamove-api/index.ts",
@@ -33322,6 +33359,12 @@
     "file": "supabase/functions/job-worker/index.ts",
     "field": "role",
     "value": "delivery_contact",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
     "kind": "escreve"
    },
    {
@@ -38403,6 +38446,54 @@
     "name": "rateGuard com consume: lote maior que o limite inteiro é recusado de imediato"
    },
    {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "nunca medido: nao pula (primeira medicao sempre acontece)"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "motorista andou mais de 300 m: mede mesmo com ETA alto"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "motorista andou menos de 300 m com ETA fresco: pula e explica"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "parado por muito tempo: pula mesmo fora da janela de 60 s"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "ETA local usa a velocidade media dos ultimos 5 pontos"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "ETA local sem velocidade confiavel cai na media urbana de 30 km/h"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "ETA local minimo 1 min; sem distancia devolve null"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "avgSpeedMps mede sobre os pontos em ordem cronologica"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "avgSpeedMps precisa de 2 pontos e de tempo decorrido"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-cadence.test.ts",
+    "name": "haversine bate com 1 grau de latitude = 111,2 km"
+   },
+   {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
     "name": "ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta"
    },
@@ -43246,6 +43337,10 @@
    {
     "file": "supabase/functions/external-companies/index.ts",
     "limit": "3"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "limit": "5"
    },
    {
     "file": "supabase/functions/job-worker/index.ts",
@@ -49583,6 +49678,11 @@
    {
     "kind": "coluna",
     "msg": "coluna `delivery_contact_phone` usada no código não existe no schema de `lalamove_orders`",
+    "where": []
+   },
+   {
+    "kind": "coluna",
+    "msg": "coluna `driver_id` usada no código não existe no schema de `driver_locations`",
     "where": []
    },
    {
@@ -67607,6 +67707,31 @@
     "MAPBOX_ACCESS_TOKEN"
    ]
   },
+  "supabase/functions/job-worker/eta-cadence.test.ts": {
+   "path": "supabase/functions/job-worker/eta-cadence.test.ts",
+   "lines": 135,
+   "is_test": true,
+   "errors": [
+    "nao deveria consultar"
+   ],
+   "rule_comments": [
+    "* Medir sempre custa uma chamada paga por ciclo por pedido. A regra: so mede de"
+   ],
+   "tests": [
+    "nunca medido: nao pula (primeira medicao sempre acontece)",
+    "ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado",
+    "ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo",
+    "motorista andou mais de 300 m: mede mesmo com ETA alto",
+    "motorista andou menos de 300 m com ETA fresco: pula e explica",
+    "parado por muito tempo: pula mesmo fora da janela de 60 s",
+    "ETA local usa a velocidade media dos ultimos 5 pontos",
+    "ETA local sem velocidade confiavel cai na media urbana de 30 km/h",
+    "ETA local minimo 1 min; sem distancia devolve null",
+    "avgSpeedMps mede sobre os pontos em ordem cronologica",
+    "avgSpeedMps precisa de 2 pontos e de tempo decorrido",
+    "haversine bate com 1 grau de latitude = 111,2 km"
+   ]
+  },
   "supabase/functions/job-worker/eta-delay.test.ts": {
    "path": "supabase/functions/job-worker/eta-delay.test.ts",
    "lines": 172,
@@ -67663,10 +67788,14 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1082,
+   "lines": 1204,
    "exports": [
     "function processGeoBackfillOrders",
-    "function maybeEmitEtaDelay"
+    "function maybeEmitEtaDelay",
+    "function haversineM",
+    "function avgSpeedMps",
+    "function localEtaMinutes",
+    "function costGuardSkipReason"
    ],
    "tables": [
     {
@@ -67718,6 +67847,10 @@
      "op": "select"
     },
     {
+     "table": "driver_locations",
+     "op": "select"
+    },
+    {
      "table": "active_tracking",
      "op": "select"
     },
@@ -67762,11 +67895,15 @@
     "active_tracking": [
      "current_latitude",
      "current_longitude",
+     "distance_to_next_stop_m",
      "driver_id",
      "eta_minutes",
+     "eta_updated_at",
      "id",
+     "last_updated",
      "next_stop_index",
      "order_id",
+     "route_provider",
      "tracking_status"
     ],
     "tracking_events": [
@@ -67780,6 +67917,12 @@
      "channel",
      "is_enabled",
      "min_interval_seconds"
+    ],
+    "driver_locations": [
+     "driver_id",
+     "latitude",
+     "longitude",
+     "recorded_at"
     ]
    },
    "rpc": [
@@ -67814,6 +67957,14 @@
     {
      "name": "ETA_TRAFFIC_THRESHOLD_MIN",
      "value": "15"
+    },
+    {
+     "name": "ETA_MIN_INTERVAL_MS",
+     "value": "60"
+    },
+    {
+     "name": "ETA_MIN_MOVED_M",
+     "value": "300"
     }
    ],
    "status_values": [
@@ -67860,6 +68011,11 @@
     {
      "field": "role",
      "value": "delivery_contact",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
      "kind": "escreve"
     },
     {
@@ -67969,6 +68125,8 @@
     "controlado pelo `geo-gateway` (orçamento + rate limit), não aqui;",
     "coordenada aproximada não pode passar como exata num pedido que será despachado.",
     "Etapa 49: `traffic:false` explícito no tracado. O polilinha de longo prazo",
+    "* Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */",
+    "suficiente. Regra: so recalcula se passou mais de 60 s do ultimo refresh",
     "Verificar autenticação (apenas service role ou autenticado)"
    ],
    "doc": "============================================================================ EDGE FUNCTION: Job Worker Descrição: Processa jobs da fila de forma assíncrona Versão: 1.0.0 Data: 2025-12-26 ============================================================================",
@@ -67976,6 +68134,7 @@
     "invoke("
    ],
    "pagination": [
+    "5",
     "9"
    ],
    "uses_service_role": true
@@ -70272,10 +70431,30 @@
   }
  },
  "git": {
-  "sha": "59374577d9c4051a953965893435d2ee409babc9",
+  "sha": "2809b605af6671f48495e724e8025fb0c812fb18",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "2809b60",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+     "supabase/functions/job-worker/eta-cadence.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
+   {
+    "sha": "d725090",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "5937457",
     "date": "2026-11-22",
@@ -70624,42 +70803,24 @@
     "files": [
      "docs/planos/PLANO_MAPBOX_100_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "2a87c43",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(migration): resolve colisao das constraints de place_id (#204)",
-    "files": [
-     "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql"
-    ]
-   },
-   {
-    "sha": "e0bceb0",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)",
-    "files": [
-     "docs/MAPBOX.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    16
+    18
    ],
    [
     "supabase/functions/geo-gateway/index.ts",
     5
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "supabase/functions/job-worker/index.ts",
     4
    ],
    [
-    "supabase/functions/job-worker/index.ts",
-    3
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    4
    ],
    [
     "supabase/functions/geo-gateway/providers/google.ts",

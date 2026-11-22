@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "59374577d9c4051a953965893435d2ee409babc9",
+  "commit": "2809b605af6671f48495e724e8025fb0c812fb18",
   "branch": "main",
-  "data_commit": "2026-11-22T01:56:51-03:00",
+  "data_commit": "2026-11-22T02:06:40-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "2809b60",
+    "data": "2026-11-22",
+    "assunto": "feat: cadencia de custo do eta_refresh (etapa 48 do plano) (#239)"
+   },
+   {
+    "sha": "d725090",
+    "data": "2026-11-22",
+    "assunto": "docs: fecha etapa 40 com a premissa correta da importacao Bitrix (#240)"
+   },
    {
     "sha": "5937457",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "1d97ccb",
     "data": "2026-11-21",
     "assunto": "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)"
-   },
-   {
-    "sha": "933f4d6",
-    "data": "2026-11-21",
-    "assunto": "docs: auditoria do ledger de migrations x schema real (#210)"
-   },
-   {
-    "sha": "e38c647",
-    "data": "2026-11-21",
-    "assunto": "fix: restaura logs de cache e de fila perdidos e remove tabela morta (#209)"
    }
   ],
-  "arquivos_mudados_7d": 260,
+  "arquivos_mudados_7d": 261,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -144,12 +144,12 @@
     "mudancas": 20
    },
    {
-    "pasta": "src/components/orders",
-    "mudancas": 18
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "mudancas": 19
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 17
+    "pasta": "src/components/orders",
+    "mudancas": 18
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -168,11 +168,11 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 12
    },
    {
-    "pasta": "supabase/functions/job-worker",
+    "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 17
+    "mudancas": 19
    },
    {
     "arquivo": "supabase/config.toml",
@@ -230,11 +230,11 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 8
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 9
    },
    {
-    "arquivo": "supabase/functions/job-worker/index.ts",
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 138
+    "commits": 140
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1008,
-  "arquivos_codigo": 629,
-  "linhas_codigo": 122810,
+  "arquivos_total": 1009,
+  "arquivos_codigo": 630,
+  "linhas_codigo": 123067,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 87,
   "migrations": 183,
   "cron_jobs": 21,
-  "testes": 135,
+  "testes": 136,
   "workflows": 5,
   "scripts": 106,
   "docs_md": 103
@@ -559,8 +559,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 70,
-   "linhas": 16895
+   "arquivos": 71,
+   "linhas": 17152
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -581,16 +581,16 @@
    "linhas": 4811
   },
   {
+   "arquivo": "supabase/functions/job-worker/index.ts",
+   "linhas": 1204
+  },
+  {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
    "linhas": 1163
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
    "linhas": 1092
-  },
-  {
-   "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1082
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",
@@ -678,7 +678,7 @@
   }
  ],
  "qualidade": {
-  "any": 124,
+  "any": 129,
   "console_log": 412,
   "ts_ignore": 0,
   "eslint_disable": 1,
