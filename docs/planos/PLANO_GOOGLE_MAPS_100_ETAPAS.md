@@ -47,11 +47,17 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c` (#114), doc GMP (pre
 > implementados — o checklist nunca foi sincronizado com o código. Cada etapa auditada ganhou um bloco
 > **"Auditado (2026-11-22)"** abaixo da Evidência, com arquivo:linha. Fechadas nesta passagem: **31, 36, 58,
 > 62, 63, 65, 78, 87, 88, 89, 91** (e a primeira metade da 32 e da 93). Fechadas depois: **33, 68, 85** (PR
-> #251/#252 e auditoria) e **66** (união explícita de destinatários). Contagem: **96 `[x]` / 94 `[ ]`**
-> (algumas etapas têm mais de um item de checklist).
-> Gaps reais confirmados que seguem abertos: 56 (sem destinatário interno), 70 (`check-driver-alerts` sem
-> `cron.schedule`, PR #217), 83 (`mapbox-proxy` ainda no ar), 94 (`provider-status` pós-deploy ausente).
-> 60/61 estão na PR #221 (branch `claude/feat-optout-tracking-clean-261122-0300`), rebasada em `main`.
+> #251/#252 e auditoria), **66** (união explícita de destinatários) e **42, 56, 70** (PRs #265, #267, #217).
+>
+> **Terceira passagem, 2026-11-22 (sincronização com o código já mergeado).** Os itens 41, 53, 54, 55, 57,
+> 60, 61, 70, 83, 93 e 94 estavam implementados e marcados `[ ]` — cada um foi conferido em arquivo:linha
+> e fechado com a evidência real. Contagem: **117 `[x]` / 74 `[ ]`** (algumas etapas têm mais de um item).
+>
+> **O que sobra aberto cai em três grupos:**
+> 1. **Ações externas sem rota MCP** — etapas 1-8, 10 (GCP billing, APIs, chaves, Map ID, secrets do Vercel).
+> 2. **Verificação em produção/pedido real** — 74, 95, 99 e as evidências de execução das 54/55/56/57/70.
+> 3. **Itens de checklist já implementados em `main` mas ainda não auditados linha a linha** — 11-30, 32,
+>    35, 85, 86. Todos têm código no repo; falta o mesmo tratamento de evidência das etapas acima.
 
 ## Decisões de negócio embutidas (padrão adotado; mude pelo código D-n)
 
@@ -380,9 +386,11 @@ correta no plano.
 - [x] Documentar em `docs/GEO_CONTRACT.md` o que este plano **lê**: `active_tracking(order_id UNIQUE, current_latitude, current_longitude, heading, speed, last_updated, tracking_status='active'|'ended', driver_id)` e `lalamove_orders(lalamove_status, driver_lalamove_id, scheduled_at)`
   - `docs/GEO_CONTRACT.md` (101 linhas): colunas lidas com o papel de cada uma, o que o motor escreve, ciclo de vida do rastreio e seção de divergências plano × código. **`tracking_status` real é `'ACTIVE'` maiúsculo** — o plano está errado em três pontos e o código manda em todos (tabela na seção 4).
   - **Gap descoberto ao documentar:** nenhuma edge cria a linha de `active_tracking`. `lalamove-webhook/index.ts:571-588` faz `maybeSingle()` e só `update` quando a linha já existe — posição de pedido sem linha é descartada em silêncio. Registrado no documento com o fix (UPSERT `onConflict: 'order_id'`).
-- [ ] Exigência: UPSERT em `active_tracking` a cada ciclo (10–15 s) — é o UPDATE que dispara o trigger da etapa 20
-- [ ] Linha criada em `DRIVER_ASSIGNED`/`ON_GOING`, `tracking_status='ended'` em `COMPLETED/CANCELED`
-- **Evidência:** doc mergeado e confirmado pelo chat da UAPI
+- [x] Exigência: UPSERT em `active_tracking` a cada ciclo (10–15 s) — é o UPDATE que dispara o trigger da etapa 20
+  - **FEITO:** `lalamove-webhook/index.ts:574-602` — `upsert({order_id, driver_id, current_latitude, ...}, { onConflict: 'order_id' })` no `DRIVER_LOCATION_UPDATED`. O comentário em `:574-582` registra a causa: antes só havia `UPDATE`, então pedido sem linha tinha a posição **descartada em silêncio** e o rastreio nunca começava. Sem `driver_id` no pedido o upsert é pulado com log (`:599`), porque a coluna é `NOT NULL`.
+- [x] Linha criada em `DRIVER_ASSIGNED`/`ON_GOING`, `tracking_status='ended'` em `COMPLETED/CANCELED`
+  - **FEITO:** a criação acontece no primeiro `DRIVER_LOCATION_UPDATED` (que chega junto do `ON_GOING`), e o encerramento em `20261123200000_optout_and_tracking_end.sql` (PR #221): `end_order_tracking(uuid, text)` + trigger `trg_close_tracking_on_order_end` em `AFTER INSERT OR UPDATE OF status` para `COMPLETED/CANCELLED/CANCELED/REJECTED/EXPIRED`. Cobre também o caminho de edição manual, não só o webhook.
+- **Evidência:** `docs/GEO_CONTRACT.md` documenta o contrato lido (com a divergência `tracking_status` real `'ACTIVE'` maiúsculo em 3 pontos); `02_scenarios.sql` cobre o ciclo. Confirmação pelo chat da UAPI: fora do meu alcance.
 
 ### 42 — n8n F01 sem DistanceMatrix.ai
 - [x] Nós "Geo Coleta"/"Geo Entrega" (`lalamove_f01_cotacao.json:62,77`) → HTTP para `geo-gateway geocode` com service_role (credencial n8n) **ou** remover geocode do n8n e deixar a edge fazer (etapa 37)
@@ -492,28 +500,37 @@ velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
 ## BLOCO 5 — Motor de geo-eventos (etapas 53–64)
 
 ### 53 — Função `geo_evaluate_events()` (corpo do trigger da etapa 20)
-- [ ] Lê pedido + stops; calcula distância ao stop de coleta (index 0) e de entrega (último); lê `approach_radius_m`, `approach_eta_min`, `notify_delivery_contact`
-- [ ] Para cada evento candidato: `INSERT INTO order_geo_events ... ON CONFLICT DO NOTHING`; se inseriu → `INSERT alerts` + `job_queue(type='notification')`
-- **Evidência:** teste SQL: 2 UPDATEs dentro do raio → 1 evento
+- [x] Lê pedido + stops; calcula distância ao stop de coleta (index 0) e de entrega (último); lê `approach_radius_m`, `approach_eta_min`, `notify_delivery_contact`
+  - **FEITO:** o corpo é `geo_evaluate_tracking()` em `20261122130100_geo_foundation.sql:389`. Lê `lalamove_orders` + `lalamove_stops` (`:420-441`), resolve raio/ETA com herança pedido→`geo_defaults` (`:429-430`) e `v_notify_del` (`:433`).
+- [x] Para cada evento candidato: `INSERT INTO order_geo_events ... ON CONFLICT DO NOTHING`; se inseriu → `INSERT alerts` + `job_queue(type='notification')`
+  - **FEITO:** `geo_emit_event()` (`:347-387`): `INSERT ... ON CONFLICT (order_id, event_type, stop_index) DO NOTHING`; só quando insere é que cria `alerts` e `add_job('notification', ...)` com idempotency key `geo:<order>:<event>:<stop_index>`.
+- **Evidência:** `supabase/tests/02_scenarios.sql` — 12 cenários / 30 asserções no job `Geo geometry SQL tests` do CI. O cenário "2 UPDATEs dentro do raio → 1 evento" está coberto.
 
 ### 54 — `DRIVER_APPROACHING_PICKUP` (D4)
-- [ ] Condição: `lalamove_status IN ('ON_GOING')` **e** `next_stop_index = 0` **e** (`distance_to_next_stop_m <= approach_radius_m` **ou** `eta_minutes <= approach_eta_min`)
-- [ ] Payload: distância, ETA, nome/placa do motorista (`driver_name/plate` do #107), `share_link`
-- **Evidência:** pedido real: evento criado antes da chegada
+- [x] Condição: `lalamove_status IN ('ON_GOING')` **e** `next_stop_index = 0` **e** (`distance_to_next_stop_m <= approach_radius_m` **ou** `eta_minutes <= approach_eta_min`)
+  - **FEITO:** `:489` — `IF NEW.next_stop_index = 0 AND v_status IN ('ON_GOING','MATCHED','ASSIGNING_DRIVER')` e `:490` — `IF v_dist <= v_radius OR (NEW.eta_minutes <= v_eta_min)`. A faixa de status é **mais ampla** que o plano: `MATCHED`/`ASSIGNING_DRIVER` já avisam, porque o motorista pode estar a caminho antes do `ON_GOING`.
+- [x] Payload: distância, ETA, nome/placa do motorista (`driver_name/plate` do #107), `share_link`
+  - **FEITO:** `v_meta` em `:475-476` carrega `driver_name`, `driver_plate`, `share_link`, `order_ref`, endereços.
+- **Evidência:** pedido real pendente — ver etapa 74/99 (dependem de pedido real, não de código).
 
 ### 55 — `DRIVER_ARRIVED_PICKUP`
-- [ ] Condição: `distance_to_next_stop_m <= 100` por ≥ 2 ciclos **ou** `lalamove_stops[0].arrived_at` preenchido
-- [ ] Vai fora da janela de horário (D3)
-- **Evidência:** evento + mensagem
+- [x] Condição: `distance_to_next_stop_m <= 100` por ≥ 2 ciclos **ou** `lalamove_stops[0].arrived_at` preenchido
+  - **FEITO:** `:498` — `IF NEW.near_stop_cycles >= 2`, com `near_stop_cycles` incrementado pelo próprio trigger a cada avaliação dentro do raio. O `arrived_at` da parada entra pela mesma via do `next_stop_index` lido em `:441`.
+- [x] Vai fora da janela de horário (D3)
+  - **FEITO:** `:503` anexa `'{"always_send":true}'` ao metadata, e `send-notification` ignora `quiet_hours` quando `always_send` está presente (`quiet-hours.ts`). Chegada nunca fica silenciada.
+- **Evidência:** `02_scenarios.sql` cobre o ciclo duplo; a entrega real depende da etapa 74.
 
 ### 56 — Aviso também para a equipe interna
-- [ ] `alert_configurations.DRIVER_APPROACHING_PICKUP` com `notify_slack/whatsapp` internos (grupo logística) — além do responsável pela coleta
-- **Evidência:** 2 destinatários em `alerts_sent`
+- [x] `alert_configurations.DRIVER_APPROACHING_PICKUP` com `notify_slack/whatsapp` internos (grupo logística) — além do responsável pela coleta
+  - **FEITO (PR #267):** `20261124120000_internal_alert_channels.sql` liga `notify_slack = true` e `slack_channels = ARRAY['internal']` em `DRIVER_APPROACHING_PICKUP` e `DRIVER_ARRIVED_PICKUP`. O token `internal` é resolvido para `SLACK_WEBHOOK_URL` por `sendSlack` (`send-notification/index.ts:793-796`) — segredo não entra em migration. `COALESCE(NULLIF(...))` preserva webhook já configurado pelo operador.
+- **Evidência:** validado em Postgres 16 (4 cenários: aplicação, idempotência 2×, `ETA_DELAY` intocado, webhook do operador preservado). **Pendente:** a linha "2 destinatários em `alerts_sent`" exige a migration aplicada + pedido real (etapa 74).
 
 ### 57 — `DRIVER_APPROACHING_DELIVERY` / `DRIVER_ARRIVED_DELIVERY` (D5)
-- [ ] Mesma lógica com `next_stop_index = último` e destinatário = `lalamove_stops[last].contact_phone`
-- [ ] Só se `notify_delivery_contact = true` (padrão false)
-- **Evidência:** teste com flag on/off
+- [x] Mesma lógica com `next_stop_index = último` e destinatário = `lalamove_stops[last].contact_phone`
+  - **FEITO:** `:508` — `IF NEW.next_stop_index >= 1 AND NEW.next_stop_index = v_last_index AND v_status IN ('PICKED_UP','ON_GOING')`; destinatário em `:478-485` monta `recipients` a partir de `lalamove_stops[stop_index].contact_name/contact_phone`.
+- [x] Só se `notify_delivery_contact = true` (padrão false)
+  - **FEITO:** `:433` — `v_notify_del := COALESCE(o.notify_delivery_contact, d.notify_delivery_contact)`, usado em `:508-524`. O seed de `alert_configurations` cria `DRIVER_*_DELIVERY` com `is_enabled = false`, então o padrão é desligado mesmo com a coluna `true`.
+- **Evidência:** `02_scenarios.sql` cobre o bloco de entrega; teste com a flag on/off em pedido real depende da etapa 74.
 
 ### 58 — Janela de horário (D3)
 - [x] `geo_notification_allowed(event_type, now())`: 07:00–20:00 `America/Sao_Paulo`; fora → `notification_status='deferred'`, `job_queue.run_at = próximo 07:00`; exceção `*_ARRIVED_*`
@@ -685,9 +702,12 @@ motorista a caminho e secrets `EVOLUTION_*`/`ZAPP_*` — não verificável sem t
 - **Evidência:** `zapp.test.ts` 9/9 verde (Bearer, número normalizado, `instance` opcional, destinatário vazio não chama API, 401 com trecho do corpo, erro de rede sem lançar, timeout abortado, factory `null` sem secrets, `normalizeZappNumber`). `sendWhatsApp` usa o Zapp como **preferencial** e cai no Evolution quando não configurado — nenhum secret configurado continua sendo o único caso de falha. `deno check` sem erro novo (4 erros de `order_id` são pré-existentes no `main`).
 
 ### 70 — Agendar `check-driver-alerts` e `escalate-alerts`
-- [ ] 🔒 `cron.schedule('check-driver-alerts','*/1 * * * *', net.http_post(...))` e `escalate-alerts` a cada 5 min (padrão de `process_job_queue`, `20251226010001`)
-- [ ] Registrar em `docs/CRON_JOBS.md`
-- **Evidência:** `cron.job_run_details` com execuções
+- [x] 🔒 `cron.schedule('check-driver-alerts','*/1 * * * *', net.http_post(...))` e `escalate-alerts` a cada 5 min (padrão de `process_job_queue`, `20251226010001`)
+  - **FEITO (PR #217):** `20261123190000_cron_check_driver_alerts.sql` agenda `check-driver-alerts` com **`*/2 * * * *`** e não `*/1` — o menor limiar de alerta é 5 min, então 2 minutos já dão 2 leituras antes do `CRITICAL` de 10 min sem pagar 2× a chamada de edge por minuto. `escalate-alerts` já existia em `20261122140000_fix_crons_dispatcher.sql:116` com `*/5`.
+  - A chave vem de `vault.decrypted_secrets` (`dispatcher_key`) em `net.http_post`, com `timeout_milliseconds := 25000`; se o secret faltar, emite `WARNING` e **não** cria o job (nunca embute segredo na migration). Idempotente via `cron.unschedule` condicional — `jobname` é a chave.
+- [x] Registrar em `docs/CRON_JOBS.md`
+  - **FEITO (PR #266):** `docs/CRON_JOBS.md` v2.0.0 lista os **20** jobs reais agrupados por natureza (edge functions, geo, cache/materialized views, limpeza, partições), documenta a resolução de chave por `vault.decrypted_secrets` e explica que `jobname` é a chave de idempotência.
+- **Evidência:** `cron.job_run_details` com execuções — **pendente de verificação em produção**: não há rota MCP para consultar `cron.job`. A query de conferência está no rodapé de `CRON_JOBS.md`.
 
 ### 71 — `alert_configurations` dos novos tipos
 - [x] Linhas com canais, `min_interval_seconds=300`, `dedup_window`, template; `is_enabled=true` para pickup, `false` para delivery
@@ -822,9 +842,11 @@ tsconfig.app.json` limpo.
 **Ressalvas honestas.** O ratchet continua **fora do CI** (`grep -rn a11y .github/workflows` → vazio); ligá-lo é mudança de workflow e fica para a etapa que trata de CI (regra 8). E restam **82** violações fora de `src/components/map/`, herdadas — não entram nesta etapa.
 
 ### 83 — Remover `mapbox-proxy` e `get-mapbox-token` redundantes
-- [ ] Após `useMapbox.ts` migrar para `useGeo.ts`: apagar `mapbox-proxy` (token Mapbox continua via `get-mapbox-token` só para tiles)
-- [ ] Atualizar `docs/ci/MATRIZ_EDGE_TABELA.md`
-- **Evidência:** `supabase_functions_list` sem `mapbox-proxy`
+- [x] Após `useMapbox.ts` migrar para `useGeo.ts`: apagar `mapbox-proxy` (token Mapbox continua via `get-mapbox-token` só para tiles)
+  - **FEITO:** `supabase/functions/mapbox-proxy` **não existe** no repo (`ls supabase/functions/ | grep mapbox` → vazio). A migração do front está completa: `src/hooks/useGeo.ts` faz `export * from "./useMapbox"` e `useMapbox.ts:2` importa `callGeo` de `@/lib/geo-gateway` — o proxy foi substituído pelo gateway, não ficou órfão. `get-mapbox-token` permanece só para os tiles do mini-mapa.
+- [x] Atualizar `docs/ci/MATRIZ_EDGE_TABELA.md`
+  - **FEITO:** `:24` lista apenas `get-mapbox-token` (e não `mapbox-proxy`); `:17,45-47` já incluem `check-driver-alerts` e as demais edges do bloco geo.
+- **Evidência:** `supabase_functions_list` sem `mapbox-proxy` — **não verificado em produção** (sem rota MCP de gestão do Supabase). O repo é a fonte que consigo provar: a function não existe no código nem na matriz.
 
 ### 84 — Testes de front ✅
 - [x] vitest: `useGeo`, `AddressAutocomplete`, `OrderTrackingMap` (mock do loader); Playwright `e2e/`: criar pedido com autocomplete → coordenadas preenchidas
@@ -919,11 +941,9 @@ tsconfig.app.json` limpo.
 ## BLOCO 9 — Qualidade, deploy, operação (etapas 93–100)
 
 ### 93 — CI
-- [ ] `ci.yml`: incluir `geo-gateway/*.test.ts` em `contract-tests`; `edge-integration-tests` chama `provider-status` em prod após deploy
-- **Evidência:** run verde
-
-**Auditado (2026-11-22).** `.github/workflows/ci.yml:126-129` roda `deno test --allow-all supabase/functions/geo-gateway/` no job de contract tests, com o comentário explicando que o gateway concentra cache/orçamento/rate guard. Cobre os 8 arquivos de teste do diretório.
-- **Pendente:** a segunda metade da etapa (chamar `provider-status` em produção após o deploy) não existe em nenhum workflow — `grep -rn "provider-status" .github/workflows/` retorna 0. Fica com a etapa 94 (verificação pós-deploy).
+- [x] `ci.yml`: incluir `geo-gateway/*.test.ts` em `contract-tests`; `edge-integration-tests` chama `provider-status` em prod após deploy
+  - **FEITO às duas metades.** A primeira em `.github/workflows/ci.yml:126-129` (`deno test --allow-all supabase/functions/geo-gateway/`, cobrindo os 8 arquivos do diretório). A segunda saiu na PR #255 (etapa 94): `deploy-edges.yml` chama `geo-gateway` com `action: provider-status` logo após o deploy, valida `HTTP 200`, exige lista de `providers` não vazia e pelo menos um `configured` — falha o job se o gateway subiu sem token.
+- **Evidência:** job `Geo geometry SQL tests` e `Deno Contract Tests` verdes na `main`; o smoke test foi provado com stub local nos 4 cenários (ver etapa 94). O primeiro run real do smoke acontece no próximo deploy de edge — não forcei deploy para verificar.
 
 ### 94 — Deploy e verificação
 - [x] Cada PR mergeada → `deploy-edges.yml` verde → `supabase_functions_list`; front → deploy Vercel `lalamove-v2` READY
