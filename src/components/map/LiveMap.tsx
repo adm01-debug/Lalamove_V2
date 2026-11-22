@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './liveMap.css';
@@ -62,6 +63,7 @@ export function LiveMap({
   vehicleFilter = 'ALL',
   statusFilter = 'ALL',
 }: LiveMapProps) {
+  const { t } = useTranslation();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -452,6 +454,8 @@ export function LiveMap({
             size="icon" 
             className={`h-10 w-10 rounded-full transition-all duration-300 ${showSettings ? 'text-primary bg-primary/10' : 'text-muted-foreground'} hover:bg-white/5`}
             onClick={() => setShowSettings(!showSettings)}
+            aria-label={t('map.actions.settings')}
+            aria-pressed={showSettings}
           >
             <Settings className="w-5 h-5" />
           </Button>
@@ -461,6 +465,8 @@ export function LiveMap({
             size="icon" 
             className={`h-10 w-10 rounded-full transition-all duration-300 ${mapStyle === 'dark-v11' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110' : 'hover:bg-white/5'}`}
             onClick={() => setMapStyle('dark-v11')}
+            aria-label={t('map.actions.styleDark')}
+            aria-pressed={mapStyle === 'dark-v11'}
           >
             <MapIcon className="w-5 h-5" />
           </Button>
@@ -469,6 +475,8 @@ export function LiveMap({
             size="icon" 
             className={`h-10 w-10 rounded-full transition-all duration-300 ${mapStyle === 'satellite-streets-v12' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110' : 'hover:bg-white/5'}`}
             onClick={() => setMapStyle('satellite-streets-v12')}
+            aria-label={t('map.actions.styleSatellite')}
+            aria-pressed={mapStyle === 'satellite-streets-v12'}
           >
             <Layers className="w-5 h-5" />
           </Button>
@@ -478,6 +486,8 @@ export function LiveMap({
             size="icon" 
             className={`h-10 w-10 rounded-full transition-all duration-300 ${showTraffic ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
             onClick={() => setShowTraffic(!showTraffic)}
+            aria-label={t('map.actions.traffic')}
+            aria-pressed={showTraffic}
           >
             <TrafficCone className="w-5 h-5" />
           </Button>
@@ -488,6 +498,8 @@ export function LiveMap({
             className={`h-10 w-10 rounded-full transition-all duration-300 ${isFollowing ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
             onClick={() => setIsFollowing(!isFollowing)}
             disabled={!selectedId}
+            aria-label={t('map.actions.followDriver')}
+            aria-pressed={isFollowing}
           >
             <Target className={`w-5 h-5 ${isFollowing ? 'animate-pulse' : ''}`} />
           </Button>
@@ -497,6 +509,8 @@ export function LiveMap({
             className={`h-10 w-10 rounded-full transition-all duration-300 ${focusMode ? 'text-primary' : 'text-muted-foreground'} hover:bg-white/5`}
             onClick={() => setFocusMode(!focusMode)}
             disabled={!selectedId}
+            aria-label={t('map.actions.focusDriver')}
+            aria-pressed={focusMode}
           >
             <Shield className="w-5 h-5" />
           </Button>

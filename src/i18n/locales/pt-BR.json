@@ -175,7 +175,22 @@
     "routes": "Rotas",
     "drivers": "Motoristas",
     "deliveries": "Entregas",
-    "realtime": "Tempo Real"
+    "realtime": "Tempo Real",
+    "actions": {
+      "settings": "Ajustes do mapa",
+      "styleDark": "Estilo escuro",
+      "styleSatellite": "Estilo satélite",
+      "traffic": "Mostrar trânsito",
+      "followDriver": "Seguir motorista",
+      "focusDriver": "Modo foco no motorista",
+      "streetView": "Abrir Street View",
+      "whatsapp": "Enviar WhatsApp ao motorista",
+      "criticalAlert": "Disparar alerta crítico",
+      "closeHistory": "Fechar histórico do motorista",
+      "clearSearch": "Limpar busca",
+      "centerOnTarget": "Centralizar no alvo",
+      "nearStop": "Distância até a próxima parada"
+    }
   },
   "reports": {
     "title": "Relatórios",
