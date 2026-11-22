@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useLoginLockout } from '@/hooks/useLoginLockout';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,13 @@ const loginSchema = z.object({
 });
 
 export function AuthPage() {
+<<<<<<< Updated upstream
   const { user, loading, signIn } = useAuth();
+=======
+  const { user, loading, signIn, signUp } = useAuth();
+  const location = useLocation();
+  const from = (location.state?.from as { pathname?: string } | null)?.pathname ?? '/';
+>>>>>>> Stashed changes
   const { lockoutStatus, checkLockout, recordFailedAttempt, clearAttempts, formatRemainingTime } = useLoginLockout();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +54,7 @@ export function AuthPage() {
 
   // Redirect if already authenticated
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={from} replace />;
   }
 
   const validateLoginForm = () => {

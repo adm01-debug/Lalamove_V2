@@ -322,11 +322,11 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `/reports/advanced` e `/settings/maps` destacam o item pai.
 
 ### 55 — [F] Login respeita a rota de origem
-- [ ] `AuthPage.tsx:60-62`: `Navigate to={location.state?.from ?? '/'}` (como `MFAVerifyPage.tsx:7`).
+- [x] `AuthPage.tsx`: `const from = (location.state?.from as { pathname?: string } | null)?.pathname ?? '/'`; redirect de usuário autenticado usa `<Navigate to={from} replace />`. Evidência: `src/pages/AuthPage.tsx:33-35,66-68`.
 - **Evidência:** abrir `/orders` deslogado → login → volta para `/orders`.
 
 ### 56 — [F] Scroll para o topo no container certo
-- [ ] `App.tsx:118-120`: rolar o `<main>` (`ref`) em vez de `window`; respeitar `history.action === 'POP'`.
+- [x] `App.tsx`: `useEffect` rola `document.getElementById('main-content')` (o `<main>` com `overflow-y-auto`), e retorna cedo em `navigationType === 'POP'` (voltar/avançar preserva a posição). Evidência: `src/App.tsx:119-128`.
 - **Evidência:** trocar de página longa volta ao topo.
 
 ### 57 — [F] Retry de chunk após deploy
