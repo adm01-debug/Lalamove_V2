@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a7e7d11c2a` · branch `main` · 2026-11-22 18:39 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `945a0a5e15` · branch `main` · 2026-11-22 18:41 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -662,9 +662,9 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `TRUCK` | compara | `src/components/map/MapLegend.tsx` |
 | `type` | `VAN` | compara | `src/components/map/MapLegend.tsx` |
 | `type` | `Van` | compara | `src/pages/reports/ReportDistributionTab.tsx` |
-| `type` | `alert` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/components/ui/activity-timeline.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>… +3 |
+| `type` | `alert` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/components/ui/activity-timeline.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`src/hooks/useRealtimeSubscriptions.ts`<br>… +2 |
 | `type` | `all` | compara | `src/components/ui/activity-timeline.tsx` |
-| `type` | `approval` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/components/ui/activity-timeline.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>… +1 |
+| `type` | `approval` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/components/ui/activity-timeline.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`src/pages/DashboardRedesigned.tsx` |
 | `type` | `approve` | escreve | `src/hooks/useOfflineStorage.ts` |
 | `type` | `area_hotspot` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
 | `type` | `authentication` | escreve | `src/hooks/useWebAuthn.ts` |
@@ -677,7 +677,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `circle` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/reports/GeoHeatmap.tsx` |
 | `type` | `delivery` | compara, escreve | `src/components/ui/activity-timeline.tsx`<br>`src/components/ui/timeline-item.tsx`<br>`src/pages/DashboardRedesigned.tsx` |
 | `type` | `delivery_delay` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
-| `type` | `driver` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts` |
+| `type` | `driver` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/usePushNotifications.ts` |
 | `type` | `driver_risk` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
 | `type` | `driver_stopped` | escreve | `src/hooks/usePredictiveAnalysis.ts` |
 | `type` | `email` | compara | `supabase/functions/job-worker/index.ts` |
@@ -696,8 +696,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `network` | escreve | `src/components/orders/AddressAutocomplete.tsx` |
 | `type` | `new_device` | compara, escreve | `src/hooks/useSecurityPushNotifications.ts` |
 | `type` | `notification` | compara, escreve | `src/hooks/useSoundSettings.ts`<br>`supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
-| `type` | `order` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/useGlobalSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`supabase/functions/lalamove-uapi/index.ts` |
-| `type` | `page` | escreve | `src/hooks/useGlobalSearch.ts` |
+| `type` | `order` | compara, escreve | `src/components/CommandPaletteEnhanced.tsx`<br>`src/hooks/useCommandPaletteSearch.ts`<br>`src/hooks/usePushNotifications.ts`<br>`supabase/functions/lalamove-uapi/index.ts` |
 | `type` | `ping` | escreve | `src/hooks/useSoundSettings.ts` |
 | `type` | `place` | escreve | `src/hooks/useMapbox.ts` |
 | `type` | `pod_fetch` | compara | `supabase/functions/job-worker/index.ts` |
@@ -1404,7 +1403,6 @@ _nenhum item encontrado_
 | `SUSTAINED_MIN_DAYS` | `3` | `src/hooks/useContractVersionUsage.ts` |
 | `SESSION_TTL_MS` | `170` | `src/hooks/useGeoSearch.ts` |
 | `DEFAULT_BIAS_RADIUS_M` | `50` | `src/hooks/useGeoSearch.ts` |
-| `MAX_RECENT` | `10` | `src/hooks/useGlobalSearch.ts` |
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useLalamoveUapi.ts` |
 | `ATTRIBUTION` | `'© Mapbox © OpenStreetMap'` | `src/hooks/useMapbox.ts` |
@@ -1588,7 +1586,6 @@ _nenhum item encontrado_
 | 10 | `src/hooks/useGeoAdmin.ts` |
 | 1 | `src/hooks/useGeoSearch.ts` |
 | 500 | `src/hooks/useGeoSearch.ts` |
-| 10 | `src/hooks/useGlobalSearch.ts` |
 | 1 | `src/hooks/useJobQueue.ts` |
 | 2000 | `src/hooks/useLalamoveQuota.ts` |
 | 100 | `src/hooks/useNotificationHistory.ts` |
@@ -1748,7 +1745,6 @@ _nenhum item encontrado_
 | fetch failed | `scripts/vercel/verify-release-targets.unit.mjs` |
 | : return  | `src/components/CommandPaletteEnhanced.tsx` |
 | : return Bell;     case  | `src/components/CommandPaletteEnhanced.tsx` |
-|  className= | `src/components/GlobalSearchAdvanced.tsx` |
 |                  className= | `src/components/admin/telemetry/ContractVersionUsagePanel.tsx` |
 | Nenhum pedido selecionado possui contato de fornecedor/cliente. | `src/components/dashboard/BatchActionsToolbar.tsx` |
 | PDF generation triggered. In a CI environment, this would use a tool like  | `src/components/debug/AuditReportGenerator.tsx` |
@@ -1811,8 +1807,6 @@ _nenhum item encontrado_
 | Aprovação Manual Necessária | `src/hooks/useEvaluateDriver.ts` |
 | Erro na Avaliação | `src/hooks/useEvaluateDriver.ts` |
 | Motorista Bloqueado | `src/hooks/useEvaluateDriver.ts` |
-| ) {         const { data: alerts, error } = await supabase.from( | `src/hooks/useGlobalSearch.ts` |
-| , title: alert.title, subtitle: alert.message, meta: alert.severity, path:  | `src/hooks/useGlobalSearch.ts` |
 | Erro ao desfazer ação | `src/hooks/useGlobalUndo.tsx` |
 | Falha ao atualizar incidente. | `src/hooks/useIncidents.ts` |
 | Falha ao excluir incidente. | `src/hooks/useIncidents.ts` |
@@ -1918,7 +1912,10 @@ _nenhum item encontrado_
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| … +102 linhas — lista completa em `context.json` | |
+| Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
+| Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
+| Falha ao marcar webhook | `src/pages/WebhooksPage.tsx` |
+| … +99 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

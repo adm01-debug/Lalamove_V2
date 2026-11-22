@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 101,
+ "total": 100,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1037,12 +1037,11 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 5,
+   "usado_por": 4,
    "usado_por_arquivos": [
     "src/components/orders/AddressAutocomplete.tsx",
     "src/hooks/useCommandPaletteSearch.ts",
     "src/hooks/useGeo.ts",
-    "src/hooks/useGlobalSearch.ts",
     "src/pages/ExternalDataPage.tsx"
    ],
    "coberto_por_testes": 0
@@ -1414,36 +1413,6 @@
     "src/hooks/useGeo.ts"
    ],
    "coberto_por_testes": 1
-  },
-  {
-   "arquivo": "src/hooks/useGlobalSearch.ts",
-   "hooks_exportados": [
-    "useGlobalSearch"
-   ],
-   "linhas": 197,
-   "dominio": "hooks",
-   "tabelas": [
-    "alerts",
-    "driver_approval_queue",
-    "drivers",
-    "lalamove_orders"
-   ],
-   "rpcs": [],
-   "edges": [],
-   "hooks_internos": [
-    "useCallback",
-    "useDebouncedValue",
-    "useEffect",
-    "useMemo",
-    "useNavigate",
-    "useState"
-   ],
-   "canais_realtime": [],
-   "usado_por": 1,
-   "usado_por_arquivos": [
-    "src/components/GlobalSearchAdvanced.tsx"
-   ],
-   "coberto_por_testes": 0
   },
   {
    "arquivo": "src/hooks/useGlobalUndo.tsx",

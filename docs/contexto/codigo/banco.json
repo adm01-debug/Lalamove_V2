@@ -1590,7 +1590,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 8,
+   "usada_no_front": 7,
    "usada_em_edges": [
     "check-driver-alerts",
     "evaluate-driver",
@@ -3513,7 +3513,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 11,
+   "usada_no_front": 10,
    "usada_em_edges": [
     "evaluate-driver"
    ],
@@ -4489,7 +4489,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 15,
+   "usada_no_front": 14,
    "usada_em_edges": [
     "evaluate-driver",
     "lalamove-api",
@@ -6559,7 +6559,7 @@
     "so_na_migration": [],
     "so_no_types": []
    },
-   "usada_no_front": 15,
+   "usada_no_front": 14,
    "usada_em_edges": [
     "bitrix24-sync",
     "evaluate-driver",

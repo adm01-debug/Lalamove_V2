@@ -1,24 +1,24 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 510,
- "arestas": 1692,
+ "nos": 508,
+ "arestas": 1678,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 128
+   "importado_por": 127
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 116
+   "importado_por": 115
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
-   "importado_por": 107
+   "importado_por": 106
   },
   {
    "arquivo": "src/integrations/supabase/client.ts",
-   "importado_por": 105
+   "importado_por": 104
   },
   {
    "arquivo": "src/components/ui/card.tsx",
@@ -26,15 +26,15 @@
   },
   {
    "arquivo": "src/utils/logger.ts",
-   "importado_por": 46
+   "importado_por": 45
   },
   {
    "arquivo": "src/components/ui/input.tsx",
-   "importado_por": 43
+   "importado_por": 42
   },
   {
    "arquivo": "src/components/ui/select.tsx",
-   "importado_por": 34
+   "importado_por": 33
   },
   {
    "arquivo": "supabase/functions/_shared/contract.ts",
@@ -53,12 +53,12 @@
    "importado_por": 28
   },
   {
-   "arquivo": "src/components/ui/dialog.tsx",
+   "arquivo": "supabase/functions/_shared/telemetry.ts",
    "importado_por": 26
   },
   {
-   "arquivo": "supabase/functions/_shared/telemetry.ts",
-   "importado_por": 26
+   "arquivo": "src/components/ui/dialog.tsx",
+   "importado_por": 25
   },
   {
    "arquivo": "src/types/index.ts",
@@ -81,12 +81,12 @@
    "importado_por": 15
   },
   {
-   "arquivo": "src/components/ui/tabs.tsx",
+   "arquivo": "src/lib/geo-gateway.ts",
    "importado_por": 14
   },
   {
-   "arquivo": "src/lib/geo-gateway.ts",
-   "importado_por": 14
+   "arquivo": "src/components/ui/tabs.tsx",
+   "importado_por": 13
   },
   {
    "arquivo": "src/components/ui/tooltip.tsx",
@@ -101,12 +101,12 @@
    "importado_por": 12
   },
   {
-   "arquivo": "src/components/ui/scroll-area.tsx",
+   "arquivo": "src/components/ui/table.tsx",
    "importado_por": 12
   },
   {
-   "arquivo": "src/components/ui/table.tsx",
-   "importado_por": 12
+   "arquivo": "src/components/ui/scroll-area.tsx",
+   "importado_por": 11
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
@@ -240,19 +240,9 @@
    "importado_por": 2
   },
   {
-   "modulo": "components",
-   "depende_de": 5,
-   "importado_por": 1
-  },
-  {
    "modulo": "components/drivers",
    "depende_de": 5,
    "importado_por": 1
-  },
-  {
-   "modulo": "components/layout",
-   "depende_de": 6,
-   "importado_por": 0
   },
   {
    "modulo": "components/notifications",
@@ -275,6 +265,11 @@
    "importado_por": 1
   },
   {
+   "modulo": "components",
+   "depende_de": 5,
+   "importado_por": 0
+  },
+  {
    "modulo": "components/alerts",
    "depende_de": 4,
    "importado_por": 1
@@ -283,6 +278,11 @@
    "modulo": "components/lalamove",
    "depende_de": 4,
    "importado_por": 1
+  },
+  {
+   "modulo": "components/layout",
+   "depende_de": 5,
+   "importado_por": 0
   }
  ],
  "arestas_em": "docs/contexto/codigo/grafo-arestas.json"

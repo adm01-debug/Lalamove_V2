@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21",
+  "sha": "945a0a5e15d26eaa7b3e3b0aa5e55a149b43c3b4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 18:39 UTC",
-  "files_total": 1057,
-  "code_files": 873,
-  "code_lines": 150458
+  "generated_at": "2026-11-22 18:41 UTC",
+  "files_total": 1055,
+  "code_files": 871,
+  "code_lines": 150105
  },
  "version": "1.3.2",
- "facts_hash": "7d2dc465740c77df",
+ "facts_hash": "361ee326d397aef4",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,8 +181,8 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 312,
-   ".tsx": 237,
+   ".ts": 311,
+   ".tsx": 236,
    ".sql": 202,
    ".mjs": 109,
    ".py": 8,
@@ -19324,7 +19324,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 162,
+  "components_count": 161,
   "hooks": [
    {
     "name": "useOrders",
@@ -19769,10 +19769,6 @@
    {
     "name": "useFrequentAddresses",
     "file": "src/hooks/useGeoSearch.ts"
-   },
-   {
-    "name": "useGlobalSearch",
-    "file": "src/hooks/useGlobalSearch.ts"
    },
    {
     "name": "useGlobalUndo",
@@ -20839,8 +20835,8 @@
   },
   {
    "module": "src/components",
-   "files": 161,
-   "lines": 29568,
+   "files": 160,
+   "lines": 29412,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20857,7 +20853,6 @@
    "exports": [
     "CommandPaletteEnhanced.tsx: CommandPaletteEnhanced",
     "ErrorBoundary.tsx: ErrorBoundary, useErrorHandler, withErrorBoundary",
-    "GlobalSearchAdvanced.tsx: GlobalSearchAdvanced",
     "ContractVersionMonthlyTrend.tsx: ContractVersionMonthlyTrend",
     "ContractVersionUsagePanel.tsx: ContractVersionUsagePanel",
     "TelemetryCharts.tsx: TelemetryCharts",
@@ -20894,7 +20889,8 @@
     "DriverProfileModal.tsx: DriverProfileModal",
     "DriverProfileTabs.tsx: OverviewTab, PerformanceTab, HistoryTab",
     "CronJobsHealthPanel.tsx: CronJobsHealthPanel",
-    "UapiCouponsPanel.tsx: UapiCouponsPanel"
+    "UapiCouponsPanel.tsx: UapiCouponsPanel",
+    "UapiFleetPanel.tsx: UapiFleetPanel"
    ],
    "docs": [
     "ContactPicker.tsx: Combobox de busca de contatos reutilizáveis. Exibe sugestões por nome/telefone/endereço e devolve o contato selecionado ao consumidor, que decide quais campos preencher."
@@ -20939,7 +20935,6 @@
    "file_list": [
     "src/components/CommandPaletteEnhanced.tsx",
     "src/components/ErrorBoundary.tsx",
-    "src/components/GlobalSearchAdvanced.tsx",
     "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
     "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
     "src/components/admin/telemetry/TelemetryCharts.tsx",
@@ -21016,13 +21011,14 @@
     "src/components/map/hooks/useMapboxToken.ts",
     "src/components/map/hooks/useTrackingData.ts",
     "src/components/map/hooks/useTrackingTrails.ts",
-    "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts"
+    "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
+    "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts"
    ]
   },
   {
    "module": "src/hooks",
-   "files": 111,
-   "lines": 19023,
+   "files": 110,
+   "lines": 18826,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21184,7 +21180,6 @@
     "src/hooks/useGeoAdmin.ts",
     "src/hooks/useGeoSearch.test.tsx",
     "src/hooks/useGeoSearch.ts",
-    "src/hooks/useGlobalSearch.ts",
     "src/hooks/useGlobalUndo.tsx",
     "src/hooks/useIncidents.ts",
     "src/hooks/useJobQueue.ts",
@@ -21221,7 +21216,8 @@
     "src/hooks/useSoundSettings.ts",
     "src/hooks/useSystemHealth.ts",
     "src/hooks/useSystemHealthExpanded.ts",
-    "src/hooks/useTestNotification.ts"
+    "src/hooks/useTestNotification.ts",
+    "src/hooks/useTheme.ts"
    ]
   },
   {
@@ -22011,7 +22007,6 @@
      "src/hooks/useAnalyticsData.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
-     "src/hooks/useGlobalSearch.ts",
      "src/hooks/useSLAMetrics.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
@@ -22176,7 +22171,6 @@
      "src/hooks/useAnalyticsData.ts",
      "src/hooks/useCommandPaletteSearch.ts",
      "src/hooks/useDashboardStats.ts",
-     "src/hooks/useGlobalSearch.ts",
      "src/hooks/useMetrics.ts",
      "src/hooks/usePendingApprovals.ts",
      "src/hooks/usePredictiveAnalysis.ts",
@@ -22249,7 +22243,6 @@
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useDeliveryMetrics.ts",
      "src/hooks/useDrivers.ts",
-     "src/hooks/useGlobalSearch.ts",
      "src/hooks/useIncidents.ts",
      "src/hooks/useMetrics.ts",
      "src/hooks/usePredictiveAnalysis.ts",
@@ -22420,7 +22413,6 @@
      "src/hooks/useDeliveryHeatmapData.ts",
      "src/hooks/useDeliveryMetrics.ts",
      "src/hooks/useGeoSearch.ts",
-     "src/hooks/useGlobalSearch.ts",
      "src/hooks/usePredictiveAnalysis.ts",
      "src/hooks/useRecentOrders.ts",
      "src/hooks/useSLAMetrics.ts",
@@ -22918,7 +22910,6 @@
     "driver_id",
     "driver_name",
     "id",
-    "order_id",
     "requested_at",
     "reviewed_at",
     "risk_score",
@@ -22969,7 +22960,6 @@
     "status",
     "success_rate",
     "total_deliveries",
-    "vehicle_plate",
     "vehicle_type",
     "whitelisted"
    ],
@@ -25329,10 +25319,6 @@
     "msg": ": return Bell;\n    case "
    },
    {
-    "file": "src/components/GlobalSearchAdvanced.tsx",
-    "msg": " className="
-   },
-   {
     "file": "src/components/admin/telemetry/ContractVersionUsagePanel.tsx",
     "msg": "\n                className="
    },
@@ -25579,14 +25565,6 @@
    {
     "file": "src/hooks/useEvaluateDriver.ts",
     "msg": "Motorista Bloqueado"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "msg": ") {\n        const { data: alerts, error } = await supabase.from("
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "msg": ", title: alert.title, subtitle: alert.message, meta: alert.severity, path: "
    },
    {
     "file": "src/hooks/useGlobalUndo.tsx",
@@ -30286,11 +30264,6 @@
     "value": "50"
    },
    {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "name": "MAX_RECENT",
-    "value": "10"
-   },
-   {
     "file": "src/hooks/useLalamoveQuota.ts",
     "name": "HOURS_LOOKBACK",
     "value": "24"
@@ -32225,84 +32198,6 @@
     "file": "src/hooks/useGeoAdmin.ts",
     "field": "status",
     "value": "ok",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "order",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "page",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "order",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "driver",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "alert",
-    "kind": "escreve"
-   },
-   {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "field": "type",
-    "value": "approval",
     "kind": "escreve"
    },
    {
@@ -45222,10 +45117,6 @@
     "limit": "500"
    },
    {
-    "file": "src/hooks/useGlobalSearch.ts",
-    "limit": "10"
-   },
-   {
     "file": "src/hooks/useJobQueue.ts",
     "limit": "1"
    },
@@ -45674,21 +45565,18 @@
       "compara:src/components/CommandPaletteEnhanced.tsx",
       "compara:src/hooks/usePushNotifications.ts",
       "escreve:src/hooks/useCommandPaletteSearch.ts",
-      "escreve:src/hooks/useGlobalSearch.ts",
       "escreve:supabase/functions/lalamove-uapi/index.ts"
      ],
      "driver": [
       "compara:src/components/CommandPaletteEnhanced.tsx",
       "compara:src/hooks/usePushNotifications.ts",
-      "escreve:src/hooks/useCommandPaletteSearch.ts",
-      "escreve:src/hooks/useGlobalSearch.ts"
+      "escreve:src/hooks/useCommandPaletteSearch.ts"
      ],
      "alert": [
       "compara:src/components/CommandPaletteEnhanced.tsx",
       "compara:src/components/ui/activity-timeline.tsx",
       "compara:src/hooks/usePushNotifications.ts",
       "escreve:src/hooks/useCommandPaletteSearch.ts",
-      "escreve:src/hooks/useGlobalSearch.ts",
       "escreve:src/hooks/usePushNotifications.ts",
       "escreve:src/hooks/useRealtimeSubscriptions.ts",
       "escreve:src/hooks/useSoundSettings.ts",
@@ -45699,7 +45587,6 @@
       "compara:src/components/ui/activity-timeline.tsx",
       "compara:src/hooks/usePushNotifications.ts",
       "escreve:src/hooks/useCommandPaletteSearch.ts",
-      "escreve:src/hooks/useGlobalSearch.ts",
       "escreve:src/hooks/usePushNotifications.ts",
       "escreve:src/pages/DashboardRedesigned.tsx"
      ],
@@ -45830,9 +45717,6 @@
      ],
      "incident": [
       "compara:src/components/ui/activity-timeline.tsx"
-     ],
-     "page": [
-      "escreve:src/hooks/useGlobalSearch.ts"
      ],
      "webhook": [
       "compara:supabase/functions/job-worker/index.ts",
@@ -56963,16 +56847,6 @@
     "setTimeout(() => this.setState({ copied: false }), 2000);"
    ]
   },
-  "src/components/GlobalSearchAdvanced.tsx": {
-   "path": "src/components/GlobalSearchAdvanced.tsx",
-   "lines": 142,
-   "exports": [
-    "function GlobalSearchAdvanced"
-   ],
-   "errors": [
-    " className="
-   ]
-  },
   "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": {
    "path": "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx",
    "lines": 94,
@@ -57712,7 +57586,7 @@
   },
   "src/components/layout/AppLayout.tsx": {
    "path": "src/components/layout/AppLayout.tsx",
-   "lines": 395,
+   "lines": 381,
    "exports": [
     "function AppLayout"
    ],
@@ -62331,156 +62205,6 @@
    "pagination": [
     "1",
     "500"
-   ]
-  },
-  "src/hooks/useGlobalSearch.ts": {
-   "path": "src/hooks/useGlobalSearch.ts",
-   "lines": 197,
-   "exports": [
-    "interface SearchResult",
-    "interface SearchFilter",
-    "interface RecentSearch",
-    "const PAGES",
-    "const typeIcons",
-    "const typeColors",
-    "const typeLabels",
-    "function useGlobalSearch"
-   ],
-   "tables": [
-    {
-     "table": "lalamove_orders",
-     "op": "select"
-    },
-    {
-     "table": "drivers",
-     "op": "select"
-    },
-    {
-     "table": "alerts",
-     "op": "select"
-    },
-    {
-     "table": "driver_approval_queue",
-     "op": "select"
-    }
-   ],
-   "table_cols": {
-    "lalamove_orders": [
-     "created_at",
-     "customer_name",
-     "delivery_address",
-     "id",
-     "lalamove_id",
-     "status"
-    ],
-    "drivers": [
-     "id",
-     "name",
-     "phone",
-     "risk_level",
-     "status",
-     "vehicle_plate"
-    ],
-    "alerts": [
-     "created_at",
-     "id",
-     "is_dismissed",
-     "message",
-     "severity",
-     "title",
-     "type"
-    ],
-    "driver_approval_queue": [
-     "driver_name",
-     "id",
-     "order_id",
-     "requested_at",
-     "risk_score",
-     "status"
-    ]
-   },
-   "errors": [
-    ") {\n        const { data: alerts, error } = await supabase.from(",
-    ", title: alert.title, subtitle: alert.message, meta: alert.severity, path: "
-   ],
-   "params": [
-    {
-     "name": "MAX_RECENT",
-     "value": "10"
-    }
-   ],
-   "status_values": [
-    {
-     "field": "type",
-     "value": "order",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "page",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "order",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "driver",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "alert",
-     "kind": "escreve"
-    },
-    {
-     "field": "type",
-     "value": "approval",
-     "kind": "escreve"
-    }
-   ],
-   "hooks": [
-    "useGlobalSearch"
-   ],
-   "pagination": [
-    "10"
    ]
   },
   "src/hooks/useGlobalUndo.tsx": {
@@ -73771,10 +73495,22 @@
   }
  },
  "git": {
-  "sha": "a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21",
+  "sha": "945a0a5e15d26eaa7b3e3b0aa5e55a149b43c3b4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "945a0a5",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/components/GlobalSearchAdvanced.tsx",
+     "src/components/layout/AppLayout.tsx",
+     "src/hooks/useGlobalSearch.ts"
+    ]
+   },
    {
     "sha": "a7e7d11",
     "date": "2026-11-22",
@@ -74138,21 +73874,12 @@
     "files": [
      "supabase/migrations/20261123190002_geo_maps_permissions.sql"
     ]
-   },
-   {
-    "sha": "a9c2b2f",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(lalamove): commita análise exaustiva e plano de integração completo (#276)",
-    "files": [
-     "docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    19
+    20
    ],
    [
     "src/App.tsx",
@@ -74173,6 +73900,14 @@
    [
     ".github/workflows/ci.yml",
     3
+   ],
+   [
+    "src/components/layout/AppLayout.tsx",
+    2
+   ],
+   [
+    "src/hooks/useGlobalSearch.ts",
+    2
    ],
    [
     "src/pages/AuthPage.tsx",
@@ -74220,14 +73955,6 @@
    ],
    [
     "supabase/functions/lalamove-token-refresh/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/simulate-driver-movement/index.ts",
-    2
-   ],
-   [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     2
    ]
   ]

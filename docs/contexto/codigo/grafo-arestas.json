@@ -132,17 +132,6 @@
    "src/services/errorMonitoring.ts",
    "src/utils/logger.ts"
   ],
-  "src/components/GlobalSearchAdvanced.tsx": [
-   "src/components/ui/badge.tsx",
-   "src/components/ui/button.tsx",
-   "src/components/ui/dialog.tsx",
-   "src/components/ui/input.tsx",
-   "src/components/ui/scroll-area.tsx",
-   "src/components/ui/select.tsx",
-   "src/components/ui/tabs.tsx",
-   "src/hooks/useGlobalSearch.ts",
-   "src/lib/utils.ts"
-  ],
   "src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx": [
    "src/components/ui/skeleton.tsx",
    "src/hooks/useContractVersionUsageMonthly.ts"
@@ -417,7 +406,6 @@
    "src/utils/exportUtils.ts"
   ],
   "src/components/layout/AppLayout.tsx": [
-   "src/components/GlobalSearchAdvanced.tsx",
    "src/components/layout/Header.tsx",
    "src/components/layout/MobileBottomNav.tsx",
    "src/components/layout/MobileSidebar.tsx",
@@ -1114,12 +1102,6 @@
   ],
   "src/hooks/useGeoSearch.ts": [
    "src/integrations/supabase/client.ts"
-  ],
-  "src/hooks/useGlobalSearch.ts": [
-   "src/hooks/useDebouncedValue.ts",
-   "src/integrations/supabase/client.ts",
-   "src/lib/postgrest.ts",
-   "src/utils/logger.ts"
   ],
   "src/hooks/useIncidents.ts": [
    "src/integrations/supabase/client.ts",

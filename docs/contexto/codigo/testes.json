@@ -1676,7 +1676,6 @@
    "src/hooks/useEvaluateDriver.ts",
    "src/hooks/useExternalData.ts",
    "src/hooks/useFuseSearch.ts",
-   "src/hooks/useGlobalSearch.ts",
    "src/hooks/useGlobalUndo.tsx",
    "src/hooks/useJobQueue.ts",
    "src/hooks/useLalamove.ts",

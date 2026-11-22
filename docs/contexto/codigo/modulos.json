@@ -5,13 +5,13 @@
  "modulos": [
   {
    "modulo": "components",
-   "arquivos": 3,
+   "arquivos": 2,
    "testes": 0,
-   "linhas": 661,
+   "linhas": 519,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 3,
+   "componentes": 2,
    "hooks_locais": [
     "useAuth",
     "useCommandPaletteSearch",
@@ -19,7 +19,6 @@
     "useErrorHandler",
     "useFuseSearch",
     "useFuseSearchWithMatches",
-    "useGlobalSearch",
     "useTheme"
    ],
    "hooks_definidos": [
@@ -48,9 +47,7 @@
     "tabelas": [],
     "rpcs": []
    },
-   "importado_por_outros_modulos": [
-    "components/layout"
-   ],
+   "importado_por_outros_modulos": [],
    "depende_de_modulos": [
     "components/ui",
     "hooks",
@@ -59,7 +56,6 @@
     "utils"
    ],
    "pacotes_externos": [
-    "framer-motion",
     "lucide-react"
    ]
   },
@@ -592,7 +588,7 @@
    "modulo": "components/layout",
    "arquivos": 6,
    "testes": 0,
-   "linhas": 1790,
+   "linhas": 1776,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -674,7 +670,6 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
-    "useGlobalSearch",
     "useGlobalUndo",
     "useGoogleMapsLoader",
     "useHints",
@@ -893,7 +888,6 @@
    },
    "importado_por_outros_modulos": [],
    "depende_de_modulos": [
-    "components",
     "components/ui",
     "hooks",
     "integrations/supabase",
@@ -1656,9 +1650,9 @@
   },
   {
    "modulo": "hooks",
-   "arquivos": 86,
+   "arquivos": 85,
    "testes": 1,
-   "linhas": 15592,
+   "linhas": 15395,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1765,7 +1759,6 @@
     "useGeoProviderStatus",
     "useGeoUsageMonth",
     "useGeocode",
-    "useGlobalSearch",
     "useGlobalUndo",
     "useGoogleMapsLoader",
     "useHints",
@@ -1985,7 +1978,6 @@
     "useAddressSearchBox",
     "useCustomerSearchBias",
     "useFrequentAddresses",
-    "useGlobalSearch",
     "useGlobalUndo",
     "useCreateIncident",
     "useDeleteIncident",

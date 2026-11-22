@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a7e7d11c2a80040a51b4d0a3a8c5f5ab89a37c21",
+  "commit": "945a0a5e15d26eaa7b3e3b0aa5e55a149b43c3b4",
   "branch": "main",
-  "data_commit": "2026-11-22T15:38:55-03:00",
+  "data_commit": "2026-11-22T15:40:37-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "945a0a5",
+    "data": "2026-11-22",
+    "assunto": "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)"
+   },
    {
     "sha": "a7e7d11",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "4ee7ef0",
     "data": "2026-11-22",
     "assunto": "docs(planos): mede cobertura BR do Search Box e fecha a etapa 321 (#278)"
-   },
-   {
-    "sha": "03b0ca8",
-    "data": "2026-11-22",
-    "assunto": "feat: replay deterministico do trajeto e 100 testes na CI (#277)"
    }
   ],
-  "arquivos_mudados_7d": 360,
+  "arquivos_mudados_7d": 361,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 19
+    "mudancas": 20
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 206
+    "commits": 207
    },
    {
     "autor": "dependabot[bot]",
@@ -310,16 +310,16 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1063,
-  "arquivos_codigo": 662,
-  "linhas_codigo": 129281,
+  "arquivos_total": 1061,
+  "arquivos_codigo": 660,
+  "linhas_codigo": 128928,
   "rotas": 56,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
   "itens_menu": 38,
   "modulos": 43,
-  "componentes": 218,
-  "hooks": 101,
+  "componentes": 217,
+  "hooks": 100,
   "edge_functions": 26,
   "tabelas": 88,
   "migrations": 191,
@@ -519,12 +519,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 161,
-   "linhas": 29568
+   "arquivos": 160,
+   "linhas": 29412
   },
   "src/hooks": {
-   "arquivos": 111,
-   "linhas": 19023
+   "arquivos": 110,
+   "linhas": 18826
   },
   "src/i18n": {
    "arquivos": 1,

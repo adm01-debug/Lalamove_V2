@@ -3447,7 +3447,6 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
-    "useGlobalSearch",
     "useGlobalUndo",
     "useGoogleMapsLoader",
     "useHints",
@@ -3638,7 +3637,6 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
-    "useGlobalSearch",
     "useGlobalUndo",
     "useGoogleMapsLoader",
     "useHints",
@@ -3835,7 +3833,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 282
+   "arquivos_puxados": 279
   }
  ],
  "menu": [
