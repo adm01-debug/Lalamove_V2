@@ -13,18 +13,13 @@
  ],
  "rotas_por_papel": {
   "(público)": [
-   "/",
    "/*",
    "/auth",
-   "/dashboard",
    "/forgot-password",
    "/mfa-enroll",
    "/mfa-verify",
    "/reset-password",
    "/unauthorized"
-  ],
-  "(só autenticado)": [
-   "/profile"
   ],
   "admin": [
    "/geo-blocking",
@@ -68,14 +63,16 @@
    "/orders"
   ],
   "viewer": [
+   "/",
    "/analytics",
+   "/dashboard",
    "/delivery-metrics",
    "/heatmap",
    "/live-map",
-   "/map",
    "/metrics",
    "/notification-history",
    "/preferences",
+   "/profile",
    "/reports",
    "/reports/advanced",
    "/sla"
@@ -92,10 +89,8 @@
  ],
  "rotas_com_permissao": [],
  "rotas_publicas": [
-  "/",
   "/*",
   "/auth",
-  "/dashboard",
   "/forgot-password",
   "/mfa-enroll",
   "/mfa-verify",
@@ -132,15 +127,15 @@
    "arquivo": null
   },
   {
-   "rotulo": "Relatórios",
-   "grupo": null,
-   "destino": "/reports",
+   "rotulo": "Dashboard Analytics",
+   "grupo": "Analytics",
+   "destino": "/analytics",
    "papel_no_menu": null,
    "papel_na_rota": "viewer",
    "rota_existe": true,
    "rota_protegida": true,
    "rota_requer_mfa": false,
-   "arquivo": "src/pages/ReportsPage.tsx"
+   "arquivo": "src/pages/AnalyticsDashboardPage.tsx"
   },
   {
    "rotulo": "Dashboard SLA",
@@ -198,6 +193,17 @@
    "arquivo": "src/pages/DeliveryMetricsPage.tsx"
   },
   {
+   "rotulo": "Relatórios",
+   "grupo": "Analytics",
+   "destino": "/reports",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ReportsPage.tsx"
+  },
+  {
    "rotulo": "Relatórios Avançados",
    "grupo": "Analytics",
    "destino": "/reports/advanced",
@@ -253,6 +259,17 @@
    "arquivo": "src/pages/MapsSettingsPage.tsx"
   },
   {
+   "rotulo": "UAPI Settings",
+   "grupo": "Integrações",
+   "destino": "/settings/uapi",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/UAPISettingsPage.tsx"
+  },
+  {
    "rotulo": "Webhooks",
    "grupo": "Integrações",
    "destino": "/webhooks",
@@ -262,6 +279,28 @@
    "rota_protegida": true,
    "rota_requer_mfa": true,
    "arquivo": "src/pages/WebhooksPage.tsx"
+  },
+  {
+   "rotulo": "Perfil",
+   "grupo": "Mais",
+   "destino": "/profile",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/ProfilePage.tsx"
+  },
+  {
+   "rotulo": "Preferências",
+   "grupo": "Mais",
+   "destino": "/preferences",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/UserPreferencesPage.tsx"
   },
   {
    "rotulo": "Alertas",
@@ -334,6 +373,17 @@
    "grupo": "Operações",
    "destino": "/map",
    "papel_no_menu": null,
+   "papel_na_rota": null,
+   "rota_existe": true,
+   "rota_protegida": false,
+   "rota_requer_mfa": false,
+   "arquivo": null
+  },
+  {
+   "rotulo": "Mapa ao Vivo",
+   "grupo": "Operações",
+   "destino": "/live-map",
+   "papel_no_menu": null,
    "papel_na_rota": "viewer",
    "rota_existe": true,
    "rota_protegida": true,
@@ -356,9 +406,20 @@
    "grupo": "Principal",
    "destino": "/",
    "papel_no_menu": null,
-   "papel_na_rota": null,
+   "papel_na_rota": "viewer",
    "rota_existe": true,
-   "rota_protegida": false,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/DashboardRedesigned.tsx"
+  },
+  {
+   "rotulo": "Dashboard (alias)",
+   "grupo": "Principal",
+   "destino": "/dashboard",
+   "papel_no_menu": null,
+   "papel_na_rota": "viewer",
+   "rota_existe": true,
+   "rota_protegida": true,
    "rota_requer_mfa": false,
    "arquivo": "src/pages/DashboardRedesigned.tsx"
   },
@@ -484,6 +545,17 @@
    "arquivo": "src/pages/SettingsPage.tsx"
   },
   {
+   "rotulo": "Cota Lalamove",
+   "grupo": "Sistema",
+   "destino": "/lalamove-quota",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/LalamoveQuotaPage.tsx"
+  },
+  {
    "rotulo": "Dashboard SLO",
    "grupo": "Sistema",
    "destino": "/slo",
@@ -506,6 +578,17 @@
    "arquivo": "src/pages/ErrorMonitoringPage.tsx"
   },
   {
+   "rotulo": "Fila de Jobs",
+   "grupo": "Sistema",
+   "destino": "/job-queue",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/JobQueuePage.tsx"
+  },
+  {
    "rotulo": "Performance",
    "grupo": "Sistema",
    "destino": "/performance",
@@ -517,6 +600,17 @@
    "arquivo": "src/pages/PerformanceDashboardPage.tsx"
   },
   {
+   "rotulo": "Rate Limiting",
+   "grupo": "Sistema",
+   "destino": "/rate-limiting",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/RateLimitDashboardPage.tsx"
+  },
+  {
    "rotulo": "Regras de Risco",
    "grupo": "Sistema",
    "destino": "/risk-rules",
@@ -526,6 +620,39 @@
    "rota_protegida": true,
    "rota_requer_mfa": true,
    "arquivo": "src/pages/RiskRulesPage.tsx"
+  },
+  {
+   "rotulo": "Saúde do Sistema",
+   "grupo": "Sistema",
+   "destino": "/system-health",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SystemHealthPage.tsx"
+  },
+  {
+   "rotulo": "Saúde Expandida",
+   "grupo": "Sistema",
+   "destino": "/system-health-expanded",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/SystemHealthExpandedPage.tsx"
+  },
+  {
+   "rotulo": "Status do Cache",
+   "grupo": "Sistema",
+   "destino": "/cache-status",
+   "papel_no_menu": "manager",
+   "papel_na_rota": "manager",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": false,
+   "arquivo": "src/pages/CacheStatusPage.tsx"
   },
   {
    "rotulo": "Telemetria BD",

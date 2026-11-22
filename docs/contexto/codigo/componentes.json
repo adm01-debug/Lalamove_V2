@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 233,
+   "linhas": 235,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -283,7 +283,7 @@
     "ProtectedRoute"
    ],
    "export_default": null,
-   "linhas": 71,
+   "linhas": 83,
    "dominio": "components/auth",
    "hooks_locais": [
     "useAuth",
@@ -750,7 +750,7 @@
     "MobileSidebar"
    ],
    "export_default": null,
-   "linhas": 292,
+   "linhas": 311,
    "dominio": "components/layout",
    "hooks_locais": [
     "usePermissions",
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 126,
+   "usado_por": 127,
    "orfao": false
   },
   {
@@ -3109,7 +3109,7 @@
     "NotFound"
    ],
    "export_default": "NotFound",
-   "linhas": 26,
+   "linhas": 38,
    "dominio": "pages",
    "hooks_locais": [],
    "tabelas": [],
@@ -3623,7 +3623,7 @@
     "UnauthorizedPage"
    ],
    "export_default": "UnauthorizedPage",
-   "linhas": 54,
+   "linhas": 90,
    "dominio": "pages",
    "hooks_locais": [],
    "tabelas": [],

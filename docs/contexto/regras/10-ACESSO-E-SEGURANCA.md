@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `23148972fd` · branch `main` · 2026-11-22 19:04 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2585b1a9e` · branch `main` · 2026-11-22 19:31 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -312,6 +312,7 @@
 
 | Rota | Guard | Roles | Arquivo |
 |---|---|---|---|
+| / | ProtectedRoute | viewer | `src/App.tsx` |
 | /${n | ProtectedRoute | operator | `scripts/ui-audit/layout-guard.unit.mjs` |
 | /${pick([ | ProtectedRoute |  | `scripts/ai-context/cenarios.mjs` |
 | /alert-configurations | ProtectedRoute | manager | `src/App.tsx` |
@@ -322,6 +323,7 @@
 | /cache-monitoring | ProtectedRoute | manager | `src/App.tsx` |
 | /cache-status | ProtectedRoute | manager | `src/App.tsx` |
 | /contacts | ProtectedRoute | operator | `src/App.tsx` |
+| /dashboard | ProtectedRoute | viewer | `src/App.tsx` |
 | /delivery-metrics | ProtectedRoute | viewer | `src/App.tsx` |
 | /drivers | ProtectedRoute | operator | `src/App.tsx` |
 | /error-monitoring | ProtectedRoute | manager | `src/App.tsx` |
@@ -335,7 +337,6 @@
 | /lalamove-operacoes | ProtectedRoute | operator | `src/App.tsx` |
 | /lalamove-quota | ProtectedRoute | admin | `src/App.tsx` |
 | /live-map | ProtectedRoute | viewer | `src/App.tsx` |
-| /map | ProtectedRoute | viewer | `src/App.tsx` |
 | /map-tools | ProtectedRoute | manager | `src/App.tsx` |
 | /metrics | ProtectedRoute | viewer | `src/App.tsx` |
 | /notification-history | ProtectedRoute | viewer | `src/App.tsx` |
@@ -345,7 +346,7 @@
 | /performance | ProtectedRoute | manager | `src/App.tsx` |
 | /permissions | ProtectedRoute | admin | `src/App.tsx` |
 | /preferences | ProtectedRoute | viewer | `src/App.tsx` |
-| /profile | ProtectedRoute |  | `src/App.tsx` |
+| /profile | ProtectedRoute | viewer | `src/App.tsx` |
 | /protected | ProtectedRoute |  | `src/components/auth/ProtectedRoute.test.tsx` |
 | /rate-limiting | ProtectedRoute | admin | `src/App.tsx` |
 | /reports | ProtectedRoute | viewer | `src/App.tsx` |

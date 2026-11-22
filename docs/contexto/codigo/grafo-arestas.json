@@ -65,6 +65,7 @@
    "src/components/ui/tooltip.tsx",
    "src/hooks/useAchievementsSystem.tsx",
    "src/hooks/useAuth.tsx",
+   "src/lib/lazyWithRetry.ts",
    "src/pages/AdminTelemetriaPage.tsx",
    "src/pages/AdvancedReportsPage.tsx",
    "src/pages/AlertConfigurationsPage.tsx",
@@ -1712,6 +1713,7 @@
    "src/pages/MetricsPage.panels.tsx"
   ],
   "src/pages/NotFound.tsx": [
+   "src/components/ui/button.tsx",
    "src/utils/logger.ts"
   ],
   "src/pages/NotificationHistoryPage.tsx": [
@@ -1933,7 +1935,8 @@
   ],
   "src/pages/UnauthorizedPage.tsx": [
    "src/components/ui/button.tsx",
-   "src/components/ui/card.tsx"
+   "src/components/ui/card.tsx",
+   "src/lib/roles.ts"
   ],
   "src/pages/UserPreferencesPage.tsx": [
    "src/components/ui/badge.tsx",

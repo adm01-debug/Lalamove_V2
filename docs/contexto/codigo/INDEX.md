@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `23148972fd2c0832d397ddb1f2869ed3521142eb` (2026-11-22T16:03:36-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c2585b1a9e10301e6473f4e4d81e89eb10ed4a1e` (2026-11-22T16:31:15-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (549), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (550), SQL (202), JavaScript (114), Markdown (109), JSON (36), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,13 +35,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1063 |
-| arquivos_codigo | 662 |
-| linhas_codigo | 129023 |
+| arquivos_total | 1064 |
+| arquivos_codigo | 663 |
+| linhas_codigo | 129153 |
 | rotas | 56 |
-| rotas_protegidas | 47 |
+| rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
-| itens_menu | 38 |
+| itens_menu | 50 |
 | modulos | 43 |
 | componentes | 217 |
 | hooks | 101 |
@@ -58,7 +58,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - telas: src/pages (54)
 - componentes: src/components (126), src/pages (87), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
-- servicos_logica: src/lib (27), src/utils (6), src/integrations (4)
+- servicos_logica: src/lib (28), src/utils (6), src/integrations (4)
 - testes: co-localizado (__tests__) (57), guards em scripts/ (47), supabase/functions/<edge> (28)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
@@ -80,15 +80,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 53 | 0 | 6 | 42 |
 | hooks | 0 | 0 | 86 | 220 | 15 | 48 |
-| lib | 0 | 0 | 27 | 8 | 3 | 0 |
-| pages | 37 | 56 | 56 | 199 | 14 | 48 |
+| lib | 0 | 0 | 28 | 8 | 3 | 0 |
+| pages | 48 | 55 | 56 | 199 | 14 | 48 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
 | utils | 0 | 0 | 6 | 0 | 0 | 0 |
 
 ## Rotas (url → arquivo → papel)
-- `/` [tela] → src/pages/DashboardRedesigned.tsx · **público**
+- `/` [tela] → src/pages/DashboardRedesigned.tsx · papel viewer
 - `/*` [tela] → src/pages/NotFound.tsx · **público**
 - `/alert-configurations` [tela] → src/pages/AlertConfigurationsPage.tsx · papel manager
 - `/alerts` [tela] → src/pages/AlertsPage.tsx · papel operator
@@ -99,7 +99,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `/cache-monitoring` [tela] → src/pages/CacheMonitoringPage.tsx · papel manager
 - `/cache-status` [tela] → src/pages/CacheStatusPage.tsx · papel manager
 - `/contacts` [tela] → src/pages/ContactsPage.tsx · papel operator
-- `/dashboard` [tela] → src/pages/DashboardRedesigned.tsx · **público**
+- `/dashboard` [tela] → src/pages/DashboardRedesigned.tsx · papel viewer
 - `/delivery-metrics` [tela] → src/pages/DeliveryMetricsPage.tsx · papel viewer
 - `/drivers` [tela] → src/pages/DriversPage.tsx · papel operator
 - `/error-monitoring` [tela] → src/pages/ErrorMonitoringPage.tsx · papel manager
@@ -114,7 +114,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `/lalamove-operacoes` [tela] → src/pages/LalamoveOperationsPage.tsx · papel operator
 - `/lalamove-quota` [tela] → src/pages/LalamoveQuotaPage.tsx · papel admin
 - `/live-map` [tela] → src/pages/LiveMapPage.tsx · papel viewer
-- `/map` [tela] → src/pages/LiveMapPage.tsx · papel viewer
+- `/map` [redirect] → **ARQUIVO NÃO RESOLVIDO** · **público**
 - `/map-tools` [tela] → src/pages/MapToolsPage.tsx · papel manager
 - `/metrics` [tela] → src/pages/MetricsPage.tsx · papel viewer
 - `/mfa-enroll` [tela] → src/pages/MFAEnrollPage.tsx · **público**
@@ -125,7 +125,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `/performance` [tela] → src/pages/PerformanceDashboardPage.tsx · papel manager
 - `/permissions` [tela] → src/pages/PermissionsPage.tsx · papel admin
 - `/preferences` [tela] → src/pages/UserPreferencesPage.tsx · papel viewer
-- `/profile` [tela] → src/pages/ProfilePage.tsx · autenticado
+- `/profile` [tela] → src/pages/ProfilePage.tsx · papel viewer
 - `/rate-limiting` [tela] → src/pages/RateLimitDashboardPage.tsx · papel admin
 - `/reports` [tela] → src/pages/ReportsPage.tsx · papel viewer
 - `/reports/advanced` [tela] → src/pages/AdvancedReportsPage.tsx · papel viewer
@@ -147,18 +147,22 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## Menu (sidebar-config.ts)
 - Mais → `#more` — **SEM ROTA**
-- Relatórios → `/reports`
+- [Analytics] Dashboard Analytics → `/analytics`
 - [Analytics] Dashboard SLA → `/sla`
 - [Analytics] Ferramentas Mapa → `/map-tools` (papel manager)
 - [Analytics] Mapa de Calor → `/heatmap`
 - [Analytics] Métricas → `/metrics`
 - [Analytics] Métricas Entregas → `/delivery-metrics`
+- [Analytics] Relatórios → `/reports`
 - [Analytics] Relatórios Avançados → `/reports/advanced`
 - [Integrações] Base CRM → `/external-data` (papel manager)
 - [Integrações] Bitrix24 → `/bitrix24` (papel manager)
 - [Integrações] Lalamove API → `/settings/lalamove` (papel manager)
 - [Integrações] Provedores de Mapa → `/settings/maps` (papel manager)
+- [Integrações] UAPI Settings → `/settings/uapi` (papel manager)
 - [Integrações] Webhooks → `/webhooks` (papel manager)
+- [Mais] Perfil → `/profile`
+- [Mais] Preferências → `/preferences`
 - [Notificações] Alertas → `/alerts`
 - [Notificações] Config. Alertas → `/alert-configurations` (papel manager)
 - [Notificações] Histórico → `/notification-history`
@@ -166,8 +170,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - [Operações] Avaliações → `/evaluations`
 - [Operações] Incidentes → `/incidents`
 - [Operações] Mapa ao Vivo → `/map`
+- [Operações] Mapa ao Vivo → `/live-map`
 - [Principal] Contatos → `/contacts`
 - [Principal] Dashboard → `/`
+- [Principal] Dashboard (alias) → `/dashboard`
 - [Principal] Motoristas → `/drivers`
 - [Principal] Operações Lalamove → `/lalamove-operacoes`
 - [Principal] Pedidos → `/orders`
@@ -179,10 +185,16 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - [Segurança] Roles → `/roles` (papel admin)
 - [Sistema] Cache Monitor → `/cache-monitoring` (papel manager)
 - [Sistema] Configurações → `/settings` (papel manager)
+- [Sistema] Cota Lalamove → `/lalamove-quota` (papel admin)
 - [Sistema] Dashboard SLO → `/slo` (papel manager)
 - [Sistema] Erros Runtime → `/error-monitoring` (papel manager)
+- [Sistema] Fila de Jobs → `/job-queue` (papel manager)
 - [Sistema] Performance → `/performance` (papel manager)
+- [Sistema] Rate Limiting → `/rate-limiting` (papel admin)
 - [Sistema] Regras de Risco → `/risk-rules` (papel manager)
+- [Sistema] Saúde do Sistema → `/system-health` (papel manager)
+- [Sistema] Saúde Expandida → `/system-health-expanded` (papel manager)
+- [Sistema] Status do Cache → `/cache-status` (papel manager)
 - [Sistema] Telemetria BD → `/telemetria` (papel admin)
 
 ## Edge functions
@@ -247,7 +259,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## RBAC
 - hierarquia: viewer=1 < operator=2 < manager=3 < admin=4
-- rotas por papel: (público) (9), (só autenticado) (1), admin (9), manager (19), operator (7), viewer (11)
+- rotas por papel: (público) (7), admin (9), manager (19), operator (7), viewer (13)
 - rotas com MFA: /bitrix24, /external-data, /risk-rules, /settings/lalamove, /settings/maps, /settings/uapi, /webhooks
 - guards: src/components/auth/ProtectedRoute.tsx
 - enums de papel no banco: app_role: admin|manager|operator|viewer
@@ -255,7 +267,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 
 ## Alertas (baseline.json → alertas)
 - rotas_sem_arquivo: 0
-- rotas_sem_protecao: 3 — ex.: /, /dashboard, /mfa-enroll
+- rotas_sem_protecao: 1 — ex.: /mfa-enroll
 - menu_visivel_sem_acesso: 7 — ex.: Alertas -> /alerts (menu: todos; rota: operator), Avaliações -> /evaluations (menu: todos; rota: operator), Incidentes -> /incidents (menu: todos; rota: operator)
 - componentes_ambiguos: 0
 - menu_sem_destino: 0
@@ -275,15 +287,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8725 nós · 18245 arestas · 645 comunidades · grafo do commit `23148972`
-- comunidades maiores: cn (191), button.tsx (129), snapshot.py (107), react (101), RateLimitDashboardPage.tsx (95), badge.tsx (88), ref_https (81), dependencies (80), ref_node_path (79), gerar.mjs (76), generate.py (73), client.ts (72)
+- 8729 nós · 18261 arestas · 641 comunidades · grafo do commit `c2585b1a`
+- comunidades maiores: cn (239), react (155), App.tsx (131), RateLimitDashboardPage.tsx (107), ref_node_path (103), AlertsPage.tsx (97), ref_https (92), dependencies (80), client.ts (79), gerar.mjs (76), package.json (72), AdvancedReportsPage.tsx (70)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), useAuth() (src/hooks/useAuth.tsx), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (39)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (22)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (23)
 - .github/workflows/ci.yml (16)
 - supabase/config.toml (16)
 - docs/MAPBOX.md (12)
@@ -378,6 +390,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `c2585b1` feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)
 - 2026-11-22 `2314897` feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)
 - 2026-11-22 `5672ef0` feat: menu alinhado às rotas (item 49) (#306)
 - 2026-11-22 `945a0a5` feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)
@@ -392,7 +405,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `07c862d` fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)
 - 2026-11-22 `b05e2b0` feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)
 - 2026-11-22 `ca2061f` feat: campos de token como password e sem autofill (#294)
-- 2026-11-22 `a388d1d` fix: validar origem do postMessage do Bitrix24 (#293)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

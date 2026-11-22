@@ -5,8 +5,8 @@
  "resumo": {
   "urls": 56,
   "layouts": 1,
-  "itens_menu": 38,
-  "lazy": 53
+  "itens_menu": 50,
+  "lazy": 54
  },
  "urls": [
   {
@@ -14,11 +14,12 @@
    "componente": "DashboardRedesigned",
    "arquivo": "src/pages/DashboardRedesigned.tsx",
    "tipo": "tela",
-   "protegida": false,
-   "papel_requerido": null,
+   "protegida": true,
+   "papel_requerido": "viewer",
    "requer_mfa": false,
    "permissao_requerida": null,
    "wrappers": [
+    "ProtectedRoute",
     "SuspenseWrapper"
    ],
    "pai": null,
@@ -238,12 +239,13 @@
    "wrappers": [],
    "pai": null,
    "indice": false,
-   "lazy": false,
+   "lazy": true,
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
     "useEffect",
-    "useLocation"
+    "useLocation",
+    "useNavigate"
    ],
    "hooks_locais": [],
    "tabelas": [],
@@ -252,7 +254,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 1
+   "arquivos_puxados": 3
   },
   {
    "caminho": "/alert-configurations",
@@ -772,11 +774,12 @@
    "componente": "DashboardRedesigned",
    "arquivo": "src/pages/DashboardRedesigned.tsx",
    "tipo": "tela",
-   "protegida": false,
-   "papel_requerido": null,
+   "protegida": true,
+   "papel_requerido": "viewer",
    "requer_mfa": false,
    "permissao_requerida": null,
    "wrappers": [
+    "ProtectedRoute",
     "SuspenseWrapper"
    ],
    "pai": null,
@@ -1727,108 +1730,30 @@
   },
   {
    "caminho": "/map",
-   "componente": "LiveMapPage",
-   "arquivo": "src/pages/LiveMapPage.tsx",
-   "tipo": "tela",
-   "protegida": true,
-   "papel_requerido": "viewer",
+   "componente": null,
+   "arquivo": null,
+   "tipo": "redirect",
+   "protegida": false,
+   "papel_requerido": null,
    "requer_mfa": false,
    "permissao_requerida": null,
    "wrappers": [
-    "ProtectedRoute",
-    "SuspenseWrapper"
+    "Navigate"
    ],
    "pai": null,
    "indice": false,
-   "lazy": true,
+   "lazy": false,
    "definida_em": "src/App.tsx",
-   "redireciona": null,
-   "hooks": [
-    "useAllowedMapProviders",
-    "useCallback",
-    "useContext",
-    "useEffect",
-    "useEffectiveMapProvider",
-    "useFeatureFlag",
-    "useFeatureFlags",
-    "useFuseSearch",
-    "useFuseSearchWithMatches",
-    "useGoogleMapsLoader",
-    "useMapAlerts",
-    "useMapMarkers",
-    "useMapSettings",
-    "useMapboxDirections",
-    "useMapboxGeocode",
-    "useMapboxIsochrone",
-    "useMapboxMapMatching",
-    "useMapboxMatrix",
-    "useMapboxOptimization",
-    "useMapboxReverseGeocode",
-    "useMapboxStaticImage",
-    "useMapboxTilequery",
-    "useMapboxToken",
-    "useMemo",
-    "useQuery",
-    "useRef",
-    "useState",
-    "useTilesProvider",
-    "useTrackingData",
-    "useTrackingHistory",
-    "useTrackingTrails",
-    "useTranslation"
-   ],
-   "hooks_locais": [
-    "useAllowedMapProviders",
-    "useEffectiveMapProvider",
-    "useFeatureFlag",
-    "useFeatureFlags",
-    "useFuseSearch",
-    "useFuseSearchWithMatches",
-    "useGoogleMapsLoader",
-    "useMapAlerts",
-    "useMapMarkers",
-    "useMapSettings",
-    "useMapboxDirections",
-    "useMapboxGeocode",
-    "useMapboxIsochrone",
-    "useMapboxMapMatching",
-    "useMapboxMatrix",
-    "useMapboxOptimization",
-    "useMapboxReverseGeocode",
-    "useMapboxStaticImage",
-    "useMapboxTilequery",
-    "useMapboxToken",
-    "useTilesProvider",
-    "useTrackingData",
-    "useTrackingHistory",
-    "useTrackingTrails"
-   ],
-   "tabelas": [
-    "active_tracking",
-    "feature_flags",
-    "geo_settings",
-    "map_settings_overrides",
-    "tracking_events"
-   ],
+   "redireciona": "/live-map",
+   "hooks": [],
+   "hooks_locais": [],
+   "tabelas": [],
    "rpcs": [],
-   "edges": [
-    "geo-gateway",
-    "get-mapbox-token",
-    "simulate-driver-movement"
-   ],
-   "canais_realtime": [
-    "active-tracking-changes",
-    "live-map-tracking"
-   ],
-   "flags": [
-    "realtime_map_updates"
-   ],
-   "papeis": [
-    "img",
-    "radio",
-    "radiogroup"
-   ],
-   "arquivos_puxados": 44
+   "edges": [],
+   "canais_realtime": [],
+   "flags": [],
+   "papeis": [],
+   "arquivos_puxados": 0
   },
   {
    "caminho": "/map-tools",
@@ -2392,7 +2317,7 @@
    "arquivo": "src/pages/ProfilePage.tsx",
    "tipo": "tela",
    "protegida": true,
-   "papel_requerido": null,
+   "papel_requerido": "viewer",
    "requer_mfa": false,
    "permissao_requerida": null,
    "wrappers": [
@@ -3290,7 +3215,9 @@
    "lazy": true,
    "definida_em": "src/App.tsx",
    "redireciona": null,
-   "hooks": [],
+   "hooks": [
+    "useLocation"
+   ],
    "hooks_locais": [],
    "tabelas": [],
    "rpcs": [],
@@ -3298,7 +3225,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 3
+   "arquivos_puxados": 4
   },
   {
    "caminho": "/webhooks",
@@ -3853,16 +3780,16 @@
    "resolve_para": null
   },
   {
-   "rotulo": "Relatórios",
-   "destino": "/reports",
-   "grupo": null,
+   "rotulo": "Dashboard Analytics",
+   "destino": "/analytics",
+   "grupo": "Analytics",
    "papel_do_grupo": null,
    "papeis": [],
    "papeis_nao_resolvidos": null,
    "badge": null,
-   "definido_em": "src/components/layout/MobileBottomNav.tsx",
+   "definido_em": "src/components/layout/sidebar-config.ts",
    "papel_efetivo": null,
-   "resolve_para": "src/pages/ReportsPage.tsx"
+   "resolve_para": "src/pages/AnalyticsDashboardPage.tsx"
   },
   {
    "rotulo": "Dashboard SLA",
@@ -3925,6 +3852,18 @@
    "definido_em": "src/components/layout/sidebar-config.ts",
    "papel_efetivo": null,
    "resolve_para": "src/pages/DeliveryMetricsPage.tsx"
+  },
+  {
+   "rotulo": "Relatórios",
+   "destino": "/reports",
+   "grupo": "Analytics",
+   "papel_do_grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": null,
+   "resolve_para": "src/pages/ReportsPage.tsx"
   },
   {
    "rotulo": "Relatórios Avançados",
@@ -3995,6 +3934,20 @@
    "resolve_para": "src/pages/MapsSettingsPage.tsx"
   },
   {
+   "rotulo": "UAPI Settings",
+   "destino": "/settings/uapi",
+   "grupo": "Integrações",
+   "papel_do_grupo": null,
+   "papeis": [
+    "manager"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "manager",
+   "resolve_para": "src/pages/UAPISettingsPage.tsx"
+  },
+  {
    "rotulo": "Webhooks",
    "destino": "/webhooks",
    "grupo": "Integrações",
@@ -4007,6 +3960,30 @@
    "definido_em": "src/components/layout/sidebar-config.ts",
    "papel_efetivo": "manager",
    "resolve_para": "src/pages/WebhooksPage.tsx"
+  },
+  {
+   "rotulo": "Perfil",
+   "destino": "/profile",
+   "grupo": "Mais",
+   "papel_do_grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": null,
+   "resolve_para": "src/pages/ProfilePage.tsx"
+  },
+  {
+   "rotulo": "Preferências",
+   "destino": "/preferences",
+   "grupo": "Mais",
+   "papel_do_grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": null,
+   "resolve_para": "src/pages/UserPreferencesPage.tsx"
   },
   {
    "rotulo": "Alertas",
@@ -4094,6 +4071,18 @@
    "badge": null,
    "definido_em": "src/components/layout/sidebar-config.ts",
    "papel_efetivo": null,
+   "resolve_para": null
+  },
+  {
+   "rotulo": "Mapa ao Vivo",
+   "destino": "/live-map",
+   "grupo": "Operações",
+   "papel_do_grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": null,
    "resolve_para": "src/pages/LiveMapPage.tsx"
   },
   {
@@ -4111,6 +4100,18 @@
   {
    "rotulo": "Dashboard",
    "destino": "/",
+   "grupo": "Principal",
+   "papel_do_grupo": null,
+   "papeis": [],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": null,
+   "resolve_para": "src/pages/DashboardRedesigned.tsx"
+  },
+  {
+   "rotulo": "Dashboard (alias)",
+   "destino": "/dashboard",
    "grupo": "Principal",
    "papel_do_grupo": null,
    "papeis": [],
@@ -4267,6 +4268,20 @@
    "resolve_para": "src/pages/SettingsPage.tsx"
   },
   {
+   "rotulo": "Cota Lalamove",
+   "destino": "/lalamove-quota",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "admin"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "admin",
+   "resolve_para": "src/pages/LalamoveQuotaPage.tsx"
+  },
+  {
    "rotulo": "Dashboard SLO",
    "destino": "/slo",
    "grupo": "Sistema",
@@ -4295,6 +4310,20 @@
    "resolve_para": "src/pages/ErrorMonitoringPage.tsx"
   },
   {
+   "rotulo": "Fila de Jobs",
+   "destino": "/job-queue",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "manager"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "manager",
+   "resolve_para": "src/pages/JobQueuePage.tsx"
+  },
+  {
    "rotulo": "Performance",
    "destino": "/performance",
    "grupo": "Sistema",
@@ -4309,6 +4338,20 @@
    "resolve_para": "src/pages/PerformanceDashboardPage.tsx"
   },
   {
+   "rotulo": "Rate Limiting",
+   "destino": "/rate-limiting",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "admin"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "admin",
+   "resolve_para": "src/pages/RateLimitDashboardPage.tsx"
+  },
+  {
    "rotulo": "Regras de Risco",
    "destino": "/risk-rules",
    "grupo": "Sistema",
@@ -4319,6 +4362,48 @@
    "definido_em": "src/components/layout/sidebar-config.ts",
    "papel_efetivo": "manager",
    "resolve_para": "src/pages/RiskRulesPage.tsx"
+  },
+  {
+   "rotulo": "Saúde do Sistema",
+   "destino": "/system-health",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "manager"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "manager",
+   "resolve_para": "src/pages/SystemHealthPage.tsx"
+  },
+  {
+   "rotulo": "Saúde Expandida",
+   "destino": "/system-health-expanded",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "manager"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "manager",
+   "resolve_para": "src/pages/SystemHealthExpandedPage.tsx"
+  },
+  {
+   "rotulo": "Status do Cache",
+   "destino": "/cache-status",
+   "grupo": "Sistema",
+   "papel_do_grupo": "manager",
+   "papeis": [
+    "manager"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "manager",
+   "resolve_para": "src/pages/CacheStatusPage.tsx"
   },
   {
    "rotulo": "Telemetria BD",
@@ -4368,6 +4453,7 @@
   "MapToolsPage": "src/pages/MapToolsPage.tsx",
   "MapsSettingsPage": "src/pages/MapsSettingsPage.tsx",
   "MetricsPage": "src/pages/MetricsPage.tsx",
+  "NotFound": "src/pages/NotFound.tsx",
   "NotificationHistoryPage": "src/pages/NotificationHistoryPage.tsx",
   "OrdersPage": "src/pages/OrdersPage.tsx",
   "PasswordResetApprovalsPage": "src/pages/PasswordResetApprovalsPage.tsx",

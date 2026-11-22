@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "23148972fd2c0832d397ddb1f2869ed3521142eb",
+  "commit": "c2585b1a9e10301e6473f4e4d81e89eb10ed4a1e",
   "branch": "main",
-  "data_commit": "2026-11-22T16:03:36-03:00",
+  "data_commit": "2026-11-22T16:31:15-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c2585b1",
+    "data": "2026-11-22",
+    "assunto": "feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)"
+   },
    {
     "sha": "2314897",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "7e572fe",
     "data": "2026-11-22",
     "assunto": "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)"
-   },
-   {
-    "sha": "572af27",
-    "data": "2026-11-22",
-    "assunto": "docs(planos): plano front-end de 190 etapas (#280)"
    }
   ],
-  "arquivos_mudados_7d": 363,
+  "arquivos_mudados_7d": 366,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -188,11 +188,11 @@
     "mudancas": 12
    },
    {
-    "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
+    "pasta": "src/components/layout",
+    "mudancas": 12
    },
    {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "pasta": "docs/pendencias/_ordem.md",
     "mudancas": 10
    }
   ],
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -270,6 +270,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
    },
@@ -278,7 +282,7 @@
     "mudancas": 7
    },
    {
-    "arquivo": "src/App.tsx",
+    "arquivo": "src/components/layout/MobileSidebar.tsx",
     "mudancas": 6
    },
    {
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
     "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/coordinates.ts",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 209
+    "commits": 210
    },
    {
     "autor": "dependabot[bot]",
@@ -310,13 +310,13 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1063,
-  "arquivos_codigo": 662,
-  "linhas_codigo": 129023,
+  "arquivos_total": 1064,
+  "arquivos_codigo": 663,
+  "linhas_codigo": 129153,
   "rotas": 56,
-  "rotas_protegidas": 47,
+  "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
-  "itens_menu": 38,
+  "itens_menu": 50,
   "modulos": 43,
   "componentes": 217,
   "hooks": 101,
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 233
+   "linhas": 235
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29350
+   "linhas": 29399
   },
   "src/hooks": {
    "arquivos": 111,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 47,
-   "linhas": 4144
+   "arquivos": 48,
+   "linhas": 4175
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19692
+   "linhas": 19740
   },
   "src/services": {
    "arquivos": 1,
@@ -718,8 +718,6 @@
  "alertas": {
   "rotas_sem_arquivo": [],
   "rotas_sem_protecao": [
-   "/",
-   "/dashboard",
    "/mfa-enroll"
   ],
   "menu_visivel_sem_acesso": [

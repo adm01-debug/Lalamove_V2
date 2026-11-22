@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `23148972fd` · branch `main` · 2026-11-22 19:04 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2585b1a9e` · branch `main` · 2026-11-22 19:31 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1417,6 +1417,7 @@ _nenhum item encontrado_
 | `TIMEOUT` | `2000` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `RETRY_DELAY` | `250` | `src/integrations/supabase/previewAuthStorage.ts` |
 | `MAX_PRIORITY_FEE_BRL` | `500` | `src/lib/lalamoveOrderEdit.ts` |
+| `RETRY_FLAG` | `'lazy-retry-flag'` | `src/lib/lazyWithRetry.ts` |
 | `BITRIX24_CONNECTED` | `"bitrix24_connected"` | `src/lib/postMessage.ts` |
 | `PAGE_SIZE` | `25` | `src/pages/ExternalDataPage.tsx` |
 | `OPTIMIZATION_THRESHOLD_PCT` | `5` | `src/pages/map-tools/OptimizationTab.tsx` |
@@ -2193,6 +2194,7 @@ _nenhum item encontrado_
 |---|---|
 | failures that must never break the UI flow. | `eslint.config.js` |
 | Background sync is best-effort; failures must not surface as console noise. | `public/sw.js` |
+| Dashboard (item 51 — papel mínimo viewer) */} | `src/App.tsx` |
 | * Gráfico de tendência de longo prazo (série mensal agregada) da proporção de | `src/components/admin/telemetry/ContractVersionMonthlyTrend.tsx` |
 | Tendência de longo prazo (série mensal consolidada) */} | `src/components/admin/telemetry/ContractVersionUsagePanel.tsx` |
 | Check permission | `src/components/auth/PermissionGate.tsx` |

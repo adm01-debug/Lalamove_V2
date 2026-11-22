@@ -16,7 +16,7 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (27)",
+   "src/lib (28)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)",
    "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)",
    "feat: menu alinhado às rotas (item 49) (#306)",
    "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)",
-   "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)",
-   "feat: hierarquia de papeis numa unica fonte (item 48) (#303)"
+   "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
