@@ -4,6 +4,10 @@
 -- permitindo chamador não autenticado forjar contadores de uso/orçamento e emitir alertas falsos de
 -- pedido/motorista (geo_emit_event). authenticated mantém geo_budget_status (painel admin,
 -- src/hooks/useGeoAdmin.ts); os outros não têm chamador em authenticated nem anon no código.
+--
+-- Aplicada diretamente em produção via MCP (apply_migration) em 2026-11-22, registrada no ledger
+-- como versão 20261122110913 -- este arquivo foi renomeado para bater com essa versão e não duplicar
+-- o drift relatado no audit (git x supabase_migrations.schema_migrations).
 
 revoke execute on function public.geo_audit_config() from public, anon, authenticated;
 revoke execute on function public.geo_budget_status() from public, anon;
