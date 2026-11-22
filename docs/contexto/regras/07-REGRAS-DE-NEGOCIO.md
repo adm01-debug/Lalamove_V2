@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `57c28e4adc` · branch `main` · 2026-11-22 05:34 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `9af8801468` · branch `main` · 2026-11-22 05:46 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1841,7 +1841,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1105 testes em 97 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1108 testes em 97 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1900,6 +1900,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
 | `supabase/functions/_shared/channels/zapp.test.ts` | 9 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
+| `supabase/functions/lalamove-api/coordinates.test.ts` | 9 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
@@ -1921,7 +1922,6 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
-| `supabase/functions/lalamove-api/coordinates.test.ts` | 6 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
 | `src/components/orders/OrderGeoEvents.test.tsx` | 5 | OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio) · estado vazio explica o que aparece ali em vez de sumir · lista evento com rótulo em PT-BR, distância, ETA e status · status sem destinatário é sinalizado na UI (motivo do reenvio) … |
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
@@ -2185,6 +2185,7 @@ _nenhum item encontrado_
 | * Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */ | `supabase/functions/job-worker/index.ts` |
 | suficiente. Regra: so recalcula se passou mais de 60 s do ultimo refresh | `supabase/functions/job-worker/index.ts` |
 | Verificar autenticação (apenas service role ou autenticado) | `supabase/functions/job-worker/index.ts` |
+| place_id do provedor (google:/mapbox:) — ele identifica o ENDEREÇO e não pode | `supabase/functions/lalamove-api/coordinates.ts` |
 | Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove. | `supabase/functions/lalamove-api/coordinates.ts` |
 | * Nunca lanca: devolve `null` quando o endereco nao pode ser resolvido, para o pedido | `supabase/functions/lalamove-api/geocode-fallback.ts` |
 | nao pode acontecer e o pedido falhar por causa do geocode. | `supabase/functions/lalamove-api/geocode-fallback.ts` |

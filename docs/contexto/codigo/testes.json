@@ -1277,11 +1277,11 @@
   {
    "arquivo": "supabase/functions/lalamove-api/coordinates.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 42,
+   "linhas": 92,
    "testa": [
     "supabase/functions/lalamove-api/coordinates.ts"
    ],
-   "casos": 6
+   "casos": 9
   },
   {
    "arquivo": "supabase/functions/lalamove-api/geocode-fallback.test.ts",

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "57c28e4adc629780e6b39c24ddf7173ccb9901c3",
+  "commit": "9af88014686f91029fe592188d966c2896a8cf85",
   "branch": "main",
-  "data_commit": "2026-11-22T02:33:33-03:00",
+  "data_commit": "2026-11-22T02:45:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "9af8801",
+    "data": "2026-11-22",
+    "assunto": "feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)"
+   },
+   {
+    "sha": "e0e0118",
+    "data": "2026-11-22",
+    "assunto": "docs: etapas 90 e 92 marcadas como executadas no plano (#247)"
+   },
    {
     "sha": "57c28e4",
     "data": "2026-11-22",
@@ -121,16 +131,6 @@
     "sha": "1a1f486",
     "data": "2026-11-21",
     "assunto": "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)"
-   },
-   {
-    "sha": "460de12",
-    "data": "2026-11-21",
-    "assunto": "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)"
-   },
-   {
-    "sha": "845586a",
-    "data": "2026-11-21",
-    "assunto": "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)"
    }
   ],
   "arquivos_mudados_7d": 277,
@@ -145,11 +145,11 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -164,6 +164,10 @@
     "mudancas": 14
    },
    {
+    "pasta": "supabase/functions/lalamove-api",
+    "mudancas": 13
+   },
+   {
     "pasta": "docs/MAPBOX.md",
     "mudancas": 12
    },
@@ -173,10 +177,6 @@
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
-    "mudancas": 10
-   },
-   {
-    "pasta": "supabase/functions/lalamove-api",
     "mudancas": 10
    },
    {
@@ -207,7 +207,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "arquivo": "supabase/config.toml",
@@ -238,6 +238,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 8
+   },
+   {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 8
    },
@@ -247,10 +251,6 @@
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 7
    },
    {
@@ -274,6 +274,10 @@
     "mudancas": 6
    },
    {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 6
+   },
+   {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
     "mudancas": 5
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/resolver.test.ts",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 145
+    "commits": 147
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1018,
   "arquivos_codigo": 639,
-  "linhas_codigo": 124346,
+  "linhas_codigo": 124428,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 159,
-   "linhas": 29054
+   "linhas": 29065
   },
   "src/hooks": {
    "arquivos": 110,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 73,
-   "linhas": 17362
+   "linhas": 17433
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,11 +590,11 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1163
+   "linhas": 1173
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1097
+   "linhas": 1108
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",

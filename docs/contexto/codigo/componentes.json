@@ -1108,7 +1108,7 @@
     "NewOrderDialog"
    ],
    "export_default": null,
-   "linhas": 1097,
+   "linhas": 1108,
    "dominio": "components/orders",
    "hooks_locais": [
     "useContacts",

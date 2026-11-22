@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `57c28e4adc629780e6b39c24ddf7173ccb9901c3` (2026-11-22T02:33:33-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9af88014686f91029fe592188d966c2896a8cf85` (2026-11-22T02:45:48-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1018 |
 | arquivos_codigo | 639 |
-| linhas_codigo | 124346 |
+| linhas_codigo | 124428 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,14 +272,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7789 nós · 16592 arestas · 580 comunidades · grafo do commit `57c28e4a`
-- comunidades maiores: badge.tsx (118), Button (117), snapshot.py (100), ref_node_path (95), dependencies (80), cn (76), App.tsx (76), gerar.mjs (76), generate.py (75), client.ts (71), useRealtimeSubscriptions.ts (68), react (67)
+- 7790 nós · 16595 arestas · 580 comunidades · grafo do commit `9af88014`
+- comunidades maiores: cn (136), react (125), App.tsx (125), Header.tsx (117), ref_node_fs (115), client.ts (107), snapshot.py (104), NewOrderDialog.tsx (104), contract.ts (88), providers/types.ts (87), geo-gateway/index.ts (85), dependencies (80)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - package.json (32)
 - package-lock.json (31)
-- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (24)
+- docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (25)
 - supabase/config.toml (16)
 - .github/workflows/ci.yml (12)
 - docs/MAPBOX.md (12)
@@ -287,10 +287,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - docs/pendencias/_ordem.md (10)
 - src/components/orders/AddressAutocomplete.tsx (9)
 - supabase/functions/job-worker/index.ts (9)
+- src/components/orders/NewOrderDialog.tsx (8)
 - supabase/functions/send-notification/index.ts (8)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (7)
 - src/components/map/LiveMap.tsx (7)
-- src/components/orders/NewOrderDialog.tsx (7)
 - supabase/functions/_shared/schemas.ts (7)
 
 ## Workflows
@@ -374,6 +374,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `9af8801` feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)
+- 2026-11-22 `e0e0118` docs: etapas 90 e 92 marcadas como executadas no plano (#247)
 - 2026-11-22 `57c28e4` test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)
 - 2026-11-22 `250e935` feat: aria-label i18n nos controles de mapa e lint de paridade dos locales (etapa 82) (#244)
 - 2026-11-22 `a067e02` feat: polyline da rota, trilha e animacao do motorista no Google Maps (etapa 77) (#243)
@@ -387,8 +389,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `bdef20a` docs: contrato de dados do motor geo (etapa 41) (#235)
 - 2026-11-22 `a7b144f` feat: testes SQL das funcoes de geometria geo (etapa 17) (#233)
 - 2026-11-22 `9ec9341` fix: codigo proprio para orcamento esgotado no geo-gateway (etapa 30) (#234)
-- 2026-11-22 `32c1842` feat: canal Zapp no send-notification (etapa 69) (#232)
-- 2026-11-22 `ed72e8d` feat(alerts): histórico mostra avisos geo que não chegaram (etapa 73) (#231)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

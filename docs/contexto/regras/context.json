@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "57c28e4adc629780e6b39c24ddf7173ccb9901c3",
+  "sha": "9af88014686f91029fe592188d966c2896a8cf85",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 05:34 UTC",
+  "generated_at": "2026-11-22 05:46 UTC",
   "files_total": 1012,
   "code_files": 836,
-  "code_lines": 143423
+  "code_lines": 143505
  },
  "version": "1.3.2",
- "facts_hash": "4011d0cbe8b3f9d7",
+ "facts_hash": "6b6ccac1200a3cc0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20411,7 +20411,7 @@
   {
    "module": "src/components",
    "files": 159,
-   "lines": 29054,
+   "lines": 29065,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21202,7 +21202,7 @@
   {
    "module": "supabase/functions",
    "files": 73,
-   "lines": 17362,
+   "lines": 17433,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -26348,6 +26348,10 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "text": "Verificar autenticação (apenas service role ou autenticado)"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.ts",
+    "text": "place_id do provedor (google:/mapbox:) — ele identifica o ENDEREÇO e não pode"
    },
    {
     "file": "supabase/functions/lalamove-api/coordinates.ts",
@@ -38882,6 +38886,18 @@
    {
     "file": "supabase/functions/lalamove-api/coordinates.test.ts",
     "name": "stopsCoords devolve lista vazia para undefined"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "persistOrderCoordinates mantem o place_id resolvido no formulario"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "persistOrderCoordinates usa lalamove:<stopId> quando nao ha place_id do provedor"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/coordinates.test.ts",
+    "name": "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id"
    },
    {
     "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
@@ -56979,7 +56995,7 @@
   },
   "src/components/orders/NewOrderDialog.tsx": {
    "path": "src/components/orders/NewOrderDialog.tsx",
-   "lines": 1097,
+   "lines": 1108,
    "exports": [
     "function NewOrderDialog"
    ],
@@ -68625,20 +68641,26 @@
   },
   "supabase/functions/lalamove-api/coordinates.test.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.test.ts",
-   "lines": 42,
+   "lines": 92,
    "is_test": true,
+   "rule_comments": [
+    "── Etapa 36: place_id do provedor não pode ser sobrescrito pelo id da parada ──"
+   ],
    "tests": [
     "stopsCoords converte as coordenadas string da Lalamove em numero",
     "stopsCoords preserva a ordem das paradas (indice = stop_index)",
     "stopsCoords anula 0,0 — placeholder que a Lalamove rejeita",
     "stopsCoords anula coordenada invalida em vez de gravar NaN",
     "stopsCoords tolera parada sem coordinates (nao quebra o pedido)",
-    "stopsCoords devolve lista vazia para undefined"
+    "stopsCoords devolve lista vazia para undefined",
+    "persistOrderCoordinates mantem o place_id resolvido no formulario",
+    "persistOrderCoordinates usa lalamove:<stopId> quando nao ha place_id do provedor",
+    "persistOrderCoordinates grava lat/lng e a linha de lalamove_stops com place_id"
    ]
   },
   "supabase/functions/lalamove-api/coordinates.ts": {
    "path": "supabase/functions/lalamove-api/coordinates.ts",
-   "lines": 88,
+   "lines": 99,
    "exports": [
     "function stopsCoords",
     "function persistOrderCoordinates"
@@ -68659,6 +68681,7 @@
     ]
    },
    "rule_comments": [
+    "place_id do provedor (google:/mapbox:) — ele identifica o ENDEREÇO e não pode",
     "Conflito ausente na tabela não pode derrubar o pedido: o pedido já existe na Lalamove."
    ],
    "percents": [
@@ -68702,7 +68725,7 @@
   },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1163,
+   "lines": 1173,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -70898,10 +70921,31 @@
   }
  },
  "git": {
-  "sha": "57c28e4adc629780e6b39c24ddf7173ccb9901c3",
+  "sha": "9af88014686f91029fe592188d966c2896a8cf85",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "9af8801",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: persiste place_id e componentes do endereco no pedido (etapa 36) (#248)",
+    "files": [
+     "src/components/orders/NewOrderDialog.tsx",
+     "supabase/functions/lalamove-api/coordinates.test.ts",
+     "supabase/functions/lalamove-api/coordinates.ts",
+     "supabase/functions/lalamove-api/index.ts"
+    ]
+   },
+   {
+    "sha": "e0e0118",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs: etapas 90 e 92 marcadas como executadas no plano (#247)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "57c28e4",
     "date": "2026-11-22",
@@ -71241,67 +71285,24 @@
     "files": [
      "docs/RUNBOOK_GOOGLE_MAPS.md"
     ]
-   },
-   {
-    "sha": "c7d9fce",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "chore: destrackear supabase/.temp e ignorar (#212)",
-    "files": [
-     ".gitignore",
-     "supabase/.temp/anc.py",
-     "supabase/.temp/cli-latest",
-     "supabase/.temp/gotrue-version",
-     "supabase/.temp/linked-project.json",
-     "supabase/.temp/pooler-url",
-     "supabase/.temp/postgres-version",
-     "supabase/.temp/project-ref",
-     "supabase/.temp/rest-version",
-     "supabase/.temp/storage-migration",
-     "supabase/.temp/storage-version"
-    ]
-   },
-   {
-    "sha": "1d97ccb",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "feat: etapa 13 e 22 do plano Mapbox (match confidence + fallback de autocomplete) (#211)",
-    "files": [
-     "docs/MAPBOX.md",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-     "src/integrations/supabase/types.ts",
-     "supabase/.temp/anc.py",
-     "supabase/.temp/cli-latest",
-     "supabase/.temp/gotrue-version",
-     "supabase/.temp/pooler-url",
-     "supabase/.temp/postgres-version",
-     "supabase/.temp/project-ref",
-     "supabase/.temp/rest-version",
-     "supabase/.temp/storage-migration",
-     "supabase/.temp/storage-version",
-     "supabase/functions/_shared/schemas.ts",
-     "supabase/functions/geo-gateway/index.ts",
-     "supabase/functions/geo-gateway/mapbox.test.ts",
-     "supabase/functions/geo-gateway/providers/google.ts",
-     "supabase/functions/geo-gateway/providers/mapbox.ts",
-     "supabase/functions/geo-gateway/providers/types.ts",
-     "supabase/functions/lalamove-api/coordinates.ts",
-     "supabase/migrations/20261123180000_geocode_match_confidence.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    21
-   ],
-   [
-    "supabase/functions/geo-gateway/index.ts",
-    5
+    22
    ],
    [
     "supabase/functions/job-worker/index.ts",
     4
+   ],
+   [
+    "supabase/functions/geo-gateway/index.ts",
+    4
+   ],
+   [
+    "src/components/orders/NewOrderDialog.tsx",
+    3
    ],
    [
     "src/components/orders/AddressAutocomplete.tsx",
@@ -71312,15 +71313,15 @@
     3
    ],
    [
+    "supabase/functions/lalamove-api/index.ts",
+    2
+   ],
+   [
     "src/components/map/MapHUD.tsx",
     2
    ],
    [
     "src/components/map/GoogleMapsCanvas.tsx",
-    2
-   ],
-   [
-    "src/components/orders/NewOrderDialog.tsx",
     2
    ],
    [
@@ -71332,44 +71333,40 @@
     2
    ],
    [
-    "supabase/functions/_shared/schemas.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/google.ts",
-    2
-   ],
-   [
-    "supabase/functions/geo-gateway/providers/types.ts",
-    2
-   ],
-   [
     "docs/RUNBOOK_GOOGLE_MAPS.md",
     2
    ],
    [
-    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    2
+    "supabase/functions/lalamove-api/coordinates.test.ts",
+    1
    ],
    [
-    "supabase/.temp/anc.py",
-    2
+    "supabase/functions/lalamove-api/coordinates.ts",
+    1
    ],
    [
-    "supabase/.temp/cli-latest",
-    2
+    "e2e/new-order-autocomplete.e2e.ts",
+    1
    ],
    [
-    "supabase/.temp/gotrue-version",
-    2
+    "package.json",
+    1
    ],
    [
-    "supabase/.temp/pooler-url",
-    2
+    "scripts/ci/a11y-button-name-baseline.json",
+    1
    ],
    [
-    "supabase/.temp/postgres-version",
-    2
+    "scripts/ci/check-i18n-parity.mjs",
+    1
+   ],
+   [
+    "scripts/ci/check-i18n-parity.unit.mjs",
+    1
+   ],
+   [
+    "src/components/map/LiveMap.tsx",
+    1
    ]
   ]
  }
