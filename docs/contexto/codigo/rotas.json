@@ -2037,6 +2037,7 @@
    "hooks": [
     "useAddressSearch",
     "useAddressSearchBox",
+    "useAllowedMapProviders",
     "useCallback",
     "useContacts",
     "useCustomerSearchBias",
@@ -2044,6 +2045,7 @@
     "useDebouncedValue",
     "useDownloadReceipt",
     "useEffect",
+    "useEffectiveMapProvider",
     "useEvaluateDriver",
     "useEvaluateDriverOnAssignment",
     "useExchangeCoupon",
@@ -2055,8 +2057,10 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
+    "useGoogleMapsLoader",
     "useId",
     "useMapMarkers",
+    "useMapSettings",
     "useMapboxDirections",
     "useMapboxGeocode",
     "useMapboxIsochrone",
@@ -2079,6 +2083,7 @@
     "useRef",
     "useSearchParams",
     "useState",
+    "useTilesProvider",
     "useTrackingData",
     "useTransform",
     "useTranslation",
@@ -2090,11 +2095,13 @@
    "hooks_locais": [
     "useAddressSearch",
     "useAddressSearchBox",
+    "useAllowedMapProviders",
     "useContacts",
     "useCustomerSearchBias",
     "useDataRefresh",
     "useDebouncedValue",
     "useDownloadReceipt",
+    "useEffectiveMapProvider",
     "useEvaluateDriver",
     "useEvaluateDriverOnAssignment",
     "useExchangeCoupon",
@@ -2106,7 +2113,9 @@
     "useFrequentAddresses",
     "useFuseSearch",
     "useFuseSearchWithMatches",
+    "useGoogleMapsLoader",
     "useMapMarkers",
+    "useMapSettings",
     "useMapboxDirections",
     "useMapboxGeocode",
     "useMapboxIsochrone",
@@ -2120,6 +2129,7 @@
     "usePullToRefresh",
     "useQuotationExpiry",
     "useRecentOrders",
+    "useTilesProvider",
     "useTrackingData",
     "useUapiCoupons",
     "useUapiFleet",
@@ -2129,9 +2139,11 @@
    "tabelas": [
     "active_tracking",
     "contacts",
+    "geo_settings",
     "lalamove_orders",
     "lalamove_status_history",
     "lalamove_stops",
+    "map_settings_overrides",
     "order_geo_events"
    ],
    "rpcs": [],
@@ -2155,7 +2167,7 @@
     "listbox",
     "option"
    ],
-   "arquivos_puxados": 68
+   "arquivos_puxados": 72
   },
   {
    "caminho": "/password-reset-approvals",

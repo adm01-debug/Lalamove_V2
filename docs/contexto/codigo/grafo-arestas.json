@@ -556,9 +556,12 @@
    "src/hooks/useMapSettings.ts"
   ],
   "src/components/map/OrderTrackingMap.tsx": [
+   "src/components/map/googleLayers.ts",
+   "src/components/map/hooks/useGoogleMapsLoader.ts",
    "src/components/map/hooks/useMapMarkers.ts",
    "src/components/map/hooks/useMapboxToken.ts",
    "src/components/map/mapLayers.ts",
+   "src/hooks/useMapProviderPolicy.ts",
    "src/lib/geo-gateway.ts"
   ],
   "src/components/map/googleLayers.ts": [

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "83fe5ba3a9c2abe83146bd269ceae69f1d467417",
+  "commit": "e21df074ac62a70ac9f92478501bab99185da80e",
   "branch": "main",
-  "data_commit": "2026-11-22T09:51:01-03:00",
+  "data_commit": "2026-11-22T10:17:43-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e21df07",
+    "data": "2026-11-22",
+    "assunto": "fix: geocode fallback com persist e mini-mapa por provider (#274)"
+   },
+   {
+    "sha": "124e628",
+    "data": "2026-11-22",
+    "assunto": "docs(agentes): registra pendencias do dono (#273)"
+   },
    {
     "sha": "83fe5ba",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "8f42f4f",
     "data": "2026-11-22",
     "assunto": "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)"
-   },
-   {
-    "sha": "59db689",
-    "data": "2026-11-22",
-    "assunto": "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)"
-   },
-   {
-    "sha": "5984867",
-    "data": "2026-11-22",
-    "assunto": "feat: contrato de hooks do geo-gateway em useGeo (etapa 33) (#251)"
    }
   ],
-  "arquivos_mudados_7d": 295,
+  "arquivos_mudados_7d": 296,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 35
+    "mudancas": 37
    },
    {
     "pasta": "src/components/orders",
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 17
+    "mudancas": 19
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -188,12 +188,12 @@
     "mudancas": 9
    },
    {
-    "pasta": "supabase/functions/lalamove-webhook",
+    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 8
    },
    {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
+    "pasta": "supabase/functions/lalamove-webhook",
+    "mudancas": 8
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -246,6 +246,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 8
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
@@ -260,10 +264,6 @@
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 8
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 7
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 174
+    "commits": 176
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1033,
+  "arquivos_total": 1034,
   "arquivos_codigo": 646,
-  "linhas_codigo": 126217,
+  "linhas_codigo": 126408,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -327,7 +327,7 @@
   "testes": 147,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 103
+  "docs_md": 104
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29223
+   "linhas": 29397
   },
   "src/hooks": {
    "arquivos": 111,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 77,
-   "linhas": 18321
+   "linhas": 18338
   },
   "tailwind.config.ts": {
    "arquivos": 1,

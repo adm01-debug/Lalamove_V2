@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "83fe5ba3a9c2abe83146bd269ceae69f1d467417",
+  "sha": "e21df074ac62a70ac9f92478501bab99185da80e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 13:12 UTC",
-  "files_total": 1027,
+  "generated_at": "2026-11-22 13:21 UTC",
+  "files_total": 1028,
   "code_files": 851,
-  "code_lines": 146100
+  "code_lines": 146291
  },
  "version": "1.3.2",
- "facts_hash": "01d2c30ac2f11c47",
+ "facts_hash": "1896eddf16fa1ed2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -17406,9 +17406,11 @@
     "tables_transitive": [
      "active_tracking",
      "contacts",
+     "geo_settings",
      "lalamove_orders",
      "lalamove_status_history",
      "lalamove_stops",
+     "map_settings_overrides",
      "order_geo_events"
     ],
     "invokes_transitive": [
@@ -17421,7 +17423,7 @@
      "send-notification"
     ],
     "rpc_transitive": [],
-    "deps_count": 68
+    "deps_count": 72
    },
    {
     "path": "",
@@ -20721,7 +20723,7 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29223,
+   "lines": 29397,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21516,7 +21518,7 @@
   {
    "module": "supabase/functions",
    "files": 77,
-   "lines": 18321,
+   "lines": 18338,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -34226,6 +34228,12 @@
     "body": "const m = map.current; if (!m || !ready.current) return; const set = (id: string, data: GeoJSON.FeatureCollection) => { const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined; src?.setData(data); }; set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY); set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY); set('driver-point', driver && valid(driver.lat, …"
    },
    {
+    "file": "src/components/map/OrderTrackingMap.tsx",
+    "name": "applyGoogle",
+    "params": "",
+    "body": "const m = googleMap.current; if (!m) return; const g = window.google as unknown as { maps: GoogleMapsNamespace }; const path = toGooglePath(expectedRoute); if (googleRoute.current) { googleRoute.current.setPath(path); } else if (path.length > 1) { googleRoute.current = new g.maps.Polyline({ path, map: m, strokeColor: '#38bdf8', strokeWeight: 4, strokeOpacity: 0.9, }); } const wanted = [ { lat: pickup?.lat ?? null, lng: pickup?.lng ?? null, color: '#22c55e' }, { lat: delivery?.lat ?? null, lng: d …"
+   },
+   {
     "file": "src/components/map/mapLayers.ts",
     "name": "applyRasterOverlay",
     "params": "map: mapboxgl.Map, provider: RasterProvider",
@@ -36278,6 +36286,10 @@
    {
     "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
     "name": "não quebra sem coordenadas nem rota"
+   },
+   {
+    "file": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    "name": "com geo_settings.tiles = google usa o canvas Google e não instancia o Mapbox"
    },
    {
     "file": "src/components/map/__tests__/googleLayers.test.ts",
@@ -39410,6 +39422,10 @@
    {
     "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
     "name": "geocodeAddress devolve null quando o provedor nao acha nada"
+   },
+   {
+    "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
+    "name": "geocodeAddress pede persist=true ao gateway (retencao permanente no Mapbox)"
    },
    {
     "file": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
@@ -56983,7 +56999,7 @@
   },
   "src/components/map/OrderTrackingMap.tsx": {
    "path": "src/components/map/OrderTrackingMap.tsx",
-   "lines": 157,
+   "lines": 279,
    "exports": [
     "interface OrderTrackingMapProps",
     "function OrderTrackingMap"
@@ -57060,6 +57076,11 @@
      "name": "apply",
      "params": "",
      "body": "const m = map.current; if (!m || !ready.current) return; const set = (id: string, data: GeoJSON.FeatureCollection) => { const src = m.getSource(id) as mapboxgl.GeoJSONSource | undefined; src?.setData(data); }; set('pickup-point', valid(pickup?.lat, pickup?.lng) ? pointFeature(pickup!.lng!, pickup!.lat!, '#22c55e') : EMPTY); set('delivery-point', valid(delivery?.lat, delivery?.lng) ? pointFeature(delivery!.lng!, delivery!.lat!, '#f97316') : EMPTY); set('driver-point', driver && valid(driver.lat, …"
+    },
+    {
+     "name": "applyGoogle",
+     "params": "",
+     "body": "const m = googleMap.current; if (!m) return; const g = window.google as unknown as { maps: GoogleMapsNamespace }; const path = toGooglePath(expectedRoute); if (googleRoute.current) { googleRoute.current.setPath(path); } else if (path.length > 1) { googleRoute.current = new g.maps.Polyline({ path, map: m, strokeColor: '#38bdf8', strokeWeight: 4, strokeOpacity: 0.9, }); } const wanted = [ { lat: pickup?.lat ?? null, lng: pickup?.lng ?? null, color: '#22c55e' }, { lat: delivery?.lat ?? null, lng: d …"
     }
    ]
   },
@@ -57320,7 +57341,7 @@
   },
   "src/components/map/__tests__/OrderTrackingMap.test.tsx": {
    "path": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
-   "lines": 62,
+   "lines": 114,
    "is_test": true,
    "rule_comments": [
     "mapbox-gl não instancia em jsdom: stub mínimo da API usada pelo componente."
@@ -57329,7 +57350,8 @@
     "OrderTrackingMap (etapa 58)",
     "mostra aviso quando o token do Mapbox não está disponível",
     "expõe a região com rótulo acessível quando há token",
-    "não quebra sem coordenadas nem rota"
+    "não quebra sem coordenadas nem rota",
+    "com geo_settings.tiles = google usa o canvas Google e não instancia o Mapbox"
    ]
   },
   "src/components/map/__tests__/googleLayers.test.ts": {
@@ -69683,7 +69705,7 @@
   },
   "supabase/functions/lalamove-api/geocode-fallback.test.ts": {
    "path": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
-   "lines": 102,
+   "lines": 115,
    "is_test": true,
    "tests": [
     "geocodeAddress devolve coordenada e place_id do gateway",
@@ -69693,6 +69715,7 @@
     "geocodeAddress devolve null quando o gateway falha (pedido nunca cai por geo)",
     "geocodeAddress devolve null para endereco vazio/curto",
     "geocodeAddress devolve null quando o provedor nao acha nada",
+    "geocodeAddress pede persist=true ao gateway (retencao permanente no Mapbox)",
     "geocodeOrderFallback grava coleta e entrega com provedor do gateway",
     "geocodeOrderFallback propaga requires_address_review quando um lado e impreciso",
     "geocodeOrderFallback devolve patch vazio sem coordenada resolvida",
@@ -69702,7 +69725,7 @@
   },
   "supabase/functions/lalamove-api/geocode-fallback.ts": {
    "path": "supabase/functions/lalamove-api/geocode-fallback.ts",
-   "lines": 140,
+   "lines": 144,
    "exports": [
     "interface GeocodeFallbackResult",
     "interface GeocodeFallbackDeps",
@@ -72096,10 +72119,32 @@
   }
  },
  "git": {
-  "sha": "83fe5ba3a9c2abe83146bd269ceae69f1d467417",
+  "sha": "e21df074ac62a70ac9f92478501bab99185da80e",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e21df07",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "fix: geocode fallback com persist e mini-mapa por provider (#274)",
+    "files": [
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+     "src/components/map/OrderTrackingMap.tsx",
+     "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+     "supabase/functions/lalamove-api/geocode-fallback.test.ts",
+     "supabase/functions/lalamove-api/geocode-fallback.ts"
+    ]
+   },
+   {
+    "sha": "124e628",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs(agentes): registra pendencias do dono (#273)",
+    "files": [
+     "docs/agentes/pendencias-dono.md"
+    ]
+   },
    {
     "sha": "83fe5ba",
     "date": "2026-11-22",
@@ -72389,31 +72434,12 @@
      "supabase/functions/lalamove-api/coordinates.ts",
      "supabase/functions/lalamove-api/index.ts"
     ]
-   },
-   {
-    "sha": "e0e0118",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: etapas 90 e 92 marcadas como executadas no plano (#247)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
-    ]
-   },
-   {
-    "sha": "57c28e4",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "test: e2e de novo pedido provando que o autocomplete preenche a coordenada (etapa 84) (#245)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "e2e/new-order-autocomplete.e2e.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    15
+    13
    ],
    [
     "supabase/functions/send-notification/index.ts",
@@ -72444,6 +72470,30 @@
     2
    ],
    [
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    1
+   ],
+   [
+    "src/components/map/OrderTrackingMap.tsx",
+    1
+   ],
+   [
+    "src/components/map/__tests__/OrderTrackingMap.test.tsx",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-api/geocode-fallback.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/lalamove-api/geocode-fallback.ts",
+    1
+   ],
+   [
+    "docs/agentes/pendencias-dono.md",
+    1
+   ],
+   [
     "supabase/functions/lalamove-webhook/index.ts",
     1
    ],
@@ -72465,30 +72515,6 @@
    ],
    [
     "supabase/migrations/20261123120000_geo_budget_cron.sql",
-    1
-   ],
-   [
-    ".github/workflows/ci.yml",
-    1
-   ],
-   [
-    "supabase/tests/fixtures/geo_trigger_schema.sql",
-    1
-   ],
-   [
-    "supabase/tests/geo_trigger.test.sql",
-    1
-   ],
-   [
-    ".github/workflows/deploy-edges.yml",
-    1
-   ],
-   [
-    ".github/workflows/apply-migrations.yml",
-    1
-   ],
-   [
-    "supabase/migrations/20261123190000_cron_check_driver_alerts.sql",
     1
    ]
   ]

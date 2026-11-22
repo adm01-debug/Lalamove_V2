@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: geocode fallback com persist e mini-mapa por provider (#274)",
+   "docs(agentes): registra pendencias do dono (#273)",
    "docs: fecha 6 itens com evidencia de producao (#272)",
    "docs: fecha a etapa 35 (o contrato da edge ja aceita o place_id) (#271)",
-   "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)",
-   "docs: sincroniza o checklist do plano com o codigo ja mergeado (#269)",
-   "feat: opt-out de avisos e encerramento do tracking (etapas 60/61) (#221)"
+   "docs: audita etapas 11-32 do plano com evidencia arquivo:linha (#270)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
@@ -97,6 +97,7 @@
   "docs/agentes/github-ci.md",
   "docs/agentes/lalamove-api.md",
   "docs/agentes/mapa-repo.md",
+  "docs/agentes/pendencias-dono.md",
   "docs/agentes/regras-dominio.md"
  ],
  "typescript": {

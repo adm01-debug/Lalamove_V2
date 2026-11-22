@@ -86,10 +86,11 @@
     "useEffect"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/components/map/Google3DCanvas.tsx",
-    "src/components/map/GoogleMapsCanvas.tsx"
+    "src/components/map/GoogleMapsCanvas.tsx",
+    "src/components/map/OrderTrackingMap.tsx"
    ],
    "coberto_por_testes": 1
   },
@@ -1701,10 +1702,11 @@
     "useMapSettings"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_arquivos": [
     "src/components/map/LiveMap.tsx",
-    "src/components/map/MapProviderSelector.tsx"
+    "src/components/map/MapProviderSelector.tsx",
+    "src/components/map/OrderTrackingMap.tsx"
    ],
    "coberto_por_testes": 1
   },

@@ -960,10 +960,11 @@
     "OrderTrackingMapProps"
    ],
    "export_default": null,
-   "linhas": 157,
+   "linhas": 279,
    "dominio": "components/map",
    "hooks_locais": [
-    "useMapboxToken"
+    "useMapboxToken",
+    "useTilesProvider"
    ],
    "tabelas": [],
    "edges": [],

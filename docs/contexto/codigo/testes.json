@@ -606,11 +606,12 @@
   {
    "arquivo": "src/components/map/__tests__/OrderTrackingMap.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 62,
+   "linhas": 114,
    "testa": [
-    "src/components/map/OrderTrackingMap.tsx"
+    "src/components/map/OrderTrackingMap.tsx",
+    "src/lib/geo-gateway.ts"
    ],
-   "casos": 3
+   "casos": 4
   },
   {
    "arquivo": "src/components/map/hooks/__tests__/parseExpectedRoute.test.ts",
@@ -1305,11 +1306,11 @@
   {
    "arquivo": "supabase/functions/lalamove-api/geocode-fallback.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 102,
+   "linhas": 115,
    "testa": [
     "supabase/functions/lalamove-api/geocode-fallback.ts"
    ],
-   "casos": 11
+   "casos": 12
   },
   {
    "arquivo": "supabase/functions/lalamove-gateway/route.test.ts",
@@ -1451,7 +1452,7 @@
   "src/hooks/useWebhookEvents.ts": 1,
   "src/i18n/index.ts": 1,
   "src/integrations/supabase/client.ts": 14,
-  "src/lib/geo-gateway.ts": 5,
+  "src/lib/geo-gateway.ts": 6,
   "src/lib/lalamoveCatalog.ts": 3,
   "src/lib/lalamoveErrors.ts": 1,
   "src/lib/lalamoveGuards.ts": 1,
