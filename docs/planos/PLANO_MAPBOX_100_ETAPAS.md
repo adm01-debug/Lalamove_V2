@@ -6,12 +6,51 @@ Base verificada: repo `adm01-debug/Lalamove_V2` @ `8141d5c`+PR #118; docs.mapbox
 
 **Fora de escopo:** ingestão da posição do motorista (UAPI — outro chat); Fase 0–3 do plano Lalamove.
 
-> **Estado em 21/11/2026 (atualizar a cada PR):**
+> **Estado em 22/11/2026 (atualizar a cada PR) — este bloco ficou atrasado: muita coisa abaixo já
+> estava mergeada e em produção sem o tracker refletir. Reescrito com evidência real (banco/código/PRs),
+> não com o que PRs individuais afirmam de si mesmas.**
 > - ✅ Etapa 1 (inventário da conta): PR #135 — `docs/MAPBOX.md`.
-> - ✅ Bloco 1 compartilhado (11–18 = Google 11–20): PR #118 mergeada; **aplicação em produção pendente**.
-> - ✅ Bloco 2 (19–34): PR #129 mergeada e deployada — `supabase/functions/geo-gateway/` (providers/mapbox.ts, resolver.ts, metering.ts, polyline.ts, 17 testes Deno). `mapbox-proxy` ainda no ar (remoção = etapa 61).
-> - ✅ Etapa 36 (script): PR #131 — `scripts/geo/searchbox-coverage.ts` + `enderecos.sample.csv`. **Execução pendente** (`MAPBOX_SERVER_TOKEN` + lista real de fornecedores).
-> - ⬜ Etapas 2–10 (tokens pk/sk, secrets, rotação), 35–44, 45–54, 55–62, 63–72, 73–100: não iniciadas.
+> - ✅ Bloco 1 (11, 16–18): `geo_settings_provider_check`/`fallback_provider_check` já incluem `auto`/`off`
+>   (confirmado por SQL em 2026-11-22); `useRegionResolver.ts` usa `geo-gateway reverse` com `persist`
+>   (não mais v5); `lalamove-api/coordinates.ts` grava `geocode_provider='lalamove'` a partir de
+>   `stops[].coordinates` (migration `20261122130100_geo_foundation.sql`); `geo_evaluate_tracking()` é
+>   agnóstico de provedor.
+>   - ⚠️ Etapa 12 **PARCIAL**: `geo_price_list` (provider=mapbox) tem `directions, geocoding_temporary,
+>     map_load, map_matching, matrix, optimization, searchbox_session, static_image`. PR #195 (aberta,
+>     não mergeada) adiciona `geocoding_permanent`/`isochrone`/`tilequery` — mas **mesmo após mergear**,
+>     `searchbox_forward`/`searchbox_reverse` continuam faltando.
+>   - ⬜ Etapa 13 parcial (`geocode_precision`/`place_id` existem; `_shared/geo-precision.ts` e
+>     `geocode_match_confidence` em `lalamove_orders`, não). Etapa 14 (CHECK de prefixo `google:`/`mapbox:`
+>     em `pickup_place_id`/`delivery_place_id`/`lalamove_stops.place_id`) **não iniciada** — colunas são
+>     `text` livre, sem constraint. Etapa 15 não reauditada nesta rodada.
+> - ✅ Bloco 2 (19–34): PR #129 + #186 (geocode-batch, etapa 25) + #187 (fix). `geo-gateway` ACTIVE v11+ em
+>   produção; `MAPBOX_ACCESS_TOKEN` já basta como fallback de servidor (testado em produção em 2026-11-22:
+>   autocomplete real de Curitiba via `geo-gateway`) — as etapas 2–10 (tokens pk/sk dedicados, rotação,
+>   alertas de faturamento) ficam só de endurecimento, não travam o resto do plano.
+> - ✅ Bloco 3 (35, 37, 39–41, 43, 44): PR #193 (sessão com TTL, estados de falha, endereços frequentes —
+>   etapas 37/40/41); `AddressAutocomplete.tsx` usa `useAddressSearchBox`/atribuição Mapbox visível;
+>   `e2e/autocomplete.e2e.ts` existe. Etapa 36 (teste de cobertura BR, decide M1): script/CSV prontos (PR
+>   #131), execução real em andamento nesta sessão com a amostra genérica do CSV — **ainda não com
+>   endereços reais do Bitrix**, resultado a atualizar aqui quando sair. Etapa 38 (CEP antes do Mapbox) não
+>   reconfirmada no fluxo de novo pedido. Etapa 42 (import Bitrix/n8n) não reauditada.
+> - ✅ Bloco 4 (45–47, 51): PR #188 (snap antes do geofence, etapa 47); `job-worker` tem `route_plan`/
+>   `eta_refresh`/`expected_route`; `scripts/geo/eta-parity.ts` existe (etapa 51). Etapas 48–50, 52–54 não
+>   reauditadas nesta rodada.
+> - ✅ Bloco 5 (55–62, inclui 61): `mapbox-proxy` **removido do código e do `config.toml`** (confirmado
+>   por grep em 2026-11-22, comentário na linha ~87 do config.toml documenta a remoção); `LiveMap.tsx`/
+>   `HeatmapPage.tsx` chamam `countMapLoad`.
+> - ✅ Bloco 6 (63 — base): `src/pages/MapsSettingsPage.tsx` existe e está registrada em rota/menu. Etapas
+>   64–72 parcialmente: etapa 72 (drill de troca de provedor) tem resultado real registrado — PR #194.
+>   Demais etapas do bloco não reauditadas individualmente.
+> - ✅ Bloco 7 (78, 81): `docs/RUNBOOK_MAPBOX.md` existe; `grep -r "mapbox.places"` vazio (legado v5
+>   limpo). Etapa 73 (orçamento real) ganhou infra adjacente nesta sessão: PR #189 (aberta, 🔒) adiciona o
+>   cron `geo-budget-notify` que avisa antes do bloqueio — ainda não mergeada.
+> - ✅ Bloco 8 (85, 92): PR #184 (E2E round-trip autocomplete→retrieve, etapa 85); `ci.yml` já tem jobs
+>   `contract-tests`/`edge-integration-tests`/`deploy`; `CHANGELOG.md` já documenta a feature.
+> - ⬜ Bloco 0 (etapas 2–10): tokens pk/sk dedicados, rotação, alertas de faturamento — **ação manual na
+>   conta Mapbox, só o dono acessa**; ver ressalva no Bloco 2 acima (não trava o resto).
+> - ⬜ Bloco 9 (93–100): aceite com pedido real e fatura de 30 dias — não iniciado, não dá pra fabricar
+>   sem produção rodando em volume real.
 
 ## O que já existe no repo (Mapbox)
 - `mapbox-gl ^3.30` no front; mapa principal `src/components/map/LiveMap.tsx:123-132` e `src/pages/HeatmapPage.tsx:36`; token via edge `get-mapbox-token` (secret `MAPBOX_ACCESS_TOKEN`, `verify_jwt=true`).
