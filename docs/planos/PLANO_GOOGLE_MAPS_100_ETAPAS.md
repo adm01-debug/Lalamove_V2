@@ -277,15 +277,15 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - [ ] Teste Deno do mapeamento quotation→stops
 - **Evidência:** `SELECT * FROM lalamove_stops WHERE order_id = ...` com 2 linhas após pedido real
 
-### 37 — Geocodificação server-side de fallback
-- [ ] Se o pedido chegar sem lat/lng (fonte `bitrix24`, `uapi_import`, n8n): `lalamove-api` chama `geo-gateway geocode` antes de cotar; grava `geocode_precision`
-- [ ] Precisão `APPROXIMATE` → marca `requires_address_review=true` e alerta `APPROVAL_REQUIRED`
-- **Evidência:** pedido de teste com endereço sem número → flag ligada
+### 37 — Geocodificação server-side de fallback ✅
+- [x] Se o pedido chegar sem lat/lng (fonte `bitrix24`, `uapi_import`, n8n): `lalamove-api` chama `geo-gateway geocode` **depois** de gravar o pedido; grava `geocode_provider`/`geocode_precision` do provedor que resolveu
+- [x] Precisão `low`/`unknown` **ou** endereço sem número → `requires_address_review=true` e alerta `APPROVAL_REQUIRED`
+- **Evidência:** `supabase/functions/lalamove-api/geocode-fallback.ts` + 11 testes Deno verdes; `stopsCoords(stops).every(lat === null)` é a condição de disparo; falha do gateway nunca derruba o pedido (devolve `null`)
 
-### 38 — Address Validation (D7: desligado, pronto para ligar)
-- [ ] Action `validate` no gateway (`POST https://addressvalidation.googleapis.com/v1:validateAddress`, `regionCode: BR`) atrás de `geo_settings.function='validate'` (default `off`)
-- [ ] Quando `on`: roda antes da cotação; `verdict.addressComplete=false` → aviso na UI
-- **Evidência:** teste Deno com fixture; UI mostra aviso com flag ligada em dev
+### 38 — Address Validation (D7: desligado, pronto para ligar) ✅
+- [x] Action `validate` no gateway (`POST https://addressvalidation.googleapis.com/v1:validateAddress`, `regionCode: BR` default) atrás de `geo_settings.function='validate'` (default `off`)
+- [x] `verdict.addressComplete=false` → `address_complete=false` + `missing_components` no retorno; a UI consome quando ligada
+- **Evidência:** antes era **ação morta** (presente em `GeoFunction` mas ausente de `ACTION_FUNCTION`, `runProvider` e dos providers → 422 "action desconhecida"). Agora `GoogleProvider.validate` existe, tem SKU `address_validation` e rate limit próprio `address_validation` (300/min); 3 testes Deno em `google.test.ts`; suíte do gateway 75/75 verde
 
 ### 39 — Backfill de pedidos existentes
 - [ ] Job `geo-backfill` em `job_queue` (tipo novo): para cada `lalamove_orders` com `pickup_latitude IS NULL` e `pickup_address` não vazio → `geocode` (respeita cap 1.000/dia e cache)

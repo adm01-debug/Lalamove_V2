@@ -2,7 +2,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { logger } from "../_shared/logger.ts";
-import { persistOrderCoordinates } from './coordinates.ts';
+import { persistOrderCoordinates, stopsCoords } from './coordinates.ts';
+import { geocodeOrderFallback } from './geocode-fallback.ts';
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -734,6 +735,30 @@ serve(async (req) => {
           // desenhava os marcadores de coleta e entrega de nenhum pedido.
           if (insertedOrder?.id) {
             await persistOrderCoordinates(supabase, insertedOrder.id as string, stops);
+            // Etapa 37: pedidos de bitrix24/uapi_import/n8n chegam sem lat/lng. Se a
+            // Lalamove não devolveu coordenada, geocodifica aqui e marca para revisão
+            // quando a precisão não for confiável.
+            if (stopsCoords(stops).every((c) => c.lat === null)) {
+              const patch = await geocodeOrderFallback(
+                stops?.[0]?.address as string | undefined,
+                stops?.[1]?.address as string | undefined,
+                { supabaseUrl: SUPABASE_URL, serviceRoleKey: SUPABASE_SERVICE_ROLE_KEY },
+              );
+              if (Object.keys(patch).length > 0) {
+                const { error: geoErr } = await supabase
+                  .from('lalamove_orders').update(patch).eq('id', insertedOrder.id);
+                if (geoErr) logger.error('Error saving geocode fallback:', geoErr);
+                if (patch.requires_address_review === true) {
+                  await supabase.from('alerts').insert({
+                    type: 'APPROVAL_REQUIRED',
+                    severity: 'WARNING',
+                    title: 'Endereço impreciso no pedido',
+                    message: `O pedido ${orderData.orderId} entrou sem coordenada e o endereço geocodificado não tem precisão suficiente. Revise antes de despachar.`,
+                    metadata: { order_id: insertedOrder.id, source: 'geocode_fallback', precision: patch.geocode_precision },
+                  });
+                }
+              }
+            }
           }
         }
         break;

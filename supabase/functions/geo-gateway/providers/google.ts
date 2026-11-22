@@ -7,8 +7,8 @@
 import { encodePolyline, decodePolyline, simplify } from "../polyline.ts";
 import type {
   AutocompleteReq, GeoAddress, GeoAddressComponents, GeoMatrix, GeoPoint, GeoPrecision, GeoProvider,
-  GeoRoute, GeoStaticImage, GeoSuggestion, GeocodeReq, MatrixReq, PlaceDetailsReq,
-  ProviderResult, ReverseReq, RouteReq, StaticReq,
+  GeoRoute, GeoStaticImage, GeoSuggestion, GeoValidation, GeocodeReq, MatrixReq, PlaceDetailsReq,
+  ProviderResult, ReverseReq, RouteReq, StaticReq, ValidateReq,
 } from "./types.ts";
 import { GeoProviderError } from "./types.ts";
 
@@ -16,6 +16,7 @@ const PLACES_BASE = "https://places.googleapis.com/v1";
 const GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json";
 const ROUTES_BASE = "https://routes.googleapis.com";
 const STATIC_BASE = "https://maps.googleapis.com/maps/api/staticmap";
+const ADDRESS_VALIDATION_BASE = "https://addressvalidation.googleapis.com/v1:validateAddress";
 
 type Fetch = typeof fetch;
 
@@ -58,8 +59,8 @@ function componentsFromGeocode(components: Array<{ long_name: string; short_name
 export class GoogleProvider implements GeoProvider {
   readonly name = "google" as const;
   readonly supports = new Set<
-    "autocomplete" | "geocode" | "reverse" | "route" | "matrix" | "static"
-  >(["autocomplete", "geocode", "reverse", "route", "matrix", "static"]);
+    "autocomplete" | "geocode" | "reverse" | "route" | "matrix" | "static" | "validate"
+  >(["autocomplete", "geocode", "reverse", "route", "matrix", "static", "validate"]);
 
   private key: string;
   private fetchFn: Fetch;
@@ -177,6 +178,50 @@ export class GoogleProvider implements GeoProvider {
     const json = await this.callGeocode(p, "geocoding");
     const r = json.results?.[0];
     return { data: r ? this.resultToAddress(r, !!req.persist) : null, sku: "geocoding", units: 1 };
+  }
+
+  // ── Address Validation API (etapa 38; D7: desligada por padrão) ─────────
+  /**
+   * `POST v1:validateAddress` com `regionCode: BR`. O provedor só reporta: devolve
+   * `address_complete` + componentes ausentes e, quando o Google reescreve o endereço,
+   * a coordenada corrigida. Corrigir o pedido é decisão de quem chamou (etapa 38 do
+   * plano mantém a função atrás de `geo_settings.validate`, default `off`).
+   */
+  async validate(req: ValidateReq): Promise<ProviderResult<GeoValidation>> {
+    const body = {
+      address: {
+        addressLines: [req.address],
+        regionCode: req.region ?? "BR",
+        languageCode: req.language ?? "pt-BR",
+      },
+    };
+    const json = await this.call<{
+      result?: {
+        verdict?: {
+          addressComplete?: boolean;
+          validationGranularity?: string;
+          hasUnconfirmedComponents?: boolean;
+          missingComponentTypes?: string[];
+        };
+        address?: { formattedAddress?: string };
+        geocode?: { location?: { latitude: number; longitude: number } };
+      };
+    }>("POST", ADDRESS_VALIDATION_BASE + `?key=${encodeURIComponent(this.key)}`, body, {}, "address_validation");
+
+    const verdict = json.result?.verdict ?? {};
+    const loc = json.result?.geocode?.location;
+    return {
+      data: {
+        formatted: json.result?.address?.formattedAddress ?? req.address,
+        address_complete: verdict.addressComplete === true,
+        missing_components: verdict.missingComponentTypes ?? [],
+        granularity: verdict.validationGranularity ?? null,
+        location: loc ? { lat: loc.latitude, lng: loc.longitude } : null,
+        provider: "google",
+      },
+      sku: "address_validation",
+      units: 1,
+    };
   }
 
   private resultToAddress(r: {

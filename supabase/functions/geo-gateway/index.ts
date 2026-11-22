@@ -31,7 +31,7 @@ const db = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: fa
 
 const ACTION_FUNCTION: Record<string, GeoFunction> = {
   "autocomplete": "autocomplete", "place-details": "autocomplete", "geocode": "geocode", "geocode-batch": "geocode", "reverse": "reverse",
-  "route": "route", "matrix": "matrix", "static": "static", "snap": "snap",
+  "route": "route", "matrix": "matrix", "static": "static", "snap": "snap", "validate": "validate",
   "isochrone": "isochrone", "optimization": "optimization", "tilequery": "tilequery", "count-map-load": "tiles",
 };
 
@@ -53,12 +53,14 @@ const GOOGLE_RATE_LIMITS: Record<string, number> = {
   "routes_compute_routes": 300,
   "routes_matrix": 60,
   "static_maps": 600,
+  "address_validation": 300,
 };
 
 /** Função geo → chave de rate limit do Google (`GOOGLE_RATE_LIMITS`). */
 const GOOGLE_RATE_API: Partial<Record<GeoFunction, string>> = {
   autocomplete: "places_autocomplete", geocode: "geocoding", reverse: "geocoding",
   route: "routes_compute_routes", matrix: "routes_matrix", static: "static_maps",
+  validate: "address_validation",
 };
 
 // Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.
@@ -166,6 +168,9 @@ async function runProvider(
     case "snap":
       if (!provider.snap) throw new GeoProviderError("GEO_NOT_SUPPORTED", `snap não disponível em ${name}`, 501);
       return await provider.snap(body);
+    case "validate":
+      if (!provider.validate) throw new GeoProviderError("GEO_NOT_SUPPORTED", `validate não disponível em ${name}`, 501);
+      return await provider.validate(body);
     case "isochrone": case "optimization": case "tilequery":
       if (!provider.raw) throw new GeoProviderError("GEO_NOT_SUPPORTED", `${action} não disponível em ${name}`, 501);
       return await provider.raw(action, body);

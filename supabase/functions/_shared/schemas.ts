@@ -243,6 +243,15 @@ const geoGatewayV1 = z.discriminatedUnion("action", [
     radius_m: z.number().int().min(1).max(50).optional(),
     provider: geoProvider,
   }),
+  // Etapa 38: Address Validation. Google-only (o Mapbox não tem equivalente; o gateway
+  // devolve 501 quando o provedor ativo é o Mapbox).
+  z.object({
+    action: z.literal("validate"),
+    address: z.string().min(3).max(300),
+    region: z.string().length(2).optional(),
+    language: z.string().min(2).max(5).optional(),
+    provider: geoProvider,
+  }),
   // Mapbox-only: pass-through validado só no essencial (a tela /map-tools já monta o body)
   z.object({ action: z.literal("isochrone"), lat: z.number(), lng: z.number() }).passthrough(),
   z.object({ action: z.literal("optimization"), coordinates: z.array(z.array(z.number()).length(2)).min(2).max(12) }).passthrough(),
