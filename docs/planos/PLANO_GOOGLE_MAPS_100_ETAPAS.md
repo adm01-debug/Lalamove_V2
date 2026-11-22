@@ -591,10 +591,39 @@ só com `auto_notify_supplier`, fallback na parada, nenhum válido → `null`).
 - [x] `mapId` no `google.maps.Map`; `google.maps.marker.AdvancedMarkerElement` em vez de `Marker` (legado, `:66,88`); ícones reaproveitando `markerFactories.ts`
 - **Evidência:** `createDriverMarkerElement` usado no lugar do SVG inline; `mapId` só entra com chave própria (o conector proíbe a API). `tsc --noEmit -p tsconfig.app.json` limpo; suite 979/979.
 
-### 77 — Polyline da rota + motorista + ETA no Google
-- [ ] Desenhar `active_tracking.expected_route` (`google.maps.Polyline`) e trilha `tracking_events`; marker do motorista animado entre pontos (interpolação 10 s)
-- [ ] Badge de ETA e distância no `MapHUD.tsx`
+### 77 — Polyline da rota + motorista + ETA no Google ✅
+- [x] Desenhar `active_tracking.expected_route` (`google.maps.Polyline`) e trilha `tracking_events`; marker do motorista animado entre pontos (interpolação 10 s)
+- [x] Badge de ETA e distância no `MapHUD.tsx`
 - **Evidência:** screenshot com rota e motorista
+
+**Executado.** `GoogleMapsCanvas` desenhava só os markers; o Mapbox (`mapLayers.ts:148,169`)
+já tinha `expected-route` e `driver-trail` desde a etapa 78, então o mesmo pedido
+aparecia diferente dependendo do provedor escolhido.
+
+- **Polyline da rota** (`GoogleMapsCanvas.tsx`, efeito novo): lê
+  `active_tracking.expected_route` via `toGooglePath()`, que delega a validação para
+  `parseExpectedRoute()` — a mesma função do Mapbox, para que um `jsonb` corrompido
+  vire path vazio em vez de Polyline quebrada. A instância é reaproveitada por
+  `order_id` e só o `path` muda: recriar a cada tick de 5 s pisca o traçado.
+- **Trilha** (`hooks/useTrackingTrails.ts`): lê `tracking_events` com **uma** consulta
+  `in('order_id', ids)` para todos os pedidos visíveis, em vez de um request por
+  pedido. Ordena por `created_at` no cliente (o PostgREST não garante ordem) e corta
+  em 60 pontos (`TRAIL_MAX_POINTS`) — a tabela cresce sem limite.
+- **Animação do marker:** o poll é de 5 s e reposicionar direto fazia o carro
+  "teleportar". `interpolatePosition()` move da posição anterior até a nova ao longo
+  de `DRIVER_ANIM_MS = 10_000`, via `requestAnimationFrame`, com o handle guardado em
+  `animationsRef` para cancelar a animação anterior antes de iniciar outra.
+- **Badge no HUD** (`MapHUD.tsx`): `formatRouteBadge()` mostra `distance_to_next_stop_m`
+  (escrito pelo trigger `geo_evaluate_tracking`, `20261122130100:453`) e o ETA lado a
+  lado. Campo ausente → `--`, sem esconder o painel.
+- **Limpeza:** `unmount` cancela `rAF`, remove Polylines e markers. Polyline de pedido
+  que saiu da lista (`COMPLETED`/`CANCELED`) é removida do mapa em vez de congelar.
+
+**Testes:** `src/components/map/__tests__/googleLayers.test.ts` — 14 casos (rota válida,
+`jsonb` corrompido → path vazio, ordenação cronológica da trilha, ponto NaN descartado,
+corte em 60, interpolação 0/meio/fim, overshoot limitado ao destino, janela zero,
+metro vs km no badge, haversine 1° ≈ 111 km). `src/components/map` **76/76 verde**,
+`tsc -p tsconfig.app.json` limpo, `eslint` 0 erros.
 
 ### 78 — Mesmo no Mapbox
 - [ ] `mapLayers.ts`: layer `expected-route` (line) e `driver-trail`; mesma fonte de dados → paridade entre provedores

@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { TrackingData } from './hooks/useTrackingData';
+import { formatRouteBadge } from './googleLayers';
 
 interface MapHUDProps {
   selectedTracking: TrackingData | null;
@@ -45,6 +46,12 @@ export function MapHUD({
   const signalStrength = Math.floor(Math.random() * 15) + 85;
   const temperature = 24;
   const riskLevel = selectedTracking.is_on_route ? 'Baixo' : 'Alto';
+  // Etapa 77: badge de ETA + distancia ate a proxima parada. `--` quando o
+  // backend ainda nao calculou (pedido sem geocodificacao completa).
+  const routeBadge = formatRouteBadge(
+    selectedTracking.distance_to_next_stop_m,
+    selectedTracking.eta_minutes,
+  );
   const driverName = selectedTracking.driver?.name || 'Motorista';
 
   const openStreetView = () => {
@@ -232,6 +239,12 @@ export function MapHUD({
                 <div className="text-3xl font-black italic text-primary flex items-baseline gap-1">
                   {selectedTracking.eta_minutes || '--'} 
                   <span className="text-[11px] font-bold not-italic opacity-40 text-muted-foreground">MIN</span>
+                  <span
+                    className="ml-auto text-[10px] font-black not-italic tracking-tight text-muted-foreground/80"
+                    title="Distancia ate a proxima parada"
+                  >
+                    {routeBadge.distance}
+                  </span>
                   {selectedTracking.eta_minutes && etaOriginal && (
                     <div className="flex flex-col ml-2">
                       <Badge variant={selectedTracking.eta_minutes > etaOriginal ? "destructive" : "success"} className="text-[8px] h-4 px-1 animate-pulse">
