@@ -517,6 +517,18 @@ serve(async (req) => {
           return;
         }
         configRecipientsDelivered.add(key);
+        // Etapa 92: o opt-out vale para **todo** canal, não só para os
+        // destinatários ad-hoc. Antes disso, quem pedia para parar de receber
+        // continuava sendo avisado quando o telefone vinha de
+        // `alert_configurations` — o caminho mais comum em produção.
+        if (channel === 'whatsapp' || channel === 'sms') {
+          const optedPhone = normalizePhone(destination) ?? destination;
+          if (await isPhoneOptedOut(optedPhone)) {
+            logger.log(`[Notification] Destinatário em opt-out ignorado: ${channel}`);
+            results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
+            return;
+          }
+        }
         // Destino que vem de `alert_configurations`, não de um contato do
         // pedido: o papel é a própria config, para não colidir na chave de
         // idempotência com o mesmo telefone enviado como contato de coleta.

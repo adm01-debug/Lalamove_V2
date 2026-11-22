@@ -508,6 +508,7 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ### 92 — [L] Opt-out unificado
 - [ ] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
 - **Evidência:** número em opt-out → `suppressed` no ledger
+- **Estado:** consulta aplicada aos **dois** caminhos de destinatário em `send-notification/index.ts` (ad-hoc e `alert_configurations`, canais WhatsApp/SMS) — antes só o ad-hoc consultava. Falta o alerta interno à operação e a linha `suppressed` no ledger (depende da migration `20261125120000`, PR #283).
 
 ### 93 — [L] Horário de silêncio por papel (Z9)
 - [ ] Motorista com pedido ativo isento; fornecedor/cliente seguem `geo_defaults`
