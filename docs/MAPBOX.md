@@ -113,6 +113,32 @@ Conclusão: **implementar `mapbox_mode='geocoding'` não muda nada** — os dois
 exatamente as mesmas coordenadas com a mesma classe de acurácia. A flag `mapbox_mode` nunca foi
 implementada no `geo-gateway` e **não deve ser**: não há ganho a capturar.
 
+### Risco adicional não capturado pela métrica de accuracy
+
+Reexecução independente em 2026-11-22 via `geo-gateway` (não o script direto — mesmo dataset,
+`invoke_edge_function` nas actions `autocomplete`/`place-details`/`geocode`) deu 26/50 (52 %), perto
+do 60 % acima; a diferença é esperada (caminho diferente: edge function com cache/rate-guard vs
+chamada direta à API). Mais importante que o número: ao conferir manualmente endereço por endereço
+(não só a classe de `accuracy`), **6 dos 50 vieram com rua ou cidade totalmente diferente da
+pedida**, com confiança `high`/`medium` — não é imprecisão, é resposta errada, e o Geocoding v6
+concordou com o mesmo erro nos casos reconferidos (os dois caem na mesma armadilha, não é só
+cobertura esparsa):
+
+| # | Endereço pedido | Resposta devolvida |
+|---|---|---|
+| 21 | Rua Carlos de Carvalho, Curitiba/PR | Rua em Cascavel/PR (~340 km) |
+| 26 | Rua Rocha Pombo, Colombo/PR | Rua em Campo Mourão/PR (~350 km) |
+| 28 | Rua Doutor Pedrosa, Pinhais/PR | "Avenida Pinhais" em Vitorino/PR (rua E cidade erradas) |
+| 29 | Avenida das Américas, Araucária/PR | Fazenda Rio Grande/PR |
+| 30 | Rua Benjamin Constant, Campo Largo/PR | Siqueira Campos/PR |
+| 50 | Rua 7, Aparecida de Goiânia/GO | POI (nome de empresa), rua errada |
+
+Implicação operacional: se a seleção do autocomplete for aceita sem conferência visual no mapa (ou
+sem o motorista notar), o pedido grava coordenada de outra cidade. Qualquer decisão de M1 que só
+olhe para a % de `accuracy` aceitável subestima o risco real — vale manter confirmação visual no
+mapa antes de salvar o endereço enquanto a cobertura ficar abaixo de 90 %, mesmo depois de enriquecer
+a base com CEP real do Bitrix24.
+
 O gap de cobertura é de **dados** (a malha de numeração da Mapbox para Goiânia e parte de Curitiba é
 interpolada), não de endpoint. Caminhos efetivos, em ordem de custo:
 
