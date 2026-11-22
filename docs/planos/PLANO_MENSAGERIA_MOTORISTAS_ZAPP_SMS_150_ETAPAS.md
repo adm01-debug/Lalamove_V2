@@ -426,12 +426,12 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 6 — Lalamove: banco (73–84)
 
 ### 73 — [L] Ledger `notification_messages` 🔒
-- [ ] `id, alert_id, order_id, driver_id, stop_id, event, role (driver|pickup_contact|delivery_contact|internal), direction (outbound|inbound), channel (whatsapp|sms|email|slack), provider, recipient_phone, client_message_id unique, provider_message_id, template_key, template_version, body_preview, status, error_code, attempt, fallback_of uuid, cost_cents, segments, sent_at, delivered_at, read_at, failed_at, expires_at, created_at`
-- **Evidência:** migration mergeada e aplicada; `describe_table` confere
+- [~] `id, alert_id, order_id, driver_id, stop_id, event, role (driver|pickup_contact|delivery_contact|internal), direction (outbound|inbound), channel (whatsapp|sms|email|slack), provider, recipient_phone, client_message_id unique, provider_message_id, template_key, template_version, body_preview, status, error_code, attempt, fallback_of uuid, cost_cents, segments, sent_at, delivered_at, read_at, failed_at, expires_at, created_at`
+- **Evidência:** escrita em `supabase/migrations/20261125120000_notification_ledger.sql` (PR #283, `MERGEABLE`), com todas as colunas acima mais `provider_sequence`/`occurred_at`/`metadata`. **Falta:** merge e `apply-migrations` — a tabela ainda não existe em produção (regra 8).
 
 ### 74 — [L] Máquina de estados
-- [ ] `queued → sent → delivered → read`; `failed`, `uncertain`, `expired`, `suppressed` terminais; transição inválida rejeitada por função
-- **Evidência:** teste SQL em Postgres descartável
+- [~] `queued → sent → delivered → read`; `failed`, `uncertain`, `expired`, `suppressed` terminais; transição inválida rejeitada por função
+- **Evidência:** `notification_status_transition_allowed(from,to)` na mesma migration é `IMMUTABLE` e testável sem tabela: `('sent','delivered')` → true, `('read','sent')` → false. **Falta:** merge/aplicação da migration.
 
 ### 75 — [L] `messaging_settings` (linha única) 🔒
 - [ ] `whatsapp_provider (zapp|evolution|off)`, `sms_provider`, `sms_fallback_after_min`, `monthly_budget_cents`, `quiet_hours_by_role jsonb`, `pilot_mode`, `shadow_mode`
@@ -468,12 +468,12 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `get_advisors` sem alerta de RLS nas tabelas novas
 
 ### 83 — [L] Índices
-- [ ] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
-- **Evidência:** `EXPLAIN` da timeline do pedido usa índice
+- [~] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
+- **Evidência:** os 5 índices estão na migration `20261125120000` (`notification_messages_order_created_idx`, `..._client_message_id_key`, `..._provider_message_id_key`, `..._pending_idx`, `..._recipient_created_idx`). **Falta:** aplicar e rodar o `EXPLAIN` de verdade.
 
 ### 84 — [L] Retenção (Z8)
-- [ ] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
-- **Evidência:** job em `cron.job`; execução registrada em `cron_job_logs`
+- [~] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
+- **Evidência:** `notification_messages_scrub_bodies(int)` + `cron.schedule('25 4 * * *')` na migration `20261125120000`, com guarda para banco sem `pg_cron`. **Falta:** aplicar (regra 8).
 
 ## Bloco 7 — Lalamove: motor de comunicação (85–98)
 
