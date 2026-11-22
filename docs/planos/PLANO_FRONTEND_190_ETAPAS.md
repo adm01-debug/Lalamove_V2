@@ -160,7 +160,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** viewer recebe 403 em `cancel`; manager recebe 200; teste Deno em `lalamove-api/auth.test.ts`.
 
 ### 19 — [E] Corrigir bugs funcionais nas edges (A22)
-- [ ] `new-device-alert/index.ts`: instanciar `new Resend(Deno.env.get('RESEND_API_KEY'))` antes de `:236`.
+- [x] `new-device-alert/index.ts:42`: instanciar `new Resend(Deno.env.get('RESEND_API_KEY'))` — antes `resend.emails.send` (`:236`) lançava `ReferenceError: resend is not defined`.
+- **Evidência:** `deno check` 0 erros. A edge agora cria o cliente `Resend` no início do handler, antes do uso em `:237`.
 - [ ] `bitrix24-sync/index.ts:44`: `action = body.action ?? url.searchParams.get('action')` para o `oauth_callback` em GET; o `fetch` interno de `refresh_token` (`:178-182`) com `Authorization: Bearer service_role`.
 - [ ] `lalamove-uapi/index.ts:495`: não remover `body.action` antes de `favorite-driver`/`block-driver` (renomear o campo de operação para `op`).
 - **Evidência:** 3 testes Deno novos; e-mail de novo dispositivo chega (log `resend` 200).
