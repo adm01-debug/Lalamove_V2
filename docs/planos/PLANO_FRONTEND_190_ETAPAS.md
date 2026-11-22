@@ -151,7 +151,8 @@ frequência; **MÉDIO** qualidade/UX; **BAIXO** polimento. Ao concluir uma etapa
 - **Evidência:** chamada com JWT de operator → 403; teste no CI.
 
 ### 17 — [E] `external-companies` com papel e busca escapada
-- [ ] `supabase/functions/external-companies/index.ts`: exigir JWT + papel ≥ operator; escapar `search` antes do `.or(ilike)` (`:109`, `:125`); `limit` máximo 200.
+- [x] `supabase/functions/external-companies/index.ts`: exigir JWT + papel ≥ operator (`requireOperator` via `getClaims`, `ROLE_PRIORITY` admin>manager>operator>viewer); escapar `search` antes do `.or(ilike)` (`escapeIlike`, `:161`, `:309`, `:315`); `limit` máximo 200 (já no schema `schemas.ts:404`).
+- **Evidência:** `deno check` 0 erros; `deno test` dos contratos 213 passed, incluindo `[external-companies] tabela fora da allowlist retorna 422`. Sem `Authorization` a edge devolve 401; role `viewer` devolve 403; o termo de busca remove `,()%\\` antes de interpolar no filtro.
 - **Evidência:** `search="a,b)"` retorna 422/resultado vazio, não 500.
 
 ### 18 — [E][D] Ações destrutivas da `lalamove-api` só para manager/admin (D6)

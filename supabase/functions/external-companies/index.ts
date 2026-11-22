@@ -14,10 +14,47 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
+
+// Ordem de precedência: admin > manager > operator > viewer. ">= operator"
+// significa que admin, manager e operator passam; apenas viewer é negado.
+const ROLE_PRIORITY: Record<string, number> = {
+  admin: 4,
+  manager: 3,
+  operator: 2,
+  viewer: 1,
+};
+
+// Exige JWT válido e papel >= operator (admin/manager/operator).
+// Retorna { error } se não autorizado, { error: null } se OK.
+async function requireOperator(req: Request): Promise<{ error: Response | null }> {
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims();
+  if (claimsError || !claimsData?.claims) {
+    return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;
+  const level = ROLE_PRIORITY[role] ?? 0;
+  if (level < ROLE_PRIORITY.operator) {
+    return { error: new Response(JSON.stringify({ error: 'Forbidden: operator role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
+  }
+  return { error: null };
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const authCheck = await requireOperator(req);
+  if (authCheck.error) return authCheck.error;
 
   const externalUrl = Deno.env.get('EXTERNAL_SUPABASE_URL');
   const externalKey = Deno.env.get('EXTERNAL_SUPABASE_SERVICE_ROLE_KEY');
@@ -121,12 +158,13 @@ serve(async (req) => {
         }
 
         const results: any[] = [];
+        const term = `%${escapeIlike(search)}%`;
 
         // Search companies
         const { data: companies } = await externalClient
           .from('companies')
           .select('id, name, address, city, state, zip_code, phone, email, type')
-          .or(`name.ilike.%${search}%,address.ilike.%${search}%`)
+          .or(`name.ilike.${term},address.ilike.${term}`)
           .limit(limit);
         
         if (companies) {
@@ -142,7 +180,7 @@ serve(async (req) => {
         const { data: customers } = await externalClient
           .from('customers')
           .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.%${search}%,address.ilike.%${search}%`)
+          .or(`name.ilike.${term},address.ilike.${term}`)
           .limit(limit);
         
         if (customers) {
@@ -158,7 +196,7 @@ serve(async (req) => {
         const { data: suppliers } = await externalClient
           .from('suppliers')
           .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.%${search}%,address.ilike.%${search}%`)
+          .or(`name.ilike.${term},address.ilike.${term}`)
           .limit(limit);
         
         if (suppliers) {
@@ -174,7 +212,7 @@ serve(async (req) => {
         const { data: carriers } = await externalClient
           .from('carriers')
           .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.%${search}%,address.ilike.%${search}%`)
+          .or(`name.ilike.${term},address.ilike.${term}`)
           .limit(limit);
         
         if (carriers) {
@@ -190,7 +228,7 @@ serve(async (req) => {
         const { data: contacts } = await externalClient
           .from('contacts')
           .select('id, name, address, city, state, zip_code, phone, email')
-          .or(`name.ilike.%${search}%,address.ilike.%${search}%`)
+          .or(`name.ilike.${term},address.ilike.${term}`)
           .limit(limit);
         
         if (contacts) {
@@ -264,9 +302,18 @@ serve(async (req) => {
   }
 });
 
+// Escapa um termo de busca para uso em filtros `ilike` do PostgREST.
+// PostgREST interpreta `,`, `(`, `)`, `.` e `%` como operadores/estrutura no
+// filtro `.or(...)`. Sem escapar, um termo como `a,b)c` quebra o filtro ou
+// injeta uma condição arbitrária. Remove os caracteres com significado no DSL.
+function escapeIlike(value: string): string {
+  return value.replace(/[,().%\\]/g, '');
+}
+
 function buildSearchFilter(table: string, search: string): string {
   // Common fields across all tables
-  return `name.ilike.%${search}%,address.ilike.%${search}%`;
+  const term = `%${escapeIlike(search)}%`;
+  return `name.ilike.${term},address.ilike.${term}`;
 }
 
 function formatAddress(record: any): string {
