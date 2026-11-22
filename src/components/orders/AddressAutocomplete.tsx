@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, useId } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -69,6 +69,7 @@ export function AddressAutocomplete({
 }: AddressAutocompleteProps) {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState(value);
+  const listboxId = useId();
   const debouncedSearch = useDebouncedValue(inputValue, 350);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -188,6 +189,11 @@ export function AddressAutocomplete({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           className="pl-10"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={open && hasResults}
+          aria-controls={listboxId}
+          aria-label={placeholder}
         />
         {isLoading && (
           <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground" />
@@ -195,7 +201,12 @@ export function AddressAutocomplete({
       </div>
 
       {open && hasResults && (
-        <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
+        <div
+          id={listboxId}
+          role="listbox"
+          aria-label="Sugestões de endereço"
+          className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg overflow-hidden"
+        >
         <div className="max-h-72 overflow-y-auto">
           {/* Endereços já usados (etapa 41) — zero chamada ao provedor */}
           {frequentMatches.length > 0 && (
@@ -208,6 +219,8 @@ export function AddressAutocomplete({
                   key={`freq-${item.address}`}
                   type="button"
                   className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30"
+                  role="option"
+                  aria-selected={false}
                   onClick={() => handleSelectFrequent(item)}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -233,6 +246,8 @@ export function AddressAutocomplete({
                   key={`${result.source_table}-${result.id}`}
                   type="button"
                   className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30"
+                  role="option"
+                  aria-selected={false}
                   onClick={() => handleSelectCRM(result)}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -266,6 +281,8 @@ export function AddressAutocomplete({
                   key={suggestion.id}
                   type="button"
                   className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors border-b border-border/30 last:border-0"
+                  role="option"
+                  aria-selected={false}
                   onClick={() => handleSelectMapbox(suggestion)}
                 >
                   <div className="flex items-center gap-2">
