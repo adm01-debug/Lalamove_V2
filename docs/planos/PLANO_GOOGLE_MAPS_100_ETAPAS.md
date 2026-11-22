@@ -503,8 +503,9 @@ correta no plano.
 
 ### 46 — Avanço de parada ✅
 - [x] `distance_to_next_stop_m < 100` por ≥ 2 ciclos ou status Lalamove `PICKED_UP` → `next_stop_index += 1`, `lalamove_stops.arrived_at = now()`
-- **Evidência:** `near_stop_cycles` incrementa quando `v_dist <= d.arrived_radius_m` (`20261122130100:454-457`, default 100 m em `:48`) e `DRIVER_ARRIVED_PICKUP` só emite com `near_stop_cycles >= 2` (`:497`). O avanço de `next_stop_index` acompanha o `lalamove_status` (`:489` trata `=0` para `ON_GOING/MATCHED/ASSIGNING_DRIVER`; `:508` trata a última parada para `PICKED_UP/ON_GOING`).
-- **Correção de premissa:** o trigger **não escreve** `next_stop_index += 1` nem `arrived_at`; ele lê `next_stop_index` para decidir qual evento emitir. O avanço da parada vem do `lalamove_status` via webhook. `arrived_at` é escrito por `POD_STATUS_CHANGED`, não pelo trigger geo.
+- **Evidência:** `20261122131000_geo_eta_delay.sql:205-224` — 2º ciclo no raio move `next_stop_index` 0→1, grava `arrived_at` na coleta, zera `near_stop_cycles` e recalcula `distance_to_next_stop_m` para a entrega; `PICKED_UP` avança no 1º ciclo. Cenários 4 e 5 de `supabase/tests/02_scenarios.sql`.
+- **Por que importa:** antes deste bloco **nada no repositório escrevia `next_stop_index`** — ele nascia em 0 e ficava em 0, e como o bloco de ENTREGA do trigger (`geo_foundation.sql:508`) exige `next_stop_index >= 1`, nenhum pedido gerava `DRIVER_APPROACHING_DELIVERY` nem `DRIVER_ARRIVED_DELIVERY`.
+- **Correção de premissa (superada):** a auditoria anterior dizia que o trigger só lia `next_stop_index`. Depois da migration `20261122131000` ele passou a escrevê-lo.
 
 ### 47 — ETA por Route Matrix ✅
 - [x] Job `eta_refresh`: `matrix(origins=[driverPos], destinations=[next_stop])` → `eta_minutes = ceil(duration_s/60)`, `eta_updated_at`, `eta_provider`
@@ -577,9 +578,8 @@ velocidade real, fallback 30 km/h, mínimo 1 min, `avgSpeedMps` cronológico,
 
 ### 52 — Testes do bloco ✅
 - [x] Fixture de trajeto real (Centro→Jardim Botânico, 40 pontos) em `supabase/tests/fixtures/route_curitiba.json`; replay via `simulate-driver-movement` (já exige JWT) → verificar `is_on_route`, `next_stop_index`, `eta_minutes`
-- **Evidência:** `supabase/tests/fixtures/route_curitiba.json` — 40 pontos, **3.983 m** reais (soma haversine dos segmentos), velocidade e heading por ponto. Replay determinístico em `job-worker/route-fixture-replay.test.ts`: **7 testes verde** — ordem de `seq`/`elapsed_s`, distância declarada × soma dos segmentos (1 %), todos os 40 vértices a < 1 m da própria rota (prova o `point_to_polyline`), ponto a 600 m conta como desvio, ponto a 278 m dentro do limite de 300 m, chegada no destino e ETA local plausível.
+- **Evidência (dupla):** `supabase/tests/fixtures/route_curitiba.json` — 40 pontos, **3.983 m** reais (soma haversine dos segmentos), velocidade e heading por ponto. (1) Replay em `job-worker/route-fixture-replay.test.ts`: **7 testes verde** — ordem de `seq`/`elapsed_s`, distância declarada × soma dos segmentos (1 %), os 40 vértices a < 1 m da própria rota, ponto a 600 m conta como desvio, ponto a 278 m dentro do limite de 300 m, chegada no destino e ETA local plausível. (2) Harness SQL `bash supabase/tests/run.sh`: **23 asserções verdes**, incluindo os 40 pontos com `is_on_route=true`, `next_stop_index` 0→1 e desvio de 500 m marcando `is_on_route=false`; extrai as funções reais das migrations e roda num Postgres 16 descartável.
 - **Correção de premissa:** o `simulate-driver-movement` **não aceita fixture** — ele move o pino aleatoriamente (`5-15 %` por ciclo + `randomOffset()`) e só roda em ambiente de desenvolvimento (`:35-38`). Replay determinístico é o teste, não a edge.
-
 ---
 
 ## BLOCO 5 — Motor de geo-eventos (etapas 53–64)
