@@ -532,9 +532,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [ ] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
 - **Evidência:** `NotificationHistoryPage` continua mostrando envios
 
-### 98 — [L] Testes de contrato do motor
-- [ ] `deno test` para roteador, idempotência, fallback, opt-out, silêncio, limite
-- **Evidência:** job `Deno Contract Tests` verde
+### 98 — [x] Testes de contrato do motor
+- [x] `deno test` para roteador, idempotência, fallback, opt-out, silêncio, limite
+- **Evidência:** job `Deno Contract Tests` (`.github/workflows/ci.yml:110`) roda `_shared/messaging/` (29 testes: roteamento, silêncio por papel, teto por motorista, dedup, interpretador de inbound), `_shared/channels/` (Zapp e SMS) e `send-notification/` (40 testes: idempotência em `message-id.test.ts`, silêncio em `quiet-hours.test.ts`, opt-out e destinatários em `recipients.test.ts`, SMS em `sms-dispatch.test.ts`). CI `success` em `83e41fd`.
 
 ## Bloco 8 — Lalamove: eventos ao motorista (99–112)
 
