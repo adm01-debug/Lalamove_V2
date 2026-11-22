@@ -225,7 +225,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 97
+   "arquivos_puxados": 98
   },
   {
    "caminho": "/*",
@@ -985,7 +985,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 97
+   "arquivos_puxados": 98
   },
   {
    "caminho": "/delivery-metrics",
@@ -1451,6 +1451,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useFuseSearch",
@@ -1726,7 +1727,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 44
+   "arquivos_puxados": 45
   },
   {
    "caminho": "/map",
@@ -1878,6 +1879,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useLocation",
@@ -1919,6 +1921,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useLocation",
@@ -2235,6 +2238,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useFuseSearch",
@@ -2332,6 +2336,7 @@
    "hooks": [
     "useAuth",
     "useAuthLogs",
+    "useCallback",
     "useContext",
     "useEffect",
     "useMutation",
@@ -2386,6 +2391,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useFuseSearch",
@@ -2613,6 +2619,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useFuseSearch",
@@ -2856,6 +2863,7 @@
    "redireciona": null,
    "hooks": [
     "useAuth",
+    "useCallback",
     "useContext",
     "useEffect",
     "useGeoBudgetStatus",

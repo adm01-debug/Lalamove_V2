@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c2585b1a9e10301e6473f4e4d81e89eb10ed4a1e",
+  "commit": "d899883254db3b7fb14e5b4f0f5dcc3b25d15c37",
   "branch": "main",
-  "data_commit": "2026-11-22T16:31:15-03:00",
+  "data_commit": "2026-11-22T16:45:34-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d899883",
+    "data": "2026-11-22",
+    "assunto": "feat: hardening de dados, erros e estados (itens 67/68/70/73/74/75/76) (#310)"
+   },
    {
     "sha": "c2585b1",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "762c4b6",
     "data": "2026-11-22",
     "assunto": "fix(edges): corrige sintaxe que derrubou o deploy das edge functions (#285)"
-   },
-   {
-    "sha": "7e572fe",
-    "data": "2026-11-22",
-    "assunto": "feat(edges): validacao de entrada com 422 unico em 15 edge functions (#284)"
    }
   ],
-  "arquivos_mudados_7d": 366,
+  "arquivos_mudados_7d": 369,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 44
+    "mudancas": 45
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -153,11 +153,11 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 23
+    "mudancas": 24
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -286,22 +286,22 @@
     "mudancas": 6
    },
    {
+    "arquivo": "src/components/map/MapHUD.tsx",
+    "mudancas": 6
+   },
+   {
+    "arquivo": "src/components/orders/OrderDetailModal.tsx",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/hooks/useRegionResolver.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "src/integrations/supabase/types.ts",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/mapbox.test.ts",
     "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 210
+    "commits": 211
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1064,
   "arquivos_codigo": 663,
-  "linhas_codigo": 129153,
+  "linhas_codigo": 129235,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29399
+   "linhas": 29415
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 18885
+   "linhas": 18939
   },
   "src/i18n": {
    "arquivos": 1,
@@ -536,7 +536,7 @@
   },
   "src/lib": {
    "arquivos": 48,
-   "linhas": 4175
+   "linhas": 4187
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -602,7 +602,7 @@
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",
-   "linhas": 1017
+   "linhas": 1026
   },
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",

@@ -272,6 +272,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/lib/html.ts",
+   "src/lib/phone.ts",
    "src/types/index.ts"
   ],
   "src/components/dashboard/DashboardHeroSection.tsx": [
@@ -527,7 +528,8 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/tooltip.tsx",
-   "src/lib/html.ts"
+   "src/lib/html.ts",
+   "src/lib/phone.ts"
   ],
   "src/components/map/MapHistoryPanel.tsx": [
    "src/components/ui/button.tsx",
@@ -960,6 +962,9 @@
   "src/hooks/healthChecks.ts": [
    "src/integrations/supabase/client.ts",
    "src/utils/logger.ts"
+  ],
+  "src/hooks/useAchievementsSystem.tsx": [
+   "src/hooks/useAuth.tsx"
   ],
   "src/hooks/useActiveAlerts.ts": [
    "src/hooks/useAuth.tsx",

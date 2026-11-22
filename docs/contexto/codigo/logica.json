@@ -651,10 +651,11 @@
    "exports": [
     "PhoneValidationResult",
     "maskBrazilianPhone",
+    "toWhatsAppUrl",
     "validateBrazilianPhone"
    ],
    "export_default": null,
-   "linhas": 91,
+   "linhas": 103,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -663,8 +664,10 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 3,
+   "usado_por": 5,
    "usado_por_modulos": [
+    "components/dashboard",
+    "components/map",
     "components/orders",
     "pages"
    ],

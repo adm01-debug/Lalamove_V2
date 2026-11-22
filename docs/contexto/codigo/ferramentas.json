@@ -853,10 +853,6 @@
     "arquivos": 2
    },
    {
-    "host": "wa.me",
-    "arquivos": 2
-   },
-   {
     "host": "x.supabase.co",
     "arquivos": 2
    },
@@ -954,6 +950,10 @@
    },
    {
     "host": "viacep.com.br",
+    "arquivos": 1
+   },
+   {
+    "host": "wa.me",
     "arquivos": 1
    },
    {

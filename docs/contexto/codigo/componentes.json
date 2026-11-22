@@ -381,7 +381,7 @@
     "BatchActionsToolbar"
    ],
    "export_default": null,
-   "linhas": 119,
+   "linhas": 126,
    "dominio": "components/dashboard",
    "hooks_locais": [],
    "tabelas": [],
@@ -1106,7 +1106,7 @@
     "OrderDetailModal"
    ],
    "export_default": null,
-   "linhas": 1017,
+   "linhas": 1026,
    "dominio": "components/orders",
    "hooks_locais": [
     "useEvaluateDriver",
@@ -2187,11 +2187,12 @@
     "RARITY_COLORS"
    ],
    "export_default": null,
-   "linhas": 426,
+   "linhas": 444,
    "dominio": "hooks",
    "hooks_locais": [
     "useAchievementsSystem",
-    "useApprovalAchievements"
+    "useApprovalAchievements",
+    "useAuth"
    ],
    "tabelas": [],
    "edges": [],
@@ -2204,14 +2205,14 @@
     "AuthProvider"
    ],
    "export_default": null,
-   "linhas": 77,
+   "linhas": 102,
    "dominio": "hooks",
    "hooks_locais": [
     "useAuth"
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "orfao": false
   },
   {

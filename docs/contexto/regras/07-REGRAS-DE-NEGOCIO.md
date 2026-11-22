@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c2585b1a9e` · branch `main` · 2026-11-22 19:31 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d899883254` · branch `main` · 2026-11-22 19:46 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1749,6 +1749,8 @@ _nenhum item encontrado_
 | : return Bell;     case  | `src/components/CommandPaletteEnhanced.tsx` |
 |                  className= | `src/components/admin/telemetry/ContractVersionUsagePanel.tsx` |
 | Nenhum pedido selecionado possui contato de fornecedor/cliente. | `src/components/dashboard/BatchActionsToolbar.tsx` |
+| Não foi possível copiar os links. | `src/components/dashboard/BatchActionsToolbar.tsx` |
+| Telefone inválido para o pedido ${order.internalOrderId \|\| order.lalamoveId}. | `src/components/dashboard/BatchActionsToolbar.tsx` |
 | PDF generation triggered. In a CI environment, this would use a tool like  | `src/components/debug/AuditReportGenerator.tsx` |
 | Falha ao resgatar o cupom. | `src/components/lalamove/UapiCouponsPanel.tsx` |
 | Informe o código do cupom. | `src/components/lalamove/UapiCouponsPanel.tsx` |
@@ -1915,9 +1917,7 @@ _nenhum item encontrado_
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
-| Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
-| Falha ao marcar webhook | `src/pages/WebhooksPage.tsx` |
-| … +99 linhas — lista completa em `context.json` | |
+| … +101 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

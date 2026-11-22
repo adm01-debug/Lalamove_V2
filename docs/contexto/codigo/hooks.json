@@ -402,12 +402,13 @@
     "useAchievementsSystem",
     "useApprovalAchievements"
    ],
-   "linhas": 426,
+   "linhas": 444,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [
+    "useAuth",
     "useCallback",
     "useContext",
     "useEffect",
@@ -651,24 +652,27 @@
    "hooks_exportados": [
     "useAuth"
    ],
-   "linhas": 77,
+   "linhas": 102,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
    "edges": [],
    "hooks_internos": [
+    "useCallback",
     "useContext",
     "useEffect",
+    "useQueryClient",
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "usado_por_arquivos": [
     "src/App.tsx",
     "src/components/auth/ProtectedRoute.tsx",
     "src/components/layout/AppLayout.tsx",
     "src/components/layout/Header.tsx",
     "src/components/layout/Sidebar.tsx",
+    "src/hooks/useAchievementsSystem.tsx",
     "src/hooks/useActiveAlerts.ts",
     "src/hooks/useAuthLogs.ts",
     "src/hooks/useCommandPaletteSearch.ts",
@@ -2233,7 +2237,7 @@
    "hooks_exportados": [
     "useServiceWorker"
    ],
-   "linhas": 255,
+   "linhas": 266,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
