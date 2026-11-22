@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, X, Package, Radio, Target } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ interface MapSearchPanelProps {
 }
 
 export function MapSearchPanel({ allTrackingData, trackingCount, onFocusTracking }: MapSearchPanelProps) {
+  const { t } = useTranslation();
   const [localSearch, setLocalSearch] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
 
@@ -49,7 +51,7 @@ export function MapSearchPanel({ allTrackingData, trackingCount, onFocusTracking
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Limpar busca"
+              aria-label={t('map.actions.clearSearch')}
               className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 rounded-full hover:bg-white/10"
               onClick={() => { setLocalSearch(''); setShowSearchResults(false); }}
             >
@@ -124,7 +126,7 @@ export function MapSearchPanel({ allTrackingData, trackingCount, onFocusTracking
           </div>
         </div>
         <div className="h-8 w-px bg-white/5 mx-1" />
-        <Button variant="ghost" size="icon" aria-label="Centralizar no alvo" className="w-8 h-8 rounded-full hover:bg-white/10">
+        <Button variant="ghost" size="icon" aria-label={t('map.actions.centerOnTarget')} className="w-8 h-8 rounded-full hover:bg-white/10">
           <Target className="w-4 h-4 text-muted-foreground" />
         </Button>
       </motion.div>

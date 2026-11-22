@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { 
   Activity, Battery, Wifi, Navigation, Shield, Clock, Zap, 
   Map as MapIcon, Cloud, Sun, Thermometer, ExternalLink, 
@@ -37,6 +38,7 @@ export function MapHUD({
   stoppedThreshold = 15,
   trend = 'stable'
 }: MapHUDProps) {
+  const { t } = useTranslation();
   if (!selectedTracking) return null;
 
   // Simulated real-time metrics for "Excellence"
@@ -103,7 +105,7 @@ export function MapHUD({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="secondary" size="icon" className="h-9 w-full bg-primary/10 hover:bg-primary/20 border-primary/20" onClick={openStreetView}>
+                    <Button variant="secondary" size="icon" className="h-9 w-full bg-primary/10 hover:bg-primary/20 border-primary/20" onClick={openStreetView} aria-label={t('map.actions.streetView')}>
                       <Eye className="w-4 h-4 text-primary" />
                     </Button>
                   </TooltipTrigger>
@@ -114,7 +116,7 @@ export function MapHUD({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="secondary" size="icon" className="h-9 w-full bg-success/10 hover:bg-success/20 border-success/20" onClick={sendWhatsApp}>
+                    <Button variant="secondary" size="icon" className="h-9 w-full bg-success/10 hover:bg-success/20 border-success/20" onClick={sendWhatsApp} aria-label={t('map.actions.whatsapp')}>
                       <MessageSquare className="w-4 h-4 text-success" />
                     </Button>
                   </TooltipTrigger>
@@ -125,7 +127,7 @@ export function MapHUD({
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="secondary" size="icon" className="h-9 w-full bg-destructive/10 hover:bg-destructive/20 border-destructive/20">
+                    <Button variant="secondary" size="icon" className="h-9 w-full bg-destructive/10 hover:bg-destructive/20 border-destructive/20" aria-label={t('map.actions.criticalAlert')}>
                       <AlertTriangle className="w-4 h-4 text-destructive" />
                     </Button>
                   </TooltipTrigger>

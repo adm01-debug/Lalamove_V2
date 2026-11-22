@@ -175,7 +175,22 @@
     "routes": "Routes",
     "drivers": "Drivers",
     "deliveries": "Deliveries",
-    "realtime": "Real-time"
+    "realtime": "Real-time",
+    "actions": {
+      "settings": "Map settings",
+      "styleDark": "Dark style",
+      "styleSatellite": "Satellite style",
+      "traffic": "Toggle traffic",
+      "followDriver": "Follow driver",
+      "focusDriver": "Driver focus mode",
+      "streetView": "Open Street View",
+      "whatsapp": "Send WhatsApp to driver",
+      "criticalAlert": "Raise critical alert",
+      "closeHistory": "Close driver history",
+      "clearSearch": "Clear search",
+      "centerOnTarget": "Center on target",
+      "nearStop": "Distance to next stop"
+    }
   },
   "reports": {
     "title": "Reports",

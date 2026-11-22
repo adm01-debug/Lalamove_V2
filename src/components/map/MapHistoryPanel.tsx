@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { History, X, Loader2, MapPin, Clock, Play, Pause, ChevronLeft, ChevronRight, FastForward, Download, FileText } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -17,6 +18,7 @@ interface MapHistoryPanelProps {
 }
 
 export function MapHistoryPanel({ show, driverName, history, loading, onClose, onPlaybackUpdate }: MapHistoryPanelProps) {
+  const { t } = useTranslation();
   const [playbackActive, setPlaybackActive] = useState(false);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [playbackSpeed, setPlaybackSpeed] = useState(800);
@@ -140,7 +142,7 @@ export function MapHistoryPanel({ show, driverName, history, loading, onClose, o
                 </span>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white/10" onClick={onClose}>
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white/10" onClick={onClose} aria-label={t('map.actions.closeHistory')}>
               <X className="w-4 h-4" />
             </Button>
           </div>
