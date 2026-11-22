@@ -53,6 +53,22 @@ em `geo_usage_month` e no painel "Faturamento" do Google Cloud; alerta `INTEGRAT
 4. Ao normalizar, voltar as funções para `auto` (não para `google` fixo), para preservar o
    balanceamento por cota.
 
+## 3b. Mapbox fora do ar (5xx / timeout)
+
+**Sintoma:** todas as funções ainda em `mapbox` devolvem `GEO_UPSTREAM_ERROR`; `snap`,
+`isochrone`, `optimization` e `tilequery` (sem equivalente Google) falham por completo.
+
+**Ação:**
+1. `/settings/maps` → mudar `autocomplete`, `geocode`, `reverse`, `route`, `matrix` e
+   `static` para `google`. **Efeito em ≤ 60 s**, sem deploy.
+2. Conferir [status.mapbox.com](https://status.mapbox.com/).
+3. As 4 funções sem equivalente no Google **não têm contorno** — avisar o time que snapping
+   e isócronas ficam indisponíveis até o Mapbox voltar.
+4. O gateway já faz failover em runtime (`failoverFor`): se o primário está usável mas a
+   chamada falha, ele tenta o `fallback_provider` declarado e depois o outro provedor do par.
+   Com `auto` em produção a maioria dos incidentes se resolve sem intervenção manual.
+5. Ao normalizar, voltar tudo para `auto`.
+
 ## 4. `computeRoutes` rejeitando `departureTime`
 
 **Sintoma:** `400 INVALID_ARGUMENT — "Timestamp must be set to a future time"`; toda rota falha.

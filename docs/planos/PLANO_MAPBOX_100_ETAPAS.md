@@ -207,9 +207,9 @@ Legenda: `[ ]` checklist · **Evidência** = prova de pronto · 🔒 = regra 8 (
 - **Evidência:** constraint presente
 
 ### 15 — Política de retenção em código
-- [ ] `geo_cache` TTL para Mapbox: `geocode` temporário **não cacheia** (termos), `route` 10 min, `static` 7 d, `matrix` 0; Google mantém 30 d
-- [ ] `geo_settings.config.retention` por provedor lido pelo gateway
-- **Evidência:** teste Deno: geocode Mapbox nunca gera linha em `geo_cache`
+- [x] `geo_cache` TTL para Mapbox: `geocode` temporário **não cacheia** (termos), `route` 10 min, `static` 7 d, `matrix` 0; Google mantém 30 d
+- [x] `geo_settings.config.retention` por provedor lido pelo gateway
+- **Evidência:** `metering.ts` `resolveTtl()` + `metering.test.ts` (6 testes); retenção é restritiva por construção (`Math.min`), TTL 0 nunca sobe — PR #214
 
 ### 16 — `region_cache` → Mapbox reverse só com `permanent`
 - [ ] `useRegionResolver.ts:215` grava bairro/cidade em `region_cache` a partir do reverse Mapbox v5 — é retenção. Trocar para Geocoding v6 reverse com `permanent=true` **ou** para Google reverse (30 d), conforme `geo_settings.reverse`

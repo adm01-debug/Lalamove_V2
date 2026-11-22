@@ -571,8 +571,8 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** alerta de teste recebido
 
 ### 97 — Runbook
-- [ ] `docs/RUNBOOK_GOOGLE_MAPS.md`: chave vazada (rotação em 2 chaves), orçamento estourado, Google fora (forçar Mapbox), Mapbox fora (forçar Google), `geo_cache` corrompido
-- **Evidência:** doc mergeado
+- [x] `docs/RUNBOOK_GOOGLE_MAPS.md`: chave vazada (rotação em 2 chaves), orçamento estourado, Google fora (forçar Mapbox), Mapbox fora (forçar Google), `geo_cache` corrompido
+- **Evidência:** doc mergeado — PR #213 (8 seções + §3b failover inverso)
 
 ### 98 — Limpeza de legado
 - [ ] Remover `VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_*` do baseline Vercel e do loader; remover `simulate-driver-movement` de produção (ou manter atrás de flag dev); migrar `region_cache` para `geo_cache`
@@ -583,9 +583,9 @@ Legenda: `[ ]` item de checklist · **Evidência** = o que prova a etapa pronta 
 - **Evidência:** `order_geo_events`, `alerts_sent`, `geo_usage` do dia, prints
 
 ### 100 — Fechamento
-- [ ] Atualizar `docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md` com "estado real" e este plano com ✅ por etapa
-- [ ] Atualizar memória do projeto (`/projects/.../areas/lalamove-v2.md`) com: projeto Google Cloud, nomes dos secrets, provedor padrão por função, orçamento
-- [ ] Listar o que ficou para V3 (app do motorista, chat) e o que ficou `off` (Address Validation, Roads, entrega ao cliente final)
+- [x] Atualizar `docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md` com "estado real" e este plano com ✅ por etapa
+- [x] Atualizar memória do projeto (`/projects/.../areas/lalamove-v2.md`) com: projeto Google Cloud, nomes dos secrets, provedor padrão por função, orçamento → ver `docs/planos/ANALISE_GOOGLE_MAPS_X_LALAMOVE_V2.md` §6
+- [x] Listar o que ficou para V3 (app do motorista, chat) e o que ficou `off` (Address Validation, Roads, entrega ao cliente final)
 - **Evidência:** docs atualizados
 
 ---
