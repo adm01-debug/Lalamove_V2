@@ -676,6 +676,7 @@
   "src/components/orders/OrderDetailModal.tsx": [
    "src/components/dashboard/RiskScoreGauge.tsx",
    "src/components/map/OrderTrackingMap.tsx",
+   "src/components/orders/OrderGeoEvents.tsx",
    "src/components/orders/StatusTimeline.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
@@ -689,6 +690,13 @@
    "src/lib/lalamoveReasons.ts",
    "src/types/index.ts",
    "src/utils/logger.ts"
+  ],
+  "src/components/orders/OrderGeoEvents.tsx": [
+   "src/components/ui/badge.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/skeleton.tsx",
+   "src/integrations/supabase/client.ts",
+   "src/lib/utils.ts"
   ],
   "src/components/orders/StatusTimeline.tsx": [
    "src/components/ui/badge.tsx",

@@ -6,7 +6,7 @@
    "src/pages (53)"
   ],
   "componentes": [
-   "src/components (126)",
+   "src/components (127)",
    "src/pages (86)",
    "src/hooks (3)"
   ],
@@ -54,7 +54,7 @@
  },
  "barrels_index": 3,
  "extensao_componentes": [
-  ".tsx (216)"
+  ".tsx (217)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)",
    "fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)",
    "docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)",
    "fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)",
-   "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)",
-   "docs: runbook operacional do Google Maps (etapa 97 do plano) (#213)"
+   "feat(geo): politica de retencao configuravel por provedor (etapa 15/211) (#214)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

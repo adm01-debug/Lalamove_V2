@@ -2114,7 +2114,8 @@
     "contacts",
     "lalamove_orders",
     "lalamove_status_history",
-    "lalamove_stops"
+    "lalamove_stops",
+    "order_geo_events"
    ],
    "rpcs": [],
    "edges": [
@@ -2123,7 +2124,8 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-api",
-    "lalamove-uapi"
+    "lalamove-uapi",
+    "send-notification"
    ],
    "canais_realtime": [
     "active-tracking-changes"
@@ -2136,7 +2138,7 @@
     "listbox",
     "option"
    ],
-   "arquivos_puxados": 67
+   "arquivos_puxados": 68
   },
   {
    "caminho": "/password-reset-approvals",
@@ -3677,6 +3679,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "order_geo_events",
     "password_reset_requests",
     "permissions",
     "rate_limit_logs",
@@ -3706,6 +3709,7 @@
     "lalamove-gateway",
     "lalamove-uapi",
     "route-analyzer",
+    "send-notification",
     "simulate-driver-movement",
     "test-notification"
    ],
@@ -3749,7 +3753,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 274
+   "arquivos_puxados": 275
   }
  ],
  "menu": [

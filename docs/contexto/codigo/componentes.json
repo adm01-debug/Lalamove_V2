@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 216,
+ "total": 217,
  "orfaos": 4,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -1125,7 +1125,7 @@
     "OrderDetailModal"
    ],
    "export_default": null,
-   "linhas": 979,
+   "linhas": 991,
    "dominio": "components/orders",
    "hooks_locais": [
     "useEvaluateDriver",
@@ -1138,6 +1138,24 @@
    ],
    "edges": [
     "lalamove-api"
+   ],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/orders/OrderGeoEvents.tsx",
+   "exports": [
+    "OrderGeoEvents"
+   ],
+   "export_default": null,
+   "linhas": 194,
+   "dominio": "components/orders",
+   "hooks_locais": [],
+   "tabelas": [
+    "order_geo_events"
+   ],
+   "edges": [
+    "send-notification"
    ],
    "usado_por": 1,
    "orfao": false
@@ -1328,7 +1346,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 106,
+   "usado_por": 107,
    "orfao": false
   },
   {
@@ -1343,7 +1361,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 126,
+   "usado_por": 127,
    "orfao": false
   },
   {
@@ -1931,7 +1949,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 27,
+   "usado_por": 28,
    "orfao": false
   },
   {

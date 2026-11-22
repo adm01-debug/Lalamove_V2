@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `460de121e3e8f5beb3af05f5c5ed2d7f59a2374e` (2026-11-21T23:47:08-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1a1f4865fbf7eb0b1b84a233178c2066dc498341` (2026-11-21T23:58:41-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (502), SQL (187), JavaScript (112), Markdown (101), JSON (34), Shell (9), Python (8), YAML (8)
+- linguagens: TypeScript (504), SQL (187), JavaScript (112), Markdown (101), JSON (34), Shell (9), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,28 +35,28 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 988 |
-| arquivos_codigo | 613 |
-| linhas_codigo | 120021 |
+| arquivos_total | 990 |
+| arquivos_codigo | 615 |
+| linhas_codigo | 120323 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
 | itens_menu | 38 |
 | modulos | 43 |
-| componentes | 216 |
+| componentes | 217 |
 | hooks | 100 |
 | edge_functions | 26 |
 | tabelas | 87 |
 | migrations | 183 |
 | cron_jobs | 21 |
-| testes | 123 |
+| testes | 124 |
 | workflows | 5 |
 | scripts | 106 |
 | docs_md | 101 |
 
 ## Onde ficam as coisas
 - telas: src/pages (53)
-- componentes: src/components (126), src/pages (86), src/hooks (3)
+- componentes: src/components (127), src/pages (86), src/hooks (3)
 - hooks: src/hooks (85), src/components (12), scripts/ai-context (1)
 - servicos_logica: src/lib (22), src/utils (6), src/integrations (4)
 - testes: co-localizado (__tests__) (48), guards em scripts/ (46), supabase/functions/<edge> (14)
@@ -74,14 +74,14 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
 | components/dashboard | 0 | 0 | 13 | 42 | 4 | 5 |
-| components/layout | 0 | 0 | 6 | 169 | 13 | 35 |
+| components/layout | 0 | 0 | 6 | 169 | 14 | 36 |
 | components/map | 0 | 0 | 18 | 21 | 2 | 4 |
-| components/orders | 0 | 0 | 8 | 31 | 6 | 5 |
+| components/orders | 0 | 0 | 9 | 31 | 7 | 6 |
 | components/ui | 0 | 0 | 59 | 8 | 0 | 0 |
 | functions | 0 | 0 | 44 | 0 | 5 | 42 |
-| hooks | 0 | 0 | 86 | 209 | 14 | 46 |
+| hooks | 0 | 0 | 86 | 209 | 15 | 47 |
 | lib | 0 | 0 | 22 | 8 | 3 | 0 |
-| pages | 37 | 55 | 55 | 194 | 13 | 46 |
+| pages | 37 | 55 | 55 | 194 | 14 | 47 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -208,7 +208,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `rotate-tokens` [Segredos/token] — tabelas: alerts, bitrix24_tokens; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `route-analyzer` [Lovable AI (custo por token)] — tabelas: alerts, drivers, lalamove_orders; chamada por 1 arquivo(s) do front
 - `seed-fix-rls` [Manutenção/DDL] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
-- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens, geo_defaults, job_queue, order_geo_events; chamada por 0 arquivo(s) do front
+- `send-notification` [Notificações/Alertas] — tabelas: alert_configurations, alerts, alerts_sent, bitrix24_tokens, geo_defaults, job_queue, order_geo_events; chamada por 1 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 1 arquivo(s) do front
 
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7600 nós · 16161 arestas · 574 comunidades · grafo do commit `460de121`
-- comunidades maiores: cn (233), card.tsx (154), client.ts (113), badge.tsx (105), snapshot.py (102), button.tsx (100), contract.ts (89), mapbox.ts (85), react (84), dependencies (80), gerar.mjs (76), lint-ratchet.mjs (75)
+- 7613 nós · 16196 arestas · 586 comunidades · grafo do commit `1a1f4865`
+- comunidades maiores: cn (201), button.tsx (119), react (113), snapshot.py (102), ref_node_path (95), badge.tsx (91), RateLimitDashboardPage.tsx (83), dependencies (80), package.json (77), gerar.mjs (76), @tanstack/react-query (75), DashboardRedesigned.tsx (72)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -370,6 +370,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `1a1f486` feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)
 - 2026-11-21 `460de12` fix: semantica ARIA no autocomplete de endereco (etapa 82) (#218)
 - 2026-11-21 `845586a` docs: fecha etapa 100 e marca etapas 15/97 implementadas (#215)
 - 2026-11-21 `c9424eb` fix: exibe atribuicao Mapbox no mapa de trajeto do pedido (#216)
@@ -384,7 +385,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `54419e1` docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)
 - 2026-11-21 `2a87c43` fix(migration): resolve colisao das constraints de place_id (#204)
 - 2026-11-21 `e0bceb0` docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)
-- 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

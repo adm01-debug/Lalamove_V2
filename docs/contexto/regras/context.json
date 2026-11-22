@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "460de121e3e8f5beb3af05f5c5ed2d7f59a2374e",
+  "sha": "1a1f4865fbf7eb0b1b84a233178c2066dc498341",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:47 UTC",
-  "files_total": 982,
-  "code_files": 809,
-  "code_lines": 139043
+  "generated_at": "2026-11-22 02:59 UTC",
+  "files_total": 984,
+  "code_files": 811,
+  "code_lines": 139345
  },
  "version": "1.3.2",
- "facts_hash": "59535ca4c3447ee0",
+ "facts_hash": "3c01638f4645a241",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -180,7 +180,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 273,
-   ".tsx": 229,
+   ".tsx": 231,
    ".sql": 187,
    ".mjs": 107,
    ".py": 8,
@@ -17123,7 +17123,8 @@
      "contacts",
      "lalamove_orders",
      "lalamove_status_history",
-     "lalamove_stops"
+     "lalamove_stops",
+     "order_geo_events"
     ],
     "invokes_transitive": [
      "evaluate-driver",
@@ -17131,10 +17132,11 @@
      "geo-gateway",
      "get-mapbox-token",
      "lalamove-api",
-     "lalamove-uapi"
+     "lalamove-uapi",
+     "send-notification"
     ],
     "rpc_transitive": [],
-    "deps_count": 67
+    "deps_count": 68
    },
    {
     "path": "",
@@ -18909,7 +18911,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 154,
+  "components_count": 156,
   "hooks": [
    {
     "name": "useOrders",
@@ -20376,8 +20378,8 @@
   },
   {
    "module": "src/components",
-   "files": 153,
-   "lines": 27983,
+   "files": 155,
+   "lines": 28285,
    "tables": [
     "active_tracking",
     "alerts",
@@ -20386,6 +20388,7 @@
     "lalamove_orders",
     "lalamove_status_history",
     "lalamove_stops",
+    "order_geo_events",
     "user_roles",
     "webhook_events"
    ],
@@ -21956,6 +21959,9 @@
     ]
    },
    "order_geo_events": {
+    "select": [
+     "src/components/orders/OrderGeoEvents.tsx"
+    ],
     "update": [
      "supabase/functions/send-notification/index.ts"
     ]
@@ -22500,8 +22506,15 @@
     "device_id"
    ],
    "order_geo_events": [
+    "distance_m",
+    "eta_min",
+    "event_type",
     "id",
-    "notification_status"
+    "notification_status",
+    "notified_at",
+    "order_id",
+    "stop_index",
+    "triggered_at"
    ],
    "query_telemetry": [
     "created_at",
@@ -23218,6 +23231,7 @@
     "src/components/dashboard/AIRouteChatbot.tsx"
    ],
    "send-notification": [
+    "src/components/orders/OrderGeoEvents.tsx",
     "supabase/functions/check-driver-alerts/index.ts",
     "supabase/functions/escalate-alerts/index.ts",
     "supabase/functions/job-worker/index.ts"
@@ -24547,6 +24561,10 @@
    {
     "file": "src/components/orders/OrderDetailModal.tsx",
     "msg": "Não foi possível copiar o link"
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.tsx",
+    "msg": "Erro ao reenviar aviso"
    },
    {
     "file": "src/components/ui/alert.tsx",
@@ -30251,6 +30269,12 @@
     "kind": "compara"
    },
    {
+    "file": "src/components/orders/OrderGeoEvents.tsx",
+    "field": "notification_status",
+    "value": "no_recipient",
+    "kind": "compara"
+   },
+   {
     "file": "src/components/orders/StatusTimeline.tsx",
     "field": "state",
     "value": "done",
@@ -35753,6 +35777,26 @@
     "name": "mostra endereço já usado antes de qualquer chamada ao provedor"
    },
    {
+    "file": "src/components/orders/OrderGeoEvents.test.tsx",
+    "name": "OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio)"
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.test.tsx",
+    "name": "estado vazio explica o que aparece ali em vez de sumir"
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.test.tsx",
+    "name": "lista evento com rótulo em PT-BR, distância, ETA e status"
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.test.tsx",
+    "name": "status sem destinatário é sinalizado na UI (motivo do reenvio)"
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.test.tsx",
+    "name": "reenvio chama send-notification com skip_dedup e geo_event_id"
+   },
+   {
     "file": "src/hooks/useGeoSearch.test.tsx",
     "name": "useAddressSearchBox"
    },
@@ -38114,6 +38158,10 @@
    },
    {
     "file": "src/components/orders/OrderDetailModal.tsx",
+    "call": "invoke("
+   },
+   {
+    "file": "src/components/orders/OrderGeoEvents.tsx",
     "call": "invoke("
    },
    {
@@ -42442,6 +42490,10 @@
     "limit": "1"
    },
    {
+    "file": "src/components/orders/OrderGeoEvents.tsx",
+    "limit": "50"
+   },
+   {
     "file": "src/components/webhooks/WebhookSecurityPanel.tsx",
     "limit": "5000"
    },
@@ -43655,6 +43707,14 @@
       "compara:src/components/health/CronJobsHealthPanel.tsx"
      ]
     },
+    "notification_status": {
+     "no_recipient": [
+      "compara:src/components/orders/OrderGeoEvents.tsx"
+     ],
+     "queued": [
+      "filtra:supabase/functions/send-notification/index.ts"
+     ]
+    },
     "state": {
      "done": [
       "compara:src/components/orders/StatusTimeline.tsx"
@@ -43714,11 +43774,6 @@
     "pop_status": {
      "picked_up": [
       "escreve:supabase/functions/lalamove-webhook/index.ts"
-     ]
-    },
-    "notification_status": {
-     "queued": [
-      "filtra:supabase/functions/send-notification/index.ts"
      ]
     },
     "pod_status": {
@@ -55844,7 +55899,7 @@
   },
   "src/components/orders/OrderDetailModal.tsx": {
    "path": "src/components/orders/OrderDetailModal.tsx",
-   "lines": 979,
+   "lines": 991,
    "exports": [
     "const OrderDetailModal"
    ],
@@ -55914,6 +55969,66 @@
    ],
    "pagination": [
     "1"
+   ]
+  },
+  "src/components/orders/OrderGeoEvents.test.tsx": {
+   "path": "src/components/orders/OrderGeoEvents.test.tsx",
+   "lines": 96,
+   "is_test": true,
+   "rule_comments": [
+    "* Cadeia de query do supabase-js: from().select().eq().order().limit() */"
+   ],
+   "tests": [
+    "OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio)",
+    "estado vazio explica o que aparece ali em vez de sumir",
+    "lista evento com rótulo em PT-BR, distância, ETA e status",
+    "status sem destinatário é sinalizado na UI (motivo do reenvio)",
+    "reenvio chama send-notification com skip_dedup e geo_event_id"
+   ]
+  },
+  "src/components/orders/OrderGeoEvents.tsx": {
+   "path": "src/components/orders/OrderGeoEvents.tsx",
+   "lines": 194,
+   "exports": [
+    "function OrderGeoEvents"
+   ],
+   "tables": [
+    {
+     "table": "order_geo_events",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "order_geo_events": [
+     "distance_m",
+     "eta_min",
+     "event_type",
+     "id",
+     "notification_status",
+     "notified_at",
+     "order_id",
+     "stop_index",
+     "triggered_at"
+    ]
+   },
+   "invokes": [
+    "send-notification"
+   ],
+   "errors": [
+    "Erro ao reenviar aviso"
+   ],
+   "status_values": [
+    {
+     "field": "notification_status",
+     "value": "no_recipient",
+     "kind": "compara"
+    }
+   ],
+   "side_effects": [
+    "invoke("
+   ],
+   "pagination": [
+    "50"
    ]
   },
   "src/components/orders/StatusTimeline.tsx": {
@@ -69006,10 +69121,21 @@
   }
  },
  "git": {
-  "sha": "460de121e3e8f5beb3af05f5c5ed2d7f59a2374e",
+  "sha": "1a1f4865fbf7eb0b1b84a233178c2066dc498341",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "1a1f486",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "feat: painel de eventos geo no pedido com reenvio manual (etapas 62/63) (#219)",
+    "files": [
+     "src/components/orders/OrderDetailModal.tsx",
+     "src/components/orders/OrderGeoEvents.test.tsx",
+     "src/components/orders/OrderGeoEvents.tsx"
+    ]
+   },
    {
     "sha": "460de12",
     "date": "2026-11-21",
@@ -69338,15 +69464,6 @@
     "subject": "test(e2e): round-trip real autocomplete -> retrieve (etapa 85) (#184)",
     "files": [
      "e2e/autocomplete.e2e.ts"
-    ]
-   },
-   {
-    "sha": "3e9f386",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix: nao-entrega de alerta deixa rastro em alerts_sent (#183)",
-    "files": [
-     "supabase/functions/send-notification/index.ts"
     ]
    }
   ],

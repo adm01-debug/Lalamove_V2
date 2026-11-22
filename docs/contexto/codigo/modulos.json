@@ -780,6 +780,7 @@
     "lalamove-gateway",
     "lalamove-uapi",
     "route-analyzer",
+    "send-notification",
     "simulate-driver-movement",
     "test-notification"
    ],
@@ -809,6 +810,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "order_geo_events",
     "password_reset_requests",
     "permissions",
     "rate_limit_logs",
@@ -1056,13 +1058,13 @@
   },
   {
    "modulo": "components/orders",
-   "arquivos": 8,
-   "testes": 1,
-   "linhas": 3200,
+   "arquivos": 9,
+   "testes": 2,
+   "linhas": 3406,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 8,
+   "componentes": 9,
    "hooks_locais": [
     "useAddressSearch",
     "useAddressSearchBox",
@@ -1103,14 +1105,16 @@
     "geo-gateway",
     "get-mapbox-token",
     "lalamove-api",
-    "lalamove-uapi"
+    "lalamove-uapi",
+    "send-notification"
    ],
    "tabelas": [
     "active_tracking",
     "contacts",
     "lalamove_orders",
     "lalamove_status_history",
-    "lalamove_stops"
+    "lalamove_stops",
+    "order_geo_events"
    ],
    "rpcs": [],
    "buckets": [],
@@ -1132,13 +1136,15 @@
    ],
    "diretos": {
     "edges": [
-     "lalamove-api"
+     "lalamove-api",
+     "send-notification"
     ],
     "tabelas": [
      "active_tracking",
      "lalamove_orders",
      "lalamove_status_history",
-     "lalamove_stops"
+     "lalamove_stops",
+     "order_geo_events"
     ],
     "rpcs": []
    },
@@ -1157,6 +1163,7 @@
    ],
    "pacotes_externos": [
     "@tanstack/react-query",
+    "date-fns",
     "lucide-react",
     "papaparse",
     "sonner"
@@ -2060,6 +2067,7 @@
     "lalamove-uapi",
     "new-device-alert",
     "route-analyzer",
+    "send-notification",
     "simulate-driver-movement",
     "test-notification"
    ],
@@ -2095,6 +2103,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "order_geo_events",
     "password_reset_requests",
     "permissions",
     "query_telemetry",
@@ -2813,6 +2822,7 @@
     "lalamove-gateway",
     "lalamove-uapi",
     "route-analyzer",
+    "send-notification",
     "simulate-driver-movement",
     "test-notification"
    ],
@@ -2848,6 +2858,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "order_geo_events",
     "password_reset_requests",
     "permissions",
     "query_telemetry",

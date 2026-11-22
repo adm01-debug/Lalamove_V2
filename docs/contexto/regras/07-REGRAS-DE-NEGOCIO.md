@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `460de121e3` · branch `main` · 2026-11-22 02:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1a1f4865fb` · branch `main` · 2026-11-22 02:59 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -792,6 +792,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `user` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx`<br>`supabase/functions/route-analyzer/index.ts` |
 | `role` | `viewer` | compara, escreve | `src/components/layout/sidebar-config.ts`<br>`src/pages/RolesPage.tsx` |
 | `last_status` | `succeeded` | compara | `src/components/health/CronJobsHealthPanel.tsx` |
+| `notification_status` | `no_recipient` | compara | `src/components/orders/OrderGeoEvents.tsx` |
+| `notification_status` | `queued` | filtra | `supabase/functions/send-notification/index.ts` |
 | `state` | `CLOSED` | escreve | `src/utils/circuitBreaker.ts` |
 | `state` | `OPEN` | compara | `src/utils/circuitBreaker.ts` |
 | `state` | `current` | compara | `src/components/orders/StatusTimeline.tsx` |
@@ -806,7 +808,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `approval_status` | `PENDING` | escreve | `src/integrations/supabase/types.ts` |
 | `tracking_status` | `ACTIVE` | filtra | `supabase/functions/job-worker/index.ts` |
 | `pop_status` | `picked_up` | escreve | `supabase/functions/lalamove-webhook/index.ts` |
-| `notification_status` | `queued` | filtra | `supabase/functions/send-notification/index.ts` |
 | `pod_status` | `NOT_REQUIRED` | compara | `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql` |
 
 ### E.4 Enums e listas de valores
@@ -1427,6 +1428,7 @@ _nenhum item encontrado_
 | Limite | Arquivo |
 |---|---|
 | 1 | `src/components/orders/OrderDetailModal.tsx` |
+| 50 | `src/components/orders/OrderGeoEvents.tsx` |
 | 5000 | `src/components/webhooks/WebhookSecurityPanel.tsx` |
 | 1 | `src/hooks/healthChecks.ts` |
 | 20 | `src/hooks/useActiveAlerts.ts` |
@@ -1621,6 +1623,7 @@ _nenhum item encontrado_
 | Erro ao trocar motorista | `src/components/orders/OrderDetailModal.tsx` |
 | Não foi possível copiar | `src/components/orders/OrderDetailModal.tsx` |
 | Não foi possível copiar o link | `src/components/orders/OrderDetailModal.tsx` |
+| Erro ao reenviar aviso | `src/components/orders/OrderGeoEvents.tsx` |
 |  className={cn(alertVariants({ variant }), className)} {...props} /> )); Alert.displayName =  | `src/components/ui/alert.tsx` |
 | useChart must be used within a <ChartContainer /> | `src/components/ui/chart.tsx` |
 | useHints must be used within a HintProvider | `src/components/ui/contextual-hints.tsx` |
@@ -1769,8 +1772,7 @@ _nenhum item encontrado_
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
 | Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
 | Token não pode ser vazio | `src/pages/UAPISettingsPage.tsx` |
-| Falha ao marcar webhook | `src/pages/WebhooksPage.tsx` |
-| … +95 linhas — lista completa em `context.json` | |
+| … +96 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1803,7 +1805,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (955 testes em 82 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (960 testes em 83 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -1874,6 +1876,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 6 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `src/components/map/hooks/__tests__/useMapAlerts.test.ts` | 5 | useMapAlerts · detecta fora de rota via is_on_route=false · registra timestamp de parada e o preserva enquanto continua parado · calcula tendência de ETA (improving / worsening / stable) … |
+| `src/components/orders/OrderGeoEvents.test.tsx` | 5 | OrderGeoEvents — etapas 62/63 (painel de eventos + reenvio) · estado vazio explica o que aparece ali em vez de sumir · lista evento com rótulo em PT-BR, distância, ETA e status · status sem destinatário é sinalizado na UI (motivo do reenvio) … |
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
@@ -1909,6 +1912,7 @@ _nenhum item encontrado_
 | `invoke(` | `src/components/orders/ImportCSVDialog.tsx` |
 | `invoke(` | `src/components/orders/NewOrderDialog.tsx` |
 | `invoke(` | `src/components/orders/OrderDetailModal.tsx` |
+| `invoke(` | `src/components/orders/OrderGeoEvents.tsx` |
 | `invoke(` | `src/hooks/healthChecks.ts` |
 | `.add('keyboard-user'` | `src/hooks/useAccessibility.tsx` |
 | `.add('mouse-user'` | `src/hooks/useAccessibility.tsx` |

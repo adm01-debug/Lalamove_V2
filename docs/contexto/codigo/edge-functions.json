@@ -983,7 +983,9 @@
     "schemas.ts",
     "telemetry.ts"
    ],
-   "chamada_pelo_front": [],
+   "chamada_pelo_front": [
+    "src/components/orders/OrderGeoEvents.tsx"
+   ],
    "chamada_por_edges": [
     "check-driver-alerts",
     "escalate-alerts",
