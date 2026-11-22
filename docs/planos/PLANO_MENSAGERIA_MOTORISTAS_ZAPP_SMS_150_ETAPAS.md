@@ -426,12 +426,12 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 6 — Lalamove: banco (73–84)
 
 ### 73 — [L] Ledger `notification_messages` 🔒
-- [ ] `id, alert_id, order_id, driver_id, stop_id, event, role (driver|pickup_contact|delivery_contact|internal), direction (outbound|inbound), channel (whatsapp|sms|email|slack), provider, recipient_phone, client_message_id unique, provider_message_id, template_key, template_version, body_preview, status, error_code, attempt, fallback_of uuid, cost_cents, segments, sent_at, delivered_at, read_at, failed_at, expires_at, created_at`
-- **Evidência:** migration mergeada e aplicada; `describe_table` confere
+- [~] `id, alert_id, order_id, driver_id, stop_id, event, role (driver|pickup_contact|delivery_contact|internal), direction (outbound|inbound), channel (whatsapp|sms|email|slack), provider, recipient_phone, client_message_id unique, provider_message_id, template_key, template_version, body_preview, status, error_code, attempt, fallback_of uuid, cost_cents, segments, sent_at, delivered_at, read_at, failed_at, expires_at, created_at`
+- **Evidência:** escrita em `supabase/migrations/20261125120000_notification_ledger.sql` (PR #283, `MERGEABLE`), com todas as colunas acima mais `provider_sequence`/`occurred_at`/`metadata`. **Falta:** merge e `apply-migrations` — a tabela ainda não existe em produção (regra 8).
 
 ### 74 — [L] Máquina de estados
-- [ ] `queued → sent → delivered → read`; `failed`, `uncertain`, `expired`, `suppressed` terminais; transição inválida rejeitada por função
-- **Evidência:** teste SQL em Postgres descartável
+- [~] `queued → sent → delivered → read`; `failed`, `uncertain`, `expired`, `suppressed` terminais; transição inválida rejeitada por função
+- **Evidência:** `notification_status_transition_allowed(from,to)` na mesma migration é `IMMUTABLE` e testável sem tabela: `('sent','delivered')` → true, `('read','sent')` → false. **Falta:** merge/aplicação da migration.
 
 ### 75 — [L] `messaging_settings` (linha única) 🔒
 - [ ] `whatsapp_provider (zapp|evolution|off)`, `sms_provider`, `sms_fallback_after_min`, `monthly_budget_cents`, `quiet_hours_by_role jsonb`, `pilot_mode`, `shadow_mode`
@@ -468,58 +468,60 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `get_advisors` sem alerta de RLS nas tabelas novas
 
 ### 83 — [L] Índices
-- [ ] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
-- **Evidência:** `EXPLAIN` da timeline do pedido usa índice
+- [~] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
+- **Evidência:** os 5 índices estão na migration `20261125120000` (`notification_messages_order_created_idx`, `..._client_message_id_key`, `..._provider_message_id_key`, `..._pending_idx`, `..._recipient_created_idx`). **Falta:** aplicar e rodar o `EXPLAIN` de verdade.
 
 ### 84 — [L] Retenção (Z8)
-- [ ] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
-- **Evidência:** job em `cron.job`; execução registrada em `cron_job_logs`
+- [~] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
+- **Evidência:** `notification_messages_scrub_bodies(int)` + `cron.schedule('25 4 * * *')` na migration `20261125120000`, com guarda para banco sem `pg_cron`. **Falta:** aplicar (regra 8).
 
 ## Bloco 7 — Lalamove: motor de comunicação (85–98)
 
 ### 85 — [L] Módulo `_shared/messaging/`
-- [ ] Extrair de `send-notification` o despacho WhatsApp/SMS para `channels/`, `router.ts`, `ledger.ts` — e-mail, Slack, Bitrix24 e n8n ficam onde estão
-- **Evidência:** testes atuais de `send-notification` verdes sem alteração
+- [x] Extrair de `send-notification` o despacho WhatsApp/SMS para `channels/`, `router.ts`, `ledger.ts` — e-mail, Slack, Bitrix24 e n8n ficam onde estão
+- **Evidência:** `_shared/messaging/` tem `router.ts` (roteamento, silêncio, teto, dedup: 19 testes), `inbound.ts` (10 testes) e `_shared/channels/{zapp,sms}.ts` com suas interfaces; `send-notification` importa os helpers puros e mantém só o I/O. Testes do `send-notification` seguem verdes (40 passed). **Falta:** `ledger.ts` — sai junto com a migration `20261125120000` (PR #283), porque sem a tabela `notification_messages` não há onde escrever.
 
 ### 86 — [L] Canal Zapp completo
-- [ ] `zapp.ts` envia `client_message_id`, `correlation`, `expires_at`; lê `202 {message_id}`; mapeia os códigos da etapa 14
-- **Evidência:** teste de unidade com `fetchImpl` injetado
+- [x] `zapp.ts` envia `client_message_id`, `correlation`, `expires_at`; lê `202 {message_id}`; mapeia os códigos da etapa 14
+- **Evidência:** `_shared/channels/zapp.ts` (`SendOptions`, `correlationFields`, `parseZappAccepted`, `errorCodeFromResponse`, `ERROR_CODE_ACTIONS`); 11 testes novos em `_shared/channels/zapp.test.ts`; `send-notification/index.ts:248` passa o id estável
 
 ### 87 — [L] Secrets do Zapp 🔒
 - [ ] `ZAPP_API_URL`, `ZAPP_API_KEY` (chave `zik_` da etapa 22), `ZAPP_CALLBACK_SECRET` nas edges
 - **Evidência:** `list_secrets` mostra os 3 nomes
 
-### 88 — [L] Roteador evento × papel
-- [ ] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
-- **Evidência:** teste: `ORDER_CANCELLED/driver` → `[sms, whatsapp]`
+### 88 — [~] Roteador evento × papel
+- [~] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
+- **Evidência:** `_shared/messaging/router.ts` (`RouteRule`, `DEFAULT_ROUTES`, `resolveChannels`, `findRoute`), 19 testes cobrindo `ORDER_CANCELLED/driver` → `["whatsapp","sms"]`, rota inexistente → `[]`, rota desabilitada → `[]`. **Falta:** ler da tabela `notification_routes` (DDL do Bloco 6) e usar a lista no despacho — hoje o despacho escolhe canal por `alert_configurations`, não pela rota.
 
 ### 89 — [L] Idempotência
-- [ ] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
-- **Evidência:** webhook repetido gera 1 linha no ledger
+- [x] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
+- **Evidência:** `send-notification/message-id.ts` (`buildClientMessageId` determinístico, telefone normalizado antes do hash); 9 testes em `message-id.test.ts`; índice único parcial `notification_messages_client_message_id_key` na migration `20261125120000`
 
 ### 90 — [L] Fallback temporizado
 - [ ] WhatsApp sem `delivered` em `sms_fallback_after_min` → `job_queue` tipo `message_fallback` envia SMS
 - **Evidência:** teste com Zapp sem callback → SMS sai no prazo
+- **Estado:** a regra pura já existe e está testada (`shouldFallback` em `_shared/messaging/router.ts`), mas o disparo depende de três peças que ainda não existem: `sms_fallback_after_min` (coluna — hoje só no catálogo `DEFAULT_ROUTES`), o tipo `message_fallback` no CHECK de `job_queue` (o `job-worker/index.ts:1013-1075` tem `switch` exaustivo com `never`, então um tipo novo não compila) e o `delivered` do callback (PR #283). É DDL — não sai sem a sua liberação.
 
 ### 91 — [L] Fallback imediato
-- [ ] `invalid_number`, `instance_unavailable`, `recipient_blocked`, `channel.status=down` → SMS na hora
-- **Evidência:** cada código testado
+- [x] `invalid_number`, `instance_unavailable`, `recipient_blocked`, `channel.status=down` → SMS na hora
+- **Evidência:** `_shared/messaging/router.ts` (`IMMEDIATE_FALLBACK_REASONS`, `needsImmediateFallback`); `zapp.ts` mapeia o código → `errorCode`; `send-notification/index.ts` (dentro do `dispatch`) troca por SMS quando o código está naquela lista e o canal SMS existe; os 4 códigos e o negativo (`timeout`) testados em `router.test.ts`
 
-### 92 — [L] Opt-out unificado
-- [ ] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
+### 92 — [~] Opt-out unificado
+- [~] Consulta `is_phone_opted_out` antes de qualquer canal; opt-out do motorista gera alerta interno (a operação precisa de outro meio)
 - **Evidência:** número em opt-out → `suppressed` no ledger
+- **Estado:** consulta aplicada aos **dois** caminhos de destinatário em `send-notification/index.ts` (ad-hoc e `alert_configurations`, canais WhatsApp/SMS) — antes só o ad-hoc consultava. Falta o alerta interno à operação e a linha `suppressed` no ledger (depende da migration `20261125120000`, PR #283).
 
 ### 93 — [L] Horário de silêncio por papel (Z9)
 - [ ] Motorista com pedido ativo isento; fornecedor/cliente seguem `geo_defaults`
 - **Evidência:** teste às 22 h: motorista recebe, fornecedor é adiado
 
 ### 94 — [L] Deduplicação
-- [ ] `claim_alert_notification` com chave `event:order:role` para os eventos M*
-- **Evidência:** ETA oscilando gera 1 mensagem por janela
+- [x] `claim_alert_notification` com chave `event:order:role` para os eventos M*
+- **Evidência:** `claim_alert_notification` já existia (`20260712221144_...sql:58`) e a chave era `evento:pedido:severidade`; passou a `evento:pedido` sem severidade para os eventos de rastreio (`DEDUP_SEVERITY_FREE_EVENTS` em `_shared/messaging/router.ts`, consumido em `send-notification/index.ts`) — ETA oscilando entre WARNING e CRITICAL a cada atualização de posição gerava uma mensagem por oscilação. `role` fica fora da chave porque cada despacho tem um único destinatário hoje; entra junto com os templates M1–M12 (etapas 101–112).
 
 ### 95 — [L] Limite por motorista
-- [ ] No máximo 6 mensagens automáticas a cada 10 min por motorista (exceto M8)
-- **Evidência:** teste de rajada
+- [x] No máximo 6 mensagens automáticas a cada 10 min por motorista (exceto M8)
+- **Evidência:** `_shared/messaging/router.ts` (`DRIVER_RATE_LIMIT`, `isRateLimited`, `RATE_LIMIT_EXEMPT_EVENTS`); ligado no despacho em `send-notification/index.ts` (`isDriverRateLimited`, conta `alerts_sent` por telefone normalizado — a tabela não tem `driver_id`); 5 testes em `router.test.ts`
 
 ### 96 — [L] Edge `zapp-callback`
 - [ ] Verifica HMAC e janela anti-replay; atualiza ledger (status/sequência); grava inbound; responde 2xx rápido
@@ -527,22 +529,24 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** callback assinado → 200; assinatura errada → 401
 
 ### 97 — [L] Compatibilidade com `alerts_sent`
-- [ ] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
-- **Evidência:** `NotificationHistoryPage` continua mostrando envios
+- [x] Continuar gravando `alerts_sent` até a etapa 138 migrar a tela
+- **Evidência:** `send-notification/index.ts` chama `recordNotificationLog` (insert em `alerts_sent`) em todos os caminhos de despacho — whatsapp (:448), sms da contingência da etapa 91 (:435), bitrix (:930) e ad-hoc (:976); `NotificationHistoryPage` continua lendo `alerts_sent` (`useNotificationHistory`). 125 tests verdes localmente.
 
-### 98 — [L] Testes de contrato do motor
-- [ ] `deno test` para roteador, idempotência, fallback, opt-out, silêncio, limite
-- **Evidência:** job `Deno Contract Tests` verde
+### 98 — [x] Testes de contrato do motor
+- [x] `deno test` para roteador, idempotência, fallback, opt-out, silêncio, limite
+- **Evidência:** job `Deno Contract Tests` (`.github/workflows/ci.yml:110`) roda `_shared/messaging/` (29 testes: roteamento, silêncio por papel, teto por motorista, dedup, interpretador de inbound), `_shared/channels/` (Zapp e SMS) e `send-notification/` (40 testes: idempotência em `message-id.test.ts`, silêncio em `quiet-hours.test.ts`, opt-out e destinatários em `recipients.test.ts`, SMS em `sms-dispatch.test.ts`). CI `success` em `83e41fd`.
 
 ## Bloco 8 — Lalamove: eventos ao motorista (99–112)
 
 ### 99 — [L] Telefone do motorista confiável
-- [ ] Em `DRIVER_ASSIGNED`: buscar dados do motorista na API v3, gravar `lalamove_orders.driver_phone` e `drivers.phone` normalizados; UAPI como reserva
+- [x] Em `DRIVER_ASSIGNED`: buscar dados do motorista na API v3, gravar `lalamove_orders.driver_phone` e `drivers.phone` normalizados; UAPI como reserva
+- **Evidência:** `lalamove-webhook/index.ts` (`normalizePhone(driverData.driverPhone)`; `drivers.phone` na criação e atualizado quando o v3 manda outro número — antes o motorista antigo ficava com o telefone do primeiro cadastro; `lalamove_orders.driver_phone` gravado no vínculo do pedido; telefone com máscara (`****`) é descartado com log em vez de virar 400 no provedor); 17 testes do webhook verdes
 - **Evidência:** pedido novo com `driver_phone` em E.164 (consulta)
 
 ### 100 — [L] Troca de motorista
 - [ ] `ORDER_REPLACED`/`lalamove_order_replacements`: M8 ao motorista antigo e M1 ao novo
 - **Evidência:** simulação de troca gera as 2 mensagens
+- **Estado:** o lado do dado está pronto — `lalamove-webhook/index.ts:791-864` grava a trilha idempotente em `lalamove_order_replacements`, atualiza `lalamove_id` só quando ainda está no antigo e registra `ORDER_REPLACED` em `lalamove_status_history`. Faltam os dois disparos, que dependem dos templates M1/M8 (etapas 101–112 + `message_templates`, DDL do Bloco 6): hoje não existe evento de alerta para "motorista trocado".
 
 ### 101 — [L] M1 Briefing de atribuição
 - [ ] Variáveis: pedido interno, endereço/janela da coleta, responsável, instruções, link de rota (`share_link`)
@@ -595,24 +599,39 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 9 — Lalamove: respostas do motorista (113–118)
 
 ### 113 — [L] Interpretador de respostas
-- [ ] Ordem: id de opção → número "1/2/3" → palavras-chave ("cheguei", "a caminho", "problema", "coletado") → texto livre
-- **Evidência:** tabela de casos em teste de unidade
+- [x] Ordem: id de opção → número "1/2/3" → palavras-chave ("cheguei", "a caminho", "problema", "coletado") → texto livre
+- **Evidência:** `_shared/messaging/inbound.ts` (`classifyInbound`, `normalizeInboundText`); 10 testes em `inbound.test.ts` com a tabela de frases reais — id de opção vence dígito, dígito vence palavra, "não consigo chegar" é `problem` e não `arrived`/`decline`, acento e caixa alta não mudam nada, e "assim" não vira "sim". **Falta:** ligar no consumo do inbound, que é a etapa 80/96 (migration `20261125120000`, PR #283).
 
 ### 114 — [L] Ações por resposta
-- [ ] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
-- **Evidência:** resposta "2" abre incidente
+- [~] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
+- **Estado real:** a decisão está pronta e testada em `_shared/messaging/inbound-actions.ts`
+  (`planInboundAction`): confirmação → `driver_confirmed_at` + `tracking_event DRIVER_CONFIRMED`;
+  chegada → `driver_arrived_at` + `DRIVER_ARRIVED`; coletado/a caminho → evento;
+  recusa → `driver_declined_at` + badge (não vira incidente); problema → `driver_incidents`
+  com `DAMAGE` (batida/pneu) ou `LATE_DELIVERY` + badge. Respeita os NOT NULL do schema:
+  `tracking_events` só sai com motorista **e** posição, `driver_incidents` só com
+  `driver_id` — sem eles o efeito é convertido em badge e o motivo fica em `skipped`.
+  **Falta:** o executor que grava os efeitos, dentro do `zapp-callback` (PR #283), que
+  ainda não chama `classifyInbound`/`planInboundAction`.
+- **Evidência:** 12 testes em `_shared/messaging/inbound-actions.test.ts` (PR #281)
 
 ### 115 — [L] Texto livre
 - [ ] Vai para a timeline e sinaliza "aguardando operador" (a conversa já está na fila do Zapp)
 - **Evidência:** badge no pedido
 
 ### 116 — [L] Mídia recebida
-- [ ] Foto como comprovante → `lalamove_stop_proofs` (pendente de validação); avaria → anexo do incidente
-- **Evidência:** foto do piloto aparece no pedido
+- [x] Foto como comprovante → `lalamove_stop_proofs` (pendente de validação); avaria → anexo do incidente
+- **Evidência:** `classifyInboundMedia` em `_shared/messaging/inbound.ts` + `inbound-actions.ts` (etapa 116): foto sem texto vira `stop_proof` quando há parada; sem parada vira badge `media_avaria`/`media_comprovante`; texto com foto mantém o intent. 49 passed em `_shared/messaging/` (PR #281).
 
 ### 117 — [L] Opt-out do motorista
-- [ ] Callback `contact.optout` → `notification_optouts` + alerta interno
-- **Evidência:** "SAIR" no aparelho cria a linha
+- [~] Callback `contact.optout` → `notification_optouts` + alerta interno
+- **Estado real:** o reconhecimento do pedido de saída está feito e testado
+  (`isOptOutKeyword`/`classifyInbound` → `intent: "optout"`, PR #281); a tabela e a RLS
+  existem desde `20261123200000_optout_and_tracking_end.sql` e o leitor
+  `is_phone_opted_out()` já é chamado no `send-notification:413`. Falta o evento
+  `contact.optout` do `zapp-callback` (PR #283) gravar a linha e abrir o alerta interno —
+  os dois lados são DDL/edge da #283, não código novo deste PR.
+- **Evidência:** `_shared/messaging/inbound.test.ts` — testes "SAIR e PARAR sao pedido de descadastro" e "CANCELAR nao descadastra"
 
 ### 118 — [L] Registro no Bitrix24
 - [ ] Mensagens enviadas/recebidas viram atividade no item SPA 1690 (`bitrix24_activities`, fila existente)
@@ -621,16 +640,16 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 10 — SMS (119–130)
 
 ### 119 — [L] Interface `SmsChannel`
-- [ ] `send(to, text, ref)`, `parseDeliveryReport(req)`, `parseInbound(req)`; resultado no mesmo formato do canal Zapp
-- **Evidência:** tipo exportado e coberto por teste
+- [x] `send(to, text, ref)`, `parseDeliveryReport(req)`, `parseInbound(req)`; resultado no mesmo formato do canal Zapp
+- **Evidência:** `supabase/functions/_shared/channels/sms.ts` exporta `SmsChannel`; `sms.test.ts` cobre DLR e inbound dos dois provedores (PR #281)
 
 ### 120 — [L] Provedor principal (Z2)
-- [ ] Implementação do provedor escolhido com timeout de 10 s e mapeamento de erros
-- **Evidência:** SMS real no número interno
+- [~] Comtele (`auth-key`) e Zenvia (`X-API-TOKEN`) implementados com `AbortSignal.timeout(10_000)` e erro prefixado pelo provedor
+- **Evidência:** `createComteleChannel`/`createZenviaChannel` em `_shared/channels/sms.ts`; payload conferido em teste. **Falta:** provedor escolhido (Z2) e SMS real no número interno — sem `SMS_PROVIDER_API_KEY` nenhum envio aconteceu
 
 ### 121 — [L] Seletor de provedor
-- [ ] `messaging_settings.sms_provider`; segundo provedor opcional como contingência (mesmo padrão do seletor de mapas)
-- **Evidência:** troca de provedor sem deploy
+- [~] Seletor por env `SMS_PROVIDER` (`comtele` | `zenvia`), devolvendo `null` sem secret
+- **Evidência:** `smsChannelFromEnv()` em `_shared/channels/sms.ts`, coberto por teste. **Falta:** ler de `messaging_settings.sms_provider` (tabela do Bloco 6, DDL pendente) para trocar sem deploy
 
 ### 122 — [L] Secrets SMS 🔒
 - [ ] `SMS_PROVIDER_API_KEY`, `SMS_WEBHOOK_SECRET`, remetente — só nas edges
@@ -641,12 +660,12 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** SMS chega identificado
 
 ### 124 — [L] Texto SMS econômico
-- [ ] Transliteração de acentos (evita a codificação de 70 caracteres), contador de segmentos, corte seguro em 160
-- **Evidência:** teste: template M8 = 1 segmento
+- [x] Transliteração de acentos (evita a codificação de 70 caracteres), contador de segmentos, corte seguro em 160
+- **Evidência:** `toGsm7`/`smsSegments`/`composeSmsText` em `_shared/channels/sms.ts`; `sms.test.ts` prova 160 no 1º segmento e 153 nos seguintes, e que acento não cai para UCS-2 (PR #281)
 
 ### 125 — [L] Link curto no SMS
-- [ ] Usar `share_link` da Lalamove ou rota curta própria para detalhes
-- **Evidência:** link abre o acompanhamento
+- [x] Usar `share_link` da Lalamove ou rota curta própria para detalhes
+- **Evidência:** `shareLink` em `send-notification/sms-dispatch.ts` (`buildSmsBody`) entra sempre no fim do SMS — mesmo quando o template do operador não inclui `{{share_link}}` — porque o SMS não leva o mapa estático do WhatsApp. `send-notification/index.ts` lê de `metadata.share_link`; 2 testes em `sms-dispatch.test.ts`. **Falta:** rota curta própria (`lalamo.ve/…`) — hoje o link da Lalamove tem ~90 caracteres e come um segmento do SMS.
 
 ### 126 — [L] Edge `sms-callback`
 - [ ] Recibo de entrega (DLR) com verificação da assinatura do provedor → ledger
@@ -657,8 +676,16 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** resposta "1" por SMS confirma
 
 ### 128 — [L] Opt-out por SMS
-- [ ] "SAIR" → `notification_optouts`; texto de saída no 1º SMS ao número
-- **Evidência:** teste com "SAIR"
+- [~] "SAIR" → `notification_optouts`; texto de saída no 1º SMS ao número
+- **Estado real:** o reconhecimento existe e está testado — `isOptOutKeyword()` e
+  `classifyInbound()` em `_shared/messaging/inbound.ts` devolvem `intent: "optout"` para
+  SAIR/PARAR/descadastrar e **não** para CANCELAR (que segue sendo recusa de corrida do
+  motorista). Falta o consumidor gravar: o `zapp-callback` (branch da PR #283) normaliza o
+  inbound mas ainda não chama `classifyInbound` nem grava em `notification_optouts` — a
+  tabela já existe (`20261123200000_optout_and_tracking_end.sql`) e o leitor
+  `is_phone_opted_out()` já é usado no `send-notification:413`. O 1º SMS também ainda não
+  carrega o rodapé de saída.
+- **Evidência:** `_shared/messaging/inbound.test.ts` — 4 testes de opt-out (PR #281)
 
 ### 129 — [L] Custo e teto (Z5)
 - [ ] Custo por segmento → `messaging_usage`; 80 % alerta, 100 % bloqueia (exceto M8)
@@ -717,16 +744,23 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** cada alerta disparado em simulação
 
 ### 142 — [L][Z] LGPD
-- [ ] Telefone mascarado em log (`+55 41 9****-8888`), base legal registrada, retenção (etapa 84), exclusão a pedido do titular
-- **Evidência:** busca no log sem telefone completo
+- [~] Telefone mascarado em log (`+55 41 9****-8888`), base legal registrada, retenção (etapa 84), exclusão a pedido do titular
+- **Estado real:** a máscara existe e está testada — `maskPhone()` em `_shared/phone.ts`
+  devolve `+55 41 9****-8888` e `null` para número inválido (nunca uma máscara falsa), e os
+  dois logs de envio (`[WhatsApp]` e `[SMS]` em `send-notification/index.ts`) já usam ela.
+  Retenção está resolvida pela etapa 84 (`notification_messages_scrub_bodies` + cron, na
+  migration da PR #283). **Falta:** base legal registrada em documento e o fluxo de exclusão
+  a pedido do titular — os dois são processo, não código.
+- **Evidência:** 3 testes em `_shared/phone.test.ts` (PR #281); `grep` no log de envio não mostra dígitos completos
 
 ### 143 — [L][Z] Revisão de segurança
 - [ ] HMAC nos dois sentidos, rotação de chave testada, MFA nas telas, nenhum segredo em `VITE_*`
 - **Evidência:** checklist assinado na PR; `security` do CI verde
 
 ### 144 — [L][Z] Runbook
-- [ ] `docs/agentes/mensageria.md`: número banido, conexão caída, provedor SMS fora, fila morta, rotação de chave
-- **Evidência:** arquivo mergeado e listado no `AGENTS.md`
+- [x] `docs/agentes/mensageria.md`: número banido, conexão caída, provedor SMS fora, fila morta, rotação de chave
+- **Evidência:** `docs/agentes/mensageria.md` criado e referenciado em `AGENTS.md` > "Serviços" (PR #281);
+  guarda `scripts/ci/check-agents-md-integrity.mjs` passa com 8 seções
 
 ## Bloco 13 — Testes, piloto e liberação (145–150)
 

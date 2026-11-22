@@ -9,6 +9,7 @@ import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { validateHmacSignature, validateLalamoveV3Signature } from "./security.ts";
 import { normalizeLalamoveV3Payload } from "./normalize.ts";
+import { normalizePhone } from "../_shared/phone.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -383,18 +384,35 @@ serve(async (req) => {
           
           const { data: existing } = await supabase
             .from('drivers')
-            .select('id, name, risk_score, risk_level, total_deliveries, status')
+            .select('id, name, phone, risk_score, risk_level, total_deliveries, status')
             .eq('lalamove_id', lalamoveDriverId)
             .maybeSingle();
           
           let driverId: string;
           let isNewDriver = false;
           
+          // Etapa 99 do plano de mensageria: o telefone do motorista so serve
+          // para mandar WhatsApp se for E.164. A v3 manda cru (`+852...`,
+          // `(41) 99999-8888`) e o motorista antigo nunca era atualizado — o
+          // numero ficava o do primeiro cadastro. Normaliza antes de gravar e
+          // completa o telefone que faltava em quem ja existia.
+          const normalizedDriverPhone = normalizePhone(driverData.driverPhone);
+          if (!normalizedDriverPhone && driverData.driverPhone) {
+            logger.log(`[Webhook] Telefone de motorista inutilizavel descartado: ${String(driverData.driverPhone).slice(0, 6)}…`);
+          }
+
           if (existing) {
             const driver = existing as DriverRecord;
             driverId = driver.id;
             logger.log(`[Webhook] Found existing driver: ${driver.name} (ID: ${driverId})`);
             logger.log(`[Webhook] Current stats - Risk: ${driver.risk_score}, Level: ${driver.risk_level}, Deliveries: ${driver.total_deliveries}, Status: ${driver.status}`);
+            if (normalizedDriverPhone && (driver as { phone?: string | null }).phone !== normalizedDriverPhone) {
+              const { error: phoneError } = await supabase
+                .from('drivers')
+                .update({ phone: normalizedDriverPhone })
+                .eq('id', driverId);
+              if (phoneError) logger.error(`[Webhook] Falha ao atualizar telefone do motorista: ${phoneError.message}`);
+            }
           } else {
             isNewDriver = true;
             const { data: newDriver, error: createError } = await supabase
@@ -402,7 +420,7 @@ serve(async (req) => {
               .insert({
                 lalamove_id: lalamoveDriverId,
                 name: driverData.driverName || 'Unknown',
-                phone: driverData.driverPhone,
+                phone: normalizedDriverPhone,
                 vehicle_type: 'MOTORCYCLE',
                 status: 'PENDING_APPROVAL',
                 risk_score: 5.0,
@@ -421,9 +439,14 @@ serve(async (req) => {
           }
           
           if (orderUuid) {
+            // Etapa 99: o telefone do motorista vive tambem no pedido
+            // (`lalamove_orders.driver_phone`) — e de la que as telas e o
+            // motor de mensageria leem quando ha troca de motorista.
+            const orderPatch: Record<string, unknown> = { driver_id: driverId, status: 'MATCHED' };
+            if (normalizedDriverPhone) orderPatch.driver_phone = normalizedDriverPhone;
             const { data: orderData } = await supabase
               .from('lalamove_orders')
-              .update({ driver_id: driverId, status: 'MATCHED' })
+              .update(orderPatch)
               .eq('id', orderUuid)
               .select('auto_notify_supplier, supplier_contact, customer_name, internal_order_id, pickup_address')
               .single();

@@ -2,22 +2,40 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { logger } from "../_shared/logger.ts";
 import {
-  resolveContractVersion,
-  parseJsonBody,
-  validateContract,
   errorResponse,
+  parseJsonBody,
+  resolveContractVersion,
+  validateContract,
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
-import { missingTemplateVars, renderTemplate, type TemplateVars } from "../_shared/template.ts";
 import {
-  QUIET_HOURS_ALERT_TYPES,
+  missingTemplateVars,
+  renderTemplate,
+  type TemplateVars,
+} from "../_shared/template.ts";
+import {
   isWithinQuietHours,
   nextAllowedTime,
+  QUIET_HOURS_ALERT_TYPES,
   type QuietHours,
 } from "./quiet-hours.ts";
-import { zappChannelFromEnv } from "../_shared/channels/zapp.ts";
-import { normalizePhone } from "../_shared/phone.ts";
+import {
+  type SendOptions,
+  zappChannelFromEnv,
+} from "../_shared/channels/zapp.ts";
+import { smsChannelFromEnv } from "../_shared/channels/sms.ts";
+import { dispatchSms } from "./sms-dispatch.ts";
+import {
+  DEDUP_SEVERITY_FREE_EVENTS,
+  DRIVER_RATE_LIMIT,
+  isRateLimited,
+  needsImmediateFallback,
+  RATE_LIMIT_EXEMPT_EVENTS,
+} from "../_shared/messaging/router.ts";
+
+import { buildClientMessageId, buildCorrelation } from "./message-id.ts";
+import { maskPhone, normalizePhone } from "../_shared/phone.ts";
 import {
   normalizeRecipients,
   recipientKey,
@@ -29,11 +47,13 @@ import {
   shouldAttachStaticMap,
 } from "./static-map.ts";
 
-const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
+const allowedOrigins =
+  Deno.env.get("ALLOWED_ORIGINS")?.split(",").map((o) => o.trim()) || ["*"];
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": allowedOrigins[0],
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 // verify_jwt=true so a valid JWT is required, but that includes ordinary
@@ -42,16 +62,23 @@ const corsHeaders = {
 // service_role (the other edge functions that call send-notification already use it).
 function isServiceRoleCaller(req: Request): boolean {
   try {
-    const token = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
-    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    const token = (req.headers.get("authorization") ?? "").replace(
+      /^Bearer\s+/i,
+      "",
+    );
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
+    );
     return payload.role === "service_role";
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
 /** Arredonda o resultado de um envio para o status persistido em `order_geo_events`. */
 function geoDeliveryStatus(results: Array<{ success: boolean }>): string {
   if (results.length === 0) return "no_recipient";
-  return results.some(r => r.success) ? "sent" : "failed";
+  return results.some((r) => r.success) ? "sent" : "failed";
 }
 
 /** Carrega a janela de horário permitido (`geo_defaults`, linha única `id=true`). */
@@ -73,7 +100,7 @@ async function loadQuietHours(supabase: any): Promise<QuietHours | null> {
 interface NotificationRequest {
   alert_id: string;
   type: string;
-  severity: 'INFO' | 'WARNING' | 'CRITICAL';
+  severity: "INFO" | "WARNING" | "CRITICAL";
   title: string;
   message: string;
   order_id?: string;
@@ -89,9 +116,9 @@ serve(async (req) => {
   try {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-    
+
     const version = resolveContractVersion(req);
     trackContractUsage("send-notification", version);
     const parsedBody = await parseJsonBody(req, version);
@@ -105,7 +132,10 @@ serve(async (req) => {
       version,
     );
     if (!validation.ok) {
-      logger.error("[Notification] Invalid request body:", validation.body.error.fields);
+      logger.error(
+        "[Notification] Invalid request body:",
+        validation.body.error.fields,
+      );
       return errorResponse(validation, corsHeaders);
     }
 
@@ -130,23 +160,37 @@ serve(async (req) => {
     const metadata = extra.metadata;
     const isEscalation = extra.is_escalation === true;
 
-    logger.log(`[Notification] Sending ${severity} alert: ${type}${isEscalation ? " (ESCALATION)" : ""}`);
+    logger.log(
+      `[Notification] Sending ${severity} alert: ${type}${
+        isEscalation ? " (ESCALATION)" : ""
+      }`,
+    );
 
     // ── Deduplication ──────────────────────────────────────────────────────
     // Escalations always bypass dedup (they are intentional re-sends).
     if (!isEscalation && extra.skip_dedup !== true) {
+      // Etapa 94: evento de rastreio nao leva a severidade na chave — o ETA
+      // oscila entre WARNING e CRITICAL a cada atualizacao de posicao e cada
+      // oscilacao abria uma mensagem nova para o mesmo pedido.
       const dedupKey = extra.dedup_key ||
-        `${type}:${order_id ?? driver_id ?? "global"}:${severity}`;
+        (DEDUP_SEVERITY_FREE_EVENTS.has(type)
+          ? `${type}:${order_id ?? driver_id ?? "global"}`
+          : `${type}:${order_id ?? driver_id ?? "global"}:${severity}`);
       const { data: dedupRows, error: dedupError } = await supabase.rpc(
         "claim_alert_notification",
         { p_dedup_key: dedupKey, p_alert_type: type, p_window_seconds: 300 },
       );
       if (dedupError) {
-        logger.error("[Notification] Dedup RPC failed, proceeding:", dedupError);
+        logger.error(
+          "[Notification] Dedup RPC failed, proceeding:",
+          dedupError,
+        );
       } else {
         const claim = Array.isArray(dedupRows) ? dedupRows[0] : dedupRows;
         if (claim && claim.should_send === false) {
-          logger.log(`[Notification] Suppressed by dedup: ${dedupKey} (x${claim.occurrence_count})`);
+          logger.log(
+            `[Notification] Suppressed by dedup: ${dedupKey} (x${claim.occurrence_count})`,
+          );
           await recordGeoEventStatus(supabase, metadata, "skipped");
           return new Response(
             JSON.stringify({
@@ -169,34 +213,60 @@ serve(async (req) => {
     // endpoint de novo quando `next_retry_at` vencer. `metadata.always_send`
     // (motorista chegou, gravado por `geo_emit_event`) e escalonamento
     // (`is_escalation`) sempre furam a janela.
-    if (QUIET_HOURS_ALERT_TYPES.has(type) && metadata?.always_send !== true && !isEscalation) {
+    if (
+      QUIET_HOURS_ALERT_TYPES.has(type) && metadata?.always_send !== true &&
+      !isEscalation
+    ) {
       const quietHours = await loadQuietHours(supabase);
       if (quietHours && !isWithinQuietHours(new Date(), quietHours)) {
         const runAt = nextAllowedTime(new Date(), quietHours);
         const { error: deferError } = await supabase.from("job_queue").insert({
           type: "notification",
-          payload: { alert_id, type, severity, title, message, order_id, driver_id, metadata },
+          payload: {
+            alert_id,
+            type,
+            severity,
+            title,
+            message,
+            order_id,
+            driver_id,
+            metadata,
+          },
           priority: 3,
           max_attempts: 3,
           dedup_key: `deferred:${alert_id}`,
           next_retry_at: runAt.toISOString(),
-          metadata: { source: "send-notification:quiet_hours", deferred_from: new Date().toISOString() },
+          metadata: {
+            source: "send-notification:quiet_hours",
+            deferred_from: new Date().toISOString(),
+          },
         });
         // 23505 = já existe reenvio pendente para este alerta (dedup_key) — não é erro.
         if (deferError && (deferError as { code?: string }).code !== "23505") {
-          logger.error("[Notification] Falha ao reenfileirar fora do horário de silêncio:", deferError);
+          logger.error(
+            "[Notification] Falha ao reenfileirar fora do horário de silêncio:",
+            deferError,
+          );
         } else {
-          logger.log(`[Notification] ${type} fora do horário de silêncio — reenfileirado para ${runAt.toISOString()}`);
+          logger.log(
+            `[Notification] ${type} fora do horário de silêncio — reenfileirado para ${runAt.toISOString()}`,
+          );
         }
         await recordGeoEventStatus(supabase, metadata, "deferred");
         return new Response(
-          JSON.stringify({ success: true, deferred: true, run_at: runAt.toISOString() }),
+          JSON.stringify({
+            success: true,
+            deferred: true,
+            run_at: runAt.toISOString(),
+          }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
     }
 
-    const results: Array<{ channel: string; success: boolean; error?: string }> = [];
+    const results: Array<
+      { channel: string; success: boolean; error?: string }
+    > = [];
 
     // ── Etapa 68: imagem do trajeto no WhatsApp ────────────────────────────
     // Só `DRIVER_APPROACHING_*` leva mapa, e só quando o pedido tem coordenada.
@@ -205,22 +275,31 @@ serve(async (req) => {
     let mediaDataUrl: string | null = null;
     if (shouldAttachStaticMap(type) && order_id) {
       const [{ data: orderRow }, { data: trackingRow }] = await Promise.all([
-        supabase.from('lalamove_orders')
-          .select('pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude')
-          .eq('id', order_id).maybeSingle(),
-        supabase.from('active_tracking')
-          .select('current_latitude, current_longitude, expected_route')
-          .eq('order_id', order_id).maybeSingle(),
+        supabase.from("lalamove_orders")
+          .select(
+            "pickup_latitude, pickup_longitude, delivery_latitude, delivery_longitude",
+          )
+          .eq("id", order_id).maybeSingle(),
+        supabase.from("active_tracking")
+          .select("current_latitude, current_longitude, expected_route")
+          .eq("order_id", order_id).maybeSingle(),
       ]);
-      const staticOptions = buildStaticMapRequestFromRows(orderRow, trackingRow);
+      const staticOptions = buildStaticMapRequestFromRows(
+        orderRow,
+        trackingRow,
+      );
       if (staticOptions) {
         mediaDataUrl = await fetchStaticMap({
           invoke: async (body) => {
-            const { data, error } = await supabase.functions.invoke('geo-gateway', { body });
+            const { data, error } = await supabase.functions.invoke(
+              "geo-gateway",
+              { body },
+            );
             if (error) {
               let detail = error.message ?? String(error);
               try {
-                const raw = await (error as { context?: Response }).context?.text?.();
+                const raw = await (error as { context?: Response }).context
+                  ?.text?.();
                 if (raw) detail = raw.slice(0, 300);
               } catch { /* corpo indisponível */ }
               throw new Error(`geo-gateway: ${detail}`);
@@ -229,7 +308,9 @@ serve(async (req) => {
           },
         }, staticOptions);
       } else {
-        logger.log(`[Notification] Sem coordenada para imagem em ${type} (pedido ${order_id}) — só texto`);
+        logger.log(
+          `[Notification] Sem coordenada para imagem em ${type} (pedido ${order_id}) — só texto`,
+        );
       }
     }
 
@@ -238,26 +319,140 @@ serve(async (req) => {
       channel: string,
       recipient: string,
       effectiveMessage: string = message,
+      role: string = "recipient",
     ): Promise<{ success: boolean; error?: string }> => {
+      // Etapa 95: ponto unico de saida — o teto do motorista vale para o
+      // caminho ad-hoc e o caminho de `alert_configurations`, e so quando o
+      // destino e o telefone do proprio motorista.
+      if (channel === "whatsapp" || channel === "sms") {
+        if (await isDriverRateLimited(recipient)) {
+          logger.log(
+            `[Notification] Limite de ${DRIVER_RATE_LIMIT.maxMessages}/10min atingido para o motorista — ${channel} ignorado`,
+          );
+          const limited = { success: false, error: "rate_limited" };
+          results.push({ channel: `${channel}:${recipient}`, ...limited });
+          await recordNotificationLog(
+            supabase,
+            alert_id,
+            channel,
+            recipient,
+            false,
+            "rate_limited",
+          );
+          return limited;
+        }
+      }
       let result: { success: boolean; error?: string };
       switch (channel) {
         case "whatsapp":
-          result = await sendWhatsApp(recipient, severity, title, effectiveMessage, order_id, driver_id, mediaDataUrl);
+          // Etapa 86/89: id estável do evento + correlação, para o callback do
+          // Zapp (etapa 96) casar a linha do ledger e não duplicar mensagem.
+          result = await sendWhatsApp(
+            recipient,
+            severity,
+            title,
+            effectiveMessage,
+            order_id,
+            driver_id,
+            mediaDataUrl,
+            {
+              clientMessageId: buildClientMessageId({
+                orderId: order_id,
+                event: type,
+                role,
+                phone: recipient,
+              }),
+              correlation: buildCorrelation(
+                { orderId: order_id, event: type, role, phone: recipient },
+                "whatsapp",
+              ),
+            },
+          );
           break;
         case "email":
-          result = await sendEmail(recipient, severity, title, effectiveMessage, order_id, driver_id);
+          result = await sendEmail(
+            recipient,
+            severity,
+            title,
+            effectiveMessage,
+            order_id,
+            driver_id,
+          );
           break;
         case "slack":
-          result = await sendSlack(recipient, severity, title, effectiveMessage, order_id, driver_id);
+          result = await sendSlack(
+            recipient,
+            severity,
+            title,
+            effectiveMessage,
+            order_id,
+            driver_id,
+          );
+          break;
+        case "sms":
+          result = await sendSms(
+            recipient,
+            title,
+            effectiveMessage,
+            order_id,
+            shareLink,
+          );
           break;
         case "n8n":
-          result = await sendN8NWebhook(recipient, { type, severity, title, message: effectiveMessage, order_id, driver_id, metadata });
+          result = await sendN8NWebhook(recipient, {
+            type,
+            severity,
+            title,
+            message: effectiveMessage,
+            order_id,
+            driver_id,
+            metadata,
+          });
           break;
         default:
           result = { success: false, error: `Unsupported channel: ${channel}` };
       }
+
+      // Etapa 91: recusa definitiva do WhatsApp (numero invalido, instancia fora,
+      // destinatario bloqueado) nao espera o fallback temporizado — o texto sai
+      // por SMS agora, senao o motorista so descobre que perdeu a entrega quando
+      // o cliente liga. Motivo transitorio (429/5xx) continua no WhatsApp.
+      const waErrorCode = (result as { errorCode?: string }).errorCode;
+      if (
+        channel === "whatsapp" && !result.success &&
+        needsImmediateFallback(waErrorCode) && smsChannelFromEnv()
+      ) {
+        logger.log(
+          `[WhatsApp] ${waErrorCode} — contingencia imediata por SMS (etapa 91)`,
+        );
+        const smsResult = await sendSms(
+          recipient,
+          title,
+          effectiveMessage,
+          order_id,
+          shareLink,
+        );
+        await recordNotificationLog(
+          supabase,
+          alert_id,
+          "sms",
+          recipient,
+          smsResult.success,
+          smsResult.error,
+        );
+        results.push({ channel: `sms:${recipient}`, ...smsResult });
+        if (smsResult.success) result = { success: true };
+      }
+
       results.push({ channel: `${channel}:${recipient}`, ...result });
-      await recordNotificationLog(supabase, alert_id, channel, recipient, result.success, result.error);
+      await recordNotificationLog(
+        supabase,
+        alert_id,
+        channel,
+        recipient,
+        result.success,
+        result.error,
+      );
       return result;
     };
 
@@ -265,28 +460,36 @@ serve(async (req) => {
     // is_enabled=true) so we can tell "channel explicitly disabled" apart
     // from "no config exists for this type" below.
     const { data: allConfigsForType, error: configsError } = await supabase
-      .from('alert_configurations')
-      .select('*')
-      .eq('alert_type', type);
+      .from("alert_configurations")
+      .select("*")
+      .eq("alert_type", type);
 
     if (configsError) {
-      logger.error(`[Notification] Failed to load alert_configurations for ${type}:`, configsError);
+      logger.error(
+        `[Notification] Failed to load alert_configurations for ${type}:`,
+        configsError,
+      );
     }
 
-    const configRows = (allConfigsForType ?? []) as Array<Record<string, unknown>>;
+    const configRows = (allConfigsForType ?? []) as Array<
+      Record<string, unknown>
+    >;
     const notifyFieldByChannel: Record<string, string> = {
-      whatsapp: 'notify_whatsapp',
-      email: 'notify_email',
-      slack: 'notify_slack',
-      bitrix24: 'notify_bitrix24_task',
-      n8n: 'notify_n8n_webhook',
+      whatsapp: "notify_whatsapp",
+      sms: "notify_sms",
+      email: "notify_email",
+      slack: "notify_slack",
+      bitrix24: "notify_bitrix24_task",
+      n8n: "notify_n8n_webhook",
     };
     // A channel is "explicitly disabled" when configs exist for this alert type
     // but none of them has it enabled — distinct from no config existing at all.
     const isChannelDisabled = (channel: string): boolean => {
       const field = notifyFieldByChannel[channel];
       if (!field || configRows.length === 0) return false;
-      return !configRows.some((c) => c.is_enabled === true && c[field] === true);
+      return !configRows.some((c) =>
+        c.is_enabled === true && c[field] === true
+      );
     };
 
     // ── Variáveis de template (etapa 67 do plano Google) ───────────────────
@@ -296,34 +499,57 @@ serve(async (req) => {
     // editava `alert_configurations.message_template` na UI e o texto enviado
     // continuava sendo o do trigger.
     const templateVars: TemplateVars = {};
-    if (metadata && typeof metadata === 'object') {
+    if (metadata && typeof metadata === "object") {
       const md = metadata as Record<string, unknown>;
-      for (const key of [
-        'order_ref', 'driver_name', 'driver_plate', 'share_link',
-        'pickup_address', 'delivery_address', 'static_map_url',
-      ]) {
+      for (
+        const key of [
+          "order_ref",
+          "driver_name",
+          "driver_plate",
+          "share_link",
+          "pickup_address",
+          "delivery_address",
+          "static_map_url",
+        ]
+      ) {
         const v = md[key];
-        if (typeof v === 'string' || typeof v === 'number') templateVars[key as never] = v as never;
+        if (typeof v === "string" || typeof v === "number") {
+          templateVars[key as never] = v as never;
+        }
       }
-      if (typeof md.distance_m === 'number') templateVars.distance_m = md.distance_m;
-      if (typeof md.eta_min === 'number') templateVars.eta_min = md.eta_min;
+      if (typeof md.distance_m === "number") {
+        templateVars.distance_m = md.distance_m;
+      }
+      if (typeof md.eta_min === "number") templateVars.eta_min = md.eta_min;
       const r0 = Array.isArray(md.recipients) ? md.recipients[0] : null;
-      if (r0 && typeof r0 === 'object') {
+      if (r0 && typeof r0 === "object") {
         const role = (r0 as Record<string, unknown>).role;
         const name = (r0 as Record<string, unknown>).name;
-        if (typeof name === 'string' && name) {
-          if (role === 'delivery_contact') templateVars.delivery_contact_name = name;
-          else templateVars.pickup_contact_name = name;
+        if (typeof name === "string" && name) {
+          if (role === "delivery_contact") {
+            templateVars.delivery_contact_name = name;
+          } else templateVars.pickup_contact_name = name;
         }
       }
     }
+
+    // Etapa 125: o link de acompanhamento vai no SMS mesmo que o template nao o
+    // inclua — SMS nao leva o mapa estatico, entao sem link o aviso nao mostra
+    // trajeto nenhum.
+    const shareLink = typeof templateVars.share_link === "string" &&
+        templateVars.share_link.trim() !== ""
+      ? templateVars.share_link.trim()
+      : null;
 
     // Template de nivel de tipo, usado nos destinatarios ad-hoc (metadata.recipients),
     // que nao tem linha de config propria para consultar.
     const typeTemplate = configRows
       .map((c) => c.message_template)
-      .find((t): t is string => typeof t === 'string' && t.trim() !== '') ?? null;
-    const adHocMessage = typeTemplate ? renderTemplate(typeTemplate, templateVars) : message;
+      .find((t): t is string => typeof t === "string" && t.trim() !== "") ??
+      null;
+    const adHocMessage = typeTemplate
+      ? renderTemplate(typeTemplate, templateVars)
+      : message;
 
     // Ad-hoc recipients supplied by the caller (e.g. the geo-foundation
     // trigger notifying an order's pickup/delivery contact, or
@@ -344,14 +570,104 @@ serve(async (req) => {
     // de nono digito e DDI, entao a comparacao nao depende da formatacao.
     const isPhoneOptedOut = async (to: string): Promise<boolean> => {
       try {
-        const { data, error } = await supabase.rpc('is_phone_opted_out', { p_phone: to });
+        const { data, error } = await supabase.rpc("is_phone_opted_out", {
+          p_phone: to,
+        });
         if (error) {
-          logger.error('[Notification] Opt-out check failed, proceeding:', error);
+          logger.error(
+            "[Notification] Opt-out check failed, proceeding:",
+            error,
+          );
           return false;
         }
         return data === true;
       } catch (e) {
-        logger.error('[Notification] Opt-out check threw, proceeding:', e);
+        logger.error("[Notification] Opt-out check threw, proceeding:", e);
+        return false;
+      }
+    };
+
+    /**
+     * Etapa 95: teto de 6 mensagens automaticas por motorista a cada 10 min.
+     * O limite e por PESSOA, nao por pedido: um motorista com 20 entregas no
+     * dia recebe o mesmo teto. Por isso a checagem so vale quando o destino e
+     * o telefone do proprio motorista — fornecedor e cliente seguem sem teto.
+     *
+     * Fonte do numero: `drivers.phone` (o `driver_id` vem no payload). Conta
+     * `alerts_sent` porque o ledger novo (etapa 73) ainda nao esta em uso, e a
+     * tabela nao tem `driver_id` (migration 20251224143803) — `recipient`
+     * guarda o destino exato enviado, que e o que precisa ser contado.
+     * Falha de leitura nao bloqueia: sem o dado o alerta sai, porque calar o
+     * motorista por erro de infraestrutura custa mais que a rajada.
+     */
+    let driverPhoneCache: Promise<string | null> | null = null;
+    const loadDriverPhone = (): Promise<string | null> => {
+      if (!driver_id) return Promise.resolve(null);
+      if (driverPhoneCache) return driverPhoneCache;
+      driverPhoneCache = (async () => {
+        try {
+          const { data, error } = await supabase
+            .from("drivers")
+            .select("phone")
+            .eq("id", driver_id)
+            .maybeSingle();
+          if (error) {
+            logger.error(
+              "[Notification] Falha ao ler telefone do motorista:",
+              error,
+            );
+            return null;
+          }
+          return (data as { phone?: string | null } | null)?.phone ?? null;
+        } catch (e) {
+          logger.error("[Notification] Telefone do motorista indisponivel:", e);
+          return null;
+        }
+      })();
+      return driverPhoneCache;
+    };
+
+    const isDriverRateLimited = async (recipient: string): Promise<boolean> => {
+      if (!driver_id) return false;
+      if ((RATE_LIMIT_EXEMPT_EVENTS as readonly string[]).includes(type)) {
+        return false;
+      }
+      const digits = (v: string | null | undefined) =>
+        (v ?? "").replace(/\D/g, "");
+      const driverDigits = digits(await loadDriverPhone());
+      const targetDigits = digits(recipient);
+      // Destino que nao e o motorista (fornecedor, cliente, operacao) nao entra
+      // no teto — senao um pedido barulhento silenciaria o cliente.
+      if (
+        !driverDigits || !targetDigits ||
+        !targetDigits.endsWith(driverDigits.slice(-11))
+      ) return false;
+      try {
+        const since = new Date(Date.now() - DRIVER_RATE_LIMIT.windowMs)
+          .toISOString();
+        const { data, error } = await supabase
+          .from("alerts_sent")
+          .select("sent_at, recipient")
+          .gte("sent_at", since);
+        if (error) {
+          logger.error(
+            "[Notification] Rate limit query failed, proceeding:",
+            error,
+          );
+          return false;
+        }
+        const recentSends = ((data ?? []) as Array<
+          { sent_at: string | null; recipient: string | null }
+        >)
+          .filter((r) => {
+            const d = digits(r.recipient);
+            return d !== "" && d.endsWith(driverDigits.slice(-11));
+          })
+          .map((r) => (r.sent_at ? new Date(r.sent_at) : null))
+          .filter((d): d is Date => d !== null && !Number.isNaN(d.getTime()));
+        return isRateLimited({ recentSends, now: new Date(), event: type });
+      } catch (e) {
+        logger.error("[Notification] Rate limit check threw, proceeding:", e);
         return false;
       }
     };
@@ -359,47 +675,65 @@ serve(async (req) => {
     const metadataRecipients = isServiceRoleCaller(req)
       ? normalizeRecipients(metadata?.recipients)
       : [];
-    const orderRecipients = unionRecipients(requestRecipients, metadataRecipients);
+    const orderRecipients = unionRecipients(
+      requestRecipients,
+      metadataRecipients,
+    );
     /** Já despachado nesta requisição — guarda contra o mesmo destino repetido. */
     const orderRecipientsDelivered = new Set<string>();
 
     for (const r of orderRecipients) {
       const channel = r.channel;
       if (isChannelDisabled(channel)) {
-        logger.log(`[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`);
+        logger.log(
+          `[Notification] Ad-hoc recipient skipped: ${channel} disabled by alert_configurations for ${type}`,
+        );
         continue;
       }
       // Etapa 59 (D1): o trigger grava `to` cru do cadastro — `(41) 99999-8888`,
       // `+55 41 ...`, ou máscara `****`. O provedor de WhatsApp quer E.164; sem
       // normalizar, o envio falha com 400 e o alerta morre sem rastro útil.
       let destination = r.to;
-      if (channel === 'whatsapp' || channel === 'sms') {
+      if (channel === "whatsapp" || channel === "sms") {
         const normalized = normalizePhone(destination);
         if (!normalized) {
-          logger.log(`[Notification] Ad-hoc recipient with unusable phone dropped: ${JSON.stringify({ channel, to: destination })}`);
+          logger.log(
+            `[Notification] Ad-hoc recipient with unusable phone dropped: ${
+              JSON.stringify({ channel, to: destination })
+            }`,
+          );
           continue;
         }
         destination = normalized;
         if (await isPhoneOptedOut(destination)) {
           logger.log(`[Notification] Ad-hoc recipient opted out: ${channel}`);
-          results.push({ channel: `${channel}:opted_out`, success: false, error: 'opted_out' });
+          results.push({
+            channel: `${channel}:opted_out`,
+            success: false,
+            error: "opted_out",
+          });
           continue;
         }
       }
       if (orderRecipientsDelivered.has(recipientKey(channel, destination))) {
-        logger.log(`[Notification] Destinatário repetido ignorado: ${channel}:${destination}`);
+        logger.log(
+          `[Notification] Destinatário repetido ignorado: ${channel}:${destination}`,
+        );
         continue;
       }
       orderRecipientsDelivered.add(recipientKey(channel, destination));
-      await dispatch(channel, destination, adHocMessage);
+      // `role` do destinatário entra na chave de idempotência (etapa 89): o
+      // mesmo telefone pode ser contato de coleta e de entrega no mesmo pedido
+      // e isso são duas mensagens distintas.
+      await dispatch(channel, destination, adHocMessage, r.role ?? "recipient");
     }
 
     const configs = configRows.filter((c) => c.is_enabled);
 
     if (!configs || configs.length === 0) {
       logger.log(`[Notification] No active configurations for: ${type}`);
-      const successCount = results.filter(r => r.success).length;
-      const failCount = results.filter(r => !r.success).length;
+      const successCount = results.filter((r) => r.success).length;
+      const failCount = results.filter((r) => !r.success).length;
       // Sem linha ativa em alert_configurations o alerta não sai por canal nenhum.
       // Antes isso retornava success:true sem deixar rastro e o alerta morria em
       // silêncio em `alerts` (foi o caso de 1.306 INTEGRATION_FAILURE sem entrega).
@@ -407,16 +741,25 @@ serve(async (req) => {
         await recordNotificationLog(
           supabase,
           alert_id,
-          'none',
-          '',
+          "none",
+          "",
           false,
           `Sem canal de notificação ativo em alert_configurations para ${type}`,
         );
       }
-      await recordGeoEventStatus(supabase, metadata, geoDeliveryStatus(results));
+      await recordGeoEventStatus(
+        supabase,
+        metadata,
+        geoDeliveryStatus(results),
+      );
       return new Response(
-        JSON.stringify({ success: true, message: 'No notification channels configured', results, summary: { sent: successCount, failed: failCount } }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({
+          success: true,
+          message: "No notification channels configured",
+          results,
+          summary: { sent: successCount, failed: failCount },
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
@@ -447,23 +790,41 @@ serve(async (req) => {
       // Placeholder sem valor é preservado (renderTemplate) e logado abaixo,
       // para o operador ver o gap em vez de receber "undefined" no WhatsApp.
       let effectiveMessage = message;
-      if (typeof cfg.message_template === 'string' && cfg.message_template.trim() !== '') {
+      if (
+        typeof cfg.message_template === "string" &&
+        cfg.message_template.trim() !== ""
+      ) {
         effectiveMessage = renderTemplate(cfg.message_template, templateVars);
         const missing = missingTemplateVars(cfg.message_template, templateVars);
         if (missing.length > 0) {
-          logger.log(`[Notification] Template de ${type} sem valor para: ${missing.join(', ')}`);
+          logger.log(
+            `[Notification] Template de ${type} sem valor para: ${
+              missing.join(", ")
+            }`,
+          );
         }
       }
 
       // On escalation, prefer escalation recipients (fall back to normal ones).
       const whatsappNumbers = isEscalation
-        ? (cfg.escalation_whatsapp_numbers?.length ? cfg.escalation_whatsapp_numbers : (cfg.whatsapp_numbers ?? []))
+        ? (cfg.escalation_whatsapp_numbers?.length
+          ? cfg.escalation_whatsapp_numbers
+          : (cfg.whatsapp_numbers ?? []))
         : (cfg.whatsapp_numbers ?? []);
       const emailAddresses = isEscalation
-        ? (cfg.escalation_email_addresses?.length ? cfg.escalation_email_addresses : (cfg.email_addresses ?? []))
+        ? (cfg.escalation_email_addresses?.length
+          ? cfg.escalation_email_addresses
+          : (cfg.email_addresses ?? []))
         : (cfg.email_addresses ?? []);
+      // Etapa 130 do plano de mensageria: `sms_numbers` existe em
+      // `alert_configurations` desde a migration `20251224181640` e nunca era lido
+      // — SMS configurado pela UI simplesmente não saía.
+      const smsNumbers: string[] =
+        (cfg as { sms_numbers?: string[] }).sms_numbers ?? [];
       const slackChannels = isEscalation
-        ? (cfg.escalation_slack_channels?.length ? cfg.escalation_slack_channels : (cfg.slack_channels ?? []))
+        ? (cfg.escalation_slack_channels?.length
+          ? cfg.escalation_slack_channels
+          : (cfg.slack_channels ?? []))
         : (cfg.slack_channels ?? []);
 
       let anyAttempted = false;
@@ -479,16 +840,47 @@ serve(async (req) => {
         // A configuração guarda o telefone como o operador digitou; o pedido
         // chega já em E.164. Sem normalizar dos dois lados, o mesmo contato
         // entraria na dedup como dois destinos diferentes.
-        const comparable = (channel === 'whatsapp' || channel === 'sms')
+        const comparable = (channel === "whatsapp" || channel === "sms")
           ? (normalizePhone(destination) ?? destination)
           : destination;
         const key = recipientKey(channel, comparable);
-        if (orderRecipientsDelivered.has(key) || configRecipientsDelivered.has(key)) {
-          logger.log(`[Notification] Destinatário repetido ignorado: ${channel}:${destination}`);
+        if (
+          orderRecipientsDelivered.has(key) ||
+          configRecipientsDelivered.has(key)
+        ) {
+          logger.log(
+            `[Notification] Destinatário repetido ignorado: ${channel}:${destination}`,
+          );
           return;
         }
         configRecipientsDelivered.add(key);
-        const r = await dispatch(channel, destination, effectiveMessage);
+        // Etapa 92: o opt-out vale para **todo** canal, não só para os
+        // destinatários ad-hoc. Antes disso, quem pedia para parar de receber
+        // continuava sendo avisado quando o telefone vinha de
+        // `alert_configurations` — o caminho mais comum em produção.
+        if (channel === "whatsapp" || channel === "sms") {
+          const optedPhone = normalizePhone(destination) ?? destination;
+          if (await isPhoneOptedOut(optedPhone)) {
+            logger.log(
+              `[Notification] Destinatário em opt-out ignorado: ${channel}`,
+            );
+            results.push({
+              channel: `${channel}:opted_out`,
+              success: false,
+              error: "opted_out",
+            });
+            return;
+          }
+        }
+        // Destino que vem de `alert_configurations`, não de um contato do
+        // pedido: o papel é a própria config, para não colidir na chave de
+        // idempotência com o mesmo telefone enviado como contato de coleta.
+        const r = await dispatch(
+          channel,
+          destination,
+          effectiveMessage,
+          "config",
+        );
         anySucceeded = anySucceeded || r.success;
       };
 
@@ -506,6 +898,15 @@ serve(async (req) => {
         }
       }
 
+      // SMS (contingência do WhatsApp — etapas 119/120)
+      if (
+        (cfg as { notify_sms?: boolean }).notify_sms && smsNumbers.length > 0
+      ) {
+        for (const number of smsNumbers) {
+          await dispatchIfNew("sms", number);
+        }
+      }
+
       // Slack
       if (cfg.notify_slack && slackChannels.length > 0) {
         for (const channel of slackChannels) {
@@ -517,9 +918,23 @@ serve(async (req) => {
       const bitrixUserIds = cfg.bitrix24_user_ids ?? [];
       if (cfg.notify_bitrix24_task && bitrixUserIds.length > 0) {
         anyAttempted = true;
-        const result = await sendBitrix24Task(supabase, bitrixUserIds, severity, title, effectiveMessage, order_id);
-        results.push({ channel: 'bitrix24', ...result });
-        await recordNotificationLog(supabase, alert_id, 'bitrix24', bitrixUserIds.join(','), result.success, result.error);
+        const result = await sendBitrix24Task(
+          supabase,
+          bitrixUserIds,
+          severity,
+          title,
+          effectiveMessage,
+          order_id,
+        );
+        results.push({ channel: "bitrix24", ...result });
+        await recordNotificationLog(
+          supabase,
+          alert_id,
+          "bitrix24",
+          bitrixUserIds.join(","),
+          result.success,
+          result.error,
+        );
         anySucceeded = anySucceeded || result.success;
       }
 
@@ -537,18 +952,22 @@ serve(async (req) => {
       if (needFallback && cfg.fallback_channel) {
         const fallbackRecipients = cfg.fallback_recipients ?? [];
         if (fallbackRecipients.length > 0) {
-          logger.log(`[Notification] Triggering fallback channel: ${cfg.fallback_channel}`);
+          logger.log(
+            `[Notification] Triggering fallback channel: ${cfg.fallback_channel}`,
+          );
           for (const recipient of fallbackRecipients) {
             await dispatch(cfg.fallback_channel, recipient, effectiveMessage);
           }
         } else {
-          logger.log('[Notification] Fallback channel set but no recipients configured');
+          logger.log(
+            "[Notification] Fallback channel set but no recipients configured",
+          );
         }
       }
     }
 
-    const successCount = results.filter(r => r.success).length;
-    const failCount = results.filter(r => !r.success).length;
+    const successCount = results.filter((r) => r.success).length;
+    const failCount = results.filter((r) => !r.success).length;
 
     // Configuração ativa, porém nenhum canal com destinatário (ex.: notify_whatsapp
     // ligado e whatsapp_numbers vazio, e-mail/slack/n8n desligados): nada foi
@@ -557,8 +976,8 @@ serve(async (req) => {
       await recordNotificationLog(
         supabase,
         alert_id,
-        'none',
-        '',
+        "none",
+        "",
         false,
         `Configuração ativa para ${type} sem canal com destinatário — nada foi enviado`,
       );
@@ -567,26 +986,34 @@ serve(async (req) => {
     // Mark the alert as escalated so the escalation worker does not re-process it.
     if (isEscalation) {
       await supabase
-        .from('alerts')
+        .from("alerts")
         .update({ escalated_at: new Date().toISOString(), escalation_level: 1 })
-        .eq('id', alert_id);
+        .eq("id", alert_id);
     }
 
-    logger.log(`[Notification] Done: ${successCount} sent, ${failCount} failed`);
+    logger.log(
+      `[Notification] Done: ${successCount} sent, ${failCount} failed`,
+    );
 
     await recordGeoEventStatus(supabase, metadata, geoDeliveryStatus(results));
 
     return new Response(
-      JSON.stringify({ success: true, escalation: isEscalation, results, summary: { sent: successCount, failed: failCount } }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: true,
+        escalation: isEscalation,
+        results,
+        summary: { sent: successCount, failed: failCount },
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
-
-    
   } catch (error: unknown) {
     logger.error("Notification Internal Error:", error);
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 });
@@ -599,14 +1026,17 @@ serve(async (req) => {
 async function recordGeoEventStatus(
   supabase: any,
   metadata: Record<string, unknown> | null | undefined,
-  status: string
+  status: string,
 ): Promise<void> {
   const geoEventId = metadata?.geo_event_id;
   if (typeof geoEventId !== "string") return;
   try {
     await supabase
       .from("order_geo_events")
-      .update({ notification_status: status, notified_at: new Date().toISOString() })
+      .update({
+        notification_status: status,
+        notified_at: new Date().toISOString(),
+      })
       .eq("id", geoEventId)
       .eq("notification_status", "queued");
   } catch (e) {
@@ -622,19 +1052,19 @@ async function recordNotificationLog(
   channel: string,
   recipient: string,
   success: boolean,
-  errorMessage?: string
+  errorMessage?: string,
 ): Promise<void> {
   try {
-    await supabase.from('alerts_sent').insert({
+    await supabase.from("alerts_sent").insert({
       alert_id: alertId,
       channel,
       recipient,
-      status: success ? 'sent' : 'failed',
+      status: success ? "sent" : "failed",
       sent_at: success ? new Date().toISOString() : null,
       error_message: errorMessage,
     });
   } catch (e) {
-    logger.error('Failed to record notification:', e);
+    logger.error("Failed to record notification:", e);
   }
 }
 
@@ -645,17 +1075,28 @@ async function recordNotification(
   channel: string,
   recipient: string,
   success: boolean,
-  errorMessage?: string
+  errorMessage?: string,
 ): Promise<void> {
-  await recordNotificationLog(supabase, alertId, channel, recipient, success, errorMessage);
+  await recordNotificationLog(
+    supabase,
+    alertId,
+    channel,
+    recipient,
+    success,
+    errorMessage,
+  );
 }
 
 function getSeverityEmoji(severity: string): string {
   switch (severity) {
-    case 'CRITICAL': return '🚨';
-    case 'WARNING': return '⚠️';
-    case 'INFO': return 'ℹ️';
-    default: return '📢';
+    case "CRITICAL":
+      return "🚨";
+    case "WARNING":
+      return "⚠️";
+    case "INFO":
+      return "ℹ️";
+    default:
+      return "📢";
   }
 }
 
@@ -668,11 +1109,12 @@ async function sendWhatsApp(
   orderId?: string,
   driverId?: string,
   mediaDataUrl?: string | null,
+  options?: SendOptions,
 ): Promise<{ success: boolean; error?: string }> {
   const evolutionUrl = Deno.env.get("EVOLUTION_API_URL");
   const evolutionKey = Deno.env.get("EVOLUTION_API_KEY");
   const instanceName = Deno.env.get("EVOLUTION_INSTANCE_NAME") || "lalamove";
-  
+
   // Etapa 69 do plano Google Maps: o Zapp (WhatsApp Web da Promo Brindes) entra
   // como canal preferencial quando `ZAPP_API_URL`/`ZAPP_API_KEY` existem. Sem os
   // secrets o factory devolve null e o Evolution continua sendo o caminho —
@@ -681,64 +1123,115 @@ async function sendWhatsApp(
   if (zapp) {
     const emoji = getSeverityEmoji(severity);
     const text = `${emoji} *${title}*\n\n${message}\n\n` +
-      (orderId ? `📦 *Pedido:* ${orderId}\n` : '') +
-      (driverId ? `🚗 *Motorista:* ${driverId}\n` : '') +
-      `\n⏰ ${new Date().toLocaleString('pt-BR')}`;
+      (orderId ? `📦 *Pedido:* ${orderId}\n` : "") +
+      (driverId ? `🚗 *Motorista:* ${driverId}\n` : "") +
+      `\n⏰ ${new Date().toLocaleString("pt-BR")}`;
     // Etapa 68: com imagem do trajeto o caption leva o texto e o mapa vai anexo;
     // sem `sendMedia` no canal, cai no texto puro.
     const zappResult = mediaDataUrl && zapp.sendMedia
-      ? await zapp.sendMedia(number, mediaDataUrl, text)
-      : await zapp.sendText(number, text);
+      ? await zapp.sendMedia(number, mediaDataUrl, text, options)
+      : await zapp.sendText(number, text, options);
     if (zappResult.success) {
-      logger.log(`[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, '')}${mediaDataUrl ? ' (com imagem)' : ''}`);
+      logger.log(
+        `[WhatsApp] Sent via Zapp to ${number.replace(/\D/g, "")}${
+          mediaDataUrl ? " (com imagem)" : ""
+        }` +
+          (zappResult.providerMessageId
+            ? ` id=${zappResult.providerMessageId}`
+            : ""),
+      );
     } else {
-      logger.error('[WhatsApp] Erro no Zapp:', zappResult.error);
+      logger.error(
+        `[WhatsApp] Erro no Zapp (${zappResult.errorCode ?? "sem-codigo"}/${
+          zappResult.action ?? "sem-acao"
+        }):`,
+        zappResult.error,
+      );
     }
     return zappResult;
   }
 
   if (!evolutionUrl || !evolutionKey) {
-    logger.log('[WhatsApp] Evolution API not configured');
-    return { success: false, error: 'Evolution API not configured' };
+    logger.log("[WhatsApp] Evolution API not configured");
+    return { success: false, error: "Evolution API not configured" };
   }
-  
+
   try {
     const emoji = getSeverityEmoji(severity);
-    const formattedNumber = number.replace(/\D/g, '');
-    
+    const formattedNumber = number.replace(/\D/g, "");
+
     const text = `${emoji} *${title}*\n\n${message}\n\n` +
-      (orderId ? `📦 *Pedido:* ${orderId}\n` : '') +
-      (driverId ? `🚗 *Motorista:* ${driverId}\n` : '') +
-      `\n⏰ ${new Date().toLocaleString('pt-BR')}`;
-    
+      (orderId ? `📦 *Pedido:* ${orderId}\n` : "") +
+      (driverId ? `🚗 *Motorista:* ${driverId}\n` : "") +
+      `\n⏰ ${new Date().toLocaleString("pt-BR")}`;
+
     const response = mediaDataUrl
       ? await fetch(`${evolutionUrl}/message/sendMedia/${instanceName}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
-          body: JSON.stringify({
-            number: formattedNumber,
-            mediatype: 'image',
-            mimetype: mediaDataUrl.slice(5, mediaDataUrl.indexOf(';')),
-            media: mediaDataUrl.slice(mediaDataUrl.indexOf(',') + 1),
-            caption: text,
-          }),
-        })
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": evolutionKey },
+        body: JSON.stringify({
+          number: formattedNumber,
+          mediatype: "image",
+          mimetype: mediaDataUrl.slice(5, mediaDataUrl.indexOf(";")),
+          media: mediaDataUrl.slice(mediaDataUrl.indexOf(",") + 1),
+          caption: text,
+        }),
+      })
       : await fetch(`${evolutionUrl}/message/sendText/${instanceName}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': evolutionKey },
-          body: JSON.stringify({ number: formattedNumber, text }),
-        });
-    
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": evolutionKey },
+        body: JSON.stringify({ number: formattedNumber, text }),
+      });
+
     if (!response.ok) {
       throw new Error(`Evolution API error: ${response.statusText}`);
     }
-    
-    logger.log(`[WhatsApp] Sent to ${formattedNumber}${mediaDataUrl ? ' (com imagem)' : ''}`);
+
+    // Etapa 142 (LGPD): o numero completo nao vai para o log.
+    logger.log(
+      `[WhatsApp] Sent to ${maskPhone(number) ?? "numero invalido"}${
+        mediaDataUrl ? " (com imagem)" : ""
+      }`,
+    );
     return { success: true };
   } catch (error: any) {
-    logger.error('[WhatsApp] Error:', error);
-    return { success: false, error: error?.message || 'Unknown error' };
+    logger.error("[WhatsApp] Error:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
+}
+
+// SMS de contingencia (etapas 119/120/124 do plano de mensageria). O canal so
+// existe quando `SMS_PROVIDER_API_KEY` esta configurado: sem ele o despacho
+// devolve erro explicito em vez de fingir que enviou.
+async function sendSms(
+  number: string,
+  title: string,
+  message: string,
+  orderId?: string | null,
+  shareLink?: string | null,
+): Promise<{ success: boolean; error?: string }> {
+  const channel = smsChannelFromEnv();
+  const result = await dispatchSms({
+    channel,
+    number,
+    title,
+    message,
+    orderId,
+    shareLink,
+  });
+  if (result.success) {
+    logger.log(
+      `[SMS] Sent via ${channel?.name} to ${
+        maskPhone(number) ?? "numero invalido"
+      } (${result.segments ?? "?"} segmento(s))`,
+    );
+    return { success: true };
+  }
+  logger.error(
+    `[SMS] Erro no ${channel?.name ?? "provedor nao configurado"}:`,
+    result.error,
+  );
+  return { success: false, error: result.error };
 }
 
 // Email via Resend
@@ -748,57 +1241,74 @@ async function sendEmail(
   title: string,
   message: string,
   orderId?: string,
-  driverId?: string
+  driverId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   const resendKey = Deno.env.get("RESEND_API_KEY");
-  
+
   if (!resendKey) {
-    logger.log('[Email] Resend API not configured');
-    return { success: false, error: 'Resend API not configured' };
+    logger.log("[Email] Resend API not configured");
+    return { success: false, error: "Resend API not configured" };
   }
-  
+
   try {
     const colorMap: Record<string, string> = {
-      'CRITICAL': '#dc2626',
-      'WARNING': '#f59e0b',
-      'INFO': '#3b82f6',
+      "CRITICAL": "#dc2626",
+      "WARNING": "#f59e0b",
+      "INFO": "#3b82f6",
     };
-    
+
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: ${colorMap[severity] || '#3b82f6'}; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-          <h1 style="margin: 0; font-size: 20px;">${getSeverityEmoji(severity)} ${title}</h1>
+        <div style="background: ${
+      colorMap[severity] || "#3b82f6"
+    }; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 20px;">${
+      getSeverityEmoji(severity)
+    } ${title}</h1>
         </div>
         <div style="background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
           <p style="color: #374151; line-height: 1.6; margin: 0 0 16px 0;">${message}</p>
-          ${orderId ? `<p style="color: #6b7280; margin: 4px 0;"><strong>Pedido:</strong> ${orderId}</p>` : ''}
-          ${driverId ? `<p style="color: #6b7280; margin: 4px 0;"><strong>Motorista:</strong> ${driverId}</p>` : ''}
+          ${
+      orderId
+        ? `<p style="color: #6b7280; margin: 4px 0;"><strong>Pedido:</strong> ${orderId}</p>`
+        : ""
+    }
+          ${
+      driverId
+        ? `<p style="color: #6b7280; margin: 4px 0;"><strong>Motorista:</strong> ${driverId}</p>`
+        : ""
+    }
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 16px 0;" />
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">Enviado em: ${new Date().toLocaleString('pt-BR')}</p>
+          <p style="color: #9ca3af; font-size: 12px; margin: 0;">Enviado em: ${
+      new Date().toLocaleString("pt-BR")
+    }</p>
         </div>
       </div>
     `;
-    
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${resendKey}` },
+
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${resendKey}`,
+      },
       body: JSON.stringify({
-        from: Deno.env.get("EMAIL_FROM") || 'Alertas <noreply@resend.dev>',
+        from: Deno.env.get("EMAIL_FROM") || "Alertas <noreply@resend.dev>",
         to: [email],
         subject: `[${severity}] ${title}`,
         html,
       }),
     });
-    
+
     if (!response.ok) {
       throw new Error(`Resend error: ${response.statusText}`);
     }
-    
+
     logger.log(`[Email] Sent to ${email}`);
     return { success: true };
   } catch (error: any) {
-    logger.error('[Email] Error:', error);
-    return { success: false, error: error?.message || 'Unknown error' };
+    logger.error("[Email] Error:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
 }
 
@@ -809,55 +1319,59 @@ async function sendSlack(
   title: string,
   message: string,
   orderId?: string,
-  driverId?: string
+  driverId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   let url = webhookUrl;
-  if (!url.startsWith('http')) {
-    url = Deno.env.get("SLACK_WEBHOOK_URL") || '';
+  if (!url.startsWith("http")) {
+    url = Deno.env.get("SLACK_WEBHOOK_URL") || "";
   }
-  
+
   if (!url) {
-    logger.log('[Slack] Webhook URL not configured');
-    return { success: false, error: 'Slack webhook not configured' };
+    logger.log("[Slack] Webhook URL not configured");
+    return { success: false, error: "Slack webhook not configured" };
   }
-  
+
   try {
     const colorMap: Record<string, string> = {
-      'CRITICAL': '#dc2626',
-      'WARNING': '#f59e0b',
-      'INFO': '#3b82f6',
+      "CRITICAL": "#dc2626",
+      "WARNING": "#f59e0b",
+      "INFO": "#3b82f6",
     };
-    
+
     const payload = {
       attachments: [{
-        color: colorMap[severity] || '#6b7280',
+        color: colorMap[severity] || "#6b7280",
         title: `${getSeverityEmoji(severity)} ${title}`,
         text: message,
         fields: [
-          ...(orderId ? [{ title: 'Pedido', value: orderId, short: true }] : []),
-          ...(driverId ? [{ title: 'Motorista', value: driverId, short: true }] : []),
-          { title: 'Severidade', value: severity, short: true },
+          ...(orderId
+            ? [{ title: "Pedido", value: orderId, short: true }]
+            : []),
+          ...(driverId
+            ? [{ title: "Motorista", value: driverId, short: true }]
+            : []),
+          { title: "Severidade", value: severity, short: true },
         ],
-        footer: 'Sistema de Alertas Lalamove',
+        footer: "Sistema de Alertas Lalamove",
         ts: Math.floor(Date.now() / 1000),
       }],
     };
-    
+
     const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    
+
     if (!response.ok) {
       throw new Error(`Slack error: ${response.statusText}`);
     }
-    
-    logger.log('[Slack] Message sent');
+
+    logger.log("[Slack] Message sent");
     return { success: true };
   } catch (error: any) {
-    logger.error('[Slack] Error:', error);
-    return { success: false, error: error?.message || 'Unknown error' };
+    logger.error("[Slack] Error:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
 }
 
@@ -868,79 +1382,89 @@ async function sendBitrix24Task(
   severity: string,
   title: string,
   message: string,
-  orderId?: string
+  orderId?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { data: tokenData } = await supabase
-      .from('bitrix24_tokens')
-      .select('*')
-      .order('updated_at', { ascending: false })
+      .from("bitrix24_tokens")
+      .select("*")
+      .order("updated_at", { ascending: false })
       .limit(1)
       .single();
-    
+
     if (!tokenData) {
-      return { success: false, error: 'Bitrix24 not connected' };
+      return { success: false, error: "Bitrix24 not connected" };
     }
-    
+
     const token = tokenData as { access_token: string; domain: string };
-    const priorityMap: Record<string, number> = { 'CRITICAL': 2, 'WARNING': 1, 'INFO': 0 };
-    
+    const priorityMap: Record<string, number> = {
+      "CRITICAL": 2,
+      "WARNING": 1,
+      "INFO": 0,
+    };
+
     const taskData = {
       fields: {
         TITLE: `[${severity}] ${title}`,
-        DESCRIPTION: message + (orderId ? `\n\nPedido: ${orderId}` : ''),
+        DESCRIPTION: message + (orderId ? `\n\nPedido: ${orderId}` : ""),
         RESPONSIBLE_ID: userIds[0] || 1,
         ACCOMPLICES: userIds.slice(1),
         PRIORITY: priorityMap[severity] || 0,
-        DEADLINE: new Date(Date.now() + (severity === 'CRITICAL' ? 3600000 : 86400000)).toISOString(),
+        DEADLINE: new Date(
+          Date.now() + (severity === "CRITICAL" ? 3600000 : 86400000),
+        ).toISOString(),
       },
     };
-    
+
     const response = await fetch(
       `https://${token.domain}/rest/tasks.task.add?auth=${token.access_token}`,
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(taskData),
-      }
+      },
     );
-    
+
     if (!response.ok) {
       throw new Error(`Bitrix24 error: ${response.statusText}`);
     }
-    
-    logger.log('[Bitrix24] Task created');
+
+    logger.log("[Bitrix24] Task created");
     return { success: true };
   } catch (error: any) {
-    logger.error('[Bitrix24] Error:', error);
-    return { success: false, error: error?.message || 'Unknown error' };
+    logger.error("[Bitrix24] Error:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
 }
 
 // N8N Webhook
 async function sendN8NWebhook(
   webhookUrl: string,
-  data: Record<string, unknown>
+  data: Record<string, unknown>,
 ): Promise<{ success: boolean; error?: string }> {
   if (!webhookUrl) {
-    return { success: false, error: 'N8N webhook URL not configured' };
+    return { success: false, error: "N8N webhook URL not configured" };
   }
-  
+
   try {
     const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...data, timestamp: new Date().toISOString(), source: 'lalamove-alerts' }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...data,
+        timestamp: new Date().toISOString(),
+        source: "lalamove-alerts",
+      }),
     });
-    
+
     if (!response.ok) {
       throw new Error(`N8N error: ${response.statusText}`);
     }
-    
-    logger.log('[N8N] Webhook sent');
+
+    logger.log("[N8N] Webhook sent");
     return { success: true };
   } catch (error: any) {
-    logger.error('[N8N] Error:', error);
-    return { success: false, error: error?.message || 'Unknown error' };
+    logger.error("[N8N] Error:", error);
+    return { success: false, error: error?.message || "Unknown error" };
   }
 }

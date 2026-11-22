@@ -1,5 +1,13 @@
-import { assertEquals, assert } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { normalizePhone, isDeliverablePhone, resolveGeoRecipient } from "./phone.ts";
+import {
+  assert,
+  assertEquals,
+} from "https://deno.land/std@0.224.0/assert/mod.ts";
+import {
+  isDeliverablePhone,
+  maskPhone,
+  normalizePhone,
+  resolveGeoRecipient,
+} from "./phone.ts";
 
 /**
  * Etapa 59 do plano Google Maps (D1) — normalização E.164 e resolução de
@@ -100,6 +108,31 @@ Deno.test("resolve: cai no telefone da parada quando os demais falham", () => {
 });
 
 Deno.test("resolve: nenhum candidato válido devolve null (vira no_recipient)", () => {
-  assertEquals(resolveGeoRecipient({ pickup_contact_phone: "****", supplier_contact: "##" }), null);
+  assertEquals(
+    resolveGeoRecipient({
+      pickup_contact_phone: "****",
+      supplier_contact: "##",
+    }),
+    null,
+  );
   assertEquals(resolveGeoRecipient({}), null);
+});
+
+Deno.test("etapa 142: log leva telefone mascarado, com DDD e os 2 ultimos", () => {
+  assertEquals(maskPhone("+5541999998888"), "+55 41 9****-8888");
+  assertEquals(maskPhone("(41) 99999-8888"), "+55 41 9****-8888");
+  assertEquals(maskPhone("4133334444"), "+55 41 3***-4444");
+});
+
+Deno.test("etapa 142: telefone invalido nao vira mascara falsa", () => {
+  assertEquals(maskPhone("****"), null);
+  assertEquals(maskPhone("1199999"), null); // curto demais para ser numero
+  assertEquals(maskPhone(null), null);
+  assertEquals(maskPhone(""), null);
+});
+
+Deno.test("etapa 142: mascara nao deixa vazar o numero completo", () => {
+  const masked = maskPhone("+5541999998888")!;
+  assertEquals(masked.includes("99999"), false);
+  assertEquals(masked.includes("9999"), false);
 });
