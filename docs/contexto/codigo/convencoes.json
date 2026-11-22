@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)",
+   "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)",
    "fix(migration): resolve colisao das constraints de place_id (#204)",
    "docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)",
-   "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)",
-   "docs(planos): corrige afirmacao errada sobre searchbox_forward/reverse (#200)",
-   "feat(geo): CHECK de prefixo de provedor em place_id (etapa 14) (#198)"
+   "feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

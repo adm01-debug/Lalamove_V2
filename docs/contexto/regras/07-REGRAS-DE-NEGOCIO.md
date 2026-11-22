@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `2a87c43651` · branch `main` · 2026-11-22 01:42 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `626b37154d` · branch `main` · 2026-11-22 01:48 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2104,6 +2104,7 @@ _nenhum item encontrado_
 | * TTL por (provider, função). 0 = não cacheia. Mapbox temporário não pode ser retido (termos) → 0. */ | `supabase/functions/geo-gateway/metering.ts` |
 | Um lote maior que o limite do minuto nunca cabe: recusa sem gravar o bucket. | `supabase/functions/geo-gateway/resolver.ts` |
 | (até `maxWaitMs`). Retorna `true` quando há folga; `false` se o limite continuar | `supabase/functions/geo-gateway/resolver.ts` |
+| "Timestamp must be set to a future time" — a hora chega ao servidor do Google | `supabase/functions/geo-gateway/providers/google.ts` |
 | * HTTP com o token do provedor. `consume` diz quantos slots do rate limit esta chamada | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | 1 slot de rate limit por consulta, não por requisição | `supabase/functions/geo-gateway/providers/mapbox.ts` |
 | Provedor desligado / orçamento estourado / rate limit: não é falha do job. | `supabase/functions/job-worker/index.ts` |

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `2a87c43651e441ee8b4d85e03a51f0ee6a700c6c` (2026-11-21T22:41:21-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `626b37154dade68ca9e8c21a8d7bf75d4b4edf44` (2026-11-21T22:48:20-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 982 |
 | arquivos_codigo | 612 |
-| linhas_codigo | 119805 |
+| linhas_codigo | 119810 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -272,8 +272,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 7556 nós · 16086 arestas · 568 comunidades · grafo do commit `2a87c436`
-- comunidades maiores: cn (214), lucide-react (178), App.tsx (117), snapshot.py (102), ref_node_path (101), badge.tsx (93), RolesPage.tsx (90), contract.ts (89), mapbox.ts (89), client.ts (83), generate.py (81), dependencies (80)
+- 7556 nós · 16088 arestas · 580 comunidades · grafo do commit `626b3715`
+- comunidades maiores: cn (187), lucide-react (140), react (119), ref_node_fs (114), DriversPage.tsx (111), button.tsx (107), snapshot.py (102), contract.ts (97), client.ts (95), mapbox.ts (83), dependencies (80), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts), internalLogger() (supabase/functions/job-worker/index.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -369,6 +369,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-21 `626b371` fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)
+- 2026-11-21 `54419e1` docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)
 - 2026-11-21 `2a87c43` fix(migration): resolve colisao das constraints de place_id (#204)
 - 2026-11-21 `e0bceb0` docs(mapbox): registra risco de resposta errada nao capturado na medicao da etapa 36 (#202)
 - 2026-11-21 `7938358` feat(geo): extrai precisao compartilhada e grava place_id do pedido (#199)
@@ -382,8 +384,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-21 `a76d93c` feat: sessão de busca com TTL, estados de falha e endereços frequentes (etapas 37/40/41) (#193)
 - 2026-11-21 `0aa60dd` docs(banco): corrige status da rotacao de chaves apos checagem real na producao (#190)
 - 2026-11-21 `fe2ee4a` feat: eta_refresh encaixa o motorista na via antes do geofence (#188)
-- 2026-11-21 `f973d92` fix: busca livre do geocode-batch usa `q`, nao `address_line1` (#187)
-- 2026-11-21 `ad06483` feat: geocode-batch no geo-gateway e uso no geo_backfill (etapa 25) (#186)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

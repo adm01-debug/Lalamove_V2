@@ -374,7 +374,7 @@
    "servico": null,
    "entrada": "supabase/functions/geo-gateway/index.ts",
    "arquivos": 8,
-   "linhas": 1790,
+   "linhas": 1793,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

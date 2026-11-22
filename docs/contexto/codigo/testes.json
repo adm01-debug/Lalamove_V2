@@ -1078,7 +1078,7 @@
   {
    "arquivo": "supabase/functions/geo-gateway/google.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 225,
+   "linhas": 227,
    "testa": [
     "supabase/functions/geo-gateway/polyline.ts",
     "supabase/functions/geo-gateway/providers/google.ts",

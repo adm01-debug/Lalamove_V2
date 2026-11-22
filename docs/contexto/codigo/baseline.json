@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "2a87c43651e441ee8b4d85e03a51f0ee6a700c6c",
+  "commit": "626b37154dade68ca9e8c21a8d7bf75d4b4edf44",
   "branch": "main",
-  "data_commit": "2026-11-21T22:41:21-03:00",
+  "data_commit": "2026-11-21T22:48:20-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "626b371",
+    "data": "2026-11-21",
+    "assunto": "fix(geo): remove departureTime da Routes API do Google (rejeitada em produção) (#205)"
+   },
+   {
+    "sha": "54419e1",
+    "data": "2026-11-21",
+    "assunto": "docs(mapbox): etapa 36 medida (M1 reprovado), etapa 38 confirmada, etapa 42 auditada (#206)"
+   },
    {
     "sha": "2a87c43",
     "data": "2026-11-21",
@@ -121,23 +131,13 @@
     "sha": "06bcb9f",
     "data": "2026-11-21",
     "assunto": "feat(geo): health teste por provedor, painel de uso e matriz de paridade (#169)"
-   },
-   {
-    "sha": "554e68b",
-    "data": "2026-11-21",
-    "assunto": "ci(migrations): ledger só com version+name, erro da API visível e não fatal após o DDL (#163)"
-   },
-   {
-    "sha": "e616ccf",
-    "data": "2026-11-21",
-    "assunto": "fix: dispatcher da job_queue via Vault + 5 handlers de job ausentes no job-worker (#144)"
    }
   ],
   "arquivos_mudados_7d": 206,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 39
+    "mudancas": 41
    },
    {
     "pasta": "src/components/map",
@@ -294,14 +294,14 @@
     "mudancas": 4
    },
    {
-    "arquivo": "src/integrations/supabase/types.ts",
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 4
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 110
+    "commits": 112
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 982,
   "arquivos_codigo": 612,
-  "linhas_codigo": 119805,
+  "linhas_codigo": 119810,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -560,7 +560,7 @@
   },
   "supabase/functions": {
    "arquivos": 57,
-   "linhas": 14772
+   "linhas": 14777
   },
   "tailwind.config.ts": {
    "arquivos": 1,
