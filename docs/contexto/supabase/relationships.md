@@ -226,6 +226,17 @@ erDiagram
         jsonb metadata
         timestamp_with_time_zone created_at
     }
+    public_cache_refresh_log {
+        uuid id PK
+        text view_name
+        timestamp_with_time_zone refresh_started_at
+        timestamp_with_time_zone refresh_completed_at
+        integer refresh_duration_ms
+        bigint row_count
+        text status
+        text error_message
+        text triggered_by
+    }
     public_contacts {
         uuid id PK
         uuid owner_id FK
@@ -475,6 +486,16 @@ erDiagram
         timestamp_with_time_zone updated_at
         uuid created_by FK
     }
+    public_job_queue_processing_log {
+        uuid id PK
+        timestamp_with_time_zone run_at
+        integer processed
+        integer succeeded
+        integer failed
+        integer skipped
+        integer duration_ms
+        jsonb metadata
+    }
     public_lalamove_order_replacements {
         uuid id PK
         uuid order_id FK
@@ -584,6 +605,7 @@ erDiagram
         text place_id
         jsonb address_components
         text geocode_precision
+        text geocode_match_confidence
     }
     public_lalamove_uapi_sessions {
         uuid id PK

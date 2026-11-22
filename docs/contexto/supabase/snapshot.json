@@ -2139,6 +2139,123 @@
       },
       {
         "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "view_name",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "refresh_started_at",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "refresh_completed_at",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "refresh_duration_ms",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "row_count",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": "'running'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "status",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "error_message",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'system'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "triggered_by",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "text"
+      },
+      {
+        "comment": null,
         "default": null,
         "generated": null,
         "identity": null,
@@ -5969,6 +6086,110 @@
         "nullable": false,
         "position": 1,
         "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "run_at",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "processed",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "succeeded",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "failed",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "skipped",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "duration_ms",
+        "nullable": true,
+        "position": 7,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "'{}'::jsonb",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "metadata",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
         "table": "lalamove_order_replacements",
         "type": "uuid"
       },
@@ -6974,6 +7195,19 @@
         "type": "boolean"
       },
       {
+        "comment": "Etapa 13: confiança bruta do provedor de geocode (Mapbox match_code.confidence / Google location_type / LALAMOVE). Complementa geocode_precision (escala normalizada).",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "geocode_match_confidence",
+        "nullable": true,
+        "position": 72,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "text"
+      },
+      {
         "comment": null,
         "default": "gen_random_uuid()",
         "generated": null,
@@ -7788,6 +8022,19 @@
         "name": "geocode_precision",
         "nullable": true,
         "position": 19,
+        "schema": "public",
+        "table": "lalamove_stops",
+        "type": "text"
+      },
+      {
+        "comment": "Etapa 13: confiança bruta do provedor de geocode da parada.",
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "geocode_match_confidence",
+        "nullable": true,
+        "position": 20,
         "schema": "public",
         "table": "lalamove_stops",
         "type": "text"
@@ -13842,6 +14089,40 @@
       },
       {
         "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "cache_refresh_log_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "status"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (status = ANY (ARRAY['running'::text, 'success'::text, 'failed'::text]))",
+        "name": "cache_refresh_log_status_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "kind"
         ],
         "deferrable": false,
@@ -15069,6 +15350,23 @@
       },
       {
         "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "job_queue_processing_log_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "previous_lalamove_id",
           "new_lalamove_id"
         ],
@@ -15228,6 +15526,23 @@
       },
       {
         "columns": [
+          "delivery_place_id"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (delivery_place_id IS NULL OR delivery_place_id ~ '^(mapbox|google|lalamove):'::text)",
+        "name": "lalamove_orders_delivery_place_id_prefix_chk",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "distance_meters"
         ],
         "deferrable": false,
@@ -15320,6 +15635,23 @@
         "deferrable": false,
         "definition": "CHECK (pickup_longitude IS NULL OR pickup_longitude >= '-180'::integer::numeric AND pickup_longitude <= 180::numeric)",
         "name": "lalamove_orders_pickup_lng_range",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_orders",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "pickup_place_id"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (pickup_place_id IS NULL OR pickup_place_id ~ '^(mapbox|google|lalamove):'::text)",
+        "name": "lalamove_orders_pickup_place_id_prefix_chk",
         "on_delete": null,
         "on_update": null,
         "ref_columns": [],
@@ -15731,6 +16063,23 @@
         "schema": "public",
         "table": "lalamove_stops",
         "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "place_id"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (place_id IS NULL OR place_id ~ '^(mapbox|google|lalamove):'::text)",
+        "name": "lalamove_stops_place_id_prefix_chk",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_stops",
+        "type": "CHECK",
         "validated": true
       },
       {
@@ -17643,6 +17992,43 @@
         "volatility": "volatile"
       },
       {
+        "args": "p_view text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": [
+            "public.cache_status"
+          ]
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "b14f50d476bbad18",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "cache_view_count",
+        "owner": "postgres",
+        "returns": "bigint",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "stable"
+      },
+      {
         "args": "_user_id uuid",
         "callers": {
           "code": [
@@ -18113,6 +18499,45 @@
         "language": "plpgsql",
         "leakproof": false,
         "name": "cleanup_old_region_cache",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20251226010001_configure_pg_cron.sql",
+              "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 2,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "6a1a9928c58f3c3a",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "cleanup_processing_logs",
         "owner": "postgres",
         "returns": "integer",
         "schema": "public",
@@ -18669,9 +19094,13 @@
             {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.process_job_queue"
@@ -18975,7 +19404,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 47,
+          "code_total_files": 49,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -19435,9 +19864,13 @@
             {
               "file": "supabase/migrations/20261122140000_fix_crons_dispatcher.sql",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [],
           "db": [
             "public.process_job_queue"
@@ -19666,7 +20099,7 @@
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "569cf6eb708c3c46",
+        "definition_sha": "df1dee3c0dd974cb",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": true,
         "is_trigger_fn": false,
@@ -19837,7 +20270,7 @@
         "volatility": "volatile"
       },
       {
-        "args": "p_view_name text",
+        "args": "p_view_name text, p_triggered_by text",
         "callers": {
           "code": [
             {
@@ -19855,9 +20288,13 @@
             {
               "file": "supabase/migrations/20261123110000_cron_refresh_cache_views.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 4,
+          "code_total_files": 5,
           "cron": [
             "26:refresh-cache-views"
           ],
@@ -19865,12 +20302,12 @@
           "triggers": [],
           "views": []
         },
-        "comment": "Atualiza uma materialized view de cache ou todas",
+        "comment": "Atualiza uma materialized view de cache (ou todas) e registra em cache_refresh_log.",
         "config": [
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "eb9491cfeaf04a5d",
+        "definition_sha": "8beae288b316685f",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
@@ -20903,6 +21340,18 @@
           "table": "blocked_ips"
         },
         {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "cache_refresh_log"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "cache_refresh_log"
+        },
+        {
           "grantee": "anon",
           "privileges": "SELECT",
           "schema": "public",
@@ -21183,6 +21632,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "job_queue"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "job_queue_processing_log"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "job_queue_processing_log"
         },
         {
           "grantee": "authenticated",
@@ -22538,6 +22999,64 @@
       },
       {
         "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX cache_refresh_log_pkey ON public.cache_refresh_log USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "cache_refresh_log_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "cache_refresh_log"
+      },
+      {
+        "columns": [
+          "view_name"
+        ],
+        "definition": "CREATE UNIQUE INDEX idx_cache_refresh_log_running ON public.cache_refresh_log USING btree (view_name) WHERE (status = 'running'::text)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_cache_refresh_log_running",
+        "predicate": "(status = 'running'::text)",
+        "schema": "public",
+        "table": "cache_refresh_log"
+      },
+      {
+        "columns": [
+          "status",
+          "refresh_started_at"
+        ],
+        "definition": "CREATE INDEX idx_cache_refresh_log_status ON public.cache_refresh_log USING btree (status, refresh_started_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_cache_refresh_log_status",
+        "predicate": null,
+        "schema": "public",
+        "table": "cache_refresh_log"
+      },
+      {
+        "columns": [
+          "view_name",
+          "refresh_started_at"
+        ],
+        "definition": "CREATE INDEX idx_cache_refresh_log_view ON public.cache_refresh_log USING btree (view_name, refresh_started_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_cache_refresh_log_view",
+        "predicate": null,
+        "schema": "public",
+        "table": "cache_refresh_log"
+      },
+      {
+        "columns": [
           "owner_id",
           "phone_e164"
         ],
@@ -23501,6 +24020,20 @@
       },
       {
         "columns": [
+          "created_by"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_created_by ON public.job_queue USING btree (created_by)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_created_by",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue"
+      },
+      {
+        "columns": [
           "type",
           "status",
           "created_at"
@@ -23585,6 +24118,34 @@
         "predicate": "((dedup_key IS NOT NULL) AND (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text])))",
         "schema": "public",
         "table": "job_queue"
+      },
+      {
+        "columns": [
+          "run_at"
+        ],
+        "definition": "CREATE INDEX idx_job_queue_processing_log_run_at ON public.job_queue_processing_log USING btree (run_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_job_queue_processing_log_run_at",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue_processing_log"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX job_queue_processing_log_pkey ON public.job_queue_processing_log USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "job_queue_processing_log_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "job_queue_processing_log"
       },
       {
         "columns": [
@@ -24464,6 +25025,20 @@
         "predicate": null,
         "schema": "public",
         "table": "new_device_alerts"
+      },
+      {
+        "columns": [
+          "alert_id"
+        ],
+        "definition": "CREATE INDEX idx_order_geo_events_alert_id ON public.order_geo_events USING btree (alert_id)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "idx_order_geo_events_alert_id",
+        "predicate": null,
+        "schema": "public",
+        "table": "order_geo_events"
       },
       {
         "columns": [
@@ -25859,20 +26434,8 @@
       },
       {
         "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.job_queue.job_queue_created_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
         "detail": "FK sem índice nas colunas ['registered_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
         "object": "public.lalamove_webhook_config.lalamove_webhook_config_registered_by_fkey",
-        "severity": "BAIXA"
-      },
-      {
-        "code": "fk_without_index",
-        "detail": "FK sem índice nas colunas ['alert_id']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
-        "object": "public.order_geo_events.order_geo_events_alert_id_fkey",
         "severity": "BAIXA"
       },
       {
@@ -26131,6 +26694,12 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.blocked_ips.Managers can view blocked IPs",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.cache_refresh_log.Admins read cache refresh log",
         "severity": "BAIXA"
       },
       {
@@ -26461,6 +27030,12 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.job_queue.Admins view jobs",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.job_queue_processing_log.Admins read job queue processing log",
         "severity": "BAIXA"
       },
       {
@@ -27126,7 +27701,19 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.cache_view_count(p_view text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.check_login_lockout_v2(p_email text, p_ip_address inet)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.cleanup_processing_logs()",
         "severity": "INFO"
       },
       {
@@ -27168,7 +27755,7 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
-        "object": "public.refresh_cache_view(p_view_name text)",
+        "object": "public.refresh_cache_view(p_view_name text, p_triggered_by text)",
         "severity": "INFO"
       },
       {
@@ -28073,6 +28660,40 @@
         "name": "fix_crons_dispatcher",
         "statements": null,
         "version": "20261122140000"
+      },
+      {
+        "name": "geo_price_list_skus_faltantes",
+        "statements": null,
+        "version": "20261123130000"
+      },
+      {
+        "name": "geo_place_id_prefix_check",
+        "statements": null,
+        "version": "20261123140000"
+      },
+      {
+        "name": "cache_refresh_log_restaurado",
+        "statements": 17,
+        "statements_sha": "f1265f62183f195b",
+        "version": "20261123150000"
+      },
+      {
+        "name": "job_queue_processing_log",
+        "statements": 10,
+        "statements_sha": "fde08101c4caa2cf",
+        "version": "20261123160000"
+      },
+      {
+        "name": "indices_fk_faltantes",
+        "statements": 2,
+        "statements_sha": "ccdafd6deb2d379a",
+        "version": "20261123170000"
+      },
+      {
+        "name": "geocode_match_confidence",
+        "statements": 4,
+        "statements_sha": "17192aff70d683c5",
+        "version": "20261123180000"
       }
     ],
     "policies": [
@@ -28602,6 +29223,18 @@
         "schema": "public",
         "table": "blocked_ips",
         "using": "has_role(auth.uid(), 'manager'::app_role)",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Admins read cache refresh log",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "cache_refresh_log",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
         "with_check": null
       },
       {
@@ -29287,6 +29920,18 @@
         "table": "job_queue",
         "using": "true",
         "with_check": "true"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Admins read job queue processing log",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "job_queue_processing_log",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": null
       },
       {
         "cmd": "DELETE",
@@ -30772,6 +31417,20 @@
         "bypass_rls": false,
         "config": null,
         "conn_limit": -1,
+        "create_db": false,
+        "create_role": false,
+        "inherit": false,
+        "login": true,
+        "member_of": [
+          "postgres"
+        ],
+        "name": "cli_login_postgres",
+        "superuser": false
+      },
+      {
+        "bypass_rls": false,
+        "config": null,
+        "conn_limit": -1,
         "create_db": true,
         "create_role": true,
         "inherit": true,
@@ -31199,6 +31858,21 @@
         "schema": "public"
       },
       {
+        "comment": "Historico de refresh das materialized views de cache (inicio, fim, duracao, erro).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "cache_refresh_log",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Contatos cadastrados (empresas/parceiros) para integracao externa.",
         "from_extension": false,
         "is_partition": false,
@@ -31489,6 +32163,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "job_queue",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Historico das rodadas do processador de fila (processados, sucesso, falha, duracao).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "job_queue_processing_log",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,
@@ -32766,11 +33455,9 @@
     "views": [
       {
         "comment": "Status de cada materialized view de cache (stale/atualizada)",
-        "definition": " SELECT view_name,\n    row_count,\n    last_refresh,\n    refresh_duration_ms,\n    last_refresh IS NULL OR last_refresh < (now() - '01:00:00'::interval) AS is_stale,\n        CASE\n            WHEN last_refresh IS NULL THEN 'never_refreshed'::text\n            WHEN last_refresh < (now() - '01:00:00'::interval) THEN 'stale'::text\n            ELSE 'success'::text\n        END AS status\n   FROM ( SELECT 'driver_stats_cache'::text AS view_name,\n            ( SELECT count(*) AS count\n                   FROM driver_stats_cache) AS row_count,\n            ( SELECT max(driver_stats_cache.cached_at) AS max\n                   FROM driver_stats_cache) AS last_refresh,\n            NULL::integer AS refresh_duration_ms\n        UNION ALL\n         SELECT 'delivery_metrics_cache'::text,\n            ( SELECT count(*) AS count\n                   FROM delivery_metrics_cache) AS count,\n            ( SELECT max(delivery_metrics_cache.cached_at) AS max\n                   FROM delivery_metrics_cache) AS max,\n            NULL::integer AS int4\n        UNION ALL\n         SELECT 'hourly_metrics_cache'::text,\n            ( SELECT count(*) AS count\n                   FROM hourly_metrics_cache) AS count,\n            ( SELECT max(hourly_metrics_cache.cached_at) AS max\n                   FROM hourly_metrics_cache) AS max,\n            NULL::integer AS int4) s;",
+        "definition": " SELECT v.view_name,\n        CASE\n            WHEN lr.refresh_completed_at IS NULL THEN cache_view_count(v.view_name)\n            ELSE lr.row_count\n        END AS row_count,\n    lr.refresh_completed_at AS last_refresh,\n    lr.refresh_duration_ms,\n    lr.refresh_completed_at IS NULL OR lr.refresh_completed_at < (now() - '01:00:00'::interval) AS is_stale,\n        CASE\n            WHEN lr.refresh_completed_at IS NULL THEN 'never_refreshed'::text\n            WHEN lr.refresh_completed_at < (now() - '01:00:00'::interval) THEN 'stale'::text\n            ELSE 'success'::text\n        END AS status\n   FROM ( VALUES ('driver_stats_cache'::text), ('delivery_metrics_cache'::text), ('hourly_metrics_cache'::text)) v(view_name)\n     LEFT JOIN LATERAL ( SELECT c.refresh_completed_at,\n            c.refresh_duration_ms,\n            c.row_count\n           FROM cache_refresh_log c\n          WHERE c.view_name = v.view_name AND c.status = 'success'::text\n          ORDER BY c.refresh_completed_at DESC\n         LIMIT 1) lr ON true;",
         "depends_on": [
-          "public.delivery_metrics_cache",
-          "public.driver_stats_cache",
-          "public.hourly_metrics_cache"
+          "public.cache_refresh_log"
         ],
         "kind": "view",
         "name": "cache_status",

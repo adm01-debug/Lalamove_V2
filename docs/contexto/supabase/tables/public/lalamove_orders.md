@@ -90,6 +90,7 @@
 | 69 | `approach_radius_m` | `integer` | sim |  |  |  |
 | 70 | `approach_eta_min` | `integer` | sim |  |  |  |
 | 71 | `notify_delivery_contact` | `boolean` | sim |  |  |  |
+| 72 | `geocode_match_confidence` | `text` | sim |  |  | Etapa 13: confiança bruta do provedor de geocode (Mapbox match_code.confidence / Google location_type / LALAMOVE). Complementa geocode_precision (escala normalizada). |
 
 
 ## Constraints
@@ -101,12 +102,14 @@
 | lalamove_orders_delay_nonneg | CHECK | `CHECK (delay_minutes IS NULL OR delay_minutes >= 0)` |  |  | sim |
 | lalamove_orders_delivery_lat_range | CHECK | `CHECK (delivery_latitude IS NULL OR delivery_latitude >= '-90'::integer::numeric AND delivery_latitude <= 90::numeric)` |  |  | sim |
 | lalamove_orders_delivery_lng_range | CHECK | `CHECK (delivery_longitude IS NULL OR delivery_longitude >= '-180'::integer::numeric AND delivery_longitude <= 180::numeric)` |  |  | sim |
+| lalamove_orders_delivery_place_id_prefix_chk | CHECK | `CHECK (delivery_place_id IS NULL OR delivery_place_id ~ '^(mapbox\|google\|lalamove):'::text)` |  |  | sim |
 | lalamove_orders_distance_nonneg | CHECK | `CHECK (distance_meters IS NULL OR distance_meters >= 0)` |  |  | sim |
 | lalamove_orders_driver_id_fkey | FOREIGN KEY | `FOREIGN KEY (driver_id) REFERENCES drivers(id) ON DELETE SET NULL` | SET NULL | NO ACTION | sim |
 | lalamove_orders_duration_nonneg | CHECK | `CHECK (duration_minutes IS NULL OR duration_minutes >= 0)` |  |  | sim |
 | lalamove_orders_lalamove_id_key | UNIQUE | `UNIQUE (lalamove_id)` |  |  | sim |
 | lalamove_orders_pickup_lat_range | CHECK | `CHECK (pickup_latitude IS NULL OR pickup_latitude >= '-90'::integer::numeric AND pickup_latitude <= 90::numeric)` |  |  | sim |
 | lalamove_orders_pickup_lng_range | CHECK | `CHECK (pickup_longitude IS NULL OR pickup_longitude >= '-180'::integer::numeric AND pickup_longitude <= 180::numeric)` |  |  | sim |
+| lalamove_orders_pickup_place_id_prefix_chk | CHECK | `CHECK (pickup_place_id IS NULL OR pickup_place_id ~ '^(mapbox\|google\|lalamove):'::text)` |  |  | sim |
 | lalamove_orders_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
 | lalamove_orders_rating_range | CHECK | `CHECK (custom_rating IS NULL OR custom_rating >= 0::numeric AND custom_rating <= 5::numeric)` |  |  | sim |
 | lalamove_orders_route_dev_threshold_nonneg | CHECK | `CHECK (route_deviation_threshold_minutes IS NULL OR route_deviation_threshold_minutes >= 0)` |  |  | sim |

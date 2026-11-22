@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
+  "commit": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
   "branch": "main",
-  "data_commit": "2026-11-21T23:08:44-03:00",
+  "data_commit": "2026-11-21T23:08:54-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "933f4d6",
+    "data": "2026-11-21",
+    "assunto": "docs: auditoria do ledger de migrations x schema real (#210)"
+   },
    {
     "sha": "e38c647",
     "data": "2026-11-21",
@@ -126,14 +131,9 @@
     "sha": "5281908",
     "data": "2026-11-21",
     "assunto": "fix: fechar ciclo de notification_status dos eventos geo (#181)"
-   },
-   {
-    "sha": "3e6683c",
-    "data": "2026-11-21",
-    "assunto": "infra: cron horario de refresh das materialized views de cache (#180)"
    }
   ],
-  "arquivos_mudados_7d": 211,
+  "arquivos_mudados_7d": 212,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 114
+    "commits": 115
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 984,
+  "arquivos_total": 985,
   "arquivos_codigo": 612,
   "linhas_codigo": 119808,
   "rotas": 55,
@@ -327,7 +327,7 @@
   "testes": 122,
   "workflows": 5,
   "scripts": 106,
-  "docs_md": 99
+  "docs_md": 100
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {

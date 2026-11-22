@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
+  "sha": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 02:09 UTC",
-  "files_total": 979,
+  "generated_at": "2026-11-22 02:18 UTC",
+  "files_total": 980,
   "code_files": 807,
   "code_lines": 138808
  },
@@ -68923,10 +68923,19 @@
   }
  },
  "git": {
-  "sha": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
+  "sha": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "933f4d6",
+    "date": "2026-11-21",
+    "author": "adm01-debug",
+    "subject": "docs: auditoria do ledger de migrations x schema real (#210)",
+    "files": [
+     "docs/auditorias/AUDITORIA_LEDGER_MIGRATIONS_2026-11.md"
+    ]
+   },
    {
     "sha": "e38c647",
     "date": "2026-11-21",
@@ -69257,22 +69266,6 @@
      "supabase/functions/job-worker/index.ts",
      "supabase/migrations/20261122140000_fix_crons_dispatcher.sql"
     ]
-   },
-   {
-    "sha": "c2ae0ba",
-    "date": "2026-11-21",
-    "author": "adm01-debug",
-    "subject": "fix(mapa): /map não quebra mais no StrictMode e camadas voltam a renderizar (#174)",
-    "files": [
-     "e2e/livemap-route.e2e.ts",
-     "src/components/map/LiveMap.tsx",
-     "src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts",
-     "src/components/map/hooks/__tests__/useMapMarkers.test.ts",
-     "src/components/map/hooks/useMapMarkers.ts",
-     "src/components/map/mapLayers.ts",
-     "src/lib/__tests__/statusPalette.test.ts",
-     "src/lib/statusPalette.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -69353,8 +69346,8 @@
     2
    ],
    [
-    "src/components/map/LiveMap.tsx",
-    2
+    "docs/auditorias/AUDITORIA_LEDGER_MIGRATIONS_2026-11.md",
+    1
    ]
   ]
  }

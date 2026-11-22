@@ -1,21 +1,21 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "gerado_em": "2026-11-22T02:09:39.691Z",
- "commit": "e38c6470f56c6a8952d865227aeed0e733d1b93a",
+ "gerado_em": "2026-11-22T02:19:09.213Z",
+ "commit": "933f4d64dd8b2fdd0d87a80bcebd1fba9d58616d",
  "branch": "main",
  "gerador": "scripts/ai-context/gerar.mjs",
  "node": "v22.23.5",
  "arquivos": {
-  "INDEX.md": "ce62912f33c0969f",
+  "INDEX.md": "40d30a3184d136f8",
   "banco.json": "1d48994c79298b3c",
-  "baseline.json": "6b8a2f44434a28dc",
+  "baseline.json": "791b429fa6758cf5",
   "componentes.json": "a146a33968ada1b7",
-  "convencoes.json": "ef91e125db32cc19",
+  "convencoes.json": "cdd1b5dbda673a86",
   "edge-functions.json": "0f5dcf6dca0ab54e",
-  "ferramentas.json": "27e4247792f49020",
+  "ferramentas.json": "6cc0a43f263c4b5c",
   "grafo-arestas.json": "26cda06167388d41",
-  "grafo-graphify.json": "518ae3cfb1001974",
+  "grafo-graphify.json": "f3ddbe4d5bac8322",
   "grafo.json": "deb639c92788238e",
   "hooks.json": "c44acb6a701946b2",
   "logica.json": "44dcb496e3563b91",
@@ -26,7 +26,7 @@
   "testes.json": "d469f8b8f3c0d77d"
  },
  "contagens": {
-  "arquivos_total": 984,
+  "arquivos_total": 985,
   "arquivos_codigo": 612,
   "linhas_codigo": 119808,
   "rotas": 55,
@@ -43,7 +43,7 @@
   "testes": 122,
   "workflows": 5,
   "scripts": 106,
-  "docs_md": 99
+  "docs_md": 100
  },
  "erros": []
 }

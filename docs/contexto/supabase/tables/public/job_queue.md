@@ -52,6 +52,7 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_job_queue_created_by | btree | created_by | não | sim |  | `CREATE INDEX idx_job_queue_created_by ON public.job_queue USING btree (created_by)` |
 | idx_job_queue_monitoring | btree | type, status, created_at | não | sim |  | `CREATE INDEX idx_job_queue_monitoring ON public.job_queue USING btree (type, status, created_at DESC)` |
 | idx_job_queue_pending | btree | next_retry_at, priority | não | sim | `(status = 'PENDING'::text)` | `CREATE INDEX idx_job_queue_pending ON public.job_queue USING btree (next_retry_at, priority DESC) WHERE (status = 'PENDING'::text)` |
 | idx_job_queue_status | btree | status | não | sim |  | `CREATE INDEX idx_job_queue_status ON public.job_queue USING btree (status)` |

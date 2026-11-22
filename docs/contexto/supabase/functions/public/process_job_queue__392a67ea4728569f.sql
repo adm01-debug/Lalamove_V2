@@ -8,7 +8,10 @@ DECLARE
   v_job       RECORD;
   v_processed integer := 0;
   v_requeued  integer := 0;
+  v_failed    integer := 0;
+  v_skipped   integer := 0;
   v_key       text;
+  v_start     TIMESTAMPTZ := clock_timestamp();
   v_url       text := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1';
 BEGIN
   SELECT decrypted_secret INTO v_key
@@ -30,10 +33,12 @@ BEGIN
 
   FOR v_job IN SELECT * FROM get_next_jobs(p_limit) LOOP
     IF NOT mark_job_processing(v_job.id) THEN
+      v_skipped := v_skipped + 1;
       CONTINUE;
     END IF;
 
     IF v_key IS NULL THEN
+      v_failed := v_failed + 1;
       RAISE WARNING 'process_job_queue: vault.dispatcher_key ausente; job % ficou em PROCESSING', v_job.id;
       CONTINUE;
     END IF;
@@ -56,6 +61,17 @@ BEGIN
 
     v_processed := v_processed + 1;
   END LOOP;
+
+  INSERT INTO public.job_queue_processing_log
+    (processed, succeeded, failed, skipped, duration_ms, metadata)
+  VALUES (
+    v_processed + v_skipped + v_failed,
+    v_processed,
+    v_failed,
+    v_skipped,
+    EXTRACT(MILLISECONDS FROM clock_timestamp() - v_start)::INTEGER,
+    jsonb_build_object('requeued', v_requeued, 'limit', p_limit)
+  );
 
   RETURN QUERY SELECT v_processed, v_requeued;
 END;

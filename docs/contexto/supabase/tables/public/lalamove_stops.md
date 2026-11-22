@@ -37,6 +37,7 @@
 | 17 | `place_id` | `text` | sim |  |  |  |
 | 18 | `address_components` | `jsonb` | sim |  |  |  |
 | 19 | `geocode_precision` | `text` | sim |  |  |  |
+| 20 | `geocode_match_confidence` | `text` | sim |  |  | Etapa 13: confiança bruta do provedor de geocode da parada. |
 
 
 ## Constraints
@@ -47,6 +48,7 @@
 | lalamove_stops_longitude_range | CHECK | `CHECK (longitude IS NULL OR longitude >= '-180'::integer::numeric AND longitude <= 180::numeric)` |  |  | sim |
 | lalamove_stops_order_id_fkey | FOREIGN KEY | `FOREIGN KEY (order_id) REFERENCES lalamove_orders(id) ON DELETE CASCADE` | CASCADE | NO ACTION | sim |
 | lalamove_stops_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
+| lalamove_stops_place_id_prefix_chk | CHECK | `CHECK (place_id IS NULL OR place_id ~ '^(mapbox\|google\|lalamove):'::text)` |  |  | sim |
 | lalamove_stops_pod_status_valid | CHECK | `CHECK (pod_status IS NULL OR (pod_status = ANY (ARRAY['pending'::text, 'delivered'::text, 'failed'::text])))` |  |  | sim |
 | lalamove_stops_stop_index_non_negative | CHECK | `CHECK (stop_index >= 0)` |  |  | sim |
 

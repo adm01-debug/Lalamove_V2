@@ -182,3 +182,9 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122130100 | [geo_foundation](migrations/20261122130100_geo_foundation.sql) | 0 |
 | 20261122130200 | [alert_type_driver_assigned](migrations/20261122130200_alert_type_driver_assigned.sql) | 0 |
 | 20261122140000 | [fix_crons_dispatcher](migrations/20261122140000_fix_crons_dispatcher.sql) | 0 |
+| 20261123130000 | [geo_price_list_skus_faltantes](migrations/20261123130000_geo_price_list_skus_faltantes.sql) | 0 |
+| 20261123140000 | [geo_place_id_prefix_check](migrations/20261123140000_geo_place_id_prefix_check.sql) | 0 |
+| 20261123150000 | [cache_refresh_log_restaurado](migrations/20261123150000_cache_refresh_log_restaurado.sql) | 17 |
+| 20261123160000 | [job_queue_processing_log](migrations/20261123160000_job_queue_processing_log.sql) | 10 |
+| 20261123170000 | [indices_fk_faltantes](migrations/20261123170000_indices_fk_faltantes.sql) | 2 |
+| 20261123180000 | [geocode_match_confidence](migrations/20261123180000_geocode_match_confidence.sql) | 4 |

@@ -52,6 +52,10 @@ Uso e tamanho em `stats.md`.
 | public.blocked_ips | blocked_ips_ip_address_key | btree | ip_address | sim | sim |  |
 | public.blocked_ips | blocked_ips_pkey | btree | id | sim | sim |  |
 | public.blocked_ips | idx_blocked_ips_expires | btree | expires_at | não | sim |  |
+| public.cache_refresh_log | cache_refresh_log_pkey | btree | id | sim | sim |  |
+| public.cache_refresh_log | idx_cache_refresh_log_running | btree | view_name | sim | sim | `(status = 'running'::text)` |
+| public.cache_refresh_log | idx_cache_refresh_log_status | btree | status, refresh_started_at | não | sim |  |
+| public.cache_refresh_log | idx_cache_refresh_log_view | btree | view_name, refresh_started_at | não | sim |  |
 | public.contacts | contacts_owner_phone_unique | btree | owner_id, phone_e164 | sim | sim |  |
 | public.contacts | contacts_pkey | btree | id | sim | sim |  |
 | public.contacts | idx_contacts_name_trgm | gin | name | não | sim |  |
@@ -119,12 +123,15 @@ Uso e tamanho em `stats.md`.
 | public.geo_usage | idx_geo_usage_month | btree | provider, day | não | sim |  |
 | public.hourly_metrics_cache | idx_hourly_metrics_cache_hour | btree | hour | sim | sim |  |
 | public.ip_whitelist | ip_whitelist_pkey | btree | id | sim | sim |  |
+| public.job_queue | idx_job_queue_created_by | btree | created_by | não | sim |  |
 | public.job_queue | idx_job_queue_monitoring | btree | type, status, created_at | não | sim |  |
 | public.job_queue | idx_job_queue_pending | btree | next_retry_at, priority | não | sim | `(status = 'PENDING'::text)` |
 | public.job_queue | idx_job_queue_status | btree | status | não | sim |  |
 | public.job_queue | idx_job_queue_type | btree | type | não | sim |  |
 | public.job_queue | job_queue_pkey | btree | id | sim | sim |  |
 | public.job_queue | uq_job_queue_dedup_open | btree | dedup_key | sim | sim | `((dedup_key IS NOT NULL) AND (status = ANY (ARRAY['PENDING'::text, 'PROCESSING'::text])))` |
+| public.job_queue_processing_log | idx_job_queue_processing_log_run_at | btree | run_at | não | sim |  |
+| public.job_queue_processing_log | job_queue_processing_log_pkey | btree | id | sim | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_new_id | btree | new_lalamove_id | não | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_order_id | btree | order_id | não | sim |  |
 | public.lalamove_order_replacements | idx_order_replacements_prev_id | btree | previous_lalamove_id | não | sim |  |
@@ -187,6 +194,7 @@ Uso e tamanho em `stats.md`.
 | public.new_device_alerts | idx_new_device_alerts_device_id | btree | device_id | não | sim |  |
 | public.new_device_alerts | idx_new_device_alerts_user | btree | user_id, created_at | não | sim |  |
 | public.new_device_alerts | new_device_alerts_pkey | btree | id | sim | sim |  |
+| public.order_geo_events | idx_order_geo_events_alert_id | btree | alert_id | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  |
 | public.order_geo_events | order_geo_events_order_id_event_type_stop_index_key | btree | order_id, event_type, stop_index | sim | sim |  |
 | public.order_geo_events | order_geo_events_pkey | btree | id | sim | sim |  |

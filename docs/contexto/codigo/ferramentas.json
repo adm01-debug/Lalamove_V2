@@ -6,7 +6,7 @@
    "TypeScript (501)",
    "SQL (186)",
    "JavaScript (112)",
-   "Markdown (99)",
+   "Markdown (100)",
    "JSON (34)",
    "Shell (9)",
    "Python (8)",
@@ -523,6 +523,10 @@
   {
    "pasta": "docs/contexto",
    "arquivos_md": 2
+  },
+  {
+   "pasta": "docs/auditorias",
+   "arquivos_md": 1
   },
   {
    "pasta": "docs/ci",

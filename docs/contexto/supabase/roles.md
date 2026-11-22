@@ -7,6 +7,7 @@
 | anon | não | não | não | não | não | -1 | statement_timeout=3s |  |
 | authenticated | não | não | não | não | não | -1 | statement_timeout=8s |  |
 | authenticator | não | sim | não | não | não | -1 | session_preload_libraries=supautils, safeupdate, statement_timeout=8s, lock_timeout=8s | anon, authenticated, service_role |
+| cli_login_postgres | não | sim | não | não | não | -1 |  | postgres |
 | dashboard_user | não | não | não | sim | sim | -1 |  |  |
 | pgbouncer | não | sim | não | não | não | -1 |  |  |
 | postgres | não | sim | sim | sim | sim | -1 | search_path="\$user", public, extensions | anon, authenticated, authenticator, pg_create_subscription, pg_monitor, pg_read_all_data, pg_signal_backend, service_role, supabase_privileged_role |

@@ -49,6 +49,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.bitrix24_tokens | Only admins can view tokens | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.blocked_ips | Admins can manage blocked IPs | ALL | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.blocked_ips | Managers can view blocked IPs | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'manager'::app_role)` |  |
+| public.cache_refresh_log | Admins read cache refresh log | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.contacts | Users manage their own contacts | ALL | PERMISSIVE | public | `(auth.uid() = owner_id)` | `(auth.uid() = owner_id)` |
 | public.contract_version_usage | admins read contract usage | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.contract_version_usage_monthly | Admins can view monthly contract usage | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
@@ -106,6 +107,7 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.ip_whitelist | Managers can view IP whitelist | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'manager'::app_role)` |  |
 | public.job_queue | Admins view jobs | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.job_queue | Service role full access | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.job_queue_processing_log | Admins read job queue processing log | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.lalamove_order_replacements | Admins can delete order_replacements | DELETE | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.lalamove_order_replacements | Admins managers can view order_replacements | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |  |
 | public.lalamove_orders | Admins managers can view all orders | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |

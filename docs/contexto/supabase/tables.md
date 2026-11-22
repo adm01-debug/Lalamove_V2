@@ -17,6 +17,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.bitrix24_sync](tables/public/bitrix24_sync.md) | table | sim | 4 | 9 | não | Registro de sincronizacao de deals com o Bitrix24. |
 | [public.bitrix24_tokens](tables/public/bitrix24_tokens.md) | table | sim | 4 | 7 | não | Tokens OAuth2 do Bitrix24 com refresh. |
 | [public.blocked_ips](tables/public/blocked_ips.md) | table | sim | 2 | 11 | sim | IPs bloqueados por rate limit/seguranca com motivo e expiracao. |
+| [public.cache_refresh_log](tables/public/cache_refresh_log.md) | table | sim | 1 | 9 | não | Historico de refresh das materialized views de cache (inicio, fim, duracao, erro). |
 | [public.contacts](tables/public/contacts.md) | table | sim | 1 | 10 | não | Contatos cadastrados (empresas/parceiros) para integracao externa. |
 | [public.contract_version_usage](tables/public/contract_version_usage.md) | table | sim | 1 | 8 | não | Uso de versoes de contrato por periodo. |
 | [public.contract_version_usage_monthly](tables/public/contract_version_usage_monthly.md) | table | sim | 1 | 9 | não | Agregado mensal de uso de versoes de contrato. |
@@ -37,13 +38,14 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.geo_usage](tables/public/geo_usage.md) | table | sim | 1 | 7 | não | Uso diario de APIs de mapa por provedor/funcao/sku com custo estimado (USD). |
 | [public.ip_whitelist](tables/public/ip_whitelist.md) | table | sim | 5 | 8 | não | IPs autorizados com CIDR para acesso privilegiado. |
 | [public.job_queue](tables/public/job_queue.md) | table | sim | 2 | 17 | não | Fila assincrona (webhook, notificacao, POD, sync). Recriada no baseline 2026-11 por drift: estava no ledger mas ausente na producao. |
+| [public.job_queue_processing_log](tables/public/job_queue_processing_log.md) | table | sim | 1 | 8 | não | Historico das rodadas do processador de fila (processados, sucesso, falha, duracao). |
 | [public.lalamove_order_replacements](tables/public/lalamove_order_replacements.md) | table | sim | 2 | 7 | sim | Registro de pedidos de reposicao/reescolha na Lalamove. |
-| [public.lalamove_orders](tables/public/lalamove_orders.md) | table | sim | 6 | 71 | não | Pedidos Lalamove com campos customizados e status em tempo real. |
+| [public.lalamove_orders](tables/public/lalamove_orders.md) | table | sim | 6 | 72 | não | Pedidos Lalamove com campos customizados e status em tempo real. |
 | [public.lalamove_priority_fee_history](tables/public/lalamove_priority_fee_history.md) | table | sim | 2 | 9 | não | Historico de taxas de prioridade aplicadas aos pedidos Lalamove. |
 | [public.lalamove_rate_limits](tables/public/lalamove_rate_limits.md) | table | sim | 2 | 12 | não | Controle de rate limit das chamadas a API Lalamove. |
 | [public.lalamove_status_history](tables/public/lalamove_status_history.md) | table | sim | 5 | 9 | não | Historico de mudancas de status de cada pedido Lalamove. |
 | [public.lalamove_stop_proofs](tables/public/lalamove_stop_proofs.md) | table | sim | 5 | 14 | sim | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. |
-| [public.lalamove_stops](tables/public/lalamove_stops.md) | table | sim | 5 | 19 | não | Paradas/stops dos pedidos Lalamove com endereco e horarios. |
+| [public.lalamove_stops](tables/public/lalamove_stops.md) | table | sim | 5 | 20 | não | Paradas/stops dos pedidos Lalamove com endereco e horarios. |
 | [public.lalamove_uapi_sessions](tables/public/lalamove_uapi_sessions.md) | table | sim | 1 | 13 | não | Sessoes da Unified API da Lalamove (token e expiracao). |
 | [public.lalamove_webhook_config](tables/public/lalamove_webhook_config.md) | table | sim | 1 | 9 | não | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). |
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 11 | não | Tentativas de login com IP e resultado para lockout de conta. |

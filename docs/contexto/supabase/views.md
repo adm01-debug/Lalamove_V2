@@ -8,42 +8,33 @@
 | owner | postgres |
 | security_invoker | não |
 | opções |  |
-| depende de | public.delivery_metrics_cache, public.driver_stats_cache, public.hourly_metrics_cache |
+| depende de | public.cache_refresh_log |
 | populada | n/a |
 | comentário | Status de cada materialized view de cache (stale/atualizada) |
 
 
 ```sql
-SELECT view_name,
-    row_count,
-    last_refresh,
-    refresh_duration_ms,
-    last_refresh IS NULL OR last_refresh < (now() - '01:00:00'::interval) AS is_stale,
+SELECT v.view_name,
         CASE
-            WHEN last_refresh IS NULL THEN 'never_refreshed'::text
-            WHEN last_refresh < (now() - '01:00:00'::interval) THEN 'stale'::text
+            WHEN lr.refresh_completed_at IS NULL THEN cache_view_count(v.view_name)
+            ELSE lr.row_count
+        END AS row_count,
+    lr.refresh_completed_at AS last_refresh,
+    lr.refresh_duration_ms,
+    lr.refresh_completed_at IS NULL OR lr.refresh_completed_at < (now() - '01:00:00'::interval) AS is_stale,
+        CASE
+            WHEN lr.refresh_completed_at IS NULL THEN 'never_refreshed'::text
+            WHEN lr.refresh_completed_at < (now() - '01:00:00'::interval) THEN 'stale'::text
             ELSE 'success'::text
         END AS status
-   FROM ( SELECT 'driver_stats_cache'::text AS view_name,
-            ( SELECT count(*) AS count
-                   FROM driver_stats_cache) AS row_count,
-            ( SELECT max(driver_stats_cache.cached_at) AS max
-                   FROM driver_stats_cache) AS last_refresh,
-            NULL::integer AS refresh_duration_ms
-        UNION ALL
-         SELECT 'delivery_metrics_cache'::text,
-            ( SELECT count(*) AS count
-                   FROM delivery_metrics_cache) AS count,
-            ( SELECT max(delivery_metrics_cache.cached_at) AS max
-                   FROM delivery_metrics_cache) AS max,
-            NULL::integer AS int4
-        UNION ALL
-         SELECT 'hourly_metrics_cache'::text,
-            ( SELECT count(*) AS count
-                   FROM hourly_metrics_cache) AS count,
-            ( SELECT max(hourly_metrics_cache.cached_at) AS max
-                   FROM hourly_metrics_cache) AS max,
-            NULL::integer AS int4) s;
+   FROM ( VALUES ('driver_stats_cache'::text), ('delivery_metrics_cache'::text), ('hourly_metrics_cache'::text)) v(view_name)
+     LEFT JOIN LATERAL ( SELECT c.refresh_completed_at,
+            c.refresh_duration_ms,
+            c.row_count
+           FROM cache_refresh_log c
+          WHERE c.view_name = v.view_name AND c.status = 'success'::text
+          ORDER BY c.refresh_completed_at DESC
+         LIMIT 1) lr ON true;
 ```
 
 ## public.delivery_metrics_cache (materialized)

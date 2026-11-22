@@ -49,6 +49,7 @@
 
 | nome | método | colunas | único | válido | predicado | definição |
 |---|---|---|---|---|---|---|
+| idx_order_geo_events_alert_id | btree | alert_id | não | sim |  | `CREATE INDEX idx_order_geo_events_alert_id ON public.order_geo_events USING btree (alert_id)` |
 | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  | `CREATE INDEX idx_order_geo_events_order ON public.order_geo_events USING btree (order_id, triggered_at DESC)` |
 | order_geo_events_order_id_event_type_stop_index_key | btree | order_id, event_type, stop_index | sim | sim |  | `CREATE UNIQUE INDEX order_geo_events_order_id_event_type_stop_index_key ON public.order_geo_events USING btree (order_id, event_type, stop_index)` |
 | order_geo_events_pkey | btree | id | sim | sim |  | `CREATE UNIQUE INDEX order_geo_events_pkey ON public.order_geo_events USING btree (id)` |
