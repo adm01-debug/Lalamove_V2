@@ -8,6 +8,7 @@ import {
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { openExternal } from '@/lib/html';
 import { 
   Tooltip,
   TooltipContent,
@@ -58,13 +59,13 @@ export function MapHUD({
 
   const openStreetView = () => {
     const url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${selectedTracking.current_latitude},${selectedTracking.current_longitude}`;
-    window.open(url, '_blank');
+    openExternal(url);
   };
 
   const sendWhatsApp = () => {
     const phone = selectedTracking.driver?.phone || '';
     if (phone) {
-      window.open(`https://wa.me/${phone.replace(/\D/g, '')}`, '_blank');
+      openExternal(`https://wa.me/${phone.replace(/\D/g, '')}`);
     }
   };
 
@@ -348,7 +349,7 @@ export function MapHUD({
                 <Navigation className="w-2 h-2" />
                 {selectedTracking.current_latitude.toFixed(6)}, {selectedTracking.current_longitude.toFixed(6)}
               </div>
-              <Button variant="ghost" size="sm" className="h-6 text-[9px] font-bold uppercase hover:bg-white/5" onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${selectedTracking.current_latitude},${selectedTracking.current_longitude}`, '_blank')}>
+              <Button variant="ghost" size="sm" className="h-6 text-[9px] font-bold uppercase hover:bg-white/5" onClick={() => openExternal(`https://www.google.com/maps/search/?api=1&query=${selectedTracking.current_latitude},${selectedTracking.current_longitude}`)}>
                 Maps <ExternalLink className="w-2 h-2 ml-1" />
               </Button>
             </div>

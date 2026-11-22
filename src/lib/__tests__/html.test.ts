@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { escapeHtml } from '../html';
+import { describe, expect, it, vi } from 'vitest';
+import { escapeHtml, openExternal } from '../html';
 
 describe('escapeHtml', () => {
   it('escapa as 5 entidades de HTML', () => {
@@ -27,5 +27,14 @@ describe('escapeHtml', () => {
     el.innerHTML = escapeHtml('<img src=x onerror=alert(1)>');
     expect(el.querySelector('img')).toBeNull();
     expect(el.textContent).toContain('<img src=x onerror=alert(1)>');
+  });
+});
+
+describe('openExternal', () => {
+  it('abre a URL em nova aba com noopener,noreferrer', () => {
+    const spy = vi.spyOn(window, 'open').mockReturnValue(null);
+    openExternal('https://example.com/x');
+    expect(spy).toHaveBeenCalledWith('https://example.com/x', '_blank', 'noopener,noreferrer');
+    spy.mockRestore();
   });
 });
