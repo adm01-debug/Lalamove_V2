@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2` (2026-11-22T13:25:18-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `79fecdfd51567104b22111027520bdb19063b700` (2026-11-22T13:38:57-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1053 |
 | arquivos_codigo | 652 |
-| linhas_codigo | 128768 |
+| linhas_codigo | 128776 |
 | rotas | 55 |
 | rotas_protegidas | 47 |
 | rotas_com_mfa | 7 |
@@ -274,8 +274,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 0
 
 ## Grafo de código (graphify)
-- 8700 nós · 18165 arestas · 629 comunidades · grafo do commit `6d201eba`
-- comunidades maiores: cn (153), contract.ts (142), lucide-react (142), utils.ts (137), Badge (111), react (110), snapshot.py (105), geo-gateway/index.ts (85), ref_node_url (85), @tanstack/react-query (85), dependencies (80), EvaluationsPage.tsx (79)
+- 8701 nós · 18180 arestas · 632 comunidades · grafo do commit `79fecdfd`
+- comunidades maiores: cn (199), contract.ts (126), card.tsx (121), button.tsx (116), snapshot.py (107), ref_node_assert (95), geo-gateway/index.ts (85), react (83), dependencies (80), send-notification/index.ts (78), lucide-react (78), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -377,6 +377,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-22 `79fecdf` chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)
 - 2026-11-22 `6d201eb` chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)
 - 2026-11-22 `d055637` feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)
 - 2026-11-22 `65322a8` chore: marca item XSS do plano front-end como feito (#288)
@@ -391,7 +392,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `95b66ec` docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)
 - 2026-11-22 `d7c05dd` feat: avanco de parada, alerta ETA_DELAY e harness SQL do geo (etapas 46/50/52/41) (#226)
 - 2026-11-22 `83125d1` feat: aviso de aproximacao tambem chega na equipe interna (etapa 56) (#267)
-- 2026-11-22 `ea8f382` fix: separa as duas migrations que nasceram com a versao 20261123190000 (#268)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

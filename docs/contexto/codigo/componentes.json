@@ -381,7 +381,7 @@
     "BatchActionsToolbar"
    ],
    "export_default": null,
-   "linhas": 118,
+   "linhas": 119,
    "dominio": "components/dashboard",
    "hooks_locais": [],
    "tabelas": [],
@@ -882,7 +882,7 @@
     "MapHUD"
    ],
    "export_default": null,
-   "linhas": 361,
+   "linhas": 362,
    "dominio": "components/map",
    "hooks_locais": [],
    "tabelas": [],
@@ -910,7 +910,7 @@
     "MapProviderSelector"
    ],
    "export_default": null,
-   "linhas": 151,
+   "linhas": 136,
    "dominio": "components/map",
    "hooks_locais": [
     "useEffectiveMapProvider",

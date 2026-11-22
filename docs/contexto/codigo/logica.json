@@ -249,10 +249,11 @@
    "arquivo": "src/lib/html.ts",
    "camada": "lib",
    "exports": [
-    "escapeHtml"
+    "escapeHtml",
+    "openExternal"
    ],
    "export_default": null,
-   "linhas": 16,
+   "linhas": 28,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -261,8 +262,9 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 2,
+   "usado_por": 5,
    "usado_por_modulos": [
+    "components/dashboard",
     "components/map"
    ],
    "coberto_por_testes": 1,

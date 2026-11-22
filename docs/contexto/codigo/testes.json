@@ -940,11 +940,11 @@
   {
    "arquivo": "src/lib/__tests__/html.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 32,
+   "linhas": 41,
    "testa": [
     "src/lib/html.ts"
    ],
-   "casos": 4
+   "casos": 5
   },
   {
    "arquivo": "src/lib/__tests__/lalamoveCanonical.test.ts",

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
+  "commit": "79fecdfd51567104b22111027520bdb19063b700",
   "branch": "main",
-  "data_commit": "2026-11-22T13:25:18-03:00",
+  "data_commit": "2026-11-22T13:38:57-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "79fecdf",
+    "data": "2026-11-22",
+    "assunto": "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)"
+   },
    {
     "sha": "6d201eb",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "062c6b7",
     "data": "2026-11-22",
     "assunto": "feat: padrões globais de geofence editáveis + permissões de mapas (etapas 90 e 92) (#246)"
-   },
-   {
-    "sha": "eb1ea10",
-    "data": "2026-11-22",
-    "assunto": "feat(geo): cron de aviso proativo de orcamento geo antes do bloqueio (#189)"
    }
   ],
-  "arquivos_mudados_7d": 331,
+  "arquivos_mudados_7d": 332,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 41
+    "mudancas": 44
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -274,6 +274,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    "mudancas": 6
+   },
+   {
     "arquivo": "src/hooks/useRegionResolver.ts",
     "mudancas": 6
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "supabase/functions/simulate-driver-movement/index.ts",
     "mudancas": 6
-   },
-   {
-    "arquivo": ".env.example",
-    "mudancas": 5
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 192
+    "commits": 193
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1053,
   "arquivos_codigo": 652,
-  "linhas_codigo": 128768,
+  "linhas_codigo": 128776,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29503
+   "linhas": 29490
   },
   "src/hooks": {
    "arquivos": 111,
@@ -536,7 +536,7 @@
   },
   "src/lib": {
    "arquivos": 38,
-   "linhas": 3674
+   "linhas": 3695
   },
   "src/main.tsx": {
    "arquivos": 1,

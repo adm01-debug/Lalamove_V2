@@ -279,6 +279,7 @@
   "src/components/dashboard/BatchActionsToolbar.tsx": [
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
+   "src/lib/html.ts",
    "src/types/index.ts"
   ],
   "src/components/dashboard/DashboardHeroSection.tsx": [
@@ -527,7 +528,8 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
-   "src/components/ui/tooltip.tsx"
+   "src/components/ui/tooltip.tsx",
+   "src/lib/html.ts"
   ],
   "src/components/map/MapHistoryPanel.tsx": [
    "src/components/ui/button.tsx",
@@ -542,7 +544,8 @@
    "src/components/ui/button.tsx",
    "src/components/ui/dropdown-menu.tsx",
    "src/hooks/useMapProviderPolicy.ts",
-   "src/hooks/useMapSettings.ts"
+   "src/hooks/useMapSettings.ts",
+   "src/lib/html.ts"
   ],
   "src/components/map/MapSearchPanel.tsx": [
    "src/components/map/hooks/useTrackingData.ts",

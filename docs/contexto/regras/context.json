@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
+  "sha": "79fecdfd51567104b22111027520bdb19063b700",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 16:26 UTC",
+  "generated_at": "2026-11-22 16:42 UTC",
   "files_total": 1047,
   "code_files": 863,
-  "code_lines": 149945
+  "code_lines": 149953
  },
  "version": "1.3.2",
- "facts_hash": "c600dad03bae8646",
+ "facts_hash": "2e0ca462b9250fb5",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20780,7 +20780,7 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29503,
+   "lines": 29490,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21214,13 +21214,13 @@
   {
    "module": "src/lib",
    "files": 38,
-   "lines": 3674,
+   "lines": 3695,
    "tables": [],
    "exports": [
     "bitrix-config.ts: isBitrixConfigured, setBitrixConfigured",
     "cep.ts: CepValidation, sanitizeCep, maskCep, validateCep, ViaCepAddress, lookupCep",
     "geo-gateway.ts: GeoFieldError, GeoGatewayError, callGeo, countMapLoad",
-    "html.ts: escapeHtml",
+    "html.ts: escapeHtml, openExternal",
     "lalamove-api.ts: LalamoveApiResponse, LalamoveStatusResponse, LalamoveWalletHistoryResponse, LalamoveGatewayError, callLalamoveGateway, QuoteParams",
     "lalamove-config.ts: isLalamoveConfigured, setLalamoveConfigured",
     "lalamoveCatalog.ts: ServiceSpec, SERVICE_CATALOG, SPECIAL_REQUESTS_BY_SERVICE, SPECIAL_REQUEST_CITY_RESTRICTIONS, ITEM_WEIGHT_RANGES, isServiceType",
@@ -38191,6 +38191,14 @@
    {
     "file": "src/lib/__tests__/html.test.ts",
     "name": "impede criação de elemento a partir de payload XSS"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "openExternal"
+   },
+   {
+    "file": "src/lib/__tests__/html.test.ts",
+    "name": "abre a URL em nova aba com noopener,noreferrer"
    },
    {
     "file": "src/lib/__tests__/lalamoveCanonical.test.ts",
@@ -57043,7 +57051,7 @@
   },
   "src/components/dashboard/BatchActionsToolbar.tsx": {
    "path": "src/components/dashboard/BatchActionsToolbar.tsx",
-   "lines": 118,
+   "lines": 119,
    "exports": [
     "function BatchActionsToolbar"
    ],
@@ -57662,7 +57670,7 @@
   },
   "src/components/map/MapHUD.tsx": {
    "path": "src/components/map/MapHUD.tsx",
-   "lines": 361,
+   "lines": 362,
    "exports": [
     "function MapHUD"
    ],
@@ -57711,7 +57719,7 @@
   },
   "src/components/map/MapProviderSelector.tsx": {
    "path": "src/components/map/MapProviderSelector.tsx",
-   "lines": 151,
+   "lines": 136,
    "exports": [
     "function MapProviderSelector"
    ]
@@ -65169,9 +65177,10 @@
   },
   "src/lib/html.ts": {
    "path": "src/lib/html.ts",
-   "lines": 16,
+   "lines": 28,
    "exports": [
-    "function escapeHtml"
+    "function escapeHtml",
+    "function openExternal"
    ],
    "doc": "Escapa texto para interpolação segura em HTML (defesa contra dados imprevistos). Fonte de verdade única para o escape de valores de usuário (nomes, endereços, IDs) antes de interpolação em `innerHTML`/`setHTML`. Cobre as 5 entidades essenciais de HTML."
   },
@@ -65663,14 +65672,16 @@
   },
   "src/lib/__tests__/html.test.ts": {
    "path": "src/lib/__tests__/html.test.ts",
-   "lines": 32,
+   "lines": 41,
    "is_test": true,
    "tests": [
     "escapeHtml",
     "escapa as 5 entidades de HTML",
     "escapa cada símbolo individualmente",
     "não altera strings sem caracteres especiais",
-    "impede criação de elemento a partir de payload XSS"
+    "impede criação de elemento a partir de payload XSS",
+    "openExternal",
+    "abre a URL em nova aba com noopener,noreferrer"
    ]
   },
   "src/lib/__tests__/lalamoveCanonical.test.ts": {
@@ -73308,10 +73319,25 @@
   }
  },
  "git": {
-  "sha": "6d201ebac8cf39fb2b8ba1d6132495c4c96d89f2",
+  "sha": "79fecdfd51567104b22111027520bdb19063b700",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "79fecdf",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/components/dashboard/BatchActionsToolbar.tsx",
+     "src/components/map/MapHUD.tsx",
+     "src/components/map/MapProviderSelector.tsx",
+     "src/components/map/markerFactories.ts",
+     "src/lib/__tests__/html.test.ts",
+     "src/lib/html.ts"
+    ]
+   },
    {
     "sha": "6d201eb",
     "date": "2026-11-22",
@@ -73644,15 +73670,6 @@
     "files": [
      "supabase/migrations/20261123190000_cron_check_driver_alerts.sql"
     ]
-   },
-   {
-    "sha": "cdaaa4f",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs: CRON_JOBS.md v2 lista os 20 jobs reais (#266)",
-    "files": [
-     "docs/CRON_JOBS.md"
-    ]
    }
   ],
   "hot_files": [
@@ -73662,11 +73679,15 @@
    ],
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    5
+    6
    ],
    [
     ".github/workflows/ci.yml",
     4
+   ],
+   [
+    "src/components/map/markerFactories.ts",
+    3
    ],
    [
     "docs/planos/README.md",
@@ -73677,7 +73698,11 @@
     3
    ],
    [
-    "src/components/map/markerFactories.ts",
+    "src/lib/__tests__/html.test.ts",
+    2
+   ],
+   [
+    "src/lib/html.ts",
     2
    ],
    [
@@ -73709,31 +73734,23 @@
     2
    ],
    [
+    "src/components/dashboard/BatchActionsToolbar.tsx",
+    1
+   ],
+   [
+    "src/components/map/MapHUD.tsx",
+    1
+   ],
+   [
+    "src/components/map/MapProviderSelector.tsx",
+    1
+   ],
+   [
     "src/components/map/GoogleMapsCanvas.tsx",
     1
    ],
    [
-    "src/lib/__tests__/html.test.ts",
-    1
-   ],
-   [
-    "src/lib/html.ts",
-    1
-   ],
-   [
     "supabase/functions/job-worker/index.ts",
-    1
-   ],
-   [
-    "supabase/functions/lalamove-uapi/index.ts",
-    1
-   ],
-   [
-    "src/components/map/__tests__/markerFactories.test.ts",
-    1
-   ],
-   [
-    "docs/planos/PLANO_UX_NAVEGACAO_200_ETAPAS.md",
     1
    ]
   ]
