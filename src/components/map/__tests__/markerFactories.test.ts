@@ -1,10 +1,11 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   createClusterMarkerElement,
   createDriverMarkerElement,
   createPickupMarkerElement,
   createDeliveryMarkerElement,
   createStoppedMarkerElement,
+  createDriverPopup,
   type ClusterInfo,
 } from '../markerFactories';
 import type { TrackingData } from '../hooks/useTrackingData';
@@ -14,11 +15,15 @@ import type { TrackingData } from '../hooks/useTrackingData';
 vi.mock('mapbox-gl', () => ({
   default: {
     Popup: class {
-      setHTML() { return this; }
+      el = document.createElement('div');
+      setHTML(html: string) { this.el.innerHTML = html; return this; }
+      getElement() { return this.el; }
     },
   },
   Popup: class {
-    setHTML() { return this; }
+    el = document.createElement('div');
+    setHTML(html: string) { this.el.innerHTML = html; return this; }
+    getElement() { return this.el; }
   },
 }));
 
@@ -147,6 +152,65 @@ describe('markerFactories', () => {
       const el = createStoppedMarkerElement(baseTracking, 17);
       expect(el.className).toBe('stopped-warning-marker');
       expect(el.innerHTML).toContain('PARADO +17M');
+    });
+  });
+
+  describe('escape de dados do usuário (XSS)', () => {
+    const malicious: TrackingData = {
+      ...baseTracking,
+      driver: { name: '<img src=x onerror=alert(1)>', phone: null, vehicle_type: 'MOTORCYCLE' },
+      order: {
+        ...baseTracking.order!,
+        customer_name: '"><script>alert(1)</script>',
+        pickup_address: '<b>Av. Paulista</b>',
+        delivery_address: '<svg onload=alert(1)>',
+      },
+    } as unknown as TrackingData;
+
+    it('não cria elemento <img> a partir do nome do motorista no popup', () => {
+      const popup = createDriverPopup(malicious);
+      const el = popup.getElement()!;
+      expect(el.querySelector('img')).toBeNull();
+      expect(el.textContent).toContain('<img src=x onerror=alert(1)>');
+    });
+
+    it('não cria elemento <script>/<b> a partir de cliente e endereços no popup', () => {
+      const popup = createDriverPopup(malicious);
+      const el = popup.getElement()!;
+      expect(el.querySelector('script')).toBeNull();
+      expect(el.querySelector('b')).toBeNull();
+    });
+
+    it('não cria elemento <b> a partir do endereço de coleta no marcador', () => {
+      const el = createPickupMarkerElement(malicious);
+      expect(el.querySelector('b')).toBeNull();
+      expect(el.textContent).toContain('<b>Av. Paulista</b>');
+    });
+
+    it('não cria elemento <svg> a partir do endereço de entrega no marcador', () => {
+      const el = createDeliveryMarkerElement(malicious);
+      expect(el.querySelector('svg')).toBeNull();
+      expect(el.textContent).toContain('<svg onload=alert(1)>');
+    });
+
+    it('não cria elemento <img> no label do marcador', () => {
+      const el = createDriverMarkerElement(malicious);
+      expect(el.querySelector('img')).toBeNull();
+    });
+
+    it('dispara show-driver-history sem onclick inline (dados via atributos, string pura)', () => {
+      const popup = createDriverPopup(malicious);
+      const btn = popup.getElement()!.querySelector<HTMLButtonElement>('[data-action="show-driver-history"]');
+      expect(btn).not.toBeNull();
+      expect(btn!.hasAttribute('onclick')).toBe(false);
+      // O valor guardado no atributo é a string crua; ao disparar o evento vai como dado, não como HTML.
+      expect(btn!.getAttribute('data-driver-name')).toBe('<img src=x onerror=alert(1)>');
+      const dispatch = vi.spyOn(window, 'dispatchEvent');
+      btn!.click();
+      const evt = dispatch.mock.calls[0]?.[0] as CustomEvent;
+      expect(evt.type).toBe('show-driver-history');
+      expect(evt.detail.driverName).toBe('<img src=x onerror=alert(1)>');
+      dispatch.mockRestore();
     });
   });
 });
