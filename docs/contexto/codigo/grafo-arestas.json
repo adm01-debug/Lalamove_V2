@@ -2351,6 +2351,9 @@
   "supabase/functions/send-notification/static-map.ts": [
    "supabase/functions/_shared/logger.ts"
   ],
+  "supabase/functions/simulate-driver-movement/index.ts": [
+   "supabase/functions/simulate-driver-movement/replay.ts"
+  ],
   "supabase/functions/test-notification/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",

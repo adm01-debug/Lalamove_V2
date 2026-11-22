@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
+  "commit": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
   "branch": "main",
-  "data_commit": "2026-11-22T10:27:44-03:00",
+  "data_commit": "2026-11-22T10:41:25-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "03b0ca8",
+    "data": "2026-11-22",
+    "assunto": "feat: replay deterministico do trajeto e 100 testes na CI (#277)"
+   },
+   {
+    "sha": "95b66ec",
+    "data": "2026-11-22",
+    "assunto": "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)"
+   },
    {
     "sha": "d7c05dd",
     "data": "2026-11-22",
@@ -121,19 +131,9 @@
     "sha": "2a4d1b1",
     "data": "2026-11-22",
     "assunto": "fix(geo): corrige ordem da migration de revogação das RPCs anon (#261)"
-   },
-   {
-    "sha": "a8e52d5",
-    "data": "2026-11-22",
-    "assunto": "security(geo): revoga EXECUTE de anon nas 5 RPCs SECURITY DEFINER do geo-gateway (#260)"
-   },
-   {
-    "sha": "961964c",
-    "data": "2026-11-22",
-    "assunto": "fix(geo): remove sublocality do mock do teste de bairro do Google (#259)"
    }
   ],
-  "arquivos_mudados_7d": 308,
+  "arquivos_mudados_7d": 311,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 23
+    "mudancas": 25
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -181,7 +181,7 @@
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 10
+    "mudancas": 11
    },
    {
     "pasta": "docs/pendencias/_ordem.md",
@@ -189,7 +189,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 8
+    "mudancas": 9
    },
    {
     "pasta": "supabase/functions/lalamove-webhook",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 14
+    "mudancas": 15
    },
    {
     "arquivo": "docs/MAPBOX.md",
@@ -235,6 +235,10 @@
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 10
+   },
+   {
+    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     "mudancas": 9
    },
    {
@@ -244,10 +248,6 @@
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 9
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 8
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 180
+    "commits": 182
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1044,
-  "arquivos_codigo": 646,
-  "linhas_codigo": 126448,
+  "arquivos_total": 1047,
+  "arquivos_codigo": 648,
+  "linhas_codigo": 126683,
   "rotas": 55,
   "rotas_protegidas": 47,
   "rotas_com_mfa": 7,
@@ -324,10 +324,10 @@
   "tabelas": 88,
   "migrations": 191,
   "cron_jobs": 23,
-  "testes": 151,
+  "testes": 152,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 106
+  "docs_md": 107
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {
@@ -520,7 +520,7 @@
   },
   "src/components": {
    "arquivos": 160,
-   "linhas": 29397
+   "linhas": 29436
   },
   "src/hooks": {
    "arquivos": 111,
@@ -563,8 +563,8 @@
    "linhas": 1080
   },
   "supabase/functions": {
-   "arquivos": 77,
-   "linhas": 18378
+   "arquivos": 79,
+   "linhas": 18574
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -683,7 +683,7 @@
  ],
  "qualidade": {
   "any": 129,
-  "console_log": 414,
+  "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,

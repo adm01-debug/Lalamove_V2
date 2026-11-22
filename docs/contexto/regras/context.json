@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
+  "sha": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 13:30 UTC",
-  "files_total": 1038,
-  "code_files": 857,
-  "code_lines": 147625
+  "generated_at": "2026-11-22 13:42 UTC",
+  "files_total": 1041,
+  "code_files": 859,
+  "code_lines": 147860
  },
  "version": "1.3.2",
- "facts_hash": "bd01ff6381ad8c18",
+ "facts_hash": "349c02caba6d31d2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -181,7 +181,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 298,
+   ".ts": 300,
    ".tsx": 235,
    ".sql": 202,
    ".mjs": 109,
@@ -18470,7 +18470,8 @@
     "name": "simulate-driver-movement",
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "methods": [
-     "OPTIONS"
+     "OPTIONS",
+     "POST"
     ],
     "auth": "service_role (ignora RLS) + valida JWT do usuário",
     "tables": [
@@ -20782,7 +20783,7 @@
   {
    "module": "src/components",
    "files": 160,
-   "lines": 29397,
+   "lines": 29436,
    "tables": [
     "active_tracking",
     "alerts",
@@ -21576,8 +21577,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 77,
-   "lines": 18378,
+   "files": 79,
+   "lines": 18574,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21651,7 +21652,8 @@
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
     "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
     "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole",
-    "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute"
+    "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute",
+    "replay.ts: ReplayPoint, ReplayFixture, ReplayStep, bearingDeg, remainingM, replaySteps"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -21746,6 +21748,8 @@
     "supabase/functions/send-notification/static-map.test.ts",
     "supabase/functions/send-notification/static-map.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
+    "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "supabase/functions/simulate-driver-movement/replay.ts",
     "supabase/functions/test-notification/index.ts"
    ]
   },
@@ -35129,6 +35133,10 @@
    {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "line": "const randomOffset = () => (Math.random() - 0.5) * 0.0005; // Small random deviation"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.ts",
+    "line": "return (Math.atan2(y, x) * 180) / Math.PI + 360 % 360;"
    }
   ],
   "tests": [
@@ -36771,6 +36779,14 @@
    {
     "file": "src/components/orders/AddressAutocomplete.test.tsx",
     "name": "emite o endereço mesmo sem coordenada, deixando o consumidor decidir"
+   },
+   {
+    "file": "src/components/orders/AddressAutocomplete.test.tsx",
+    "name": "AddressAutocomplete — origem do resultado (etapa 316 do plano Mapbox)"
+   },
+   {
+    "file": "src/components/orders/AddressAutocomplete.test.tsx",
+    "name": "rotula cada sugestao com o provedor que respondeu"
    },
    {
     "file": "src/components/orders/OrderGeoEvents.test.tsx",
@@ -39747,6 +39763,34 @@
    {
     "file": "supabase/functions/send-notification/static-map.test.ts",
     "name": "GEO_STATIC_MAP_IN_WHATSAPP=false desliga a imagem sem chamar o gateway"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: primeiro passo pula o ponto 0 (posicao inicial) e chega ao 1"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: e deterministico — mesma entrada, mesma saida"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: percorre a fixture inteira e para no ultimo ponto"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: ETA decresce ao longo do trajeto"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: distancia restante zera no ultimo ponto e bate com o total no inicio"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "bearing: norte puro = 0, leste puro = 90"
+   },
+   {
+    "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
+    "name": "replay: heading sempre finito e entre 0 e 360"
    }
   ],
   "webhook_events": [
@@ -57863,7 +57907,7 @@
   },
   "src/components/orders/AddressAutocomplete.test.tsx": {
    "path": "src/components/orders/AddressAutocomplete.test.tsx",
-   "lines": 199,
+   "lines": 227,
    "is_test": true,
    "tests": [
     "AddressAutocomplete — estados de falha (etapa 40)",
@@ -57874,7 +57918,9 @@
     "mostra endereço já usado antes de qualquer chamada ao provedor",
     "AddressAutocomplete — onAddressSelected (etapa 34)",
     "entrega o endereço resolvido com place_id, componentes e precisão",
-    "emite o endereço mesmo sem coordenada, deixando o consumidor decidir"
+    "emite o endereço mesmo sem coordenada, deixando o consumidor decidir",
+    "AddressAutocomplete — origem do resultado (etapa 316 do plano Mapbox)",
+    "rotula cada sugestao com o provedor que respondeu"
    ],
    "webhook_events": [
     "autocomplete"
@@ -57882,7 +57928,7 @@
   },
   "src/components/orders/AddressAutocomplete.tsx": {
    "path": "src/components/orders/AddressAutocomplete.tsx",
-   "lines": 400,
+   "lines": 411,
    "exports": [
     "function AddressAutocomplete"
    ],
@@ -71185,7 +71231,7 @@
   },
   "supabase/functions/simulate-driver-movement/index.ts": {
    "path": "supabase/functions/simulate-driver-movement/index.ts",
-   "lines": 237,
+   "lines": 286,
    "tables": [
     {
      "table": "user_roles",
@@ -71248,6 +71294,36 @@
     "const randomOffset = () => (Math.random() - 0.5) * 0.0005; // Small random deviation"
    ],
    "uses_service_role": true
+  },
+  "supabase/functions/simulate-driver-movement/replay.test.ts": {
+   "path": "supabase/functions/simulate-driver-movement/replay.test.ts",
+   "lines": 54,
+   "is_test": true,
+   "tests": [
+    "replay: primeiro passo pula o ponto 0 (posicao inicial) e chega ao 1",
+    "replay: e deterministico — mesma entrada, mesma saida",
+    "replay: percorre a fixture inteira e para no ultimo ponto",
+    "replay: ETA decresce ao longo do trajeto",
+    "replay: distancia restante zera no ultimo ponto e bate com o total no inicio",
+    "bearing: norte puro = 0, leste puro = 90",
+    "replay: heading sempre finito e entre 0 e 360"
+   ]
+  },
+  "supabase/functions/simulate-driver-movement/replay.ts": {
+   "path": "supabase/functions/simulate-driver-movement/replay.ts",
+   "lines": 93,
+   "exports": [
+    "interface ReplayPoint",
+    "interface ReplayFixture",
+    "interface ReplayStep",
+    "function bearingDeg",
+    "function remainingM",
+    "function replaySteps"
+   ],
+   "doc": "Etapa 53 do PLANO_MAPBOX_100_ETAPAS: replay deterministico de trajeto. A simulacao original movia o motorista em direcao ao destino usando `Math.random()` — nunca tocava a fixture `route_curitiba.json` nem passava a rota pelo provedor, entao um erro de polilinha/heading/ETA do Mapbox nao aparecia. A …",
+   "percents": [
+    "return (Math.atan2(y, x) * 180) / Math.PI + 360 % 360;"
+   ]
   },
   "supabase/functions/test-notification/index.ts": {
    "path": "supabase/functions/test-notification/index.ts",
@@ -72299,10 +72375,35 @@
   }
  },
  "git": {
-  "sha": "d7c05ddb3736ea2eed2382a4cbdb00e5b43f579d",
+  "sha": "03b0ca8cf498b5098b295d0cf75fcd309e4c66db",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "03b0ca8",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "feat: replay deterministico do trajeto e 100 testes na CI (#277)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+     "src/components/orders/AddressAutocomplete.test.tsx",
+     "src/components/orders/AddressAutocomplete.tsx",
+     "supabase/functions/simulate-driver-movement/index.ts",
+     "supabase/functions/simulate-driver-movement/replay.test.ts",
+     "supabase/functions/simulate-driver-movement/replay.ts"
+    ]
+   },
+   {
+    "sha": "95b66ec",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs(planos): adiciona plano de 150 etapas de mensageria aos motoristas via Zapp e SMS (#275)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "docs/planos/README.md"
+    ]
+   },
    {
     "sha": "d7c05dd",
     "date": "2026-11-22",
@@ -72591,42 +72692,15 @@
     "files": [
      "src/pages/AlertConfigurationsPage.tsx"
     ]
-   },
-   {
-    "sha": "8f42f4f",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: união explícita de destinatários do pedido com alert_configurations (etapa 66) (#253)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/_shared/schemas.ts",
-     "supabase/functions/send-notification/index.ts",
-     "supabase/functions/send-notification/recipients.test.ts",
-     "supabase/functions/send-notification/recipients.ts"
-    ]
-   },
-   {
-    "sha": "59db689",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: imagem do trajeto no WhatsApp dos alertas de aproximacao (etapa 68) (#252)",
-    "files": [
-     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-     "supabase/functions/_shared/channels/zapp.test.ts",
-     "supabase/functions/_shared/channels/zapp.ts",
-     "supabase/functions/send-notification/index.ts",
-     "supabase/functions/send-notification/static-map.test.ts",
-     "supabase/functions/send-notification/static-map.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    11
+    9
    ],
    [
-    "supabase/functions/send-notification/index.ts",
+    ".github/workflows/ci.yml",
     3
    ],
    [
@@ -72634,7 +72708,7 @@
     3
    ],
    [
-    ".github/workflows/ci.yml",
+    "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
     2
    ],
    [
@@ -72654,6 +72728,34 @@
     2
    ],
    [
+    "src/components/orders/AddressAutocomplete.test.tsx",
+    1
+   ],
+   [
+    "src/components/orders/AddressAutocomplete.tsx",
+    1
+   ],
+   [
+    "supabase/functions/simulate-driver-movement/index.ts",
+    1
+   ],
+   [
+    "supabase/functions/simulate-driver-movement/replay.test.ts",
+    1
+   ],
+   [
+    "supabase/functions/simulate-driver-movement/replay.ts",
+    1
+   ],
+   [
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    1
+   ],
+   [
+    "docs/planos/README.md",
+    1
+   ],
+   [
     ".github/toolchain.json",
     1
    ],
@@ -72671,34 +72773,6 @@
    ],
    [
     "supabase/migrations/20261122131000_geo_eta_delay.sql",
-    1
-   ],
-   [
-    "supabase/tests/00_stubs.sql",
-    1
-   ],
-   [
-    "supabase/tests/01_functions.sql",
-    1
-   ],
-   [
-    "supabase/tests/02_scenarios.sql",
-    1
-   ],
-   [
-    "supabase/tests/03_fixture.sql",
-    1
-   ],
-   [
-    "supabase/tests/README.md",
-    1
-   ],
-   [
-    "supabase/tests/fixtures/route_curitiba_geo.json",
-    1
-   ],
-   [
-    "supabase/tests/run.sh",
     1
    ]
   ]

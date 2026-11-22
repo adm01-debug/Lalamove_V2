@@ -3,10 +3,10 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (533)",
+   "TypeScript (535)",
    "SQL (202)",
    "JavaScript (114)",
-   "Markdown (106)",
+   "Markdown (107)",
    "JSON (36)",
    "Shell (10)",
    "Python (8)",
@@ -537,7 +537,7 @@
   },
   {
    "pasta": "docs/planos",
-   "arquivos_md": 4
+   "arquivos_md": 5
   },
   {
    "pasta": "docs/adr",

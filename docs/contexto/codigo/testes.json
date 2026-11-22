@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 151,
+ "total": 152,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 24,
+  "edge (deno)": 25,
   "guard (node --test)": 34,
   "unit (vitest)": 75
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 26
+   "arquivos": 27
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -672,11 +672,11 @@
   {
    "arquivo": "src/components/orders/AddressAutocomplete.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 199,
+   "linhas": 227,
    "testa": [
     "src/components/orders/AddressAutocomplete.tsx"
    ],
-   "casos": 6
+   "casos": 7
   },
   {
    "arquivo": "src/components/orders/OrderGeoEvents.test.tsx",
@@ -1357,6 +1357,16 @@
     "supabase/functions/send-notification/static-map.ts"
    ],
    "casos": 12
+  },
+  {
+   "arquivo": "supabase/functions/simulate-driver-movement/replay.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 54,
+   "testa": [
+    "supabase/functions/simulate-driver-movement/replay.ts",
+    "supabase/tests/fixtures/route_curitiba.json"
+   ],
+   "casos": 7
   }
  ],
  "sql": [
@@ -1500,7 +1510,8 @@
   "supabase/functions/send-notification/quiet-hours.ts": 1,
   "supabase/functions/send-notification/recipients.ts": 1,
   "supabase/functions/send-notification/static-map.ts": 1,
-  "supabase/tests/fixtures/route_curitiba.json": 1
+  "supabase/functions/simulate-driver-movement/replay.ts": 1,
+  "supabase/tests/fixtures/route_curitiba.json": 2
  },
  "sem_teste": {
   "telas": [
@@ -1645,7 +1656,6 @@
    "rotate-tokens",
    "route-analyzer",
    "seed-fix-rls",
-   "simulate-driver-movement",
    "test-notification"
   ],
   "servicos": [

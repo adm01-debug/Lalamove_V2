@@ -1025,11 +1025,12 @@
    "nome": "simulate-driver-movement",
    "servico": "Motoristas",
    "entrada": "supabase/functions/simulate-driver-movement/index.ts",
-   "arquivos": 1,
-   "linhas": 237,
+   "arquivos": 2,
+   "linhas": 379,
    "verify_jwt": true,
    "metodos": [
-    "OPTIONS"
+    "OPTIONS",
+    "POST"
    ],
    "assina_hmac": false,
    "usa_service_role": true,
@@ -1056,7 +1057,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
-   "testes": 0
+   "testes": 1
   },
   {
    "nome": "test-notification",
