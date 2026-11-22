@@ -13,6 +13,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { MAPBOX_RATE_LIMITS, MapboxProvider } from "./providers/mapbox.ts";
+import { GoogleProvider } from "./providers/google.ts";
 import { GeoProviderError } from "./providers/types.ts";
 import type { GeoFunction, GeoProvider, ProviderName, ProviderResult } from "./providers/types.ts";
 import { callWithFailover } from "./failover.ts";
@@ -38,6 +39,25 @@ const MAPBOX_RATE_API: Partial<Record<GeoFunction, string>> = {
   autocomplete: "searchbox", geocode: "geocoding", reverse: "geocoding",
   route: "directions", matrix: "matrix:driving", static: "static",
   snap: "matching", isochrone: "isochrone", optimization: "optimization", tilequery: "tilequery",
+};
+
+/**
+ * Limite local por minuto das APIs do Google usadas pelo gateway — guarda de segurança própria,
+ * não a cota real da conta Google (que varia por faturamento/projeto). Conservador de propósito.
+ */
+const GOOGLE_RATE_LIMITS: Record<string, number> = {
+  "places_autocomplete": 600,
+  "place_details": 600,
+  "geocoding": 300,
+  "routes_compute_routes": 300,
+  "routes_matrix": 60,
+  "static_maps": 600,
+};
+
+/** Função geo → chave de rate limit do Google (`GOOGLE_RATE_LIMITS`). */
+const GOOGLE_RATE_API: Partial<Record<GeoFunction, string>> = {
+  autocomplete: "places_autocomplete", geocode: "geocoding", reverse: "geocoding",
+  route: "routes_compute_routes", matrix: "routes_matrix", static: "static_maps",
 };
 
 // Rate limit por usuário (uid do JWT): autocomplete 60/min, demais 20/min — em memória por instância.
@@ -92,7 +112,7 @@ const resolver: ProviderResolver = new ProviderResolver({
     })) as QuotaRow[];
   },
   isConfigured: (p) => p === "mapbox" ? !!MAPBOX_TOKEN : !!GOOGLE_KEY,
-  supports: (p, fn): boolean => p === "mapbox" ? mapbox.supports.has(fn as never) : false, // Google: Bloco 2 do plano Google
+  supports: (p, fn): boolean => p === "mapbox" ? mapbox.supports.has(fn as never) : google.supports.has(fn as never),
 });
 
 const mapbox: MapboxProvider = new MapboxProvider({
@@ -100,9 +120,14 @@ const mapbox: MapboxProvider = new MapboxProvider({
   rateGuard: (api: string, consume?: number): boolean => resolver.rateGuard("mapbox", api, MAPBOX_RATE_LIMITS[api] ?? 300, consume),
 });
 
+const google: GoogleProvider = new GoogleProvider({
+  key: GOOGLE_KEY,
+  rateGuard: (api: string, consume?: number): boolean => resolver.rateGuard("google", api, GOOGLE_RATE_LIMITS[api] ?? 300, consume),
+});
+
 function getProvider(name: ProviderName): GeoProvider {
   if (name === "mapbox") return mapbox;
-  throw new GeoProviderError("GEO_NOT_CONFIGURED", "Provedor Google ainda não implementado no gateway", 503);
+  return google;
 }
 
 /** Despacha a ação para o provedor; usado tanto na tentativa primária quanto no failover. */
@@ -213,7 +238,7 @@ Deno.serve(async (req) => {
       const status = providers.map((p) => ({
         provider: p,
         configured: p === "mapbox" ? !!MAPBOX_TOKEN : !!GOOGLE_KEY,
-        implemented: p === "mapbox",
+        implemented: true,
         budget: resolver.budgetOf(p) ?? null,
       }));
       const settings = (["tiles", "autocomplete", "geocode", "reverse", "route", "matrix", "static", "snap", "validate", "isochrone", "optimization", "tilequery"] as GeoFunction[])
@@ -250,10 +275,10 @@ Deno.serve(async (req) => {
     // ── rate limit do provedor (espera a virada da janela) ─────────────────
     // Etapa 76: se a janela de rate limit do provedor está cheia, aguarda a virada
     // (até 2s) em vez de devolver 429 na cara do operador.
-    const rateApi = MAPBOX_RATE_API[fn];
-    if (name === "mapbox" && rateApi) {
-      const limit = MAPBOX_RATE_LIMITS[rateApi] ?? 300;
-      const ok = await resolver.waitForCapacity("mapbox", rateApi, limit);
+    const rateApi = name === "mapbox" ? MAPBOX_RATE_API[fn] : GOOGLE_RATE_API[fn];
+    if (rateApi) {
+      const limit = name === "mapbox" ? (MAPBOX_RATE_LIMITS[rateApi] ?? 300) : (GOOGLE_RATE_LIMITS[rateApi] ?? 300);
+      const ok = await resolver.waitForCapacity(name, rateApi, limit);
       if (!ok) throw new GeoProviderError("GEO_RATE_LIMITED", "Limite local de chamadas atingido; tente em instantes.", 429, 60_000);
     }
     // ── chamada ao provedor (com failover em runtime) ──────────────────────
