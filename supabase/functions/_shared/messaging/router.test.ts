@@ -152,7 +152,9 @@ Deno.test("etapa 93: adiamento devolve o instante em que a janela abre", () => {
     false,
   );
   assert(decision.releaseAt);
-  assertEquals(decision.releaseAt!.getTime() > Date.now() - 3_600_000, true);
+  // 20:30 UTC-3 -> janela abre 07:00 local = 10:00 UTC. Resultado é determinístico;
+  // comparar com o instante exato (e não com Date.now(), que quebra o teste com o tempo).
+  assertEquals(decision.releaseAt!.toISOString(), "2026-11-23T10:00:00.000Z");
   assertEquals(localHour(decision.releaseAt!, -180), 7);
 });
 
