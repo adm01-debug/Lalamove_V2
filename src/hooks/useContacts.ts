@@ -158,6 +158,9 @@ export function useContacts() {
   return {
     contacts: query.data ?? [],
     isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    refetch: query.refetch,
     search,
     upsertContact: upsertMutation.mutateAsync,
     updateContact: updateMutation.mutateAsync,

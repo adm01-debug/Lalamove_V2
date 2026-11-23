@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { maskBrazilianPhone } from '@/lib/phone';
+import { QueryState } from '@/components/ui/query-state';
 
 const KIND_LABEL: Record<ContactKind, string> = {
   sender: 'Remetente',
@@ -45,7 +46,7 @@ function formatPhoneDisplay(e164: string): string {
 }
 
 export default function ContactsPage() {
-  const { contacts, isLoading, search, updateContact, deleteContact, isMutating } = useContacts();
+  const { contacts, isLoading, isError, error, refetch, search, updateContact, deleteContact, isMutating } = useContacts();
   const [term, setTerm] = useState('');
   const [kindFilter, setKindFilter] = useState<'all' | ContactKind>('all');
   const [editing, setEditing] = useState<Contact | null>(null);
@@ -110,7 +111,9 @@ export default function ContactsPage() {
 
         <Card>
           <CardContent className="p-0">
-            {isLoading ? (
+            {isError ? (
+              <QueryState isError error={error} onRetry={refetch} />
+            ) : isLoading ? (
               <div className="flex items-center justify-center py-16 text-muted-foreground">
                 <Loader2 className="h-5 w-5 animate-spin mr-2" />
                 Carregando contatos…

@@ -43,6 +43,7 @@ import { useRateLimiting } from '@/hooks/useRateLimiting';
 import { PermissionGate } from '@/components/auth/PermissionGate';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { BlockIPDialog, WhitelistDialog } from './ratelimit/RateLimitDialogs';
+import { QueryState } from '@/components/ui/query-state';
 
 export default function RateLimitDashboardPage() {
   const {
@@ -51,6 +52,9 @@ export default function RateLimitDashboardPage() {
     ipWhitelist,
     stats,
     isLoading,
+    isError,
+    error,
+    refetch,
     blockIP,
     isBlocking,
     unblockIP,
@@ -122,6 +126,10 @@ export default function RateLimitDashboardPage() {
     };
     return units[duration] || 86400000;
   };
+
+  if (isError) {
+    return <QueryState isError error={error} onRetry={refetch} />;
+  }
 
   if (isLoading) {
     return (

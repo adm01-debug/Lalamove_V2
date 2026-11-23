@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Zap, CheckCircle2, XCircle, History, ChevronLeft, ChevronRight, Truck, MapPin, Eye, EyeOff } from 'lucide-react';
 import { LalamoveV3Explorer } from './lalamove/LalamoveV3Explorer';
+import { QueryState } from '@/components/ui/query-state';
 
 interface Transaction {
   id: string;
@@ -39,7 +40,7 @@ interface ServiceArea {
 }
 
 export default function LalamoveSettingsPage() {
-  const { data: status, isLoading: statusLoading } = useLalamoveStatus();
+  const { data: status, isLoading: statusLoading, isError: statusFailed, error: statusError, refetch: refetchStatus } = useLalamoveStatus();
   const { data: user } = useLalamoveUser();
   const { data: wallet } = useWallet();
   const updateToken = useUpdateUapiToken();
@@ -115,6 +116,8 @@ export default function LalamoveSettingsPage() {
         </h2>
         <p className="text-muted-foreground">Gerenciamento das conexões com as APIs da Lalamove</p>
       </div>
+
+      {statusFailed && <QueryState isError error={statusError} onRetry={refetchStatus} />}
 
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

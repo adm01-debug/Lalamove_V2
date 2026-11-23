@@ -34,6 +34,7 @@ import {
   type GeoProviderName,
   type GeoSettingProvider,
 } from '@/hooks/useGeoAdmin';
+import { QueryState } from '@/components/ui/query-state';
 
 /** Rótulo de negócio para cada função geo (a chave é o CHECK do banco). */
 const FUNCTION_LABEL: Record<GeoFunction, { label: string; hint: string }> = {
@@ -163,6 +164,33 @@ export default function MapsSettingsPage() {
   const health = useGeoProviderHealth();
   const defaults = useGeoDefaults();
   const updateDefaults = useUpdateGeoDefaults();
+
+  /** Falha em qualquer consulta geo: painel de erro com retry evita tela vazia sem explicação. */
+  const geoFailed =
+    status.isError ||
+    defaults.isError ||
+    priceList.isError ||
+    usage.isError ||
+    latency.isError ||
+    budgetStatus.isError ||
+    budgets.isError;
+  const geoError =
+    status.error ??
+    defaults.error ??
+    priceList.error ??
+    usage.error ??
+    latency.error ??
+    budgetStatus.error ??
+    budgets.error;
+  const retryGeo = () => {
+    void status.refetch();
+    void defaults.refetch();
+    void priceList.refetch();
+    void usage.refetch();
+    void latency.refetch();
+    void budgetStatus.refetch();
+    void budgets.refetch();
+  };
   const [defaultsEdits, setDefaultsEdits] = useState<Partial<GeoDefaultsRow>>({});
   const [healthResults, setHealthResults] = useState<Record<string, GeoHealthResult>>({});
   /** Etapa 71/paridade: o gateway informa quem está realmente implementado (Google ainda não). */
@@ -349,6 +377,8 @@ export default function MapsSettingsPage() {
       </div>
 
       {/* Saúde e orçamento por provedor */}
+      {geoFailed && <QueryState isError error={geoError} onRetry={retryGeo} />}
+
       <div className="grid gap-4 md:grid-cols-2">
         {status.isLoading && <Skeleton className="h-40 w-full" />}
         {status.data?.providers.map((p) => {

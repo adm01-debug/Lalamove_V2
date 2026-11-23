@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { DataRefreshIndicator } from '@/components/ui/data-refresh-indicator';
+import { QueryState } from '@/components/ui/query-state';
 import { ApprovalStatsPanel, IncidentSeverityPanel, IncidentTypePanel, WhitelistBlacklistSummary } from './MetricsPage.panels';
 
 const RISK_COLORS = {
@@ -63,9 +64,9 @@ const itemVariants = {
 };
 
 export function MetricsPage() {
-  const { data: driverMetrics, isLoading: driversLoading } = useDriverMetrics();
-  const { data: approvalMetrics, isLoading: approvalsLoading } = useApprovalMetrics();
-  const { data: incidentMetrics, isLoading: incidentsLoading } = useIncidentMetrics();
+  const { data: driverMetrics, isLoading: driversLoading, isError: driversFailed, error: driversError } = useDriverMetrics();
+  const { data: approvalMetrics, isLoading: approvalsLoading, isError: approvalsFailed, error: approvalsError } = useApprovalMetrics();
+  const { data: incidentMetrics, isLoading: incidentsLoading, isError: incidentsFailed, error: incidentsError } = useIncidentMetrics();
   const queryClient = useQueryClient();
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -80,6 +81,17 @@ export function MetricsPage() {
   }, [queryClient]);
 
   const isLoading = driversLoading || approvalsLoading || incidentsLoading;
+  const hasError = driversFailed || approvalsFailed || incidentsFailed;
+
+  if (hasError) {
+    return (
+      <QueryState
+        isError
+        error={driversError ?? approvalsError ?? incidentsError}
+        onRetry={handleRefresh}
+      />
+    );
+  }
 
   if (isLoading) {
     return (

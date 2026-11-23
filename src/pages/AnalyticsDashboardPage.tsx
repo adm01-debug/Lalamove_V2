@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { QueryState } from '@/components/ui/query-state';
 import { 
   AreaChart, Area, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
@@ -25,7 +26,7 @@ const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 
 export default function AnalyticsDashboardPage() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState('7');
-  const { data, isLoading, refetch, isRefetching } = useAnalyticsData(parseInt(period));
+  const { data, isLoading, isError, error, refetch, isRefetching } = useAnalyticsData(parseInt(period));
 
   const handleExport = async (fmt: 'csv' | 'excel' | 'json' | 'pdf') => {
     if (!data) return;
@@ -71,6 +72,8 @@ export default function AnalyticsDashboardPage() {
           </div>
         </div>
       </motion.div>
+
+      {isError && <QueryState isError error={error} onRetry={refetch} />}
 
       {/* Summary Cards */}
       <motion.div variants={itemVariants} className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

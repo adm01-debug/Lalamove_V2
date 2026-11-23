@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { QueryState } from '@/components/ui/query-state';
 import { useCacheStats, useCacheViews, useRefreshCache, CacheView } from '@/hooks/useCacheViews';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
@@ -41,7 +42,7 @@ function getStatusLabel(status: string): string {
 }
 
 export function CacheMonitoringPage() {
-  const { data: stats, isLoading: statsLoading, refetch } = useCacheStats();
+  const { data: stats, isLoading: statsLoading, isError: statsFailed, error: statsError, refetch } = useCacheStats();
   const { data: views, isLoading: viewsLoading } = useCacheViews();
   const refreshCache = useRefreshCache();
 
@@ -161,7 +162,9 @@ export function CacheMonitoringPage() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {isLoading ? (
+        {statsFailed ? (
+          <QueryState isError error={statsError} onRetry={refetch} />
+        ) : isLoading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6"><div className="h-20 bg-muted rounded" /></CardContent>

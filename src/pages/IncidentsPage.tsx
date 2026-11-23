@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQueryClient } from '@tanstack/react-query';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { DataRefreshIndicator } from '@/components/ui/data-refresh-indicator';
+import { QueryState } from '@/components/ui/query-state';
 import { CreateIncidentDialog, ResolveIncidentDialog } from './incidents/IncidentDialogs';
 
 const typeLabels: Record<string, string> = { ROUTE_DEVIATION: 'Desvio de Rota', LONG_STOP: 'Parada Longa', LATE_DELIVERY: 'Atraso na Entrega', CUSTOMER_COMPLAINT: 'Reclamação', DAMAGE: 'Dano', OTHER: 'Outro' };
@@ -41,7 +42,7 @@ export function IncidentsPage() {
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { data: incidents, isLoading } = useIncidents();
+  const { data: incidents, isLoading, isError, error, refetch } = useIncidents();
   const { data: drivers } = useDrivers();
   const createMutation = useCreateIncident();
   const resolveMutation = useResolveIncident();
@@ -69,6 +70,10 @@ export function IncidentsPage() {
   const openCount = incidents?.filter(i => !i.resolved).length || 0;
   const resolvedCount = incidents?.filter(i => i.resolved).length || 0;
   const criticalCount = incidents?.filter(i => !i.resolved && (i.severity === 'HIGH' || i.severity === 'CRITICAL')).length || 0;
+
+  if (isError) {
+    return <QueryState isError error={error} onRetry={refetch} />;
+  }
 
   if (isLoading) return (
     <div className="p-6 flex items-center justify-center min-h-[400px]">

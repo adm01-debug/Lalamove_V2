@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { QueryState } from "@/components/ui/query-state";
 import { 
   RefreshCw, 
   AlertCircle, 
@@ -16,7 +17,7 @@ import { useCacheStats, useRefreshCache, formatRefreshDuration, formatLastRefres
 import { useCachedStats, useDashboardSummary } from "@/hooks/useCachedStats";
 
 export default function CacheStatusPage() {
-  const { data: cacheViews, isLoading: loadingStats } = useCacheStats();
+  const { data: cacheViews, isLoading: loadingStats, isError, error, refetch } = useCacheStats();
   const { mutateAsync: refresh, isPending: isRefreshing } = useRefreshCache();
   const { data: cachedData } = useCachedStats();
   const summary = useDashboardSummary();
@@ -28,6 +29,14 @@ export default function CacheStatusPage() {
   const handleRefreshAll = async () => {
     await refresh(undefined);
   };
+
+  if (isError) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <QueryState isError error={error} onRetry={refetch} />
+      </div>
+    );
+  }
 
   if (loadingStats) {
     return (

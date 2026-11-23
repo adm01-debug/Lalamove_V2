@@ -45,7 +45,7 @@ export function useRateLimiting() {
   const queryClient = useQueryClient();
 
   // Buscar logs de rate limit
-  const { data: rateLimitLogs, isLoading: logsLoading } = useQuery({
+  const { data: rateLimitLogs, isLoading: logsLoading, isError: logsFailed, error: logsError, refetch: refetchLogs } = useQuery({
     queryKey: ['rate-limit-logs'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -60,7 +60,7 @@ export function useRateLimiting() {
   });
 
   // Buscar IPs bloqueados
-  const { data: blockedIPs, isLoading: blockedLoading } = useQuery({
+  const { data: blockedIPs, isLoading: blockedLoading, isError: blockedFailed, error: blockedError, refetch: refetchBlocked } = useQuery({
     queryKey: ['blocked-ips'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -74,7 +74,7 @@ export function useRateLimiting() {
   });
 
   // Buscar whitelist
-  const { data: ipWhitelist, isLoading: whitelistLoading } = useQuery({
+  const { data: ipWhitelist, isLoading: whitelistLoading, isError: whitelistFailed, error: whitelistError, refetch: refetchWhitelist } = useQuery({
     queryKey: ['ip-whitelist'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -227,6 +227,9 @@ export function useRateLimiting() {
     ipWhitelist,
     stats,
     isLoading: logsLoading || blockedLoading || whitelistLoading,
+    isError: logsFailed || blockedFailed || whitelistFailed,
+    error: logsError ?? blockedError ?? whitelistError,
+    refetch: () => Promise.all([refetchLogs(), refetchBlocked(), refetchWhitelist()]),
 
     // Actions
     blockIP: blockIPMutation.mutate,

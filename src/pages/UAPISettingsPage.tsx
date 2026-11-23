@@ -6,9 +6,10 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Wallet, Wifi, WifiOff, User, RefreshCw, Key, Clock, Shield, Eye, EyeOff } from 'lucide-react';
+import { QueryState } from '@/components/ui/query-state';
 
 export default function UAPISettingsPage() {
-  const { data: status, isLoading: statusLoading } = useUAPIStatus();
+  const { data: status, isLoading: statusLoading, isError, error, refetch } = useUAPIStatus();
   const { data: user } = useUAPIUser();
   const { data: wallet } = useWalletBalance();
   const updateToken = useUpdateToken();
@@ -38,6 +39,8 @@ export default function UAPISettingsPage() {
         <h2 className="text-2xl font-bold text-foreground">Configurações UAPI</h2>
         <p className="text-muted-foreground">Gerenciamento da conexão com a API não-oficial da Lalamove</p>
       </div>
+
+      {isError && <QueryState isError error={error} onRetry={refetch} />}
 
       {/* Status + Wallet row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

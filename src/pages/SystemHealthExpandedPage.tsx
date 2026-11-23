@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { QueryState } from '@/components/ui/query-state';
 import { useSystemHealthExpanded, type HealthStatus, type ComponentHealth } from '@/hooks/useSystemHealthExpanded';
 import {
   CheckCircle2,
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export default function SystemHealthExpandedPage() {
-  const { data: health, isLoading, refetch, isFetching } = useSystemHealthExpanded(30000);
+  const { data: health, isLoading, isError, error, refetch, isFetching } = useSystemHealthExpanded(30000);
 
   const getStatusIcon = (status: HealthStatus) => {
     switch (status) {
@@ -90,6 +91,10 @@ export default function SystemHealthExpandedPage() {
       </Card>
     );
   };
+
+  if (isError) {
+    return <QueryState isError error={error} onRetry={refetch} />;
+  }
 
   if (isLoading) {
     return (
