@@ -97,14 +97,14 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 002 — Remover do repositório os 10 arquivos com credencial e travar reincidência no guard de segredos
+### Etapa 002 — Remover do repositório os 11 arquivos com credencial e travar reincidência no guard de segredos
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
 - **Achados resolvidos:** C-010
 - **Problema hoje:** Mesmo achado da etapa anterior: os 10 arquivos continuam no HEAD. Enquanto estiverem versionados, qualquer novo clone distribui a credencial — e o guard que varreria isso (`scripts/ci/check-bundle-secrets.mjs`) só olha o bundle compilado, não a raiz do repo.
 - **Causa raiz:** Documentacao e os fluxos n8n foram gerados com os valores reais embutidos e commitados na raiz. Nenhuma guarda cobre esses arquivos: scripts/pre-commit-secrets.sh:54 exclui '\.md$' da varredura e nao tem padrao pk_prod_/sk_prod_; nao existe hook pre-commit instalado (sem husky no package.json); scripts/ci/check-bundle-secrets.mjs so varre dist/ e so procura JWT do Supabase.
-- **Caminho recomendado:** Depois de a rotação estar confirmada: apagar os 10 arquivos (são material de documentação/importação do n8n, nenhum deles é importado por código — `grep -rn "lalamove_bundle_import\|lalamove_f0" src supabase scripts` não devolve nada) e estender `scripts/ci/check-bundle-secrets.mjs` para varrer também `*.md`, `*.json`, `*.html` e `*.py` da raiz procurando `pk_prod_`/`sk_prod_`/`sbp_`/JWT. Siga o padrão do próprio script (lista de padrões + saída com arquivo:linha, sem imprimir o valor). Atalho a evitar: mover os arquivos para `docs/` — continuam versionados e públicos.
+- **Caminho recomendado:** Depois de a rotação estar confirmada: apagar os 11 arquivos (são material de documentação/importação do n8n, nenhum deles é importado por código — `grep -rn "lalamove_bundle_import\|lalamove_f0" src supabase scripts` não devolve nada) e estender `scripts/ci/check-bundle-secrets.mjs` para varrer também `*.md`, `*.json`, `*.html` e `*.py` da raiz procurando `pk_prod_`/`sk_prod_`/`sbp_`/JWT. Siga o padrão do próprio script (lista de padrões + saída com arquivo:linha, sem imprimir o valor). Atalho a evitar: mover os arquivos para `docs/` — continuam versionados e públicos.
 - **Arquivos e objetos a tocar:** `lalamove_documentacao_completa.md`, `lalamove_documentacao_completa.html`, `lalamove_suplemento_v2.md`, `lalamove_suplemento_v2.html`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_f01_cotacao.json`, `lalamove_f02_pedido.json`, `lalamove_f03_rastreamento.json`, `lalamove_f04_pod.json`, `scripts/ci/check-bundle-secrets.mjs`
 - **Não tocar / armadilhas:** Nao mexer em supabase/functions/lalamove-gateway nem em lalamove-api/index.ts:129: a leitura por Deno.env.get ja esta correta, o defeito e so o valor versionado. docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md:91,122,159,259,277,311,408 cita os prefixos truncados (8-12 chars) - esse arquivo e referencia, nao vazamento, e nao precisa de mudanca.
 - **Depende de:** etapa 001 · **Libera:** etapa 047

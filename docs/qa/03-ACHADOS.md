@@ -416,7 +416,7 @@ Entregáveis de sessões antigas de análise (documentação, relatório de pedi
 **5 achado(s) sob esta causa.**
 
 
-#### C-010 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 10 arquivos
+#### C-010 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 11 arquivos
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
