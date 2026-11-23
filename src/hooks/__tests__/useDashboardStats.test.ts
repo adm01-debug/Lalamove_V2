@@ -25,7 +25,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 
-import { useDashboardStats, type DashboardStats } from '../useDashboardStats';
+import { useDashboardStats, type DashboardStats, type DashboardStatsResult } from '../useDashboardStats';
 import { supabase } from '@/integrations/supabase/client';
 
 function createWrapper() {
@@ -118,5 +118,38 @@ describe('useDashboardStats', () => {
 
     await vi.waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(supabase.from).toHaveBeenCalledTimes(7);
+  });
+
+  it('uma query rejeitada não derruba os outros KPIs', async () => {
+    let callIdx = 0;
+    (supabase.from as ReturnType<typeof vi.fn>).mockImplementation(() => {
+      callIdx++;
+      // A 5ª query (alertas ativos) falha — RLS negada, por exemplo.
+      if (callIdx === 5) {
+        const failing = chainable({ count: null, error: null });
+        failing.then = vi.fn().mockImplementation(
+          (_resolve: (v: unknown) => void, reject: (e: unknown) => void) =>
+            Promise.reject(new Error('permission denied for table alerts')).then(undefined, reject),
+        ) as ReturnType<typeof vi.fn>;
+        return failing;
+      }
+      if (callIdx <= 6) return chainable({ count: 7, error: null });
+      return chainable({ data: [], error: null });
+    });
+
+    const { result } = renderHook(() => useDashboardStats(), {
+      wrapper: createWrapper(),
+    });
+
+    await vi.waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    const data = result.current.data as DashboardStatsResult;
+    // As queries que responderam continuam valendo (antes do fix, todas viravam 0).
+    expect(data.totalOrders).toBe(7);
+    expect(data.activeDeliveries).toBe(7);
+    expect(data.activeDrivers).toBe(7);
+    // Só o KPI que falhou cai no fallback, e o nome dele fica registrado.
+    expect(data.alertsCount).toBe(0);
+    expect(data.errors.map((e) => e.name)).toEqual(['alertsCount']);
   });
 });

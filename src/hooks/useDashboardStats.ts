@@ -71,21 +71,26 @@ async function fetchDashboardStats(): Promise<DashboardStatsResult> {
     }
   });
 
-  const ok = (index: number) => (results[index] as PromiseFulfilledResult<{ count: number | null } | { data: unknown[] | null }>).value;
+  // Cada KPI é isolado: query rejeitada devolve undefined e cai no fallback, em vez
+  // de derrubar as outras seis (o cast cego anterior lançava TypeError e zerava tudo).
+  const value = <T,>(index: number): T | undefined =>
+    results[index].status === 'fulfilled'
+      ? (results[index] as PromiseFulfilledResult<T>).value
+      : undefined;
 
-  const ordersResult = ok(0) as { count: number | null };
-  const activeDeliveriesResult = ok(1) as { count: number | null };
-  const completedTodayResult = ok(2) as { count: number | null };
-  const pendingApprovalsResult = ok(3) as { count: number | null };
-  const alertsResult = ok(4) as { count: number | null };
-  const activeDriversResult = ok(5) as { count: number | null };
-  const deliveryTimesResult = ok(6) as { data: { scheduled_at: string | null; actual_delivery: string | null; estimated_delivery: string | null }[] | null };
+  const ordersResult = value<{ count: number | null }>(0);
+  const activeDeliveriesResult = value<{ count: number | null }>(1);
+  const completedTodayResult = value<{ count: number | null }>(2);
+  const pendingApprovalsResult = value<{ count: number | null }>(3);
+  const alertsResult = value<{ count: number | null }>(4);
+  const activeDriversResult = value<{ count: number | null }>(5);
+  const deliveryTimesResult = value<{ data: { scheduled_at: string | null; actual_delivery: string | null; estimated_delivery: string | null }[] | null }>(6);
 
   // Calculate average delivery time and on-time rate (só pares completos)
   let avgDeliveryTime = 0;
   let onTimeRate = 0;
   
-  if (deliveryTimesResult.data && deliveryTimesResult.data.length > 0) {
+  if (deliveryTimesResult?.data && deliveryTimesResult.data.length > 0) {
     const complete = deliveryTimesResult.data.filter(
       (order) => order.scheduled_at && order.actual_delivery,
     );
@@ -114,14 +119,14 @@ async function fetchDashboardStats(): Promise<DashboardStatsResult> {
   }
 
   return {
-    totalOrders: ordersResult.count ?? 0,
-    activeDeliveries: activeDeliveriesResult.count ?? 0,
-    completedToday: completedTodayResult.count ?? 0,
-    pendingApprovals: pendingApprovalsResult.count ?? 0,
-    alertsCount: alertsResult.count ?? 0,
+    totalOrders: ordersResult?.count ?? 0,
+    activeDeliveries: activeDeliveriesResult?.count ?? 0,
+    completedToday: completedTodayResult?.count ?? 0,
+    pendingApprovals: pendingApprovalsResult?.count ?? 0,
+    alertsCount: alertsResult?.count ?? 0,
     avgDeliveryTime, // real computed average (0 when there are no complete deliveries)
     onTimeRate, // real on-time percentage (0 when there are no complete deliveries)
-    activeDrivers: activeDriversResult.count ?? 0,
+    activeDrivers: activeDriversResult?.count ?? 0,
     errors,
   };
 }

@@ -45,6 +45,17 @@ const defaultStats = {
   onTimeRate: 0, activeDrivers: 0,
 };
 
+// Nomes legíveis dos KPIs de useDashboardStats para o aviso de falha parcial.
+const KPI_LABELS: Record<string, string> = {
+  totalOrders: 'pedidos totais',
+  activeDeliveries: 'entregas ativas',
+  completedToday: 'concluídos hoje',
+  pendingApprovals: 'aprovações pendentes',
+  alertsCount: 'alertas',
+  activeDrivers: 'motoristas ativos',
+  deliveryTimes: 'tempos de entrega',
+};
+
 export function DashboardRedesigned() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -62,12 +73,16 @@ export function DashboardRedesigned() {
 
   const isLoading = statsLoading || ordersLoading || approvalsLoading || alertsLoading;
 
-  // Toast de erro quando alguma das 7 queries do dashboard falha (RLS negada, etc).
+  // Uma das 7 queries pode falhar sem derrubar as outras: o toast diz qual KPI ficou de fora.
+  const kpisComFalha = (stats?.errors ?? []).map((e) => KPI_LABELS[e.name] ?? e.name);
+  const kpisComFalhaChave = kpisComFalha.join(', ');
   useEffect(() => {
     if (statsError) {
       toast.error('Não foi possível carregar as métricas do dashboard');
+    } else if (kpisComFalhaChave) {
+      toast.error(`Métricas indisponíveis: ${kpisComFalhaChave}`);
     }
-  }, [statsError]);
+  }, [statsError, kpisComFalhaChave]);
 
   // Compute sparklines from real order data
   const ordersSparkline = useMemo(() => {
