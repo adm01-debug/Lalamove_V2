@@ -51,20 +51,20 @@ evitar. Siga o padrão citado em vez de inventar um novo — consistência aqui 
 
 ## Mapa do plano
 
-300 etapas, numeradas de 001 a 300, cobrindo os 282 achados de `03-ACHADOS.md`
+300 etapas, numeradas de 001 a 300, cobrindo os 291 achados de `03-ACHADOS.md`
 (todo achado tem ao menos uma etapa; nenhuma etapa existe sem achado).
-**80 etapas precisam de aprovação sua antes do merge** — são as que tocam migration em produção,
+**79 etapas precisam de aprovação sua antes do merge** — são as que tocam migration em produção,
 CI/workflows, segredo, infraestrutura, deleção de dado, arquitetura ou custo.
 
 | Onda | Tema | Etapas |
 |---|---|---|
-| 1 | Segurança e risco de perda de dado | 56 |
-| 2 | Fluxos principais quebrados | 22 |
-| 3 | Integridade de dados e regras de negócio | 59 |
-| 4 | Funcionalidades incompletas | 29 |
-| 5 | Robustez: erros, estados, concorrência | 45 |
+| 1 | Segurança e risco de perda de dado | 58 |
+| 2 | Fluxos principais quebrados | 25 |
+| 3 | Integridade de dados e regras de negócio | 58 |
+| 4 | Funcionalidades incompletas | 28 |
+| 5 | Robustez: erros, estados, concorrência | 44 |
 | 6 | Performance | 25 |
-| 7 | Experiência de uso e consistência | 33 |
+| 7 | Experiência de uso e consistência | 31 |
 | 8 | Higiene: código morto, CI, observabilidade | 31 |
 
 
@@ -77,7 +77,7 @@ CI/workflows, segredo, infraestrutura, deleção de dado, arquitetura ou custo.
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
-- **Achados resolvidos:** C-008
+- **Achados resolvidos:** C-010
 - **Problema hoje:** A chave de API e o segredo HMAC de produção da Lalamove estão em texto puro em 10 arquivos na raiz do repositório, que está público no GitHub. Qualquer pessoa cria e cancela fretes pagos na conta da empresa e consegue forjar webhooks que o sistema aceita como verdadeiros.
   Evidência: `lalamove_documentacao_completa.md:119-120` e `:1610-1611` (rótulos `API_KEY`/`SECRET_KEY`, valores de 40 e 72 caracteres — formato real, não placeholder); mesmos valores em `lalamove_documentacao_completa.html`, `lalamove_suplemento_v2.md`, `lalamove_suplemento_v2.html`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_f01_cotacao.json`, `lalamove_f02_pedido.json`, `lalamove_f03_rastreamento.json`, `lalamove_f04_pod.json`. Confirmado por `grep -rl` no HEAD.
 - **Causa raiz:** Documentacao e os fluxos n8n foram gerados com os valores reais embutidos e commitados na raiz. Nenhuma guarda cobre esses arquivos: scripts/pre-commit-secrets.sh:54 exclui '\.md$' da varredura e nao tem padrao pk_prod_/sk_prod_; nao existe hook pre-commit instalado (sem husky no package.json); scripts/ci/check-bundle-secrets.mjs so varre dist/ e so procura JWT do Supabase.
@@ -101,13 +101,13 @@ Checklist de conclusão:
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
-- **Achados resolvidos:** C-008
+- **Achados resolvidos:** C-010
 - **Problema hoje:** Mesmo achado da etapa anterior: os 10 arquivos continuam no HEAD. Enquanto estiverem versionados, qualquer novo clone distribui a credencial — e o guard que varreria isso (`scripts/ci/check-bundle-secrets.mjs`) só olha o bundle compilado, não a raiz do repo.
 - **Causa raiz:** Documentacao e os fluxos n8n foram gerados com os valores reais embutidos e commitados na raiz. Nenhuma guarda cobre esses arquivos: scripts/pre-commit-secrets.sh:54 exclui '\.md$' da varredura e nao tem padrao pk_prod_/sk_prod_; nao existe hook pre-commit instalado (sem husky no package.json); scripts/ci/check-bundle-secrets.mjs so varre dist/ e so procura JWT do Supabase.
 - **Caminho recomendado:** Depois de a rotação estar confirmada: apagar os 10 arquivos (são material de documentação/importação do n8n, nenhum deles é importado por código — `grep -rn "lalamove_bundle_import\|lalamove_f0" src supabase scripts` não devolve nada) e estender `scripts/ci/check-bundle-secrets.mjs` para varrer também `*.md`, `*.json`, `*.html` e `*.py` da raiz procurando `pk_prod_`/`sk_prod_`/`sbp_`/JWT. Siga o padrão do próprio script (lista de padrões + saída com arquivo:linha, sem imprimir o valor). Atalho a evitar: mover os arquivos para `docs/` — continuam versionados e públicos.
 - **Arquivos e objetos a tocar:** `lalamove_documentacao_completa.md`, `lalamove_documentacao_completa.html`, `lalamove_suplemento_v2.md`, `lalamove_suplemento_v2.html`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_f01_cotacao.json`, `lalamove_f02_pedido.json`, `lalamove_f03_rastreamento.json`, `lalamove_f04_pod.json`, `scripts/ci/check-bundle-secrets.mjs`
 - **Não tocar / armadilhas:** Nao mexer em supabase/functions/lalamove-gateway nem em lalamove-api/index.ts:129: a leitura por Deno.env.get ja esta correta, o defeito e so o valor versionado. docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md:91,122,159,259,277,311,408 cita os prefixos truncados (8-12 chars) - esse arquivo e referencia, nao vazamento, e nao precisa de mudanca.
-- **Depende de:** etapa 001 · **Libera:** etapa 046
+- **Depende de:** etapa 001 · **Libera:** etapa 047
 - **Risco e como reverter:** Remoção de documentação. Reverter = `git revert`. Não mexa no histórico.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `node scripts/ci/check-bundle-secrets.mjs` → exit 0 e, ao recriar um dos arquivos com um `pk_prod_` falso, exit 1 apontando arquivo:linha. `grep -rlE "pk_prod_|sk_prod_" . --exclude-dir=node_modules --exclude-dir=.git` → nenhuma saída.
@@ -124,7 +124,7 @@ Checklist de conclusão:
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
-- **Achados resolvidos:** C-010
+- **Achados resolvidos:** C-012
 - **Problema hoje:** O código-fonte inteiro e o histórico estão abertos na internet. No histórico está a chave que dá acesso total ao banco de produção (service_role) e o token de administração do projeto Supabase. Quem copiou antes continua com acesso mesmo se o repositório for fechado agora.
 
   ```
@@ -190,7 +190,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto (REVOKE explícito por papel, no padrão de 20260902000000; nada de tentar RLS em materialized view). Um ajuste: `cache_status` é view comum, não MV — se ela for criada sem `security_invoker=true`, roda com os privilégios do dono e expõe as MVs mesmo depois do REVOKE nelas; então o REVOKE em cache_status (que o caminho já inclui) é indispensável, não opcional. Verificar também se delivery_metrics_cache/hourly_metrics_cache carregam identificador de motorista antes de decidir se basta REVOKE ou se cabe recortar colunas.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122090000_cache_system_backend.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
 - **Não tocar / armadilhas:** Mantenha o GRANT para `authenticated` e `service_role`: as páginas /cache-status e /cache-monitoring e o cron de refresh dependem deles. Não dropar as MVs: `refresh_cache_view` (20261123150000:58-114) e o cron de 20261123110000_cron_refresh_cache_views.sql apontam para os três nomes exatos. Revogar de `anon` não resolve o segundo problema da mesma migration (refresh_cache_view aberto a authenticated) — é achado separado.
-- **Depende de:** — · **Libera:** etapa 045
+- **Depende de:** — · **Libera:** etapa 046
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select grantee, privilege_type from information_schema.role_table_grants where table_name in ('driver_stats_cache','delivery_metrics_cache','hourly_metrics_cache','cache_status');` — esperado: nenhuma linha com grantee='anon'. Teste real: `curl -s "$SUPABASE_URL/rest/v1/driver_stats_cache?select=driver_name,phone&limit=1" -H "apikey: <chave publicável>"` sem header Authorization — esperado HTTP 401/permission denied, não um JSON com dados.
@@ -207,20 +207,16 @@ Checklist de conclusão:
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Backend — notificação e fila**
 
-- **Achados resolvidos:** C-006
+- **Achados resolvidos:** C-007
 - **Problema hoje:** Qualquer pessoa com login no sistema consegue fazer o servidor entregar a senha de integração do Bitrix24 para um site dela. Com essa senha dá para ler e alterar os negócios no CRM da empresa, e o estrago continua depois, porque o endereço falso fica gravado e é reusado automaticamente.
 
   ```
   supabase/functions/bitrix24-sync/index.ts:92 `const domain = url.searchParams.get("domain") || (params && params.domain);` · :101-105 `const tokenResponse = await fetch(`https://${domain}/oauth/token/`, { ... body: new URLSearchParams({ grant_type: "authorization_code", client_id: clientId!, client_secret: clientSecret!, code: code, }) });` · :123-128 `await supabase.from("bitrix24_tokens").upsert({ domain: domain, ... }, { onConflict: "domain" });` · send-notification/index.ts:1419-1420 `fetch(`https://${token.domain}/rest/tasks.task.add?auth=${token.access_token}`,` · proteção existente que NÃO cobre o caso: supabase/config.toml:78-79 `[functions.bitrix24-sync]` + `verify_jwt = true`
   ```
-  Mesma causa, outro local — Integrações e contratos:
-  ```
-  /home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts:90 → `const domain = url.searchParams.get("domain") || (params && params.domain);` · :100 → `const tokenResponse = await fetch(\`https://${domain}/oauth/token/\`, {` · :105-106 → `client_id: clientId!,` / `client_secret: clientSecret!,` · /home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts:379 → `domain: z.string().optional(),`
-  ```
 - **Causa raiz:** `domain` vem cru da query string / do corpo, sem allowlist e sem validação de host. Nada amarra o `domain` ao domínio Bitrix24 contratado. Como o `upsert` grava esse mesmo `domain`, um valor envenenado passa a ser reusado por `bitrix24-process-queue` em todo ciclo de fila (e por `sendBitrix24Task` em send-notification/index.ts:1419-1420).
 - **Caminho recomendado:** 1) Fixar o domínio por secret (`BITRIX24_DOMAIN`) e ignorar o `domain` da requisição em `oauth_callback`, ou validar contra allowlist exata antes de qualquer fetch — o padrão de allowlist/validação já existe em `supabase/functions/_shared/contract.ts` + `_shared/schemas.ts` (use um `z.enum`/refine no schema `bitrix24-sync`, arquivo `supabase/functions/_shared/schemas.ts`, em vez de validar no handler). 2) Exigir papel admin no `oauth_callback` e no `get_auth_url`, no mesmo padrão de `supabase/functions/lalamove-uapi/index.ts` (`requireAdmin`) e `supabase/functions/geo-admin/index.ts`. 3) Em `bitrix24-process-queue:108` e `send-notification:1419`, validar `tokenData.domain` contra a mesma allowlist antes do fetch. Atalho tentador a evitar: só trocar `||` por `??` ou acrescentar um regex de "termina com bitrix24.com" — subdomínio hostil (`evil.bitrix24.com.attacker.tld`) passa; precisa ser igualdade com valor configurado.
   AJUSTE DO REVISOR: O passo 1 (fixar `BITRIX24_DOMAIN` por secret e ignorar o `domain` da requisição) está certo e é o que resolve — faça só esse. Correções no resto: (a) o passo 2 (exigir admin no `oauth_callback`) é inócuo como defesa principal e enganoso: `requireAdmin` existe em supabase/functions/lalamove-uapi/index.ts:74, mas com o domínio fixo por secret o papel deixa de ser a barreira; vale como defesa em profundidade, não como correção. (b) o `oauth_callback` como está já é inalcançável pelo redirect real do Bitrix24 (navegador faz GET sem JWT e `verify_jwt = true` devolve 401 antes do handler) — ou seja, o único caller possível hoje é um usuário logado do próprio sistema; ao fixar o domínio, revise se esse fluxo de OAuth ainda é usado ou se a edge deve sair do ar. (c) o passo 3 vira desnecessário se o domínio for lido do secret também em `bitrix24-process-queue` e `sendBitrix24Task`, em vez de `tokenData.domain`/`token.domain` — validar contra allowlist deixa a coluna envenenada no banco. (d) o alerta contra regex de sufixo está correto e deve ser mantido.
-- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/send-notification/index.ts`
+- **Arquivos e objetos a tocar:** `supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
 - **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
@@ -250,7 +246,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Apagar é o caminho de menor risco e está certo, com uma ressalva: docs/backups/plano-pim-promo-supply-v2.md:117,154,256,259 descreve esta edge como o transporte planejado para o catálogo PIM — confirme com o dono que o plano foi abandonado antes de apagar, senão o trabalho volta. Se mantiver, além do gate de papel + allowlist, nota: o padrão de papel que você cita de external-companies lê o papel de app_metadata/user_metadata e é furado (ver o achado da lalamove-uapi); copie o de geo-admin/index.ts (consulta user_roles), não o de external-companies.
 - **Arquivos e objetos a tocar:** `supabase/functions/external-db-bridge/index.ts`, `supabase/functions/_shared/schemas.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 060
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com o JWT de um usuário `viewer` real: `curl -s -X POST "$SUPABASE_URL/functions/v1/external-db-bridge" -H "Authorization: Bearer <jwt_do_viewer>" -H 'content-type: application/json' -d '{"operation":"select","table":"companies","limit":1}'`. Hoje esperado: 200 com a linha. Depois da correção: 404 (removida) ou 403 (gate de papel).
@@ -282,7 +278,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correto no essencial. Dois ajustes: (1) no item 2, ignorar os números do corpo também em triggeredBy='MANUAL' — a avaliação manual não tem motivo para aceitar estatísticas de fora, e aceitar só em MANUAL mantém o furo para qualquer chamador que mande MANUAL; use sempre calculateStatsFromOrders/calculateStatsFromDriver e trate os campos do corpo como legado ignorado. (2) O item 3 (driverId → z.string().uuid()) precisa ser checado antes contra os chamadores reais: lalamove-webhook/index.ts e job-worker passam o driver_id vindo da Lalamove, que não é UUID do Supabase; se for esse o caso, trocar para uuid quebra a avaliação automática — verifique a coluna drivers.id e os chamadores antes de apertar o schema.
 - **Arquivos e objetos a tocar:** `src/hooks/useEvaluateDriver.ts`, `supabase/config.toml`, `supabase/functions/_shared/schemas.ts`, `supabase/functions/evaluate-driver/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 009
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Pegar um `driverId` real com `status` != 'BLOCKED' em homologação e chamar `curl -s -X POST "$SUPABASE_URL/functions/v1/evaluate-driver" -H "Authorization: Bearer <jwt_de_viewer>" -H 'content-type: application/json' -d '{"driverId":"<uuid>","triggeredBy":"MANUAL","totalDeliveries":10,"completedDeliveries":0,"failedDeliveries":10,"cancelledDeliveries":5,"avgDelayMinutes":120,"rating":0}'`; conferir `select status, risk_score from drivers where id='<uuid>'`. Hoje esperado: resposta com `autoBlocked: true` e `status='BLOCKED'`. Depois da correção: 403 e `status` intacto.
@@ -295,7 +291,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 009 — lalamove-api nao tem nenhuma checagem de papel: qualquer usuario logado cria pedido pago, cancela, aumenta taxa e redireciona o webhook da conta — parte 1/2
+### Etapa 009 — lalamove-api nao tem nenhuma checagem de papel: qualquer usuario logado cria pedido pago, cancela, aumenta taxa e redireciona o webhook da conta
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Backend — edges Lalamove**
 
@@ -312,14 +308,12 @@ Checklist de conclusão:
 - **Causa raiz:** A funcao foi protegida apenas por `verify_jwt = true` no supabase/config.toml, que prova que existe uma sessao Supabase — nao que o papel dela autoriza a acao. Nenhuma autorizacao foi adicionada no codigo, e o cliente de banco e criado direto com service_role (index.ts:661 `createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)`), o que tambem anula a RLS que separa viewer/operator/manager/admin. O proprio repo trata a configuracao do webhook como assunto de admin: a tabela lalamove_webhook_config tem politica `has_role(auth.uid(),'admin')` (supabase/migrations/20261122120100_lalamove_integration_columns.sql:80-85), mas a edge que de fato repointa a URL na Lalamove nao recheca nada.
 - **Caminho recomendado:** 1) Criar um helper de autorizacao reaproveitando o padrao que ja existe no repo — `requireAdmin` em supabase/functions/lalamove-uapi/index.ts:74-92 — mas corrigido para ler o papel de `public.user_roles` via a RPC `has_role` (definida em supabase/migrations/20251231115949_*.sql), nao de claims do JWT. 2) Mapear cada action para o papel minimo: `cities`/`get-order`/`get-quotation`/`get-driver` = viewer; `quotation`/`order`/`cancel`/`edit-order` = operator; `change-driver`/`priority-fee`/`fetch-orders-bulk`/`sync` = manager; `set-webhook`/`webhook-selftest` = admin. 3) Aplicar o gate logo depois do contrato (index.ts:693), antes do `switch (action)`. 4) Para `set-webhook`, validar a URL com `z.string().url()` e exigir que o host seja o dominio do proprio projeto Supabase, alem de gravar a URL em lalamove_webhook_config (a tabela existe e nunca e escrita). 5) Trocar o cliente service_role (index.ts:661) pelo cliente com o JWT do chamador nas leituras/escritas de pedido, mantendo service_role so na telemetria (adminDb, :31-33) — e o que a propria funcao ja separa. Atalho tentador a evitar: confiar no RBAC do `ProtectedRoute` do front; a edge e chamavel direto com o JWT, sem passar pela tela.
   AJUSTE DO REVISOR: Itens 1-4 estão certos (com a correção que o próprio auditor já aponta: ler o papel de user_roles/has_role, nunca de claims). Descarte o item 5: trocar o client service_role da linha 661 pelo client com o JWT do chamador nas leituras/escritas de pedido é mudança de arquitetura arriscada no fluxo principal — lalamove-gateway, lalamove-webhook e job-worker chamam esta edge, e os writes em lalamove_orders/lalamove_status_history passariam a depender das policies dessas tabelas, com risco real de quebrar criação e cancelamento de pedido. O gate de papel (itens 1-3) resolve o achado sem esse churn; se o dono quiser RLS no caminho do pedido, isso é tarefa separada.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `/home/user/Lalamove_V2/supabase/config.toml`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `supabase/config.toml`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/config.toml`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `supabase/config.toml`
+- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/config.toml`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `supabase/config.toml`, `supabase/functions/_shared/schemas.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`
 - **Não tocar / armadilhas:** Nao mexer em `verify_jwt` no config.toml: as chamadas internas (job-worker, webhook, bitrix24) usam Bearer service_role e dependem dele. Ao exigir papel, verificar que o service_role continue passando (o JWT de service_role nao tem linha em user_roles) — senao as chamadas internas quebram; o caminho e liberar quando o claim `role` do JWT for `service_role`. A lalamove-gateway repassa o JWT do chamador (index.ts:303), portanto o gate em lalamove-api cobre tambem o trafego do gateway.
-- **Depende de:** etapa 008 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 019, etapa 022, etapa 040
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com o JWT de um usuario que tem somente `viewer` em user_roles: `curl -s -X POST "$SUPABASE_URL/functions/v1/lalamove-api?action=set-webhook" -H "Authorization: Bearer $JWT_VIEWER" -H 'Content-Type: application/json' --form-string nada=1 -d '{"url":"https://exemplo-invalido.tld"}'`. Hoje: HTTP 200/4xx vindo da Lalamove (a chamada foi feita). Esperado depois do fix: HTTP 403 e nenhuma linha nova em lalamove_rate_limits com endpoint '/webhook'.
-  Nesta etapa, a verificação vale para: `/home/user/Lalamove_V2/supabase/config.toml`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `supabase/config.toml`.
 
 Checklist de conclusão:
 
@@ -329,45 +323,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 010 — lalamove-api nao tem nenhuma checagem de papel: qualquer usuario logado cria pedido pago, cancela, aumenta taxa e redireciona o webhook da conta — parte 2/2
-
-**Onda 1 (Segurança e risco de perda de dado) / Crítica / Backend — edges Lalamove**
-
-- **Achados resolvidos:** C-005
-- **Problema hoje:** Qualquer pessoa com login no sistema — inclusive o perfil de so-leitura — pode gastar dinheiro da empresa criando entregas, cancelar entregas em andamento, aumentar o valor pago ao motorista e, pior, apontar todos os avisos da Lalamove para um endereco de fora, cegando o rastreamento e entregando os dados de entrega a terceiros.
-
-  ```
-  supabase/functions/lalamove-api/index.ts:661 (service_role antes de tudo), :1084-1093 (case set-webhook sem gate) + :450-452 (setWebhookUrl → PATCH /webhook), :915-925 e :981-989 (getUser é só auditoria, não autorização); supabase/migrations/20261122120100_lalamove_integration_columns.sql:80-85 (RLS exige admin na tabela de config do webhook).
-  ```
-  Mesma causa, outro local — Integrações e contratos:
-  ```
-  /home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts:1092 → `result = await setWebhookUrl(webhookUrl);` · :451 → `return lalamoveRequest('PATCH', '/webhook', { data: { url } });` · /home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts:929 → `url: z.string().min(1, "url é obrigatório"),` · /home/user/Lalamove_V2/supabase/config.toml:19 → `verify_jwt = true` (único controle) · grep de `role` no index.ts: nenhuma ocorrência
-  ```
-- **Causa raiz:** A funcao foi protegida apenas por `verify_jwt = true` no supabase/config.toml, que prova que existe uma sessao Supabase — nao que o papel dela autoriza a acao. Nenhuma autorizacao foi adicionada no codigo, e o cliente de banco e criado direto com service_role (index.ts:661 `createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)`), o que tambem anula a RLS que separa viewer/operator/manager/admin. O proprio repo trata a configuracao do webhook como assunto de admin: a tabela lalamove_webhook_config tem politica `has_role(auth.uid(),'admin')` (supabase/migrations/20261122120100_lalamove_integration_columns.sql:80-85), mas a edge que de fato repointa a URL na Lalamove nao recheca nada.
-- **Caminho recomendado:** 1) Criar um helper de autorizacao reaproveitando o padrao que ja existe no repo — `requireAdmin` em supabase/functions/lalamove-uapi/index.ts:74-92 — mas corrigido para ler o papel de `public.user_roles` via a RPC `has_role` (definida em supabase/migrations/20251231115949_*.sql), nao de claims do JWT. 2) Mapear cada action para o papel minimo: `cities`/`get-order`/`get-quotation`/`get-driver` = viewer; `quotation`/`order`/`cancel`/`edit-order` = operator; `change-driver`/`priority-fee`/`fetch-orders-bulk`/`sync` = manager; `set-webhook`/`webhook-selftest` = admin. 3) Aplicar o gate logo depois do contrato (index.ts:693), antes do `switch (action)`. 4) Para `set-webhook`, validar a URL com `z.string().url()` e exigir que o host seja o dominio do proprio projeto Supabase, alem de gravar a URL em lalamove_webhook_config (a tabela existe e nunca e escrita). 5) Trocar o cliente service_role (index.ts:661) pelo cliente com o JWT do chamador nas leituras/escritas de pedido, mantendo service_role so na telemetria (adminDb, :31-33) — e o que a propria funcao ja separa. Atalho tentador a evitar: confiar no RBAC do `ProtectedRoute` do front; a edge e chamavel direto com o JWT, sem passar pela tela.
-  AJUSTE DO REVISOR: Itens 1-4 estão certos (com a correção que o próprio auditor já aponta: ler o papel de user_roles/has_role, nunca de claims). Descarte o item 5: trocar o client service_role da linha 661 pelo client com o JWT do chamador nas leituras/escritas de pedido é mudança de arquitetura arriscada no fluxo principal — lalamove-gateway, lalamove-webhook e job-worker chamam esta edge, e os writes em lalamove_orders/lalamove_status_history passariam a depender das policies dessas tabelas, com risco real de quebrar criação e cancelamento de pedido. O gate de papel (itens 1-3) resolve o achado sem esse churn; se o dono quiser RLS no caminho do pedido, isso é tarefa separada.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/functions/_shared/schemas.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/functions/_shared/schemas.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`
-- **Não tocar / armadilhas:** Nao mexer em `verify_jwt` no config.toml: as chamadas internas (job-worker, webhook, bitrix24) usam Bearer service_role e dependem dele. Ao exigir papel, verificar que o service_role continue passando (o JWT de service_role nao tem linha em user_roles) — senao as chamadas internas quebram; o caminho e liberar quando o claim `role` do JWT for `service_role`. A lalamove-gateway repassa o JWT do chamador (index.ts:303), portanto o gate em lalamove-api cobre tambem o trafego do gateway.
-- **Depende de:** etapa 009 · **Libera:** etapa 019, etapa 022, etapa 039
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Com o JWT de um usuario que tem somente `viewer` em user_roles: `curl -s -X POST "$SUPABASE_URL/functions/v1/lalamove-api?action=set-webhook" -H "Authorization: Bearer $JWT_VIEWER" -H 'Content-Type: application/json' --form-string nada=1 -d '{"url":"https://exemplo-invalido.tld"}'`. Hoje: HTTP 200/4xx vindo da Lalamove (a chamada foi feita). Esperado depois do fix: HTTP 403 e nenhuma linha nova em lalamove_rate_limits com endpoint '/webhook'.
-  Nesta etapa, a verificação vale para: `supabase/functions/_shared/schemas.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 011 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove
+### Etapa 010 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
-- **Achados resolvidos:** C-009
+- **Achados resolvidos:** C-011
 - **Problema hoje:** Um funcionario com acesso apenas de leitura, ou qualquer conta logada que vaze, pode: contratar fretes pagos na conta da empresa, cancelar entregas em andamento, subir a taxa de prioridade (dinheiro), trocar o motorista de uma entrega e, com set-webhook, mandar todos os avisos de status da Lalamove para um endereco de fora - o sistema para de receber atualizacao de entrega e um terceiro passa a receber os dados.
 
   ```
@@ -378,7 +338,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro — o gate de geo-admin/index.ts:69-84 e de fato o padrao do repo e aceita service_role, o que preserva as chamadas internas. Dois cuidados que faltaram: 1) a lalamove-gateway chama a lalamove-api por GET com 'action' na QUERY (comentario em lalamove-api/index.ts:665-672 aponta lalamove-gateway/index.ts:295,306,322), entao o gate tem de ler a action do input MESCLADO (query + corpo) como o contrato ja faz em :686-692; gatear so pelo corpo deixa 100% desse trafego passar sem checagem. 2) Antes de exigir 'operator+' em quotation/order, conferir se a propria lalamove-gateway chama com service_role ou repassando o JWT do usuario — se repassar o JWT, o gate novo passa a valer tambem para o cartao de status do dashboard e para o cancelamento, e um papel mal escolhido quebra o fluxo principal em producao.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/test-notification/index.ts`, `supabase/functions/rotate-tokens/index.ts`, `supabase/functions/route-analyzer/index.ts`, `supabase/functions/geo-gateway/index.ts`, `supabase/config.toml`, `src/App.tsx`
 - **Não tocar / armadilhas:** Nao exigir papel de usuario em job-worker, bitrix24-sync, escalate-alerts, check-driver-alerts e lalamove-token-refresh: sao chamadas por pg_cron com Bearer service_role e nao tem uid - um gate de user_roles ali derruba os jobs. supabase/functions/lalamove-webhook ja esta protegido por HMAC (security.ts:21-47, fail-closed quando o segredo falta) e nao deve ganhar checagem de papel, senao as entregas reais param. O caso 'webhook-selftest' (lalamove-api/index.ts:1105) tem trava de prefixo propria e nao cria pedido pago.
-- **Depende de:** — · **Libera:** etapa 012, etapa 076
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com o token de um usuario viewer: curl -X POST "$SUPABASE_URL/functions/v1/lalamove-api" -H "Authorization: Bearer <jwt-viewer>" -H 'content-type: application/json' --form-string nao se aplica, usar -d '{"action":"cities"}'. Hoje responde 200; depois da correcao deve responder 403. Repetir com {"action":"set-webhook","url":"https://exemplo-de-teste.invalid/x"} e exigir 403 mesmo para operator.
@@ -391,11 +351,75 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 012 — Importação em massa da UAPI rebaixa o status de pedidos existentes e sobrescreve endereço e cliente com valores de espaço reservado
+### Etapa 011 — requireAdmin da lalamove-uapi aceita papel escrito pelo proprio usuario (escalonamento) e nunca reconhece o admin de verdade
+
+**Onda 1 (Segurança e risco de perda de dado) / Crítica / Backend — edges Lalamove**
+
+- **Achados resolvidos:** C-006
+- **Problema hoje:** Dois estragos ao mesmo tempo. Qualquer pessoa com login consegue, mudando um dado do proprio perfil, sobrescrever a sessao do portal Lalamove da empresa — derrubando carteira, historico e cupons de todos — e ler os metadados do token. E o administrador legitimo nao consegue trocar o token quando ele expira, o que transforma uma tarefa de 1 minuto em incidente.
+
+  ```
+  supabase/functions/lalamove-uapi/index.ts:87-89; supabase/functions/external-companies/index.ts:43-48; nenhuma escrita de app_metadata em todo o repo (grep em supabase/migrations/, supabase/functions/, src/); fonte real do papel em supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql:137-149 (has_role com is_active).
+  ```
+  Mesma causa, outro local — Transversal — segurança:
+  ```
+  supabase/functions/lalamove-uapi/index.ts:87 — 'const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;' seguido de :88 'if (role !== \'admin\') {' → 403. Mesma linha em supabase/functions/external-companies/index.ts:43, seguida de :44-45 'const level = ROLE_PRIORITY[role] ?? 0; if (level < ROLE_PRIORITY.operator) {'. Prova da gravabilidade: src/pages/ProfilePage.tsx:77-79 'await supabase.auth.updateUser({ data: { full_name: trimmedName, name: trimmedName } })'.
+  ```
+  Mesma causa, outro local — Backend — demais edges:
+  ```
+  supabase/functions/external-companies/index.ts:43-47 — `const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role; const level = ROLE_PRIORITY[role] ?? 0; if (level < ROLE_PRIORITY.operator) { ... 403 ... }`; supabase/functions/lalamove-uapi/index.ts:87-89 — mesma leitura com `if (role !== 'admin')`. Gate correto já no repo: supabase/functions/geo-admin/index.ts:74-83.
+  ```
+- **Causa raiz:** O check le o papel de claims do JWT. `app_metadata` nunca e populado por nenhuma migration, funcao ou trigger deste repo, entao o primeiro termo e sempre `undefined` e o fallback assume: `user_metadata` (raw_user_meta_data), que o proprio usuario grava do navegador com `supabase.auth.updateUser({ data: { role: 'admin' } })` e que entra no token no refresh seguinte. Resultado duplo: quem nao e admin consegue virar admin aos olhos da funcao, e quem e admin de fato (linha em user_roles) e barrado com 403.
+- **Caminho recomendado:** Trocar a origem do papel pela fonte de verdade que o repo ja usa em toda a RLS: a funcao SQL `public.has_role(auth.uid(), 'admin'::app_role)` (migrations/20251231115949_*.sql). Em lalamove-uapi/index.ts:74-92, depois de `getClaims` validar o token, criar um cliente com o Authorization do chamador (o padrao esta em lalamove-gateway/index.ts:236-240) e chamar `await anonClient.rpc('has_role', { _user_id: <sub do claim>, _role: 'admin' })`, ou simplesmente `select` em `public.user_roles` sob RLS. Remover por completo o fallback para `user_metadata` — esse e o atalho tentador que cria o furo. Aplicar a mesma correcao em external-companies/index.ts:43, que copia a linha. Conferir a assinatura exata dos parametros de has_role na migration antes de escrever a chamada.
+  AJUSTE DO REVISOR: Caminho correto. Detalhe que você mesmo pediu para conferir: a assinatura é `public.has_role(_user_id UUID, _role app_role)` (migration 20251231115949, linha 137), então a chamada é `rpc('has_role', { _user_id: <sub>, _role: 'admin' })`. Prefira consultar user_roles com o client service_role (padrão de geo-admin/index.ts, que também checa is_active e expires_at) em vez do client sob RLS: se a policy de SELECT em user_roles mudar, o gate degrada para 403 em vez de falhar aberto.
+- **Arquivos e objetos a tocar:** `src/hooks/usePermissions.ts`, `src/hooks/useRole.ts`, `supabase/functions/external-companies/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
+- **Não tocar / armadilhas:** Nao resolver isso populando `app_metadata.role` por fora: isso cria uma segunda fonte de verdade de papel que sai de sincronia com user_roles (que e o que a RLS do banco usa) e e exatamente o tipo de divergencia que causa 'o usuario ve a tela mas a query nega'. Depois do fix, as actions set-token e token-status passam a exigir admin de verdade — confirmar antes que exista pelo menos um admin em user_roles, senao o painel UAPI fica sem ninguem que possa configurar o token.
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** 1) Escalonamento: com um usuario viewer, rodar no console do app `await supabase.auth.updateUser({ data: { role: 'admin' } })`, forcar refresh da sessao e chamar `POST $SUPABASE_URL/functions/v1/lalamove-uapi?action=token-status`. Hoje: HTTP 200 com os metadados do token. Esperado: 403. 2) Admin legitimo: com o JWT de um usuario que tem 'admin' em user_roles e sem nada em user_metadata, a mesma chamada deve dar 200 (hoje da 403).
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 012 — `bitrix24-sync` action `oauth_callback` manda `BITRIX24_CLIENT_SECRET` para o domínio que vem na query — sem allowlist
+
+**Onda 1 (Segurança e risco de perda de dado) / Crítica / Integrações e contratos**
+
+- **Achados resolvidos:** C-008
+- **Problema hoje:** Vazamento da credencial do aplicativo Bitrix24 da empresa: quem tiver qualquer login no sistema faz o servidor entregar o segredo do app para um site de fora. Com ele é possível se passar pelo app e ler/alterar o CRM. Exige rotação da credencial no painel Bitrix24.
+
+  ```
+  /home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts:90 → `const domain = url.searchParams.get("domain") || (params && params.domain);` · :100 → `const tokenResponse = await fetch(\`https://${domain}/oauth/token/\`, {` · :105-106 → `client_id: clientId!,` / `client_secret: clientSecret!,` · /home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts:379 → `domain: z.string().optional(),`
+  ```
+- **Causa raiz:** `domain` é string livre no contrato e é interpolada direto na URL de um POST que carrega `client_id` e `client_secret`. Não há allowlist (`*.bitrix24.com.br`/`*.bitrix24.com`), nem validação de hostname, nem comparação com o `domain` já gravado em `bitrix24_tokens`. Como `bitrix24-sync` também não tem checagem de papel, qualquer sessão autenticada basta. A mesma falta de validação está em `get_auth_url` (:78-80), que monta a URL de autorização com o domínio do chamador.
+- **Caminho recomendado:** 1) Em `schemas.ts:373` e `:378`, trocar `domain: z.string().optional()` por um `z.string().regex(/^[a-z0-9-]+\.bitrix24\.(com|com\.br|ru)$/)` (mesmo espírito da allowlist de `externalCompaniesTable` em `schemas.ts:397-399`, que é o padrão de allowlist já existente no repo). 2) No handler, para `oauth_callback`/`refresh_token`, preferir o domínio gravado em `bitrix24_tokens` ao que vem da requisição; só aceitar da query no primeiro `oauth_callback` e só se casar com o `domain` usado em `get_auth_url`. 3) Adicionar `state` assinado ao fluxo OAuth. Atalho a evitar: `encodeURIComponent(domain)` não resolve — o problema é o host, não a escaping.
+  AJUSTE DO REVISOR: A regex `^[a-z0-9-]+\.bitrix24\.(com|com\.br|ru)$` só cobre portais hospedados; se o portal do dono for self-hosted ela quebra o fluxo. Mais seguro e mais simples: guardar o domínio permitido em secret da edge (ex. `BITRIX24_DOMAIN`) e usar sempre esse valor — ignorando o `domain` da query em `oauth_callback`/`get_auth_url` — com fallback no domínio já gravado em `bitrix24_tokens`. O item 3 (state assinado) continua válido, mas é secundário em relação a parar de mandar o secret para host arbitrário.
+- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`
+- **Não tocar / armadilhas:** `refresh_token` (:152) e `sync_order` (:244) usam `tokenData.domain` lido do banco — esses não são a porta de entrada e não devem passar a validar entrada do usuário. O `window.opener?.postMessage('bitrix24_connected', '*')` em :127 também usa origem curinga, mas é outro defeito (não corrigir junto sem avisar, muda o fluxo da janela de OAuth).
+- **Depende de:** — · **Libera:** etapa 079
+- **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
+- **Precisa de aprovação humana antes do merge:** sim
+- **Como verificar:** Com JWT de qualquer usuário: `curl -s -X POST "$SUPABASE_URL/functions/v1/bitrix24-sync" -H "Authorization: Bearer <jwt>" -H 'Content-Type: application/json' -d '{"action":"oauth_callback","code":"x","domain":"<host-de-teste-controlado>"}'` e observar no host de teste o POST em `/oauth/token/` com `client_secret`. Depois do fix a resposta deve ser 422 nomeando o campo `domain`.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 013 — Importação em massa da UAPI rebaixa o status de pedidos existentes e sobrescreve endereço e cliente com valores de espaço reservado
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** C-007
+- **Achados resolvidos:** C-009
 - **Problema hoje:** Rodar a importação da UAPI com pedidos em andamento faz entregas voltarem a estados anteriores e apaga o endereço de coleta, o endereço de entrega e o nome do cliente de pedidos que já estavam corretos no sistema.
 
   ```
@@ -406,7 +430,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto nos 3 pontos; faltam dois, e um deles vem primeiro. (0) Fechar a action: chamar `requireAdmin(req)` antes do case 'bulk-import' (index.ts:750), como já é feito para 'set-token' em index.ts:524 — hoje qualquer usuário autenticado dispara a sobrescrita. (4) Corrigir a checagem de erro do jeito certo: não basta 'checar o erro', é preciso capturar o retorno (`const { error } = await supabase...`), porque o try/catch atual nunca vê erro de PostgREST — o supabase-js devolve `error` em vez de lançar, e é por isso que `totalImported` hoje conta falhas como sucesso.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-uapi/index.ts`
 - **Não tocar / armadilhas:** A UAPI é um segundo canal com vocabulário numérico próprio — não tente unificá-lo com o enum interno num mapa só sem antes confirmar o significado de cada código (hoje só 0..3 estão mapeados; qualquer outro código cai no default). Dados já sobrescritos por 'N/A'/'Importado UAPI' precisam de correção de dado à parte (chamar o dono).
-- **Depende de:** etapa 011 · **Libera:** —
+- **Depende de:** etapa 003 · **Libera:** etapa 016
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No Postgres descartável: inserir pedido com status='PICKED_UP', endereços reais e mesmo lalamove_id, rodar bulkImportOrders com um item sem addr_info e conferir `select status, pickup_address, customer_name from lalamove_orders where lalamove_id='<id>'`. Em produção (leitura): `select count(*) from lalamove_orders where customer_name = 'Importado UAPI' or pickup_address = 'N/A'`.
@@ -419,11 +443,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 013 — RLS de user_roles deixa qualquer usuario logado se promover a admin
+### Etapa 014 — RLS de user_roles deixa qualquer usuario logado se promover a admin
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Transversal — segurança**
 
-- **Achados resolvidos:** C-011
+- **Achados resolvidos:** C-013
 - **Problema hoje:** Um usuario com o perfil mais baixo (viewer) pode se tornar administrador sozinho, pelo navegador, sem pedir nada a ninguem. Dali ele ve e muda tudo: pedidos, motoristas, dados de cliente, configuracoes de alerta e os paineis de seguranca.
 
   ```
@@ -434,7 +458,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correcao do auditor tem um erro de referencia e um risco operacional. Erro: o conjunto restrito de 20260712202439_22b0c67b-a04f-4143-8b53-6b8c6b659bc8.sql nao e 'INSERT/UPDATE/DELETE so com has_role admin' — as policies reais (linhas 17-32) sao 'MFA admins can insert roles', '... update roles' e '... delete roles' e todas exigem 'public.has_role(auth.uid(), \'admin\') AND public.is_aal2()', isto e, admin COM MFA ativa (AAL2). Risco: se o dono nao tiver MFA inscrita, restaurar esse conjunto fecha a gestao de papeis para todo mundo (tela /roles para de salvar) e so service_role consegue mexer. Entao a migration nova deve: (a) derrubar as tres policies permissivas por nome; (b) recriar o par SELECT proprio + gestao admin, decidindo explicitamente se mantem o is_aal2() — se mantiver, confirmar antes que existe ao menos um admin com MFA, senao incluir no mesmo PR o caminho de recuperacao por service_role; (c) tratar a heranca de 20260828000003:23-27, que deixou TODOS os usuarios de auth.users como admin — sem limpar isso, fechar a policy nao resolve nada, porque todo mundo ja e admin. Essa limpeza e escrita destrutiva em producao: item para o dono, nao para o agente.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260828000002_dashboard_fixes.sql`, `supabase/migrations/20260712202439_22b0c67b-a04f-4143-8b53-6b8c6b659bc8.sql`, `src/hooks/useRole.ts`
 - **Não tocar / armadilhas:** Nao remover a policy de SELECT sem trocar por equivalente: src/hooks/usePermissions.ts:47,128,156 e src/hooks/useRole.ts:26,45,116 leem user_roles para montar o menu e o RBAC das rotas - matar o SELECT quebra a sidebar e o ProtectedRoute. A policy de service_role (FOR ALL) tem de ficar: supabase/functions/geo-admin/index.ts:74-78 depende dela.
-- **Depende de:** etapa 003 · **Libera:** etapa 016
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com a sessao de um usuario viewer, POST em /rest/v1/user_roles com body {"user_id":"<proprio uid>","role":"admin","is_active":true}. Hoje a expectativa e 201. Depois da correcao deve voltar 403 'new row violates row-level security policy'. E: select policyname, cmd, roles from pg_policies where tablename='user_roles' nao deve listar nenhuma policy de INSERT/UPDATE com roles={authenticated} e qual=true.
@@ -447,11 +471,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 014 — Pedido criado e cobrado na Lalamove nao e gravado no banco: vehicle_type do formulario nao existe no enum do banco
+### Etapa 015 — Pedido criado e cobrado na Lalamove nao e gravado no banco: vehicle_type do formulario nao existe no enum do banco
 
 **Onda 1 (Segurança e risco de perda de dado) / Crítica / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** C-012
+- **Achados resolvidos:** C-014
 - **Problema hoje:** O operador cria uma entrega, paga por ela na Lalamove e ve 'Pedido criado com sucesso', mas o pedido nao aparece na lista nem no painel: fica invisivel para acompanhamento, cobranca e alertas. Atinge o tipo de veiculo que vem marcado por padrao na tela (LALAGO) e todos os servicos novos, exceto CAR e VAN.
 
   ```
@@ -475,7 +499,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 015 — Chave do dispatcher gravada em texto puro no comando do cron e chave publishable literal dentro de migration — contra a regra escrita do próprio repo
+### Etapa 016 — Chave do dispatcher gravada em texto puro no comando do cron e chave publishable literal dentro de migration — contra a regra escrita do próprio repo
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Banco — funções, triggers e cron**
 
@@ -490,7 +514,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho está bom e o padrão citado é real (process_job_queue agendado só como `select public.process_job_queue(10);`, 20261122140000:103-105, com a leitura do vault dentro da função, :44-45). Dois reparos: (1) priorize a parte de segurança — dropar/proteger `get_cron_jobs_status()` é o que fecha a leitura da chave e pode ir sozinho; só reagendar os jobs não impede que o comando ANTIGO (com a chave) continue em `cron.job.command` até o `cron.unschedule`. (2) `invoke_edge` precisa de `REVOKE ALL ... FROM PUBLIC, anon, authenticated` na mesma migration (senão vira um proxy autenticado para invocar qualquer edge com a chave do dispatcher) e, por alterar objetos de cron em produção, é DDL para o dono aprovar, não merge direto.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261123190000_cron_check_driver_alerts.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20251226010001_configure_pg_cron.sql`, `docs/CRON_JOBS.md`, `docs/agentes/banco.md`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 013 · **Libera:** etapa 054
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select jobname, command from cron.job where jobname in ('check-driver-alerts','escalate-unacknowledged-alerts','lalamove_uapi_token_refresh_hourly');` — nenhum comando pode conter `apikey` com valor; depois do fix, só a chamada da função. A rotação da chave publishable e do dispatcher_key é decisão do dono (já consta como pendência em docs/agentes/banco.md).
@@ -503,7 +527,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 016 — audit_log aberto a qualquer usuário logado: política de leitura sem papel e RPC de escrita concedida a authenticated
+### Etapa 017 — audit_log aberto a qualquer usuário logado: política de leitura sem papel e RPC de escrita concedida a authenticated
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Banco — funções, triggers e cron**
 
@@ -522,7 +546,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O plano está incompleto: dropar/recriar audit_log_select e audit_log_insert não fecha o acesso, porque 20260828000003_comprehensive_rls_fix.sql:67-73 deixou a policy `"Authenticated full access audit_log"` (FOR ALL TO authenticated, USING true) na mesma tabela e políticas RLS são combinadas por OR. A migration de fix tem de (1) `DROP POLICY IF EXISTS "Authenticated full access audit_log" ON public.audit_log;` além das duas citadas, (2) recriar SELECT com has_role(...,'admin') e deixar o INSERT só para service_role, (3) `REVOKE EXECUTE ... FROM authenticated` em create_audit_log, e (4) revogar os privilégios de tabela que 20260828000003:79-83 concedeu em bloco (`REVOKE ALL ON public.audit_log FROM anon, authenticated;` e depois o GRANT mínimo), senão o RLS é a única barreira e ela continua furada. Atenção: essa mesma migration 20260828000003 abre dezenas de outras tabelas do mesmo jeito — tratar isso é tarefa separada, não ampliar o escopo deste fix.
 - **Arquivos e objetos a tocar:** `docs/MIGRATION_RECONCILIATION_2026-11.md`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261123160000_job_queue_processing_log.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 013 · **Libera:** etapa 052
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com um token de usuário de papel `viewer`: `select count(*) from audit_log;` deve passar a devolver 0 linhas (ou permission denied) e `select public.create_audit_log('x','y',gen_random_uuid(),'{}'::jsonb);` deve falhar com 42501.
@@ -535,7 +559,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 017 — geo_evaluate_tracking perdeu as atribuições de v_notify_del e v_driver_name — notificação de entrega nunca é enfileirada e o nome do motorista some das mensagens
+### Etapa 018 — geo_evaluate_tracking perdeu as atribuições de v_notify_del e v_driver_name — notificação de entrega nunca é enfileirada e o nome do motorista some das mensagens
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Banco — funções, triggers e cron**
 
@@ -549,7 +573,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Migration aditiva com `CREATE OR REPLACE FUNCTION public.geo_evaluate_tracking()` repetindo o corpo atual de 20261122131000_geo_eta_delay.sql e reinserindo as duas atribuições logo após o bloco que carrega `o` e `d` (hoje 20261122131000:81-85), exatamente como em 20261122130100_geo_foundation.sql:433-434. Padrão de referência no próprio repo: a função já é recriada inteira por migration aditiva (é o que 20261122131000 fez sobre 20261122130100). Atalho a evitar: fazer `ALTER FUNCTION` ou editar 20261122131000 no lugar — migration já aplicada não se edita, e o repo exige arquivo novo (docs/agentes/banco.md:55-57). Evitar também "consertar" só `v_driver_name`: é `v_notify_del` que desliga o envio.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 042, etapa 048
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Depois do apply: `select prosrc from pg_proc where proname='geo_evaluate_tracking'` deve conter `v_notify_del :=`. Em banco descartável (`supabase start`), inserir um pedido com `notify_delivery_contact=true` + contatos, criar tracking e atualizar a posição para dentro do raio da entrega; `select event_type, notification_status, job_id from order_geo_events where order_id = ...` deve trazer notification_status='queued' e job_id não nulo (hoje vem 'skipped' e NULL).
@@ -562,7 +586,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 018 — Tokens da Unified API da Lalamove gravados em texto puro numa tabela legível pelo navegador do administrador
+### Etapa 019 — Tokens da Unified API da Lalamove gravados em texto puro numa tabela legível pelo navegador do administrador
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Banco — integridade e índices**
 
@@ -577,7 +601,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O REVOKE + DROP POLICY está certo e pode ir inteiro: a parte da view não é necessária, porque nenhum arquivo em src/ consulta essa tabela (verificado por grep) — a tela de UAPI usa supabase.functions.invoke('lalamove-uapi') em src/hooks/useLalamoveUapi.ts:39, não o PostgREST. Fazer a view agora é escopo extra sem consumidor. Acrescentar ao plano: criptografar ou migrar o token para secret de edge só depois, porque hoje as edges leem a coluna em claro (lalamove-uapi/index.ts:141) e mudar o formato quebraria o refresh.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260315165451_86aebbac-da62-421e-b90c-59196d72b2da.sql`, `supabase/migrations/20260711184027_e973dd91-92eb-4403-bb93-065601d4ec41.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
 - **Não tocar / armadilhas:** A tela de administração da UAPI pode quebrar se ela lê a tabela direto — checar os consumidores antes (src/ e supabase/functions/lalamove-uapi) e criar a view substituta no mesmo PR. Não revogar do service_role: as edges de refresh de token dependem dele. O índice único parcial `idx_uapi_sessions_active ... WHERE is_active = true` (:20) garante uma sessão ativa só e deve ser preservado.
-- **Depende de:** — · **Libera:** etapa 041, etapa 047
+- **Depende de:** etapa 009 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com um JWT de administrador, `curl "$SUPABASE_URL/rest/v1/lalamove_uapi_sessions?select=access_token" -H "apikey: <anon>" -H "Authorization: Bearer <jwt-admin>"` — hoje devolve o token; depois do fix deve devolver 401/permission denied. E `select has_table_privilege('authenticated','public.lalamove_uapi_sessions','select')` deve virar false.
@@ -590,7 +614,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 019 — Duas migrations dão papel admin a todos os usuários existentes e uma terceira reativa papéis desativados
+### Etapa 020 — Duas migrations dão papel admin a todos os usuários existentes e uma terceira reativa papéis desativados
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Banco — RLS e autorização**
 
@@ -605,7 +629,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está certo no essencial (levantar a lista, dono decide, UPDATE nominal; nunca rebaixar todos em massa), mas está INCOMPLETO e por isso arriscado como plano final: o mesmo arquivo 20260828000003_comprehensive_rls_fix.sql:18-19 deixou em pé `CREATE POLICY "Authenticated users can insert roles" ON public.user_roles FOR INSERT TO authenticated WITH CHECK (true);` e o equivalente para UPDATE, e nenhuma migration posterior os dropa. Enquanto essas duas policies existirem, qualquer usuário logado insere a própria linha 'admin' e o conserto de dado é desfeito no minuto seguinte. A ordem correta é: (1) migration aditiva dropando as policies de INSERT/UPDATE abertas em user_roles e recriando-as restritas a `public.has_role(auth.uid(),'admin')`; (2) só então o UPDATE nominal de papéis.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260828000002_dashboard_fixes.sql`, `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260828000004_populate_permissions.sql`, `supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql`
 - **Não tocar / armadilhas:** `has_role` exige `auth.uid() = _user_id` (20260712210653:15) e `is_active = true` — rebaixar ou desativar a linha errada derruba o acesso da pessoa na hora, inclusive o do dono, e as policies de escrita de user_roles exigem admin COM MFA (20260712202439:17-31): se sobrar zero admin com MFA, ninguém conserta pela UI. Faça o fix do achado de user_roles (policies) ANTES, senão qualquer usuário desfaz o ajuste se promovendo de novo. assigned_at das linhas criadas em 28/08 ajuda a identificar quais vieram dessas migrations.
-- **Depende de:** etapa 010 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 030
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select ur.role, count(*) from public.user_roles ur where ur.is_active group by 1 order by 1;` — esperado: o número de admins bate com a lista aprovada pelo dono (hoje a expectativa é ~1 a 3, não a base inteira). Depois do ajuste, logar com uma conta rebaixada e abrir uma tela com requiredRole="admin" — esperado bloqueio pelo ProtectedRoute e 0 linhas nas queries admin.
@@ -618,7 +642,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 020 — P-04 e P-10 afirmam que as chaves legacy foram rotacionadas e estao 401; banco.md diz o oposto e e a fonte mais recente
+### Etapa 021 — P-04 e P-10 afirmam que as chaves legacy foram rotacionadas e estao 401; banco.md diz o oposto e e a fonte mais recente
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Documentação × código**
 
@@ -633,7 +657,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro (alinhar pelo banco.md:69-115, nunca escrever valor de chave). Dois ajustes: (a) as linhas a editar em P-10 sao :8 e :15, nao :12 e :19; (b) P-10 nao fica totalmente obsoleto — os ~12 scripts de diagnostico continuam no repo e continuam sendo os mesmos que, segundo mapa-repo.md:42 ("**Vários têm `service_role`/PAT no código**"), ainda teriam segredo; essa frase de mapa-repo.md tambem esta falsa hoje e deve cair no mesmo PR, senao a contradicao so muda de arquivo.
 - **Arquivos e objetos a tocar:** `docs/pendencias/P-04-rotacionar-jwt-secret-painel.md`, `docs/pendencias/P-10-scripts-chaves-legacy.md`, `docs/agentes/banco.md`, `docs/pendencias/_ordem.md`
 - **Não tocar / armadilhas:** Nao rotacionar nada: banco.md:98-100 registra que o dono foi consultado em 22/11 e decidiu nao rotacionar agora — a decisao e dele, o achado aqui e so a documentacao que esconde o risco. Nao imprimir nem commitar valor de chave (regra do AGENTS.md). O estado do banco de producao segue sem MCP nesta sessao, entao a frase correta no doc e "NAO VERIFICADO", nao "valida".
-- **Depende de:** — · **Libera:** etapa 029
+- **Depende de:** — · **Libera:** etapa 025
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** grep -rln "eyJ[A-Za-z0-9_-]\{10,\}" scripts/ retorna apenas scripts/pre-commit-secrets.sh (regex do detector, linha 33) e scripts/ai-context/cenarios.mjs (fixture de teste, linha 133) — nenhum segredo vivo. O estado real da chave em producao exige o painel Supabase ou a Management API do projeto iecgydonctmabiijadsf.
@@ -646,7 +670,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 021 — route-analyzer: usuário `viewer` usa o LLM pago sem limite e recebe pedidos completos (nome do cliente) lidos com service_role
+### Etapa 022 — route-analyzer: usuário `viewer` usa o LLM pago sem limite e recebe pedidos completos (nome do cliente) lidos com service_role
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Backend — demais edges**
 
@@ -661,7 +685,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Concordo com os três itens (gate de papel, bucket por usuário, `max(1000)` no contrato). Dois ajustes: (a) o gate precisa aceitar service_role explicitamente, porque `getCaller` em supabase/functions/simulate-driver-movement/index.ts:22-31 é o padrão do repo e sem isso chamadas internas quebram; (b) mexer em supabase/functions/_shared/schemas.ts:111 muda o contrato v1 — pelas regras do repo isso exige o par v1/v2 e o contract.test.ts correspondente (supabase/functions/_shared/contract.test.ts já cobre route-analyzer nas linhas 68/121/181), então inclua o caso de teto no teste no mesmo PR, senão a CI `Deno Contract Tests` fica sem cobertura do novo limite. Alternativa melhor que mover o chatbot: manter o componente no dashboard e esconder/desabilitar por papel no front, já que a correção de verdade é no servidor.
 - **Arquivos e objetos a tocar:** `supabase/functions/route-analyzer/index.ts`, `supabase/functions/_shared/schemas.ts`, `src/pages/DashboardRedesigned.tsx`, `src/components/dashboard/AIRouteChatbot.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 025
+- **Depende de:** etapa 009 · **Libera:** etapa 028
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de um `viewer`: `curl -s -X POST "$SUPABASE_URL/functions/v1/route-analyzer" -H "Authorization: Bearer <jwt_viewer>" -H 'content-type: application/json' -d '{"action":"analyze-alerts","message":"escreva um poema de 500 palavras"}'`. Hoje esperado: 200 com o poema — prova de gasto de token por um viewer e de que o prompt é livre. Depois da correção: 403; e a segunda chamada do mesmo usuário acima do limite deve devolver 429.
@@ -674,7 +698,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 022 — new-device-alert confia no userId e no e-mail do corpo: registra dispositivo e grava auditoria no nome de outro usuário
+### Etapa 023 — new-device-alert confia no userId e no e-mail do corpo: registra dispositivo e grava auditoria no nome de outro usuário
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Backend — notificação e fila**
 
@@ -689,7 +713,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Corrija um ponto do caminho proposto: declarar `[functions.new-device-alert] verify_jwt = true` em supabase/config.toml NÃO acrescenta nada — `true` já é o default do Supabase para função não declarada (os blocos de config.toml:44-58 existem justamente para quem precisa de `false`). A correção útil é só a primeira parte: ler o usuário do `Authorization` recebido via `auth.getUser()` e usar esse `id`/`email`, respondendo 403 quando divergirem do corpo. Isso não quebra o chamador atual (src/hooks/useDeviceDetection.ts:85 já manda o usuário da própria sessão).
 - **Arquivos e objetos a tocar:** `supabase/functions/new-device-alert/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 010 · **Libera:** etapa 027
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de um usuário A, `curl -X POST .../functions/v1/new-device-alert -d '{"userId":"<uuid de B>","userEmail":"qualquer@exemplo.com","deviceFingerprint":"x","ipAddress":"1.2.3.4","userAgent":"x"}'`. Esperado após o fix: 403 e nenhuma linha nova em `user_devices`/`auth_logs` para B. Hoje: 200 com `isNewDevice:true` e e-mail enviado.
@@ -702,7 +726,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 023 — test-notification envia para destinatário e webhook arbitrários, sem papel e com CORS aberto
+### Etapa 024 — test-notification envia para destinatário e webhook arbitrários, sem papel e com CORS aberto
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Backend — notificação e fila**
 
@@ -730,7 +754,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 024 — Botão "Entrar com Biometria" nunca loga ninguém: o challenge é inserido como anônimo e a RLS recusa
+### Etapa 025 — Botão "Entrar com Biometria" nunca loga ninguém: o challenge é inserido como anônimo e a RLS recusa
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Hooks e estado — auth, permissão e infra**
 
@@ -745,7 +769,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e a armadilha apontada (não liberar anon) é válida. Dois ajustes: (a) o botão já se esconde sozinho quando não há autenticador de plataforma (src/components/auth/PasskeyLoginButton.tsx:46-48), então o mínimo é remover a linha 271 de src/pages/AuthPage.tsx — não mexer no componente; (b) ao reescrever server-side, a edge também precisa gravar o challenge com user_id (ou guardar em tabela própria com service_role), senão a mesma policy volta a barrar.
 - **Arquivos e objetos a tocar:** `src/hooks/useWebAuthn.ts`, `src/components/auth/PasskeyLoginButton.tsx`, `src/pages/AuthPage.tsx`, `supabase/migrations/20260108144200_f760b5fc-115e-4968-850b-f169eb73680a.sql`
 - **Não tocar / armadilhas:** Não mexer em `registerMutation` (linhas 80-205): esse caminho roda autenticado e funciona para cadastrar passkey em PasskeySettings. O defeito é só no login. Também não apagar `useWebAuthn.hasPasskeys`, consumido por `src/pages/SecurityDashboardPage.tsx:27`.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 021 · **Libera:** etapa 044
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Abrir /auth em produção com DevTools na aba Network, clicar em "Entrar com Biometria" e observar o POST para `/rest/v1/webauthn_challenges` responder 401/403 (violação de RLS) e o toast de erro aparecer; nenhuma requisição para `/auth/v1/token` é feita.
@@ -758,7 +782,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 025 — Registro de dispositivo e alerta de "novo acesso" gravam sempre IP 0.0.0.0, vindo do cliente
+### Etapa 026 — Registro de dispositivo e alerta de "novo acesso" gravam sempre IP 0.0.0.0, vindo do cliente
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Hooks e estado — auth, permissão e infra**
 
@@ -773,7 +797,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A direção está certa (a edge deve ler o IP da própria requisição e ignorar o do corpo), mas o passo "no cliente, apagar o bloco morto e parar de enviar o campo" quebra a função como proposto: o contrato exige o campo — supabase/functions/_shared/schemas.ts:92 `ipAddress: z.string().min(1, "ipAddress é obrigatório")`, validado em new-device-alert/index.ts:51-58 com `errorResponse(validation, corsHeaders)`. Remover `ipAddress` do corpo sem tocar no schema faz toda chamada falhar na validação e nenhum dispositivo novo é registrado nem alertado — ficaria pior que hoje. Ordem segura: (1) na edge, derivar `const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? req.headers.get('cf-connecting-ip') ?? null` e usar `clientIp` nos quatro pontos (117, 137, 214, 260), parando de usar o valor do corpo; (2) tornar `ipAddress` opcional no schema (schemas.ts:92) — lembrando que `newDeviceAlertV2 = newDeviceAlertV1` em :100, então as duas versões mudam juntas e os testes de contrato (`deno test supabase/functions/_shared/contract.test.ts`) precisam rodar; (3) só então limpar o cliente. Importante: `user_devices.ip_address` e `auth_logs.ip_address` aparecem como `unknown` em src/integrations/supabase/types.ts:489 e :752 (tipo `inet` no banco), então gravar `null` é aceito mas convém confirmar a nulidade da coluna antes — e isso eu NÃO VERIFIQUEI, porque nenhum MCP desta sessão aponta para o projeto oficial `iecgydonctmabiijadsf`. Concordo com evitar o serviço público de geolocalização no navegador.
 - **Arquivos e objetos a tocar:** `src/hooks/useDeviceDetection.ts`, `supabase/functions/new-device-alert/index.ts`, `src/hooks/useUserDevices.ts`
 - **Não tocar / armadilhas:** `device_fingerprint` (linhas 7-35) é a chave usada para decidir se o dispositivo é novo — não alterar o algoritmo junto, ou todos os dispositivos conhecidos viram "novos" e disparam alerta em massa. Mudar a edge é deploy de função: confirmar com o dono antes.
-- **Depende de:** etapa 021 · **Libera:** etapa 043
+- **Depende de:** — · **Libera:** etapa 168
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com acesso ao banco oficial: `select distinct ip_address, count(*) from user_devices group by 1;` — se tudo for 0.0.0.0, está confirmado. Sem acesso: logar de um navegador novo e conferir no e-mail de alerta o campo IP como 0.0.0.0.
@@ -786,11 +810,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 026 — Renovação do token Bitrix24 quebrada em dois pontos: self-call sem Authorization e erro do provedor virando 500 genérico
+### Etapa 027 — O required check E2E passa sem exercitar RBAC e MFA: os testes autenticados fazem skip porque o ci.yml nao injeta a sessao
+
+**Onda 1 (Segurança e risco de perda de dado) / Alta / Infra, CI e deploy**
+
+- **Achados resolvidos:** A-012
+- **Problema hoje:** O teste que deveria provar que um operador nao acessa tela de admin e que o MFA barra o acesso nunca roda; uma regressao de permissao chega a producao com a CI verde.
+
+  ```
+  e2e/helpers/auth.ts:19-22 — `const storageKey = process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;` / `const sessionJson = process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON;` / `if (!storageKey || !sessionJson) return null;`; e2e/rbac.e2e.ts:60 — `test.skip(!session, 'Requer sessão autenticada injetada para validar hierarquia de papéis.');`; .github/workflows/ci.yml:54-57 — `env:` / `CI: 'true'` / `VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}` / `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}`
+  ```
+  Mesma causa, outro local — Testes:
+  ```
+  e2e/helpers/auth.ts:19-22; .github/workflows/ci.yml:52-57 (env só com VITE_*) e :58-64 (upload do report); skips em autocomplete.e2e.ts:50, livemap-route.e2e.ts:44, new-order-autocomplete.e2e.ts:64, mfa.e2e.ts:29, rbac.e2e.ts:60 e :74; playwright.config.ts:20.
+  ```
+- **Causa raiz:** Nenhuma das duas variaveis `LOVABLE_BROWSER_SUPABASE_*` e passada ao `npx playwright test` (ci.yml:52-57), e elas tambem nao existem no .env.example. Logo `getInjectedSession()` devolve null em todo run de CI e os 8 pontos de `test.skip` de rbac/mfa/autocomplete/livemap/new-order sao acionados. O Playwright conta skip como sucesso: o check `E2E (Playwright)` — um dos 7 required checks da main — fica verde tendo rodado apenas os fluxos nao autenticados (login-lockout, password-reset).
+- **Caminho recomendado:** Duas partes. (1) Tornar o buraco visivel: hoje nada distingue "passou" de "pulou". Como os specs ja usam `test.skip` condicional, o caminho minimo e um passo no job e2e que falha quando a sessao nao foi injetada em CI (`if [ -z "${LOVABLE_BROWSER_SUPABASE_SESSION_JSON:-}" ]; then echo '::error::E2E autenticado pulado'; exit 1; fi`). (2) Injetar a sessao de verdade: criar os secrets `LOVABLE_BROWSER_SUPABASE_STORAGE_KEY` e `LOVABLE_BROWSER_SUPABASE_SESSION_JSON` (usuario de teste dedicado, nunca conta real) e acrescenta-los ao `env:` de ci.yml:54-57. Antes disso, ligar scripts/ci/redigir-relatorio.mjs antes do `upload-artifact` (ci.yml:58-64), como scripts/ci/README.md:45-50 manda: com sessao injetada, o trace do Playwright passa a conter o token e hoje o artefato sobe sem redacao. Atalho a evitar: trocar `test.skip` por teste que loga com senha em texto no spec.
+  AJUSTE DO REVISOR: Caminho correto e a ordem dele importa — reforco com evidencia que ele nao citou: a redacao do artefato nao e opcional, porque `playwright.config.ts:24` usa `trace: 'on-first-retry'` com `retries: 2` em CI (linha 21), entao com sessao injetada o trace do retry carrega o token e ci.yml:58-64 sobe o `playwright-report/` sem redacao. Logo a sequencia e: (1) ligar `scripts/ci/redigir-relatorio.mjs playwright-report --segredo-env=LOVABLE_BROWSER_SUPABASE_STORAGE_KEY --segredo-env=LOVABLE_BROWSER_SUPABASE_SESSION_JSON` antes do upload; (2) so depois criar os secrets e acrescenta-los ao `env:`; (3) o passo que falha quando a sessao nao foi injetada. Acrescento: ligar junto `scripts/ci/check-e2e-artifact-secrets.mjs` (ele ja conhece esses dois nomes — scripts/ci/check-e2e-artifact-secrets.mjs:44-45 — e passa hoje, EXIT=0), senao a regra "injetou sessao, redija o relatorio" volta a depender de memoria humana. Mantenho o alerta contra login com senha em texto no spec.
+- **Arquivos e objetos a tocar:** `.env.example`, `.github/workflows/ci.yml`, `e2e/autocomplete.e2e.ts`, `e2e/helpers/auth.ts`, `e2e/livemap-route.e2e.ts`, `e2e/mfa.e2e.ts`, `e2e/new-order-autocomplete.e2e.ts`, `e2e/rbac.e2e.ts`, `playwright.config.ts`
+- **Não tocar / armadilhas:** —
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
+- **Precisa de aprovação humana antes do merge:** sim
+- **Como verificar:** No ultimo run do job `E2E (Playwright)`, contar skipped: `npx playwright test --reporter=line` localmente sem as envs devolve os specs de rbac/mfa como skipped. Depois do fix, o resumo do run tem de mostrar 0 skipped e os testes de rbac/mfa como passed.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 028 — Renovação do token Bitrix24 quebrada em dois pontos: self-call sem Authorization e erro do provedor virando 500 genérico
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Integrações e contratos**
 
-- **Achados resolvidos:** A-012
+- **Achados resolvidos:** A-013
 - **Problema hoje:** Depois que o token do Bitrix24 vence, a sincronização de pedidos com o CRM para de funcionar e a mensagem que aparece é "erro interno" — ninguém descobre que o problema é a credencial. A tentativa automática de renovar nunca acontece.
 
   ```
@@ -801,7 +857,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto, com um ajuste: extrair o corpo do case `refresh_token` para função local e chamá-la em `sync_order` é o diff certo, mas a função PRECISA devolver o novo access_token e o chamador precisa atribuir a `tokenData.access_token` (é o que bitrix24-process-queue/index.ts:135 já faz: `tokenData.access_token = tokens.access_token;`). Sem isso, mesmo renovando, `sync_order` continua chamando `crm.deal.update` com o token expirado. Reler do banco também resolve, mas é uma query extra desnecessária.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`
 - **Não tocar / armadilhas:** `refresh_token` do Bitrix24 é de uso único: duas renovações simultâneas queimam o refresh. Ao chamar a função local em `sync_order`, garantir que não há duas chamadas concorrentes (o repo já tem o padrão de claim em `lalamove-token-refresh/index.ts:140-148`). Não trocar o `.single()` de `bitrix24_tokens` (:132-135) por `.maybeSingle()` sem olhar quem depende do 400 atual.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 022 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Erro (b), reproduzido aqui: `node -e "try{new Date(Date.now()+undefined*1000).toISOString()}catch(e){console.log(e.name,e.message)}"` → `RangeError Invalid time value`. Erro (a): com o token expirado em `bitrix24_tokens`, chamar `action: "sync_order"` e conferir nos logs da edge que a requisição interna devolveu 401 e que o `crm.deal.update` seguinte respondeu `{"error":"expired_token"}`.
@@ -814,11 +870,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 027 — `cancel` devolve HTTP 204 com corpo JSON: o pedido é cancelado na Lalamove e a tela recebe erro
+### Etapa 029 — `cancel` devolve HTTP 204 com corpo JSON: o pedido é cancelado na Lalamove e a tela recebe erro
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Integrações e contratos**
 
-- **Achados resolvidos:** A-013
+- **Achados resolvidos:** A-014
 - **Problema hoje:** Quem cancela um pedido vê mensagem de erro e tende a tentar de novo ou a ligar para o suporte, quando o cancelamento já foi feito. Gera retrabalho e desconfiança no sistema justamente na ação mais sensível da operação.
 
   ```
@@ -828,7 +884,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Normalizar o status na borda: em :1203, trocar `status: result.status || 200` por algo como `status: result.status === 204 ? 200 : (result.status || 200)` — o corpo `{data:{success:true}}` já existe e o front espera JSON. Alternativa de diff ainda menor: em :208, devolver `status: 200` no ramo do 204, mantendo o 204 apenas em `result.data`/log. Atalho a evitar: devolver `new Response(null, {status:204})` — `lalamove-gateway/index.ts:344-346` faz `parsed = text ? JSON.parse(text) : {}` e passaria a entregar `{}` ao front, que perde o `success`.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`
 - **Não tocar / armadilhas:** O mesmo caminho serve `change-driver` (`DELETE /orders/{id}/drivers/{id}`), que também pode responder 204 — conferir os dois. Não mexer no tratamento de 204 dentro de `lalamoveRequest` sem olhar `persistRateLimit`, que é chamado ali com `status: 204`. Se algum consumidor hoje depende do 500 para não marcar como cancelado, verificar `src/hooks` antes.
-- **Depende de:** etapa 022 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 083, etapa 134
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Cancelar um pedido real em `ASSIGNING_DRIVER` pelo painel e comparar: `select status, cancelled_at from lalamove_orders where lalamove_id = '<id>'` (hoje vem `CANCELED` com `cancelled_at` preenchido) contra a resposta HTTP da edge (hoje 500 `Internal server error`). O teste em Deno é `deno eval "new Response('{}',{status:204})"` para confirmar que o runtime da edge também rejeita.
@@ -841,27 +897,33 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 028 — A restrição de pod_status proíbe o próprio valor padrão da coluna, o que pode estar derrubando em silêncio toda a gravação de paradas do pedido — parte 1/2
+### Etapa 030 — Duas edge functions de DDL destrutivo (apply-fixes, seed-fix-rls) continuam no repo e no deploy automático, sem nenhum chamador e sem checagem de papel
 
-**Onda 1 (Segurança e risco de perda de dado) / Alta / Regras de negócio — ciclo de vida**
+**Onda 1 (Segurança e risco de perda de dado) / Alta / Transversal — código morto e duplicação**
 
-- **Achados resolvidos:** A-014
-- **Problema hoje:** Se a restrição estiver mesmo em pé, nenhuma parada de pedido é salva — e é dessas linhas que saem o telefone e o nome do destinatário usados no aviso de chegada por WhatsApp e a prova de entrega (foto). O resultado é entrega sem comprovante registrado e aviso ao cliente sem destinatário.
+- **Achados resolvidos:** A-015
+- **Problema hoje:** Um endpoint publicado da empresa, que ninguém usa, é capaz de abrir os dados de pedidos, motoristas, incidentes e rastreamento para qualquer pessoa na internet sem login, e de permitir que um usuário comum se promova a administrador. Basta um usuário com senha do sistema (ou nenhum login, depois da primeira chamada) para vazar a base de operações.
 
   ```
-  supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql:19 (DEFAULT 'NOT_REQUIRED') vs supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql:5 (CHECK que exclui esse valor); único INSERT em supabase/functions/lalamove-api/coordinates.ts:103-128, erro apenas logado em :128
+  supabase/functions/apply-fixes/index.ts:46-49 (SQL) + :55 (rpc 'exec') + :58-60 (erro engolido); supabase/functions/seed-fix-rls/index.ts:46-48,100 (SQL) + :140 (rpc 'exec' com throwOnError); .github/workflows/deploy-edges.yml:42-47 (deploy de todas as functions); ausência de public.exec em supabase/migrations/ e em src/integrations/supabase/types.ts:4217+; scripts/db-audit/known-violations.json (mesmo achado já registrado como baseline).
   ```
-- **Causa raiz:** A restrição foi adicionada sem remover nem ajustar o DEFAULT 'NOT_REQUIRED' da mesma coluna, e nenhuma migration posterior a corrige (não há ALTER COLUMN pod_status nem DROP dessa constraint em todo supabase/). Como o único gravador de lalamove_stops não envia pod_status, todo INSERT novo cai no default proibido e o upsert é rejeitado — com o erro apenas registrado em log, nunca propagado. Sinal de que a inconsistência é conhecida: uma migration 11 dias posterior cria lalamove_stop_proofs aceitando 'NOT_REQUIRED' no CHECK (20260723122332:10) e faz a carga inicial tratando esse valor como existente em lalamove_stops (linha 73).
-- **Caminho recomendado:** Depois de confirmar o estado real: (a) se a constraint existe, migration aditiva incluindo 'NOT_REQUIRED' na lista — exatamente como lalamove_stop_proofs já faz (20260723122332:10) — ou alinhando o DEFAULT para 'pending'; (b) independentemente disso, fazer coordinates.ts:124-128 tratar o erro do upsert como falha visível (contabilizar e devolver na resposta), em vez de só logar, para que esse tipo de problema pare de ser invisível. O comentário do próprio arquivo (linhas 114-118) diz que contact_name/contact_phone eram 100% NULL em produção — compatível com o upsert nunca ter gravado.
-  AJUSTE DO REVISOR: Prefira a alternativa (b) do auditor para o DEFAULT, não a (a): o vocabulário vivo de pod_status é minúsculo — lalamove-webhook/index.ts:678-679 normaliza para 'pending'|'delivered'|'failed' — então a migration aditiva deve ser `ALTER TABLE public.lalamove_stops ALTER COLUMN pod_status DROP DEFAULT` (a CHECK já aceita NULL) ou `SET DEFAULT 'pending'`. Incluir 'NOT_REQUIRED' na CHECK, como lalamove_stop_proofs fez, reintroduz dois vocabulários na mesma coluna e mantém de pé o índice parcial `WHERE pod_status != 'NOT_REQUIRED'` (20251224181640:102) e o COMMENT com valores em maiúsculas (:120), que já divergem do que o código grava. Antes de escrever a migration, confirme com o dono se a constraint realmente existe em produção (`\d+ public.lalamove_stops`), porque se a 20260712112618 falhou na aplicação não há nada a corrigir no banco — só o DEFAULT a alinhar.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql`, `supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql`, `supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql`
-- **Não tocar / armadilhas:** É DDL em produção → PR fica aberta para o dono. Não 'resolver' passando pod_status:'pending' no upsert de coordinates.ts: isso faria toda parada nascer como prova pendente e acionaria o alerta MISSING_POD indevidamente. Conferir antes se o repositório de migrations está sincronizado com o banco — se a constraint não existe lá, o problema real é a divergência entre migrations e produção.
-- **Depende de:** — · **Libera:** etapa 081, etapa 132
+  Mesma causa, outro local — Transversal — segurança:
+  ```
+  As duas funções NÃO estão em supabase/config.toml, portanto valem verify_jwt=true (default) e exigem JWT válido: o ataque exige conta logada, não é anônimo. O `Access-Control-Allow-Origin: '*'` (apply-fixes/index.ts:12, seed-fix-rls/index.ts:12) não afeta autenticação. O SQL depende de uma RPC inexistente no repo: apply-fixes/index.ts:55 chama `rpc('exec', { query: sql })` e seed-fix-rls/index.ts:140 chama `rpc('exec', { sql_text: sql })` — assinaturas incompatíveis entre si e nenhuma migration cria `public.exec`. O comentário em seed-fix-rls/index.ts:138 diz 'precisamos criar uma função primeiro'. O furo do anon em produção veio de supabase/migrations/20260828000001_seed_fix_rls.sql (citada em 20261122150100_fix_public_rls_bypass.sql:1-2), não da edge.
+  ```
+  Mesma causa, outro local — Backend — demais edges:
+  ```
+  supabase/functions/apply-fixes/index.ts:36-37 (service_role sem auth), :55 (`supabase.rpc('exec', { query: sql })`), :58-60 (catch que converte a falha em `ERR:` e retorna success:true). supabase/functions/seed-fix-rls/index.ts:35-37 e :140 (`supabase.rpc('exec', { sql_text: sql }).throwOnError()`). Ausência da RPC: 0 matches em supabase/migrations/ e ausência em src/integrations/supabase/types.ts (Functions a partir da linha 4217; só mcp_exec:4494 e mcp_exec_many:4495). Registro prévio: scripts/db-audit/known-violations.json.
+  ```
+- **Causa raiz:** São scripts de manutenção de uma sessão antiga que nunca foram removidos. Nenhuma das duas está declarada em supabase/config.toml, então herdam `verify_jwt` padrão (true) — qualquer usuário logado, inclusive `viewer`, tem JWT válido e passa. Dentro do código não há segunda checagem de papel (padrão que `geo-admin/index.ts:75-84` e `mcp-query/index.ts:6-8` aplicam corretamente). O deploy-edges.yml publica todas as functions do diretório, então elas existem como endpoint em produção.
+- **Caminho recomendado:** 1) Apagar os diretórios supabase/functions/apply-fixes/ e supabase/functions/seed-fix-rls/ e as entradas correspondentes em supabase/functions/_shared/schemas.ts (linhas 962 e 975) e nos testes de contrato (supabase/functions/_shared/contract.test.ts:71,80,127,134,184,193) — o guard de inventário de contrato quebra se o schema ficar sem function. 2) Remover as duas functions do projeto Supabase pelo painel (apagar do repo NÃO as remove da produção — é exatamente o que o comentário de supabase/config.toml:92-97 registra sobre a `mapbox-proxy`, que segue deployada sem chamador). 3) Verificar e, se existir, dropar a RPC `public.exec`. Atalho tentador a evitar: só adicionar `verify_jwt = true` no config.toml — isso não muda nada, já é o padrão, e continua liberando qualquer `viewer`; e NÃO reescrever as duas functions com checagem de admin, porque DDL em produção tem que passar pelo fluxo de supabase/migrations/ descrito em docs/agentes/banco.md, não por endpoint HTTP.
+  AJUSTE DO REVISOR: Caminho bom — em especial o item 3 (verificar e, se existir, dropar public.exec), que é justamente o que decide a gravidade. Dois acréscimos: remover também as duas entradas de scripts/db-audit/known-violations.json junto com os diretórios (senão o supabase-usage-guard acusa baseline obsoleto), e rodar `deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts` depois de mexer em _shared/schemas.ts, porque o inventário de contratos quebra se sobrar schema sem function.
+- **Arquivos e objetos a tocar:** `.github/workflows/deploy-edges.yml`, `supabase/config.toml`, `supabase/functions/_shared/schemas.ts`, `supabase/functions/apply-fixes/index.ts`, `supabase/functions/seed-fix-rls/index.ts`, `supabase/migrations/20261122150100_fix_public_rls_bypass.sql`
+- **Não tocar / armadilhas:** NÃO mexer em `mcp-query` nem em `external-db-bridge`: parecem da mesma família (também sem chamador no front, também com service_role) mas ambos validam JWT em código e autorizam por RPC default-deny (mcp-query/index.ts:4-13) — são legítimos. Também não tocar em `geo-admin`: ele recheca admin/manager (geo-admin/index.ts:75-84). Remover do schemas.ts sem remover dos contract.test.ts faz o check obrigatório "Deno Contract Tests" ficar vermelho e travar o merge.
+- **Depende de:** etapa 020 · **Libera:** etapa 057
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
-- **Como verificar:** No Postgres descartável (`supabase start`, que aplica todas as migrations): `insert into lalamove_stops (order_id, stop_index, address) values ('<uuid>', 0, 'teste');` — se a constraint estiver ativa, o INSERT falha com violação de lalamove_stops_pod_status_valid. Esse mesmo comando é a prova definitiva.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql`, `supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql`.
+- **Como verificar:** Antes: `curl -s -X POST https://iecgydonctmabiijadsf.supabase.co/functions/v1/seed-fix-rls -H "Authorization: Bearer <JWT de um usuário viewer>" -H 'Content-Type: application/json' -d '{}'` — hoje responde 200/500 (endpoint existe). Depois da remoção no painel: deve responder 404. E `supabase functions list --project-ref iecgydonctmabiijadsf` não deve mais listar `apply-fixes` nem `seed-fix-rls`.
 
 Checklist de conclusão:
 
@@ -871,11 +933,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 029 — A restrição de pod_status proíbe o próprio valor padrão da coluna, o que pode estar derrubando em silêncio toda a gravação de paradas do pedido — parte 2/2
+### Etapa 031 — A restrição de pod_status proíbe o próprio valor padrão da coluna, o que pode estar derrubando em silêncio toda a gravação de paradas do pedido
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-014
+- **Achados resolvidos:** A-016
 - **Problema hoje:** Se a restrição estiver mesmo em pé, nenhuma parada de pedido é salva — e é dessas linhas que saem o telefone e o nome do destinatário usados no aviso de chegada por WhatsApp e a prova de entrega (foto). O resultado é entrega sem comprovante registrado e aviso ao cliente sem destinatário.
 
   ```
@@ -884,14 +946,12 @@ Checklist de conclusão:
 - **Causa raiz:** A restrição foi adicionada sem remover nem ajustar o DEFAULT 'NOT_REQUIRED' da mesma coluna, e nenhuma migration posterior a corrige (não há ALTER COLUMN pod_status nem DROP dessa constraint em todo supabase/). Como o único gravador de lalamove_stops não envia pod_status, todo INSERT novo cai no default proibido e o upsert é rejeitado — com o erro apenas registrado em log, nunca propagado. Sinal de que a inconsistência é conhecida: uma migration 11 dias posterior cria lalamove_stop_proofs aceitando 'NOT_REQUIRED' no CHECK (20260723122332:10) e faz a carga inicial tratando esse valor como existente em lalamove_stops (linha 73).
 - **Caminho recomendado:** Depois de confirmar o estado real: (a) se a constraint existe, migration aditiva incluindo 'NOT_REQUIRED' na lista — exatamente como lalamove_stop_proofs já faz (20260723122332:10) — ou alinhando o DEFAULT para 'pending'; (b) independentemente disso, fazer coordinates.ts:124-128 tratar o erro do upsert como falha visível (contabilizar e devolver na resposta), em vez de só logar, para que esse tipo de problema pare de ser invisível. O comentário do próprio arquivo (linhas 114-118) diz que contact_name/contact_phone eram 100% NULL em produção — compatível com o upsert nunca ter gravado.
   AJUSTE DO REVISOR: Prefira a alternativa (b) do auditor para o DEFAULT, não a (a): o vocabulário vivo de pod_status é minúsculo — lalamove-webhook/index.ts:678-679 normaliza para 'pending'|'delivered'|'failed' — então a migration aditiva deve ser `ALTER TABLE public.lalamove_stops ALTER COLUMN pod_status DROP DEFAULT` (a CHECK já aceita NULL) ou `SET DEFAULT 'pending'`. Incluir 'NOT_REQUIRED' na CHECK, como lalamove_stop_proofs fez, reintroduz dois vocabulários na mesma coluna e mantém de pé o índice parcial `WHERE pod_status != 'NOT_REQUIRED'` (20251224181640:102) e o COMMENT com valores em maiúsculas (:120), que já divergem do que o código grava. Antes de escrever a migration, confirme com o dono se a constraint realmente existe em produção (`\d+ public.lalamove_stops`), porque se a 20260712112618 falhou na aplicação não há nada a corrigir no banco — só o DEFAULT a alinhar.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/functions/lalamove-api/coordinates.ts`, `supabase/functions/lalamove-webhook/index.ts`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/coordinates.ts`, `supabase/functions/lalamove-webhook/index.ts`
+- **Arquivos e objetos a tocar:** `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql`, `supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql`, `supabase/functions/lalamove-api/coordinates.ts`, `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** É DDL em produção → PR fica aberta para o dono. Não 'resolver' passando pod_status:'pending' no upsert de coordinates.ts: isso faria toda parada nascer como prova pendente e acionaria o alerta MISSING_POD indevidamente. Conferir antes se o repositório de migrations está sincronizado com o banco — se a constraint não existe lá, o problema real é a divergência entre migrations e produção.
-- **Depende de:** etapa 020 · **Libera:** etapa 055
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** No Postgres descartável (`supabase start`, que aplica todas as migrations): `insert into lalamove_stops (order_id, stop_index, address) values ('<uuid>', 0, 'teste');` — se a constraint estiver ativa, o INSERT falha com violação de lalamove_stops_pod_status_valid. Esse mesmo comando é a prova definitiva.
-  Nesta etapa, a verificação vale para: `supabase/functions/lalamove-api/coordinates.ts`, `supabase/functions/lalamove-webhook/index.ts`.
 
 Checklist de conclusão:
 
@@ -901,11 +961,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 030 — SSRF em test-notification: a edge faz POST em qualquer URL enviada pelo caller, e dispara WhatsApp/e-mail para destinatario arbitrario
+### Etapa 032 — SSRF em test-notification: a edge faz POST em qualquer URL enviada pelo caller, e dispara WhatsApp/e-mail para destinatario arbitrario
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Transversal — segurança**
 
-- **Achados resolvidos:** A-015
+- **Achados resolvidos:** A-017
 - **Problema hoje:** Qualquer conta logada pode usar o servidor da empresa para bater em endereco escolhido por ela (inclusive servicos internos que so o servidor enxerga) e, com as credenciais da empresa, mandar WhatsApp para qualquer numero e e-mail para qualquer endereco - conta de mensageria, risco de a empresa ser usada para disparo indesejado e de o numero ser bloqueado.
 
   ```
@@ -916,7 +976,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mantenha o plano, com uma correção de premissa: o gate de papel é o item que fecha o buraco (verify_jwt já está ativo por default, só não autoriza nada). Prefira o padrão de supabase/functions/geo-admin/index.ts (recheca admin/manager em user_roles) ao isServiceRoleCaller de send-notification, porque esta função é chamada pelo front autenticado, não por edge interna — exigir service_role quebraria a tela de teste. E valide `recipients` (e-mail/telefone contra a configuração salva), não só o host do webhook: o abuso de WhatsApp/Resend não passa pelo webhookUrl.
 - **Arquivos e objetos a tocar:** `supabase/functions/test-notification/index.ts`, `supabase/functions/_shared/schemas.ts`
 - **Não tocar / armadilhas:** Nao replicar a correcao em supabase/functions/send-notification: ela ja trata o caso (comentario em :59-62 e a funcao isServiceRoleCaller em :63) e restringe destinatario ad-hoc a service_role - e a referencia, nao o problema. Os canais slack/bitrix24 de test-notification usam URL de secret, nao do caller, e nao precisam mudar.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 152
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de viewer: POST em /functions/v1/test-notification com {"channel":"n8n","alertType":"teste","webhookUrl":"http://127.0.0.1:1/x"}. Hoje a resposta diferencia conexao recusada de 200 (devolve 'Erro ao conectar: ...' ou 'Webhook N8N acionado com sucesso'), o que ja prova o SSRF cego. Depois da correcao deve voltar 422 (URL fora da allowlist) ou 403 (papel), sem nenhuma tentativa de conexao.
@@ -929,11 +989,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 031 — Duas telas gravam alert_configurations com canais diferentes e o motor de alertas usa só o alert_type — desligar alerta pode não ter efeito
+### Etapa 033 — Duas telas gravam alert_configurations com canais diferentes e o motor de alertas usa só o alert_type — desligar alerta pode não ter efeito
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — administração**
 
-- **Achados resolvidos:** A-016
+- **Achados resolvidos:** A-018
 - **Problema hoje:** Um gerente desliga 'Motorista Parado' em Configurações, a tela confirma 'salvo com sucesso', e os alertas continuam disparando (ou o contrário: o alerta fica desligado sem ninguém ter pedido). Os minutos de tolerância configurados podem ser ignorados e o sistema usar 5/10/15 de fábrica.
 
   ```
@@ -944,7 +1004,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Itens 1 e 2 estão corretos (filtrar canal na leitura de useAlertSettings.ts:34-36 e no motor em check-driver-alerts/index.ts:61-73). O item 3 está invertido e pioraria o quadro: filtrar `availableTypes` por (alert_type, channel) faz a tela OFERECER criar a linha 'email' de um tipo que já tem linha 'in_app' — é exatamente a duplicata que causa o bug. O correto é definir onde vive o liga/desliga: se 'in_app' é a fonte de verdade do motor, AlertConfigurationsPage deve editar/criar sobre a MESMA linha (canal único) em vez de uma segunda linha por canal, ou o motor precisa agregar explicitamente (ex.: desligado se qualquer linha do tipo tiver is_enabled=false), decisão que muda comportamento e deve ser escolhida antes do patch.
 - **Arquivos e objetos a tocar:** `src/hooks/useAlertSettings.ts`, `src/pages/SettingsPage.tsx`, `src/pages/AlertConfigurationsPage.tsx`, `supabase/functions/check-driver-alerts/index.ts`
 - **Não tocar / armadilhas:** Não apagar as linhas do canal 'email': são elas que levam destinatários de WhatsApp/e-mail/Slack usados por send-notification. A correção é separar responsabilidades (canal 'in_app' = regra do alerta; demais canais = destinatários), não unificar as linhas.
-- **Depende de:** — · **Libera:** etapa 153
+- **Depende de:** — · **Libera:** etapa 034
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Listar `select alert_type, channel, is_enabled, config from alert_configurations order by alert_type, channel` e procurar tipos com mais de uma linha. Depois do fix, desligar DRIVER_STOPPED em /settings e conferir no log de check-driver-alerts que STOPPED_ALERT_ENABLED saiu como false.
@@ -957,11 +1017,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 032 — Formulários de credencial da Lalamove (token UAPI e chaves V3) nunca conseguem salvar — o gateway devolve 501
+### Etapa 034 — Formulários de credencial da Lalamove (token UAPI e chaves V3) nunca conseguem salvar — o gateway devolve 501
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — administração**
 
-- **Achados resolvidos:** A-017
+- **Achados resolvidos:** A-019
 - **Problema hoje:** Quando o token da Lalamove expira (a cada ~24h), o gerente abre a tela de configurações, cola o token novo, clica em Atualizar e recebe um erro sem explicação. A operação fica sem cotação/pedido até alguém trocar o segredo pelo painel do Supabase — e a tela não diz isso em lugar nenhum.
 
   ```
@@ -972,7 +1032,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Opção (a) — remover os formulários e instruir a troca via secrets — é a correta e de risco baixo. Opção (b) está errada como descrita: o auditor manda replicar o 'padrão de guarda de lalamove-gateway/index.ts:233-245', mas essas linhas só checam Bearer + `supabase.auth.getClaims(token)` e devolvem 401; não há NENHUMA verificação de papel admin ali. Copiar esse padrão numa edge de escrita de credencial deixaria qualquer usuário autenticado gravar token/segredo da Lalamove — pior que o 501 de hoje. Se (b) for escolhida, a guarda tem de consultar user_roles/has_role explicitamente. Propagar a mensagem real do gateway nos toasts (UAPISettingsPage.tsx:30-32, LalamoveSettingsPage.tsx:73-75 e :101-103) é melhoria válida, mas atenção: o `reason` do gateway cita 'supabase secrets set', então exibi-lo ao operador revela caminho de infraestrutura — mostre texto próprio em vez do erro cru. O 'atalho a evitar' do auditor está correto e confirmado (index.ts:276-278 põe `key` e params na query string da URL).
 - **Arquivos e objetos a tocar:** `src/pages/LalamoveSettingsPage.tsx`, `src/pages/UAPISettingsPage.tsx`, `src/lib/lalamove-api.ts`, `src/lib/uapi-proxy.ts`, `supabase/functions/lalamove-gateway/route.ts`
 - **Não tocar / armadilhas:** O botão 'Renovar Automaticamente' (LalamoveSettingsPage.tsx:214) é outro caminho — vai para `refresh_token`, que está mapeado para a edge lalamove-uapi (route.ts:102) e deve continuar funcionando. Não remover esse. Nunca imprimir o valor do token em log ou toast.
-- **Depende de:** — · **Libera:** etapa 033
+- **Depende de:** etapa 033 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com o painel aberto em /settings/lalamove, colar qualquer texto no campo de token e clicar em Atualizar: a resposta da função lalamove-gateway volta 501 com 'Credenciais não são gravadas por requisição'. Confirmar o lado do servidor com `deno test supabase/functions/lalamove-gateway/route.test.ts` (o teste já lista essas ações como não suportadas, linhas 79-87).
@@ -985,11 +1045,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 033 — Exportação em PDF injeta texto do banco no HTML sem escapar, em janela de mesma origem
+### Etapa 035 — Exportação em PDF injeta texto do banco no HTML sem escapar, em janela de mesma origem
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-018
+- **Achados resolvidos:** A-020
 - **Problema hoje:** Basta um pedido chegar com nome de departamento ou endereço contendo marcação para que, ao gerar o PDF, código de terceiro rode dentro da sessão de quem clicou — com acesso ao login do usuário. Os dados de pedido vêm de integração externa (Bitrix24/webhook), então o texto não é confiável.
 
   ```
@@ -1000,7 +1060,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está correto e a dependência citada existe de fato (package.json:75-76 `"jspdf": "^4.2.1"`, `"jspdf-autotable": "^5.0.8"`, usados em src/pages/AdminTelemetriaPage.tsx:165-166 via import dinâmico). Ajuste de prioridade: o diff mínimo e suficiente é uma função de escape em src/utils/exportUtils.ts aplicada a title, section.title e section.content (3 pontos de interpolação, linhas 111 e 112-114) — isso fecha o buraco sem tocar em 3 páginas. Trocar por jspdf é reescrita maior e muda o formato do arquivo entregue (hoje o usuário imprime como PDF pelo diálogo do navegador; com jspdf passa a baixar .pdf), então não deve entrar no mesmo PR do fix de segurança. Não basta escapar o title, como o auditor já alertou.
 - **Arquivos e objetos a tocar:** `src/utils/exportUtils.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/ReportsPage.tsx`, `src/pages/AnalyticsDashboardPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 032 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em banco descartável (`supabase start`), gravar um pedido com `department` = `<img src=x onerror=alert(1)>`, abrir Relatórios Avançados e clicar em PDF: a marcação é interpretada na janela de impressão em vez de aparecer como texto.
@@ -1013,11 +1073,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 034 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita)
+### Etapa 036 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita)
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** A-019
+- **Achados resolvidos:** A-021
 - **Problema hoje:** Quem recebeu acesso temporário (ex.: gerente de férias, consultor) continua entrando nas telas de administração depois do prazo. As telas abrem, mas os dados vêm vazios ou com erro, porque o banco já nega — dá a impressão de sistema quebrado e, pior, mantém o menu de administrador visível para quem não deveria mais tê-lo.
 
   ```
@@ -1032,7 +1092,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A alternativa recomendada pelo auditor (trocar pela RPC `get_user_roles`) ESTÁ ERRADA e quebraria a tela: supabase/migrations/20260715164406_77606d9a-be67-4be6-b857-f0e760d12491.sql:9 faz `REVOKE EXECUTE ON FUNCTION public.get_user_roles(uuid) FROM PUBLIC, anon, authenticated;` e a linha 17 só devolve o GRANT a `service_role` — ou seja, o front logado (role `authenticated`) receberia erro de permissão. Use só a opção 1: acrescentar o predicado na própria consulta em src/hooks/usePermissions.ts:45-49 (`.or('expires_at.is.null,expires_at.gt.' + new Date().toISOString())`) e passar `expires_at` para `getHighestRole`/`hasRole` em src/lib/roles.ts:32-48. O alerta sobre não filtrar em JavaScript é válido, mas o número é staleTime 10000 em src/App.tsx:90, não :91.
 - **Arquivos e objetos a tocar:** `src/components/auth/ProtectedRoute.tsx`, `src/components/layout/Sidebar.tsx`, `src/hooks/usePermissions.ts`, `src/hooks/useRole.ts`, `src/lib/roles.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 123
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com uma linha em `user_roles` com `is_active=true` e `expires_at` no passado para o usuário logado, a RPC `get_user_permissions` e `has_role()` devem retornar vazio/false enquanto o menu de Segurança desaparece e `/roles` passa a redirecionar para `/unauthorized`. Consulta de conferência (somente leitura, no projeto iecgydonctmabiijadsf): `select role, is_active, expires_at, public.has_role(user_id, role) from public.user_roles where expires_at < now() and is_active;` — toda linha deve ter `has_role=false`, e a UI precisa concordar com essa coluna.
@@ -1045,11 +1105,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 035 — Exigir MFA nas rotas que concedem privilégio
+### Etapa 037 — Exigir MFA nas rotas que concedem privilégio
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** A-020
+- **Achados resolvidos:** A-022
 - **Problema hoje:** Quem tiver apenas a senha de um administrador (sem o celular do segundo fator) entra no sistema e consegue abrir a tela que distribui papéis, a lista de permissões, a whitelist de IP e a aprovação de reset de senha. O segundo fator, que foi configurado justamente para proteger a conta, hoje só tranca 7 telas de integração.
 
   ```
@@ -1059,7 +1119,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Adicionar `requireMFA` nas rotas de privilégio (/roles, /permissions, /ip-whitelist, /geo-blocking, /password-reset-approvals, /security, /rate-limiting, /telemetria), copiando a forma já usada em `src/App.tsx` nas 7 rotas que têm a flag. Antes de mergear, confirme com o dono que ele tem MFA ativo — senão ele perde o acesso a essas telas no próximo login. Atalho a evitar: aplicar a flag sem checar `needsMFAEnrollment`: todo admin sem fator cadastrado cai em /mfa-enroll.
 - **Arquivos e objetos a tocar:** `src/App.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 122
+- **Depende de:** — · **Libera:** etapa 055
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `npx vitest run src/components/auth/ProtectedRoute.test.tsx` verde; e com sessão aal1 (login sem o segundo fator), `/roles` redireciona para `/mfa-verify` em vez de renderizar.
@@ -1072,11 +1132,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 036 — Inverter o default do ProtectedRoute para exigir MFA, liberando explicitamente as exceções
+### Etapa 038 — Inverter o default do ProtectedRoute para exigir MFA, liberando explicitamente as exceções
 
 **Onda 1 (Segurança e risco de perda de dado) / Alta / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** A-020
+- **Achados resolvidos:** A-022
 - **Problema hoje:** Quem tiver apenas a senha de um administrador (sem o celular do segundo fator) entra no sistema e consegue abrir a tela que distribui papéis, a lista de permissões, a whitelist de IP e a aprovação de reset de senha. O segundo fator, que foi configurado justamente para proteger a conta, hoje só tranca 7 telas de integração.
 
   ```
@@ -1086,7 +1146,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Depois da etapa anterior estar em produção: trocar `requireMFA = false` por `requireMFA = true` em `src/components/auth/ProtectedRoute.tsx` e marcar `requireMFA={false}` nas poucas rotas que devem ficar sem (dashboard, perfil, preferências, mapa ao vivo…). Assim uma rota nova nasce protegida. Atalho a evitar: fazer as duas etapas numa PR só — se algo der errado, o revert tira a proteção das rotas de privilégio também.
 - **Arquivos e objetos a tocar:** `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 035 · **Libera:** etapa 053
+- **Depende de:** etapa 037 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Teste novo em `ProtectedRoute.test.tsx` provando que uma rota sem a flag exige MFA; e a contagem de rotas sem MFA no `inventario/estado/rotas.json` regerado bate com a lista de exceções.
@@ -1099,7 +1159,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 037 — Alertas críticos de segurança do webhook e de quota da Lalamove param na tabela `alerts`: nada enfileira notificação e o escalonamento nasce desligado
+### Etapa 039 — Alertas críticos de segurança do webhook e de quota da Lalamove param na tabela `alerts`: nada enfileira notificação e o escalonamento nasce desligado
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Banco — funções, triggers e cron**
 
@@ -1127,7 +1187,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 038 — Fila de aprovação de reset de senha não tem produtor: a única policy de INSERT exige usuário logado, mas o fluxo é pré-login
+### Etapa 040 — Fila de aprovação de reset de senha não tem produtor: a única policy de INSERT exige usuário logado, mas o fluxo é pré-login
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Banco — RLS e autorização**
 
@@ -1142,7 +1202,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A opção (a) do auditor fica mais barata do que ele supôs: o lado da aprovação já funciona ponta a ponta (usePasswordResetActions.ts:43-47 marca 'approved' e chama resetPasswordForEmail), então basta a edge function produtora. Dois requisitos que ele não citou e são obrigatórios: a edge precisa responder SEMPRE a mesma mensagem, exista ou não o e-mail (senão a tela vira enumeração de usuários, exatamente o risco que ele queria evitar), e precisa de rate limit por IP/e-mail — o repo já tem esse padrão pré-login em RPC SECURITY DEFINER (check_login_lockout_v2/record_failed_login_v2, citadas em 20260902000000:10-12). A opção (b) continua válida. Concordo em não afrouxar a policy para anon.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260315151153_789547cf-e79d-4291-8123-61567f7973e1.sql`, `src/pages/ForgotPasswordPage.tsx`, `src/pages/PasswordResetApprovalsPage.tsx`, `src/hooks/usePasswordResetActions.ts`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`
 - **Não tocar / armadilhas:** As policies de SELECT e UPDATE (20251231131206:29-37, admin/manager via has_role) estão corretas e devem ficar como estão em qualquer um dos caminhos. Não confunda com `password_reset_tokens`, que é outra tabela, nem com `use_reset_token`/`is_token_valid` — essas funções tiveram EXECUTE revogado de anon e authenticated em 20260715164406:7,12 e também não têm chamador em src/ nem nas edges; se o caminho (a) for escolhido, elas precisam ser reavaliadas junto.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 009 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select count(*), max(requested_at) from public.password_reset_requests;` — hoje a expectativa é 0 linhas (confirma que a fila nunca foi alimentada). Teste real do caminho (a) depois de implementado: pedir reset em /forgot-password deslogado e conferir uma linha nova na tabela e o item aparecendo em /password-reset-approvals.
@@ -1155,7 +1215,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 039 — geo_blocks: tabela usada pelo front não é criada por nenhuma migration, não tem ENABLE RLS nem policy de SELECT no repo, e quebra o banco descartável
+### Etapa 041 — geo_blocks: tabela usada pelo front não é criada por nenhuma migration, não tem ENABLE RLS nem policy de SELECT no repo, e quebra o banco descartável
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Banco — RLS e autorização**
 
@@ -1170,7 +1230,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto é válido (baseline idempotente no estilo de 20261122120200_job_queue_system.sql:18, que já faz `CREATE TABLE IF NOT EXISTS public.job_queue`), com duas correções. (1) O diagnóstico da quebra está no lugar errado: `DROP POLICY IF EXISTS ... ON tabela_inexistente` NÃO aborta no Postgres — emite só um NOTICE "relation does not exist, skipping"; quem aborta com 42P01 é o `CREATE POLICY` da linha 220. Portanto basta envolver as linhas 220-231 no `DO $$ ... IF to_regclass('public.geo_blocks') IS NOT NULL ...` (ou criar a tabela antes), e não há necessidade de mexer no DROP. Não rodei `supabase db reset` para ver o erro, então essa quebra é RASTREADA, não executada. (2) Antes de escrever o CREATE TABLE, extraia o shape real do banco (colunas, a UNIQUE `geo_blocks_country_code_key` citada em 20260813143344...sql:7-8 e a FK `geo_blocks_blocked_by_fkey` de 20260711194822...sql:4-6) — src/integrations/supabase/types.ts é tipo gerado e pode estar atrasado; um baseline com shape diferente do de produção cria drift novo em vez de resolver. E a policy de SELECT deve ser escrita para IGUALAR a que P-08 diz já existir em produção (manager SELECT), não inventar uma nova.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260108144121_4432fc97-f0cf-4dab-95d5-4e66ed486768.sql`, `supabase/migrations/20260711185011_e422dc54-64d2-4379-8882-138f7bf9abb4.sql`, `supabase/migrations/20260711194822_91c059f1-9073-4dc7-b576-0dcf7c85f854.sql`, `supabase/migrations/20261121100000_add_table_comments.sql`, `src/pages/GeoBlockingPage.tsx`, `docs/pendencias/P-08-geo-blocks-sem-rls.md`
 - **Não tocar / armadilhas:** docs/pendencias/P-08 está marcado OBSOLETO porque em produção a tabela tem 5 policies (admin ALL/INSERT/UPDATE/DELETE + manager SELECT) — então em produção o acesso está controlado; o problema é de reprodutibilidade e de auditoria pelo código, não de porta aberta hoje. Por isso a migration nova tem que ser 100% idempotente (IF NOT EXISTS, policy dentro de IF NOT EXISTS em pg_policies) e não pode dropar nem recriar as policies existentes, senão altera o acesso real. Não mexer em `is_country_blocked` (20260711184140), que consulta a tabela.
-- **Depende de:** etapa 010 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 070, etapa 128
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select relrowsecurity from pg_class where oid='public.geo_blocks'::regclass;` — esperado true; e `select policyname, cmd from pg_policies where tablename='geo_blocks';` — esperado incluir uma de SELECT. Para a reprodutibilidade: `make db-reset` (Makefile:41-42) num Postgres descartável — esperado concluir as 191+1 migrations sem erro 42P01; hoje para em 20260108144121.
@@ -1183,7 +1243,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 040 — job_queue: policies permissivas de 2025 nunca removidas — leitura por qualquer autenticado e INSERT validado por metadado que o próprio usuário controla
+### Etapa 042 — job_queue: policies permissivas de 2025 nunca removidas — leitura por qualquer autenticado e INSERT validado por metadado que o próprio usuário controla
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Banco — RLS e autorização**
 
@@ -1198,7 +1258,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro — confirmei os quatro nomes literais e que "Admins view jobs" (20261122120200:164-166, `FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'::app_role))`) e "Service role full access" (:163) já cobrem o acesso legítimo, então os DROPs não causam regressão. Um ajuste: "Service role full access" de 20251226010000:397 JÁ é dropado por 20261122120200:162 (mesmo nome literal), então esse não precisa entrar na lista; os que faltam são exatamente "Admin can view all jobs", "Service role can manage jobs" (20251226000003:399 e :404), "Users can view their own jobs" e "Admins can create jobs" (20251226010000:383 e :390). A ressalva dele de conferir pg_policies antes é a parte mais importante do plano e deve ser cumprida, porque o estado de produção não é dedutível do repo.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20251226000003_create_job_queue.sql`, `supabase/migrations/20251226010000_create_job_queue_system.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`
 - **Não tocar / armadilhas:** Nenhum INSERT legítimo depende dessas policies: `add_job` é SECURITY DEFINER e teve EXECUTE revogado de PUBLIC/anon/authenticated (20261122120200:169), e o dispatcher `process_job_queue` roda como SECURITY DEFINER via cron (20261122140000:33-35). docs/MIGRATION_RECONCILIATION_2026-11.md registra que 20251226010000 está no ledger sem ter sido aplicada e que job_queue foi recriada em 21/11 — então em PRODUÇÃO essas duas policies provavelmente não existem; o buraco é nos ambientes construídos do repo. Confirme com pg_policies antes de prometer que "estava aberto em produção".
-- **Depende de:** — · **Libera:** etapa 067, etapa 127
+- **Depende de:** etapa 018 · **Libera:** etapa 058
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select policyname, cmd, qual, with_check from pg_policies where tablename='job_queue';` — esperado: só as duas de 20261122120200 (service_role ALL e admins SELECT via has_role); nenhuma citando raw_user_meta_data nem `auth.role() = 'authenticated'`. Teste em banco descartável: `supabase start`, criar usuário com metadata `{"role":"admin"}` e `POST /rest/v1/job_queue {"type":"whatsapp","payload":{}}` — esperado HTTP 403.
@@ -1211,7 +1271,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 041 — refresh_cache_view executável por qualquer autenticado, sem checagem de papel
+### Etapa 043 — refresh_cache_view executável por qualquer autenticado, sem checagem de papel
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Banco — RLS e autorização**
 
@@ -1226,7 +1286,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O guard proposto (`IF NOT public.has_role(auth.uid(), 'admin') THEN RAISE ...`) QUEBRA duas coisas — não use como está. (1) O cron roda `SELECT public.refresh_cache_view();` (supabase/migrations/20261123110000_cron_refresh_cache_views.sql:22-25) pelo pg_cron, sem JWT: `auth.uid()` é NULL e has_role (20260712210653:8-13, `WHERE user_id = _user_id`) devolve false → o refresh horário passa a falhar. (2) A tela é de manager, não admin (src/App.tsx:172), então exigir admin mata o botão manual de src/hooks/useCacheViews.ts:135. Guard correto: `IF auth.uid() IS NOT NULL AND NOT (public.has_role(auth.uid(),'manager'::public.app_role) OR public.has_role(auth.uid(),'admin'::public.app_role)) THEN RAISE EXCEPTION 'Acesso negado' USING ERRCODE='42501'; END IF;` — o `auth.uid() IS NOT NULL` preserva cron e service_role. Mantida a ressalva dele sobre assinatura: CREATE OR REPLACE com exatamente (text, text) e os mesmos defaults.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `supabase/migrations/20261123110000_cron_refresh_cache_views.sql`
 - **Não tocar / armadilhas:** O cron de 20261123110000_cron_refresh_cache_views.sql chama a função como superusuário/postgres, onde `auth.uid()` é NULL — se o guard for `has_role(auth.uid(),'admin')`, a chamada do cron passa a falhar. Trate isso explicitamente: `IF auth.uid() IS NOT NULL AND NOT public.has_role(...)`, ou deixe o cron chamar com p_triggered_by='system' e aceite auth.uid() IS NULL como caminho de serviço. Teste o cron depois do deploy; um refresh que para de rodar deixa o painel com dado velho sem avisar.
-- **Depende de:** etapa 018 · **Libera:** etapa 056
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select proname, proacl from pg_proc where proname='refresh_cache_view';` — esperado: sem `authenticated=X` ou, se mantido, com guard no corpo (`select prosrc from pg_proc where proname='refresh_cache_view'` contendo has_role). Teste real: logado como viewer, `POST /rest/v1/rpc/refresh_cache_view` com `{"p_view_name":"driver_stats_cache"}` — esperado HTTP 403/42501; e conferir que `select * from public.cache_refresh_log order by 1 desc limit 3` continua recebendo as linhas do cron.
@@ -1239,7 +1299,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 042 — check-external-api: health check sem autorização alguma que queima credenciais pagas (Mapbox/Google geocoding) por request e fora do orçamento do geo-gateway
+### Etapa 044 — check-external-api: health check sem autorização alguma que queima credenciais pagas (Mapbox/Google geocoding) por request e fora do orçamento do geo-gateway
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — demais edges**
 
@@ -1254,7 +1314,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O gate de papel (bloco de supabase/functions/geo-admin/index.ts:69-85) está certo e os dois chamadores de fato são telas de gestão (src/hooks/healthChecks.ts:129 e src/hooks/useGeoAdmin.ts:336). Ajuste: `manager` é restritivo demais para healthChecks.ts, que alimenta painel de status consumido por operação — prefira aceitar service_role + admin/manager/operator ali, ou separe os dois casos (probe geo pago = manager; ping Lalamove/Bitrix/Evolution = operator). Rotear os probes geo pelo geo-gateway (`action: 'geocode'`) é a parte mais valiosa, porque traz orçamento e `geo_usage` de graça — mas atenção: o cache do gateway (index.ts:290-295) faria o health check responder HIT sem tocar no provedor, o que mataria o propósito do teste; use `ttl=0`/bypass de cache nesse caminho.
 - **Arquivos e objetos a tocar:** `supabase/functions/check-external-api/index.ts`, `supabase/config.toml`, `src/hooks/healthChecks.ts`, `src/hooks/useGeoAdmin.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 025 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `curl -s -X POST "$SUPABASE_URL/functions/v1/check-external-api" -H "Authorization: Bearer $VITE_SUPABASE_PUBLISHABLE_KEY" -H 'content-type: application/json' -d '{"service":"mapbox"}'`. Hoje esperado: 200 com `details.http_status: 200` e `latency_ms` — prova de que a chamada paga foi feita sem sessão. Depois da correção: 401/403. Conferir também `select count(*) from geo_usage where sku='geocoding_temporary' and created_at > now() - interval '1 hour'` — hoje as chamadas do health não aparecem lá.
@@ -1267,7 +1327,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 043 — geo-admin: `manager` cunha e revoga credenciais de faturamento da Mapbox, e o token secreto novo volta no corpo da resposta para o navegador
+### Etapa 045 — geo-admin: `manager` cunha e revoga credenciais de faturamento da Mapbox, e o token secreto novo volta no corpo da resposta para o navegador
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — demais edges**
 
@@ -1282,7 +1342,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mantenha apenas o item (1): trocar `.in("role", ["admin", "manager"])` por `.eq("role", "admin")` em supabase/functions/geo-admin/index.ts:78 e ajustar a mensagem de :84. Descarte o item (2): remover `new_token` do corpo (:176) quebra a rotacao, porque a Tokens API da Mapbox nunca reexibe o valor de um `sk.` criado — nao existe "pegar o valor no painel Mapbox". Se quiser reduzir exposicao, o caminho e gravar o secret pela Management API do Supabase dentro da propria function e devolver so id+fingerprint; isso exige um PAT `sbp_*` como secret da edge, o que e decisao do dono (AGENTS.md: segredos e rotacao so com o dono). Mantenha a ressalva do auditor de nao automatizar o revoke (:1-12) e lembre que :139-147 (`dry_run`) nao cria token.
 - **Arquivos e objetos a tocar:** `supabase/functions/geo-admin/index.ts`, `supabase/functions/geo-admin/rotation.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 025 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de um usuário `manager` (sem admin): `curl -s -X POST "$SUPABASE_URL/functions/v1/geo-admin" -H "Authorization: Bearer <jwt_manager>" -H 'content-type: application/json' -d '{"action":"rotate-mapbox-token","dry_run":true}'`. Hoje esperado: 200 com `would_create`. Depois da correção: 403. Com admin e `dry_run: true`, a resposta não deve conter nenhum campo `new_token`.
@@ -1295,7 +1355,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 044 — geo-gateway: todas as chamadas internas (job-worker) compartilham um único balde de 20 req/min, porque o id do usuário cai em "service_role"
+### Etapa 046 — geo-gateway: todas as chamadas internas (job-worker) compartilham um único balde de 20 req/min, porque o id do usuário cai em "service_role"
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — demais edges**
 
@@ -1310,7 +1370,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O nucleo da proposta esta certo (isentar service_role do balde por usuario e usar `sub` quando houver), e o mais simples e reaproveitar o `getCaller` de supabase/functions/geo-admin/index.ts:42-49 em vez de escrever nova logica. Ajuste: a parte "recusar a chamada quando nao houver nem sub nem service_role" nao e necessaria e e arriscada — com `verify_jwt = true` (supabase/config.toml:83-84) um token nao-JWT (publishable key nova `sb_publishable_*`) ja e barrado antes da function, e o `catch` do atob tambem pega JWT malformado; transformar isso em 403 muda contrato sem ganho. Mantenha o fallback "anon" com o balde atual e so separe o caso service_role.
 - **Arquivos e objetos a tocar:** `supabase/functions/geo-gateway/index.ts`, `supabase/functions/job-worker/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 005 · **Libera:** etapa 068
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em homologação, enfileirar 30 jobs de rota (`insert into job_queue (type, payload) select 'route_calculation', ... from generate_series(1,30)`) e, depois do minuto do cron, conferir `select status, error_message from job_queue where type='route_calculation' and created_at > now() - interval '5 min'`. Hoje esperado: parte com erro contendo `geo-gateway: ... Muitas requisições`. Depois da correção: nenhum job com esse erro.
@@ -1323,7 +1383,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 045 — get-mapbox-token entrega o token Mapbox a qualquer caller, sem papel e sem medição, por fora do controle de custo do geo-gateway
+### Etapa 047 — get-mapbox-token entrega o token Mapbox a qualquer caller, sem papel e sem medição, por fora do controle de custo do geo-gateway
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — demais edges**
 
@@ -1337,7 +1397,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** (1) Tratar o `healthCheck: true` que o contrato já aceita (supabase/functions/_shared/schemas.ts:322-327): quando presente, responder `{ ok: true }` sem o campo `token` — corrige src/hooks/healthChecks.ts:49 e src/hooks/useSystemHealth.ts:29 sem mudar o front, que só olha o erro. (2) Trocar o `Access-Control-Allow-Origin: '*'` da linha 12 pela origem configurada, como supabase/functions/rotate-tokens/index.ts:18-21 já faz com `ALLOWED_ORIGINS`. (3) Confirmar no painel Mapbox que o token devolvido é `pk.` com restrição de domínio e que a medição do uso de tiles chega ao `geo_usage` pela action `count-map-load` do geo-gateway (supabase/functions/geo-gateway/index.ts:273-276) — se não chegar, o gasto de mapa fica invisível. Armadilha: não remover a function; src/components/map/hooks/useMapboxToken.ts:13 depende dela para o mapa carregar.
 - **Arquivos e objetos a tocar:** `supabase/functions/get-mapbox-token/index.ts`, `supabase/config.toml`, `src/hooks/healthChecks.ts`, `src/hooks/useSystemHealth.ts`, `src/components/map/hooks/useMapboxToken.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 005 · **Libera:** etapa 065
+- **Depende de:** etapa 002 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `curl -s -X POST "$SUPABASE_URL/functions/v1/get-mapbox-token" -H "Authorization: Bearer $VITE_SUPABASE_PUBLISHABLE_KEY" -H 'content-type: application/json' -d '{"healthCheck":true}' | head -c 40`. Hoje esperado: começa com `{"token":"`. Depois da correção: `{"ok":true}` e nenhum valor de token; a chamada sem `healthCheck` (usada pelo mapa) deve continuar devolvendo o token.
@@ -1350,7 +1410,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 046 — llm-wh: o proxy de webhook quebra a assinatura v3 da Lalamove — todo evento repassado por ele é recusado com 401
+### Etapa 048 — llm-wh: o proxy de webhook quebra a assinatura v3 da Lalamove — todo evento repassado por ele é recusado com 401
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — demais edges**
 
@@ -1365,7 +1425,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A correção proposta funciona, mas prefira direto a segunda forma, não a primeira: o llm-wh envia o caminho original (`x-original-path`, preenchido pelo próprio proxy em supabase/functions/llm-wh/index.ts:54-63) e o webhook acrescenta esse valor aos candidatos de index.ts:198 — com allowlist fixa dos dois caminhos conhecidos, para um caller externo não injetar path arbitrário no texto assinado. Cravar `/functions/v1/llm-wh` na constante resolve hoje e volta a quebrar no próximo apelido. Antes de qualquer patch, confirme com o dono qual URL está registrada na Lalamove: se for a direta, isto é higiene de caminho morto e não urgência.
 - **Arquivos e objetos a tocar:** `supabase/functions/llm-wh/index.ts`, `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-webhook/security.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 002 · **Libera:** —
+- **Depende de:** etapa 018 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Primeiro, confirmar qual URL está registrada: chamar a action que define o webhook na edge `lalamove-api` ou consultar o painel Lalamove. Depois, `select event_type, error_message, created_at from webhook_events where event_type='SIGNATURE_INVALID' order by created_at desc limit 20` na produção — se houver fila de `Signature mismatch (v3 body)` com horários de entregas reais, o defeito está ativo. Depois da correção, o mesmo evento repassado pelo llm-wh deve virar linha processada em `lalamove_status_history`.
@@ -1378,7 +1438,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 047 — O campo que decide o efeito colateral do webhook (eventType) fica de fora da assinatura HMAC, e a checagem de frescor e opcional
+### Etapa 049 — O campo que decide o efeito colateral do webhook (eventType) fica de fora da assinatura HMAC, e a checagem de frescor e opcional
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — edges Lalamove**
 
@@ -1393,7 +1453,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Itens (1) e (2) estao certos e sao o que realmente fecha o buraco: exigir frescor sempre, lendo o `timestamp` do topo que ESTA assinado (ja disponivel em `preParsed`, index.ts:197). O item (3) NAO resolve o ataque e pode dar falsa sensacao de seguranca: `eventId` tambem esta fora do bloco `data` e, portanto, fora da assinatura (security.ts:80) — o atacante que troca eventType troca eventId junto e gera chave nova de novo. Use eventId como chave de idempotencia se quiser economizar reprocessamento de reentrega legitima, mas nao o conte como defesa; a defesa e o frescor obrigatorio sobre o timestamp assinado. O teste sugerido ('eventType trocado, assinatura intacta') vale e deve assertar o 409 de replay, nao o 401.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/security.ts`, `supabase/functions/lalamove-webhook/normalize.ts`, `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** O handshake de registro sem corpo (index.ts:180-186) tem que continuar devolvendo 200 antes de qualquer gate, senao o PATCH /v3/webhook volta a falhar com ERR_INVALID_RESPONSE — o comentario no codigo explica por que. Ao tornar o frescor obrigatorio, a janela de 5 min (:122) passa a valer para todo evento: conferir se o relogio usado e o `timestamp` em segundos do topo (nao o `updatedAt` ISO) antes de comparar, senao eventos validos comecam a receber 409. E nao trocar a formula do HMAC: ela e a oficial e esta coberta por testes.
-- **Depende de:** etapa 018 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 209
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Pegar um corpo assinado de teste via `webhook-selftest`, alterar so o campo `eventType` para 'ORDER_CANCELLED' mantendo timestamp/signature/data, e postar em `/functions/v1/lalamove-webhook`. Hoje: HTTP 200 e uma linha ORDER_CANCELLED em webhook_events. Esperado depois do fix: 401 ou 409.
@@ -1406,7 +1466,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 048 — O webhook grava no banco antes de qualquer autenticacao valida, com limite de requisicoes guardado so na memoria do processo e sem politica de retencao
+### Etapa 050 — O webhook grava no banco antes de qualquer autenticacao valida, com limite de requisicoes guardado so na memoria do processo e sem politica de retencao
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — edges Lalamove**
 
@@ -1421,7 +1481,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Medidas (1) e (2) estao boas. A (3) esta imprecisa: `claim_alert_notification` nao e um rate limiter — a assinatura e (text, alert_type, integer) e o segundo parametro e o enum alert_type (migrations/20260712221542_*.sql:1), entao nao serve para contar requests por IP sem distorcer o dominio de alertas. Use a tabela que ja existe para isso, `rate_limit_logs` (criada/purgada em migrations/20260723174310_*.sql:30), ou um contador proprio por (chave, janela) com indice unico e upsert atomico. E registre no plano que, com `x-forwarded-for` escolhido pelo cliente, qualquer contador por IP e burlavel: o ganho real vem de (1) e (2), nao de (3).
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/config.toml`
 - **Não tocar / armadilhas:** A medida (2) apaga dado em producao e a (3) mexe em infraestrutura compartilhada — ambas passam pelo dono, conforme AGENTS.md. Nao reduzir RATE_LIMIT_MAX_REQUESTS sem medir: a Lalamove pode enviar rajadas legitimas em pico, e um 429 para a Lalamove significa evento de entrega perdido. O handshake sem corpo (:180-186) responde antes do gate e nao gera linha — esse caminho deve continuar barato.
-- **Depende de:** — · **Libera:** etapa 209
+- **Depende de:** — · **Libera:** etapa 092, etapa 167
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Em ambiente de teste, disparar 200 POSTs com assinatura invalida e contar: `select count(*) from webhook_events where event_type = 'SIGNATURE_INVALID' and created_at > now() - interval '5 minutes'`. Hoje: proximo de 200 (o limite de 100 so vale por isolate). Esperado depois do fix: uma linha agregada por janela, e HTTP 429 a partir do centesimo request contado de forma compartilhada.
@@ -1434,7 +1494,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 049 — lalamove-gateway deixa o chamador sobrescrever a action roteada via params, furando a propria lista branca de acoes
+### Etapa 051 — lalamove-gateway deixa o chamador sobrescrever a action roteada via params, furando a propria lista branca de acoes
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — edges Lalamove**
 
@@ -1449,7 +1509,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho técnico está correto (filtrar chaves reservadas em translateParams + inverter a ordem em index.ts, com caso em lalamove-gateway/route.test.ts, que existe). Só não trate como correção de segurança: a ausência de RBAC por action em lalamove-api é o item separado e maior — ali `set-webhook`, `cancel` e `change-driver` estão abertos a qualquer usuário autenticado, inclusive viewer.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-gateway/route.ts`
 - **Não tocar / armadilhas:** `PARAM_ALIASES` (route.ts:47-52) tem que continuar funcionando (order_id -> orderId etc.), e lalamove-api le ids da query por uma lista fixa (lalamove-api/index.ts:681 QUERY_KEYS) — remover a chave `action` dos params nao afeta nenhum chamador real, porque o front manda a action no corpo (src/lib/lalamove-api.ts). O caminho do proxy externo (index.ts:275-281) esta inativo em producao (os 4 secrets nunca existiram, route.ts:5-9), mas deve ser corrigido junto para nao reabrir o furo se alguem configurar os secrets.
-- **Depende de:** — · **Libera:** etapa 090, etapa 167
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `curl -s -X POST "$SUPABASE_URL/functions/v1/lalamove-gateway" -H "Authorization: Bearer $JWT" -H 'Content-Type: application/json' -d '{"action":"cities","params":{"action":"set-webhook"},"body":{"url":"https://exemplo-invalido.tld"}}'`. Hoje: a resposta e a de set-webhook (erro/sucesso da Lalamove para PATCH /v3/webhook), e `select rpc_name from query_telemetry order by created_at desc limit 1` mostra 'cities'. Esperado depois do fix: a resposta e a lista de cidades.
@@ -1462,7 +1522,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 050 — E-mail montado por concatenação de HTML sem escape, com texto vindo do banco e do chamador
+### Etapa 052 — E-mail montado por concatenação de HTML sem escape, com texto vindo do banco e do chamador
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — notificação e fila**
 
@@ -1490,7 +1550,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 051 — Token de acesso do Bitrix24 viaja na query string e o telefone completo vai para o log no caminho Zapp
+### Etapa 053 — Token de acesso do Bitrix24 viaja na query string e o telefone completo vai para o log no caminho Zapp
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Backend — notificação e fila**
 
@@ -1518,7 +1578,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 052 — Telemetria de erro do front escreve com a chave publica sem o token da sessao, e a policy exige usuario autenticado
+### Etapa 054 — Telemetria de erro do front escreve com a chave publica sem o token da sessao, e a policy exige usuario autenticado
 
 **Onda 1 (Segurança e risco de perda de dado) / Média / Transversal — segurança**
 
@@ -1546,7 +1606,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 053 — Bloco DO de 20260828000003 compara variável com coluna de mesmo nome e tenta abrir FOR ALL USING(true) em 13 tabelas sensíveis
+### Etapa 055 — Bloco DO de 20260828000003 compara variável com coluna de mesmo nome e tenta abrir FOR ALL USING(true) em 13 tabelas sensíveis
 
 **Onda 1 (Segurança e risco de perda de dado) / Baixa / Banco — RLS e autorização**
 
@@ -1561,7 +1621,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O DROP preventivo das policies 'Authenticated full access%' é inofensivo mas desnecessário — elas não existem (grep acima). O ajuste importante é o inverso do que o auditor pediu: NÃO consertar este bloco para ele passar a rodar, porque o mesmo arquivo contém, em :17-19, `CREATE POLICY "Authenticated users can insert roles" ON public.user_roles FOR INSERT TO authenticated WITH CHECK (true);` e um INSERT que dá 'admin' a todo usuário (:22-27) — fazer o arquivo rodar é que abriria escalada de privilégio. Trate-o como legado inerte e não mexa; se precisar, apenas documente.  
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
 - **Não tocar / armadilhas:** 6 dos 13 nomes da lista (notification_history, notification_preferences, cron_jobs, saved_views, user_preferences, dashboard_widgets) não existem em nenhuma migration — o DROP tem que ser dirigido por pg_policies, não pela lista do arquivo. Não edite 20260828000003 no lugar: ela consta no ledger como aplicada, e mudar o arquivo cria divergência entre ledger e repo sem alterar o banco. Os GRANTs de :77-81 para anon já foram revogados por 20260902000000 — não precisam de ação, mas confirme antes de declarar fechado.
-- **Depende de:** etapa 036 · **Libera:** —
+- **Depende de:** etapa 037 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select tablename, policyname, cmd, qual, with_check from pg_policies where schemaname='public' and policyname like 'Authenticated full access%';` — esperado: zero linhas. Em banco descartável, `make db-reset` passando por 20260828000003 sem erro de "column reference table_name is ambiguous" mostra qual caminho o Postgres tomou.
@@ -1574,7 +1634,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 054 — Policy pública de leitura em alert_configurations sobreviveu ao fix de 22/11
+### Etapa 056 — Policy pública de leitura em alert_configurations sobreviveu ao fix de 22/11
 
 **Onda 1 (Segurança e risco de perda de dado) / Baixa / Banco — RLS e autorização**
 
@@ -1602,7 +1662,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 055 — Arquivos de documentacao e bundle n8n na raiz expoem dado real de negocio e identificacao da conta
+### Etapa 057 — Arquivos de documentacao e bundle n8n na raiz expoem dado real de negocio e identificacao da conta
 
 **Onda 1 (Segurança e risco de perda de dado) / Baixa / Transversal — segurança**
 
@@ -1617,7 +1677,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mantenha a limpeza da raiz, mas corrija a premissa: não existe 'credencial de produção' para remover nesses arquivos (todos os tokens vêm de $env) e o ID do projeto Supabase é público por decisão, está em supabase/config.toml:1 — não trate como segredo nem amarre este PR ao 'achado 1'. O que tem de ser tirado é o conteúdo sensível de negócio (faturamento, nome e código da conta em lalamove_order_history_full.md:3-7,13-22), o host do portal interno e o caminho de máquina pessoal em lalamove_cron_setup.sh:16. Inclua também os arquivos que o achado esqueceu: lalamove_documentacao_completa.{html,docx,md.pdf}, lalamove_suplemento_v2.{html,docx}, lalamove_setup_guide.html e lalamove_n8n_integration.md. O .md.pdf tem 1,7 MB — sair do repo também encurta o clone.
 - **Arquivos e objetos a tocar:** `lalamove_order_history_full.md`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_f01_cotacao.json`, `lalamove_f02_pedido.json`, `lalamove_f03_rastreamento.json`, `lalamove_f04_pod.json`, `lalamove_cron_setup.sh`, `lalamove_token_manager.py`, `lalamove_documentacao_completa.md`, `lalamove_suplemento_v2.md`
 - **Não tocar / armadilhas:** Nao apagar lalamove_token_manager.py achando que carrega credencial: ele le tudo de ambiente/arquivo de sessao (:25-27 'os.environ.get("LALAMOVE_SESSION_FILE", ...)') e nao tem login nem chave embutida - o problema dele e so apontar para caminho de maquina pessoal. E nao confundir com supabase/config.toml:1, onde o id do projeto e legitimo e obrigatorio.
-- **Depende de:** etapa 029 · **Libera:** etapa 169
+- **Depende de:** etapa 030 · **Libera:** etapa 169
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** ls /home/user/Lalamove_V2 nao deve mais listar lalamove_*.json, lalamove_*.docx, lalamove_*.html nem lalamove_*.pdf. E grep -rn 'Andressa\|536,358\|qDdE35mo' --exclude-dir=.git . deve voltar vazio. Nenhum teste quebra: nada no codigo referencia esses arquivos.
@@ -1630,7 +1690,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 056 — CORS das edges cai em '*' por omissao e ignora todas as origens alem da primeira
+### Etapa 058 — CORS das edges cai em '*' por omissao e ignora todas as origens alem da primeira
 
 **Onda 1 (Segurança e risco de perda de dado) / Baixa / Transversal — segurança**
 
@@ -1645,7 +1705,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A função corsFor(req) com Vary: Origin está certa, mas o "fail-closed sem a variável definida" é arriscado do jeito proposto: se ALLOWED_ORIGINS não estiver configurada no projeto (não há como verificar nesta sessão — sem MCP do banco iecgydonctmabiijadsf), omitir Access-Control-Allow-Origin derruba TODAS as chamadas do front às edges de uma vez. Ordem segura: 1) definir ALLOWED_ORIGINS com os domínios reais (prod + preview Vercel) via `supabase secrets set`; 2) só então trocar o default '*' pelo fail-closed; 3) manter o cabeçalho fixo em lalamove-webhook e llm-wh (chamada servidor-a-servidor, sem Origin), como o próprio achado já prevê.
 - **Arquivos e objetos a tocar:** `supabase/functions/_shared/cors.ts`, `supabase/functions/apply-fixes/index.ts`, `supabase/functions/seed-fix-rls/index.ts`, `supabase/functions/llm-wh/index.ts`
 - **Não tocar / armadilhas:** Nao apertar o CORS de supabase/functions/lalamove-webhook nem de llm-wh sem testar o handshake de registro da URL na Lalamove: o comentario em lalamove-webhook/index.ts:148-151 registra que um gate anterior (por IP) derrubou o PATCH /v3/webhook e todas as entregas reais.
-- **Depende de:** etapa 041 · **Libera:** —
+- **Depende de:** etapa 042 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** curl -i -X OPTIONS "$SUPABASE_URL/functions/v1/lalamove-api" -H 'Origin: https://site-de-teste.invalid' -H 'Access-Control-Request-Method: POST'. Hoje, sem ALLOWED_ORIGINS, a resposta traz 'Access-Control-Allow-Origin: *'. Depois da correcao nao deve trazer o cabecalho para essa origem, e deve traze-lo (com Vary: Origin) para o dominio real do app.
@@ -1664,11 +1724,51 @@ Checklist de conclusão:
 ## Onda 2 — Fluxos principais quebrados
 
 
-### Etapa 057 — Nenhuma guarda de transição na única função que muda status do pedido: evento desconhecido vira 'ON_GOING' e ressuscita pedido já concluído
+### Etapa 059 — Cancelamento manual grava 'CANCELED' numa coluna que só aceita 'CANCELLED' — o pedido nunca é marcado como cancelado no banco
 
 **Onda 2 (Fluxos principais quebrados) / Crítica / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** C-013
+- **Achados resolvidos:** C-015
+- **Problema hoje:** Quando um operador cancela um pedido, o cancelamento acontece na Lalamove mas o sistema continua mostrando a entrega como ativa, sem motivo, sem quem cancelou e sem data — e os painéis, relatórios e alertas seguem tratando o pedido como em andamento.
+
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 (`status: 'CANCELED'`, sem `const { error }`) vs supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:6,104 e 20261122120000_baseline_order_status_values.sql:16-18 (enum sem 'CANCELED'); mitigação parcial em supabase/functions/lalamove-webhook/index.ts:113
+  ```
+  Mesma causa, outro local — Backend — edges Lalamove:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936; supabase/migrations/20251224143803_*.sql:6-14 e :104; supabase/migrations/20261122120000_baseline_order_status_values.sql:16-18; supabase/migrations/20261122120100_lalamove_integration_columns.sql:53-63 (widening é só em lalamove_status_history); supabase/migrations/20261123200000_optout_and_tracking_end.sql:123 (compara 'CANCELED' mas não cria o valor).
+  ```
+  Mesma causa, outro local — Interface — fluxo de pedido:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 `await supabase.from('lalamove_orders').update({ status: 'CANCELED', cancellation_reason: cancellationReason, cancellation_notes: cancellationNotes, cancelled_by: cancelledBy, ... })` | supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:104 `status public.order_status NOT NULL DEFAULT 'PENDING',` | src/integrations/supabase/types.ts:4794-4806 `order_status: [ "PENDING", ... "CANCELLED", ... ]` | mitigacao parcial do status: supabase/functions/lalamove-webhook/index.ts:113 `'CANCELED': 'CANCELLED',` | UI: src/components/orders/OrderDetailModal.tsx:395 `onClick={() => cancelMutation.mutate({ orderId: order.lalamoveId, reason: cancelReason, notes: cancelNotes })}`
+  ```
+  Mesma causa, outro local — Banco — integridade e índices:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 — `await supabase\n  .from('lalamove_orders')\n  .update({ status: 'CANCELED', cancellation_reason: ..., cancelled_by: cancelledBy, ... })\n  .eq('lalamove_id', cancelOrderId);` ; supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:104 `status public.order_status NOT NULL DEFAULT 'PENDING',`
+  ```
+- **Causa raiz:** A coluna lalamove_orders.status é o enum order_status, que grafa CANCELLED com dois L. O handler `case 'cancel'` escreve 'CANCELED' (grafia da API Lalamove, um L). O Postgres rejeita o UPDATE inteiro com 22P02 (invalid input value for enum). O retorno não é desestruturado — não há `const { error }` — então o erro é descartado e a edge devolve sucesso.
+- **Caminho recomendado:** 1) Em supabase/functions/lalamove-api/index.ts:929 trocar `status: 'CANCELED'` por `status: 'CANCELLED'` — é exatamente o que o próprio arquivo já faz no mapa de sincronização (linha 552: `'CANCELED': 'CANCELLED'`) e o que o webhook faz (lalamove-webhook/index.ts:113). 2) Passar a checar o erro desse UPDATE (`const { error } = await supabase...; if (error) ...`) e devolver falha ao front em vez de sucesso silencioso — o mesmo padrão já usado em syncOrderToDatabase (lalamove-api/index.ts:504-514). Atalho a evitar: adicionar 'CANCELED' ao enum order_status — isso cria dois valores para o mesmo estado e quebra os relatórios que filtram por 'CANCELLED' (ex.: src/hooks/useAdvancedReports.ts:164).
+  AJUSTE DO REVISOR: Caminho proposto está correto (trocar por 'CANCELLED' e passar a checar o erro). Uma ressalva: o cancelamento na Lalamove já ocorreu quando o UPDATE roda, então devolver erro puro ao front faria o operador achar que o pedido não foi cancelado — retornar sucesso parcial explícito (cancelado na Lalamove, falha ao gravar) e registrar o alerta, em vez de falha genérica.
+- **Arquivos e objetos a tocar:** `src/components/orders/OrderDetailModal.tsx`, `src/integrations/supabase/types.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20261122120000_baseline_order_status_values.sql`
+- **Não tocar / armadilhas:** Não alterar o mapa de statusMapping do webhook (já correto). Não mexer em src/types/lalamove.ts: ali 'CANCELED' é proposital (vocabulário da API v3) e há teste que exige isso (src/lib/__tests__/lalamoveContract.test.ts:117-119). Pedidos já cancelados na Lalamove e presos como ativos no banco precisarão de correção de dado à parte (DML em produção → chamar o dono).
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Após o fix: cancelar um pedido de teste pela UI e consultar `select status, cancelled_at, cancellation_reason from lalamove_orders where lalamove_id = '<id>'` — esperado status='CANCELLED' com cancelled_at preenchido. Antes do fix, o mesmo SELECT devolve o status anterior e cancelled_at NULL.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 060 — Nenhuma guarda de transição na única função que muda status do pedido: evento desconhecido vira 'ON_GOING' e ressuscita pedido já concluído
+
+**Onda 2 (Fluxos principais quebrados) / Crítica / Regras de negócio — ciclo de vida**
+
+- **Achados resolvidos:** C-016
 - **Problema hoje:** Um aviso atrasado ou fora de ordem da Lalamove faz um pedido já entregue, cancelado ou rejeitado voltar a aparecer como 'em trânsito'. Isso suja o painel, reabre alertas, dispara nova notificação ao cliente e corrompe o indicador de entregas concluídas.
 
   ```
@@ -1679,7 +1779,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Itens 1, 3 e 5 do caminho proposto estão corretos. Dois reparos: (a) o `.eq('status', oldStatus)` do item 2 quebra quando o SELECT de index.ts:319-320 falha e oldStatus fica null (o filtro casaria com NULL e nunca atualizaria) — condicionar só quando oldStatus existir, ou usar RPC com UPDATE condicional; (b) o item 4 ('acrescentar DELIVERING ao statusMapping') deve mapear DELIVERING→'ON_GOING', e não para o valor cru 'DELIVERING', para não divergir de lalamove-api/index.ts:549 e dos relatórios que já tratam ON_GOING como em trânsito.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** TERMINAL_ORDER_STATUSES usa 'CANCELED' (um L) e o banco grava 'CANCELLED' — reaproveitar a lista sem normalizar a grafia faz o pedido cancelado continuar sendo tratado como não-terminal. ORDER_STATUS_RANK também não tem as chaves 'PENDING' nem 'MATCHED', que são exatamente o que o webhook grava; sem incluí-las, o posto vem `undefined` e o guard libera tudo.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 007 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com o Postgres descartável (`supabase start`): inserir um pedido em COMPLETED, invocar a edge com ORDER_STATUS_CHANGED de status inválido e conferir `select status from lalamove_orders` — hoje devolve ON_GOING; depois do fix deve continuar COMPLETED e haver linha em webhook_events sem alteração do pedido.
@@ -1692,11 +1792,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 058 — Job travado volta para PENDING sem incrementar attempts — laço infinito de redispatch, sem limite de tentativas
+### Etapa 061 — Job travado volta para PENDING sem incrementar attempts — laço infinito de redispatch, sem limite de tentativas
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** A-021
+- **Achados resolvidos:** A-023
 - **Problema hoje:** Uma notificação que não consegue ser entregue fica sendo reenviada a cada ~10 minutos para sempre, consumindo invocações pagas da edge function indefinidamente, e nunca aparece como "falhou" em nenhuma tela — a promessa de "retry automático até 3 tentativas" (docs/JOB_QUEUE_SYSTEM.md:36) não vale nesse caminho.
 
   ```
@@ -1719,11 +1819,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 059 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual
+### Etapa 062 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Documentação × código**
 
-- **Achados resolvidos:** A-022
+- **Achados resolvidos:** A-024
 - **Problema hoje:** Mudanca de banco mergeada e anunciada como "em producao" sem nunca ter sido aplicada: a tela nova quebra em producao porque a tabela/coluna nao existe, e ninguem sabe que faltou um passo. O inverso tambem: um agente que acredita que "o merge e o apply" evita abrir PR por medo de aplicar DDL sem autorizacao, travando trabalho que era seguro.
 
   ```
@@ -1747,11 +1847,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 060 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main
+### Etapa 063 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Documentação × código**
 
-- **Achados resolvidos:** A-023
+- **Achados resolvidos:** A-025
 - **Problema hoje:** Dois riscos opostos. O agente que confia no doc mexe em edge function acreditando que nada sobe sozinho e publica codigo na producao sem perceber. E o agente que precisa publicar uma edge vai pedir passo manual ao dono, que o AGENTS.md proibe, em vez de simplesmente mergear.
 
   ```
@@ -1775,11 +1875,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 061 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration
+### Etapa 064 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Documentação × código**
 
-- **Achados resolvidos:** A-024
+- **Achados resolvidos:** A-026
 - **Problema hoje:** O agente segue a cadeia AGENTS.md -> banco.md -> DEPLOYMENT.md e aprende um fluxo que nao existe: "git push e a Lovable aplica as migrations". Resultado: mudanca de banco mergeada e declarada pronta sem aplicacao, e verificacao de deploy feita contra uma URL que nao serve o produto (nem o /health existe).
 
   ```
@@ -1803,11 +1903,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 062 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe
+### Etapa 065 — mensageria.md manda o plantao olhar o ledger notification_messages e a edge zapp-callback; nenhum dos dois existe no repo
+
+**Onda 2 (Fluxos principais quebrados) / Alta / Documentação × código**
+
+- **Achados resolvidos:** A-027
+- **Problema hoje:** Em incidente de mensageria, quem esta de plantao vai procurar as mensagens enviadas numa tabela que nao existe e vai olhar o log de uma funcao que nunca foi criada, concluindo "o provedor esta fora" quando na verdade nao existe caminho de retorno nenhum: nenhuma resposta de motorista e nenhum status entregue/lido chega ao sistema hoje.
+
+  ```
+  docs/agentes/mensageria.md:13-17 e :43-47 contra: ausencia do diretorio supabase/functions/zapp-callback; zero CREATE TABLE notification_messages em supabase/migrations/ e inexistencia de 20261125120000_* (ultima = 20261124120000_internal_alert_channels.sql); supabase/functions/send-notification/index.ts:597 (comentario "o ledger novo (etapa 73) ainda nao esta em uso"), :649 e :1058 (`.from("alerts_sent")`); supabase/functions/_shared/messaging/inbound-actions.ts:5 ("o chamador (`zapp-callback`, etapa 96)") sem nenhum importador fora de _shared/messaging.
+  ```
+  Mesma causa, outro local — Backend — notificação e fila:
+  ```
+  docs/agentes/mensageria.md:13-15 `4. O que foi enviado e o que voltou fica no ledger `notification_messages` (migration `20261125120000_notification_ledger.sql`). … 5. A resposta do motorista chega pelo `zapp-callback`, é classificada (`_shared/messaging/inbound.ts`)` — contra `ls supabase/functions/` (sem `zapp-callback`), `ls supabase/migrations/` (último arquivo `20261124120000_internal_alert_channels.sql`) e `find supabase -name security.ts` (só `lalamove-webhook/security.ts`).
+  ```
+- **Causa raiz:** O runbook foi escrito a partir do plano de 150 etapas, descrevendo o estado alvo como se fosse o estado atual. A edge zapp-callback e a etapa 96 (citada em supabase/functions/_shared/messaging/inbound-actions.ts:5 como "o chamador (`zapp-callback`, etapa 96)") e o ledger e a etapa 73 — as duas ainda nao existem. A secao "O que ainda não existe" (:66-71) lista as etapas 133-138 mas omite justamente o ledger e o callback.
+- **Caminho recomendado:** Em mensageria.md: no passo 4 do caminho da mensagem, dizer que hoje o registro vai para `alerts_sent` (send-notification/index.ts:649 e :1058) e que `notification_messages` e a etapa 73, ainda sem migration; no passo 5 e na secao "Fila morta de callbacks", marcar que `zapp-callback` (etapa 96) nao existe, que `_shared/messaging/inbound*.ts` sao decisao pura sem chamador HTTP, e que portanto nao ha entrega de resposta/ACK no ar. Mover as duas para a secao "O que ainda não existe" :66-71, que ja tem o formato certo. Atalho tentador a evitar: criar a migration ou a edge para "fazer o doc virar verdade" — isso e feature nova, fora do escopo de corrigir documentacao.
+  AJUSTE DO REVISOR: O caminho proposto esta correto, incluindo o alerta de nao criar migration/edge para "fazer o doc virar verdade". Acrescento uma precisao: a secao "Fila morta de callbacks" (:39-48) inteira descreve garantias de um schema que nao existe (`provider_message_id` com indice unico, `provider_sequence`), nao basta marcar o passo 5 — essa secao precisa virar "nao existe ainda" por inteiro, senao o plantao continua confiando em anti-replay e deduplicacao que ninguem implementou.
+- **Arquivos e objetos a tocar:** `docs/agentes/mensageria.md`, `supabase/functions/_shared/messaging/inbound-actions.ts`, `supabase/functions/_shared/messaging/inbound.ts`, `supabase/functions/send-notification/index.ts`
+- **Não tocar / armadilhas:** As demais secoes do runbook (SMS_PROVIDER, smsChannelFromEnv, is_phone_opted_out, isOptOutKeyword) conferem com o codigo — nao reescrever o arquivo inteiro. `is_phone_opted_out()` existe de verdade (supabase/migrations/20261123200000_optout_and_tracking_end.sql + send-notification/index.ts).
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** grep -rn "notification_messages" --include=*.sql supabase/migrations/ retorna vazio; ls supabase/functions | grep zapp retorna vazio; grep -n 'from("alerts_sent")' supabase/functions/send-notification/index.ts mostra :649 e :1058.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 066 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Backend — edges Lalamove**
 
-- **Achados resolvidos:** A-025
+- **Achados resolvidos:** A-028
 - **Problema hoje:** O operador cancela a entrega, ve 'erro interno' na tela e tenta de novo (as tentativas seguintes falham, porque o pedido ja nao existe mais na Lalamove). Na pratica ninguem confia no botao de cancelar, e o time acha que a integracao esta quebrada quando o cancelamento funcionou.
 
   ```
@@ -1818,7 +1950,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e minimo (normalizar em :1200-1206, nao em :211 — `lalamoveRequest` e compartilhado e o 204 alimenta `persistRateLimit`). Dois complementos: (1) as outras saidas da funcao tambem montam Response dentro do try, mas todas com status fixo 200/400, entao a normalizacao em um ponto cobre tudo; `change-driver` (case que chama changeDriver) e o unico outro caminho com 204 real, e e corrigido pela mesma linha. (2) Nao confie em teste de contrato para provar: nenhum teste do repo exercita 204 (`grep -rn 204 supabase/functions/*/*.test.ts` so acha ids de pedido em lalamove-webhook/security.test.ts) — valide com um request real de cancelamento depois do deploy.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`
 - **Não tocar / armadilhas:** Nao confundir com o 204 que o lalamoveRequest grava em lalamove_rate_limits (:210) — esse deve continuar 204. E atencao: o UPDATE local do cancelamento (:926-936) roda ANTES desse ponto, entao o fix da resposta sozinho nao conserta o banco — ver o achado do valor 'CANCELED' fora do enum, que precisa ser corrigido no mesmo PR para o cancelamento funcionar ponta a ponta.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 067, etapa 216
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Depois do fix, cancelar um pedido real de teste pela tela e conferir HTTP 200 com `{"data":{"success":true},"status":204,...}` no corpo; e `select status, cancelled_at from lalamove_orders where lalamove_id = '<id>'` deve mostrar CANCELLED. Antes do fix, o mesmo request devolve 500 `{"error":"Internal server error"}`.
@@ -1831,11 +1963,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 063 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade
+### Etapa 067 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Backend — edges Lalamove**
 
-- **Achados resolvidos:** A-026
+- **Achados resolvidos:** A-029
 - **Problema hoje:** A renovacao automatica do acesso ao portal da Lalamove nunca funcionou: o token morre sozinho a cada 24h e alguem precisa refazer o login na mao. Enquanto isso, carteira, historico de pedidos e cupons ficam indisponiveis no sistema. E o alerta critico dispara de hora em hora sem que haja o que corrigir, treinando o time a ignorar alerta critico — que e como um problema de verdade passa batido.
 
   ```
@@ -1850,7 +1982,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho viável (a action `refresh-token` de lalamove-uapi não exige admin, aceita Bearer service_role e já persiste os tokens). Dois cuidados que faltam: (1) depois de delegar, remover o UPDATE de :202-205 é obrigatório, não opcional — ele reescreveria `last_refreshed_at` por cima do que a lalamove-uapi acabou de gravar; (2) o cron de 20261122140000:125-134 manda só `apikey` com a publishable key, sem `Authorization: Bearer`, então o header da chamada interna tem de ser montado dentro da edge (SUPABASE_SERVICE_ROLE_KEY do ambiente), não herdado do cron.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-gateway/route.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-token-refresh/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-gateway/route.ts`, `supabase/functions/lalamove-token-refresh/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
 - **Não tocar / armadilhas:** O refresh da UAPI e de uso unico — o claim anti-corrida de :141-149 tem que continuar valendo, senao duas execucoes queimam o refresh e derrubam a sessao de vez. Cuidado para nao disparar renovacoes em serie durante o teste: o token atual e o da operacao. E o worker e invocado por pg_cron com Bearer service_role (config.toml declara verify_jwt=true para esta funcao), entao a chamada interna para lalamove-uapi precisa usar service_role, nao o JWT de um usuario.
-- **Depende de:** — · **Libera:** etapa 064, etapa 216
+- **Depende de:** etapa 066 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select id, token_obtained_at, last_refreshed_at, refresh_method from public.lalamove_uapi_sessions where is_active` antes e depois de um disparo manual (`curl -X POST $SUPABASE_URL/functions/v1/lalamove-token-refresh -H "Authorization: Bearer $SERVICE_ROLE"`). Hoje: HTTP 500 com `{"ok":false,"error":"Configuração do proxy Lalamove ausente"}` e uma linha nova em alerts com subtype UAPI_TOKEN_REFRESH. Esperado: HTTP 200 `{"ok":true,"refreshed":true}` e access_token diferente do anterior na tabela.
@@ -1863,11 +1995,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 064 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia
+### Etapa 068 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Backend — edges Lalamove**
 
-- **Achados resolvidos:** A-027
+- **Achados resolvidos:** A-030
 - **Problema hoje:** Dois efeitos que o dono sente: (1) o score de risco dos motoristas trabalha sempre com zero entregas concluidas, entao todo motorista permanece como alto risco e cai na fila de aprovacao manual, travando operacao; (2) quando a Lalamove cancela uma entrega, ninguem e avisado e o motivo do cancelamento nao fica registrado — o time descobre pelo cliente.
 
   ```
@@ -1878,7 +2010,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O plano está correto, falta uma guarda: ao despachar os efeitos de COMPLETED pelo ORDER_STATUS_CHANGED mantendo o case legado ORDER_COMPLETED, um provedor que mandasse os dois incrementaria o contador do motorista duas vezes. Condicione o incremento a `oldStatus !== 'COMPLETED'` — updateOrderStatus (index.ts:320-322) já lê o status anterior, basta devolvê-lo.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-webhook/normalize.ts`
 - **Não tocar / armadilhas:** Nao duplicar o incremento: o pedido pode receber ORDER_STATUS_CHANGED=COMPLETED mais de uma vez, e a dedup por hash de corpo (:275-293) so pega corpos identicos. Condicionar o incremento a transicao de status (updateOrderStatus ja le o status anterior em :319-322) para nao somar duas vezes. O encerramento de tracking (:335-341, RPC end_order_tracking) ja roda pelo caminho generico e nao deve ser chamado de novo. E a normalizacao v3 (normalize.ts:39) achata order dentro de data, entao `payload.data.status` ja e o status — nao procurar em `payload.status`.
-- **Depende de:** etapa 063 · **Libera:** —
+- **Depende de:** etapa 046 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com a action `webhook-selftest` da lalamove-api (que assina com o segredo real e so aceita orderId com prefixo E2E-SELFTEST-): disparar `{"action":"webhook-selftest","orderId":"E2E-SELFTEST-1","eventType":"ORDER_STATUS_CHANGED","status":"COMPLETED"}` para um pedido de teste com motorista vinculado, e comparar `select completed_deliveries, total_deliveries from drivers where id = '<uuid>'` antes e depois. Hoje os numeros nao mudam.
@@ -1891,11 +2023,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 065 — Telefone vindo de alert_configurations é enviado sem normalização — só o caminho ad-hoc normaliza
+### Etapa 069 — Telefone vindo de alert_configurations é enviado sem normalização — só o caminho ad-hoc normaliza
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Backend — notificação e fila**
 
-- **Achados resolvidos:** A-028
+- **Achados resolvidos:** A-031
 - **Problema hoje:** Alerta configurado pelo operador na tela de configurações pode não chegar: o número sai sem o código do país e o WhatsApp/SMS entrega para o destinatário errado ou devolve erro. O mesmo contato cadastrado pelo pedido recebe normal, então o problema parece intermitente e ninguém desconfia do cadastro.
 
   ```
@@ -1906,7 +2038,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro como proposto (reatribuir `destination` em `dispatchIfNew`, reaproveitando `normalizePhone` de supabase/functions/_shared/phone.ts, e idem no laço de `fallback_recipients` em :952-960). Um complemento que o auditor não citou: a normalização só na edge deixa o dado sujo no banco — vale normalizar/rejeitar também no submit da UI (src/pages/alert-configurations/AlertConfigCard.tsx:106 e src/pages/AlertConfigurationsPage.tsx:81), senão o operador continua sem saber que digitou um número que não sai. O alerta contra normalizar dentro de `sendWhatsApp`/`sendSms` está correto.
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`, `supabase/functions/_shared/channels/sms.ts`, `supabase/functions/_shared/phone.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 045 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run` não cobre edge; rodar o teste Deno das funções puras: `deno test --allow-net --allow-env supabase/functions/_shared/channels/sms.test.ts` e acrescentar um caso em `supabase/functions/send-notification/recipients.test.ts` com `to: "(41) 99999-8888"` vindo de config, esperando `+5541999998888` no destino despachado. Em produção: cadastrar um número com máscara em `alert_configurations.whatsapp_numbers`, disparar o alerta e conferir em `alerts_sent.recipient` se gravou `+55…` (correto) ou `41999998888` (defeito).
@@ -1919,11 +2051,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 066 — Painel de SLA: 5 consultas sem limite a cada 10 s, uma delas inútil, e erro de consulta vira "100% no prazo"
+### Etapa 070 — Botão "Avaliar motorista" nunca mostra o resultado: o hook lê um formato de resposta que a edge evaluate-driver não devolve
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** A-029
+- **Achados resolvidos:** A-032
+- **Problema hoje:** Ao clicar em avaliar o motorista de um pedido, o sistema avalia de verdade (pode até bloquear o motorista no banco), mas a tela não mostra nada: nem score, nem aviso de bloqueio, nem erro. O operador acha que não funcionou e pode liberar um motorista crítico.
+
+  ```
+  supabase/functions/evaluate-driver/index.ts:73-83 (interface achatada), :607-610, :631-634 e :794-797 `return new Response(\n      JSON.stringify(result),`; src/hooks/useEvaluateDriver.ts:69 `const { evaluation, driver } = data;`, :78 `if (evaluation.autoBlocked) {`, :93-95 `toast.error('Erro na Avaliação', { description: error.message })`; src/components/orders/OrderDetailModal.tsx:552 `riskScore: result.evaluation.riskAnalysis.score,` e :557-558 (catch com só `logger.error`); node_modules/@tanstack/query-core/build/modern/mutation.js:195 e :203-210 (throw no onSuccess cai no onError)
+  ```
+  Mesma causa, outro local — Regras de negócio — cálculos:
+  ```
+  supabase/functions/evaluate-driver/index.ts:794-795 — "return new Response(\n      JSON.stringify(result),"; mesmos retornos planos em :610 e :634. Interface plana em index.ts:73-84. src/hooks/useEvaluateDriver.ts:68 — "const { evaluation, driver } = data;" e :75 — "if (evaluation.autoBlocked) {". src/components/orders/OrderDetailModal.tsx:551-552 — "riskScore: result.evaluation.riskAnalysis.score,\n          riskLevel: result.evaluation.riskAnalysis.level,".
+  ```
+- **Causa raiz:** A interface declarada no hook (useEvaluateDriver.ts:30-47) inventa um envelope `{ success, evaluation: { riskAnalysis... }, driver }` que a função servidora nunca produziu — nem no caminho principal (:794) nem nos atalhos de blacklist (:610) e whitelist (:634). Como `supabase.functions.invoke` tipa `data` como any, o TypeScript não acusa. Em runtime `evaluation` é undefined: o onSuccess ainda invalida as queries (:72-75) e então estoura TypeError em `evaluation.autoBlocked`, sem nenhum toast; no componente o acesso a `result.evaluation.riskAnalysis` estoura antes do setEvaluationResult e o catch só faz logger.error (OrderDetailModal.tsx:556-558).
+- **Caminho recomendado:** Alinhar o cliente ao contrato real da edge (e não o contrário, para não quebrar o webhook que também a invoca): copiar a interface de supabase/functions/evaluate-driver/index.ts:73-83 para o hook, ler `data.autoBlocked` / `data.requiresManualApproval` / `data.riskScore` / `data.riskLevel` no onSuccess (o nome do motorista já está em `order.driverName`) e trocar OrderDetailModal.tsx:552-555 por `result.riskScore`, `result.riskLevel`, `result.approved`, `result.recommendation`. Validar a resposta segue o padrão de supabase/functions/_shared/contract.test.ts. Atalho tentador a evitar: encher de `?.` — o erro some e o risco continua sem aparecer.
+  AJUSTE DO REVISOR: Caminho proposto está correto na direção (alinhar o cliente ao contrato da edge, não o contrário) e os campos indicados existem exatamente em index.ts:73-83. Dois ajustes: (a) o `driver.name` não precisa de substituto — `order.driverName` já é passado no próprio input (OrderDetailModal.tsx:548), então basta usá-lo; (b) não basta reescrever a leitura: valide a resposta antes de usá-la (ex.: checar `typeof data?.riskScore === 'number'` e falhar com mensagem de negócio) para o próximo desalinhamento virar erro legível em vez de TypeError. O alerta contra encher de `?.` está certo — com optional chaining o toast de sucesso simplesmente não aparece e o bloqueio do motorista fica invisível.
+- **Arquivos e objetos a tocar:** `src/components/orders/OrderDetailModal.tsx`, `src/hooks/useEvaluateDriver.ts`, `supabase/functions/evaluate-driver/index.ts`
+- **Não tocar / armadilhas:** docs/pendencias/P-16-hooks-orfaos-triagem.md usa essa ação manual ("já existe em OrderDetailModal.tsx:490-509") para descartar `useEvaluateDriverOnAssignment` — o doc está desatualizado: a ação existe mas não entrega resultado. Corrigir o doc no mesmo PR. Não mude o formato de saída da edge sem checar supabase/functions/lalamove-webhook (DRIVER_ASSIGNED a chama).
+- **Depende de:** etapa 041 · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Com a edge local (`supabase functions serve evaluate-driver`), abrir um pedido com motorista e clicar em Avaliar: hoje o console mostra TypeError lendo `riskAnalysis` e nenhum card; depois do fix o RiskScoreGauge (OrderDetailModal.tsx:744) aparece com o score.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 071 — Painel de SLA: 5 consultas sem limite a cada 10 s, uma delas inútil, e erro de consulta vira "100% no prazo"
+
+**Onda 2 (Fluxos principais quebrados) / Alta / Hooks e estado — dados de negócio**
+
+- **Achados resolvidos:** A-033
 - **Problema hoje:** O painel pode exibir 100% de entregas no prazo justamente quando a consulta falha, escondendo atraso; e o sistema puxa a base inteira a cada 10 segundos, o que pesa em custo e velocidade do Supabase.
 
   ```
@@ -1934,7 +2098,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro (o padrão de lançar erro existe em src/hooks/useRecentOrders.ts:43-47 e a página já tem o ramo de erro em SLADashboardPage.tsx:58, hoje morto). Dois ajustes: `scheduled_at` é usado no cálculo de tempo (:101-105) e `is_stopped`/`is_on_route`/`speed` vêm de `active_tracking` (:116-120), então a lista de colunas a selecionar precisa cobrir as duas tabelas, não só `lalamove_orders`; e trocar `: 100` por `null` exige ajustar src/pages/SLADashboardPage.tsx:76 e :126 (`getSLAStatus` e o `strokeDasharray` quebram com null).
 - **Arquivos e objetos a tocar:** `src/hooks/useSLAMetrics.ts`
 - **Não tocar / armadilhas:** O `select('*')` de active_tracking existe porque `distance_to_next_stop_m` e `expected_route` não estão no types.ts gerado (comentário em src/components/map/hooks/useTrackingData.ts:17-30) — ao listar colunas explicitamente, inclua as duas.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 116
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run src/hooks/__tests__/useSLAMetrics.test.ts` com um caso novo em que a consulta de pedidos devolve `{ data: null, error: {...} }`: hoje resolve com `onTimeRate: 100`; depois do fix deve ir para isError.
@@ -1947,11 +2111,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 067 — Fallback de geocodificação do pedido nunca funciona: lê `json.data[0]` mas o geo-gateway devolve array puro — e os 12 testes do módulo mockam o formato errado
+### Etapa 072 — Fallback de geocodificação do pedido nunca funciona: lê `json.data[0]` mas o geo-gateway devolve array puro — e os 12 testes do módulo mockam o formato errado
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Integrações e contratos**
 
-- **Achados resolvidos:** A-030
+- **Achados resolvidos:** A-034
 - **Problema hoje:** Todo pedido que entra sem coordenada (Bitrix24, importação da UAPI, n8n) fica sem ponto no mapa e sem cálculo de distância/ETA, e nunca é marcado para revisão de endereço — exatamente o problema que a etapa 37 dizia ter resolvido. Ninguém percebe porque os testes estão verdes.
 
   ```
@@ -1962,7 +2126,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto, inclusive o alerta de não mexer no geo-gateway. Dois ajustes: (a) a linha de referência do padrão tolerante é `job-worker/index.ts:440` (`const best = Array.isArray(data) ? data[0] : data;`), não :453 nem :441; (b) ao corrigir o parser, lembrar que o fallback só é acionado quando a Lalamove não devolveu coordenada (`lalamove-api/index.ts:790` → `if (stopsCoords(stops).every((c) => c.lat === null))`), ou seja o conserto muda o comportamento de pedidos vindos de bitrix24/uapi_import/n8n — vale conferir que `requires_address_review` passa a marcar pedidos que hoje passam batido, para a fila de revisão não estourar de uma vez.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/geocode-fallback.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/geocode-fallback.test.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/index.ts`
 - **Não tocar / armadilhas:** Não mexer em `geo-gateway/index.ts:336` nem em `metering.ts` (cache) — o array puro é o contrato público do gateway, consumido pelo front e pelo job-worker. Depois do fix o fallback passa a fazer chamadas pagas de geocoding com `persist:true` (SKU `geocoding_permanent`, US$ 5,00/1k): o volume de pedidos sem coordenada vai aparecer na fatura e em `geo_usage` pela primeira vez.
-- **Depende de:** etapa 040 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 085
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `deno test --allow-net supabase/functions/lalamove-api/geocode-fallback.test.ts` com o mock corrigido para array puro (deve falhar ANTES do fix do parser e passar depois). Em produção: criar pedido via action `order` com endereços sem lat/lng e conferir `select pickup_latitude, geocode_provider, requires_address_review from lalamove_orders order by created_at desc limit 1` — hoje volta NULL/NULL/NULL.
@@ -1975,11 +2139,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 068 — `priority-fee` grava a taxa e o histórico sem checar se a Lalamove aceitou
+### Etapa 073 — `priority-fee` grava a taxa e o histórico sem checar se a Lalamove aceitou
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Integrações e contratos**
 
-- **Achados resolvidos:** A-031
+- **Achados resolvidos:** A-035
 - **Problema hoje:** A tela mostra uma gorjeta de prioridade que a Lalamove nunca cobrou nem repassou ao motorista, e o histórico de auditoria registra um aumento que não ocorreu. Pior: por causa da regra de "só pode aumentar", um valor fantasma de R$ 20 impede o operador de oferecer R$ 15 de verdade para desencalhar a entrega.
 
   ```
@@ -1990,7 +2154,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto (`if (!result.error && current?.id)` em :994, espelhando :914 e :1061). Um ajuste: `lalamove_priority_fee_history` tem `previous_fee`/`new_fee` numéricos e `reason` de texto; gravar a tentativa recusada com `new_fee = previous_fee` cria linha de histórico sem mudança de valor e pode confundir relatório de auditoria — melhor registrar a recusa só no log/`alerts` ou numa coluna própria de tentativa, e não inventar linha de histórico. Verificar também o schema real antes (não há MCP do projeto iecgydonctmabiijadsf nesta sessão, então o formato da tabela é NÃO VERIFICADO).
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`
 - **Não tocar / armadilhas:** `addPriorityFee` passa pelo retry de `lalamoveRequest` (maxAttempts 3) com `Request-ID` estável, que a Lalamove usa como chave de idempotência — não vale tratar um 429 retried como recusa definitiva sem olhar `result.attempts`. Não mexer na validação de teto de R$ 500 nem no `toFixed(2)` (:974-977): são regras de negócio separadas. Se já houver linhas fantasma em `lalamove_priority_fee_history`, a limpeza é dado em produção e precisa do dono.
-- **Depende de:** — · **Libera:** etapa 115
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Chamar `action: 'priority-fee'` para um pedido já `COMPLETED` (a Lalamove recusa) e conferir `select priority_fee, priority_fee_updated_at from lalamove_orders where lalamove_id = '<id>'` e `select * from lalamove_priority_fee_history where lalamove_order_id = '<id>'` — hoje as duas gravam; depois do fix `lalamove_orders.priority_fee` deve ficar intacto e a resposta HTTP deve trazer o erro da Lalamove.
@@ -2003,11 +2167,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 069 — A sincronização periódica grava o status cru da Lalamove no enum: pedido cancelado trava como ativo e é re-sincronizado para sempre
+### Etapa 074 — A sincronização periódica grava o status cru da Lalamove no enum: pedido cancelado trava como ativo e é re-sincronizado para sempre
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-032
+- **Achados resolvidos:** A-036
 - **Problema hoje:** Pedidos cancelados ficam eternamente na lista de entregas em andamento e consomem chamada paga à API da Lalamove em toda sincronização, sem nunca sair da fila. O contador de pedidos ativos do painel fica inflado.
 
   ```
@@ -2018,7 +2182,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto. Dois acréscimos: (a) a correção precisa cobrir também a ação 'get-order' (index.ts:826), que usa a mesma função e hoje falha do mesmo jeito; (b) ao extrair o statusMap para constante única, manter o mapeamento 'ASSIGNING_DRIVER'→'PENDING' já usado no upsert (index.ts:547), porque hoje syncOrderToDatabase grava 'ASSIGNING_DRIVER' cru e upsertOrderToDatabase grava 'PENDING' para o mesmo pedido — os dois caminhos deixam o banco em estados diferentes.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`
 - **Não tocar / armadilhas:** O statusMap de upsertOrderToDatabase colapsa 'DELIVERING' em 'ON_GOING' (linha 550) e tem default 'PENDING' (linha 556) — copiá-lo como está troca um bug por outro (regressão de status). O mapa unificado deve preservar DELIVERING e não ter default que rebaixe o pedido.
-- **Depende de:** — · **Libera:** etapa 082
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No Postgres descartável: inserir pedido com status 'ON_GOING' e rodar o caminho de sync com uma resposta de teste contendo status 'CANCELED'. Esperado hoje: log 'Error updating order' e status inalterado. Em produção (somente leitura): `select status, count(*) from lalamove_orders where status in ('ON_GOING','PICKED_UP') and updated_at < now() - interval '7 days' group by 1` — pedidos ativos muito antigos são o sintoma.
@@ -2031,11 +2195,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 070 — Criar a tabela de tradução única de status em _shared e cobri-la de teste
+### Etapa 075 — Criar a tabela de tradução única de status em _shared e cobri-la de teste
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-033
+- **Achados resolvidos:** A-037
 - **Problema hoje:** O mesmo acontecimento aparece com dois nomes diferentes no histórico do pedido dependendo de qual caminho o registrou, e a linha do tempo mostra etapas repetidas ou fora de ordem. Qualquer relatório que conte pedidos por status subconta, porque precisa conhecer as duas grafias.
 
   ```
@@ -2058,11 +2222,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 071 — Passar os pontos de escrita de status a usar a tradução única
+### Etapa 076 — Passar os pontos de escrita de status a usar a tradução única
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-033
+- **Achados resolvidos:** A-037
 - **Problema hoje:** O mesmo acontecimento aparece com dois nomes diferentes no histórico do pedido dependendo de qual caminho o registrou, e a linha do tempo mostra etapas repetidas ou fora de ordem. Qualquer relatório que conte pedidos por status subconta, porque precisa conhecer as duas grafias.
 
   ```
@@ -2072,7 +2236,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Trocar as conversões ad-hoc pelos helpers da etapa anterior nos pontos que escrevem status (webhook, api, uapi, sincronização). Um ponto por commit dentro da mesma PR, conferindo o teste Deno a cada troca. Atalho a evitar: manter o `switch` antigo como fallback — dois caminhos é exatamente o problema que esta etapa resolve.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
 - **Não tocar / armadilhas:** Não normalizar o histórico já gravado (UPDATE em massa em produção = chamar o dono); a leitura já tolera as duas grafias via normalizeOrderStatus. Cuidado com o teste src/lib/__tests__/lalamoveContract.test.ts:117-119, que exige que o enum canônico do front use 'CANCELED' e NÃO 'CANCELLED' — a unificação precisa ser cru↔interno, não a troca de um pelo outro.
-- **Depende de:** etapa 070 · **Libera:** —
+- **Depende de:** etapa 075 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `deno test --allow-net --allow-env supabase/functions/lalamove-webhook/ supabase/functions/lalamove-api/` verde; e no Postgres descartável, cada eventType conhecido grava um valor aceito pelo enum (nenhum UPDATE recusado).
@@ -2085,11 +2249,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 072 — Botões 'Trajeto' e 'Google' do popup do motorista não fazem nada em produção (listener nunca é anexado)
+### Etapa 077 — Botões 'Trajeto' e 'Google' do popup do motorista não fazem nada em produção (listener nunca é anexado)
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** A-034
+- **Achados resolvidos:** A-038
 - **Problema hoje:** No mapa ao vivo, clicar em 'Trajeto' ou 'Google' no balão do motorista não abre nada: o histórico de trajeto e o atalho para o Google Maps simplesmente não funcionam, e a equipe não tem como revisar o caminho percorrido por quem está em rota.
 
   ```
@@ -2100,7 +2264,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Prefira a segunda opção (montar nó DOM + `setDOMContent`) e evite `popup.on('open', ...)`: `addTo` dispara 'open' a cada abertura (node_modules/mapbox-gl/dist/mapbox-gl-dev.js:114803 `this.fire(new ref_properties.Event("open"));`), então o mesmo objeto de popup acumularia listeners a cada toggle e um clique em 'Trajeto' dispararia o evento N vezes. Com `setDOMContent` o listener nasce uma vez junto do nó. O resto do caminho (corrigir o mock do teste, não voltar a `onclick` inline) está correto.
 - **Arquivos e objetos a tocar:** `src/components/map/markerFactories.ts`, `src/components/map/LiveMap.tsx`, `src/components/map/__tests__/markerFactories.test.ts`
 - **Não tocar / armadilhas:** Com `setPopup` sendo chamado a cada atualização (useMapMarkers.ts:185-187), o popup é recriado e os listeners precisam ser reanexados — ligar no evento 'open' resolve isso naturalmente; anexar uma única vez fora do ciclo volta a quebrar após o primeiro refresh.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 210
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /live-map, clicar num marcador de motorista e depois em 'Trajeto': hoje nada acontece (nenhum evento 'show-driver-history' no console com `window.addEventListener('show-driver-history', console.log)`); após o fix, o painel de histórico (MapHistoryPanel) deve abrir. `npx vitest run src/components/map/__tests__/markerFactories.test.ts` (91 testes da área passam hoje mesmo com o defeito).
@@ -2113,11 +2277,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 073 — Falha do get-mapbox-token deixa o mapa ao vivo travado no spinner, sem mensagem e sem retry
+### Etapa 078 — Falha do get-mapbox-token deixa o mapa ao vivo travado no spinner, sem mensagem e sem retry
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** A-035
+- **Achados resolvidos:** A-039
 - **Problema hoje:** Se a sessão do operador expira ou o token do mapa sai do ar, a tela de rastreamento ao vivo fica girando para sempre sem dizer o que houve — o operador acha que não há entregas em andamento e ninguém descobre o motivo.
 
   ```
@@ -2141,11 +2305,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 074 — Regras de risco: 5 dos 8 campos oferecidos na tela não existem no avaliador — a regra é salva como Ativa e nunca dispara
+### Etapa 079 — Regras de risco: 5 dos 8 campos oferecidos na tela não existem no avaliador — a regra é salva como Ativa e nunca dispara
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — administração**
 
-- **Achados resolvidos:** A-036
+- **Achados resolvidos:** A-040
 - **Problema hoje:** O gestor cria uma regra de risco (por exemplo 'taxa de conclusão abaixo de 80% soma 3 pontos'), a tela confirma 'Regra criada com sucesso' e mostra a regra como Ativa, mas ela nunca pesa na avaliação dos motoristas. O score de risco continua ignorando o critério que o negócio definiu.
 
   ```
@@ -2156,7 +2320,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Acrescentar ao plano o saneamento das regras já gravadas: como o seed da migration de 2025-12-24 criou duas regras ativas com campos mudos, reduzir FIELD_OPTIONS não as remove do banco — é preciso uma migration que renomeie `completion_rate` para `success_rate` no JSONB dessas linhas (ou as desative explicitamente), senão o score continua errado em produção depois do fix da UI. Fora isso o caminho proposto está correto.
 - **Arquivos e objetos a tocar:** `src/pages/RiskRulesPage.tsx`, `src/pages/RiskRulesPage.dialogs.tsx`, `supabase/functions/evaluate-driver/index.ts`
 - **Não tocar / armadilhas:** O `score_impact` entra no score dividido por 2 (evaluate-driver/index.ts:712 `riskAnalysis.score + (ruleBonus / 2)`) — ao reativar regras que estavam mudas, o score de vários motoristas sobe de uma vez e pode disparar bloqueio automático (AUTO-BLOCKING em :750). Rever o impacto antes de habilitar em massa.
-- **Depende de:** — · **Libera:** etapa 210
+- **Depende de:** etapa 012 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select name, condition->>'field', is_active from risk_rules;` e comparar cada field com o switch de evaluate-driver/index.ts:425-457. Qualquer field fora da lista é uma regra morta. Depois do fix, rodar uma avaliação de motorista e conferir no log a linha '[evaluate-driver] Rule "<nome>" matched'.
@@ -2169,11 +2333,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 075 — Salvar permissões sempre falha: a chave do pendingChanges é quebrada por split('-') em UUID
+### Etapa 080 — Salvar permissões sempre falha: a chave do pendingChanges é quebrada por split('-') em UUID
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — administração**
 
-- **Achados resolvidos:** A-037
+- **Achados resolvidos:** A-041
 - **Problema hoje:** A tela de permissões por papel não grava nada. Quem tenta dar ou tirar acesso de gerente/operador/visualizador recebe erro genérico e acredita que o sistema está travado — na prática os acessos continuam exatamente como estavam.
 
   ```
@@ -2184,7 +2348,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Além do separador/estrutura aninhada proposta (ambos corretos), é obrigatório passar a conferir o `error` devolvido por insert/delete — sem isso o bug continua invisível mesmo com a chave corrigida, porque hoje o catch de :116 nunca é alcançado. O alerta contra `key.split('-').slice(1).join('-')` permanece válido.
 - **Arquivos e objetos a tocar:** `src/pages/PermissionsPage.tsx`
 - **Não tocar / armadilhas:** Não mexer no `if (selectedRole === 'admin') return;` (:86 e :92) — o bloqueio do papel admin é intencional. O `queryClient.invalidateQueries(['role-permissions'])` já usa a chave correta do hook (src/hooks/usePermissions.ts:83); não renomear.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 087
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** node -e "const [r,p]='manager-550e8400-e29b-41d4-a716-446655440000'.split('-');console.log(r,p)" → hoje imprime `manager 550e8400` (esperado: o UUID completo). Depois do fix, abrir /permissions como admin, ligar uma permissão de 'operator', Salvar e conferir a linha nova em role_permissions.
@@ -2197,11 +2361,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 076 — "Total de motoristas" do Analytics vem de uma consulta com limit(10) e nunca passa de 10
+### Etapa 081 — "Total de motoristas" do Analytics vem de uma consulta com limit(10) e nunca passa de 10
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-038
+- **Achados resolvidos:** A-042
 - **Problema hoje:** O painel informa que a operação tem 10 motoristas, qualquer que seja o tamanho real da frota — e o número contradiz o card "Total Motoristas" da página de Métricas.
 
   ```
@@ -2212,7 +2376,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correto. Observação: o padrão citado (src/hooks/useMetrics.ts:126-128, `.select('*', { count: 'exact', head: true })`) de fato existe e é o certo; só vale acrescentar que o `change: 0` desse indicador vai continuar fixo em 0 depois do fix — se quiserem variação, precisa de uma contagem com recorte de `created_at` da frota, que a tabela `drivers` precisa ter (verificar antes de prometer).
 - **Arquivos e objetos a tocar:** `src/hooks/useAnalyticsData.ts`, `src/pages/AnalyticsDashboardPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 011 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 176, etapa 177
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select count(*) from drivers;` versus o card "Total de motoristas" em Indicadores de Performance — o card para em 10.
@@ -2225,11 +2389,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 077 — Página "Fila de Jobs" não lê a tabela job_queue real; "Processando" e "Tempo Médio" são constantes
+### Etapa 082 — Página "Fila de Jobs" não lê a tabela job_queue real; "Processando" e "Tempo Médio" são constantes
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-039
+- **Achados resolvidos:** A-043
 - **Problema hoje:** A tela que deveria avisar que notificações, sincronizações e buscas de POD estão travadas mostra números de outra coisa: jobs realmente parados ou falhando ficam invisíveis, e o campo "Processando" nunca sai de zero.
 
   ```
@@ -2240,7 +2404,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto, com um porém: o próprio cabeçalho da migration (20261122120200_job_queue_system.sql:4-8) registra DRIFT — a tabela consta no ledger como aplicada mas não existia em produção. Antes de reescrever o hook, confirmar com o dono/MCP do banco oficial (iecgydonctmabiijadsf) que `job_queue` e `job_queue_processing_log` existem e têm RLS que permita leitura pelo papel manager; sem isso a tela troca dado falso por tela vazia/erro 42P01.
 - **Arquivos e objetos a tocar:** `src/hooks/useJobQueue.ts`, `src/pages/JobQueuePage.tsx`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261123160000_job_queue_processing_log.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 084
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com a fila real: `select status, count(*) from job_queue group by status;` e comparar com os cards da página. Hoje o card "Processando" fica 0 e "Tempo Médio" 2.0s qualquer que seja o resultado da query.
@@ -2253,11 +2417,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 078 — SLO: disponibilidade soma falhas que não estão no total de requisições e pode ficar negativa; o gráfico usa outra fórmula
+### Etapa 083 — SLO: disponibilidade soma falhas que não estão no total de requisições e pode ficar negativa; o gráfico usa outra fórmula
 
 **Onda 2 (Fluxos principais quebrados) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-040
+- **Achados resolvidos:** A-044
 - **Problema hoje:** O indicador principal de disponibilidade pode exibir valor impossível (negativo) e, em todo caso, discorda do gráfico logo abaixo, inutilizando a página para decidir se houve violação de SLO.
 
   ```
@@ -2268,7 +2432,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A primeira opção do caminho proposto (somar os erros de frontend ao denominador) está errada e deve ser descartada: `occurrence_count` agrega repetições do mesmo erro ao longo do tempo (:188), não é um evento de requisição — somá-lo ao denominador inflaria artificialmente o volume e mascararia falhas reais. Correção certa: tirar `frontendErrors` de `totalFailures` (:192) e mantê-lo apenas em `failureSources` (:300), já exibido em src/pages/SLODashboardPage.tsx:333. Com as populações alinhadas, o card passa a usar a mesma conta dos buckets e o `Math.max(0, …)` fica desnecessário.
 - **Arquivos e objetos a tocar:** `src/hooks/useSLOMetrics.ts`, `src/pages/SLODashboardPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 079, etapa 176, etapa 177
+- **Depende de:** etapa 029 · **Libera:** etapa 115, etapa 164
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Numa janela com poucas queries e muitos erros de frontend (ex.: 50 telemetrias, 400 ocorrências), o card de Disponibilidade mostra valor negativo enquanto o gráfico mostra ~100%.
@@ -2287,11 +2451,11 @@ Checklist de conclusão:
 ## Onda 3 — Integridade de dados e regras de negócio
 
 
-### Etapa 079 — A edge `new-device-alert` publicada responde 500 em vez de 422 — o alerta de login em dispositivo novo não é enviado
+### Etapa 084 — A edge `new-device-alert` publicada responde 500 em vez de 422 — o alerta de login em dispositivo novo não é enviado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Backend — notificação e fila**
 
-- **Achados resolvidos:** A-041
+- **Achados resolvidos:** A-045
 - **Problema hoje:** Ninguém recebe o aviso de "login de um dispositivo novo". Um acesso a partir de máquina desconhecida passa calado, que é exatamente o cenário para o qual esse alerta existe.
 
   ```
@@ -2301,7 +2465,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Mover a construção do cliente Resend para DEPOIS da validação do contrato (depois de `:51`), e checar a variável explicitamente: sem `RESEND_API_KEY`, responder 503 com mensagem clara em vez de 500 genérico — o padrão de resposta de erro tipado já existe em `supabase/functions/_shared/contract.ts` (`errorResponse`). Verifique também se a chave está configurada nos secrets da edge; se não estiver, a correção de código só troca o 500 por um 503 honesto e o alerta continua não saindo. Atalho a evitar: envolver só o construtor num try/catch e seguir — o alerta continua sem ser enviado, e sem ninguém saber.
 - **Arquivos e objetos a tocar:** `supabase/functions/new-device-alert/index.ts`
 - **Não tocar / armadilhas:** Não mexa no esquema do contrato (`_shared/schemas.ts`): os testes de integração que acusam o problema esperam exatamente o formato 422 atual.
-- **Depende de:** etapa 078 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 109
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `deno test --allow-net --allow-env --allow-read supabase/functions/_shared/contract.integration.test.ts` com os secrets do ambiente → os 3 casos de `new-device-alert` passam (`24 passed`). E um POST com corpo inválido na edge publicada deve devolver 422, não 500.
@@ -2314,11 +2478,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 080 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer) — parte 1/2
+### Etapa 085 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer)
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** A-042
+- **Achados resolvidos:** A-046
 - **Problema hoje:** Depois que o operador sai da tela de Alertas, os alertas críticos param de aparecer na hora (só voltam no refresh automático de 30 s, sem aviso sonoro nem notificação); e enquanto várias telas estão abertas o mesmo alerta toca e aparece repetido.
 
   ```
@@ -2328,14 +2492,12 @@ Checklist de conclusão:
 - **Caminho recomendado:** 1) Tornar a assinatura única e com contagem de consumidores: criar o canal uma vez (provider no topo da árvore, como já faz AppLayout) e expor só o registro de callbacks — a infraestrutura já está escrita e sem uso no mesmo arquivo (`useRealtimeManager`, src/hooks/useRealtimeSubscriptions.ts:38-150, com `subscribersRef` e um único canal 'consolidated-realtime'). 2) Remendo mínimo enquanto isso: nome de canal único por montagem (`alerts-${useId()}`), aceitando o toast duplicado. Atalho tentador a evitar: apenas remover o `removeChannel` do cleanup — isso vaza canal e duplica ligações a cada navegação, piorando o item (a).
   AJUSTE DO REVISOR: O remendo 2 proposto está ERRADO e é perigoso: nome de canal único por montagem (`alerts-${useId()}`) cria 5 canais distintos, e aí a duplicação de toast/som/push — que hoje NÃO existe por causa da deduplicação em RealtimeChannel.js:791-797 — passa a existir de verdade, além de 5 joins no websocket. Não faça isso.
 Correção mínima e segura: ter UM único assinante. Separar src/hooks/useActiveAlerts.ts em (a) `useActiveAlerts()` só com a query e (b) a assinatura, chamada em um lugar só — AppLayout.tsx:86, que é o topo da árvore e já fica montado em todas as rotas autenticadas; remover `useAlertsRealtime` do caminho usado por Header/MobileBottomNav/AlertsPage/DashboardRedesigned. Diff pequeno, sem provider novo, e elimina tanto o `removeChannel` prematuro quanto o risco de duplicação. O caminho 1 (ligar o `useRealtimeManager` de useRealtimeSubscriptions.ts:36, hoje código morto — confirmado: zero chamadas no repo, e listado como órfão em docs/pendencias/P-16-hooks-orfaos-triagem.md:39) é o destino correto a prazo, mas é reescrita e não cabe no mesmo fix.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/hooks/useRealtimeSubscriptions.ts`, `src/hooks/useActiveAlerts.ts`, `src/components/layout/Header.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/MobileBottomNav.tsx`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/hooks/useRealtimeSubscriptions.ts`, `src/hooks/useActiveAlerts.ts`, `src/components/layout/Header.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/MobileBottomNav.tsx`
+- **Arquivos e objetos a tocar:** `src/hooks/useRealtimeSubscriptions.ts`, `src/hooks/useActiveAlerts.ts`, `src/components/layout/Header.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/MobileBottomNav.tsx`, `src/pages/AlertsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`
 - **Não tocar / armadilhas:** Não renomeie tópicos sem checar docs/agentes/regras-dominio.md; e não altere useAlertsRealtime confiando em src/hooks/__tests__/useActiveAlerts.test.ts:32, que mocka o hook (`useAlertsRealtime: vi.fn()`) e por isso passa com e sem o bug.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 072 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com o app em dev, abrir /alertas, voltar ao dashboard e inserir um alerta no Postgres descartável (`supabase start`): o toast e o som não aparecem mais. O log '[AlertsRealtime] Cleaning up subscription' (useRealtimeSubscriptions.ts:271) mostra o canal removido enquanto Header/AppLayout seguem montados.
-  Nesta etapa, a verificação vale para: `src/hooks/useRealtimeSubscriptions.ts`, `src/hooks/useActiveAlerts.ts`, `src/components/layout/Header.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/MobileBottomNav.tsx`.
 
 Checklist de conclusão:
 
@@ -2345,42 +2507,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 081 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer) — parte 2/2
-
-**Onda 3 (Integridade de dados e regras de negócio) / Alta / Hooks e estado — dados de negócio**
-
-- **Achados resolvidos:** A-042
-- **Problema hoje:** Depois que o operador sai da tela de Alertas, os alertas críticos param de aparecer na hora (só voltam no refresh automático de 30 s, sem aviso sonoro nem notificação); e enquanto várias telas estão abertas o mesmo alerta toca e aparece repetido.
-
-  ```
-  src/hooks/useRealtimeSubscriptions.ts:164 `.channel('alerts-consolidated')`; :272 `supabase.removeChannel(channel);`; src/hooks/useActiveAlerts.ts:46 `useAlertsRealtime(isAuthenticated);` e :51 `refetchInterval: 30000,`; node_modules/@supabase/realtime-js/dist/main/RealtimeClient.js:340-349 (reuso por tópico) e :257-262 (`removeChannel` → `unsubscribe` + `teardown`); REFUTA a duplicação: node_modules/@supabase/realtime-js/dist/main/RealtimeChannel.js:791-797 (binding `postgres_changes` duplicado é ignorado)
-  ```
-- **Causa raiz:** Cada montagem de useActiveAlerts (Header, AppLayout, MobileBottomNav, AlertsPage, DashboardRedesigned) chama supabase.channel('alerts-consolidated'), que devolve SEMPRE o mesmo objeto de canal, e cada uma adiciona suas próprias ligações `.on('postgres_changes', ...)`. Duas consequências: (a) o handler de INSERT roda uma vez por consumidor montado, repetindo toast, som e invalidação; (b) no cleanup, o primeiro consumidor que desmonta executa `removeChannel` no canal compartilhado e derruba as ligações de todos os outros, que continuam montados e cujos efeitos não rodam de novo — o tempo real morre até que algum componente monte de novo. O mesmo padrão existe em 'sidebar-counts-consolidated' (Sidebar + MobileSidebar) e nos demais tópicos fixos do arquivo.
-- **Caminho recomendado:** 1) Tornar a assinatura única e com contagem de consumidores: criar o canal uma vez (provider no topo da árvore, como já faz AppLayout) e expor só o registro de callbacks — a infraestrutura já está escrita e sem uso no mesmo arquivo (`useRealtimeManager`, src/hooks/useRealtimeSubscriptions.ts:38-150, com `subscribersRef` e um único canal 'consolidated-realtime'). 2) Remendo mínimo enquanto isso: nome de canal único por montagem (`alerts-${useId()}`), aceitando o toast duplicado. Atalho tentador a evitar: apenas remover o `removeChannel` do cleanup — isso vaza canal e duplica ligações a cada navegação, piorando o item (a).
-  AJUSTE DO REVISOR: O remendo 2 proposto está ERRADO e é perigoso: nome de canal único por montagem (`alerts-${useId()}`) cria 5 canais distintos, e aí a duplicação de toast/som/push — que hoje NÃO existe por causa da deduplicação em RealtimeChannel.js:791-797 — passa a existir de verdade, além de 5 joins no websocket. Não faça isso.
-Correção mínima e segura: ter UM único assinante. Separar src/hooks/useActiveAlerts.ts em (a) `useActiveAlerts()` só com a query e (b) a assinatura, chamada em um lugar só — AppLayout.tsx:86, que é o topo da árvore e já fica montado em todas as rotas autenticadas; remover `useAlertsRealtime` do caminho usado por Header/MobileBottomNav/AlertsPage/DashboardRedesigned. Diff pequeno, sem provider novo, e elimina tanto o `removeChannel` prematuro quanto o risco de duplicação. O caminho 1 (ligar o `useRealtimeManager` de useRealtimeSubscriptions.ts:36, hoje código morto — confirmado: zero chamadas no repo, e listado como órfão em docs/pendencias/P-16-hooks-orfaos-triagem.md:39) é o destino correto a prazo, mas é reescrita e não cabe no mesmo fix.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/pages/AlertsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/pages/AlertsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`
-- **Não tocar / armadilhas:** Não renomeie tópicos sem checar docs/agentes/regras-dominio.md; e não altere useAlertsRealtime confiando em src/hooks/__tests__/useActiveAlerts.test.ts:32, que mocka o hook (`useAlertsRealtime: vi.fn()`) e por isso passa com e sem o bug.
-- **Depende de:** etapa 028 · **Libera:** etapa 114, etapa 164
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Com o app em dev, abrir /alertas, voltar ao dashboard e inserir um alerta no Postgres descartável (`supabase start`): o toast e o som não aparecem mais. O log '[AlertsRealtime] Cleaning up subscription' (useRealtimeSubscriptions.ts:271) mostra o canal removido enquanto Header/AppLayout seguem montados.
-  Nesta etapa, a verificação vale para: `src/pages/AlertsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 082 — A CI da `main` está vermelha há três execuções e o AGENTS.md afirma por escrito que está verde
+### Etapa 086 — A CI da `main` está vermelha há três execuções e o AGENTS.md afirma por escrito que está verde
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Infra, CI e deploy**
 
-- **Achados resolvidos:** A-043
+- **Achados resolvidos:** A-047
 - **Problema hoje:** O próximo agente de IA lê no manual do projeto que a integração contínua está verde, não confere, e passa a trabalhar sobre uma base que já está quebrada — e o teste que detecta edge quebrada em produção não impede nenhum merge.
 
   ```
@@ -2390,7 +2521,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Duas etapas separadas, nesta ordem: (1) corrigir a causa do vermelho (o 500 da `new-device-alert`, que tem achado próprio); (2) corrigir a frase do `AGENTS.md` para apontar para a fonte e não para um estado congelado — em vez de "a CI está verde desde …", escrever "confira o estado atual em Actions antes de mergear". Só depois disso faz sentido pedir ao dono para incluir `Deno Edge Function I/O Integration Tests` nos required checks. Atalho a evitar: incluir o job nos required checks antes de corrigir o 500 — a `main` trava para todo mundo.
 - **Arquivos e objetos a tocar:** `AGENTS.md`, `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** O `AGENTS.md` é vigiado por `scripts/ci/check-agents-md-integrity.mjs`: a alteração precisa passar por ele (rode `node scripts/ci/check-agents-md-integrity.mjs` antes do push).
-- **Depende de:** etapa 069 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 105
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Depois do fix do 500, o run seguinte do `CI/CD` na `main` deve concluir `success`. E `grep -n "CI da .main. está verde" AGENTS.md` não deve mais devolver afirmação de estado.
@@ -2403,11 +2534,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 083 — Avaliação de risco não é gravada para nenhum motorista com falha: CHECK de failure_rate espera fração, a edge grava percentual
+### Etapa 087 — Avaliação de risco não é gravada para nenhum motorista com falha: CHECK de failure_rate espera fração, a edge grava percentual
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** A-044
+- **Achados resolvidos:** A-048
 - **Problema hoje:** O histórico de avaliação de motoristas de risco — justamente os que importam — não existe no banco. A tela de Avaliações mostra só motoristas sem nenhuma falha, e não há como auditar depois por que um motorista foi bloqueado.
 
   ```
@@ -2418,7 +2549,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A migration proposta (DROP CONSTRAINT IF EXISTS + recriar com 0..100) está correta, e manter percentual é a escolha certa — risk_score já usa 0..100 na constraint irmã (20260712113111:2) mesmo com a edge gravando 0..10, e a UI exibe percentual. Mas o segundo passo do auditor está errado no mecanismo: trocar o catch por log não resolve, porque o catch nunca dispara. O certo é `const { error } = await supabase.from('driver_evaluations').insert([...]); if (error) { logger.error(...); return false; }` e só então logar sucesso — vale também para o `.update()` de `drivers` em index.ts:733 e para os inserts de `driver_approval_queue`/`alerts` (index.ts:770, 781), todos sem verificação de erro. Atenção extra: antes de aplicar a nova constraint, confira se há linhas legadas em fração (gravadas antes da edge mudar de unidade), senão o ALTER passa mas os relatórios misturam escalas.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260712113111_afc9cefc-6f90-498e-8922-63e5a1ee8345.sql`, `supabase/functions/evaluate-driver/index.ts`, `src/pages/EvaluationsPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 105
+- **Depende de:** etapa 080 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Em produção: select count(*) from driver_evaluations where failure_rate > 1; hoje deve ser 0 enquanto existem motoristas com drivers.failure_rate > 1. Depois do apply, chamar evaluate-driver para um motorista com falhas e conferir que a linha aparece em driver_evaluations.
@@ -2431,11 +2562,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 084 — Minutos de aviso e de crítico configurados em /alert-configurations não têm efeito nenhum no alerta de motorista parado
+### Etapa 088 — Minutos de aviso e de crítico configurados em /alert-configurations não têm efeito nenhum no alerta de motorista parado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** A-045
+- **Achados resolvidos:** A-049
 - **Problema hoje:** O operador ajusta "avisar quando o motorista ficar parado X minutos", a tela salva e mostra o valor salvo, e o sistema continua avisando aos 5 minutos — alerta demais ou de menos sem ninguém entender por quê.
 
   ```
@@ -2446,7 +2577,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está certo, inclusive no alerta sobre o channel. Um ajuste de ordem: hoje stalled_threshold_minutes tem DEFAULT 15 na tabela (supabase/migrations/20260517125817_5fbfe94b-4f32-4095-b9cd-634493fc2bab.sql:5), ou seja todo pedido já traz valor e o `??` do campo por pedido vence sempre — a configuração da tela continuaria sem efeito. Para a tela passar a valer, a precedência precisa ser warning_minutes global e o campo do pedido só quando ele foi editado para algo diferente do default, ou o dono decide que o campo por pedido é o dono da regra e a tela para de oferecer esses dois minutos (nesse caso o defeito é a tela, não a edge). Decisão do dono, não do agente.
 - **Arquivos e objetos a tocar:** `supabase/functions/check-driver-alerts/index.ts`, `src/hooks/useAlertSettings.ts`, `src/pages/alert-configurations/AlertConfigCard.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 077 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Definir aviso 20 min na tela; com um pedido sem stalled_threshold_minutes e motorista parado há 7 min, nenhum alerta DRIVER_STOPPED pode ser criado; aos 21 min tem de aparecer WARNING e aos 41 min virar CRITICAL.
@@ -2459,11 +2590,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 085 — Regra de risco configurada como "+N pontos" só aplica metade
+### Etapa 089 — Pontualidade é calculada com três fórmulas diferentes e uma delas conta pedido sem prazo como "no prazo"
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** A-046
+- **Achados resolvidos:** A-050
+- **Problema hoje:** O painel, a tela de SLA e o relatório mostram percentuais de pontualidade diferentes para o mesmo período, e todos tendem a inflar o número porque pedido sem prazo registrado entra como pontual.
+
+  ```
+  src/hooks/useSLAMetrics.ts:80-84 — "const onTimeOrders = completedOrders.filter(o => {\n    if (!o.estimated_delivery || !o.actual_delivery) return true;"; src/hooks/useDashboardStats.ts:91-96 — "// Consider on-time if delivered within estimated time or within 15 min of scheduled\n        if (order.estimated_delivery) { ... } else {\n          if (diffMinutes <= 60) onTimeCount++;"; src/hooks/useAdvancedReports.ts:346-347 — "const onTime = completedRows.filter((r) => (r.delay_minutes || 0) <= 0).length;".
+  ```
+  Mesma causa, outro local — Interface — painéis e relatórios:
+  ```
+  src/hooks/useSLAMetrics.ts:80-89 e :168-170; src/hooks/useAdvancedReports.ts:334; src/pages/reports/useReportData.ts:100-102 e :110.
+  ```
+- **Causa raiz:** A mesma métrica de negócio ("Pontualidade") foi implementada três vezes, cada uma com um critério de pontualidade e um tratamento diferente para dado faltante, e nenhuma separa "no prazo" de "não dá para medir".
+- **Caminho recomendado:** Extrair uma função única em src/lib/ (ex.: `isOnTime(order)` + `onTimeRate(orders)`) que: (a) só considera mensurável o pedido com actual_delivery e (estimated_delivery ou delay_minutes não nulo); (b) usa esses mensuráveis como denominador; (c) devolve também a contagem de não-mensuráveis para a tela poder dizer "X pedidos sem prazo registrado". Trocar as três implementações por ela. Referência de organização: src/lib/utils.ts e src/lib/statusPalette.ts já concentram regras compartilhadas, e há teste ao lado em src/hooks/__tests__/useSLAMetrics.test.ts para ancorar o comportamento novo. Atalho a evitar: igualar as três fórmulas copiando uma delas — a de useSLAMetrics tem o viés de contar sem-prazo como pontual.
+  AJUSTE DO REVISOR: Caminho aceito. Dois acréscimos: incluir no escopo o fallback de useSLAMetrics.ts:168-170 (hoje devolve onTimeRate 100 quando não há pedido concluído — a tela mostra 100% de pontualidade sem nenhum dado) e lembrar que useDashboardStats usa scheduled_at, não estimated_delivery, como base do atraso, então a função única precisa definir qual campo é o prazo contratual antes de substituir as três.
+- **Arquivos e objetos a tocar:** `src/hooks/useAdvancedReports.ts`, `src/hooks/useDashboardStats.ts`, `src/hooks/useSLAMetrics.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/pages/SLADashboardPage.tsx`, `src/pages/reports/useReportData.ts`
+- **Não tocar / armadilhas:** —
+- **Depende de:** — · **Libera:** etapa 107
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Com um conjunto de 10 pedidos concluídos dos quais 4 sem estimated_delivery e 2 atrasados, as três telas têm de mostrar o mesmo percentual (4 de 6 mensuráveis = 67%), não 80%/60%/100%.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 090 — Regra de risco configurada como "+N pontos" só aplica metade
+
+**Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
+
+- **Achados resolvidos:** A-051
 - **Problema hoje:** Quem configura as regras de risco em /risk-rules acha que está somando 4 pontos e soma 2; a justificativa gravada no alerta diz "+4 pontos" e o score não bate com ela.
 
   ```
@@ -2487,11 +2650,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 086 — Score de risco do motorista: fórmula e faixas divergem do que está documentado, e mais fatores de risco podem BAIXAR o score
+### Etapa 091 — Score de risco do motorista: fórmula e faixas divergem do que está documentado, e mais fatores de risco podem BAIXAR o score
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** A-047
+- **Achados resolvidos:** A-052
 - **Problema hoje:** O número de risco que aparece na tela e dispara bloqueio automático não é o que foi combinado, e pode premiar o motorista pior: um motorista com taxa de falha alta E atrasos E nota baixa E cancelamentos pode receber score MENOR do que um que só tem a taxa de falha alta — e escapar do bloqueio.
 
   ```
@@ -2502,7 +2665,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto na direção (soma ponderada com divisor constante), mas acrescente duas coisas antes de executar: (1) `drivers` não tem coluna de data da última entrega usada pelo cálculo — a edge só ESCREVE `last_active_at` (index.ts:739) e o sub-score de recência precisa de uma fonte real (data do último pedido em `lalamove_orders`, que a função já busca em index.ts:640-645); decida isso com o dono antes de prometer os 15%. (2) Trocar a fórmula muda quem é auto-bloqueado: `makeDecision` decide por `riskAnalysis.level` e `stats`, então o PR tem de reavaliar os limites de bloqueio junto, e as regras de `/risk-rules` entram como `score_impact` dividido por 2 sobre o score final (index.ts:716) — esse bônus também precisa ser reescalado, ou o efeito das regras cadastradas muda de tamanho sem ninguém pedir. Esta correção deve vir ANTES da do achado das faixas duplicadas, não depois.
 - **Arquivos e objetos a tocar:** `supabase/functions/evaluate-driver/index.ts`, `docs/agentes/regras-dominio.md`, `docs/pendencias/_regras-de-negocio.md`, `README.md`
 - **Não tocar / armadilhas:** Mudar o peso muda quem é bloqueado automaticamente: `makeDecision` (index.ts:300-325) bloqueia tudo que for CRITICAL. Rebaixar os cortes para 2,5/5/7,5 sem recalibrar os sub-scores pode bloquear motoristas que hoje passam. drivers.risk_score tem CHECK 0..10 (migration 20251224143803:87) — o score final precisa continuar nessa faixa.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 141
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Teste de mesa com dois motoristas: (A) failureRate 21%, nada mais; (B) failureRate 21% + 15 entregas + atraso 16min + nota 3,5 + cancelamento 12%. Hoje A=10 (CRITICAL, bloqueado) e B=7,4 (HIGH, não bloqueado). Depois do fix B tem de ser >= A. Cobrir com teste em supabase/functions/evaluate-driver (padrão de deno test já usado em _shared/contract.test.ts).
@@ -2515,11 +2678,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 087 — Tolerância de atraso do ETA tem duas fontes diferentes; a do job-worker usa o campo de intervalo entre alertas como se fosse regra de negócio
+### Etapa 092 — Tolerância de atraso do ETA tem duas fontes diferentes; a do job-worker usa o campo de intervalo entre alertas como se fosse regra de negócio
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** A-048
+- **Achados resolvidos:** A-053
 - **Problema hoje:** Ao ajustar a tolerância de atraso o dono muda só metade do sistema; e ao ajustar de quanto em quanto tempo o alerta pode repetir (min_interval_seconds) ele muda, sem saber, a própria regra de o que conta como atraso.
 
   ```
@@ -2530,7 +2693,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto válido (ler late_tolerance_min de geo_defaults e usar alert_configurations só para is_enabled). Acrescento: geo_defaults é linha única com RLS (20261122130100_geo_foundation.sql) e o job-worker roda com service_role, então a leitura passa; e o fallback do código deve ser 15 (igual ao DEFAULT da coluna late_tolerance_min, 20261122131000:32) e não 900/60, para não reintroduzir o número 5. NÃO VERIFICADO em produção: sem MCP do projeto iecgydonctmabiijadsf não consigo confirmar o valor atual das duas colunas no banco oficial — a divergência 5 vs 15 está provada pelos defaults do schema, não por query.
 - **Arquivos e objetos a tocar:** `supabase/functions/job-worker/index.ts`, `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261121193000_fix_escalation_pipeline.sql`
 - **Não tocar / armadilhas:** Os dois caminhos emitem via geo_emit_event, que deduplica por (order_id, event_type, stop_index) — então hoje quem chega primeiro vence e o outro é silenciosamente descartado; ao alinhar a tolerância, não remover o dedup achando que virou duplicata.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 050 · **Libera:** etapa 093
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com late_tolerance_min = 30 em geo_defaults e min_interval_seconds = 900 em alert_configurations, um pedido com ETA 20 min além do scheduled_at não pode gerar ETA_DELAY: conferir que não há linha nova em order_geo_events com event_type='ETA_DELAY' para esse pedido.
@@ -2543,11 +2706,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 088 — DRIVER_ASSIGNED força status 'MATCHED' sem guarda e sem registrar nada no histórico
+### Etapa 093 — DRIVER_ASSIGNED força status 'MATCHED' sem guarda e sem registrar nada no histórico
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-049
+- **Achados resolvidos:** A-054
 - **Problema hoje:** A atribuição e a troca de motorista não aparecem na linha do tempo do pedido — ninguém consegue auditar quando e por que o motorista mudou. E um aviso atrasado da Lalamove pode fazer um pedido já concluído voltar a 'Motorista atribuído'.
 
   ```
@@ -2563,7 +2726,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está certo em separar as escritas, mas há uma ordem obrigatória que ele não cita: `updateOrderStatus` faz um SELECT do status atual (index.ts:319-320) para preencher `old_status`, então ele precisa ser chamado ANTES do UPDATE de driver_id/driver_phone — senão o `old_status` já veio alterado. Também não dá para depender da 'guarda de transição do achado anterior': ela não existe no repositório (nenhum trigger ou CHECK de transição em supabase/migrations), logo a condição de não rebaixar precisa ser escrita dentro do próprio updateOrderStatus (ignorar o novo status quando o atual já é COMPLETED/CANCELLED/CANCELED/REJECTED/EXPIRED — a mesma lista que já está em index.ts:334).
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** 'MATCHED' não existe no vocabulário da Lalamove v3 — é um estado só interno; ao normalizar, src/lib/lalamoveTimeline.ts:39 o traduz para 'ON_GOING'. Não trocar 'MATCHED' por outro valor sem ajustar junto o seed de bitrix24_stage_mappings (que mapeia 'MATCHED' → PREPARATION) e os dois statusConfig da UI.
-- **Depende de:** — · **Libera:** etapa 108
+- **Depende de:** etapa 092 · **Libera:** etapa 094, etapa 223
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No Postgres descartável, disparar DRIVER_ASSIGNED para um pedido e consultar `select status, old_status, change_reason from lalamove_status_history where order_id = '<uuid>' order by created_at desc limit 3` — hoje não aparece nenhuma linha para a atribuição; depois do fix deve aparecer uma com status='MATCHED'.
@@ -2576,11 +2739,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 089 — Fila de aprovação aceita decisão em cima de decisão: dois gestores simultâneos, e o desfazer devolve motorista bloqueado para 'aguardando aprovação'
+### Etapa 094 — Fila de aprovação aceita decisão em cima de decisão: dois gestores simultâneos, e o desfazer devolve motorista bloqueado para 'aguardando aprovação'
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** A-050
+- **Achados resolvidos:** A-055
 - **Problema hoje:** Um motorista que foi bloqueado por risco pode voltar silenciosamente para a fila como 'aguardando aprovação' e ser aprovado em seguida. E a decisão de um gestor pode ser sobrescrita pela de outro sem ninguém perceber.
 
   ```
@@ -2591,7 +2754,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Itens 1 e 2 estão corretos. No item 3, a RPC citada como modelo (`end_order_tracking`) está em supabase/migrations/20261123200000_optout_and_tracking_end.sql:78-110, não na linha 78 exata do arquivo como "exemplo de aprovação" — é só analogia de padrão. E atenção: criar a RPC é DDL em produção, então pelo AGENTS.md esse item volta para o dono; os itens 1 e 2 resolvem o pior efeito (destravar blacklist) sem DDL.
 - **Arquivos e objetos a tocar:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `supabase/functions/evaluate-driver/index.ts`
 - **Não tocar / armadilhas:** Existem dois hooks de aprovação (useApprovalActions e useApprovalActionsEnhanced); o segundo apenas embrulha o primeiro (useApprovalActionsEnhanced.ts:2,11), então o fix no primeiro cobre as duas telas (DashboardRedesigned.tsx:59 e ApprovalsPage.tsx:26) — não duplicar a correção. O evaluate-driver já protege WHITELIST e BLACKLIST (index.ts:581,616), mas só na avaliação automática; o desfazer do front passa por cima.
-- **Depende de:** — · **Libera:** etapa 141
+- **Depende de:** etapa 093 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Abrir a mesma solicitação em duas abas, aprovar numa e rejeitar na outra: hoje as duas mostram sucesso e vence a última. Depois do fix, a segunda deve avisar que a solicitação já foi decidida. Para o desfazer: blacklistar um motorista e, em seguida, usar o desfazer de uma aprovação anterior dele — `select status from drivers where id='<uuid>'` deve continuar BLACKLIST.
@@ -2604,43 +2767,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 090 — Taxa de pontualidade tem três fórmulas divergentes e conta entrega sem prazo como "no prazo"
+### Etapa 095 — usage_ratio é gravado em duas escalas diferentes pelas edges; o painel de Quota mostra 0,9% no lugar de 90% e o alerta crítico dispara errado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-051
-- **Problema hoje:** A mesma operação aparece com pontualidades diferentes em três telas, e a mais visível (o medidor grande do Dashboard SLA) é a mais otimista — marca 100% "Excelente" num dia sem nenhuma entrega concluída.
-
-  ```
-  src/hooks/useSLAMetrics.ts:80-89 e :168-170; src/hooks/useAdvancedReports.ts:334; src/pages/reports/useReportData.ts:100-102 e :110.
-  ```
-  Mesma causa, outro local — Regras de negócio — cálculos:
-  ```
-  src/hooks/useSLAMetrics.ts:80-84 — "const onTimeOrders = completedOrders.filter(o => {\n    if (!o.estimated_delivery || !o.actual_delivery) return true;"; src/hooks/useDashboardStats.ts:91-96 — "// Consider on-time if delivered within estimated time or within 15 min of scheduled\n        if (order.estimated_delivery) { ... } else {\n          if (diffMinutes <= 60) onTimeCount++;"; src/hooks/useAdvancedReports.ts:346-347 — "const onTime = completedRows.filter((r) => (r.delay_minutes || 0) <= 0).length;".
-  ```
-- **Causa raiz:** Três hooks definem o mesmo indicador de formas diferentes: o SLA trata dado faltante como pontual (`return true`) e ainda devolve 100% quando não há entregas concluídas; o Relatório Avançado trata `delay_minutes` nulo como zero (pontual); o Relatório de Entregas exige os dois timestamps (exclui).
-- **Caminho recomendado:** Definir uma única função de pontualidade (ex.: src/lib/sla.ts) com a regra estrita já usada em useReportData.ts:101 — só entra no cálculo quem tem prazo e entrega registrados — e consumi-la nos três hooks; sem base elegível, devolver null e a UI mostrar "sem dados" em vez de 100 (SLADashboardPage.tsx:132 já tem espaço para isso). Armadilha: `onTimeDeliveries + lateDeliveries` hoje não fecha com `completedOrders`; ao corrigir, acertar os três contadores do mesmo card.
-  AJUSTE DO REVISOR: Caminho válido, mas incompleto: além dos três contadores do card, o mesmo viés está no gráfico horário do próprio SLA — src/hooks/useSLAMetrics.ts:137 `if (!o.estimated_delivery || new Date(o.actual_delivery) <= new Date(o.estimated_delivery)) { stats.onTime++; }`. Se a função única não for aplicada também aí, a barra por hora continua divergindo do card. Em useAdvancedReports.ts a regra `delay_minutes` também aparece em :403 e :463 (por grupo e por ranking) — trocar nos três lugares, senão os cards do mesmo relatório passam a discordar entre si.
-- **Arquivos e objetos a tocar:** `src/hooks/useAdvancedReports.ts`, `src/hooks/useDashboardStats.ts`, `src/hooks/useSLAMetrics.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/pages/SLADashboardPage.tsx`, `src/pages/reports/useReportData.ts`
-- **Não tocar / armadilhas:** —
-- **Depende de:** etapa 049 · **Libera:** etapa 091, etapa 092
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Com zero entregas COMPLETED no dia, abrir o Dashboard SLA: mostra 100% "Excelente". Com entregas concluídas sem estimated_delivery, comparar o mesmo dia em SLA, Relatórios e Relatórios Avançados — os três percentuais divergem.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 091 — usage_ratio é gravado em duas escalas diferentes pelas edges; o painel de Quota mostra 0,9% no lugar de 90% e o alerta crítico dispara errado
-
-**Onda 3 (Integridade de dados e regras de negócio) / Alta / Interface — painéis e relatórios**
-
-- **Achados resolvidos:** A-052
+- **Achados resolvidos:** A-056
 - **Problema hoje:** No painel de Quota, as chamadas feitas por um dos caminhos aparecem como 0,9% de uso quando o consumo real é 90% — o dono não vê que está perto do limite da Lalamove. E a trigger dispara alerta de quota crítica para qualquer chamada com mais de 0,95% de uso registrada pelo outro caminho, enchendo os alertas de falso positivo.
 
   ```
@@ -2651,7 +2782,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O destino (escala 0–100) está certo, mas a justificativa está trocada: a linha 42 da trigger faz `COALESCE(NEW.usage_ratio,0) * 100` com formato `%.0f%%`, ou seja, ela espera 0–1, não 0–100. Portanto, ao padronizar em 0–100 é preciso alterar DOIS pontos da função `notify_lalamove_quota_low` — o limiar da linha 22 (`>= 0.95` → `>= 95`) E a linha 42 (remover o `* 100`, senão a mensagem passa a dizer 9000%). O resto do plano (multiplicar por 100 no gateway + migration de normalização do histórico) está correto.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `src/pages/LalamoveQuotaPage.tsx`, `src/hooks/useLalamoveQuota.ts`, `supabase/migrations/20260723132258_bb348d49-2f3a-458f-885a-327cabee5179.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 090 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select method, endpoint, limit_total, limit_remaining, usage_ratio from lalamove_rate_limits order by created_at desc limit 20;` — linhas com remaining/total equivalentes aparecem com usage_ratio em ordens de grandeza diferentes (ex.: 90.00 e 0.90).
@@ -2664,7 +2795,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 092 — Auditoria de MFA nunca grava: log_mfa_session() insere na coluna aal_level, que não existe, e omite duas colunas NOT NULL
+### Etapa 096 — Auditoria de MFA nunca grava: log_mfa_session() insere na coluna aal_level, que não existe, e omite duas colunas NOT NULL
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Banco — integridade e índices**
 
@@ -2679,7 +2810,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A migration aditiva proposta está tecnicamente correta, mas é trabalho jogado fora se feita antes da decisão de produto: como nada chama a função (nenhum trigger, EXECUTE revogado de todos os papéis), consertar o INSERT não produz um único registro. Inverter a ordem: primeiro decidir com o dono se o registro de sessão MFA vem de trigger, da edge de login ou do front; e só então a migration (coluna + defaults + recriação da função) junto com o chamador, no mesmo PR. Além disso, `factor_id` não sai de `auth.jwt() -> 'amr'` de forma confiável (amr é um array de métodos, não o id do fator) — tirar o factor_id do `auth.mfa_factors` do usuário ou deixar a coluna nula explicitamente.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql`, `supabase/migrations/20260516112923_4931320e-6f67-4667-8eae-490bb7d9564c.sql`, `src/hooks/useSecurityPushNotifications.ts`, `src/integrations/supabase/types.ts`
 - **Não tocar / armadilhas:** DDL em produção: pede confirmação do dono (regra do AGENTS.md). Não dropar e recriar `mfa_sessions` — a tabela está publicada no realtime e é assinada por src/hooks/useSecurityPushNotifications.ts:178-199; recriar derruba a assinatura. Também não mexer em `is_aal2()` (20260516112923:2-7), que funciona e é usada por policies.
-- **Depende de:** etapa 090 · **Libera:** etapa 093, etapa 223
+- **Depende de:** — · **Libera:** etapa 195
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select column_name, is_nullable from information_schema.columns where table_name='mfa_sessions'` deve listar `aal_level`. Depois `select public.log_mfa_session()` dentro de uma sessão autenticada (ou um INSERT manual equivalente) deve retornar sem erro e `select count(*) from mfa_sessions` deve crescer. Hoje o INSERT da função devolve 42703.
@@ -2692,7 +2823,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 093 — Schema local divergente do de produção: CREATE TABLE IF NOT EXISTS antigo vence e as migrations de restauração viram no-op
+### Etapa 097 — Schema local divergente do de produção: CREATE TABLE IF NOT EXISTS antigo vence e as migrations de restauração viram no-op
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Banco — integridade e índices**
 
@@ -2707,7 +2838,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Remova da correção o item de driver_stats_cache: trocar o create da 20251226020000:15 por `DROP ... CASCADE` + create é no-op, porque o DROP CASCADE já está na linha 13 logo acima. A parte válida é só o bloco de normalização pós-`CREATE TABLE IF NOT EXISTS` em cache_refresh_log (`ALTER TABLE public.cache_refresh_log DROP CONSTRAINT IF EXISTS unique_running_refresh;`) e em audit_log (recriar a FK de user_id com ON DELETE SET NULL) — o que, em audit_log, é o mesmo trabalho do achado das FKs sem ON DELETE e deve ir numa única migration para não duplicar.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`
 - **Não tocar / armadilhas:** Em produção algumas dessas tabelas simplesmente não existem (job_queue, system_logs, saved_filters, entity_versions — ver 20261122120200_job_queue_system.sql:4-8); os ALTERs precisam ser idempotentes para não quebrar nos dois lados. Não confiar no nome do arquivo nem no ledger para saber o que existe: conferir em pg_catalog.
-- **Depende de:** etapa 092 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Depois de destravar a cadeia (achado anterior), rodar `supabase db reset` e comparar: `select conname from pg_constraint where conrelid='public.cache_refresh_log'::regclass` não deve listar `unique_running_refresh`, e `select confdeltype from pg_constraint where conrelid='public.audit_log'::regclass and contype='f'` deve ser `n` (SET NULL). Comparar o resultado com o mesmo par de queries na produção.
@@ -2720,7 +2851,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 094 — Valor de enum DRIVER_ASSIGNED pode não existir em produção, derrubando o alerta de motorista designado
+### Etapa 098 — Valor de enum DRIVER_ASSIGNED pode não existir em produção, derrubando o alerta de motorista designado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Banco — integridade e índices**
 
@@ -2748,7 +2879,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 095 — tracking_events perdeu chave primária e as duas chaves estrangeiras ao ser reparticionada
+### Etapa 099 — tracking_events perdeu chave primária e as duas chaves estrangeiras ao ser reparticionada
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Banco — integridade e índices**
 
@@ -2763,7 +2894,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A ordem (medir órfãos → limpar com o dono → constraints em arquivos separados) está certa, mas o último parágrafo mistura duas coisas: PRIMARY KEY não aceita NOT VALID (só FK e CHECK aceitam). Em tabela particionada o caminho sem travar escrita é: `CREATE UNIQUE INDEX CONCURRENTLY` em cada partição (o parent não aceita CONCURRENTLY), criar o índice único no parent com `ON ONLY`, dar `ALTER INDEX ... ATTACH PARTITION` em cada um e só então `ALTER TABLE ... ADD CONSTRAINT tracking_events_pkey PRIMARY KEY USING INDEX`. Para as FKs, NOT VALID + VALIDATE em arquivo separado funciona como ele descreveu (padrão de 20261122120100_lalamove_integration_columns.sql:28-33 + 20261122120300_validate_service_type_constraint.sql:7-8). Atenção extra: as FKs têm de ficar nullable — a reparticionagem tirou o NOT NULL de propósito e supabase/functions/_shared/messaging/inbound-actions.ts:84 já conta com evento sem pedido associado; recolocar NOT NULL quebraria essa escrita.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260516114956_ae65dc31-f603-4f09-87a8-f7ff56459e41.sql`, `supabase/migrations/20260513180659_3d0cc70a-4422-478c-825d-2da43ac7eb15.sql`, `src/integrations/supabase/types.ts`
 - **Não tocar / armadilhas:** `order_id`/`driver_id` hoje são nullable e o webhook pode estar gravando NULL (supabase/functions/lalamove-webhook/index.ts:649); pôr NOT NULL de volta sem checar derruba a gravação de rastreamento. A rotina de partições (`ensure_tracking_events_partition`, 20260715175652:14-55) faz DETACH/ATTACH da partição DEFAULT — adicionar FK no pai exige que ela continue funcionando; testar a função depois do fix.
-- **Depende de:** — · **Libera:** etapa 195
+- **Depende de:** — · **Libera:** etapa 159
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select conname, contype from pg_constraint where conrelid = 'public.tracking_events'::regclass` — hoje devolve só os 4 CHECKs de coordenada/velocidade; depois do fix deve trazer `p` (primary) e dois `f` (foreign). E `select count(*) from tracking_events t left join lalamove_orders o on o.id=t.order_id where t.order_id is not null and o.id is null` deve ser 0.
@@ -2776,7 +2907,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 096 — Contagens de inventario erradas e em cadeia nos docs de agentes: 153/157 migrations contra 191 reais, 4 specs e2e contra 7, 6 rotas com MFA contra 7
+### Etapa 100 — Contagens de inventario erradas e em cadeia nos docs de agentes: 153/157 migrations contra 191 reais, 4 specs e2e contra 7, 6 rotas com MFA contra 7
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Documentação × código**
 
@@ -2791,7 +2922,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto (trocar numero fixo por comando, listar as 7 rotas com requireMFA, falar "os specs em e2e/*.e2e.ts"). Dois cuidados: (a) em banco.md:34 corrigir tambem o "sem versão duplicada" e o intervalo final — o valor que importa ali e o timestamp da ULTIMA migration (20261124120000), porque e dele que sai o nome da proxima; (b) nao tocar em inventario/estado/*.json a mao: sao saida de scripts/inventario/gerar-rotas.mjs e gerar-banco.mjs e o workflow inventario-estado-semanal.yml abre PR com eles — editar o JSON manualmente quebra a unica fonte que podia virar automatica.
 - **Arquivos e objetos a tocar:** `docs/agentes/banco.md`, `docs/agentes/mapa-repo.md`, `docs/agentes/regras-dominio.md`, `docs/pendencias/_linha-de-base.md`, `inventario/estado/rotas.json`, `inventario/estado/edges.json`
 - **Não tocar / armadilhas:** A contagem de "hooks" aparece como 82 (mapa-repo.md:32), 83 (_linha-de-base.md) e 101 (P-12) — os tres podem estar "certos" porque contam coisas diferentes (arquivos em src/hooks/ = 87; funcoes `use*` exportadas e outro numero). Nao harmonizar sem definir o criterio, senao a correcao vira um quarto numero errado. Nao mexer em inventario/estado/*.json a mao: e artefato gerado por scripts/inventario/.
-- **Depende de:** — · **Libera:** etapa 097
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** ls supabase/migrations/*.sql | wc -l = 191; grep -c "requireMFA" src/App.tsx = 7; ls e2e/*.e2e.ts | wc -l = 7; ls supabase/functions | grep -v _shared | wc -l = 27; grep -c 'path="' src/App.tsx = 56.
@@ -2804,7 +2935,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 097 — O indice do backlog (docs/pendencias/README.md) nao lista P-14, P-15 e P-16 — inclusive o unico item ativo da fila
+### Etapa 101 — O indice do backlog (docs/pendencias/README.md) nao lista P-14, P-15 e P-16 — inclusive o unico item ativo da fila
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Documentação × código**
 
@@ -2819,7 +2950,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho aceito, com um ajuste de escopo: o README ja declara a hierarquia em docs/pendencias/README.md:3 ("_linha-de-base.md = regressão; _ordem.md = sequência; _regras-de-negocio.md = regras ao executar"), entao nao e preciso inventar frase nova nem reestruturar a tabela — basta acrescentar P-14, P-15 e P-16 com o status que _ordem.md registra e corrigir P-13 para CONCLUIDO (PR #103, a614869). Para P-15, usar o recorte corrigido no achado anterior ("codigo na main; apply em producao pendente") em vez de "PR #119 aberta", senao o README nasce com o erro que o outro achado esta consertando. Concordo em nao criar um terceiro indice.
 - **Arquivos e objetos a tocar:** `docs/pendencias/README.md`, `docs/pendencias/_ordem.md`, `docs/pendencias/P-14-analise-correcoes-planejadas.md`, `docs/pendencias/P-15-pipeline-escalonamento-alertas.md`, `docs/pendencias/P-16-hooks-orfaos-triagem.md`
 - **Não tocar / armadilhas:** P-14 registra como pendencia real "branch protection em `main` (404 na API, rulesets `[]`)" — isso ja foi resolvido (7 required checks ativos, verificado nesta auditoria), entao ao indexar P-14 no README nao repetir essa pendencia como aberta.
-- **Depende de:** etapa 096 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** ls docs/pendencias/P-*.md | wc -l = 16 e cada ID aparece uma vez na tabela do README; nenhum status do README diverge do registrado em _ordem.md.
@@ -2832,7 +2963,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 098 — O procedimento de confirmacao de deploy documentado em deploy.md nao funciona com o acesso desta sessao, e o doc da a CI/build como quebrada enquanto o AGENTS.md a da como verde
+### Etapa 102 — O procedimento de confirmacao de deploy documentado em deploy.md nao funciona com o acesso desta sessao, e o doc da a CI/build como quebrada enquanto o AGENTS.md a da como verde
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Documentação × código**
 
@@ -2847,7 +2978,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O plano esta certo no essencial (decidir a verdade por evidencia antes de reescrever). Um ajuste: a parte critica nao e o procedimento de get_deployment, e a frase de github-ci.md que autoriza mergear sem CI verde — ela precisa sair no mesmo PR, porque convive com branch protection de 7 required checks (AGENTS.md), que recusa o merge com HTTP 405. Prioridade: (1) apagar/reescrever o bloco "CI verde nao existe neste repo hoje" de github-ci.md; (2) so depois mexer no procedimento de confirmacao de deploy.
 - **Arquivos e objetos a tocar:** `docs/agentes/deploy.md`, `docs/agentes/github-ci.md`, `AGENTS.md`
 - **Não tocar / armadilhas:** Nao concluir "a CI esta verde" so porque o AGENTS.md diz: branch/commit/PR nao provam nada, e a propria regra do repo manda ler o resultado. Tambem nao assumir que o 404 do get_deployment significa que o deploy nao existe — e limite de escopo do token, nao estado do deploy.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 129, etapa 155
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** mcp__Vercel__get_deployment(idOrUrl="lalamove-v2.vercel.app") -> 404 not_found (reproduzido). Para a CI: github_list_workflow_runs(owner=adm01-debug, repo=Lalamove_V2, branch=main) e comparar conclusion dos runs recentes com a afirmacao de cada doc.
@@ -2860,7 +2991,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 099 — github-ci.md declara a main sem branch protection e sem required checks; a API mostra 7 required checks e enforce_admins ligado
+### Etapa 103 — github-ci.md declara a main sem branch protection e sem required checks; a API mostra 7 required checks e enforce_admins ligado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Documentação × código**
 
@@ -2875,7 +3006,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Alem das 4 linhas da tabela, corrija no mesmo PR as tres afirmacoes ja mortas da secao Workflows (:83-93): 'O CI esta vermelho na main desde 2026-10-03' e '"CI verde" nao existe neste repo hoje' — o AGENTS.md registra CI verde desde 21/11/2026 (runs #466+), e com required checks a conclusao oposta vale: vermelho agora barra o merge. Deixar essas frases torna o conserto da tabela inutil.
 - **Arquivos e objetos a tocar:** `docs/agentes/github-ci.md`, `AGENTS.md`
 - **Não tocar / armadilhas:** Nao mexer no AGENTS.md: ele ja esta certo. Nao alterar a branch protection em si (regra 8 — chamar o dono). O campo "Rulesets: nenhum" nao foi reverificado nesta auditoria; checar com github_list_rulesets antes de reescrever essa linha especifica.
-- **Depende de:** — · **Libera:** etapa 159
+- **Depende de:** — · **Libera:** etapa 104
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** github_get_branch_protection(owner=adm01-debug, repo=Lalamove_V2, branch=main) deve listar os mesmos 7 contexts que a tabela do doc passar a listar; conferir que nenhuma linha da tabela diz "nenhuma"/"nenhum".
@@ -2888,7 +3019,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 100 — github-ci.md descreve 1 workflow e 8 jobs e afirma que os guards nao estao ligados ao CI; sao 5 workflows, 13 jobs e o guard e required check
+### Etapa 104 — github-ci.md descreve 1 workflow e 8 jobs e afirma que os guards nao estao ligados ao CI; sao 5 workflows, 13 jobs e o guard e required check
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Documentação × código**
 
@@ -2903,7 +3034,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Escreva 12 jobs, nao 13, e use os `name:` reais (:157-158 'SQL Geo Trigger Tests', :209-210 'Geo geometry SQL tests', :241-242 'Geo trigger SQL tests') — nomear errado na tabela reintroduz o mesmo problema. Marque como required check apenas os 7 contexts que a API devolve: lint-and-typecheck, test, build, security, Deno Contract Tests, E2E (Playwright), Guarda AGENTS.md / docs/agentes.
 - **Arquivos e objetos a tocar:** `docs/agentes/github-ci.md`, `.github/workflows/ci.yml`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`
 - **Não tocar / armadilhas:** Nao editar .github/workflows/ para "alinhar com o doc" — workflow e regra 8. O doc tambem diz "teste dos próprios guards (9 casos)" (:109-110): o numero real e 367 testes em ~30 arquivos *.unit.mjs; corrigir junto, mas sem transformar o doc num inventario que vai envelhecer de novo — citar o comando em vez do numero.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 103 · **Libera:** etapa 157
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** node --test scripts/ci/*.unit.mjs (rodado nesta auditoria: 367 testes, 366 pass, 1 skip, exit 0) e node scripts/ci/check-agents-md-integrity.mjs (exit 0, "AGENTS.md OK: 8 secoes presentes") provam que os guards rodam; `ls .github/workflows/ | wc -l` = 5.
@@ -2916,7 +3047,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 101 — rotate-tokens: sem autorização e sem agendador — qualquer caller força a rotação dos tokens OAuth do Bitrix24 e pode derrubar a integração
+### Etapa 105 — rotate-tokens: sem autorização e sem agendador — qualquer caller força a rotação dos tokens OAuth do Bitrix24 e pode derrubar a integração
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — demais edges**
 
@@ -2931,7 +3062,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O item (2) do caminho proposto cita um padrão que não existe: supabase/migrations/20261122140000_fix_crons_dispatcher.sql:125-134 (bloco `lalamove_uapi_token_refresh_hourly`) NÃO monta `Bearer service_role` — manda só `apikey` com a publishable key `sb_publishable_*`. Copiar esse bloco daria um cron sem service_role, justamente o que o item (1) quer exigir. Se for agendar, o cron precisa de header `Authorization: Bearer <service_role>` (ou de um RPC que leia o segredo do Vault), senão o gate recusa o próprio cron. Itens (1) e (3) estão corretos. Antes de agendar, vale decidir se o worker deve existir: com o refresh sob demanda de bitrix24-sync/bitrix24-process-queue já em produção, apagar rotate-tokens é diff menor que agendá-lo.
 - **Arquivos e objetos a tocar:** `supabase/functions/rotate-tokens/index.ts`, `supabase/config.toml`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 086 · **Libera:** etapa 218
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `curl -s -X POST "$SUPABASE_URL/functions/v1/rotate-tokens" -H "Authorization: Bearer $VITE_SUPABASE_PUBLISHABLE_KEY" -H 'content-type: application/json' -d '{}'` em homologação. Hoje esperado: 200 com `{"message":"Rotated N tokens..."}` ou `"No tokens need rotation"` — qualquer um dos dois prova que roda sem sessão. Depois da correção: 401/403. E `select jobname from cron.job where jobname like '%rotate%'` deve passar a retornar uma linha.
@@ -2944,7 +3075,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 102 — A troca de motorista tenta gravar o historico em colunas que nao existem (lalamove_id, changed_at) e sem order_id, que e NOT NULL
+### Etapa 106 — A troca de motorista tenta gravar o historico em colunas que nao existem (lalamove_id, changed_at) e sem order_id, que e NOT NULL
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — edges Lalamove**
 
@@ -2959,7 +3090,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto, com um ajuste de justificativa: não é preciso mexer no tipo de `status` (já é text desde 20261122120100:53-63). Resolver o UUID por `lalamove_orders.lalamove_id = cdOrderId` e gravar `order_id/old_status/change_reason/metadata`, capturando `error`, é o certo. Detalhe: para `old_status` o valor tem de ser lido ANTES do UPDATE de :1062-1072, que já sobrescreve o status para 'ASSIGNING_DRIVER'.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`
 - **Não tocar / armadilhas:** A coluna `status` dessa tabela foi alargada de enum para text (20261122120100_lalamove_integration_columns.sql:57-68) justamente para aceitar 'DRIVER_CHANGED', entao esse valor pode ficar. O UPDATE de lalamove_orders logo acima (:1062-1072) grava status 'ASSIGNING_DRIVER', que existe no enum desde 20261122120000 — esse trecho esta certo e nao deve mudar. Se o pedido nao existir localmente (importado de fora), nao inserir historico orfao: `order_id` e NOT NULL com FK.
-- **Depende de:** — · **Libera:** etapa 128, etapa 155
+- **Depende de:** — · **Libera:** etapa 111
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Depois do fix, trocar o motorista de um pedido de teste e rodar `select order_id, status, change_reason, metadata from lalamove_status_history where status = 'DRIVER_CHANGED' order by created_at desc limit 1`. Hoje a consulta nao retorna nada, por mais trocas que tenham sido feitas.
@@ -2972,7 +3103,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 103 — Cada uma das cinco funcoes responde erro num formato diferente, e so um deles o front sabe ler
+### Etapa 107 — Cada uma das cinco funcoes responde erro num formato diferente, e so um deles o front sabe ler
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — edges Lalamove**
 
@@ -2987,7 +3118,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Antes de padronizar os ~16 pontos da lalamove-api, corrigir o que dá retorno maior com menos diff: o caminho não-2xx. Ou (a) fazer `parseEdgeError` aceitar `error` do tipo string (src/lib/edge-error.ts:33-35), que resolve gateway, uapi e lalamove-api de uma vez sem tocar em edge nenhuma, ou (b) só então migrar as edges para `buildErrorBody`. Atenção: lalamove-uapi devolve status 400 quando `ret !== 0` (:807), o que hoje desvia a resposta para o ramo de erro e mata o `resolveUapiError` de src/hooks/useLalamoveUapi.ts:51-55 — qualquer padronização precisa preservar esse mapeamento de código UAPI.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/_shared/contract.ts`, `src/lib/edge-error.ts`
 - **Não tocar / armadilhas:** Varios desses 400 sao checados hoje por texto ou por status no front — migrar funcao por funcao e conferir as telas que consomem (src/lib/lalamove-api.ts, src/hooks/useLalamove.ts) antes de cada troca, para nao transformar uma mensagem util em 'erro desconhecido'. O `requestId` do gateway precisa sobreviver a padronizacao: ele e o unico elo entre a reclamacao do usuario e o log.
-- **Depende de:** — · **Libera:** etapa 104
+- **Depende de:** etapa 089 · **Libera:** etapa 140
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Chamar `action=priority-fee` com um valor menor que o atual e inspecionar o corpo. Hoje: `{"error":"Novo valor deve ser maior que o atual (R$ 12.00)"}` e a tela mostra o fallback generico. Esperado: `{"error":{"code":"...","message":"Novo valor deve ser maior..."}}` e a tela mostra a frase exata.
@@ -3000,7 +3131,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 104 — Jobs de fila dos tipos email/whatsapp/slack nunca entregam e são marcados como concluídos — parte 1/2
+### Etapa 108 — Jobs de fila dos tipos email/whatsapp/slack nunca entregam e são marcados como concluídos
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — notificação e fila**
 
@@ -3013,14 +3144,12 @@ Checklist de conclusão:
 - **Causa raiz:** `type` cai no nome do canal quando o payload não traz `type`. Esse valor é usado como `alert_type` (enum do Postgres) em duas chamadas: `claim_alert_notification(p_alert_type alert_type, …)` (migration 20260712221144:58-62) e `.from("alert_configurations").eq("alert_type", type)`. As duas falham com erro de cast de enum, e os dois pontos tratam a falha como não-fatal: a primeira segue sem dedup, a segunda devolve lista vazia de configuração — o que leva ao retorno de sucesso sem envio. O `job-worker` então chama `mark_job_completed`.
 - **Caminho recomendado:** Em `processChannelNotification` (job-worker/index.ts:143-172), não usar o nome do canal como `type`: exigir `payload.type` (um valor do enum `alert_type`) e lançar quando faltar, no mesmo padrão dos outros handlers que validam por tipo dentro de `processJob` (o comentário em job-worker/index.ts:1166-1172 explica por que o throw tem de ser dentro do `processJob`, para passar por `mark_job_failed`). O canal pedido já viaja separado em `metadata.requested_channel` (linha 160). Complementar: em send-notification/index.ts:467-472, tratar `configsError` como falha visível (gravar `recordNotificationLog` com o erro) em vez de só logar, para a próxima perda não ser silenciosa. Atalho tentador a evitar: acrescentar 'email'/'whatsapp'/'slack' ao enum `alert_type` — são canais, não tipos de alerta, e isso contamina `alerts`, `alert_configurations` e `alert_dedup`.
   AJUSTE DO REVISOR: Exigir `payload.type` com throw dentro de `processJob` está certo, e a justificativa do comentário de job-worker/index.ts:1166-1172 confere (um 422 antes de `processJob` não passa por `mark_job_failed`). Dois ajustes: (a) o throw tem de validar o valor contra a lista do enum `alert_type`, não só a presença — `payload.type` é jsonb livre (`job_queue.payload` é jsonb sem checagem) e um valor presente mas inválido cai no mesmo buraco; (b) descarte o complemento proposto para send-notification:467-472 como está escrito — já existe `recordNotificationLog` em :741-749 cobrindo o caso, então acrescentar outro log ali duplicaria linha em `alerts_sent`; o que falta de verdade é diferenciar `configsError` (erro de banco) de `configs` vazia legítima e devolver `success: false` no primeiro caso, para o job ir a `mark_job_failed` e ser reenfileirado em vez de concluído. O alerta contra acrescentar 'email'/'whatsapp'/'slack' ao enum está correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/functions/job-worker/index.ts`, `supabase/functions/send-notification/index.ts`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/functions/job-worker/index.ts`, `supabase/functions/send-notification/index.ts`
+- **Arquivos e objetos a tocar:** `supabase/functions/job-worker/index.ts`, `supabase/functions/send-notification/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 103 · **Libera:** etapa 157
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em Postgres descartável (`supabase start`): `select public.add_job('email', '{"message":"x"}'::jsonb);` e rodar o dispatcher `select * from public.process_job_queue(1);`. Esperado após o fix: job em `FAILED`/`PENDING` com `error_message` dizendo que falta `type`. Hoje: job `COMPLETED` e uma linha em `alerts_sent` com `channel='none'`.
-  Nesta etapa, a verificação vale para: `supabase/functions/job-worker/index.ts`, `supabase/functions/send-notification/index.ts`.
 
 Checklist de conclusão:
 
@@ -3030,37 +3159,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 105 — Jobs de fila dos tipos email/whatsapp/slack nunca entregam e são marcados como concluídos — parte 2/2
-
-**Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — notificação e fila**
-
-- **Achados resolvidos:** M-029
-- **Problema hoje:** Notificação colocada na fila como "email", "whatsapp" ou "slack" não chega a ninguém e a fila mostra o job como concluído com sucesso. É perda silenciosa de aviso: ninguém descobre pelo painel.
-
-  ```
-  supabase/functions/job-worker/index.ts:150-152 `alert_id: payload.alert_id ?? payload.alertId ?? crypto.randomUUID(), type: payload.type ?? channel,` · supabase/functions/_shared/schemas.ts:54 `type: z.string().min(1, "type é obrigatório"),` (não barra o valor) · supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:53-59 `CREATE TYPE public.alert_type AS ENUM ( 'DRIVER_BLOCKED', 'ROUTE_DEVIATION', 'DRIVER_STOPPED', 'LATE_DELIVERY', 'APPROVAL_REQUIRED', 'ORDER_CANCELLED' );` · supabase/functions/job-worker/index.ts:1098-1101 `await supabase.rpc('mark_job_completed', { p_job_id: jobPayload.jobId, p_result: result });` · rastro que o auditor não viu: send-notification/index.ts:741-749 `recordNotificationLog( supabase, alert_id, "none", "", false, `Sem canal de notificação ativo em alert_configurations para ${type}`, )`
-  ```
-- **Causa raiz:** `type` cai no nome do canal quando o payload não traz `type`. Esse valor é usado como `alert_type` (enum do Postgres) em duas chamadas: `claim_alert_notification(p_alert_type alert_type, …)` (migration 20260712221144:58-62) e `.from("alert_configurations").eq("alert_type", type)`. As duas falham com erro de cast de enum, e os dois pontos tratam a falha como não-fatal: a primeira segue sem dedup, a segunda devolve lista vazia de configuração — o que leva ao retorno de sucesso sem envio. O `job-worker` então chama `mark_job_completed`.
-- **Caminho recomendado:** Em `processChannelNotification` (job-worker/index.ts:143-172), não usar o nome do canal como `type`: exigir `payload.type` (um valor do enum `alert_type`) e lançar quando faltar, no mesmo padrão dos outros handlers que validam por tipo dentro de `processJob` (o comentário em job-worker/index.ts:1166-1172 explica por que o throw tem de ser dentro do `processJob`, para passar por `mark_job_failed`). O canal pedido já viaja separado em `metadata.requested_channel` (linha 160). Complementar: em send-notification/index.ts:467-472, tratar `configsError` como falha visível (gravar `recordNotificationLog` com o erro) em vez de só logar, para a próxima perda não ser silenciosa. Atalho tentador a evitar: acrescentar 'email'/'whatsapp'/'slack' ao enum `alert_type` — são canais, não tipos de alerta, e isso contamina `alerts`, `alert_configurations` e `alert_dedup`.
-  AJUSTE DO REVISOR: Exigir `payload.type` com throw dentro de `processJob` está certo, e a justificativa do comentário de job-worker/index.ts:1166-1172 confere (um 422 antes de `processJob` não passa por `mark_job_failed`). Dois ajustes: (a) o throw tem de validar o valor contra a lista do enum `alert_type`, não só a presença — `payload.type` é jsonb livre (`job_queue.payload` é jsonb sem checagem) e um valor presente mas inválido cai no mesmo buraco; (b) descarte o complemento proposto para send-notification:467-472 como está escrito — já existe `recordNotificationLog` em :741-749 cobrindo o caso, então acrescentar outro log ali duplicaria linha em `alerts_sent`; o que falta de verdade é diferenciar `configsError` (erro de banco) de `configs` vazia legítima e devolver `success: false` no primeiro caso, para o job ir a `mark_job_failed` e ser reenfileirado em vez de concluído. O alerta contra acrescentar 'email'/'whatsapp'/'slack' ao enum está correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
-- **Não tocar / armadilhas:** —
-- **Depende de:** etapa 083 · **Libera:** etapa 139, etapa 218
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Em Postgres descartável (`supabase start`): `select public.add_job('email', '{"message":"x"}'::jsonb);` e rodar o dispatcher `select * from public.process_job_queue(1);`. Esperado após o fix: job em `FAILED`/`PENDING` com `error_message` dizendo que falta `type`. Hoje: job `COMPLETED` e uma linha em `alerts_sent` com `channel='none'`.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 106 — skip_dedup e is_escalation aceitos de qualquer usuário autenticado
+### Etapa 109 — skip_dedup e is_escalation aceitos de qualquer usuário autenticado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Backend — notificação e fila**
 
@@ -3075,7 +3174,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Não aplicar o portão a `skip_dedup` nem a `dedup_key`: forçar `skip_dedup = false` para caller não-service quebra o botão "reenviar" de eventos geo (src/components/orders/OrderGeoEvents.tsx:95) — o reenvio manual seria engolido pelo dedup de 300s e o operador veria "sucesso" sem mensagem nova. Gate só em `is_escalation`: em index.ts:161 trocar por `const isEscalation = extra.is_escalation === true && isServiceRoleCaller(req);` com `logger.log` quando o campo for ignorado. Isso preserva escalate-alerts (que chama com service_role) e fecha a estampa de `escalated_at` e o furo da janela de silêncio. A alternativa de exigir admin/manager na função inteira também quebraria OrderGeoEvents, que é tela de operação — não seguir.
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`, `supabase/functions/_shared/schemas.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 110
+- **Depende de:** etapa 084 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de `viewer`, chamar duas vezes seguidas com `skip_dedup: true` e o mesmo `type`/`order_id`; esperado após o fix: a segunda chamada volta `suppressed: true` com `dedup_key`. Hoje as duas enviam. Para `is_escalation`: conferir `select escalated_at from alerts where id = '<alert>'` — deve continuar nulo.
@@ -3088,7 +3187,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 107 — Recalculo de risco no navegador sobrescreve o score da edge com outra matemática e ignora whitelist/blacklist
+### Etapa 110 — Recalculo de risco no navegador sobrescreve o score da edge com outra matemática e ignora whitelist/blacklist
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Hooks e estado — dados de negócio**
 
@@ -3116,7 +3215,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 108 — Migration só é aplicada à mão, com o nome do arquivo digitado, enquanto o código sobe sozinho no merge
+### Etapa 111 — Migration só é aplicada à mão, com o nome do arquivo digitado, enquanto o código sobe sozinho no merge
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Infra, CI e deploy**
 
@@ -3130,7 +3229,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Mínimo que resolve: um job no `ci.yml` que compara os arquivos de `supabase/migrations/` da PR com o ledger de produção (a consulta já existe no passo "Ledger antes" do `apply-migrations.yml`) e falha quando a PR adiciona migration — obrigando o apply antes do merge. Reaproveite o `SUPABASE_ACCESS_TOKEN` já configurado e a mesma chamada `POST /v1/projects/<ref>/database/query`. Atalho a evitar: automatizar o apply no merge sem gate — DDL automática em produção é exatamente o que o `AGENTS.md` manda não fazer.
 - **Arquivos e objetos a tocar:** `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`
 - **Não tocar / armadilhas:** Não mude `deploy-edges.yml` para deixar de publicar tudo sem antes resolver as edges que não deveriam estar publicadas (há achado próprio para isso).
-- **Depende de:** etapa 088 · **Libera:** —
+- **Depende de:** etapa 106 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Numa PR de teste que adicione um arquivo em `supabase/migrations/`, o job novo deve falhar com a lista do que falta aplicar; numa PR sem migration, deve passar.
@@ -3143,7 +3242,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 109 — Quatro jobs de teste de banco nao estao entre os required checks: podem ficar vermelhos sem bloquear merge
+### Etapa 112 — Quatro jobs de teste de banco nao estao entre os required checks: podem ficar vermelhos sem bloquear merge
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Infra, CI e deploy**
 
@@ -3171,7 +3270,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 110 — Tres suites Deno existem no repo e nenhum job as executa
+### Etapa 113 — Tres suites Deno existem no repo e nenhum job as executa
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Infra, CI e deploy**
 
@@ -3186,7 +3285,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correto, inclusive a armadilha: trocar por `deno test supabase/functions/` arrastaria supabase/functions/_shared/contract.integration.test.ts, que ci.yml:186-207 mantem em job separado com `if: github.ref == 'refs/heads/main'` e secrets. Um reparo no detalhe: o passo novo precisa das flags certas — phone.test.ts e geo-precision.test.ts sao codigo puro e rodam sem permissao, mas external-db-bridge/index.test.ts deve ir junto com `--allow-net --allow-env` (mesmo estilo do passo de ci.yml:145-149), senao o job quebra na primeira execucao por falta de permissao, nao por regressao.
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`, `supabase/functions/_shared/geo-precision.test.ts`, `supabase/functions/_shared/phone.test.ts`, `supabase/functions/external-db-bridge/index.test.ts`, `scripts/ci/check-test-inventory.mjs`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 106 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `deno test --allow-net --allow-env --allow-read supabase/functions/_shared/geo-precision.test.ts supabase/functions/_shared/phone.test.ts supabase/functions/external-db-bridge/index.test.ts` passa localmente; depois, o log do job `Deno Contract Tests` tem de citar os tres arquivos.
@@ -3199,7 +3298,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 111 — github-settings-baseline.json afirma que a main nao tem branch protection, e a API diz o contrario — varios workflows repetem a informacao errada
+### Etapa 114 — github-settings-baseline.json afirma que a main nao tem branch protection, e a API diz o contrario — varios workflows repetem a informacao errada
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Infra, CI e deploy**
 
@@ -3227,7 +3326,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 112 — xlsx vem de tarball fora do registro npm: build, typecheck e teste caem juntos quando cdn.sheetjs.com nao responde, e o npm audit nao enxerga a dependencia
+### Etapa 115 — xlsx vem de tarball fora do registro npm: build, typecheck e teste caem juntos quando cdn.sheetjs.com nao responde, e o npm audit nao enxerga a dependencia
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Infra, CI e deploy**
 
@@ -3242,7 +3341,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A direcao (trocar por pacote do registro, ex. `@e965/xlsx` ou `exceljs`, ou vendorar o tarball e apontar `file:`) esta certa e o alerta de nao usar `build.rolldownOptions.external` tambem. Corrija duas coisas: (1) nao venda isso como 'CI caindo hoje' — a evidencia de 403 e do proxy deste sandbox e os cinco `npm ci` do run #987 passaram; o argumento de negocio e o ponto unico de falha fora do registro + o ponto cego de `npm audit`/Dependabot; (2) o diff nao e so o import: `grep -n XLSX src/utils/exportUtils.ts` mostra os usos de `XLSX.utils.*`/`XLSX.write*`, e `@e965/xlsx` mantem a API (troca de 1 linha) enquanto `exceljs` tem API assincrona diferente e exige reescrever a funcao de exportacao — se a prioridade e diff minimo, prefira o fork registry-hosted.
 - **Arquivos e objetos a tocar:** `package.json`, `package-lock.json`, `src/utils/exportUtils.ts`, `.github/workflows/ci.yml`, `.github/dependabot.yml`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 083 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `npm ci --ignore-scripts` termina sem erro sem precisar de cdn.sheetjs.com (dica: `grep -c cdn.sheetjs.com package-lock.json` tem de virar 0), e `npx tsc --noEmit -p tsconfig.app.json` volta a exit 0.
@@ -3255,7 +3354,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 113 — O health check da Lalamove chama endpoint e autenticação que não existem no contrato v3 — resultado é sempre "degraded"
+### Etapa 116 — O health check da Lalamove chama endpoint e autenticação que não existem no contrato v3 — resultado é sempre "degraded"
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Integrações e contratos**
 
@@ -3270,7 +3369,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está correto, mas há opção com menos risco de duplicar segredo: em vez de extrair HMAC para `_shared/` e dar LALAMOVE_API_SECRET a uma segunda função, `check-external-api` pode invocar a edge `lalamove-api` com `action: 'cities'` (mesma rota que lalamove-gateway/route.ts:71-73 já usa para 'status'/'test') e classificar pelo status devolvido. Assim a chave HMAC continua existindo em uma única edge.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/check-external-api/index.ts`, `/home/user/Lalamove_V2/src/hooks/healthChecks.ts`, `/home/user/Lalamove_V2/docs/LALAMOVE_API_V3.md`
 - **Não tocar / armadilhas:** `/v3/cities` tem limite de 300 req/janela (`docs/LALAMOVE_API_V3.md:186`): conferir a frequência com que `src/hooks/healthChecks.ts:129` dispara antes de transformar a sonda numa chamada real, senão o health check passa a consumir a quota do pedido. `GET /v3/webhook` responde 405 (`docs/LALAMOVE_API_V3.md:542`) e não serve de sonda. O mesmo arquivo tem `checkBitrix24` com `${BITRIX24_URL}/profile.json` — não mexer no mesmo PR sem validar o formato de `BITRIX24_URL`.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 071 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Chamar `supabase.functions.invoke('check-external-api', { body: { service: 'lalamove' } })` e ler `message`: hoje volta `API returned 404` (ou 401) com `status: 'degraded'`; depois do fix deve voltar `status: 'ok'` / `API responding`. Confirmar nos logs da edge que a requisição saiu com `Authorization: hmac ...`.
@@ -3283,7 +3382,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 114 — `route-analyzer` não checa papel nem limita taxa: qualquer autenticado gasta crédito de IA e manda a base de motoristas e pedidos para fora
+### Etapa 117 — `route-analyzer` não checa papel nem limita taxa: qualquer autenticado gasta crédito de IA e manda a base de motoristas e pedidos para fora
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Integrações e contratos**
 
@@ -3297,7 +3396,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** 1) Copiar o recheck de papel de `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts:68-85` (consulta `user_roles` com `is_active`/`expires_at`, exceção para `service_role`) e exigir manager+ para `analyze-drivers`/`analyze-alerts` e operator+ para `analyze-routes`/`analyze-order`. 2) Copiar o bucket por usuário de `/home/user/Lalamove_V2/supabase/functions/geo-gateway/index.ts:66-77` com um teto baixo (ex.: 5/min). 3) Reduzir o que vai no prompt: trocar `select('*')` pelas colunas necessárias, tirando telefone e nome do cliente — o prompt de sistema (:132-158) pede padrões de rota e risco, não identificação pessoal. Atalho a evitar: só baixar o `.limit(20)` — não resolve custo nem exposição.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/config.toml`
 - **Não tocar / armadilhas:** `aiResponse = data.choices?.[0]?.message?.content` (:199) pode ser `undefined` e hoje a função devolve 200 com `response` ausente: ao mexer aqui, tratar esse caso, senão a tela mostra análise vazia como se fosse sucesso. Não existe timeout nessa chamada (ver o achado de timeouts) — se adicionar, prazo generoso, é LLM. O teste de contrato `contract.integration.test.ts` só manda payload inválido para esta função justamente para não gastar crédito: um gate de papel antes do contrato muda o status esperado lá (401/403 em vez de 422).
-- **Depende de:** etapa 081 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 232
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com JWT de `viewer`: `curl -s -X POST "$SUPABASE_URL/functions/v1/route-analyzer" -H "Authorization: Bearer <jwt_viewer>" -H 'Content-Type: application/json' -d '{"action":"analyze-drivers"}'` — hoje devolve 200 com a análise; depois do fix deve ser 403. Repetir 10x e conferir nos logs da edge que só as 5 primeiras saem para `ai.gateway.lovable.dev`.
@@ -3310,7 +3409,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 115 — Os dois ratchets de tipo têm baseline desatualizado: 17 erros já corrigidos continuam na lista de perdoados e podem voltar com a CI verde
+### Etapa 118 — Os dois ratchets de tipo têm baseline desatualizado: 17 erros já corrigidos continuam na lista de perdoados e podem voltar com a CI verde
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Transversal — código morto e duplicação**
 
@@ -3328,7 +3427,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Zerar os dois baselines: `scripts/ci/implicit-any-baseline.json` → `{ "baseline": 0 }` e `scripts/ci/typecheck-baseline.json` → `issues: []` mantendo `"schemaVersion": 2` e o campo `command`. Rodar os dois scripts depois para confirmar exit 0. Atalho tentador a evitar: regravar o baseline a partir da saída atual deste contêiner — aqui o `tsc` acusa `src/utils/exportUtils.ts(5,23) TS2307 Cannot find module 'xlsx'`, que é falta de instalação local (o pacote vem de `https://cdn.sheetjs.com/...` em package.json:98 e o host é bloqueado neste sandbox, já registrado em docs/qa/01-INVENTARIO.md:309), não dívida do repo — gravar esse erro no baseline esconderia um import quebrado de verdade no futuro.
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`, `scripts/ci/a11y-button-name-baseline.json`, `scripts/ci/bundle-budget.mjs`, `scripts/ci/implicit-any-baseline.json`, `scripts/ci/implicit-any-ratchet.mjs`, `scripts/ci/typecheck-baseline.json`, `scripts/ci/typecheck-ratchet.mjs`
 - **Não tocar / armadilhas:** O `baseline=17` do typecheck foi medido com `tsc -b --force` (scripts/ci/typecheck-baseline.json campo `command`), que compila tsconfig.app.json E tsconfig.node.json; `tsc -p tsconfig.app.json` sozinho vê menos arquivos. Comparar os dois comandos como se fossem equivalentes leva a baixar o baseline escondendo erros do projeto `node`. Também não apagar os arquivos de baseline: scripts/ci/typecheck-ratchet.mjs:221 lança erro se o schema não for o 2.
-- **Depende de:** etapa 068 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `node scripts/ci/typecheck-ratchet.mjs` e `node scripts/ci/implicit-any-ratchet.mjs` em um ambiente com `npm ci` completo: os dois têm de sair 0 com "nenhum novo erro" e `baseline: 0`. Depois, introduzir de propósito um `const x: any` em um arquivo de src e confirmar que o implicit-any ratchet falha.
@@ -3341,7 +3440,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 116 — Toda a camada de edge functions está fora do lint e de qualquer verificação de tipo na CI: 94 arquivos .ts sem análise estática, apesar dos 7 checks obrigatórios
+### Etapa 119 — Toda a camada de edge functions está fora do lint e de qualquer verificação de tipo na CI: 94 arquivos .ts sem análise estática, apesar dos 7 checks obrigatórios
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Transversal — código morto e duplicação**
 
@@ -3356,7 +3455,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está certo no essencial (passo `deno check` no job que já instala o Deno, ci.yml:116) e o alerta contra tirar `supabase/functions/**` do ignores do ESLint procede. Dois ajustes: (1) não use o padrão do typecheck-ratchet.mjs como ponto de partida — verifiquei que nenhum workflow executa esse script (grep "ratchet" em .github/ não retorna nada), então ele não é o mecanismo do repo e copiá-lo criaria mais tooling morto; se as edges tiverem erros acumulados, liste os arquivos limpos no comando e vá ampliando. (2) `deno check supabase/functions/**/*.ts` expandido pelo shell estoura o limite de argumentos e inclui os `*.test.ts`; prefira `deno check $(find supabase/functions -name index.ts)` primeiro, que é exatamente o que hoje não é compilado por nada.
 - **Arquivos e objetos a tocar:** `eslint.config.js`, `tsconfig.app.json`, `.github/workflows/ci.yml`, `scripts/ci/implicit-any-ratchet.mjs`
 - **Não tocar / armadilhas:** Mexer em .github/workflows/ci.yml toca os checks obrigatórios da branch protection — adicionar um check novo como obrigatório trava PRs abertas até elas serem rebaseadas. Subir o passo primeiro como não-obrigatório. E os 64 usos de `any` nas edges (28 só em supabase/functions/job-worker/index.ts) vão aparecer de uma vez: por isso o baseline, não a correção em massa no mesmo PR.
-- **Depende de:** — · **Libera:** etapa 232
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Executado nesta sessão: `node scripts/ci/implicit-any-ratchet.mjs` → `implicit-any errors: 0 (baseline: 2)`, ou seja compilou e não viu nenhum arquivo de supabase/functions. Para confirmar o tamanho do problema antes de mexer na CI: `deno check supabase/functions/lalamove-api/index.ts supabase/functions/job-worker/index.ts` e contar os erros. Não foi possível rodar aqui: `which deno` → exit 1, Deno não instalado neste contêiner.
@@ -3369,7 +3468,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 117 — A mesma faixa de risco está escrita com cortes diferentes em quatro lugares
+### Etapa 120 — A mesma faixa de risco está escrita com cortes diferentes em quatro lugares
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
 
@@ -3384,7 +3483,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Ajuste de ordem e de escopo: não mexa nos cortes antes de resolver o divisor variável do achado anterior — mover a UI para 2,5/5/7,5 sobre um score calculado por média de fatores disparados só troca de erro. Além disso, a edge roda em Deno e não importa de `src/`, então uma função em src/lib/ não serve para os dois lados: ou duplique a constante com um teste que compare os dois valores, ou ponha a fonte em supabase/functions/_shared/ e faça o front importar/duplicar com guard de teste. Na edge, lembre dos DOIS pontos (index.ts:270-273 e index.ts:717-720), senão o bônus de regras recoloca os cortes antigos. E `approval_priority` (index.ts:777) deriva do level da edge — se os cortes mudarem, a prioridade da fila muda junto.
 - **Arquivos e objetos a tocar:** `supabase/functions/evaluate-driver/index.ts`, `src/components/approvals/SwipeableApprovalCard.tsx`, `src/components/dashboard/ApprovalQueue.tsx`, `docs/agentes/regras-dominio.md`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 121
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com um motorista de score 7,6, as três telas (fila de aprovação, card do dashboard, página de avaliações) têm de mostrar CRITICAL; com 5,2, HIGH.
@@ -3397,7 +3496,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 118 — Análise preditiva mostra percentual de SLA inventado e nunca encontra motoristas em risco
+### Etapa 121 — Análise preditiva mostra percentual de SLA inventado e nunca encontra motoristas em risco
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
 
@@ -3412,7 +3511,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O passo 1 (`.in('risk_level', ['HIGH','CRITICAL'])`) está correto. Ressalva no passo 2: useSLAMetrics.ts:168-170 calcula `onTimeRate` sobre `completedOrders` e devolve 100 quando não há pedido concluído — reaproveitar essa função sem mudar esse default só troca o 95% fixo por um 100% fixo. Então o passo 3 (mostrar "sem dados") tem de vir junto com o passo 2, não como alternativa.
 - **Arquivos e objetos a tocar:** `src/hooks/usePredictiveAnalysis.ts`, `src/components/alerts/PredictiveAlerts.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 120 · **Libera:** etapa 179
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com 8 motoristas com risk_level = 'HIGH' no banco, o card "Alto Risco de Problemas com Motoristas" tem de aparecer e dizer 8 (hoje diz 0 e o card não aparece).
@@ -3425,11 +3524,47 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 119 — Bloqueio e limite por IP no login nunca são acionados — o front sempre envia o IP como indefinido
+### Etapa 122 — Aprovação de motorista não registra quem aprovou e é feita em dois updates sem transação
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
 
 - **Achados resolvidos:** M-043
+- **Problema hoje:** Não há registro de quem liberou ou barrou cada motorista — exatamente o dado que se precisa quando uma entrega dá problema. E se a segunda escrita falhar, a fila marca "aprovado" enquanto o motorista continua pendente, travando o pedido.
+
+  ```
+  src/hooks/useApprovalActions.ts:34-38 — ".update({ status: 'APPROVED', reviewed_at: new Date().toISOString(), decision_notes: notes || 'Aprovado manualmente' })\n        .eq('id', approvalId);" seguido de "supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId)"; coluna em supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:182 — "reviewed_by UUID,"; leitura em src/hooks/usePendingApprovals.ts:88.
+  ```
+  Mesma causa, outro local — Hooks e estado — dados de negócio:
+  ```
+  src/hooks/useApprovalActions.ts:34-39 `const { error: approvalError } = await supabase.from('driver_approval_queue').update({ status: 'APPROVED', ... }).eq('id', approvalId); if (approvalError) throw approvalError; const { error: driverError } = await supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId);` e :46-48 `await supabase.from('driver_approval_queue').update({ status: 'PENDING', ... }); await supabase.from('drivers').update({ status: 'PENDING_APPROVAL' }).eq('id', data.driverId); queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });`
+  ```
+  Mesma causa, outro local — Regras de negócio — ciclo de vida:
+  ```
+  src/hooks/useApprovalActions.ts:34-36, 56-58, 78-80, 93-95; coluna em supabase/migrations/20251224143803_*.sql:182; padrão correto em src/hooks/usePasswordResetActions.ts:36; leitura em src/hooks/usePendingApprovals.ts:88.
+  ```
+- **Causa raiz:** O campo de auditoria nunca foi preenchido na escrita, embora exista no banco e seja lido pela UI; e as duas escritas (fila + cadastro do motorista) são chamadas independentes, sem RPC transacional.
+- **Caminho recomendado:** 1) Preencher `reviewed_by: (await supabase.auth.getUser()).data.user?.id` nas três mutações (aprovar, rejeitar, whitelist) e também no desfazer, que hoje limpa reviewed_at e deixaria reviewed_by órfão (useApprovalActions.ts:46 e 68). 2) Mover o par de updates para uma RPC SECURITY DEFINER em supabase/migrations/ (padrão já usado em todo o repo para operação com mais de uma tabela) para que fila e motorista mudem juntos. Confirmar antes qual hook a tela usa: regras-dominio.md:40-42 avisa que existem dois (useApprovalActions e useApprovalActionsEnhanced) e corrigir o errado não muda nada na UI.
+  AJUSTE DO REVISOR: Duas correções no caminho proposto. (1) A ressalva "confirmar antes qual hook a tela usa" está errada e só gera trabalho: src/hooks/useApprovalActionsEnhanced.ts não tem caminho de escrita próprio — ele apenas envolve o hook base (linha 2: "import { useApprovalActions as useBaseApprovalActions } from './usePendingApprovals';") e não é importado por nenhum arquivo do projeto (grep por useApprovalActionsWithAchievements só encontra a própria declaração em :10). As telas usam o hook base: src/pages/ApprovalsPage.tsx:26 e src/pages/DashboardRedesigned.tsx:59. Corrigir useApprovalActions.ts é suficiente. (2) Preencher reviewed_by com o id lido no browser (supabase.auth.getUser()) é um campo de auditoria que o próprio cliente escolhe — vale como passo provisório, mas a correção boa é a RPC SECURITY DEFINER usando auth.uid() internamente, que já resolve os dois problemas (autor confiável + as duas tabelas na mesma transação). Incluir a mutação de blacklist (:92-101) no mesmo ajuste.
+- **Arquivos e objetos a tocar:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/hooks/usePasswordResetActions.ts`, `src/hooks/usePendingApprovals.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
+- **Não tocar / armadilhas:** —
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Aprovar um motorista e conferir `select reviewed_by, reviewed_at, status from driver_approval_queue where id = <id>` com o uuid do usuário logado; forçar erro no update de drivers e conferir que a fila continua PENDING.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 123 — Bloqueio e limite por IP no login nunca são acionados — o front sempre envia o IP como indefinido
+
+**Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
+
+- **Achados resolvidos:** M-044
 - **Problema hoje:** Quem testa senhas variando o e-mail nunca é barrado: o único freio que funciona é por e-mail. A lista de IPs bloqueados também nunca é alimentada pelo login, então a tela de rate limiting mostra uma proteção que não está acontecendo.
 
   ```
@@ -3440,7 +3575,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Primeira metade do caminho está certa (capturar o IP server-side e nunca aceitar IP vindo do browser). A segunda metade é arriscada e deve ser descartada: 'remover o bloco de IP das RPCs' quebraria o que já funciona por outro caminho — a tabela blocked_ips é alimentada e lida manualmente pelo painel admin (src/hooks/useRateLimiting.ts:64-70 lê blocked_ips, :115-120 insere bloqueio) e public.is_ip_blocked(inet) está com EXECUTE concedido a service_role (supabase/migrations/20260711184140_...:9) para uso server-side. Mantenha as RPCs como estão e só passe a alimentá-las com IP real; se isso não couber agora, o ajuste mínimo é parar de prometer bloqueio por IP na tela de login, sem tocar no SQL.
 - **Arquivos e objetos a tocar:** `src/hooks/useLoginLockout.ts`, `supabase/migrations/20260109204414_4f9e55d1-a4a0-41ad-b2c3-e7bc13f39347.sql`, `src/hooks/useRateLimiting.ts`
 - **Não tocar / armadilhas:** Os specs e2e/login-lockout.e2e.ts cobrem o lockout por e-mail; mudar o caminho de chamada pode quebrá-los. A RPC v2 dobra o tempo de bloqueio quando marca atividade suspeita (migration :203-206) — ligar o IP de verdade vai começar a bloquear por 2 h, o que muda o suporte ao usuário.
-- **Depende de:** — · **Libera:** etapa 120
+- **Depende de:** etapa 036 · **Libera:** etapa 165
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Depois do fix: 21 tentativas falhas com e-mails diferentes do mesmo IP têm de inserir linha em blocked_ips e fazer check_login_lockout_v2 devolver is_ip_blocked = true. Hoje: select count(*) from blocked_ips where reason like 'Excesso de tentativas%' deve ser 0.
@@ -3453,11 +3588,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 120 — Dinheiro somado em ponto flutuante, com moeda de um pedido aplicada ao total e denominadores diferentes para o mesmo "custo médio"
+### Etapa 124 — Dinheiro somado em ponto flutuante, com moeda de um pedido aplicada ao total e denominadores diferentes para o mesmo "custo médio"
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** M-044
+- **Achados resolvidos:** M-045
 - **Problema hoje:** O relatório financeiro mostra custo médio e custo por quilômetro menores do que a realidade quando há pedidos sem valor registrado, apresenta a média do centro de custo numa base diferente da média geral, e rotula o total com uma moeda que pode não ser a de todos os pedidos somados.
 
   ```
@@ -3468,7 +3603,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Fique no passo 1 (unificar a base em `withCost`, inclusive `totalKm` e o `count` de byGroup) — é o que corrige número errado. O passo 2 (migrar tudo para centavos inteiros) é reescrita de hook inteiro para um erro que não aparece na tela: risco maior que o ganho; deixe fora deste fix. O passo 3 vale só como sinalização de "moedas mistas" se e quando houver pedido não-BRL; não vale mexer na base por ele agora.
 - **Arquivos e objetos a tocar:** `src/hooks/useAdvancedReports.ts`, `src/pages/AdvancedReportsPage.tsx`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-api/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 119 · **Libera:** etapa 179
+- **Depende de:** — · **Libera:** etapa 139
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Relatório com 10 pedidos (6 com custo somando R$ 600, 4 sem custo, 100 km no total e 60 km nos pedidos com custo): custo/km tem de ser R$ 10,00 (hoje sai R$ 6,00) e a média por centro de custo tem de bater com o custo médio geral quando há um centro só.
@@ -3481,11 +3616,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 121 — Tabela de pedidos e análise preditiva tratam o limiar configurado como se fosse o desvio medido
+### Etapa 125 — Tabela de pedidos e análise preditiva tratam o limiar configurado como se fosse o desvio medido
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — cálculos**
 
-- **Achados resolvidos:** M-045
+- **Achados resolvidos:** M-046
 - **Problema hoje:** Todo pedido cadastrado com tolerância acima de 15 minutos aparece permanentemente marcado como "Motorista Parado" ou "Desvio de Rota" no painel, mesmo com o motorista rodando normalmente — e pedidos realmente parados, com tolerância de 10 minutos, não recebem marca nenhuma.
 
   ```
@@ -3509,11 +3644,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 122 — A coluna lalamove_status, que os gatilhos de geo leem como status primário do pedido, nunca é escrita por ninguém — e as listas de liberação não cobrem o vocabulário real
+### Etapa 126 — A coluna lalamove_status, que os gatilhos de geo leem como status primário do pedido, nunca é escrita por ninguém — e as listas de liberação não cobrem o vocabulário real
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-046
+- **Achados resolvidos:** M-047
 - **Problema hoje:** Os avisos automáticos de 'motorista se aproximando' e 'motorista chegou' deixam de sair em parte dos pedidos: nenhum aviso de entrega quando o pedido está marcado como 'Em entrega', e nenhum aviso de coleta quando ele está como 'Pendente'. O cliente e o fornecedor ficam sem o aviso que o sistema promete.
 
   ```
@@ -3524,7 +3659,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O plano está bom no conteúdo, mas aponte o arquivo errado: a correção das listas tem de partir da definição viva (20261122131000_geo_eta_delay.sql:172 e :223), não de 20261122130100_geo_foundation.sql, senão a nova migration reintroduz a versão antiga da função (ela é CREATE OR REPLACE do corpo inteiro, incluindo o bloco de avanço de parada da etapa 46, linhas 210-240). Copie o corpo da 131000 e altere só a lista da linha 172.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** Alterar os gatilhos é DDL em produção → PR aberta para o dono. Começar a gravar lalamove_status SEM antes corrigir as listas muda o comportamento dos avisos de uma vez (o COALESCE passa a usar o valor cru), podendo ligar ou desligar notificações em massa. supabase/tests/geo_trigger.test.sql assume que a coluna vem preenchida — por isso os testes de gatilho passam enquanto a produção não exercita esse caminho.
-- **Depende de:** etapa 035 · **Libera:** etapa 165
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** No Postgres descartável (`supabase start` + supabase/tests/geo_trigger.test.sql como base): inserir pedido com status='DELIVERING' e lalamove_status NULL, atualizar active_tracking para 50 m da entrega e conferir `select count(*) from order_geo_events where event_type='DRIVER_ARRIVED_DELIVERY'` — esperado 0 hoje, 1 depois do fix.
@@ -3537,11 +3672,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 123 — A regra de transição existe, está testada e verde, mas nenhum código de produção a chama — e o P-09 declara o problema obsoleto por causa dela
+### Etapa 127 — A regra de transição existe, está testada e verde, mas nenhum código de produção a chama — e o P-09 declara o problema obsoleto por causa dela
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-047
+- **Achados resolvidos:** M-048
 - **Problema hoje:** A documentação diz que a ordem dos estados está garantida pelo sistema; na prática não há nenhuma verificação rodando, nem no banco nem no servidor. Decisões tomadas confiando nesse documento (não investir em validação de estado) estão apoiadas em algo que não existe.
 
   ```
@@ -3565,11 +3700,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 124 — Evento de POD repetido ou fora de ordem apaga a foto e a data de entrega já gravadas
+### Etapa 128 — Evento de POD repetido ou fora de ordem apaga a foto e a data de entrega já gravadas
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-048
+- **Achados resolvidos:** M-049
 - **Problema hoje:** A foto que comprova a entrega pode sumir do pedido depois de já ter sido recebida, deixando a entrega sem comprovante e disparando o alerta de prova de entrega faltante numa entrega que de fato foi comprovada.
 
   ```
@@ -3580,7 +3715,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A ideia de montar o patch só com os campos presentes está correta, mas "usar COALESCE do valor existente" não é possível via PostgREST/supabase-js — não há expressão SQL no .update(). Em vez disso: simplesmente OMITIR pod_image_url/pod_delivered_at do objeto quando o evento não os trouxer (o valor anterior permanece), e no upsert de lalamove_stop_proofs omitir as mesmas chaves (o PostgREST só atualiza as colunas enviadas). Aproveite para filtrar a parada: quando stopIndex for null, resolver o stop por stop_id (coluna criada em supabase/migrations/20261122120100_*.sql:46) em vez de atualizar todas as paradas do pedido.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** Não trocar o upsert de lalamove_stop_proofs por insert: a unicidade por stop_id é o que torna o POD idempotente. E não vale 'nunca sobrescrever': um POD legítimo que corrige o anterior (status failed → delivered com nova foto) precisa passar.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 041 · **Libera:** etapa 199
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No Postgres descartável: enviar POD_STATUS_CHANGED com status DELIVERED e imagem, depois outro da mesma parada com status PENDING sem imagem; `select pod_status, pod_image_url, pod_delivered_at from lalamove_stops where order_id='<uuid>' and stop_index=0` — hoje a foto e a data voltam para NULL.
@@ -3593,11 +3728,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 125 — Pedido em 'ASSIGNING_DRIVER', 'DELIVERING' ou 'QUOTED' joga o negócio de volta para a etapa 'Novo' no Bitrix24
+### Etapa 129 — Pedido em 'ASSIGNING_DRIVER', 'DELIVERING' ou 'QUOTED' joga o negócio de volta para a etapa 'Novo' no Bitrix24
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-049
+- **Achados resolvidos:** M-050
 - **Problema hoje:** Quando um pedido avança para 'Em entrega', o negócio correspondente no CRM volta para a coluna 'Novo' — ou seja, a integração anda para trás justamente no momento mais avançado da entrega, e o time comercial vê o pedido como se nem tivesse começado.
 
   ```
@@ -3608,7 +3743,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Os passos 1 e 3 valem como escritos. No passo 2, tire 'QUOTED' da migration: ele não é gravado em lalamove_orders por nenhum caminho de código, e semear uma etapa para um status inexistente só cria linha morta na tabela que o operador edita pela tela. Mapeie ASSIGNING_DRIVER (→ NEW, igual a PENDING) e DELIVERING (→ EXECUTING).
 - **Arquivos e objetos a tocar:** `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql`, `supabase/migrations/20261122120000_baseline_order_status_values.sql`
 - **Não tocar / armadilhas:** É DDL/DML em produção (INSERT em tabela de configuração) → a PR fica aberta para o dono. O fix do código (item 1) é independente e pode ir sozinho. Não remover o seed antigo: há pedidos históricos nos 8 status originais.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 102 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select lalamove_status from bitrix24_stage_mappings` comparado com `select unnest(enum_range(null::order_status))` — hoje faltam três valores. Depois do fix no código: forçar sync de um pedido em DELIVERING e conferir que o negócio no Bitrix24 mantém a etapa em vez de voltar para 'Novo'.
@@ -3621,11 +3756,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 126 — Quatro eventos que não mudam status gravam uma transição falsa para 'ON_GOING' no histórico do pedido
+### Etapa 130 — Quatro eventos que não mudam status gravam uma transição falsa para 'ON_GOING' no histórico do pedido
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-050
+- **Achados resolvidos:** M-051
 - **Problema hoje:** Uma simples mudança de preço ou de código de entrega aparece no histórico do pedido como se ele tivesse voltado para 'Motorista a caminho', e a tela marca 'fora de ordem' num pedido saudável. Quem audita um atraso ou uma reclamação lê um histórico que não aconteceu.
 
   ```
@@ -3649,11 +3784,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 127 — Troca de motorista duplica pedidos de aprovação: a fila não tem unicidade por pedido e a edge não checa se já existe um pendente
+### Etapa 131 — Troca de motorista duplica pedidos de aprovação: a fila não tem unicidade por pedido e a edge não checa se já existe um pendente
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-051
+- **Achados resolvidos:** M-052
 - **Problema hoje:** A fila de aprovações mostra o mesmo motorista e o mesmo pedido várias vezes, os contadores de pendências e de tempo de espera ficam inflados, e um gestor pode aprovar uma cópia enquanto outra continua pendente.
 
   ```
@@ -3664,7 +3799,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A consulta-antes-de-inserir em evaluate-driver/index.ts:770 resolve o caso comum, mas é preciso dizer ao dono que ela NÃO fecha o caso: duas execuções concorrentes (webhook + job reprocessado) continuam criando duas linhas, porque não há unicidade no banco. Então o índice único parcial `on driver_approval_queue (driver_id, order_id) where status = 'PENDING'` não é 'reforço opcional', é a correção de fato — vai em migration + PR aberta para o dono (DDL em produção), e exige limpar duplicatas PENDING existentes antes, senão a criação do índice falha. Enquanto o índice não existir, o patch na edge deve também checar o erro do insert (hoje descartado) para não engolir a falha.
 - **Arquivos e objetos a tocar:** `supabase/functions/evaluate-driver/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/functions/lalamove-webhook/index.ts`
 - **Não tocar / armadilhas:** O índice único não pode ser total: o mesmo motorista legitimamente volta à fila em pedidos diferentes, e um par já decidido (APPROVED/REJECTED) pode reaparecer numa reavaliação — por isso o `where status = 'PENDING'`. Antes de criar o índice é preciso limpar as duplicatas existentes (DML em produção → dono).
-- **Depende de:** etapa 040 · **Libera:** etapa 199
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** No Postgres descartável: disparar DRIVER_ASSIGNED e depois DRIVER_CHANGED para o mesmo pedido e motorista de risco alto e contar `select count(*) from driver_approval_queue where driver_id='<uuid>' and order_id='<uuid>' and status='PENDING'` — hoje devolve 2; depois do fix, 1.
@@ -3677,11 +3812,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 128 — check-driver-alerts alerta sobre pedidos já encerrados: não filtra nem o status do pedido nem o rastreio encerrado
+### Etapa 132 — check-driver-alerts alerta sobre pedidos já encerrados: não filtra nem o status do pedido nem o rastreio encerrado
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Regras de negócio — ciclo de vida**
 
-- **Achados resolvidos:** M-052
+- **Achados resolvidos:** M-053
 - **Problema hoje:** O sistema continua disparando 'motorista parado' e 'desvio de rota' para entregas que já foram concluídas ou canceladas, enchendo o painel de alerta falso e, quando o aviso automático ao fornecedor está ligado, mandando WhatsApp sobre um pedido que já acabou.
 
   ```
@@ -3696,7 +3831,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Ajuste de referência: o `.eq('tracking_status','ACTIVE')` entra no encadeamento da consulta de supabase/functions/check-driver-alerts/index.ts:86-107 (depois do `.select(...)`, não na linha 87 no meio do template do select). O resto do plano está correto, inclusive preservar o bloco de POD, que depende de pedido COMPLETED.
 - **Arquivos e objetos a tocar:** `supabase/functions/check-driver-alerts/index.ts`, `supabase/functions/job-worker/index.ts`
 - **Não tocar / armadilhas:** Filtrar por tracking_status sozinho não basta: end_order_tracking grava 'ended' em minúsculo (supabase/migrations/20261123200000_optout_and_tracking_end.sql:90) e o default é 'ACTIVE' em maiúsculo — por isso o filtro deve ser pela igualdade com 'ACTIVE', nunca por `<> 'ENDED'`. Cuidado para não mover o bloco de MISSING_POD para dentro do novo filtro de estado final: ele depende de order.status === 'COMPLETED'.
-- **Depende de:** etapa 102 · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 142
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No Postgres descartável: criar tracking com is_stopped=true e stopped_since antigo para um pedido COMPLETED, invocar a edge e contar `select count(*) from alerts where type='DRIVER_STOPPED' and order_id='<uuid>'` — hoje cria alerta; depois do fix, zero. Em produção (leitura): `select count(*) from alerts a join lalamove_orders o on o.id=a.order_id where a.type in ('DRIVER_STOPPED','ROUTE_DEVIATION') and o.status in ('COMPLETED','CANCELLED')`.
@@ -3709,11 +3844,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 129 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum
+### Etapa 133 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Testes**
 
-- **Achados resolvidos:** M-053
+- **Achados resolvidos:** M-054
 - **Problema hoje:** Se alguém quebrar a trava de acesso por papel, um usuário de nível baixo (viewer/operator) passa a abrir telas de administrador — segurança, papéis, telemetria — e os 7 checks obrigatórios da CI continuam verdes. O erro só apareceria quando alguém de fora do time visse dado que não devia.
 
   ```
@@ -3737,11 +3872,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 130 — Teste e2e obrigatório bate no endpoint real de recuperação de senha, sem interceptar, e só passa no caminho feliz
+### Etapa 134 — Teste e2e obrigatório bate no endpoint real de recuperação de senha, sem interceptar, e só passa no caminho feliz
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Testes**
 
-- **Achados resolvidos:** M-054
+- **Achados resolvidos:** M-055
 - **Problema hoje:** O check obrigatório "E2E (Playwright)" pode ficar vermelho e travar merge por causa do limite de envio de e-mail do fornecedor, não por defeito no código. E cada execução da CI dispara um pedido real de recuperação de senha no projeto configurado, somando ao contador de limite do Auth.
 
   ```
@@ -3752,7 +3887,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O padrão proposto está certo (e2e/login-lockout.e2e.ts já intercepta com `route.fulfill`) e `**/auth/v1/recover**` é o endpoint que `resetPasswordForEmail` chama. Dois ajustes: (1) o `page.route` tem de ser registrado antes do `page.goto('/forgot-password')` E depois do `ensureSignedOut` do beforeEach (e2e/password-reset.e2e.ts:17-19), que já faz `page.goto('/')` — registrar na própria it, não no beforeEach, para não afetar os outros três testes; (2) no caso 429, a asserção deve travar o comportamento atual (toast de erro genérico + permanecer em /forgot-password), não exigir a mensagem "Se existir uma conta", senão o novo teste nasce vermelho.
 - **Arquivos e objetos a tocar:** `e2e/password-reset.e2e.ts`, `src/pages/ForgotPasswordPage.tsx`, `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** O terceiro teste do arquivo (e2e/password-reset.e2e.ts:51-59) depende de a página /reset-password NÃO ter sessão de recuperação — não instale uma interceptação global de `**/auth/v1/**` que mude esse estado.
-- **Depende de:** — · **Libera:** etapa 142
+- **Depende de:** etapa 029 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com a rota interceptada, `npx playwright test e2e/password-reset.e2e.ts` passa sem rede externa; para ver o problema hoje, interceptar `**/auth/v1/recover**` devolvendo 429 faz o teste atual falhar no `expect` da linha 47.
@@ -3765,11 +3900,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 131 — src/__tests__/improvements-validation.test.tsx: 40 testes que não importam uma linha do aplicativo
+### Etapa 135 — src/__tests__/improvements-validation.test.tsx: 40 testes que não importam uma linha do aplicativo
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Testes**
 
-- **Achados resolvidos:** M-055
+- **Achados resolvidos:** M-056
 - **Problema hoje:** 40 dos 1050 testes verdes não testam o sistema — e são justamente os que prometem cobrir o filtro de menu por papel e os números do painel. Inflam a sensação de cobertura e empurram para depois o teste de verdade dessas duas coisas.
 
   ```
@@ -3780,7 +3915,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho válido; corrijo duas citações. (1) O teste do aria-label da senha NÃO está em :192-198 — está em :280-284 (`describe('AuthPage Accessibility'` em :280, `it('password toggle button should have aria-label'` em :281, com `const showLabel = 'Mostrar senha';` em :283). As linhas :191-200 são outro caso igualmente vazio: `it('counts orders in correct time buckets'` chamando um `computeSparkline` declarado dentro do próprio arquivo. (2) Os arquivos de referência existem e servem: src/lib/roles.ts, src/lib/__tests__/roles.test.ts, src/lib/__tests__/sidebarRoutes.test.ts (que lê o disco de verdade — :24-28 `readFileSync(join(process.cwd(), APP_PATH)...)` + `app.matchAll(/path="([^"]+)"/g)`) e src/hooks/__tests__/useDashboardStats.test.ts (verificado com `ls`). Ressalva ao apagar: antes de remover, confira que `roles.test.ts` já cobre os casos negativos de hierarquia que estavam aqui, para não reduzir cobertura real junto com a falsa.
 - **Arquivos e objetos a tocar:** `src/__tests__/improvements-validation.test.tsx`
 - **Não tocar / armadilhas:** Não apague src/lib/__tests__/roles.test.ts nem src/lib/__tests__/sidebarRoutes.test.ts junto achando que é duplicação: esses dois importam/leem o código real e são a cobertura verdadeira. Apagar o arquivo derruba a contagem total de testes em 40 — não é regressão.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 231
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `grep -c "^import" src/__tests__/improvements-validation.test.tsx` → 1, e esse import é do vitest. `npx vitest run src/__tests__/improvements-validation.test.tsx` passa; alterar a hierarquia em src/lib/roles.ts não muda o resultado.
@@ -3793,11 +3928,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 132 — Atribuir papel exige UUID digitado à mão e revogar não pede confirmação
+### Etapa 136 — Atribuir papel exige UUID digitado à mão e revogar não pede confirmação
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-056
+- **Achados resolvidos:** M-057
 - **Problema hoje:** Para dar acesso a alguém é preciso descobrir e copiar um identificador técnico, com risco de atribuir papel de administrador ao usuário errado; e tirar o acesso de alguém acontece no primeiro clique, sem pergunta.
 
   ```
@@ -3808,7 +3943,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A sugestão de "busca de usuário por e-mail" não é aplicável de imediato: não existe tabela `profiles`/`user_profiles` nem edge de listagem de usuários neste repo (grep por `from('profiles')`, `user_profiles`, `admin.listUsers` em src/ e supabase/functions/ não retorna nada) — o `user_email` de PasswordResetApprovalsPage.tsx:147 é coluna da própria tabela `password_reset_requests`, não um diretório de usuários. Ou seja, a busca exigiria uma edge nova com service_role (decisão do dono). Fix imediato e seguro: validar formato UUID com zod antes de habilitar o botão em RolesPage.tsx:384 e envolver "Revogar Role" no AlertDialog padrão (src/pages/ip-whitelist/IPWhitelistDialogs.tsx:103-126, que confirmei existir).
 - **Arquivos e objetos a tocar:** `src/pages/RolesPage.tsx`, `src/hooks/useRole.ts`
 - **Não tocar / armadilhas:** A revogação é um soft delete (`update is_active=false`, src/hooks/useRole.ts:85-89), então é reversível pelo próprio fluxo de atribuir — a confirmação é para evitar o susto, não para proteger dado perdido. A atribuição usa upsert com `onConflict: 'user_id,role'` (:72-78): reatribuir o mesmo papel não duplica linha.
-- **Depende de:** etapa 028 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /roles, abrir 'Atribuir Role', digitar 'abc' e clicar em Atribuir: o botão libera e o erro só aparece como toast do Postgres ('invalid input syntax for type uuid'). No menu de um usuário, 'Revogar Role' aplica no primeiro clique — conferir `select role, is_active from user_roles where user_id='<id>';`
@@ -3821,11 +3956,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 133 — Validação de IP rejeita IPv6 abreviado, inclusive o exemplo do próprio formulário
+### Etapa 137 — Validação de IP rejeita IPv6 abreviado, inclusive o exemplo do próprio formulário
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-057
+- **Achados resolvidos:** M-058
 - **Problema hoje:** O administrador copia o formato que a própria tela sugere para liberar um IPv6 e recebe 'Formato de IP inválido', sem saber o que corrigir. Na prática a whitelist só aceita IPv4 (ou IPv6 escrito por extenso).
 
   ```
@@ -3836,7 +3971,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto não roda: o projeto usa zod 4 (package.json:99 `"zod": "^4.4.3"`, instalado 4.6.7) e `z.string().ip()` foi removido — verifiquei em Node que `typeof z.string().ip === 'undefined'` (daria TypeError no submit). Em zod 4 use `z.union([z.ipv4(), z.ipv6()])` (testei: `z.ipv6().safeParse('2001:db8::1').success === true`, `z.ipv4().safeParse('192.168.1.1').success === true`), mantendo `.max(45)` e removendo o `min(7)`, com `message` própria para preservar o texto 'Formato de IP inválido'.
 - **Arquivos e objetos a tocar:** `src/pages/IPWhitelistPage.tsx`, `src/pages/ip-whitelist/IPWhitelistDialogs.tsx`
 - **Não tocar / armadilhas:** A coluna `ip_address` é INET (supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql:75), então o banco é a última linha de defesa — mas o erro dele aparece como toast técnico ('invalid input syntax for type inet'); a validação do formulário precisa continuar existindo.
-- **Depende de:** — · **Libera:** etapa 231
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** node -e "const re=/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;console.log(re.test('2001:db8::1'), re.test('::1'))" → hoje imprime `false false`. Depois do fix, ambos devem passar e o insert chegar no banco.
@@ -3849,11 +3984,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 134 — Raio e ETA de aproximacao do pedido so sao validados pelo navegador: valor negativo desliga o aviso em silencio
+### Etapa 138 — Raio e ETA de aproximacao do pedido so sao validados pelo navegador: valor negativo desliga o aviso em silencio
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-058
+- **Achados resolvidos:** M-059
 - **Problema hoje:** Um pedido salvo com raio negativo nunca dispara o aviso de 'motorista chegando' para o cliente, e nada na tela indica isso — o operador acha que configurou o aviso.
 
   ```
@@ -3864,7 +3999,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mesmo plano, mas o passo 2 vai no lugar errado: em vez de clampar à mão em lalamove-api/index.ts:767-768, aperte o contrato em supabase/functions/_shared/schemas.ts:856-857 (`z.number().int().min(50).max(5000)` para o raio e `.int().min(1).max(60)` para o ETA) — a validação já roda para esta action em index.ts:688-689 e vale para qualquer chamador, não só o dialogo. O passo 3 (CHECK em produção) continua sendo item para o dono.
 - **Arquivos e objetos a tocar:** `src/components/orders/NewOrderDialog.tsx`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122130100_geo_foundation.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 137
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Criar um pedido com '-100' no campo 'Raio de aproximacao (m)' e consultar `select approach_radius_m from lalamove_orders where lalamove_id = '<id>';` — o esperado hoje e -100 gravado e nenhum evento DRIVER_APPROACHING em `order_geo_events`.
@@ -3877,11 +4012,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 135 — "Tempo médio de entrega" calculado com três denominadores diferentes, um deles subestimando a média
+### Etapa 139 — "Tempo médio de entrega" calculado com três denominadores diferentes, um deles subestimando a média
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-059
+- **Achados resolvidos:** M-060
 - **Problema hoje:** O tempo médio de entrega aparece menor no Analytics do que nos Relatórios para o mesmo período, e há ainda um "tempo médio de coleta" que é simplesmente 30% do tempo de entrega, não uma medição.
 
   ```
@@ -3892,7 +4027,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Ajustes: (1) `avgPickupTime` não tem nenhum consumidor — `grep -rn "avgPickupTime" src/` retorna só a declaração (useSLAMetrics.ts:16) e a atribuição (:172). Não há o que "medir de fato": é campo morto, basta remover os dois pontos, sem risco de quebrar tela. (2) Enquanto o card do Analytics estiver com variação fixa em useAnalyticsData.ts:79 (`change: avgDeliveryMins > 0 ? -5 : 0`), corrigir só a média deixa o card meio verdadeiro — tirar a seta/variação na mesma mudança ou o dono continua lendo "melhorou 5%" todo dia.
 - **Arquivos e objetos a tocar:** `src/hooks/useAnalyticsData.ts`, `src/pages/reports/useReportData.ts`, `src/hooks/useSLAMetrics.ts`, `src/hooks/useDeliveryMetrics.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 124 · **Libera:** etapa 153, etapa 203, etapa 207, etapa 230
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Para o mesmo intervalo de 7 dias, comparar "Tempo médio de entrega" no Analytics com "Tempo Médio" em Relatórios: o primeiro é sistematicamente menor quando há pedidos concluídos sem scheduled_at.
@@ -3905,11 +4040,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 136 — Gráficos diários usam o dia em UTC enquanto o rótulo é o dia local: pedidos da noite caem no dia seguinte e a tendência exibe a data errada
+### Etapa 140 — Gráficos diários usam o dia em UTC enquanto o rótulo é o dia local: pedidos da noite caem no dia seguinte e a tendência exibe a data errada
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-060
+- **Achados resolvidos:** M-061
 - **Problema hoje:** Todo pedido feito depois das 21h aparece no dia seguinte, e o gráfico de tendência mostra as barras deslocadas um dia. Pico de demanda da noite é atribuído ao dia errado em qualquer comparação.
 
   ```
@@ -3920,7 +4055,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho está certo mas incompleto em useDeliveryMetrics: lá os dois lados estão em UTC (os baldes são criados em src/hooks/useDeliveryMetrics.ts:210 com `date.toISOString().split('T')[0]`), então o agrupamento é internamente consistente — trocar só a linha 216 para dia local QUEBRA o casamento com as chaves e passa a descartar silenciosamente pedidos (o `if (byDate[dateStr])` da linha 217 vira filtro). As duas linhas (210 e 216) têm de mudar no mesmo patch. Vale também olhar o laço `for (let i = 0; i <= days; i++)` em :206, que gera days+1 baldes (8 para 7 dias).
 - **Arquivos e objetos a tocar:** `src/hooks/useAnalyticsData.ts`, `src/hooks/useDeliveryMetrics.ts`, `src/pages/DeliveryMetricsPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 107 · **Libera:** etapa 148
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com um pedido criado às 21:30 (horário de Brasília), conferir em qual coluna do gráfico "Tendência" ele aparece: hoje entra no dia seguinte; e comparar o rótulo do eixo com o dia real no banco.
@@ -3933,11 +4068,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 137 — Monitoramento de Cache esconde justamente as views com falha e mostra "última verificação" da view errada
+### Etapa 141 — Monitoramento de Cache esconde justamente as views com falha e mostra "última verificação" da view errada
 
 **Onda 3 (Integridade de dados e regras de negócio) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-061
+- **Achados resolvidos:** M-062
 - **Problema hoje:** A tela diz "1 view com falha" e não mostra qual nem oferece como corrigir; e a "última verificação" exibida pode ser de horas antes da real. Dado agregado desatualizado continua alimentando os outros painéis sem que ninguém consiga agir.
 
   ```
@@ -3948,7 +4083,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Corrigindo o caminho proposto: (a) o alvo do filtro não é 'failed', é 'stale'/'never_refreshed' — listar todas as linhas de `cache_status` e passar o `status` real (não o derivado de `is_stale`) para o badge, para o rótulo deixar de ser sempre "Atualizado"; (b) o card "Com Falha" (CacheMonitoringPage.tsx:63 e 128-134) deve virar "Nunca atualizadas" (`status === 'never_refreshed'`) ou ser removido, porque `'failed'` é inalcançável pela definição da view — manter o card como está é mostrar um zero permanente; (c) `getStatusLabel`/`getStatusVariant` (CacheMonitoringPage.tsx:25-41) precisam de um caso para `'never_refreshed'`, senão cai no `default: 'Desconhecido'`; (d) a armadilha apontada sobre `|| 0` é pior do que ele diz: `refresh_duration_ms` é `NULL::INTEGER` fixo na própria view (migration linhas 104-110), então a "Latência" exibida em CacheMonitoringPage.tsx:198 é sempre 0ms — não é só máscara de nulo, é um dado que o backend não fornece; (e) `lastChecked` como máximo de `last_refresh` está correto.
 - **Arquivos e objetos a tocar:** `src/hooks/useCacheViews.ts`, `src/pages/CacheMonitoringPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 134 · **Libera:** etapa 138, etapa 207, etapa 219, etapa 230
+- **Depende de:** etapa 091 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select view_name, status, is_stale from cache_status;` com uma view em 'failed': o card "Com Falha" marca 1 e a grade abaixo não traz essa view.
@@ -3967,11 +4102,11 @@ Checklist de conclusão:
 ## Onda 4 — Funcionalidades incompletas
 
 
-### Etapa 138 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação
+### Etapa 142 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação
 
 **Onda 4 (Funcionalidades incompletas) / Alta / Integrações e contratos**
 
-- **Achados resolvidos:** A-053
+- **Achados resolvidos:** A-057
 - **Problema hoje:** Quando o cliente escolhe caminhão, van, Fiorino ou carro e marca extras pagos (bolsa térmica, tempo de espera, ajudante de carga, viagem de volta), a cotação sai SEM esses extras: o preço fica errado e o motorista chega sem o combinado. Em motos e nos serviços LALAGO/LALAPRO os mesmos extras passam normalmente — a tela mente sobre o que foi pedido, dependendo do veículo.
 
   ```
@@ -3982,7 +4117,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto (fonte única em `_shared/`, importada pelos dois lados). Dois reparos: (1) o front NÃO passa pelo `lalamove-gateway` nesta tela — chama `supabase.functions.invoke('lalamove-api', ...)` direto (NewOrderDialog.tsx:302), então não há ponto intermediário onde sanear; (2) o fallback `if (!allowed) return { clean: requested, dropped: [] }` deixa de ser aceitável depois da unificação: com o mapa completo (14 serviceTypes de src/types/lalamove.ts:18-33), serviceType fora da lista é erro de entrada e deve devolver 400, não silêncio. Enquanto não houver `_shared/`, o diff mínimo (copiar valores e chaves do catálogo) resolve.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/src/lib/lalamoveCatalog.ts`, `/home/user/Lalamove_V2/src/components/orders/NewOrderDialog.tsx`, `/home/user/Lalamove_V2/src/types/lalamove.ts`
 - **Não tocar / armadilhas:** Não trocar o `console.warn` por `throw`: pedido de origem externa (Bitrix24/n8n) pode mandar um código antigo e hoje ele só é descartado. `lalamoveCatalog.ts:236` (`filterValidSpecialRequests`) também considera a cidade (`cities` em `SERVICE_CATALOG`) — a edge não tem a cidade no corpo da cotação, então a versão compartilhada precisa aceitar cidade opcional, sem endurecer o que hoje passa. Há 14 serviceTypes e vários têm matriz própria (`CARFOURH`, `VANFOURH`, `UV_4H`, `TRUCK3_5T`, `TRUCK_6H`): copiar todos, não só os 7 atuais.
-- **Depende de:** etapa 137 · **Libera:** etapa 204
+- **Depende de:** etapa 132 · **Libera:** etapa 161
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run src/lib/__tests__/lalamoveCanonical.test.ts` cobre o lado do front. Para a edge: chamar `action: 'quotation'` com `{serviceType:'CAR', specialRequests:['WAITING_TIME_030MIN']}` e conferir nos logs da função a linha `Dropping incompatible specialRequests for CAR: [ "WAITING_TIME_030MIN" ]` — hoje ela aparece; depois do fix não deve aparecer e o `priceBreakdown.total` da cotação deve subir em relação à mesma cotação sem o extra.
@@ -3995,11 +4130,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 139 — IP Whitelist e Bloqueio Geográfico são telas de segurança que nenhum código aplica
+### Etapa 143 — IP Whitelist e Bloqueio Geográfico são telas de segurança que nenhum código aplica
 
 **Onda 4 (Funcionalidades incompletas) / Alta / Interface — administração**
 
-- **Achados resolvidos:** A-054
+- **Achados resolvidos:** A-058
 - **Problema hoje:** O dono acha que restringiu o acesso ao sistema a IPs e países específicos; na prática qualquer pessoa de qualquer país e qualquer IP continua entrando normalmente. É falsa sensação de segurança em duas telas de admin.
 
   ```
@@ -4010,7 +4145,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O ponto de aplicação proposto está certo, mas a referência de padrão está errada: supabase/functions/lalamove-gateway/index.ts:231-245 é guarda de AUTENTICAÇÃO (Bearer + `supabase.auth.getClaims(token)` → 401), não de papel nem de origem — qualquer usuário autenticado passa. Serve como modelo de 'recusar antes de trabalhar', não como modelo de autorização. Além disso, aplicar nas edges cobre só as chamadas às edges: o acesso direto ao PostgREST (`supabase.from(...)` do front) continua fora do bloqueio geográfico, porque RLS não vê o IP de origem. Se a promessa é 'acesso ao sistema', o ponto correto é a borda (WAF do Vercel / Supabase), e as edges ficam como defesa em profundidade. Enquanto não houver aplicação, trocar os textos de GeoBlockingPage.tsx:296-299 e IPWhitelistPage.tsx (descrição "IPs listados aqui têm acesso permitido ao sistema") por aviso de lista não aplicada.
 - **Arquivos e objetos a tocar:** `src/pages/GeoBlockingPage.tsx`, `src/pages/IPWhitelistPage.tsx`, `src/hooks/useRateLimiting.ts`
 - **Não tocar / armadilhas:** A pendência docs/pendencias/P-08-geo-blocks-sem-rls.md já foi fechada (RLS existe) — isto é outro problema, não o mesmo. Não apagar as telas: a lista em si é usada pelos painéis de rate limit. Ligar bloqueio por país/IP de verdade pode trancar o próprio dono fora do sistema; precisa da confirmação dele e de uma whitelist do IP de operação antes de ativar.
-- **Depende de:** etapa 105 · **Libera:** etapa 140
+- **Depende de:** — · **Libera:** etapa 144, etapa 163
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** grep -rn "is_ip_whitelisted\|is_country_blocked\|geo_blocks\|ip_whitelist" supabase/functions/ → hoje retorna zero linhas. Depois do fix, chamar uma edge protegida de um IP fora da whitelist e esperar 403 no log da função.
@@ -4023,11 +4158,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 140 — Dashboard de Analytics mostra variação percentual inventada (+12%, +8%, -3%, -15%) como "vs período anterior"
+### Etapa 144 — Dashboard de Analytics mostra variação percentual inventada (+12%, +8%, -3%, -15%) como "vs período anterior"
 
 **Onda 4 (Funcionalidades incompletas) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-055
+- **Achados resolvidos:** A-059
 - **Problema hoje:** A página chamada "Métricas reais do sistema" mostra que pedidos subiram 12% e alertas caíram 15% todos os dias, inclusive quando caíram pela metade. Decisão de negócio tomada sobre número fictício.
 
   ```
@@ -4038,7 +4173,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho válido, com dois ajustes: (1) a janela anterior em useAnalyticsData.ts:25-26 se sobrepõe à atual na borda (`prevEndDate = startOfDay(subDays(new Date(), days))` e `startDate = startOfDay(subDays(new Date(), days - 1))` deixam o dia de corte contado nas duas janelas) — corrigir junto, senão o `change` novo já nasce enviesado; (2) `prevOrdersRes` só traz `id, status` (linha 33), suficiente para pedidos e entregas, mas para o "Tempo médio de entrega" da janela anterior será preciso incluir `actual_delivery, scheduled_at` nesse select. Também lembrar que :84 esconde a linha quando `change === 0`: com dados reais, variação zero passa a não aparecer — é aceitável, mas é mudança visível.
 - **Arquivos e objetos a tocar:** `src/pages/AnalyticsDashboardPage.tsx`, `src/hooks/useAnalyticsData.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 139 · **Libera:** etapa 149
+- **Depende de:** etapa 143 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Trocar o período de 7 para 90 dias: os quatro percentuais continuam 12/8/3/15 e as setas não mudam de direção.
@@ -4051,11 +4186,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 141 — AGENTS.md indica a edge mapbox-proxy como o proxy do Mapbox; ela foi removida do repo na etapa 61
+### Etapa 145 — AGENTS.md indica a edge mapbox-proxy como o proxy do Mapbox; ela foi removida do repo na etapa 61
 
 **Onda 4 (Funcionalidades incompletas) / Média / Documentação × código**
 
-- **Achados resolvidos:** M-062
+- **Achados resolvidos:** M-063
 - **Problema hoje:** Agente encarregado de mexer em mapa procura uma funcao que nao existe, ou pior, recria/declara `mapbox-proxy` no config.toml — e, conforme o aviso no proprio config.toml, declarar funcao sem diretorio derruba o deploy de todas as edges de uma vez.
 
   ```
@@ -4066,7 +4201,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mantenho: trocar `mapbox-proxy` por `geo-gateway` na linha 107 do AGENTS.md e nao duplicar ali o detalhe que config.toml:93-97 ja guarda. Uma ressalva ao caminho proposto: nao vale um PR proprio — AGENTS.md e vigiado por scripts/ci/check-agents-md-integrity.mjs e pelo required check "Guarda AGENTS.md / docs/agentes", entao pendure essa troca de uma palavra no mesmo PR que corrigir os outros dois achados de doc, em vez de gastar um ciclo de CI nela.
 - **Arquivos e objetos a tocar:** `AGENTS.md`, `supabase/config.toml`, `src/hooks/useMapbox.ts`, `supabase/functions/geo-gateway/providers/mapbox.ts`
 - **Não tocar / armadilhas:** Nao adicionar [functions.mapbox-proxy] ao config.toml em hipotese alguma (quebra o deploy de todas as edges). Nao remover a funcao do painel Supabase — e acao do dono, ja registrada como pendente no config.toml. Editar AGENTS.md faz o guard check-agents-md-integrity.mjs rodar: mudanca pequena passa, mas conferir com `node scripts/ci/check-agents-md-integrity.mjs` antes do PR.
-- **Depende de:** etapa 089 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** ls supabase/functions | grep mapbox retorna apenas get-mapbox-token; grep -rn "mapbox-proxy" src/ supabase/ retorna somente comentarios (useMapbox.ts:57, useGeoSearch.ts:6) e o bloco explicativo do config.toml — nenhuma invocacao.
@@ -4079,11 +4214,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 142 — pendencias-dono.md apresenta 3 PRs como abertas aguardando decisao do dono; as 3 estao mergeadas na main
+### Etapa 146 — pendencias-dono.md apresenta 3 PRs como abertas aguardando decisao do dono; as 3 estao mergeadas na main
 
 **Onda 4 (Funcionalidades incompletas) / Média / Documentação × código**
 
-- **Achados resolvidos:** M-063
+- **Achados resolvidos:** M-064
 - **Problema hoje:** O dono abre a fila de decisoes e ve tres decisoes pendentes que nao existem mais, incluindo duas que envolvem mudanca de banco. Pior: um agente pode tentar "ajudar" reaplicando o rename de migration ou reabrindo PR equivalente, criando conflito em cima de trabalho que ja esta na main.
 
   ```
@@ -4094,7 +4229,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mesmo plano, com as linhas certas: apagar :7-15 (secao + tabela + a frase "Todas as três ...") e preservar "## Tabelas de migration sem correspondência em produção" :17-24, que segue aberta (`cache_refresh_log`, `entity_versions`, `job_queue_processing_log`). Com a fila de PRs vazia, escrever uma linha dizendo isso, como o auditor propoe. Conferir cada PR antes de apagar: aqui conferi por `git log origin/main`, nao por numero.
 - **Arquivos e objetos a tocar:** `docs/agentes/pendencias-dono.md`
 - **Não tocar / armadilhas:** O item "Tabelas de migration sem correspondencia em producao" (cache_refresh_log, entity_versions, job_queue_processing_log) nao foi verificado nesta auditoria — sem MCP do banco oficial, nao da para dizer se foi resolvido; deixar como esta.
-- **Depende de:** etapa 130 · **Libera:** etapa 161
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Para cada arquivo: git log --oneline -1 origin/main -- supabase/migrations/<arquivo> retorna o commit de squash com o numero da PR; e `ls supabase/migrations | grep 20261123190000` retorna um unico arquivo.
@@ -4107,11 +4242,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 143 — Fallback temporizado entre WhatsApp e SMS está escrito e testado, mas nenhum código o usa
+### Etapa 147 — Fallback temporizado entre WhatsApp e SMS está escrito e testado, mas nenhum código o usa
 
 **Onda 4 (Funcionalidades incompletas) / Média / Backend — notificação e fila**
 
-- **Achados resolvidos:** M-064
+- **Achados resolvidos:** M-065
 - **Problema hoje:** Quando o WhatsApp aceita a mensagem mas o motorista não lê (telefone sem internet, aparelho desligado), nada acontece: não existe o SMS de contingência depois de 10 minutos que o plano prevê. O motorista só descobre a mudança quando alguém liga. O runbook (mensageria.md:9-10) diz que o roteador resolve rota e canal, o que não é o caso.
 
   ```
@@ -4122,7 +4257,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Confirmei que o gancho proposto existe: index.ts:223-243 insere em `job_queue` com `dedup_key: `deferred:${alert_id}`` e `next_retry_at: runAt.toISOString()` — serve de molde. Duas correções no texto do auditor: (1) a opção (b) está errada ao mandar corrigir mensageria.md:9-10 por inteiro — 'aplica idempotência, horário de silêncio e limite por motorista' é verdade (dedup em index.ts:175-182, horário de silêncio em index.ts:221-222 via ./quiet-hours.ts, limite em index.ts:630-668); só 'resolve rota e canal (_shared/messaging/router.ts)' é falso, porque o canal vem de metadata.recipients/alert_configurations. Corrigir só esse trecho, senão o doc passa a negar proteção que está no ar. (2) `applyQuietHours` do router não é simplesmente 'sem consumidor' — ela tem uma regra que o caminho vivo não implementa ('motorista com pedido ativo nunca espera', router.ts:238-245); registrar isso como divergência, não como código morto.
 - **Arquivos e objetos a tocar:** `supabase/functions/_shared/messaging/router.ts`, `supabase/functions/send-notification/index.ts`, `docs/agentes/mensageria.md`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** etapa 145, etapa 163
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `grep -rn "shouldFallback\|resolveChannels\|applyQuietHours\|suppressionReason" --include=*.ts supabase/ src/ | grep -v test` — hoje só encontra as próprias definições em `router.ts`. É essa a evidência; depois do fix (a), aparece o chamador em `send-notification/index.ts`.
@@ -4135,11 +4270,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 144 — Falhas de consulta engolidas: contadores da sidebar e contagem de incidentes viram zero sem avisar
+### Etapa 148 — Falhas de consulta engolidas: contadores da sidebar e contagem de incidentes viram zero sem avisar
 
 **Onda 4 (Funcionalidades incompletas) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-065
+- **Achados resolvidos:** M-066
 - **Problema hoje:** O operador vê o menu sem nenhuma aprovação pendente, nenhum alerta e nenhum incidente aberto, e a lista de motoristas com zero ocorrências, quando na verdade a consulta falhou. Trabalho crítico deixa de ser feito por parecer que não existe.
 
   ```
@@ -4150,7 +4285,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O `throw error` nas tres funcoes de useSidebarCounts e necessario mas NAO suficiente como descrito: o proprio hook achata o erro em zero na saida — src/hooks/useSidebarCounts.ts:52-54 `unreadAlerts: results[0].data ?? 0, pendingApprovals: results[1].data ?? 0, openIncidents: results[2].data ?? 0`. O fix tem de devolver tambem o estado de erro (ex.: `isError: results.some(r => r.isError)` ou contadores `number | null`) e a Sidebar/MobileSidebar esconder o badge nesse caso; so lancar na queryFn mantem o 0 na tela. Em useDrivers o `throw incidentError` proposto esta correto, mas derruba a lista inteira de motoristas por causa dos incidentes — preferir `incidentCount: null` + '—' na UI, que ja era a alternativa citada.
 - **Arquivos e objetos a tocar:** `src/hooks/useSidebarCounts.ts`, `src/hooks/useDrivers.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 140 · **Libera:** etapa 149, etapa 158
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev, bloquear a leitura de `driver_incidents` no Postgres descartável e abrir a tela de motoristas: hoje todos aparecem com 0 incidentes e nenhum erro; depois do fix, estado de erro visível.
@@ -4163,11 +4298,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 145 — Painel de saúde do sistema mostra números inventados e mina um token Mapbox a cada 30 segundos
+### Etapa 149 — Painel de saúde do sistema mostra números inventados e mina um token Mapbox a cada 30 segundos
 
 **Onda 4 (Funcionalidades incompletas) / Média / Hooks e estado — auth, permissão e infra**
 
-- **Achados resolvidos:** M-066
+- **Achados resolvidos:** M-067
 - **Problema hoje:** O painel que o dono usaria para saber se o sistema está de pé informa disponibilidade de 99,9% e 15 conexões sempre, independentemente da realidade — ou seja, não serve para detectar incidente. E cada aba aberta nessa tela pede o token do mapa a cada meio minuto sem precisar dele.
 
   ```
@@ -4186,7 +4321,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto. Um reparo: ao implementar o desvio `healthCheck: true` na edge, responda `{ ok: true }` depois de validar o contrato (index.ts:30-35) e antes de montar a resposta com o token, não 'antes de ler MAPBOX_ACCESS_TOKEN' — a leitura do env está na linha 23, acima da validação, e mover a validação para baixo abriria a função a corpo inválido.
 - **Arquivos e objetos a tocar:** `src/hooks/healthChecks.ts`, `src/hooks/useSystemHealth.ts`, `src/pages/SystemHealthPage.tsx`, `supabase/functions/get-mapbox-token/index.ts`
 - **Não tocar / armadilhas:** `src/hooks/healthChecks.ts` é um módulo paralelo (usado pelo painel expandido) com a mesma checagem — mudar a edge resolve os dois; mudar só o hook deixa a duplicação. O campo `fnLatency` é medição real e deve continuar.
-- **Depende de:** etapa 143 · **Libera:** —
+- **Depende de:** etapa 148 · **Libera:** etapa 150, etapa 170, etapa 236
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /system-health com a aba Network aberta: o campo Uptime mostra 99.9% e Connections 15/100 mesmo com o banco respondendo lento, e aparece um POST para `/functions/v1/get-mapbox-token` a cada 30s cuja resposta contém o token.
@@ -4199,11 +4334,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 146 — Nao existe vercel.json nem fallback de SPA no repositorio, com 58 rotas em BrowserRouter
+### Etapa 150 — Nao existe vercel.json nem fallback de SPA no repositorio, com 58 rotas em BrowserRouter
 
 **Onda 4 (Funcionalidades incompletas) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-067
+- **Achados resolvidos:** M-068
 - **Problema hoje:** Link direto para uma tela interna compartilhado com alguem que nunca abriu o sistema pode cair em pagina de erro, mesmo com o usuario tendo acesso.
 
   ```
@@ -4214,7 +4349,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Antes de criar vercel.json, confirme o sintoma com um request real a uma rota profunda no domínio de produção (ex.: `curl -I https://<dominio>/pedidos` em aba limpa, sem service worker) e confira o painel da Vercel (Project > Settings > Rewrites). Só se o 404 aparecer é que o arquivo se justifica. Observação sobre a armadilha citada: o vercel.json de contexto.yml:417-419 não é um rewrite — é `ignoreCommand`/`deploymentEnabled` para impedir deploy da branch gerada; criar um vercel.json na main com `rewrites` não interfere nele (branches diferentes), mas cuidado com o inverso: a branch `contexto` é montada do zero pelo job, então ela continuará sem o rewrite — o que é o desejado.
 - **Arquivos e objetos a tocar:** `src/App.tsx`, `public/sw.js`, `.github/workflows/contexto.yml`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 149 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `curl -sI https://<dominio-de-producao>/<rota-interna>` tem de devolver 200 e `content-type: text/html` numa sessao sem service worker (use `--no-keepalive` em aba anonima equivalente, ou `curl` puro, que nao executa SW).
@@ -4227,11 +4362,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 147 — Traçado de rota fica no mapa para sempre depois que o pedido sai do rastreamento
+### Etapa 151 — Abrir o painel de configurações do mapa zera os limiares de alerta que o operador acabou de ajustar
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-068
+- **Achados resolvidos:** M-069
+- **Problema hoje:** O operador ajusta os limites de 'fora de rota', 'parado' e cerca do mapa, fecha o painel e, ao reabrir, tudo volta ao padrão — os alertas do mapa passam a usar valores que ninguém escolheu.
+
+  ```
+  src/components/map/MapSettingsPanel.tsx:34-39 `useEffect(() => {` / `if (show && activeContext) {` / ... / `await loadContextSettings(activeContext);`; src/hooks/useMapSettings.ts:107-110 `} else {` / `// Fallback to defaults if no specific context found` / `get().resetToDefaults();` / `}`; useMapSettings.ts:119-123 `resetToDefaults: () => set({ offRouteThreshold: 500, ... })`
+  ```
+  Mesma causa, outro local — Hooks e estado — auth, permissão e infra:
+  ```
+  src/hooks/useMapSettings.ts:107-110 `} else { // Fallback to defaults if no specific context found` / `get().resetToDefaults(); }` · :119-123 `resetToDefaults: () => set({ offRouteThreshold: 500, stoppedThreshold: 15, geofenceRadius: 300, })` || src/components/map/MapSettingsPanel.tsx:34-39 `useEffect(() => { if (show && activeContext) { ... await loadContextSettings(activeContext);` || src/components/map/LiveMap.tsx:559 `<MapSettingsPanel show={showSettings} onClose={() => setShowSettings(false)} />` (sem activeContext → sempre 'default')
+  ```
+- **Causa raiz:** O painel chama `loadContextSettings('default')` toda vez que abre (`activeContext` tem default 'default', MapSettingsPanel.tsx:15). Se não existe linha salva em `map_settings_overrides` para esse contexto — o caso normal, porque salvar depende de o usuário clicar em Salvar (linha 53) — o store executa `resetToDefaults()` e sobrescreve offRouteThreshold/stoppedThreshold/geofenceRadius com 500/15/300, descartando o que estava persistido no localStorage pelo zustand (useMapSettings.ts:43-50, 119-123). O mesmo reset acontece no `catch` (linha 114).
+- **Caminho recomendado:** Em useMapSettings.ts:107-116, não chamar `resetToDefaults()` quando não há linha para o contexto: ausência de override significa 'mantém o que já está', e o default só vale na primeira inicialização do store (que já o define nas linhas 46-48). No `catch`, idem: preservar o estado e apenas sinalizar a falha. Alternativa de menor diff: deixar o painel carregar override só quando `activeContext !== 'default'` (MapSettingsPanel.tsx:35). Atalho tentador a evitar: remover o `loadContextSettings` do efeito — isso quebraria o carregamento por contexto (região/tipo) previsto na interface do store (useMapSettings.ts:24-29).
+  AJUSTE DO REVISOR: A correção principal (não chamar `resetToDefaults()` quando não há linha, e preservar estado no `catch`) está certa, mas precisa de um complemento para não criar vazamento entre contextos: hoje o reset é o único mecanismo que 'desaplica' o override de um contexto ao voltar para outro. Ao remover o reset, trocar de 'region:sul' (com override) para 'default' (sem linha) manteria os valores do sul. A forma correta é guardar os valores base (os do usuário, antes de qualquer override) e restaurar esses — não os defaults 500/15/300 — quando o contexto não tem linha. A alternativa de menor diff sugerida (só carregar quando `activeContext !== 'default'`) resolve o sintoma reportado mas mantém o mesmo vazamento ao sair de um contexto específico.
+- **Arquivos e objetos a tocar:** `src/components/map/LiveMap.tsx`, `src/components/map/MapSettingsPanel.tsx`, `src/hooks/useMapSettings.ts`
+- **Não tocar / armadilhas:** A consulta de `loadContextSettings` filtra só por `context_key` e usa `maybeSingle()` (useMapSettings.ts:93-97), enquanto o upsert grava com `user_id` (linhas 69-75): se o RLS da tabela permitir ler linhas de outros usuários, `maybeSingle` erra com múltiplas linhas e cai no mesmo reset — ao corrigir, acrescentar o filtro por `user_id`. Os limiares alimentam os alertas exibidos (LiveMap.tsx:96 e MapHUD via props 552-554), então mudar o default muda o comportamento dos alertas, não só a tela.
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Em /live-map: abrir o painel de ajustes, mover os sliders (sem clicar em Salvar), fechar e reabrir. Hoje os valores voltam a 500 m / 15 min / 300 m — confirmável também em `JSON.parse(localStorage.getItem('map-settings-storage'))` antes e depois de reabrir. Após o fix, os valores ajustados permanecem.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 152 — Traçado de rota fica no mapa para sempre depois que o pedido sai do rastreamento
+
+**Onda 4 (Funcionalidades incompletas) / Média / Interface — mapa e rastreamento**
+
+- **Achados resolvidos:** M-070
 - **Problema hoje:** Ao longo do turno o mapa vai acumulando linhas de entregas já encerradas; o operador vê rotas que não existem mais e a tela fica cada vez mais pesada até ele recarregar a página.
 
   ```
@@ -4242,7 +4409,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto. Acrescente duas coisas que o auditor não viu: (a) a camada e a source têm o MESMO id (`addLayer({ id: sourceId, source: sourceId })`, useMapMarkers.ts:266-271), então a ordem precisa ser removeLayer antes de removeSource; (b) o mesmo laço também não limpa os marcadores de `pointMarkers` (`${id}-pickup`, `${id}-delivery`, `${id}-stopped`, criados em useMapMarkers.ts:203-226) — remova-os no mesmo ponto, senão pino de coleta/entrega de pedido encerrado continua no mapa. Inclua `routeLines.current.delete(id)` e faça `resetMarkers` apagar as camadas antes de `clear()`.
 - **Arquivos e objetos a tocar:** `src/components/map/hooks/useMapMarkers.ts`
 - **Não tocar / armadilhas:** Remover a layer antes da source, nessa ordem, senão o mapbox lança. Também existem markers de pickup/delivery/stopped com ids derivados (`${id}-pickup`, `${id}-delivery`, `stopped-${id}`, linhas 202/215/303) que ficam órfãos no mesmo cenário — mesmo laço resolve, mas não mexer no clustering (linhas 389-394), que já tem reconciliação própria.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 032 · **Libera:** etapa 171
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev, com o handle `window.__livemap` (LiveMap.tsx:155-157): rodar `Object.keys(window.__livemap.getStyle().sources).filter(s=>s.startsWith('route-')).length`, concluir/cancelar um pedido rastreado e repetir — hoje o número não cai; após o fix, cai junto com o marcador.
@@ -4255,11 +4422,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 148 — Zonas de risco do mapa são polígonos fixos escritos no código, apresentados como informação operacional
+### Etapa 153 — Zonas de risco do mapa são polígonos fixos escritos no código, apresentados como informação operacional
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-069
+- **Achados resolvidos:** M-071
 - **Problema hoje:** O mapa marca duas áreas como 'alto risco' e 'atenção' que não vêm de nenhuma análise: a equipe pode tomar decisão de rota confiando em desenho de exemplo, e áreas realmente problemáticas não aparecem.
 
   ```
@@ -4270,7 +4437,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correta (source vazia + `setRiskZones` no padrão de `setExpectedRoute`, mapLayers.ts:243-253 e :293-297). Um ajuste necessário: `applyRasterOverlay` usa `risk-zones-fill` como âncora de ordenação (mapLayers.ts:306 `const beforeId = map.getLayer('risk-zones-fill') ? 'risk-zones-fill' : undefined;`); se a camada deixar de ser criada enquanto não houver dado, o overlay OSM/Esri passa a entrar no topo e cobre os overlays customizados. Então, ou mantém-se a camada criada com `FeatureCollection` vazia (invisível, e a âncora continua existindo), ou troca-se a âncora na mesma PR. A legenda citada não precisa ser mexida: não existe legenda de zonas de risco no mapa hoje.
 - **Arquivos e objetos a tocar:** `src/components/map/mapLayers.ts`, `src/components/map/__tests__/mapLayers.test.ts`
 - **Não tocar / armadilhas:** A camada 'risk-zones-fill' é usada como âncora de ordenação do overlay raster (mapLayers.ts:306 `const beforeId = map.getLayer('risk-zones-fill') ? 'risk-zones-fill' : undefined;`): se ela deixar de existir quando não há dado, conferir que o OSM/Esri continua entrando abaixo dos overlays customizados.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 139 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev: `window.__livemap.getSource('risk-zones')._data.features.map(f=>f.properties.name)` em /live-map devolve exatamente os dois nomes fixos, em qualquer banco e qualquer usuário — prova de que não vem de dado. Após o fix, a lista deve refletir as regras cadastradas (ou ficar vazia).
@@ -4283,11 +4450,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 149 — Aba Acessibilidade das preferências não aplica nem salva nada
+### Etapa 154 — Aba Acessibilidade das preferências não aplica nem salva nada
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-070
+- **Achados resolvidos:** M-072
 - **Problema hoje:** Quem precisa de alto contraste, texto maior ou menos animação liga as opções, vê o botão mudar de posição e nada acontece; ao recarregar a página as opções voltam a desligadas. A promessa de acessibilidade do sistema não existe.
 
   ```
@@ -4298,7 +4465,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto e seguro (hook próprio com localStorage + atributos em document.documentElement + CSS em src/index.css, incluído no handleResetAll). Único ajuste: `reducedMotion` já é atendido pelo sistema via src/index.css:41/:286, então o hook deve tratar o toggle como override explícito (3 estados: auto/ligado/desligado) em vez de sobrescrever o que o sistema pede, senão quem usa 'reduzir animações' no SO perde o comportamento atual.
 - **Arquivos e objetos a tocar:** `src/pages/UserPreferencesPage.tsx`
 - **Não tocar / armadilhas:** `reducedMotion` nasce lendo `window.matchMedia('(prefers-reduced-motion: reduce)')` (:47): ao implementar, a escolha explícita do usuário deve prevalecer sobre a preferência do sistema, e não ser sobrescrita a cada render. A aplicação usa framer-motion em quase toda tela — reduzir movimento de verdade exige respeitar a flag nos componentes de animação, não só no CSS.
-- **Depende de:** etapa 140 · **Libera:** etapa 150, etapa 158
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /preferences > Acessibilidade, ligar 'Alto contraste' e 'Texto maior', navegar para outra tela e recarregar: hoje nada muda visualmente e os switches voltam ao estado inicial. Depois do fix, inspecionar `document.documentElement.dataset` e ver o atributo gravado.
@@ -4311,11 +4478,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 150 — Banner 'Secrets de notificação pendentes' é fixo no código e o botão Configurar não faz nada
+### Etapa 155 — Banner 'Secrets de notificação pendentes' é fixo no código e o botão Configurar não faz nada
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-071
+- **Achados resolvidos:** M-073
 - **Problema hoje:** O gerente vê um alerta permanente de pendência que pode já estar resolvida, clica em 'Configurar' e nada acontece. Ou o inverso: confia que está tudo certo porque o aviso é 'sempre assim' e deixa de notar que as notificações realmente não estão ativas.
 
   ```
@@ -4326,7 +4493,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A opção (1) é boa, mas cuidado com o modelo citado: check-external-api existe (supabase/functions/check-external-api) e é usada em src/hooks/useGeoAdmin.ts:336 via useGeoProviderHealth (:333) — ela testa provedor de geocodificação, não canal de notificação; serve de molde, não de endpoint pronto, então a opção (1) exige mexer na edge. Na opção (2), a referência de linha está errada: MapsSettingsPage.tsx:537 é um <Input> de raio de chegada; o padrão `Button ... asChild` está em MapsSettingsPage.tsx:333. Mais simples e sem edge: condicionar o banner ao estado real já disponível na própria página (configs com canal habilitado) ou, no mínimo, trocar o botão morto por link para docs/agentes/deploy.md com o asChild de :333.
 - **Arquivos e objetos a tocar:** `src/pages/AlertConfigurationsPage.tsx`
 - **Não tocar / armadilhas:** Não exibir nome nem valor de segredo na tela além do nome da variável, que já está lá. O botão 'Testar' de cada canal (src/pages/alert-configurations/AlertConfigCard.tsx:116-123) dispara notificação real para os destinatários cadastrados — não reaproveitar esse caminho como 'verificação de secret'.
-- **Depende de:** etapa 149 · **Libera:** etapa 151, etapa 170, etapa 236
+- **Depende de:** etapa 102 · **Libera:** etapa 229, etapa 238
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /alert-configurations e clicar em 'Configurar': nada acontece (sem navegação, sem diálogo, sem request na aba Network). Depois do fix, o banner deve desaparecer quando os três segredos existirem.
@@ -4339,11 +4506,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 151 — Provedor reserva (fallback) do mapa é só exibido, nunca configurável
+### Etapa 156 — Provedor reserva (fallback) do mapa é só exibido, nunca configurável
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-072
+- **Achados resolvidos:** M-074
 - **Problema hoje:** O administrador lê que existe um provedor reserva para quando o mapa principal falhar, mas não consegue escolher qual é. Quem quiser mudar depende de alterar o banco direto.
 
   ```
@@ -4354,7 +4521,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto (segundo Select espelhando :655-676, enviando por updateSetting.mutate, que já aceita fallback_provider — src/hooks/useGeoAdmin.ts:250-275 com onConflict 'function' — e respeitando canWrite). Dois ajustes: (a) o CHECK do banco aceita 'off' como texto, não NULL, para fallback (supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql:32-33 `CHECK (fallback_provider IN ('google','mapbox','auto','off'))`), então mapear a opção "nenhuma" para NULL como o código já faz em :215, não para a string 'off'; (b) preservar o comportamento atual de limpar o fallback quando o primário vai para 'off' (:215), senão desligar uma função deixa de desligar — resolve() cairia no fallback (resolver.ts:126 `tryOne(primary,...) ?? tryOne(fallback,...)`).
 - **Arquivos e objetos a tocar:** `src/pages/MapsSettingsPage.tsx`
 - **Não tocar / armadilhas:** Esta é a única tela do escopo que respeita papel corretamente (canWrite = isAdmin e RLS admin-only em supabase/migrations/20261122130100_geo_foundation.sql:569-575) — não afrouxar isso ao mexer. Toda alteração dispara auditoria por trigger (trg_geo_settings_audit, :618-620); o volume de audit_log cresce a cada clique.
-- **Depende de:** etapa 150 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /settings/maps como admin: a coluna 'Reserva' é texto puro, sem controle. Depois do fix, trocar a reserva de 'Rota' e conferir `select function, provider, fallback_provider from geo_settings where function='route';`
@@ -4367,11 +4534,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 152 — Consulta que falha aparece como 'nenhum registro' em tres blocos do detalhe do pedido
+### Etapa 157 — Consulta que falha aparece como 'nenhum registro' em tres blocos do detalhe do pedido
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-073
+- **Achados resolvidos:** M-075
 - **Problema hoje:** Quando a consulta falha (politica de acesso, rede, coluna renomeada) a tela afirma que nao existe prova de entrega, nem codigo de entrega, nem historico de status do pedido. O operador decide com base numa ausencia que e falsa — inclusive em disputa de entrega, onde a foto existe.
 
   ```
@@ -4382,7 +4549,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto esta correto (lancar o erro em OrderDetailModal.tsx:481 e ler `isError` nos outros dois, no formato de src/components/lalamove/UapiOrderHistoryPanel.tsx:53-61). Acrescento: so acender o bloco de :867 nao cobre o bloco de POD/comprovantes em :952, que tambem renderiza nada quando a leitura falha — o aviso de erro precisa valer para as duas secoes que consomem `stopsData`.
 - **Arquivos e objetos a tocar:** `src/components/orders/OrderDetailModal.tsx`, `src/components/orders/OrderGeoEvents.tsx`, `src/components/orders/StatusTimeline.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 104 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir um pedido, bloquear no devtools a requisicao a `lalamove_stops` (ou derrubar a rede) e reabrir o modal: hoje aparecem os blocos de POD/codigos simplesmente ausentes e nenhuma mensagem de falha.
@@ -4395,11 +4562,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 153 — Importacao de CSV adota a primeira coluna como ID quando nao reconhece o cabecalho, sem limite de linhas nem como cancelar
+### Etapa 158 — Importacao de CSV adota a primeira coluna como ID quando nao reconhece o cabecalho, sem limite de linhas nem como cancelar
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-074
+- **Achados resolvidos:** M-076
 - **Problema hoje:** Escolher o arquivo errado (ou um CSV com outro layout) dispara centenas de consultas pagas a Lalamove com identificadores inventados, todas falhando, e o operador fica preso na tela ate terminar.
 
   ```
@@ -4410,7 +4577,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Itens 1 e 3 estao corretos. Ajuste no item 2: nao transforme 'ID numerico longo' em filtro rigido. O unico respaldo no repo e um placeholder de UI (src/components/orders/FetchOrderDialog.tsx:71 `placeholder="Ex: 3443160224863834408"`), e a lista de cabecalhos aceitos em :44 inclui 'Número do Pedido' e 'internal_order_id', que no projeto nao sao necessariamente numericos (src/hooks/useRecentOrders.ts:53 `internalOrderId: order.internal_order_id`) — uma regra numerica descartaria IDs legitimos em silencio. Faca a checagem de formato como aviso ('N linhas fora do padrao, confirma?') e deixe a escolha explicita da coluna ser a garantia. Acrescente tambem desabilitar o X de :166 enquanto `importing` for true, senao o operador limpa a tela mas os lotes continuam indo para a edge.
 - **Arquivos e objetos a tocar:** `src/components/orders/ImportCSVDialog.tsx`
 - **Não tocar / armadilhas:** O toast de :58 conta `ids.length` (antes da deduplicacao) enquanto a previa e o botao usam `orderIds.length` (depois); ao mexer, alinhar os dois para nao trocar um numero errado por outro.
-- **Depende de:** etapa 031 · **Libera:** etapa 171
+- **Depende de:** etapa 148 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Importar um CSV cujo primeiro cabecalho seja 'Cliente' (sem nenhuma coluna de ID): a previa lista nomes de clientes como 'IDs de corrida' e a importacao dispara lotes a `fetch-orders-bulk`, visiveis na aba Rede.
@@ -4423,11 +4590,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 154 — Operadores de busca documentados na propria tela de pedidos nunca funcionam
+### Etapa 159 — Operadores de busca documentados na propria tela de pedidos nunca funcionam
 
 **Onda 4 (Funcionalidades incompletas) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-075
+- **Achados resolvidos:** M-077
 - **Problema hoje:** A ajuda da propria tela ensina uma sintaxe que sempre devolve 'Nenhum pedido encontrado'. O operador conclui que nao ha pedidos do tipo que procura.
 
   ```
@@ -4438,7 +4605,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A opcao (a) do auditor (traduzir operador -> filtro PostgREST) e a mais arriscada das duas e, se escolhida, precisa tambem escapar o termo antes de montar a string do `.or()`: hoje qualquer virgula, parentese ou ponto digitado pelo usuario quebra/reinterpreta o filtro em useRecentOrders.ts:37, porque o valor e concatenado cru. Caminho de menor risco: trocar por Input simples nesta pagina (opcao b) e manter o SearchInputWithHelp apenas onde a lista inteira ja esta em memoria.
 - **Arquivos e objetos a tocar:** `src/pages/OrdersPage.tsx`, `src/hooks/useFuseSearch.ts`, `src/components/ui/search-help-tooltip.tsx`, `src/hooks/useRecentOrders.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 099 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /orders, digitar `^` seguido do inicio de um ID interno que exista (ex.: `^PED-`) e observar na aba Rede a chamada com `or=(lalamove_id.ilike.%^PED-%,...)` e resposta vazia, com a tela exibindo 'Nenhum pedido encontrado'.
@@ -4451,7 +4618,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 155 — Três crons de cache documentados como ativos vêm de migration que nunca rodou, e dois apontam para materialized views que não existem em lugar nenhum
+### Etapa 160 — Três crons de cache documentados como ativos vêm de migration que nunca rodou, e dois apontam para materialized views que não existem em lugar nenhum
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Banco — funções, triggers e cron**
 
@@ -4466,7 +4633,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Corrigir docs/CRON_JOBS.md é o único passo acionável sem o banco: trocar `refresh_cache_views()` por `refresh_cache_view()` e marcar as linhas de refresh-delivery-hourly-stats/refresh-risk-distribution como 'agendadas por migration não aplicada (drift) — conferir em cron.job'. O cron.unschedule só entra se a medição mostrar os jobs existindo; não criar migration de unschedule preventiva.
 - **Arquivos e objetos a tocar:** `docs/CRON_JOBS.md`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20261123110000_cron_refresh_cache_views.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 102 · **Libera:** etapa 196, etapa 229, etapa 238
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select j.jobname, j.schedule, d.status, d.return_message from cron.job j left join lateral (select * from cron.job_run_details r where r.jobid=j.jobid order by start_time desc limit 1) d on true where j.jobname like 'refresh-%';` — return_message com `relation ... does not exist` confirma o caso (b) do achado.
@@ -4479,7 +4646,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 156 — Artefatos gerados e commitados estão desatualizados: o inventário diz 54 rotas e 20 problemas, o real é 56 e 0
+### Etapa 161 — Artefatos gerados e commitados estão desatualizados: o inventário diz 54 rotas e 20 problemas, o real é 56 e 0
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Documentação × código**
 
@@ -4493,7 +4660,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Adicionar ao job de guardas (há etapa própria que cria esse job) os dois geradores em modo verificação: `node scripts/ci/gerar-matriz-edge-tabela.mjs --check` (o modo já existe) e um `--check` equivalente em `gerar-rotas.mjs`, comparando com o arquivo commitado. Assim a PR que muda rota ou edge é obrigada a regenerar. Atalho a evitar: regerar os arquivos num commit automático na `main` — a `main` é protegida e isso contorna o gate.
 - **Arquivos e objetos a tocar:** `inventario/estado/rotas.json`, `inventario/estado/edges.json`, `docs/ci/MATRIZ_EDGE_TABELA.md`, `scripts/inventario/gerar-rotas.mjs`, `scripts/ci/gerar-matriz-edge-tabela.mjs`
 - **Não tocar / armadilhas:** Não confunda com a branch `contexto`: ela é gerada de propósito por `contexto.yml` e o cabeçalho do workflow diz para nunca abrir PR dela.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 142 · **Libera:** etapa 191
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `node scripts/ci/gerar-matriz-edge-tabela.mjs --check` → exit 0 depois de regerar e commitar; exit 1 numa PR que mude `.from(` numa edge sem regerar.
@@ -4506,7 +4673,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 157 — mapa-repo.md afirma que nenhum doc e gerado por script e que vários scripts tem service_role/PAT no codigo; as duas afirmacoes sao falsas hoje
+### Etapa 162 — mapa-repo.md afirma que nenhum doc e gerado por script e que vários scripts tem service_role/PAT no codigo; as duas afirmacoes sao falsas hoje
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Documentação × código**
 
@@ -4521,7 +4688,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Corrija apenas a linha :44, trocando "vários têm service_role/PAT no código" por "os segredos hardcoded foram removidos (PR #80 — banco.md > Segredos commitados)" e mantendo o aviso de policy permissiva. NÃO reescreva o parágrafo :21-23 como se a frase fosse falsa: ela é correta para os docs listados; se quiser cobrir o que é gerado, acrescente uma LINHA nova na tabela para inventario/estado/*.json (inventario-estado-semanal.yml) e para a branch contexto (contexto.yml), sem mexer no resto. E não substitua "30 scripts soltos" — bate com os 29 arquivos na raiz de scripts/; se faltar algo, é citar as subpastas (scripts/ci/, scripts/inventario/, scripts/ai-context/, scripts/graphify/), não trocar o número.
 - **Arquivos e objetos a tocar:** `docs/agentes/mapa-repo.md`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/README.md`, `scripts/inventario/README.md`
 - **Não tocar / armadilhas:** Nao apagar o aviso sobre apply-sql-via-management-api.ts: esse risco e real e continua no repo. Nao commitar nada dentro de docs/contexto/ nem de inventario/estado/ (sao saida de workflow). docs/contexto/supabase/ nao existe na main — ele vive na branch `contexto`, e _linha-de-base.md:"docs/contexto/supabase/ nunca foi gerado" contradiz _ordem.md, que diz que foi publicado la.
-- **Depende de:** etapa 104 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** ls .github/workflows/ (5 arquivos, dois deles geradores de doc); find scripts -type f | wc -l = 182; a varredura de segredo acima retorna so detector e fixture; ls scripts/apply-sql-via-management-api.ts existe (o aviso de RLS permissiva segue valido).
@@ -4534,7 +4701,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 158 — Formatadores de moeda e data reescritos à mão em 12 lugares, com a moeda fixada em BRL em uma das cópias — parte 1/2
+### Etapa 163 — Formatadores de moeda e data reescritos à mão em 12 lugares, com a moeda fixada em BRL em uma das cópias
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Transversal — código morto e duplicação**
 
@@ -4547,14 +4714,12 @@ Checklist de conclusão:
 - **Causa raiz:** Não existe um módulo de formatação compartilhado em src/lib/ (há src/lib/uapiFormat.ts só para centavos da UAPI e src/lib/statusPalette.ts para cores), então cada tela escreveu a sua.
 - **Caminho recomendado:** Criar src/lib/format.ts seguindo o padrão dos módulos de apoio que já existem (src/lib/uapiFormat.ts:3 `formatFen`, src/lib/statusPalette.ts) com `formatCurrency(value, currency)` e `formatDateTime(value, { comHora })`, com teste ao lado como src/lib/phone.test.ts e src/lib/utils.test.ts já fazem, e trocar as 12 cópias por import. A versão de src/hooks/useCachedStats.ts:317 passa a receber a moeda do dado em vez de assumir BRL. Atalho tentador a evitar: substituir as cópias sem resolver o caso da moeda — se a função compartilhada também fixar BRL, a divergência continua, só que centralizada.
   AJUSTE DO REVISOR: Ajuste: a cópia de src/hooks/useCachedStats.ts:317 deve ser APAGADA, não parametrizada — é export sem nenhum consumidor. E o src/lib/format.ts só deve absorver os formatadores de data se expuser as variantes que as telas realmente usam (dia/mês, data, data+hora); forçar um formato único muda a UI de telas que hoje mostram só a data, o que não foi pedido.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/hooks/useCachedStats.ts`, `src/components/orders/OrderDetailModal.tsx`, `src/components/dashboard/OrdersTable.tsx`, `src/pages/orders/OrderCard.tsx`, `src/components/admin/telemetry/ContractVersionUsagePanel.tsx`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/hooks/useCachedStats.ts`, `src/components/orders/OrderDetailModal.tsx`, `src/components/dashboard/OrdersTable.tsx`, `src/pages/orders/OrderCard.tsx`, `src/components/admin/telemetry/ContractVersionUsagePanel.tsx`
+- **Arquivos e objetos a tocar:** `src/hooks/useCachedStats.ts`, `src/components/orders/OrderDetailModal.tsx`, `src/components/dashboard/OrdersTable.tsx`, `src/pages/orders/OrderCard.tsx`, `src/components/admin/telemetry/ContractVersionUsagePanel.tsx`, `src/components/health/CronJobsHealthPanel.tsx`, `src/pages/ProfilePage.tsx`, `src/pages/JobQueuePage.tsx`, `src/pages/Bitrix24Page.tsx`, `src/pages/bitrix24/Bitrix24SubComponents.tsx`
 - **Não tocar / armadilhas:** src/lib/uapiFormat.ts:3 `formatFen` converte centavos (fen) da UAPI e NÃO é a mesma coisa — não unificar com formatCurrency. src/utils/timeUtils.ts (getElapsedTime, formatElapsedTimeCompact) é tempo decorrido, não data absoluta — também fica fora. E src/pages/Bitrix24Page.tsx:30 / src/pages/bitrix24/Bitrix24SubComponents.tsx:65 usam `format(... , { locale: ptBR })` do date-fns com máscaras diferentes de propósito (uma com hora, outra sem): confirmar na tela qual é a desejada antes de uniformizar.
-- **Depende de:** etapa 149 · **Libera:** —
+- **Depende de:** etapa 143 · **Libera:** etapa 185
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run src/lib` com casos de `formatCurrency(10, 'USD')` → `US$ 10,00` e `formatCurrency(10, 'BRL')` → `R$ 10,00`; depois `grep -rn "new Intl.NumberFormat('pt-BR', { style: 'currency'" src/` deve achar só src/lib/format.ts.
-  Nesta etapa, a verificação vale para: `src/hooks/useCachedStats.ts`, `src/components/orders/OrderDetailModal.tsx`, `src/components/dashboard/OrdersTable.tsx`, `src/pages/orders/OrderCard.tsx`, `src/components/admin/telemetry/ContractVersionUsagePanel.tsx`.
 
 Checklist de conclusão:
 
@@ -4564,37 +4729,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 159 — Formatadores de moeda e data reescritos à mão em 12 lugares, com a moeda fixada em BRL em uma das cópias — parte 2/2
-
-**Onda 4 (Funcionalidades incompletas) / Baixa / Transversal — código morto e duplicação**
-
-- **Achados resolvidos:** B-008
-- **Problema hoje:** Os painéis de métrica mostram todo valor como R$ mesmo quando o pedido foi cotado em outra moeda, enquanto o cartão do pedido mostra a moeda certa — dois números diferentes para o mesmo pedido. E a data aparece em formatos diferentes de tela para tela.
-
-  ```
-  src/hooks/useCachedStats.ts:317-322 define e exporta `formatCurrency(value)` com `currency: 'BRL'` fixo, mas nenhum arquivo importa esse símbolo (único import do módulo: src/pages/CacheStatusPage.tsx:16 `import { useCachedStats, useDashboardSummary } from "@/hooks/useCachedStats"`), então é código morto. As três cópias vivas (src/components/orders/OrderDetailModal.tsx:437, src/components/dashboard/OrdersTable.tsx:71, src/pages/orders/OrderCard.tsx:35) são idênticas e recebem a moeda do dado (`order.currency`, usos em OrderDetailModal.tsx:837, OrdersTable.tsx:152/295/397, OrderCard.tsx:131).
-  ```
-- **Causa raiz:** Não existe um módulo de formatação compartilhado em src/lib/ (há src/lib/uapiFormat.ts só para centavos da UAPI e src/lib/statusPalette.ts para cores), então cada tela escreveu a sua.
-- **Caminho recomendado:** Criar src/lib/format.ts seguindo o padrão dos módulos de apoio que já existem (src/lib/uapiFormat.ts:3 `formatFen`, src/lib/statusPalette.ts) com `formatCurrency(value, currency)` e `formatDateTime(value, { comHora })`, com teste ao lado como src/lib/phone.test.ts e src/lib/utils.test.ts já fazem, e trocar as 12 cópias por import. A versão de src/hooks/useCachedStats.ts:317 passa a receber a moeda do dado em vez de assumir BRL. Atalho tentador a evitar: substituir as cópias sem resolver o caso da moeda — se a função compartilhada também fixar BRL, a divergência continua, só que centralizada.
-  AJUSTE DO REVISOR: Ajuste: a cópia de src/hooks/useCachedStats.ts:317 deve ser APAGADA, não parametrizada — é export sem nenhum consumidor. E o src/lib/format.ts só deve absorver os formatadores de data se expuser as variantes que as telas realmente usam (dia/mês, data, data+hora); forçar um formato único muda a UI de telas que hoje mostram só a data, o que não foi pedido.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/components/health/CronJobsHealthPanel.tsx`, `src/pages/ProfilePage.tsx`, `src/pages/JobQueuePage.tsx`, `src/pages/Bitrix24Page.tsx`, `src/pages/bitrix24/Bitrix24SubComponents.tsx`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/components/health/CronJobsHealthPanel.tsx`, `src/pages/ProfilePage.tsx`, `src/pages/JobQueuePage.tsx`, `src/pages/Bitrix24Page.tsx`, `src/pages/bitrix24/Bitrix24SubComponents.tsx`
-- **Não tocar / armadilhas:** src/lib/uapiFormat.ts:3 `formatFen` converte centavos (fen) da UAPI e NÃO é a mesma coisa — não unificar com formatCurrency. src/utils/timeUtils.ts (getElapsedTime, formatElapsedTimeCompact) é tempo decorrido, não data absoluta — também fica fora. E src/pages/Bitrix24Page.tsx:30 / src/pages/bitrix24/Bitrix24SubComponents.tsx:65 usam `format(... , { locale: ptBR })` do date-fns com máscaras diferentes de propósito (uma com hora, outra sem): confirmar na tela qual é a desejada antes de uniformizar.
-- **Depende de:** etapa 099 · **Libera:** —
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** `npx vitest run src/lib` com casos de `formatCurrency(10, 'USD')` → `US$ 10,00` e `formatCurrency(10, 'BRL')` → `R$ 10,00`; depois `grep -rn "new Intl.NumberFormat('pt-BR', { style: 'currency'" src/` deve achar só src/lib/format.ts.
-  Nesta etapa, a verificação vale para: `src/components/health/CronJobsHealthPanel.tsx`, `src/pages/ProfilePage.tsx`, `src/pages/JobQueuePage.tsx`, `src/pages/Bitrix24Page.tsx`, `src/pages/bitrix24/Bitrix24SubComponents.tsx`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 160 — Oito arquivos de front (~1.900 linhas) exportados e nunca importados por ninguém, incluindo um componente marcado como placeholder — parte 1/2
+### Etapa 164 — Oito arquivos de front (~1.900 linhas) exportados e nunca importados por ninguém, incluindo um componente marcado como placeholder
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Transversal — código morto e duplicação**
 
@@ -4607,14 +4742,12 @@ Checklist de conclusão:
 - **Causa raiz:** Funcionalidades iniciadas e abandonadas: fila offline (useOfflineStorage), cartão de aprovação por gesto (SwipeableApprovalCard + useApprovalActionsEnhanced, que depende de useAchievementsSystem — também sem uso real), disjuntor de chamadas (circuitBreaker, única implementação do tipo no repo e não plugada em nenhum fetch) e um gerador de relatório que nunca passou de esqueleto.
 - **Caminho recomendado:** Apagar em um PR só de remoção, sem tocar em mais nada: AuditReportGenerator.tsx, useApprovalActionsEnhanced.ts, SwipeableApprovalCard.tsx, useOfflineStorage.ts e circuitBreaker.ts. Antes de apagar cada um, confirmar com `grep -rn "<NomeDoExport>" src/ e2e/` (SwipeableApprovalCard.tsx importa src/pages/approvals/ApprovalCard.tsx, que TEM outros consumidores e fica). Atalho tentador a evitar: "ligar" useOfflineStorage para aproveitar as 290 linhas — fila offline mexe em gravação de pedido e é feature nova, não limpeza; tratar como pedido separado do dono.
   AJUSTE DO REVISOR: Dois fatos do achado estao errados e mudam o que conferir antes de apagar. (1) SwipeableApprovalCard.tsx NAO importa src/pages/approvals/ApprovalCard.tsx — seus imports locais sao src/components/approvals/SwipeableApprovalCard.tsx:18 `@/components/dashboard/RiskScoreGauge` e :19 `./UrgencyIndicator` (= src/components/approvals/UrgencyIndicator.tsx). O arquivo que precisa FICAR e UrgencyIndicator.tsx, porque src/components/dashboard/ApprovalQueue.tsx tambem o importa. (2) useAchievementsSystem NAO esta 'sem uso real': src/App.tsx:17 importa `AchievementsProvider` de `@/hooks/useAchievementsSystem`, e src/hooks/useAchievementsSystem.tsx:384 e :428 o consomem internamente — ou seja, apagar useApprovalActionsEnhanced.ts (que so re-exporta o hook em :97) nao libera nada de useAchievementsSystem.tsx, que deve ficar. Fora isso o caminho esta bom: apagar os 5 (AuditReportGenerator.tsx, useApprovalActionsEnhanced.ts, SwipeableApprovalCard.tsx, useOfflineStorage.ts, circuitBreaker.ts) e deixar chart.tsx/hero-metric.tsx, que sao primitivos de UI, fora do PR de remocao.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/components/approvals/SwipeableApprovalCard.tsx`, `src/hooks/useOfflineStorage.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/utils/circuitBreaker.ts`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/components/approvals/SwipeableApprovalCard.tsx`, `src/hooks/useOfflineStorage.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/utils/circuitBreaker.ts`
+- **Arquivos e objetos a tocar:** `src/components/approvals/SwipeableApprovalCard.tsx`, `src/hooks/useOfflineStorage.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/utils/circuitBreaker.ts`, `src/components/debug/AuditReportGenerator.tsx`, `src/components/ui/hero-metric.tsx`, `src/hooks/useDriverEvaluations.ts`, `src/components/ui/chart.tsx`
 - **Não tocar / armadilhas:** src/components/ui/chart.tsx (332 linhas) e src/components/ui/hero-metric.tsx (293) estão na lista mas são componentes de biblioteca de UI (chart.tsx é o arquivo padrão do shadcn, gerado por components.json) — apagar quebra o fluxo de `npx shadcn add` depois e não vale o risco; deixar os dois. src/hooks/useAchievementsSystem.tsx NÃO está na lista de órfãos (tem importador), então não entra nesta remoção mesmo sendo a dependência do cartão por gesto.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 083 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Depois da remoção: `npx tsc --noEmit -p tsconfig.app.json` sem erro novo, `npx vitest run` igual a antes e `npm run build` concluindo. Repetir a varredura de órfãos: deve sobrar só o que for shadcn intocado.
-  Nesta etapa, a verificação vale para: `src/components/approvals/SwipeableApprovalCard.tsx`, `src/hooks/useOfflineStorage.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/utils/circuitBreaker.ts`.
 
 Checklist de conclusão:
 
@@ -4624,37 +4757,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 161 — Oito arquivos de front (~1.900 linhas) exportados e nunca importados por ninguém, incluindo um componente marcado como placeholder — parte 2/2
-
-**Onda 4 (Funcionalidades incompletas) / Baixa / Transversal — código morto e duplicação**
-
-- **Achados resolvidos:** B-009
-- **Problema hoje:** Cerca de 1.900 linhas que parecem fazer parte do sistema e não fazem nada. Quem for pedir "melhorar o app para funcionar offline" ou "aprovar arrastando o cartão" vai ouvir que já existe — e não existe, porque nada disso está ligado em tela nenhuma.
-
-  ```
-  8 arquivos sem importador, confirmado por grep em src/ + e2e/: src/components/approvals/SwipeableApprovalCard.tsx (500), src/hooks/useOfflineStorage.ts (290), src/hooks/useDriverEvaluations.ts (288), src/components/ui/hero-metric.tsx (293), src/components/ui/chart.tsx (332, exports ChartContainer/ChartTooltip/ChartConfig/ChartLegend sem nenhum consumidor), src/hooks/useApprovalActionsEnhanced.ts (97), src/utils/circuitBreaker.ts (59), src/components/debug/AuditReportGenerator.tsx (35, placeholder declarado na linha 7). Total 1894 linhas.
-  ```
-- **Causa raiz:** Funcionalidades iniciadas e abandonadas: fila offline (useOfflineStorage), cartão de aprovação por gesto (SwipeableApprovalCard + useApprovalActionsEnhanced, que depende de useAchievementsSystem — também sem uso real), disjuntor de chamadas (circuitBreaker, única implementação do tipo no repo e não plugada em nenhum fetch) e um gerador de relatório que nunca passou de esqueleto.
-- **Caminho recomendado:** Apagar em um PR só de remoção, sem tocar em mais nada: AuditReportGenerator.tsx, useApprovalActionsEnhanced.ts, SwipeableApprovalCard.tsx, useOfflineStorage.ts e circuitBreaker.ts. Antes de apagar cada um, confirmar com `grep -rn "<NomeDoExport>" src/ e2e/` (SwipeableApprovalCard.tsx importa src/pages/approvals/ApprovalCard.tsx, que TEM outros consumidores e fica). Atalho tentador a evitar: "ligar" useOfflineStorage para aproveitar as 290 linhas — fila offline mexe em gravação de pedido e é feature nova, não limpeza; tratar como pedido separado do dono.
-  AJUSTE DO REVISOR: Dois fatos do achado estao errados e mudam o que conferir antes de apagar. (1) SwipeableApprovalCard.tsx NAO importa src/pages/approvals/ApprovalCard.tsx — seus imports locais sao src/components/approvals/SwipeableApprovalCard.tsx:18 `@/components/dashboard/RiskScoreGauge` e :19 `./UrgencyIndicator` (= src/components/approvals/UrgencyIndicator.tsx). O arquivo que precisa FICAR e UrgencyIndicator.tsx, porque src/components/dashboard/ApprovalQueue.tsx tambem o importa. (2) useAchievementsSystem NAO esta 'sem uso real': src/App.tsx:17 importa `AchievementsProvider` de `@/hooks/useAchievementsSystem`, e src/hooks/useAchievementsSystem.tsx:384 e :428 o consomem internamente — ou seja, apagar useApprovalActionsEnhanced.ts (que so re-exporta o hook em :97) nao libera nada de useAchievementsSystem.tsx, que deve ficar. Fora isso o caminho esta bom: apagar os 5 (AuditReportGenerator.tsx, useApprovalActionsEnhanced.ts, SwipeableApprovalCard.tsx, useOfflineStorage.ts, circuitBreaker.ts) e deixar chart.tsx/hero-metric.tsx, que sao primitivos de UI, fora do PR de remocao.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `src/components/debug/AuditReportGenerator.tsx`, `src/components/ui/hero-metric.tsx`, `src/hooks/useDriverEvaluations.ts`, `src/components/ui/chart.tsx`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `src/components/debug/AuditReportGenerator.tsx`, `src/components/ui/hero-metric.tsx`, `src/hooks/useDriverEvaluations.ts`, `src/components/ui/chart.tsx`
-- **Não tocar / armadilhas:** src/components/ui/chart.tsx (332 linhas) e src/components/ui/hero-metric.tsx (293) estão na lista mas são componentes de biblioteca de UI (chart.tsx é o arquivo padrão do shadcn, gerado por components.json) — apagar quebra o fluxo de `npx shadcn add` depois e não vale o risco; deixar os dois. src/hooks/useAchievementsSystem.tsx NÃO está na lista de órfãos (tem importador), então não entra nesta remoção mesmo sendo a dependência do cartão por gesto.
-- **Depende de:** etapa 142 · **Libera:** etapa 191
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Depois da remoção: `npx tsc --noEmit -p tsconfig.app.json` sem erro novo, `npx vitest run` igual a antes e `npm run build` concluindo. Repetir a varredura de órfãos: deve sobrar só o que for shadcn intocado.
-  Nesta etapa, a verificação vale para: `src/components/debug/AuditReportGenerator.tsx`, `src/components/ui/hero-metric.tsx`, `src/hooks/useDriverEvaluations.ts`, `src/components/ui/chart.tsx`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 162 — Painel de quota da Lalamove subnotifica chamadas sem avisar: a janela de 24 h é cortada em 2000 linhas
+### Etapa 165 — Painel de quota da Lalamove subnotifica chamadas sem avisar: a janela de 24 h é cortada em 2000 linhas
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Regras de negócio — cálculos**
 
@@ -4669,7 +4772,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Direção certa, com dois reparos. (1) A referência do padrão de count está uma linha fora: em src/hooks/useDashboardStats.ts o `.select('id', { count: 'exact', head: true })` aparece nas linhas 32, 38, 44, 51, 57 e 63 — cite 57-63, não 60-64. (2) Trocar "uso atual" por uma consulta `limit(1)` solta muda o comportamento para pior: hoje `currentRemaining`/`currentLimit`/`latestResetAt` vêm de `rows[0]` (useLalamoveQuota.ts:73-76), ou seja, do registro mais recente DENTRO das 24h, e o painel mostra "Sem dados recentes" quando a janela está vazia; um limit(1) sem o `.gte('created_at', since)` traria uma leitura de dias atrás apresentada como uso atual. Se separar, mantenha o filtro da janela nessa consulta. Os três counts (total, críticas, erros) devem virar três `count: 'exact', head: true` com os mesmos filtros (há índices parciais prontos para os dois últimos: supabase/migrations/20260723131806_a3854e60-0935-4d4c-be8a-51b57157d413.sql:19-20), e o limit(2000) fica só para a amostra de detalhe/timeline, com rótulo de "amostra" quando rows.length === 2000. Concordo em evitar o atalho de subir o limite.
 - **Arquivos e objetos a tocar:** `src/hooks/useLalamoveQuota.ts`, `src/pages/LalamoveQuotaPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 123 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Comparar o valor do card "Chamadas (24h)" com select count(*) from lalamove_rate_limits where created_at >= now() - interval '24 hours'; os dois têm de bater mesmo acima de 2000.
@@ -4682,7 +4785,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 163 — A quarentena de E2E não exclui nada: o playwright.config.ts não tem testIgnore e o guard que cobra prazo não roda na CI
+### Etapa 166 — A quarentena de E2E não exclui nada: o playwright.config.ts não tem testIgnore e o guard que cobra prazo não roda na CI
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Testes**
 
@@ -4697,7 +4800,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está correto e não é arriscado; dois ajustes. (1) O passo 3 pode ser dispensado por ora: o job `guard-agents-md` já roda `node --test scripts/ci/*.unit.mjs` (ci.yml:97), que cobre a forma e o prazo via scripts/ci/check-quarantine.unit.mjs; acrescentar `node scripts/ci/check-quarantine.mjs` é útil só para o dia em que e2e/quarantine.js existir — então faça-o no MESMO PR que criar o arquivo, não antes. (2) Prioridade: como não há nenhum item em quarentena hoje, fechar esse circuito não muda nada em produção nem na CI; é trabalho de higiene que só compensa quando houver o primeiro spec a quarentenar. Mantenho integralmente o alerta do auditor contra usar quarentena para esconder teste que não roda por falta de credencial.
 - **Arquivos e objetos a tocar:** `scripts/ci/check-quarantine.mjs`, `playwright.config.ts`, `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** Mexer em workflow pede o dono. E cuidado com a ordem: ligar o `testIgnore` sem o guard na CI cria o esconderijo que o guard existe para impedir.
-- **Depende de:** etapa 143 · **Libera:** etapa 185
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Com um item de prazo vencido em e2e/quarantine.js, `node scripts/ci/check-quarantine.mjs` tem de sair 1; e `npx playwright test --list` não deve mais listar o spec em quarentena. Hoje o guard sai 0 em qualquer situação porque o arquivo não existe.
@@ -4710,7 +4813,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 164 — Limite de cobertura de 70% em vitest.config.ts é decorativo: o pacote de cobertura não está instalado e nenhum workflow pede cobertura
+### Etapa 167 — Limite de cobertura de 70% em vitest.config.ts é decorativo: o pacote de cobertura não está instalado e nenhum workflow pede cobertura
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Testes**
 
@@ -4725,7 +4828,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correto, com um detalhe: na opção (b), `@vitest/coverage-v8` precisa ser pinado na mesma major do vitest declarado (package.json:96 `"vitest": "^5.0.3"`) e o pacote hoje não está em node_modules — sem ele, rodar `--coverage` faz o Vitest tentar instalar em tempo de execução, o que na CI quebra o job. Também não existe script `test` em package.json (a seção scripts vai de `dev` a `graph:update`), então o `--coverage` tem de entrar direto no `run` do workflow, não em `npm test`. Dadas as duas opções, (a) remover o bloco é o diff mínimo e sem risco.
 - **Arquivos e objetos a tocar:** `vitest.config.ts`, `package.json`, `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** Dependência nova e mudança de workflow — o AGENTS.md pede aviso na PR para dependência nova e chamar o dono para CI/workflows. A opção (a) não tem esse custo.
-- **Depende de:** etapa 081 · **Libera:** —
+- **Depende de:** etapa 050 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run --coverage` hoje não consegue reportar (provedor ausente). Depois da opção (b), o mesmo comando imprime os percentuais e falha abaixo do piso configurado.
@@ -4738,7 +4841,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 165 — Opções 'Grátis' do seletor usam tiles públicos de OSM e Esri direto do servidor de origem
+### Etapa 168 — Opções 'Grátis' do seletor usam tiles públicos de OSM e Esri direto do servidor de origem
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Interface — mapa e rastreamento**
 
@@ -4753,7 +4856,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Corrigir a referência do proxy: a edge `mapbox-proxy` NÃO existe mais no repo — supabase/config.toml:93 registra 'mapbox-proxy: REMOVIDA do repo na etapa 61 (arquivo apagado)' e src/hooks/useMapbox.ts:57 a chama de legado. O padrão vivo é `geo-gateway` (supabase/functions/geo-gateway/, com providers/mapbox.ts:1 descrito como 'porta do mapbox-proxy'), então qualquer proxy de tiles deve ser uma rota nova dentro de geo-gateway. Além disso, antes de investir em proxy com cache (que vira custo de egress e storage), o mínimo que resolve o sintoma visível é um `map.on('error')`/fallback para o basemap Mapbox quando o tile falhar, mais a nota no seletor de que são fontes sem garantia.
 - **Arquivos e objetos a tocar:** `src/components/map/mapLayers.ts`, `src/components/map/MapProviderSelector.tsx`
 - **Não tocar / armadilhas:** `applyRasterOverlay` é idempotente e reaplicada a cada troca de estilo (LiveMap.tsx:167-172, 211-222): qualquer proxy novo precisa manter esse comportamento, senão a camada some ao alternar dark/satélite.
-- **Depende de:** etapa 122 · **Libera:** —
+- **Depende de:** etapa 026 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Selecionar 'OpenStreetMap' no seletor do /live-map e observar na aba Network a quantidade de requests para `tile.openstreetmap.org` em uma navegação de 1 minuto, e se algum volta 418/429/403.
@@ -4766,7 +4869,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 166 — Classes de cor montadas em tempo de execução não existem no CSS final
+### Etapa 169 — Classes de cor montadas em tempo de execução não existem no CSS final
 
 **Onda 4 (Funcionalidades incompletas) / Baixa / Interface — administração**
 
@@ -4781,7 +4884,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mapa de classes literais é o caminho certo (e os exemplos citados existem). Corrija a justificativa ao dono: não são 'três cartões sem cor' — hoje só falta `bg-muted-foreground/10` no cartão 'Inativos' de src/pages/IPWhitelistPage.tsx:141; o resto funciona por coincidência e é dívida, não defeito visível. Se o fix for feito, cobrir também `fill-${stat.color}` de src/pages/approvals/ApprovalCard.tsx:66, que o achado não listou.
 - **Arquivos e objetos a tocar:** `src/pages/IPWhitelistPage.tsx`, `src/pages/ApprovalsPage.tsx`, `src/pages/approvals/ApprovalCard.tsx`
 - **Não tocar / armadilhas:** `text-${stat.color}` com `stat.color = 'muted-foreground'` produziria `text-muted-foreground`, que existe por coincidência (é usada literalmente em outros arquivos) — não concluir pelo teste de um único cartão que o padrão funciona.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 057 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** grep -rn 'bg-\${' src/pages/ lista as ocorrências; abrir /ip-whitelist e inspecionar o ícone do cartão 'Ativos' — a classe `bg-success/10` está no elemento mas não existe na folha de estilo.
@@ -4800,11 +4903,11 @@ Checklist de conclusão:
 ## Onda 5 — Robustez: erros, estados, concorrência
 
 
-### Etapa 167 — Os quatro crons que chamam edge functions são disparo cego: nada lê a resposta HTTP e o pg_cron marca 'succeeded' mesmo com 401
+### Etapa 170 — Os quatro crons que chamam edge functions são disparo cego: nada lê a resposta HTTP e o pg_cron marca 'succeeded' mesmo com 401
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Alta / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** A-056
+- **Achados resolvidos:** A-060
 - **Problema hoje:** Alertas de motorista, escalonamento, renovação de token da Lalamove e a fila inteira podem estar parados por horas com todos os indicadores verdes — foi exatamente o que aconteceu em 21/11, quando a chave expirada derrubou dois crons às 12:40 e ninguém viu até às 18:40.
 
   ```
@@ -4815,7 +4918,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O desenho proposto esta correto, mas acrescente a janela util: o pg_net limpa net._http_response em poucas horas (TTL padrao ~6h), logo a funcao deve recusar p_window maior que isso ou dizer explicitamente que fora da janela o resultado e vazio — senao o painel vira 'zero falhas' por falta de linha, repetindo o mesmo falso verde. Para o caminho do job-worker, prefira corrigir antes a contabilidade de 20261123160000_job_queue_processing_log.sql:129-138, que hoje chama despacho de 'succeeded'.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20261123190000_cron_check_driver_alerts.sql`, `supabase/migrations/20260711194632_e6def1eb-1b3c-487f-978f-b0774a8201af.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 049 · **Libera:** —
+- **Depende de:** etapa 149 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select (response).status_code, count(*) from net._http_response where created > now() - interval '24 hours' group by 1;` — se houver qualquer 401/403/5xx enquanto `select jobname, status from cron.job_run_details order by start_time desc limit 20` mostra só 'succeeded', a cegueira está demonstrada.
@@ -4828,11 +4931,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 168 — Rotinas de retenção e rollup existem mas nunca foram agendadas: logs de erro e uso de contrato crescem sem corte
+### Etapa 171 — Rotinas de retenção e rollup existem mas nunca foram agendadas: logs de erro e uso de contrato crescem sem corte
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** M-076
+- **Achados resolvidos:** M-078
 - **Problema hoje:** A tabela de erros de runtime e a de rate limit crescem para sempre, aumentando o custo de armazenamento e deixando as telas de observabilidade lentas; e o gráfico de tendência mensal de uso de contrato fica vazio, porque a tabela que ele lê nunca é preenchida.
 
   ```
@@ -4843,7 +4946,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto, com dois acertos. (1) O parâmetro: a assinatura é `rollup_contract_version_usage(p_retention_days integer DEFAULT 90)` (20260712195355:35-37), então `select public.rollup_contract_version_usage(90);` é redundante — basta `select public.rollup_contract_version_usage();`, menos acoplamento. (2) Faltou uma terceira função órfã do mesmo tipo, criada ontem e que merece o mesmo cron na mesma migration aditiva: `public.cleanup_processing_logs()` (supabase/migrations/20261123160000_job_queue_processing_log.sql:28-41, apaga job_queue_processing_log > 7 dias) — a tabela recebe um INSERT por minuto (process_job_queue, :126-136) e nenhum `cron.schedule` a referencia. Concordo em evitar embutir nas rotinas existentes. Sobre a observação do auditor quanto a `resolved = true`: trocar por retenção também de não resolvidos é mudança de política de dado — decisão do dono, não do fix.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20260723174310_cda85f06-6820-474f-ba32-909ff8ce703d.sql`, `supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql`, `src/hooks/useContractVersionUsageMonthly.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 152 · **Libera:** etapa 172
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select jobname from cron.job order by jobname;` não lista hoje nenhum job dessas duas rotinas; e `select min(created_at), count(*) from public.runtime_error_logs;` / `select count(*) from public.contract_version_usage_monthly;` mostram, respectivamente, histórico sem poda e tabela vazia.
@@ -4856,11 +4959,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 169 — lalamove-api e lalamove-uapi chamam a Lalamove sem nenhum timeout, com ate 3 tentativas por chamada
+### Etapa 172 — lalamove-api e lalamove-uapi chamam a Lalamove sem nenhum timeout, com ate 3 tentativas por chamada
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Backend — edges Lalamove**
 
-- **Achados resolvidos:** M-077
+- **Achados resolvidos:** M-079
 - **Problema hoje:** Se a Lalamove ficar lenta em vez de cair, a tela de cotacao/pedido fica girando ate estourar e o operador nao recebe nem erro nem resultado — e cada tentativa dessas segura um processo do servidor, o que degrada o sistema inteiro justamente no momento de pico.
 
   ```
@@ -4871,7 +4974,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correcao necessaria no caminho: por tentativa nao basta. O catch de rede em lalamove-api/index.ts:253-262 trata QUALQUER excecao como retentavel (`lastError = error instanceof Error ? error.message : 'Unknown error'` e `if (attempt < maxAttempts) { ... continue; }`), entao um AbortError de 25s vira 3 x 25s mais backoff — pior caso acima de 75s, o que nao resolve o travamento, so o multiplica de forma controlada. Precisa de duas coisas juntas: timeout por tentativa (AbortController, como gateway:309-324) e um deadline logico da chamada inteira, checado antes de cada `continue` em :258, com o AbortError tratado como nao-retentavel quando o deadline global ja estourou. Em fetch-orders-bulk (index.ts:858-868) o deadline agregado e obrigatorio, nao opcional: 50 chamadas em serie com 200ms de pausa cada ja gastam 10s de pausa antes de qualquer latencia. Em lalamove-uapi, os pontos :180 e :214 estao corretos.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
 - **Não tocar / armadilhas:** O `Request-ID` e estavel entre as tentativas de proposito (lalamove-api/index.ts:132-134) e e o que faz a Lalamove deduplicar escritas — nao gerar um novo ao reorganizar o laco, senao um timeout em POST /orders pode virar pedido duplicado e cobrado duas vezes. Nao aumentar `maxAttempts` junto: com timeout, 3 tentativas ja somam ate 75s mais os backoffs.
-- **Depende de:** etapa 055 · **Libera:** —
+- **Depende de:** etapa 171 · **Libera:** etapa 202
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Depois do fix, apontar `LALAMOVE_BASE_URL` para um host que aceita conexao e nao responde (em ambiente de teste) e chamar `action=cities`: deve voltar erro em ~25s por tentativa em vez de ficar pendurado ate o limite da plataforma. Confirmar nos logs (`supabase functions logs lalamove-api`) a linha de falha de rede por tentativa.
@@ -4884,11 +4987,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 170 — Canais Resend, Slack, Bitrix24, n8n e Evolution fazem fetch sem timeout, em laço sequencial
+### Etapa 173 — Canais Resend, Slack, Bitrix24, n8n e Evolution fazem fetch sem timeout, em laço sequencial
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Backend — notificação e fila**
 
-- **Achados resolvidos:** M-078
+- **Achados resolvidos:** M-080
 - **Problema hoje:** Se um dos provedores (e-mail, Slack, Bitrix24, n8n) ficar lento, o alerta não sai por nenhum dos outros canais: a função é cortada no meio e os destinatários seguintes nunca são chamados. Uma lentidão em canal secundário derruba o aviso principal.
 
   ```
@@ -4899,7 +5002,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho aceito. Só um detalhe: `postJson` em _shared/channels/sms.ts:109-131 não é exportado, então a extração significa criar um módulo novo (ex.: supabase/functions/_shared/http.ts) e fazer sms.ts passar a importá-lo, para não ficar com duas cópias. Bitrix24 (:1419) e Evolution (:1169/:1180) não enviam `Content-Type` igual ao helper em todos os casos — manter os headers atuais como parâmetro, como o helper já prevê. A observação sobre não trocar o laço por `Promise.all` está correta: `configRecipientsDelivered` (index.ts:826, 846-856) depende da ordem.
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 150 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Teste puro com `fetchImpl` injetado que nunca resolve, no padrão de `supabase/functions/_shared/channels/zapp.test.ts` (que já exercita o timeout): esperar `{success:false}` com mensagem de timeout em até ~15 s em vez de pendurar. Hoje `sendEmail`/`sendSlack` não aceitam `fetchImpl`, então o fix inclui passar o fetch por parâmetro.
@@ -4912,11 +5015,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 171 — Opt-out é furado pelo canal de contingência e pelo fallback imediato de SMS
+### Etapa 174 — Opt-out é furado pelo canal de contingência e pelo fallback imediato de SMS
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Backend — notificação e fila**
 
-- **Achados resolvidos:** M-079
+- **Achados resolvidos:** M-081
 - **Problema hoje:** Quem pediu para parar de receber mensagens continua recebendo pelo canal de contingência. Além do incômodo, é exposição de LGPD: existe registro do pedido de descadastro no banco e o sistema envia de todo jeito. E SMS que o operador desligou continua sendo cobrado.
 
   ```
@@ -4927,7 +5030,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mover a checagem para dentro de `dispatch` continua sendo o desenho certo, mas o passo final proposto é arriscado: remover as cópias das linhas 708-716 e 861-874 degrada o comportamento. Nos dois laços o destino em opt-out hoje é descartado ANTES de entrar nos Sets de dedup (`orderRecipientsDelivered`/`configRecipientsDelivered`) e sem gravar `alerts_sent`; dentro de `dispatch` ele passaria a gravar `recordNotificationLog` com `opted_out` por destinatário e a ocupar a chave de dedup. Faça só o acréscimo em `dispatch` (idempotente: a RPC é barata e o resultado é o mesmo) e deixe as duas cópias existentes, ou então troque-as por um cache em memória do resultado da RPC nesta requisição, em vez de removê-las. O trecho do caminho que fala do fallback imediato de SMS deve ser descartado — ali não há furo de opt-out; o que falta é só `!isChannelDisabled("sms")` na condição de :421-425, e isso é uma correção separada, de custo/consentimento do operador.
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 153 · **Libera:** etapa 172
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Inserir um telefone em `notification_optouts` (ambiente descartável via `supabase start`), colocar o mesmo número em `alert_configurations.fallback_recipients` com `fallback_channel='whatsapp'` e todos os canais principais falhando; esperar `alerts_sent` com `channel='whatsapp'` e `error_message='opted_out'`, status `failed`, e nenhuma requisição ao Zapp/Evolution no log. Hoje a mensagem sai.
@@ -4940,47 +5043,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 172 — Aprovar/rejeitar motorista faz dois UPDATEs sem transação e o desfazer não checa erro — fila e cadastro podem divergir
+### Etapa 175 — Limitar e paginar as consultas de motorista e avaliação (useDrivers, useDriverEvaluations, useReportData)
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-080
-- **Problema hoje:** Pode ficar registrado que um motorista foi aprovado sem que ele fique aprovado de fato (ou rejeitado sem ser bloqueado), e o botão Desfazer pode não desfazer nada sem avisar — decisão de risco gravada pela metade.
-
-  ```
-  src/hooks/useApprovalActions.ts:34-39 `const { error: approvalError } = await supabase.from('driver_approval_queue').update({ status: 'APPROVED', ... }).eq('id', approvalId); if (approvalError) throw approvalError; const { error: driverError } = await supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId);` e :46-48 `await supabase.from('driver_approval_queue').update({ status: 'PENDING', ... }); await supabase.from('drivers').update({ status: 'PENDING_APPROVAL' }).eq('id', data.driverId); queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });`
-  ```
-  Mesma causa, outro local — Regras de negócio — cálculos:
-  ```
-  src/hooks/useApprovalActions.ts:34-38 — ".update({ status: 'APPROVED', reviewed_at: new Date().toISOString(), decision_notes: notes || 'Aprovado manualmente' })\n        .eq('id', approvalId);" seguido de "supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId)"; coluna em supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:182 — "reviewed_by UUID,"; leitura em src/hooks/usePendingApprovals.ts:88.
-  ```
-  Mesma causa, outro local — Regras de negócio — ciclo de vida:
-  ```
-  src/hooks/useApprovalActions.ts:34-36, 56-58, 78-80, 93-95; coluna em supabase/migrations/20251224143803_*.sql:182; padrão correto em src/hooks/usePasswordResetActions.ts:36; leitura em src/hooks/usePendingApprovals.ts:88.
-  ```
-- **Causa raiz:** A decisão é gravada em duas tabelas em sequência, sem RPC/transação. Se o segundo UPDATE falhar (RLS, rede, indisponibilidade), a fila fica APPROVED/REJECTED e o motorista permanece PENDING_APPROVAL — e o onError só desfaz o cache local (`rollback`, :22-26), nunca o banco. No desfazer do toast as duas escritas não verificam erro (falha silenciosa) e só `['pending-approvals']` é invalidada (:49), deixando histórico e estatísticas mostrando a decisão já desfeita.
-- **Caminho recomendado:** Mover as duas escritas para uma função SQL transacional (SECURITY DEFINER com search_path fixo, padrão já usado em `acknowledge_alert`, chamada em src/hooks/useActiveAlerts.ts:140-142) e invocá-la por `supabase.rpc('decide_driver_approval', { p_approval_id, p_driver_id, p_decision, p_notes })`; o desfazer vira outra rpc que checa `error` e reaproveita `invalidateAll()` (:12-18). Atalho tentador a evitar: inverter a ordem dos UPDATEs ou compensar no catch pelo cliente — continua sem atomicidade.
-  AJUSTE DO REVISOR: O caminho está certo e o padrão citado existe mesmo (public.acknowledge_alert em supabase/migrations/20260712221144_...sql:127, chamada em src/hooks/useActiveAlerts.ts:145), mas falta um requisito que, se esquecido, cria falha de segurança: a nova função SECURITY DEFINER roda ignorando RLS, então precisa validar o papel dentro dela (`IF NOT (public.has_role(auth.uid(),'admin') OR public.has_role(auth.uid(),'manager')) THEN RAISE EXCEPTION`) e ter EXECUTE revogado de anon/public e concedido só a authenticated — exatamente o que 20260712221208_...sql:3-6 faz para acknowledge_alert. Sem isso, qualquer usuário logado (inclusive viewer) passaria a aprovar motorista.
-- **Arquivos e objetos a tocar:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/hooks/usePasswordResetActions.ts`, `src/hooks/usePendingApprovals.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
-- **Não tocar / armadilhas:** Criar a função exige migration (supabase/migrations/ → PR → merge → deploy → apply, conforme docs/agentes/banco.md) e é DDL em produção: item de chamar o dono. Não confunda com `useApprovalActionsWithAchievements`, que embrulha estas mutations e está sem consumidor (triado em docs/pendencias/P-16).
-- **Depende de:** etapa 171 · **Libera:** etapa 203
-- **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
-- **Precisa de aprovação humana antes do merge:** sim
-- **Como verificar:** Em Postgres descartável, revogar o UPDATE em `drivers` para o papel do operador, aprovar uma solicitação na tela e rodar `select q.status, d.status from driver_approval_queue q join drivers d on d.id = q.driver_id where q.id = '<id>'` — fila APPROVED com motorista PENDING_APPROVAL e nenhum erro na tela.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 173 — Limitar e paginar as consultas de motorista e avaliação (useDrivers, useDriverEvaluations, useReportData)
-
-**Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — dados de negócio**
-
-- **Achados resolvidos:** M-081
+- **Achados resolvidos:** M-082
 - **Problema hoje:** Conforme a base cresce, as telas de motoristas, incidentes e aprovações passam a mostrar números menores que a realidade, sem aviso — decisões de bloqueio e de risco tomadas sobre contagem errada.
 
   ```
@@ -5003,11 +5070,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 174 — Limitar e paginar incidentes, dispositivos e contatos (useIncidents, useUserDevices, useContacts)
+### Etapa 176 — Limitar e paginar incidentes, dispositivos e contatos (useIncidents, useUserDevices, useContacts)
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-081
+- **Achados resolvidos:** M-082
 - **Problema hoje:** Conforme a base cresce, as telas de motoristas, incidentes e aprovações passam a mostrar números menores que a realidade, sem aviso — decisões de bloqueio e de risco tomadas sobre contagem errada.
 
   ```
@@ -5017,7 +5084,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Mesmo padrão da etapa anterior, mesmas referências. Aqui o risco é menor por volume, mas os três alimentam contadores exibidos como totais.
 - **Arquivos e objetos a tocar:** `src/hooks/useIncidents.ts`, `src/hooks/useUserDevices.ts`, `src/hooks/useContacts.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 173 · **Libera:** —
+- **Depende de:** etapa 081 · **Libera:** etapa 233
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Mesma prova da etapa anterior, por tabela.
@@ -5030,11 +5097,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 175 — Limitar e paginar os logs de rate limit, webhook e aprovação de senha
+### Etapa 177 — Limitar e paginar os logs de rate limit, webhook e aprovação de senha
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-081
+- **Achados resolvidos:** M-082
 - **Problema hoje:** Conforme a base cresce, as telas de motoristas, incidentes e aprovações passam a mostrar números menores que a realidade, sem aviso — decisões de bloqueio e de risco tomadas sobre contagem errada.
 
   ```
@@ -5044,7 +5111,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Mesmo padrão. Estas três são as que crescem mais rápido (log por requisição), então aqui o `.range()` com paginação na tela é obrigatório, não opcional.
 - **Arquivos e objetos a tocar:** `src/hooks/useRateLimiting.ts`, `src/hooks/useWebhookEvents.ts`, `src/pages/PasswordResetApprovalsPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 174 · **Libera:** —
+- **Depende de:** etapa 081 · **Libera:** etapa 178
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Mesma prova; e o painel de rate limit deve mostrar o total de requisições vindo de `count`/soma de `request_count`, não do número de linhas lidas.
@@ -5057,11 +5124,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 176 — Rastreamento ao vivo refaz a consulta inteira a cada evento de GPS, além do intervalo de 5 s
+### Etapa 178 — Rastreamento ao vivo refaz a consulta inteira a cada evento de GPS, além do intervalo de 5 s
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-082
+- **Achados resolvidos:** M-083
 - **Problema hoje:** Com a frota em movimento, o mapa consome muito mais banco e banda do que precisa (custo do Supabase e travamento no celular), sem ganho de atualização em relação ao refresh de 5 segundos que já existe.
 
   ```
@@ -5072,7 +5139,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho técnico (merge por `id` com o payload + debounce curto, mantendo o refetch como rede de segurança) está correto. Corrijo a justificativa: a flag `realtime_map_updates` NÃO protege este canal — ela só condiciona o canal próprio da página (src/pages/LiveMapPage.tsx:162-163 `if (flagsLoading || !realtimeEnabled) return;`). O canal de useTrackingData.ts:89 abre sempre, mesmo com a flag desligada, então o kill-switch descrito em docs/pendencias/P-16 não desliga este caminho. Ao aplicar o merge, aplicar também o filtro de veículo/status à linha mesclada (lógica de :75-85), senão a linha atualizada volta a aparecer com filtro ativo.
 - **Arquivos e objetos a tocar:** `src/components/map/hooks/useTrackingData.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 078 · **Libera:** etapa 233
+- **Depende de:** etapa 177 · **Libera:** etapa 213
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev, com o mapa aberto e a aba Network do DevTools, inserir 10 updates em `active_tracking` no Postgres descartável: saem 10 requisições completas a `active_tracking?select=*...` além da do intervalo.
@@ -5085,11 +5152,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 177 — Falha transitória na RPC de permissões tranca o usuário em /unauthorized até recarregar a página
+### Etapa 179 — Falha transitória na RPC de permissões tranca o usuário em /unauthorized até recarregar a página
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — auth, permissão e infra**
 
-- **Achados resolvidos:** M-083
+- **Achados resolvidos:** M-084
 - **Problema hoje:** Uma oscilação de rede de um segundo faz o operador ser mandado para a tela "sem permissão" e ficar preso ali — ele acha que perdeu o acesso e abre chamado, quando bastaria recarregar a página.
 
   ```
@@ -5100,7 +5167,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Vale o conserto, mas no lugar certo: expor `isError`/`refetch` em src/hooks/usePermissions.ts:174-187 e tratar erro em src/components/auth/ProtectedRoute.tsx:27-36 como tela de falha com "tentar de novo" — e o gate que importa é o de `requiredRole` (:54-68), não o de `requiredPermission` (:71-79), que é código ainda não usado. Subir `retry` só na query `user-roles` (a de `user-permissions` não derruba acesso nenhum hoje). A ressalva do auditor sobre não mexer no `makeQueryClient` global (src/App.tsx:87-97) está correta.
 - **Arquivos e objetos a tocar:** `src/hooks/usePermissions.ts`, `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`
 - **Não tocar / armadilhas:** Não transformar erro em "libera o acesso": o fail-closed atual está certo quanto à segurança; o defeito é não haver recuperação nem mensagem correta.
-- **Depende de:** etapa 078 · **Libera:** etapa 178
+- **Depende de:** etapa 121 · **Libera:** etapa 180
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** DevTools → Network → bloquear a URL `*/rest/v1/rpc/get_user_permissions`, recarregar, logar e navegar para uma rota com `requiredPermission` (ex.: as declaradas em src/App.tsx): a aplicação vai para /unauthorized e permanece lá entre navegações até um reload completo.
@@ -5113,11 +5180,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 178 — Gate de MFA abre quando a consulta de nível de autenticação falha
+### Etapa 180 — Fila de jobs: "Deletar" e "Processar fila" não fazem nada mas confirmam sucesso, e o filtro de status ignora as avaliações
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — auth, permissão e infra**
 
-- **Achados resolvidos:** M-084
+- **Achados resolvidos:** M-085
+- **Problema hoje:** Na tela de fila, apagar um job mostra "Job deletado" e o job continua lá; "Processar fila" sempre informa "0 jobs processados, 0 erros" como se tivesse rodado. E ao filtrar por "Pendentes" ou "Com falha" a lista vem poluída de avaliações já concluídas. O operador não consegue confiar na tela para saber se há trabalho travado.
+
+  ```
+  src/hooks/useJobQueue.ts:317-318 `const deleteJob = async (jobId: string): Promise<void> => { logger.warn(\`Delete de job ${jobId} ignorado (jobs são registros históricos)\`); };`; :340 `return { processed: 0, errors: 0 };`; :159-163 consulta de `driver_evaluations` sem filtro e :170 `status: 'COMPLETED',`; src/pages/JobQueuePage.tsx:39 `toast.success('Job deletado');`
+  ```
+  Mesma causa, outro local — Interface — painéis e relatórios:
+  ```
+  src/hooks/useJobQueue.ts:339 `return { processed: 0, errors: 0 };`; :318 `logger.warn(\`Delete de job ${jobId} ignorado (jobs são registros históricos)\`);`; src/pages/JobQueuePage.tsx:39 `toast.success('Job deletado');`; :50 `toast.success(\`${result.processed} jobs processados, ${result.errors} erros\`);`
+  ```
+- **Causa raiz:** O hook foi montado como fachada sobre `webhook_events`/`bitrix24_sync`/`driver_evaluations` (comentário nas linhas 1-4) e três operações ficaram como simulação, sem que a UI soubesse. O filtro de status foi aplicado só nas duas tabelas que têm coluna de status.
+- **Caminho recomendado:** Curto prazo e diff mínimo: (a) em `src/pages/JobQueuePage.tsx`, remover o botão de deletar e trocar o texto do "Processar fila" por "Atualizar" (é só isso que `processQueue` faz: invalida caches, linhas 335-337); (b) em `src/hooks/useJobQueue.ts:159-163`, só incluir `driver_evaluations` quando `status` for undefined ou `'COMPLETED'`, do mesmo jeito que os blocos de `webhook_events` (132-138) e `bitrix24_sync` (187-193) já condicionam. Atalho a evitar: fazer `deleteJob` apagar de verdade linhas de `webhook_events`/`driver_evaluations` — são registros históricos de auditoria e a própria nota do código (linha 319) avisa isso.
+  AJUSTE DO REVISOR: Caminho correto e a armadilha (não apagar histórico) é válida. Um ajuste no item (b): quando `status === 'FAILED'` ou `'PENDING'`, não basta excluir `driver_evaluations` — a paginação usa `Math.floor(limit / 3)` por fonte (:163), então ao tirar uma fonte a lista passa a mostrar no máximo 2/3 do limite pedido; se quiser manter o volume, recalcule o divisor pelas fontes efetivamente consultadas.
+- **Arquivos e objetos a tocar:** `src/hooks/useJobQueue.ts`, `src/pages/JobQueuePage.tsx`
+- **Não tocar / armadilhas:** `useRetryJob` (linhas 266-310) é real e funciona (atualiza `webhook_events.processed` e `bitrix24_sync.sync_status`): não mexer nele. O `useAddJob` só grava de verdade para `sync_bitrix24` (linhas 236-253) e devolve `simulated-<ts>` nos outros tipos — se algum caller novo usar esse id, vira bug silencioso.
+- **Depende de:** etapa 179 · **Libera:** etapa 181
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Abrir /job-queue, clicar em deletar um job e recarregar: o job reaparece. Filtrar por "FAILED" e conferir que itens do tipo `evaluation` aparecem com status COMPLETED na lista.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 181 — Gate de MFA abre quando a consulta de nível de autenticação falha
+
+**Onda 5 (Robustez: erros, estados, concorrência) / Média / Hooks e estado — auth, permissão e infra**
+
+- **Achados resolvidos:** M-086
 - **Problema hoje:** As telas que exigem segundo fator (regras de risco, webhooks, integrações, chaves da Lalamove/UAPI) podem ser abertas sem o segundo fator se a verificação de nível falhar. As gravações continuam barradas pelo banco, mas a camada extra de proteção da tela deixa de existir.
 
   ```
@@ -5128,7 +5227,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Expor o erro das queries e bloquear em ProtectedRoute está certo. Corrijo o 'atalho a evitar': MFASettings e SecurityDashboardPage NÃO usam esses sinais — os únicos consumidores de needsMFAEnrollment/needsMFAVerification são src/components/auth/ProtectedRoute.tsx:23,44,49 e o teste src/components/auth/ProtectedRoute.test.tsx (MFASettings.tsx:23 consome `factors, isMFAEnabled, disableMFA, isDisabling, loadingFactors`). Logo, inverter o default dentro de useMFA não quebraria texto de status; ainda assim prefira tratar o erro no guard e atualizar src/components/auth/ProtectedRoute.test.tsx com o caso de erro.
 - **Arquivos e objetos a tocar:** `src/hooks/useMFA.ts`, `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 177 · **Libera:** etapa 213
+- **Depende de:** etapa 180 · **Libera:** etapa 221
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** DevTools → Network → bloquear `*/auth/v1/factors`, logar como manager sem MFA verificado e abrir /webhooks: a página deve redirecionar para /mfa-enroll; se renderizar, o fail-open está confirmado. Em teste: `npx vitest run src/components/auth/ProtectedRoute.test.tsx` com um mock de useMFA devolvendo erro.
@@ -5141,11 +5240,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 179 — 24 referencias de GitHub Action por tag mutavel e 2 actions fora da allowlist
+### Etapa 182 — 24 referencias de GitHub Action por tag mutavel e 2 actions fora da allowlist
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-085
+- **Achados resolvidos:** M-087
 - **Problema hoje:** O sistema confia em codigo de terceiros que pode mudar sem aviso dentro do processo que tem a chave do banco de producao.
 
   ```
@@ -5156,7 +5255,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho esta certo e os SHAs reutilizaveis existem — conferi: contexto.yml:89 `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1`, :147 `actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0`, :162 `actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0`, :189 `actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2`. Duas correcoes: (1) o SHA de `actions/download-artifact` NAO esta em contexto.yml:189 (ali e upload-artifact) — esta em contexto.yml:350 `actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0`; (2) falta o passo decisivo: ligar `node scripts/ci/check-workflow-pins.mjs` no job required `guard-agents-md` (ci.yml:81-97), senao o pin volta a se degradar na proxima edicao de workflow, exatamente como aconteceu. Manter `version: 3.2.0` do setup-cli: o comentario em deploy-edges.yml:36-39 explica a razao (rate limit do 'latest').
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`, `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/allowed-actions.json`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 120 · **Libera:** etapa 180
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `node scripts/ci/check-workflow-pins.mjs` tem de sair 0 (hoje 1 com 24 linhas), e `node scripts/ci/check-workflow-pins-resolvem.mjs` tem de confirmar cada pin contra o GitHub.
@@ -5169,11 +5268,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 180 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController` — parte 1/2
+### Etapa 183 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController`
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Integrações e contratos**
 
-- **Achados resolvidos:** M-086
+- **Achados resolvidos:** M-088
 - **Problema hoje:** Se a Lalamove, o Mapbox, o Google ou o WhatsApp travarem sem derrubar a conexão, a tela fica rodando até o limite da plataforma em vez de falhar rápido e tentar o outro caminho. No geo-gateway isso também impede o failover para o provedor alternativo, porque ele só dispara quando a primeira chamada falha.
 
   ```
@@ -5182,14 +5281,12 @@ Checklist de conclusão:
 - **Causa raiz:** O repo tem o padrão certo em quatro lugares — `lalamove-gateway/index.ts:305-307` (`AbortController` + `TIMEOUT_MS = 25_000`), `lalamove-token-refresh/index.ts:160-161`, `_shared/channels/zapp.ts:233-234` e `_shared/channels/sms.ts:116-117` — mas ele nunca foi aplicado às chamadas que falam com o terceiro de verdade. Sem `signal`, um provedor que aceita a conexão e não responde prende a invocação até o limite de parede da plataforma, consumindo o tempo de execução e, em `lalamove-api`, multiplicando pelo retry (até 3 tentativas penduradas na mesma invocação).
 - **Caminho recomendado:** Aplicar o padrão de `/home/user/Lalamove_V2/supabase/functions/_shared/channels/zapp.ts:231-245` (arquivo de referência: `AbortController` + `clearTimeout` no `finally` + erro distinguindo abort de rede) em cada ponto, com prazos por natureza da chamada: ~10s para geocoding/autocomplete e notificação, ~25s para rota/matrix e criação de pedido, ~60s para a IA do route-analyzer. Nos providers de mapa, o lugar certo é o `call()` único de cada classe (`mapbox.ts:81-131` e `google.ts:367`), não cada método. Onde `AbortSignal.timeout(ms)` resolve sozinho, usar — é o que `check-external-api/index.ts:133` já faz. Atalho a evitar: um prazo curto e igual para tudo: `matrix` com 625 elementos e `geocode-batch` com 50 consultas passam de 10s legitimamente e passariam a falhar.
   AJUSTE DO REVISOR: Corrija o mapa dos providers de mapa: google.ts NAO tem um `call()` unico — sao quatro pontos de fetch independentes (:121, :259, :358, :377), e :367 nao e o lugar; mapbox.ts tem o `call()` (:82-131), mas tambem um fetch fora dele em :466 (staticMap), que ficaria sem prazo. O caminho enxuto para os dois e aplicar o prazo no `fetchFn` injetado no construtor (mapbox.ts:73 / google.ts:71): um wrapper que adiciona AbortSignal.timeout(ms) cobre todos os pontos de uma vez, sem tocar cada metodo. O resto do plano (prazos por natureza da chamada, prazo maior para matrix/geocode-batch) esta correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/mapbox.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/google.ts`, `/home/user/Lalamove_V2/supabase/functions/send-notification/index.ts`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/mapbox.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/google.ts`, `/home/user/Lalamove_V2/supabase/functions/send-notification/index.ts`
+- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/mapbox.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/google.ts`, `/home/user/Lalamove_V2/supabase/functions/send-notification/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`, `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`
 - **Não tocar / armadilhas:** Em `lalamove-api`, o retry de :222-233 já trata erro de rede como retentável e o `Request-ID` é estável entre tentativas — um abort passa a contar como tentativa e pode fazer um `POST /orders` abortado ser reenviado; a idempotência pelo `Request-ID` cobre isso, mas não mexer no `requestId` ao mexer no timeout. No geo-gateway, um abort passa a ser `isFailoverWorthy` (`failover.ts:17-19` devolve true para erro não tipado) e vai disparar o provedor alternativo: é o comportamento desejado, mas muda custo e precisa aparecer em `geo_usage`. `staticMap` (`mapbox.ts:356-357`) baixa a imagem inteira — prazo generoso.
-- **Depende de:** etapa 179 · **Libera:** etapa 181
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Injetar um `fetchFn` que nunca resolve nos testes de provider (`deno test supabase/functions/geo-gateway/mapbox.test.ts`) e afirmar que a chamada rejeita com erro de timeout em até N ms — hoje o teste ficaria pendurado. Em produção: `select action, duration_ms, status from query_telemetry order by duration_ms desc limit 20` para ver se há chamadas no teto da plataforma.
-  Nesta etapa, a verificação vale para: `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/mapbox.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/google.ts`, `/home/user/Lalamove_V2/supabase/functions/send-notification/index.ts`.
 
 Checklist de conclusão:
 
@@ -5199,41 +5296,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 181 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController` — parte 2/2
-
-**Onda 5 (Robustez: erros, estados, concorrência) / Média / Integrações e contratos**
-
-- **Achados resolvidos:** M-086
-- **Problema hoje:** Se a Lalamove, o Mapbox, o Google ou o WhatsApp travarem sem derrubar a conexão, a tela fica rodando até o limite da plataforma em vez de falhar rápido e tentar o outro caminho. No geo-gateway isso também impede o failover para o provedor alternativo, porque ele só dispara quando a primeira chamada falha.
-
-  ```
-  Sem `signal` em: lalamove-api/index.ts:195,1156 · lalamove-uapi/index.ts:180,214 · send-notification/index.ts:1169,1180,1289,1360,1419,1450 · bitrix24-sync/index.ts:101,152,197,243,255,333 · bitrix24-process-queue/index.ts:108,188,205 · route-analyzer/index.ts:167 · geo-admin/index.ts:54,152,212 · geo-gateway/providers/mapbox.ts:100,104,466 · geo-gateway/providers/google.ts:121,259,358,377. Referencias corretas: check-external-api/index.ts:133 e _shared/channels/zapp.ts:240-242
-  ```
-- **Causa raiz:** O repo tem o padrão certo em quatro lugares — `lalamove-gateway/index.ts:305-307` (`AbortController` + `TIMEOUT_MS = 25_000`), `lalamove-token-refresh/index.ts:160-161`, `_shared/channels/zapp.ts:233-234` e `_shared/channels/sms.ts:116-117` — mas ele nunca foi aplicado às chamadas que falam com o terceiro de verdade. Sem `signal`, um provedor que aceita a conexão e não responde prende a invocação até o limite de parede da plataforma, consumindo o tempo de execução e, em `lalamove-api`, multiplicando pelo retry (até 3 tentativas penduradas na mesma invocação).
-- **Caminho recomendado:** Aplicar o padrão de `/home/user/Lalamove_V2/supabase/functions/_shared/channels/zapp.ts:231-245` (arquivo de referência: `AbortController` + `clearTimeout` no `finally` + erro distinguindo abort de rede) em cada ponto, com prazos por natureza da chamada: ~10s para geocoding/autocomplete e notificação, ~25s para rota/matrix e criação de pedido, ~60s para a IA do route-analyzer. Nos providers de mapa, o lugar certo é o `call()` único de cada classe (`mapbox.ts:81-131` e `google.ts:367`), não cada método. Onde `AbortSignal.timeout(ms)` resolve sozinho, usar — é o que `check-external-api/index.ts:133` já faz. Atalho a evitar: um prazo curto e igual para tudo: `matrix` com 625 elementos e `geocode-batch` com 50 consultas passam de 10s legitimamente e passariam a falhar.
-  AJUSTE DO REVISOR: Corrija o mapa dos providers de mapa: google.ts NAO tem um `call()` unico — sao quatro pontos de fetch independentes (:121, :259, :358, :377), e :367 nao e o lugar; mapbox.ts tem o `call()` (:82-131), mas tambem um fetch fora dele em :466 (staticMap), que ficaria sem prazo. O caminho enxuto para os dois e aplicar o prazo no `fetchFn` injetado no construtor (mapbox.ts:73 / google.ts:71): um wrapper que adiciona AbortSignal.timeout(ms) cobre todos os pontos de uma vez, sem tocar cada metodo. O resto do plano (prazos por natureza da chamada, prazo maior para matrix/geocode-batch) esta correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`, `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`, `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`
-- **Não tocar / armadilhas:** Em `lalamove-api`, o retry de :222-233 já trata erro de rede como retentável e o `Request-ID` é estável entre tentativas — um abort passa a contar como tentativa e pode fazer um `POST /orders` abortado ser reenviado; a idempotência pelo `Request-ID` cobre isso, mas não mexer no `requestId` ao mexer no timeout. No geo-gateway, um abort passa a ser `isFailoverWorthy` (`failover.ts:17-19` devolve true para erro não tipado) e vai disparar o provedor alternativo: é o comportamento desejado, mas muda custo e precisa aparecer em `geo_usage`. `staticMap` (`mapbox.ts:356-357`) baixa a imagem inteira — prazo generoso.
-- **Depende de:** etapa 180 · **Libera:** etapa 221
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Injetar um `fetchFn` que nunca resolve nos testes de provider (`deno test supabase/functions/geo-gateway/mapbox.test.ts`) e afirmar que a chamada rejeita com erro de timeout em até N ms — hoje o teste ficaria pendurado. Em produção: `select action, duration_ms, status from query_telemetry order by duration_ms desc limit 20` para ver se há chamadas no teto da plataforma.
-  Nesta etapa, a verificação vale para: `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`, `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 182 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro
+### Etapa 184 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Testes**
 
-- **Achados resolvidos:** M-087
+- **Achados resolvidos:** M-089
 - **Problema hoje:** A defesa contra quem tenta adivinhar senha por força bruta não é verificada por nada. Se a função do banco for alterada e parar de contar as tentativas, o teste de lockout continua verde e a conta deixa de ser bloqueada — e isso só se descobre quando alguém entrar.
 
   ```
@@ -5257,11 +5324,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 183 — O teste de RBAC autenticado passa tanto se o usuário for barrado quanto se ele entrar
+### Etapa 185 — O teste de RBAC autenticado passa tanto se o usuário for barrado quanto se ele entrar
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Testes**
 
-- **Achados resolvidos:** M-088
+- **Achados resolvidos:** M-090
 - **Problema hoje:** O repositório tem um teste chamado "usuário sem papel de admin é barrado" que ficaria verde mesmo se a trava de administrador fosse removida. Quem lê o nome do teste acredita que a hierarquia de papéis está protegida; ela não está.
 
   ```
@@ -5272,7 +5339,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho está correto, inclusive o padrão de asserção que ele cita (e2e/rbac.e2e.ts:45 `page.getByRole('heading', { name: 'Acesso Negado', exact: true })`) e o alerta contra manter o `waitForTimeout(2000)`. Acrescento duas precisões: trocar a espera fixa por `await page.waitForURL(/\/unauthorized/)` (o helper já usa esse padrão em e2e/helpers/auth.ts:52) é o que de fato elimina a corrida, porque o redirect é client-side via `<Navigate>` em ProtectedRoute.tsx:58-64; e, enquanto não houver um segundo par de secrets com sessão de papel conhecido, este caso não deve ser "consertado" com a asserção dupla disfarçada — é melhor deixá-lo como skip declarado do que como teste que afirma algo que não checa. A ordem sã é: primeiro o guard de skip e os secrets do achado 2, depois esta asserção.
 - **Arquivos e objetos a tocar:** `e2e/rbac.e2e.ts`
 - **Não tocar / armadilhas:** Esse teste hoje pula na CI (ver achado dos skips), então corrigir a asserção sem injetar a sessão não muda nada na prática — os dois achados precisam andar juntos.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 163 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com sessão injetada de papel conhecido, `npx playwright test e2e/rbac.e2e.ts -g "barrado"` tem de falhar se a verificação de papel em src/components/auth/ProtectedRoute.tsx:54 for desativada. Hoje passa nos dois casos.
@@ -5285,11 +5352,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 184 — Webhook da Lalamove: só o HMAC é testado; mapeamento de status, replay e idempotência não têm teste e o arquivo não exporta nada
+### Etapa 186 — Webhook da Lalamove: só o HMAC é testado; mapeamento de status, replay e idempotência não têm teste e o arquivo não exporta nada
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Testes**
 
-- **Achados resolvidos:** M-089
+- **Achados resolvidos:** M-091
 - **Problema hoje:** É o canal por onde a Lalamove avisa que o pedido foi coletado, entregue ou cancelado. Se a Lalamove criar ou renomear um status, todo pedido nesse status passa a ser gravado como "em andamento" — o painel mostra entrega em curso para pedido já cancelado, e nenhum teste acusa. E a defesa contra reenvio de mensagem antiga é desligada por quem simplesmente omite o campo de data.
 
   ```
@@ -5313,11 +5380,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 185 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece
+### Etapa 187 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-090
+- **Achados resolvidos:** M-092
 - **Problema hoje:** Quem escolher 'Google Earth 3D' no seletor de mapa pode ficar com um retângulo vazio, sem aviso e sem volta automática para o mapa 2D — parece que o sistema quebrou.
 
   ```
@@ -5328,7 +5395,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Item 1 (setar erro + `onFallback?.()` no catch) está correto e é o que resolve o sintoma — mas cuidado com laço: `onFallback` em LiveMap.tsx:585 troca para `google-hybrid`, e se `google-hybrid` também falhar não há segundo degrau; vale sinalizar o erro na tela e deixar o fallback como ação do usuário, ou garantir fallback único por sessão. Item 2: incluir `maps3d` no `libraries` do caminho da chave própria NÃO resolve, porque o bloqueio é o canal `weekly` (useGoogleMapsLoader.ts:79), não a lista de libraries; a opção segura é esconder 'Google Earth 3D' no seletor quando `USING_OWN_KEY` (ou carregar um segundo script/`v=beta` só para o 3D). A ressalva do auditor sobre não forçar `v=beta` para todos é correta e confirmada: `mapId` depende de `USING_OWN_KEY` (useGoogleMapsLoader.ts:47 `return USING_OWN_KEY ? OWN_MAP_ID : undefined;`).
 - **Arquivos e objetos a tocar:** `src/components/map/Google3DCanvas.tsx`, `src/components/map/hooks/useGoogleMapsLoader.ts`, `src/components/map/MapProviderSelector.tsx`
 - **Não tocar / armadilhas:** `loaderPromise` é singleton de módulo (useGoogleMapsLoader.ts:28) e só é zerado no `onerror` do script (linha 91): trocar libraries em runtime não recarrega o script, então a correção tem de decidir as bibliotecas antes do primeiro load, não no momento do clique.
-- **Depende de:** etapa 163 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com `VITE_GOOGLE_MAPS_BROWSER_KEY` configurada, escolher 'Google Earth 3D' no seletor do /live-map e observar: a URL do script carregado (`maps.googleapis.com/maps/api/js?...v=weekly&libraries=maps,marker,routes`) não traz maps3d e `google.maps.importLibrary('maps3d')` rejeita no console; a tela fica vazia. Após o fix deve aparecer a mensagem com o botão de voltar ao 2D, ou a opção não deve ser oferecida.
@@ -5341,11 +5408,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 186 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin
+### Etapa 188 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-091
+- **Achados resolvidos:** M-093
 - **Problema hoje:** O mesmo pedido pode aparecer com mapa de um fornecedor na tela de rastreamento e de outro no detalhe do pedido, e em alguns casos o sistema paga pelos dois ao abrir uma única tela.
 
   ```
@@ -5369,11 +5436,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 187 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer
+### Etapa 189 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-092
+- **Achados resolvidos:** M-094
 - **Problema hoje:** Um clique errado bloqueia um motorista para sempre (ou o marca como confiável para sempre, pulando a análise de risco em todos os pedidos futuros), sem perguntar nada e sem caminho de volta pela interface.
 
   ```
@@ -5397,11 +5464,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 188 — Decisão de aprovação de motorista não checa o status atual: duas abas sobrescrevem uma à outra
+### Etapa 190 — Decisão de aprovação de motorista não checa o status atual: duas abas sobrescrevem uma à outra
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-093
+- **Achados resolvidos:** M-095
 - **Problema hoje:** Dois gerentes trabalhando na mesma fila: o segundo clique vence e pode reverter uma aprovação para rejeição (bloqueando o motorista) sem nenhum aviso de que o caso já tinha sido resolvido.
 
   ```
@@ -5425,11 +5492,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 189 — Editar configuração de alerta sobrescreve o que outra aba salvou e perde a edição se o salvamento falhar
+### Etapa 191 — Editar configuração de alerta sobrescreve o que outra aba salvou e perde a edição se o salvamento falhar
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-094
+- **Achados resolvidos:** M-096
 - **Problema hoje:** Dois gerentes ajustando os destinatários do mesmo alerta: o último a salvar apaga a alteração do primeiro sem aviso. E se a internet cair no momento de salvar, o texto do template digitado é perdido e é preciso escrever tudo de novo.
 
   ```
@@ -5440,7 +5507,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Manter o fechamento no `onSuccess` (padrão correto em src/pages/PasswordResetApprovalsPage.tsx:72-82) e reinicializar o formulário no clique de editar (AlertConfigCard.tsx:138), como IPWhitelistPage.tsx:95 já faz em `handleEdit`. Cuidado com a trava otimista proposta: `.eq('updated_at', configCarregado.updated_at)` depende de o PostgREST devolver a contagem de linhas afetadas — a função atual descarta isso (useAlertConfigurations.ts:59-64 só lê `error`), então é preciso usar `.select()` e checar array vazio, senão o conflito passa silencioso e fica pior que hoje.
 - **Arquivos e objetos a tocar:** `src/pages/alert-configurations/AlertConfigCard.tsx`, `src/hooks/useAlertConfigurations.ts`, `src/pages/IPWhitelistPage.tsx`
 - **Não tocar / armadilhas:** `handleSaveEdit` grava os cinco campos sempre, inclusive os que o usuário não tocou — por isso a sobrescrita é total e não parcial. Ao enviar só os campos sujos, atenção ao `.split(',')` sem `.filter(Boolean)` (mesma linha), que hoje grava destinatário vazio quando o texto termina em vírgula.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 161 · **Libera:** etapa 215
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /alert-configurations em duas abas, editar os e-mails do mesmo alerta nas duas e salvar primeiro na aba A e depois na B: o valor de A desaparece sem nenhum aviso. Conferir com `select email_addresses, updated_at from alert_configurations where id = '<id>'`.
@@ -5453,11 +5520,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 190 — Falha ao carregar lista vira estado vazio em três telas de segurança e aprovação
+### Etapa 192 — Falha ao carregar lista vira estado vazio em três telas de segurança e aprovação
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-095
+- **Achados resolvidos:** M-097
 - **Problema hoje:** Se a consulta falhar, o administrador lê 'Nenhum país na whitelist' ou 'Nenhum IP na whitelist' e pode concluir que alguém apagou as regras de acesso, ou que não há pedido de reset de senha para aprovar, quando na verdade a tela só não conseguiu carregar.
 
   ```
@@ -5481,11 +5548,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 191 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum
+### Etapa 193 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-096
+- **Achados resolvidos:** M-098
 - **Problema hoje:** Quem precisa levar a lista de pedidos para planilha clica e nao acontece nada — sem erro, sem aviso. Vira retrabalho manual ou pedido de relatorio para outra pessoa.
 
   ```
@@ -5496,7 +5563,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto esta correto. Observacao de escopo ao executar: `filteredOrders` em OrdersPage.tsx:88-101 contem no maximo os 20 itens da pagina (PAGE_SIZE em src/hooks/useRecentOrders.ts:9 e `.range(from, to)` em :41); exportar tudo exige refazer a consulta sem `.range()`, nao reaproveitar o dado em maos.
 - **Arquivos e objetos a tocar:** `src/pages/OrdersPage.tsx`, `src/utils/exportUtils.ts`, `src/components/lalamove/UapiStatementPanel.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 161 · **Libera:** etapa 215
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /orders, clicar em 'Exportar' e observar que nenhuma requisicao, download ou toast acontece (aba Rede e console vazios).
@@ -5509,11 +5576,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 192 — KPI "Taxa Auto-Aprovação" compara fila por pedido com total de motoristas e trava em 0%
+### Etapa 194 — KPI "Taxa Auto-Aprovação" compara fila por pedido com total de motoristas e trava em 0%
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-097
+- **Achados resolvidos:** M-099
 - **Problema hoje:** O indicador que mostraria quantas aprovações o sistema resolve sozinho fica permanentemente em 0%, sugerindo que nenhuma automação funciona e escondendo o ganho (ou a perda) real do fluxo de aprovação.
 
   ```
@@ -5537,11 +5604,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 193 — /reset-password aceita qualquer sessão ativa, não só o link de recuperação — troca de senha sem pedir a senha atual
+### Etapa 195 — /reset-password aceita qualquer sessão ativa, não só o link de recuperação — troca de senha sem pedir a senha atual
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-098
+- **Achados resolvidos:** M-100
 - **Problema hoje:** Em um computador compartilhado ou deixado destravado, quem senta na frente abre /reset-password e troca a senha da conta sem precisar saber a senha atual — e passa a ser o dono do acesso. Vale também para uma sessão roubada: o invasor fecha a porta atrás de si.
 
   ```
@@ -5552,7 +5619,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto é adequado, com dois ajustes. (1) Checar `type=recovery` no hash tem prazo de validade: o cliente Supabase consome e limpa o fragmento da URL ao detectar a sessão (detectSessionInUrl), então a leitura precisa acontecer na primeira renderização (antes de qualquer await) ou ser substituída por um flag setado no handler de PASSWORD_RECOVERY — não dá para ler o hash depois do `getSession()`. (2) Confirmar com o dono se 'Secure password change' está ligado no painel do projeto iecgydonctmabiijadsf antes de dimensionar o fix: com ele ligado, o próprio Supabase já recusa `updateUser({ password })` sem reautenticação recente e a correção se resume ao gate de UI. Isso é o que falta para fechar o caso.
 - **Arquivos e objetos a tocar:** `src/pages/ResetPasswordPage.tsx`, `src/pages/ForgotPasswordPage.tsx`, `src/App.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 096 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Logado normalmente (sem clicar em link de recuperação), abrir /reset-password: hoje o formulário aparece e `supabase.auth.updateUser({password})` conclui. Depois do fix deve aparecer a tela de link inválido, e o fluxo pelo e-mail de /forgot-password deve continuar funcionando ponta a ponta.
@@ -5565,11 +5632,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 194 — Rota 404 quebra: NotFound é lazy e é a única rota sem Suspense, caindo no ErrorBoundary
+### Etapa 196 — Rota 404 quebra: NotFound é lazy e é a única rota sem Suspense, caindo no ErrorBoundary
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-099
+- **Achados resolvidos:** M-101
 - **Problema hoje:** Qualquer link quebrado, URL digitada errada ou atalho antigo mostra a tela genérica de erro ("Ops! Algo deu errado") em vez da página 404 com o botão de voltar ao painel. O usuário acha que o sistema caiu quando só errou o endereço.
 
   ```
@@ -5593,7 +5660,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 195 — notification_optouts tem chave primária no telefone cru, mas a consulta compara o telefone normalizado
+### Etapa 197 — notification_optouts tem chave primária no telefone cru, mas a consulta compara o telefone normalizado
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Banco — integridade e índices**
 
@@ -5608,7 +5675,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O índice funcional proposto resolve, mas acrescente um cuidado que o auditor não menciona: `normalize_br_phone` é plpgsql marcada IMMUTABLE (:46) sem ser de fato imutável por contrato — qualquer `CREATE OR REPLACE` futuro na função (o próprio arquivo usa CREATE OR REPLACE) corrompe silenciosamente o índice, e seria preciso REINDEX. Como a tabela é pequena e só tem leitura, o ganho de performance é irrelevante; o valor está apenas em impedir duplicata. Se for feito, deixe o REINDEX registrado como consequência de mexer na função.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261123200000_optout_and_tracking_end.sql`
 - **Não tocar / armadilhas:** `normalize_br_phone` precisa continuar IMMUTABLE para sustentar o índice — se alguém a reescrever como STABLE o índice fica inválido. A tabela é pequena hoje, então o ganho de desempenho é secundário; o que importa é a unicidade.
-- **Depende de:** etapa 095 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `insert into notification_optouts(phone, reason) values ('+5541999998888','teste'), ('4199998888','teste');` — hoje as duas linhas entram; depois do índice a segunda deve ser recusada com 23505. E `explain select public.is_phone_opted_out('+5541999998888')` / `explain select 1 from notification_optouts where normalize_br_phone(phone)='4199998888'` deve passar de Seq Scan para Index Scan.
@@ -5621,7 +5688,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 196 — CORS: a configuracao de origens so respeita a primeira da lista, e duas das cinco funcoes liberam qualquer origem de forma fixa
+### Etapa 198 — CORS: a configuracao de origens so respeita a primeira da lista, e duas das cinco funcoes liberam qualquer origem de forma fixa
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Backend — edges Lalamove**
 
@@ -5636,7 +5703,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho bom, com dois ajustes. (1) Quando a origem da requisicao NAO casar com a lista, nao devolver a primeira origem: omitir o cabecalho `Access-Control-Allow-Origin` (o navegador ja bloqueia, e devolver uma origem que nao e a do chamador so confunde o diagnostico). (2) Nao tocar em lalamove-webhook: ela nao e chamada por navegador, o diff ali e churn sem ganho e mexe no caminho mais sensivel do sistema. `Vary: Origin` e os cabecalhos herdados do SDK no gateway/token-refresh: corretos como descrito.
 - **Arquivos e objetos a tocar:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-token-refresh/index.ts`, `supabase/functions/_shared/cors.ts`
 - **Não tocar / armadilhas:** O webhook nao e chamado por navegador algum — a Lalamove nao manda `Origin`; restringir ali nao protege nada e pode atrapalhar o handshake de registro, entao deixar `*` nessa funcao e defensavel. A lista de `Access-Control-Allow-Headers` da lalamove-api e lalamove-uapi nao inclui `x-request-id` nem `x-contract-version`, que o gateway inclui (:16) — ao unificar o helper, nao reduzir a lista de nenhuma funcao, senao o preflight passa a falhar onde hoje funciona.
-- **Depende de:** etapa 155 · **Libera:** etapa 228
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Definir `ALLOWED_ORIGINS="https://a.exemplo,https://b.exemplo"` e fazer um preflight de cada origem: `curl -i -X OPTIONS "$SUPABASE_URL/functions/v1/lalamove-api" -H 'Origin: https://b.exemplo' -H 'Access-Control-Request-Method: POST'`. Hoje o cabecalho volta com `https://a.exemplo` para as duas; esperado: cada origem recebe a si mesma, com `Vary: Origin`.
@@ -5649,7 +5716,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 197 — bitrix24-process-queue processa a fila sem reservar a linha e sem serializar o refresh de token
+### Etapa 199 — bitrix24-process-queue processa a fila sem reservar a linha e sem serializar o refresh de token
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Backend — notificação e fila**
 
@@ -5664,7 +5731,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O claim condicional proposto está tecnicamente certo, mas é esforço desproporcional para um disparo manual. Correção mínima e suficiente: tornar o refresh condicional (`update bitrix24_tokens set … where id = <id> and expires_at = <valor lido>` e, se não voltar linha, reler o token em vez de refazer o refresh) e dar idempotência ao `crm.activity.add` — hoje :240-247 insere em `bitrix24_activities` sem checar duplicata. Descarte o bloco de requeue de 'processing' preso: sem cron e sem status 'processing' nesta tabela, ele não tem o que destravar. Se um dia esta edge for agendada em cron, aí sim vale o claim completo no padrão de `mark_job_processing`.
 - **Arquivos e objetos a tocar:** `supabase/functions/bitrix24-process-queue/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 128 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em Postgres descartável, inserir 1 linha `pending` e invocar a função duas vezes em paralelo (`curl … & curl … & wait`); contar `select count(*) from bitrix24_activities where deal_id = <id>` — tem de ser 1. Falta para confirmar em produção: não há MCP desta sessão apontando para `iecgydonctmabiijadsf`, então não dá para ver se hoje já existem atividades duplicadas.
@@ -5677,7 +5744,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 198 — Cache de permissões e de dados administrativos sobrevive à troca de usuário quando a sessão cai sem signOut explícito
+### Etapa 200 — Cache de permissões e de dados administrativos sobrevive à troca de usuário quando a sessão cai sem signOut explícito
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Hooks e estado — auth, permissão e infra**
 
@@ -5705,7 +5772,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 199 — O logout promete limpar as preferências da sessão anterior mas apaga apenas 2 de ~8 chaves
+### Etapa 201 — O logout promete limpar as preferências da sessão anterior mas apaga apenas 2 de ~8 chaves
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Hooks e estado — auth, permissão e infra**
 
@@ -5720,7 +5787,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Não centralize uma lista de chaves para zerar tema/idioma/som/mapa no logout — isso muda comportamento esperado (o usuário perde tema e idioma ao sair) e não resolve nada de segurança. O conserto é só: trocar as duas linhas mortas de useAuth.tsx:75-76 pela remoção das chaves reais (`achievements:${id}` e `achievement-points:${id}` do usuário que saiu, usando o id capturado antes do signOut) ou remover o bloco e o comentário, já que useAchievementsSystem.tsx:256-257 isola por usuário. A citação 'brokeredPreviewStorage (client.ts:12)' também está deslocada: a linha 12 é o `createClient`, o storage é passado em client.ts:14.
 - **Arquivos e objetos a tocar:** `src/hooks/useAuth.tsx`, `src/hooks/useTheme.ts`, `src/hooks/useScheduledTheme.ts`, `src/hooks/useSoundSettings.ts`, `src/hooks/useMapSettings.ts`, `src/hooks/useRegionResolver.ts`, `src/hooks/usePushNotifications.ts`, `src/i18n/index.ts`
 - **Não tocar / armadilhas:** `region_cache`/`mapbox-region-cache:v1` não é preferência e não deve ser apagado no logout (é cache de custo). O `i18nextLng` só deve ser limpo se o produto quiser voltar à detecção automática.
-- **Depende de:** etapa 127 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Logar, mudar tema e desligar o som em /preferences, sair, logar com outro usuário e abrir o DevTools → Application → Local Storage: `lalamove-guardian-theme`, `sound_settings` e `map-settings-storage` continuam com os valores do usuário anterior.
@@ -5733,7 +5800,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 200 — Nenhum job do ci.yml tem timeout nem concurrency
+### Etapa 202 — Nenhum job do ci.yml tem timeout nem concurrency
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Infra, CI e deploy**
 
@@ -5748,7 +5815,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto, inclusive o cuidado com `cancel-in-progress`: confirmei o comentario em contexto.yml:62 que justifica `false` para push na main, entao `cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}` e a forma segura. Um ajuste de calibragem: use 30 (nao 10) tambem para `contract-tests`, que executa 7 passos de `deno test` em sequencia (ci.yml:119-155), e lembre que `concurrency` no topo do arquivo vale para o workflow inteiro — como `deploy` e `edge-integration-tests` so rodam em push na main (ci.yml:191 e :282), com `cancel-in-progress` ligado em main um push seguido do outro poderia cancelar um run de deploy no meio; por isso a expressao condicional, nao `true` fixo.
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 172 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `grep -c timeout-minutes .github/workflows/ci.yml` passa de 0 para 13; empurrar dois commits seguidos numa branch e ver o primeiro run cancelado em Actions.
@@ -5761,7 +5828,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 201 — Os limites de cobertura de 70% do vitest nunca sao aplicados: a CI roda vitest sem --coverage
+### Etapa 203 — Os limites de cobertura de 70% do vitest nunca sao aplicados: a CI roda vitest sem --coverage
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Infra, CI e deploy**
 
@@ -5776,7 +5843,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto esta correto na ordem (medir antes de ligar) e no alerta da dependencia. Um ajuste: como nao existe script `test` no package.json, a mudanca em ci.yml:37 deve continuar usando `npx vitest run --coverage --reporter=verbose`, e `@vitest/coverage-v8` precisa entrar em devDependencies com versao compativel com `vitest ^5.0.3` (package.json:96) — `npx` baixando o pacote em tempo de CI quebra em runner sem rede livre e torna o run nao reprodutivel. Nao ligar `--coverage` no mesmo PR em que se mexe nos thresholds sem a medicao: o job `test` e required check (AGENTS.md) e a main fica bloqueada.
 - **Arquivos e objetos a tocar:** `vitest.config.ts`, `.github/workflows/ci.yml`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 139 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run --coverage` imprime a tabela de cobertura e sai !=0 se algum dos quatro limites nao for atingido; hoje `npx vitest run` nao imprime cobertura nenhuma.
@@ -5789,7 +5856,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 202 — npm run lint nunca pode falhar: todas as regras ruidosas sao warning e o ratchet que conteria a divida esta quebrado
+### Etapa 204 — npm run lint nunca pode falhar: todas as regras ruidosas sao warning e o ratchet que conteria a divida esta quebrado
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Infra, CI e deploy**
 
@@ -5817,7 +5884,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 203 — Telemetria de quota da Lalamove lê o header sem o sufixo de endpoint: `lalamove_rate_limits` sempre nulo e o alerta de quota crítica nunca dispara
+### Etapa 205 — Telemetria de quota da Lalamove lê o header sem o sufixo de endpoint: `lalamove_rate_limits` sempre nulo e o alerta de quota crítica nunca dispara
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Integrações e contratos**
 
@@ -5832,7 +5899,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto (reusar a varredura por prefixo de `lalamove-gateway/index.ts:60-91` e extrair para `_shared/`). Dois cuidados: as duas edges tratam `reset` com regras diferentes — `lalamove-api:57-59` usa `n > 1_000_000_000` para decidir epoch vs delta, o gateway usa `numeric > 1e11` para decidir segundos vs milissegundos; ao unificar, escolha explicitamente a regra do gateway (o doc diz Unix em segundos) senão a mesma linha passa a gravar `limit_reset_at` diferente do que grava hoje. E o gateway normaliza `usage_ratio` de 0 a 1 (`:86-89`) enquanto `lalamove-api` grava 0 a 100 (`:65-67`): a mesma coluna `lalamove_rate_limits.usage_ratio` recebe duas escalas — isso precisa ser decidido no mesmo PR, ou o painel passa a somar maçã com laranja.
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md`
 - **Não tocar / armadilhas:** Manter também a leitura sem sufixo como fallback — o doc não garante que todo endpoint mande o sufixo, e `raw_headers` continua guardando tudo. Depois do fix o aviso de :82-84 passa a disparar de verdade: conferir se `logger.error` é o canal certo ou se deve virar alerta em `alerts` (hoje só vai para o log). Não mexer no cálculo de `resetAt` de :56-64 (epoch vs delta) no mesmo diff.
-- **Depende de:** etapa 172 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select endpoint, limit_total, limit_remaining, usage_ratio, raw_headers from lalamove_rate_limits order by created_at desc limit 10` — hoje as três colunas numéricas vêm `null` com `raw_headers` populado; depois do fix devem vir preenchidas e coerentes com o que está em `raw_headers`.
@@ -5845,7 +5912,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 204 — `geo-admin` ficou fora do registro de contratos, mas o doc afirma "26 de 26 Edge Functions com entrada validada"
+### Etapa 206 — `geo-admin` ficou fora do registro de contratos, mas o doc afirma "26 de 26 Edge Functions com entrada validada"
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Integrações e contratos**
 
@@ -5860,7 +5927,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A parte do registro/fixtures/doc está boa. Corrija a última sugestão: derivar a asserção do número de diretórios de supabase/functions/ via Deno.readDir falha no CI — .github/workflows/ci.yml:121 roda contract.test.ts com `deno test --allow-net --allow-env`, sem --allow-read, e o teste quebraria por permissão, não por regressão. Ou acrescente --allow-read a esse step, ou mantenha a asserção num número constante e ponha a conferência de cobertura no teste de integração (ci.yml:207 já roda com --allow-read).
 - **Arquivos e objetos a tocar:** `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`, `/home/user/Lalamove_V2/docs/API_CONTRACTS.md`
 - **Não tocar / armadilhas:** O gate de papel de `geo-admin` roda ANTES de ler o corpo (:68-85) e deve continuar assim — `docs/API_CONTRACTS.md` já documenta essa ordem ("o contrato roda depois do gate"), senão um caller sem papel recebe 422 e descobre o formato do payload. Mexer em `schemas.ts` recompila o job `Deno Contract Tests`, que é required check na `main`: sem fixture a build quebra. Não mudar a asserção do contador sem rodar `deno test` — e não há Deno nesta sessão.
-- **Depende de:** etapa 138 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `ls -d supabase/functions/*/ | grep -v _shared | wc -l` (27) contra `grep -c '": { v1:' supabase/functions/_shared/schemas.ts` dentro do `CONTRACT_REGISTRY` (26). Depois do fix, `deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts` deve cobrir `geo-admin`, e `curl -X POST .../geo-admin -d '[]'` com JWT de admin deve devolver 422 no formato único em vez de 400 `Invalid JSON`.
@@ -5873,7 +5940,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 205 — Cálculo de risco de motorista duplicado: cópia morta no front com pesos diferentes da que roda de verdade na edge evaluate-driver
+### Etapa 207 — Cálculo de risco de motorista duplicado: cópia morta no front com pesos diferentes da que roda de verdade na edge evaluate-driver
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Transversal — código morto e duplicação**
 
@@ -5888,7 +5955,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Apagar o arquivo está certo, mas a última frase do caminho é FALSA e não deve guiar decisão: a edge NÃO tem modo de leitura. A linha 300 citada está dentro de `makeDecision` (declarada em supabase/functions/evaluate-driver/index.ts:299), não numa resposta read-only, e não existe parâmetro de dry-run no contrato (supabase/functions/_shared/schemas.ts:32-49). Toda chamada grava: `.update(` em :735 e :755 (drivers), `.insert(` em :597, :758, :781 (alerts), :770 (driver_approval_queue) e :821 (driver_evaluations). Se alguma tela precisar prever a nota sem gravar, isso é trabalho novo na edge (flag dryRun que pula as escritas), não um recurso existente. Antes de apagar, confirmar também que `calculateRiskLevel` (:187) não é usado — o grep atual diz que não — e não mexer no enum RiskLevel, que vem de src/types/driver.ts e segue em uso.
 - **Arquivos e objetos a tocar:** `src/hooks/useDriverEvaluations.ts`, `src/hooks/useEvaluateDriver.ts`, `supabase/functions/evaluate-driver/index.ts`
 - **Não tocar / armadilhas:** src/hooks/useDriverEvaluations.ts:147-187 também exporta `useDriverEvaluations`, `useLatestDriverEvaluation`, `useCreateEvaluation` e `calculateRiskLevel` — confirmar um a um que não há importador antes de apagar (a varredura atual diz que não há, mas o enum `RiskLevel` que ele usa vem de src/types/driver.ts e esse continua em uso). Não apagar src/pages/evaluations/EvaluationDetails.tsx: é importado por src/pages/EvaluationsPage.tsx.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 139 · **Libera:** etapa 208
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `grep -rn "useDriverEvaluations\|calculateRiskLevel" src/ e2e/` deve voltar vazio depois do fix, e `npx tsc --noEmit -p tsconfig.app.json` tem de continuar com os mesmos erros de antes (hoje: só o de 'xlsx', ver item de ambiente). Depois, avaliar um motorista real pela tela e conferir `risk_score` gravado contra os pesos da edge.
@@ -5901,7 +5968,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 206 — Dois `useWalletBalance` exportados com formatos de dado diferentes; a tela de UAPI usa a versão sem trava de configuração e consulta a cada 30s mesmo sem Lalamove configurado
+### Etapa 208 — Dois `useWalletBalance` exportados com formatos de dado diferentes; a tela de UAPI usa a versão sem trava de configuração e consulta a cada 30s mesmo sem Lalamove configurado
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Transversal — código morto e duplicação**
 
@@ -5916,7 +5983,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A migração proposta quebra a tela. `isLalamoveConfigured()` (src/lib/lalamove-config.ts:8-14) lê a chave de localStorage `lalamove_configured`, e `setLalamoveConfigured` (:16-25) não é chamado em lugar nenhum do repo — grep em src/ e e2e/ só encontra a própria definição. Logo `isLalamoveConfigured()` é sempre false e `useWallet` com `enabled: isLalamoveConfigured()` nunca roda: apontar UAPISettingsPage.tsx:2 para '@/hooks/useLalamove' faria o saldo virar '—' permanente justamente na página onde o dono configura o token. Ordem correta: primeiro resolver a trava morta (alguém precisa chamar `setLalamoveConfigured(true)` quando o status da sessão vem ok, ou trocar a guarda por `status?.session?.is_active`), e só então unificar os hooks e apagar useUAPI.ts. A consulta de 30s "sem Lalamove configurado" descrita no título não é um problema a fechar com `enabled` nessa página — é a única razão pela qual ela mostra saldo hoje.
 - **Arquivos e objetos a tocar:** `src/hooks/useUAPI.ts`, `src/hooks/useLalamove.ts`, `src/pages/UAPISettingsPage.tsx`, `src/lib/uapi-proxy.ts`
 - **Não tocar / armadilhas:** Não apagar src/lib/uapi-proxy.ts junto: ele é usado por useUAPICall e pelo painel de extrato (src/lib/uapiStatement.ts). E não mexer em src/hooks/useLalamoveUapi.ts (287 linhas): é a camada nova, chama a edge `lalamove-uapi` (:39) e é um terceiro caminho legítimo, não parte desta duplicação.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 207 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com a integração desligada (isLalamoveConfigured() falso), abrir `/settings/uapi` com a aba Network aberta: hoje sai uma chamada a `lalamove-gateway` a cada 30s; depois do fix, nenhuma. Ou `npx vitest run src/hooks` com um caso que monte o hook com config ausente e espere `fetchStatus === 'idle'`.
@@ -5929,7 +5996,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 207 — O mapa "hero" do dashboard tem altura fixa de 300px dentro de um cartão de até 600px, e a prop activeDeliveries que ele recebe nunca é usada
+### Etapa 209 — O mapa "hero" do dashboard tem altura fixa de 300px dentro de um cartão de até 600px, e a prop activeDeliveries que ele recebe nunca é usada
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Transversal — código morto e duplicação**
 
@@ -5944,7 +6011,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho validado: o `div` externo (LiveMapPlaceholder.tsx:17-20, `cn("glass-card rounded-xl overflow-hidden relative", className)`) já tem altura explícita, então `h-full` no LiveMap resolve e o header overlay não é afetado porque é `absolute` (:22). Um reparo: ao remover a prop, apague primeiro o uso em DashboardRedesigned.tsx:366 e só depois a interface e a assinatura, senão o `tsc -p tsconfig.app.json` da CI (ci.yml:22) falha no passo intermediário por propriedade obrigatória ausente. E confirmo o alerta: não renomear o componente neste PR.
 - **Arquivos e objetos a tocar:** `src/components/dashboard/LiveMapPlaceholder.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/map/LiveMap.tsx`
 - **Não tocar / armadilhas:** `LiveMap` também é usado em src/pages/LiveMapPage.tsx (rota `/live-map`) — lá a altura vem de outro lugar; mexer na altura padrão dentro de src/components/map/LiveMap.tsx em vez de no chamador afetaria as duas telas. A troca tem de ser no chamador.
-- **Depende de:** etapa 137 · **Libera:** etapa 208
+- **Depende de:** etapa 049 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npm run dev`, abrir `/dashboard` em janela larga (>1280px) e medir o bloco do mapa: hoje 300px de mapa num cartão de 600px; depois do fix o mapa preenche o cartão. Alternativa sem app: `npx playwright test` com um caso que leia `boundingBox()` do contêiner do mapa e do cartão e compare as alturas.
@@ -5957,7 +6024,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 208 — Orçamento de mapas do Mapbox nasce com limite zero e parada obrigatória — bloqueia no primeiro centavo e sem aviso prévio
+### Etapa 210 — Orçamento de mapas do Mapbox nasce com limite zero e parada obrigatória — bloqueia no primeiro centavo e sem aviso prévio
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Regras de negócio — cálculos**
 
@@ -5972,7 +6039,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Alinhar o seed ao que o plano pediu (`hard_stop=false` para o mapbox enquanto o uso estiver dentro do grátis) resolve sem decisão de valor e sem risco de desligar as funções que só o mapbox atende (isochrone/optimization/tilequery, sem fallback — supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql:36-40). Não mexa em `geo_budget_status()` para "avisar quando limite=0": esse caminho reescreve uma função usada pelo cron e pelo gateway por causa de um aviso que o alerta CRITICAL do cron já cobre. E antes de qualquer migration, confirme com o dono o valor em produção — sem MCP do banco oficial o estado atual da linha é NÃO VERIFICADO.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/functions/geo-gateway/resolver.ts`, `supabase/migrations/20261123120000_geo_budget_cron.sql`, `supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql`
 - **Não tocar / armadilhas:** O modo 'auto' do resolver escolhe o provedor com franquia gratuita sobrando (resolver.ts:114-118) e o fallback só funciona se o outro provedor estiver configurado; aumentar o limite do mapbox sem olhar o do google pode só mudar de qual fatura o problema aparece.
-- **Depende de:** etapa 207 · **Libera:** —
+- **Depende de:** etapa 077 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** select * from geo_budget_status() where provider='mapbox' no projeto iecgydonctmabiijadsf: se spent_usd > 0 e blocked = true com limit_usd = 0, o bloqueio já está ativo. Sem acesso a esse banco nesta sessão, o valor efetivo em produção não pôde ser lido.
@@ -5985,7 +6052,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 209 — Trocar a velocidade do replay de trajeto não tem efeito enquanto a reprodução está rodando
+### Etapa 211 — Trocar a velocidade do replay de trajeto não tem efeito enquanto a reprodução está rodando
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Interface — mapa e rastreamento**
 
@@ -6000,7 +6067,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está correto e é o de menor risco: incluir `playbackSpeed` nas deps (MapHistoryPanel.tsx:43) e estabilizar `onPlaybackUpdate` com `useCallback` no LiveMap (LiveMap.tsx:627-652 — a closure só usa os refs `map` e `playbackMarkerRef`, então `useCallback(..., [])` basta e não introduz dep stale). Ajuste a acrescentar: o mesmo efeito também depende de `history`, cujo array vem de `useTrackingHistory`; se esse hook devolver nova referência a cada fetch, o intervalo segue sendo recriado mesmo depois do `useCallback` — vale confirmar a identidade de `history` no mesmo PR para não declarar o replay 'estável' sem ter verificado.
 - **Arquivos e objetos a tocar:** `src/components/map/MapHistoryPanel.tsx`
 - **Não tocar / armadilhas:** O replay move um marcador próprio criado em LiveMap.tsx:641-643; recriar o intervalo não deve recriar esse marcador — a lógica de reuso (`if (!playbackMarkerRef.current)`, linha 631) precisa continuar valendo.
-- **Depende de:** etapa 048 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir o painel de histórico de um motorista, dar play e clicar nas velocidades: hoje o ritmo dos passos não muda (contar os saltos do marcador de replay em 10 s); após o fix, muda imediatamente.
@@ -6013,7 +6080,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 210 — Download do comprovante abre a janela depois do await e falha calado quando o navegador bloqueia
+### Etapa 212 — Download do comprovante abre a janela depois do await e falha calado quando o navegador bloqueia
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Interface — fluxo de pedido**
 
@@ -6028,7 +6095,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto esta ERRADO e geraria falso positivo: com `noopener` nos features, `window.open` retorna null tambem quando a aba ABRE (comportamento especificado; vale para Chrome, Firefox e Safari). Testar `if (!win)` faria o toast 'permita popups' aparecer em todo download bem-sucedido. Correto: (a) abrir a aba de forma sincrona no clique (`const win = window.open('about:blank', '_blank')` sem noopener, zerar `win.opener = null`, e so depois do await setar `win.location.href = url`), ou (b) manter o open como esta e, em paralelo, mostrar um toast com acao/ancora apontando para a URL ja resolvida (`toast.success(..., { action: { label: 'Abrir comprovante', onClick: () => openExternal(url) } })`), o que da ao usuario um clique proprio caso a aba nao tenha aberto. O paralelo com o clipboard em src/components/orders/OrderDetailModal.tsx:592-599 nao se aplica: la o `navigator.clipboard.writeText` rejeita a promise, aqui nao ha erro algum para capturar.
 - **Arquivos e objetos a tocar:** `src/components/lalamove/UapiOrderHistoryPanel.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 074 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /lalamove-operacoes, bloquear popups para o dominio e clicar em 'Comprovante': a requisicao de comprovante e concluida na aba Rede, mas nenhuma aba abre e nenhum aviso aparece.
@@ -6041,7 +6108,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 211 — Cabeçalho mostra "Dashboard" em 25 das 49 telas internas, inclusive no Mapa ao Vivo canônico
+### Etapa 213 — Cabeçalho mostra "Dashboard" em 25 das 49 telas internas, inclusive no Mapa ao Vivo canônico
 
 **Onda 5 (Robustez: erros, estados, concorrência) / Baixa / Interface — rotas e RBAC**
 
@@ -6056,7 +6123,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto funciona, mas tem uma armadilha que o auditor não viu e que, como ele escreveu ("pageConfig apenas como override quando houver subtítulo"), introduz dois rótulos errados: o menu tem rótulos de apresentação, não títulos de página. src/components/layout/sidebar-config.ts:32 — `{ id: 'dashboard-alias', path: '/dashboard', label: 'Dashboard (alias)', icon: LayoutDashboard },` faria o cabeçalho de /dashboard virar "Dashboard (alias)"; e sidebar-config.ts:115 — `{ id: 'profile', path: '/profile', label: 'Perfil', icon: Users },` trocaria "Meu Perfil" por "Perfil". Então a regra tem de ser: pageConfig vence SEMPRE que a chave existir (não só quando tem subtítulo), e o menu entra apenas como fallback no lugar do literal 'Dashboard'. Confirmei que o menu cobre o necessário: as 49 entradas de `path:` em sidebar-config.ts incluem /live-map (:46) e todas as 25 rotas órfãs, então o fallback derivado resolve 100% dos casos. O resto da análise dele está certo: o casamento é por igualdade exata em AppLayout.tsx:54, e o `matchPath({ path, end: false })` de src/components/layout/Sidebar.tsx:37 é outro mecanismo — não deve ser reaproveitado aqui, sob pena de /settings/uapi passar a exibir "Configurações".
 - **Arquivos e objetos a tocar:** `src/components/layout/AppLayout.tsx`, `src/App.tsx`, `src/components/layout/sidebar-config.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 178 · **Libera:** etapa 214
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /live-map, /contacts e /roles: o cabeçalho deve dizer "Mapa ao Vivo", "Contatos" e "Roles". Hoje as três dizem "Dashboard". Conferência rápida sem subir o app: `node -e "..."` comparando as chaves de pageConfig (AppLayout.tsx:22-47) com os `path=` de App.tsx acusa as 25 ausências.
@@ -6075,11 +6142,11 @@ Checklist de conclusão:
 ## Onda 6 — Performance
 
 
-### Etapa 212 — useSidebarCounts.refetchCounts muda de identidade a cada render e recria o canal realtime da sidebar sem parar
+### Etapa 214 — useSidebarCounts.refetchCounts muda de identidade a cada render e recria o canal realtime da sidebar sem parar
 
 **Onda 6 (Performance) / Alta / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** A-057
+- **Achados resolvidos:** A-061
 - **Problema hoje:** Os contadores de alertas, aprovações e incidentes ao lado do menu deixam de se atualizar sozinhos de forma confiável, e o app fica abrindo e fechando conexão em loop (consumo de conexões Realtime do plano e bateria no celular).
 
   ```
@@ -6090,7 +6157,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A correção proposta está certa e é segura: `queryClient` é estável e o prefixo ['sidebar-count'] casa com useSidebarCounts.ts:42-45. O alerta sobre não usar `[]` nas deps também está certo. Duas adições necessárias: (a) `invalidateQueries` só conserta a identidade do callback — a colisão de tópico entre Sidebar e MobileSidebar continua, então no mesmo fix deixe só UM dos dois chamando `useSidebarCountsRealtime` (o `MobileSidebar`, cujo corpo roda mesmo fechado, é o candidato a sair); (b) alternativa de uma linha, se quiser diff ainda menor: `results[i].refetch` é referencialmente estável (queryObserver.js:56 `this.refetch = this.refetch.bind(this);` e :407 `refetch: this.refetch,`), então desestruturar os três `refetch` e usá-los como deps também resolve.
 - **Arquivos e objetos a tocar:** `src/hooks/useSidebarCounts.ts`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`, `src/hooks/useRealtimeSubscriptions.ts`
 - **Não tocar / armadilhas:** Não tente estabilizar com `useMemo([results])` — o problema é a identidade do array devolvido por useQueries, não a memoização do callback.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 213 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev, observando o log '[SidebarRealtime] Setting up counts subscription...' (useRealtimeSubscriptions.ts:378) ao navegar entre páginas: hoje setup/cleanup se repetem a cada render; depois do fix, uma vez por montagem.
@@ -6103,11 +6170,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 213 — Mover os totais dos painéis para contagem no banco (count exact) em vez de somar no navegador
+### Etapa 215 — Mover os totais dos painéis para contagem no banco (count exact) em vez de somar no navegador
 
 **Onda 6 (Performance) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-058
+- **Achados resolvidos:** A-062
 - **Problema hoje:** Quanto mais a operação cresce, mais os números do painel encolhem em relação à realidade, sem nenhum aviso na tela: "Total de Pedidos", "Taxa de Conclusão", "Total Requests" e as exportações passam a descrever só um pedaço do período.
 
   ```
@@ -6117,7 +6184,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Substituir as somas em JavaScript sobre o array já carregado por `select("*", { count: "exact", head: true })` por métrica — padrão em `src/hooks/usePendingApprovals.ts:115-119`. Comece pelos cartões de total, que são os que o dono lê para decidir.
 - **Arquivos e objetos a tocar:** `src/hooks/useAnalyticsData.ts`, `src/hooks/useDeliveryMetrics.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 178 · **Libera:** etapa 214
+- **Depende de:** etapa 191 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com mais de 1000 pedidos no Postgres descartável, o cartão de total bate com `select count(*) from lalamove_orders;`.
@@ -6130,11 +6197,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 214 — Mover as médias e taxas para agregação no banco (RPC) em vez de média do navegador
+### Etapa 216 — Mover as médias e taxas para agregação no banco (RPC) em vez de média do navegador
 
 **Onda 6 (Performance) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-058
+- **Achados resolvidos:** A-062
 - **Problema hoje:** Quanto mais a operação cresce, mais os números do painel encolhem em relação à realidade, sem nenhum aviso na tela: "Total de Pedidos", "Taxa de Conclusão", "Total Requests" e as exportações passam a descrever só um pedaço do período.
 
   ```
@@ -6144,7 +6211,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Criar/usar função SQL de agregação para média e taxa — o repo já tem o padrão de RPC agregadora nas views de cache (`supabase/migrations/20261122090000_cache_system_backend.sql`). Como envolve objeto novo no banco, abra a migration e aguarde aprovação.
 - **Arquivos e objetos a tocar:** `src/hooks/useSLAMetrics.ts`, `src/hooks/useAdvancedReports.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 213 · **Libera:** —
+- **Depende de:** etapa 066 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** A média exibida bate com a mesma média calculada por SQL direto sobre a tabela inteira, no Postgres descartável.
@@ -6157,11 +6224,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 215 — Fazer a exportação (CSV/PDF/XLSX) buscar o conjunto completo, não a página da tela
+### Etapa 217 — Fazer a exportação (CSV/PDF/XLSX) buscar o conjunto completo, não a página da tela
 
 **Onda 6 (Performance) / Alta / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** A-058
+- **Achados resolvidos:** A-062
 - **Problema hoje:** Quanto mais a operação cresce, mais os números do painel encolhem em relação à realidade, sem nenhum aviso na tela: "Total de Pedidos", "Taxa de Conclusão", "Total Requests" e as exportações passam a descrever só um pedaço do período.
 
   ```
@@ -6171,7 +6238,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Na exportação, refazer a consulta sem o limite da tela (paginando até o fim) antes de montar o arquivo, e exibir progresso. Referência: `src/utils/exportUtils.ts`. Atalho a evitar: exportar o estado já carregado da tabela — é exatamente o que produz o arquivo incompleto que o dono usa para fechar o mês.
 - **Arquivos e objetos a tocar:** `src/utils/exportUtils.ts`, `src/pages/ReportsPage.tsx`, `src/pages/AdvancedReportsPage.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 191 · **Libera:** —
+- **Depende de:** etapa 216 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `npx vitest run src/utils/__tests__/exportUtils.test.ts` verde e, com 1500 registros, o CSV gerado tem 1500 linhas de dados (não 50 nem 1000).
@@ -6184,11 +6251,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 216 — Fila do Bitrix24: o trigger enfileira a cada mudança de status, mas nada drena — só um botão manual na tela
+### Etapa 218 — Fila do Bitrix24: o trigger enfileira a cada mudança de status, mas nada drena — só um botão manual na tela
 
 **Onda 6 (Performance) / Média / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** M-100
+- **Achados resolvidos:** M-102
 - **Problema hoje:** As mudanças de status dos pedidos só chegam ao Bitrix24 quando alguém abre a tela e clica em processar a fila; entre um clique e outro, o CRM fica desatualizado sem nenhum aviso.
 
   ```
@@ -6199,7 +6266,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Antes de escolher (a) ou (b), decidir qual tabela é a vigente: supabase/migrations/20261122120100_lalamove_integration_columns.sql:110 declara que bitrix24_spa_sync (modelo crm.item.*/SPA 1690) SUBSTITUI bitrix24_sync (modelo de deals), e a edge bitrix24-process-queue lê bitrix24_sync (supabase/functions/bitrix24-process-queue/index.ts:45-48). Se o SPA é o modelo atual, enfileirar o legado só automatiza um caminho morto — essa é a pergunta para o dono. Se bitrix24_sync segue valendo, a opção (a) (add_job('bitrix_sync', ...)) é a correta e o tipo já é aceito pelo CHECK em 20261122120200:53.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql`, `src/pages/Bitrix24Page.tsx`, `supabase/functions/bitrix24-process-queue/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 063 · **Libera:** —
+- **Depende de:** etapa 105 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select sync_status, count(*), min(last_synced_at) from bitrix24_sync group by 1;` — hoje deve haver 'pending' antigos acumulados. Depois do fix, mudar o status de um pedido com deal vinculado e conferir em até 2 min `select status, type from job_queue where payload->>'order_id' = '<id>'`.
@@ -6212,11 +6279,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 217 — refresh_geo_jobs enfileira 1 a 2 jobs por rastreio ativo a cada 5 min contra um dispatcher de 10 jobs por minuto
+### Etapa 219 — refresh_geo_jobs enfileira 1 a 2 jobs por rastreio ativo a cada 5 min contra um dispatcher de 10 jobs por minuto
 
 **Onda 6 (Performance) / Média / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** M-101
+- **Achados resolvidos:** M-103
 - **Problema hoje:** Acima de algumas dezenas de entregas simultâneas a fila passa a acumular: o ETA e a rota mostrados ao cliente ficam cada vez mais atrasados e as notificações de geofence entram em espera atrás deles, sem nenhum erro aparecer.
 
   ```
@@ -6240,11 +6307,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 218 — Aviso automático ao fornecedor é reemitido a cada novo alerta de parada, sem teto por pedido
+### Etapa 220 — Aviso automático ao fornecedor é reemitido a cada novo alerta de parada, sem teto por pedido
 
 **Onda 6 (Performance) / Média / Backend — notificação e fila**
 
-- **Achados resolvidos:** M-102
+- **Achados resolvidos:** M-104
 - **Problema hoje:** Numa entrega com trânsito, o fornecedor pode receber um aviso de atraso a cada 5 minutos pelo mesmo pedido — até 12 por hora. Mensagem paga e, pior, fornecedor irritado com aviso repetido sobre algo que ele não controla.
 
   ```
@@ -6255,7 +6322,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Prefira a alternativa do dedup_key explícito (o campo existe em supabase/functions/_shared/schemas.ts:62 e é honrado em send-notification/index.ts:174-176, que usa extra.dedup_key antes da chave padrão) em vez de consultar `alerts_sent`: essa tabela é legado até a tela migrar (docs/agentes/mensageria.md:14) e a consulta de index.ts:648-651 só traz sent_at/recipient, sem order_id — não dá para derivar dela um teto por pedido sem verificar o schema. Antes de qualquer patch, verifique quem popula `is_stopped`/`stopped_since` em produção: se for só o simulador, o conserto prioritário é esse, não o teto.
 - **Arquivos e objetos a tocar:** `supabase/functions/check-driver-alerts/index.ts`, `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 105 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Postgres descartável: pedido com `auto_notify_supplier=true` e `supplier_contact` preenchido; alternar `active_tracking.is_stopped` entre true/false a cada rodada da função por 6 ciclos e contar `select count(*) from alerts_sent where channel='whatsapp' and alert_id in (select id from alerts where type='SUPPLIER_DELAY_NOTICE')` — hoje cresce um por ciclo acima de 5 min; o esperado é 1 na janela configurada.
@@ -6268,11 +6335,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 219 — Teto de 6 mensagens/10min por motorista lê alerts_sent sem filtro por destinatário nem limite
+### Etapa 221 — Teto de 6 mensagens/10min por motorista lê alerts_sent sem filtro por destinatário nem limite
 
 **Onda 6 (Performance) / Média / Backend — notificação e fila**
 
-- **Achados resolvidos:** M-103
+- **Achados resolvidos:** M-105
 - **Problema hoje:** Em horário de pico o limite de mensagens por motorista pode deixar de valer e o motorista leva uma rajada de avisos — exatamente o que o limite existe para evitar. E cada envio puxa toda a tabela de envios dos últimos 10 minutos, deixando o disparo mais lento quanto mais movimento tem.
 
   ```
@@ -6283,7 +6350,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O `.like("recipient", "%" + driverDigits.slice(-11))` proposto como paliativo NÃO funciona: `recipient` é gravado cru, exatamente como veio ao dispatch (index.ts:1058 `await supabase.from("alerts_sent").insert({ alert_id, channel, recipient, … })`), então vale `+5541999998888` e também `(41) 99999-8888` — o LIKE por sufixo de dígitos erra o segundo formato e o teto passaria a subcontar de verdade, não só sob truncamento. Faça na ordem certa: primeiro normalizar na escrita (`normalizePhone` já está importado em index.ts:38) para que `alerts_sent.recipient` seja sempre E.164, depois `.eq("recipient", <telefone normalizado>)` com `.order("sent_at", { ascending: false }).limit(DRIVER_RATE_LIMIT.maxMessages + 1)` e um índice `(recipient, sent_at DESC)`. Enquanto a coluna não estiver normalizada, o remendo seguro é só `.order("sent_at", { ascending: false }).limit(…)` com um teto generoso: não corrige a subcontagem, mas evita o truncamento arbitrário de hoje (sem `.order()`, as linhas que voltam nem são as mais recentes).
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 137 · **Libera:** —
+- **Depende de:** etapa 181 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Postgres descartável: inserir 2000 linhas em `alerts_sent` com `sent_at` dentro da janela, sendo 7 delas do telefone do motorista, e chamar a função — esperar `error: "rate_limited"` em `alerts_sent`. Falta para confirmar em produção o teto de linhas efetivo do PostgREST do projeto e o volume real de `alerts_sent` por janela de 10 min; nenhum MCP desta sessão aponta para `iecgydonctmabiijadsf`.
@@ -6296,11 +6363,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 220 — Fila de aprovações é cortada em 50 itens sem paginação enquanto o contador mostra o total
+### Etapa 222 — Fila de aprovações é cortada em 50 itens sem paginação enquanto o contador mostra o total
 
 **Onda 6 (Performance) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-104
+- **Achados resolvidos:** M-106
 - **Problema hoje:** Passando de 50 aprovações pendentes, as mais antigas somem da tela e nunca são analisadas, embora o contador continue mostrando que existem — pedidos parados esperando decisão que ninguém consegue abrir.
 
   ```
@@ -6324,11 +6391,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 221 — useSLAMetrics recria o canal realtime a cada render (handleUpdate depende do objeto da query)
+### Etapa 223 — useSLAMetrics recria o canal realtime a cada render (handleUpdate depende do objeto da query)
 
 **Onda 6 (Performance) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-105
+- **Achados resolvidos:** M-107
 - **Problema hoje:** O painel de SLA fica abrindo e fechando a conexão de tempo real continuamente; em pico de movimento perde eventos e consome conexão e banda à toa.
 
   ```
@@ -6339,7 +6406,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correção proposta está certa, e a opção mais barata é a segunda: `const { refetch } = query;` com `[refetch]` funciona porque `refetch` É estável no v5 instalado — node_modules/@tanstack/query-core/build/modern/queryObserver.js:56 `this.refetch = this.refetch.bind(this);` e :407 `refetch: this.refetch,`, e o observer vem de `React.useState` em useBaseQuery.js. Uma linha, sem tocar em `queryClient`. O alerta contra função inline também está correto.
 - **Arquivos e objetos a tocar:** `src/hooks/useSLAMetrics.ts`, `src/hooks/useRealtimeSubscriptions.ts`
 - **Não tocar / armadilhas:** src/hooks/__tests__/useSLAMetrics.test.ts:22 mocka `useSLAMetricsRealtime: vi.fn()`, então o teste verde não prova nada aqui.
-- **Depende de:** etapa 181 · **Libera:** —
+- **Depende de:** etapa 093 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev, na página de SLA, o log '[SLARealtime] Setting up SLA subscription...' se repete a cada 10 s hoje; depois do fix deve aparecer uma vez por montagem.
@@ -6352,11 +6419,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 222 — useTrackingHistory sem proteção contra resposta atrasada: histórico de um motorista pode sobrescrever o de outro
+### Etapa 224 — useTrackingHistory sem proteção contra resposta atrasada: histórico de um motorista pode sobrescrever o de outro
 
 **Onda 6 (Performance) / Média / Hooks e estado — dados de negócio**
 
-- **Achados resolvidos:** M-106
+- **Achados resolvidos:** M-108
 - **Problema hoje:** O painel de histórico pode mostrar o trajeto de um motorista com o nome de outro, sem erro visível — base errada para cobrar atraso ou apurar incidente.
 
   ```
@@ -6367,7 +6434,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto e seguro (requestIdRef comparado antes de setHistory/setError/setLoading, invalidando no cleanup). Observação para não quebrar o painel: o `finally { setLoading(false); }` de :57-59 também precisa ficar sob a checagem, senão a resposta obsoleta apaga o estado de carregamento da requisição nova. O padrão de referência citado (`let cancelled = false` / `if (cancelled) return`) está em src/components/map/hooks/useTrackingData.ts:49 e :65, não em :51 — a linha exata diverge, o padrão existe.
 - **Arquivos e objetos a tocar:** `src/hooks/useTrackingHistory.ts`, `src/components/map/LiveMap.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** — · **Libera:** etapa 225
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em dev com throttling 'Slow 3G', clicar no histórico do motorista A e em seguida do B: o painel mostra o nome de B com os pontos de A. `npx vitest run src/hooks/__tests__/useTrackingHistory.test.ts` passa nos dois casos, porque não cobre chamadas concorrentes.
@@ -6380,11 +6447,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 223 — Os jobs de SQL testam a migration por faixas de linha fixas (sed -n '277,345p')
+### Etapa 225 — Os jobs de SQL testam a migration por faixas de linha fixas (sed -n '277,345p')
 
 **Onda 6 (Performance) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-107
+- **Achados resolvidos:** M-109
 - **Problema hoje:** A rede de protecao do codigo que decide chegada e atraso depende de contagem de linhas de um arquivo; uma edicao inocente a transforma em teste que nao testa (ou em falha confusa que vira ruido).
 
   ```
@@ -6395,7 +6462,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Ajuste: nao precisa inventar comentario sentinela na migration. O padrao por marcador JA existe e esta provado no repo — supabase/tests/run.sh:33-38 recorta do `CREATE OR REPLACE FUNCTION public.<nome>(` ate o terminador `$$;`, sem tocar no .sql, e run.sh:50-56 ainda escolhe a migration certa por funcao. Mexer no .sql para inserir sentinela e pior: migration ja aplicada em producao nao deve ser reescrita. O caminho de menor risco e eliminar os dois jobs de faixa fixa e mover os asserts de supabase/tests/geo_functions.test.sql e supabase/tests/geo_trigger.test.sql para dentro do harness run.sh (que ja monta 01_functions.sql com as funcoes reais e a fixture), ou, se forem mantidos, trocar o `sed -n '<faixa>p'` pela mesma extracao por nome. E, ao mover, apontar geo_evaluate_tracking para 20261122131000_geo_eta_delay.sql, senao o teste segue validando a versao morta. A armadilha que o auditor apontou (nao aplicar a migration inteira por causa de lalamove_orders/active_tracking/alerts/job_queue, ci.yml:264-266 e supabase/tests/fixtures/geo_trigger_schema.sql) continua valida.
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`, `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/tests/geo_functions.test.sql`, `supabase/tests/geo_trigger.test.sql`, `supabase/tests/fixtures/geo_trigger_schema.sql`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 092 · **Libera:** —
+- **Depende de:** etapa 224 · **Libera:** etapa 226
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Prova direta do acoplamento: `sed -n '277,345p' supabase/migrations/20261122130100_geo_foundation.sql | head -3` comeca em `CREATE OR REPLACE FUNCTION public.geo_haversine_m`; acrescente uma linha no topo do arquivo e o mesmo comando passa a cortar no meio. Depois do fix, o recorte por sentinela tem de continuar comecando no CREATE FUNCTION.
@@ -6408,11 +6475,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 224 — Balão de informações do motorista fecha sozinho a cada ciclo de atualização
+### Etapa 226 — Balão de informações do motorista fecha sozinho a cada ciclo de atualização
 
 **Onda 6 (Performance) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-108
+- **Achados resolvidos:** M-110
 - **Problema hoje:** Ao abrir os detalhes de um motorista no mapa, a janelinha fecha sozinha em poucos segundos; o operador precisa clicar de novo cada vez que quer ler endereço, cliente e ETA.
 
   ```
@@ -6423,7 +6490,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Correta no essencial (atualizar conteúdo em vez de trocar instância). Um ajuste: o popup atual é criado por `createDriverPopup`, então o conteúdo vem de uma função que devolve `new mapboxgl.Popup(...).setHTML(...)`; a correção precisa extrair a geração do HTML para reaproveitá-la em `getPopup().setHTML(...)`, senão o `setHTML` duplica a montagem do markup. Evitar a alternativa `setPopup` + `togglePopup()` sugerida como plano B: `togglePopup` alterna, logo se o popup já tiver sido reaberto por outro caminho ela fecha o balão — usar `getPopup()?.addTo(map)` se a troca for inevitável.
 - **Arquivos e objetos a tocar:** `src/components/map/hooks/useMapMarkers.ts`
 - **Não tocar / armadilhas:** Os botões do popup dependem do ciclo de vida dos listeners (achado dos botões 'Trajeto'/'Google'): ao mudar para atualização in-place, reanexar/preservar os listeners, senão o balão fica aberto mas inerte.
-- **Depende de:** — · **Libera:** etapa 225
+- **Depende de:** etapa 225 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /live-map com pelo menos um motorista ativo: clicar no marcador para abrir o balão, cronometrar — hoje ele fecha no primeiro refresh (até ~5 s). Após o fix, deve permanecer aberto e com os números mudando.
@@ -6436,11 +6503,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 225 — Cada troca de estilo ou de provedor recria o mapa Mapbox e cobra um novo map load, além de refazer as chamadas de Directions
+### Etapa 227 — Cada troca de estilo ou de provedor recria o mapa Mapbox e cobra um novo map load, além de refazer as chamadas de Directions
 
 **Onda 6 (Performance) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-109
+- **Achados resolvidos:** M-111
 - **Problema hoje:** Um operador que alterna entre mapa escuro e satélite algumas vezes por hora multiplica a fatura de mapa e de cálculo de rota sem gerar nenhuma informação nova.
 
   ```
@@ -6451,7 +6518,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: O caminho proposto está certo (tirar `mapStyle` das deps + `map.current.setStyle(...)` em efeito próprio), mas falta um detalhe que, omitido, cria um bug novo: o handler `style.load` é registrado dentro do efeito de init (LiveMap.tsx:164) e captura `showTraffic` daquele momento, chamando `setupMapLayers(map.current, showTraffic)` (:166). Hoje isso funciona porque o mapStyle nas deps recria tudo; sem o remonte, a camada de tráfego volta com o valor antigo (o efeito de LiveMap.tsx:226-234 só roda quando `showTraffic` muda, não após um `setStyle`). Então: ler `showTraffic` e `preferredProvider` de refs dentro do handler `style.load`, ou reexecutar a reaplicação de tráfego/overlay depois de cada `style.load`. O resto (idempotência de `setupMapLayers`, documentada em src/components/map/mapLayers.ts:8-10, e preferir `expected_route`) está correto.
 - **Arquivos e objetos a tocar:** `src/components/map/LiveMap.tsx`, `src/components/map/hooks/useMapMarkers.ts`, `src/hooks/useMapbox.ts`
 - **Não tocar / armadilhas:** O comentário de LiveMap.tsx:43-45 avisa que literais nas props default recriavam a referência e reinicializavam o mapa — não reintroduzir isso ao mexer nas deps. E ao usar `setStyle`, as sources de rota/geofence/rastro desaparecem: a reaplicação depende dos handlers `once('style.load', ...)` já existentes (LiveMap.tsx:361-383).
-- **Depende de:** etapa 224 · **Libera:** etapa 226
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Em /live-map, DevTools > Network: clicar alternadamente nos dois botões de estilo e contar os POST para `functions/v1/geo-gateway` com `action: count-map-load` (hoje 1 por clique) e os requests de rota disparados em seguida. Depois do fix, nenhum novo map load ao trocar estilo.
@@ -6464,11 +6531,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 226 — Loop de animação a 60 fps roda sem parar no mapa ao vivo, inclusive sem movimento e com provedor Google ativo
+### Etapa 228 — Loop de animação a 60 fps roda sem parar no mapa ao vivo, inclusive sem movimento e com provedor Google ativo
 
 **Onda 6 (Performance) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-110
+- **Achados resolvidos:** M-112
 - **Problema hoje:** A aba do mapa consome processador e bateria o tempo todo; em máquina mais fraca ou notebook em bateria a tela fica lenta e esquenta sem estar fazendo nada.
 
   ```
@@ -6479,7 +6546,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho proposto está bom; só ajustar a justificativa (é CPU/DOM, não repintura do canvas GL). Ao implementar o limiar de parada, parar também de reagendar quando `markerPositions.current.size === 0` — isso cobre de graça o caso do provedor Google, sem precisar de checagem de `mapRef.current`.
 - **Arquivos e objetos a tocar:** `src/components/map/hooks/useMapMarkers.ts`, `src/components/map/LiveMap.tsx`
 - **Não tocar / armadilhas:** A animação é o que evita o 'teletransporte' dos marcadores entre leituras de 5 s (mesma razão documentada em GoogleMapsCanvas.tsx:166-168): o critério de parada tem de ser por proximidade do alvo, não desligar a interpolação.
-- **Depende de:** etapa 225 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /live-map, deixar a tela parada sem motoristas em movimento e gravar 10 s no Performance do DevTools: hoje aparecem ~600 frames com chamadas de `setLngLat`; após o fix, o perfil deve ficar praticamente vazio em repouso.
@@ -6492,11 +6559,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 227 — Mesma tabela active_tracking consultada por 2 a 3 pollings simultâneos e 2 canais realtime, e o kill-switch documentado não desliga o polling
+### Etapa 229 — Mesma tabela active_tracking consultada por 2 a 3 pollings simultâneos e 2 canais realtime, e o kill-switch documentado não desliga o polling
 
 **Onda 6 (Performance) / Média / Interface — mapa e rastreamento**
 
-- **Achados resolvidos:** M-111
+- **Achados resolvidos:** M-113
 - **Problema hoje:** A tela de rastreamento consulta o banco várias vezes por segundo quando os motoristas estão se movendo — custo de banco e de tráfego multiplicado por 2 ou 3 sem nenhum ganho, e risco de a tela engasgar justamente na hora de maior movimento.
 
   ```
@@ -6507,7 +6574,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Mantenha os itens 1 (fonte única via react-query com `queryKey: ['active-tracking', vehicleFilter, statusFilter]`) e 3 (debounce no handler do realtime). DESCARTE os itens 2 e 4: tornar o `setInterval` condicional à flag muda o comportamento intencional (o polling é o piso que cobre o período de `flagsLoading` e a perda de conexão do canal — LiveMapPage.tsx:156-157) e, com uma única query compartilhada, o intervalo vira `refetchInterval` dessa query, não um `if`; e não há linha errada em docs/pendencias/P-16 para corrigir. Risco a vigiar na unificação: os dois selects pedem colunas diferentes no join de `lalamove_orders` (LiveMapPage.tsx:80 não traz lat/lng; useTrackingData.ts:57-61 traz) — a query unificada tem que usar o superconjunto, senão o traçado de rota some.
 - **Arquivos e objetos a tocar:** `src/pages/LiveMapPage.tsx`, `src/components/map/hooks/useTrackingData.ts`, `src/components/map/GoogleMapsCanvas.tsx`, `src/components/map/Google3DCanvas.tsx`, `docs/pendencias/P-16-hooks-orfaos-triagem.md`
 - **Não tocar / armadilhas:** Dois `supabase.channel()` com o mesmo tópico ('active-tracking-changes') convivem hoje; ao unificar, garantir que `removeChannel` no cleanup (useTrackingData.ts:104-108) não derrube o canal de outro consumidor ainda montado. Também não remover o guard `cancelled` (linha 69), que descarta resposta obsoleta na troca de filtro.
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 155 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Abrir /live-map com o DevTools na aba Network filtrando `active_tracking`: hoje saem duas famílias de requests (uma a cada 5 s, outra a cada 10 s) mais uma por evento realtime; trocar o provedor para Google Ruas no seletor e contar novamente (sobe para três). Após o fix deve sobrar uma série só. No banco: `select count(*) from query_telemetry where ...` ou o painel de queries do Supabase para comparar o volume antes/depois.
@@ -6520,11 +6587,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 228 — Cartoes de estatistica da tela de pedidos misturam total geral com contagem da pagina atual
+### Etapa 230 — Cartoes de estatistica da tela de pedidos misturam total geral com contagem da pagina atual
 
 **Onda 6 (Performance) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-112
+- **Achados resolvidos:** M-114
 - **Problema hoje:** Com 500 pedidos a tela mostra 'Total 500' ao lado de 'Concluidos 7' — numeros que nao fecham e que o dono usa para medir operacao. Os tres cartoes tambem mudam so de virar a pagina.
 
   ```
@@ -6535,7 +6602,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A afirmação "o projeto já tem views de agregação por status em supabase/migrations/ para o dashboard" eu não verifiquei — não liste isso como fato ao implementar; confirme a view antes de depender dela. Caminho de menor risco e sem DDL: quatro `select('id', { count: 'exact', head: true })` por status (ou um agrupamento via RPC existente) respeitando os mesmos filtros de busca/status do hook; o rótulo 'nesta página' segue válido como paliativo imediato.
 - **Arquivos e objetos a tocar:** `src/pages/OrdersPage.tsx`, `src/hooks/useRecentOrders.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 196 · **Libera:** —
+- **Depende de:** etapa 139 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Com mais de 20 pedidos no banco, abrir /orders e comparar o cartao 'Total' com a soma dos outros tres; depois clicar em 'Proxima' e ver os tres mudarem enquanto o total fica parado.
@@ -6548,11 +6615,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 229 — Endereco escolhido no CRM ou em 'Ja usados' entra no pedido sem a coordenada que o sistema ja tinha gravada
+### Etapa 231 — Endereco escolhido no CRM ou em 'Ja usados' entra no pedido sem a coordenada que o sistema ja tinha gravada
 
 **Onda 6 (Performance) / Média / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** M-113
+- **Achados resolvidos:** M-115
 - **Problema hoje:** A lista 'Ja usados' existe justamente para reaproveitar o ponto exato sem pagar nova consulta ao provedor de mapas, mas o pedido sai so com o texto e a Lalamove refaz a localizacao por conta propria — pode cair em outro ponto da mesma rua, e o ganho de custo e de precisao nao acontece.
 
   ```
@@ -6563,7 +6630,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto, com um ajuste de ordem: emitir `onAddressSelected` em handleSelectFrequent DEPOIS de `onChange` (como handleSelectMapbox já faz em :141-145), porque o `onChange` do dialogo em NewOrderDialog.tsx:650-654 zera `pickupGeo` quando o texto difere — se a emissão vier antes, o próprio dialogo apaga o ponto recém-emitido. Para o CRM o ganho é só place components/texto (não há coordenada na busca de CRM), então priorize o caso 'Já usados', que é o que realmente perde dado.
 - **Arquivos e objetos a tocar:** `src/components/orders/AddressAutocomplete.tsx`, `src/components/orders/NewOrderDialog.tsx`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 155 · **Libera:** —
+- **Depende de:** etapa 135 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** No novo pedido, escolher um endereco do grupo 'Ja usados' e pedir cotacao: no corpo enviado a edge (action 'quotation') o `stops[0]` vai sem o campo `coordinates`, embora a tabela de enderecos frequentes tenha latitude/longitude para ele.
@@ -6576,7 +6643,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 230 — Cinco índices redundantes: duplicam o prefixo de um índice único ou composto já existente
+### Etapa 232 — Cinco índices redundantes: duplicam o prefixo de um índice único ou composto já existente
 
 **Onda 6 (Performance) / Baixa / Banco — integridade e índices**
 
@@ -6591,7 +6658,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Dropar apenas três: public.idx_webhooks_type, public.idx_contract_version_usage_monthly_month e public.idx_order_replacements_prev_id. Não incluir idx_orders_lalamove_id nem idx_drivers_lalamove_id — já removidos em 20260813143344:11 e 20260723174458:4; repetir o DROP é inócuo mas o achado não deve ser reportado como cinco. O precedente citado (20260813143344:19-22) continua válido como modelo de comentário.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20251224181603_0ace1e1d-c3a8-4569-b3ec-02bdee6d54c9.sql`, `supabase/migrations/20260723172904_f9756817-8a17-405c-98a6-c5f8b344caa2.sql`, `supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql`, `supabase/migrations/20260723130425_76481d2c-7b89-4ed7-9e3c-b89a98051ac3.sql`
 - **Não tocar / armadilhas:** Não confundir `idx_tracking_events_order`/`idx_tracking_events_created` (20251224143803:284-285) com duplicatas vivas: a tabela foi dropada e recriada em 20260516114956, então esses nomes não existem mais no banco. E `idx_alerts_unread ON alerts(is_read) WHERE is_read = false` não é redundante com `idx_alerts_not_dismissed (is_dismissed, created_at DESC)` — colunas diferentes.
-- **Depende de:** etapa 137 · **Libera:** —
+- **Depende de:** etapa 117 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** `select indexrelid::regclass, idx_scan from pg_stat_user_indexes where relname in ('lalamove_orders','drivers','webhook_events','contract_version_usage_monthly','lalamove_order_replacements') order by idx_scan` — os cinco devem aparecer com idx_scan baixo ou zero antes do drop; depois do drop, repetir as consultas do front (filtro por lalamove_id, listagem de webhooks por tipo) e confirmar no EXPLAIN que o índice remanescente é usado.
@@ -6604,7 +6671,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 231 — Trigger de auditoria da configuração de mapas grava resource_id aleatório porque a coluna é uuid NOT NULL
+### Etapa 233 — Trigger de auditoria da configuração de mapas grava resource_id aleatório porque a coluna é uuid NOT NULL
 
 **Onda 6 (Performance) / Baixa / Banco — integridade e índices**
 
@@ -6619,7 +6686,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Cuidado com o `COALESCE(NEW.function, OLD.function, NEW.provider, OLD.provider, 'singleton')` proposto: NEW/OLD são record e referenciar um campo que não existe na tabela do trigger dá erro em tempo de execução (42703) — a função é compartilhada pelas três tabelas. Use ramificação por `TG_TABLE_NAME` com `IF/ELSIF` atribuindo de NEW/OLD por tabela, ou extraia do JSON já montado: `COALESCE(to_jsonb(NEW), to_jsonb(OLD)) ->> CASE TG_TABLE_NAME WHEN 'geo_settings' THEN 'function' WHEN 'geo_budget' THEN 'provider' ELSE 'id' END`. O resto (coluna aditiva resource_key + índice, mantendo resource_id intacto, e não mexer no tipo/nullability) está correto.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`
 - **Não tocar / armadilhas:** A função é SECURITY DEFINER e dispara em INSERT/UPDATE/DELETE das três tabelas de configuração; um erro dentro dela congela a configuração de mapas inteira — foi exatamente o que aconteceu quando audit_log não existia (20261121192500_restore_audit_log.sql:4-8). Testar com um UPDATE real em ambiente descartável antes de aplicar.
-- **Depende de:** etapa 133 · **Libera:** —
+- **Depende de:** etapa 176 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Mudar o provedor de uma função em /settings/maps e rodar `select action, resource_type, resource_id, changes->'after'->>'function' from audit_log where resource_type='geo_settings' order by created_at desc limit 3` — hoje resource_id é um UUID diferente a cada linha e sem relação com a função alterada.
@@ -6632,7 +6699,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 232 — active_tracking.tracking_status sem CHECK e já gravado em caixas diferentes ('ACTIVE' e 'ended')
+### Etapa 234 — active_tracking.tracking_status sem CHECK e já gravado em caixas diferentes ('ACTIVE' e 'ended')
 
 **Onda 6 (Performance) / Baixa / Banco — integridade e índices**
 
@@ -6647,7 +6714,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Na etapa (1), trocar os DOIS literais de 20261123200000_optout_and_tracking_end.sql, não só o da linha 90: se só o SET virar 'ENDED' e o filtro da linha 94 continuar `<> 'ended'`, a função volta a "encerrar" linhas já encerradas em cada chamada (reescrevendo last_updated e inflando o ROW_COUNT devolvido). O resto do plano (normalizar com upper(), depois CHECK NOT VALID + VALIDATE em arquivo separado, e não converter para enum) está correto.
 - **Arquivos e objetos a tocar:** `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20261123200000_optout_and_tracking_end.sql`, `supabase/functions/job-worker/index.ts`, `supabase/migrations/20261121194500_geo_jobs_scheduler.sql`
 - **Não tocar / armadilhas:** Trocar 'ended' por 'ENDED' sem o UPDATE de normalização faz as linhas já encerradas com minúscula voltarem a ser reprocessadas pela condição `<> 'ENDED'` da própria função — custo de rota no Mapbox para pedido fechado, exatamente o que a etapa 61 veio evitar. Fazer o UPDATE e a troca do literal no mesmo arquivo.
-- **Depende de:** etapa 116 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select distinct tracking_status, count(*) from active_tracking group by 1` — hoje pode trazer 'ACTIVE' e 'ended' misturados. Depois do fix, só valores em maiúscula, e `select pg_get_constraintdef(oid) from pg_constraint where conname='active_tracking_status_chk'` deve existir. Teste funcional: encerrar um pedido e confirmar que o job-worker para de pedir rota para ele (log da edge).
@@ -6660,7 +6727,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 233 — O comentário do workflow de contexto diz "a cada 10 min"; o agendamento é horário
+### Etapa 235 — O comentário do workflow de contexto diz "a cada 10 min"; o agendamento é horário
 
 **Onda 6 (Performance) / Baixa / Documentação × código**
 
@@ -6674,7 +6741,7 @@ Checklist de conclusão:
 - **Caminho recomendado:** Corrigir o comentário de `:2` para "a cada hora (minuto 3)". Uma linha. O `render-workflow-docs.mjs` existe para manter esses cabeçalhos em sincronia — rode-o em modo `--check` depois da correção. Atalho a evitar: mudar o cron para 10 minutos "para casar com o comentário": seriam 6× mais execuções e o gate por commit já evita trabalho repetido.
 - **Arquivos e objetos a tocar:** `.github/workflows/contexto.yml`
 - **Não tocar / armadilhas:** Não mexa no gate por commit (`Comparar HEAD de main com os manifests da branch contexto`): é o que impede o workflow de refazer tudo a cada hora.
-- **Depende de:** etapa 176 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `node scripts/ci/render-workflow-docs.mjs --check` → exit 0 (hoje devolve exit 1).
@@ -6687,7 +6754,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 234 — Canal de contingência dispara mesmo quando a mensagem já saiu ou foi barrada por opt-out
+### Etapa 236 — Canal de contingência dispara mesmo quando a mensagem já saiu ou foi barrada por opt-out
 
 **Onda 6 (Performance) / Baixa / Backend — notificação e fila**
 
@@ -6702,7 +6769,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: A correção proposta está errada e não resolve: mover `anyAttempted = true` para depois dos `return` deixa `anyAttempted=false` no caso de supressão total, e `needFallback` tem o termo `|| (!anyAttempted)` (index.ts:951) — a contingência dispararia igual, pelo outro ramo. O conserto certo é mexer na condição, não na posição da flag: contar entregas e supressões (`anyDelivered` somando também os sucessos do laço ad-hoc de :683-727, e `anySuppressed` para dedup/opt-out) e trocar :951 por algo como `const needFallback = !anyDelivered && !anySuppressed && cfg.fallback_channel`. E, como o bloco está morto por falta de `fallback_channel` configurável, isso só vale a pena junto com a exposição do campo na UI — corrigir a condição sozinho não muda nada em produção.
 - **Arquivos e objetos a tocar:** `supabase/functions/send-notification/index.ts`
 - **Não tocar / armadilhas:** —
-- **Depende de:** — · **Libera:** —
+- **Depende de:** etapa 149 · **Libera:** —
 - **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
 - **Precisa de aprovação humana antes do merge:** não
 - **Como verificar:** Postgres descartável: um `alert_configurations` com `notify_whatsapp=true`, `whatsapp_numbers=['+5541999998888']`, `fallback_channel='email'`, `fallback_recipients=['op@exemplo.com']`; chamar send-notification com `metadata.recipients` contendo o mesmo `+5541999998888`. Esperado após o fix: uma linha em `alerts_sent` (whatsapp, sent) e nenhuma de email. Hoje aparece também a de email.
@@ -6715,7 +6782,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 235 — escalate-alerts dispara a mesma escalação uma vez por linha de configuração do tipo, e a escalação não passa por dedup
+### Etapa 237 — escalate-alerts dispara a mesma escalação uma vez por linha de configuração do tipo, e a escalação não passa por dedup
 
 **Onda 6 (Performance) / Baixa / Backend — notificação e fila**
 
@@ -6743,7 +6810,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 236 — O job deploy do ci.yml so imprime uma frase e aparece como deploy bem-sucedido
+### Etapa 238 — O job deploy do ci.yml so imprime uma frase e aparece como deploy bem-sucedido
 
 **Onda 6 (Performance) / Baixa / Infra, CI e deploy**
 
@@ -6758,7 +6825,7 @@ Checklist de conclusão:
   AJUSTE DO REVISOR: Caminho correto, so acrescente que a confirmacao dos required checks nao foi reverificada nesta sessao (sem acesso a API do GitHub): antes de apagar, confirme pelo settings da main que `deploy` nao e required, como o proprio achado manda. O bloco a remover e exatamente ci.yml:279-286.
 - **Arquivos e objetos a tocar:** `.github/workflows/ci.yml`, `.github/workflows/deploy-edges.yml`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 150 · **Libera:** —
+- **Depende de:** etapa 155 · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** Depois do merge, um push na main nao lista mais o job `deploy` no run do CI/CD, e `Deploy Edge Functions` aparece so como workflow proprio.
@@ -6777,11 +6844,11 @@ Checklist de conclusão:
 ## Onda 7 — Experiência de uso e consistência
 
 
-### Etapa 237 — Buscar o endereco pelo CEP depois de escolher no autocomplete deixa a coordenada antiga: a cotacao vai com o ponto do endereco anterior
+### Etapa 239 — Buscar o endereco pelo CEP depois de escolher no autocomplete deixa a coordenada antiga: a cotacao vai com o ponto do endereco anterior
 
 **Onda 7 (Experiência de uso e consistência) / Alta / Interface — fluxo de pedido**
 
-- **Achados resolvidos:** A-059
+- **Achados resolvidos:** A-063
 - **Problema hoje:** A Lalamove cobra e roteiriza pela coordenada, nao pelo texto: o pedido sai com o endereco novo escrito na tela e o ponto do endereco velho. Preco errado e motorista indo para o lugar errado, sem nenhum aviso ao operador.
 
   ```
@@ -6805,11 +6872,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 238 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco — parte 1/2
+### Etapa 240 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco
 
 **Onda 7 (Experiência de uso e consistência) / Média / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** M-114
+- **Achados resolvidos:** M-116
 - **Problema hoje:** Não é possível recriar o banco a partir do repositório: um ambiente novo, um teste local ou uma recuperação de desastre param no meio da aplicação das migrations. Hoje a única cópia funcional do banco é a produção.
 
   ```
@@ -6818,14 +6885,12 @@ Checklist de conclusão:
 - **Causa raiz:** `CREATE OR REPLACE FUNCTION` não aceita mudar nome de parâmetro nem tipo/colunas de retorno (42P13) e `CREATE MATERIALIZED VIEW` sem IF NOT EXISTS falha se a relação existe (42P07). O repo acumulou duas gerações de cache e três de job_queue sem nunca dropar a geração anterior, porque em produção nada disso chegou a ser aplicado (drift Lovable) — então o erro só aparece quando a cadeia roda de verdade, do zero.
 - **Caminho recomendado:** Uma migration aditiva no fim da cadeia não resolve: a quebra está no meio dela. O caminho de menor risco é um `DROP FUNCTION IF EXISTS` / `DROP MATERIALIZED VIEW IF EXISTS` imediatamente antes de cada redefinição conflitante, dentro dos próprios arquivos antigos (que, por já estarem no ledger, não serão reexecutados em produção — mudança sem efeito lá e que conserta o reset local), exatamente como 20261123150000_cache_refresh_log_restaurado.sql:54-56 já faz (`DROP FUNCTION IF EXISTS public.refresh_cache_view(text);` com o comentário explicando a troca de assinatura). Como isso contraria "migration aplicada não se edita", é decisão do dono: a alternativa é aposentar as gerações mortas (20251226000003/000004/010000/010001/020000 e 20250102000002) por um baseline único. Atalho a evitar: acrescentar `IF NOT EXISTS` só na materialized view — as três colisões de função continuariam abortando.
   AJUSTE DO REVISOR: São três drops, não quatro: o da materialized view já existe (20251226020000:13) e não deve ser tocado. Atenção extra no DROP de get_hourly_metrics_cached/refresh_cache_view: o CASCADE das MVs em 20251226020000 e os retornos `SETOF <view>` acoplam função e tipo composto, então o drop precisa vir imediatamente antes de cada redefinição e sem CASCADE. Antes de editar arquivo já aplicado (que contraria 'migration aplicada não se edita'), o caminho mais barato é validar a hipótese rodando `supabase db reset` local e anexando o erro 42P13 real — hoje a afirmação é dedução da leitura dos arquivos, sem execução.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20251226000004_create_cache_views.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20251226000003_create_job_queue.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20251226000004_create_cache_views.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20251226000003_create_job_queue.sql`
+- **Arquivos e objetos a tocar:** `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20251226000004_create_cache_views.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20251226000003_create_job_queue.sql`, `supabase/migrations/20251226010001_configure_pg_cron.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `docs/MIGRATION_RECONCILIATION_2026-11.md`, `docs/agentes/banco.md`
 - **Não tocar / armadilhas:** —
-- **Depende de:** etapa 155 · **Libera:** —
+- **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `supabase start && supabase db reset` em máquina descartável: hoje para com `cannot change name of input parameter "hours_back"` na 20251226000004. Corrigido, o reset vai até a última migration e `select count(*) from supabase_migrations.schema_migrations` iguala o número de arquivos em supabase/migrations/.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20251226000004_create_cache_views.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20251226000003_create_job_queue.sql`.
 
 Checklist de conclusão:
 
@@ -6835,41 +6900,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 239 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco — parte 2/2
+### Etapa 241 — Trigger de geofence lê OLD em INSERT: o primeiro ponto do rastreio pode abortar o upsert e o rastreio nunca começa
 
 **Onda 7 (Experiência de uso e consistência) / Média / Banco — funções, triggers e cron**
 
-- **Achados resolvidos:** M-114
-- **Problema hoje:** Não é possível recriar o banco a partir do repositório: um ambiente novo, um teste local ou uma recuperação de desastre param no meio da aplicação das migrations. Hoje a única cópia funcional do banco é a produção.
-
-  ```
-  Colisões reais: 20250102000002_cache_system_complete.sql:157 vs 20251226000004_create_cache_views.sql:290-293; 20250102000002_cache_system_complete.sql:257-262 vs 20261122090000_cache_system_backend.sql:118-123; 20251226000003_create_job_queue.sql:254-257 vs 20251226010001_configure_pg_cron.sql:12-17. Falsa: 20251226020000_create_materialized_views_cache.sql:13 (`DROP MATERIALIZED VIEW IF EXISTS driver_stats_cache CASCADE;`) precede o CREATE de :15.
-  ```
-- **Causa raiz:** `CREATE OR REPLACE FUNCTION` não aceita mudar nome de parâmetro nem tipo/colunas de retorno (42P13) e `CREATE MATERIALIZED VIEW` sem IF NOT EXISTS falha se a relação existe (42P07). O repo acumulou duas gerações de cache e três de job_queue sem nunca dropar a geração anterior, porque em produção nada disso chegou a ser aplicado (drift Lovable) — então o erro só aparece quando a cadeia roda de verdade, do zero.
-- **Caminho recomendado:** Uma migration aditiva no fim da cadeia não resolve: a quebra está no meio dela. O caminho de menor risco é um `DROP FUNCTION IF EXISTS` / `DROP MATERIALIZED VIEW IF EXISTS` imediatamente antes de cada redefinição conflitante, dentro dos próprios arquivos antigos (que, por já estarem no ledger, não serão reexecutados em produção — mudança sem efeito lá e que conserta o reset local), exatamente como 20261123150000_cache_refresh_log_restaurado.sql:54-56 já faz (`DROP FUNCTION IF EXISTS public.refresh_cache_view(text);` com o comentário explicando a troca de assinatura). Como isso contraria "migration aplicada não se edita", é decisão do dono: a alternativa é aposentar as gerações mortas (20251226000003/000004/010000/010001/020000 e 20250102000002) por um baseline único. Atalho a evitar: acrescentar `IF NOT EXISTS` só na materialized view — as três colisões de função continuariam abortando.
-  AJUSTE DO REVISOR: São três drops, não quatro: o da materialized view já existe (20251226020000:13) e não deve ser tocado. Atenção extra no DROP de get_hourly_metrics_cached/refresh_cache_view: o CASCADE das MVs em 20251226020000 e os retornos `SETOF <view>` acoplam função e tipo composto, então o drop precisa vir imediatamente antes de cada redefinição e sem CASCADE. Antes de editar arquivo já aplicado (que contraria 'migration aplicada não se edita'), o caminho mais barato é validar a hipótese rodando `supabase db reset` local e anexando o erro 42P13 real — hoje a afirmação é dedução da leitura dos arquivos, sem execução.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20251226010001_configure_pg_cron.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `docs/MIGRATION_RECONCILIATION_2026-11.md`, `docs/agentes/banco.md`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20251226010001_configure_pg_cron.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `docs/MIGRATION_RECONCILIATION_2026-11.md`, `docs/agentes/banco.md`
-- **Não tocar / armadilhas:** —
-- **Depende de:** etapa 238 · **Libera:** —
-- **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
-- **Precisa de aprovação humana antes do merge:** sim
-- **Como verificar:** `supabase start && supabase db reset` em máquina descartável: hoje para com `cannot change name of input parameter "hours_back"` na 20251226000004. Corrigido, o reset vai até a última migration e `select count(*) from supabase_migrations.schema_migrations` iguala o número de arquivos em supabase/migrations/.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20251226010001_configure_pg_cron.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `docs/MIGRATION_RECONCILIATION_2026-11.md`, `docs/agentes/banco.md`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 240 — Trigger de geofence lê OLD em INSERT: o primeiro ponto do rastreio pode abortar o upsert e o rastreio nunca começa
-
-**Onda 7 (Experiência de uso e consistência) / Média / Banco — funções, triggers e cron**
-
-- **Achados resolvidos:** M-115
+- **Achados resolvidos:** M-117
 - **Problema hoje:** Quando o motorista já está no local de coleta no primeiro ping de GPS, a abertura do rastreio falha; o webhook apenas registra o erro no log (`if (trackingError) logger.error(...)`, lalamove-webhook/index.ts:631) e o pedido fica sem rastreio no mapa e sem nenhum alerta de geofence, em silêncio.
 
   ```
@@ -6893,11 +6928,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 241 — Prova de entrega sem stopIndex sobrescreve TODAS as paradas do pedido com a mesma imagem e o mesmo status
+### Etapa 242 — Prova de entrega sem stopIndex sobrescreve TODAS as paradas do pedido com a mesma imagem e o mesmo status
 
 **Onda 7 (Experiência de uso e consistência) / Média / Backend — edges Lalamove**
 
-- **Achados resolvidos:** M-116
+- **Achados resolvidos:** M-118
 - **Problema hoje:** Em entrega com varias paradas, a foto e o status de entrega de uma parada viram a prova de todas. O comprovante de entrega deixa de servir como prova: nao da para saber qual cliente recebeu, e uma parada que falhou pode aparecer como entregue.
 
   ```
@@ -6921,43 +6956,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 242 — Busca de pedidos injeta o texto do usuário cru no filtro `.or()` do PostgREST
-
-**Onda 7 (Experiência de uso e consistência) / Média / Hooks e estado — dados de negócio**
-
-- **Achados resolvidos:** M-117
-- **Problema hoje:** Buscar por nome com vírgula devolve resultado errado ou erro na tela de pedidos, e alguém com acesso ao painel consegue fazer a busca trazer pedidos fora do filtro pretendido.
-
-  ```
-  src/hooks/useRecentOrders.ts:37 `supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`);`; src/pages/OrdersPage.tsx:78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
-  ```
-  Mesma causa, outro local — Interface — fluxo de pedido:
-  ```
-  src/hooks/useRecentOrders.ts:36-38 `if (query && query.trim()) { supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`); }` | src/pages/OrdersPage.tsx:29 `const q = searchParams.get('q') || '';` e :78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
-  ```
-- **Causa raiz:** O texto digitado é concatenado dentro da string de filtro do PostgREST, onde a vírgula separa termos e os parênteses delimitam grupos. Um termo com vírgula (ex.: "Silva, João") vira mais um termo do `or`, e um texto construído de propósito (`x,status.eq.CANCELED`) acrescenta condição própria ou provoca 400 de sintaxe. É o único ponto da camada que monta filtro por concatenação — os demais usam `.eq()`/`.in()` com valor separado.
-- **Caminho recomendado:** Sanitizar antes de montar o filtro (`const safe = query.trim().replace(/[,()\.:"%]/g, ' ')`) e usar `%${safe}%`; o mais seguro é trocar o `.or()` por uma RPC de busca (ilike/websearch_to_tsquery com parâmetro), para o texto nunca virar sintaxe de filtro. Atalho tentador a evitar: `encodeURIComponent(query)` — o supabase-js já codifica a URL; o problema é a gramática do filtro, não o encoding.
-  AJUSTE DO REVISOR: A regex proposta (`replace(/[,()\.:"%]/g, ' ')`) resolve a sintaxe mas mutila termos legitimos — tira ponto e dois-pontos do que o usuario digitou, e e aplicada depois de o `%` ja ter sido removido, deixando a busca por fragmento inconsistente. Caminho mais direto e sem perda: aspear o valor no proprio filtro, que e o mecanismo do PostgREST para isso — `customer_name.ilike."%<valor>%"` com `"` e `\` do valor escapados; so entao a virgula deixa de ser separador. A RPC de busca segue sendo a opcao mais robusta. Independente do fix, tratar o 400 na UI: hoje :44-47 relanca e a OrdersPage cai no bloco de erro (:129) em vez de mostrar "nenhum resultado".
-- **Arquivos e objetos a tocar:** `src/hooks/useRecentOrders.ts`, `src/pages/OrdersPage.tsx`
-- **Não tocar / armadilhas:** Não restrinja o termo a alfanumérico puro: IDs da Lalamove e `internal_order_id` usam hífen e underscore e precisam continuar buscáveis.
-- **Depende de:** — · **Libera:** —
-- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
-- **Precisa de aprovação humana antes do merge:** não
-- **Como verificar:** Na tela de pedidos, buscar por `a,status.eq.COMPLETED` e olhar a requisição no DevTools: o parâmetro `or=` leva o termo extra — o filtro aplicado não é o que a UI prometeu (o recorte por RLS continua valendo).
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
 ### Etapa 243 — Tema agendado só funciona enquanto a tela de preferências está aberta: dois hooks de tema disputam a mesma classe com chaves diferentes
 
 **Onda 7 (Experiência de uso e consistência) / Média / Hooks e estado — auth, permissão e infra**
 
-- **Achados resolvidos:** M-118
+- **Achados resolvidos:** M-119
 - **Problema hoje:** O usuário escolhe "tema escuro das 18h às 6h", vê funcionar na tela de preferências e, ao navegar para qualquer outra tela ou recarregar, o tema volta ao anterior. A configuração parece salva e não tem efeito.
 
   ```
@@ -6985,7 +6988,7 @@ Checklist de conclusão:
 
 **Onda 7 (Experiência de uso e consistência) / Média / Integrações e contratos**
 
-- **Achados resolvidos:** M-119
+- **Achados resolvidos:** M-120
 - **Problema hoje:** A operação vê "sincronizado" e "tarefa criada" quando o Bitrix24 recusou. Alerta crítico que deveria abrir tarefa para o responsável não abre e ninguém é avisado; o contador de erros da fila fica em zero enquanto as linhas estão marcadas como erro no banco.
 
   ```
@@ -7013,7 +7016,7 @@ Checklist de conclusão:
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-120
+- **Achados resolvidos:** M-121
 - **Problema hoje:** O usuário clica para dar um apelido ao próprio aparelho ('Notebook da operação') e o sistema grava 'Windows (Chrome)' sem perguntar nada — e o botão fica desabilitado em momentos errados.
 
   ```
@@ -7041,7 +7044,7 @@ Checklist de conclusão:
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-121
+- **Achados resolvidos:** M-122
 - **Problema hoje:** O painel de reset de senha mostra 'Aprovadas: 0' e 'Rejeitadas: 0' na abertura, mesmo tendo dezenas de casos no histórico. Quem acompanha o volume de pedidos de senha lê um número errado.
 
   ```
@@ -7065,11 +7068,43 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 247 — "Motoristas Ativos" conta linhas de rastreamento e de cache, não motoristas distintos
+### Etapa 247 — Filtro de busca sem escape: virgula ou parentese no termo quebram a consulta da lista de pedidos
+
+**Onda 7 (Experiência de uso e consistência) / Média / Interface — fluxo de pedido**
+
+- **Achados resolvidos:** M-123
+- **Problema hoje:** Procurar um cliente escrevendo 'Sobrenome, Nome' derruba a tela de pedidos com 'Erro ao Carregar' em vez de devolver resultado — e um termo construido de proposito consegue mudar o filtro da consulta.
+
+  ```
+  src/hooks/useRecentOrders.ts:36-38 `if (query && query.trim()) { supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`); }` | src/pages/OrdersPage.tsx:29 `const q = searchParams.get('q') || '';` e :78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
+  ```
+  Mesma causa, outro local — Hooks e estado — dados de negócio:
+  ```
+  src/hooks/useRecentOrders.ts:37 `supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`);`; src/pages/OrdersPage.tsx:78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
+  ```
+- **Causa raiz:** O termo digitado e interpolado cru dentro da string de filtro do PostgREST, que usa virgula para separar condicoes e parenteses para agrupar. Um termo com virgula ('Silva, Maria'), parentese ou ponto vira sintaxe de filtro: a consulta e recusada (a OrdersPage cai no bloco de erro em OrdersPage.tsx:120-135) ou passa a filtrar por outra condicao que o usuario nao pediu, inclusive sobrescrevendo o filtro de status aplicado em useRecentOrders.ts:32-34.
+- **Caminho recomendado:** Sanitizar o termo antes de montar o filtro (remover/escapar `,` `.` `(` `)` `%` e aspas) ou trocar o `.or()` por uma RPC/consulta parametrizada no banco com `websearch_to_tsquery`/`ilike` ja parametrizado. O caminho mais barato e um helper em src/lib/ que escape o termo e seja usado pelos tres `ilike`, aplicando tambem nos outros hooks de lista que usam `.or()`. Atalho a evitar: so bloquear a virgula no input — o problema e a montagem da string, e o mesmo hook e usado pela URL (?q=), que ninguem valida.
+  AJUSTE DO REVISOR: O helper de escape em src/lib/ e o caminho certo e barato. Precisao tecnica: nao remova `.` nem `%` do termo — `%` e o curinga que o ilike precisa e o `.` dentro do valor nao quebra o parser; o que quebra o `or=` sao virgula, parenteses e aspas. O padrao do PostgREST e envolver o valor em aspas duplas e escapar aspas/contrabarra internas (`lalamove_id.ilike."%termo%"`), nao mutilar o texto digitado — mutilar faria a busca por 'Silva, Maria' devolver resultado errado em vez de erro. Revise tambem src/pages/DashboardRedesigned.tsx:55, que chama o mesmo hook sem query (nao afetado).
+- **Arquivos e objetos a tocar:** `src/hooks/useRecentOrders.ts`, `src/pages/OrdersPage.tsx`
+- **Não tocar / armadilhas:** O mesmo padrao `.or()` com interpolacao aparece em outros hooks de lista do projeto; corrigir so este deixa o resto igual. Nao confundir com RLS: a politica continua valendo, o problema e quebra da consulta e desvio do filtro, nao leitura de dado alheio.
+- **Depende de:** — · **Libera:** —
+- **Risco e como reverter:** Mudança de código em produção (deploy automático no merge). Reverter = `git revert` do commit desta PR e confirmar o novo deploy.
+- **Precisa de aprovação humana antes do merge:** não
+- **Como verificar:** Abrir /orders?q=Silva%2C%20Maria (virgula na query) e olhar a resposta da chamada a `lalamove_orders` na aba Rede: a expectativa e HTTP 400 do PostgREST com erro de parsing do parametro `or`, e a tela mostrando 'Erro ao Carregar'.
+
+Checklist de conclusão:
+
+- [ ] mudança aplicada só nos arquivos listados
+- [ ] typecheck, lint e testes dos arquivos tocados passam
+- [ ] verificação acima executada, com a evidência registrada
+- [ ] deploy confirmado, quando se aplica
+- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
+
+### Etapa 248 — "Motoristas Ativos" conta linhas de rastreamento e de cache, não motoristas distintos
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-122
+- **Achados resolvidos:** M-124
 - **Problema hoje:** Três telas dão três números diferentes para "motoristas ativos", e o do Dashboard SLA infla conforme os pedidos simultâneos — o dono não consegue saber quantas pessoas estão realmente rodando.
 
   ```
@@ -7093,11 +7128,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 248 — "Pedidos (7d)" do Cache Status são as 7 linhas mais recentes da view, que podem abranger meses
+### Etapa 249 — "Pedidos (7d)" do Cache Status são as 7 linhas mais recentes da view, que podem abranger meses
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-123
+- **Achados resolvidos:** M-125
 - **Problema hoje:** O resumo de performance mostra como "últimos 7 dias" um total que pode somar um mês inteiro, e a taxa de conclusão exibida ao lado é calculada sobre esse mesmo recorte elástico.
 
   ```
@@ -7121,11 +7156,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 249 — Busca de erros monta o filtro do PostgREST por concatenação: vírgula ou parêntese no termo quebra a consulta
+### Etapa 250 — Busca de erros monta o filtro do PostgREST por concatenação: vírgula ou parêntese no termo quebra a consulta
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-124
+- **Achados resolvidos:** M-126
 - **Problema hoje:** Pesquisar por um texto com vírgula ou parêntese — comum em mensagens de erro — devolve erro ou uma lista errada, e o operador conclui que não há aquele erro registrado.
 
   ```
@@ -7149,11 +7184,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 250 — CSV de Relatórios traz a coluna "Tempo Médio (min)" sempre zerada
+### Etapa 251 — CSV de Relatórios traz a coluna "Tempo Médio (min)" sempre zerada
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-125
+- **Achados resolvidos:** M-127
 - **Problema hoje:** Quem abre o relatório exportado conclui que o tempo médio diário de entrega é zero em todos os dias do período.
 
   ```
@@ -7177,11 +7212,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 251 — Rate Limiting: "Total Requests" conta linhas de log (teto 500) ignorando request_count, e o gráfico "Últimas 24 horas" são os últimos 24 registros
+### Etapa 252 — Rate Limiting: "Total Requests" conta linhas de log (teto 500) ignorando request_count, e o gráfico "Últimas 24 horas" são os últimos 24 registros
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-126
+- **Achados resolvidos:** M-128
 - **Problema hoje:** Num ataque ou pico, o painel de proteção mostra no máximo 500 requisições e um gráfico rotulado "últimas 24 horas" que pode cobrir só os últimos minutos — exatamente quando o dono precisa dimensionar o volume.
 
   ```
@@ -7205,11 +7240,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 252 — SLO: o "orçamento de erro" da latência não é orçamento — indicador saudável aparece com 0% livre
+### Etapa 253 — SLO: o "orçamento de erro" da latência não é orçamento — indicador saudável aparece com 0% livre
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-127
+- **Achados resolvidos:** M-129
 - **Problema hoje:** O cartão de latência diz "Saudável" e, logo abaixo, "0% livre" com a barra vermelha — leitura contraditória que faz o dono achar que há violação onde não há.
 
   ```
@@ -7233,11 +7268,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 253 — Saúde geral cai para "degradado" sem incidente: sistema ocioso e ausência de canais realtime são tratados como falha
+### Etapa 254 — Saúde geral cai para "degradado" sem incidente: sistema ocioso e ausência de canais realtime são tratados como falha
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-128
+- **Achados resolvidos:** M-130
 - **Problema hoje:** Toda madrugada, feriado ou período sem pedidos o painel acusa sistema degradado. O dono aprende a ignorar o alerta e perde o sinal quando a degradação for verdadeira.
 
   ```
@@ -7261,11 +7296,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 254 — Score de Performance mostra 0/100 "Ruim" quando ainda não há métricas e normaliza o resultado pelo que foi coletado
+### Etapa 255 — Score de Performance mostra 0/100 "Ruim" quando ainda não há métricas e normaliza o resultado pelo que foi coletado
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — painéis e relatórios**
 
-- **Achados resolvidos:** M-129
+- **Achados resolvidos:** M-131
 - **Problema hoje:** Ao abrir a página, o medidor mostra 0/100 em vermelho e "Ruim" como se o site estivesse péssimo; segundos depois pode pular para 100 "Excelente" com uma métrica só. O indicador não serve nem para alarmar nem para tranquilizar.
 
   ```
@@ -7289,11 +7324,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 255 — Command palette lista todas as rotas de administração sem filtro de papel e fica ativa na tela pública de login
+### Etapa 256 — Command palette lista todas as rotas de administração sem filtro de papel e fica ativa na tela pública de login
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-130
+- **Achados resolvidos:** M-132
 - **Problema hoje:** Qualquer pessoa que chegue à tela de login pode apertar Ctrl+K e ver o mapa completo do sistema, inclusive as telas de gestão de papéis, whitelist de IP e aprovação de reset de senha. Não vaza dado de cliente, mas entrega a um atacante a lista exata do que vale atacar. Para quem já está logado como viewer, a paleta ainda oferece esses atalhos e cada um termina em "Acesso Negado".
 
   ```
@@ -7317,11 +7352,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 256 — Menu lateral não sabe expressar o papel 'operator', então o viewer vê 7 itens que a rota recusa
+### Etapa 257 — Menu lateral não sabe expressar o papel 'operator', então o viewer vê 7 itens que a rota recusa
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-131
+- **Achados resolvidos:** M-133
 - **Problema hoje:** Um usuário de consulta abre o sistema e vê Pedidos, Motoristas, Contatos, Incidentes, Alertas, Avaliações e Operações Lalamove no menu; ao clicar em qualquer um, leva "Acesso Negado". Sete becos sem saída no menu principal de quem só deveria ver indicadores.
 
   ```
@@ -7345,11 +7380,11 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 257 — Navegação mobile ignora o RBAC por completo: viewer vê e toca em Aprovações, Webhooks, Regras de Risco e Configurações
+### Etapa 258 — Navegação mobile ignora o RBAC por completo: viewer vê e toca em Aprovações, Webhooks, Regras de Risco e Configurações
 
 **Onda 7 (Experiência de uso e consistência) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-132
+- **Achados resolvidos:** M-134
 - **Problema hoje:** No celular, um usuário de consulta ou operador vê botões de aprovação, webhooks e configurações e, ao tocar, recebe "Acesso Negado". Além de frustrar a equipe de campo, expõe que essas funções existem e parece que o sistema está com defeito.
 
   ```
@@ -7373,7 +7408,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 258 — Dois pares de crons agendam a mesma rotina com nomes diferentes, e o documento descreve cada par como rotinas distintas
+### Etapa 259 — Dois pares de crons agendam a mesma rotina com nomes diferentes, e o documento descreve cada par como rotinas distintas
 
 **Onda 7 (Experiência de uso e consistência) / Baixa / Banco — funções, triggers e cron**
 
@@ -7400,7 +7435,7 @@ Checklist de conclusão:
 - [ ] deploy confirmado, quando se aplica
 - [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
 
-### Etapa 259 — Nove chaves estrangeiras para auth.users sem ON DELETE — apagar um usuário falha — parte 1/2
+### Etapa 260 — Nove chaves estrangeiras para auth.users sem ON DELETE — apagar um usuário falha
 
 **Onda 7 (Experiência de uso e consistência) / Baixa / Banco — integridade e índices**
 
@@ -7413,44 +7448,12 @@ Checklist de conclusão:
 - **Causa raiz:** Sem cláusula explícita o Postgres assume NO ACTION: a exclusão da linha referenciada é recusada enquanto houver referência. Como essas colunas registram quem fez o quê (log de sistema, auditoria, quem mudou a configuração de mapa, quem enfileirou job), todo usuário que já agiu no sistema acumula referências e passa a ser indeletável.
 - **Caminho recomendado:** Uma migration aditiva que, para cada uma das colunas acima, faz `ALTER TABLE public.<t> DROP CONSTRAINT IF EXISTS <t>_<col>_fkey; ALTER TABLE public.<t> ADD CONSTRAINT <t>_<col>_fkey FOREIGN KEY (<col>) REFERENCES auth.users(id) ON DELETE SET NULL;` — o mesmo contrato já escolhido em 20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql:5 (`cancelled_by UUID REFERENCES auth.users(id) ON DELETE SET NULL`), que é o padrão do repo para coluna de autoria. Descobrir o nome real de cada constraint com `select conname from pg_constraint where confrelid='auth.users'::regclass` antes de escrever o arquivo, em vez de supor o nome padrão. Atalho tentador a evitar: ON DELETE CASCADE — apagaria logs de sistema e linhas de auditoria junto com o usuário, que é justamente o registro que se quer preservar.
   AJUSTE DO REVISOR: Acrescente 20251226010000_create_job_queue_system.sql:58 (`created_by`) à lista — são 10 ocorrências, não 9. E tire audit_log da migration de FKs ou trate-o junto com o achado de divergência de schema: em produção a coluna já tem ON DELETE SET NULL (20261121192500:17), então o ALTER só é necessário para bancos construídos do zero, e repetir o trabalho em dois arquivos duplica a correção. O resto (DROP/ADD CONSTRAINT com ON DELETE SET NULL, descobrindo o nome real via pg_constraint, sem CASCADE) está correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20251226000001_create_system_logs.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20251226000001_create_system_logs.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`
+- **Arquivos e objetos a tocar:** `supabase/migrations/20251226000001_create_system_logs.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`
 - **Não tocar / armadilhas:** Não incluir nesse lote as FKs que são CASCADE de propósito (ex.: contacts.owner_id em 20260723135010:5, notification_optouts.created_by, mfa_sessions.user_id na versão de 20260516112923:12) — ali apagar o usuário deve mesmo apagar o dado dele. E `user_roles.user_id` (20251231115949:11) não tem FK nenhuma: criar uma agora exige checar antes se não há papel órfão, senão o ALTER falha.
 - **Depende de:** — · **Libera:** —
 - **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
 - **Precisa de aprovação humana antes do merge:** sim
 - **Como verificar:** `select c.conname, t.relname, c.confdeltype from pg_constraint c join pg_class t on t.oid=c.conrelid where c.confrelid='auth.users'::regclass` — hoje as nove linhas têm confdeltype='a' (NO ACTION); depois devem ter 'n' (SET NULL). Teste funcional: criar um usuário de teste, gerar uma linha em system_logs para ele e apagá-lo — hoje dá erro 23503.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20251226000001_create_system_logs.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`.
-
-Checklist de conclusão:
-
-- [ ] mudança aplicada só nos arquivos listados
-- [ ] typecheck, lint e testes dos arquivos tocados passam
-- [ ] verificação acima executada, com a evidência registrada
-- [ ] deploy confirmado, quando se aplica
-- [ ] etapa marcada em `docs/qa/05-PROGRESSO.md`
-
-### Etapa 260 — Nove chaves estrangeiras para auth.users sem ON DELETE — apagar um usuário falha — parte 2/2
-
-**Onda 7 (Experiência de uso e consistência) / Baixa / Banco — integridade e índices**
-
-- **Achados resolvidos:** B-040
-- **Problema hoje:** Não dá para desligar de vez a conta de alguém que saiu da empresa nem atender a um pedido de exclusão de dados: o painel do Supabase devolve erro de chave estrangeira e exige limpeza manual tabela por tabela. Em compensação, apagar à força levaria junto a trilha de auditoria — por isso o certo é SET NULL, não CASCADE.
-
-  ```
-  supabase/migrations/20251226000001_create_system_logs.sql:8; 20251226000002_create_audit_log.sql:4; 20251226010000_create_job_queue_system.sql:58 (não listado pelo auditor); 20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql:7; 20261122120100_lalamove_integration_columns.sql:72; 20261122120200_job_queue_system.sql:34 e :47; 20261122130100_geo_foundation.sql:27, :55, :151. Padrão correto já adotado em 20261121192500_restore_audit_log.sql:17 e 20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql:5
-  ```
-- **Causa raiz:** Sem cláusula explícita o Postgres assume NO ACTION: a exclusão da linha referenciada é recusada enquanto houver referência. Como essas colunas registram quem fez o quê (log de sistema, auditoria, quem mudou a configuração de mapa, quem enfileirou job), todo usuário que já agiu no sistema acumula referências e passa a ser indeletável.
-- **Caminho recomendado:** Uma migration aditiva que, para cada uma das colunas acima, faz `ALTER TABLE public.<t> DROP CONSTRAINT IF EXISTS <t>_<col>_fkey; ALTER TABLE public.<t> ADD CONSTRAINT <t>_<col>_fkey FOREIGN KEY (<col>) REFERENCES auth.users(id) ON DELETE SET NULL;` — o mesmo contrato já escolhido em 20260723132716_148d4e3d-b62f-45d2-b4f6-35f3ffb33cdd.sql:5 (`cancelled_by UUID REFERENCES auth.users(id) ON DELETE SET NULL`), que é o padrão do repo para coluna de autoria. Descobrir o nome real de cada constraint com `select conname from pg_constraint where confrelid='auth.users'::regclass` antes de escrever o arquivo, em vez de supor o nome padrão. Atalho tentador a evitar: ON DELETE CASCADE — apagaria logs de sistema e linhas de auditoria junto com o usuário, que é justamente o registro que se quer preservar.
-  AJUSTE DO REVISOR: Acrescente 20251226010000_create_job_queue_system.sql:58 (`created_by`) à lista — são 10 ocorrências, não 9. E tire audit_log da migration de FKs ou trate-o junto com o achado de divergência de schema: em produção a coluna já tem ON DELETE SET NULL (20261121192500:17), então o ALTER só é necessário para bancos construídos do zero, e repetir o trabalho em dois arquivos duplica a correção. O resto (DROP/ADD CONSTRAINT com ON DELETE SET NULL, descobrindo o nome real via pg_constraint, sem CASCADE) está correto.
-  NESTA ETAPA, aplique o caminho acima APENAS a: `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`. As demais ocorrências do mesmo achado ficam para as outras partes desta divisão — assim cada PR é pequena e verificável sozinha. Não altere arquivo que não esteja listado aqui.
-- **Arquivos e objetos a tocar:** `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`
-- **Não tocar / armadilhas:** Não incluir nesse lote as FKs que são CASCADE de propósito (ex.: contacts.owner_id em 20260723135010:5, notification_optouts.created_by, mfa_sessions.user_id na versão de 20260516112923:12) — ali apagar o usuário deve mesmo apagar o dado dele. E `user_roles.user_id` (20251231115949:11) não tem FK nenhuma: criar uma agora exige checar antes se não há papel órfão, senão o ALTER falha.
-- **Depende de:** etapa 259 · **Libera:** —
-- **Risco e como reverter:** Mudança sensível (migration/DDL, CI, segredo ou infraestrutura). Não há revert automático: escreva no corpo da PR o passo de volta (migration inversa, restaurar a configuração anterior) ANTES de pedir o merge.
-- **Precisa de aprovação humana antes do merge:** sim
-- **Como verificar:** `select c.conname, t.relname, c.confdeltype from pg_constraint c join pg_class t on t.oid=c.conrelid where c.confrelid='auth.users'::regclass` — hoje as nove linhas têm confdeltype='a' (NO ACTION); depois devem ter 'n' (SET NULL). Teste funcional: criar um usuário de teste, gerar uma linha em system_logs para ele e apagá-lo — hoje dá erro 23503.
-  Nesta etapa, a verificação vale para: `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`.
 
 Checklist de conclusão:
 
@@ -7721,7 +7724,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Alta / Infra, CI e deploy**
 
-- **Achados resolvidos:** A-060
+- **Achados resolvidos:** A-064
 - **Problema hoje:** O alarme que existia para avisar que o repositório virou público não dispara. Foi assim que a mudança passou em branco: o guarda não consegue ver e ainda assim diz que está tudo certo.
 
   ```
@@ -7748,7 +7751,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Banco — integridade e índices**
 
-- **Achados resolvidos:** M-133
+- **Achados resolvidos:** M-135
 - **Problema hoje:** Não existe banco de teste descartável. O caminho que a própria documentação manda usar antes de qualquer mexida em banco (docs/agentes/banco.md:12: 'Postgres descartável — supabase start + supabase db reset') para de funcionar no segundo arquivo da fila. Resultado prático: toda mudança de banco só pode ser testada direto na produção, que é exatamente o que a regra proíbe.
 
   ```
@@ -7776,7 +7779,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Documentação × código**
 
-- **Achados resolvidos:** M-134
+- **Achados resolvidos:** M-136
 - **Problema hoje:** O protocolo que deveria garantir que "nada que funciona pode quebrar" compara o sistema contra um retrato errado. Um agente que rodar a baseline vai ver divergencia em tudo e nao consegue distinguir regressao que ele causou de defasagem do documento — ou seja, a rede de seguranca do backlog nao pega nada.
 
   ```
@@ -7804,7 +7807,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Documentação × código**
 
-- **Achados resolvidos:** M-135
+- **Achados resolvidos:** M-137
 - **Problema hoje:** O item que a fila aponta como prioridade 2 parece exigir revisao e merge de uma PR; na verdade so falta aplicar a migration no banco. O dono decide no escuro, e um agente pode reabrir/recriar a PR e duplicar migration — o repo ja teve colisao de versao exatamente assim (PR #268).
 
   ```
@@ -7832,7 +7835,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-136
+- **Achados resolvidos:** M-138
 - **Problema hoje:** O repositorio tem um painel de alarmes bonito e desligado: quem olha a CI verde acredita que supply chain, segredos, tamanho de bundle, cobertura de teste e divida de lint estao sob controle, e nenhum deles e conferido quando uma mudanca entra.
 
   ```
@@ -7859,7 +7862,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-136
+- **Achados resolvidos:** M-138
 - **Problema hoje:** O repositorio tem um painel de alarmes bonito e desligado: quem olha a CI verde acredita que supply chain, segredos, tamanho de bundle, cobertura de teste e divida de lint estao sob controle, e nenhum deles e conferido quando uma mudanca entra.
 
   ```
@@ -7886,7 +7889,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-136
+- **Achados resolvidos:** M-138
 - **Problema hoje:** O repositorio tem um painel de alarmes bonito e desligado: quem olha a CI verde acredita que supply chain, segredos, tamanho de bundle, cobertura de teste e divida de lint estao sob controle, e nenhum deles e conferido quando uma mudanca entra.
 
   ```
@@ -7913,7 +7916,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-137
+- **Achados resolvidos:** M-139
 - **Problema hoje:** Uma falha de seguranca grave numa biblioteca do sistema pode entrar em producao com o selo verde da CI.
 
   ```
@@ -7941,7 +7944,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-138
+- **Achados resolvidos:** M-140
 - **Problema hoje:** Uma correcao de edge function com defeito vai para producao mesmo com os testes dela vermelhos: pedido, rastreamento ou mensagem para o motorista podem quebrar em producao enquanto a CI ainda esta rodando.
 
   ```
@@ -7969,7 +7972,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Infra, CI e deploy**
 
-- **Achados resolvidos:** M-139
+- **Achados resolvidos:** M-141
 - **Problema hoje:** Quem conseguir disparar esse workflow (qualquer conta com escrita no repo, inclusive um agente) pode roubar a chave que da controle total do banco de producao — todos os pedidos, clientes e motoristas.
 
   ```
@@ -7997,7 +8000,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Integrações e contratos**
 
-- **Achados resolvidos:** M-140
+- **Achados resolvidos:** M-142
 - **Problema hoje:** A integração com o Bitrix24 não pode ser ligada: a tela de conexão abre a janela de autorização, o usuário autoriza e volta para uma página de erro. Nenhum pedido sincroniza com o CRM, nenhuma atividade é registrada no negócio.
 
   ```
@@ -8025,7 +8028,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Transversal — código morto e duplicação**
 
-- **Achados resolvidos:** M-141
+- **Achados resolvidos:** M-143
 - **Problema hoje:** O token de servidor do Mapbox, que é o que gera a conta a pagar, nunca é trocado: a rotação automática que o projeto considera pronta não acontece. Se esse token vazar, não há mecanismo ativo para substituí-lo — e ainda fica um endpoint publicado em produção que ninguém usa.
 
   ```
@@ -8053,7 +8056,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Testes**
 
-- **Achados resolvidos:** M-142
+- **Achados resolvidos:** M-144
 - **Problema hoje:** É o caminho do dinheiro: cotar, criar e cancelar pedido na Lalamove. Se a fórmula da assinatura sair do lugar — um `\r\n` a menos, o corpo serializado de outro jeito — a Lalamove recusa tudo com erro de autenticação e nenhum pedido sai, e a CI continua verde porque nada testa isso. A duplicação torna provável que uma correção seja aplicada em só uma das duas cópias.
 
   ```
@@ -8081,7 +8084,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Testes**
 
-- **Achados resolvidos:** M-143
+- **Achados resolvidos:** M-145
 - **Problema hoje:** Existem testes escritos, pagos em horas de trabalho, que nunca rodam — inclusive o da ponte com o banco externo. Quem lê "CI verde" acha que eles passaram. É exatamente o problema que os comentários do próprio ci.yml (linhas 136-142) dizem ter corrigido antes: "existia e nenhum workflow executava".
 
   ```
@@ -8109,7 +8112,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Testes**
 
-- **Achados resolvidos:** M-144
+- **Achados resolvidos:** M-146
 - **Problema hoje:** Prova concreta de que teste órfão não é só desperdício: existe um teste quebrado no repositório e ninguém soube. Pior, ele é o guard que avisaria se alguém criasse uma nova assinatura de tempo real que não recebe evento nenhum — ou seja, tela que parece ao vivo e fica parada. Enquanto ele estiver vermelho por motivo errado, não dá para ligá-lo à CI.
 
   ```
@@ -8137,7 +8140,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Interface — administração**
 
-- **Achados resolvidos:** M-145
+- **Achados resolvidos:** M-147
 - **Problema hoje:** Ao conferir o que um Visualizador pode fazer, a tela mostra que ele tem TODAS as permissões do sistema, inclusive as de administrador. Quem usa essa tela para auditar acesso recebe informação errada sobre segurança.
 
   ```
@@ -8165,7 +8168,7 @@ Checklist de conclusão:
 
 **Onda 8 (Higiene: código morto, CI, observabilidade) / Média / Interface — rotas e RBAC**
 
-- **Achados resolvidos:** M-146
+- **Achados resolvidos:** M-148
 - **Problema hoje:** Quem recebe um link direto para um pedido, um alerta ou um relatório e ainda não está logado é levado ao login e, ao entrar, cai no painel inicial em vez da tela que pediu — tem de navegar de novo até lá. O mesmo acontece quando a sessão vence no meio do trabalho: perde-se o lugar.
 
   ```

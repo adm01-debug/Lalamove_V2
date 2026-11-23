@@ -1,7 +1,7 @@
 # 03 — Achados
 
-Base: commit `281cd07`. 282 achados mantidos — **13 Crítica**, **60 Alta**,
-**146 Média**, **63 Baixa**. Agrupados por causa raiz quando mais de um achado
+Base: commit `281cd07`. 291 achados mantidos — **16 Crítica**, **64 Alta**,
+**148 Média**, **63 Baixa**. Agrupados por causa raiz quando mais de um achado
 compartilha a mesma origem; o restante vem agrupado por camada.
 
 Cada achado passou por uma segunda leitura independente (um revisor que tentou **refutar** o achado
@@ -47,7 +47,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
 - **Arquivos:** `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260828000002_dashboard_fixes.sql`, `supabase/migrations/20260712202439_22b0c67b-a04f-4143-8b53-6b8c6b659bc8.sql`
 - **Etapas do plano:** 004
 
-#### C-011 — RLS de user_roles deixa qualquer usuario logado se promover a admin
+#### C-013 — RLS de user_roles deixa qualquer usuario logado se promover a admin
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Crítica · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -58,7 +58,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** A migration 20260828000003 foi feita para 'consertar o dashboard' abrindo RLS e nunca foi revertida. A migration que limpou o mesmo tipo de bug (20261122150100_fix_public_rls_bypass.sql) so derrubou as policies com nome 'Public can *' (TO anon) e nao olhou as 'Authenticated users can *' de user_roles. Como policies permissivas se combinam com OR, a policy aberta vence a restrita de 20260712202439.
 - **Arquivos:** `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260828000002_dashboard_fixes.sql`, `supabase/migrations/20260712202439_22b0c67b-a04f-4143-8b53-6b8c6b659bc8.sql`, `src/hooks/useRole.ts`
-- **Etapas do plano:** 013
+- **Etapas do plano:** 014
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Nenhum MCP desta sessao aponta para o projeto oficial iecgydonctmabiijadsf (AGENTS.md > Banco), entao nao foi possivel listar as policies vigentes em producao. A cadeia de migrations do repo e conclusiva sobre o estado DECLARADO; falta a confirmacao de que producao esta igual ao declarado (ou pior, se alguem aplicou SQL a mao).
 
 #### A-002 — audit_log aberto a qualquer usuário logado: política de leitura sem papel e RPC de escrita concedida a authenticated
@@ -76,7 +76,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** A migration de restauração copiou as políticas permissivas do arquivo original de 2025 (20251226000002:22-25) em vez de adotar o padrão admin-only que o repo passou a usar, e concedeu a RPC de escrita a `authenticated` para o front poder registrar ações — sem filtro de papel nem validação dos campos.
 - **Arquivos:** `docs/MIGRATION_RECONCILIATION_2026-11.md`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261123160000_job_queue_processing_log.sql`
-- **Etapas do plano:** 016
+- **Etapas do plano:** 017
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Se o papel `authenticated` tem GRANT de tabela em audit_log — a migration não concede explicitamente, mas os privilégios padrão do schema public em projetos Supabase costumam conceder (o hardening de 20260902000000_harden_revoke_anon_grants.sql revoga só para anon, linhas 16-27). Sem acesso ao banco oficial: `select has_table_privilege('authenticated','public.audit_log','SELECT'), has_table_privilege('authenticated','public.audit_log','INSERT');`. A parte da RPC (GRANT EXECUTE a authenticated) já está confirmada pelo código.
 
 #### A-004 — Tokens da Unified API da Lalamove gravados em texto puro numa tabela legível pelo navegador do administrador
@@ -90,7 +90,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** A política de segurança fecha a função, que era o caminho indireto, mas deixa a tabela com GRANT padrão para `authenticated` e uma policy FOR ALL para quem tem papel admin. Qualquer sessão de administrador no navegador pode, pelo PostgREST, fazer `select access_token, refresh_token from lalamove_uapi_sessions` — o segredo sai do servidor e entra no browser. Isso contraria a regra do AGENTS.md de que segredo de serviço vive só em secret de edge.
 - **Arquivos:** `supabase/migrations/20260315165451_86aebbac-da62-421e-b90c-59196d72b2da.sql`, `supabase/migrations/20260711184027_e973dd91-92eb-4403-bb93-065601d4ec41.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
-- **Etapas do plano:** 018
+- **Etapas do plano:** 019
 
 #### A-005 — Duas migrations dão papel admin a todos os usuários existentes e uma terceira reativa papéis desativados
 
@@ -103,7 +103,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** Para resolver "role indefinido" no dashboard (comentário em 20260828000002:24-25), as migrations escolheram o papel mais alto como default em vez do mais baixo ('viewer', que é o DEFAULT da própria coluna em 20251231115949:12). O UPDATE de 20260828000004 reativa indiscriminadamente, e `has_role` (versão final em 20260712210653:8-15) filtra por `is_active = true` — então revogações feitas por desativação foram desfeitas. Nenhuma migration posterior às 191 reverte: não há DELETE nem UPDATE de `role` em user_roles depois disso.
 - **Arquivos:** `supabase/migrations/20260828000002_dashboard_fixes.sql`, `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260828000004_populate_permissions.sql`, `supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql`
-- **Etapas do plano:** 019
+- **Etapas do plano:** 020
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: É um achado de DADO, não de schema: preciso do banco real para saber quantas linhas foram afetadas e quais continuam lá. Falta rodar `select role, count(*) from public.user_roles where is_active group by 1;` e cruzar com a lista de quem deveria ser admin — só o dono define isso.
 
 #### M-004 — job_queue: policies permissivas de 2025 nunca removidas — leitura por qualquer autenticado e INSERT validado por metadado que o próprio usuário controla
@@ -117,7 +117,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** Dois defeitos somados. (1) O nome da policy mente sobre o conteúdo: "Admin can view all jobs" libera SELECT para todo authenticated. (2) A autorização de INSERT lê o papel de `auth.users.raw_user_meta_data`, que é o metadado que o próprio usuário envia no signUp/updateUser — não da tabela `user_roles`, que é a fonte de verdade do RBAC e tem o helper `has_role` justamente para isso (20260712210653). A migration de baseline de 22/11 acrescenta a policy correta (`FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin'))`) mas não dropa as antigas; como RLS combina permissivas com OR, a correta não restringe nada.
 - **Arquivos:** `supabase/migrations/20251226000003_create_job_queue.sql`, `supabase/migrations/20251226010000_create_job_queue_system.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`
-- **Etapas do plano:** 040
+- **Etapas do plano:** 042
 
 #### M-005 — refresh_cache_view executável por qualquer autenticado, sem checagem de papel
 
@@ -130,7 +130,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** A função é SECURITY DEFINER (:64) e foi concedida ao papel `authenticated` inteiro, repetindo o GRANT da versão anterior (20261122090000:168). O padrão de proteção usado no resto do repo para RPC privilegiada é o guard interno — `mcp_introspect` levanta exceção 42501 se `can_run_db_diagnostics(auth.uid())` for falso (20260813125422:67-70) — ou o REVOKE de authenticated (20261122120200:169-175 para as funções de job_queue). Aqui não há nem um nem outro.
 - **Arquivos:** `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `supabase/migrations/20261123110000_cron_refresh_cache_views.sql`
-- **Etapas do plano:** 041
+- **Etapas do plano:** 043
 
 #### M-016 — Telemetria de erro do front escreve com a chave publica sem o token da sessao, e a policy exige usuario autenticado
 
@@ -143,7 +143,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** O comentario em src/services/errorMonitoring.ts:55 explica a escolha ('Use raw REST API to avoid type issues with unregistered table'): ao sair do client supabase-js para fetch cru, perdeu-se o envio do access token da sessao, que e o que faz a requisicao valer como authenticated. O hardening posterior de grants (20260902) selou o caminho.
 - **Arquivos:** `src/services/errorMonitoring.ts`, `src/hooks/useErrorLogs.ts`, `supabase/migrations/20260315150348_629a3abc-d72f-4ba0-a24b-73d73457ed8b.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
-- **Etapas do plano:** 052
+- **Etapas do plano:** 054
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Nao foi possivel emitir a requisicao real contra iecgydonctmabiijadsf nem ler os logs do PostgREST (sem MCP do projeto oficial). Falta confirmar o codigo de retorno observado (esperado 401/403 'permission denied for table runtime_error_logs') e se a tabela runtime_error_logs tem linha recente.
 
 #### B-001 — Bloco DO de 20260828000003 compara variável com coluna de mesmo nome e tenta abrir FOR ALL USING(true) em 13 tabelas sensíveis
@@ -157,7 +157,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** `table_name` é ao mesmo tempo a variável PL/pgSQL e uma coluna de information_schema.tables. Com o `plpgsql.variable_conflict` padrão (error), a referência ambígua aborta a execução do bloco; se o conflito for resolvido a favor da variável, a condição vira a tautologia `table_name = table_name` e o IF passa para todos os 13 nomes, criando acesso total para qualquer autenticado em tabelas de auditoria, log, fila e flags. Os dois desfechos são ruins e nenhum é o pretendido. No desfecho de erro, as linhas 76-81 da mesma migration (`GRANT ALL ON ALL TABLES IN SCHEMA public TO anon`) nunca chegam a rodar — o que explica por que o endurecimento de 20260902000000 encontrou o banco menos aberto do que o arquivo sugere.
 - **Arquivos:** `supabase/migrations/20260828000003_comprehensive_rls_fix.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
-- **Etapas do plano:** 053
+- **Etapas do plano:** 055
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Preciso saber qual dos dois desfechos ocorreu em produção: `select tablename, policyname from pg_policies where policyname like 'Authenticated full access%';` — se vier vazio, o bloco abortou; se vier com linhas, o acesso total existe. Também falta checar se `anon` recebeu os GRANTs de :78-81 antes de 20260902000000 revogar.
 
 #### B-002 — Policy pública de leitura em alert_configurations sobreviveu ao fix de 22/11
@@ -171,7 +171,7 @@ Entre agosto e novembro várias migrations abriram a permissão de leitura e esc
   ```
 - **Causa raiz:** A varredura de 22/11 produziu dois arquivos: 20261122150000 tratou alert_configurations (só o INSERT, que era o vetor do incidente investigado) e 20261122150100_fix_public_rls_bypass.sql limpou as outras 10 tabelas do seed — mas alert_configurations não está na lista dele, então a policy de SELECT para `anon` nunca foi dropada. É a última migration que decide o caso: nada posterior toca essa policy.
 - **Arquivos:** `supabase/migrations/20260828000001_seed_fix_rls.sql`, `supabase/migrations/20261122150000_fix_alert_configs_anon_insert.sql`, `supabase/migrations/20261122150100_fix_public_rls_bypass.sql`, `supabase/migrations/20260902000000_harden_revoke_anon_grants.sql`
-- **Etapas do plano:** 054
+- **Etapas do plano:** 056
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: O efeito prático depende dos grants reais: 20260902000000_harden_revoke_anon_grants.sql:16 revoga tudo de `anon` em public, o que neutraliza a policy. Falta confirmar no banco que `anon` realmente não tem SELECT em alert_configurations hoje: `select grantee, privilege_type from information_schema.role_table_grants where table_name='alert_configurations';`
 
 
@@ -227,9 +227,9 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** A funcao foi protegida apenas por `verify_jwt = true` no supabase/config.toml, que prova que existe uma sessao Supabase — nao que o papel dela autoriza a acao. Nenhuma autorizacao foi adicionada no codigo, e o cliente de banco e criado direto com service_role (index.ts:661 `createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)`), o que tambem anula a RLS que separa viewer/operator/manager/admin. O proprio repo trata a configuracao do webhook como assunto de admin: a tabela lalamove_webhook_config tem politica `has_role(auth.uid(),'admin')` (supabase/migrations/20261122120100_lalamove_integration_columns.sql:80-85), mas a edge que de fato repointa a URL na Lalamove nao recheca nada.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/config.toml`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `supabase/config.toml`, `supabase/functions/_shared/schemas.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`
-- **Etapas do plano:** 009, 010
+- **Etapas do plano:** 009
 
-#### C-009 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove
+#### C-011 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -240,7 +240,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** O hardening registrado no config.toml parou no verify_jwt e tratou 'tem JWT' como 'esta autorizado'. O RBAC real do produto vive so no front (src/App.tsx:179 '<Route path="/orders" element={<ProtectedRoute requiredRole="operator">'), e as edges chamadas por essas telas nao repetem a checagem no servidor.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/test-notification/index.ts`, `supabase/functions/rotate-tokens/index.ts`, `supabase/functions/route-analyzer/index.ts`, `supabase/functions/geo-gateway/index.ts`, `supabase/config.toml`, `src/App.tsx`
-- **Etapas do plano:** 011
+- **Etapas do plano:** 010
 
 #### A-007 — route-analyzer: usuário `viewer` usa o LLM pago sem limite e recebe pedidos completos (nome do cliente) lidos com service_role
 
@@ -253,7 +253,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** O `verify_jwt = true` do supabase/config.toml foi tratado como se fosse o controle de acesso, mas ele só garante "tem um JWT do projeto" — não distingue `viewer` de `admin`, e a chave publicável do front também passa. Sem checagem de papel e sem limite por usuário/por minuto (o geo-gateway tem um, supabase/functions/geo-gateway/index.ts:66-77 `userBuckets`; o route-analyzer não tem nada), cada request gasta tokens da LOVABLE_API_KEY, e o `message` é texto livre de tamanho ilimitado enviado ao modelo. Além do custo, o contexto do prompt é montado com service_role, ou seja, ignorando RLS: `analyze-routes` devolve 20 pedidos inteiros e `analyze-order` devolve qualquer pedido por `orderId`, com nome do cliente e coordenadas, para quem só deveria ver o que a RLS permite.
 - **Arquivos:** `supabase/functions/route-analyzer/index.ts`, `supabase/functions/_shared/schemas.ts`, `src/pages/DashboardRedesigned.tsx`, `src/components/dashboard/AIRouteChatbot.tsx`
-- **Etapas do plano:** 021
+- **Etapas do plano:** 022
 
 #### A-009 — test-notification envia para destinatário e webhook arbitrários, sem papel e com CORS aberto
 
@@ -266,7 +266,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** A função nasceu como ferramenta de teste da tela de configurações e nunca ganhou guarda de papel. `verify_jwt` não está declarado em `supabase/config.toml` (default), então basta um JWT qualquer — inclusive de `viewer`. O `recipients`/`webhookUrl` vão direto para as credenciais pagas (`EVOLUTION_API_KEY`, `RESEND_API_KEY`) e para um fetch de saída sem allowlist.
 - **Arquivos:** `supabase/functions/test-notification/index.ts`, `supabase/config.toml`
-- **Etapas do plano:** 023
+- **Etapas do plano:** 024
 
 #### M-006 — check-external-api: health check sem autorização alguma que queima credenciais pagas (Mapbox/Google geocoding) por request e fora do orçamento do geo-gateway
 
@@ -279,7 +279,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** A function foi feita para "não expor API keys no frontend" (comentário em index.ts:1-3) e ficou sem gate: qualquer caller dispara, por chamada, uma geocodificação real cobrada na conta Mapbox/Google, um ping autenticado na API Lalamove com `LALAMOVE_API_KEY` (:127-133), um GET no webhook Bitrix24 (:167) e um health na Evolution com `EVOLUTION_API_KEY` (:204-209). Ela também passa por fora de toda a contabilidade que o projeto construiu para custo geo (`geo_usage`, `geo_budget`, rate guard do geo-gateway), então esse gasto não aparece no painel nem respeita o limite mensal, e o alerta `GEO_BUDGET_WARNING` nunca é disparado por ele.
 - **Arquivos:** `supabase/functions/check-external-api/index.ts`, `supabase/config.toml`, `src/hooks/healthChecks.ts`, `src/hooks/useGeoAdmin.ts`
-- **Etapas do plano:** 042
+- **Etapas do plano:** 044
 
 #### M-007 — geo-admin: `manager` cunha e revoga credenciais de faturamento da Mapbox, e o token secreto novo volta no corpo da resposta para o navegador
 
@@ -292,7 +292,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** O gate exige `admin` OU `manager`, mas a operação é emissão e revogação de credencial que determina a fatura da Mapbox — nível de administrador, não de gerente. E o valor secreto do token novo sai no corpo da resposta HTTP: se um dia a function for chamada de uma tela (hoje não é chamada de lugar nenhum), o `sk.` passa pelo navegador, entra no histórico de rede e em qualquer log de proxy. Por fim, ela continua publicada sem nenhum chamador: é superfície viva que só um runbook manual usa.
 - **Arquivos:** `supabase/functions/geo-admin/index.ts`, `supabase/functions/geo-admin/rotation.ts`
-- **Etapas do plano:** 043
+- **Etapas do plano:** 045
 
 #### M-009 — get-mapbox-token entrega o token Mapbox a qualquer caller, sem papel e sem medição, por fora do controle de custo do geo-gateway
 
@@ -305,7 +305,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** O token é entregue ao navegador sem distinção de papel e com CORS aberto, e o consumo que ele gera depois acontece direto contra a Mapbox, sem passar pelo `meter`/`geo_budget` do geo-gateway (supabase/functions/geo-gateway/index.ts:325). O health check agrava: para responder "a Mapbox está de pé", a function devolve o segredo inteiro em vez de um booleano, espalhando o valor por logs de rede e de erro do front a cada ciclo de monitoramento.
 - **Arquivos:** `supabase/functions/get-mapbox-token/index.ts`, `supabase/config.toml`, `src/hooks/healthChecks.ts`, `src/hooks/useSystemHealth.ts`, `src/components/map/hooks/useMapboxToken.ts`
-- **Etapas do plano:** 045
+- **Etapas do plano:** 047
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Falta ver o valor de `MAPBOX_ACCESS_TOKEN` em produção (não deve ser lido nem impresso): se for um `pk.` com restrição de domínio na conta Mapbox, o risco é só de consumo não medido; se for um `sk.`, é vazamento de segredo de servidor e a severidade sobe para Crítica. Checar no painel Mapbox o tipo e os escopos do token, e se há URL restriction.
 
 #### M-026 — rotate-tokens: sem autorização e sem agendador — qualquer caller força a rotação dos tokens OAuth do Bitrix24 e pode derrubar a integração
@@ -319,7 +319,7 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** A function é um worker de rotação que nunca ganhou gate nem agendador. Dois problemas somados: (a) sem autorização, qualquer caller dispara a rotação na hora que quiser — e como refresh token de OAuth2 é de uso único, forçar rotações em paralelo ou em sequência faz o Bitrix invalidar o par e as chamadas seguintes falharem, com o `update` condicionado a `.eq('refresh_token', token.refresh_token)` (:168) deixando o banco com um token já consumido; (b) sem nenhum `cron.schedule` no repo apontando para ela (ao contrário de escalate-alerts, lalamove-token-refresh e job-worker, agendados em supabase/migrations/20261122140000_fix_crons_dispatcher.sql:104-130), a rotação que o arquivo diz ser obrigatória provavelmente não acontece — os tokens vencem sozinhos. Cada falha ainda insere um alerta `CRITICAL` em `alerts` (:53-63), então chamadas repetidas também servem para inundar o painel de alertas.
 - **Arquivos:** `supabase/functions/rotate-tokens/index.ts`, `supabase/config.toml`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`
-- **Etapas do plano:** 101
+- **Etapas do plano:** 105
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Falta acesso à produção: (a) `select jobname, schedule, command from cron.job` para saber se existe agendamento de rotate-tokens criado fora do repo; (b) `select domain, expires_at from bitrix24_tokens` para ver se há token vencido; (c) lista de edges deployadas, para confirmar que rotate-tokens está publicada.
 
 #### M-038 — `route-analyzer` não checa papel nem limita taxa: qualquer autenticado gasta crédito de IA e manda a base de motoristas e pedidos para fora
@@ -333,32 +333,41 @@ O endurecimento das funções de servidor parou em "tem que estar logado". Nenhu
   ```
 - **Causa raiz:** O `config.toml` resolveu só a autenticação. A função usa `service_role` (ignora RLS), serializa linhas inteiras de `drivers`+`driver_incidents`, `lalamove_orders`+`active_tracking`+`lalamove_stops` ou `alerts` com `JSON.stringify(..., null, 2)` dentro do system prompt (:76, :93, :110, :127) e envia para o gateway de IA de terceiro — sem nenhuma consulta a `user_roles`, sem bucket por usuário e sem teto de chamadas. O repo tem os dois padrões prontos e não usou nenhum: `geo-gateway/index.ts:66-77` (`userAllowed`, bucket por `uid` do JWT) e `geo-admin/index.ts:68-85` (recheck de `user_roles`). O AGENTS.md avisa explicitamente que `LOVABLE_API_KEY` tem custo por token.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/config.toml`
-- **Etapas do plano:** 114
+- **Etapas do plano:** 117
 
 
 ## Causa raiz: O servidor acredita no que o próprio solicitante manda sobre identidade, poder e destino
 
 Em vez de descobrir no servidor quem está chamando e para onde a informação pode ir, essas funções leem esses dados do próprio pedido recebido. O papel do usuário vem de um campo que ele mesmo pode editar no perfil; o dono do dispositivo registrado e da auditoria vem de um número enviado no corpo; as estatísticas que decidem se um motorista é bloqueado vêm de quem chamou; e o endereço de internet para onde o sistema envia o segredo do Bitrix24 ou uma mensagem de WhatsApp vem solto, sem lista do que é permitido. Quem conhece o formato da chamada escolhe o resultado.
 
-**4 achado(s) sob esta causa.**
+**5 achado(s) sob esta causa.**
 
 
-#### C-006 — bitrix24-sync entrega o BITRIX24_CLIENT_SECRET para um domínio escolhido pelo chamador, e o domínio fica salvo no banco
+#### C-007 — bitrix24-sync entrega o BITRIX24_CLIENT_SECRET para um domínio escolhido pelo chamador, e o domínio fica salvo no banco
 
-- **Camada:** Backend — notificação e fila (+ 1 outro(s) local)
+- **Camada:** Backend — notificação e fila
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
 - **Impacto no negócio:** Qualquer pessoa com login no sistema consegue fazer o servidor entregar a senha de integração do Bitrix24 para um site dela. Com essa senha dá para ler e alterar os negócios no CRM da empresa, e o estrago continua depois, porque o endereço falso fica gravado e é reusado automaticamente.
 - **Evidência:**
   ```
   supabase/functions/bitrix24-sync/index.ts:92 `const domain = url.searchParams.get("domain") || (params && params.domain);` · :101-105 `const tokenResponse = await fetch(`https://${domain}/oauth/token/`, { ... body: new URLSearchParams({ grant_type: "authorization_code", client_id: clientId!, client_secret: clientSecret!, code: code, }) });` · :123-128 `await supabase.from("bitrix24_tokens").upsert({ domain: domain, ... }, { onConflict: "domain" });` · send-notification/index.ts:1419-1420 `fetch(`https://${token.domain}/rest/tasks.task.add?auth=${token.access_token}`,` · proteção existente que NÃO cobre o caso: supabase/config.toml:78-79 `[functions.bitrix24-sync]` + `verify_jwt = true`
   ```
-  Mesma causa, outro local — Integrações e contratos:
+- **Causa raiz:** `domain` vem cru da query string / do corpo, sem allowlist e sem validação de host. Nada amarra o `domain` ao domínio Bitrix24 contratado. Como o `upsert` grava esse mesmo `domain`, um valor envenenado passa a ser reusado por `bitrix24-process-queue` em todo ciclo de fila (e por `sendBitrix24Task` em send-notification/index.ts:1419-1420).
+- **Arquivos:** `supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/functions/send-notification/index.ts`
+- **Etapas do plano:** 006
+
+#### C-008 — `bitrix24-sync` action `oauth_callback` manda `BITRIX24_CLIENT_SECRET` para o domínio que vem na query — sem allowlist
+
+- **Camada:** Integrações e contratos
+- **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
+- **Impacto no negócio:** Vazamento da credencial do aplicativo Bitrix24 da empresa: quem tiver qualquer login no sistema faz o servidor entregar o segredo do app para um site de fora. Com ele é possível se passar pelo app e ler/alterar o CRM. Exige rotação da credencial no painel Bitrix24.
+- **Evidência:**
   ```
   /home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts:90 → `const domain = url.searchParams.get("domain") || (params && params.domain);` · :100 → `const tokenResponse = await fetch(\`https://${domain}/oauth/token/\`, {` · :105-106 → `client_id: clientId!,` / `client_secret: clientSecret!,` · /home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts:379 → `domain: z.string().optional(),`
   ```
-- **Causa raiz:** `domain` vem cru da query string / do corpo, sem allowlist e sem validação de host. Nada amarra o `domain` ao domínio Bitrix24 contratado. Como o `upsert` grava esse mesmo `domain`, um valor envenenado passa a ser reusado por `bitrix24-process-queue` em todo ciclo de fila (e por `sendBitrix24Task` em send-notification/index.ts:1419-1420).
-- **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/functions/bitrix24-sync/index.ts`, `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 006
+- **Causa raiz:** `domain` é string livre no contrato e é interpolada direto na URL de um POST que carrega `client_id` e `client_secret`. Não há allowlist (`*.bitrix24.com.br`/`*.bitrix24.com`), nem validação de hostname, nem comparação com o `domain` já gravado em `bitrix24_tokens`. Como `bitrix24-sync` também não tem checagem de papel, qualquer sessão autenticada basta. A mesma falta de validação está em `get_auth_url` (:78-80), que monta a URL de autorização com o domínio do chamador.
+- **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`
+- **Etapas do plano:** 012
 
 #### A-008 — new-device-alert confia no userId e no e-mail do corpo: registra dispositivo e grava auditoria no nome de outro usuário
 
@@ -371,9 +380,9 @@ Em vez de descobrir no servidor quem está chamando e para onde a informação p
   ```
 - **Causa raiz:** A função roda com `SUPABASE_SERVICE_ROLE_KEY` (index.ts:40-41) e usa o `userId` do corpo como se fosse o do chamador. Não existe leitura do `sub` do JWT nem checagem de papel; o schema (`_shared/schemas.ts:88-98`) só valida formato.
 - **Arquivos:** `supabase/functions/new-device-alert/index.ts`
-- **Etapas do plano:** 022
+- **Etapas do plano:** 023
 
-#### A-015 — SSRF em test-notification: a edge faz POST em qualquer URL enviada pelo caller, e dispara WhatsApp/e-mail para destinatario arbitrario
+#### A-017 — SSRF em test-notification: a edge faz POST em qualquer URL enviada pelo caller, e dispara WhatsApp/e-mail para destinatario arbitrario
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -384,7 +393,7 @@ Em vez de descobrir no servidor quem está chamando e para onde a informação p
   ```
 - **Causa raiz:** Function de teste manual exposta como endpoint de producao: valida a FORMA do payload (contrato) mas nao valida o DESTINO nem quem pode chamar. z.string().url() aceita qualquer host, inclusive endereco interno.
 - **Arquivos:** `supabase/functions/test-notification/index.ts`, `supabase/functions/_shared/schemas.ts`
-- **Etapas do plano:** 030
+- **Etapas do plano:** 032
 
 #### M-030 — skip_dedup e is_escalation aceitos de qualquer usuário autenticado
 
@@ -397,7 +406,7 @@ Em vez de descobrir no servidor quem está chamando e para onde a informação p
   ```
 - **Causa raiz:** O comentário em index.ts:59-62 identifica o problema ("verify_jwt=true … includes ordinary authenticated users") e a correção foi aplicada só a `metadata.recipients`. `skip_dedup`, `dedup_key` e `is_escalation` continuam livres, e os três controlam justamente a proteção contra repetição e a marcação de escalonamento.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`, `supabase/functions/_shared/schemas.ts`
-- **Etapas do plano:** 106
+- **Etapas do plano:** 109
 
 
 ## Causa raiz: Senhas, chaves e dados reais de clientes guardados em lugar que não é cofre
@@ -407,7 +416,7 @@ Entregáveis de sessões antigas de análise (documentação, relatório de pedi
 **5 achado(s) sob esta causa.**
 
 
-#### C-008 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 10 arquivos
+#### C-010 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 10 arquivos
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -431,7 +440,7 @@ Entregáveis de sessões antigas de análise (documentação, relatório de pedi
   ```
 - **Causa raiz:** Tirar a chave do SQL versionado resolveu metade do problema: o `format(%L)` recoloca o valor decifrado no texto do job, que o pg_cron guarda em claro. E as duas migrations anteriores ainda carregam a chave publishable literal porque a correção de 21/11 priorizou destravar o 401.
 - **Arquivos:** `supabase/migrations/20261123190000_cron_check_driver_alerts.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20251226010001_configure_pg_cron.sql`, `docs/CRON_JOBS.md`, `docs/agentes/banco.md`
-- **Etapas do plano:** 015
+- **Etapas do plano:** 016
 
 #### M-015 — Token de acesso do Bitrix24 viaja na query string e o telefone completo vai para o log no caminho Zapp
 
@@ -444,9 +453,9 @@ Entregáveis de sessões antigas de análise (documentação, relatório de pedi
   ```
 - **Causa raiz:** (a) O `access_token` é posto na URL em vez do corpo; a mensagem de erro de `fetch` no Deno inclui a URL, então um erro de rede imprime o token no log da função. (b) A máscara de telefone da etapa 142 (`maskPhone`, `_shared/phone.ts:67-77`) foi aplicada só no ramo Evolution; o ramo Zapp — que é o preferencial quando `ZAPP_API_URL`/`ZAPP_API_KEY` existem (index.ts:1122-1123) — loga o número inteiro.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 051
+- **Etapas do plano:** 053
 
-#### M-139 — workflow_dispatch de apply-migrations.yml interpola o input direto no bash, com o token de producao no ambiente
+#### M-141 — workflow_dispatch de apply-migrations.yml interpola o input direto no bash, com o token de producao no ambiente
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -470,17 +479,17 @@ Entregáveis de sessões antigas de análise (documentação, relatório de pedi
   ```
 - **Causa raiz:** Entregaveis de uma sessao de analise (relatorio, documentacao, export de fluxos n8n) foram commitados na raiz em vez de ficarem fora do repo ou em docs/ com os dados tirados. Nenhum deles e lido por codigo: grep de 'lalamove_bundle_import|lalamove_f0|order_history' em src/, supabase/ e scripts/ nao retorna nenhuma referencia.
 - **Arquivos:** `lalamove_order_history_full.md`, `lalamove_bundle_import.json`, `lalamove_f00_bootstrap.json`, `lalamove_f01_cotacao.json`, `lalamove_f02_pedido.json`, `lalamove_f03_rastreamento.json`, `lalamove_f04_pod.json`, `lalamove_cron_setup.sh`, `lalamove_token_manager.py`, `lalamove_documentacao_completa.md`, `lalamove_suplemento_v2.md`
-- **Etapas do plano:** 055
+- **Etapas do plano:** 057
 
 
 ## Causa raiz: O valor que o sistema grava não é o que o banco aceita: nunca houve uma tradução única de status
 
 O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: a grafia da Lalamove, a grafia interna, o catálogo novo de veículos, o nome do canal de mensagem. Como cada lugar criou a sua própria tradução (ou nenhuma), o banco recusa a gravação em silêncio ou aceita um valor que ninguém mais entende. O efeito prático é dinheiro e operação: pedido pago na Lalamove que não entra no banco, cancelamento que a tela confirma mas o pedido continua aparecendo como ativo, pedido já encerrado voltando para a etapa inicial no CRM, avaliação de risco de motorista com falha que nunca é salva e aviso de quota que dispara na hora errada por estar em outra escala.
 
-**11 achado(s) sob esta causa.**
+**12 achado(s) sob esta causa.**
 
 
-#### C-012 — Pedido criado e cobrado na Lalamove nao e gravado no banco: vehicle_type do formulario nao existe no enum do banco
+#### C-014 — Pedido criado e cobrado na Lalamove nao e gravado no banco: vehicle_type do formulario nao existe no enum do banco
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Crítica · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -491,10 +500,35 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** O catalogo v3 (src/types/lalamove.ts:18-33: LALAGO, LALAPRO, HATCHBACK, UV_FIORINO, TRUCK330...) foi adotado na UI e na API, mas o enum `vehicle_type` do banco nunca foi migrado e continua com os 4 valores antigos. A edge grava o serviceType cru nessa coluna, e o erro do insert e descartado: `const { data: insertedOrder } = await supabase.from('lalamove_orders').insert({...})` (index.ts:741) nao captura `error`. Sem linha inserida, `insertedOrder?.id` e undefined e todo o restante (coordenadas, place_id, campos Guardian) tambem e pulado.
 - **Arquivos:** `src/components/orders/NewOrderDialog.tsx`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `src/integrations/supabase/types.ts`
-- **Etapas do plano:** 014
+- **Etapas do plano:** 015
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: acesso de leitura ao banco/edges de produção (ver 01-INVENTARIO.md §11)
 
-#### A-014 — A restrição de pod_status proíbe o próprio valor padrão da coluna, o que pode estar derrubando em silêncio toda a gravação de paradas do pedido
+#### C-015 — Cancelamento manual grava 'CANCELED' numa coluna que só aceita 'CANCELLED' — o pedido nunca é marcado como cancelado no banco
+
+- **Camada:** Regras de negócio — ciclo de vida (+ 3 outro(s) local)
+- **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
+- **Impacto no negócio:** Quando um operador cancela um pedido, o cancelamento acontece na Lalamove mas o sistema continua mostrando a entrega como ativa, sem motivo, sem quem cancelou e sem data — e os painéis, relatórios e alertas seguem tratando o pedido como em andamento.
+- **Evidência:**
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 (`status: 'CANCELED'`, sem `const { error }`) vs supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:6,104 e 20261122120000_baseline_order_status_values.sql:16-18 (enum sem 'CANCELED'); mitigação parcial em supabase/functions/lalamove-webhook/index.ts:113
+  ```
+  Mesma causa, outro local — Backend — edges Lalamove:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936; supabase/migrations/20251224143803_*.sql:6-14 e :104; supabase/migrations/20261122120000_baseline_order_status_values.sql:16-18; supabase/migrations/20261122120100_lalamove_integration_columns.sql:53-63 (widening é só em lalamove_status_history); supabase/migrations/20261123200000_optout_and_tracking_end.sql:123 (compara 'CANCELED' mas não cria o valor).
+  ```
+  Mesma causa, outro local — Interface — fluxo de pedido:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 `await supabase.from('lalamove_orders').update({ status: 'CANCELED', cancellation_reason: cancellationReason, cancellation_notes: cancellationNotes, cancelled_by: cancelledBy, ... })` | supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:104 `status public.order_status NOT NULL DEFAULT 'PENDING',` | src/integrations/supabase/types.ts:4794-4806 `order_status: [ "PENDING", ... "CANCELLED", ... ]` | mitigacao parcial do status: supabase/functions/lalamove-webhook/index.ts:113 `'CANCELED': 'CANCELLED',` | UI: src/components/orders/OrderDetailModal.tsx:395 `onClick={() => cancelMutation.mutate({ orderId: order.lalamoveId, reason: cancelReason, notes: cancelNotes })}`
+  ```
+  Mesma causa, outro local — Banco — integridade e índices:
+  ```
+  supabase/functions/lalamove-api/index.ts:926-936 — `await supabase\n  .from('lalamove_orders')\n  .update({ status: 'CANCELED', cancellation_reason: ..., cancelled_by: cancelledBy, ... })\n  .eq('lalamove_id', cancelOrderId);` ; supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:104 `status public.order_status NOT NULL DEFAULT 'PENDING',`
+  ```
+- **Causa raiz:** A coluna lalamove_orders.status é o enum order_status, que grafa CANCELLED com dois L. O handler `case 'cancel'` escreve 'CANCELED' (grafia da API Lalamove, um L). O Postgres rejeita o UPDATE inteiro com 22P02 (invalid input value for enum). O retorno não é desestruturado — não há `const { error }` — então o erro é descartado e a edge devolve sucesso.
+- **Arquivos:** `src/components/orders/OrderDetailModal.tsx`, `src/integrations/supabase/types.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20261122120000_baseline_order_status_values.sql`
+- **Etapas do plano:** 059
+
+#### A-016 — A restrição de pod_status proíbe o próprio valor padrão da coluna, o que pode estar derrubando em silêncio toda a gravação de paradas do pedido
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Alta · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -505,10 +539,10 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** A restrição foi adicionada sem remover nem ajustar o DEFAULT 'NOT_REQUIRED' da mesma coluna, e nenhuma migration posterior a corrige (não há ALTER COLUMN pod_status nem DROP dessa constraint em todo supabase/). Como o único gravador de lalamove_stops não envia pod_status, todo INSERT novo cai no default proibido e o upsert é rejeitado — com o erro apenas registrado em log, nunca propagado. Sinal de que a inconsistência é conhecida: uma migration 11 dias posterior cria lalamove_stop_proofs aceitando 'NOT_REQUIRED' no CHECK (20260723122332:10) e faz a carga inicial tratando esse valor como existente em lalamove_stops (linha 73).
 - **Arquivos:** `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20260712112618_ddd2aa1c-8a4f-445c-956c-b9fe1a298c3e.sql`, `supabase/migrations/20260723122332_c21c9304-eed8-478e-a96e-274111e49528.sql`, `supabase/functions/lalamove-api/coordinates.ts`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 028, 029
+- **Etapas do plano:** 031
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Sem acesso ao banco oficial não dá para saber se a constraint chegou a ser aplicada (ela falharia se já houvesse linhas com 'NOT_REQUIRED') nem se existem linhas em lalamove_stops. Resolver com: `select conname, pg_get_constraintdef(oid) from pg_constraint where conrelid='public.lalamove_stops'::regclass`, `select column_default from information_schema.columns where table_name='lalamove_stops' and column_name='pod_status'` e `select count(*) from lalamove_stops`.
 
-#### A-032 — A sincronização periódica grava o status cru da Lalamove no enum: pedido cancelado trava como ativo e é re-sincronizado para sempre
+#### A-036 — A sincronização periódica grava o status cru da Lalamove no enum: pedido cancelado trava como ativo e é re-sincronizado para sempre
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -519,9 +553,9 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** `syncOrderToDatabase` escreve `orderData.status` sem passar por mapa nenhum — diferente de `upsertOrderToDatabase`, que fica 70 linhas abaixo no mesmo arquivo e tem statusMap (linhas 546-556). A Lalamove devolve 'CANCELED' (um L) para pedido cancelado, valor ausente do enum order_status: o UPDATE falha (22P02), cai no `if (error) { logger.error(...); return null; }` da linha 511 e o pedido permanece com o status antigo. Como o status antigo está na lista de 'ativos' da linha 623, o laço de syncActiveOrders volta a buscar esse mesmo pedido na Lalamove em toda execução, indefinidamente.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`
-- **Etapas do plano:** 069
+- **Etapas do plano:** 074
 
-#### A-033 — Cinco vocabulários de status diferentes para o mesmo ciclo de vida, misturados na mesma coluna de histórico
+#### A-037 — Cinco vocabulários de status diferentes para o mesmo ciclo de vida, misturados na mesma coluna de histórico
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -532,9 +566,9 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** Nunca houve uma tradução única entre o vocabulário da API v3 (ASSIGNING_DRIVER, DELIVERING, CANCELED) e o interno (PENDING, MATCHED, CANCELLED). Cada ponto de escrita criou o seu mapa, com chaves e defaults diferentes, e um deles não traduz nada. lalamove_status_history.status, além disso, deixou de ser enum e virou text livre (supabase/migrations/20261122120100_lalamove_integration_columns.sql:55-64), então nada impede a mistura.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`, `src/lib/lalamoveTimeline.ts`, `src/lib/lalamoveOrderEdit.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`
-- **Etapas do plano:** 070, 071
+- **Etapas do plano:** 075, 076
 
-#### A-044 — Avaliação de risco não é gravada para nenhum motorista com falha: CHECK de failure_rate espera fração, a edge grava percentual
+#### A-048 — Avaliação de risco não é gravada para nenhum motorista com falha: CHECK de failure_rate espera fração, a edge grava percentual
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -545,9 +579,9 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** Duas unidades para a mesma grandeza: a edge calcula taxa de falha em porcentagem (0–100) e a constraint do banco foi escrita para fração (0–1). Qualquer motorista com failure_rate > 1% faz o INSERT em driver_evaluations violar o CHECK; o erro é engolido pelo catch e a avaliação some.
 - **Arquivos:** `supabase/migrations/20260712113111_afc9cefc-6f90-498e-8922-63e5a1ee8345.sql`, `supabase/functions/evaluate-driver/index.ts`, `src/pages/EvaluationsPage.tsx`
-- **Etapas do plano:** 083
+- **Etapas do plano:** 087
 
-#### A-052 — usage_ratio é gravado em duas escalas diferentes pelas edges; o painel de Quota mostra 0,9% no lugar de 90% e o alerta crítico dispara errado
+#### A-056 — usage_ratio é gravado em duas escalas diferentes pelas edges; o painel de Quota mostra 0,9% no lugar de 90% e o alerta crítico dispara errado
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -558,7 +592,7 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** Duas edges escrevem na mesma coluna `lalamove_rate_limits.usage_ratio` com escalas distintas (0–100 e 0–1). A página e o eixo Y (domain [0,100], unit '%') assumem 0–100; a trigger de alerta assume 0–1.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `src/pages/LalamoveQuotaPage.tsx`, `src/hooks/useLalamoveQuota.ts`, `supabase/migrations/20260723132258_bb348d49-2f3a-458f-885a-327cabee5179.sql`
-- **Etapas do plano:** 091
+- **Etapas do plano:** 095
 
 #### M-029 — Jobs de fila dos tipos email/whatsapp/slack nunca entregam e são marcados como concluídos
 
@@ -571,9 +605,9 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** `type` cai no nome do canal quando o payload não traz `type`. Esse valor é usado como `alert_type` (enum do Postgres) em duas chamadas: `claim_alert_notification(p_alert_type alert_type, …)` (migration 20260712221144:58-62) e `.from("alert_configurations").eq("alert_type", type)`. As duas falham com erro de cast de enum, e os dois pontos tratam a falha como não-fatal: a primeira segue sem dedup, a segunda devolve lista vazia de configuração — o que leva ao retorno de sucesso sem envio. O `job-worker` então chama `mark_job_completed`.
 - **Arquivos:** `supabase/functions/job-worker/index.ts`, `supabase/functions/send-notification/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
-- **Etapas do plano:** 104, 105
+- **Etapas do plano:** 108
 
-#### M-046 — A coluna lalamove_status, que os gatilhos de geo leem como status primário do pedido, nunca é escrita por ninguém — e as listas de liberação não cobrem o vocabulário real
+#### M-047 — A coluna lalamove_status, que os gatilhos de geo leem como status primário do pedido, nunca é escrita por ninguém — e as listas de liberação não cobrem o vocabulário real
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -584,10 +618,10 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** A coluna foi criada para guardar o status cru da Lalamove e os gatilhos geo_evaluate_tracking e o de atraso de ETA (20261122131000_geo_eta_delay.sql:81) a leem com prioridade sobre o enum. Como nenhum código a preenche, v_status cai sempre no enum interno. As listas de liberação, porém, foram escritas misturando os dois vocabulários ('MATCHED' só existe no interno, 'ASSIGNING_DRIVER' vinha do cru) e deixaram de fora justamente 'PENDING' — que é o que o webhook grava para ASSIGNING_DRIVER (index.ts:109) — e 'DELIVERING'.
 - **Arquivos:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 122
+- **Etapas do plano:** 126
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Sem MCP do projeto iecgydonctmabiijadsf não dá para conferir se a coluna está 100% NULL em produção nem contar os eventos geo que deixaram de sair. Confirmar com: `select count(*) filter (where lalamove_status is not null), count(*) from lalamove_orders` e `select status, count(*) from lalamove_orders where status in ('PENDING','DELIVERING')`.
 
-#### M-049 — Pedido em 'ASSIGNING_DRIVER', 'DELIVERING' ou 'QUOTED' joga o negócio de volta para a etapa 'Novo' no Bitrix24
+#### M-050 — Pedido em 'ASSIGNING_DRIVER', 'DELIVERING' ou 'QUOTED' joga o negócio de volta para a etapa 'Novo' no Bitrix24
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -598,10 +632,10 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** O enum order_status ganhou três valores novos (QUOTED, ASSIGNING_DRIVER, DELIVERING — supabase/migrations/20261122120000_baseline_order_status_values.sql:16-18, já presentes em src/integrations/supabase/types.ts:4617-4619) e são efetivamente gravados (lalamove-api/index.ts:467 e :744 gravam o status cru da Lalamove; lalamove-webhook/index.ts:902 grava 'ASSIGNING_DRIVER'). A tabela bitrix24_stage_mappings nunca recebeu linhas para eles, e o código usa `|| "NEW"` em vez de 'não mexer na etapa'.
 - **Arquivos:** `supabase/functions/bitrix24-process-queue/index.ts`, `supabase/migrations/20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql`, `supabase/migrations/20261122120000_baseline_order_status_values.sql`
-- **Etapas do plano:** 125
+- **Etapas do plano:** 129
 - **Divergência entre revisores:** um revisor refutou e outro confirmou: CONFIRMA: O fallback é real: supabase/functions/bitrix24-process-queue/index.ts:169 usa `STAGE_ID: stageMap.get(order.status) || "NEW"`, e as linhas semeadas em 20251224182758...sql:64-73 cobrem só os 8 status antigos — as outras três migrations que tocam bitrix24_stage_mappings (20260108144121, 2026010920390 || REFUTA: Reabri os três arquivos e o caso não se sustenta, por dois motivos independentes. (1) Vocabulário inexistente: grep por DELIVERING e QUOTED em src/ e supabase/functions/ só retorna rótulos de tela, tipos e testes (src/pages/orders/OrderCard.tsx:21,23, src/lib/lalamoveTimeline.ts:45, src/integrations
 
-#### M-050 — Quatro eventos que não mudam status gravam uma transição falsa para 'ON_GOING' no histórico do pedido
+#### M-051 — Quatro eventos que não mudam status gravam uma transição falsa para 'ON_GOING' no histórico do pedido
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -612,7 +646,7 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** A coluna status de lalamove_status_history é obrigatória e os autores desses casos escolheram 'ON_GOING' como valor de preenchimento, em vez de registrar o evento sem alegar mudança de estado. Como a coluna virou text livre (migration 20261122120100:55-64), nada barra o valor errado. A leitura (src/lib/lalamoveTimeline.ts:112-137) trata cada linha do histórico como transição e marca `outOfOrder` quando o posto regride.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `src/lib/lalamoveTimeline.ts`
-- **Etapas do plano:** 126
+- **Etapas do plano:** 130
 
 #### B-034 — active_tracking.tracking_status sem CHECK e já gravado em caixas diferentes ('ACTIVE' e 'ended')
 
@@ -625,7 +659,7 @@ O ciclo de vida do pedido é escrito em vocabulários diferentes em cada ponto: 
   ```
 - **Causa raiz:** Coluna de estado declarada como texto livre, sem CHECK e sem enum. Hoje o sistema ainda funciona por sorte — nada filtra por 'ENDED' —, mas o vocabulário já está inconsistente dentro do próprio banco, então o próximo filtro escrito na caixa 'errada' vai devolver zero linha sem erro nenhum. O índice parcial `idx_tracking_status_active ON public.active_tracking(tracking_status) WHERE tracking_status = 'ACTIVE'` (:104) também depende do literal exato: uma gravação como 'active' sai do índice e deixa de ser vista pelo agendador.
 - **Arquivos:** `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`, `supabase/migrations/20261123200000_optout_and_tracking_end.sql`, `supabase/functions/job-worker/index.ts`, `supabase/migrations/20261121194500_geo_jobs_scheduler.sql`
-- **Etapas do plano:** 232
+- **Etapas do plano:** 234
 
 
 ## Causa raiz: O histórico de mudanças do banco não reconstrói o banco, e reescritas copiadas perderam pedaços
@@ -646,7 +680,7 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** A reescrita de `geo_evaluate_tracking()` na migration de ETA_DELAY (20261122131000) copiou o corpo da versão de geo_foundation sem as duas linhas de atribuição do bloco de preparação. Como `CREATE OR REPLACE` substitui a função inteira e esta é a última definição do ledger, o estado vigente é o quebrado. plpgsql não acusa variável não atribuída: ela vale NULL.
 - **Arquivos:** `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`
-- **Etapas do plano:** 017
+- **Etapas do plano:** 018
 
 #### M-003 — geo_blocks: tabela usada pelo front não é criada por nenhuma migration, não tem ENABLE RLS nem policy de SELECT no repo, e quebra o banco descartável
 
@@ -659,7 +693,7 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** A tabela foi criada fora do versionamento (sync Lovable / painel). As 191 migrations só a referenciam: policies de INSERT/UPDATE/DELETE em 20260108144121:218-231, índice em 20260711185011:9, constraint em 20260711194822:4-6, drop de índice em 20260813143344:8 e COMMENT em 20261121100000:28. Consequências: (a) o repo não descreve o controle de acesso de uma tabela que é controle de segurança (bloqueio geográfico) — não há ENABLE RLS nem policy de SELECT versionada, então a única fonte é o banco; (b) `DROP POLICY IF EXISTS` protege contra policy ausente, não contra tabela ausente, então num banco novo a migration 20260108144121 aborta com 42P01 e `supabase db reset` nunca termina — exatamente o fluxo de teste que o AGENTS.md manda usar.
 - **Arquivos:** `supabase/migrations/20260108144121_4432fc97-f0cf-4dab-95d5-4e66ed486768.sql`, `supabase/migrations/20260711185011_e422dc54-64d2-4379-8882-138f7bf9abb4.sql`, `supabase/migrations/20260711194822_91c059f1-9073-4dc7-b576-0dcf7c85f854.sql`, `supabase/migrations/20261121100000_add_table_comments.sql`, `src/pages/GeoBlockingPage.tsx`, `docs/pendencias/P-08-geo-blocks-sem-rls.md`
-- **Etapas do plano:** 039
+- **Etapas do plano:** 041
 
 #### M-017 — Auditoria de MFA nunca grava: log_mfa_session() insere na coluna aal_level, que não existe, e omite duas colunas NOT NULL
 
@@ -672,7 +706,7 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** Duas migrations criam `mfa_sessions` com contratos diferentes. A segunda usa `CREATE TABLE IF NOT EXISTS`, então em produção (onde a primeira já rodou) a definição nova foi descartada, mas a função `log_mfa_session()` — escrita para o shape novo — foi criada de qualquer jeito. Qualquer execução dela falha com 42703 (column "aal_level" does not exist); mesmo sem isso falharia com 23502, porque não informa `factor_id` nem `expires_at`, ambos NOT NULL sem default. A função segue viva em produção (é alvo de GRANT/REVOKE em 20260516112942:2-10, 20260711184027:37, 20260712203139:24) e nenhum CREATE TRIGGER a aciona.
 - **Arquivos:** `supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql`, `supabase/migrations/20260516112923_4931320e-6f67-4667-8eae-490bb7d9564c.sql`, `src/hooks/useSecurityPushNotifications.ts`, `src/integrations/supabase/types.ts`
-- **Etapas do plano:** 092
+- **Etapas do plano:** 096
 
 #### M-018 — Schema local divergente do de produção: CREATE TABLE IF NOT EXISTS antigo vence e as migrations de restauração viram no-op
 
@@ -685,7 +719,7 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** O padrão adotado para "restaurar" tabelas que o ledger marcou como aplicadas sem terem rodado (explicado em 20261122120200_job_queue_system.sql:4-8) é `CREATE TABLE IF NOT EXISTS` com a definição nova. Isso resolve produção, onde a tabela não existe, mas num banco construído do zero a definição antiga é criada primeiro e a nova é ignorada por completo — colunas, constraints e índices ficam diferentes. Só uma das migrations de restauração fez a normalização correta: 20261122120200_job_queue_system.sql:43-56 acrescenta `ADD COLUMN IF NOT EXISTS` e refaz os CHECKs com `DROP CONSTRAINT IF EXISTS` + `ADD CONSTRAINT`. As de audit_log, cache_refresh_log e mfa_sessions não fizeram.
 - **Arquivos:** `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`
-- **Etapas do plano:** 093
+- **Etapas do plano:** 097
 - **Divergência entre revisores:** um revisor refutou e outro confirmou: CONFIRMA: Confirmado no essencial, com uma evidência errada. Confirmo cache_refresh_log: 20250102000002_cache_system_complete.sql:70-82 cria a tabela com `CONSTRAINT unique_running_refresh UNIQUE (view_name, status) DEFERRABLE INITIALLY DEFERRED` (no máximo uma linha por par view/status, logo o 2º 'success' d || REFUTA: RASTREADO. O mecanismo descrito exige que um banco construído do zero chegue às migrations de restauração, e isso é inalcançável: `supabase/migrations/20250102000002_cache_system_complete.sql` é a 3ª migration na ordem (`ls supabase/migrations | sort` → 20241231000000_saved_filters, 20250102000001_s
 
 #### M-019 — Valor de enum DRIVER_ASSIGNED pode não existir em produção, derrubando o alerta de motorista designado
@@ -699,7 +733,7 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** ADD VALUE precisa de arquivo e transação próprios, então essa migration ficou isolada e depende de ser disparada à mão pelo workflow de aplicação. O snapshot de tipos, gerado depois da geo_foundation, não a contém — indício de que ela pode ter ficado para trás. Se o valor não existir, o INSERT em alerts falha com 22P02 e o aviso de coleta ao responsável não sai.
 - **Arquivos:** `supabase/migrations/20261122130200_alert_type_driver_assigned.sql`, `supabase/functions/lalamove-webhook/index.ts`, `supabase/migrations/20261122160000_fix_supplier_notify_disabled.sql`, `src/integrations/supabase/types.ts`
-- **Etapas do plano:** 094
+- **Etapas do plano:** 098
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Sem MCP apontando para o banco oficial iecgydonctmabiijadsf (AGENTS.md: os três MCPs Supabase da sessão são de outros projetos), não dá para consultar pg_enum nem o ledger supabase_migrations.schema_migrations. O snapshot types.ts é de 2026-11-21 23:25, anterior a essa migration, então a ausência pode ser só defasagem do arquivo — não prova que o valor falta no banco.
 
 #### M-020 — tracking_events perdeu chave primária e as duas chaves estrangeiras ao ser reparticionada
@@ -713,9 +747,9 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** A reparticionagem de 2026-05-16 refez a tabela do zero e não recopiou PK nem FKs; nenhuma das 19 migrations posteriores que tocam `tracking_events` as devolveu (grep por `REFERENCES`/`PRIMARY KEY` em supabase/migrations/*.sql filtrado por tracking_events não retorna nada depois dessa data). As únicas constraints recuperadas foram CHECKs de faixa de coordenada, em 20260712110254_d65d9750-b900-4c03-98c2-c95ad186f7a1.sql:2-6.
 - **Arquivos:** `supabase/migrations/20260516114956_ae65dc31-f603-4f09-87a8-f7ff56459e41.sql`, `supabase/migrations/20260513180659_3d0cc70a-4422-478c-825d-2da43ac7eb15.sql`, `src/integrations/supabase/types.ts`
-- **Etapas do plano:** 095
+- **Etapas do plano:** 099
 
-#### M-114 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco
+#### M-116 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -726,9 +760,9 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** `CREATE OR REPLACE FUNCTION` não aceita mudar nome de parâmetro nem tipo/colunas de retorno (42P13) e `CREATE MATERIALIZED VIEW` sem IF NOT EXISTS falha se a relação existe (42P07). O repo acumulou duas gerações de cache e três de job_queue sem nunca dropar a geração anterior, porque em produção nada disso chegou a ser aplicado (drift Lovable) — então o erro só aparece quando a cadeia roda de verdade, do zero.
 - **Arquivos:** `supabase/migrations/20250102000002_cache_system_complete.sql`, `supabase/migrations/20251226000004_create_cache_views.sql`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20251226000003_create_job_queue.sql`, `supabase/migrations/20251226010001_configure_pg_cron.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`, `docs/MIGRATION_RECONCILIATION_2026-11.md`, `docs/agentes/banco.md`
-- **Etapas do plano:** 238, 239
+- **Etapas do plano:** 240
 
-#### M-115 — Trigger de geofence lê OLD em INSERT: o primeiro ponto do rastreio pode abortar o upsert e o rastreio nunca começa
+#### M-117 — Trigger de geofence lê OLD em INSERT: o primeiro ponto do rastreio pode abortar o upsert e o rastreio nunca começa
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -739,9 +773,9 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
   ```
 - **Causa raiz:** Em trigger de linha disparado por INSERT o registro OLD não é atribuído; ler um campo dele levanta 55000 (`record "old" is not assigned yet`). Como o CASE só avalia o ramo THEN, o erro ocorre no INSERT em que a primeira posição recebida já está dentro de `arrived_radius_m` da próxima parada — situação comum, porque o primeiro DRIVER_LOCATION_UPDATED costuma chegar com o motorista já no ponto de coleta.
 - **Arquivos:** `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 240
+- **Etapas do plano:** 241
 
-#### M-133 — A cadeia de migrations não roda do zero: três arquivos referenciam objetos que não existem ou que são criados depois
+#### M-135 — A cadeia de migrations não roda do zero: três arquivos referenciam objetos que não existem ou que são criados depois
 
 - **Camada:** Banco — integridade e índices
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -759,10 +793,10 @@ A pasta que guarda a história das mudanças do banco deixou de ser confiável: 
 
 Todos os pontos que mudam o estado de um pedido ou a situação de um motorista foram escritos como gravação simples: ninguém pergunta em que estado a coisa está antes de mudar. Por isso um evento desconhecido reabre pedido já concluído, uma importação em massa rebaixa pedidos que já andaram, dois gestores decidem o mesmo caso e o segundo apaga o primeiro, um segundo comprovante de entrega apaga a foto já guardada e cada troca de motorista cria um novo pedido de aprovação. Na mesma linha, as duas ações mais definitivas da tela — bloquear e liberar um motorista em definitivo — executam no primeiro clique, sem pergunta e sem desfazer, enquanto aprovar e rejeitar têm desfazer.
 
-**10 achado(s) sob esta causa.**
+**9 achado(s) sob esta causa.**
 
 
-#### C-007 — Importação em massa da UAPI rebaixa o status de pedidos existentes e sobrescreve endereço e cliente com valores de espaço reservado
+#### C-009 — Importação em massa da UAPI rebaixa o status de pedidos existentes e sobrescreve endereço e cliente com valores de espaço reservado
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -773,9 +807,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** O upsert por lalamove_id não distingue 'importar pedido novo' de 'atualizar pedido existente': ele reescreve todas as colunas do objeto. O mapa numérico da UAPI só tem 4 estados e cai em 'PENDING' por padrão, então um pedido local em PICKED_UP ou DELIVERING é rebaixado para ON_GOING/PENDING. Os campos de endereço e cliente só são corrigidos se `order.addr_info` vier preenchido (linhas 457-464); quando não vem, os literais 'N/A' e 'Importado UAPI' são gravados por cima do dado real. E o retorno do upsert não é checado.
 - **Arquivos:** `supabase/functions/lalamove-uapi/index.ts`
-- **Etapas do plano:** 012
+- **Etapas do plano:** 013
 
-#### C-013 — Nenhuma guarda de transição na única função que muda status do pedido: evento desconhecido vira 'ON_GOING' e ressuscita pedido já concluído
+#### C-016 — Nenhuma guarda de transição na única função que muda status do pedido: evento desconhecido vira 'ON_GOING' e ressuscita pedido já concluído
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -786,9 +820,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** `updateOrderStatus` lê o status atual só para registrar `old_status` no histórico — não há comparação, nem bloqueio de estado terminal, nem verificação de ordem. Soma-se o fallback `|| 'ON_GOING'`: qualquer status que a Lalamove mande e não esteja no mapa de 8 chaves (index.ts:108-117), incluindo 'DELIVERING', vira 'ON_GOING'. Não existe CHECK nem trigger no banco que impeça a regressão (os únicos triggers em lalamove_orders são updated_at, sync Bitrix24 e trg_close_tracking_on_order_end).
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 057
+- **Etapas do plano:** 060
 
-#### A-049 — DRIVER_ASSIGNED força status 'MATCHED' sem guarda e sem registrar nada no histórico
+#### A-054 — DRIVER_ASSIGNED força status 'MATCHED' sem guarda e sem registrar nada no histórico
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -804,9 +838,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** Os casos DRIVER_ASSIGNED e DRIVER_CHANGED (index.ts:376-377) escrevem o status direto na tabela, sem passar pelo helper updateOrderStatus (index.ts:318) — logo sem verificação de estado terminal, sem comparação de ordem e sem a linha correspondente em lalamove_status_history. Um DRIVER_ASSIGNED que chegue depois de ORDER_COMPLETED (entrega fora de ordem, que a própria Lalamove admite) rebaixa o pedido concluído para 'MATCHED'.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 088
+- **Etapas do plano:** 093
 
-#### A-050 — Fila de aprovação aceita decisão em cima de decisão: dois gestores simultâneos, e o desfazer devolve motorista bloqueado para 'aguardando aprovação'
+#### A-055 — Fila de aprovação aceita decisão em cima de decisão: dois gestores simultâneos, e o desfazer devolve motorista bloqueado para 'aguardando aprovação'
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -817,9 +851,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** Nenhum dos quatro fluxos (aprovar, rejeitar, whitelist, blacklist) filtra pelo estado atual: falta `.eq('status', 'PENDING')` no UPDATE da fila e qualquer verificação do status atual do motorista. Com isso: (1) dois gestores decidindo a mesma linha ao mesmo tempo acabam com a decisão do segundo prevalecendo, sem erro nem aviso; (2) o desfazer grava 'PENDING_APPROVAL' no motorista mesmo que ele tenha sido colocado em BLACKLIST ou bloqueado automaticamente pelo evaluate-driver (supabase/functions/evaluate-driver/index.ts:753-756) nesse meio-tempo; (3) as duas escritas não são atômicas — se a segunda falhar, a fila fica 'APROVADO' com o motorista ainda pendente.
 - **Arquivos:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `supabase/functions/evaluate-driver/index.ts`
-- **Etapas do plano:** 089
+- **Etapas do plano:** 094
 
-#### M-048 — Evento de POD repetido ou fora de ordem apaga a foto e a data de entrega já gravadas
+#### M-049 — Evento de POD repetido ou fora de ordem apaga a foto e a data de entrega já gravadas
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -830,9 +864,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** O UPDATE grava sempre as três colunas, usando `?? null` quando o campo não vem no evento. Um segundo POD_STATUS_CHANGED da mesma parada sem imagem (ou com status diferente de DELIVERED) zera pod_image_url e pod_delivered_at que o evento anterior tinha preenchido. O mesmo vale para o upsert em lalamove_stop_proofs (linhas 699-706), que é feito por stop_id e sobrescreve o registro inteiro. A proteção de entrega duplicada do webhook (índice único de idempotency_key, supabase/migrations/20260723172904_...sql:2) é calculada sobre o conteúdo exato do corpo e não cobre dois eventos distintos sobre a mesma parada.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 124
+- **Etapas do plano:** 128
 
-#### M-051 — Troca de motorista duplica pedidos de aprovação: a fila não tem unicidade por pedido e a edge não checa se já existe um pendente
+#### M-052 — Troca de motorista duplica pedidos de aprovação: a fila não tem unicidade por pedido e a edge não checa se já existe um pendente
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -843,30 +877,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** Cada DRIVER_ASSIGNED ou DRIVER_CHANGED chama evaluate-driver (lalamove-webhook/index.ts:478-485), que insere uma nova linha PENDING sempre que o risco exigir aprovação manual. Sem índice único em (driver_id, order_id) e sem consulta prévia, uma troca de motorista, uma reentrega do mesmo evento com corpo ligeiramente diferente ou uma reavaliação geram linhas pendentes repetidas para o mesmo par motorista/pedido.
 - **Arquivos:** `supabase/functions/evaluate-driver/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 127
+- **Etapas do plano:** 131
 
-#### M-080 — Aprovar/rejeitar motorista faz dois UPDATEs sem transação e o desfazer não checa erro — fila e cadastro podem divergir
-
-- **Camada:** Hooks e estado — dados de negócio (+ 2 outro(s) local)
-- **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
-- **Impacto no negócio:** Pode ficar registrado que um motorista foi aprovado sem que ele fique aprovado de fato (ou rejeitado sem ser bloqueado), e o botão Desfazer pode não desfazer nada sem avisar — decisão de risco gravada pela metade.
-- **Evidência:**
-  ```
-  src/hooks/useApprovalActions.ts:34-39 `const { error: approvalError } = await supabase.from('driver_approval_queue').update({ status: 'APPROVED', ... }).eq('id', approvalId); if (approvalError) throw approvalError; const { error: driverError } = await supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId);` e :46-48 `await supabase.from('driver_approval_queue').update({ status: 'PENDING', ... }); await supabase.from('drivers').update({ status: 'PENDING_APPROVAL' }).eq('id', data.driverId); queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });`
-  ```
-  Mesma causa, outro local — Regras de negócio — cálculos:
-  ```
-  src/hooks/useApprovalActions.ts:34-38 — ".update({ status: 'APPROVED', reviewed_at: new Date().toISOString(), decision_notes: notes || 'Aprovado manualmente' })\n        .eq('id', approvalId);" seguido de "supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId)"; coluna em supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:182 — "reviewed_by UUID,"; leitura em src/hooks/usePendingApprovals.ts:88.
-  ```
-  Mesma causa, outro local — Regras de negócio — ciclo de vida:
-  ```
-  src/hooks/useApprovalActions.ts:34-36, 56-58, 78-80, 93-95; coluna em supabase/migrations/20251224143803_*.sql:182; padrão correto em src/hooks/usePasswordResetActions.ts:36; leitura em src/hooks/usePendingApprovals.ts:88.
-  ```
-- **Causa raiz:** A decisão é gravada em duas tabelas em sequência, sem RPC/transação. Se o segundo UPDATE falhar (RLS, rede, indisponibilidade), a fila fica APPROVED/REJECTED e o motorista permanece PENDING_APPROVAL — e o onError só desfaz o cache local (`rollback`, :22-26), nunca o banco. No desfazer do toast as duas escritas não verificam erro (falha silenciosa) e só `['pending-approvals']` é invalidada (:49), deixando histórico e estatísticas mostrando a decisão já desfeita.
-- **Arquivos:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/hooks/usePasswordResetActions.ts`, `src/hooks/usePendingApprovals.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
-- **Etapas do plano:** 172
-
-#### M-092 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer
+#### M-094 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -877,9 +890,9 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** Aprovar e rejeitar recebem desfazer (`showUndoToast` em useApprovalActions.ts:45 e :68), mas as duas ações permanentes — blacklist e whitelist — não têm diálogo de confirmação nem undo, embora sejam as de maior consequência e fiquem lado a lado, com rótulo abreviado ('BL'/'WL') no celular.
 - **Arquivos:** `src/pages/approvals/ApprovalCard.tsx`, `src/hooks/useApprovalActions.ts`
-- **Etapas do plano:** 187
+- **Etapas do plano:** 189
 
-#### M-093 — Decisão de aprovação de motorista não checa o status atual: duas abas sobrescrevem uma à outra
+#### M-095 — Decisão de aprovação de motorista não checa o status atual: duas abas sobrescrevem uma à outra
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -890,7 +903,7 @@ Todos os pontos que mudam o estado de um pedido ou a situação de um motorista 
   ```
 - **Causa raiz:** O update é incondicional. Quem estiver com a tela aberta em outra aba (ou dentro da janela de 15s) ainda vê o cartão e pode decidir de novo, sobrescrevendo a decisão já registrada, inclusive invertendo aprovado para rejeitado — e o motorista é atualizado junto (`drivers.status`).
 - **Arquivos:** `src/hooks/useApprovalActions.ts`, `src/pages/ApprovalsPage.tsx`
-- **Etapas do plano:** 188
+- **Etapas do plano:** 190
 
 #### B-046 — 'Bloquear motorista' executa direto no primeiro clique, sem confirmacao
 
@@ -913,7 +926,7 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
 **9 achado(s) sob esta causa.**
 
 
-#### A-019 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita)
+#### A-021 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita)
 
 - **Camada:** Interface — rotas e RBAC (+ 1 outro(s) local)
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -928,9 +941,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** A consulta que alimenta `hasRole()` (usada por ProtectedRoute.tsx:55-57 e por getHighestRole no Sidebar.tsx:31) filtra só `is_active=true`. A função `has_role()` do Postgres, que governa as RLS, também exige `expires_at > now()`. As duas camadas divergem, então um papel temporário vencido continua valendo na interface.
 - **Arquivos:** `src/components/auth/ProtectedRoute.tsx`, `src/components/layout/Sidebar.tsx`, `src/hooks/usePermissions.ts`, `src/hooks/useRole.ts`, `src/lib/roles.ts`
-- **Etapas do plano:** 034
+- **Etapas do plano:** 036
 
-#### A-020 — requireMFA cobre 7 de 49 rotas e deixa de fora exatamente as que concedem privilégio (/roles, /permissions, /ip-whitelist)
+#### A-022 — requireMFA cobre 7 de 49 rotas e deixa de fora exatamente as que concedem privilégio (/roles, /permissions, /ip-whitelist)
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -941,9 +954,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** MFA é aplicado por rota, não por sessão. `needsMFAVerification` (src/hooks/useMFA.ts:56-57) é calculado para toda sessão aal1 com fator verificado, mas ProtectedRoute só age nas 7 rotas que declaram `requireMFA` (App.tsx:195,197,198,199,200,201,208). Nas outras 42, uma sessão que parou no primeiro fator entra normalmente.
 - **Arquivos:** `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`, `src/pages/RolesPage.tsx`, `docs/pendencias/_regras-de-negocio.md`
-- **Etapas do plano:** 035, 036
+- **Etapas do plano:** 037, 038
 
-#### M-083 — Falha transitória na RPC de permissões tranca o usuário em /unauthorized até recarregar a página
+#### M-084 — Falha transitória na RPC de permissões tranca o usuário em /unauthorized até recarregar a página
 
 - **Camada:** Hooks e estado — auth, permissão e infra
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -954,9 +967,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** O gate de permissão trata "não sei" como "não pode" e o ProtectedRoute só olha `isLoading`, nunca `isError`. Com `retry: 1` e `refetchOnWindowFocus: false`, a query em estado de erro não se recupera sozinha: toda navegação para uma rota com `requiredPermission` volta a cair no redirecionamento.
 - **Arquivos:** `src/hooks/usePermissions.ts`, `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`
-- **Etapas do plano:** 177
+- **Etapas do plano:** 179
 
-#### M-084 — Gate de MFA abre quando a consulta de nível de autenticação falha
+#### M-086 — Gate de MFA abre quando a consulta de nível de autenticação falha
 
 - **Camada:** Hooks e estado — auth, permissão e infra
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -967,10 +980,10 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** Os sinais derivados colapsam "não sei" em "não precisa": são `undefined ? ... : false` por construção. Com `retry: 1` e `refetchOnWindowFocus: false` no cliente global (src/App.tsx:93-94), a query de AAL em erro não se recupera e o guard segue liberando.
 - **Arquivos:** `src/hooks/useMFA.ts`, `src/components/auth/ProtectedRoute.tsx`, `src/App.tsx`
-- **Etapas do plano:** 178
+- **Etapas do plano:** 181
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Não tenho como provocar o erro em produção sem acesso (bloquear a chamada no navegador do dono ou ver log). `getAuthenticatorAssuranceLevel()` é local no supabase-js, então o erro depende de sessão corrompida/ausente; `listFactors()` é de rede e falha mais fácil, mas só alimenta `isMFAEnabled`. Confirma-se bloqueando a requisição de fatores/AAL no DevTools e tentando abrir /risk-rules.
 
-#### M-098 — /reset-password aceita qualquer sessão ativa, não só o link de recuperação — troca de senha sem pedir a senha atual
+#### M-100 — /reset-password aceita qualquer sessão ativa, não só o link de recuperação — troca de senha sem pedir a senha atual
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -981,9 +994,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** A tela foi escrita para o fluxo de link de e-mail (ForgotPasswordPage.tsx:34-36 aponta `redirectTo: .../reset-password`), mas o gate de validade virou "existe sessão?" em vez de "esta sessão veio de um PASSWORD_RECOVERY". A rota é pública (App.tsx:148), então basta estar logado e digitar o endereço.
 - **Arquivos:** `src/pages/ResetPasswordPage.tsx`, `src/pages/ForgotPasswordPage.tsx`, `src/App.tsx`
-- **Etapas do plano:** 193
+- **Etapas do plano:** 195
 
-#### M-130 — Command palette lista todas as rotas de administração sem filtro de papel e fica ativa na tela pública de login
+#### M-132 — Command palette lista todas as rotas de administração sem filtro de papel e fica ativa na tela pública de login
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -994,9 +1007,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** A lista de navegação da paleta é uma terceira cópia estática dos destinos (ao lado de sidebar-config e MobileBottomNav) e nunca recebeu filtro de papel; e a paleta foi montada no topo da árvore, fora do `AppLayout`, para funcionar em qualquer rota — o que inclui as rotas públicas.
 - **Arquivos:** `src/hooks/useCommandPaletteSearch.ts`, `src/components/CommandPaletteEnhanced.tsx`, `src/App.tsx`
-- **Etapas do plano:** 255
+- **Etapas do plano:** 256
 
-#### M-131 — Menu lateral não sabe expressar o papel 'operator', então o viewer vê 7 itens que a rota recusa
+#### M-133 — Menu lateral não sabe expressar o papel 'operator', então o viewer vê 7 itens que a rota recusa
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1007,9 +1020,9 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** O contrato de `MenuItem`/`MenuCategory` foi escrito com dois papéis quando a hierarquia tem quatro (src/lib/roles.ts:10). Itens cuja rota exige 'operator' não têm como declarar isso e passam pelo filtro como se fossem públicos a qualquer autenticado. O teste que deveria pegar isso é limitado de propósito: src/lib/__tests__/sidebarRoutes.test.ts:75 — `if (routeRole && roleLevel(routeRole) >= ROLE_LEVEL.manager) {` — ou seja, só verifica manager e admin.
 - **Arquivos:** `src/components/layout/sidebar-config.ts`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`, `src/lib/__tests__/sidebarRoutes.test.ts`, `src/App.tsx`
-- **Etapas do plano:** 256
+- **Etapas do plano:** 257
 
-#### M-132 — Navegação mobile ignora o RBAC por completo: viewer vê e toca em Aprovações, Webhooks, Regras de Risco e Configurações
+#### M-134 — Navegação mobile ignora o RBAC por completo: viewer vê e toca em Aprovações, Webhooks, Regras de Risco e Configurações
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1020,7 +1033,7 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** O MobileBottomNav tem sua própria lista estática de destinos (MobileBottomNav.tsx:46-63 e :86-97), paralela ao sidebar-config, e nunca recebeu o filtro de papel que o Sidebar aplica (Sidebar.tsx:58-60).
 - **Arquivos:** `src/components/layout/MobileBottomNav.tsx`, `src/components/layout/sidebar-config.ts`, `src/components/layout/Sidebar.tsx`
-- **Etapas do plano:** 257
+- **Etapas do plano:** 258
 
 #### B-018 — Cache de permissões e de dados administrativos sobrevive à troca de usuário quando a sessão cai sem signOut explícito
 
@@ -1033,7 +1046,7 @@ Quem pode ver o quê foi implementado na interface, tela por tela, sem uma fonte
   ```
 - **Causa raiz:** A invalidação de cache está acoplada ao botão de sair, não ao evento de autenticação. Sessão expirada, revogada ou encerrada em outra aba chega por `onAuthStateChange` (SIGNED_OUT / falha de refresh) e esse caminho não limpa nada; como as chaves de permissão globais não incluem o id do usuário, o próximo login reaproveita as entradas do usuário anterior (gcTime de 5 min, src/App.tsx:92).
 - **Arquivos:** `src/hooks/useAuth.tsx`, `src/App.tsx`, `src/hooks/usePermissions.ts`, `src/hooks/useRole.ts`, `src/hooks/useRateLimiting.ts`
-- **Etapas do plano:** 198
+- **Etapas do plano:** 200
 
 
 ## Causa raiz: Texto digitado ou vindo do banco é usado cru, sem validação no servidor nem tratamento
@@ -1043,7 +1056,7 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
 **11 achado(s) sob esta causa.**
 
 
-#### A-018 — Exportação em PDF injeta texto do banco no HTML sem escapar, em janela de mesma origem
+#### A-020 — Exportação em PDF injeta texto do banco no HTML sem escapar, em janela de mesma origem
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1054,7 +1067,7 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** Conteúdo vindo do banco (nome de departamento, centro de custo, região extraída do endereço, nome de motorista) é concatenado em HTML sem escape e escrito via document.write numa janela aberta com `about:blank`, que herda a origem da aplicação — portanto com acesso ao localStorage onde fica a sessão do Supabase.
 - **Arquivos:** `src/utils/exportUtils.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/ReportsPage.tsx`, `src/pages/AnalyticsDashboardPage.tsx`
-- **Etapas do plano:** 033
+- **Etapas do plano:** 035
 
 #### M-014 — E-mail montado por concatenação de HTML sem escape, com texto vindo do banco e do chamador
 
@@ -1067,9 +1080,9 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** `message` chega de `renderTemplate(cfg.message_template, templateVars)` (index.ts:797), com variáveis que vêm do banco (`pickup_address`, `driver_name`, `share_link`, `order_ref` — index.ts:504-523) e de `metadata` do chamador; `title`/`orderId`/`driverId` vêm do corpo validado apenas como string. Nada é escapado antes de virar HTML. Em `new-device-alert` todos os campos exibidos vêm do corpo da requisição.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`, `supabase/functions/_shared/template.ts`, `supabase/functions/new-device-alert/index.ts`
-- **Etapas do plano:** 050
+- **Etapas do plano:** 052
 
-#### M-056 — Atribuir papel exige UUID digitado à mão e revogar não pede confirmação
+#### M-057 — Atribuir papel exige UUID digitado à mão e revogar não pede confirmação
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1080,9 +1093,9 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** O diálogo de atribuição não tem busca de usuário nem validação de formato (o único bloqueio é `!newUserData.userId`, :78 e :381), e a revogação dispara a mutation no clique, sem AlertDialog. A lista de usuários também só exibe os 8 primeiros caracteres do UUID (:221), então não há como conferir quem é quem.
 - **Arquivos:** `src/pages/RolesPage.tsx`, `src/hooks/useRole.ts`
-- **Etapas do plano:** 132
+- **Etapas do plano:** 136
 
-#### M-057 — Validação de IP rejeita IPv6 abreviado, inclusive o exemplo do próprio formulário
+#### M-058 — Validação de IP rejeita IPv6 abreviado, inclusive o exemplo do próprio formulário
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1093,9 +1106,9 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** O ramo IPv6 da expressão exige os 8 grupos completos e não aceita a compressão `::`, e o `min(7)` ainda barra endereços curtos. O placeholder foi escrito supondo um validador mais permissivo.
 - **Arquivos:** `src/pages/IPWhitelistPage.tsx`, `src/pages/ip-whitelist/IPWhitelistDialogs.tsx`
-- **Etapas do plano:** 133
+- **Etapas do plano:** 137
 
-#### M-058 — Raio e ETA de aproximacao do pedido so sao validados pelo navegador: valor negativo desliga o aviso em silencio
+#### M-059 — Raio e ETA de aproximacao do pedido so sao validados pelo navegador: valor negativo desliga o aviso em silencio
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1106,9 +1119,9 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** O `min={0}` do input nao bloqueia digitacao (o dialogo nao tem elemento <form> nem validacao no envio), a edge so confere o tipo e a coluna nao tem restricao. O gatilho compara a distancia com esse valor (geo_foundation.sql:429 `v_radius := COALESCE(o.approach_radius_m, d.approach_radius_m);`), entao um numero negativo torna a condicao impossivel.
 - **Arquivos:** `src/components/orders/NewOrderDialog.tsx`, `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20261122130100_geo_foundation.sql`
-- **Etapas do plano:** 134
+- **Etapas do plano:** 138
 
-#### M-074 — Importacao de CSV adota a primeira coluna como ID quando nao reconhece o cabecalho, sem limite de linhas nem como cancelar
+#### M-076 — Importacao de CSV adota a primeira coluna como ID quando nao reconhece o cabecalho, sem limite de linhas nem como cancelar
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1119,26 +1132,26 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** O fallback para `headers[0]` aceita qualquer coluna como identificador, e o unico criterio e ter mais de 5 caracteres — datas, nomes e enderecos passam. Em seguida o laco dispara lotes de 20 a edge `lalamove-api` ate acabar o arquivo, sem teto de linhas e sem caminho de interrupcao: o dialogo nao fecha enquanto `importing` for true.
 - **Arquivos:** `src/components/orders/ImportCSVDialog.tsx`
-- **Etapas do plano:** 153
+- **Etapas do plano:** 158
 
-#### M-117 — Busca de pedidos injeta o texto do usuário cru no filtro `.or()` do PostgREST
+#### M-123 — Filtro de busca sem escape: virgula ou parentese no termo quebram a consulta da lista de pedidos
 
-- **Camada:** Hooks e estado — dados de negócio (+ 1 outro(s) local)
+- **Camada:** Interface — fluxo de pedido (+ 1 outro(s) local)
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
-- **Impacto no negócio:** Buscar por nome com vírgula devolve resultado errado ou erro na tela de pedidos, e alguém com acesso ao painel consegue fazer a busca trazer pedidos fora do filtro pretendido.
+- **Impacto no negócio:** Procurar um cliente escrevendo 'Sobrenome, Nome' derruba a tela de pedidos com 'Erro ao Carregar' em vez de devolver resultado — e um termo construido de proposito consegue mudar o filtro da consulta.
 - **Evidência:**
-  ```
-  src/hooks/useRecentOrders.ts:37 `supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`);`; src/pages/OrdersPage.tsx:78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
-  ```
-  Mesma causa, outro local — Interface — fluxo de pedido:
   ```
   src/hooks/useRecentOrders.ts:36-38 `if (query && query.trim()) { supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`); }` | src/pages/OrdersPage.tsx:29 `const q = searchParams.get('q') || '';` e :78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
   ```
-- **Causa raiz:** O texto digitado é concatenado dentro da string de filtro do PostgREST, onde a vírgula separa termos e os parênteses delimitam grupos. Um termo com vírgula (ex.: "Silva, João") vira mais um termo do `or`, e um texto construído de propósito (`x,status.eq.CANCELED`) acrescenta condição própria ou provoca 400 de sintaxe. É o único ponto da camada que monta filtro por concatenação — os demais usam `.eq()`/`.in()` com valor separado.
+  Mesma causa, outro local — Hooks e estado — dados de negócio:
+  ```
+  src/hooks/useRecentOrders.ts:37 `supabaseQuery = supabaseQuery.or(`lalamove_id.ilike.%${query}%,customer_name.ilike.%${query}%,internal_order_id.ilike.%${query}%`);`; src/pages/OrdersPage.tsx:78 `const { data: ordersData, isLoading, error, isFetching } = useRecentOrders(currentPage, statusFilter, q);`
+  ```
+- **Causa raiz:** O termo digitado e interpolado cru dentro da string de filtro do PostgREST, que usa virgula para separar condicoes e parenteses para agrupar. Um termo com virgula ('Silva, Maria'), parentese ou ponto vira sintaxe de filtro: a consulta e recusada (a OrdersPage cai no bloco de erro em OrdersPage.tsx:120-135) ou passa a filtrar por outra condicao que o usuario nao pediu, inclusive sobrescrevendo o filtro de status aplicado em useRecentOrders.ts:32-34.
 - **Arquivos:** `src/hooks/useRecentOrders.ts`, `src/pages/OrdersPage.tsx`
-- **Etapas do plano:** 242
+- **Etapas do plano:** 247
 
-#### M-124 — Busca de erros monta o filtro do PostgREST por concatenação: vírgula ou parêntese no termo quebra a consulta
+#### M-126 — Busca de erros monta o filtro do PostgREST por concatenação: vírgula ou parêntese no termo quebra a consulta
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -1149,7 +1162,7 @@ Nada no caminho entre o que a pessoa digita e o destino final confere ou neutral
   ```
 - **Causa raiz:** O termo digitado entra cru na sintaxe de filtro do PostgREST, onde vírgula separa condições e parênteses delimitam o grupo. Um termo como `a,b` ou `Error (500)` muda a estrutura do filtro.
 - **Arquivos:** `src/hooks/useErrorLogs.ts`, `src/pages/ErrorMonitoringPage.tsx`
-- **Etapas do plano:** 249
+- **Etapas do plano:** 250
 
 #### B-045 — Alerta crítico pode ser salvo com tempo menor que o de aviso
 
@@ -1199,7 +1212,7 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
 **12 achado(s) sob esta causa.**
 
 
-#### A-012 — Renovação do token Bitrix24 quebrada em dois pontos: self-call sem Authorization e erro do provedor virando 500 genérico
+#### A-013 — Renovação do token Bitrix24 quebrada em dois pontos: self-call sem Authorization e erro do provedor virando 500 genérico
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1210,9 +1223,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** (a) O self-call de refresh em `sync_order` não manda `Authorization`, então o `verify_jwt = true` de `config.toml:78-79` responde 401; o resultado nem é lido (`await fetch(...)` sem checar status) e a execução segue usando `tokenData.access_token`, que já havia sido lido ANTES e está expirado. (b) No case `refresh_token`, nada verifica `tokenResponse.ok` nem `tokens.error`: quando o Bitrix recusa o refresh, `tokens.expires_in` é `undefined`, `Date.now() + undefined*1000` é `NaN` e `new Date(NaN).toISOString()` lança `RangeError: Invalid time value`, caindo no catch genérico de :365-371 que devolve `{error: "Internal server error"}` com 500 — a causa real nunca aparece. O padrão correto existe no arquivo irmão: `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts:119-127` lê `tokens.error` e retorna 400 antes de calcular `expiresAt`.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`
-- **Etapas do plano:** 026
+- **Etapas do plano:** 028
 
-#### A-013 — `cancel` devolve HTTP 204 com corpo JSON: o pedido é cancelado na Lalamove e a tela recebe erro
+#### A-014 — `cancel` devolve HTTP 204 com corpo JSON: o pedido é cancelado na Lalamove e a tela recebe erro
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Alta · **Confiança:** hipotese · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1223,10 +1236,10 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** O `DELETE /v3/orders/{id}` da Lalamove responde 204 e o wrapper propaga esse status cru até o `new Response`. Pela especificação WHATWG, 204 é um "null body status" e o construtor de `Response` rejeita um corpo não nulo — o lançamento cai no catch de :1209-1215, que devolve `{error: "Internal server error"}` com 500, DEPOIS de o cancelamento já ter ido para a Lalamove e de `lalamove_orders` já ter sido atualizada em :918-929. O `lalamove-gateway` então vê `!upstream.ok` e repassa erro ao front. Reproduzi o comportamento do construtor em Node (undici): `new Response(JSON.stringify({a:1}), {status:204})` → `TypeError: Response constructor: Invalid response status code 204`.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`
-- **Etapas do plano:** 027
+- **Etapas do plano:** 029
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Não há Deno neste ambiente (`command -v deno` → exit 1), então reproduzi o lançamento em Node/undici e no Bun (o Bun, que é permissivo, aceitou). Falta rodar o construtor no runtime Deno da edge, ou fazer um cancelamento real em produção e ler o status HTTP da resposta.
 
-#### A-025 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe
+#### A-028 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe
 
 - **Camada:** Backend — edges Lalamove
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1237,9 +1250,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** 204 e um 'null body status' no padrao Fetch (igual a 101/205/304): o construtor Response recusa qualquer corpo. Como a action `cancel` propaga o 204 da Lalamove ate o `new Response(JSON.stringify(result), { status: 204 })`, o construtor lanca TypeError, que cai no catch generico de :1208-1213 e vira `{ error: 'Internal server error' }` com HTTP 500. O cancelamento ja aconteceu na Lalamove nesse ponto — so a resposta mente.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`
-- **Etapas do plano:** 062
+- **Etapas do plano:** 066
 
-#### A-026 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade
+#### A-029 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade
 
 - **Camada:** Backend — edges Lalamove (+ 1 outro(s) local)
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1254,9 +1267,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** Dois defeitos somados. (a) O worker so sabe renovar via proxy externo, que nunca foi provisionado — entao a cada execucao horaria ele lanca, cai no catch de :208-211, dispara alerta CRITICAL e devolve HTTP 500. (b) Mesmo que o proxy passasse a existir, o UPDATE de sucesso nao persiste os tokens devolvidos (a resposta do proxy nem e lida alem de `text.slice(0,500)`), mas mexe em `last_refreshed_at`, que e justamente a referencia de idade usada em :120-121 `const referenceAt = session.last_refreshed_at ?? session.token_obtained_at`. Ou seja: o relogio volta para zero sem o token ter sido trocado, e os alertas de 'passou de 24h' (:124-133) param de disparar. A propria lalamove-uapi tem o caminho certo e usa a UAPI direto: refreshUapiToken + UPDATE com access_token/refresh_token (lalamove-uapi/index.ts:172-200 e :140-151).
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-gateway/route.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-token-refresh/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-gateway/route.ts`, `supabase/functions/lalamove-token-refresh/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
-- **Etapas do plano:** 063
+- **Etapas do plano:** 067
 
-#### A-027 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia
+#### A-030 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia
 
 - **Camada:** Backend — edges Lalamove
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1267,9 +1280,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** O handler nasceu para um contrato interno com um evento por transicao (ORDER_COMPLETED, ORDER_CANCELLED, ORDER_PICKED_UP) e a v3 oficial entrega tudo como ORDER_STATUS_CHANGED com o status dentro de data.order.status. A normalizacao v3 foi adicionada (normalize.ts) mas mapeia `event: p.eventType` sem desdobrar o status em um evento interno, entao os cases especificos viraram codigo morto para o trafego real e o case generico so grava status + historico. Consequencias concretas: contadores de entrega do motorista nunca sobem; `lalamove_stops.completed_at` nunca e marcado (estava no case ORDER_PICKED_UP, :545); o motivo do cancelamento, que a normalizacao ate copia para `data.reason` (normalize.ts:59-61), e ignorado; e nenhuma notificacao de cancelamento sai.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-webhook/normalize.ts`
-- **Etapas do plano:** 064
+- **Etapas do plano:** 068
 
-#### A-030 — Fallback de geocodificação do pedido nunca funciona: lê `json.data[0]` mas o geo-gateway devolve array puro — e os 12 testes do módulo mockam o formato errado
+#### A-034 — Fallback de geocodificação do pedido nunca funciona: lê `json.data[0]` mas o geo-gateway devolve array puro — e os 12 testes do módulo mockam o formato errado
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1280,9 +1293,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** O `geo-gateway` serializa `result.data` direto no corpo (array de `GeoAddress`), sem envelope. O `geocode-fallback.ts` espera um envelope `{ data: [...] }`. Como `Array.prototype.data` não existe, `json.data?.[0]` é sempre `undefined`, `if (!hit?.location) return null` dispara e `geocodeAddress` devolve `null` em 100% dos casos. Os testes passam porque o mock constrói o envelope que a produção não tem — o teste valida o parser contra si mesmo, não contra o gateway. Prova de que o formato real é array puro: `/home/user/Lalamove_V2/supabase/functions/job-worker/index.ts:453` faz `const best = Array.isArray(data) ? data[0] : data;` e `/home/user/Lalamove_V2/src/hooks/useGeo.ts:141` declara `callGeo<GeoAddress[]>({ action: "geocode" })`.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/geocode-fallback.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-api/geocode-fallback.test.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/index.ts`
-- **Etapas do plano:** 067
+- **Etapas do plano:** 072
 
-#### A-053 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação
+#### A-057 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1293,7 +1306,7 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** Há duas matrizes de compatibilidade e elas não têm um único código em comum. A da edge usa serviceTypes que não existem no catálogo BR (`MOTORCYCLE`, `MPV`, `TRUCK175`) e códigos que não existem na matriz oficial (`HELP_BUY`, `TOLL_FEE`, `ROUND_TRIP`, `DOOR_TO_DOOR`, `MOVING_SERVICE`, `LOADING_SERVICE`). O front oferece os códigos de `lalamoveCatalog.ts:141` (`NewOrderDialog.tsx:246`) e os envia em `specialRequests` (`NewOrderDialog.tsx:316`). Em `sanitizeSpecialRequests` (:313-326), para `CAR`, `VAN`, `UV_FIORINO` e `TRUCK330` a chave EXISTE na matriz da edge, então tudo o que o operador marcou cai em `dropped` e sai do corpo — com apenas um `console.warn` (:330-334). Para `LALAGO`, `LALAPRO`, `HATCHBACK` etc. a chave não existe e o comentário `// Serviço desconhecido: repassa tal qual` deixa passar. Resultado: o comportamento depende do veículo, e o comentário "mantida em sincronia" é falso.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/src/lib/lalamoveCatalog.ts`, `/home/user/Lalamove_V2/src/components/orders/NewOrderDialog.tsx`, `/home/user/Lalamove_V2/src/types/lalamove.ts`
-- **Etapas do plano:** 138
+- **Etapas do plano:** 142
 
 #### M-010 — llm-wh: o proxy de webhook quebra a assinatura v3 da Lalamove — todo evento repassado por ele é recusado com 401
 
@@ -1306,7 +1319,7 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** A assinatura v3 da Lalamove inclui o caminho da URL registrada no texto que é assinado (`${timestamp}\r\nPOST\r\n${path}\r\n\r\n${data}`). Se a URL cadastrada na Lalamove é `/functions/v1/llm-wh`, a assinatura que chega foi calculada com esse caminho. O llm-wh repassa o corpo cru para `/functions/v1/lalamove-webhook`, e lá os dois únicos caminhos candidatos testados são a constante `/functions/v1/lalamove-webhook` e o `pathname` da própria request repassada — nenhum dos dois é `/functions/v1/llm-wh`. O laço de `validateLalamoveV3Signature` esgota os candidatos e devolve `valid: false`, e o webhook responde 401 e grava `SIGNATURE_INVALID` em `webhook_events`. O proxy existe justamente para ser a URL registrada, então o caminho pelo qual ele serve é o único que não é aceito.
 - **Arquivos:** `supabase/functions/llm-wh/index.ts`, `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-webhook/security.ts`
-- **Etapas do plano:** 046
+- **Etapas do plano:** 048
 
 #### M-011 — O campo que decide o efeito colateral do webhook (eventType) fica de fora da assinatura HMAC, e a checagem de frescor e opcional
 
@@ -1319,7 +1332,7 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** A formula oficial da v3 assina apenas o bloco `data`; a implementacao aceita isso (correto) mas depois confia em `eventType`, `eventId` e `apiKey`, que o atacante pode trocar sem invalidar a assinatura. Como o eventType escolhe o case do switch, um corpo legitimamente assinado pode ser reapresentado com o evento trocado (por exemplo DRIVER_ASSIGNED -> ORDER_CANCELLED) e passa pelos tres gates: a assinatura continua valida, o hash de idempotencia muda junto com o corpo (index.ts:275, hash do corpo inteiro) e o frescor e pulado quando `data.updatedAt` nao existe e o timestamp do topo veio como string. O security.test.ts cobre bem a assinatura em si, mas nenhum teste cobre 'eventType trocado com assinatura valida'.
 - **Arquivos:** `supabase/functions/lalamove-webhook/security.ts`, `supabase/functions/lalamove-webhook/normalize.ts`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 047
+- **Etapas do plano:** 049
 
 #### M-037 — O health check da Lalamove chama endpoint e autenticação que não existem no contrato v3 — resultado é sempre "degraded"
 
@@ -1332,9 +1345,9 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** Dois desvios do contrato v3 no mesmo fetch: (1) `/v3/ping` não é um endpoint da API v3 — o doc auditado em produção lista cities, quotations, orders, priority-fee, drivers e webhook, e o próprio repo usa `cities` como sonda de saúde (`/home/user/Lalamove_V2/supabase/functions/lalamove-gateway/route.ts:73-75`: `case 'status': case 'test': return { fn: 'lalamove-api', action: 'cities' }`); (2) a v3 autentica com `hmac <key>:<timestamp>:<signature>`, não com `Bearer <key>`. Qualquer um dos dois já garante um 4xx permanente, então `response.ok` nunca é verdadeiro e o else de :141-145 devolve `status: 'degraded', message: "API returned 404"`. O comentário do código (`// Ping endpoint (ou endpoint de health se existir)`) admite que o endpoint foi suposto, não verificado.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/check-external-api/index.ts`, `/home/user/Lalamove_V2/src/hooks/healthChecks.ts`, `/home/user/Lalamove_V2/docs/LALAMOVE_API_V3.md`
-- **Etapas do plano:** 113
+- **Etapas do plano:** 116
 
-#### M-140 — O retorno do OAuth do Bitrix24 é impossível: a URL de redirect aponta para uma edge com `verify_jwt = true`
+#### M-142 — O retorno do OAuth do Bitrix24 é impossível: a URL de redirect aponta para uma edge com `verify_jwt = true`
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1358,7 +1371,7 @@ Partes da integração foram feitas supondo um contrato que nunca existiu ou que
   ```
 - **Causa raiz:** O `rateLimits` coletado em :197-200 guarda as chaves cruas (`ratelimits-limit-getcities`, etc.), mas `persistRateLimit` procura as chaves exatas sem sufixo. Nenhuma casa, então `Number(undefined)` é `NaN`, `limit_total`/`limit_remaining`/`usage_ratio` são gravados como `null`, e a guarda de :82-84 (`if (Number.isFinite(limitRemaining) && limitRemaining <= 10)`) nunca é verdadeira — o aviso de quota crítica é código morto. O gateway, no mesmo repo, trata o sufixo corretamente, o que confirma qual é o formato real. Isto já está catalogado como item B23 em `/home/user/Lalamove_V2/docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md:258` e como ação 2.8 em :340 — ainda não foi feito.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/docs/ANALISE_EXAUSTIVA_E_PLANO_INTEGRACAO_2026-11-21.md`
-- **Etapas do plano:** 203
+- **Etapas do plano:** 205
 
 
 ## Causa raiz: As regras de envio de mensagem ficaram espalhadas por cada caminho, em vez de um único ponto de saída
@@ -1368,7 +1381,7 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
 **9 achado(s) sob esta causa.**
 
 
-#### A-028 — Telefone vindo de alert_configurations é enviado sem normalização — só o caminho ad-hoc normaliza
+#### A-031 — Telefone vindo de alert_configurations é enviado sem normalização — só o caminho ad-hoc normaliza
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1379,9 +1392,9 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** Em `dispatchIfNew` o `normalizePhone` só é usado para montar a chave de dedup (`comparable`) e para a consulta de opt-out (`optedPhone`, linha 862). O valor passado ao `dispatch` nunca é reatribuído. A jusante, `sendWhatsApp` (index.ts:1161 `number.replace(/\D/g, "")`) e `normalizeSmsNumber` (supabase/functions/_shared/channels/sms.ts:101-103) apenas tiram os não-dígitos: não acrescentam o DDI 55 nem tiram o `0` de discagem. `(41) 99999-8888` cadastrado na UI sai como `41999998888`.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`, `supabase/functions/_shared/channels/sms.ts`, `supabase/functions/_shared/phone.ts`
-- **Etapas do plano:** 065
+- **Etapas do plano:** 069
 
-#### M-079 — Opt-out é furado pelo canal de contingência e pelo fallback imediato de SMS
+#### M-081 — Opt-out é furado pelo canal de contingência e pelo fallback imediato de SMS
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1392,9 +1405,9 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** A checagem de opt-out está duplicada nos dois laços de destinatário (index.ts:708 e index.ts:861-874) em vez de ficar no ponto único de saída (`dispatch`). Todo caminho que chama `dispatch`/`sendSms` por fora desses laços — `fallback_channel` e o fallback imediato por SMS — escapa. O fallback imediato também ignora `isChannelDisabled("sms")`, então SMS desligado pelo operador volta a custar.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 171
+- **Etapas do plano:** 174
 
-#### M-102 — Aviso automático ao fornecedor é reemitido a cada novo alerta de parada, sem teto por pedido
+#### M-104 — Aviso automático ao fornecedor é reemitido a cada novo alerta de parada, sem teto por pedido
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1405,9 +1418,9 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** O aviso dispara quando um alerta DRIVER_STOPPED **novo** é criado, e a dispensa automática de :261-263 apaga o alerta existente assim que o motorista volta a se mover. Motorista em trânsito pesado oscila parado/andando, e cada oscilação recria o alerta e dispara um novo aviso. O único freio é o dedup de `claim_alert_notification` com janela fixa de 300 s (send-notification/index.ts:181 `p_window_seconds: 300`), e o fornecedor não é o motorista, então o teto de 6/10min de `isDriverRateLimited` não se aplica (index.ts:641-644 exige que o destino case com o telefone do motorista).
 - **Arquivos:** `supabase/functions/check-driver-alerts/index.ts`, `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 218
+- **Etapas do plano:** 220
 
-#### M-103 — Teto de 6 mensagens/10min por motorista lê alerts_sent sem filtro por destinatário nem limite
+#### M-105 — Teto de 6 mensagens/10min por motorista lê alerts_sent sem filtro por destinatário nem limite
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1418,7 +1431,7 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** A comparação de telefone é feita por sufixo em JavaScript (`endsWith` dos 11 últimos dígitos), então a consulta não pode filtrar no banco pelo `recipient` exato e trouxe tudo. Sem `.limit()` e sem índice por `recipient`, o conjunto depende do teto de linhas que o PostgREST aplica: se a janela de 10 minutos tiver mais linhas que esse teto, os envios do motorista podem ficar fora da página lida e o teto subconta.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 219
+- **Etapas do plano:** 221
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: O valor de `max-rows` do PostgREST no projeto `iecgydonctmabiijadsf` e o volume de `alerts_sent` por janela de 10 minutos. Sem isso, o ponto do teto de página é hipótese; o excesso de tráfego por envio está confirmado pelo código.
 
 #### B-015 — notification_optouts tem chave primária no telefone cru, mas a consulta compara o telefone normalizado
@@ -1432,7 +1445,7 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** A unicidade foi declarada sobre o valor cru (`phone text PRIMARY KEY`) enquanto a semântica do sistema é o valor normalizado por `normalize_br_phone()`. Como a função é IMMUTABLE (:46), dava para ter criado um índice único funcional sobre `normalize_br_phone(phone)` — não foi criado. Consequência dupla: (a) o mesmo número entra duas vezes em formatos diferentes sem o banco reclamar; (b) a comparação é sobre uma expressão, então nenhum índice atende e toda checagem de descadastro varre a tabela inteira.
 - **Arquivos:** `supabase/migrations/20261123200000_optout_and_tracking_end.sql`
-- **Etapas do plano:** 195
+- **Etapas do plano:** 197
 
 #### B-036 — Canal de contingência dispara mesmo quando a mensagem já saiu ou foi barrada por opt-out
 
@@ -1445,7 +1458,7 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** `anyAttempted` é marcado como "tentou" antes de decidir se realmente vai tentar. Quando o único destinatário da configuração já recebeu pelo laço ad-hoc (dedup de `orderRecipientsDelivered`) ou está em opt-out, o resultado é `anyAttempted=true, anySucceeded=false`, que é exatamente a condição de "tudo falhou" que libera o canal de contingência.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 234
+- **Etapas do plano:** 236
 
 #### B-037 — escalate-alerts dispara a mesma escalação uma vez por linha de configuração do tipo, e a escalação não passa por dedup
 
@@ -1458,7 +1471,7 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
   ```
 - **Causa raiz:** `alert_configurations` tem `UNIQUE(alert_type, channel)` (migration 20251224143803:264), ou seja, vários registros por tipo são permitidos. O JOIN sem `DISTINCT` devolve uma linha por configuração; o worker invoca `send-notification` uma vez por linha, e cada invocação já envia para todas as configurações do tipo. Como escalação pula o dedup, nada absorve a repetição.
 - **Arquivos:** `supabase/migrations/20261121193000_fix_escalation_pipeline.sql`, `supabase/functions/escalate-alerts/index.ts`, `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 235
+- **Etapas do plano:** 237
 
 #### B-043 — bitrix24 aceito como fallback_channel pelo banco cai no ramo 'canal não suportado' do despacho
 
@@ -1491,10 +1504,10 @@ O sistema manda mensagem ao motorista e ao fornecedor por vários caminhos (aler
 
 Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a conta no navegador — e baixa só uma parte, porque o servidor corta a resposta (mil linhas por padrão, dez no caso do total de motoristas, cinquenta na fila de aprovações, duas mil na quota) sem avisar que cortou. Além disso, o mesmo indicador foi reescrito em cada tela com regra própria: pontualidade, tempo médio de entrega, motoristas ativos, faixa de risco e até a nota do motorista têm valores diferentes dependendo de onde você olha, e um dos caminhos conta entrega sem prazo como entrega no prazo. Em termos de negócio: nenhum número do painel pode ser usado para decidir.
 
-**18 achado(s) sob esta causa.**
+**17 achado(s) sob esta causa.**
 
 
-#### A-038 — "Total de motoristas" do Analytics vem de uma consulta com limit(10) e nunca passa de 10
+#### A-042 — "Total de motoristas" do Analytics vem de uma consulta com limit(10) e nunca passa de 10
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1505,9 +1518,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** A mesma consulta serve ao ranking "Top Motoristas" (limitada a 10 por design) e ao indicador de total da frota.
 - **Arquivos:** `src/hooks/useAnalyticsData.ts`, `src/pages/AnalyticsDashboardPage.tsx`
-- **Etapas do plano:** 076
+- **Etapas do plano:** 081
 
-#### A-047 — Score de risco do motorista: fórmula e faixas divergem do que está documentado, e mais fatores de risco podem BAIXAR o score
+#### A-052 — Score de risco do motorista: fórmula e faixas divergem do que está documentado, e mais fatores de risco podem BAIXAR o score
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1518,26 +1531,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Não há pesos percentuais: são multiplicadores de 1,0 a 4,0 aplicados a pontuações por faixa, e o total é dividido pelo NÚMERO DE FATORES DISPARADOS. Como só entra no divisor o fator que disparou, acrescentar um fator de risco de peso menor dilui o score. Além disso o fator "recência da última entrega" (15% no documento) não existe no código, e existe um fator "CANCELLATIONS" que o documento não prevê; as faixas de corte são 3/5/8 em vez de 2,5/5/7,5.
 - **Arquivos:** `supabase/functions/evaluate-driver/index.ts`, `docs/agentes/regras-dominio.md`, `docs/pendencias/_regras-de-negocio.md`, `README.md`
-- **Etapas do plano:** 086
+- **Etapas do plano:** 091
 
-#### A-051 — Taxa de pontualidade tem três fórmulas divergentes e conta entrega sem prazo como "no prazo"
-
-- **Camada:** Interface — painéis e relatórios (+ 1 outro(s) local)
-- **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
-- **Impacto no negócio:** A mesma operação aparece com pontualidades diferentes em três telas, e a mais visível (o medidor grande do Dashboard SLA) é a mais otimista — marca 100% "Excelente" num dia sem nenhuma entrega concluída.
-- **Evidência:**
-  ```
-  src/hooks/useSLAMetrics.ts:80-89 e :168-170; src/hooks/useAdvancedReports.ts:334; src/pages/reports/useReportData.ts:100-102 e :110.
-  ```
-  Mesma causa, outro local — Regras de negócio — cálculos:
-  ```
-  src/hooks/useSLAMetrics.ts:80-84 — "const onTimeOrders = completedOrders.filter(o => {\n    if (!o.estimated_delivery || !o.actual_delivery) return true;"; src/hooks/useDashboardStats.ts:91-96 — "// Consider on-time if delivered within estimated time or within 15 min of scheduled\n        if (order.estimated_delivery) { ... } else {\n          if (diffMinutes <= 60) onTimeCount++;"; src/hooks/useAdvancedReports.ts:346-347 — "const onTime = completedRows.filter((r) => (r.delay_minutes || 0) <= 0).length;".
-  ```
-- **Causa raiz:** Três hooks definem o mesmo indicador de formas diferentes: o SLA trata dado faltante como pontual (`return true`) e ainda devolve 100% quando não há entregas concluídas; o Relatório Avançado trata `delay_minutes` nulo como zero (pontual); o Relatório de Entregas exige os dois timestamps (exclui).
-- **Arquivos:** `src/hooks/useAdvancedReports.ts`, `src/hooks/useDashboardStats.ts`, `src/hooks/useSLAMetrics.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/pages/SLADashboardPage.tsx`, `src/pages/reports/useReportData.ts`
-- **Etapas do plano:** 090
-
-#### A-058 — Totais, médias e exportações são calculados no navegador sobre uma página truncada dos dados
+#### A-062 — Totais, médias e exportações são calculados no navegador sobre uma página truncada dos dados
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1548,7 +1544,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Cada painel baixa linhas brutas e agrega em JavaScript. Onde há `.limit()`, a conta é sobre a fatia; onde não há, o PostgREST aplica o teto `db.max-rows` (1000 no padrão do Supabase) e devolve uma fatia sem ordenação definida — em useDeliveryMetrics nem `.order()` existe, então o conjunto muda entre recargas.
 - **Arquivos:** `src/hooks/useDeliveryMetrics.ts`, `src/hooks/useRateLimiting.ts`, `src/pages/AdminTelemetriaPage.tsx`, `src/hooks/useSLOMetrics.ts`, `src/hooks/useErrorLogs.ts`, `src/hooks/useAdvancedReports.ts`, `src/pages/reports/useReportData.ts`, `src/hooks/useMetrics.ts`, `src/hooks/useDeliveryHeatmapData.ts`
-- **Etapas do plano:** 213, 214, 215
+- **Etapas do plano:** 215, 216, 217
 
 #### M-031 — Recalculo de risco no navegador sobrescreve o score da edge com outra matemática e ignora whitelist/blacklist
 
@@ -1561,7 +1557,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Três caminhos escrevem `drivers.risk_score`/`risk_level` com fórmulas diferentes e sem travamento: a edge (fatores ponderados, WEIGHTS em index.ts:86-95), o recálculo do hook de incidentes (base 5 + experiência + taxa de sucesso + nota + soma de severidades) e as ações de whitelist/blacklist (fixos 0 e 10, useApprovalActions.ts:83 e :98). Como o recálculo do hook só lê entregas/nota, ele não conhece `whitelisted`/`blacklisted`/`status`: criar, editar, resolver ou apagar qualquer incidente de um motorista na blacklist rebaixa o score de 10 para o valor da fórmula do cliente (e sobe de 0 no caso do whitelist), mudando também o `risk_level`.
 - **Arquivos:** `src/hooks/useIncidents.ts`, `src/hooks/useApprovalActions.ts`, `supabase/functions/evaluate-driver/index.ts`
-- **Etapas do plano:** 107
+- **Etapas do plano:** 110
 
 #### M-041 — A mesma faixa de risco está escrita com cortes diferentes em quatro lugares
 
@@ -1574,9 +1570,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Os cortes foram copiados à mão em cada componente em vez de virem de uma função única; nenhum deles bate com o documento.
 - **Arquivos:** `supabase/functions/evaluate-driver/index.ts`, `src/components/approvals/SwipeableApprovalCard.tsx`, `src/components/dashboard/ApprovalQueue.tsx`, `docs/agentes/regras-dominio.md`
-- **Etapas do plano:** 117
+- **Etapas do plano:** 120
 
-#### M-059 — "Tempo médio de entrega" calculado com três denominadores diferentes, um deles subestimando a média
+#### M-060 — "Tempo médio de entrega" calculado com três denominadores diferentes, um deles subestimando a média
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1587,9 +1583,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** No Analytics, a soma inclui só pedidos com os dois timestamps mas a divisão usa TODOS os concluídos — cada pedido sem timestamp puxa a média para baixo. Os outros dois hooks dividem pela população correta, e ainda filtram outliers com cortes diferentes (480 min no SLA, 1440 min em useDeliveryMetrics, sem corte no Analytics, que ainda aplica Math.abs e transforma entrega adiantada em atraso).
 - **Arquivos:** `src/hooks/useAnalyticsData.ts`, `src/pages/reports/useReportData.ts`, `src/hooks/useSLAMetrics.ts`, `src/hooks/useDeliveryMetrics.ts`
-- **Etapas do plano:** 135
+- **Etapas do plano:** 139
 
-#### M-081 — Consultas de negócio sem limite nem paginação: o corte silencioso de 1000 linhas do PostgREST falsifica contagens
+#### M-082 — Consultas de negócio sem limite nem paginação: o corte silencioso de 1000 linhas do PostgREST falsifica contagens
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1600,10 +1596,10 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Nenhuma dessas consultas usa `.range()`/`.limit()`. O PostgREST corta a resposta no máximo de linhas configurado (1000 por padrão no Supabase) sem erro, e o cliente trata a fatia como conjunto completo: em useDrivers o mapa de incidentes por motorista é montado só com as primeiras linhas (incidentCount menor que o real) e em usePendingApprovals a média de risco sai da fatia enquanto `pending` vem de um count exato. Os hooks que fazem certo estão no mesmo repo: useContacts.ts:30 `.limit(500)`, useActiveAlerts.ts:22 `.limit(20)`, useRecentOrders.ts:41 `.range(from, to)`.
 - **Arquivos:** `src/hooks/useDrivers.ts`, `src/hooks/useIncidents.ts`, `src/hooks/usePendingApprovals.ts`, `src/components/map/hooks/useTrackingData.ts`
-- **Etapas do plano:** 173, 174, 175
+- **Etapas do plano:** 175, 176, 177
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Sem MCP do banco oficial iecgydonctmabiijadsf não dá para ver quantas linhas existem hoje em `drivers`, `driver_incidents` e `active_tracking`, nem o `db-max-rows` do projeto — o defeito é estrutural, o momento em que ele morde depende do volume atual.
 
-#### M-104 — Fila de aprovações é cortada em 50 itens sem paginação enquanto o contador mostra o total
+#### M-106 — Fila de aprovações é cortada em 50 itens sem paginação enquanto o contador mostra o total
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1614,9 +1610,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** A lista de pendentes traz no máximo 50 registros, ordenados do mais recente para o mais antigo, e não há `.range()` nem controle de página na origem do dado. O cartão de estatísticas usa `count: 'exact'` e mostra o total verdadeiro. Como a ordenação é decrescente, o que fica de fora são justamente as solicitações mais antigas.
 - **Arquivos:** `src/hooks/usePendingApprovals.ts`, `src/pages/ApprovalsPage.tsx`
-- **Etapas do plano:** 220
+- **Etapas do plano:** 222
 
-#### M-112 — Cartoes de estatistica da tela de pedidos misturam total geral com contagem da pagina atual
+#### M-114 — Cartoes de estatistica da tela de pedidos misturam total geral com contagem da pagina atual
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1627,9 +1623,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** `total` vem do `count: 'exact'` da consulta (todos os pedidos), enquanto os outros tres contam dentro do array da pagina corrente, que tem no maximo 20 itens e muda conforme filtro e paginacao.
 - **Arquivos:** `src/pages/OrdersPage.tsx`, `src/hooks/useRecentOrders.ts`
-- **Etapas do plano:** 228
+- **Etapas do plano:** 230
 
-#### M-121 — Cartões de estatística das aprovações de senha contam apenas a lista já filtrada — 'Aprovadas' e 'Rejeitadas' ficam sempre em zero
+#### M-122 — Cartões de estatística das aprovações de senha contam apenas a lista já filtrada — 'Aprovadas' e 'Rejeitadas' ficam sempre em zero
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1642,7 +1638,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
 - **Arquivos:** `src/pages/PasswordResetApprovalsPage.tsx`
 - **Etapas do plano:** 246
 
-#### M-122 — "Motoristas Ativos" conta linhas de rastreamento e de cache, não motoristas distintos
+#### M-124 — "Motoristas Ativos" conta linhas de rastreamento e de cache, não motoristas distintos
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1653,9 +1649,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** active_tracking é única por PEDIDO, não por motorista: um motorista com dois pedidos em curso conta duas vezes. Em CacheStatusPage, "ativos" é quem já entregou alguma vez (sobre no máximo 100 linhas da view, limit em useCachedStats.ts:99). Só useReportData usa Set de driver_id.
 - **Arquivos:** `src/hooks/useSLAMetrics.ts`, `src/hooks/useCachedStats.ts`, `src/pages/reports/useReportData.ts`, `src/pages/SLADashboardPage.tsx`, `src/pages/CacheStatusPage.tsx`
-- **Etapas do plano:** 247
+- **Etapas do plano:** 248
 
-#### M-123 — "Pedidos (7d)" do Cache Status são as 7 linhas mais recentes da view, que podem abranger meses
+#### M-125 — "Pedidos (7d)" do Cache Status são as 7 linhas mais recentes da view, que podem abranger meses
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -1666,9 +1662,9 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** A materialized view só tem linha para dias com movimento; `slice(0,7)` pega as sete linhas mais recentes, não os últimos sete dias. Numa operação com folgas, essas sete linhas podem cobrir semanas.
 - **Arquivos:** `src/hooks/useCachedStats.ts`, `src/pages/CacheStatusPage.tsx`
-- **Etapas do plano:** 248
+- **Etapas do plano:** 249
 
-#### M-126 — Rate Limiting: "Total Requests" conta linhas de log (teto 500) ignorando request_count, e o gráfico "Últimas 24 horas" são os últimos 24 registros
+#### M-128 — Rate Limiting: "Total Requests" conta linhas de log (teto 500) ignorando request_count, e o gráfico "Últimas 24 horas" são os últimos 24 registros
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1679,7 +1675,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Cada linha de rate_limit_logs agrega várias requisições em `request_count`; o KPI conta linhas e o gráfico lê `request_count` — duas definições de "requests" na mesma tela. E o recorte do gráfico é por quantidade de linhas (24), não por tempo.
 - **Arquivos:** `src/hooks/useRateLimiting.ts`, `src/pages/RateLimitDashboardPage.tsx`
-- **Etapas do plano:** 251
+- **Etapas do plano:** 252
 
 #### B-008 — Formatadores de moeda e data reescritos à mão em 12 lugares, com a moeda fixada em BRL em uma das cópias
 
@@ -1692,7 +1688,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** Não existe um módulo de formatação compartilhado em src/lib/ (há src/lib/uapiFormat.ts só para centavos da UAPI e src/lib/statusPalette.ts para cores), então cada tela escreveu a sua.
 - **Arquivos:** `src/hooks/useCachedStats.ts`, `src/components/orders/OrderDetailModal.tsx`, `src/components/dashboard/OrdersTable.tsx`, `src/pages/orders/OrderCard.tsx`, `src/components/admin/telemetry/ContractVersionUsagePanel.tsx`, `src/components/health/CronJobsHealthPanel.tsx`, `src/pages/ProfilePage.tsx`, `src/pages/JobQueuePage.tsx`, `src/pages/Bitrix24Page.tsx`, `src/pages/bitrix24/Bitrix24SubComponents.tsx`
-- **Etapas do plano:** 158, 159
+- **Etapas do plano:** 163
 
 #### B-010 — Painel de quota da Lalamove subnotifica chamadas sem avisar: a janela de 24 h é cortada em 2000 linhas
 
@@ -1705,7 +1701,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** A contagem é feita no cliente sobre uma página de no máximo 2000 registros, em vez de um count agregado no banco; passando desse volume o painel passa a mostrar sempre o teto, sem nenhuma indicação de corte. Pelo mesmo motivo, "chamadas críticas" e as estatísticas por endpoint também ficam limitadas às 2000 mais recentes.
 - **Arquivos:** `src/hooks/useLalamoveQuota.ts`, `src/pages/LalamoveQuotaPage.tsx`
-- **Etapas do plano:** 162
+- **Etapas do plano:** 165
 
 #### B-025 — Cálculo de risco de motorista duplicado: cópia morta no front com pesos diferentes da que roda de verdade na edge evaluate-driver
 
@@ -1718,7 +1714,7 @@ Nenhum indicador é calculado no banco. Cada painel baixa as linhas e faz a cont
   ```
 - **Causa raiz:** A pontuação de risco foi reimplementada na edge (com fatores que o front não tem — LOW_RATING, FIRST_DELIVERY, CRITICAL_INCIDENTS separado) e a versão do front ficou no repo sem ser removida. src/hooks/useEvaluateDriver.ts:58 é quem chama a edge de verdade.
 - **Arquivos:** `src/hooks/useDriverEvaluations.ts`, `src/hooks/useEvaluateDriver.ts`, `supabase/functions/evaluate-driver/index.ts`
-- **Etapas do plano:** 205
+- **Etapas do plano:** 207
 
 #### B-049 — Mesma nota de motorista aparece como 5,0 em uma tela e 0,0 em outra
 
@@ -1741,7 +1737,7 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
 **7 achado(s) sob esta causa.**
 
 
-#### A-016 — Duas telas gravam alert_configurations com canais diferentes e o motor de alertas usa só o alert_type — desligar alerta pode não ter efeito
+#### A-018 — Duas telas gravam alert_configurations com canais diferentes e o motor de alertas usa só o alert_type — desligar alerta pode não ter efeito
 
 - **Camada:** Interface — administração
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1752,9 +1748,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** A tabela tem chave única (alert_type, channel), então existem múltiplas linhas por tipo de alerta. O motor sobrescreve a entrada do mapa a cada linha, ficando com a última que o Postgres devolveu (ordem não garantida). O mesmo acontece na leitura da tela: useAlertSettings.ts:35 faz `.from('alert_configurations').select('*')` sem filtrar canal, então o toggle exibido pode vir de uma linha diferente daquela que o botão Salvar escreve.
 - **Arquivos:** `src/hooks/useAlertSettings.ts`, `src/pages/SettingsPage.tsx`, `src/pages/AlertConfigurationsPage.tsx`, `supabase/functions/check-driver-alerts/index.ts`
-- **Etapas do plano:** 031
+- **Etapas do plano:** 033
 
-#### A-036 — Regras de risco: 5 dos 8 campos oferecidos na tela não existem no avaliador — a regra é salva como Ativa e nunca dispara
+#### A-040 — Regras de risco: 5 dos 8 campos oferecidos na tela não existem no avaliador — a regra é salva como Ativa e nunca dispara
 
 - **Camada:** Interface — administração
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -1765,9 +1761,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** As listas de campos da UI e o `switch` do `evaluateCondition` na edge foram escritas separadamente e divergiram. Só `total_deliveries`, `rating` e `incident_count` existem nos dois lados; os cinco restantes caem no `default: return false`, ou seja, a condição nunca é verdadeira.
 - **Arquivos:** `src/pages/RiskRulesPage.tsx`, `src/pages/RiskRulesPage.dialogs.tsx`, `supabase/functions/evaluate-driver/index.ts`
-- **Etapas do plano:** 074
+- **Etapas do plano:** 079
 
-#### A-045 — Minutos de aviso e de crítico configurados em /alert-configurations não têm efeito nenhum no alerta de motorista parado
+#### A-049 — Minutos de aviso e de crítico configurados em /alert-configurations não têm efeito nenhum no alerta de motorista parado
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1778,9 +1774,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** A configuração é lida (`configs['DRIVER_STOPPED']`, index.ts:76) só para saber se o alerta está ligado; o limiar efetivo vem do campo por pedido `lalamove_orders.stalled_threshold_minutes` ou da constante 5, e o crítico é sempre o dobro do aviso.
 - **Arquivos:** `supabase/functions/check-driver-alerts/index.ts`, `src/hooks/useAlertSettings.ts`, `src/pages/alert-configurations/AlertConfigCard.tsx`
-- **Etapas do plano:** 084
+- **Etapas do plano:** 088
 
-#### A-054 — IP Whitelist e Bloqueio Geográfico são telas de segurança que nenhum código aplica
+#### A-058 — IP Whitelist e Bloqueio Geográfico são telas de segurança que nenhum código aplica
 
 - **Camada:** Interface — administração
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1791,9 +1787,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** As funções de banco `is_ip_whitelisted(inet)` e `is_country_blocked(text)` existem e têm GRANT para service_role (supabase/migrations/20260711184140_78845ae2-2e63-4f1a-a1bc-c8a1bb09f674.sql:6-10), mas nenhuma edge function, policy RLS ou middleware do repo as chama. Não há vercel.json nem middleware.ts com regra de país/IP. A configuração é gravada e nunca consultada em nenhum caminho de autenticação ou request.
 - **Arquivos:** `src/pages/GeoBlockingPage.tsx`, `src/pages/IPWhitelistPage.tsx`, `src/hooks/useRateLimiting.ts`
-- **Etapas do plano:** 139
+- **Etapas do plano:** 143
 
-#### M-043 — Bloqueio e limite por IP no login nunca são acionados — o front sempre envia o IP como indefinido
+#### M-044 — Bloqueio e limite por IP no login nunca são acionados — o front sempre envia o IP como indefinido
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1804,9 +1800,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** As RPCs v2 foram escritas para receber o IP, mas o front (único chamador) não tem como obtê-lo e passa undefined; nenhuma edge faz esse papel. O comentário no próprio código reconhece que o IP viria "server-side quando disponível" — e esse lado nunca foi feito.
 - **Arquivos:** `src/hooks/useLoginLockout.ts`, `supabase/migrations/20260109204414_4f9e55d1-a4a0-41ad-b2c3-e7bc13f39347.sql`, `src/hooks/useRateLimiting.ts`
-- **Etapas do plano:** 119
+- **Etapas do plano:** 123
 
-#### M-070 — Aba Acessibilidade das preferências não aplica nem salva nada
+#### M-072 — Aba Acessibilidade das preferências não aplica nem salva nada
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -1817,9 +1813,9 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** A aba foi construída como estado local puro. Nenhum outro arquivo do projeto conhece essas chaves — `grep -rn "highContrast\|largerText\|focusIndicators\|reducedMotion" src/` só encontra ocorrências dentro desta própria página.
 - **Arquivos:** `src/pages/UserPreferencesPage.tsx`
-- **Etapas do plano:** 149
+- **Etapas do plano:** 154
 
-#### M-072 — Provedor reserva (fallback) do mapa é só exibido, nunca configurável
+#### M-074 — Provedor reserva (fallback) do mapa é só exibido, nunca configurável
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1830,7 +1826,7 @@ Várias telas de ajuste foram construídas, salvam no banco e dão mensagem de s
   ```
 - **Causa raiz:** A matriz de funções recebeu seletor para o provedor principal, mas o da reserva ficou como leitura. Não há nenhum caminho na interface para definir, trocar ou remover o fallback de uma função.
 - **Arquivos:** `src/pages/MapsSettingsPage.tsx`
-- **Etapas do plano:** 151
+- **Etapas do plano:** 156
 
 
 ## Causa raiz: Botão que confirma sucesso sem executar a ação
@@ -1851,9 +1847,9 @@ Elementos de interface foram entregues sem a ação por trás, e alguns ainda av
   ```
 - **Causa raiz:** O fluxo de passkey foi escrito como se houvesse um verificador server-side, mas não há: o cliente grava o challenge direto na tabela (sem `user_id`, e sem sessão para `auth.uid()`), lê `user_passkeys` (cujo SELECT é `TO authenticated USING (auth.uid() = user_id)`, migration 20260315204059:10) e devolve `{ success: true }` sem nunca verificar assinatura nem criar sessão Supabase. Na prática a mutation estoura no primeiro insert; e mesmo se passasse, nenhuma sessão seria criada porque `AuthPage` não passa `onSuccess`.
 - **Arquivos:** `src/hooks/useWebAuthn.ts`, `src/components/auth/PasskeyLoginButton.tsx`, `src/pages/AuthPage.tsx`, `supabase/migrations/20260108144200_f760b5fc-115e-4968-850b-f169eb73680a.sql`
-- **Etapas do plano:** 024
+- **Etapas do plano:** 025
 
-#### A-017 — Formulários de credencial da Lalamove (token UAPI e chaves V3) nunca conseguem salvar — o gateway devolve 501
+#### A-019 — Formulários de credencial da Lalamove (token UAPI e chaves V3) nunca conseguem salvar — o gateway devolve 501
 
 - **Camada:** Interface — administração
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1864,9 +1860,9 @@ Elementos de interface foram entregues sem a ação por trás, e alguns ainda av
   ```
 - **Causa raiz:** O proxy externo foi removido (comentário em lalamove-gateway/index.ts:270: 'quando os secrets não estão definidos (é o caso da produção), a ação é atendida pelas edges locais') e as ações de escrita de credencial foram marcadas como não suportadas, mas as três telas que oferecem esses formulários continuaram no ar. O erro 501 cai no `catch` genérico das páginas e aparece como 'Erro ao atualizar token' / 'Erro ao atualizar credenciais V3', sem dizer que o caminho não existe mais.
 - **Arquivos:** `src/pages/LalamoveSettingsPage.tsx`, `src/pages/UAPISettingsPage.tsx`, `src/lib/lalamove-api.ts`, `src/lib/uapi-proxy.ts`, `supabase/functions/lalamove-gateway/route.ts`
-- **Etapas do plano:** 032
+- **Etapas do plano:** 034
 
-#### A-034 — Botões 'Trajeto' e 'Google' do popup do motorista não fazem nada em produção (listener nunca é anexado)
+#### A-038 — Botões 'Trajeto' e 'Google' do popup do motorista não fazem nada em produção (listener nunca é anexado)
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1877,9 +1873,9 @@ Elementos de interface foram entregues sem a ação por trás, e alguns ainda av
   ```
 - **Causa raiz:** `createDriverPopup` chama `popup.getElement()` logo depois de `new mapboxgl.Popup()` + `setHTML()`, antes de o popup entrar no mapa. No mapbox-gl, `getElement()` devolve `_container`, que só é criado quando o popup é adicionado a um mapa; antes disso é `undefined`. Logo a função cai no `if (!root) return popup;` e os dois `addEventListener` (linhas 328 e 335) nunca rodam. Não existe listener delegado em nenhum outro ponto (verificado: só markerFactories.ts dispara 'show-driver-history' e LiveMap.tsx:343 escuta).
 - **Arquivos:** `src/components/map/markerFactories.ts`, `src/components/map/LiveMap.tsx`, `src/components/map/__tests__/markerFactories.test.ts`
-- **Etapas do plano:** 072
+- **Etapas do plano:** 077
 
-#### M-096 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum
+#### M-098 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1890,9 +1886,9 @@ Elementos de interface foram entregues sem a ação por trás, e alguns ainda av
   ```
 - **Causa raiz:** Botao entregue sem acao. A capacidade existe no projeto (src/utils/exportUtils.ts, usada em src/components/lalamove/UapiStatementPanel.tsx:9 `import { exportToCSV, exportToExcel } from '@/utils/exportUtils';`), so nao foi ligada aqui.
 - **Arquivos:** `src/pages/OrdersPage.tsx`, `src/utils/exportUtils.ts`, `src/components/lalamove/UapiStatementPanel.tsx`
-- **Etapas do plano:** 191
+- **Etapas do plano:** 193
 
-#### M-120 — Botão de renomear dispositivo não pergunta o nome: grava um rótulo automático
+#### M-121 — Botão de renomear dispositivo não pergunta o nome: grava um rótulo automático
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1916,7 +1912,7 @@ Elementos de interface foram entregues sem a ação por trás, e alguns ainda av
   ```
 - **Causa raiz:** `playbackSpeed` é usado no `setInterval` mas não está nas dependências do efeito, então mudar a velocidade não recria o timer: o intervalo continua com o valor vigente quando o play foi acionado, até pausar e dar play de novo.
 - **Arquivos:** `src/components/map/MapHistoryPanel.tsx`
-- **Etapas do plano:** 209
+- **Etapas do plano:** 211
 
 
 ## Causa raiz: Valor de maquete deixado no código e apresentado como medição real
@@ -1926,7 +1922,7 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
 **8 achado(s) sob esta causa.**
 
 
-#### A-039 — Página "Fila de Jobs" não lê a tabela job_queue real; "Processando" e "Tempo Médio" são constantes
+#### A-043 — Página "Fila de Jobs" não lê a tabela job_queue real; "Processando" e "Tempo Médio" são constantes
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1937,9 +1933,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** A fila real existe no banco (job_queue + RPCs mark_job_processing/mark_job_failed/get_next_jobs, usadas pelo job-worker) mas a UI foi escrita sobre proxies (webhook_events, driver_evaluations, bitrix24_sync). Nenhum arquivo de src/ consulta job_queue (`grep -rn "job_queue" src/` só retorna types.ts).
 - **Arquivos:** `src/hooks/useJobQueue.ts`, `src/pages/JobQueuePage.tsx`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261123160000_job_queue_processing_log.sql`
-- **Etapas do plano:** 077
+- **Etapas do plano:** 082
 
-#### A-055 — Dashboard de Analytics mostra variação percentual inventada (+12%, +8%, -3%, -15%) como "vs período anterior"
+#### A-059 — Dashboard de Analytics mostra variação percentual inventada (+12%, +8%, -3%, -15%) como "vs período anterior"
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1950,7 +1946,7 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** Valores de maquete deixados no código. O hook já busca a janela anterior (useAnalyticsData.ts:33-35) e tem `calcChange` (linha 65), mas os quatro cards de topo não o usam, e "Tempo médio" usa -5 fixo.
 - **Arquivos:** `src/pages/AnalyticsDashboardPage.tsx`, `src/hooks/useAnalyticsData.ts`
-- **Etapas do plano:** 140
+- **Etapas do plano:** 144
 
 #### M-042 — Análise preditiva mostra percentual de SLA inventado e nunca encontra motoristas em risco
 
@@ -1963,9 +1959,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** O "compliance" não é calculado, é uma escada de três valores fixos sobre um atraso médio que, em pedidos em andamento, costuma ser zero; e o filtro de risco compara o enum em caixa diferente da gravada.
 - **Arquivos:** `src/hooks/usePredictiveAnalysis.ts`, `src/components/alerts/PredictiveAlerts.tsx`
-- **Etapas do plano:** 118
+- **Etapas do plano:** 121
 
-#### M-066 — Painel de saúde do sistema mostra números inventados e mina um token Mapbox a cada 30 segundos
+#### M-067 — Painel de saúde do sistema mostra números inventados e mina um token Mapbox a cada 30 segundos
 
 - **Camada:** Hooks e estado — auth, permissão e infra (+ 2 outro(s) local)
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -1984,9 +1980,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** O hook mistura três coisas: medidas reais (latência da função, erro do banco), valores de maquete que nunca foram substituídos, e um "ping" implementado em cima do endpoint que entrega a credencial do Mapbox. Além disso `realtime` é inferido de `supabase.getChannels()` — estado do próprio navegador, não do serviço.
 - **Arquivos:** `src/hooks/healthChecks.ts`, `src/hooks/useSystemHealth.ts`, `src/pages/SystemHealthPage.tsx`, `supabase/functions/get-mapbox-token/index.ts`
-- **Etapas do plano:** 145
+- **Etapas do plano:** 149
 
-#### M-069 — Zonas de risco do mapa são polígonos fixos escritos no código, apresentados como informação operacional
+#### M-071 — Zonas de risco do mapa são polígonos fixos escritos no código, apresentados como informação operacional
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -1997,9 +1993,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** `setupMapLayers` cria a source 'risk-zones' com duas features GeoJSON hardcoded em coordenadas fixas de São Paulo e desenha as camadas 'risk-zones-fill'/'risk-zones-outline' (linhas 55-80). Busca em todo o src/ mostra que nenhum código faz `setData` dessa source: as únicas outras referências são os testes (src/components/map/__tests__/mapLayers.test.ts:31,39-40,59) e o posicionamento do overlay raster (mapLayers.ts:306). Ou seja, o dado nunca é substituído por regra real — e o repo tem página de regras de risco própria (/risk-rules em src/App.tsx), desconectada daqui.
 - **Arquivos:** `src/components/map/mapLayers.ts`, `src/components/map/__tests__/mapLayers.test.ts`
-- **Etapas do plano:** 148
+- **Etapas do plano:** 153
 
-#### M-071 — Banner 'Secrets de notificação pendentes' é fixo no código e o botão Configurar não faz nada
+#### M-073 — Banner 'Secrets de notificação pendentes' é fixo no código e o botão Configurar não faz nada
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2010,9 +2006,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** Aviso estático escrito à mão, com um botão decorativo. A página não consulta o estado real dos segredos (EVOLUTION_API_KEY, RESEND_API_KEY, SLACK_WEBHOOK_URL) em nenhum lugar, então o alerta aparece mesmo quando tudo já está configurado, e o único caminho de ação oferecido é morto.
 - **Arquivos:** `src/pages/AlertConfigurationsPage.tsx`
-- **Etapas do plano:** 150
+- **Etapas do plano:** 155
 
-#### M-125 — CSV de Relatórios traz a coluna "Tempo Médio (min)" sempre zerada
+#### M-127 — CSV de Relatórios traz a coluna "Tempo Médio (min)" sempre zerada
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2023,9 +2019,9 @@ Telas foram montadas primeiro com números de exemplo, para mostrar como ficaria
   ```
 - **Causa raiz:** O campo `avgTime` de DailyStats é inicializado em 0 e nunca preenchido; só o CSV o consome.
 - **Arquivos:** `src/pages/reports/useReportData.ts`, `src/pages/ReportsPage.tsx`
-- **Etapas do plano:** 250
+- **Etapas do plano:** 251
 
-#### M-145 — Aba 'Permissões' da tela de Roles mostra todas as permissões como concedidas para qualquer papel
+#### M-147 — Aba 'Permissões' da tela de Roles mostra todas as permissões como concedidas para qualquer papel
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2046,7 +2042,7 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
 **9 achado(s) sob esta causa.**
 
 
-#### A-021 — Job travado volta para PENDING sem incrementar attempts — laço infinito de redispatch, sem limite de tentativas
+#### A-023 — Job travado volta para PENDING sem incrementar attempts — laço infinito de redispatch, sem limite de tentativas
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2057,9 +2053,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** O requeue de PROCESSING travado foi escrito como se `attempts` já tivesse sido incrementado no dispatch. Como o incremento depende do worker responder, todo job cujo HTTP nunca chega ao worker (401, edge fora do ar, timeout, chave do vault ausente) fica com attempts=0 para sempre e a condição de corte `attempts >= max_attempts` nunca é satisfeita.
 - **Arquivos:** `supabase/migrations/20261123160000_job_queue_processing_log.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `docs/JOB_QUEUE_SYSTEM.md`
-- **Etapas do plano:** 058
+- **Etapas do plano:** 061
 
-#### A-031 — `priority-fee` grava a taxa e o histórico sem checar se a Lalamove aceitou
+#### A-035 — `priority-fee` grava a taxa e o histórico sem checar se a Lalamove aceitou
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2070,9 +2066,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** A única condição antes de persistir é `current?.id` (o pedido existir no banco local). `result.error`/`result.status` nunca são consultados, ao contrário dos cases vizinhos `cancel` (:898 `if (!result.error)`) e `change-driver` (:1055 `if (!result.error)`). Quando a Lalamove recusa o aumento (pedido já concluído, fee menor que o atual do lado dela, 4xx de validação), o banco local passa a afirmar um valor que não existe no pedido real — e a validação de aumento monotônico de :980-986 usa justamente `lalamove_orders.priority_fee` como base, então a linha errada bloqueia tentativas legítimas seguintes.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`
-- **Etapas do plano:** 068
+- **Etapas do plano:** 073
 
-#### A-056 — Os quatro crons que chamam edge functions são disparo cego: nada lê a resposta HTTP e o pg_cron marca 'succeeded' mesmo com 401
+#### A-060 — Os quatro crons que chamam edge functions são disparo cego: nada lê a resposta HTTP e o pg_cron marca 'succeeded' mesmo com 401
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2083,9 +2079,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** pg_net é assíncrono: `net.http_post` devolve um id e enfileira; o status real só existe em `net._http_response`. Nenhuma das migrations persiste o request_id nem há rotina que faça o join depois, então toda falha de autenticação, 5xx ou timeout das edges chamadas por cron é invisível, inclusive no painel System Health.
 - **Arquivos:** `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20261123190000_cron_check_driver_alerts.sql`, `supabase/migrations/20260711194632_e6def1eb-1b3c-487f-978f-b0774a8201af.sql`
-- **Etapas do plano:** 167
+- **Etapas do plano:** 170
 
-#### M-077 — lalamove-api e lalamove-uapi chamam a Lalamove sem nenhum timeout, com ate 3 tentativas por chamada
+#### M-079 — lalamove-api e lalamove-uapi chamam a Lalamove sem nenhum timeout, com ate 3 tentativas por chamada
 
 - **Camada:** Backend — edges Lalamove
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2096,9 +2092,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** As duas funcoes mais antigas (std@0.168.0) foram escritas antes do padrao de deadline adotado no gateway e nunca foram alinhadas. Sem `signal`, um upstream que aceita a conexao e nao responde prende a requisicao ate o limite de execucao da plataforma; com retry, o pior caso e multiplicado pelo numero de tentativas. No lalamove-api isso ainda alcanca `fetch-orders-bulk`, que faz ate 50 chamadas em serie (:858-868).
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
-- **Etapas do plano:** 169
+- **Etapas do plano:** 172
 
-#### M-078 — Canais Resend, Slack, Bitrix24, n8n e Evolution fazem fetch sem timeout, em laço sequencial
+#### M-080 — Canais Resend, Slack, Bitrix24, n8n e Evolution fazem fetch sem timeout, em laço sequencial
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2109,9 +2105,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** O timeout foi implementado só nos canais novos (Zapp e SMS, com `DEFAULT_TIMEOUT_MS`). Os cinco canais antigos usam `fetch` nu. Como `dispatch` é chamado com `await` dentro dos laços de destinatário (index.ts:685-729 e 769-967), um provedor pendurado trava a fila inteira até o limite de execução da edge function.
 - **Arquivos:** `supabase/functions/send-notification/index.ts`
-- **Etapas do plano:** 170
+- **Etapas do plano:** 173
 
-#### M-086 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController`
+#### M-088 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController`
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2122,9 +2118,9 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** O repo tem o padrão certo em quatro lugares — `lalamove-gateway/index.ts:305-307` (`AbortController` + `TIMEOUT_MS = 25_000`), `lalamove-token-refresh/index.ts:160-161`, `_shared/channels/zapp.ts:233-234` e `_shared/channels/sms.ts:116-117` — mas ele nunca foi aplicado às chamadas que falam com o terceiro de verdade. Sem `signal`, um provedor que aceita a conexão e não responde prende a invocação até o limite de parede da plataforma, consumindo o tempo de execução e, em `lalamove-api`, multiplicando pelo retry (até 3 tentativas penduradas na mesma invocação).
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/lalamove-api/index.ts`, `/home/user/Lalamove_V2/supabase/functions/lalamove-uapi/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/mapbox.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-gateway/providers/google.ts`, `/home/user/Lalamove_V2/supabase/functions/send-notification/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-sync/index.ts`, `/home/user/Lalamove_V2/supabase/functions/bitrix24-process-queue/index.ts`, `/home/user/Lalamove_V2/supabase/functions/route-analyzer/index.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`
-- **Etapas do plano:** 180, 181
+- **Etapas do plano:** 183
 
-#### M-101 — refresh_geo_jobs enfileira 1 a 2 jobs por rastreio ativo a cada 5 min contra um dispatcher de 10 jobs por minuto
+#### M-103 — refresh_geo_jobs enfileira 1 a 2 jobs por rastreio ativo a cada 5 min contra um dispatcher de 10 jobs por minuto
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2135,10 +2131,10 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** Produtor e consumidor foram dimensionados em migrations diferentes e nunca foram confrontados: o `p_limit` de 10 veio do desenho original da fila de notificações, antes de os jobs geo (eta_refresh/route_plan) passarem a usar a mesma fila.
 - **Arquivos:** `supabase/migrations/20261121194500_geo_jobs_scheduler.sql`, `supabase/migrations/20261122140000_fix_crons_dispatcher.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`
-- **Etapas do plano:** 217
+- **Etapas do plano:** 219
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Volume real de rastreios ativos simultâneos e profundidade atual da fila, que exigem leitura do banco oficial: `select count(*) from active_tracking where tracking_status='ACTIVE'` e `select status, count(*), min(created_at) from job_queue group by 1`.
 
-#### M-119 — Erro do Bitrix24 chega em corpo HTTP 200 e é contado como sucesso em três pontos
+#### M-120 — Erro do Bitrix24 chega em corpo HTTP 200 e é contado como sucesso em três pontos
 
 - **Camada:** Integrações e contratos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2162,7 +2158,7 @@ O padrão em todo o sistema é mandar e seguir adiante. As rotinas automáticas 
   ```
 - **Causa raiz:** A fila é lida e processada sem reserva (claim) nem lease: o status só muda no fim (:229-237). Duas execuções sobrepostas — cron de 1 min com um ciclo que passa de 1 min, ou invocação manual junto do cron — leem as mesmas 10 linhas. O refresh de OAuth também não é serializado: dois refreshes concorrentes com o mesmo `refresh_token` fazem o Bitrix24 invalidar um deles. O padrão correto já existe no repo: `mark_job_processing` em supabase/migrations/20261122120200_job_queue_system.sql:105-112 e o requeue de PROCESSING travado >10 min em 20261122140000_fix_crons_dispatcher.sql:47-59.
 - **Arquivos:** `supabase/functions/bitrix24-process-queue/index.ts`
-- **Etapas do plano:** 197
+- **Etapas do plano:** 199
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Leitura de `bitrix24_activities` na produção (duplicatas por `deal_id`+`subject`+minuto) e a periodicidade real do cron desta função — nenhum MCP desta sessão aponta para o projeto oficial.
 
 
@@ -2173,7 +2169,7 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
 **8 achado(s) sob esta causa.**
 
 
-#### A-035 — Falha do get-mapbox-token deixa o mapa ao vivo travado no spinner, sem mensagem e sem retry
+#### A-039 — Falha do get-mapbox-token deixa o mapa ao vivo travado no spinner, sem mensagem e sem retry
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2184,7 +2180,7 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** Quando `supabase.functions.invoke('get-mapbox-token')` devolve `error` (JWT expirado → 401, ou MAPBOX_ACCESS_TOKEN ausente → 500, ver supabase/functions/get-mapbox-token/index.ts:37-46 e supabase/config.toml:6-7 `verify_jwt = true`), o hook retorna sem setar `error` e sem setar token. O LiveMap só mostra tela de erro quando `error` é string (LiveMap.tsx:393) e o `loading` nunca vira false porque o evento 'load' do Mapbox nunca acontece. Resultado: `error === null` e `mapboxToken === null` = spinner infinito. O hook não tenta novamente (useEffect com `[]`).
 - **Arquivos:** `src/components/map/hooks/useMapboxToken.ts`, `src/components/map/LiveMap.tsx`, `src/components/map/hooks/__tests__/useMapboxToken.test.ts`
-- **Etapas do plano:** 073
+- **Etapas do plano:** 078
 
 #### M-028 — Cada uma das cinco funcoes responde erro num formato diferente, e so um deles o front sabe ler
 
@@ -2197,9 +2193,9 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** A camada de contrato foi adicionada depois e so cobre o caminho de validacao (422). Os erros de regra de negocio, de upstream e de excecao de cada funcao continuaram no formato que cada uma tinha. Como `parseEdgeError` devolve null para `error` do tipo string, todo erro que nao seja 422 de schema cai no texto generico de fallback da tela.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/_shared/contract.ts`, `src/lib/edge-error.ts`
-- **Etapas do plano:** 103
+- **Etapas do plano:** 107
 
-#### M-065 — Falhas de consulta engolidas: contadores da sidebar e contagem de incidentes viram zero sem avisar
+#### M-066 — Falhas de consulta engolidas: contadores da sidebar e contagem de incidentes viram zero sem avisar
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2210,9 +2206,9 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** As três funções de contagem desestruturam só `count` e ignoram `error`; qualquer falha (RLS, rede, timeout) deixa `count` indefinido e o hook publica 0 como dado real. Em useDrivers, a falha ao buscar incidentes é apenas logada e a execução continua, atribuindo 0 incidentes a todos os motoristas — indistinguível de frota sem ocorrência.
 - **Arquivos:** `src/hooks/useSidebarCounts.ts`, `src/hooks/useDrivers.ts`
-- **Etapas do plano:** 144
+- **Etapas do plano:** 148
 
-#### M-073 — Consulta que falha aparece como 'nenhum registro' em tres blocos do detalhe do pedido
+#### M-075 — Consulta que falha aparece como 'nenhum registro' em tres blocos do detalhe do pedido
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2223,9 +2219,9 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** Nos tres casos o estado de erro nao chega a tela: no primeiro a queryFn engole o erro do PostgREST (entao `isError` nunca fica true e a mensagem de falha ja escrita em :867-873 nunca renderiza); nos outros dois a queryFn lanca certo, mas o componente so desestrutura `data`/`isLoading` e trata qualquer ausencia como lista vazia.
 - **Arquivos:** `src/components/orders/OrderDetailModal.tsx`, `src/components/orders/OrderGeoEvents.tsx`, `src/components/orders/StatusTimeline.tsx`
-- **Etapas do plano:** 152
+- **Etapas do plano:** 157
 
-#### M-095 — Falha ao carregar lista vira estado vazio em três telas de segurança e aprovação
+#### M-097 — Falha ao carregar lista vira estado vazio em três telas de segurança e aprovação
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2236,9 +2232,9 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** As três páginas tratam apenas `isLoading` e caem no ramo de lista vazia quando a query falha (erro de rede, RLS negando, token expirado). O repo tem o padrão correto em outras telas do mesmo escopo — WebhooksPage.tsx:120-131 e RiskRulesPage.tsx:155-165 renderizam um bloco de erro dedicado.
 - **Arquivos:** `src/pages/GeoBlockingPage.tsx`, `src/pages/PasswordResetApprovalsPage.tsx`, `src/pages/IPWhitelistPage.tsx`
-- **Etapas do plano:** 190
+- **Etapas do plano:** 192
 
-#### M-128 — Saúde geral cai para "degradado" sem incidente: sistema ocioso e ausência de canais realtime são tratados como falha
+#### M-130 — Saúde geral cai para "degradado" sem incidente: sistema ocioso e ausência de canais realtime são tratados como falha
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2249,9 +2245,9 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** Dois checks confundem "sem atividade" com "com defeito": o de realtime mede canais abertos pela própria aba (a página de saúde não assina nada) e o de cache marca degradado se nenhum pedido foi atualizado nos últimos 5 minutos. Qualquer um dos dois arrasta o status geral para "Partial Degradation".
 - **Arquivos:** `src/hooks/healthChecks.ts`, `src/hooks/useSystemHealth.ts`, `src/pages/SystemHealthExpandedPage.tsx`, `src/pages/SystemHealthPage.tsx`
-- **Etapas do plano:** 253
+- **Etapas do plano:** 254
 
-#### M-129 — Score de Performance mostra 0/100 "Ruim" quando ainda não há métricas e normaliza o resultado pelo que foi coletado
+#### M-131 — Score de Performance mostra 0/100 "Ruim" quando ainda não há métricas e normaliza o resultado pelo que foi coletado
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2262,7 +2258,7 @@ A interface foi escrita tratando só dois casos: carregando e carregou. Quando a
   ```
 - **Causa raiz:** Sem nenhuma métrica, a função devolve 0 e a UI não distingue "sem dados" de "nota zero"; com coleta parcial (INP, por exemplo, só é reportado após interação), o score é normalizado pelo peso do que chegou — uma única métrica boa resulta em "Excelente".
 - **Arquivos:** `src/utils/webVitals.ts`, `src/pages/PerformanceDashboardPage.tsx`
-- **Etapas do plano:** 254
+- **Etapas do plano:** 255
 
 #### B-042 — Erro cru da Lalamove e mensagem interna de excecao voltam para o cliente
 
@@ -2296,9 +2292,9 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** Duas gerações de pipeline de alerta convivem: a antiga (trigger grava em `alerts` e espera que alguém escale) e a nova (produtor chama `add_job('notification', ...)`). Os triggers de segurança ficaram na antiga, e a correção de 21/11 deliberadamente semeou as configurações desabilitadas para não disparar backlog — o resultado combinado é que ninguém é avisado.
 - **Arquivos:** `supabase/migrations/20260723173506_f797adca-6a56-4477-b962-b1a865de6238.sql`, `supabase/migrations/20260723132258_bb348d49-2f3a-458f-885a-327cabee5179.sql`, `supabase/migrations/20261121193000_fix_escalation_pipeline.sql`
-- **Etapas do plano:** 037
+- **Etapas do plano:** 039
 
-#### M-047 — A regra de transição existe, está testada e verde, mas nenhum código de produção a chama — e o P-09 declara o problema obsoleto por causa dela
+#### M-048 — A regra de transição existe, está testada e verde, mas nenhum código de produção a chama — e o P-09 declara o problema obsoleto por causa dela
 
 - **Camada:** Regras de negócio — ciclo de vida
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2309,9 +2305,9 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** O guard foi escrito e coberto por teste unitário, mas nunca foi ligado ao único ponto que muda status (supabase/functions/lalamove-webhook/index.ts:318) — está em src/lib/, que a edge nem importa. Além disso a própria lógica é frouxa: TERMINAL_ORDER_STATUSES (src/types/lalamove.ts:70-75) só lista 'CANCELED' e ORDER_STATUS_RANK (linhas 58-68) não tem 'PENDING' nem 'MATCHED'; quando o posto é `undefined` a função devolve `true` (linha 78), ou seja, mesmo se fosse ligada ela liberaria 'CANCELLED' → 'ON_GOING'. O P-09 fecha a pendência afirmando que a transição é garantida pelo código, o que não se sustenta.
 - **Arquivos:** `src/lib/lalamoveGuards.ts`, `src/types/lalamove.ts`, `src/lib/__tests__/lalamoveCanonical.test.ts`, `docs/pendencias/P-09-transicoes-status-sem-check.md`, `supabase/functions/lalamove-webhook/index.ts`
-- **Etapas do plano:** 123
+- **Etapas do plano:** 127
 
-#### M-064 — Fallback temporizado entre WhatsApp e SMS está escrito e testado, mas nenhum código o usa
+#### M-065 — Fallback temporizado entre WhatsApp e SMS está escrito e testado, mas nenhum código o usa
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2322,9 +2318,9 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** Só o fallback imediato (etapa 91) foi ligado (index.ts:421-445). O fallback por tempo (etapa 90) e a resolução de rota evento×papel (etapa 88) ficaram como função pura sem consumidor, porque dependem de estado de envio que só o ledger `notification_messages` guardaria — e o ledger não existe.
 - **Arquivos:** `supabase/functions/_shared/messaging/router.ts`, `supabase/functions/send-notification/index.ts`, `docs/agentes/mensageria.md`
-- **Etapas do plano:** 143
+- **Etapas do plano:** 147
 
-#### M-076 — Rotinas de retenção e rollup existem mas nunca foram agendadas: logs de erro e uso de contrato crescem sem corte
+#### M-078 — Rotinas de retenção e rollup existem mas nunca foram agendadas: logs de erro e uso de contrato crescem sem corte
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2335,9 +2331,9 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** As migrations que criaram as funções pararam na definição e nos grants; o agendamento foi feito em arquivos separados apenas para parte das rotinas (20260109205309, 20260712202307, 20260713110255, 20260723174804) e essas duas ficaram de fora.
 - **Arquivos:** `supabase/migrations/20260723174310_cda85f06-6820-474f-ba32-909ff8ce703d.sql`, `supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql`, `src/hooks/useContractVersionUsageMonthly.ts`
-- **Etapas do plano:** 168
+- **Etapas do plano:** 171
 
-#### M-100 — Fila do Bitrix24: o trigger enfileira a cada mudança de status, mas nada drena — só um botão manual na tela
+#### M-102 — Fila do Bitrix24: o trigger enfileira a cada mudança de status, mas nada drena — só um botão manual na tela
 
 - **Camada:** Banco — funções, triggers e cron
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2348,9 +2344,9 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** A fila foi desenhada como tabela de estado ('pending') sem produtor de trabalho: o trigger marca, mas a drenagem ficou dependendo de ação humana na página do Bitrix24. Nenhuma migration posterior agendou o processamento.
 - **Arquivos:** `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql`, `src/pages/Bitrix24Page.tsx`, `supabase/functions/bitrix24-process-queue/index.ts`
-- **Etapas do plano:** 216
+- **Etapas do plano:** 218
 
-#### M-141 — Edge geo-admin: rotação do token do Mapbox foi construída, está deployada e nunca roda — nenhum chamador, nenhuma entrada de menu, nenhum agendamento
+#### M-143 — Edge geo-admin: rotação do token do Mapbox foi construída, está deployada e nunca roda — nenhum chamador, nenhuma entrada de menu, nenhum agendamento
 
 - **Camada:** Transversal — código morto e duplicação
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2374,7 +2370,7 @@ Várias peças foram concluídas e deixadas sem o último passo: não existe que
   ```
 - **Causa raiz:** Funcionalidades iniciadas e abandonadas: fila offline (useOfflineStorage), cartão de aprovação por gesto (SwipeableApprovalCard + useApprovalActionsEnhanced, que depende de useAchievementsSystem — também sem uso real), disjuntor de chamadas (circuitBreaker, única implementação do tipo no repo e não plugada em nenhum fetch) e um gerador de relatório que nunca passou de esqueleto.
 - **Arquivos:** `src/components/approvals/SwipeableApprovalCard.tsx`, `src/hooks/useOfflineStorage.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/utils/circuitBreaker.ts`, `src/components/debug/AuditReportGenerator.tsx`, `src/components/ui/hero-metric.tsx`, `src/hooks/useDriverEvaluations.ts`, `src/components/ui/chart.tsx`
-- **Etapas do plano:** 160, 161
+- **Etapas do plano:** 164
 
 #### B-053 — useDriver e useDriverIncidents sem nenhum consumidor (não cobertos pela triagem de órfãos)
 
@@ -2408,7 +2404,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** A protecao da main foi configurada com 7 contextos e os jobs de SQL/integracao foram acrescentados ao ci.yml depois, sem entrar na lista. Os proprios comentarios do ci.yml dizem que esses jobs cobrem o que mais dói — ci.yml:160-163: "O trigger geo_evaluate_tracking e o codigo que decide aproximacao, chegada, avanco de parada e atraso... uma regressao aqui... so apareceria com o motorista na rua".
 - **Arquivos:** `.github/workflows/ci.yml`
-- **Etapas do plano:** 109
+- **Etapas do plano:** 112
 
 #### M-034 — Tres suites Deno existem no repo e nenhum job as executa
 
@@ -2421,7 +2417,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** O ci.yml lista alvos um a um e por diretorio; arquivos novos na raiz de `_shared/` e em functions sem diretorio citado nao entram. O guarda que deveria pegar isso (scripts/ci/check-test-inventory.mjs) nao roda na CI — e, quando rodei, acusou 24 arquivos, dos quais 21 sao falso-positivo: ele nao credita cobertura por `deno test <dir>/`, apesar de scripts/ci/README.md prometer "(ou coberto pelo glob)".
 - **Arquivos:** `.github/workflows/ci.yml`, `supabase/functions/_shared/geo-precision.test.ts`, `supabase/functions/_shared/phone.test.ts`, `supabase/functions/external-db-bridge/index.test.ts`, `scripts/ci/check-test-inventory.mjs`
-- **Etapas do plano:** 110
+- **Etapas do plano:** 113
 
 #### M-039 — Os dois ratchets de tipo têm baseline desatualizado: 17 erros já corrigidos continuam na lista de perdoados e podem voltar com a CI verde
 
@@ -2438,7 +2434,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** Os ratchets só falham com erro NOVO: scripts/ci/typecheck-ratchet.mjs compara por `(arquivo,linha,código)+contextHash` e imprime "OK: nenhum novo erro de tipo foi introduzido" (:355). Dívida corrigida não baixa o baseline sozinha, e ninguém baixou: as 17 entradas foram todas eliminadas (`removidas=17`) e continuam no arquivo, assim como o `baseline: 2` de implicit-any com 0 erros reais.
 - **Arquivos:** `.github/workflows/ci.yml`, `scripts/ci/a11y-button-name-baseline.json`, `scripts/ci/bundle-budget.mjs`, `scripts/ci/implicit-any-baseline.json`, `scripts/ci/implicit-any-ratchet.mjs`, `scripts/ci/typecheck-baseline.json`, `scripts/ci/typecheck-ratchet.mjs`
-- **Etapas do plano:** 115
+- **Etapas do plano:** 118
 - **Divergência entre revisores:** um revisor refutou e outro confirmou: CONFIRMA: Reexecutei os dois scripts agora. `node scripts/ci/typecheck-ratchet.mjs` → 'Typecheck ratchet: baseline=17, atual=1, removidas=17, novas=1' (a única nova é `src/utils/exportUtils.ts(5,23) TS2307 Cannot find module 'xlsx'`). `node scripts/ci/implicit-any-ratchet.mjs` → 'implicit-any errors: 0 (basel || REFUTA: EXECUTADO e REFUTADO no mecanismo. Os fatos de contagem conferem: `node scripts/ci/typecheck-ratchet.mjs` → `Typecheck ratchet: baseline=17, atual=1, removidas=17, novas=1`, e scripts/ci/implicit-any-baseline.json contém só `{ "baseline": 2 }`. Mas a consequência do título — "podem voltar com a CI v
 
 #### M-040 — Toda a camada de edge functions está fora do lint e de qualquer verificação de tipo na CI: 94 arquivos .ts sem análise estática, apesar dos 7 checks obrigatórios
@@ -2452,9 +2448,9 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** O ESLint foi configurado para ignorar a pasta das edges (provavelmente porque elas usam imports de URL e a global `Deno`, que o parser do front não entende) e nunca foi substituído por `deno check`/`deno lint` na CI. O tsconfig do app só inclui `src`. Resultado: nenhum dos 7 checks obrigatórios da main compila as edges.
 - **Arquivos:** `eslint.config.js`, `tsconfig.app.json`, `.github/workflows/ci.yml`, `scripts/ci/implicit-any-ratchet.mjs`
-- **Etapas do plano:** 116
+- **Etapas do plano:** 119
 
-#### M-085 — 24 referencias de GitHub Action por tag mutavel e 2 actions fora da allowlist
+#### M-087 — 24 referencias de GitHub Action por tag mutavel e 2 actions fora da allowlist
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2465,9 +2461,9 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** ci.yml, apply-migrations.yml e deploy-edges.yml ficaram com tags flutuantes enquanto contexto.yml e inventario-estado-semanal.yml foram pinados por SHA. Tag e um ponteiro mutavel: quem controla o repositorio da Action (ou um invasor que comprometa a conta) troca o alvo da tag e passa a executar codigo arbitrario dentro do job — inclusive no job `deploy` de deploy-edges.yml, que tem `SUPABASE_ACCESS_TOKEN` no ambiente. Alem disso `supabase/setup-cli` e `peter-evans/create-pull-request` (inventario-estado-semanal.yml:92) nao constam de scripts/ci/allowed-actions.json, cujos `patterns` listam so `actions/*` e `denoland/setup-deno` — a allowlist esta desatualizada em relacao ao que os workflows realmente usam.
 - **Arquivos:** `.github/workflows/ci.yml`, `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/allowed-actions.json`
-- **Etapas do plano:** 179
+- **Etapas do plano:** 182
 
-#### M-136 — Nenhum dos ~28 guardas de scripts/ci/ roda na CI: o ci.yml executa somente os testes dos guardas
+#### M-138 — Nenhum dos ~28 guardas de scripts/ci/ roda na CI: o ci.yml executa somente os testes dos guardas
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2480,7 +2476,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
 - **Arquivos:** `.github/workflows/ci.yml`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/README.md`, `scripts/ci/check-workflow-pins.mjs`, `scripts/ci/check-test-inventory.mjs`, `scripts/ci/lint-ratchet.mjs`, `scripts/ci/render-workflow-docs.mjs`, `scripts/ci/gerar-matriz-edge-tabela.mjs`, `scripts/ci/bundle-budget.mjs`
 - **Etapas do plano:** 274, 275, 276
 
-#### M-137 — O job security so quebra em vulnerabilidade critica: high passa verde
+#### M-139 — O job security so quebra em vulnerabilidade critica: high passa verde
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2493,7 +2489,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
 - **Arquivos:** `.github/workflows/ci.yml`, `package.json`
 - **Etapas do plano:** 277
 
-#### M-138 — deploy das edge functions em producao nao depende da CI: contract test vermelho nao impede o deploy
+#### M-140 — deploy das edge functions em producao nao depende da CI: contract test vermelho nao impede o deploy
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2506,7 +2502,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
 - **Arquivos:** `.github/workflows/deploy-edges.yml`, `.github/workflows/ci.yml`
 - **Etapas do plano:** 278
 
-#### M-143 — O guard que detecta teste órfão falha hoje (exit 1) e nenhum workflow o executa
+#### M-145 — O guard que detecta teste órfão falha hoje (exit 1) e nenhum workflow o executa
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2519,7 +2515,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
 - **Arquivos:** `scripts/ci/check-test-inventory.mjs`, `.github/workflows/ci.yml`, `supabase/functions/_shared/geo-precision.test.ts`, `supabase/functions/_shared/phone.test.ts`, `supabase/functions/external-db-bridge/index.test.ts`
 - **Etapas do plano:** 283
 
-#### M-144 — Suíte órfã com teste vermelho há tempo indeterminado: baseline congelada de assinaturas realtime não bate mais com o código
+#### M-146 — Suíte órfã com teste vermelho há tempo indeterminado: baseline congelada de assinaturas realtime não bate mais com o código
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2543,7 +2539,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** O mecanismo foi portado pela metade: o verificador de forma e prazo existe, o arquivo de quarentena e a ligação com o Playwright não. Com arquivo ausente o guard sai 0 (scripts/ci/check-quarantine.mjs:55-59 trata ausência como "não é erro"), então nem o aviso chega a lugar nenhum.
 - **Arquivos:** `scripts/ci/check-quarantine.mjs`, `playwright.config.ts`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 163
+- **Etapas do plano:** 166
 
 #### B-012 — Limite de cobertura de 70% em vitest.config.ts é decorativo: o pacote de cobertura não está instalado e nenhum workflow pede cobertura
 
@@ -2556,7 +2552,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** A configuração de cobertura foi escrita mas nunca acompanhada do provedor nem de um passo que a execute. Vitest só aplica `thresholds` quando a cobertura é pedida explicitamente.
 - **Arquivos:** `vitest.config.ts`, `package.json`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 164
+- **Etapas do plano:** 167
 
 #### B-020 — Nenhum job do ci.yml tem timeout nem concurrency
 
@@ -2569,7 +2565,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** O ci.yml e o unico workflow sem as duas travas. Sem `timeout-minutes`, um job travado (webServer do Playwright que nao sobe, psql esperando o service de Postgres) corre ate o limite padrao de 6 horas; sem `concurrency`, dois pushes seguidos na mesma branch rodam os 13 jobs em paralelo em vez de cancelar o run antigo.
 - **Arquivos:** `.github/workflows/ci.yml`
-- **Etapas do plano:** 200
+- **Etapas do plano:** 202
 
 #### B-021 — Os limites de cobertura de 70% do vitest nunca sao aplicados: a CI roda vitest sem --coverage
 
@@ -2582,7 +2578,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** Os thresholds do vitest so sao avaliados quando a coleta de cobertura esta ligada. Sem `--coverage` (ou `coverage.enabled: true`), o bloco inteiro e configuracao morta e o job `test` passa com qualquer cobertura.
 - **Arquivos:** `vitest.config.ts`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 201
+- **Etapas do plano:** 203
 
 #### B-022 — npm run lint nunca pode falhar: todas as regras ruidosas sao warning e o ratchet que conteria a divida esta quebrado
 
@@ -2595,7 +2591,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** Com tudo rebaixado a warning, `eslint .` sai com codigo 0 por construcao — o passo `- run: npm run lint` (ci.yml:19) e decorativo. O mecanismo pensado para segurar o crescimento e scripts/ci/lint-ratchet.mjs contra eslint-baseline.json (533 issues em 139 arquivos), mas ele (a) nao e chamado por workflow nenhum e (b) falha fail-closed: executei e deu EXIT=2 com `ERRO no lint ratchet: O ESLint ou eslint.config.js mudou desde a geracao do baseline`. A causa e a versao: o baseline grava `eslintVersion: 10.10.0` e o instalado e 10.15.0 (o sha do eslint.config.js confere — comparei: 09102ff5... nos dois lados). Como package.json:113 fixa `"eslint": "^10.10.0"`, qualquer bump de minor do eslint rebaixa o guarda a inutil ate alguem regerar o baseline a mao.
 - **Arquivos:** `package.json`, `eslint.config.js`, `scripts/ci/lint-ratchet.mjs`, `scripts/ci/eslint-baseline.json`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 202
+- **Etapas do plano:** 204
 
 #### B-038 — O job deploy do ci.yml so imprime uma frase e aparece como deploy bem-sucedido
 
@@ -2608,7 +2604,7 @@ Os mecanismos de controle foram copiados de outro projeto e nunca ligados de ver
   ```
 - **Causa raiz:** Sobra do deploy antigo pela Lovable. Hoje o deploy de edge e feito por deploy-edges.yml (`supabase functions deploy`) e o do front pela Vercel (projeto lalamove-v2), como AGENTS.md descreve. O job continua no ci.yml verde a cada push na main, chamando-se "Deploy Edge Functions" sem implantar nada.
 - **Arquivos:** `.github/workflows/ci.yml`, `.github/workflows/deploy-edges.yml`
-- **Etapas do plano:** 236
+- **Etapas do plano:** 238
 
 #### B-054 — .lintstagedrc configurado sem lint-staged, husky nem prettier instalados
 
@@ -2645,7 +2641,7 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
 **8 achado(s) sob esta causa.**
 
 
-#### M-053 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum
+#### M-054 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2656,9 +2652,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** O teste do ProtectedRoute foi escrito para cobrir os estados de MFA (loadingAAL, needsMFAVerification, needsMFAEnrollment) e mocka `hasRole`/`hasPermission` sempre como `true`. Com isso os dois ramos de negação (ProtectedRoute.tsx:54-66 para papel e :71-78 para permissão) nunca são executados por nenhum teste. O e2e que deveria cobrir isso (e2e/rbac.e2e.ts:58) pula na CI e não afirma nada sobre papel.
 - **Arquivos:** `src/components/auth/ProtectedRoute.tsx`, `src/components/auth/ProtectedRoute.test.tsx`, `e2e/rbac.e2e.ts`
-- **Etapas do plano:** 129
+- **Etapas do plano:** 133
 
-#### M-054 — Teste e2e obrigatório bate no endpoint real de recuperação de senha, sem interceptar, e só passa no caminho feliz
+#### M-055 — Teste e2e obrigatório bate no endpoint real de recuperação de senha, sem interceptar, e só passa no caminho feliz
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2669,9 +2665,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** O teste depende do Auth real apontado por `VITE_SUPABASE_URL` (passado como secret em .github/workflows/ci.yml:54). Qualquer resposta de erro do backend — limite de envio do Supabase Auth, instabilidade, secret trocado — cai no `catch` da ForgotPasswordPage, a tela de confirmação não aparece e o teste falha por motivo que não tem relação com o PR.
 - **Arquivos:** `e2e/password-reset.e2e.ts`, `src/pages/ForgotPasswordPage.tsx`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 130
+- **Etapas do plano:** 134
 
-#### M-055 — src/__tests__/improvements-validation.test.tsx: 40 testes que não importam uma linha do aplicativo
+#### M-056 — src/__tests__/improvements-validation.test.tsx: 40 testes que não importam uma linha do aplicativo
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2682,9 +2678,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** O arquivo foi escrito como "validação das melhorias recentes" copiando a lógica para dentro do teste em vez de importar de src/lib/roles.ts, src/components/layout/sidebar-config.ts e dos hooks do dashboard. Como nada do app é importado, nenhuma mudança no app pode fazer esses 40 testes falharem.
 - **Arquivos:** `src/__tests__/improvements-validation.test.tsx`
-- **Etapas do plano:** 131
+- **Etapas do plano:** 135
 
-#### M-087 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro
+#### M-089 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2695,9 +2691,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** O lockout foi testado só na camada de interface, com as RPCs interceptadas pelo Playwright. A contagem de tentativas, a janela de bloqueio e a liberação vivem em função SQL que nenhum teste executa. O e2e passaria igual se as duas RPCs fossem apagadas do banco.
 - **Arquivos:** `e2e/login-lockout.e2e.ts`, `supabase/migrations/20260109204414_4f9e55d1-a4a0-41ad-b2c3-e7bc13f39347.sql`, `supabase/migrations/20260715184538_b9d1dde2-5dfd-41f8-87f9-e4017f5a2acf.sql`, `supabase/tests/run.sh`
-- **Etapas do plano:** 182
+- **Etapas do plano:** 184
 
-#### M-088 — O teste de RBAC autenticado passa tanto se o usuário for barrado quanto se ele entrar
+#### M-090 — O teste de RBAC autenticado passa tanto se o usuário for barrado quanto se ele entrar
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2708,9 +2704,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** A única asserção é "não caiu na tela de login". Os dois desfechos opostos — admin entra em /security, ou não-admin é mandado para /unauthorized — satisfazem a asserção. O teste não checa o papel do usuário da sessão nem a URL final, então não verifica a hierarquia que o título promete.
 - **Arquivos:** `e2e/rbac.e2e.ts`
-- **Etapas do plano:** 183
+- **Etapas do plano:** 185
 
-#### M-089 — Webhook da Lalamove: só o HMAC é testado; mapeamento de status, replay e idempotência não têm teste e o arquivo não exporta nada
+#### M-091 — Webhook da Lalamove: só o HMAC é testado; mapeamento de status, replay e idempotência não têm teste e o arquivo não exporta nada
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2721,9 +2717,9 @@ A suíte de testes dá sensação de segurança que ela não entrega. O teste do
   ```
 - **Causa raiz:** A lógica de negócio do webhook vive dentro do `serve()` e de funções não exportadas no index.ts de 989 linhas, então é inalcançável por teste. O que foi extraído para módulo (security.ts, normalize.ts) tem teste bom; o resto não. Daí os dois comportamentos silenciosos: status desconhecido da Lalamove vira `ON_GOING` em vez de erro, e payload sem campo `timestamp` passa pela proteção de replay.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-webhook/security.test.ts`
-- **Etapas do plano:** 184
+- **Etapas do plano:** 186
 
-#### M-142 — Cotação, criação e cancelamento de pedido na edge lalamove-api: nenhuma das 15 ações tem teste, nem a assinatura HMAC que autentica todas elas
+#### M-144 — Cotação, criação e cancelamento de pedido na edge lalamove-api: nenhuma das 15 ações tem teste, nem a assinatura HMAC que autentica todas elas
 
 - **Camada:** Testes
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2757,7 +2753,7 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
 **10 achado(s) sob esta causa.**
 
 
-#### A-029 — Painel de SLA: 5 consultas sem limite a cada 10 s, uma delas inútil, e erro de consulta vira "100% no prazo"
+#### A-033 — Painel de SLA: 5 consultas sem limite a cada 10 s, uma delas inútil, e erro de consulta vira "100% no prazo"
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2768,9 +2764,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** O hook lê cinco tabelas inteiras com `select('*')` a cada 10 s (mais a cada evento realtime das 3 tabelas assinadas) e nenhum dos cinco resultados tem checagem de `error`: todos caem em `|| []` (:68-72). Com lista vazia por falha, `completedOrders.length === 0` e a pontualidade é publicada como 100%. Além disso `driversResult` é buscado e nunca usado, por comentário do próprio código — varredura completa de `drivers` a cada 10 s sem destino.
 - **Arquivos:** `src/hooks/useSLAMetrics.ts`
-- **Etapas do plano:** 066
+- **Etapas do plano:** 071
 
-#### A-042 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer)
+#### A-046 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer)
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2781,9 +2777,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** Cada montagem de useActiveAlerts (Header, AppLayout, MobileBottomNav, AlertsPage, DashboardRedesigned) chama supabase.channel('alerts-consolidated'), que devolve SEMPRE o mesmo objeto de canal, e cada uma adiciona suas próprias ligações `.on('postgres_changes', ...)`. Duas consequências: (a) o handler de INSERT roda uma vez por consumidor montado, repetindo toast, som e invalidação; (b) no cleanup, o primeiro consumidor que desmonta executa `removeChannel` no canal compartilhado e derruba as ligações de todos os outros, que continuam montados e cujos efeitos não rodam de novo — o tempo real morre até que algum componente monte de novo. O mesmo padrão existe em 'sidebar-counts-consolidated' (Sidebar + MobileSidebar) e nos demais tópicos fixos do arquivo.
 - **Arquivos:** `src/hooks/useRealtimeSubscriptions.ts`, `src/hooks/useActiveAlerts.ts`, `src/components/layout/Header.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/MobileBottomNav.tsx`, `src/pages/AlertsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`
-- **Etapas do plano:** 080, 081
+- **Etapas do plano:** 085
 
-#### A-057 — useSidebarCounts.refetchCounts muda de identidade a cada render e recria o canal realtime da sidebar sem parar
+#### A-061 — useSidebarCounts.refetchCounts muda de identidade a cada render e recria o canal realtime da sidebar sem parar
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2794,7 +2790,7 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** O array devolvido por `useQueries` nunca é referencialmente estável, então o `useCallback([results])` produz função nova em todo render. Como o efeito de `useSidebarCountsRealtime` depende dessa função, cada render do Sidebar/MobileSidebar executa `removeChannel` e assina de novo o canal 'sidebar-counts-consolidated'. Combina com o achado anterior: Sidebar e MobileSidebar compartilham o mesmo tópico, então o render de um derruba a assinatura do outro.
 - **Arquivos:** `src/hooks/useSidebarCounts.ts`, `src/components/layout/Sidebar.tsx`, `src/components/layout/MobileSidebar.tsx`, `src/hooks/useRealtimeSubscriptions.ts`
-- **Etapas do plano:** 212
+- **Etapas do plano:** 214
 
 #### M-008 — geo-gateway: todas as chamadas internas (job-worker) compartilham um único balde de 20 req/min, porque o id do usuário cai em "service_role"
 
@@ -2807,9 +2803,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** O balde por usuário foi desenhado para o `sub` do JWT de uma pessoa. Quando o chamador é uma edge interna, o JWT é a service_role, que não tem `sub` — o fallback `payload.role` devolve a string `"service_role"`, então todo o trabalho de fila (geocodificação em lote, cálculo de rota, snap) divide um único balde por função: 20 chamadas por minuto para `route`, 20 para `matrix`, 20 para `snap`, 20 para `geocode`. Pela mesma razão, qualquer caller usando a chave publicável do front cai no balde `"anon"`.
 - **Arquivos:** `supabase/functions/geo-gateway/index.ts`, `supabase/functions/job-worker/index.ts`
-- **Etapas do plano:** 044
+- **Etapas do plano:** 046
 
-#### M-082 — Rastreamento ao vivo refaz a consulta inteira a cada evento de GPS, além do intervalo de 5 s
+#### M-083 — Rastreamento ao vivo refaz a consulta inteira a cada evento de GPS, além do intervalo de 5 s
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2820,9 +2816,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** Cada mudança em qualquer linha de `active_tracking` dispara releitura completa da tabela com dois joins, sem agrupamento nem espera; como o rastreamento grava posição continuamente, N pings geram N varreduras completas — e o setInterval de 5 s faz a mesma varredura de qualquer forma. O payload do evento (`payload.new`) é descartado em vez de atualizar só a linha alterada.
 - **Arquivos:** `src/components/map/hooks/useTrackingData.ts`
-- **Etapas do plano:** 176
+- **Etapas do plano:** 178
 
-#### M-105 — useSLAMetrics recria o canal realtime a cada render (handleUpdate depende do objeto da query)
+#### M-107 — useSLAMetrics recria o canal realtime a cada render (handleUpdate depende do objeto da query)
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2833,9 +2829,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** `query` (retorno de useQuery) é objeto novo a cada render; com `refetchInterval: 10000` (useSLAMetrics.ts:191) o hook renderiza pelo menos a cada 10 s, e cada render troca `handleUpdate`, disparando cleanup + nova assinatura de 'sla-metrics-consolidated' (useRealtimeSubscriptions.ts:412-430). Pior: cada evento realtime chama refetch, que renderiza, que recria o canal — realimentação.
 - **Arquivos:** `src/hooks/useSLAMetrics.ts`, `src/hooks/useRealtimeSubscriptions.ts`
-- **Etapas do plano:** 221
+- **Etapas do plano:** 223
 
-#### M-109 — Cada troca de estilo ou de provedor recria o mapa Mapbox e cobra um novo map load, além de refazer as chamadas de Directions
+#### M-111 — Cada troca de estilo ou de provedor recria o mapa Mapbox e cobra um novo map load, além de refazer as chamadas de Directions
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2846,9 +2842,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** `mapStyle` e `isGoogleActive` estão nas dependências do efeito que instancia o mapa, então clicar nos botões de estilo (LiveMap.tsx:471 `onClick={() => setMapStyle('dark-v11')}` / 481 satélite) ou alternar provedor destrói a instância e cria outra, contabilizando um map load novo a cada clique. Em cascata, `resetMarkers` (useMapMarkers.ts:112-121) limpa o Set `routeLines`, e os pedidos sem `expected_route` voltam a chamar Directions no browser um por um (useMapMarkers.ts:278 `getDirections(waypoints, 'driving-traffic')` → src/hooks/useMapbox.ts:487-493 → geo-gateway), sem cache.
 - **Arquivos:** `src/components/map/LiveMap.tsx`, `src/components/map/hooks/useMapMarkers.ts`, `src/hooks/useMapbox.ts`
-- **Etapas do plano:** 225
+- **Etapas do plano:** 227
 
-#### M-110 — Loop de animação a 60 fps roda sem parar no mapa ao vivo, inclusive sem movimento e com provedor Google ativo
+#### M-112 — Loop de animação a 60 fps roda sem parar no mapa ao vivo, inclusive sem movimento e com provedor Google ativo
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -2859,9 +2855,9 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** O efeito agenda `requestAnimationFrame` em cadeia com deps `[mapRef]` (ref estável), então o loop vive durante toda a permanência na tela. A interpolação usa fator fixo de 5% por frame, que se aproxima do destino mas nunca o alcança, de modo que `setLngLat` é chamado para todo motorista em todo frame — repintura contínua do mapa mesmo quando ninguém se moveu. O hook é chamado incondicionalmente pelo LiveMap (LiveMap.tsx:109-123), inclusive quando o provedor é Google e o mapa Mapbox nem existe.
 - **Arquivos:** `src/components/map/hooks/useMapMarkers.ts`, `src/components/map/LiveMap.tsx`
-- **Etapas do plano:** 226
+- **Etapas do plano:** 228
 
-#### M-111 — Mesma tabela active_tracking consultada por 2 a 3 pollings simultâneos e 2 canais realtime, e o kill-switch documentado não desliga o polling
+#### M-113 — Mesma tabela active_tracking consultada por 2 a 3 pollings simultâneos e 2 canais realtime, e o kill-switch documentado não desliga o polling
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2872,7 +2868,7 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** A página e o componente de mapa fazem fetch independentes da mesma tabela com os mesmos joins, cada um com seu intervalo e seu canal realtime no evento '*'. Quando o provedor ativo é Google, há ainda um terceiro consumidor do hook (src/components/map/GoogleMapsCanvas.tsx:102 `const { trackingData } = useTrackingData(vehicleFilter, statusFilter);`, idem Google3DCanvas.tsx:38), abrindo um segundo canal com o mesmo nome 'active-tracking-changes'. Cada evento de posição dispara um refetch completo em cada consumidor, sem debounce. Além disso o comentário de LiveMapPage.tsx:71-73 e o doc docs/pendencias/P-16-hooks-orfaos-triagem.md:14 dizem que com a flag `realtime_map_updates` desligada o mapa 'cai para polling de 10s em vez de abrir canal Realtime' — mas o `setInterval` da linha 147 é incondicional: com a flag ligada rodam polling E realtime.
 - **Arquivos:** `src/pages/LiveMapPage.tsx`, `src/components/map/hooks/useTrackingData.ts`, `src/components/map/GoogleMapsCanvas.tsx`, `src/components/map/Google3DCanvas.tsx`, `docs/pendencias/P-16-hooks-orfaos-triagem.md`
-- **Etapas do plano:** 227
+- **Etapas do plano:** 229
 
 #### B-013 — Opções 'Grátis' do seletor usam tiles públicos de OSM e Esri direto do servidor de origem
 
@@ -2885,7 +2881,7 @@ O acompanhamento ao vivo e as contagens da barra lateral foram implementados tel
   ```
 - **Causa raiz:** O overlay raster aponta para os servidores públicos de tiles do OpenStreetMap e do ArcGIS Online, sem proxy, sem cache e sem chave — uso que as políticas desses serviços restringem para aplicação comercial e que pode ser limitado ou bloqueado por volume/por referer. Não há nenhum tratamento de falha de tile: se o servidor recusar, o mapa fica cinza (a camada é adicionada em mapLayers.ts:297-318 sem handler de erro).
 - **Arquivos:** `src/components/map/mapLayers.ts`, `src/components/map/MapProviderSelector.tsx`
-- **Etapas do plano:** 165
+- **Etapas do plano:** 168
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Medir o volume real de tiles por sessão e verificar se há bloqueio/throttle em produção (precisa de acesso a log de rede do ambiente publicado); a política de uso de cada fornecedor também deve ser confirmada pelo dono antes de tratar como impedimento.
 
 
@@ -2907,9 +2903,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** banco.md foi corrigido em 2026-11-22 com evidencia nova (o JWT ativo tem `iat` igual ao `created_at` do projeto, 2026-08-02 — logo e a chave original, nao uma chave nova), mas os arquivos de pendencia que repetem a premissa antiga nao foram atualizados. Alem disso P-10 descreve ~12 scripts com chave hardcoded que nao existem mais: a varredura desta auditoria em scripts/ nao achou nenhum segredo real (os unicos matches sao o padrao do detector em scripts/pre-commit-secrets.sh:33 e uma fixture de teste em scripts/ai-context/cenarios.mjs:133).
 - **Arquivos:** `docs/pendencias/P-04-rotacionar-jwt-secret-painel.md`, `docs/pendencias/P-10-scripts-chaves-legacy.md`, `docs/agentes/banco.md`, `docs/pendencias/_ordem.md`
-- **Etapas do plano:** 020
+- **Etapas do plano:** 021
 
-#### A-022 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual
+#### A-024 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual
 
 - **Camada:** Documentação × código
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2920,9 +2916,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** O workflow de apply foi criado depois de banco.md e o doc nunca foi corrigido. Hoje o apply e um workflow_dispatch que alguem precisa disparar com a lista de arquivos; merge em main nao aplica nada. O proprio docs/agentes/pendencias-dono.md:60 ja fala de "o proximo apply-migrations", provando que o fluxo real e outro.
 - **Arquivos:** `docs/agentes/banco.md`, `.github/workflows/apply-migrations.yml`, `docs/agentes/pendencias-dono.md`, `docs/DEPLOYMENT.md`
-- **Etapas do plano:** 059
+- **Etapas do plano:** 062
 
-#### A-023 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main
+#### A-025 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main
 
 - **Camada:** Documentação × código
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -2933,9 +2929,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** deploy.md foi escrito em 2026-11-08 ("Tudo abaixo foi lido em 2026-11-08"), antes do deploy-edges.yml existir, e nunca foi revisitado. A consequencia que o doc tira ("Merge em `main` não garante edge nova em produção") inverteu de sinal: hoje o merge em main que toque supabase/functions/** dispara deploy real na producao.
 - **Arquivos:** `docs/agentes/deploy.md`, `.github/workflows/deploy-edges.yml`, `supabase/config.toml`
-- **Etapas do plano:** 060
+- **Etapas do plano:** 063
 
-#### A-024 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration
+#### A-026 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration
 
 - **Camada:** Documentação × código
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -2946,7 +2942,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** O repo migrou de Lovable para Vercel e os dois documentos de entrada (README e DEPLOYMENT) nunca foram retificados. Tres docs de agente ja reconhecem a defasagem (mapa-repo.md:22, deploy.md:33-37, deploy.md:74), mas nenhum deles corta o elo: banco.md continua apontando para o DEPLOYMENT.md como autoridade do fluxo de DDL, que e exatamente a parte errada do doc.
 - **Arquivos:** `docs/DEPLOYMENT.md`, `README.md`, `docs/agentes/banco.md`, `docs/agentes/deploy.md`
-- **Etapas do plano:** 061
+- **Etapas do plano:** 064
 
 #### M-021 — Contagens de inventario erradas e em cadeia nos docs de agentes: 153/157 migrations contra 191 reais, 4 specs e2e contra 7, 6 rotas com MFA contra 7
 
@@ -2959,7 +2955,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** Os numeros foram escritos a mao em 2026-11-08 e viraram texto fixo em quatro arquivos diferentes. Nenhum guard de CI confere contagem (scripts/ci/check-agents-md-integrity.mjs so verifica secoes obrigatorias e tamanho, nao conteudo), e o inventario automatico que existiria para isso (inventario/estado/*.json, gerado_em 2026-11-08) tambem esta velho: 54 rotas e 26 edges contra 56 e 27 reais.
 - **Arquivos:** `docs/agentes/banco.md`, `docs/agentes/mapa-repo.md`, `docs/agentes/regras-dominio.md`, `docs/pendencias/_linha-de-base.md`, `inventario/estado/rotas.json`, `inventario/estado/edges.json`
-- **Etapas do plano:** 096
+- **Etapas do plano:** 100
 
 #### M-022 — O indice do backlog (docs/pendencias/README.md) nao lista P-14, P-15 e P-16 — inclusive o unico item ativo da fila
 
@@ -2972,7 +2968,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** O README e o indice mantido a mao e tres itens nasceram depois sem entrar na tabela; o status de P-13 foi atualizado em _ordem.md e nao no README. Os dois arquivos sao a mesma fonte para quem chega na pasta e discordam entre si.
 - **Arquivos:** `docs/pendencias/README.md`, `docs/pendencias/_ordem.md`, `docs/pendencias/P-14-analise-correcoes-planejadas.md`, `docs/pendencias/P-15-pipeline-escalonamento-alertas.md`, `docs/pendencias/P-16-hooks-orfaos-triagem.md`
-- **Etapas do plano:** 097
+- **Etapas do plano:** 101
 
 #### M-023 — O procedimento de confirmacao de deploy documentado em deploy.md nao funciona com o acesso desta sessao, e o doc da a CI/build como quebrada enquanto o AGENTS.md a da como verde
 
@@ -2985,7 +2981,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** Os dois docs de agente congelaram o estado de 08/11 e o AGENTS.md foi atualizado em 21/11 sem propagar para eles. Alem disso o unico procedimento de verificacao que deploy.md oferece depende de um escopo de token que a sessao nao tem — o proprio doc ja registra 403/404 em list_deployments e get_project com teamId, mas mesmo assim indica get_deployment por hostname como caminho bom.
 - **Arquivos:** `docs/agentes/deploy.md`, `docs/agentes/github-ci.md`, `AGENTS.md`
-- **Etapas do plano:** 098
+- **Etapas do plano:** 102
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Qual das duas afirmacoes sobre CI/build e a verdadeira: falta ler os runs recentes da main no GitHub Actions e o estado do alias de producao no painel Vercel (o token desta sessao devolve 404 para o hostname e 403 para list_deployments, exatamente o limite que deploy.md:20-26 ja registra).
 
 #### M-024 — github-ci.md declara a main sem branch protection e sem required checks; a API mostra 7 required checks e enforce_admins ligado
@@ -2999,7 +2995,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** A tabela "estado canônico" de github-ci.md foi lida em 2026-11-08 e nunca foi reconciliada depois que a branch protection foi criada. O AGENTS.md ja registra o estado novo ("A `main` tem branch protection com 7 required checks ... o merge é recusado com HTTP 405"), mas github-ci.md — que o proprio AGENTS.md manda ler para detalhe — continua afirmando o contrario, e a regra escrita no doc ("qualquer mudança nos campos abaixo atualiza esta tabela no mesmo PR") foi violada.
 - **Arquivos:** `docs/agentes/github-ci.md`, `AGENTS.md`
-- **Etapas do plano:** 099
+- **Etapas do plano:** 103
 
 #### M-025 — github-ci.md descreve 1 workflow e 8 jobs e afirma que os guards nao estao ligados ao CI; sao 5 workflows, 13 jobs e o guard e required check
 
@@ -3012,7 +3008,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** Mesma defasagem de 2026-11-08. O ci.yml ganhou 5 jobs novos (guard-agents-md, sql-geo-tests, geo-sql-tests, geo-trigger-sql-tests) e o repo ganhou 4 workflows; a tabela de jobs e a frase final do doc nao acompanharam. O nivel do npm audit tambem mudou de high para critical.
 - **Arquivos:** `docs/agentes/github-ci.md`, `.github/workflows/ci.yml`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`
-- **Etapas do plano:** 100
+- **Etapas do plano:** 104
 
 #### M-035 — github-settings-baseline.json afirma que a main nao tem branch protection, e a API diz o contrario — varios workflows repetem a informacao errada
 
@@ -3025,9 +3021,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** O baseline foi medido em 08/11/2026 com um token sem `administration:read` (o proprio arquivo registra o 403) e nunca foi refeito depois que a protecao entrou. Ele e a fonte que o github-settings-guard.mjs compara contra a realidade: do jeito que esta, qualquer execucao acusa divergencia ("mudanca fora de PR") num perimetro que na verdade ficou mais seguro — e, pior, agentes que leem o arquivo e os comentarios dos workflows concluem que podem empurrar codigo sem check.
 - **Arquivos:** `scripts/ci/github-settings-baseline.json`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/README.md`
-- **Etapas do plano:** 111
+- **Etapas do plano:** 114
 
-#### M-062 — AGENTS.md indica a edge mapbox-proxy como o proxy do Mapbox; ela foi removida do repo na etapa 61
+#### M-063 — AGENTS.md indica a edge mapbox-proxy como o proxy do Mapbox; ela foi removida do repo na etapa 61
 
 - **Camada:** Documentação × código
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3038,9 +3034,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** A edge foi apagada do repo e o AGENTS.md, que e o doc de maior autoridade, nao foi atualizado. O codigo ja esta certo: so restam comentarios historicos em useMapbox.ts:57 e useGeoSearch.ts:6.
 - **Arquivos:** `AGENTS.md`, `supabase/config.toml`, `src/hooks/useMapbox.ts`, `supabase/functions/geo-gateway/providers/mapbox.ts`
-- **Etapas do plano:** 141
+- **Etapas do plano:** 145
 
-#### M-063 — pendencias-dono.md apresenta 3 PRs como abertas aguardando decisao do dono; as 3 estao mergeadas na main
+#### M-064 — pendencias-dono.md apresenta 3 PRs como abertas aguardando decisao do dono; as 3 estao mergeadas na main
 
 - **Camada:** Documentação × código
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3051,9 +3047,9 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** A lista de pendencias do dono e mantida a mao ("Ao decidir uma, apague a linha daqui") e as tres PRs foram mergeadas sem que a linha fosse apagada. O item #268 em particular ja nao tem sentido: a colisao de versao foi desfeita — `ls supabase/migrations | grep 1900` mostra 190000, 190001 e 190002, cada um unico.
 - **Arquivos:** `docs/agentes/pendencias-dono.md`
-- **Etapas do plano:** 142
+- **Etapas do plano:** 146
 
-#### M-134 — A linha de base anti-regressao, que as regras da pasta mandam rodar antes e depois de cada fatia, esta desatualizada e se contradiz com _ordem.md
+#### M-136 — A linha de base anti-regressao, que as regras da pasta mandam rodar antes e depois de cada fatia, esta desatualizada e se contradiz com _ordem.md
 
 - **Camada:** Documentação × código
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3066,7 +3062,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
 - **Arquivos:** `docs/pendencias/_linha-de-base.md`, `docs/pendencias/_ordem.md`, `docs/pendencias/README.md`, `docs/pendencias/P-10-scripts-chaves-legacy.md`
 - **Etapas do plano:** 272
 
-#### M-135 — P-15 e P-16 registram a PR #119 como aberta e a main sem o trabalho dela; migration e tela ja estao na main
+#### M-137 — P-15 e P-16 registram a PR #119 como aberta e a main sem o trabalho dela; migration e tela ja estao na main
 
 - **Camada:** Documentação × código
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3090,7 +3086,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** O documento de cron foi escrito a partir dos arquivos de migration, não de `cron.job`, e incluiu agendamentos de um arquivo que o próprio repositório identifica como não aplicado. Se por algum caminho esses jobs existirem no banco, eles falham a cada execução por referenciarem relações inexistentes.
 - **Arquivos:** `docs/CRON_JOBS.md`, `supabase/migrations/20251226020000_create_materialized_views_cache.sql`, `supabase/migrations/20261123110000_cron_refresh_cache_views.sql`, `supabase/migrations/20261122090000_cache_system_backend.sql`
-- **Etapas do plano:** 155
+- **Etapas do plano:** 160
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Acesso de leitura ao banco oficial iecgydonctmabiijadsf (nenhum MCP desta sessão aponta para ele): basta `select jobname, schedule, active from cron.job order by jobname` e `select matviewname from pg_matviews where schemaname='public'` para dizer quais dos quatro jobs de cache realmente existem e contra quais views.
 
 #### B-007 — mapa-repo.md afirma que nenhum doc e gerado por script e que vários scripts tem service_role/PAT no codigo; as duas afirmacoes sao falsas hoje
@@ -3104,7 +3100,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** Dois fatos mudaram depois de 08/11 e o mapa nao acompanhou: nasceram dois workflows que geram documentacao automaticamente, e a PR #80 trocou todos os segredos hardcoded de scripts/ por leitura de process.env (banco.md:71-81 ja registra isso). A pasta scripts/ tambem deixou de ser "30 scripts soltos": sao 182 arquivos, com subpastas organizadas (scripts/ci/ com ~30 guards e README, scripts/inventario/, scripts/ai-context/, scripts/graphify/).
 - **Arquivos:** `docs/agentes/mapa-repo.md`, `.github/workflows/contexto.yml`, `.github/workflows/inventario-estado-semanal.yml`, `scripts/ci/README.md`, `scripts/inventario/README.md`
-- **Etapas do plano:** 157
+- **Etapas do plano:** 162
 
 #### B-024 — `geo-admin` ficou fora do registro de contratos, mas o doc afirma "26 de 26 Edge Functions com entrada validada"
 
@@ -3117,7 +3113,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** A tabela de status e o contador do doc foram escritos quando havia 26 funções; `geo-admin` entrou depois (rotação do token de servidor Mapbox via Tokens API) e nunca foi adicionada ao `CONTRACT_REGISTRY` nem às fixtures. O teste que "falha se o registro deixar de cobrir 26 contratos" não protege contra isso: ele trava o número 26, então uma função nova fora do registro continua passando. Resultado: a única edge que cunha e revoga credenciais de faturamento valida a entrada à mão (sem Zod, sem o 422 do formato único) e `body.action` segue como string livre comparada por igualdade em :117.
 - **Arquivos:** `/home/user/Lalamove_V2/supabase/functions/_shared/schemas.ts`, `/home/user/Lalamove_V2/supabase/functions/geo-admin/index.ts`, `/home/user/Lalamove_V2/docs/API_CONTRACTS.md`
-- **Etapas do plano:** 204
+- **Etapas do plano:** 206
 
 #### B-039 — Dois pares de crons agendam a mesma rotina com nomes diferentes, e o documento descreve cada par como rotinas distintas
 
@@ -3130,7 +3126,7 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
   ```
 - **Causa raiz:** A migration de 12/07 agendou "as rotinas que existiam sem cron job associado" (20260712202307:1) sem verificar que a de 09/01 já as havia agendado com outro nome; o `cron.unschedule` de cada arquivo só protege contra o próprio nome.
 - **Arquivos:** `supabase/migrations/20260109205309_5747a020-5d75-4401-a623-b5688143f754.sql`, `supabase/migrations/20260712202307_d4575c89-bdd8-439f-92bc-3d5524309049.sql`, `docs/CRON_JOBS.md`
-- **Etapas do plano:** 258
+- **Etapas do plano:** 259
 
 #### B-050 — docs/DATA_DICTIONARY.md diverge do schema em cinco pontos, inclusive na escala do score de risco
 
@@ -3176,10 +3172,27 @@ Os documentos que orientam qualquer agente de IA (e o dono) foram escritos numa 
 
 Os elementos do mapa e dos painéis foram criados supondo uma tela estática. Quando o pedido sai do acompanhamento, o marcador é removido mas o traçado da rota fica desenhado para sempre; a cada ciclo de atualização o balão de informações do motorista é recriado e fecha sozinho na cara do operador; abrir o painel de configurações do mapa recarrega os valores padrão e apaga os limites que o operador acabou de ajustar; e ao abrir o histórico de dois motoristas em sequência, a resposta atrasada do primeiro sobrescreve a do segundo. São falhas de limpeza e de ordem, não de cálculo: o que a tela mostra deixa de corresponder ao que está acontecendo.
 
-**3 achado(s) sob esta causa.**
+**4 achado(s) sob esta causa.**
 
 
-#### M-068 — Traçado de rota fica no mapa para sempre depois que o pedido sai do rastreamento
+#### M-069 — Abrir o painel de configurações do mapa zera os limiares de alerta que o operador acabou de ajustar
+
+- **Camada:** Interface — mapa e rastreamento (+ 1 outro(s) local)
+- **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** O operador ajusta os limites de 'fora de rota', 'parado' e cerca do mapa, fecha o painel e, ao reabrir, tudo volta ao padrão — os alertas do mapa passam a usar valores que ninguém escolheu.
+- **Evidência:**
+  ```
+  src/components/map/MapSettingsPanel.tsx:34-39 `useEffect(() => {` / `if (show && activeContext) {` / ... / `await loadContextSettings(activeContext);`; src/hooks/useMapSettings.ts:107-110 `} else {` / `// Fallback to defaults if no specific context found` / `get().resetToDefaults();` / `}`; useMapSettings.ts:119-123 `resetToDefaults: () => set({ offRouteThreshold: 500, ... })`
+  ```
+  Mesma causa, outro local — Hooks e estado — auth, permissão e infra:
+  ```
+  src/hooks/useMapSettings.ts:107-110 `} else { // Fallback to defaults if no specific context found` / `get().resetToDefaults(); }` · :119-123 `resetToDefaults: () => set({ offRouteThreshold: 500, stoppedThreshold: 15, geofenceRadius: 300, })` || src/components/map/MapSettingsPanel.tsx:34-39 `useEffect(() => { if (show && activeContext) { ... await loadContextSettings(activeContext);` || src/components/map/LiveMap.tsx:559 `<MapSettingsPanel show={showSettings} onClose={() => setShowSettings(false)} />` (sem activeContext → sempre 'default')
+  ```
+- **Causa raiz:** O painel chama `loadContextSettings('default')` toda vez que abre (`activeContext` tem default 'default', MapSettingsPanel.tsx:15). Se não existe linha salva em `map_settings_overrides` para esse contexto — o caso normal, porque salvar depende de o usuário clicar em Salvar (linha 53) — o store executa `resetToDefaults()` e sobrescreve offRouteThreshold/stoppedThreshold/geofenceRadius com 500/15/300, descartando o que estava persistido no localStorage pelo zustand (useMapSettings.ts:43-50, 119-123). O mesmo reset acontece no `catch` (linha 114).
+- **Arquivos:** `src/components/map/LiveMap.tsx`, `src/components/map/MapSettingsPanel.tsx`, `src/hooks/useMapSettings.ts`
+- **Etapas do plano:** 151
+
+#### M-070 — Traçado de rota fica no mapa para sempre depois que o pedido sai do rastreamento
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3190,9 +3203,9 @@ Os elementos do mapa e dos painéis foram criados supondo uma tela estática. Qu
   ```
 - **Causa raiz:** A reconciliação remove marcador e posição do motorista que saiu de `trackingData`, mas não remove a source/layer `route-<id>` nem o id do Set `routeLines`. Busca no diretório confirma que não existe nenhum `removeLayer`/`removeSource` para ids `route-` (só geofence, overlay raster e a linha de histórico são removidos: mapLayers.ts:291-292, LiveMap.tsx:199-201, LiveMap.tsx:349-350). `resetMarkers` (useMapMarkers.ts:112-121) limpa refs mas não apaga as camadas do mapa.
 - **Arquivos:** `src/components/map/hooks/useMapMarkers.ts`
-- **Etapas do plano:** 147
+- **Etapas do plano:** 152
 
-#### M-106 — useTrackingHistory sem proteção contra resposta atrasada: histórico de um motorista pode sobrescrever o de outro
+#### M-108 — useTrackingHistory sem proteção contra resposta atrasada: histórico de um motorista pode sobrescrever o de outro
 
 - **Camada:** Hooks e estado — dados de negócio
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3203,9 +3216,9 @@ Os elementos do mapa e dos painéis foram criados supondo uma tela estática. Qu
   ```
 - **Causa raiz:** `fetchHistory` é chamado a cada evento `show-driver-history` vindo do mapa, sem cancelar nem marcar como obsoleta a chamada anterior. Abrindo o histórico do motorista A e logo depois o do B, a resposta de A (até 200 pontos de `tracking_events`) pode chegar por último e sobrescrever `history`, deixando o painel com o nome de B e o trajeto de A. O hook vizinho já resolve isso: src/components/map/hooks/useTrackingData.ts:51 `let cancelled = false;` com `if (cancelled) return;` antes do setState.
 - **Arquivos:** `src/hooks/useTrackingHistory.ts`, `src/components/map/LiveMap.tsx`
-- **Etapas do plano:** 222
+- **Etapas do plano:** 224
 
-#### M-108 — Balão de informações do motorista fecha sozinho a cada ciclo de atualização
+#### M-110 — Balão de informações do motorista fecha sozinho a cada ciclo de atualização
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3216,7 +3229,7 @@ Os elementos do mapa e dos painéis foram criados supondo uma tela estática. Qu
   ```
 - **Causa raiz:** O código troca o popup justamente quando ele está aberto, para atualizar os dados. Mas `Marker.setPopup` do mapbox-gl remove o popup atual (fecha) e associa o novo fechado — não há reabertura. Como `trackingData` é refeito a cada 5 s (useTrackingData.ts:102) e a cada evento realtime, o balão que o operador está lendo fecha nesse intervalo.
 - **Arquivos:** `src/components/map/hooks/useMapMarkers.ts`
-- **Etapas do plano:** 224
+- **Etapas do plano:** 226
 
 
 ## Causa raiz: A coordenada do endereço não acompanha o endereço escolhido no pedido
@@ -3226,7 +3239,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **2 achado(s) sob esta causa.**
 
 
-#### A-059 — Buscar o endereco pelo CEP depois de escolher no autocomplete deixa a coordenada antiga: a cotacao vai com o ponto do endereco anterior
+#### A-063 — Buscar o endereco pelo CEP depois de escolher no autocomplete deixa a coordenada antiga: a cotacao vai com o ponto do endereco anterior
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3237,9 +3250,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A limpeza da coordenada esta so no onChange do AddressAutocomplete. O CepQuickFill escreve o endereco direto via updateField (mesmo caminho nas duas pontas: :642-646 coleta e :709-713 entrega), entao o texto muda e `pickupGeo`/`deliveryGeo` continuam apontando para o endereco escolhido antes.
 - **Arquivos:** `src/components/orders/NewOrderDialog.tsx`, `src/components/orders/CepQuickFill.tsx`
-- **Etapas do plano:** 237
+- **Etapas do plano:** 239
 
-#### M-113 — Endereco escolhido no CRM ou em 'Ja usados' entra no pedido sem a coordenada que o sistema ja tinha gravada
+#### M-115 — Endereco escolhido no CRM ou em 'Ja usados' entra no pedido sem a coordenada que o sistema ja tinha gravada
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3250,7 +3263,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Somente `handleSelectMapbox` chama `onAddressSelected` (:145), que e o unico canal que o formulario de pedido escuta. Como o dialogo nao passa `onSelectMapbox`/`onCoordinatesChange`, o bloco condicional de `handleSelectFrequent` nunca executa e a latitude/longitude ja armazenada do endereco frequente e descartada; a selecao no CRM nunca teve canal nenhum.
 - **Arquivos:** `src/components/orders/AddressAutocomplete.tsx`, `src/components/orders/NewOrderDialog.tsx`
-- **Etapas do plano:** 229
+- **Etapas do plano:** 231
 
 
 ## Backend — demais edges
@@ -3274,8 +3287,29 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 
 ## Backend — edges Lalamove
 
-**5 achado(s).**
+**6 achado(s).**
 
+
+#### C-006 — requireAdmin da lalamove-uapi aceita papel escrito pelo proprio usuario (escalonamento) e nunca reconhece o admin de verdade
+
+- **Camada:** Backend — edges Lalamove (+ 2 outro(s) local)
+- **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
+- **Impacto no negócio:** Dois estragos ao mesmo tempo. Qualquer pessoa com login consegue, mudando um dado do proprio perfil, sobrescrever a sessao do portal Lalamove da empresa — derrubando carteira, historico e cupons de todos — e ler os metadados do token. E o administrador legitimo nao consegue trocar o token quando ele expira, o que transforma uma tarefa de 1 minuto em incidente.
+- **Evidência:**
+  ```
+  supabase/functions/lalamove-uapi/index.ts:87-89; supabase/functions/external-companies/index.ts:43-48; nenhuma escrita de app_metadata em todo o repo (grep em supabase/migrations/, supabase/functions/, src/); fonte real do papel em supabase/migrations/20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql:137-149 (has_role com is_active).
+  ```
+  Mesma causa, outro local — Transversal — segurança:
+  ```
+  supabase/functions/lalamove-uapi/index.ts:87 — 'const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;' seguido de :88 'if (role !== \'admin\') {' → 403. Mesma linha em supabase/functions/external-companies/index.ts:43, seguida de :44-45 'const level = ROLE_PRIORITY[role] ?? 0; if (level < ROLE_PRIORITY.operator) {'. Prova da gravabilidade: src/pages/ProfilePage.tsx:77-79 'await supabase.auth.updateUser({ data: { full_name: trimmedName, name: trimmedName } })'.
+  ```
+  Mesma causa, outro local — Backend — demais edges:
+  ```
+  supabase/functions/external-companies/index.ts:43-47 — `const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role; const level = ROLE_PRIORITY[role] ?? 0; if (level < ROLE_PRIORITY.operator) { ... 403 ... }`; supabase/functions/lalamove-uapi/index.ts:87-89 — mesma leitura com `if (role !== 'admin')`. Gate correto já no repo: supabase/functions/geo-admin/index.ts:74-83.
+  ```
+- **Causa raiz:** O check le o papel de claims do JWT. `app_metadata` nunca e populado por nenhuma migration, funcao ou trigger deste repo, entao o primeiro termo e sempre `undefined` e o fallback assume: `user_metadata` (raw_user_meta_data), que o proprio usuario grava do navegador com `supabase.auth.updateUser({ data: { role: 'admin' } })` e que entra no token no refresh seguinte. Resultado duplo: quem nao e admin consegue virar admin aos olhos da funcao, e quem e admin de fato (linha em user_roles) e barrado com 403.
+- **Arquivos:** `src/hooks/usePermissions.ts`, `src/hooks/useRole.ts`, `supabase/functions/external-companies/index.ts`, `supabase/functions/lalamove-uapi/index.ts`
+- **Etapas do plano:** 011
 
 #### M-012 — O webhook grava no banco antes de qualquer autenticacao valida, com limite de requisicoes guardado so na memoria do processo e sem politica de retencao
 
@@ -3288,7 +3322,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A funcao e publica por necessidade (`verify_jwt = false` no config.toml, correto para webhook) e a autenticidade e garantida pela assinatura — mas a escrita de auditoria acontece ANTES de o remetente ter provado qualquer coisa, com service_role. As duas contencoes que existiriam nao contem: o Map vive no isolate (reinicia a cada cold start e nao e compartilhado entre instancias) e a chave e um cabecalho que o cliente escolhe. Sem retencao, cada requisicao recusada deixa residuo permanente de ate 1000 caracteres.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/config.toml`
-- **Etapas do plano:** 048
+- **Etapas do plano:** 050
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Nao tenho acesso ao banco de producao (nenhum MCP desta sessao aponta para iecgydonctmabiijadsf): falta `select count(*), min(created_at) from webhook_events where event_type = 'SIGNATURE_INVALID'` para saber se ja existe acumulo real, e a contagem total da tabela para dimensionar o custo.
 
 #### M-013 — lalamove-gateway deixa o chamador sobrescrever a action roteada via params, furando a propria lista branca de acoes
@@ -3302,7 +3336,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A action de destino e escrita na query string antes do loop que copia os `params` do chamador, e `URLSearchParams.set` substitui. Com `{"action":"cities","params":{"action":"set-webhook"}}` o gateway acredita ter roteado para `cities` (telemetria, alertas e logs registram 'cities') mas a URL final chama `set-webhook` na lalamove-api. Isso anula tudo que a tabela de rotas tenta impedir: as acoes marcadas `unsupported` (route.ts:113-140 — passagem generica v3/uapi e escrita de credencial) e as acoes de lalamove-api que nem estao na tabela (set-webhook, edit-order, change-driver, fetch-orders-bulk, webhook-selftest, priority-fee).
 - **Arquivos:** `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-gateway/route.ts`
-- **Etapas do plano:** 049
+- **Etapas do plano:** 051
 
 #### M-027 — A troca de motorista tenta gravar o historico em colunas que nao existem (lalamove_id, changed_at) e sem order_id, que e NOT NULL
 
@@ -3315,9 +3349,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O insert foi escrito com o vocabulario de outra tabela (lalamove_orders usa lalamove_id). Sao tres erros na mesma chamada: coluna inexistente `lalamove_id`, coluna inexistente `changed_at` e ausencia de `order_id`, que e NOT NULL. O PostgREST recusa o insert, e como o retorno nao e verificado (diferente do resto do arquivo), a falha e invisivel. Compare com o webhook, que faz o insert correto em lalamove-webhook/index.ts:327-330 usando `order_id`, `old_status` e `change_reason`.
 - **Arquivos:** `supabase/functions/lalamove-api/index.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql`
-- **Etapas do plano:** 102
+- **Etapas do plano:** 106
 
-#### M-116 — Prova de entrega sem stopIndex sobrescreve TODAS as paradas do pedido com a mesma imagem e o mesmo status
+#### M-118 — Prova de entrega sem stopIndex sobrescreve TODAS as paradas do pedido com a mesma imagem e o mesmo status
 
 - **Camada:** Backend — edges Lalamove
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -3328,7 +3362,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Quando `stopIndex` nao vem como numero no payload (ausente, string, ou so `stopId`), o filtro por parada simplesmente nao e aplicado e o UPDATE passa a valer para o pedido inteiro. O handler ate tem o `stopId` em maos (:673) mas nunca o usa para localizar a parada — e a coluna existe no banco desde migrations/20261122120100_lalamove_integration_columns.sql:51-52 (`ADD COLUMN IF NOT EXISTS stop_id text`). Note o contraste com POP_STATUS_CHANGED, que usa default 0 (:737) em vez de null — as duas escolhas estao erradas de jeitos diferentes.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`
-- **Etapas do plano:** 241
+- **Etapas do plano:** 242
 
 #### B-016 — CORS: a configuracao de origens so respeita a primeira da lista, e duas das cinco funcoes liberam qualquer origem de forma fixa
 
@@ -3341,7 +3375,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A leitura da variavel pega apenas o indice 0 em vez de comparar com o `Origin` da requisicao, entao configurar duas origens (producao + preview da Vercel, por exemplo) faz a segunda falhar silenciosamente no navegador. E se `ALLOWED_ORIGINS` nao estiver definida, o default e `*`. Nas duas funcoes que usam o helper do supabase-js nao ha configuracao nenhuma: e `*` sempre.
 - **Arquivos:** `supabase/functions/lalamove-webhook/index.ts`, `supabase/functions/lalamove-api/index.ts`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-gateway/index.ts`, `supabase/functions/lalamove-token-refresh/index.ts`, `supabase/functions/_shared/cors.ts`
-- **Etapas do plano:** 196
+- **Etapas do plano:** 198
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Nao consigo listar os secrets do projeto de producao (nenhum MCP aponta para iecgydonctmabiijadsf), entao nao sei se `ALLOWED_ORIGINS` esta definida hoje nem com quantas origens — se tiver uma so, o efeito pratico atual e nulo e o achado e so de acabamento.
 
 
@@ -3350,7 +3384,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **1 achado(s).**
 
 
-#### A-041 — A edge `new-device-alert` publicada responde 500 em vez de 422 — o alerta de login em dispositivo novo não é enviado
+#### A-045 — A edge `new-device-alert` publicada responde 500 em vez de 422 — o alerta de login em dispositivo novo não é enviado
 
 - **Camada:** Backend — notificação e fila
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3361,7 +3395,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O cliente do serviço de e-mail é construído no topo do `try`, antes de qualquer validação. Se `RESEND_API_KEY` estiver ausente ou inválida em produção, o construtor lança e TODA requisição cai no `catch` genérico, que responde 500 — inclusive as válidas. É a única edge do repo que constrói esse cliente (`grep -rn "new Resend("` → 1 ocorrência).
 - **Arquivos:** `supabase/functions/new-device-alert/index.ts`
-- **Etapas do plano:** 079
+- **Etapas do plano:** 084
 
 
 ## Banco — RLS e autorização
@@ -3380,7 +3414,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A policy de INSERT foi desenhada para um fluxo em que o usuário logado pede o reset do próprio e-mail, mas a tela de "esqueci minha senha" roda sem login e foi implementada com `resetPasswordForEmail` do Supabase Auth, que não escreve nessa tabela. Nenhuma edge function grava nela. Resultado: a condição da policy é insatisfazível no fluxo real e a fila nunca recebe linhas.
 - **Arquivos:** `supabase/migrations/20260315151153_789547cf-e79d-4291-8123-61567f7973e1.sql`, `src/pages/ForgotPasswordPage.tsx`, `src/pages/PasswordResetApprovalsPage.tsx`, `src/hooks/usePasswordResetActions.ts`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`
-- **Etapas do plano:** 038
+- **Etapas do plano:** 040
 
 
 ## Banco — integridade e índices
@@ -3399,7 +3433,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Constraint UNIQUE já cria um índice próprio (`<tabela>_<coluna>_key`), e um índice composto atende todas as consultas que usam só a primeira coluna. Nos cinco casos foi criado um índice extra sobre a mesma chave, em migrations diferentes, sem dropar o anterior — nos casos (3) e (4) a migration nova veio justamente para substituir a antiga e esqueceu o DROP.
 - **Arquivos:** `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`, `supabase/migrations/20251224181603_0ace1e1d-c3a8-4569-b3ec-02bdee6d54c9.sql`, `supabase/migrations/20260723172904_f9756817-8a17-405c-98a6-c5f8b344caa2.sql`, `supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql`, `supabase/migrations/20260723130425_76481d2c-7b89-4ed7-9e3c-b89a98051ac3.sql`
-- **Etapas do plano:** 230
+- **Etapas do plano:** 232
 
 #### B-033 — Trigger de auditoria da configuração de mapas grava resource_id aleatório porque a coluna é uuid NOT NULL
 
@@ -3412,7 +3446,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** audit_log foi modelada supondo que todo recurso auditável tem id UUID. Como geo_settings/geo_budget/geo_defaults são chaveadas por texto, o trigger não tem UUID para informar e, por causa do NOT NULL, inventa um com gen_random_uuid() a cada linha. A identificação do recurso sobra apenas dentro do JSON de `changes`.
 - **Arquivos:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/migrations/20261121192500_restore_audit_log.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`
-- **Etapas do plano:** 231
+- **Etapas do plano:** 233
 
 #### B-040 — Nove chaves estrangeiras para auth.users sem ON DELETE — apagar um usuário falha
 
@@ -3425,13 +3459,30 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Sem cláusula explícita o Postgres assume NO ACTION: a exclusão da linha referenciada é recusada enquanto houver referência. Como essas colunas registram quem fez o quê (log de sistema, auditoria, quem mudou a configuração de mapa, quem enfileirou job), todo usuário que já agiu no sistema acumula referências e passa a ser indeletável.
 - **Arquivos:** `supabase/migrations/20251226000001_create_system_logs.sql`, `supabase/migrations/20251226000002_create_audit_log.sql`, `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql`, `supabase/migrations/20261122120100_lalamove_integration_columns.sql`, `supabase/migrations/20261122120200_job_queue_system.sql`, `supabase/migrations/20261122130100_geo_foundation.sql`
-- **Etapas do plano:** 259, 260
+- **Etapas do plano:** 260
 
 
 ## Documentação × código
 
-**3 achado(s).**
+**4 achado(s).**
 
+
+#### A-027 — mensageria.md manda o plantao olhar o ledger notification_messages e a edge zapp-callback; nenhum dos dois existe no repo
+
+- **Camada:** Documentação × código (+ 1 outro(s) local)
+- **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
+- **Impacto no negócio:** Em incidente de mensageria, quem esta de plantao vai procurar as mensagens enviadas numa tabela que nao existe e vai olhar o log de uma funcao que nunca foi criada, concluindo "o provedor esta fora" quando na verdade nao existe caminho de retorno nenhum: nenhuma resposta de motorista e nenhum status entregue/lido chega ao sistema hoje.
+- **Evidência:**
+  ```
+  docs/agentes/mensageria.md:13-17 e :43-47 contra: ausencia do diretorio supabase/functions/zapp-callback; zero CREATE TABLE notification_messages em supabase/migrations/ e inexistencia de 20261125120000_* (ultima = 20261124120000_internal_alert_channels.sql); supabase/functions/send-notification/index.ts:597 (comentario "o ledger novo (etapa 73) ainda nao esta em uso"), :649 e :1058 (`.from("alerts_sent")`); supabase/functions/_shared/messaging/inbound-actions.ts:5 ("o chamador (`zapp-callback`, etapa 96)") sem nenhum importador fora de _shared/messaging.
+  ```
+  Mesma causa, outro local — Backend — notificação e fila:
+  ```
+  docs/agentes/mensageria.md:13-15 `4. O que foi enviado e o que voltou fica no ledger `notification_messages` (migration `20261125120000_notification_ledger.sql`). … 5. A resposta do motorista chega pelo `zapp-callback`, é classificada (`_shared/messaging/inbound.ts`)` — contra `ls supabase/functions/` (sem `zapp-callback`), `ls supabase/migrations/` (último arquivo `20261124120000_internal_alert_channels.sql`) e `find supabase -name security.ts` (só `lalamove-webhook/security.ts`).
+  ```
+- **Causa raiz:** O runbook foi escrito a partir do plano de 150 etapas, descrevendo o estado alvo como se fosse o estado atual. A edge zapp-callback e a etapa 96 (citada em supabase/functions/_shared/messaging/inbound-actions.ts:5 como "o chamador (`zapp-callback`, etapa 96)") e o ledger e a etapa 73 — as duas ainda nao existem. A secao "O que ainda não existe" (:66-71) lista as etapas 133-138 mas omite justamente o ledger e o callback.
+- **Arquivos:** `docs/agentes/mensageria.md`, `supabase/functions/_shared/messaging/inbound-actions.ts`, `supabase/functions/_shared/messaging/inbound.ts`, `supabase/functions/send-notification/index.ts`
+- **Etapas do plano:** 065
 
 #### B-006 — Artefatos gerados e commitados estão desatualizados: o inventário diz 54 rotas e 20 problemas, o real é 56 e 0
 
@@ -3444,7 +3495,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Os geradores existem e funcionam, mas nenhum workflow os roda em modo `--check` na PR. O `inventario-estado-semanal.yml` só roda segunda-feira e abre PR própria (que, pelos required checks, não tem CI e não pode ser mergeada).
 - **Arquivos:** `inventario/estado/rotas.json`, `inventario/estado/edges.json`, `docs/ci/MATRIZ_EDGE_TABELA.md`, `scripts/inventario/gerar-rotas.mjs`, `scripts/ci/gerar-matriz-edge-tabela.mjs`
-- **Etapas do plano:** 156
+- **Etapas do plano:** 161
 
 #### B-035 — O comentário do workflow de contexto diz "a cada 10 min"; o agendamento é horário
 
@@ -3457,7 +3508,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O comentário do cabeçalho ficou da versão anterior do agendamento e não foi corrigido quando o cron mudou para horário.
 - **Arquivos:** `.github/workflows/contexto.yml`
-- **Etapas do plano:** 233
+- **Etapas do plano:** 235
 
 #### B-051 — `SUPABASE_ACCESS_TOKEN` existe há dois dias, mas o workflow que depende dele afirma que não está configurado
 
@@ -3475,7 +3526,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 
 ## Hooks e estado — auth, permissão e infra
 
-**3 achado(s).**
+**4 achado(s).**
 
 
 #### A-011 — Registro de dispositivo e alerta de "novo acesso" gravam sempre IP 0.0.0.0, vindo do cliente
@@ -3489,9 +3540,26 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A captura de IP foi removida do cliente (comentário diz que APIs externas de geolocalização são bloqueadas por CORS) sem passar a responsabilidade para a edge function, que continua recebendo o IP como dado de entrada do navegador.
 - **Arquivos:** `src/hooks/useDeviceDetection.ts`, `supabase/functions/new-device-alert/index.ts`, `src/hooks/useUserDevices.ts`
-- **Etapas do plano:** 025
+- **Etapas do plano:** 026
 
-#### M-118 — Tema agendado só funciona enquanto a tela de preferências está aberta: dois hooks de tema disputam a mesma classe com chaves diferentes
+#### M-085 — Fila de jobs: "Deletar" e "Processar fila" não fazem nada mas confirmam sucesso, e o filtro de status ignora as avaliações
+
+- **Camada:** Hooks e estado — auth, permissão e infra (+ 1 outro(s) local)
+- **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** Na tela de fila, apagar um job mostra "Job deletado" e o job continua lá; "Processar fila" sempre informa "0 jobs processados, 0 erros" como se tivesse rodado. E ao filtrar por "Pendentes" ou "Com falha" a lista vem poluída de avaliações já concluídas. O operador não consegue confiar na tela para saber se há trabalho travado.
+- **Evidência:**
+  ```
+  src/hooks/useJobQueue.ts:317-318 `const deleteJob = async (jobId: string): Promise<void> => { logger.warn(\`Delete de job ${jobId} ignorado (jobs são registros históricos)\`); };`; :340 `return { processed: 0, errors: 0 };`; :159-163 consulta de `driver_evaluations` sem filtro e :170 `status: 'COMPLETED',`; src/pages/JobQueuePage.tsx:39 `toast.success('Job deletado');`
+  ```
+  Mesma causa, outro local — Interface — painéis e relatórios:
+  ```
+  src/hooks/useJobQueue.ts:339 `return { processed: 0, errors: 0 };`; :318 `logger.warn(\`Delete de job ${jobId} ignorado (jobs são registros históricos)\`);`; src/pages/JobQueuePage.tsx:39 `toast.success('Job deletado');`; :50 `toast.success(\`${result.processed} jobs processados, ${result.errors} erros\`);`
+  ```
+- **Causa raiz:** O hook foi montado como fachada sobre `webhook_events`/`bitrix24_sync`/`driver_evaluations` (comentário nas linhas 1-4) e três operações ficaram como simulação, sem que a UI soubesse. O filtro de status foi aplicado só nas duas tabelas que têm coluna de status.
+- **Arquivos:** `src/hooks/useJobQueue.ts`, `src/pages/JobQueuePage.tsx`
+- **Etapas do plano:** 180
+
+#### M-119 — Tema agendado só funciona enquanto a tela de preferências está aberta: dois hooks de tema disputam a mesma classe com chaves diferentes
 
 - **Camada:** Hooks e estado — auth, permissão e infra
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3515,15 +3583,55 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** As preferências foram implementadas hook por hook, cada uma com sua chave de localStorage e sem registro central; o logout só conhece as duas chaves do sistema de conquistas.
 - **Arquivos:** `src/hooks/useAuth.tsx`, `src/hooks/useTheme.ts`, `src/hooks/useScheduledTheme.ts`, `src/hooks/useSoundSettings.ts`, `src/hooks/useMapSettings.ts`, `src/hooks/useRegionResolver.ts`, `src/hooks/usePushNotifications.ts`, `src/i18n/index.ts`
-- **Etapas do plano:** 199
+- **Etapas do plano:** 201
+
+
+## Hooks e estado — dados de negócio
+
+**1 achado(s).**
+
+
+#### A-032 — Botão "Avaliar motorista" nunca mostra o resultado: o hook lê um formato de resposta que a edge evaluate-driver não devolve
+
+- **Camada:** Hooks e estado — dados de negócio (+ 1 outro(s) local)
+- **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** Ao clicar em avaliar o motorista de um pedido, o sistema avalia de verdade (pode até bloquear o motorista no banco), mas a tela não mostra nada: nem score, nem aviso de bloqueio, nem erro. O operador acha que não funcionou e pode liberar um motorista crítico.
+- **Evidência:**
+  ```
+  supabase/functions/evaluate-driver/index.ts:73-83 (interface achatada), :607-610, :631-634 e :794-797 `return new Response(\n      JSON.stringify(result),`; src/hooks/useEvaluateDriver.ts:69 `const { evaluation, driver } = data;`, :78 `if (evaluation.autoBlocked) {`, :93-95 `toast.error('Erro na Avaliação', { description: error.message })`; src/components/orders/OrderDetailModal.tsx:552 `riskScore: result.evaluation.riskAnalysis.score,` e :557-558 (catch com só `logger.error`); node_modules/@tanstack/query-core/build/modern/mutation.js:195 e :203-210 (throw no onSuccess cai no onError)
+  ```
+  Mesma causa, outro local — Regras de negócio — cálculos:
+  ```
+  supabase/functions/evaluate-driver/index.ts:794-795 — "return new Response(\n      JSON.stringify(result),"; mesmos retornos planos em :610 e :634. Interface plana em index.ts:73-84. src/hooks/useEvaluateDriver.ts:68 — "const { evaluation, driver } = data;" e :75 — "if (evaluation.autoBlocked) {". src/components/orders/OrderDetailModal.tsx:551-552 — "riskScore: result.evaluation.riskAnalysis.score,\n          riskLevel: result.evaluation.riskAnalysis.level,".
+  ```
+- **Causa raiz:** A interface declarada no hook (useEvaluateDriver.ts:30-47) inventa um envelope `{ success, evaluation: { riskAnalysis... }, driver }` que a função servidora nunca produziu — nem no caminho principal (:794) nem nos atalhos de blacklist (:610) e whitelist (:634). Como `supabase.functions.invoke` tipa `data` como any, o TypeScript não acusa. Em runtime `evaluation` é undefined: o onSuccess ainda invalida as queries (:72-75) e então estoura TypeError em `evaluation.autoBlocked`, sem nenhum toast; no componente o acesso a `result.evaluation.riskAnalysis` estoura antes do setEvaluationResult e o catch só faz logger.error (OrderDetailModal.tsx:556-558).
+- **Arquivos:** `src/components/orders/OrderDetailModal.tsx`, `src/hooks/useEvaluateDriver.ts`, `supabase/functions/evaluate-driver/index.ts`
+- **Etapas do plano:** 070
 
 
 ## Infra, CI e deploy
 
-**7 achado(s).**
+**8 achado(s).**
 
 
-#### A-043 — A CI da `main` está vermelha há três execuções e o AGENTS.md afirma por escrito que está verde
+#### A-012 — O required check E2E passa sem exercitar RBAC e MFA: os testes autenticados fazem skip porque o ci.yml nao injeta a sessao
+
+- **Camada:** Infra, CI e deploy (+ 1 outro(s) local)
+- **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** O teste que deveria provar que um operador nao acessa tela de admin e que o MFA barra o acesso nunca roda; uma regressao de permissao chega a producao com a CI verde.
+- **Evidência:**
+  ```
+  e2e/helpers/auth.ts:19-22 — `const storageKey = process.env.LOVABLE_BROWSER_SUPABASE_STORAGE_KEY;` / `const sessionJson = process.env.LOVABLE_BROWSER_SUPABASE_SESSION_JSON;` / `if (!storageKey || !sessionJson) return null;`; e2e/rbac.e2e.ts:60 — `test.skip(!session, 'Requer sessão autenticada injetada para validar hierarquia de papéis.');`; .github/workflows/ci.yml:54-57 — `env:` / `CI: 'true'` / `VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}` / `VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}`
+  ```
+  Mesma causa, outro local — Testes:
+  ```
+  e2e/helpers/auth.ts:19-22; .github/workflows/ci.yml:52-57 (env só com VITE_*) e :58-64 (upload do report); skips em autocomplete.e2e.ts:50, livemap-route.e2e.ts:44, new-order-autocomplete.e2e.ts:64, mfa.e2e.ts:29, rbac.e2e.ts:60 e :74; playwright.config.ts:20.
+  ```
+- **Causa raiz:** Nenhuma das duas variaveis `LOVABLE_BROWSER_SUPABASE_*` e passada ao `npx playwright test` (ci.yml:52-57), e elas tambem nao existem no .env.example. Logo `getInjectedSession()` devolve null em todo run de CI e os 8 pontos de `test.skip` de rbac/mfa/autocomplete/livemap/new-order sao acionados. O Playwright conta skip como sucesso: o check `E2E (Playwright)` — um dos 7 required checks da main — fica verde tendo rodado apenas os fluxos nao autenticados (login-lockout, password-reset).
+- **Arquivos:** `.env.example`, `.github/workflows/ci.yml`, `e2e/autocomplete.e2e.ts`, `e2e/helpers/auth.ts`, `e2e/livemap-route.e2e.ts`, `e2e/mfa.e2e.ts`, `e2e/new-order-autocomplete.e2e.ts`, `e2e/rbac.e2e.ts`, `playwright.config.ts`
+- **Etapas do plano:** 027
+
+#### A-047 — A CI da `main` está vermelha há três execuções e o AGENTS.md afirma por escrito que está verde
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3534,9 +3642,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Dois problemas somados: o job que testa as edges publicadas não é required check, e a instrução que os agentes leem como verdade (`AGENTS.md`) não é atualizada quando o estado muda.
 - **Arquivos:** `AGENTS.md`, `.github/workflows/ci.yml`
-- **Etapas do plano:** 082
+- **Etapas do plano:** 086
 
-#### A-060 — O guarda que vigia as configurações do GitHub dá "tudo certo" quando o token é recusado
+#### A-064 — O guarda que vigia as configurações do GitHub dá "tudo certo" quando o token é recusado
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3560,7 +3668,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Não existe gate entre "código novo em produção" e "schema que o código novo espera". O apply depende de alguém lembrar de rodar o workflow com o nome exato do arquivo; esquecer não gera erro, gera código rodando contra schema antigo.
 - **Arquivos:** `.github/workflows/apply-migrations.yml`, `.github/workflows/deploy-edges.yml`
-- **Etapas do plano:** 108
+- **Etapas do plano:** 111
 
 #### M-036 — xlsx vem de tarball fora do registro npm: build, typecheck e teste caem juntos quando cdn.sheetjs.com nao responde, e o npm audit nao enxerga a dependencia
 
@@ -3573,9 +3681,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Dependencia por URL: o `npm ci` resolve esse unico pacote fora do registro npm, sem mirror nem fallback. Se o host cair, mudar o caminho do arquivo ou for bloqueado pela rede do runner, o `npm ci` falha inteiro — e com ele os 5 jobs que o executam (lint-and-typecheck, test, e2e, build, guard-agents-md), ou seja 5 dos 7 required checks. Efeito colateral de seguranca: `npm audit` so consulta o registro, entao uma vulnerabilidade no xlsx nunca aparece no job `security`, e o Dependabot (.github/dependabot.yml) tambem nao abre PR para dependencia por URL.
 - **Arquivos:** `package.json`, `package-lock.json`, `src/utils/exportUtils.ts`, `.github/workflows/ci.yml`, `.github/dependabot.yml`
-- **Etapas do plano:** 112
+- **Etapas do plano:** 115
 
-#### M-067 — Nao existe vercel.json nem fallback de SPA no repositorio, com 58 rotas em BrowserRouter
+#### M-068 — Nao existe vercel.json nem fallback de SPA no repositorio, com 58 rotas em BrowserRouter
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3586,10 +3694,10 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Hospedagem estatica de SPA precisa de rewrite de todas as rotas para /index.html; o preset de Vite na Vercel nao adiciona esse fallback sozinho (ao contrario do preset de CRA). O service worker public/sw.js:90-91 tem fallback de navegacao para `/index.html` em cache, o que mascara o problema para quem ja visitou o site — mas a primeira visita a um link profundo (link compartilhado, aba anonima, QR) vai direto ao servidor.
 - **Arquivos:** `src/App.tsx`, `public/sw.js`, `.github/workflows/contexto.yml`
-- **Etapas do plano:** 146
+- **Etapas do plano:** 150
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Falta um request real a producao a uma rota profunda em sessao limpa (ex.: `curl -I https://<dominio>/pedidos` e conferir 200 + text/html em vez de 404) e a leitura das configuracoes do projeto na Vercel — o MCP da Vercel responde 404 not_found em GET /v9/projects/lalamove-v2 (escopo da conexao), mesmo limite ja registrado em scripts/ci/vercel-env-baseline.json.
 
-#### M-107 — Os jobs de SQL testam a migration por faixas de linha fixas (sed -n '277,345p')
+#### M-109 — Os jobs de SQL testam a migration por faixas de linha fixas (sed -n '277,345p')
 
 - **Camada:** Infra, CI e deploy
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3600,7 +3708,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Os jobs `Geo geometry SQL tests` e `Geo trigger SQL tests` nao aplicam a migration: recortam dela os blocos de funcao por numero de linha. Conferi que as faixas hoje caem certo (L277 abre `CREATE OR REPLACE FUNCTION public.geo_haversine_m`, L341 fecha `END; $$;`, L347 abre `geo_emit_event`, L389 abre `geo_evaluate_tracking`, L533 fecha o `CREATE TRIGGER`), mas o acoplamento e por posicao: inserir uma linha no inicio do arquivo desloca tudo e o psql passa a receber SQL truncado. Alem disso, nada fora dessas faixas e exercitado — RLS, grants e as linhas de `alert_configurations` da secao 10 nunca entram no Postgres de teste.
 - **Arquivos:** `.github/workflows/ci.yml`, `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/tests/geo_functions.test.sql`, `supabase/tests/geo_trigger.test.sql`, `supabase/tests/fixtures/geo_trigger_schema.sql`
-- **Etapas do plano:** 223
+- **Etapas do plano:** 225
 
 #### B-056 — Atualização automática de dependência vulnerável está desligada num repositório público
 
@@ -3621,7 +3729,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **3 achado(s).**
 
 
-#### A-037 — Salvar permissões sempre falha: a chave do pendingChanges é quebrada por split('-') em UUID
+#### A-041 — Salvar permissões sempre falha: a chave do pendingChanges é quebrada por split('-') em UUID
 
 - **Camada:** Interface — administração
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3632,9 +3740,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A chave composta usa '-' como separador, mas o permission_id é um UUID que contém '-'. O destructuring devolve role='manager' e permissionId='550e8400' (só o 1º bloco do UUID). O insert/delete em role_permissions vai com um UUID inválido; o Postgres recusa (22P02), o loop lança no 1º item e o catch mostra só 'Erro ao salvar'. Nenhuma permissão é gravada e pendingChanges não é limpo.
 - **Arquivos:** `src/pages/PermissionsPage.tsx`
-- **Etapas do plano:** 075
+- **Etapas do plano:** 080
 
-#### M-094 — Editar configuração de alerta sobrescreve o que outra aba salvou e perde a edição se o salvamento falhar
+#### M-096 — Editar configuração de alerta sobrescreve o que outra aba salvou e perde a edição se o salvamento falhar
 
 - **Camada:** Interface — administração
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -3645,7 +3753,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O estado do formulário nasce do `config` do primeiro render e nunca é sincronizado quando a query é revalidada (useAlertConfigurations usa `staleTime` de 1 hora, src/hooks/useAlertConfigurations.ts:116-120). O update é cego — `.update(...).eq('id', id)` sem comparar `updated_at` (mesmo arquivo, :50-64). E o `setIsEditing(false)` roda antes da resposta, então um erro de rede só aparece como toast, com o conteúdo digitado já descartado.
 - **Arquivos:** `src/pages/alert-configurations/AlertConfigCard.tsx`, `src/hooks/useAlertConfigurations.ts`, `src/pages/IPWhitelistPage.tsx`
-- **Etapas do plano:** 189
+- **Etapas do plano:** 191
 
 #### B-014 — Classes de cor montadas em tempo de execução não existem no CSS final
 
@@ -3658,7 +3766,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O Tailwind gera as classes varrendo strings literais do código; nomes concatenados em tempo de execução nunca entram no CSS e, sem safelist, as classes simplesmente não existem. Os ícones e números ficam sem a cor pretendida.
 - **Arquivos:** `src/pages/IPWhitelistPage.tsx`, `src/pages/ApprovalsPage.tsx`, `src/pages/approvals/ApprovalCard.tsx`
-- **Etapas do plano:** 166
+- **Etapas do plano:** 169
 - **Divergência entre revisores:** um revisor refutou e outro confirmou: CONFIRMA: Reli os três pontos e a interpolação existe exatamente como descrito: src/pages/IPWhitelistPage.tsx:141 (`cn("p-3 rounded-xl", `bg-${stat.color}/10`)` + `text-${stat.color}` nas linhas 141 e 144), src/pages/ApprovalsPage.tsx:69-72 (`from-${stat.color} to-${stat.color}/50`, `bg-${stat.color}/10 borde || CONFIRMA: As três interpolações existem como descrito: src/pages/IPWhitelistPage.tsx:141 (`bg-${stat.color}/10`, `text-${stat.color}`, cores 'primary'|'success'|'muted-foreground' nas linhas 134-136), src/pages/ApprovalsPage.tsx:69-74 (`from-${color}`, `to-${color}/50`, `bg-${color}/10 border-${color}/30`, co || REFUTA: EXECUTADO (grep de ocorrências literais em src/) + RASTREADO. A premissa do mecanismo está errada: o Tailwind varre TODOS os arquivos de `content` (tailwind.config.ts:6 `content: ["./pages/**/*.{ts,tsx}", ... "./src/**/*.{ts,tsx}"]`) e gera qualquer classe que apareça literalmente em QUALQUER arquiv
 
 
@@ -3667,7 +3775,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **4 achado(s).**
 
 
-#### M-075 — Operadores de busca documentados na propria tela de pedidos nunca funcionam
+#### M-077 — Operadores de busca documentados na propria tela de pedidos nunca funcionam
 
 - **Camada:** Interface — fluxo de pedido
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3678,7 +3786,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O termo digitado e gravado na URL (OrdersPage.tsx:36-52) e usado primeiro como filtro `ilike` literal no banco. So o que sobrevive a esse filtro chega ao Fuse (OrdersPage.tsx:89-101). Como '^ORD-' nao existe como substring em nenhum campo, o banco devolve zero linhas e o Fuse — unico que entende esses operadores — nao recebe nada para filtrar.
 - **Arquivos:** `src/pages/OrdersPage.tsx`, `src/hooks/useFuseSearch.ts`, `src/components/ui/search-help-tooltip.tsx`, `src/hooks/useRecentOrders.ts`
-- **Etapas do plano:** 154
+- **Etapas do plano:** 159
 
 #### B-030 — Download do comprovante abre a janela depois do await e falha calado quando o navegador bloqueia
 
@@ -3691,7 +3799,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O `window.open` ocorre depois de uma chamada assincrona, fora da janela de gesto do usuario; nesse caso o navegador bloqueia o popup, `window.open` devolve null e o codigo nao testa o retorno — nenhum erro e lancado, entao o catch tambem nao ajuda.
 - **Arquivos:** `src/components/lalamove/UapiOrderHistoryPanel.tsx`
-- **Etapas do plano:** 210
+- **Etapas do plano:** 212
 
 #### B-047 — Cupons e frota da conta Lalamove mostram so a primeira pagina, sem indicacao de que ha mais
 
@@ -3725,7 +3833,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **2 achado(s).**
 
 
-#### M-090 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece
+#### M-092 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3736,9 +3844,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Com `VITE_GOOGLE_MAPS_BROWSER_KEY` definida (`USING_OWN_KEY`), o script do Google é carregado no canal `weekly` e sem a biblioteca `maps3d` — o próprio comentário do arquivo (useGoogleMapsLoader.ts:74-76) diz que `maps3d` 'nao sai no canal estavel'. Quando `importLibrary('maps3d')` rejeita, o Google3DCanvas apenas retorna: não seta erro, não chama `onFallback` (prop existe e está ligada em LiveMap.tsx:585 `onFallback={() => useMapSettings.getState().setPreferredProvider('google-hybrid')}`), e o overlay de loading já saiu porque `ready` é true. Sobra um `<div>` vazio ocupando a tela.
 - **Arquivos:** `src/components/map/Google3DCanvas.tsx`, `src/components/map/hooks/useGoogleMapsLoader.ts`, `src/components/map/MapProviderSelector.tsx`
-- **Etapas do plano:** 185
+- **Etapas do plano:** 187
 
-#### M-091 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin
+#### M-093 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin
 
 - **Camada:** Interface — mapa e rastreamento
 - **Severidade:** Média · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3749,7 +3857,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** `useEffectiveMapProvider` (src/hooks/useMapProviderPolicy.ts:62-66) combina a escolha persistida do usuário com o que o admin liberou, e com `geo_settings.tiles` ausente/'off' a política é fail-open (linhas 18-21, 43) — ou seja, vale a preferência do usuário. O OrderTrackingMap ignora a preferência e olha apenas `tiles === 'google'`. As duas telas da mesma sessão podem então renderizar provedores diferentes. Pior: o efeito que instancia o Mapbox no mini-mapa depende só do token (OrderTrackingMap.tsx:202 `}, [mapboxToken]);`), então uma mudança de `useGoogle` depois da criação não desmonta o mapa Mapbox e o canvas Google é montado no mesmo `container.current` (linha 220), com dois `countMapLoad` contados (linhas 169 e 228).
 - **Arquivos:** `src/components/map/LiveMap.tsx`, `src/components/map/OrderTrackingMap.tsx`, `src/hooks/useMapProviderPolicy.ts`
-- **Etapas do plano:** 186
+- **Etapas do plano:** 188
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Não há MCP apontando para o projeto oficial iecgydonctmabiijadsf (AGENTS.md), então não pude ler a linha `geo_settings.tiles` de produção: se hoje ela estiver em 'google' ou 'mapbox', a divergência entre as duas telas é imediata; se estiver ausente/'off', a divergência só aparece quando o usuário troca de provedor no seletor. O empilhamento dos dois canvas depende de qual resposta chega primeiro (token do Mapbox x query de tiles) e precisa ser observado no browser.
 
 
@@ -3758,7 +3866,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **5 achado(s).**
 
 
-#### A-040 — SLO: disponibilidade soma falhas que não estão no total de requisições e pode ficar negativa; o gráfico usa outra fórmula
+#### A-044 — SLO: disponibilidade soma falhas que não estão no total de requisições e pode ficar negativa; o gráfico usa outra fórmula
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3769,9 +3877,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** `frontendErrors` é a soma de `occurrence_count` de runtime_error_logs — uma população que não compõe o denominador. Um pico de erros de frontend derruba a disponibilidade abaixo de zero e eleva a taxa de falhas acima de 100%. Os buckets do gráfico ignoram essa parcela, então o número do card e a linha do gráfico nunca batem.
 - **Arquivos:** `src/hooks/useSLOMetrics.ts`, `src/pages/SLODashboardPage.tsx`
-- **Etapas do plano:** 078
+- **Etapas do plano:** 083
 
-#### M-060 — Gráficos diários usam o dia em UTC enquanto o rótulo é o dia local: pedidos da noite caem no dia seguinte e a tendência exibe a data errada
+#### M-061 — Gráficos diários usam o dia em UTC enquanto o rótulo é o dia local: pedidos da noite caem no dia seguinte e a tendência exibe a data errada
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3782,9 +3890,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** `created_at` chega como ISO em UTC; comparar/cortar a string agrupa por dia UTC, mas o eixo é rotulado com o dia local (UTC-3). Em DeliveryMetricsPage o efeito aparece no rótulo: `new Date('2026-11-22')` é meia-noite UTC e, formatado em pt-BR, imprime 21/11.
 - **Arquivos:** `src/hooks/useAnalyticsData.ts`, `src/hooks/useDeliveryMetrics.ts`, `src/pages/DeliveryMetricsPage.tsx`
-- **Etapas do plano:** 136
+- **Etapas do plano:** 140
 
-#### M-061 — Monitoramento de Cache esconde justamente as views com falha e mostra "última verificação" da view errada
+#### M-062 — Monitoramento de Cache esconde justamente as views com falha e mostra "última verificação" da view errada
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
@@ -3795,9 +3903,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** useCacheViews filtra para `status === 'success'`, então as views com falha ou nunca atualizadas entram no contador "Com Falha" mas não viram card — e é no card que fica o botão "Atualizar". O `lastChecked` pega a primeira view em ordem alfabética, não a mais recente.
 - **Arquivos:** `src/hooks/useCacheViews.ts`, `src/pages/CacheMonitoringPage.tsx`
-- **Etapas do plano:** 137
+- **Etapas do plano:** 141
 
-#### M-097 — KPI "Taxa Auto-Aprovação" compara fila por pedido com total de motoristas e trava em 0%
+#### M-099 — KPI "Taxa Auto-Aprovação" compara fila por pedido com total de motoristas e trava em 0%
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3808,9 +3916,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** `driversInQueue` conta LINHAS da fila (uma por pedido que exigiu aprovação), não motoristas distintos. Como o volume de pedidos cresce acima do número de motoristas, a subtração fica negativa e o `Math.max(0, …)` fixa o indicador em 0,0%.
 - **Arquivos:** `src/hooks/useMetrics.ts`, `src/pages/MetricsPage.tsx`
-- **Etapas do plano:** 192
+- **Etapas do plano:** 194
 
-#### M-127 — SLO: o "orçamento de erro" da latência não é orçamento — indicador saudável aparece com 0% livre
+#### M-129 — SLO: o "orçamento de erro" da latência não é orçamento — indicador saudável aparece com 0% livre
 
 - **Camada:** Interface — painéis e relatórios
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -3821,7 +3929,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Para latência, "consumido" é a razão entre o p95 observado e o alvo, não a fração de um orçamento de violação. Quando o p95 iguala o alvo (situação classificada como 'healthy' na linha 242), o cartão mostra 100% consumido e 0% livre.
 - **Arquivos:** `src/hooks/useSLOMetrics.ts`, `src/pages/SLODashboardPage.tsx`
-- **Etapas do plano:** 252
+- **Etapas do plano:** 253
 
 
 ## Interface — rotas e RBAC
@@ -3829,7 +3937,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **3 achado(s).**
 
 
-#### M-099 — Rota 404 quebra: NotFound é lazy e é a única rota sem Suspense, caindo no ErrorBoundary
+#### M-101 — Rota 404 quebra: NotFound é lazy e é a única rota sem Suspense, caindo no ErrorBoundary
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3840,9 +3948,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Esquecimento no item 58 (comentário em App.tsx:84 diz "lazy + com retry de chunk"): o componente foi convertido para lazy mas a rota catch-all não recebeu o wrapper. Um componente lazy sem Suspense ancestral faz o React lançar erro de renderização, que sobe até o ErrorBoundary de App.tsx:132.
 - **Arquivos:** `src/App.tsx`, `src/lib/lazyWithRetry.ts`, `e2e/rbac.e2e.ts`
-- **Etapas do plano:** 194
+- **Etapas do plano:** 196
 
-#### M-146 — Após login o usuário sempre cai no painel: AppLayout redireciona sem guardar a rota de origem
+#### M-148 — Após login o usuário sempre cai no painel: AppLayout redireciona sem guardar a rota de origem
 
 - **Camada:** Interface — rotas e RBAC
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3866,7 +3974,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O `pageConfig` é uma tabela manual que não acompanhou o crescimento das rotas e ficou presa no alias legado `/map` em vez da rota canônica `/live-map` (criada no item 50, App.tsx:191). O fallback silencioso (`|| { title: 'Dashboard' }`) esconde a falta.
 - **Arquivos:** `src/components/layout/AppLayout.tsx`, `src/App.tsx`, `src/components/layout/sidebar-config.ts`
-- **Etapas do plano:** 211
+- **Etapas do plano:** 213
 
 
 ## Regras de negócio — ciclo de vida
@@ -3874,7 +3982,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **1 achado(s).**
 
 
-#### M-052 — check-driver-alerts alerta sobre pedidos já encerrados: não filtra nem o status do pedido nem o rastreio encerrado
+#### M-053 — check-driver-alerts alerta sobre pedidos já encerrados: não filtra nem o status do pedido nem o rastreio encerrado
 
 - **Camada:** Regras de negócio — ciclo de vida (+ 1 outro(s) local)
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 3 revisor(es) independente(s)
@@ -3889,15 +3997,32 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A consulta traz TODAS as linhas de active_tracking, sem `.eq('tracking_status','ACTIVE')` e sem excluir pedidos em estado final — embora a tabela tenha a coluna tracking_status com índice parcial para exatamente esse filtro (supabase/migrations/20251224181640_...sql:104) e o campo order.status seja trazido no select (linha 102), sendo usado só no bloco de POD (linha 232). O job-worker faz o filtro certo nos dois pontos equivalentes (job-worker/index.ts:538 e :881: `.eq('tracking_status', 'ACTIVE')`), e o próprio job-worker barra pedido encerrado por status (linha 704).
 - **Arquivos:** `supabase/functions/check-driver-alerts/index.ts`, `supabase/functions/job-worker/index.ts`
-- **Etapas do plano:** 128
+- **Etapas do plano:** 132
 
 
 ## Regras de negócio — cálculos
 
-**6 achado(s).**
+**8 achado(s).**
 
 
-#### A-046 — Regra de risco configurada como "+N pontos" só aplica metade
+#### A-050 — Pontualidade é calculada com três fórmulas diferentes e uma delas conta pedido sem prazo como "no prazo"
+
+- **Camada:** Regras de negócio — cálculos (+ 1 outro(s) local)
+- **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** O painel, a tela de SLA e o relatório mostram percentuais de pontualidade diferentes para o mesmo período, e todos tendem a inflar o número porque pedido sem prazo registrado entra como pontual.
+- **Evidência:**
+  ```
+  src/hooks/useSLAMetrics.ts:80-84 — "const onTimeOrders = completedOrders.filter(o => {\n    if (!o.estimated_delivery || !o.actual_delivery) return true;"; src/hooks/useDashboardStats.ts:91-96 — "// Consider on-time if delivered within estimated time or within 15 min of scheduled\n        if (order.estimated_delivery) { ... } else {\n          if (diffMinutes <= 60) onTimeCount++;"; src/hooks/useAdvancedReports.ts:346-347 — "const onTime = completedRows.filter((r) => (r.delay_minutes || 0) <= 0).length;".
+  ```
+  Mesma causa, outro local — Interface — painéis e relatórios:
+  ```
+  src/hooks/useSLAMetrics.ts:80-89 e :168-170; src/hooks/useAdvancedReports.ts:334; src/pages/reports/useReportData.ts:100-102 e :110.
+  ```
+- **Causa raiz:** A mesma métrica de negócio ("Pontualidade") foi implementada três vezes, cada uma com um critério de pontualidade e um tratamento diferente para dado faltante, e nenhuma separa "no prazo" de "não dá para medir".
+- **Arquivos:** `src/hooks/useAdvancedReports.ts`, `src/hooks/useDashboardStats.ts`, `src/hooks/useSLAMetrics.ts`, `src/pages/AdvancedReportsPage.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/pages/SLADashboardPage.tsx`, `src/pages/reports/useReportData.ts`
+- **Etapas do plano:** 089
+
+#### A-051 — Regra de risco configurada como "+N pontos" só aplica metade
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3908,9 +4033,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** A divisão por 2 foi introduzida na soma final sem nenhum comentário e sem ajustar o rótulo nem o texto da justificativa, que continuam anunciando o valor integral.
 - **Arquivos:** `supabase/functions/evaluate-driver/index.ts`, `src/pages/RiskRulesPage.tsx`, `src/pages/RiskRulesPage.dialogs.tsx`
-- **Etapas do plano:** 085
+- **Etapas do plano:** 090
 
-#### A-048 — Tolerância de atraso do ETA tem duas fontes diferentes; a do job-worker usa o campo de intervalo entre alertas como se fosse regra de negócio
+#### A-053 — Tolerância de atraso do ETA tem duas fontes diferentes; a do job-worker usa o campo de intervalo entre alertas como se fosse regra de negócio
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Alta · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3921,9 +4046,30 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O mesmo alerta ETA_DELAY é emitido por dois caminhos (trigger geo_evaluate_tracking e maybeEmitEtaDelay no job-worker) e cada um lê a tolerância de uma coluna diferente. Com os defaults de seed os dois dão 15 min por coincidência (900 s / 60 = 15 e late_tolerance_min = 15), então a divergência fica invisível até alguém mexer em qualquer um dos dois valores.
 - **Arquivos:** `supabase/functions/job-worker/index.ts`, `supabase/migrations/20261122131000_geo_eta_delay.sql`, `supabase/migrations/20261121193000_fix_escalation_pipeline.sql`
-- **Etapas do plano:** 087
+- **Etapas do plano:** 092
 
-#### M-044 — Dinheiro somado em ponto flutuante, com moeda de um pedido aplicada ao total e denominadores diferentes para o mesmo "custo médio"
+#### M-043 — Aprovação de motorista não registra quem aprovou e é feita em dois updates sem transação
+
+- **Camada:** Regras de negócio — cálculos (+ 2 outro(s) local)
+- **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
+- **Impacto no negócio:** Não há registro de quem liberou ou barrou cada motorista — exatamente o dado que se precisa quando uma entrega dá problema. E se a segunda escrita falhar, a fila marca "aprovado" enquanto o motorista continua pendente, travando o pedido.
+- **Evidência:**
+  ```
+  src/hooks/useApprovalActions.ts:34-38 — ".update({ status: 'APPROVED', reviewed_at: new Date().toISOString(), decision_notes: notes || 'Aprovado manualmente' })\n        .eq('id', approvalId);" seguido de "supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId)"; coluna em supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql:182 — "reviewed_by UUID,"; leitura em src/hooks/usePendingApprovals.ts:88.
+  ```
+  Mesma causa, outro local — Hooks e estado — dados de negócio:
+  ```
+  src/hooks/useApprovalActions.ts:34-39 `const { error: approvalError } = await supabase.from('driver_approval_queue').update({ status: 'APPROVED', ... }).eq('id', approvalId); if (approvalError) throw approvalError; const { error: driverError } = await supabase.from('drivers').update({ status: 'APPROVED' }).eq('id', driverId);` e :46-48 `await supabase.from('driver_approval_queue').update({ status: 'PENDING', ... }); await supabase.from('drivers').update({ status: 'PENDING_APPROVAL' }).eq('id', data.driverId); queryClient.invalidateQueries({ queryKey: ['pending-approvals'] });`
+  ```
+  Mesma causa, outro local — Regras de negócio — ciclo de vida:
+  ```
+  src/hooks/useApprovalActions.ts:34-36, 56-58, 78-80, 93-95; coluna em supabase/migrations/20251224143803_*.sql:182; padrão correto em src/hooks/usePasswordResetActions.ts:36; leitura em src/hooks/usePendingApprovals.ts:88.
+  ```
+- **Causa raiz:** O campo de auditoria nunca foi preenchido na escrita, embora exista no banco e seja lido pela UI; e as duas escritas (fila + cadastro do motorista) são chamadas independentes, sem RPC transacional.
+- **Arquivos:** `src/hooks/useApprovalActions.ts`, `src/hooks/useApprovalActionsEnhanced.ts`, `src/hooks/usePasswordResetActions.ts`, `src/hooks/usePendingApprovals.ts`, `supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql`
+- **Etapas do plano:** 122
+
+#### M-045 — Dinheiro somado em ponto flutuante, com moeda de um pedido aplicada ao total e denominadores diferentes para o mesmo "custo médio"
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3934,9 +4080,9 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Três problemas na mesma conta: (a) valores monetários acumulados como number binário e só arredondados no fim; (b) a moeda do total é a do primeiro pedido que tiver alguma — e há duas origens de preço com moedas próprias (supabase/functions/lalamove-api/index.ts:468-469 grava currency do priceBreakdown; supabase/functions/lalamove-uapi/index.ts:440-441 grava 'BRL' fixo); (c) "custo médio" divide por pedidos com custo, enquanto a média por centro de custo divide por todos os pedidos do grupo, e custo/km divide o custo de alguns pedidos pela distância de todos.
 - **Arquivos:** `src/hooks/useAdvancedReports.ts`, `src/pages/AdvancedReportsPage.tsx`, `supabase/functions/lalamove-uapi/index.ts`, `supabase/functions/lalamove-api/index.ts`
-- **Etapas do plano:** 120
+- **Etapas do plano:** 124
 
-#### M-045 — Tabela de pedidos e análise preditiva tratam o limiar configurado como se fosse o desvio medido
+#### M-046 — Tabela de pedidos e análise preditiva tratam o limiar configurado como se fosse o desvio medido
 
 - **Camada:** Regras de negócio — cálculos
 - **Severidade:** Média · **Confiança:** confirmado · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -3947,7 +4093,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Confusão entre configuração e medição: `stalled_threshold_minutes` e `route_deviation_threshold_minutes` são a tolerância cadastrada no pedido, não minutos parado nem desvio observado.
 - **Arquivos:** `src/components/dashboard/OrdersTable.tsx`, `src/hooks/usePredictiveAnalysis.ts`
-- **Etapas do plano:** 121
+- **Etapas do plano:** 125
 
 #### B-028 — Orçamento de mapas do Mapbox nasce com limite zero e parada obrigatória — bloqueia no primeiro centavo e sem aviso prévio
 
@@ -3960,7 +4106,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** Com limite 0, a condição de bloqueio (`spent >= limite AND spent > 0`) é verdadeira assim que o primeiro dólar faturável é medido, e a condição de aviso (`limite > 0`) é falsa para sempre — ou seja, o Mapbox é desligado sem nunca ter passado pelo estágio de aviso de 80%.
 - **Arquivos:** `supabase/migrations/20261122130100_geo_foundation.sql`, `supabase/functions/geo-gateway/resolver.ts`, `supabase/migrations/20261123120000_geo_budget_cron.sql`, `supabase/migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql`
-- **Etapas do plano:** 208
+- **Etapas do plano:** 210
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Acesso de leitura ao banco oficial iecgydonctmabiijadsf (nenhum MCP desta sessão aponta para ele, conforme AGENTS.md) para ler geo_budget.monthly_limit_usd/hard_stop e geo_usage_month do mês corrente — o valor pode ter sido alterado pela tela de administração depois do seed.
 
 #### B-044 — Contador de espera da fila: a faixa "urgente" (15–30 min) é desenhada igual à de "atenção", e o outro componente usa cinco faixas em vez de quatro
@@ -3998,8 +4144,30 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 
 ## Transversal — código morto e duplicação
 
-**3 achado(s).**
+**4 achado(s).**
 
+
+#### A-015 — Duas edge functions de DDL destrutivo (apply-fixes, seed-fix-rls) continuam no repo e no deploy automático, sem nenhum chamador e sem checagem de papel
+
+- **Camada:** Transversal — código morto e duplicação (+ 2 outro(s) local)
+- **Severidade:** Alta · **Confiança:** hipotese · **Modo:** RASTREADO · **Revisão:** relido e confirmado por 2 revisor(es) independente(s)
+- **Impacto no negócio:** Um endpoint publicado da empresa, que ninguém usa, é capaz de abrir os dados de pedidos, motoristas, incidentes e rastreamento para qualquer pessoa na internet sem login, e de permitir que um usuário comum se promova a administrador. Basta um usuário com senha do sistema (ou nenhum login, depois da primeira chamada) para vazar a base de operações.
+- **Evidência:**
+  ```
+  supabase/functions/apply-fixes/index.ts:46-49 (SQL) + :55 (rpc 'exec') + :58-60 (erro engolido); supabase/functions/seed-fix-rls/index.ts:46-48,100 (SQL) + :140 (rpc 'exec' com throwOnError); .github/workflows/deploy-edges.yml:42-47 (deploy de todas as functions); ausência de public.exec em supabase/migrations/ e em src/integrations/supabase/types.ts:4217+; scripts/db-audit/known-violations.json (mesmo achado já registrado como baseline).
+  ```
+  Mesma causa, outro local — Transversal — segurança:
+  ```
+  As duas funções NÃO estão em supabase/config.toml, portanto valem verify_jwt=true (default) e exigem JWT válido: o ataque exige conta logada, não é anônimo. O `Access-Control-Allow-Origin: '*'` (apply-fixes/index.ts:12, seed-fix-rls/index.ts:12) não afeta autenticação. O SQL depende de uma RPC inexistente no repo: apply-fixes/index.ts:55 chama `rpc('exec', { query: sql })` e seed-fix-rls/index.ts:140 chama `rpc('exec', { sql_text: sql })` — assinaturas incompatíveis entre si e nenhuma migration cria `public.exec`. O comentário em seed-fix-rls/index.ts:138 diz 'precisamos criar uma função primeiro'. O furo do anon em produção veio de supabase/migrations/20260828000001_seed_fix_rls.sql (citada em 20261122150100_fix_public_rls_bypass.sql:1-2), não da edge.
+  ```
+  Mesma causa, outro local — Backend — demais edges:
+  ```
+  supabase/functions/apply-fixes/index.ts:36-37 (service_role sem auth), :55 (`supabase.rpc('exec', { query: sql })`), :58-60 (catch que converte a falha em `ERR:` e retorna success:true). supabase/functions/seed-fix-rls/index.ts:35-37 e :140 (`supabase.rpc('exec', { sql_text: sql }).throwOnError()`). Ausência da RPC: 0 matches em supabase/migrations/ e ausência em src/integrations/supabase/types.ts (Functions a partir da linha 4217; só mcp_exec:4494 e mcp_exec_many:4495). Registro prévio: scripts/db-audit/known-violations.json.
+  ```
+- **Causa raiz:** São scripts de manutenção de uma sessão antiga que nunca foram removidos. Nenhuma das duas está declarada em supabase/config.toml, então herdam `verify_jwt` padrão (true) — qualquer usuário logado, inclusive `viewer`, tem JWT válido e passa. Dentro do código não há segunda checagem de papel (padrão que `geo-admin/index.ts:75-84` e `mcp-query/index.ts:6-8` aplicam corretamente). O deploy-edges.yml publica todas as functions do diretório, então elas existem como endpoint em produção.
+- **Arquivos:** `.github/workflows/deploy-edges.yml`, `supabase/config.toml`, `supabase/functions/_shared/schemas.ts`, `supabase/functions/apply-fixes/index.ts`, `supabase/functions/seed-fix-rls/index.ts`, `supabase/migrations/20261122150100_fix_public_rls_bypass.sql`
+- **Etapas do plano:** 030
+- **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: As duas chamam `supabase.rpc('exec', ...)` (apply-fixes/index.ts:55, seed-fix-rls/index.ts:140) e NÃO existe nenhuma `CREATE FUNCTION exec` em supabase/migrations/ (grep por `function exec` nas migrations: 0 resultados). Se a RPC `exec` não existir em produção, as chamadas falham e o dano é zero hoje; se existir (criada à mão ou pela Lovable, fora das migrations), a escalada é imediata. Falta acesso de leitura ao banco iecgydonctmabiijadsf para rodar `select proname from pg_proc where proname='exec'` — nenhum MCP desta sessão aponta para esse projeto.
 
 #### B-026 — Dois `useWalletBalance` exportados com formatos de dado diferentes; a tela de UAPI usa a versão sem trava de configuração e consulta a cada 30s mesmo sem Lalamove configurado
 
@@ -4012,7 +4180,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** src/hooks/useUAPI.ts (65 linhas) é a camada antiga e src/hooks/useLalamove.ts reexporta os nomes antigos "para compatibilidade" (comentário em :190). As duas chegam ao mesmo backend (src/lib/uapi-proxy.ts:1 importa `callLalamoveGateway`, destino `target: 'uapi'`), mas com query keys diferentes, nomes de campo diferentes (`balanceCents/balanceFormatted` vs `cents/formatted`) e guardas diferentes. Nenhum dos 7 exports de useUAPI.ts é referenciado fora dele além de UAPISettingsPage.tsx.
 - **Arquivos:** `src/hooks/useUAPI.ts`, `src/hooks/useLalamove.ts`, `src/pages/UAPISettingsPage.tsx`, `src/lib/uapi-proxy.ts`
-- **Etapas do plano:** 206
+- **Etapas do plano:** 208
 
 #### B-027 — O mapa "hero" do dashboard tem altura fixa de 300px dentro de um cartão de até 600px, e a prop activeDeliveries que ele recebe nunca é usada
 
@@ -4025,7 +4193,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O componente nasceu como espaço reservado (daí o nome) com um contador, depois recebeu o `LiveMap` de verdade mas manteve a altura fixa do protótipo e o parâmetro do contador. O `className` responsivo fica no `div` de fora (:18) e o mapa não acompanha.
 - **Arquivos:** `src/components/dashboard/LiveMapPlaceholder.tsx`, `src/pages/DashboardRedesigned.tsx`, `src/components/map/LiveMap.tsx`
-- **Etapas do plano:** 207
+- **Etapas do plano:** 209
 
 #### B-058 — Dashboard principal mostra o código em inglês do status e some com o ícone do veículo: o mapa de status/ícones do OrdersTable divergiu da cópia usada na página de Pedidos
 
@@ -4046,7 +4214,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
 **2 achado(s).**
 
 
-#### C-010 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico
+#### C-012 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico
 
 - **Camada:** Transversal — segurança
 - **Severidade:** Crítica · **Confiança:** confirmado · **Modo:** EXECUTADO · **Revisão:** relido e confirmado por 1 revisor(es) independente(s)
@@ -4070,7 +4238,7 @@ No formulário de novo pedido, só um dos caminhos de escolha de endereço avisa
   ```
 - **Causa raiz:** O default foi escrito para 'funcionar em qualquer ambiente' e o proprio comentario do arquivo (:2-3) adia a restricao ('In production, you should ideally restrict...'). O uso de allowedOrigins[0] foi uma simplificacao que nunca foi completada.
 - **Arquivos:** `supabase/functions/_shared/cors.ts`, `supabase/functions/apply-fixes/index.ts`, `supabase/functions/seed-fix-rls/index.ts`, `supabase/functions/llm-wh/index.ts`
-- **Etapas do plano:** 056
+- **Etapas do plano:** 058
 - **HIPÓTESE — NÃO VERIFICADO.** Falta para confirmar: Nao foi possivel ler o valor de ALLOWED_ORIGINS nos secrets do projeto iecgydonctmabiijadsf (sem MCP nem acesso ao painel nesta sessao). Se a variavel estiver definida com um unico dominio, o risco de origem aberta nao se materializa e sobra so a limitacao de uma origem so.
 
 ## Refutados (não reabrir)

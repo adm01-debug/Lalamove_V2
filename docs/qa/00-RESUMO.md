@@ -94,14 +94,13 @@ projeto afirmam, por escrito, que está verde — o que faz o próximo agente tr
 
 | Severidade | O que significa | Achados |
 |---|---|---|
-| **Crítica** | perda ou vazamento de dado, falha de segurança, fluxo principal quebrado | **13** |
-| **Alta** | função importante falha ou dá resultado errado | **60** |
-| **Média** | funciona com defeito ou fragilidade | **146** |
+| **Crítica** | perda ou vazamento de dado, falha de segurança, fluxo principal quebrado | **16** |
+| **Alta** | função importante falha ou dá resultado errado | **64** |
+| **Média** | funciona com defeito ou fragilidade | **148** |
 | **Baixa** | acabamento e higiene | **63** |
-| | **Total** | **282** |
+| | **Total** | **291** |
 
-Os 282 achados estão organizados em **24 causas raiz** no `03-ACHADOS.md` — 245 deles cabem numa dessas
-24 causas, o que é a informação mais útil deste relatório: não são 282 problemas independentes, são
+Os 291 achados estão organizados em **24 causas raiz** no `03-ACHADOS.md` — a maioria deles cabe numa dessas 24 causas, o que é a informação mais útil deste relatório: não são 282 problemas independentes, são
 cerca de duas dezenas de decisões que se repetiram. As quatro maiores: regra de acesso do banco
 afrouxada para destravar tela e nunca refechada (12 achados); função de servidor que exige login mas
 nunca confere o papel (13); valor gravado que o banco não aceita, por falta de uma tradução única de
@@ -109,7 +108,7 @@ status (13); e número de painel calculado no navegador sobre uma fatia dos dado
 tela (18). O restante vem agrupado por camada.
 
 Mais 6 achados foram **levantados e depois refutados** pela segunda leitura — estão listados no fim de
-`03-ACHADOS.md`, com o motivo, para não serem reabertos por engano. E 34 achados duplicados (o mesmo
+`03-ACHADOS.md`, com o motivo, para não serem reabertos por engano. E 25 achados duplicados (o mesmo
 defeito visto por dois ângulos) foram **fundidos** no achado de origem, em vez de contados duas vezes.
 
 ## O plano
@@ -119,7 +118,7 @@ principais quebrados · 3 integridade de dados e regras de negócio · 4 funcion
 5 robustez · 6 performance · 7 experiência de uso · 8 higiene.
 
 Cada etapa é uma mudança pequena, com uma PR própria e uma verificação concreta — comando, consulta ou
-request, com o resultado esperado escrito. **80 etapas param e esperam sua aprovação** antes do merge:
+request, com o resultado esperado escrito. **79 etapas param e esperam sua aprovação** antes do merge:
 são as que mexem em migration de produção, CI, segredo, infraestrutura, deleção de dado, arquitetura ou
 custo.
 
@@ -159,6 +158,6 @@ nesta sessão) e **243 foram RASTREADOS** (caminho seguido no código). A distin
 | `docs/qa/00-RESUMO.md` | este |
 | `docs/qa/01-INVENTARIO.md` | mapa do sistema e registro de cobertura (o que foi e o que não foi revisado, item por item) |
 | `docs/qa/02-CENARIOS.md` | matriz de cenários por jornada, com EXECUTADO/RASTREADO |
-| `docs/qa/03-ACHADOS.md` | os 282 achados, agrupados por causa raiz, com evidência e impacto |
+| `docs/qa/03-ACHADOS.md` | os 291 achados, agrupados por causa raiz, com evidência e impacto |
 | `docs/qa/04-PLANO.md` | instruções para o agente executor + as 300 etapas |
 | `docs/qa/05-PROGRESSO.md` | checklist que o executor vai marcando |
