@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/utils/logger';
 
 export type MarkerDensity = 'comfortable' | 'compact';
 
@@ -83,7 +84,7 @@ export const useMapSettings = create<MapSettingsState>()(
             }
           }));
         } catch (error) {
-          console.error('Error saving context settings:', error);
+          logger.error('Error saving context settings:', error instanceof Error ? error : undefined);
           throw error;
         }
       },
@@ -109,7 +110,7 @@ export const useMapSettings = create<MapSettingsState>()(
             get().resetToDefaults();
           }
         } catch (error) {
-          console.error('Error loading context settings:', error);
+          logger.error('Error loading context settings:', error instanceof Error ? error : undefined);
           // Fallback on error
           get().resetToDefaults();
           throw error;

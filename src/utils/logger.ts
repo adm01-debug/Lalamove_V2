@@ -16,7 +16,11 @@ const loggerObj = {
       // Em produção: não imprime o payload (evita vazar dados sensíveis no console)
       // Envia para o serviço de monitoramento de erros
       const err = errorOrContext instanceof Error ? errorOrContext : new Error(message);
-      captureError(err, { source: 'manual', metadata: context });
+      captureError(err, {
+        source: 'manual',
+        severity: 'error',
+        metadata: { message, ...context },
+      });
     }
   },
   info: (...args: unknown[]) => {
