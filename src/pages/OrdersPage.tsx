@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -14,10 +14,14 @@ import {
 import { useRecentOrders } from '@/hooks/useRecentOrders';
 import { Order, OrderStatus } from '@/types';
 import { cn } from '@/lib/utils';
-import { OrderDetailModal } from '@/components/orders/OrderDetailModal';
+const OrderDetailModal = lazy(() =>
+  import('@/components/orders/OrderDetailModal').then(m => ({ default: m.OrderDetailModal }))
+);
+const NewOrderDialog = lazy(() =>
+  import('@/components/orders/NewOrderDialog').then(m => ({ default: m.NewOrderDialog }))
+);
 import { FetchOrderDialog } from '@/components/orders/FetchOrderDialog';
 import { ImportCSVDialog } from '@/components/orders/ImportCSVDialog';
-import { NewOrderDialog } from '@/components/orders/NewOrderDialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 import { SearchInputWithHelp } from '@/components/ui/search-help-tooltip';
@@ -258,10 +262,14 @@ export function OrdersPage() {
           </div>
         )}
 
-        <OrderDetailModal order={selectedOrder} open={detailModalOpen} onOpenChange={setDetailModalOpen} />
+        <Suspense fallback={null}>
+          <OrderDetailModal order={selectedOrder} open={detailModalOpen} onOpenChange={setDetailModalOpen} />
+        </Suspense>
         <FetchOrderDialog open={fetchDialogOpen} onOpenChange={setFetchDialogOpen} onSuccess={handleRefresh} />
         <ImportCSVDialog open={importDialogOpen} onOpenChange={setImportDialogOpen} onSuccess={handleRefresh} />
-        <NewOrderDialog open={newOrderDialogOpen} onOpenChange={setNewOrderDialogOpen} onSuccess={handleRefresh} />
+        <Suspense fallback={null}>
+          <NewOrderDialog open={newOrderDialogOpen} onOpenChange={setNewOrderDialogOpen} onSuccess={handleRefresh} />
+        </Suspense>
       </div>
     </PullToRefresh>
   );
