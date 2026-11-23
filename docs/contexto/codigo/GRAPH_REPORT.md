@@ -1,7 +1,7 @@
 # Graph Report - Lalamove_V2  (2026-11-23)
 
 ## Corpus Check
-- 1041 files · ~1,102,742 words
+- 1041 files · ~1,102,884 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d3f974b0`
+- Built from commit: `b6d8b233`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -751,7 +751,7 @@ Nodes (39): 33 — Hook `src/hooks/useGeo.ts` ✅, ADDRESS, geo, Impl, invokeMoc
 
 ### Community 36 - "Onda 1 — Segurança e risco de perda de dado"
 Cohesion: 0.04
-Nodes (45): Etapa 001 — Rotacionar a chave e o segredo HMAC da Lalamove e atualizar os secrets das edges, Etapa 002 — Remover do repositório os 10 arquivos com credencial e travar reincidência no guard de segredos, Etapa 003 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico, Etapa 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true), Etapa 005 — Nome, telefone e score de risco dos motoristas expostos sem login: materialized view driver_stats_cache com GRANT SELECT para anon, Etapa 007 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele, Etapa 008 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista, Etapa 010 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove (+37 more)
+Nodes (45): Etapa 001 — Rotacionar a chave e o segredo HMAC da Lalamove e atualizar os secrets das edges, Etapa 002 — Remover do repositório os 11 arquivos com credencial e travar reincidência no guard de segredos, Etapa 003 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico, Etapa 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true), Etapa 005 — Nome, telefone e score de risco dos motoristas expostos sem login: materialized view driver_stats_cache com GRANT SELECT para anon, Etapa 007 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele, Etapa 008 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista, Etapa 010 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove (+37 more)
 
 ### Community 37 - "DriversPage.tsx"
 Cohesion: 0.06
@@ -2127,7 +2127,7 @@ Nodes (5): Bloqueio, Estado (2026-11-21), Evidência, Impacto no negócio, Probl
 
 ### Community 385 - "Causa raiz: Senhas, chaves e dados reais de clientes guardados em lugar que não é cofre"
 Cohesion: 0.33
-Nodes (6): A-001 — Chave do dispatcher gravada em texto puro no comando do cron e chave publishable literal dentro de migration — contra a regra escrita do próprio repo, B-003 — Arquivos de documentacao e bundle n8n na raiz expoem dado real de negocio e identificacao da conta, C-010 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 10 arquivos, Causa raiz: Senhas, chaves e dados reais de clientes guardados em lugar que não é cofre, M-015 — Token de acesso do Bitrix24 viaja na query string e o telefone completo vai para o log no caminho Zapp, M-141 — workflow_dispatch de apply-migrations.yml interpola o input direto no bash, com o token de producao no ambiente
+Nodes (6): A-001 — Chave do dispatcher gravada em texto puro no comando do cron e chave publishable literal dentro de migration — contra a regra escrita do próprio repo, B-003 — Arquivos de documentacao e bundle n8n na raiz expoem dado real de negocio e identificacao da conta, C-010 — Credenciais de PRODUCAO da Lalamove (API key + secret HMAC) versionadas em 11 arquivos, Causa raiz: Senhas, chaves e dados reais de clientes guardados em lugar que não é cofre, M-015 — Token de acesso do Bitrix24 viaja na query string e o telefone completo vai para o log no caminho Zapp, M-141 — workflow_dispatch de apply-migrations.yml interpola o input direto no bash, com o token de producao no ambiente
 
 ### Community 386 - "Causa raiz: Botão que confirma sucesso sem executar a ação"
 Cohesion: 0.33

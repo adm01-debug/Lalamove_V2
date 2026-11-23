@@ -5,9 +5,9 @@
   "linguagens": [
    "TypeScript (563)",
    "SQL (202)",
-   "Markdown (116)",
    "JavaScript (114)",
-   "JSON (36)",
+   "Markdown (114)",
+   "JSON (30)",
    "Shell (10)",
    "Python (8)",
    "YAML (8)"
@@ -506,11 +506,6 @@
    "linhas": 124
   },
   {
-   "arquivo": "lalamove_documentacao_completa.md",
-   "titulo": "Lalamove Brasil — Documentação Mestra Exaustiva",
-   "linhas": 1738
-  },
-  {
    "arquivo": "lalamove_n8n_integration.md",
    "titulo": "Integração n8n ↔ Lalamove Token Manager",
    "linhas": 141
@@ -519,11 +514,6 @@
    "arquivo": "lalamove_order_history_full.md",
    "titulo": "Lalamove Brasil — Histórico Completo de Pedidos",
    "linhas": 116
-  },
-  {
-   "arquivo": "lalamove_suplemento_v2.md",
-   "titulo": "Lalamove Brasil — Suplemento Técnico v2",
-   "linhas": 772
   }
  ],
  "docs_em_subpastas": [

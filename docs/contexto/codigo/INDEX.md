@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d3f974b04f8e22e082ca45139e7e6815bacd8340` (2026-11-22T21:56:59-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b6d8b2336dec1bac212f122d2adf30aa33094ef1` (2026-11-23T06:50:52-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (563), SQL (202), Markdown (116), JavaScript (114), JSON (36), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (563), SQL (202), JavaScript (114), Markdown (114), JSON (30), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1084 |
+| arquivos_total | 1073 |
 | arquivos_codigo | 676 |
 | linhas_codigo | 132230 |
 | rotas | 56 |
@@ -52,7 +52,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | testes | 166 |
 | workflows | 5 |
 | scripts | 107 |
-| docs_md | 116 |
+| docs_md | 114 |
 
 ## Onde ficam as coisas
 - telas: src/pages (54)
@@ -65,7 +65,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
-- docs: docs (37), (raiz) (9), .github (1)
+- docs: docs (37), (raiz) (7), .github (1)
 - nomenclatura: {"componentes":"PascalCase (72%)","hooks":"use + PascalCase","servicos":"camelCase (84%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/mensageria.md, docs/agentes/pendencias-dono.md, docs/agentes/regras-dominio.md
 
@@ -288,7 +288,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9524 nós · 19502 arestas · 676 comunidades · grafo do commit `d3f974b0`
+- 9524 nós · 19502 arestas · 676 comunidades · grafo do commit `b6d8b233`
 - comunidades maiores: cn (224), geo-gateway/index.ts (154), lucide-react (153), App.tsx (146), client.ts (115), RateLimitDashboardPage.tsx (112), DashboardRedesigned.tsx (94), 4. Componentes, hooks, libs e estado — **revisado** (90), send-notification/index.ts (87), ref_node_url (82), dependencies (80), lalamove-api/index.ts (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -383,14 +383,13 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `docs/TROUBLESHOOTING.md` — 🔧 Troubleshooting - Lalamove Guardian (178 linhas)
 - `docs/WEBHOOK_HANDLER.md` — 📡 Webhook Handler - Lalamove Guardian (142 linhas)
 - `docs/audit_report.md` — 🏆 Relatório de Auditoria Enterprise - Lalamove Guardian (124 linhas)
-- `lalamove_documentacao_completa.md` — Lalamove Brasil — Documentação Mestra Exaustiva (1738 linhas)
 - `lalamove_n8n_integration.md` — Integração n8n ↔ Lalamove Token Manager (141 linhas)
 - `lalamove_order_history_full.md` — Lalamove Brasil — Histórico Completo de Pedidos (116 linhas)
-- `lalamove_suplemento_v2.md` — Lalamove Brasil — Suplemento Técnico v2 (772 linhas)
 - subpastas de docs/: docs/pendencias (20), docs/agentes (8), docs/planos (7), docs/qa (6), docs/adr (2), docs/backups (2), docs/contexto (2), docs/auditorias (1), docs/ci (1)
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `b6d8b23` security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)
 - 2026-11-22 `d3f974b` docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)
 - 2026-11-22 `281cd07` feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)
 - 2026-11-22 `7f6a42b` feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)
@@ -405,7 +404,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `6487163` feat: desligar auto-cadastro no front (item 9) (#300)
 - 2026-11-22 `97b9d2e` feat: cliente do front entende o formato único de erro (item 42) (#301)
 - 2026-11-22 `035a7c6` feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)
-- 2026-11-22 `1f97a5b` fix: fechar janela de bypass de MFA no ProtectedRoute (#298)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

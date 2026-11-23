@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "d3f974b04f8e22e082ca45139e7e6815bacd8340",
+  "sha": "b6d8b2336dec1bac212f122d2adf30aa33094ef1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 01:14 UTC",
-  "files_total": 1078,
+  "generated_at": "2026-11-23 10:14 UTC",
+  "files_total": 1067,
   "code_files": 887,
   "code_lines": 153407
  },
@@ -74628,10 +74628,32 @@
   }
  },
  "git": {
-  "sha": "d3f974b04f8e22e082ca45139e7e6815bacd8340",
+  "sha": "b6d8b2336dec1bac212f122d2adf30aa33094ef1",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b6d8b23",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)",
+    "files": [
+     "docs/qa/03-ACHADOS.md",
+     "docs/qa/04-PLANO.md",
+     "docs/qa/05-PROGRESSO.md",
+     "lalamove_bundle_import.json",
+     "lalamove_documentacao_completa.docx",
+     "lalamove_documentacao_completa.html",
+     "lalamove_documentacao_completa.md",
+     "lalamove_f00_bootstrap.json",
+     "lalamove_f01_cotacao.json",
+     "lalamove_f02_pedido.json",
+     "lalamove_f03_rastreamento.json",
+     "lalamove_f04_pod.json",
+     "lalamove_suplemento_v2.html",
+     "lalamove_suplemento_v2.md"
+    ]
+   },
    {
     "sha": "d3f974b",
     "date": "2026-11-22",
@@ -75026,22 +75048,12 @@
      "supabase/functions/seed-fix-rls/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ]
-   },
-   {
-    "sha": "572af27",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(planos): plano front-end de 190 etapas (#280)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "docs/planos/README.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    24
+    23
    ],
    [
     "src/App.tsx",
@@ -75062,6 +75074,18 @@
    [
     "src/components/map/markerFactories.ts",
     3
+   ],
+   [
+    "docs/qa/03-ACHADOS.md",
+    2
+   ],
+   [
+    "docs/qa/04-PLANO.md",
+    2
+   ],
+   [
+    "docs/qa/05-PROGRESSO.md",
+    2
    ],
    [
     ".github/workflows/ci.yml",
@@ -75105,18 +75129,6 @@
    ],
    [
     "src/components/auth/ProtectedRoute.test.tsx",
-    2
-   ],
-   [
-    "src/hooks/useMFA.ts",
-    2
-   ],
-   [
-    "supabase/functions/external-companies/index.ts",
-    2
-   ],
-   [
-    "src/lib/__tests__/html.test.ts",
     2
    ]
   ]
