@@ -631,15 +631,12 @@ const jobWorkerV2 = jobWorkerV1; // envelope fixado por process_job_queue() no b
 //    (:647/:651) deixa o corpo sobrescrever o tipo de frota.
 //  - `search-orders` repassa o corpo inteiro para `order_search` (:609 → :258),
 //    sem ler campo algum → só discriminador + passthrough.
-//  - `favorite-driver`/`block-driver`: o handler exige `body.action` (:655/:661,
-//    :665/:671), campo que :495 SEMPRE remove do corpo — o guard é inalcançável
-//    e as duas ações devolvem 400 em qualquer payload. `driver_action` é o campo
-//    do contrato futuro e fica OPCIONAL: torná-lo obrigatório só é fiel no mesmo
-//    PR que editar index.ts:655/:661/:665/:671 e useLalamoveUapi.ts:267-271.
-//  - ramos 'add'/'remove'/'block'/'unblock': é o que o front envia HOJE, porque
-//    o spread de useLalamoveUapi.ts:39 (`{ action, ...body }`) sobrescreve o
-//    nome da ação. Aceitar aqui mantém o 400 'Invalid action' atual (:762) em
-//    vez de trocá-lo por 422. Remover junto com o fix do hook.
+//  - `favorite-driver`/`block-driver`: o discriminador do contrato é `action` e
+//    o corpo sempre perde esse campo; a sub-ação (add/remove/block/unblock) vem
+//    em `driver_action`, obrigatório aqui e enviado por useLalamoveUapi.ts:271.
+//    Antes o handler lia `body.action` — campo inexistente no corpo — e as duas
+//    ações devolviam 400 em qualquer payload. Os ramos de compatibilidade
+//    'add'/'remove'/'block'/'unblock' foram removidos no mesmo fix.
 const uapiId = z.union(
   [z.string().min(1, "order_uuid é obrigatório"), z.number()],
   { errorMap: () => ({ message: "order_uuid é obrigatório" }) },
@@ -708,18 +705,13 @@ const lalamoveUapiV1 = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("favorite-driver"),
     driver_fid: uapiFid,
-    driver_action: z.string().min(1).optional(),
+    driver_action: z.string().min(1, "driver_action é obrigatório"),
   }).passthrough(),
   z.object({
     action: z.literal("block-driver"),
     driver_fid: uapiFid,
-    driver_action: z.string().min(1).optional(),
+    driver_action: z.string().min(1, "driver_action é obrigatório"),
   }).passthrough(),
-  // ramos de compatibilidade com o bug de useLalamoveUapi.ts:39 (hoje → 400)
-  z.object({ action: z.literal("add") }).passthrough(),
-  z.object({ action: z.literal("remove") }).passthrough(),
-  z.object({ action: z.literal("block") }).passthrough(),
-  z.object({ action: z.literal("unblock") }).passthrough(),
   z.object({
     action: z.literal("rate-driver"),
     order_uuid: uapiId,

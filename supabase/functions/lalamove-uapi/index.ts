@@ -677,23 +677,23 @@ serve(async (req) => {
         break;
 
       case 'favorite-driver':
-        if (!body.driver_fid || !body.action) {
+        if (!body.driver_fid || !body.driver_action) {
           return new Response(
-            JSON.stringify({ error: 'driver_fid and action (add/remove) are required' }),
+            JSON.stringify({ error: 'driver_fid and driver_action (add/remove) are required' }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        result = await manageFavoriteDriver(accessToken, body.driver_fid, body.action);
+        result = await manageFavoriteDriver(accessToken, body.driver_fid, body.driver_action);
         break;
 
       case 'block-driver':
-        if (!body.driver_fid || !body.action) {
+        if (!body.driver_fid || !body.driver_action) {
           return new Response(
-            JSON.stringify({ error: 'driver_fid and action (block/unblock) are required' }),
+            JSON.stringify({ error: 'driver_fid and driver_action (block/unblock) are required' }),
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        result = await manageBlockedDriver(accessToken, body.driver_fid, body.action);
+        result = await manageBlockedDriver(accessToken, body.driver_fid, body.driver_action);
         break;
 
       // --- Driver Rating ---

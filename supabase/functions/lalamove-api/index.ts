@@ -11,6 +11,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { requireRole } from "../_shared/auth.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -871,6 +872,7 @@ serve(async (req) => {
       }
 
       case 'edit-order': {
+        { const { error: re } = await requireRole(req, ['admin', 'manager', 'operator'], corsHeaders); if (re) return re; }
         const editOrderId = (body.orderId as string | undefined) ?? null;
         if (!editOrderId) {
           return new Response(
@@ -886,6 +888,7 @@ serve(async (req) => {
       }
 
       case 'cancel': {
+        { const { error: re } = await requireRole(req, ['admin', 'manager', 'operator'], corsHeaders); if (re) return re; }
         const cancelOrderId = body.orderId as string;
         if (!cancelOrderId) {
           return new Response(
@@ -940,6 +943,7 @@ serve(async (req) => {
 
       // --- Priority Fee (Doc §5) — só pode aumentar, nunca reduzir. ---
       case 'priority-fee': {
+        { const { error: re } = await requireRole(req, ['admin', 'manager', 'operator'], corsHeaders); if (re) return re; }
         const pfOrderId = body.orderId as string;
         // `fee` é o nome que a lalamove-gateway envia na query (src/lib/lalamove-api.ts:133).
         const rawAmount = body.amount ?? body.priorityFee ?? body.fee;
@@ -1039,6 +1043,7 @@ serve(async (req) => {
 
       // --- Change Driver (Doc Section 6) ---
       case 'change-driver': {
+        { const { error: re } = await requireRole(req, ['admin', 'manager', 'operator'], corsHeaders); if (re) return re; }
         const cdOrderId = body.orderId as string;
         const cdDriverId = body.driverId as string;
         const cdReason = (body.reason as string) || '';
@@ -1082,6 +1087,7 @@ serve(async (req) => {
 
       // --- Webhook ---
       case 'set-webhook': {
+        { const { error: re } = await requireRole(req, ['admin'], corsHeaders); if (re) return re; }
         const webhookUrl = body.url;
         if (!webhookUrl) {
           return new Response(
