@@ -63,8 +63,7 @@ export function BatchActionsToolbar({ selectedOrders, onClear, onStatusUpdate }:
       .join('\n');
     navigator.clipboard.writeText(trackingLinks).then(
       () => toast.success('Links de rastreamento copiados para a área de transferência!'),
-      () => toast.error('Não foi possível copiar os links.'),
-    );
+    ).catch(() => toast.error('Não foi possível copiar: permissão de clipboard negada.'));
   };
 
   return (
