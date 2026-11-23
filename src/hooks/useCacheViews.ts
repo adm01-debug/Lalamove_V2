@@ -56,13 +56,13 @@ export function useCacheStats() {
         throw error;
       }
 
-      return (data || []).map((row: any) => ({
-        view_name: row.view_name,
+      return (data || []).map((row) => ({
+        view_name: row.view_name ?? '',
         last_refresh: row.last_refresh,
         refresh_duration_ms: row.refresh_duration_ms,
         row_count: row.row_count,
-        is_stale: row.is_stale,
-        status: row.status,
+        is_stale: row.is_stale ?? false,
+        status: (row.status ?? 'never_refreshed') as CacheStats['status'],
       }));
     },
     refetchInterval: 30000,
@@ -141,11 +141,11 @@ export function useRefreshCache() {
         throw error;
       }
 
-      return (data || []).map((r: any) => ({
+      return (data || []).map((r) => ({
         view_refreshed: r.view_refreshed,
         duration_ms: r.duration_ms,
         row_count: r.row_count,
-        status: r.status,
+        status: (r.status === 'failed' ? 'failed' : 'success') as RefreshResult['status'],
       }));
     },
     onSuccess: (data) => {

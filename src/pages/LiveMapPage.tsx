@@ -101,8 +101,8 @@ export function LiveMapPage() {
       const { error } = await supabase.functions.invoke('simulate-driver-movement');
       if (error) throw error;
       return true;
-    } catch (err: any) {
-      const status = err?.context?.status;
+    } catch (err) {
+      const status = (err as { context?: { status?: number } })?.context?.status;
       toast.error(status === 403 ? 'Sem permissão para simular (requer admin ou manager)' : 'Erro ao simular movimento');
       return false;
     }

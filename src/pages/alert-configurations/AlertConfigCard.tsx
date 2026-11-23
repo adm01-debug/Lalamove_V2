@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap, Trash2, Navigation, MapPin, Clock, FileWarning, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUpdateAlertConfiguration, useDeleteAlertConfiguration, AlertConfiguration } from '@/hooks/useAlertConfigurations';
-import { useTestNotification } from '@/hooks/useTestNotification';
+import { useTestNotification, TestNotificationChannel } from '@/hooks/useTestNotification';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -104,13 +104,13 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
     updateMutation.mutate({ id: config.id, updates: { [fieldMap[channel]]: !currentValue } });
   };
   const handleSaveEdit = () => { updateMutation.mutate({ id: config.id, updates: { message_template: editedTemplate, whatsapp_numbers: editedWhatsapp ? editedWhatsapp.split(',').map(s => s.trim()) : null, email_addresses: editedEmails ? editedEmails.split(',').map(s => s.trim()) : null, slack_channels: editedSlack ? editedSlack.split(',').map(s => s.trim()) : null, n8n_webhook_url: editedN8nUrl || null } }); setIsEditing(false); };
-  const handleTestChannel = (channelKey: string) => {
+  const handleTestChannel = (channelKey: TestNotificationChannel) => {
     let recipients: string[] | undefined; let webhookUrl: string | undefined;
     if (channelKey === 'whatsapp') recipients = config.whatsapp_numbers || [];
     else if (channelKey === 'email') recipients = config.email_addresses || [];
     else if (channelKey === 'slack') recipients = config.slack_channels || [];
     else if (channelKey === 'n8n') webhookUrl = config.n8n_webhook_url || undefined;
-    testMutation.mutate({ channel: channelKey as any, alertType: config.alert_type, recipients, webhookUrl });
+    testMutation.mutate({ channel: channelKey, alertType: config.alert_type, recipients, webhookUrl });
   };
 
   const channels = [
@@ -153,7 +153,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
                     <Switch checked={channel.enabled || false} onCheckedChange={() => handleToggleChannel(channel.key, channel.enabled)} disabled={updateMutation.isPending} className="scale-75" />
                     <Icon className={cn("w-4 h-4 shrink-0 transition-colors", channel.enabled ? "text-primary" : "text-muted-foreground")} />
                     <span className={cn("text-xs font-medium flex-1 transition-colors", channel.enabled ? "text-foreground" : "text-muted-foreground")}>{channelLabels[channel.key as keyof typeof channelLabels]}</span>
-                    {channel.enabled && <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="h-6 w-6 shrink-0" onClick={() => handleTestChannel(channel.key)} disabled={testMutation.isPending}>{isTestingThis ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}</Button></TooltipTrigger><TooltipContent><p>Testar {channelLabels[channel.key as keyof typeof channelLabels]}</p></TooltipContent></Tooltip>}
+                    {channel.enabled && <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="h-6 w-6 shrink-0" onClick={() => handleTestChannel(channel.key as TestNotificationChannel)} disabled={testMutation.isPending}>{isTestingThis ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}</Button></TooltipTrigger><TooltipContent><p>Testar {channelLabels[channel.key as keyof typeof channelLabels]}</p></TooltipContent></Tooltip>}
                   </div>
                 );
               })}
