@@ -145,14 +145,16 @@ Deno.test("etapa 93: motorista com pedido ativo nunca e silenciado; fornecedor e
 });
 
 Deno.test("etapa 93: adiamento devolve o instante em que a janela abre", () => {
-  // 20:30 em SP -> abre as 07:00 locais = 10:00 UTC.
+  // 20:30 em SP -> abre as 07:00 locais = 10:00 UTC do dia seguinte.
+  const input = new Date("2026-11-22T23:30:00Z");
   const decision = applyQuietHours(
     "pickup_contact",
-    new Date("2026-11-22T23:30:00Z"),
+    input,
     false,
   );
   assert(decision.releaseAt);
-  assertEquals(decision.releaseAt!.getTime() > Date.now() - 3_600_000, true);
+  // releaseAt deve ser posterior à entrada (próximo dia às 07:00 SP)
+  assertEquals(decision.releaseAt!.getTime() > input.getTime(), true);
   assertEquals(localHour(decision.releaseAt!, -180), 7);
 });
 

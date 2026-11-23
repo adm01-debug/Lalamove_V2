@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { QueryState } from '@/components/ui/query-state';
 import { useQueueStatistics, useJobQueue, useRetryJob, useDeleteJob, useProcessQueue } from '@/hooks/useJobQueue';
 import { AlertCircle, CheckCircle2, Clock, Loader2, PlayCircle, RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -16,8 +17,8 @@ import {
 
 export default function JobQueuePage() {
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined);
-  const { data: stats, isLoading: statsLoading } = useQueueStatistics();
-  const { data: jobs, isLoading: jobsLoading, refetch } = useJobQueue(selectedStatus, 100);
+  const { data: stats, isLoading: statsLoading, isError: statsError } = useQueueStatistics();
+  const { data: jobs, isLoading: jobsLoading, refetch, isError: jobsError } = useJobQueue(selectedStatus, 100);
   const { retryJob } = useRetryJob();
   const { deleteJob } = useDeleteJob();
   const { processQueue } = useProcessQueue();
@@ -107,6 +108,14 @@ export default function JobQueuePage() {
     return (
       <div className="flex items-center justify-center h-96">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (statsError || jobsError) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <QueryState isError onRetry={refetch} errorText="Não foi possível carregar a fila de jobs." />
       </div>
     );
   }

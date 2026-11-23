@@ -5,6 +5,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { QueryState } from '@/components/ui/query-state';
 import { useDeliveryMetrics, useDriverDeliveryStats, useDeliveryTrends } from '@/hooks/useDeliveryMetrics';
 import { 
   PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar,
@@ -33,11 +34,12 @@ const RISK_COLORS: Record<string, string> = { LOW: 'text-success', MEDIUM: 'text
 const fmt = (m: number) => m < 60 ? `${Math.round(m)} min` : `${Math.floor(m / 60)}h ${Math.round(m % 60)}m`;
 
 export function DeliveryMetricsPage() {
-  const { data: dm, isLoading: l1 } = useDeliveryMetrics();
-  const { data: ds, isLoading: l2 } = useDriverDeliveryStats();
-  const { data: trends, isLoading: l3 } = useDeliveryTrends(7);
+  const { data: dm, isLoading: l1, isError: e1, refetch: refetch1 } = useDeliveryMetrics();
+  const { data: ds, isLoading: l2, isError: e2 } = useDriverDeliveryStats();
+  const { data: trends, isLoading: l3, isError: e3 } = useDeliveryTrends(7);
 
-  if (l1 || l2 || l3) return <div className="p-6 flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
+  if (l1 || l2 || l3) return <QueryState isLoading />;
+  if (e1 || e2 || e3) return <QueryState isError onRetry={refetch1} errorText="Não foi possível carregar as métricas de entrega." />;
 
   const statusData = dm ? Object.entries(dm.byStatus).map(([s, c]) => ({ name: STATUS_LABELS[s] || s, value: c, color: STATUS_COLORS[s] || 'hsl(var(--muted))' })).filter(d => d.value > 0) : [];
   const vehicleData = dm ? Object.entries(dm.byVehicleType).map(([t, c]) => ({ name: VEHICLE_LABELS[t] || t, value: c, color: VEHICLE_COLORS[t] || 'hsl(var(--primary))' })).filter(d => d.value > 0) : [];
