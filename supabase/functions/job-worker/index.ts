@@ -690,6 +690,8 @@ export async function maybeEmitEtaDelay(
     etaMinutes: number;
     lat: number;
     lng: number;
+    /** Instante de referência; injetável para testes de fronteira de tempo. */
+    nowMs?: number;
   },
 ): Promise<boolean> {
   const { data: order } = await supabase
@@ -714,7 +716,7 @@ export async function maybeEmitEtaDelay(
   if (cfg && cfg.is_enabled === false) return false;
   const thresholdMin = Math.max(1, Math.round(Number(cfg?.min_interval_seconds ?? 900) / 60));
 
-  const arrivalMs = Date.now() + args.etaMinutes * 60_000;
+  const arrivalMs = (args.nowMs ?? Date.now()) + args.etaMinutes * 60_000;
   const lateMs = new Date(order.scheduled_at).getTime() + thresholdMin * 60_000;
   if (!Number.isFinite(lateMs) || arrivalMs <= lateMs) return false;
 
