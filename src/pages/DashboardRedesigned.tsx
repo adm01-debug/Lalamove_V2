@@ -216,12 +216,6 @@ export function DashboardRedesigned() {
     dismissMutation.mutate(alert.id);
   }, [dismissMutation]);
 
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
-
-  const displayStats = stats ?? defaultStats;
-
   // Mapa de erros por métrica (item 61): quando uma das 7 queries falha (ex.: RLS negada),
   // o KPI correspondente mostra "—" em vez de "0".
   const metricError = useMemo(() => {
@@ -230,8 +224,14 @@ export function DashboardRedesigned() {
     return map;
   }, [stats]);
 
-  const kpi = (field: keyof DashboardStats, value: number | string): string | number =>
-    metricError[field] ? '—' : value;
+  const kpi = useCallback((field: keyof DashboardStats, value: number | string): string | number =>
+    metricError[field] ? '—' : value, [metricError]);
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  const displayStats = stats ?? defaultStats;
 
   const dashboardContent = (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
