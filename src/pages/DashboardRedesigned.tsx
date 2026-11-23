@@ -11,6 +11,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { AlertActionCard } from '@/components/dashboard/AlertActionCard';
 import { MetricCard } from '@/components/dashboard/MetricCard';
 import { LiveMapPlaceholder } from '@/components/dashboard/LiveMapPlaceholder';
@@ -33,9 +34,9 @@ import { useActiveAlerts, useAlertActions } from '@/hooks/useActiveAlerts';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useAnnounce } from '@/hooks/useAccessibility';
-import { DriverApproval, Alert } from '@/types';
+import { DriverApproval, Alert, DashboardStats } from '@/types';
 import { motion } from 'framer-motion';
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo, useEffect } from 'react';
 
 // Use displayStats after loading guard
 const defaultStats = {
@@ -51,7 +52,7 @@ export function DashboardRedesigned() {
   const { announce } = useAnnounce();
   const [liveMessage, setLiveMessage] = useState('');
   
-  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = useDashboardStats();
+  const { data: stats, isLoading: statsLoading, isError: statsError, refetch: refetchStats } = useDashboardStats();
   const { data: ordersData, isLoading: ordersLoading, refetch: refetchOrders } = useRecentOrders();
   const { data: approvals, isLoading: approvalsLoading, refetch: refetchApprovals } = usePendingApprovals();
   const { data: alerts, isLoading: alertsLoading, refetch: refetchAlerts } = useActiveAlerts();
@@ -60,6 +61,13 @@ export function DashboardRedesigned() {
   const { dismissMutation } = useAlertActions();
 
   const isLoading = statsLoading || ordersLoading || approvalsLoading || alertsLoading;
+
+  // Toast de erro quando alguma das 7 queries do dashboard falha (RLS negada, etc).
+  useEffect(() => {
+    if (statsError) {
+      toast.error('Não foi possível carregar as métricas do dashboard');
+    }
+  }, [statsError]);
 
   // Compute sparklines from real order data
   const ordersSparkline = useMemo(() => {
@@ -208,6 +216,17 @@ export function DashboardRedesigned() {
     dismissMutation.mutate(alert.id);
   }, [dismissMutation]);
 
+  // Mapa de erros por métrica (item 61): quando uma das 7 queries falha (ex.: RLS negada),
+  // o KPI correspondente mostra "—" em vez de "0".
+  const metricError = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    (stats?.errors ?? []).forEach(e => { map[e.name] = true; });
+    return map;
+  }, [stats]);
+
+  const kpi = useCallback((field: keyof DashboardStats, value: number | string): string | number =>
+    metricError[field] ? '—' : value, [metricError]);
+
   if (isLoading) {
     return <DashboardSkeleton />;
   }
@@ -285,7 +304,7 @@ export function DashboardRedesigned() {
       {/* Main Metrics with Sparklines */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <MetricCard
-          value={displayStats.totalOrders}
+          value={kpi('totalOrders', displayStats.totalOrders)}
           label="Total Pedidos"
           icon={Package}
           sparkline={ordersSparkline}
@@ -294,7 +313,7 @@ export function DashboardRedesigned() {
         />
         
         <MetricCard
-          value={displayStats.activeDeliveries}
+          value={kpi('activeDeliveries', displayStats.activeDeliveries)}
           label="Ativas"
           icon={Truck}
           variant="warning"
@@ -302,16 +321,16 @@ export function DashboardRedesigned() {
         />
         
         <MetricCard
-          value={displayStats.completedToday}
+          value={kpi('completedToday', displayStats.completedToday)}
           label="Concluídas"
           icon={CheckCircle2}
           sparkline={completionSparkline}
-          comparison={`${displayStats.onTimeRate}% no prazo`}
+          comparison={metricError['onTimeRate'] ? undefined : `${displayStats.onTimeRate}% no prazo`}
           variant="success"
         />
         
         <MetricCard
-          value={displayStats.pendingApprovals}
+          value={kpi('pendingApprovals', displayStats.pendingApprovals)}
           label="Pendentes"
           icon={Shield}
           variant={displayStats.pendingApprovals > 0 ? 'warning' : 'default'}
@@ -322,25 +341,25 @@ export function DashboardRedesigned() {
       {/* Secondary Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <MetricCard
-          value={displayStats.alertsCount}
+          value={kpi('alertsCount', displayStats.alertsCount)}
           label="Alertas"
           icon={Bell}
           variant={displayStats.alertsCount > 0 ? 'destructive' : 'default'}
           onClick={() => navigate('/alerts')}
         />
         <MetricCard
-          value={`${displayStats.avgDeliveryTime}min`}
+          value={kpi('avgDeliveryTime', `${displayStats.avgDeliveryTime}min`)}
           label="Tempo Médio"
           icon={Clock}
         />
         <MetricCard
-          value={`${displayStats.onTimeRate}%`}
+          value={kpi('onTimeRate', `${displayStats.onTimeRate}%`)}
           label="No Prazo"
           icon={TrendingUp}
           variant="success"
         />
         <MetricCard
-          value={displayStats.activeDrivers}
+          value={kpi('activeDrivers', displayStats.activeDrivers)}
           label="Motoristas"
           icon={Users}
           variant="primary"

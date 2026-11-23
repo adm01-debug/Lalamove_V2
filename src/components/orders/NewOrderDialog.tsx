@@ -270,6 +270,13 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
     return { valid: true as const, iso: dt.toISOString(), error: '' };
   })();
 
+  // Converte uma Date para o valor do <input type="datetime-local"> no fuso local do usuário.
+  // `toISOString()` é UTC e deslocaria a hora exibida no campo.
+  const toLocalInputValue = (date: Date): string => {
+    const tzOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+  };
+
   // Validação E.164 dos telefones (Lalamove v3 exige celular BR válido).
   const senderPhoneValidation = validateBrazilianPhone(form.senderPhone);
   const recipientPhoneValidation = validateBrazilianPhone(form.recipientPhone);
@@ -902,9 +909,9 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 value={form.scheduleAt}
                 onChange={e => updateField('scheduleAt', e.target.value)}
                 // eslint-disable-next-line react-hooks/purity
-                min={new Date(Date.now() + 31 * 60000).toISOString().slice(0, 16)}
+                min={toLocalInputValue(new Date(Date.now() + 31 * 60000))}
                 // eslint-disable-next-line react-hooks/purity
-                max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}
+                max={toLocalInputValue(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000))}
               />
               {form.scheduleAt && !scheduleValidation.valid && (
                 <p className="text-[11px] text-destructive">{scheduleValidation.error}</p>

@@ -31,22 +31,21 @@ export function AuthPage() {
 
   // Countdown timer for lockout
   useEffect(() => {
-    if (lockoutStatus.isLocked && lockoutStatus.remainingSeconds > 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCountdown(lockoutStatus.remainingSeconds);
-      const interval = setInterval(() => {
-        setCountdown(prev => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            checkLockout(email);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [lockoutStatus.isLocked, lockoutStatus.remainingSeconds, email, checkLockout]);
+    if (!lockoutStatus.isLocked || lockoutStatus.remainingSeconds <= 0) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCountdown(lockoutStatus.remainingSeconds);
+    const interval = setInterval(() => {
+      setCountdown(prev => Math.max(prev - 1, 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutStatus.isLocked, lockoutStatus.remainingSeconds]);
+
+  // Ao zerar o countdown, revalida o lockout (sem reiniciar o timer a cada tecla de e-mail).
+  useEffect(() => {
+    if (countdown !== 0 || !lockoutStatus.isLocked) return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    checkLockout(email);
+  }, [countdown, lockoutStatus.isLocked, checkLockout]);
 
   // Redirect if already authenticated
   if (user) {

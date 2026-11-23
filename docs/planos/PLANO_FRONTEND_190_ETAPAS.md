@@ -355,23 +355,23 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 ## Bloco 3 — Dados, erros e estados de tela (61–85)
 
 ### 61 — [F] Dashboard checa o `error` das 7 queries
-- [ ] `src/hooks/useDashboardStats.ts:28-116`: `Promise.allSettled`; qualquer `error` → `isError` + toast "não foi possível carregar X"; KPI mostra "—" e não "0".
+- [x] `src/hooks/useDashboardStats.ts:28-116`: `Promise.allSettled`; qualquer `error` → `isError` + toast "não foi possível carregar X"; KPI mostra "—" e não "0".
 - **Evidência:** RLS negada em uma tabela → card com "—" e toast; teste unitário com mock.
 
 ### 62 — [F] Métricas com filtro de período e paginação
-- [ ] `src/hooks/useDeliveryMetrics.ts:40-42`: filtro `created_at >= periodo` + `range()` paginado (ou RPC agregada `delivery_metrics(period)`), `count: 'exact'` para avisar "mostrando 1.000 de N".
+- [x] `src/hooks/useDeliveryMetrics.ts:40-42`: filtro `created_at >= periodo` + `range()` paginado (ou RPC agregada `delivery_metrics(period)`), `count: 'exact'` para avisar "mostrando 1.000 de N".
 - **Evidência:** base com > 1.000 pedidos: KPI bate com `select count(*)`.
 
 ### 63 — [F] Agrupamento diário em `America/Sao_Paulo`
-- [ ] `useDeliveryMetrics.ts:210` e `useCachedStats.ts:139`: `formatInTimeZone(date, 'America/Sao_Paulo', 'yyyy-MM-dd')` (`date-fns-tz`) em vez de `toISOString().split('T')[0]`.
+- [x] `useDeliveryMetrics.ts:210` e `useCachedStats.ts:139`: `formatInTimeZone(date, 'America/Sao_Paulo', 'yyyy-MM-dd')` (`date-fns-tz`) em vez de `toISOString().split('T')[0]`.
 - **Evidência:** pedido de 22h BRT cai no dia correto no gráfico.
 
 ### 64 — [F] Tempo médio de entrega só com pares completos
-- [ ] `useDashboardStats.ts:89-102`: filtrar registros com `actual` e `scheduled_at`; dividir pelo tamanho filtrado.
+- [x] `useDashboardStats.ts:89-102`: filtrar registros com `actual` e `scheduled_at`; dividir pelo tamanho filtrado.
 - **Evidência:** teste unitário com 3 registros (1 incompleto) → média dos 2.
 
 ### 65 — [F] `datetime-local` em hora local
-- [ ] `NewOrderDialog.tsx:905-907`: helper `toLocalInputValue(date)` (ajusta `getTimezoneOffset`) para `min`/`max`.
+- [x] `NewOrderDialog.tsx:905-907`: helper `toLocalInputValue(date)` (ajusta `getTimezoneOffset`) para `min`/`max`.
 - **Evidência:** em BRT o `min` é agora + 31 min, não + 3 h 31.
 
 ### 66 — [F] Aprovação de motorista atômica com feedback
@@ -383,7 +383,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** rejeitar `getSession` em teste → `loading=false` e tela de login.
 
 ### 68 — [F] Logout limpa o cache e os canais
-- [ ] `useAuth.tsx:63-72`: `queryClient.clear()`, `supabase.removeAllChannels()`, limpar `localStorage` de preferências por usuário.
+- [x] `useAuth.tsx:63-72`: `queryClient.clear()`, `supabase.removeAllChannels()`, limpar `localStorage` de preferências por usuário.
 - **Evidência:** logar com usuário B após A não mostra pedidos de A (teste e2e).
 
 ### 69 — [F] Estado de erro no mapa ao vivo
@@ -395,11 +395,11 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** erro simulado → mensagem correta.
 
 ### 71 — [F] Busca global: cancelamento e paralelismo
-- [ ] `useGlobalSearch.ts:147` / `useCommandPaletteSearch.ts:183-203`: `useQuery` com `signal` (AbortController) e `Promise.all` das 4 fontes; `debounce` 300 ms.
+- [x] `useGlobalSearch.ts:147` / `useCommandPaletteSearch.ts:183-203`: `useQuery` com `signal` (AbortController) e `Promise.all` das 4 fontes; `debounce` 300 ms.
 - **Evidência:** digitar rápido não deixa resultado antigo sobrescrever o novo (teste com atraso artificial).
 
 ### 72 — [F] `setCountdown` sem efeito colateral e sem reiniciar por tecla
-- [ ] `AuthPage.tsx:46-53`: mover `clearInterval`/`checkLockout` para `useEffect` dependente de `countdown === 0`; remover `email` das deps do timer.
+- [x] `AuthPage.tsx:46-53`: mover `clearInterval`/`checkLockout` para `useEffect` dependente de `countdown === 0`; remover `email` das deps do timer.
 - **Evidência:** StrictMode não dispara `checkLockout` 2×; digitar não reinicia a contagem.
 
 ### 73 — [F] Conquistas: `JSON.parse` protegido e por usuário
@@ -411,7 +411,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** 3 cliques em "atualizar" = 1 listener (`getEventListeners` no DevTools).
 
 ### 75 — [F] Clipboard assíncrono com tratamento
-- [ ] `BatchActionsToolbar.tsx:58`: `await navigator.clipboard.writeText(...)` em `try/catch`; toast de erro quando negado.
+- [x] `BatchActionsToolbar.tsx:58`: `await navigator.clipboard.writeText(...)` em `try/catch`; toast de erro quando negado.
 - **Evidência:** permissão negada → toast de erro, não de sucesso.
 
 ### 76 — [F] Telefone e link de rastreamento pelas fontes oficiais

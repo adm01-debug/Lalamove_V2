@@ -5,7 +5,7 @@ import { createElement, type ReactNode } from 'react';
 
 function chainable(value: unknown): Record<string, ReturnType<typeof vi.fn>> {
   const self: Record<string, ReturnType<typeof vi.fn>> = {};
-  const methods = ['select', 'eq', 'in', 'gte', 'not', 'limit', 'order'];
+  const methods = ['select', 'eq', 'in', 'gte', 'not', 'limit', 'order', 'range'];
   for (const m of methods) self[m] = vi.fn().mockReturnValue(self);
   self.then = vi.fn().mockImplementation((resolve: (v: unknown) => void) =>
     Promise.resolve(value).then(resolve)
@@ -29,7 +29,6 @@ function createWrapper() {
 describe('useDeliveryMetrics', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   it('deve calcular métricas de entrega corretamente', async () => {
@@ -140,7 +139,6 @@ describe('useDeliveryMetrics', () => {
 describe('useDriverDeliveryStats', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   it('deve agrupar entregas por motorista', async () => {
