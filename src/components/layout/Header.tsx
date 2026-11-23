@@ -345,6 +345,7 @@ export function Header({ title, subtitle, onMenuClick }: HeaderProps) {
                                   <Button
                                     variant="ghost"
                                     size="icon"
+                                    aria-label="Dispensar alerta"
                                     className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity"
                                     onClick={(e) => {
                                       e.stopPropagation();

@@ -101,7 +101,7 @@ export const DriverCard = forwardRef<HTMLDivElement, DriverCardProps>(function D
                 <RiskScoreGauge score={driver.riskScore} size="sm" showLabel={false} />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon-sm" className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"><MoreVertical className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon-sm" aria-label="Mais opções" className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"><MoreVertical className="h-4 w-4" /></Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-popover/95 backdrop-blur-xl">
                     {driver.status === 'PENDING_APPROVAL' && <DropdownMenuItem onClick={() => onApprove(driver.id)}><CheckCircle2 className="w-4 h-4 mr-2" />Aprovar</DropdownMenuItem>}
@@ -156,7 +156,7 @@ export const DriverCard = forwardRef<HTMLDivElement, DriverCardProps>(function D
                   <Button size="sm" variant="gradient-success" className="flex-1 h-9 sm:h-10 text-xs sm:text-sm" onClick={() => onApprove(driver.id)} disabled={isApproving}>
                     {isApproving ? <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" /> : <><CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />Aprovar</>}
                   </Button>
-                  <Button variant="destructive" size="sm" className="h-9 sm:h-10 w-9 sm:w-10" onClick={() => onOpenDialog('block', driver)}><Ban className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></Button>
+                  <Button variant="destructive" size="sm" aria-label="Bloquear motorista" className="h-9 sm:h-10 w-9 sm:w-10" onClick={() => onOpenDialog('block', driver)}><Ban className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></Button>
                 </>
               )}
               {driver.status === 'APPROVED' && (

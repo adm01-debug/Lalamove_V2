@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -38,6 +38,7 @@ function ProfilePage() {
   // Nome de exibição vem de user_metadata (full_name ou name) ou fallback do email
   const initialName = getDisplayName(user) ?? userEmail.split('@')[0];
 
+  const nameInputId = useId();
   const [displayName, setDisplayName] = useState<string>(initialName);
   const [editName, setEditName] = useState<string>(initialName);
   const [isEditing, setIsEditing] = useState(false);
@@ -124,10 +125,11 @@ function ProfilePage() {
               <div className="flex items-start gap-3">
                 <User className="w-4 h-4 mt-2 text-muted-foreground shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground">Nome de exibição</p>
+                  <label htmlFor={nameInputId} className="text-xs text-muted-foreground">Nome de exibição</label>
                   {isEditing ? (
                     <div className="flex items-center gap-2 mt-1">
                       <Input
+                        id={nameInputId}
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
                         disabled={isSaving}
