@@ -1,12 +1,12 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 517,
- "arestas": 1695,
+ "nos": 519,
+ "arestas": 1699,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 128
+   "importado_por": 129
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -181,6 +181,7 @@
   "src/hooks/useOfflineStorage.ts",
   "src/lib/lalamoveGuards.ts",
   "src/lib/lalamoveValidation.ts",
+  "src/lib/queryKeys.ts",
   "src/utils/circuitBreaker.ts"
  ],
  "modulos_mais_acoplados": [

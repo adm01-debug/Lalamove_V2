@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "b6d8b2336dec1bac212f122d2adf30aa33094ef1",
+  "commit": "39678492223395f184e603efc63185df8c65a792",
   "branch": "main",
-  "data_commit": "2026-11-23T06:50:52-03:00",
+  "data_commit": "2026-11-23T09:16:52-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3967849",
+    "data": "2026-11-23",
+    "assunto": "feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)"
+   },
    {
     "sha": "b6d8b23",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "6d201eb",
     "data": "2026-11-22",
     "assunto": "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)"
-   },
-   {
-    "sha": "d055637",
-    "data": "2026-11-22",
-    "assunto": "feat(edges): valida entrada nas 26 edge functions (lalamove-api, uapi, job-worker) (#289)"
    }
   ],
-  "arquivos_mudados_7d": 393,
+  "arquivos_mudados_7d": 397,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -144,11 +144,11 @@
     "mudancas": 45
    },
    {
-    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 39
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 40
    },
    {
-    "pasta": "supabase/functions/_shared",
+    "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
     "mudancas": 39
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 215
+    "commits": 216
    },
    {
     "autor": "dependabot[bot]",
@@ -310,15 +310,15 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1073,
-  "arquivos_codigo": 676,
-  "linhas_codigo": 132230,
+  "arquivos_total": 1075,
+  "arquivos_codigo": 678,
+  "linhas_codigo": 132363,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
   "itens_menu": 50,
   "modulos": 43,
-  "componentes": 217,
+  "componentes": 218,
   "hooks": 101,
   "edge_functions": 27,
   "tabelas": 88,
@@ -519,8 +519,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 160,
-   "linhas": 29415
+   "arquivos": 161,
+   "linhas": 29478
   },
   "src/hooks": {
    "arquivos": 111,
@@ -535,8 +535,8 @@
    "linhas": 4956
   },
   "src/lib": {
-   "arquivos": 48,
-   "linhas": 4187
+   "arquivos": 49,
+   "linhas": 4235
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19740
+   "linhas": 19760
   },
   "src/services": {
    "arquivos": 1,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 94,
-   "linhas": 23587
+   "linhas": 23589
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -646,7 +646,7 @@
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",
-   "linhas": 602
+   "linhas": 611
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",

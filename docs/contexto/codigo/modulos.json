@@ -1270,13 +1270,13 @@
   },
   {
    "modulo": "components/ui",
-   "arquivos": 59,
+   "arquivos": 60,
    "testes": 0,
-   "linhas": 7861,
+   "linhas": 7924,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 55,
+   "componentes": 56,
    "hooks_locais": [
     "useDataRefresh",
     "useFuseSearch",
@@ -2472,9 +2472,9 @@
   },
   {
    "modulo": "lib",
-   "arquivos": 28,
+   "arquivos": 29,
    "testes": 6,
-   "linhas": 2573,
+   "linhas": 2621,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2556,7 +2556,7 @@
    "modulo": "pages",
    "arquivos": 56,
    "testes": 1,
-   "linhas": 16214,
+   "linhas": 16234,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",

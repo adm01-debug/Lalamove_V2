@@ -392,7 +392,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 38
+   "arquivos_puxados": 39
   },
   {
    "caminho": "/analytics",
@@ -1025,7 +1025,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 9
+   "arquivos_puxados": 11
   },
   {
    "caminho": "/drivers",
@@ -1533,7 +1533,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 10
+   "arquivos_puxados": 11
   },
   {
    "caminho": "/lalamove-operacoes",
@@ -3771,7 +3771,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 280
+   "arquivos_puxados": 281
   }
  ],
  "menu": [

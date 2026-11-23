@@ -873,6 +873,9 @@
   "src/components/ui/pull-to-refresh.tsx": [
    "src/lib/utils.ts"
   ],
+  "src/components/ui/query-state.tsx": [
+   "src/components/ui/button.tsx"
+  ],
   "src/components/ui/radio-group.tsx": [
    "src/lib/utils.ts"
   ],
@@ -1408,6 +1411,7 @@
    "src/components/ui/data-refresh-indicator.tsx",
    "src/components/ui/dialog.tsx",
    "src/components/ui/pull-to-refresh.tsx",
+   "src/components/ui/query-state.tsx",
    "src/components/ui/sparkline.tsx",
    "src/components/ui/undo-toast.tsx",
    "src/hooks/useActiveAlerts.ts",
@@ -1517,6 +1521,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/progress.tsx",
+   "src/components/ui/query-state.tsx",
    "src/components/ui/table.tsx",
    "src/hooks/useDeliveryMetrics.ts"
   ],
@@ -1640,6 +1645,7 @@
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/query-state.tsx",
    "src/components/ui/table.tsx",
    "src/hooks/useJobQueue.ts"
   ],

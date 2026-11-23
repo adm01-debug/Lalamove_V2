@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 217,
+ "total": 218,
  "orfaos": 4,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 127,
+   "usado_por": 128,
    "orfao": false
   },
   {
@@ -1812,6 +1812,20 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 7,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/ui/query-state.tsx",
+   "exports": [
+    "QueryState"
+   ],
+   "export_default": null,
+   "linhas": 63,
+   "dominio": "components/ui",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 3,
    "orfao": false
   },
   {
@@ -2287,7 +2301,7 @@
     "AlertsPage"
    ],
    "export_default": null,
-   "linhas": 602,
+   "linhas": 611,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",
@@ -2484,7 +2498,7 @@
     "DeliveryMetricsPage"
    ],
    "export_default": null,
-   "linhas": 132,
+   "linhas": 134,
    "dominio": "pages",
    "hooks_locais": [
     "useDeliveryMetrics",
@@ -2785,7 +2799,7 @@
     "JobQueuePage"
    ],
    "export_default": "JobQueuePage",
-   "linhas": 346,
+   "linhas": 355,
    "dominio": "pages",
    "hooks_locais": [
     "useDeleteJob",

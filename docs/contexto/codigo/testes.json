@@ -1247,7 +1247,7 @@
   {
    "arquivo": "supabase/functions/_shared/messaging/router.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 206,
+   "linhas": 208,
    "testa": [
     "supabase/functions/_shared/messaging/router.ts"
    ],
