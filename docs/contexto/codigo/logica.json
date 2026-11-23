@@ -1002,9 +1002,10 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 2,
+   "usado_por": 3,
    "usado_por_modulos": [
-    "components"
+    "components",
+    "utils"
    ],
    "coberto_por_testes": 0,
    "orfao": false
@@ -1291,7 +1292,7 @@
     "logger"
    ],
    "export_default": null,
-   "linhas": 23,
+   "linhas": 31,
    "tabelas": [],
    "rpcs": [],
    "edges": [],

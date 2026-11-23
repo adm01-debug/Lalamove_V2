@@ -140,6 +140,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -242,6 +243,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -346,6 +348,7 @@
    ],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -410,7 +413,10 @@
    "buckets": [],
    "canais_realtime": [],
    "env": [
-    "DEV"
+    "DEV",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
    ],
    "flags": [],
    "papeis": [],
@@ -460,6 +466,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -847,6 +854,7 @@
    "env": [
     "DEV",
     "PROD",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -955,6 +963,7 @@
    ],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -1027,6 +1036,7 @@
    ],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -1128,6 +1138,7 @@
    ],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -1196,7 +1207,10 @@
    "canais_realtime": [],
    "env": [
     "DEV",
-    "PROD"
+    "PROD",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
    ],
    "flags": [],
    "papeis": [],
@@ -1245,6 +1259,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -2198,6 +2213,7 @@
    "env": [
     "DEV",
     "PROD",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -2972,6 +2988,7 @@
    "env": [
     "DEV",
     "PROD",
+    "VITE_APP_VERSION",
     "VITE_GOOGLE_MAPS_BROWSER_KEY",
     "VITE_GOOGLE_MAPS_MAP_ID",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
@@ -3229,6 +3246,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -3366,6 +3384,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -3600,6 +3619,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -3685,6 +3705,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -3736,6 +3757,7 @@
    "canais_realtime": [],
    "env": [
     "DEV",
+    "VITE_APP_VERSION",
     "VITE_SUPABASE_PUBLISHABLE_KEY",
     "VITE_SUPABASE_URL"
    ],
@@ -3790,7 +3812,8 @@
     "rpcs": []
    },
    "importado_por_outros_modulos": [
-    "components"
+    "components",
+    "utils"
    ],
    "depende_de_modulos": [
     "integrations/supabase",
@@ -3841,7 +3864,7 @@
    "modulo": "utils",
    "arquivos": 6,
    "testes": 0,
-   "linhas": 683,
+   "linhas": 691,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -3857,7 +3880,10 @@
    "canais_realtime": [],
    "env": [
     "DEV",
-    "PROD"
+    "PROD",
+    "VITE_APP_VERSION",
+    "VITE_SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL"
    ],
    "flags": [],
    "papeis": [],
@@ -3883,7 +3909,8 @@
     "services"
    ],
    "depende_de_modulos": [
-    "hooks"
+    "hooks",
+    "services"
    ],
    "pacotes_externos": [
     "web-vitals",

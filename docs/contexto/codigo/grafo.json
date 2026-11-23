@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "nos": 519,
- "arestas": 1700,
+ "arestas": 1701,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -166,8 +166,16 @@
   }
  ],
  "ciclos": {
-  "total": 0,
-  "maiores": []
+  "total": 1,
+  "maiores": [
+   {
+    "tamanho": 2,
+    "arquivos": [
+     "src/services/errorMonitoring.ts",
+     "src/utils/logger.ts"
+    ]
+   }
+  ]
  },
  "orfaos": [
   "public/sw.js",
@@ -207,7 +215,7 @@
   },
   {
    "modulo": "utils",
-   "depende_de": 1,
+   "depende_de": 2,
    "importado_por": 14
   },
   {

@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `add648e05048a7977f6cb42413dfd5bd7f4dbad3` (2026-11-23T12:05:32-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9c1ef6e55a436a5f16879ce1c7505f53996d9512` (2026-11-23T16:21:37-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1075 |
 | arquivos_codigo | 678 |
-| linhas_codigo | 132520 |
+| linhas_codigo | 132528 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -284,12 +284,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts_orfaos: 3 — ex.: scripts/deploy-gateway.ps1, scripts/fix_corrupted_imports.py, scripts/fix_logs.py
 - scripts_soltos_na_raiz: 29 — ex.: scripts/add-security-manage.ts, scripts/apply-dashboard-fixes.ts, scripts/apply-final-sql.ts
 - env_usadas_nao_declaradas: 5 — ex.: DEV, PROD, VITE_APP_VERSION
-- ciclos_de_import: 0
+- ciclos_de_import: 1
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9535 nós · 19532 arestas · 673 comunidades · grafo do commit `add648e0`
-- comunidades maiores: cn (176), contract.ts (148), badge.tsx (140), card.tsx (133), button.tsx (131), client.ts (127), ref_node_path (107), geo-gateway/index.ts (92), DashboardRedesigned.tsx (88), 4. Componentes, hooks, libs e estado — **revisado** (87), generate.py (81), dependencies (81)
+- 9535 nós · 19533 arestas · 683 comunidades · grafo do commit `9c1ef6e5`
+- comunidades maiores: cn (246), button.tsx (163), badge.tsx (108), geo-gateway/index.ts (100), ref_node_url (94), dependencies (81), send-notification/index.ts (80), @tanstack/react-query (78), gerar.mjs (76), 4. Componentes, hooks, libs e estado — **revisado** (73), client.ts (73), AdvancedReportsPage.tsx (73)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -389,6 +389,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `9c1ef6e` feat: lote 10 - build es2022 + manualChunks + logger producao (#322)
 - 2026-11-23 `add648e` feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)
 - 2026-11-23 `79b206d` feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)
 - 2026-11-23 `3967849` feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)
@@ -403,7 +404,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `945a0a5` feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)
 - 2026-11-22 `a7e7d11` feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)
 - 2026-11-22 `62a5161` feat: hierarquia de papeis numa unica fonte (item 48) (#303)
-- 2026-11-22 `fa9a59c` fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

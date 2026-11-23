@@ -225,7 +225,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 98
+   "arquivos_puxados": 99
   },
   {
    "caminho": "/*",
@@ -254,7 +254,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 3
+   "arquivos_puxados": 7
   },
   {
    "caminho": "/alert-configurations",
@@ -392,7 +392,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 39
+   "arquivos_puxados": 40
   },
   {
    "caminho": "/analytics",
@@ -514,7 +514,7 @@
    ],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 39
+   "arquivos_puxados": 40
   },
   {
    "caminho": "/auth",
@@ -565,7 +565,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/bitrix24",
@@ -658,7 +658,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 10
+   "arquivos_puxados": 11
   },
   {
    "caminho": "/cache-status",
@@ -727,7 +727,7 @@
    "papeis": [
     "alert"
    ],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "caminho": "/contacts",
@@ -985,7 +985,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 98
+   "arquivos_puxados": 99
   },
   {
    "caminho": "/delivery-metrics",
@@ -1101,7 +1101,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 38
+   "arquivos_puxados": 39
   },
   {
    "caminho": "/error-monitoring",
@@ -1346,7 +1346,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/incidents",
@@ -1429,7 +1429,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 26
   },
   {
    "caminho": "/ip-whitelist",
@@ -1486,7 +1486,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 21
+   "arquivos_puxados": 22
   },
   {
    "caminho": "/job-queue",
@@ -1533,7 +1533,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/lalamove-operacoes",
@@ -1727,7 +1727,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 45
+   "arquivos_puxados": 46
   },
   {
    "caminho": "/map",
@@ -1900,7 +1900,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/mfa-verify",
@@ -1942,7 +1942,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/notification-history",
@@ -2136,7 +2136,7 @@
     "listbox",
     "option"
    ],
-   "arquivos_puxados": 74
+   "arquivos_puxados": 75
   },
   {
    "caminho": "/password-reset-approvals",
@@ -2216,7 +2216,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 8
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/permissions",
@@ -2273,7 +2273,7 @@
     "manager",
     "operator"
    ],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "caminho": "/preferences",
@@ -2313,7 +2313,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 24
   },
   {
    "caminho": "/profile",
@@ -2369,7 +2369,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/rate-limiting",
@@ -2430,7 +2430,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 24
+   "arquivos_puxados": 25
   },
   {
    "caminho": "/reports",
@@ -2468,7 +2468,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 16
+   "arquivos_puxados": 17
   },
   {
    "caminho": "/reports/advanced",
@@ -2521,7 +2521,7 @@
    ],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 19
+   "arquivos_puxados": 20
   },
   {
    "caminho": "/reset-password",
@@ -2655,7 +2655,7 @@
     "manager",
     "viewer"
    ],
-   "arquivos_puxados": 21
+   "arquivos_puxados": 22
   },
   {
    "caminho": "/security",
@@ -2728,7 +2728,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 23
+   "arquivos_puxados": 24
   },
   {
    "caminho": "/settings",
@@ -2769,7 +2769,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "caminho": "/settings/lalamove",
@@ -2924,7 +2924,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 17
+   "arquivos_puxados": 18
   },
   {
    "caminho": "/settings/uapi",
@@ -3038,7 +3038,7 @@
    ],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 27
   },
   {
    "caminho": "/slo",
@@ -3158,7 +3158,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 10
+   "arquivos_puxados": 11
   },
   {
    "caminho": "/telemetria",
@@ -3204,7 +3204,7 @@
    "papeis": [
     "alert"
    ],
-   "arquivos_puxados": 18
+   "arquivos_puxados": 19
   },
   {
    "caminho": "/unauthorized",
@@ -3771,7 +3771,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 281
+   "arquivos_puxados": 282
   }
  ],
  "menu": [

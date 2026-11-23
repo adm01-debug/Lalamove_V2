@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
+  "sha": "9c1ef6e55a436a5f16879ce1c7505f53996d9512",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 16:09 UTC",
+  "generated_at": "2026-11-23 19:22 UTC",
   "files_total": 1069,
   "code_files": 889,
-  "code_lines": 153697
+  "code_lines": 153705
  },
  "version": "1.3.2",
- "facts_hash": "2d8e0c03ca67cb58",
+ "facts_hash": "a080dc5b90b347a2",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -17023,7 +17023,7 @@
     "rpc_transitive": [
      "get_contract_v1_sunset_readiness"
     ],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -17039,7 +17039,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 19
+    "deps_count": 20
    },
    {
     "path": "",
@@ -17065,7 +17065,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 37
+    "deps_count": 38
    },
    {
     "path": "",
@@ -17091,7 +17091,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 36
+    "deps_count": 37
    },
    {
     "path": "",
@@ -17108,7 +17108,7 @@
      "clear_login_attempts",
      "record_failed_login_v2"
     ],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -17136,7 +17136,7 @@
     "rpc_transitive": [
      "refresh_cache_view"
     ],
-    "deps_count": 10
+    "deps_count": 11
    },
    {
     "path": "",
@@ -17152,7 +17152,7 @@
     "rpc_transitive": [
      "refresh_cache_view"
     ],
-    "deps_count": 12
+    "deps_count": 13
    },
    {
     "path": "",
@@ -17190,7 +17190,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 95
+    "deps_count": 96
    },
    {
     "path": "",
@@ -17214,7 +17214,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 38
+    "deps_count": 39
    },
    {
     "path": "",
@@ -17275,7 +17275,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -17290,7 +17290,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -17302,7 +17302,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 25
+    "deps_count": 26
    },
    {
     "path": "",
@@ -17315,7 +17315,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -17365,7 +17365,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 44
+    "deps_count": 45
    },
    {
     "path": "",
@@ -17419,7 +17419,7 @@
      "geo_budget_status",
      "get_user_permissions"
     ],
-    "deps_count": 17
+    "deps_count": 18
    },
    {
     "path": "",
@@ -17491,7 +17491,7 @@
      "send-notification"
     ],
     "rpc_transitive": [],
-    "deps_count": 73
+    "deps_count": 74
    },
    {
     "path": "",
@@ -17509,7 +17509,7 @@
     "tables_transitive": [],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 8
+    "deps_count": 10
    },
    {
     "path": "",
@@ -17523,7 +17523,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 20
+    "deps_count": 21
    },
    {
     "path": "",
@@ -17540,7 +17540,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -17571,7 +17571,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 16
+    "deps_count": 17
    },
    {
     "path": "",
@@ -17617,7 +17617,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 21
+    "deps_count": 22
    },
    {
     "path": "",
@@ -17632,7 +17632,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 23
+    "deps_count": 24
    },
    {
     "path": "",
@@ -17666,7 +17666,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 23
+    "deps_count": 24
    },
    {
     "path": "",
@@ -17677,7 +17677,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 22
+    "deps_count": 23
    },
    {
     "path": "",
@@ -17694,7 +17694,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 10
+    "deps_count": 11
    },
    {
     "path": "",
@@ -17738,7 +17738,7 @@
     "tables_transitive": [],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 17
+    "deps_count": 19
    },
    {
     "path": "",
@@ -17758,7 +17758,7 @@
     "tables_transitive": [],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 3
+    "deps_count": 7
    }
   ],
   "edge_functions": [
@@ -21657,7 +21657,7 @@
   {
    "module": "src/utils",
    "files": 8,
-   "lines": 1079,
+   "lines": 1087,
    "tables": [],
    "exports": [
     "alertSounds.ts: playToneType, playAlertSound, playTestSound, previewTone, enableAudioOnInteraction, isAudioEnabled",
@@ -21679,7 +21679,8 @@
     "web-vitals"
    ],
    "imports_modules": [
-    "src/hooks"
+    "src/hooks",
+    "src/services"
    ],
    "file_list": [
     "src/utils/alertSounds.ts",
@@ -68981,7 +68982,7 @@
   },
   "src/utils/logger.ts": {
    "path": "src/utils/logger.ts",
-   "lines": 23,
+   "lines": 31,
    "exports": [
     "const logger"
    ],
@@ -74684,10 +74685,21 @@
   }
  },
  "git": {
-  "sha": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
+  "sha": "9c1ef6e55a436a5f16879ce1c7505f53996d9512",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "9c1ef6e",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: lote 10 - build es2022 + manualChunks + logger producao (#322)",
+    "files": [
+     "src/hooks/useRegionResolver.ts",
+     "src/pages/AdminTelemetriaPage.tsx",
+     "src/utils/logger.ts"
+    ]
+   },
    {
     "sha": "add648e",
     "date": "2026-11-23",
@@ -75115,16 +75127,6 @@
     "files": [
      "docs/planos/PLANO_FRONTEND_190_ETAPAS.md"
     ]
-   },
-   {
-    "sha": "6e6c62b",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)",
-    "files": [
-     "src/components/map/__tests__/markerFactories.test.ts",
-     "src/components/map/markerFactories.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -75153,8 +75155,8 @@
     3
    ],
    [
-    "src/components/map/markerFactories.ts",
-    3
+    "src/pages/AdminTelemetriaPage.tsx",
+    2
    ],
    [
     "src/hooks/useCachedStats.ts",

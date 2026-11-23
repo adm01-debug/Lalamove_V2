@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
+  "commit": "9c1ef6e55a436a5f16879ce1c7505f53996d9512",
   "branch": "main",
-  "data_commit": "2026-11-23T12:05:32-03:00",
+  "data_commit": "2026-11-23T16:21:37-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "9c1ef6e",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 10 - build es2022 + manualChunks + logger producao (#322)"
+   },
    {
     "sha": "add648e",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "a388d1d",
     "data": "2026-11-22",
     "assunto": "fix: validar origem do postMessage do Bitrix24 (#293)"
-   },
-   {
-    "sha": "ba39240",
-    "data": "2026-11-22",
-    "assunto": "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)"
    }
   ],
-  "arquivos_mudados_7d": 416,
+  "arquivos_mudados_7d": 417,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -278,6 +278,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "src/hooks/useRegionResolver.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/components/orders/OrderDetailModal.tsx",
     "mudancas": 6
-   },
-   {
-    "arquivo": "src/hooks/useRegionResolver.ts",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 218
+    "commits": 219
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1075,
   "arquivos_codigo": 678,
-  "linhas_codigo": 132520,
+  "linhas_codigo": 132528,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -560,7 +560,7 @@
   },
   "src/utils": {
    "arquivos": 8,
-   "linhas": 1079
+   "linhas": 1087
   },
   "supabase/functions": {
    "arquivos": 94,
@@ -816,7 +816,7 @@
    "VITE_GOOGLE_MAPS_BROWSER_KEY",
    "VITE_GOOGLE_MAPS_MAP_ID"
   ],
-  "ciclos_de_import": 0,
+  "ciclos_de_import": 1,
   "possiveis_segredos_no_codigo": [
    "supabase/functions/geo-admin/rotation.test.ts:32"
   ]

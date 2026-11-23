@@ -2237,6 +2237,9 @@
   "src/utils/circuitBreaker.ts": [
    "src/utils/logger.ts"
   ],
+  "src/utils/logger.ts": [
+   "src/services/errorMonitoring.ts"
+  ],
   "src/utils/webVitals.ts": [
    "src/utils/logger.ts"
   ],
