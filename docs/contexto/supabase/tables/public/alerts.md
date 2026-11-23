@@ -49,6 +49,7 @@
 | tabela | constraint | colunas | on delete |
 |---|---|---|---|
 | public.alerts_sent | alerts_sent_alert_id_fkey | alert_id | CASCADE |
+| public.notification_messages | notification_messages_alert_id_fkey | alert_id | SET NULL |
 | public.order_geo_events | order_geo_events_alert_id_fkey | alert_id | SET NULL |
 
 

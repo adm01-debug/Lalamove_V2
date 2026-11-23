@@ -2,6 +2,21 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-23 21:13 UTC
+
+- **colunas** adicionado (32): `public.notification_messages.alert_id`, `public.notification_messages.attempt`, `public.notification_messages.body_preview`, `public.notification_messages.channel`, `public.notification_messages.client_message_id`, `public.notification_messages.cost_cents`, `public.notification_messages.created_at`, `public.notification_messages.delivered_at`, `public.notification_messages.direction`, `public.notification_messages.driver_id`, `public.notification_messages.error_code`, `public.notification_messages.event`, `public.notification_messages.expires_at`, `public.notification_messages.failed_at`, `public.notification_messages.fallback_of`, `public.notification_messages.id`, `public.notification_messages.metadata`, `public.notification_messages.occurred_at`, `public.notification_messages.order_id`, `public.notification_messages.provider`, `public.notification_messages.provider_message_id`, `public.notification_messages.provider_sequence`, `public.notification_messages.read_at`, `public.notification_messages.recipient_phone`, `public.notification_messages.role`, `public.notification_messages.segments`, `public.notification_messages.sent_at`, `public.notification_messages.status`, `public.notification_messages.stop_id`, `public.notification_messages.template_key`, `public.notification_messages.template_version`, `public.notification_messages.updated_at`
+- **constraints** adicionado (7): `public.notification_messages.notification_messages_alert_id_fkey`, `public.notification_messages.notification_messages_channel_check`, `public.notification_messages.notification_messages_direction_check`, `public.notification_messages.notification_messages_fallback_of_fkey`, `public.notification_messages.notification_messages_pkey`, `public.notification_messages.notification_messages_role_check`, `public.notification_messages.notification_messages_status_check`
+- **cron jobs** adicionado (1): `30:notification_messages_scrub_bodies`
+- **functions** adicionado (3): `public.notification_messages_scrub_bodies(p_keep_days integer)`, `public.notification_messages_touch()`, `public.notification_status_transition_allowed(p_from text, p_to text)`
+- **functions** alterado (1): `public.has_role(_user_id uuid, _role app_role)`
+- **grants** adicionado (2): `public.notification_messages:authenticated`, `public.notification_messages:service_role`
+- **indexes** adicionado (7): `public.notification_messages_client_message_id_key`, `public.notification_messages_driver_created_idx`, `public.notification_messages_order_created_idx`, `public.notification_messages_pending_idx`, `public.notification_messages_pkey`, `public.notification_messages_provider_message_id_key`, `public.notification_messages_recipient_created_idx`
+- **lints** adicionado (4): `fk_without_index:public.notification_messages.notification_messages_alert_id_fkey`, `fk_without_index:public.notification_messages.notification_messages_fallback_of_fkey`, `policy_auth_fn_not_wrapped:public.notification_messages.operator le ledger de mensagens`, `rpc_anon_executable:public.notification_messages_scrub_bodies(p_keep_days integer)`
+- **migrations** adicionado (1): `20261125120000_notification_ledger`
+- **policies (RLS)** adicionado (2): `public.notification_messages.operator le ledger de mensagens`, `public.notification_messages.service role escreve ledger de mensagens`
+- **tabelas** adicionado (1): `public.notification_messages`
+- **triggers** adicionado (1): `public.notification_messages.notification_messages_touch_trg`
+
 ## 2026-11-22 17:12 UTC
 
 - **functions** alterado (1): `public.mark_job_failed(p_job_id uuid, p_error_message text, p_error_stack text)`

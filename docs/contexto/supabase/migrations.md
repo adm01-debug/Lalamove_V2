@@ -196,3 +196,4 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261123190002 | [geo_maps_permissions](migrations/20261123190002_geo_maps_permissions.sql) | 0 |
 | 20261123200000 | [optout_and_tracking_end](migrations/20261123200000_optout_and_tracking_end.sql) | 0 |
 | 20261124120000 | [internal_alert_channels](migrations/20261124120000_internal_alert_channels.sql) | 0 |
+| 20261125120000 | [notification_ledger](migrations/20261125120000_notification_ledger.sql) | 0 |

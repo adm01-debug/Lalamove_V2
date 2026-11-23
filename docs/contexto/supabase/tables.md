@@ -53,6 +53,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.mcp_diagnostics_grants](tables/public/mcp_diagnostics_grants.md) | table | sim | 1 | 7 | não | Grants de acesso a diagnosticos via MCP (query_telemetry). |
 | [public.mfa_sessions](tables/public/mfa_sessions.md) | table | sim | 5 | 9 | sim | Sessoes MFA (TOTP) registradas por usuario. |
 | [public.new_device_alerts](tables/public/new_device_alerts.md) | table | sim | 4 | 8 | sim | Alertas de novo dispositivo detectado no login. |
+| [public.notification_messages](tables/public/notification_messages.md) | table | sim | 2 | 32 | não | Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela. |
 | [public.notification_optouts](tables/public/notification_optouts.md) | table | sim | 2 | 4 | não | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. |
 | [public.order_geo_events](tables/public/order_geo_events.md) | table | sim | 1 | 14 | não | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) - 1 por (pedido, evento, parada). |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 11 | não | Requisicoes de reset de senha com aprovacao de admin. |

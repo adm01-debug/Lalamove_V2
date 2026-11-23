@@ -8899,6 +8899,422 @@
       },
       {
         "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "alert_id",
+        "nullable": true,
+        "position": 2,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "order_id",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "driver_id",
+        "nullable": true,
+        "position": 4,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "stop_id",
+        "nullable": true,
+        "position": 5,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "event",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "role",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'outbound'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "direction",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "channel",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "provider",
+        "nullable": true,
+        "position": 10,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "recipient_phone",
+        "nullable": true,
+        "position": 11,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "client_message_id",
+        "nullable": true,
+        "position": 12,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "provider_message_id",
+        "nullable": true,
+        "position": 13,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "template_key",
+        "nullable": true,
+        "position": 14,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "template_version",
+        "nullable": true,
+        "position": 15,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "body_preview",
+        "nullable": true,
+        "position": 16,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'queued'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "status",
+        "nullable": false,
+        "position": 17,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "error_code",
+        "nullable": true,
+        "position": 18,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "1",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "attempt",
+        "nullable": false,
+        "position": 19,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "fallback_of",
+        "nullable": true,
+        "position": 20,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cost_cents",
+        "nullable": true,
+        "position": 21,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "segments",
+        "nullable": true,
+        "position": 22,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "provider_sequence",
+        "nullable": true,
+        "position": 23,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "bigint"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "occurred_at",
+        "nullable": true,
+        "position": 24,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "sent_at",
+        "nullable": true,
+        "position": 25,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "delivered_at",
+        "nullable": true,
+        "position": 26,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "read_at",
+        "nullable": true,
+        "position": 27,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "failed_at",
+        "nullable": true,
+        "position": 28,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "expires_at",
+        "nullable": true,
+        "position": 29,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "'{}'::jsonb",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "metadata",
+        "nullable": false,
+        "position": 30,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 31,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 32,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
         "default": null,
         "generated": null,
         "identity": null,
@@ -16428,6 +16844,129 @@
       },
       {
         "columns": [
+          "alert_id"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (alert_id) REFERENCES alerts(id) ON DELETE SET NULL",
+        "name": "notification_messages_alert_id_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "public",
+        "ref_table": "alerts",
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "channel"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (channel = ANY (ARRAY['whatsapp'::text, 'sms'::text, 'email'::text, 'slack'::text, 'n8n'::text]))",
+        "name": "notification_messages_channel_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "direction"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (direction = ANY (ARRAY['outbound'::text, 'inbound'::text]))",
+        "name": "notification_messages_direction_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "fallback_of"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (fallback_of) REFERENCES notification_messages(id) ON DELETE SET NULL",
+        "name": "notification_messages_fallback_of_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "public",
+        "ref_table": "notification_messages",
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "notification_messages_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "role"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (role = ANY (ARRAY['driver'::text, 'pickup_contact'::text, 'delivery_contact'::text, 'internal'::text]))",
+        "name": "notification_messages_role_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "status"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (status = ANY (ARRAY['queued'::text, 'sent'::text, 'delivered'::text, 'read'::text, 'failed'::text, 'uncertain'::text, 'expired'::text, 'suppressed'::text]))",
+        "name": "notification_messages_status_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_messages",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "created_by"
         ],
         "deferrable": false,
@@ -17960,6 +18499,15 @@
           "jobid": 29,
           "jobname": "check-driver-alerts",
           "schedule": "*/2 * * * *",
+          "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.notification_messages_scrub_bodies(90)",
+          "database": "postgres",
+          "jobid": 30,
+          "jobname": "notification_messages_scrub_bodies",
+          "schedule": "25 4 * * *",
           "username": "postgres"
         }
       ]
@@ -19592,7 +20140,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 51,
+          "code_total_files": 52,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -20248,6 +20796,111 @@
         "name": "normalize_br_phone",
         "owner": "postgres",
         "returns": "text",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "immutable"
+      },
+      {
+        "args": "p_keep_days integer",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261125120000_notification_ledger.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [
+            "30:notification_messages_scrub_bodies"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "b58291d250d16249",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "notification_messages_scrub_bodies",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261125120000_notification_ledger.sql",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [
+            "public.notification_messages.notification_messages_touch_trg"
+          ],
+          "views": []
+        },
+        "comment": null,
+        "config": null,
+        "definition": null,
+        "definition_sha": "d47d6d25799058c5",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": true,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "notification_messages_touch",
+        "owner": "postgres",
+        "returns": "trigger",
+        "schema": "public",
+        "security_definer": false,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_from text, p_to text",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/migrations/20261125120000_notification_ledger.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": null,
+        "definition": null,
+        "definition_sha": "bdb4223b8bca3e94",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": true,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "sql",
+        "leakproof": false,
+        "name": "notification_status_transition_allowed",
+        "owner": "postgres",
+        "returns": "boolean",
         "schema": "public",
         "security_definer": false,
         "strict": false,
@@ -22107,6 +22760,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "new_device_alerts"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_messages"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_messages"
         },
         {
           "grantee": "authenticated",
@@ -25335,6 +26000,108 @@
       },
       {
         "columns": [
+          "client_message_id"
+        ],
+        "definition": "CREATE UNIQUE INDEX notification_messages_client_message_id_key ON public.notification_messages USING btree (client_message_id) WHERE (client_message_id IS NOT NULL)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_client_message_id_key",
+        "predicate": "(client_message_id IS NOT NULL)",
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "driver_id",
+          "created_at"
+        ],
+        "definition": "CREATE INDEX notification_messages_driver_created_idx ON public.notification_messages USING btree (driver_id, created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_driver_created_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "order_id",
+          "created_at"
+        ],
+        "definition": "CREATE INDEX notification_messages_order_created_idx ON public.notification_messages USING btree (order_id, created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_order_created_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "status"
+        ],
+        "definition": "CREATE INDEX notification_messages_pending_idx ON public.notification_messages USING btree (status) WHERE (status = ANY (ARRAY['queued'::text, 'sent'::text]))",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_pending_idx",
+        "predicate": "(status = ANY (ARRAY['queued'::text, 'sent'::text]))",
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX notification_messages_pkey ON public.notification_messages USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "provider",
+          "provider_message_id"
+        ],
+        "definition": "CREATE UNIQUE INDEX notification_messages_provider_message_id_key ON public.notification_messages USING btree (provider, provider_message_id) WHERE (provider_message_id IS NOT NULL)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_provider_message_id_key",
+        "predicate": "(provider_message_id IS NOT NULL)",
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
+          "recipient_phone",
+          "created_at"
+        ],
+        "definition": "CREATE INDEX notification_messages_recipient_created_idx ON public.notification_messages USING btree (recipient_phone, created_at DESC)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_messages_recipient_created_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_messages"
+      },
+      {
+        "columns": [
           "phone"
         ],
         "definition": "CREATE UNIQUE INDEX notification_optouts_pkey ON public.notification_optouts USING btree (phone)",
@@ -26761,6 +27528,18 @@
       },
       {
         "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['alert_id']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.notification_messages.notification_messages_alert_id_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['fallback_of']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.notification_messages.notification_messages_fallback_of_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
         "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
         "object": "public.notification_optouts.notification_optouts_created_by_fkey",
         "severity": "BAIXA"
@@ -27632,6 +28411,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.notification_messages.operator le ledger de mensagens",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.notification_optouts.admin gerencia opt-outs",
         "severity": "BAIXA"
       },
@@ -28065,6 +28850,12 @@
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.is_phone_opted_out(p_phone text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.notification_messages_scrub_bodies(p_keep_days integer)",
         "severity": "INFO"
       },
       {
@@ -29063,6 +29854,11 @@
         "name": "internal_alert_channels",
         "statements": null,
         "version": "20261124120000"
+      },
+      {
+        "name": "notification_ledger",
+        "statements": null,
+        "version": "20261125120000"
       }
     ],
     "policies": [
@@ -30829,6 +31625,30 @@
         "table": "new_device_alerts",
         "using": "(auth.uid() = user_id)",
         "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "name": "operator le ledger de mensagens",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "notification_messages",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role escreve ledger de mensagens",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "notification_messages",
+        "using": "true",
+        "with_check": "true"
       },
       {
         "cmd": "ALL",
@@ -32791,6 +33611,21 @@
         "schema": "public"
       },
       {
+        "comment": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "notification_messages",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
         "from_extension": false,
         "is_partition": false,
@@ -33500,6 +34335,17 @@
         "schema": "public",
         "status": "enabled",
         "table": "mcp_diagnostics_grants",
+        "timing": "BEFORE"
+      },
+      {
+        "definition": "CREATE TRIGGER notification_messages_touch_trg BEFORE UPDATE ON notification_messages FOR EACH ROW EXECUTE FUNCTION notification_messages_touch()",
+        "events": "UPDATE",
+        "function": "public.notification_messages_touch",
+        "level": "ROW",
+        "name": "notification_messages_touch_trg",
+        "schema": "public",
+        "status": "enabled",
+        "table": "notification_messages",
         "timing": "BEFORE"
       },
       {

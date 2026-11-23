@@ -37,6 +37,8 @@
 | public.lalamove_webhook_config | registered_by | auth.users | id | NO ACTION | NO ACTION |
 | public.map_settings_overrides | user_id | auth.users | id | CASCADE | NO ACTION |
 | public.new_device_alerts | device_id | public.user_devices | id | CASCADE | NO ACTION |
+| public.notification_messages | alert_id | public.alerts | id | SET NULL | NO ACTION |
+| public.notification_messages | fallback_of | public.notification_messages | id | SET NULL | NO ACTION |
 | public.notification_optouts | created_by | auth.users | id | SET NULL | NO ACTION |
 | public.order_geo_events | alert_id | public.alerts | id | SET NULL | NO ACTION |
 | public.order_geo_events | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
@@ -688,6 +690,34 @@ erDiagram
         timestamp_with_time_zone sent_at
         timestamp_with_time_zone created_at
     }
+    public_notification_messages {
+        uuid id PK
+        uuid alert_id FK
+        uuid order_id
+        uuid driver_id
+        uuid stop_id
+        text event
+        text role
+        text direction
+        text channel
+        text provider
+        text recipient_phone
+        text client_message_id
+        text provider_message_id
+        text template_key
+        integer template_version
+        text body_preview
+        text status
+        text error_code
+        integer attempt
+        uuid fallback_of FK
+        integer cost_cents
+        integer segments
+        bigint provider_sequence
+        timestamp_with_time_zone occurred_at
+        timestamp_with_time_zone sent_at
+        text _mais_colunas_
+    }
     public_notification_optouts {
         text phone PK
         text reason
@@ -937,6 +967,8 @@ erDiagram
     auth_users ||--o{ public_lalamove_webhook_config : "lalamove_webhook_config_registered_by_fkey"
     auth_users ||--o{ public_map_settings_overrides : "map_settings_overrides_user_id_fkey"
     public_user_devices ||--o{ public_new_device_alerts : "new_device_alerts_device_id_fkey"
+    public_alerts ||--o{ public_notification_messages : "notification_messages_alert_id_fkey"
+    public_notification_messages ||--o{ public_notification_messages : "notification_messages_fallback_of_fkey"
     auth_users ||--o{ public_notification_optouts : "notification_optouts_created_by_fkey"
     public_alerts ||--o{ public_order_geo_events : "order_geo_events_alert_id_fkey"
     public_lalamove_orders ||--o{ public_order_geo_events : "order_geo_events_order_id_fkey"

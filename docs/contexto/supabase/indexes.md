@@ -194,6 +194,13 @@ Uso e tamanho em `stats.md`.
 | public.new_device_alerts | idx_new_device_alerts_device_id | btree | device_id | não | sim |  |
 | public.new_device_alerts | idx_new_device_alerts_user | btree | user_id, created_at | não | sim |  |
 | public.new_device_alerts | new_device_alerts_pkey | btree | id | sim | sim |  |
+| public.notification_messages | notification_messages_client_message_id_key | btree | client_message_id | sim | sim | `(client_message_id IS NOT NULL)` |
+| public.notification_messages | notification_messages_driver_created_idx | btree | driver_id, created_at | não | sim |  |
+| public.notification_messages | notification_messages_order_created_idx | btree | order_id, created_at | não | sim |  |
+| public.notification_messages | notification_messages_pending_idx | btree | status | não | sim | `(status = ANY (ARRAY['queued'::text, 'sent'::text]))` |
+| public.notification_messages | notification_messages_pkey | btree | id | sim | sim |  |
+| public.notification_messages | notification_messages_provider_message_id_key | btree | provider, provider_message_id | sim | sim | `(provider_message_id IS NOT NULL)` |
+| public.notification_messages | notification_messages_recipient_created_idx | btree | recipient_phone, created_at | não | sim |  |
 | public.notification_optouts | notification_optouts_pkey | btree | phone | sim | sim |  |
 | public.order_geo_events | idx_order_geo_events_alert_id | btree | alert_id | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  |
