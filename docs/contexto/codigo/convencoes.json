@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)",
    "feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)",
    "security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)",
    "docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)",
-   "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)",
-   "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)"
+   "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

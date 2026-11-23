@@ -1087,7 +1087,7 @@
     "NewOrderDialog"
    ],
    "export_default": null,
-   "linhas": 1172,
+   "linhas": 1179,
    "dominio": "components/orders",
    "hooks_locais": [
     "useContacts",
@@ -2371,7 +2371,7 @@
     "AuthPage"
    ],
    "export_default": null,
-   "linhas": 307,
+   "linhas": 306,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",
@@ -2474,7 +2474,7 @@
     "DashboardRedesigned"
    ],
    "export_default": null,
-   "linhas": 425,
+   "linhas": 444,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",

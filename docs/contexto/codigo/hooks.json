@@ -753,7 +753,7 @@
     "useMetricsComparison",
     "useTopDrivers"
    ],
-   "linhas": 346,
+   "linhas": 349,
    "dominio": "hooks",
    "tabelas": [
     "delivery_metrics_cache",
@@ -810,7 +810,7 @@
    "hooks_exportados": [
     "useCommandPaletteSearch"
    ],
-   "linhas": 230,
+   "linhas": 238,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -983,7 +983,7 @@
    "hooks_exportados": [
     "useDashboardStats"
    ],
-   "linhas": 126,
+   "linhas": 147,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -1078,7 +1078,7 @@
     "useDeliveryTrends",
     "useDriverDeliveryStats"
    ],
-   "linhas": 256,
+   "linhas": 295,
    "dominio": "hooks",
    "tabelas": [
     "drivers",

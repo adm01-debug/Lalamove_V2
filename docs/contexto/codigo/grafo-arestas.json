@@ -1062,7 +1062,8 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useDashboardStats.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/types/index.ts"
   ],
   "src/hooks/useDeliveryHeatmapData.ts": [
    "src/integrations/supabase/client.ts",

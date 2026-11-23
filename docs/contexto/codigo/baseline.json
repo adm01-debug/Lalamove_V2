@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "39678492223395f184e603efc63185df8c65a792",
+  "commit": "79b206d8975d84299409d231d39ecde95f25d728",
   "branch": "main",
-  "data_commit": "2026-11-23T09:16:52-03:00",
+  "data_commit": "2026-11-23T12:04:18-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "79b206d",
+    "data": "2026-11-23",
+    "assunto": "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)"
+   },
    {
     "sha": "3967849",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "79fecdf",
     "data": "2026-11-22",
     "assunto": "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)"
-   },
-   {
-    "sha": "6d201eb",
-    "data": "2026-11-22",
-    "assunto": "chore: unifica escapeHtml em src/lib/html.ts (item 86 do plano front-end) (#290)"
    }
   ],
-  "arquivos_mudados_7d": 397,
+  "arquivos_mudados_7d": 401,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -153,11 +153,11 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 26
+    "mudancas": 27
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -169,14 +169,14 @@
    },
    {
     "pasta": "package.json",
+    "mudancas": 16
+   },
+   {
+    "pasta": "package-lock.json",
     "mudancas": 15
    },
    {
     "pasta": ".github/workflows/ci.yml",
-    "mudancas": 14
-   },
-   {
-    "pasta": "package-lock.json",
     "mudancas": 14
    },
    {
@@ -203,15 +203,15 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 32
+    "mudancas": 33
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 31
+    "mudancas": 32
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 24
+    "mudancas": 25
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -246,16 +246,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/_shared/schemas.ts",
     "mudancas": 10
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 216
+    "commits": 217
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1075,
   "arquivos_codigo": 678,
-  "linhas_codigo": 132363,
+  "linhas_codigo": 132457,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 161,
-   "linhas": 29478
+   "linhas": 29485
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 18939
+   "linhas": 19008
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19760
+   "linhas": 19778
   },
   "src/services": {
    "arquivos": 1,
@@ -598,7 +598,7 @@
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1172
+   "linhas": 1179
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",

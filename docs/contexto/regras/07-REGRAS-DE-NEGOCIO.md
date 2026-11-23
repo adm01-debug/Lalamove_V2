@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3967849222` · branch `main` · 2026-11-23 12:37 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `79b206d897` · branch `main` · 2026-11-23 15:21 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -779,7 +779,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `pending` | compara, filtra | `src/components/ui/timeline-item.tsx`<br>`src/hooks/useNotificationHistory.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `planned` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `refreshed` | escreve | `supabase/functions/job-worker/index.ts` |
-| `status` | `rejected` | compara, escreve | `src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
+| `status` | `rejected` | compara, escreve | `src/hooks/useDashboardStats.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `sent` | compara | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts` |
 | `status` | `skipped` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `stale` | compara | `src/pages/CacheMonitoringPage.tsx` |
@@ -1421,6 +1421,7 @@ _nenhum item encontrado_
 | `MAX_RECENT_SEARCHES` | `5` | `src/hooks/useCommandPaletteSearch.ts` |
 | `TREND_RISE_THRESHOLD` | `0.5` | `src/hooks/useContractVersionUsage.ts` |
 | `SUSTAINED_MIN_DAYS` | `3` | `src/hooks/useContractVersionUsage.ts` |
+| `PAGE_SIZE` | `1000` | `src/hooks/useDeliveryMetrics.ts` |
 | `SESSION_TTL_MS` | `170` | `src/hooks/useGeoSearch.ts` |
 | `DEFAULT_BIAS_RADIUS_M` | `50` | `src/hooks/useGeoSearch.ts` |
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
@@ -1500,7 +1501,7 @@ _nenhum item encontrado_
 | `setTimeout(() => setCopied(false), 2000);` | `src/components/auth/MFAEnroll.tsx` |
 | `gKeyTimeoutRef.current = setTimeout(() => { setGKeyPressed(false); }, 1500);` | `src/components/layout/AppLayout.tsx` |
 | `setTimeout(() => setIsTestingSound(false), 1000);` | `src/components/notifications/SoundSettingsPanel.tsx` |
-| `max={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 16)}` | `src/components/orders/NewOrderDialog.tsx` |
+| `max={toLocalInputValue(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000))}` | `src/components/orders/NewOrderDialog.tsx` |
 | `setTimeout(() => { resetForm(); onOpenChange(false); onSuccess(); }, 1500);` | `src/components/orders/NewOrderDialog.tsx` |
 | `const timer = setTimeout(() => setIsActive(true), 2000);` | `src/components/ui/contextual-hints.tsx` |
 | `if (event.relatedId) { navigator.clipboard.writeText(event.relatedId); setCopied(true); setTimeout(() => setCopied(false), 2000); }` | `src/components/ui/timeline-item.tsx` |
@@ -1607,6 +1608,7 @@ _nenhum item encontrado_
 | 5 | `src/hooks/useCommandPaletteSearch.ts` |
 | 500 | `src/hooks/useContacts.ts` |
 | 100 | `src/hooks/useDashboardStats.ts` |
+| 0 | `src/hooks/useDeliveryMetrics.ts` |
 | 1 | `src/hooks/useDriverEvaluations.ts` |
 | 100 | `src/hooks/useDriverEvaluations.ts` |
 | 10 | `src/hooks/useGeoAdmin.ts` |
@@ -1911,6 +1913,7 @@ _nenhum item encontrado_
 | ; import { Badge } from  | `src/pages/CacheStatusPage.tsx` |
 | Falha ao atualizar | `src/pages/ContactsPage.tsx` |
 | Falha ao remover | `src/pages/ContactsPage.tsx` |
+| Não foi possível carregar as métricas do dashboard | `src/pages/DashboardRedesigned.tsx` |
 | Erro ao enviar email de recuperação. Tente novamente. | `src/pages/ForgotPasswordPage.tsx` |
 | Erro ao adicionar país:  | `src/pages/GeoBlockingPage.tsx` |
 | Erro ao remover país:  | `src/pages/GeoBlockingPage.tsx` |
@@ -1940,8 +1943,7 @@ _nenhum item encontrado_
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| Token inválido ou expirado. Tente novamente. | `src/pages/UAPISettingsPage.tsx` |
-| … +108 linhas — lista completa em `context.json` | |
+| … +109 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

@@ -61,7 +61,7 @@
    "test:e2e:report": "playwright show-report",
    "test:e2e:ui": "playwright test --ui"
   },
-  "dependencias": 79,
+  "dependencias": 80,
   "dev_dependencias": 21,
   "principais": {
    "@supabase/supabase-js": "^2.116.0",

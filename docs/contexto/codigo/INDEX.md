@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `39678492223395f184e603efc63185df8c65a792` (2026-11-23T09:16:52-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `79b206d8975d84299409d231d39ecde95f25d728` (2026-11-23T12:04:18-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1075 |
 | arquivos_codigo | 678 |
-| linhas_codigo | 132363 |
+| linhas_codigo | 132457 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -288,15 +288,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9529 nós · 19515 arestas · 694 comunidades · grafo do commit `39678492`
-- comunidades maiores: cn (164), lucide-react (134), react (116), client.ts (115), ref_node_path (104), geo-gateway/index.ts (100), AlertsPage.tsx (96), RateLimitDashboardPage.tsx (91), send-notification/index.ts (88), button.tsx (87), dependencies (80), gerar.mjs (76)
+- 9533 nós · 19527 arestas · 687 comunidades · grafo do commit `79b206d8`
+- comunidades maiores: cn (259), client.ts (167), react (146), contract.ts (126), RateLimitDashboardPage.tsx (111), 4. Componentes, hooks, libs e estado — **revisado** (98), badge.tsx (97), App.tsx (95), ref_node_url (94), AppLayout.tsx (85), send-notification/index.ts (85), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (39)
-- package.json (32)
-- package-lock.json (31)
-- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (24)
+- package.json (33)
+- package-lock.json (32)
+- docs/planos/PLANO_FRONTEND_190_ETAPAS.md (25)
 - .github/workflows/ci.yml (18)
 - supabase/config.toml (17)
 - docs/MAPBOX.md (13)
@@ -305,9 +305,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
+- src/components/orders/NewOrderDialog.tsx (10)
 - supabase/functions/_shared/schemas.ts (10)
 - supabase/functions/job-worker/index.ts (10)
-- src/components/orders/NewOrderDialog.tsx (9)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -389,6 +389,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `79b206d` feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)
 - 2026-11-23 `3967849` feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)
 - 2026-11-23 `b6d8b23` security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)
 - 2026-11-22 `d3f974b` docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)
@@ -403,7 +404,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `62a5161` feat: hierarquia de papeis numa unica fonte (item 48) (#303)
 - 2026-11-22 `fa9a59c` fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)
 - 2026-11-22 `6487163` feat: desligar auto-cadastro no front (item 9) (#300)
-- 2026-11-22 `97b9d2e` feat: cliente do front entende o formato único de erro (item 42) (#301)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

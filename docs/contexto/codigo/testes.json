@@ -746,7 +746,7 @@
   {
    "arquivo": "src/hooks/__tests__/useDeliveryMetrics.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 186,
+   "linhas": 184,
    "testa": [
     "src/hooks/useDeliveryMetrics.ts",
     "src/integrations/supabase/client.ts"
