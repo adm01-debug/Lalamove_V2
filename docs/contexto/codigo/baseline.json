@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "874a336af2a91f92b03e41d12dc292884283e9ee",
+  "commit": "e918dd612682cdba61c8cbf3c17785983e98c042",
   "branch": "main",
-  "data_commit": "2026-11-23T17:55:22-03:00",
+  "data_commit": "2026-11-23T18:16:32-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e918dd6",
+    "data": "2026-11-23",
+    "assunto": "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)"
+   },
    {
     "sha": "874a336",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "945a0a5",
     "data": "2026-11-22",
     "assunto": "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)"
-   },
-   {
-    "sha": "a7e7d11",
-    "data": "2026-11-22",
-    "assunto": "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)"
    }
   ],
-  "arquivos_mudados_7d": 438,
+  "arquivos_mudados_7d": 439,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 230
+    "commits": 231
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1087,
   "arquivos_codigo": 688,
-  "linhas_codigo": 134001,
+  "linhas_codigo": 134054,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19055
+   "linhas": 19093
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19817
+   "linhas": 19832
   },
   "src/services": {
    "arquivos": 1,

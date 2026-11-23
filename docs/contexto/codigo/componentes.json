@@ -2505,7 +2505,7 @@
     "DashboardRedesigned"
    ],
    "export_default": null,
-   "linhas": 444,
+   "linhas": 459,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",

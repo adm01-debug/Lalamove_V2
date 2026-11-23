@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `874a336af2a91f92b03e41d12dc292884283e9ee` (2026-11-23T17:55:22-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `e918dd612682cdba61c8cbf3c17785983e98c042` (2026-11-23T18:16:32-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1087 |
 | arquivos_codigo | 688 |
-| linhas_codigo | 134001 |
+| linhas_codigo | 134054 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -290,8 +290,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9631 nós · 19763 arestas · 678 comunidades · grafo do commit `874a336a`
-- comunidades maiores: cn (195), button.tsx (160), ref_https (115), snapshot.py (106), DashboardRedesigned.tsx (106), NewOrderDialog.tsx (100), client.ts (98), App.tsx (96), ref_node_path (92), Badge (90), schemas.ts (86), DriversPage.tsx (86)
+- 9632 nós · 19765 arestas · 681 comunidades · grafo do commit `e918dd61`
+- comunidades maiores: cn (297), button.tsx (154), App.tsx (145), ref_https (137), client.ts (118), ref_node_path (109), snapshot.py (106), send-notification/index.ts (95), lucide-react (94), AlertsPage.tsx (86), dependencies (81), 4. Componentes, hooks, libs e estado — **revisado** (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -393,6 +393,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `e918dd6` fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)
 - 2026-11-23 `874a336` feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)
 - 2026-11-23 `e74d394` fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)
 - 2026-11-23 `21ba6a5` fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)
@@ -407,7 +408,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `9c1ef6e` feat: lote 10 - build es2022 + manualChunks + logger producao (#322)
 - 2026-11-23 `add648e` feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)
 - 2026-11-23 `79b206d` feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)
-- 2026-11-23 `3967849` feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -983,7 +983,7 @@
    "hooks_exportados": [
     "useDashboardStats"
    ],
-   "linhas": 148,
+   "linhas": 153,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
