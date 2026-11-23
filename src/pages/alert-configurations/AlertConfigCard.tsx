@@ -153,7 +153,7 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
                     <Switch checked={channel.enabled || false} onCheckedChange={() => handleToggleChannel(channel.key, channel.enabled)} disabled={updateMutation.isPending} className="scale-75" />
                     <Icon className={cn("w-4 h-4 shrink-0 transition-colors", channel.enabled ? "text-primary" : "text-muted-foreground")} />
                     <span className={cn("text-xs font-medium flex-1 transition-colors", channel.enabled ? "text-foreground" : "text-muted-foreground")}>{channelLabels[channel.key as keyof typeof channelLabels]}</span>
-                    {channel.enabled && <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="h-6 w-6 shrink-0" onClick={() => handleTestChannel(channel.key)} disabled={testMutation.isPending}>{isTestingThis ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}</Button></TooltipTrigger><TooltipContent><p>Testar {channelLabels[channel.key as keyof typeof channelLabels]}</p></TooltipContent></Tooltip>}
+                    {channel.enabled && <Tooltip><TooltipTrigger asChild><Button variant="ghost" size="icon-sm" className="h-6 w-6 shrink-0" onClick={() => handleTestChannel(channel.key as TestNotificationChannel)} disabled={testMutation.isPending}>{isTestingThis ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}</Button></TooltipTrigger><TooltipContent><p>Testar {channelLabels[channel.key as keyof typeof channelLabels]}</p></TooltipContent></Tooltip>}
                   </div>
                 );
               })}
