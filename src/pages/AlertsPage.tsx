@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { DataRefreshIndicator } from '@/components/ui/data-refresh-indicator';
 import { useUndoableAction } from '@/components/ui/undo-toast';
@@ -471,17 +472,11 @@ export function AlertsPage() {
 
             <CardContent className="p-0">
               {filteredAlerts.length === 0 ? (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="p-12 text-center"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-success/20 to-success/5 mx-auto mb-4 flex items-center justify-center border border-success/20">
-                    <Bell className="w-8 h-8 text-success" />
-                  </div>
-                  <h4 className="text-lg font-medium text-foreground mb-2">Tudo tranquilo</h4>
-                  <p className="text-muted-foreground">Nenhum alerta nesta categoria</p>
-                </motion.div>
+                <EmptyState
+                  icon={<Bell className="w-6 h-6 text-success" />}
+                  title="Tudo tranquilo"
+                  description="Nenhum alerta nesta categoria"
+                />
               ) : (
                 <div className="p-4 space-y-3">
                   <AnimatePresence>
