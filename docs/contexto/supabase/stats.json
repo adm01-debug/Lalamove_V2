@@ -192,30 +192,39 @@
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T17:10:00.113621+00:00",
+        "end_time": "2026-11-23T18:15:00.146346+00:00",
         "jobid": 18,
         "return_message": "1 row",
-        "runid": 33997,
+        "runid": 34122,
         "seconds": 0.02,
-        "start_time": "2026-11-23T17:10:00.093144+00:00",
+        "start_time": "2026-11-23T18:15:00.124948+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T17:05:00.179333+00:00",
+        "end_time": "2026-11-23T18:10:00.055908+00:00",
         "jobid": 18,
         "return_message": "1 row",
-        "runid": 33987,
-        "seconds": 0.02,
-        "start_time": "2026-11-23T17:05:00.157128+00:00",
+        "runid": 34113,
+        "seconds": 0.01,
+        "start_time": "2026-11-23T18:10:00.048146+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T17:00:00.062863+00:00",
+        "end_time": "2026-11-23T18:05:00.148904+00:00",
         "jobid": 18,
         "return_message": "1 row",
-        "runid": 33977,
-        "seconds": 0.03,
-        "start_time": "2026-11-23T17:00:00.033493+00:00",
+        "runid": 34103,
+        "seconds": 0.02,
+        "start_time": "2026-11-23T18:05:00.127653+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T17:17:00.263660+00:00",
+        "jobid": 19,
+        "return_message": "1 row",
+        "runid": 34011,
+        "seconds": 0.02,
+        "start_time": "2026-11-23T17:17:00.240126+00:00",
         "status": "succeeded"
       },
       {
@@ -237,66 +246,66 @@
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T14:17:00.154467+00:00",
-        "jobid": 19,
+        "end_time": "2026-11-23T18:16:00.085056+00:00",
+        "jobid": 20,
         "return_message": "1 row",
-        "runid": 33663,
+        "runid": 34124,
+        "seconds": 0.03,
+        "start_time": "2026-11-23T18:16:00.058851+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:15:00.164715+00:00",
+        "jobid": 20,
+        "return_message": "1 row",
+        "runid": 34121,
+        "seconds": 0.04,
+        "start_time": "2026-11-23T18:15:00.124358+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:14:00.047559+00:00",
+        "jobid": 20,
+        "return_message": "1 row",
+        "runid": 34120,
         "seconds": 0.01,
-        "start_time": "2026-11-23T14:17:00.144415+00:00",
+        "start_time": "2026-11-23T18:14:00.035032+00:00",
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T17:13:00.178282+00:00",
-        "jobid": 20,
-        "return_message": "1 row",
-        "runid": 34002,
-        "seconds": 0.06,
-        "start_time": "2026-11-23T17:13:00.119015+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:12:00.061082+00:00",
-        "jobid": 20,
-        "return_message": "1 row",
-        "runid": 34001,
-        "seconds": 0.03,
-        "start_time": "2026-11-23T17:12:00.029529+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:11:00.238164+00:00",
-        "jobid": 20,
-        "return_message": "1 row",
-        "runid": 33998,
-        "seconds": 0.05,
-        "start_time": "2026-11-23T17:11:00.185593+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:11:00.266882+00:00",
+        "end_time": "2026-11-23T18:16:00.080480+00:00",
         "jobid": 25,
         "return_message": "1 row",
-        "runid": 33999,
-        "seconds": 0.08,
-        "start_time": "2026-11-23T17:11:00.187801+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:06:00.051742+00:00",
-        "jobid": 25,
-        "return_message": "1 row",
-        "runid": 33990,
-        "seconds": 0.03,
-        "start_time": "2026-11-23T17:06:00.025823+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:01:00.097691+00:00",
-        "jobid": 25,
-        "return_message": "1 row",
-        "runid": 33979,
+        "runid": 34125,
         "seconds": 0.02,
-        "start_time": "2026-11-23T17:01:00.081848+00:00",
+        "start_time": "2026-11-23T18:16:00.064782+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:11:00.121113+00:00",
+        "jobid": 25,
+        "return_message": "1 row",
+        "runid": 34115,
+        "seconds": 0.02,
+        "start_time": "2026-11-23T18:11:00.105906+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:06:00.072452+00:00",
+        "jobid": 25,
+        "return_message": "1 row",
+        "runid": 34106,
+        "seconds": 0.03,
+        "start_time": "2026-11-23T18:06:00.040237+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:03:00.322494+00:00",
+        "jobid": 26,
+        "return_message": "3 rows",
+        "runid": 34098,
+        "seconds": 0.2,
+        "start_time": "2026-11-23T18:03:00.121844+00:00",
         "status": "succeeded"
       },
       {
@@ -318,39 +327,30 @@
         "status": "succeeded"
       },
       {
-        "end_time": "2026-11-23T15:03:00.248508+00:00",
-        "jobid": 26,
-        "return_message": "3 rows",
-        "runid": 33750,
-        "seconds": 0.22,
-        "start_time": "2026-11-23T15:03:00.029049+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:12:00.049699+00:00",
+        "end_time": "2026-11-23T18:16:00.072801+00:00",
         "jobid": 29,
         "return_message": "1 row",
-        "runid": 34000,
-        "seconds": 0.02,
-        "start_time": "2026-11-23T17:12:00.027684+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:10:00.112069+00:00",
-        "jobid": 29,
-        "return_message": "1 row",
-        "runid": 33995,
-        "seconds": 0.02,
-        "start_time": "2026-11-23T17:10:00.093778+00:00",
-        "status": "succeeded"
-      },
-      {
-        "end_time": "2026-11-23T17:08:00.029502+00:00",
-        "jobid": 29,
-        "return_message": "1 row",
-        "runid": 33992,
+        "runid": 34123,
         "seconds": 0.01,
-        "start_time": "2026-11-23T17:08:00.019081+00:00",
+        "start_time": "2026-11-23T18:16:00.062656+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:14:00.060081+00:00",
+        "jobid": 29,
+        "return_message": "1 row",
+        "runid": 34119,
+        "seconds": 0.03,
+        "start_time": "2026-11-23T18:14:00.031822+00:00",
+        "status": "succeeded"
+      },
+      {
+        "end_time": "2026-11-23T18:12:00.046907+00:00",
+        "jobid": 29,
+        "return_message": "1 row",
+        "runid": 34116,
+        "seconds": 0.02,
+        "start_time": "2026-11-23T18:12:00.031299+00:00",
         "status": "succeeded"
       }
     ],
@@ -399,39 +399,39 @@
           "usename": "supabase_admin"
         }
       ],
-      "database_bytes": 55692435,
+      "database_bytes": 55798931,
       "queues": [],
       "schema_bytes": [
         {
-          "bytes": 15007744,
+          "bytes": 15081472,
           "schema": "public"
         }
       ],
       "storage": [],
       "top_queries": [
         {
-          "calls": 55,
-          "mean_ms": 46264.76,
+          "calls": 56,
+          "mean_ms": 46301.78,
           "query": "SELECT table_schema AS schema, table_name AS \"table\", column_name AS \"column\", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ",
           "role": "postgres",
           "rows": 0,
-          "total_ms": 2544562
+          "total_ms": 2592900
         },
         {
-          "calls": 29384,
+          "calls": 29398,
           "mean_ms": 11.77,
           "query": "select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id",
           "role": "postgres",
-          "rows": 29384,
-          "total_ms": 345816
+          "rows": 29398,
+          "total_ms": 346042
         },
         {
-          "calls": 26816,
-          "mean_ms": 8.15,
+          "calls": 26829,
+          "mean_ms": 8.16,
           "query": "WITH pgrst_source AS (SELECT \"pgrst_call\".* FROM \"public\".\"get_pending_escalations\"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ",
           "role": "service_role",
-          "rows": 26816,
-          "total_ms": 218597
+          "rows": 26829,
+          "total_ms": 218840
         },
         {
           "calls": 220,
@@ -442,20 +442,20 @@
           "total_ms": 122966
         },
         {
-          "calls": 2796,
-          "mean_ms": 29.29,
+          "calls": 2859,
+          "mean_ms": 29.28,
           "query": "select public.process_job_queue($1)",
           "role": "postgres",
-          "rows": 2796,
-          "total_ms": 81893
+          "rows": 2859,
+          "total_ms": 83714
         },
         {
-          "calls": 75813,
+          "calls": 75926,
           "mean_ms": 1.07,
           "query": "WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid",
           "role": "postgres",
-          "rows": 32603,
-          "total_ms": 81231
+          "rows": 32688,
+          "total_ms": 81326
         },
         {
           "calls": 111,
@@ -466,28 +466,28 @@
           "total_ms": 74561
         },
         {
-          "calls": 75813,
+          "calls": 75926,
           "mean_ms": 0.93,
           "query": "WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key || ",
           "role": "postgres",
-          "rows": 33078,
-          "total_ms": 70630
+          "rows": 33147,
+          "total_ms": 70753
         },
         {
-          "calls": 55,
-          "mean_ms": 1217.65,
+          "calls": 56,
+          "mean_ms": 1219.18,
           "query": "SELECT jobid, runid, status, start_time, end_time, EXTRACT($2 FROM (end_time - start_time))::numeric(10,2) AS seconds, left(return_message, $3) AS return_message FROM (SELECT *, row_number() OVER (PARTITION BY jobid ORDE",
           "role": "postgres",
-          "rows": 1832,
-          "total_ms": 66971
+          "rows": 1871,
+          "total_ms": 68274
         },
         {
-          "calls": 1425,
+          "calls": 1426,
           "mean_ms": 27.36,
           "query": "WITH pgrst_source AS (INSERT INTO \"public\".\"alerts\"(\"message\", \"metadata\", \"severity\", \"title\", \"type\") SELECT \"pgrst_body\".\"message\", \"pgrst_body\".\"metadata\", \"pgrst_body\".\"severity\", \"pgrst_body\".\"title\", \"pgrst_body\".",
           "role": "service_role",
-          "rows": 1425,
-          "total_ms": 38994
+          "rows": 1426,
+          "total_ms": 39010
         },
         {
           "calls": 16,
@@ -498,12 +498,12 @@
           "total_ms": 37243
         },
         {
-          "calls": 2245,
+          "calls": 2246,
           "mean_ms": 16.06,
           "query": "WITH pgrst_source AS (SELECT \"pgrst_call\".* FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT \"p_dedup_key\", \"p_alert_type\", \"p_window_seconds\" FROM json_to_record(pgrst_payload.json_data) AS _(\"p_dedup_key\" t",
           "role": "service_role",
-          "rows": 2245,
-          "total_ms": 36059
+          "rows": 2246,
+          "total_ms": 36071
         },
         {
           "calls": 1388,
@@ -514,20 +514,20 @@
           "total_ms": 34256
         },
         {
-          "calls": 9041,
-          "mean_ms": 2.68,
+          "calls": 9131,
+          "mean_ms": 2.69,
           "query": "WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT \"p_contract_name\", \"p_contract_version\", \"p_deprecated\" FROM json_to_record(pgrst_payload.json_data) AS _(",
           "role": "service_role",
-          "rows": 9041,
-          "total_ms": 24197
+          "rows": 9131,
+          "total_ms": 24568
         },
         {
-          "calls": 33078,
+          "calls": 33147,
           "mean_ms": 0.7,
           "query": "insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)",
           "role": "postgres",
-          "rows": 33078,
-          "total_ms": 23300
+          "rows": 33147,
+          "total_ms": 23357
         }
       ]
     },
@@ -546,7 +546,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "active_tracking_pkey",
-        "scans": 3054,
+        "scans": 3100,
         "schema": "public",
         "table": "active_tracking"
       },
@@ -654,7 +654,7 @@
         "is_primary": false,
         "is_unique": false,
         "name": "idx_alerts_driver_active",
-        "scans": 2514,
+        "scans": 2613,
         "schema": "public",
         "table": "alerts"
       },
@@ -681,7 +681,7 @@
         "is_primary": false,
         "is_unique": false,
         "name": "idx_alerts_order_active",
-        "scans": 23368,
+        "scans": 24273,
         "schema": "public",
         "table": "alerts"
       },
@@ -717,7 +717,7 @@
         "is_primary": false,
         "is_unique": false,
         "name": "idx_alerts_type",
-        "scans": 1875,
+        "scans": 1954,
         "schema": "public",
         "table": "alerts"
       },
@@ -969,7 +969,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "cache_refresh_log_pkey",
-        "scans": 88,
+        "scans": 91,
         "schema": "public",
         "table": "cache_refresh_log"
       },
@@ -1068,7 +1068,7 @@
         "is_primary": false,
         "is_unique": true,
         "name": "contract_version_usage_unique",
-        "scans": 9367,
+        "scans": 9467,
         "schema": "public",
         "table": "contract_version_usage"
       },
@@ -1527,7 +1527,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "geo_cache_pkey",
-        "scans": 3263,
+        "scans": 3309,
         "schema": "public",
         "table": "geo_cache"
       },
@@ -1554,7 +1554,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "geo_price_list_pkey",
-        "scans": 1837,
+        "scans": 1860,
         "schema": "public",
         "table": "geo_price_list"
       },
@@ -1572,7 +1572,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "geo_usage_pkey",
-        "scans": 1908,
+        "scans": 1932,
         "schema": "public",
         "table": "geo_usage"
       },
@@ -1613,7 +1613,7 @@
         "table": "job_queue"
       },
       {
-        "bytes": 65536,
+        "bytes": 73728,
         "is_primary": false,
         "is_unique": false,
         "name": "idx_job_queue_monitoring",
@@ -1626,7 +1626,7 @@
         "is_primary": false,
         "is_unique": false,
         "name": "idx_job_queue_pending",
-        "scans": 3302,
+        "scans": 3388,
         "schema": "public",
         "table": "job_queue"
       },
@@ -1635,7 +1635,7 @@
         "is_primary": false,
         "is_unique": false,
         "name": "idx_job_queue_status",
-        "scans": 4861,
+        "scans": 4947,
         "schema": "public",
         "table": "job_queue"
       },
@@ -1662,7 +1662,7 @@
         "is_primary": false,
         "is_unique": true,
         "name": "uq_job_queue_dedup_open",
-        "scans": 2049,
+        "scans": 2072,
         "schema": "public",
         "table": "job_queue"
       },
@@ -1676,7 +1676,7 @@
         "table": "job_queue_processing_log"
       },
       {
-        "bytes": 90112,
+        "bytes": 114688,
         "is_primary": true,
         "is_unique": true,
         "name": "job_queue_processing_log_pkey",
@@ -1887,7 +1887,7 @@
         "is_primary": true,
         "is_unique": true,
         "name": "lalamove_orders_pkey",
-        "scans": 36929,
+        "scans": 37592,
         "schema": "public",
         "table": "lalamove_orders"
       },
@@ -3112,48 +3112,48 @@
         "dead_rows": 0,
         "est_rows": 488,
         "heap_bytes": 483328,
-        "idx_scan": 3263,
+        "idx_scan": 3309,
         "index_bytes": 204800,
         "last_autoanalyze": "2026-11-23T16:37:46.851716+00:00",
         "last_autovacuum": "2026-11-23T03:15:08.262706+00:00",
         "name": "geo_cache",
         "schema": "public",
         "seq_scan": 14,
-        "total_bytes": 5029888
+        "total_bytes": 5038080
       },
       {
-        "dead_rows": 154,
+        "dead_rows": 200,
         "est_rows": 2126,
-        "heap_bytes": 1277952,
-        "idx_scan": 14878,
-        "index_bytes": 425984,
+        "heap_bytes": 1294336,
+        "idx_scan": 15073,
+        "index_bytes": 434176,
         "last_autoanalyze": "2026-11-23T16:03:45.438135+00:00",
         "last_autovacuum": "2026-11-23T15:12:43.073369+00:00",
         "name": "job_queue",
         "schema": "public",
         "seq_scan": 120,
-        "total_bytes": 1744896
+        "total_bytes": 1769472
       },
       {
         "dead_rows": 4,
         "est_rows": 1307,
         "heap_bytes": 434176,
-        "idx_scan": 29189,
+        "idx_scan": 30272,
         "index_bytes": 557056,
         "last_autoanalyze": "2026-11-20T01:17:37.990911+00:00",
         "last_autovacuum": "2026-11-16T14:17:44.964832+00:00",
         "name": "alerts",
         "schema": "public",
-        "seq_scan": 2750,
+        "seq_scan": 2763,
         "total_bytes": 1032192
       },
       {
         "dead_rows": 0,
-        "est_rows": 1509,
+        "est_rows": 1711,
         "heap_bytes": 294912,
         "idx_scan": 22,
         "index_bytes": 696320,
-        "last_autoanalyze": "2026-11-23T11:58:33.838279+00:00",
+        "last_autoanalyze": "2026-11-23T18:02:50.816298+00:00",
         "last_autovacuum": "2026-11-23T03:48:09.966863+00:00",
         "name": "query_telemetry",
         "schema": "public",
@@ -3163,50 +3163,50 @@
       {
         "dead_rows": 0,
         "est_rows": 2326,
-        "heap_bytes": 303104,
+        "heap_bytes": 311296,
         "idx_scan": 1,
-        "index_bytes": 204800,
+        "index_bytes": 229376,
         "last_autoanalyze": "2026-11-23T16:47:47.238154+00:00",
         "last_autovacuum": "2026-11-22T22:18:53.793926+00:00",
         "name": "job_queue_processing_log",
         "schema": "public",
         "seq_scan": 4,
-        "total_bytes": 548864
+        "total_bytes": 581632
       },
       {
-        "dead_rows": 29,
+        "dead_rows": 10,
         "est_rows": 20,
         "heap_bytes": 114688,
-        "idx_scan": 3069,
+        "idx_scan": 3115,
         "index_bytes": 65536,
         "last_autoanalyze": "2026-11-23T17:12:48.413821+00:00",
         "last_autovacuum": "2026-11-23T01:29:02.907953+00:00",
         "name": "active_tracking",
         "schema": "public",
-        "seq_scan": 3940,
+        "seq_scan": 3998,
         "total_bytes": 417792
       },
       {
         "dead_rows": 7,
         "est_rows": 50,
         "heap_bytes": 24576,
-        "idx_scan": 37998,
+        "idx_scan": 38661,
         "index_bytes": 237568,
         "last_autoanalyze": null,
         "last_autovacuum": null,
         "name": "lalamove_orders",
         "schema": "public",
-        "seq_scan": 911,
+        "seq_scan": 913,
         "total_bytes": 294912
       },
       {
-        "dead_rows": 62,
+        "dead_rows": 8,
         "est_rows": 107,
         "heap_bytes": 106496,
-        "idx_scan": 9382,
+        "idx_scan": 9482,
         "index_bytes": 98304,
-        "last_autoanalyze": "2026-11-23T17:00:47.805611+00:00",
-        "last_autovacuum": "2026-11-23T16:38:46.825768+00:00",
+        "last_autoanalyze": "2026-11-23T18:06:51.004110+00:00",
+        "last_autovacuum": "2026-11-23T18:06:50.995014+00:00",
         "name": "contract_version_usage",
         "schema": "public",
         "seq_scan": 24,
@@ -3278,17 +3278,17 @@
         "total_bytes": 147456
       },
       {
-        "dead_rows": 60,
+        "dead_rows": 63,
         "est_rows": 114,
-        "heap_bytes": 16384,
-        "idx_scan": 97,
+        "heap_bytes": 24576,
+        "idx_scan": 100,
         "index_bytes": 65536,
         "last_autoanalyze": "2026-11-23T14:03:39.993250+00:00",
         "last_autovacuum": "2026-11-22T21:03:50.251512+00:00",
         "name": "cache_refresh_log",
         "schema": "public",
         "seq_scan": 42,
-        "total_bytes": 122880
+        "total_bytes": 131072
       },
       {
         "dead_rows": 0,
@@ -3330,7 +3330,7 @@
         "total_bytes": 122880
       },
       {
-        "dead_rows": 18,
+        "dead_rows": 19,
         "est_rows": 7,
         "heap_bytes": 8192,
         "idx_scan": 107,
@@ -3339,7 +3339,7 @@
         "last_autovacuum": "2026-11-23T02:17:05.348583+00:00",
         "name": "alert_dedup",
         "schema": "public",
-        "seq_scan": 4775,
+        "seq_scan": 4777,
         "total_bytes": 114688
       },
       {
@@ -3378,7 +3378,7 @@
         "last_autovacuum": null,
         "name": "drivers",
         "schema": "public",
-        "seq_scan": 11305,
+        "seq_scan": 11722,
         "total_bytes": 114688
       },
       {
@@ -3417,7 +3417,7 @@
         "last_autovacuum": null,
         "name": "alert_configurations",
         "schema": "public",
-        "seq_scan": 26732,
+        "seq_scan": 26774,
         "total_bytes": 90112
       },
       {
@@ -3460,16 +3460,16 @@
         "total_bytes": 81920
       },
       {
-        "dead_rows": 37,
+        "dead_rows": 3,
         "est_rows": 34,
         "heap_bytes": 8192,
-        "idx_scan": 1965,
+        "idx_scan": 1989,
         "index_bytes": 32768,
         "last_autoanalyze": "2026-11-23T17:12:48.416174+00:00",
-        "last_autovacuum": "2026-11-23T13:08:37.281757+00:00",
+        "last_autovacuum": "2026-11-23T17:48:50.194046+00:00",
         "name": "geo_usage",
         "schema": "public",
-        "seq_scan": 3903,
+        "seq_scan": 3964,
         "total_bytes": 81920
       },
       {
@@ -3755,7 +3755,7 @@
         "last_autovacuum": null,
         "name": "lalamove_stops",
         "schema": "public",
-        "seq_scan": 1735,
+        "seq_scan": 1758,
         "total_bytes": 40960
       },
       {
@@ -3807,7 +3807,7 @@
         "last_autovacuum": null,
         "name": "geo_budget",
         "schema": "public",
-        "seq_scan": 1125,
+        "seq_scan": 1144,
         "total_bytes": 32768
       },
       {
@@ -3827,13 +3827,13 @@
         "dead_rows": 2,
         "est_rows": 0,
         "heap_bytes": 8192,
-        "idx_scan": 1837,
+        "idx_scan": 1860,
         "index_bytes": 16384,
         "last_autoanalyze": null,
         "last_autovacuum": null,
         "name": "geo_price_list",
         "schema": "public",
-        "seq_scan": 1105,
+        "seq_scan": 1124,
         "total_bytes": 32768
       },
       {
@@ -3846,7 +3846,7 @@
         "last_autovacuum": null,
         "name": "geo_settings",
         "schema": "public",
-        "seq_scan": 1110,
+        "seq_scan": 1129,
         "total_bytes": 32768
       },
       {
@@ -3976,7 +3976,7 @@
         "last_autovacuum": null,
         "name": "lalamove_uapi_sessions",
         "schema": "public",
-        "seq_scan": 2292,
+        "seq_scan": 2293,
         "total_bytes": 24576
       },
       {
