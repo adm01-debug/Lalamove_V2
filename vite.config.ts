@@ -15,13 +15,13 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
-          'supabase': ['@supabase/supabase-js'],
-          'mapbox': ['mapbox-gl'],
-          'charts': ['recharts'],
-          'motion': ['framer-motion'],
-          'export': ['xlsx', 'jspdf'],
+        manualChunks(id) {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('jsx-runtime')) return 'react-vendor';
+          if (id.includes('@supabase')) return 'supabase';
+          if (id.includes('mapbox-gl')) return 'mapbox';
+          if (id.includes('recharts')) return 'charts';
+          if (id.includes('framer-motion')) return 'motion';
+          if (id.includes('xlsx') || id.includes('jspdf')) return 'export';
         },
       },
     },
