@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f5779da5d8` · branch `main` · 2026-11-23 21:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ac2a2af236` · branch `main` · 2026-11-23 22:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -33,7 +33,7 @@
 | `driver_incidents` | Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano). | 13 colunas | migration |
 | `driver_locations` | Historico detalhado de posicoes GPS dos motoristas. | 9 colunas | migration |
 | `driver_stats_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | types.ts |
-| `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 32 colunas | migration |
+| `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 33 colunas | migration |
 | `drivers_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | types.ts |
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
@@ -62,10 +62,14 @@
 | `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
 | `map_settings_overrides` | Overrides de configuracao de mapa por usuario/contexto. | 8 colunas | migration |
 | `mcp_diagnostics_grants` | Grants de acesso a diagnosticos via MCP (query_telemetry). | 7 colunas | migration |
+| `message_templates` | Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres. | 13 colunas | migration |
+| `messaging_settings` | Configuracao unica da mensageria (etapa 75). shadow_mode=true decide tudo e nao envia nada. | 10 colunas | migration |
+| `messaging_usage` | Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5). | 7 colunas | migration |
 | `mfa_sessions` | Sessoes MFA (TOTP) registradas por usuario. | 10 colunas | migration |
 | `new_device_alerts` | Alertas de novo dispositivo detectado no login. | 8 colunas | migration |
 | `notification_messages` | Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela. | 32 colunas | migration |
 | `notification_optouts` | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. | 4 colunas | migration |
+| `notification_routes` | Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta. | 9 colunas | migration |
 | `order_geo_events` | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada). | 14 colunas | migration |
 | `orders_operator_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
 | `orders_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
@@ -313,6 +317,7 @@ _nenhum item encontrado_
 - Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.
 - `cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `drivers.whatsapp_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `lalamove_orders.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
@@ -342,7 +347,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 20/91 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
+- 20/95 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

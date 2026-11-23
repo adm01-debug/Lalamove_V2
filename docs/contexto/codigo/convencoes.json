@@ -50,7 +50,7 @@
   "hooks": "use + PascalCase",
   "servicos": "camelCase (84%)",
   "edge_functions": "kebab-case (100%)",
-  "tabelas": "snake_case (94%)"
+  "tabelas": "snake_case (95%)"
  },
  "barrels_index": 4,
  "extensao_componentes": [
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
    "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)",
    "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)",
    "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)",
-   "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)",
-   "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)"
+   "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

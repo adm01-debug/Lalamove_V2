@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `f5779da5d8916923d8b9ff1da0b859a30174c540` (2026-11-23T18:43:13-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ac2a2af2366a413cdd82345cfbb9d1031981b0cb` (2026-11-23T19:26:15-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (575), SQL (203), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (575), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1087 |
+| arquivos_total | 1088 |
 | arquivos_codigo | 688 |
 | linhas_codigo | 134069 |
 | rotas | 56 |
@@ -46,8 +46,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | componentes | 220 |
 | hooks | 101 |
 | edge_functions | 28 |
-| tabelas | 89 |
-| migrations | 192 |
+| tabelas | 93 |
+| migrations | 193 |
 | cron_jobs | 24 |
 | testes | 169 |
 | workflows | 5 |
@@ -66,7 +66,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
 - docs: docs (37), (raiz) (7), .github (1)
-- nomenclatura: {"componentes":"PascalCase (71%)","hooks":"use + PascalCase","servicos":"camelCase (84%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (94%)"}
+- nomenclatura: {"componentes":"PascalCase (71%)","hooks":"use + PascalCase","servicos":"camelCase (84%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (95%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/mensageria.md, docs/agentes/pendencias-dono.md, docs/agentes/regras-dominio.md
 
 ## Módulos (menu → domínio)
@@ -279,7 +279,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - edges_sem_verify_jwt: 3 — ex.: lalamove-webhook, llm-wh, mcp-query
 - tabelas_sem_rls: 0
 - tabelas_usadas_sem_definicao: 4 — ex.: carriers, companies, customers
-- tabelas_com_drift_migration_vs_types: 4 — ex.: geo_budget, geo_cache, geo_defaults
+- tabelas_com_drift_migration_vs_types: 5 — ex.: drivers, geo_budget, geo_cache
 - rpcs_sem_definicao: 1 — ex.: exec
 - componentes_orfaos: 5 — ex.: src/components/approvals/SwipeableApprovalCard.tsx, src/components/debug/AuditReportGenerator.tsx, src/components/ui/chart.tsx
 - componentes_com_nome_duplicado: 5 — ex.: ExtendedFAB, MiniFAB, QuickActionsPanel
@@ -290,8 +290,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9632 nós · 19765 arestas · 681 comunidades · grafo do commit `f5779da5`
-- comunidades maiores: cn (297), button.tsx (154), App.tsx (145), ref_https (137), client.ts (118), ref_node_path (109), snapshot.py (106), send-notification/index.ts (95), lucide-react (94), AlertsPage.tsx (86), dependencies (81), 4. Componentes, hooks, libs e estado — **revisado** (79)
+- 9646 nós · 19785 arestas · 688 comunidades · grafo do commit `ac2a2af2`
+- comunidades maiores: cn (284), lucide-react (157), ref_https (132), 4. Componentes, hooks, libs e estado — **revisado** (130), ref_node_path (109), snapshot.py (106), badge.tsx (100), client.ts (88), @tanstack/react-query (84), dependencies (81), GeoBlockingPage.tsx (77), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -393,6 +393,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
 - 2026-11-23 `f5779da` fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)
 - 2026-11-23 `e918dd6` fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)
 - 2026-11-23 `874a336` feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)
@@ -407,7 +408,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `ee920ac` fix: validar contrato antes de criar cliente no new-device-alert (#328)
 - 2026-11-23 `f20a3ea` feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)
 - 2026-11-23 `9c1ef6e` feat: lote 10 - build es2022 + manualChunks + logger producao (#322)
-- 2026-11-23 `add648e` feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

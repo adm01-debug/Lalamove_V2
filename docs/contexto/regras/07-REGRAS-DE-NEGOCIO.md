@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f5779da5d8` · branch `main` · 2026-11-23 21:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ac2a2af236` · branch `main` · 2026-11-23 22:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -232,6 +232,17 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `notification_optouts` | service role escreve opt-outs | ALL | service_role | permissive | `true` | `true` |
 | `notification_messages` | operator le ledger de mensagens | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
 | `notification_messages` | service role escreve ledger de mensagens | ALL | service_role | permissive | `true` | `true` |
+| `messaging_settings` | equipe le configuracao de mensageria | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `messaging_settings` | admin edita configuracao de mensageria | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role)` | `public.has_role(auth.uid(), 'admin'::public.app_role)` |
+| `messaging_settings` | service role gerencia configuracao de mensageria | ALL | service_role | permissive | `true` | `true` |
+| `message_templates` | equipe le templates | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `message_templates` | admin edita templates | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role)` | `public.has_role(auth.uid(), 'admin'::public.app_role)` |
+| `message_templates` | service role gerencia templates | ALL | service_role | permissive | `true` | `true` |
+| `notification_routes` | equipe le rotas de notificacao | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `notification_routes` | admin edita rotas de notificacao | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role)` | `public.has_role(auth.uid(), 'admin'::public.app_role)` |
+| `notification_routes` | service role gerencia rotas de notificacao | ALL | service_role | permissive | `true` | `true` |
+| `messaging_usage` | equipe le uso de mensageria | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `messaging_usage` | service role escreve uso de mensageria | ALL | service_role | permissive | `true` | `true` |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -263,6 +274,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `drivers` | `created_at` | default now() |
 | `drivers` | `updated_at` | default now() |
 | `drivers` | `failed_deliveries` | default 0 |
+| `drivers` | `whatsapp_status` | default 'unknown' |
 | `lalamove_orders` | `id` | PK; default gen_random_uuid() |
 | `lalamove_orders` | `lalamove_id` | obrigatório; único |
 | `lalamove_orders` | `status` | default 'PENDING' |
@@ -536,8 +548,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `expires_at` | default (now() |
 | `password_reset_requests` | `created_at` | default now() |
 | `login_attempts` | `id` | PK; default gen_random_uuid() |
-| `login_attempts` | `email` | obrigatório |
-| … +278 linhas — lista completa em `context.json` | | |
+| … +321 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -603,6 +614,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 |---|---|---|---|
 | `cache_refresh_log` | `status` | `failed`, `running`, `success` | `running` |
 | `drivers` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` | `PENDING_APPROVAL` |
+| `drivers` | `whatsapp_status` | **livre (sem enum/CHECK)** | `unknown` |
 | `lalamove_orders` | `status` | `PENDING`, `MATCHED`, `ON_GOING`, `PICKED_UP`, `COMPLETED`, `CANCELLED`, `REJECTED`, `EXPIRED` | `PENDING` |
 | `lalamove_orders` | `lalamove_status` | **livre (sem enum/CHECK)** |  |
 | `lalamove_orders` | `internal_status` | **livre (sem enum/CHECK)** |  |
@@ -1608,6 +1620,7 @@ _nenhum item encontrado_
 | `OR lr.refresh_completed_at < now() - interval '1 hour') AS is_stale,` | `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql` |
 | `WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale'` | `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql` |
 | `AND started_at < now() - interval '10 minutes'` | `supabase/migrations/20261123160000_job_queue_processing_log.sql` |
+| `AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;` | `supabase/migrations/20261126120000_messaging_foundation.sql` |
 
 ### H.3 Limites de paginação
 

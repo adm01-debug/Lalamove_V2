@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "f5779da5d8916923d8b9ff1da0b859a30174c540",
+  "sha": "ac2a2af2366a413cdd82345cfbb9d1031981b0cb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 21:43 UTC",
-  "files_total": 1081,
-  "code_files": 900,
-  "code_lines": 155430
+  "generated_at": "2026-11-23 22:28 UTC",
+  "files_total": 1082,
+  "code_files": 901,
+  "code_lines": 155740
  },
  "version": "1.3.2",
- "facts_hash": "e750becdc31a60a0",
+ "facts_hash": "5d1f0641b46da71f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -189,7 +189,7 @@
   "languages": {
    ".ts": 336,
    ".tsx": 239,
-   ".sql": 203,
+   ".sql": 204,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -467,6 +467,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/migrations/20251225194242_ab4f75da-94a4-4a98-85e6-4f1170dc4e8a.sql"
+     },
+     {
+      "name": "whatsapp_status",
+      "type": "text NOT NULL DEFAULT 'unknown'",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
      },
      {
       "name": "avg_delay_minutes",
@@ -6582,6 +6589,317 @@
     "comment": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela.",
     "origin": "migration"
    },
+   "messaging_settings": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "boolean PRIMARY KEY DEFAULT true CHECK (id)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "whatsapp_provider",
+      "type": "text NOT NULL DEFAULT 'zapp' CHECK (whatsapp_provider IN ('zapp','evolution','off'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "sms_provider",
+      "type": "text NOT NULL DEFAULT 'none' CHECK (sms_provider IN ('none','zenvia','comtele','twilio'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "sms_fallback_after_min",
+      "type": "integer NOT NULL DEFAULT 10 CHECK (sms_fallback_after_min BETWEEN 0 AND 1440)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "monthly_budget_cents",
+      "type": "integer NOT NULL DEFAULT 0 CHECK (monthly_budget_cents >= 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "quiet_hours_by_role",
+      "type": "jsonb NOT NULL DEFAULT '{}'::jsonb",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "pilot_mode",
+      "type": "boolean NOT NULL DEFAULT false",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "shadow_mode",
+      "type": "boolean NOT NULL DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_by",
+      "type": "uuid REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "comment": "Configuracao unica da mensageria (etapa 75). shadow_mode=true decide tudo e nao envia nada.",
+    "origin": "migration"
+   },
+   "message_templates": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "key",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "event",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "role",
+      "type": "text NOT NULL DEFAULT 'driver' CHECK (role IN ('driver','supplier','customer','internal'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "channel",
+      "type": "text NOT NULL CHECK (channel IN ('whatsapp','sms'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "version",
+      "type": "integer NOT NULL DEFAULT 1 CHECK (version > 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "body",
+      "type": "text NOT NULL CHECK (length(btrim(body)) > 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "variables",
+      "type": "text[] NOT NULL DEFAULT '{}'::text[]",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "max_length",
+      "type": "integer CHECK (max_length IS NULL OR max_length > 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "is_active",
+      "type": "boolean NOT NULL DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_by",
+      "type": "uuid REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     }
+    ],
+    "constraints": [
+     "UNIQUE (key, channel, version)"
+    ],
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "comment": "Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres.",
+    "origin": "migration"
+   },
+   "notification_routes": {
+    "columns": [
+     {
+      "name": "event",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "role",
+      "type": "text NOT NULL CHECK (role IN ('driver','supplier','customer','internal'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "channels",
+      "type": "text[] NOT NULL DEFAULT '{}'::text[]",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "fallback_after_min",
+      "type": "integer NOT NULL DEFAULT 0 CHECK (fallback_after_min BETWEEN 0 AND 1440)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "requires_reply",
+      "type": "boolean NOT NULL DEFAULT false",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "reply_timeout_min",
+      "type": "integer CHECK (reply_timeout_min IS NULL OR reply_timeout_min > 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "is_enabled",
+      "type": "boolean NOT NULL DEFAULT true",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_by",
+      "type": "uuid REFERENCES auth.users(id) ON DELETE SET NULL",
+      "fk": "users.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     }
+    ],
+    "constraints": [
+     "PRIMARY KEY (event, role)"
+    ],
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "comment": "Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta.",
+    "origin": "migration"
+   },
+   "messaging_usage": {
+    "columns": [
+     {
+      "name": "day",
+      "type": "date NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "channel",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "provider",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "messages",
+      "type": "integer NOT NULL DEFAULT 0 CHECK (messages >= 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "segments",
+      "type": "integer NOT NULL DEFAULT 0 CHECK (segments >= 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "cost_cents",
+      "type": "integer NOT NULL DEFAULT 0 CHECK (cost_cents >= 0)",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+     }
+    ],
+    "constraints": [
+     "PRIMARY KEY (day, channel, provider)"
+    ],
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "comment": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5).",
+    "origin": "migration"
+   },
    "fixture_route_curitiba": {
     "columns": [
      {
@@ -10802,6 +11120,116 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "equipe le configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le templates",
+    "table": "message_templates",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita templates",
+    "table": "message_templates",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia templates",
+    "table": "message_templates",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le uso de mensageria",
+    "table": "messaging_usage",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role escreve uso de mensageria",
+    "table": "messaging_usage",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
    }
   ],
   "triggers": [
@@ -12491,6 +12919,34 @@
      "alvo",
      "notification_messages",
      "v_count"
+    ]
+   },
+   "record_messaging_usage": {
+    "args": "p_channel text, p_provider text, p_messages integer DEFAULT 1, p_segments integer DEFAULT 1, p_cost_cents integer DEFAULT 0, p_day date DEFAULT NULL",
+    "returns": "public.messaging_usage",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v public.messaging_usage; BEGIN INSERT INTO messaging_usage (day, channel, provider, messages, segments, cost_cents) VALUES ( COALESCE(p_day, (now() AT TIME ZONE 'America/Sao_Paulo')::date), p_channel, p_provider, GREATEST(COALESCE(p_messages, 0), 0), GREATEST(COALESCE(p_segments, 0), 0), GREATEST(COALESCE(p_cost_cents, 0), 0) ) ON CONFLICT (day, channel, provider) DO UPDATE SET messages = messaging_usage.messages + EXCLUDED.messages, segments = messaging_usage.segments + EXCLUDED.segments, cost_cents = messaging_usage.cost_cents + EXCLUDED.cost_cents, updated_at = now() RETURNING * INTO v; RETURN v; END;",
+    "raises": [],
+    "tables": [
+     "SET",
+     "messaging_usage",
+     "v"
+    ]
+   },
+   "messaging_month_cost_cents": {
+    "args": "p_month date DEFAULT NULL",
+    "returns": "integer",
+    "lang": "sql",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "SELECT COALESCE(SUM(cost_cents), 0)::integer FROM messaging_usage WHERE day >= date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date))::date AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;",
+    "raises": [],
+    "tables": [
+     "messaging_usage"
     ]
    },
    "uid": {
@@ -14585,6 +15041,38 @@
     "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    },
    {
+    "name": "message_templates_active_key_idx",
+    "table": "message_templates",
+    "columns": "key, channel",
+    "unique": true,
+    "where": "WHERE is_active",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "messaging_usage_day_idx",
+    "table": "messaging_usage",
+    "columns": "day",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "message_templates_event_idx",
+    "table": "message_templates",
+    "columns": "event, role, channel",
+    "unique": false,
+    "where": "WHERE is_active",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "notification_routes_event_idx",
+    "table": "notification_routes",
+    "columns": "event",
+    "unique": false,
+    "where": "WHERE is_enabled",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
     "name": "uq_job_queue_dedup_open",
     "table": "job_queue",
     "columns": "dedup_key",
@@ -14878,6 +15366,7 @@
    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
    "supabase/migrations/20261124120000_internal_alert_channels.sql",
    "supabase/migrations/20261125120000_notification_ledger.sql",
+   "supabase/migrations/20261126120000_messaging_foundation.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -14961,7 +15450,11 @@
    "cache_refresh_log": "enabled",
    "job_queue_processing_log": "enabled",
    "notification_optouts": "enabled",
-   "notification_messages": "enabled"
+   "notification_messages": "enabled",
+   "messaging_settings": "enabled",
+   "message_templates": "enabled",
+   "notification_routes": "enabled",
+   "messaging_usage": "enabled"
   },
   "grants": [
    {
@@ -17203,6 +17696,38 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "messaging_month_cost_cents",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "messaging_month_cost_cents",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
    }
   ],
   "raises": [
@@ -17376,7 +17901,12 @@
    "column:lalamove_stops.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode da parada.",
    "column:permissions.module": "Modulo funcional; maps cobre provedores de mapa e custo (etapa 92).",
    "table:notification_optouts": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
-   "table:notification_messages": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela."
+   "table:notification_messages": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela.",
+   "table:messaging_settings": "Configuracao unica da mensageria (etapa 75). shadow_mode=true decide tudo e nao envia nada.",
+   "column:messaging_settings.quiet_hours_by_role": "Horario de silencio por papel. Motorista com pedido ativo e isento (Z9).",
+   "table:message_templates": "Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres.",
+   "table:notification_routes": "Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta.",
+   "table:messaging_usage": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5)."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -22269,8 +22799,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 192,
-   "lines": 13377,
+   "files": 193,
+   "lines": 13687,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -24546,8 +25076,12 @@
    "lalamove_webhook_config",
    "login_attempts",
    "mcp_diagnostics_grants",
+   "message_templates",
+   "messaging_settings",
+   "messaging_usage",
    "mfa_sessions",
    "notification_optouts",
+   "notification_routes",
    "orders_operator_view",
    "orders_safe_view",
    "password_reset_tokens",
@@ -28147,6 +28681,11 @@
     "rule": "default 0"
    },
    {
+    "table": "drivers",
+    "column": "whatsapp_status",
+    "rule": "default 'unknown'"
+   },
+   {
     "table": "lalamove_orders",
     "column": "id",
     "rule": "PK; default gen_random_uuid()"
@@ -30660,6 +31199,216 @@
     "table": "notification_messages",
     "column": "updated_at",
     "rule": "default now()"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "id",
+    "rule": "PK; default true; CHECK id"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "whatsapp_provider",
+    "rule": "default 'zapp'; CHECK whatsapp_provider IN ('zapp','evolution','off')"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "sms_provider",
+    "rule": "default 'none'; CHECK sms_provider IN ('none','zenvia','comtele','twilio')"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "sms_fallback_after_min",
+    "rule": "default 10; CHECK sms_fallback_after_min BETWEEN 0 AND 1440"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "monthly_budget_cents",
+    "rule": "default 0; CHECK monthly_budget_cents >= 0"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "quiet_hours_by_role",
+    "rule": "default '{}'::jsonb"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "pilot_mode",
+    "rule": "default false"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "shadow_mode",
+    "rule": "default true"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "updated_by",
+    "rule": "FK → users.id ON DELETE SET NULL"
+   },
+   {
+    "table": "messaging_settings",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "message_templates",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "message_templates",
+    "column": "key",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "message_templates",
+    "column": "event",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "message_templates",
+    "column": "role",
+    "rule": "default 'driver'; CHECK role IN ('driver','supplier','customer','internal')"
+   },
+   {
+    "table": "message_templates",
+    "column": "channel",
+    "rule": "obrigatório; CHECK channel IN ('whatsapp','sms')"
+   },
+   {
+    "table": "message_templates",
+    "column": "version",
+    "rule": "default 1; CHECK version > 0"
+   },
+   {
+    "table": "message_templates",
+    "column": "body",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "message_templates",
+    "column": "variables",
+    "rule": "default '{}'::text[]"
+   },
+   {
+    "table": "message_templates",
+    "column": "max_length",
+    "rule": "CHECK max_length IS NULL OR max_length > 0"
+   },
+   {
+    "table": "message_templates",
+    "column": "is_active",
+    "rule": "default true"
+   },
+   {
+    "table": "message_templates",
+    "column": "updated_by",
+    "rule": "FK → users.id ON DELETE SET NULL"
+   },
+   {
+    "table": "message_templates",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "message_templates",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "message_templates",
+    "column": "(tabela)",
+    "rule": "UNIQUE (key, channel, version)"
+   },
+   {
+    "table": "notification_routes",
+    "column": "event",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "notification_routes",
+    "column": "role",
+    "rule": "obrigatório; CHECK role IN ('driver','supplier','customer','internal')"
+   },
+   {
+    "table": "notification_routes",
+    "column": "channels",
+    "rule": "default '{}'::text[]"
+   },
+   {
+    "table": "notification_routes",
+    "column": "fallback_after_min",
+    "rule": "default 0; CHECK fallback_after_min BETWEEN 0 AND 1440"
+   },
+   {
+    "table": "notification_routes",
+    "column": "requires_reply",
+    "rule": "default false"
+   },
+   {
+    "table": "notification_routes",
+    "column": "reply_timeout_min",
+    "rule": "CHECK reply_timeout_min IS NULL OR reply_timeout_min > 0"
+   },
+   {
+    "table": "notification_routes",
+    "column": "is_enabled",
+    "rule": "default true"
+   },
+   {
+    "table": "notification_routes",
+    "column": "updated_by",
+    "rule": "FK → users.id ON DELETE SET NULL"
+   },
+   {
+    "table": "notification_routes",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "notification_routes",
+    "column": "(tabela)",
+    "rule": "PRIMARY KEY (event, role)"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "day",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "channel",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "provider",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "messages",
+    "rule": "default 0; CHECK messages >= 0"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "segments",
+    "rule": "default 0; CHECK segments >= 0"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "cost_cents",
+    "rule": "default 0; CHECK cost_cents >= 0"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "messaging_usage",
+    "column": "(tabela)",
+    "rule": "PRIMARY KEY (day, channel, provider)"
    },
    {
     "table": "fixture_route_curitiba",
@@ -36223,6 +36972,10 @@
    {
     "file": "supabase/migrations/20261123160000_job_queue_processing_log.sql",
     "line": "AND started_at < now() - interval '10 minutes'"
+   },
+   {
+    "file": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "line": "AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;"
    }
   ],
   "percents": [
@@ -44599,6 +45352,116 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "equipe le configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia configuracao de mensageria",
+    "table": "messaging_settings",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le templates",
+    "table": "message_templates",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita templates",
+    "table": "message_templates",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia templates",
+    "table": "message_templates",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "admin edita rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "ALL",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role gerencia rotas de notificacao",
+    "table": "notification_routes",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le uso de mensageria",
+    "table": "messaging_usage",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "service role escreve uso de mensageria",
+    "table": "messaging_usage",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
    }
   ],
   "db_triggers": [
@@ -46290,6 +47153,34 @@
      "v_count"
     ]
    },
+   "record_messaging_usage": {
+    "args": "p_channel text, p_provider text, p_messages integer DEFAULT 1, p_segments integer DEFAULT 1, p_cost_cents integer DEFAULT 0, p_day date DEFAULT NULL",
+    "returns": "public.messaging_usage",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v public.messaging_usage; BEGIN INSERT INTO messaging_usage (day, channel, provider, messages, segments, cost_cents) VALUES ( COALESCE(p_day, (now() AT TIME ZONE 'America/Sao_Paulo')::date), p_channel, p_provider, GREATEST(COALESCE(p_messages, 0), 0), GREATEST(COALESCE(p_segments, 0), 0), GREATEST(COALESCE(p_cost_cents, 0), 0) ) ON CONFLICT (day, channel, provider) DO UPDATE SET messages = messaging_usage.messages + EXCLUDED.messages, segments = messaging_usage.segments + EXCLUDED.segments, cost_cents = messaging_usage.cost_cents + EXCLUDED.cost_cents, updated_at = now() RETURNING * INTO v; RETURN v; END;",
+    "raises": [],
+    "tables": [
+     "SET",
+     "messaging_usage",
+     "v"
+    ]
+   },
+   "messaging_month_cost_cents": {
+    "args": "p_month date DEFAULT NULL",
+    "returns": "integer",
+    "lang": "sql",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "SELECT COALESCE(SUM(cost_cents), 0)::integer FROM messaging_usage WHERE day >= date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date))::date AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;",
+    "raises": [],
+    "tables": [
+     "messaging_usage"
+    ]
+   },
    "uid": {
     "args": "",
     "returns": "uuid",
@@ -46768,6 +47659,14 @@
      ],
      "default": "PENDING_APPROVAL",
      "type": "public.driver_status NOT NULL DEFAULT 'PENDING_APPROVAL'"
+    },
+    {
+     "table": "drivers",
+     "column": "whatsapp_status",
+     "enum": "",
+     "allowed": [],
+     "default": "unknown",
+     "type": "text NOT NULL DEFAULT 'unknown'"
     },
     {
      "table": "lalamove_orders",
@@ -47960,6 +48859,16 @@
     "notification_messages",
     "role",
     "text NOT NULL CHECK (role IN ('driver','pickup_contact','delivery_contact','internal'))"
+   ],
+   [
+    "message_templates",
+    "role",
+    "text NOT NULL DEFAULT 'driver' CHECK (role IN ('driver','supplier','customer','internal'))"
+   ],
+   [
+    "notification_routes",
+    "role",
+    "text NOT NULL CHECK (role IN ('driver','supplier','customer','internal'))"
    ]
   ],
   "jwt_claims": [
@@ -48648,6 +49557,62 @@
      "authenticated: public.has_role(auth.uid(), 'admin')"
     ]
    },
+   "message_templates": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ]
+   },
+   "messaging_settings": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ]
+   },
+   "messaging_usage": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "service_role: true"
+    ],
+    "DELETE": [
+     "service_role: true"
+    ]
+   },
    "mfa_sessions": {
     "rls": "enabled",
     "SELECT": [
@@ -48701,6 +49666,26 @@
    "notification_optouts": {
     "rls": "enabled",
     "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ],
+    "DELETE": [
+     "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
+     "service_role: true"
+    ]
+   },
+   "notification_routes": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
      "authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)",
      "service_role: true"
     ],
@@ -49302,7 +50287,8 @@
    "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
    "supabase/migrations/20261123160000_job_queue_processing_log.sql",
    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
-   "supabase/migrations/20261125120000_notification_ledger.sql"
+   "supabase/migrations/20261125120000_notification_ledger.sql",
+   "supabase/migrations/20261126120000_messaging_foundation.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -49349,6 +50335,7 @@
    "is_token_valid",
    "log_mfa_session",
    "mcp_introspect",
+   "messaging_month_cost_cents",
    "notification_messages_scrub_bodies",
    "notify_lalamove_quota_low",
    "notify_webhook_security_event",
@@ -49358,6 +50345,7 @@
    "prune_tracking_events_partitions",
    "record_failed_login",
    "record_failed_login_v2",
+   "record_messaging_usage",
    "refresh_cache_view",
    "refresh_geo_jobs",
    "resume_cron_job",
@@ -51618,6 +52606,38 @@
     "objkind": "function",
     "roles": "service_role",
     "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "record_messaging_usage",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "messaging_month_cost_cents",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "messaging_month_cost_cents",
+    "objkind": "function",
+    "roles": "service_role, authenticated",
+    "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
    }
   ],
   "guards": [
@@ -52433,6 +53453,10 @@
    [
     "lalamove_webhook_config",
     "is_active"
+   ],
+   [
+    "message_templates",
+    "is_active"
    ]
   ],
   "audit": {
@@ -52656,6 +53680,22 @@
    ],
    "notification_messages": [
     "created_at",
+    "updated_at"
+   ],
+   "messaging_settings": [
+    "updated_at",
+    "updated_by"
+   ],
+   "message_templates": [
+    "created_at",
+    "updated_at",
+    "updated_by"
+   ],
+   "notification_routes": [
+    "updated_at",
+    "updated_by"
+   ],
+   "messaging_usage": [
     "updated_at"
    ],
    "fixture_route_curitiba": [],
@@ -52935,6 +53975,11 @@
     "notification_messages",
     "cost_cents",
     "int"
+   ],
+   [
+    "messaging_usage",
+    "cost_cents",
+    "integer"
    ],
    [
     "delivery_metrics_cache",
@@ -53739,6 +54784,7 @@
    "Nenhuma regra manual em `manual/`: prazos, limites, exceções comerciais, quem aprova o quê — só o negócio sabe.",
    "`cache_refresh_log.status` tem valores ['failed', 'running', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`drivers.whatsapp_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`lalamove_orders.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`lalamove_orders.lalamove_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`lalamove_orders.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
@@ -53768,7 +54814,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "20/91 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
+   "20/95 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -75942,6 +76988,14 @@
    "lines": 184,
    "uses_service_role": true
   },
+  "supabase/migrations/20261126120000_messaging_foundation.sql": {
+   "path": "supabase/migrations/20261126120000_messaging_foundation.sql",
+   "lines": 310,
+   "temporal": [
+    "AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;"
+   ],
+   "uses_service_role": true
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -75996,10 +77050,19 @@
   }
  },
  "git": {
-  "sha": "f5779da5d8916923d8b9ff1da0b859a30174c540",
+  "sha": "ac2a2af2366a413cdd82345cfbb9d1031981b0cb",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "ac2a2af",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
+    "files": [
+     "supabase/migrations/20261126120000_messaging_foundation.sql"
+    ]
+   },
    {
     "sha": "f5779da",
     "date": "2026-11-23",
@@ -76423,24 +77486,12 @@
      "src/App.tsx",
      "src/pages/AuthPage.tsx"
     ]
-   },
-   {
-    "sha": "6487163",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: desligar auto-cadastro no front (item 9) (#300)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "e2e/login-lockout.e2e.ts",
-     "src/hooks/useAuth.tsx",
-     "src/pages/AuthPage.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    11
+    10
    ],
    [
     "src/App.tsx",
@@ -76460,10 +77511,6 @@
    ],
    [
     ".github/workflows/ci.yml",
-    3
-   ],
-   [
-    "src/pages/AuthPage.tsx",
     3
    ],
    [
@@ -76516,6 +77563,10 @@
    ],
    [
     "src/hooks/useCommandPaletteSearch.ts",
+    2
+   ],
+   [
+    "src/hooks/useSystemHealth.ts",
     2
    ]
   ]

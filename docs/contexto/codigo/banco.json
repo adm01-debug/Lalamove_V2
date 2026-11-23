@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 192,
+ "migrations": 193,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -37,7 +37,8 @@
    "SUPPLIER_DELAY_NOTICE",
    "MISSING_POD",
    "GEO_BUDGET_WARNING",
-   "DRIVER_ASSIGNED"
+   "DRIVER_ASSIGNED",
+   "DRIVER_NO_CONFIRMATION"
   ],
   "app_role": [
    "admin",
@@ -188,6 +189,7 @@
   "mark_job_failed",
   "mark_job_processing",
   "mcp_introspect",
+  "messaging_month_cost_cents",
   "monitor_queue_health",
   "normalize_br_phone",
   "notification_messages_scrub_bodies",
@@ -201,6 +203,7 @@
   "prune_tracking_events_partitions",
   "record_failed_login",
   "record_failed_login_v2",
+  "record_messaging_usage",
   "refresh_all_cache_views",
   "refresh_all_caches",
   "refresh_cache_view",
@@ -4288,6 +4291,13 @@
      "default": null,
      "ref": null
     },
+    "last_reply_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
     "name": {
      "tipo": "text",
      "nn": true,
@@ -4314,6 +4324,13 @@
      "nn": false,
      "pk": false,
      "default": null,
+     "ref": null
+    },
+    "preferred_channel": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'auto'",
      "ref": null
     },
     "rating": {
@@ -4384,6 +4401,20 @@
      "nn": true,
      "pk": false,
      "default": "'MOTORCYCLE'",
+     "ref": null
+    },
+    "whatsapp_checked_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "whatsapp_status": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'unknown'",
      "ref": null
     },
     "whitelisted": {
@@ -4503,7 +4534,12 @@
     "whitelisted": "boolean | null"
    },
    "drift": {
-    "so_na_migration": [],
+    "so_na_migration": [
+     "whatsapp_status",
+     "whatsapp_checked_at",
+     "preferred_channel",
+     "last_reply_at"
+    ],
     "so_no_types": []
    },
    "usada_no_front": 14,
@@ -8028,6 +8064,323 @@
    "sem_rls": false,
    "nao_usada": true
   },
+  "message_templates": {
+   "colunas": {
+    "body": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "channel": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "event": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "is_active": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "true",
+     "ref": null
+    },
+    "max_length": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "role": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'driver'",
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "updated_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth"
+    },
+    "variables": {
+     "tipo": "text[]",
+     "nn": true,
+     "pk": false,
+     "default": "'{}'::text[]",
+     "ref": null
+    },
+    "version": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "1",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "admin edita templates",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "equipe le templates",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role gerencia templates",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "message_templates_active_key_idx",
+     "colunas": "key, channel",
+     "unico": true
+    },
+    {
+     "nome": "message_templates_event_idx",
+     "colunas": "event, role, channel",
+     "unico": false
+    }
+   ],
+   "fks": [
+    "updated_by->auth"
+   ],
+   "criada_em": "20261126120000_messaging_foundation.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "messaging_settings": {
+   "colunas": {
+    "id": {
+     "tipo": "boolean",
+     "nn": false,
+     "pk": true,
+     "default": "true",
+     "ref": null
+    },
+    "monthly_budget_cents": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
+    "pilot_mode": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "false",
+     "ref": null
+    },
+    "quiet_hours_by_role": {
+     "tipo": "jsonb",
+     "nn": true,
+     "pk": false,
+     "default": "'{}'::jsonb",
+     "ref": null
+    },
+    "shadow_mode": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "true",
+     "ref": null
+    },
+    "sms_fallback_after_min": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "10",
+     "ref": null
+    },
+    "sms_provider": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'none'",
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "updated_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth"
+    },
+    "whatsapp_provider": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'zapp'",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "admin edita configuracao de mensageria",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "equipe le configuracao de mensageria",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role gerencia configuracao de mensageria",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [],
+   "fks": [
+    "updated_by->auth"
+   ],
+   "criada_em": "20261126120000_messaging_foundation.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "messaging_usage": {
+   "colunas": {
+    "channel": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "cost_cents": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
+    "day": {
+     "tipo": "date",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "messages": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
+    "provider": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "segments": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "equipe le uso de mensageria",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role escreve uso de mensageria",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "messaging_usage_day_idx",
+     "colunas": "day",
+     "unico": false
+    }
+   ],
+   "fks": [],
+   "criada_em": "20261126120000_messaging_foundation.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
   "mfa_sessions": {
    "colunas": {
     "aal_level": {
@@ -8699,6 +9052,110 @@
     "created_by->auth"
    ],
    "criada_em": "20261123200000_optout_and_tracking_end.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": true
+  },
+  "notification_routes": {
+   "colunas": {
+    "channels": {
+     "tipo": "text[]",
+     "nn": true,
+     "pk": false,
+     "default": "'{}'::text[]",
+     "ref": null
+    },
+    "event": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "fallback_after_min": {
+     "tipo": "integer",
+     "nn": true,
+     "pk": false,
+     "default": "0",
+     "ref": null
+    },
+    "is_enabled": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "true",
+     "ref": null
+    },
+    "reply_timeout_min": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "requires_reply": {
+     "tipo": "boolean",
+     "nn": true,
+     "pk": false,
+     "default": "false",
+     "ref": null
+    },
+    "role": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "updated_by": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "auth"
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "admin edita rotas de notificacao",
+     "comando": "all",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "equipe le rotas de notificacao",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role gerencia rotas de notificacao",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "notification_routes_event_idx",
+     "colunas": "event",
+     "unico": false
+    }
+   ],
+   "fks": [
+    "updated_by->auth"
+   ],
+   "criada_em": "20261126120000_messaging_foundation.sql",
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],

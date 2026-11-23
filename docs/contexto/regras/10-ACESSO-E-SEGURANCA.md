@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f5779da5d8` · branch `main` · 2026-11-23 21:43 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ac2a2af236` · branch `main` · 2026-11-23 22:28 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -8,7 +8,7 @@
 `admin`, `assistant`, `delivery_contact`, `denied`, `driver`, `granted`, `manager`, `operator`, `option`, `permission`, `role`, `service_role`, `string`, `user`, `viewer`
 
 - Tabelas de perfil/permissão: `user_roles`, `permissions`, `role_permissions`
-- Colunas de perfil: `user_roles.role` (app_role NOT NULL DEFAULT 'viewer'), `role_permissions.role` (app_role NOT NULL), `notification_messages.role` (text NOT NULL CHECK (role IN ('driver','pickup_contact','delivery_contact','internal')))
+- Colunas de perfil: `user_roles.role` (app_role NOT NULL DEFAULT 'viewer'), `role_permissions.role` (app_role NOT NULL), `notification_messages.role` (text NOT NULL CHECK (role IN ('driver','pickup_contact','delivery_contact','internal'))), `message_templates.role` (text NOT NULL DEFAULT 'driver' CHECK (role IN ('driver','supplier','customer','internal'))), `notification_routes.role` (text NOT NULL CHECK (role IN ('driver','supplier','customer','internal')))
 - Claims do JWT usados em políticas/funções: `aal`
 - Funções usadas dentro de políticas RLS (a regra real está no corpo delas — veja `06`): `can_run_db_diagnostics`, `has_permission`, `has_role`, `uid`
 
@@ -71,10 +71,14 @@
 | `login_attempts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) | public: has_role(auth.uid(), 'admin'::app_role) |
 | `map_settings_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
 | `mcp_diagnostics_grants` | enabled | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') | authenticated: public.has_role(auth.uid(), 'admin') |
+| `message_templates` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true |
+| `messaging_settings` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true |
+| `messaging_usage` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>service_role: true | service_role: true | service_role: true | service_role: true |
 | `mfa_sessions` | enabled | authenticated: auth.uid() = user_id<br>public: auth.uid() = user_id | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id<br>authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')<br>authenticated: auth.uid() = user_id |
 | `new_device_alerts` | enabled | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') | authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin') |
 | `notification_messages` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>service_role: true | service_role: true | service_role: true | service_role: true |
 | `notification_optouts` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true |
+| `notification_routes` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true | authenticated: public.has_role(auth.uid(), 'admin'::public.app_role)<br>service_role: true |
 | `order_geo_events` | enabled | public: auth.role() = 'authenticated' | — | — | — |
 | `orders_operator_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
 | `orders_safe_view` | não encontrado | sem RLS | sem RLS | sem RLS | sem RLS |
@@ -110,7 +114,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 126 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 127 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -238,6 +242,7 @@
 - `supabase/migrations/20261123160000_job_queue_processing_log.sql`
 - `supabase/migrations/20261123200000_optout_and_tracking_end.sql`
 - `supabase/migrations/20261125120000_notification_ledger.sql`
+- `supabase/migrations/20261126120000_messaging_foundation.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -285,6 +290,7 @@
 - `is_token_valid`
 - `log_mfa_session`
 - `mcp_introspect`
+- `messaging_month_cost_cents`
 - `notification_messages_scrub_bodies`
 - `notify_lalamove_quota_low`
 - `notify_webhook_security_event`
@@ -294,6 +300,7 @@
 - `prune_tracking_events_partitions`
 - `record_failed_login`
 - `record_failed_login_v2`
+- `record_messaging_usage`
 - `refresh_cache_view`
 - `refresh_geo_jobs`
 - `resume_cron_job`
@@ -399,9 +406,9 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +5 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
 | grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
-| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +32 |
-| grant | service_role, authenticated | execute | `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking` |
-| revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies` |
+| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +33 |
+| grant | service_role, authenticated | execute | `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `messaging_month_cost_cents` |
+| revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies`, `record_messaging_usage`, `messaging_month_cost_cents` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
 | revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +10 |
@@ -450,6 +457,7 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `lalamove_uapi_sessions` | `is_active` |
 | `mcp_diagnostics_grants` | `is_active` |
 | `lalamove_webhook_config` | `is_active` |
+| `message_templates` | `is_active` |
 
 ## Auditoria (colunas de rastreio)
 
@@ -517,6 +525,10 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `geo_cache` | `created_at` |
 | `notification_optouts` | `created_at`, `created_by` |
 | `notification_messages` | `created_at`, `updated_at` |
+| `messaging_settings` | `updated_at`, `updated_by` |
+| `message_templates` | `created_at`, `updated_at`, `updated_by` |
+| `notification_routes` | `updated_at`, `updated_by` |
+| `messaging_usage` | `updated_at` |
 | `geo_blocks` | `created_at`, `updated_at` |
 | `tracking_events_default` | `created_at` |
 | `tracking_events_y2026m05` | `created_at` |
@@ -594,6 +606,7 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `lalamove_orders` | `total_cost` | `number` |
 | `driver_evaluations` | `total_deliveries` | `integer` |
 | `notification_messages` | `cost_cents` | `int` |
+| `messaging_usage` | `cost_cents` | `integer` |
 | `delivery_metrics_cache` | `total_orders` | `number` |
 | `delivery_metrics_cache` | `total_value` | `number` |
 | `driver_stats_cache` | `total_deliveries` | `number` |

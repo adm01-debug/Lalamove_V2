@@ -4,7 +4,7 @@
  "stack": {
   "linguagens": [
    "TypeScript (575)",
-   "SQL (203)",
+   "SQL (204)",
    "JavaScript (114)",
    "Markdown (114)",
    "JSON (31)",
@@ -1068,7 +1068,8 @@
   "tabelas_de_flag": [
    "feature_flags",
    "geo_settings",
-   "map_settings_overrides"
+   "map_settings_overrides",
+   "messaging_settings"
   ]
  },
  "providers": {
