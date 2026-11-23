@@ -7,6 +7,7 @@ import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { DataRefreshIndicator } from '@/components/ui/data-refresh-indicator';
 import { useUndoableAction } from '@/components/ui/undo-toast';
 import { TrendIndicator } from '@/components/ui/sparkline';
+import { QueryState } from '@/components/ui/query-state';
 import { 
   Bell, 
   CheckCheck, 
@@ -98,7 +99,7 @@ type ViewMode = 'list' | 'compact';
 export function AlertsPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data: alerts = [], isLoading, isFetching } = useActiveAlerts();
+  const { data: alerts = [], isLoading, isFetching, isError, refetch } = useActiveAlerts();
   const { dismissMutation, markAsReadMutation, markAllAsReadMutation, acknowledgeMutation } = useAlertActions();
   
   const [searchParams, setSearchParams] = useSearchParams();
@@ -293,6 +294,14 @@ export function AlertsPage() {
     return (
       <div className="flex items-center justify-center h-full">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <QueryState isError onRetry={refetch} errorText="Não foi possível carregar os alertas." />
       </div>
     );
   }
