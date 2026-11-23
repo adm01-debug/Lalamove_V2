@@ -13,7 +13,19 @@ Total: **300 etapas** · 79 aguardam aprovação humana.
 ### Onda 1 — Segurança e risco de perda de dado
 
 - [ ] 001 — Rotacionar a chave e o segredo HMAC da Lalamove e atualizar os secrets das edges — onda 1 — Crítica
-- [ ] 002 — Remover do repositório os 10 arquivos com credencial e travar reincidência no guard de segredos — onda 1 — Crítica
+- [ ] 002 — Remover do repositório os 11 arquivos com credencial e travar reincidência no guard de segredos — onda 1 — Crítica
+  - **Parcialmente executada em 23/11/2026 — segue `[ ]` porque a etapa não foi concluída como definida.** Feito: os 11 arquivos removidos da `main`
+    (`lalamove_documentacao_completa.{md,html,docx}`, `lalamove_suplemento_v2.{md,html}`,
+    `lalamove_bundle_import.json`, `lalamove_f0{0,1,2,3,4}_*.json`). Evidência:
+    `grep -rlE "pk_prod_[A-Za-z0-9]{10,}|sk_prod_[A-Za-z0-9]{10,}"` no HEAD → 0 arquivos.
+    Correção do achado: eram **11** arquivos, não 10 — o `.docx` carregava a credencial dentro do zip e
+    o grep original não leu arquivos compactados. `lalamove_suplemento_v2.docx` e
+    `lalamove_documentacao_completa.md.pdf` conferidos e limpos (streams descomprimidos e por fragmento).
+  - **NÃO feito, segue aberto:** (a) a etapa 001 (rotação da chave e do segredo no painel da Lalamove) —
+    o dono optou por postergar; enquanto não rotacionar, quem já copiou do histórico público continua
+    com acesso à conta Lalamove e consegue forjar webhook; (b) a extensão do
+    `scripts/ci/check-bundle-secrets.mjs` para varrer `*.md/*.json/*.html/*.py` da raiz, que era a parte
+    de "travar reincidência" desta etapa — fora do pedido "só apaga".
 - [ ] 003 — O repositório está PÚBLICO no GitHub, com credenciais de produção no histórico — onda 1 — Crítica
 - [ ] 004 — Qualquer usuário autenticado pode se promover a admin (user_roles com INSERT/UPDATE WITH CHECK/USING true) — onda 1 — Crítica
 - [ ] 005 — Nome, telefone e score de risco dos motoristas expostos sem login: materialized view driver_stats_cache com GRANT SELECT para anon — onda 1 — Crítica
