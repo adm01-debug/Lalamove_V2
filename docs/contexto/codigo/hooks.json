@@ -428,7 +428,7 @@
     "useActiveAlerts",
     "useAlertActions"
    ],
-   "linhas": 168,
+   "linhas": 169,
    "dominio": "hooks",
    "tabelas": [
     "alerts"
@@ -753,7 +753,7 @@
     "useMetricsComparison",
     "useTopDrivers"
    ],
-   "linhas": 349,
+   "linhas": 353,
    "dominio": "hooks",
    "tabelas": [
     "delivery_metrics_cache",
@@ -782,7 +782,7 @@
     "useCacheViews",
     "useRefreshCache"
    ],
-   "linhas": 245,
+   "linhas": 247,
    "dominio": "hooks",
    "tabelas": [
     "cache_status"
@@ -983,7 +983,7 @@
    "hooks_exportados": [
     "useDashboardStats"
    ],
-   "linhas": 147,
+   "linhas": 148,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -1191,7 +1191,7 @@
     "useErrorStats",
     "useResolveError"
    ],
-   "linhas": 158,
+   "linhas": 160,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1360,7 +1360,7 @@
     "useUpdateGeoDefaults",
     "useUpdateGeoSetting"
    ],
-   "linhas": 343,
+   "linhas": 347,
    "dominio": "hooks",
    "tabelas": [
     "geo_budget",
@@ -1476,7 +1476,7 @@
     "useQueueStatistics",
     "useRetryJob"
    ],
-   "linhas": 344,
+   "linhas": 346,
    "dominio": "hooks",
    "tabelas": [
     "bitrix24_sync",
@@ -1521,7 +1521,7 @@
     "useWalletBalance",
     "useWalletHistory"
    ],
-   "linhas": 193,
+   "linhas": 197,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1545,7 +1545,7 @@
    "hooks_exportados": [
     "useLalamoveQuota"
    ],
-   "linhas": 149,
+   "linhas": 150,
    "dominio": "hooks",
    "tabelas": [
     "lalamove_rate_limits"
@@ -1765,7 +1765,7 @@
     "useNotificationStats",
     "usePendingGeoEvents"
    ],
-   "linhas": 150,
+   "linhas": 153,
    "dominio": "hooks",
    "tabelas": [
     "alerts_sent",
@@ -1835,7 +1835,7 @@
     "useApprovalStats",
     "usePendingApprovals"
    ],
-   "linhas": 146,
+   "linhas": 148,
    "dominio": "hooks",
    "tabelas": [
     "driver_approval_queue"
@@ -2059,7 +2059,7 @@
    "hooks_exportados": [
     "useRecentOrders"
    ],
-   "linhas": 92,
+   "linhas": 93,
    "dominio": "hooks",
    "tabelas": [
     "lalamove_orders"
@@ -2284,7 +2284,7 @@
    "hooks_exportados": [
     "useSLAMetrics"
    ],
-   "linhas": 204,
+   "linhas": 205,
    "dominio": "hooks",
    "tabelas": [
     "active_tracking",
@@ -2362,7 +2362,7 @@
    "hooks_exportados": [
     "useSystemHealth"
    ],
-   "linhas": 50,
+   "linhas": 51,
    "dominio": "hooks",
    "tabelas": [
     "drivers"
@@ -2482,7 +2482,7 @@
     "useUpdateToken",
     "useWalletBalance"
    ],
-   "linhas": 66,
+   "linhas": 68,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2563,7 +2563,7 @@
     "useReprocessWebhook",
     "useWebhookEvents"
    ],
-   "linhas": 150,
+   "linhas": 151,
    "dominio": "hooks",
    "tabelas": [
     "webhook_events"
@@ -2587,7 +2587,7 @@
    "hooks_exportados": [
     "useWebhookSecurityMetrics"
    ],
-   "linhas": 113,
+   "linhas": 114,
    "dominio": "hooks",
    "tabelas": [
     "webhook_events"

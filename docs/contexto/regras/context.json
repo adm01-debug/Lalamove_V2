@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "79b206d8975d84299409d231d39ecde95f25d728",
+  "sha": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 15:21 UTC",
+  "generated_at": "2026-11-23 16:09 UTC",
   "files_total": 1069,
   "code_files": 889,
-  "code_lines": 153634
+  "code_lines": 153697
  },
  "version": "1.3.2",
- "facts_hash": "3380641689984cb3",
+ "facts_hash": "2d8e0c03ca67cb58",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -20551,7 +20551,7 @@
   {
    "module": "(raiz)",
    "files": 7,
-   "lines": 765,
+   "lines": 782,
    "tables": [],
    "exports": [
     "eslint.config.js: tseslint",
@@ -21062,7 +21062,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 19008,
+   "lines": 19041,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21427,7 +21427,7 @@
   {
    "module": "src/pages",
    "files": 90,
-   "lines": 19778,
+   "lines": 19792,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -21657,7 +21657,7 @@
   {
    "module": "src/utils",
    "files": 8,
-   "lines": 1080,
+   "lines": 1079,
    "tables": [],
    "exports": [
     "alertSounds.ts: playToneType, playAlertSound, playTestSound, previewTone, enableAudioOnInteraction, isAudioEnabled",
@@ -21676,8 +21676,7 @@
    "deps": [
     "react",
     "vitest",
-    "web-vitals",
-    "xlsx"
+    "web-vitals"
    ],
    "imports_modules": [
     "src/hooks"
@@ -35287,10 +35286,6 @@
    {
     "file": "src/hooks/useCachedStats.ts",
     "line": "refetchInterval: 10 * 60 * 1000,"
-   },
-   {
-    "file": "src/hooks/useCachedStats.ts",
-    "line": "refetchInterval: 10 * 60 * 1000, // Refetch a cada 10 minutos"
    },
    {
     "file": "src/hooks/useCachedStats.ts",
@@ -52879,7 +52874,7 @@
   },
   "vite.config.ts": {
    "path": "vite.config.ts",
-   "lines": 30,
+   "lines": 47,
    "exports": [
     "default defineConfig"
    ]
@@ -60883,7 +60878,7 @@
   },
   "src/hooks/useActiveAlerts.ts": {
    "path": "src/hooks/useActiveAlerts.ts",
-   "lines": 168,
+   "lines": 169,
    "exports": [
     "function useActiveAlerts",
     "function useAlertActions"
@@ -61505,7 +61500,7 @@
   },
   "src/hooks/useCacheViews.ts": {
    "path": "src/hooks/useCacheViews.ts",
-   "lines": 245,
+   "lines": 247,
    "exports": [
     "interface CacheStats",
     "interface CacheView",
@@ -61591,7 +61586,7 @@
   },
   "src/hooks/useCachedStats.ts": {
    "path": "src/hooks/useCachedStats.ts",
-   "lines": 349,
+   "lines": 353,
    "exports": [
     "interface DriverStatsCached",
     "interface DeliveryMetricsCached",
@@ -61678,7 +61673,6 @@
    ],
    "temporal": [
     "refetchInterval: 10 * 60 * 1000,",
-    "refetchInterval: 10 * 60 * 1000, // Refetch a cada 10 minutos",
     "staleTime: 5 * 60 * 1000,",
     "staleTime: 5 * 60 * 1000, // Cache por 5 minutos no client"
    ],
@@ -62008,7 +62002,7 @@
   },
   "src/hooks/useDashboardStats.ts": {
    "path": "src/hooks/useDashboardStats.ts",
-   "lines": 147,
+   "lines": 148,
    "exports": [
     "type DashboardStatsResult",
     "function useDashboardStats"
@@ -62493,7 +62487,7 @@
   },
   "src/hooks/useErrorLogs.ts": {
    "path": "src/hooks/useErrorLogs.ts",
-   "lines": 158,
+   "lines": 160,
    "exports": [
     "interface RuntimeErrorLog",
     "function useErrorLogs",
@@ -62656,7 +62650,7 @@
   },
   "src/hooks/useGeoAdmin.ts": {
    "path": "src/hooks/useGeoAdmin.ts",
-   "lines": 343,
+   "lines": 347,
    "exports": [
     "type GeoProviderName",
     "type GeoSettingProvider",
@@ -62983,7 +62977,7 @@
   },
   "src/hooks/useJobQueue.ts": {
    "path": "src/hooks/useJobQueue.ts",
-   "lines": 344,
+   "lines": 346,
    "exports": [
     "const useQueueStatistics",
     "const useJobQueue",
@@ -63191,7 +63185,7 @@
   },
   "src/hooks/useLalamove.ts": {
    "path": "src/hooks/useLalamove.ts",
-   "lines": 193,
+   "lines": 197,
    "exports": [
     "function useLalamoveStatus",
     "function useLalamoveTest",
@@ -63239,7 +63233,7 @@
   },
   "src/hooks/useLalamoveQuota.ts": {
    "path": "src/hooks/useLalamoveQuota.ts",
-   "lines": 149,
+   "lines": 150,
    "exports": [
     "interface RateLimitRow",
     "interface EndpointStat",
@@ -63669,7 +63663,7 @@
   },
   "src/hooks/useNotificationHistory.ts": {
    "path": "src/hooks/useNotificationHistory.ts",
-   "lines": 150,
+   "lines": 153,
    "exports": [
     "interface NotificationSent",
     "function useNotificationHistory",
@@ -63850,7 +63844,7 @@
   },
   "src/hooks/usePendingApprovals.ts": {
    "path": "src/hooks/usePendingApprovals.ts",
-   "lines": 146,
+   "lines": 148,
    "exports": [
     "function usePendingApprovals",
     "function useApprovalHistory",
@@ -64375,7 +64369,7 @@
   },
   "src/hooks/useRecentOrders.ts": {
    "path": "src/hooks/useRecentOrders.ts",
-   "lines": 92,
+   "lines": 93,
    "exports": [
     "function useRecentOrders"
    ],
@@ -64592,7 +64586,7 @@
   },
   "src/hooks/useSLAMetrics.ts": {
    "path": "src/hooks/useSLAMetrics.ts",
-   "lines": 204,
+   "lines": 205,
    "exports": [
     "interface SLAMetrics",
     "function useSLAMetrics"
@@ -64997,7 +64991,7 @@
   },
   "src/hooks/useSystemHealth.ts": {
    "path": "src/hooks/useSystemHealth.ts",
-   "lines": 50,
+   "lines": 51,
    "exports": [
     "const useSystemHealth"
    ],
@@ -65107,7 +65101,7 @@
   },
   "src/hooks/useUAPI.ts": {
    "path": "src/hooks/useUAPI.ts",
-   "lines": 66,
+   "lines": 68,
    "exports": [
     "function useUAPIStatus",
     "function useUAPITest",
@@ -65294,7 +65288,7 @@
   },
   "src/hooks/useWebhookEvents.ts": {
    "path": "src/hooks/useWebhookEvents.ts",
-   "lines": 150,
+   "lines": 151,
    "exports": [
     "interface WebhookEvent",
     "function useWebhookEvents",
@@ -65344,7 +65338,7 @@
   },
   "src/hooks/useWebhookSecurityMetrics.ts": {
    "path": "src/hooks/useWebhookSecurityMetrics.ts",
-   "lines": 113,
+   "lines": 114,
    "exports": [
     "interface WebhookSecurityBucket",
     "interface WebhookSecurityMetrics",
@@ -67464,7 +67458,7 @@
   },
   "src/pages/LiveMapPage.tsx": {
    "path": "src/pages/LiveMapPage.tsx",
-   "lines": 454,
+   "lines": 468,
    "exports": [
     "function LiveMapPage"
    ],
@@ -68976,7 +68970,7 @@
   },
   "src/utils/exportUtils.ts": {
    "path": "src/utils/exportUtils.ts",
-   "lines": 130,
+   "lines": 129,
    "exports": [
     "function exportToCSV",
     "function exportToJSON",
@@ -74690,10 +74684,46 @@
   }
  },
  "git": {
-  "sha": "79b206d8975d84299409d231d39ecde95f25d728",
+  "sha": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "add648e",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)",
+    "files": [
+     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+     "src/App.tsx",
+     "src/components/lalamove/UapiStatementPanel.tsx",
+     "src/components/map/MapHistoryPanel.tsx",
+     "src/hooks/useActiveAlerts.ts",
+     "src/hooks/useCacheViews.ts",
+     "src/hooks/useCachedStats.ts",
+     "src/hooks/useDashboardStats.ts",
+     "src/hooks/useErrorLogs.ts",
+     "src/hooks/useGeoAdmin.ts",
+     "src/hooks/useJobQueue.ts",
+     "src/hooks/useLalamove.ts",
+     "src/hooks/useLalamoveQuota.ts",
+     "src/hooks/useNotificationHistory.ts",
+     "src/hooks/usePendingApprovals.ts",
+     "src/hooks/useRecentOrders.ts",
+     "src/hooks/useSLAMetrics.ts",
+     "src/hooks/useSystemHealth.ts",
+     "src/hooks/useUAPI.ts",
+     "src/hooks/useWebhookEvents.ts",
+     "src/hooks/useWebhookSecurityMetrics.ts",
+     "src/pages/AdvancedReportsPage.tsx",
+     "src/pages/AnalyticsDashboardPage.tsx",
+     "src/pages/LiveMapPage.tsx",
+     "src/pages/SLODashboardPage.tsx",
+     "src/utils/__tests__/exportUtils.test.ts",
+     "src/utils/exportUtils.ts",
+     "vite.config.ts"
+    ]
+   },
    {
     "sha": "79b206d",
     "date": "2026-11-23",
@@ -75095,26 +75125,16 @@
      "src/components/map/__tests__/markerFactories.test.ts",
      "src/components/map/markerFactories.ts"
     ]
-   },
-   {
-    "sha": "93d26a3",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "docs(planos): plano de UX de navegacao em 200 etapas (#286)",
-    "files": [
-     "docs/planos/PLANO_UX_NAVEGACAO_200_ETAPAS.md",
-     "docs/planos/README.md"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    23
+    24
    ],
    [
     "src/App.tsx",
-    4
+    5
    ],
    [
     "src/components/auth/ProtectedRoute.tsx",
@@ -75135,6 +75155,14 @@
    [
     "src/components/map/markerFactories.ts",
     3
+   ],
+   [
+    "src/hooks/useCachedStats.ts",
+    2
+   ],
+   [
+    "src/hooks/useDashboardStats.ts",
+    2
    ],
    [
     "src/hooks/useCommandPaletteSearch.ts",
@@ -75178,14 +75206,6 @@
    ],
    [
     "src/lib/roles.ts",
-    2
-   ],
-   [
-    "src/components/layout/AppLayout.tsx",
-    2
-   ],
-   [
-    "src/hooks/useGlobalSearch.ts",
     2
    ]
   ]

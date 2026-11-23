@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "79b206d8975d84299409d231d39ecde95f25d728",
+  "commit": "add648e05048a7977f6cb42413dfd5bd7f4dbad3",
   "branch": "main",
-  "data_commit": "2026-11-23T12:04:18-03:00",
+  "data_commit": "2026-11-23T12:05:32-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "add648e",
+    "data": "2026-11-23",
+    "assunto": "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)"
+   },
    {
     "sha": "79b206d",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "ba39240",
     "data": "2026-11-22",
     "assunto": "fix: sanitiza busca global contra injeção de filtro PostgREST (item 10) (#292)"
-   },
-   {
-    "sha": "79fecdf",
-    "data": "2026-11-22",
-    "assunto": "chore: adiciona openExternal com noopener,noreferrer (item 12) (#291)"
    }
   ],
-  "arquivos_mudados_7d": 401,
+  "arquivos_mudados_7d": 416,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 45
+    "mudancas": 46
    },
    {
     "pasta": "supabase/functions/_shared",
@@ -157,7 +157,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "pasta": "supabase/functions/lalamove-api",
@@ -211,7 +211,7 @@
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    "mudancas": 25
+    "mudancas": 26
    },
    {
     "arquivo": ".github/workflows/ci.yml",
@@ -262,6 +262,10 @@
     "mudancas": 9
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 8
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
@@ -272,10 +276,6 @@
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 8
-   },
-   {
-    "arquivo": "src/App.tsx",
-    "mudancas": 7
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 217
+    "commits": 218
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1075,
   "arquivos_codigo": 678,
-  "linhas_codigo": 132457,
+  "linhas_codigo": 132520,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19008
+   "linhas": 19041
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19778
+   "linhas": 19792
   },
   "src/services": {
    "arquivos": 1,
@@ -560,7 +560,7 @@
   },
   "src/utils": {
    "arquivos": 8,
-   "linhas": 1080
+   "linhas": 1079
   },
   "supabase/functions": {
    "arquivos": 94,
@@ -572,7 +572,7 @@
   },
   "vite.config.ts": {
    "arquivos": 1,
-   "linhas": 30
+   "linhas": 47
   },
   "vitest.config.ts": {
    "arquivos": 1,

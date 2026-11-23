@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `79b206d897` · branch `main` · 2026-11-23 15:21 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `add648e050` · branch `main` · 2026-11-23 16:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1513,7 +1513,6 @@ _nenhum item encontrado_
 | `staleTime: 60 * 60 * 1000, // 1 hour` | `src/hooks/useAlertConfigurations.ts` |
 | `const diffHours = (Date.now() - date.getTime()) / (1000 * 60 * 60);` | `src/hooks/useAlertGrouping.ts` |
 | `refetchInterval: 10 * 60 * 1000,` | `src/hooks/useCachedStats.ts` |
-| `refetchInterval: 10 * 60 * 1000, // Refetch a cada 10 minutos` | `src/hooks/useCachedStats.ts` |
 | `staleTime: 5 * 60 * 1000,` | `src/hooks/useCachedStats.ts` |
 | `staleTime: 5 * 60 * 1000, // Cache por 5 minutos no client` | `src/hooks/useCachedStats.ts` |
 | `.gte('last_active_at', subDays(new Date(), 1).toISOString()),` | `src/hooks/useDashboardStats.ts` |
