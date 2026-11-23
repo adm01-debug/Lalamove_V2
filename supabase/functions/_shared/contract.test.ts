@@ -854,6 +854,32 @@ Deno.test("[lalamove-uapi] ação inexistente retorna 422 nomeando action", () =
   if (!result.ok) assert(result.body.error.fields.some((f) => f.field === "action"));
 });
 
+Deno.test("[lalamove-uapi] favorite-driver/block-driver exigem driver_action", () => {
+  for (const action of ["favorite-driver", "block-driver"]) {
+    const ok = validateContract(
+      getSchema("lalamove-uapi", "v1"),
+      { action, driver_fid: "d-1", driver_action: "add" },
+      "v1",
+    );
+    assert(ok.ok, `${action}: ${JSON.stringify(ok)}`);
+
+    const semSubAcao = validateContract(
+      getSchema("lalamove-uapi", "v1"),
+      { action, driver_fid: "d-1" },
+      "v1",
+    );
+    assert(!semSubAcao.ok, `${action} sem driver_action deveria falhar`);
+    if (!semSubAcao.ok) {
+      assert(semSubAcao.body.error.fields.some((f) => f.field === "driver_action"));
+    }
+  }
+});
+
+Deno.test("[lalamove-uapi] ação 'add'/'remove' (ramos legacy) não é mais aceita", () => {
+  const result = validateContract(getSchema("lalamove-uapi", "v1"), { action: "add" }, "v1");
+  assert(!result.ok, "ramo legacy 'add' deveria ter sido removido");
+});
+
 Deno.test("[lalamove-uapi] set-token exige access_token e refresh_token", () => {
   const result = validateContract(
     getSchema("lalamove-uapi", "v1"),

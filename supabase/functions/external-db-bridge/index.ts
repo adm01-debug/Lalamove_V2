@@ -245,6 +245,16 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Apenas administradores podem acessar o banco externo.
+    const userRole = (user.app_metadata as Record<string, unknown>)?.role as string | undefined;
+    if (userRole !== "admin") {
+      return new Response(JSON.stringify({ error: "Forbidden: admin role required" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const userId = user.id;
 
     // Contrato de entrada (422 no formato único + versão v1/v2). Roda DEPOIS
@@ -260,6 +270,24 @@ Deno.serve(async (req) => {
     );
     if (!contract.ok) return errorResponse(contract, corsHeaders);
     const payload = contract.data as QueryPayload;
+
+    // Allowlist de tabelas e RPCs permitidas (defense-in-depth).
+    const ALLOWED_TABLES = new Set(["companies", "customers", "suppliers", "carriers", "contacts"]);
+    const ALLOWED_RPCS = new Set<string>(
+      (Deno.env.get("EXTERNAL_DB_ALLOWED_RPCS") ?? "").split(",").filter(Boolean),
+    );
+    if (payload.table && !ALLOWED_TABLES.has(payload.table)) {
+      return new Response(
+        JSON.stringify({ error: `Table '${payload.table}' not allowed` }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+    if (payload.rpc_name && ALLOWED_RPCS.size > 0 && !ALLOWED_RPCS.has(payload.rpc_name)) {
+      return new Response(
+        JSON.stringify({ error: `RPC '${payload.rpc_name}' not allowed` }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     // External DB client
     const externalUrl = Deno.env.get("EXTERNAL_SUPABASE_URL");

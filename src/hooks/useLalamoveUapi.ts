@@ -271,7 +271,7 @@ export function useFleetMutation() {
     mutationFn: ({ driverFid, action }) =>
       invokeUapi(action === 'add' || action === 'remove' ? 'favorite-driver' : 'block-driver', {
         driver_fid: driverFid,
-        action,
+        driver_action: action,
       }),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['uapi', 'fleet'] });
