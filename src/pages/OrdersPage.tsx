@@ -14,6 +14,7 @@ import {
 import { useRecentOrders } from '@/hooks/useRecentOrders';
 import { Order, OrderStatus } from '@/types';
 import { cn } from '@/lib/utils';
+import { EmptyState } from '@/components/ui/empty-state';
 const OrderDetailModal = lazy(() =>
   import('@/components/orders/OrderDetailModal').then(m => ({ default: m.OrderDetailModal }))
 );
@@ -241,15 +242,13 @@ export function OrdersPage() {
         </div>
 
         {filteredOrders.length === 0 && !isLoading && (
-          <div className="flex-1 flex items-center justify-center animate-fade-in">
-            <Card variant="gradient" className="max-w-md">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4"><Package className="w-8 h-8 text-primary" /></div>
-                <p className="text-lg font-medium text-foreground">Nenhum pedido encontrado</p>
-                <p className="text-sm text-muted-foreground mt-1">Tente ajustar os filtros de busca</p>
-              </CardContent>
-            </Card>
-          </div>
+          <EmptyState
+            icon={<Package className="w-6 h-6" />}
+            title="Nenhum pedido encontrado"
+            description="Tente ajustar os filtros de busca"
+            action={{ label: 'Novo pedido', onClick: () => setNewOrderDialogOpen(true) }}
+            className="flex-1 animate-fade-in"
+          />
         )}
 
         {totalPages > 1 && (

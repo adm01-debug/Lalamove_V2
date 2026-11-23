@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
 import { useUndoableAction } from '@/components/ui/undo-toast';
 import { createSwipeAction } from '@/components/ui/swipeable-list';
 import { CheckCircle2 as ApproveIcon, Ban as BlockIcon, Shield as ShieldIcon, Trash2 as TrashIcon } from 'lucide-react';
@@ -231,15 +232,12 @@ export function DriversPage() {
         </div>
 
         {filteredDrivers.length === 0 && (
-          <div className="flex-1 flex items-center justify-center animate-fade-in">
-            <Card variant="gradient" className="max-w-md">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4"><Users className="w-8 h-8 text-primary" /></div>
-                <p className="text-lg font-medium text-foreground">Nenhum motorista encontrado</p>
-                <p className="text-sm text-muted-foreground mt-1">Tente ajustar os filtros de busca</p>
-              </CardContent>
-            </Card>
-          </div>
+          <EmptyState
+            icon={<Users className="w-6 h-6" />}
+            title="Nenhum motorista encontrado"
+            description="Tente ajustar os filtros de busca"
+            className="flex-1 animate-fade-in"
+          />
         )}
 
         <DriverConfirmDialog open={dialogOpen} onOpenChange={setDialogOpen} dialogType={dialogType} selectedDriver={selectedDriver} reasonText={reasonText} onReasonChange={setReasonText} onConfirm={handleDialogConfirm} />

@@ -5,6 +5,7 @@ import { DataRefreshIndicator } from '@/components/ui/data-refresh-indicator';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, AlertTriangle, CheckCircle2, XCircle, Clock, History, Loader2, RefreshCw, Zap, TrendingUp, Sparkles } from 'lucide-react';
 import { usePendingApprovals, useApprovalHistory, useApprovalStats, useApprovalActions } from '@/hooks/usePendingApprovals';
@@ -105,7 +106,12 @@ export function ApprovalsPage() {
               ) : error ? (
                 <motion.div className="flex-1 flex items-center justify-center" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}><Card variant="glass" className="p-8 text-center border-destructive/30"><div className="w-16 h-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4 border border-destructive/20"><XCircle className="w-8 h-8 text-destructive" /></div><p className="text-muted-foreground">Erro ao carregar aprovações pendentes</p></Card></motion.div>
               ) : pendingApprovals.length === 0 ? (
-                <motion.div className="flex-1 flex items-center justify-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><Card variant="glass" className="p-8 text-center border-success/30"><div className="w-16 h-16 rounded-2xl bg-success/10 flex items-center justify-center mx-auto mb-4 border border-success/20"><CheckCircle2 className="w-8 h-8 text-success" /></div><h3 className="text-lg font-semibold text-foreground mb-2">Nenhuma aprovação pendente</h3><p className="text-muted-foreground">Todas as aprovações foram processadas!</p></Card></motion.div>
+                <EmptyState
+                  icon={<CheckCircle2 className="w-6 h-6 text-success" />}
+                  title="Nenhuma aprovação pendente"
+                  description="Todas as aprovações foram processadas!"
+                  className="flex-1"
+                />
               ) : (
                 <motion.div className="space-y-4 overflow-y-auto" variants={containerVariants} initial="hidden" animate="visible">
                   <AnimatePresence mode="popLayout">
@@ -119,7 +125,12 @@ export function ApprovalsPage() {
               {historyLoading ? (
                 <div className="flex-1 flex items-center justify-center py-12"><motion.div className="text-center" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}><Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" /><p className="text-muted-foreground mt-4">Carregando histórico...</p></motion.div></div>
               ) : historyApprovals.length === 0 ? (
-                <motion.div className="flex-1 flex items-center justify-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><Card variant="glass" className="p-8 text-center"><motion.div className="w-16 h-16 rounded-2xl bg-secondary/50 flex items-center justify-center mx-auto mb-4 border border-border/50" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 3, repeat: Infinity }}><History className="w-8 h-8 text-muted-foreground" /></motion.div><h3 className="text-lg font-semibold text-foreground mb-2">Nenhum histórico</h3><p className="text-muted-foreground">As aprovações processadas aparecerão aqui.</p></Card></motion.div>
+                <EmptyState
+                  icon={<History className="w-6 h-6" />}
+                  title="Nenhum histórico"
+                  description="As aprovações processadas aparecerão aqui."
+                  className="flex-1"
+                />
               ) : (
                 <motion.div className="space-y-3" variants={containerVariants} initial="hidden" animate="visible">
                   <AnimatePresence>{historyApprovals.map((approval) => <motion.div key={approval.id} variants={itemVariants}><HistoryCard approval={approval} /></motion.div>)}</AnimatePresence>
