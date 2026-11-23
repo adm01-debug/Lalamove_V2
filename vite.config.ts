@@ -43,21 +43,4 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ["react", "react-dom", "react/jsx-runtime"],
   },
-  build: {
-    target: "es2022",
-    sourcemap: "hidden",
-    chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "react-vendor": ["react", "react-dom", "react/jsx-runtime", "react-router-dom"],
-          "supabase": ["@supabase/supabase-js"],
-          "mapbox": ["mapbox-gl"],
-          "motion": ["framer-motion"],
-          "charts": ["recharts"],
-          "export": ["jspdf", "xlsx"],
-        },
-      },
-    },
-  },
 }));
