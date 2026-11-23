@@ -175,7 +175,7 @@ export function DriversPage() {
           <div className="sm:hidden"><DataRefreshIndicator lastUpdated={lastUpdated} isRefreshing={isFetching} onRefresh={handleRefresh} variant="minimal" /></div>
           <Card variant="glass" className="hidden sm:block px-3 sm:px-5 py-2 sm:py-3">
             <div className="flex items-center gap-3 sm:gap-5">
-              <Button variant="ghost" size="icon-sm" onClick={handleRefresh} disabled={isFetching} className="h-8 w-8"><RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin")} /></Button>
+              <Button variant="ghost" size="icon-sm" aria-label="Atualizar lista de motoristas" onClick={handleRefresh} disabled={isFetching} className="h-8 w-8"><RefreshCw className={cn("w-4 h-4", isFetching && "animate-spin")} /></Button>
               <div className="w-px h-5 bg-border" />
               <div className="flex items-center gap-1.5 sm:gap-2"><span className="status-dot-glow bg-success" /><span className="text-sm font-semibold">{stats.approved}</span><span className="text-xs text-muted-foreground hidden md:inline">aprovados</span></div>
               <div className="w-px h-5 bg-border" />

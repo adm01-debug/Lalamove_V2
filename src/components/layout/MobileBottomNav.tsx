@@ -201,6 +201,7 @@ export function MobileBottomNav() {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label="Fechar menu"
                 onClick={() => setMoreOpen(false)}
               >
                 <X className="h-5 w-5" />
