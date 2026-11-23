@@ -85,7 +85,7 @@ export function LiveMapPage() {
       .order('last_updated', { ascending: false });
 
     if (error) {
-      setFetchError('Falha ao atualizar dados. Tentando novamente em 10 s.');
+      setFetchError('Falha ao atualizar dados. Tentando de novo em 10 s.');
       setIsRefreshing(false);
       return;
     }
@@ -274,6 +274,17 @@ export function LiveMapPage() {
           </Button>
         </div>
       </div>
+
+      {/* Error banner */}
+      {fetchError && (
+        <div className="flex items-center justify-between gap-3 mb-3 px-4 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+          <span>{fetchError}</span>
+          <Button size="sm" variant="ghost" className="h-7 text-destructive hover:text-destructive" onClick={fetchDeliveries} disabled={isRefreshing}>
+            <RefreshCw className={`w-3.5 h-3.5 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Tentar agora
+          </Button>
+        </div>
+      )}
 
       {/* Filters */}
       {showFilters && (

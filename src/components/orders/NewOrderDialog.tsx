@@ -56,6 +56,13 @@ interface NewOrderDialogProps {
 // Etapa 7 — a UI passa a consumir o catálogo canônico (docs/LALAMOVE_MASTER_ANALYSIS.md).
 // A lista é por cidade: a Lalamove recusa com 422 ERR_INVALID_FIELD qualquer
 // serviceType que a praça de coleta não ofereça (Curitiba tem 6 dos 14).
+/** Converts a Date to the `yyyy-MM-ddTHH:mm` format expected by datetime-local inputs,
+ *  adjusted for the local timezone so the picker shows the correct local time. */
+function toLocalInputValue(date: Date): string {
+  const tzOffset = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+}
+
 function vehicleTypesForCity(city: LalamoveCityCode) {
   return servicesForCity(city).map(value => ({
     value,
@@ -909,7 +916,7 @@ export function NewOrderDialog({ open, onOpenChange, onSuccess }: NewOrderDialog
                 value={form.scheduleAt}
                 onChange={e => updateField('scheduleAt', e.target.value)}
                 // eslint-disable-next-line react-hooks/purity
-                min={toLocalInputValue(new Date(Date.now() + 31 * 60000))}
+                min={toLocalInputValue(new Date(Date.now() + 31 * 60_000))}
                 // eslint-disable-next-line react-hooks/purity
                 max={toLocalInputValue(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000))}
               />
