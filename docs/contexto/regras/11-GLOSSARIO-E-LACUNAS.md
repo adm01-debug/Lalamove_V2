@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c4fdb6958e` · branch `main` · 2026-11-23 19:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `60a68d0e30` · branch `main` · 2026-11-23 19:55 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -136,6 +136,7 @@
 | `ThemeMode` (TS) | light \| dark \| auto \| scheduled |  | `src/hooks/useScheduledTheme.ts` |
 | `AlertPriority` (TS) | CRITICAL \| URGENT \| HIGH \| MEDIUM \| LOW |  | `src/hooks/useSoundSettings.ts` |
 | `ToneType` (TS) | beep \| chime \| alert \| notification \| ping \| silent |  | `src/hooks/useSoundSettings.ts` |
+| `TestNotificationChannel` (TS) | whatsapp \| email \| slack \| bitrix24 \| n8n |  | `src/hooks/useTestNotification.ts` |
 | `ThemeMode` (TS) | light \| dark \| auto |  | `src/hooks/useTheme.ts` |
 | `OrderOperation` (TS) | edit \| cancel \| priorityFee \| changeDriver |  | `src/lib/lalamoveOrderEdit.ts` |
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `src/lib/lalamoveReasons.ts` |

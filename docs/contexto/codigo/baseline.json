@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "c4fdb6958e95fc108fe24357b6672655afc53456",
+  "commit": "60a68d0e3039624670270a3529da31710dcdb1dd",
   "branch": "main",
-  "data_commit": "2026-11-23T16:45:50-03:00",
+  "data_commit": "2026-11-23T16:46:03-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "60a68d0",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 14 - remover as any e tipar canal de teste (#327)"
+   },
    {
     "sha": "c4fdb69",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "97b9d2e",
     "data": "2026-11-22",
     "assunto": "feat: cliente do front entende o formato único de erro (item 42) (#301)"
-   },
-   {
-    "sha": "035a7c6",
-    "data": "2026-11-22",
-    "assunto": "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)"
    }
   ],
-  "arquivos_mudados_7d": 425,
+  "arquivos_mudados_7d": 426,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -270,6 +270,10 @@
     "mudancas": 8
    },
    {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 8
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
     "mudancas": 8
    },
@@ -279,10 +283,6 @@
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
-    "mudancas": 7
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
     "mudancas": 7
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 225
+    "commits": 226
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1077,
   "arquivos_codigo": 680,
-  "linhas_codigo": 132668,
+  "linhas_codigo": 132670,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19052
+   "linhas": 19054
   },
   "src/i18n": {
    "arquivos": 1,
@@ -682,7 +682,7 @@
   }
  ],
  "qualidade": {
-  "any": 132,
+  "any": 128,
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,

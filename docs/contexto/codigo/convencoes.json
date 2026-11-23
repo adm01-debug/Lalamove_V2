@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: lote 14 - remover as any e tipar canal de teste (#327)",
    "feat: lote 9 - EmptyState component + vitest script (#321)",
    "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)",
    "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)",
-   "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)",
-   "fix: validar contrato antes de criar cliente no new-device-alert (#328)"
+   "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

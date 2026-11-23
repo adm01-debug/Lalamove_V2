@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c4fdb6958e` · branch `main` · 2026-11-23 19:47 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `60a68d0e30` · branch `main` · 2026-11-23 19:55 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -867,6 +867,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | ThemeMode | light \| dark \| auto \| scheduled | `src/hooks/useScheduledTheme.ts` |
 | AlertPriority | CRITICAL \| URGENT \| HIGH \| MEDIUM \| LOW | `src/hooks/useSoundSettings.ts` |
 | ToneType | beep \| chime \| alert \| notification \| ping \| silent | `src/hooks/useSoundSettings.ts` |
+| TestNotificationChannel | whatsapp \| email \| slack \| bitrix24 \| n8n | `src/hooks/useTestNotification.ts` |
 | ThemeMode | light \| dark \| auto | `src/hooks/useTheme.ts` |
 | OrderOperation | edit \| cancel \| priorityFee \| changeDriver | `src/lib/lalamoveOrderEdit.ts` |
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `src/lib/lalamoveReasons.ts` |

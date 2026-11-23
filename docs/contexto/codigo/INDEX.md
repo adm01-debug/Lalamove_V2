@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c4fdb6958e95fc108fe24357b6672655afc53456` (2026-11-23T16:45:50-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `60a68d0e3039624670270a3529da31710dcdb1dd` (2026-11-23T16:46:03-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1077 |
 | arquivos_codigo | 680 |
-| linhas_codigo | 132668 |
+| linhas_codigo | 132670 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -288,8 +288,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9547 nós · 19570 arestas · 691 comunidades · grafo do commit `c4fdb695`
-- comunidades maiores: cn (173), Badge (148), button.tsx (147), ref_node_path (114), react (112), 4. Componentes, hooks, libs e estado — **revisado** (108), client.ts (105), ref_https (92), dependencies (81), AlertsPage.tsx (79), gerar.mjs (76), AppLayout.tsx (74)
+- 9548 nós · 19572 arestas · 688 comunidades · grafo do commit `60a68d0e`
+- comunidades maiores: cn (265), client.ts (136), lucide-react (126), AlertsPage.tsx (112), framer-motion (106), ref_node_fs (102), badge.tsx (95), RateLimitDashboardPage.tsx (93), ref_https (91), AdvancedReportsPage.tsx (82), dependencies (81), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -391,6 +391,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `60a68d0` feat: lote 14 - remover as any e tipar canal de teste (#327)
 - 2026-11-23 `c4fdb69` feat: lote 9 - EmptyState component + vitest script (#321)
 - 2026-11-23 `ced043f` feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)
 - 2026-11-23 `3e994e3` feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)
@@ -405,7 +406,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-22 `d3f974b` docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)
 - 2026-11-22 `281cd07` feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)
 - 2026-11-22 `7f6a42b` feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)
-- 2026-11-22 `d899883` feat: hardening de dados, erros e estados (itens 67/68/70/73/74/75/76) (#310)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

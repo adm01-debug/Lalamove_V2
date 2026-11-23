@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c4fdb6958e95fc108fe24357b6672655afc53456",
+  "sha": "60a68d0e3039624670270a3529da31710dcdb1dd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 19:47 UTC",
+  "generated_at": "2026-11-23 19:55 UTC",
   "files_total": 1071,
   "code_files": 891,
-  "code_lines": 153845
+  "code_lines": 153847
  },
  "version": "1.3.2",
- "facts_hash": "ac7f262450e7b41d",
+ "facts_hash": "8548713e8730af1c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21049,7 +21049,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 19052,
+   "lines": 19054,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -24629,6 +24629,11 @@
     "file": "src/hooks/useSoundSettings.ts",
     "name": "ToneType",
     "values": "beep | chime | alert | notification | ping | silent"
+   },
+   {
+    "file": "src/hooks/useTestNotification.ts",
+    "name": "TestNotificationChannel",
+    "values": "whatsapp | email | slack | bitrix24 | n8n"
    },
    {
     "file": "src/hooks/useTheme.ts",
@@ -32182,6 +32187,12 @@
     "file": "src/hooks/useCacheViews.ts",
     "field": "status",
     "value": "success",
+    "kind": "compara"
+   },
+   {
+    "file": "src/hooks/useCacheViews.ts",
+    "field": "status",
+    "value": "failed",
     "kind": "compara"
    },
    {
@@ -61577,6 +61588,11 @@
     },
     {
      "field": "status",
+     "value": "failed",
+     "kind": "compara"
+    },
+    {
+     "field": "status",
      "value": "success",
      "kind": "compara"
     },
@@ -65050,8 +65066,9 @@
   },
   "src/hooks/useTestNotification.ts": {
    "path": "src/hooks/useTestNotification.ts",
-   "lines": 45,
+   "lines": 47,
    "exports": [
+    "type TestNotificationChannel",
     "function useTestNotification"
    ],
    "invokes": [
@@ -65060,6 +65077,12 @@
    "errors": [
     "Erro ao testar notificação",
     "Teste executado"
+   ],
+   "enums": [
+    {
+     "name": "TestNotificationChannel",
+     "values": "whatsapp | email | slack | bitrix24 | n8n"
+    }
    ],
    "hooks": [
     "useTestNotification"
@@ -74696,10 +74719,22 @@
   }
  },
  "git": {
-  "sha": "c4fdb6958e95fc108fe24357b6672655afc53456",
+  "sha": "60a68d0e3039624670270a3529da31710dcdb1dd",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "60a68d0",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: lote 14 - remover as any e tipar canal de teste (#327)",
+    "files": [
+     "src/hooks/useCacheViews.ts",
+     "src/hooks/useTestNotification.ts",
+     "src/pages/LiveMapPage.tsx",
+     "src/pages/alert-configurations/AlertConfigCard.tsx"
+    ]
+   },
    {
     "sha": "c4fdb69",
     "date": "2026-11-23",
@@ -75118,23 +75153,12 @@
      "src/components/admin/telemetry/__tests__/AdminTelemetriaPage.test.tsx",
      "src/pages/AdminTelemetriaPage.tsx"
     ]
-   },
-   {
-    "sha": "ca2061f",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: campos de token como password e sem autofill (#294)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/pages/LalamoveSettingsPage.tsx",
-     "src/pages/UAPISettingsPage.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    18
+    17
    ],
    [
     "src/App.tsx",
@@ -75149,12 +75173,20 @@
     4
    ],
    [
+    "src/pages/LiveMapPage.tsx",
+    3
+   ],
+   [
     "src/pages/AuthPage.tsx",
     3
    ],
    [
     "src/components/layout/sidebar-config.ts",
     3
+   ],
+   [
+    "src/hooks/useCacheViews.ts",
+    2
    ],
    [
     "package.json",
@@ -75185,10 +75217,6 @@
     2
    ],
    [
-    "src/pages/LiveMapPage.tsx",
-    2
-   ],
-   [
     "src/hooks/useSystemHealth.ts",
     2
    ],
@@ -75206,10 +75234,6 @@
    ],
    [
     "src/hooks/useCachedStats.ts",
-    2
-   ],
-   [
-    "src/hooks/useDashboardStats.ts",
     2
    ]
   ]
