@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (57)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (37)"
+   "supabase/functions/<edge> (40)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: motor de mensageria ao motorista (bloco 7) (#333)",
    "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
    "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)",
    "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)",
-   "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)",
-   "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)"
+   "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

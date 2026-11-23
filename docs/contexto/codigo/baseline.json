@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ac2a2af2366a413cdd82345cfbb9d1031981b0cb",
+  "commit": "63cda83b22cffa43573c4a8a57014031b659a260",
   "branch": "main",
-  "data_commit": "2026-11-23T19:26:15-03:00",
+  "data_commit": "2026-11-23T20:09:26-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "63cda83",
+    "data": "2026-11-23",
+    "assunto": "feat: motor de mensageria ao motorista (bloco 7) (#333)"
+   },
    {
     "sha": "ac2a2af",
     "data": "2026-11-23",
@@ -126,26 +131,21 @@
     "sha": "c2585b1",
     "data": "2026-11-22",
     "assunto": "feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)"
-   },
-   {
-    "sha": "2314897",
-    "data": "2026-11-22",
-    "assunto": "feat: sidebar usa usePermissions e contadores em paralelo (itens 52-54) (#307)"
    }
   ],
-  "arquivos_mudados_7d": 440,
+  "arquivos_mudados_7d": 446,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
     "mudancas": 62
    },
    {
-    "pasta": "src/components/map",
-    "mudancas": 46
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 49
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 43
+    "pasta": "src/components/map",
+    "mudancas": 46
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -270,15 +270,15 @@
     "mudancas": 9
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 9
+   },
+   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
    {
     "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 233
+    "commits": 234
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1088,
-  "arquivos_codigo": 688,
-  "linhas_codigo": 134069,
+  "arquivos_total": 1094,
+  "arquivos_codigo": 694,
+  "linhas_codigo": 135963,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 169,
+  "testes": 172,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 102,
-   "linhas": 24927
+   "arquivos": 108,
+   "linhas": 26821
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -601,6 +601,10 @@
    "linhas": 1186
   },
   {
+   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+   "linhas": 1062
+  },
+  {
    "arquivo": "supabase/functions/_shared/schemas.ts",
    "linhas": 1032
   },
@@ -611,10 +615,6 @@
   {
    "arquivo": "scripts/db-audit/check-migration-drift.mjs",
    "linhas": 1007
-  },
-  {
-   "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 990
   },
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",
@@ -682,7 +682,7 @@
   }
  ],
  "qualidade": {
-  "any": 128,
+  "any": 135,
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,

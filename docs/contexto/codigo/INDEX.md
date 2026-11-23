@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `ac2a2af2366a413cdd82345cfbb9d1031981b0cb` (2026-11-23T19:26:15-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `63cda83b22cffa43573c4a8a57014031b659a260` (2026-11-23T20:09:26-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (575), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (581), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1088 |
-| arquivos_codigo | 688 |
-| linhas_codigo | 134069 |
+| arquivos_total | 1094 |
+| arquivos_codigo | 694 |
+| linhas_codigo | 135963 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 169 |
+| testes | 172 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (129), src/pages (87), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (29), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (57), guards em scripts/ (47), supabase/functions/<edge> (37)
+- testes: co-localizado (__tests__) (57), guards em scripts/ (47), supabase/functions/<edge> (40)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
-| functions | 0 | 0 | 65 | 0 | 6 | 44 |
+| functions | 0 | 0 | 68 | 0 | 6 | 47 |
 | hooks | 0 | 0 | 86 | 220 | 15 | 48 |
 | lib | 0 | 0 | 29 | 8 | 3 | 0 |
 | pages | 48 | 55 | 56 | 199 | 14 | 48 |
@@ -256,7 +256,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Integrações externas
 - SDKs: CSV (papaparse), IndexedDB (idb), Lovable Cloud, Mapbox GL, Postgres (pg, scripts), Recharts, Supabase, Web Vitals, XLSX (export), i18next, jsPDF (export), react-query, zod, zustand
 - serviços por edge: Lalamove API v3 (5), Notificações/Alertas (5), Dados externos (3), Bitrix24 (2), Manutenção/DDL (2), Motoristas (2), Fila de jobs (1), Lovable AI (custo por token) (1), Mapbox (1), Segredos/token (1)
-- hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, api.mapbox.com, maps.googleapis.com, supabase.com, www.google.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, routes.googleapis.com, x.supabase.co, a.tile.openstreetmap.org, abc.supabase.co, addressvalidation.googleapis.com, ai.gateway.lovable.dev
+- hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, api.mapbox.com, www.google.com, maps.googleapis.com, supabase.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, routes.googleapis.com, x.supabase.co, a.tile.openstreetmap.org, abc.supabase.co, addressvalidation.googleapis.com, ai.gateway.lovable.dev
 - webhooks recebidos (verify_jwt=false): lalamove-webhook, llm-wh, mcp-query
 - env de integração (só NOMES, nunca valores): BITRIX24_CLIENT_ID, BITRIX24_CLIENT_SECRET, BITRIX24_WEBHOOK_URL, EVOLUTION_API_KEY, EXTERNAL_SUPABASE_SERVICE_ROLE_KEY, EXTERNAL_SUPABASE_URL, GOOGLE_MAPS_API_KEY, LALAMOVE_API_KEY, LALAMOVE_API_SECRET, LALAMOVE_API_URL, LALAMOVE_BASE_URL, LALAMOVE_TRUSTED_IPS, LALAMOVE_UNIFIED_PROXY_KEY, LALAMOVE_UNIFIED_PROXY_URL, LOVABLE_API_KEY, MAPBOX_ACCESS_TOKEN, MAPBOX_SERVER_TOKEN, MAPBOX_TOKENS_API_TOKEN, MAPBOX_USERNAME, RESEND_API_KEY, SLACK_WEBHOOK_URL, SUPABASE_ANON_KEY, SUPABASE_PROJECT_REF, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_URL, ZAPP_CALLBACK_SECRET
 
@@ -290,8 +290,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9646 nós · 19785 arestas · 688 comunidades · grafo do commit `ac2a2af2`
-- comunidades maiores: cn (284), lucide-react (157), ref_https (132), 4. Componentes, hooks, libs e estado — **revisado** (130), ref_node_path (109), snapshot.py (106), badge.tsx (100), client.ts (88), @tanstack/react-query (84), dependencies (81), GeoBlockingPage.tsx (77), gerar.mjs (76)
+- 9724 nós · 20023 arestas · 687 comunidades · grafo do commit `63cda83b`
+- comunidades maiores: cn (253), lucide-react (146), ref_https (136), client.ts (123), App.tsx (121), geo-gateway/index.ts (109), react (108), snapshot.py (106), AlertsPage.tsx (98), ref_node_assert (88), button.tsx (88), send-notification/index.ts (82)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -393,6 +393,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
 - 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
 - 2026-11-23 `f5779da` fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)
 - 2026-11-23 `e918dd6` fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)
@@ -407,7 +408,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `680e653` feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)
 - 2026-11-23 `ee920ac` fix: validar contrato antes de criar cliente no new-device-alert (#328)
 - 2026-11-23 `f20a3ea` feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)
-- 2026-11-23 `9c1ef6e` feat: lote 10 - build es2022 + manualChunks + logger producao (#322)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

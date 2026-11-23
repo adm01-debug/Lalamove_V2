@@ -4547,6 +4547,7 @@
     "evaluate-driver",
     "lalamove-api",
     "lalamove-webhook",
+    "messaging",
     "route-analyzer",
     "send-notification"
    ],
@@ -6621,6 +6622,7 @@
     "lalamove-api",
     "lalamove-uapi",
     "lalamove-webhook",
+    "messaging",
     "route-analyzer",
     "send-notification"
    ],
@@ -7477,7 +7479,8 @@
    "usada_em_edges": [
     "job-worker",
     "lalamove-api",
-    "lalamove-webhook"
+    "lalamove-webhook",
+    "messaging"
    ],
    "triggers": [],
    "sem_rls": false,
@@ -8189,10 +8192,12 @@
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "messaging"
+   ],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "messaging_settings": {
    "colunas": {
@@ -8294,10 +8299,12 @@
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "messaging"
+   ],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "messaging_usage": {
    "colunas": {
@@ -8993,6 +9000,7 @@
    "criada_em": "20261125120000_notification_ledger.sql",
    "usada_no_front": 0,
    "usada_em_edges": [
+    "messaging",
     "zapp-callback"
    ],
    "triggers": [
@@ -9157,10 +9165,12 @@
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
    "usada_no_front": 0,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "messaging"
+   ],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "order_geo_events": {
    "colunas": {
@@ -12166,7 +12176,7 @@
   {
    "nome": "is_phone_opted_out",
    "definida": true,
-   "usada_em": 1
+   "usada_em": 2
   },
   {
    "nome": "mark_job_completed",
@@ -12184,7 +12194,17 @@
    "usada_em": 1
   },
   {
+   "nome": "messaging_month_cost_cents",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
    "nome": "record_failed_login_v2",
+   "definida": true,
+   "usada_em": 1
+  },
+  {
+   "nome": "record_messaging_usage",
    "definida": true,
    "usada_em": 1
   },

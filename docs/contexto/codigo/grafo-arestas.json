@@ -2257,8 +2257,26 @@
   "src/utils/webVitals.ts": [
    "src/utils/logger.ts"
   ],
+  "supabase/functions/_shared/messaging/dispatch.ts": [
+   "supabase/functions/_shared/channels/sms.ts",
+   "supabase/functions/_shared/channels/zapp.ts",
+   "supabase/functions/_shared/messaging/registry.ts",
+   "supabase/functions/_shared/messaging/router.ts",
+   "supabase/functions/_shared/template.ts"
+  ],
   "supabase/functions/_shared/messaging/inbound-actions.ts": [
    "supabase/functions/_shared/messaging/inbound.ts"
+  ],
+  "supabase/functions/_shared/messaging/notify-driver.ts": [
+   "supabase/functions/_shared/channels/sms.ts",
+   "supabase/functions/_shared/channels/zapp.ts",
+   "supabase/functions/_shared/messaging/dispatch.ts",
+   "supabase/functions/_shared/messaging/registry.ts",
+   "supabase/functions/_shared/messaging/router.ts",
+   "supabase/functions/_shared/phone.ts"
+  ],
+  "supabase/functions/_shared/messaging/registry.ts": [
+   "supabase/functions/_shared/messaging/router.ts"
   ],
   "supabase/functions/_shared/schemas.ts": [
    "supabase/functions/_shared/contract.ts"
@@ -2407,6 +2425,7 @@
   "supabase/functions/lalamove-webhook/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/logger.ts",
+   "supabase/functions/_shared/messaging/notify-driver.ts",
    "supabase/functions/_shared/phone.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts",

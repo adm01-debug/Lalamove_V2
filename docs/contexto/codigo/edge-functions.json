@@ -21,10 +21,16 @@
   "supabase/functions/_shared/geo-precision.test.ts",
   "supabase/functions/_shared/geo-precision.ts",
   "supabase/functions/_shared/logger.ts",
+  "supabase/functions/_shared/messaging/dispatch.test.ts",
+  "supabase/functions/_shared/messaging/dispatch.ts",
   "supabase/functions/_shared/messaging/inbound-actions.test.ts",
   "supabase/functions/_shared/messaging/inbound-actions.ts",
   "supabase/functions/_shared/messaging/inbound.test.ts",
   "supabase/functions/_shared/messaging/inbound.ts",
+  "supabase/functions/_shared/messaging/notify-driver.test.ts",
+  "supabase/functions/_shared/messaging/notify-driver.ts",
+  "supabase/functions/_shared/messaging/registry.test.ts",
+  "supabase/functions/_shared/messaging/registry.ts",
   "supabase/functions/_shared/messaging/router.test.ts",
   "supabase/functions/_shared/messaging/router.ts",
   "supabase/functions/_shared/phone.test.ts",
@@ -782,7 +788,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 3,
-   "linhas": 1159,
+   "linhas": 1231,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"
@@ -821,6 +827,7 @@
    "usa_shared": [
     "contract.ts",
     "logger.ts",
+    "notify-driver.ts",
     "phone.ts",
     "schemas.ts",
     "telemetry.ts"

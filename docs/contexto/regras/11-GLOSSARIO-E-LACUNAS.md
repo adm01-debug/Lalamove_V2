@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ac2a2af236` · branch `main` · 2026-11-23 22:28 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `63cda83b22` · branch `main` · 2026-11-23 23:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -179,6 +179,8 @@
 | `TEMPLATE_VARS` (TS) | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", |  | `supabase/functions/_shared/template.ts` |
 | `DeliveryStatus` (TS) | sent \| delivered \| failed \| unknown |  | `supabase/functions/_shared/channels/sms.ts` |
 | `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/_shared/channels/zapp.ts` |
+| `PlanAction` (TS) | send \| shadow \| suppress |  | `supabase/functions/_shared/messaging/dispatch.ts` |
+| `DriverMessageReason` (TS) | sem_telefone \| opt_out \| sem_rota \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra |  | `supabase/functions/_shared/messaging/dispatch.ts` |
 | `IncidentType` (TS) | LATE_DELIVERY \| DAMAGE \| CUSTOMER_COMPLAINT \| OTHER |  | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | `InboundIntent` (TS) | optout \| problem \| arrived \| collected \| on_the_way \| decline \| confirm |  | `supabase/functions/_shared/messaging/inbound.ts` |
 | `InboundMediaKind` (TS) | proof \| damage \| other |  | `supabase/functions/_shared/messaging/inbound.ts` |
@@ -230,11 +232,12 @@ _nenhum item encontrado_
 | status | valor `entregue` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
 | status | valor `falha` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
 | status | valor `enviado` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/channels/sms.ts` |
+| status | valor `valid` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/messaging/notify-driver.ts` |
+| status | valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/_shared/messaging/notify-driver.ts`<br>`escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `ZERO_RESULTS` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `OVER_QUERY_LIMIT` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `REQUEST_DENIED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
 | status | valor `OK` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/geo-gateway/providers/google.ts` |
-| status | valor `invalid` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `update_error` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `updated` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
 | status | valor `planned` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/job-worker/index.ts` |
@@ -256,6 +259,7 @@ _nenhum item encontrado_
 | coluna | coluna `state` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `zip_code` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `count` usada no código não existe no schema de `drivers` |  |
+| coluna | coluna `preferred_channel` usada no código não existe no schema de `drivers` |  |
 | coluna | coluna `delivery_contact_name` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `delivery_contact_phone` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `driver_id` usada no código não existe no schema de `driver_locations` |  |

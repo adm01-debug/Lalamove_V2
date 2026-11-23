@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ac2a2af236` · branch `main` · 2026-11-23 22:28 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `63cda83b22` · branch `main` · 2026-11-23 23:09 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -789,29 +789,32 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `geocoded` | compara | `supabase/functions/job-worker/index.ts` |
 | `status` | `healthy` | compara | `src/pages/SLODashboardPage.tsx` |
 | `status` | `in_progress` | compara | `src/components/ui/timeline-item.tsx` |
-| `status` | `invalid` | escreve | `supabase/functions/job-worker/index.ts` |
+| `status` | `invalid` | compara, escreve | `supabase/functions/_shared/messaging/notify-driver.ts`<br>`supabase/functions/job-worker/index.ts` |
 | `status` | `not_found` | compara | `supabase/functions/job-worker/index.ts` |
 | `status` | `number` | compara | `src/lib/geo-gateway.ts` |
 | `status` | `ok` | compara, escreve | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useSystemHealthExpanded.ts`<br>`src/pages/MapsSettingsPage.tsx`<br>`src/pages/SystemHealthExpandedPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `pending` | compara, filtra | `src/components/ui/timeline-item.tsx`<br>`src/hooks/useNotificationHistory.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `planned` | escreve | `supabase/functions/job-worker/index.ts` |
+| `status` | `queued` | escreve | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `refreshed` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `rejected` | compara, escreve | `src/hooks/useDashboardStats.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
-| `status` | `sent` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts`<br>`supabase/functions/zapp-callback/payload.ts` |
+| `status` | `sent` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts`<br>`supabase/functions/_shared/messaging/notify-driver.ts`<br>`supabase/functions/zapp-callback/payload.ts` |
 | `status` | `skipped` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `stale` | compara | `src/pages/CacheMonitoringPage.tsx` |
 | `status` | `string` | compara | `supabase/functions/lalamove-api/index.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `status` | `success` | compara, escreve | `src/hooks/useCacheViews.ts`<br>`src/pages/CacheMonitoringPage.tsx`<br>`src/pages/CacheStatusPage.tsx` |
+| `status` | `suppressed` | escreve | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `synced` | escreve | `src/components/ui/data-refresh-indicator.tsx` |
 | `status` | `syncing` | compara, escreve | `src/components/ui/data-refresh-indicator.tsx`<br>`src/hooks/useOfflineStorage.ts` |
-| `status` | `unknown` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/MapsSettingsPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
+| `status` | `unknown` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/MapsSettingsPage.tsx`<br>`supabase/functions/_shared/messaging/notify-driver.ts`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `update_error` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
+| `status` | `valid` | compara | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `verified` | compara, escreve | `src/components/auth/MFASettings.tsx`<br>`src/hooks/useMFA.ts` |
 | `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +1 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
-| `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
+| `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/dispatch.ts`<br>`supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `role` | `manager` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `operator` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
@@ -922,6 +925,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | TEMPLATE_VARS | "pickup_contact_name", "delivery_contact_name", "driver_name", "driver_plate", "eta_min", "distance_m", "share_link", "order_ref", "pickup_address", "delivery_address", "static_map_url", | `supabase/functions/_shared/template.ts` |
 | DeliveryStatus | sent \| delivered \| failed \| unknown | `supabase/functions/_shared/channels/sms.ts` |
 | ErrorAction | fallback \| retry \| give_up \| alert | `supabase/functions/_shared/channels/zapp.ts` |
+| PlanAction | send \| shadow \| suppress | `supabase/functions/_shared/messaging/dispatch.ts` |
+| DriverMessageReason | sem_telefone \| opt_out \| sem_rota \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra | `supabase/functions/_shared/messaging/dispatch.ts` |
 | IncidentType | LATE_DELIVERY \| DAMAGE \| CUSTOMER_COMPLAINT \| OTHER | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | InboundIntent | optout \| problem \| arrived \| collected \| on_the_way \| decline \| confirm | `supabase/functions/_shared/messaging/inbound.ts` |
 | InboundMediaKind | proof \| damage \| other | `supabase/functions/_shared/messaging/inbound.ts` |
@@ -1477,6 +1482,7 @@ _nenhum item encontrado_
 | `DEFAULT_TIMEOUT_MS` | `10` | `supabase/functions/_shared/channels/sms.ts` |
 | `DEFAULT_TIMEOUT_MS` | `15` | `supabase/functions/_shared/channels/zapp.ts` |
 | `DEFAULT_TTL_MINUTES` | `30` | `supabase/functions/_shared/channels/zapp.ts` |
+| `RATE_WINDOW_MS` | `10` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `DEFAULT_STOPPED_WARNING_MINUTES` | `5` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_POD_DEADLINE_MINUTES` | `30` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -1581,6 +1587,7 @@ _nenhum item encontrado_
 | `return remaining > 0 && remaining < 30 * 60 * 1000; // within 30 min` | `src/pages/DashboardRedesigned.tsx` |
 | `setTimeout(() => { navigate('/'); }, 3000);` | `src/pages/ResetPasswordPage.tsx` |
 | `ORDER_TIMEOUT: 5,` | `src/types/lalamove.ts` |
+| `const local = new Date(date.getTime() - 3 * 60 * 60_000);` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `export const REVOKE_AFTER_MS = 10 * 60 * 1000;` | `supabase/functions/geo-admin/rotation.ts` |
 | `token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),` | `supabase/functions/lalamove-uapi/index.ts` |
 | `const WEBHOOK_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes` | `supabase/functions/lalamove-webhook/index.ts` |
@@ -1658,6 +1665,7 @@ _nenhum item encontrado_
 | 100 | `src/hooks/useWebhookEvents.ts` |
 | 5000 | `src/hooks/useWebhookSecurityMetrics.ts` |
 | 500 | `src/pages/EvaluationsPage.tsx` |
+| 1 | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | 1 | `supabase/functions/bitrix24-process-queue/index.ts` |
 | 10 | `supabase/functions/bitrix24-process-queue/index.ts` |
 | 1 | `supabase/functions/check-driver-alerts/index.ts` |
@@ -2005,6 +2013,7 @@ _nenhum item encontrado_
 | `selectedRole` | `src/pages/RolesPage.tsx` |
 | `granted` | `src/pages/UserPreferencesPage.tsx` |
 | `claimRole` | `supabase/functions/_shared/auth.ts` |
+| `driver` | `supabase/functions/_shared/messaging/dispatch.ts` |
 | `driver` | `supabase/functions/_shared/messaging/router.ts` |
 | `role` | `supabase/functions/_shared/messaging/router.ts` |
 | `admin` | `supabase/functions/external-db-bridge/index.ts` |
@@ -2018,7 +2027,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1395 testes em 119 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1432 testes em 122 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2036,6 +2045,7 @@ _nenhum item encontrado_
 | `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
 | `src/components/map/__tests__/googleLayers.test.ts` | 19 | toGooglePath (etapa 77) · converte expected_route em path do Google · devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada) · buildTrailPath (etapa 77) … |
+| `supabase/functions/_shared/messaging/dispatch.test.ts` | 19 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
 | `supabase/functions/_shared/messaging/router.test.ts` | 19 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
@@ -2088,6 +2098,8 @@ _nenhum item encontrado_
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
+| `supabase/functions/_shared/messaging/notify-driver.test.ts` | 9 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
+| `supabase/functions/_shared/messaging/registry.test.ts` | 9 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 75: erro na leitura da configuracao nao liga nenhum provedor … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `supabase/functions/send-notification/message-id.test.ts` | 9 | etapa 89: mesmo evento devolve o mesmo id (idempotência) · etapa 89: telefone com máscara não muda o id · etapa 89: eventos diferentes geram ids diferentes · etapa 89: papéis diferentes no mesmo telefone geram ids diferentes … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
@@ -2147,6 +2159,7 @@ _nenhum item encontrado_
 | Evento | Arquivo |
 |---|---|
 | `dismiss` | `public/sw.js` |
+| `string` | `supabase/functions/_shared/messaging/registry.ts` |
 
 ## M. Efeitos colaterais (e-mail, SMS, cobrança, fila — não são idempotentes por padrão)
 
@@ -2211,6 +2224,9 @@ _nenhum item encontrado_
 | `notify_whatsapp` | `src/pages/alert-configurations/AlertConfigCard.tsx` |
 | `notifyDeliveryContact` | `supabase/functions/_shared/schemas.ts` |
 | `sendNotification` | `supabase/functions/_shared/schemas.ts` |
+| `notify` | `supabase/functions/_shared/messaging/dispatch.ts` |
+| `notify` | `supabase/functions/_shared/messaging/notify-driver.ts` |
+| `notifyDriver` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `invoke(` | `supabase/functions/check-driver-alerts/index.ts` |
 | `notify` | `supabase/functions/check-driver-alerts/index.ts` |
 | `notifying` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -2219,6 +2235,8 @@ _nenhum item encontrado_
 | `notifyDeliveryContact` | `supabase/functions/lalamove-api/index.ts` |
 | `notify_delivery_contact` | `supabase/functions/lalamove-api/index.ts` |
 | `notify` | `supabase/functions/lalamove-webhook/index.ts` |
+| `notifyDriver` | `supabase/functions/lalamove-webhook/index.ts` |
+| `notifyDriverEvent` | `supabase/functions/lalamove-webhook/index.ts` |
 | `notifyError` | `supabase/functions/lalamove-webhook/index.ts` |
 | `sendNotification` | `supabase/functions/lalamove-webhook/index.ts` |
 | `resend.emails.send` | `supabase/functions/new-device-alert/index.ts` |
@@ -2380,9 +2398,14 @@ _nenhum item encontrado_
 | é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
 | Sem prazo explícito vale o TTL padrão: alerta de pedido entregue meia | `supabase/functions/_shared/channels/zapp.ts` |
 | Nunca lança: falta de secret não pode derrubar o despacho de alerta. | `supabase/functions/_shared/channels/zapp.ts` |
+| hora. Erro que pode passar (rate limit, timeout) espera o fallback | `supabase/functions/_shared/messaging/dispatch.ts` |
 | sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato — | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | * A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave | `supabase/functions/_shared/messaging/inbound.ts` |
 | não deve virar confirmação de chegada. Quem decide onde gravar (stop_proofs ou | `supabase/functions/_shared/messaging/inbound.ts` |
+| de um pedido e uma falha de mensagem nao pode derrubar o pedido. | `supabase/functions/_shared/messaging/notify-driver.ts` |
+| Mensagem nao pode derrubar o fluxo do pedido. | `supabase/functions/_shared/messaging/notify-driver.ts` |
+| conservadora. O motor de mensagem nao pode derrubar o webhook porque uma | `supabase/functions/_shared/messaging/registry.ts` |
+| * Cliente minimo de leitura. O fake dos testes implementa apenas isto. */ | `supabase/functions/_shared/messaging/registry.ts` |
 | testar os casos de borda que custam dinheiro — limite por motorista, silencio | `supabase/functions/_shared/messaging/router.ts` |
 | * Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o | `supabase/functions/_shared/messaging/router.ts` |
 | * Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */ | `supabase/functions/_shared/messaging/router.ts` |

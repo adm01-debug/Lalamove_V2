@@ -1459,9 +1459,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 65,
-   "testes": 37,
-   "linhas": 18812,
+   "arquivos": 68,
+   "testes": 40,
+   "linhas": 19932,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1511,8 +1511,11 @@
     "lalamove_stop_proofs",
     "lalamove_stops",
     "lalamove_uapi_sessions",
+    "message_templates",
+    "messaging_settings",
     "new_device_alerts",
     "notification_messages",
+    "notification_routes",
     "order_geo_events",
     "query_telemetry",
     "risk_rules",
@@ -1537,7 +1540,9 @@
     "is_phone_opted_out",
     "mark_job_completed",
     "mark_job_failed",
-    "mcp_introspect"
+    "mcp_introspect",
+    "messaging_month_cost_cents",
+    "record_messaging_usage"
    ],
    "buckets": [],
    "canais_realtime": [],
@@ -1631,8 +1636,11 @@
      "lalamove_stop_proofs",
      "lalamove_stops",
      "lalamove_uapi_sessions",
+     "message_templates",
+     "messaging_settings",
      "new_device_alerts",
      "notification_messages",
+     "notification_routes",
      "order_geo_events",
      "query_telemetry",
      "risk_rules",
@@ -1657,7 +1665,9 @@
      "is_phone_opted_out",
      "mark_job_completed",
      "mark_job_failed",
-     "mcp_introspect"
+     "mcp_introspect",
+     "messaging_month_cost_cents",
+     "record_messaging_usage"
     ]
    },
    "importado_por_outros_modulos": [],

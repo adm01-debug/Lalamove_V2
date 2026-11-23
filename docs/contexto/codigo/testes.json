@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 169,
+ "total": 172,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 35,
+  "edge (deno)": 38,
   "guard (node --test)": 34,
   "unit (vitest)": 82
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 37
+   "arquivos": 40
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1226,6 +1226,17 @@
    "casos": 3
   },
   {
+   "arquivo": "supabase/functions/_shared/messaging/dispatch.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 322,
+   "testa": [
+    "supabase/functions/_shared/messaging/dispatch.ts",
+    "supabase/functions/_shared/messaging/registry.ts",
+    "supabase/functions/_shared/messaging/router.ts"
+   ],
+   "casos": 19
+  },
+  {
    "arquivo": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
    "tipo": "edge (deno)",
    "linhas": 164,
@@ -1243,6 +1254,25 @@
     "supabase/functions/_shared/messaging/inbound.ts"
    ],
    "casos": 14
+  },
+  {
+   "arquivo": "supabase/functions/_shared/messaging/notify-driver.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 289,
+   "testa": [
+    "supabase/functions/_shared/messaging/notify-driver.ts"
+   ],
+   "casos": 9
+  },
+  {
+   "arquivo": "supabase/functions/_shared/messaging/registry.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 163,
+   "testa": [
+    "supabase/functions/_shared/messaging/registry.ts",
+    "supabase/functions/_shared/messaging/router.ts"
+   ],
+   "casos": 9
   },
   {
    "arquivo": "supabase/functions/_shared/messaging/router.test.ts",
@@ -1651,9 +1681,12 @@
   "supabase/functions/_shared/channels/zapp.ts": 1,
   "supabase/functions/_shared/contract.ts": 3,
   "supabase/functions/_shared/geo-precision.ts": 1,
+  "supabase/functions/_shared/messaging/dispatch.ts": 1,
   "supabase/functions/_shared/messaging/inbound-actions.ts": 1,
   "supabase/functions/_shared/messaging/inbound.ts": 2,
-  "supabase/functions/_shared/messaging/router.ts": 1,
+  "supabase/functions/_shared/messaging/notify-driver.ts": 1,
+  "supabase/functions/_shared/messaging/registry.ts": 2,
+  "supabase/functions/_shared/messaging/router.ts": 3,
   "supabase/functions/_shared/phone.ts": 1,
   "supabase/functions/_shared/schemas.ts": 2,
   "supabase/functions/_shared/template.ts": 1,
