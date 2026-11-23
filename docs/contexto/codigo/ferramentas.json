@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (566)",
+   "TypeScript (567)",
    "SQL (202)",
    "JavaScript (114)",
    "Markdown (114)",
@@ -57,6 +57,8 @@
    "lint:i18n": "node scripts/ci/check-i18n-parity.mjs",
    "preview": "vite preview",
    "seed": "tsx scripts/seed-database.ts",
+   "test": "vitest run",
+   "test:coverage": "vitest run --coverage",
    "test:e2e": "playwright test",
    "test:e2e:report": "playwright show-report",
    "test:e2e:ui": "playwright test --ui"

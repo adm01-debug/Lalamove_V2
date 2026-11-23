@@ -1285,13 +1285,13 @@
   },
   {
    "modulo": "components/ui",
-   "arquivos": 61,
+   "arquivos": 62,
    "testes": 0,
-   "linhas": 7971,
+   "linhas": 8021,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 57,
+   "componentes": 58,
    "hooks_locais": [
     "useDataRefresh",
     "useFuseSearch",
@@ -2573,7 +2573,7 @@
    "modulo": "pages",
    "arquivos": 56,
    "testes": 1,
-   "linhas": 16287,
+   "linhas": 16290,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",

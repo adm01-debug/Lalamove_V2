@@ -6,7 +6,7 @@
    "src/pages (54)"
   ],
   "componentes": [
-   "src/components (128)",
+   "src/components (129)",
    "src/pages (87)",
    "src/hooks (3)"
   ],
@@ -46,7 +46,7 @@
   ]
  },
  "nomenclatura": {
-  "componentes": "PascalCase (72%)",
+  "componentes": "PascalCase (71%)",
   "hooks": "use + PascalCase",
   "servicos": "camelCase (84%)",
   "edge_functions": "kebab-case (100%)",
@@ -54,7 +54,7 @@
  },
  "barrels_index": 4,
  "extensao_componentes": [
-  ".tsx (219)"
+  ".tsx (220)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: lote 9 - EmptyState component + vitest script (#321)",
    "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)",
    "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)",
    "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)",
-   "fix: validar contrato antes de criar cliente no new-device-alert (#328)",
-   "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)"
+   "fix: validar contrato antes de criar cliente no new-device-alert (#328)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

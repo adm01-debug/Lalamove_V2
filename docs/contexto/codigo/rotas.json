@@ -392,7 +392,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 40
+   "arquivos_puxados": 41
   },
   {
    "caminho": "/analytics",
@@ -513,8 +513,10 @@
     "sla-metrics-consolidated"
    ],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 40
+   "papeis": [
+    "status"
+   ],
+   "arquivos_puxados": 41
   },
   {
    "caminho": "/auth",
@@ -1101,7 +1103,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 39
+   "arquivos_puxados": 40
   },
   {
    "caminho": "/error-monitoring",
@@ -2134,9 +2136,10 @@
     "combobox",
     "img",
     "listbox",
-    "option"
+    "option",
+    "status"
    ],
-   "arquivos_puxados": 75
+   "arquivos_puxados": 76
   },
   {
    "caminho": "/password-reset-approvals",
@@ -3772,7 +3775,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 282
+   "arquivos_puxados": 283
   }
  ],
  "menu": [

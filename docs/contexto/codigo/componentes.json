@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 219,
+ "total": 220,
  "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 129,
+   "usado_por": 130,
    "orfao": false
   },
   {
@@ -1527,6 +1527,22 @@
    "tabelas": [],
    "edges": [],
    "usado_por": 12,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/components/ui/empty-state.tsx",
+   "exports": [
+    "EmptyState",
+    "EmptyStateAction",
+    "EmptyStateProps"
+   ],
+   "export_default": null,
+   "linhas": 50,
+   "dominio": "components/ui",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 4,
    "orfao": false
   },
   {
@@ -2316,7 +2332,7 @@
     "AlertsPage"
    ],
    "export_default": null,
-   "linhas": 611,
+   "linhas": 606,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",
@@ -2366,7 +2382,7 @@
     "ApprovalsPage"
    ],
    "export_default": null,
-   "linhas": 135,
+   "linhas": 146,
    "dominio": "pages",
    "hooks_locais": [
     "useApprovalActions",
@@ -2573,7 +2589,7 @@
     "DriversPage"
    ],
    "export_default": null,
-   "linhas": 250,
+   "linhas": 248,
    "dominio": "pages",
    "hooks_locais": [
     "useAddToBlacklist",
@@ -3185,7 +3201,7 @@
     "OrdersPage"
    ],
    "export_default": null,
-   "linhas": 277,
+   "linhas": 276,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",

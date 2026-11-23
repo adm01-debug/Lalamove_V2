@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "ced043f289e90d7760a8c5920f75e645ac24256d",
+  "commit": "c4fdb6958e95fc108fe24357b6672655afc53456",
   "branch": "main",
-  "data_commit": "2026-11-23T16:34:34-03:00",
+  "data_commit": "2026-11-23T16:45:50-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c4fdb69",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 9 - EmptyState component + vitest script (#321)"
+   },
    {
     "sha": "ced043f",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "035a7c6",
     "data": "2026-11-22",
     "assunto": "feat: exigir inscrição de MFA nas rotas requireMFA (item 4) (#299)"
-   },
-   {
-    "sha": "1f97a5b",
-    "data": "2026-11-22",
-    "assunto": "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)"
    }
   ],
-  "arquivos_mudados_7d": 423,
+  "arquivos_mudados_7d": 425,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -169,7 +169,7 @@
    },
    {
     "pasta": "package.json",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "pasta": "package-lock.json",
@@ -203,7 +203,7 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 33
+    "mudancas": 34
    },
    {
     "arquivo": "package-lock.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 224
+    "commits": 225
    },
    {
     "autor": "dependabot[bot]",
@@ -310,15 +310,15 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1076,
-  "arquivos_codigo": 679,
-  "linhas_codigo": 132615,
+  "arquivos_total": 1077,
+  "arquivos_codigo": 680,
+  "linhas_codigo": 132668,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
   "itens_menu": 50,
   "modulos": 43,
-  "componentes": 219,
+  "componentes": 220,
   "hooks": 101,
   "edge_functions": 27,
   "tabelas": 88,
@@ -519,8 +519,8 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 162,
-   "linhas": 29540
+   "arquivos": 163,
+   "linhas": 29590
   },
   "src/hooks": {
    "arquivos": 111,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19813
+   "linhas": 19816
   },
   "src/services": {
    "arquivos": 1,
@@ -646,7 +646,7 @@
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",
-   "linhas": 611
+   "linhas": 606
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",

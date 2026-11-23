@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "ced043f289e90d7760a8c5920f75e645ac24256d",
+  "sha": "c4fdb6958e95fc108fe24357b6672655afc53456",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 19:36 UTC",
-  "files_total": 1070,
-  "code_files": 890,
-  "code_lines": 153792
+  "generated_at": "2026-11-23 19:47 UTC",
+  "files_total": 1071,
+  "code_files": 891,
+  "code_lines": 153845
  },
  "version": "1.3.2",
- "facts_hash": "f7e1cabc1fe52055",
+ "facts_hash": "ac7f262450e7b41d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -120,6 +120,8 @@
    "lint:i18n": "node scripts/ci/check-i18n-parity.mjs",
    "lint:a11y": "node scripts/ci/a11y-button-name-ratchet.mjs",
    "preview": "vite preview",
+   "test": "vitest run",
+   "test:coverage": "vitest run --coverage",
    "test:e2e": "playwright test",
    "test:e2e:ui": "playwright test --ui",
    "test:e2e:report": "playwright show-report",
@@ -182,7 +184,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 328,
-   ".tsx": 238,
+   ".tsx": 239,
    ".sql": 202,
    ".mjs": 109,
    ".py": 8,
@@ -17065,7 +17067,7 @@
     "rpc_transitive": [
      "acknowledge_alert"
     ],
-    "deps_count": 38
+    "deps_count": 39
    },
    {
     "path": "",
@@ -17091,7 +17093,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 37
+    "deps_count": 38
    },
    {
     "path": "",
@@ -17214,7 +17216,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 39
+    "deps_count": 40
    },
    {
     "path": "",
@@ -17478,7 +17480,7 @@
      "lalamove-api"
     ],
     "rpc_transitive": [],
-    "deps_count": 26
+    "deps_count": 27
    },
    {
     "path": "",
@@ -19345,7 +19347,7 @@
     "file": ".github/workflows/inventario-estado-semanal.yml"
    }
   ],
-  "components_count": 163,
+  "components_count": 164,
   "hooks": [
    {
     "name": "useOrders",
@@ -20868,8 +20870,8 @@
   },
   {
    "module": "src/components",
-   "files": 162,
-   "lines": 29540,
+   "files": 163,
+   "lines": 29590,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -21412,7 +21414,7 @@
   {
    "module": "src/pages",
    "files": 90,
-   "lines": 19813,
+   "lines": 19816,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -60029,6 +60031,15 @@
    "path": "src/components/ui/dropdown-menu.tsx",
    "lines": 180
   },
+  "src/components/ui/empty-state.tsx": {
+   "path": "src/components/ui/empty-state.tsx",
+   "lines": 50,
+   "exports": [
+    "interface EmptyStateAction",
+    "interface EmptyStateProps",
+    "function EmptyState"
+   ]
+  },
   "src/components/ui/fab-variants.tsx": {
    "path": "src/components/ui/fab-variants.tsx",
    "lines": 134,
@@ -66835,7 +66846,7 @@
   },
   "src/pages/AlertsPage.tsx": {
    "path": "src/pages/AlertsPage.tsx",
-   "lines": 611,
+   "lines": 606,
    "exports": [
     "function AlertsPage"
    ],
@@ -66852,7 +66863,7 @@
   },
   "src/pages/ApprovalsPage.tsx": {
    "path": "src/pages/ApprovalsPage.tsx",
-   "lines": 135,
+   "lines": 146,
    "exports": [
     "function ApprovalsPage"
    ],
@@ -67089,7 +67100,7 @@
   },
   "src/pages/DriversPage.tsx": {
    "path": "src/pages/DriversPage.tsx",
-   "lines": 250,
+   "lines": 248,
    "exports": [
     "function DriversPage"
    ],
@@ -67631,7 +67642,7 @@
   },
   "src/pages/OrdersPage.tsx": {
    "path": "src/pages/OrdersPage.tsx",
-   "lines": 277,
+   "lines": 276,
    "exports": [
     "function OrdersPage"
    ],
@@ -74685,10 +74696,24 @@
   }
  },
  "git": {
-  "sha": "ced043f289e90d7760a8c5920f75e645ac24256d",
+  "sha": "c4fdb6958e95fc108fe24357b6672655afc53456",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c4fdb69",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: lote 9 - EmptyState component + vitest script (#321)",
+    "files": [
+     "package.json",
+     "src/components/ui/empty-state.tsx",
+     "src/pages/AlertsPage.tsx",
+     "src/pages/ApprovalsPage.tsx",
+     "src/pages/DriversPage.tsx",
+     "src/pages/OrdersPage.tsx"
+    ]
+   },
    {
     "sha": "ced043f",
     "date": "2026-11-23",
@@ -75104,24 +75129,12 @@
      "src/pages/LalamoveSettingsPage.tsx",
      "src/pages/UAPISettingsPage.tsx"
     ]
-   },
-   {
-    "sha": "a388d1d",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: validar origem do postMessage do Bitrix24 (#293)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/hooks/useBitrix24.ts",
-     "src/lib/__tests__/postMessage.test.ts",
-     "src/lib/postMessage.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    19
+    18
    ],
    [
     "src/App.tsx",
@@ -75142,6 +75155,22 @@
    [
     "src/components/layout/sidebar-config.ts",
     3
+   ],
+   [
+    "package.json",
+    2
+   ],
+   [
+    "src/pages/AlertsPage.tsx",
+    2
+   ],
+   [
+    "src/pages/DriversPage.tsx",
+    2
+   ],
+   [
+    "src/pages/OrdersPage.tsx",
+    2
    ],
    [
     "src/components/dashboard/BatchActionsToolbar.tsx",
@@ -75181,22 +75210,6 @@
    ],
    [
     "src/hooks/useDashboardStats.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/router.test.ts",
-    2
-   ],
-   [
-    "docs/qa/03-ACHADOS.md",
-    2
-   ],
-   [
-    "docs/qa/04-PLANO.md",
-    2
-   ],
-   [
-    "docs/qa/05-PROGRESSO.md",
     2
    ]
   ]

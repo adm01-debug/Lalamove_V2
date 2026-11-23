@@ -806,6 +806,10 @@
   "src/components/ui/dropdown-menu.tsx": [
    "src/lib/utils.ts"
   ],
+  "src/components/ui/empty-state.tsx": [
+   "src/components/ui/button.tsx",
+   "src/lib/utils.ts"
+  ],
   "src/components/ui/fab-variants.tsx": [
    "src/components/ui/button.tsx",
    "src/lib/utils.ts"
@@ -1416,6 +1420,7 @@
    "src/components/ui/collapsible.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
    "src/components/ui/dialog.tsx",
+   "src/components/ui/empty-state.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/components/ui/query-state.tsx",
    "src/components/ui/sparkline.tsx",
@@ -1438,6 +1443,7 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/empty-state.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/components/ui/tabs.tsx",
    "src/hooks/useApprovalRealtime.ts",
@@ -1538,6 +1544,7 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/empty-state.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/components/ui/search-help-tooltip.tsx",
    "src/components/ui/skeleton.tsx",
@@ -1754,6 +1761,7 @@
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
    "src/components/ui/data-refresh-indicator.tsx",
+   "src/components/ui/empty-state.tsx",
    "src/components/ui/pull-to-refresh.tsx",
    "src/components/ui/search-help-tooltip.tsx",
    "src/components/ui/skeleton.tsx",
