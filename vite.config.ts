@@ -9,6 +9,23 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    target: 'es2022',
+    sourcemap: 'hidden',
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react/jsx-runtime'],
+          'supabase': ['@supabase/supabase-js'],
+          'mapbox': ['mapbox-gl'],
+          'charts': ['recharts'],
+          'motion': ['framer-motion'],
+          'export': ['xlsx', 'jspdf'],
+        },
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,

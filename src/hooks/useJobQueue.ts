@@ -108,6 +108,7 @@ export const useQueueStatistics = () => {
       };
     },
     refetchInterval: 10000,
+    refetchIntervalInBackground: false,
     staleTime: 5000,
   });
 };
@@ -216,6 +217,7 @@ export const useJobQueue = (status?: string, limit = 50) => {
       return jobs.slice(0, limit);
     },
     refetchInterval: 5000,
+    refetchIntervalInBackground: false,
     staleTime: 2000,
   });
 };

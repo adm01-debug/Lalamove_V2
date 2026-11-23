@@ -65,7 +65,8 @@ export function useCacheStats() {
         status: row.status,
       }));
     },
-    refetchInterval: 30000, // Atualiza a cada 30 segundos
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false, // Atualiza a cada 30 segundos
     staleTime: 20000,
   });
 }
@@ -93,7 +94,8 @@ export function useCacheRefreshHistory(viewName?: string) {
       }
       return data || [];
     },
-    refetchInterval: 60000, // Atualiza a cada 1 minuto
+    refetchInterval: 60000,
+    refetchIntervalInBackground: false, // Atualiza a cada 1 minuto
   });
 }
 

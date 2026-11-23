@@ -60,6 +60,7 @@ export function useLalamoveQuota(): UseLalamoveQuotaResult {
       return (data ?? []) as RateLimitRow[];
     },
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
     staleTime: 15_000,
   });
 

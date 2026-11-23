@@ -105,6 +105,7 @@ export function useWebhookSecurityMetrics(windowHours = 24) {
     queryKey: ['webhook-security-metrics', windowHours],
     queryFn: () => fetchMetrics(windowHours),
     refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
     staleTime: 30_000,
   });
 }

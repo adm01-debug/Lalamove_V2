@@ -27,12 +27,12 @@ export default function AnalyticsDashboardPage() {
   const [period, setPeriod] = useState('7');
   const { data, isLoading, refetch, isRefetching } = useAnalyticsData(parseInt(period));
 
-  const handleExport = (fmt: 'csv' | 'excel' | 'json' | 'pdf') => {
+  const handleExport = async (fmt: 'csv' | 'excel' | 'json' | 'pdf') => {
     if (!data) return;
     const rows = data.chartData.map(d => ({ Data: d.date, Pedidos: d.pedidos, Entregas: d.entregas, Aprovações: d.aprovacoes, Alertas: d.alertas }));
     if (fmt === 'csv') { exportToCSV(rows, `analytics_${period}d`); toast.success('CSV exportado!'); }
     else if (fmt === 'excel') {
-      exportToExcel([
+      await exportToExcel([
         { name: 'Série diária', rows },
         { name: 'Performance', rows: data.performanceData.map(p => ({ Métrica: p.metric, Valor: p.value, 'Variação (%)': p.change })) },
         { name: 'Top Motoristas', rows: data.driverRanking.map((d, i) => ({ Posição: i + 1, Motorista: d.name, Entregas: d.entregas, Avaliação: d.rating, 'Sucesso (%)': d.taxa })) },

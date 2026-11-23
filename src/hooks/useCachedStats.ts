@@ -119,7 +119,8 @@ export function useDriverStatsCache() {
       }));
     },
     staleTime: 5 * 60 * 1000, // Cache por 5 minutos no client
-    refetchInterval: 10 * 60 * 1000, // Refetch a cada 10 minutos
+    refetchInterval: 10 * 60 * 1000,
+    refetchIntervalInBackground: false, // Refetch a cada 10 minutos
   });
 }
 
@@ -164,6 +165,7 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -204,6 +206,7 @@ export function useHourlyMetricsCache(hoursBack: number = 24) {
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -245,6 +248,7 @@ export function useTopDrivers(
     },
     staleTime: 5 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
+    refetchIntervalInBackground: false,
   });
 }
 

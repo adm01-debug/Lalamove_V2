@@ -119,7 +119,8 @@ export function useDashboardStats() {
   return useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: fetchDashboardStats,
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false, // Refresh every 30 seconds
     staleTime: 10000,
   });
 }

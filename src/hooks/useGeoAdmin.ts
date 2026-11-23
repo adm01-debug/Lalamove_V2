@@ -79,6 +79,7 @@ export function useGeoProviderStatus() {
     queryKey: ['geo', 'provider-status'],
     queryFn: fetchProviderStatus,
     refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }
@@ -104,6 +105,7 @@ export function useGeoBudgetStatus() {
       return (data ?? []) as GeoBudgetStatusRow[];
     },
     refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }
@@ -176,6 +178,7 @@ export function useGeoUsageMonth() {
       return (data ?? []) as GeoUsageMonthRow[];
     },
     refetchInterval: 120_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }
@@ -243,6 +246,7 @@ export function useGeoLatency(hours = 24) {
       return aggregateGeoLatency(data ?? []);
     },
     refetchInterval: 120_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }

@@ -6,6 +6,7 @@ export function useUAPIStatus() {
     queryKey: ['uapi', 'status'],
     queryFn: () => uapi.getStatus(),
     refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -30,6 +31,7 @@ export function useWalletBalance() {
     queryKey: ['uapi', 'wallet'],
     queryFn: () => uapi.getWalletBalance(),
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
     select: (data) => ({
       balanceCents: data.body?.data?.balance_fen ?? 0,
       balanceFormatted: data.formatted ?? 'R$ 0,00',

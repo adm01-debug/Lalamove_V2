@@ -50,6 +50,7 @@ export function useActiveAlerts() {
     queryFn: fetchActiveAlerts,
     enabled: isAuthenticated,
     refetchInterval: 30000,
+    refetchIntervalInBackground: false,
     staleTime: 10000,
   });
 

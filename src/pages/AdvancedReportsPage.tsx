@@ -167,8 +167,8 @@ export default function AdvancedReportsPage() {
     exportToCSV(buildDetailRows(), `relatorio_avancado_${filters.period}d`);
   };
 
-  const handleExportExcel = () => {
-    exportToExcel(
+  const handleExportExcel = async () => {
+    await exportToExcel(
       [
         { name: 'Entregas', rows: buildDetailRows() },
         {
