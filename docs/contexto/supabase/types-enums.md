@@ -3,7 +3,7 @@
 | tipo | kind | valores / definição | usado em |
 |---|---|---|---|
 | public.alert_severity | enum | INFO, WARNING, CRITICAL | public.alerts.severity |
-| public.alert_type | enum | DRIVER_BLOCKED, ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY, APPROVAL_REQUIRED, ORDER_CANCELLED, INTEGRATION_FAILURE, DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING, DRIVER_ASSIGNED | public.alert_configurations.alert_type, public.alert_dedup.alert_type, public.alerts.type, public.order_geo_events.event_type |
+| public.alert_type | enum | DRIVER_BLOCKED, ROUTE_DEVIATION, DRIVER_STOPPED, LATE_DELIVERY, APPROVAL_REQUIRED, ORDER_CANCELLED, INTEGRATION_FAILURE, DRIVER_APPROACHING_PICKUP, DRIVER_ARRIVED_PICKUP, DRIVER_APPROACHING_DELIVERY, DRIVER_ARRIVED_DELIVERY, ETA_DELAY, SUPPLIER_DELAY_NOTICE, MISSING_POD, GEO_BUDGET_WARNING, DRIVER_ASSIGNED, DRIVER_NO_CONFIRMATION | public.alert_configurations.alert_type, public.alert_dedup.alert_type, public.alerts.type, public.order_geo_events.event_type |
 | public.app_role | enum | admin, manager, operator, viewer | public.role_permissions.role, public.user_roles.role |
 | public.approval_priority | enum | LOW, MEDIUM, HIGH, URGENT, CRITICAL | public.driver_approval_queue.approval_priority |
 | public.approval_status | enum | PENDING, APPROVED, REJECTED | public.driver_approval_queue.status |

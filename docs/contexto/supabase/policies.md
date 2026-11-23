@@ -143,6 +143,14 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.login_attempts | Admins can view login attempts | SELECT | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.map_settings_overrides | Users can manage their own settings overrides | ALL | PERMISSIVE | public | `(auth.uid() = user_id)` | `(auth.uid() = user_id)` |
 | public.mcp_diagnostics_grants | Admins manage diagnostics grants | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.message_templates | admin edita templates | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.message_templates | equipe le templates | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |  |
+| public.message_templates | service role gerencia templates | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.messaging_settings | admin edita configuracao de mensageria | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.messaging_settings | equipe le configuracao de mensageria | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |  |
+| public.messaging_settings | service role gerencia configuracao de mensageria | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.messaging_usage | equipe le uso de mensageria | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |  |
+| public.messaging_usage | service role escreve uso de mensageria | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.mfa_sessions | Users can delete their MFA sessions | DELETE | PERMISSIVE | authenticated | `((auth.uid() = user_id) OR has_role(auth.uid(), 'admin'::app_role))` |  |
 | public.mfa_sessions | Users can insert their MFA sessions | INSERT | PERMISSIVE | authenticated |  | `(auth.uid() = user_id)` |
 | public.mfa_sessions | Users can manage own MFA sessions | ALL | PERMISSIVE | authenticated | `(auth.uid() = user_id)` | `(auth.uid() = user_id)` |
@@ -156,6 +164,9 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.notification_messages | service role escreve ledger de mensagens | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.notification_optouts | admin gerencia opt-outs | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
 | public.notification_optouts | service role escreve opt-outs | ALL | PERMISSIVE | service_role | `true` | `true` |
+| public.notification_routes | admin edita rotas de notificacao | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.notification_routes | equipe le rotas de notificacao | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |  |
+| public.notification_routes | service role gerencia rotas de notificacao | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.order_geo_events | order_geo_events_read | SELECT | PERMISSIVE | public | `(auth.role() = 'authenticated'::text)` |  |
 | public.password_reset_requests | Admins and managers can view reset requests | SELECT | PERMISSIVE | public | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |  |
 | public.password_reset_requests | Admins can update reset requests | UPDATE | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |

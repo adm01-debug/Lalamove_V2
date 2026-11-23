@@ -189,6 +189,13 @@ Uso e tamanho em `stats.md`.
 | public.map_settings_overrides | map_settings_overrides_user_id_context_key_key | btree | user_id, context_key | sim | sim |  |
 | public.mcp_diagnostics_grants | mcp_diagnostics_grants_pkey | btree | id | sim | sim |  |
 | public.mcp_diagnostics_grants | mcp_diagnostics_grants_user_id_key | btree | user_id | sim | sim |  |
+| public.message_templates | message_templates_active_key_idx | btree | key, channel | sim | sim | `is_active` |
+| public.message_templates | message_templates_event_idx | btree | event, role, channel | não | sim | `is_active` |
+| public.message_templates | message_templates_key_channel_version_key | btree | key, channel, version | sim | sim |  |
+| public.message_templates | message_templates_pkey | btree | id | sim | sim |  |
+| public.messaging_settings | messaging_settings_pkey | btree | id | sim | sim |  |
+| public.messaging_usage | messaging_usage_day_idx | btree | day | não | sim |  |
+| public.messaging_usage | messaging_usage_pkey | btree | day, channel, provider | sim | sim |  |
 | public.mfa_sessions | idx_mfa_sessions_user | btree | user_id | não | sim |  |
 | public.mfa_sessions | mfa_sessions_pkey | btree | id | sim | sim |  |
 | public.new_device_alerts | idx_new_device_alerts_device_id | btree | device_id | não | sim |  |
@@ -202,6 +209,8 @@ Uso e tamanho em `stats.md`.
 | public.notification_messages | notification_messages_provider_message_id_key | btree | provider, provider_message_id | sim | sim | `(provider_message_id IS NOT NULL)` |
 | public.notification_messages | notification_messages_recipient_created_idx | btree | recipient_phone, created_at | não | sim |  |
 | public.notification_optouts | notification_optouts_pkey | btree | phone | sim | sim |  |
+| public.notification_routes | notification_routes_event_idx | btree | event | não | sim | `is_enabled` |
+| public.notification_routes | notification_routes_pkey | btree | event, role | sim | sim |  |
 | public.order_geo_events | idx_order_geo_events_alert_id | btree | alert_id | não | sim |  |
 | public.order_geo_events | idx_order_geo_events_order | btree | order_id, triggered_at | não | sim |  |
 | public.order_geo_events | order_geo_events_order_id_event_type_stop_index_key | btree | order_id, event_type, stop_index | sim | sim |  |

@@ -51,6 +51,10 @@
 | 30 | `avg_delay_minutes` | `numeric` | sim | `0` |  |  |
 | 31 | `last_delivery_at` | `timestamp with time zone` | sim |  |  |  |
 | 32 | `first_seen_at` | `timestamp with time zone` | sim | `now()` |  |  |
+| 33 | `whatsapp_status` | `text` | não | `'unknown'::text` |  |  |
+| 34 | `whatsapp_checked_at` | `timestamp with time zone` | sim |  |  |  |
+| 35 | `preferred_channel` | `text` | não | `'auto'::text` |  |  |
+| 36 | `last_reply_at` | `timestamp with time zone` | sim |  |  |  |
 
 
 ## Constraints
@@ -59,8 +63,10 @@
 |---|---|---|---|---|---|
 | drivers_lalamove_id_key | UNIQUE | `UNIQUE (lalamove_id)` |  |  | sim |
 | drivers_pkey | PRIMARY KEY | `PRIMARY KEY (id)` |  |  | sim |
+| drivers_preferred_channel_check | CHECK | `CHECK (preferred_channel = ANY (ARRAY['auto'::text, 'whatsapp'::text, 'sms'::text]))` |  |  | sim |
 | drivers_rating_check | CHECK | `CHECK (rating >= 0::numeric AND rating <= 5::numeric)` |  |  | sim |
 | drivers_risk_score_check | CHECK | `CHECK (risk_score >= 0::numeric AND risk_score <= 10::numeric)` |  |  | sim |
+| drivers_whatsapp_status_check | CHECK | `CHECK (whatsapp_status = ANY (ARRAY['valid'::text, 'invalid'::text, 'unknown'::text]))` |  |  | sim |
 
 
 ## Referenciada por (FKs de outras tabelas)

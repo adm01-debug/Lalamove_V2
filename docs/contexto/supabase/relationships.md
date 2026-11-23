@@ -36,10 +36,13 @@
 | public.lalamove_stops | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.lalamove_webhook_config | registered_by | auth.users | id | NO ACTION | NO ACTION |
 | public.map_settings_overrides | user_id | auth.users | id | CASCADE | NO ACTION |
+| public.message_templates | updated_by | auth.users | id | SET NULL | NO ACTION |
+| public.messaging_settings | updated_by | auth.users | id | SET NULL | NO ACTION |
 | public.new_device_alerts | device_id | public.user_devices | id | CASCADE | NO ACTION |
 | public.notification_messages | alert_id | public.alerts | id | SET NULL | NO ACTION |
 | public.notification_messages | fallback_of | public.notification_messages | id | SET NULL | NO ACTION |
 | public.notification_optouts | created_by | auth.users | id | SET NULL | NO ACTION |
+| public.notification_routes | updated_by | auth.users | id | SET NULL | NO ACTION |
 | public.order_geo_events | alert_id | public.alerts | id | SET NULL | NO ACTION |
 | public.order_geo_events | order_id | public.lalamove_orders | id | CASCADE | NO ACTION |
 | public.password_reset_requests | reviewed_by | auth.users | id | SET NULL | NO ACTION |
@@ -669,6 +672,42 @@ erDiagram
         timestamp_with_time_zone created_at
         timestamp_with_time_zone updated_at
     }
+    public_message_templates {
+        uuid id PK
+        text key
+        text event
+        text role
+        text channel
+        integer version
+        text body
+        text__ variables
+        integer max_length
+        boolean is_active
+        uuid updated_by FK
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
+    }
+    public_messaging_settings {
+        boolean id PK
+        text whatsapp_provider
+        text sms_provider
+        integer sms_fallback_after_min
+        integer monthly_budget_cents
+        jsonb quiet_hours_by_role
+        boolean pilot_mode
+        boolean shadow_mode
+        uuid updated_by FK
+        timestamp_with_time_zone updated_at
+    }
+    public_messaging_usage {
+        date day PK
+        text channel PK
+        text provider PK
+        integer messages
+        integer segments
+        integer cost_cents
+        timestamp_with_time_zone updated_at
+    }
     public_mfa_sessions {
         uuid id PK
         uuid user_id
@@ -723,6 +762,17 @@ erDiagram
         text reason
         uuid created_by FK
         timestamp_with_time_zone created_at
+    }
+    public_notification_routes {
+        text event PK
+        text role PK
+        text__ channels
+        integer fallback_after_min
+        boolean requires_reply
+        integer reply_timeout_min
+        boolean is_enabled
+        uuid updated_by FK
+        timestamp_with_time_zone updated_at
     }
     public_order_geo_events {
         uuid id PK
@@ -966,10 +1016,13 @@ erDiagram
     public_lalamove_orders ||--o{ public_lalamove_stops : "lalamove_stops_order_id_fkey"
     auth_users ||--o{ public_lalamove_webhook_config : "lalamove_webhook_config_registered_by_fkey"
     auth_users ||--o{ public_map_settings_overrides : "map_settings_overrides_user_id_fkey"
+    auth_users ||--o{ public_message_templates : "message_templates_updated_by_fkey"
+    auth_users ||--o{ public_messaging_settings : "messaging_settings_updated_by_fkey"
     public_user_devices ||--o{ public_new_device_alerts : "new_device_alerts_device_id_fkey"
     public_alerts ||--o{ public_notification_messages : "notification_messages_alert_id_fkey"
     public_notification_messages ||--o{ public_notification_messages : "notification_messages_fallback_of_fkey"
     auth_users ||--o{ public_notification_optouts : "notification_optouts_created_by_fkey"
+    auth_users ||--o{ public_notification_routes : "notification_routes_updated_by_fkey"
     public_alerts ||--o{ public_order_geo_events : "order_geo_events_alert_id_fkey"
     public_lalamove_orders ||--o{ public_order_geo_events : "order_geo_events_order_id_fkey"
     auth_users ||--o{ public_password_reset_requests : "password_reset_requests_reviewed_by_fkey"

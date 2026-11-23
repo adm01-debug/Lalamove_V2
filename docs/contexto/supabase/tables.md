@@ -26,7 +26,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.driver_evaluations](tables/public/driver_evaluations.md) | table | sim | 5 | 19 | não | Historico de avaliacoes de risco dos motoristas com fatores detalhados. |
 | [public.driver_incidents](tables/public/driver_incidents.md) | table | sim | 5 | 13 | não | Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano). |
 | [public.driver_locations](tables/public/driver_locations.md) | table | sim | 5 | 9 | não | Historico detalhado de posicoes GPS dos motoristas. |
-| [public.drivers](tables/public/drivers.md) | table | sim | 6 | 32 | não | Cadastro de motoristas com metricas de performance e score de risco. |
+| [public.drivers](tables/public/drivers.md) | table | sim | 6 | 36 | não | Cadastro de motoristas com metricas de performance e score de risco. |
 | [public.email_verifications](tables/public/email_verifications.md) | table | sim | 4 | 7 | não | Tokens de verificacao de email com expiracao. |
 | [public.feature_flags](tables/public/feature_flags.md) | table | sim | 2 | 7 | não | Flags de feature para ativacao/desativacao de funcionalidades. |
 | [public.geo_blocks](tables/public/geo_blocks.md) | table | sim | 5 | 10 | não | Bloqueios geograficos por pais (permanente ou temporario). |
@@ -51,10 +51,14 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 11 | não | Tentativas de login com IP e resultado para lockout de conta. |
 | [public.map_settings_overrides](tables/public/map_settings_overrides.md) | table | sim | 1 | 8 | não | Overrides de configuracao de mapa por usuario/contexto. |
 | [public.mcp_diagnostics_grants](tables/public/mcp_diagnostics_grants.md) | table | sim | 1 | 7 | não | Grants de acesso a diagnosticos via MCP (query_telemetry). |
+| [public.message_templates](tables/public/message_templates.md) | table | sim | 3 | 13 | não | Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres. |
+| [public.messaging_settings](tables/public/messaging_settings.md) | table | sim | 3 | 10 | não | Configuracao unica da mensageria (etapa 75). shadow_mode=true decide tudo e nao envia nada. |
+| [public.messaging_usage](tables/public/messaging_usage.md) | table | sim | 2 | 7 | não | Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5). |
 | [public.mfa_sessions](tables/public/mfa_sessions.md) | table | sim | 5 | 9 | sim | Sessoes MFA (TOTP) registradas por usuario. |
 | [public.new_device_alerts](tables/public/new_device_alerts.md) | table | sim | 4 | 8 | sim | Alertas de novo dispositivo detectado no login. |
 | [public.notification_messages](tables/public/notification_messages.md) | table | sim | 2 | 32 | não | Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela. |
 | [public.notification_optouts](tables/public/notification_optouts.md) | table | sim | 2 | 4 | não | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. |
+| [public.notification_routes](tables/public/notification_routes.md) | table | sim | 3 | 9 | não | Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta. |
 | [public.order_geo_events](tables/public/order_geo_events.md) | table | sim | 1 | 14 | não | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) - 1 por (pedido, evento, parada). |
 | [public.password_reset_requests](tables/public/password_reset_requests.md) | table | sim | 3 | 11 | não | Requisicoes de reset de senha com aprovacao de admin. |
 | [public.password_reset_tokens](tables/public/password_reset_tokens.md) | table | sim | 4 | 7 | não | Tokens de reset de senha com expiracao. |

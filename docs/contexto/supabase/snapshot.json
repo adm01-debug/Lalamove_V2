@@ -4323,6 +4323,58 @@
       },
       {
         "comment": null,
+        "default": "'unknown'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "whatsapp_status",
+        "nullable": false,
+        "position": 33,
+        "schema": "public",
+        "table": "drivers",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "whatsapp_checked_at",
+        "nullable": true,
+        "position": 34,
+        "schema": "public",
+        "table": "drivers",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "'auto'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "preferred_channel",
+        "nullable": false,
+        "position": 35,
+        "schema": "public",
+        "table": "drivers",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "last_reply_at",
+        "nullable": true,
+        "position": 36,
+        "schema": "public",
+        "table": "drivers",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
         "default": null,
         "generated": null,
         "identity": null,
@@ -8686,6 +8738,396 @@
         "nullable": false,
         "position": 1,
         "schema": "public",
+        "table": "message_templates",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "key",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "event",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'driver'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "role",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "channel",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "1",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "version",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "body",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'{}'::text[]",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "variables",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "text[]"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "max_length",
+        "nullable": true,
+        "position": 9,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_active",
+        "nullable": false,
+        "position": 10,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_by",
+        "nullable": true,
+        "position": 11,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "created_at",
+        "nullable": false,
+        "position": 12,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 13,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": "'zapp'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "whatsapp_provider",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'none'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "sms_provider",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "10",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "sms_fallback_after_min",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "monthly_budget_cents",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "integer"
+      },
+      {
+        "comment": "Horario de silencio por papel. Motorista com pedido ativo e isento (Z9).",
+        "default": "'{}'::jsonb",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "quiet_hours_by_role",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "pilot_mode",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "shadow_mode",
+        "nullable": false,
+        "position": 8,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_by",
+        "nullable": true,
+        "position": 9,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 10,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "day",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "date"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "channel",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "provider",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "messages",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "segments",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "cost_cents",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "id",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
         "table": "mfa_sessions",
         "type": "uuid"
       },
@@ -9363,6 +9805,123 @@
         "position": 4,
         "schema": "public",
         "table": "notification_optouts",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "event",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "role",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "'{}'::text[]",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "channels",
+        "nullable": false,
+        "position": 3,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "text[]"
+      },
+      {
+        "comment": null,
+        "default": "0",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "fallback_after_min",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "requires_reply",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "reply_timeout_min",
+        "nullable": true,
+        "position": 6,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "true",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "is_enabled",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "boolean"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_by",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "uuid"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 9,
+        "schema": "public",
+        "table": "notification_routes",
         "type": "timestamp with time zone"
       },
       {
@@ -15256,6 +15815,23 @@
       },
       {
         "columns": [
+          "preferred_channel"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (preferred_channel = ANY (ARRAY['auto'::text, 'whatsapp'::text, 'sms'::text]))",
+        "name": "drivers_preferred_channel_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "drivers",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "rating"
         ],
         "deferrable": false,
@@ -15278,6 +15854,23 @@
         "deferrable": false,
         "definition": "CHECK (risk_score >= 0::numeric AND risk_score <= 10::numeric)",
         "name": "drivers_risk_score_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "drivers",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "whatsapp_status"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (whatsapp_status = ANY (ARRAY['valid'::text, 'invalid'::text, 'unknown'::text]))",
+        "name": "drivers_whatsapp_status_check",
         "on_delete": null,
         "on_update": null,
         "ref_columns": [],
@@ -16791,6 +17384,337 @@
       },
       {
         "columns": [
+          "body"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (length(btrim(body)) > 0)",
+        "name": "message_templates_body_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "channel"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (channel = ANY (ARRAY['whatsapp'::text, 'sms'::text]))",
+        "name": "message_templates_channel_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "key",
+          "channel",
+          "version"
+        ],
+        "deferrable": false,
+        "definition": "UNIQUE (key, channel, version)",
+        "name": "message_templates_key_channel_version_key",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "UNIQUE",
+        "validated": true
+      },
+      {
+        "columns": [
+          "max_length"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (max_length IS NULL OR max_length > 0)",
+        "name": "message_templates_max_length_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "message_templates_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "role"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (role = ANY (ARRAY['driver'::text, 'supplier'::text, 'customer'::text, 'internal'::text]))",
+        "name": "message_templates_role_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (updated_by) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "name": "message_templates_updated_by_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "message_templates",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "version"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (version > 0)",
+        "name": "message_templates_version_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "message_templates",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (id)",
+        "name": "messaging_settings_id_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "monthly_budget_cents"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (monthly_budget_cents >= 0)",
+        "name": "messaging_settings_monthly_budget_cents_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (id)",
+        "name": "messaging_settings_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "sms_fallback_after_min"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (sms_fallback_after_min >= 0 AND sms_fallback_after_min <= 1440)",
+        "name": "messaging_settings_sms_fallback_after_min_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "sms_provider"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (sms_provider = ANY (ARRAY['none'::text, 'zenvia'::text, 'comtele'::text, 'twilio'::text]))",
+        "name": "messaging_settings_sms_provider_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (updated_by) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "name": "messaging_settings_updated_by_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "FOREIGN KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "whatsapp_provider"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (whatsapp_provider = ANY (ARRAY['zapp'::text, 'evolution'::text, 'off'::text]))",
+        "name": "messaging_settings_whatsapp_provider_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_settings",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "cost_cents"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (cost_cents >= 0)",
+        "name": "messaging_usage_cost_cents_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "messages"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (messages >= 0)",
+        "name": "messaging_usage_messages_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "day",
+          "channel",
+          "provider"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (day, channel, provider)",
+        "name": "messaging_usage_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "segments"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (segments >= 0)",
+        "name": "messaging_usage_segments_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "messaging_usage",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
           "id"
         ],
         "deferrable": false,
@@ -16999,6 +17923,94 @@
         "schema": "public",
         "table": "notification_optouts",
         "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "fallback_after_min"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (fallback_after_min >= 0 AND fallback_after_min <= 1440)",
+        "name": "notification_routes_fallback_after_min_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "event",
+          "role"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (event, role)",
+        "name": "notification_routes_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
+          "reply_timeout_min"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (reply_timeout_min IS NULL OR reply_timeout_min > 0)",
+        "name": "notification_routes_reply_timeout_min_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "role"
+        ],
+        "deferrable": false,
+        "definition": "CHECK (role = ANY (ARRAY['driver'::text, 'supplier'::text, 'customer'::text, 'internal'::text]))",
+        "name": "notification_routes_role_check",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "CHECK",
+        "validated": true
+      },
+      {
+        "columns": [
+          "updated_by"
+        ],
+        "deferrable": false,
+        "definition": "FOREIGN KEY (updated_by) REFERENCES auth.users(id) ON DELETE SET NULL",
+        "name": "notification_routes_updated_by_fkey",
+        "on_delete": "SET NULL",
+        "on_update": "NO ACTION",
+        "ref_columns": [
+          "id"
+        ],
+        "ref_schema": "auth",
+        "ref_table": "users",
+        "schema": "public",
+        "table": "notification_routes",
+        "type": "FOREIGN KEY",
         "validated": true
       },
       {
@@ -20140,7 +21152,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 52,
+          "code_total_files": 53,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -20431,11 +21443,15 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/functions/_shared/messaging/notify-driver.ts",
+              "hits": 1
+            },
+            {
               "file": "supabase/functions/send-notification/index.ts",
               "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -20761,6 +21777,41 @@
         "name": "mcp_introspect",
         "owner": "postgres",
         "returns": "jsonb",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "stable"
+      },
+      {
+        "args": "p_month date",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/_shared/messaging/notify-driver.ts",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "2752fd20fe7a7679",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "sql",
+        "leakproof": false,
+        "name": "messaging_month_cost_cents",
+        "owner": "postgres",
+        "returns": "integer",
         "schema": "public",
         "security_definer": true,
         "strict": false,
@@ -21175,6 +22226,41 @@
         "name": "record_failed_login_v2",
         "owner": "postgres",
         "returns": "TABLE(is_locked boolean, lockout_seconds integer, attempt_count integer, is_suspicious boolean)",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "p_channel text, p_provider text, p_messages integer, p_segments integer, p_cost_cents integer, p_day date",
+        "callers": {
+          "code": [
+            {
+              "file": "supabase/functions/_shared/messaging/notify-driver.ts",
+              "hits": 1
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": null,
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "129b43d62c80dd91",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "record_messaging_usage",
+        "owner": "postgres",
+        "returns": "messaging_usage",
         "schema": "public",
         "security_definer": true,
         "strict": false,
@@ -22741,6 +23827,42 @@
           "grantee": "authenticated",
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
+          "table": "message_templates"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "message_templates"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "messaging_settings"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "messaging_settings"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "messaging_usage"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "messaging_usage"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
           "table": "mfa_sessions"
         },
         {
@@ -22784,6 +23906,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "notification_optouts"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_routes"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "notification_routes"
         },
         {
           "grantee": "authenticated",
@@ -25929,6 +27063,111 @@
       },
       {
         "columns": [
+          "key",
+          "channel"
+        ],
+        "definition": "CREATE UNIQUE INDEX message_templates_active_key_idx ON public.message_templates USING btree (key, channel) WHERE is_active",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "message_templates_active_key_idx",
+        "predicate": "is_active",
+        "schema": "public",
+        "table": "message_templates"
+      },
+      {
+        "columns": [
+          "event",
+          "role",
+          "channel"
+        ],
+        "definition": "CREATE INDEX message_templates_event_idx ON public.message_templates USING btree (event, role, channel) WHERE is_active",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "message_templates_event_idx",
+        "predicate": "is_active",
+        "schema": "public",
+        "table": "message_templates"
+      },
+      {
+        "columns": [
+          "key",
+          "channel",
+          "version"
+        ],
+        "definition": "CREATE UNIQUE INDEX message_templates_key_channel_version_key ON public.message_templates USING btree (key, channel, version)",
+        "is_primary": false,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "message_templates_key_channel_version_key",
+        "predicate": null,
+        "schema": "public",
+        "table": "message_templates"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX message_templates_pkey ON public.message_templates USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "message_templates_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "message_templates"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "definition": "CREATE UNIQUE INDEX messaging_settings_pkey ON public.messaging_settings USING btree (id)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "messaging_settings_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "messaging_settings"
+      },
+      {
+        "columns": [
+          "day"
+        ],
+        "definition": "CREATE INDEX messaging_usage_day_idx ON public.messaging_usage USING btree (day)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "messaging_usage_day_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "messaging_usage"
+      },
+      {
+        "columns": [
+          "day",
+          "channel",
+          "provider"
+        ],
+        "definition": "CREATE UNIQUE INDEX messaging_usage_pkey ON public.messaging_usage USING btree (day, channel, provider)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "messaging_usage_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "messaging_usage"
+      },
+      {
+        "columns": [
           "user_id"
         ],
         "definition": "CREATE INDEX idx_mfa_sessions_user ON public.mfa_sessions USING btree (user_id)",
@@ -26113,6 +27352,35 @@
         "predicate": null,
         "schema": "public",
         "table": "notification_optouts"
+      },
+      {
+        "columns": [
+          "event"
+        ],
+        "definition": "CREATE INDEX notification_routes_event_idx ON public.notification_routes USING btree (event) WHERE is_enabled",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_routes_event_idx",
+        "predicate": "is_enabled",
+        "schema": "public",
+        "table": "notification_routes"
+      },
+      {
+        "columns": [
+          "event",
+          "role"
+        ],
+        "definition": "CREATE UNIQUE INDEX notification_routes_pkey ON public.notification_routes USING btree (event, role)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "notification_routes_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "notification_routes"
       },
       {
         "columns": [
@@ -27528,6 +28796,18 @@
       },
       {
         "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.message_templates.message_templates_updated_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.messaging_settings.messaging_settings_updated_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
         "detail": "FK sem índice nas colunas ['alert_id']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
         "object": "public.notification_messages.notification_messages_alert_id_fkey",
         "severity": "BAIXA"
@@ -27542,6 +28822,12 @@
         "code": "fk_without_index",
         "detail": "FK sem índice nas colunas ['created_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
         "object": "public.notification_optouts.notification_optouts_created_by_fkey",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "fk_without_index",
+        "detail": "FK sem índice nas colunas ['updated_by']: joins e DELETE/UPDATE na tabela pai ficam lentos.",
+        "object": "public.notification_routes.notification_routes_updated_by_fkey",
         "severity": "BAIXA"
       },
       {
@@ -28357,6 +29643,36 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.message_templates.admin edita templates",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.message_templates.equipe le templates",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.messaging_settings.admin edita configuracao de mensageria",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.messaging_settings.equipe le configuracao de mensageria",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.messaging_usage.equipe le uso de mensageria",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.mfa_sessions.Users can delete their MFA sessions",
         "severity": "BAIXA"
       },
@@ -28418,6 +29734,18 @@
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.notification_optouts.admin gerencia opt-outs",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.notification_routes.admin edita rotas de notificacao",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.notification_routes.equipe le rotas de notificacao",
         "severity": "BAIXA"
       },
       {
@@ -28855,6 +30183,12 @@
       {
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.messaging_month_cost_cents(p_month date)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.notification_messages_scrub_bodies(p_keep_days integer)",
         "severity": "INFO"
       },
@@ -28868,6 +30202,12 @@
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.record_failed_login_v2(p_email text, p_ip_address inet, p_user_agent text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.record_messaging_usage(p_channel text, p_provider text, p_messages integer, p_segments integer, p_cost_cents integer, p_day date)",
         "severity": "INFO"
       },
       {
@@ -29859,6 +31199,11 @@
         "name": "notification_ledger",
         "statements": null,
         "version": "20261125120000"
+      },
+      {
+        "name": "messaging_foundation",
+        "statements": null,
+        "version": "20261126120000"
       }
     ],
     "policies": [
@@ -31519,6 +32864,102 @@
         "with_check": "has_role(auth.uid(), 'admin'::app_role)"
       },
       {
+        "cmd": "ALL",
+        "name": "admin edita templates",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "message_templates",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "equipe le templates",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "message_templates",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role gerencia templates",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "message_templates",
+        "using": "true",
+        "with_check": "true"
+      },
+      {
+        "cmd": "ALL",
+        "name": "admin edita configuracao de mensageria",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "messaging_settings",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "equipe le configuracao de mensageria",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "messaging_settings",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role gerencia configuracao de mensageria",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "messaging_settings",
+        "using": "true",
+        "with_check": "true"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "equipe le uso de mensageria",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "messaging_usage",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role escreve uso de mensageria",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "messaging_usage",
+        "using": "true",
+        "with_check": "true"
+      },
+      {
         "cmd": "DELETE",
         "name": "Users can delete their MFA sessions",
         "permissive": "PERMISSIVE",
@@ -31671,6 +33112,42 @@
         ],
         "schema": "public",
         "table": "notification_optouts",
+        "using": "true",
+        "with_check": "true"
+      },
+      {
+        "cmd": "ALL",
+        "name": "admin edita rotas de notificacao",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "notification_routes",
+        "using": "has_role(auth.uid(), 'admin'::app_role)",
+        "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "equipe le rotas de notificacao",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "notification_routes",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role gerencia rotas de notificacao",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "notification_routes",
         "using": "true",
         "with_check": "true"
       },
@@ -33581,6 +35058,51 @@
         "schema": "public"
       },
       {
+        "comment": "Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "message_templates",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Configuracao unica da mensageria (etapa 75). shadow_mode=true decide tudo e nao envia nada.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "messaging_settings",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "messaging_usage",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
         "comment": "Sessoes MFA (TOTP) registradas por usuario.",
         "from_extension": false,
         "is_partition": false,
@@ -33631,6 +35153,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "notification_optouts",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta.",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "notification_routes",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,
@@ -34580,7 +36117,8 @@
           "SUPPLIER_DELAY_NOTICE",
           "MISSING_POD",
           "GEO_BUDGET_WARNING",
-          "DRIVER_ASSIGNED"
+          "DRIVER_ASSIGNED",
+          "DRIVER_NO_CONFIRMATION"
         ]
       },
       {
