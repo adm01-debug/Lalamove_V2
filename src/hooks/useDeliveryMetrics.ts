@@ -207,7 +207,7 @@ async function fetchDeliveryTrends(days: number = 7): Promise<DeliveryTrend[]> {
   for (let i = 0; i <= days; i++) {
     const date = new Date();
     date.setDate(date.getDate() - (days - i));
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo' }).format(date);
     byDate[dateStr] = { completed: 0, cancelled: 0, total: 0 };
   }
 

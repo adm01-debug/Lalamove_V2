@@ -136,7 +136,7 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
       // Filtra os últimos `daysBack` dias por delivery_date.
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysBack);
-      const startDateISO = startDate.toISOString().split('T')[0];
+      const startDateISO = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo' }).format(startDate);
 
       const { data, error } = await supabase
         .from('delivery_metrics_cache')

@@ -1,16 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, subDays } from 'date-fns';
+import { toast } from '@/hooks/use-toast';
 
 export interface DashboardStats {
-  totalOrders: number;
-  activeDeliveries: number;
-  completedToday: number;
-  pendingApprovals: number;
-  alertsCount: number;
-  avgDeliveryTime: number;
-  onTimeRate: number;
-  activeDrivers: number;
+  totalOrders: number | null;
+  activeDeliveries: number | null;
+  completedToday: number | null;
+  pendingApprovals: number | null;
+  alertsCount: number | null;
+  avgDeliveryTime: number | null;
+  onTimeRate: number | null;
+  activeDrivers: number | null;
 }
 
 async function fetchDashboardStats(): Promise<DashboardStats> {
@@ -25,7 +26,7 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
     alertsResult,
     activeDriversResult,
     deliveryTimesResult,
-  ] = await Promise.all([
+  ] = await Promise.allSettled([
     // Total orders in last 30 days
     supabase
       .from('lalamove_orders')
@@ -73,12 +74,30 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
       .limit(100),
   ]);
 
+  // Notify user for each failed KPI query
+  const kpiNames: Record<number, string> = {
+    0: 'pedidos totais',
+    1: 'entregas ativas',
+    2: 'concluídos hoje',
+    3: 'aprovações pendentes',
+    4: 'alertas',
+    5: 'motoristas ativos',
+    6: 'tempos de entrega',
+  };
+  const results = [ordersResult, activeDeliveriesResult, completedTodayResult, pendingApprovalsResult, alertsResult, activeDriversResult, deliveryTimesResult];
+  const failedKpis = results
+    .map((r, i) => (r.status === 'rejected' ? kpiNames[i] : null))
+    .filter(Boolean);
+  if (failedKpis.length > 0) {
+    toast({ title: 'Dashboard', description: `Não foi possível carregar: ${failedKpis.join(', ')}.`, variant: 'destructive' });
+  }
+
   // Calculate average delivery time and on-time rate
-  let avgDeliveryTime = 0;
-  let onTimeRate = 0;
-  
-  if (deliveryTimesResult.data && deliveryTimesResult.data.length > 0) {
-    const deliveries = deliveryTimesResult.data;
+  let avgDeliveryTime: number | null = null;
+  let onTimeRate: number | null = null;
+
+  if (deliveryTimesResult.status === 'fulfilled' && deliveryTimesResult.value.data && deliveryTimesResult.value.data.length > 0) {
+    const deliveries = deliveryTimesResult.value.data;
     let totalMinutes = 0;
     let onTimeCount = 0;
 
@@ -89,7 +108,6 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
         const diffMinutes = Math.round((actual - scheduled) / (1000 * 60));
         totalMinutes += Math.max(0, diffMinutes);
 
-        // Consider on-time if delivered within estimated time or within 15 min of scheduled
         if (order.estimated_delivery) {
           const estimated = new Date(order.estimated_delivery).getTime();
           if (actual <= estimated) onTimeCount++;
@@ -104,14 +122,14 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
   }
 
   return {
-    totalOrders: ordersResult.count ?? 0,
-    activeDeliveries: activeDeliveriesResult.count ?? 0,
-    completedToday: completedTodayResult.count ?? 0,
-    pendingApprovals: pendingApprovalsResult.count ?? 0,
-    alertsCount: alertsResult.count ?? 0,
-    avgDeliveryTime, // real computed average (0 when there are no deliveries)
-    onTimeRate, // real on-time percentage (0 when there are no deliveries)
-    activeDrivers: activeDriversResult.count ?? 0,
+    totalOrders: ordersResult.status === 'fulfilled' ? (ordersResult.value.count ?? 0) : null,
+    activeDeliveries: activeDeliveriesResult.status === 'fulfilled' ? (activeDeliveriesResult.value.count ?? 0) : null,
+    completedToday: completedTodayResult.status === 'fulfilled' ? (completedTodayResult.value.count ?? 0) : null,
+    pendingApprovals: pendingApprovalsResult.status === 'fulfilled' ? (pendingApprovalsResult.value.count ?? 0) : null,
+    alertsCount: alertsResult.status === 'fulfilled' ? (alertsResult.value.count ?? 0) : null,
+    avgDeliveryTime,
+    onTimeRate,
+    activeDrivers: activeDriversResult.status === 'fulfilled' ? (activeDriversResult.value.count ?? 0) : null,
   };
 }
 
