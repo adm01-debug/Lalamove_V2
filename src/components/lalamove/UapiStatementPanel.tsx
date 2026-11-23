@@ -92,8 +92,8 @@ export function UapiStatementPanel() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={async () =>
-                  await exportToExcel(
+                onClick={() =>
+                  void exportToExcel(
                     [
                       { name: 'Lançamentos', rows: accountingRows },
                       { name: 'Resumo', rows: [{ ...totals }] },
