@@ -1209,12 +1209,12 @@
   {
    "arquivo": "supabase/functions/_shared/contract.test.ts",
    "tipo": "contrato (deno)",
-   "linhas": 866,
+   "linhas": 892,
    "testa": [
     "supabase/functions/_shared/contract.ts",
     "supabase/functions/_shared/schemas.ts"
    ],
-   "casos": 56
+   "casos": 58
   },
   {
    "arquivo": "supabase/functions/_shared/geo-precision.test.ts",

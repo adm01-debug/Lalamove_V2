@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `84fad61ea9f8bd1e0bc97d53123da48659af7ef6` (2026-11-23T17:01:26-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `e74d3949901f8b25d0d0e3cb123110009114d9ad` (2026-11-23T17:52:44-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (567), SQL (202), JavaScript (114), Markdown (114), JSON (30), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (568), SQL (202), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -29,15 +29,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - estado: react-query, zustand
 - gerenciador_pacotes: npm (package-lock.json; não há bun.lock)
 - node: n/d
-- deploy: github actions
+- deploy: vercel, github actions
 - pastas_fonte: src
 
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1077 |
-| arquivos_codigo | 680 |
-| linhas_codigo | 132678 |
+| arquivos_total | 1079 |
+| arquivos_codigo | 681 |
+| linhas_codigo | 132821 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
-| functions | 0 | 0 | 60 | 0 | 6 | 43 |
+| functions | 0 | 0 | 61 | 0 | 6 | 43 |
 | hooks | 0 | 0 | 86 | 220 | 15 | 48 |
 | lib | 0 | 0 | 29 | 8 | 3 | 0 |
 | pages | 48 | 55 | 56 | 199 | 14 | 48 |
@@ -288,8 +288,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9548 nós · 19574 arestas · 697 comunidades · grafo do commit `84fad61e`
-- comunidades maiores: cn (232), lucide-react (165), react (140), RateLimitDashboardPage.tsx (131), framer-motion (104), ref_node_fs (102), ref_https (92), AdvancedReportsPage.tsx (89), dependencies (81), App.tsx (79), gerar.mjs (76), package.json (69)
+- 9557 nós · 19575 arestas · 680 comunidades · grafo do commit `e74d3949`
+- comunidades maiores: cn (215), App.tsx (123), AlertsPage.tsx (113), ref_https (112), lucide-react (110), react (102), RateLimitDashboardPage.tsx (101), button.tsx (100), ref_node_path (92), send-notification/index.ts (91), schemas.ts (86), client.ts (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -303,10 +303,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
 - src/components/orders/NewOrderDialog.tsx (11)
+- supabase/functions/_shared/schemas.ts (11)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
 - src/components/orders/AddressAutocomplete.tsx (10)
-- supabase/functions/_shared/schemas.ts (10)
 - supabase/functions/job-worker/index.ts (10)
 
 ## Workflows
@@ -391,6 +391,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `e74d394` fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)
+- 2026-11-23 `21ba6a5` fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)
 - 2026-11-23 `84fad61` feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)
 - 2026-11-23 `60a68d0` feat: lote 14 - remover as any e tipar canal de teste (#327)
 - 2026-11-23 `c4fdb69` feat: lote 9 - EmptyState component + vitest script (#321)
@@ -404,8 +406,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `79b206d` feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)
 - 2026-11-23 `3967849` feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)
 - 2026-11-23 `b6d8b23` security(repo): remove os 11 arquivos com credencial de producao da Lalamove (#312)
-- 2026-11-22 `d3f974b` docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)
-- 2026-11-22 `281cd07` feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

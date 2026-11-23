@@ -1459,9 +1459,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 60,
+   "arquivos": 61,
    "testes": 34,
-   "linhas": 18038,
+   "linhas": 18155,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1550,6 +1550,7 @@
     "EVOLUTION_API_KEY",
     "EVOLUTION_API_URL",
     "EVOLUTION_INSTANCE_NAME",
+    "EXTERNAL_DB_ALLOWED_RPCS",
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL",
     "GOOGLE_MAPS_SERVER_KEY",
@@ -1660,6 +1661,7 @@
    "depende_de_modulos": [],
    "pacotes_externos": [
     "https:",
+    "jsr:@supabase",
     "npm:@supabase"
    ]
   },

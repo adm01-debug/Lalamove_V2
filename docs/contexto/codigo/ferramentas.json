@@ -3,11 +3,11 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (567)",
+   "TypeScript (568)",
    "SQL (202)",
    "JavaScript (114)",
    "Markdown (114)",
-   "JSON (30)",
+   "JSON (31)",
    "Shell (10)",
    "Python (8)",
    "YAML (8)"
@@ -37,6 +37,7 @@
   "gerenciador_pacotes": "npm (package-lock.json; não há bun.lock)",
   "node": null,
   "deploy": [
+   "vercel",
    "github actions"
   ],
   "pastas_fonte": [
@@ -113,6 +114,7 @@
   "tsconfig.app.json",
   "tsconfig.json",
   "tsconfig.node.json",
+  "vercel.json",
   "vite.config.ts",
   "vitest.config.ts"
  ],
@@ -597,6 +599,7 @@
    "EVOLUTION_API_KEY",
    "EVOLUTION_API_URL",
    "EVOLUTION_INSTANCE_NAME",
+   "EXTERNAL_DB_ALLOWED_RPCS",
    "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
    "EXTERNAL_SUPABASE_URL",
    "GOOGLE_MAPS_SERVER_KEY",
@@ -637,9 +640,17 @@
  },
  "deploy": {
   "alvos": [
+   "vercel",
    "github actions"
   ],
-  "vercel": null,
+  "vercel": {
+   "framework": null,
+   "build": null,
+   "rewrites": 1,
+   "redirects": 0,
+   "headers": 2,
+   "crons": []
+  },
   "nota": "Deploy real: Vercel (projeto lalamove-v2, team juca1) + Lovable — ver docs/agentes/deploy.md."
  },
  "integracoes": {

@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "84fad61ea9f8bd1e0bc97d53123da48659af7ef6",
+  "commit": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
   "branch": "main",
-  "data_commit": "2026-11-23T17:01:26-03:00",
+  "data_commit": "2026-11-23T17:52:44-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e74d394",
+    "data": "2026-11-23",
+    "assunto": "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)"
+   },
+   {
+    "sha": "21ba6a5",
+    "data": "2026-11-23",
+    "assunto": "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)"
+   },
    {
     "sha": "84fad61",
     "data": "2026-11-23",
@@ -121,19 +131,9 @@
     "sha": "62a5161",
     "data": "2026-11-22",
     "assunto": "feat: hierarquia de papeis numa unica fonte (item 48) (#303)"
-   },
-   {
-    "sha": "fa9a59c",
-    "data": "2026-11-22",
-    "assunto": "fix: login respeita rota de origem e scroll no container certo (itens 55 e 56) (#302)"
-   },
-   {
-    "sha": "6487163",
-    "data": "2026-11-22",
-    "assunto": "feat: desligar auto-cadastro no front (item 9) (#300)"
    }
   ],
-  "arquivos_mudados_7d": 428,
+  "arquivos_mudados_7d": 430,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 40
+    "mudancas": 43
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -161,7 +161,7 @@
    },
    {
     "pasta": "supabase/functions/lalamove-api",
-    "mudancas": 22
+    "mudancas": 23
    },
    {
     "pasta": "supabase/functions/send-notification",
@@ -238,6 +238,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 11
    },
@@ -250,11 +254,11 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/job-worker/index.ts",
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
    },
    {
@@ -263,10 +267,6 @@
    },
    {
     "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 9
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 227
+    "commits": 229
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1077,
-  "arquivos_codigo": 680,
-  "linhas_codigo": 132678,
+  "arquivos_total": 1079,
+  "arquivos_codigo": 681,
+  "linhas_codigo": 132821,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 94,
-   "linhas": 23589
+   "arquivos": 95,
+   "linhas": 23732
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -594,7 +594,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",
-   "linhas": 1216
+   "linhas": 1222
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
@@ -602,7 +602,7 @@
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",
-   "linhas": 1040
+   "linhas": 1032
   },
   {
    "arquivo": "src/components/orders/OrderDetailModal.tsx",

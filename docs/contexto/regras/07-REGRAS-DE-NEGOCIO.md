@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `84fad61ea9` · branch `main` · 2026-11-23 20:01 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e74d394990` · branch `main` · 2026-11-23 20:53 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1972,8 +1972,10 @@ _nenhum item encontrado_
 | `admin` | `src/pages/ProfilePage.tsx` |
 | `selectedRole` | `src/pages/RolesPage.tsx` |
 | `granted` | `src/pages/UserPreferencesPage.tsx` |
+| `claimRole` | `supabase/functions/_shared/auth.ts` |
 | `driver` | `supabase/functions/_shared/messaging/router.ts` |
 | `role` | `supabase/functions/_shared/messaging/router.ts` |
+| `admin` | `supabase/functions/external-db-bridge/index.ts` |
 | `service_role` | `supabase/functions/geo-admin/index.ts` |
 | `admin` | `supabase/functions/lalamove-uapi/index.ts` |
 | `true` | `supabase/functions/mcp-query/index.ts` |
@@ -1984,12 +1986,12 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1349 testes em 116 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1351 testes em 116 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
 | `scripts/db-audit/check-migration-drift.test.mjs` | 76 | aceita migration com nome e SQL equivalentes no ledger · aceita registro legado sem name/statements, sem inventar evidencia · fixa arquivo legado por hash sem chamar seus bytes de conteudo historico · name-and-file-pinned falha para arquivo/nome alterado ou SQL recuperado no ledger … |
-| `supabase/functions/_shared/contract.test.ts` | 56 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
+| `supabase/functions/_shared/contract.test.ts` | 58 | formato único de erro: estrutura consistente · [${name}] payload válido é aceito (v1) · [${name}] corpo vazio é aceito (contrato de corpo opcional) · [${name}] corpo que não é objeto retorna 422 no formato único … |
 | `src/__tests__/improvements-validation.test.tsx` | 48 | App QueryClient Stability · getQueryClient pattern ensures singleton behavior · Sidebar Role Filtering Logic · admin can access all items … |
 | `src/types/__tests__/types.test.ts` | 29 | Type Contracts - Order · deve aceitar todas as propriedades obrigatórias · deve aceitar propriedades opcionais · deve validar todos os OrderStatus … |
 | `src/components/map/__tests__/markerFactories.test.ts` | 24 | markerFactories · createClusterMarkerElement · escala tamanho logaritmicamente e usa cor crítica quando há criticos · renderiza badges por tipo de veículo ordenados por volume … |
@@ -2320,6 +2322,8 @@ _nenhum item encontrado_
 | * JSON pointer — presente apenas em `ERR_INVALID_FIELD`. */ | `src/types/lalamove.ts` |
 | Resume audio context if suspended (required by browsers) | `src/utils/alertSounds.ts` |
 | Check if user has interacted with the page (required for audio) | `src/utils/alertSounds.ts` |
+| * Returns a 403 response when the caller lacks the required role. */ | `supabase/functions/_shared/auth.ts` |
+| * O role é resolvido em duas etapas, para não bloquear quem tem permissão: | `supabase/functions/_shared/auth.ts` |
 | Contract Layer — Validação de schema + formato único de erro para todas as | `supabase/functions/_shared/contract.ts` |
 | * Versão para a qual o integrador deve migrar. */ | `supabase/functions/_shared/contract.ts` |
 | * Presente somente quando a versão usada está descontinuada. */ | `supabase/functions/_shared/contract.ts` |
@@ -2353,6 +2357,7 @@ _nenhum item encontrado_
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule factors to reasons | `supabase/functions/evaluate-driver/index.ts` |
 | significa que admin, manager e operator passam; apenas viewer é negado. | `supabase/functions/external-companies/index.ts` |
+| Apenas administradores podem acessar o banco externo. | `supabase/functions/external-db-bridge/index.ts` |
 | Qual id o passo 3 do runbook deve revogar. `pickTokenToRevoke` devolve null | `supabase/functions/geo-admin/index.ts` |
 | apenas quando ele está presente. | `supabase/functions/geo-admin/rotation.ts` |
 | sozinho quando o cooldown expira. | `supabase/functions/geo-gateway/error-monitor.ts` |

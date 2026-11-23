@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `84fad61ea9` · branch `main` · 2026-11-23 20:01 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e74d394990` · branch `main` · 2026-11-23 20:53 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -109,7 +109,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 123 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 124 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -144,6 +144,7 @@
 - `scripts/supabase_snapshot/snapshot.py`
 - `scripts/test-after-fix.ts`
 - `scripts/test-user-permissions.ts`
+- `supabase/functions/_shared/auth.ts`
 - `supabase/functions/_shared/telemetry.ts`
 - `supabase/functions/apply-fixes/index.ts`
 - `supabase/functions/bitrix24-process-queue/index.ts`

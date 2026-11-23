@@ -9,6 +9,7 @@
   "mcp-query"
  ],
  "shared": [
+  "supabase/functions/_shared/auth.ts",
   "supabase/functions/_shared/channels/sms.test.ts",
   "supabase/functions/_shared/channels/sms.ts",
   "supabase/functions/_shared/channels/zapp.test.ts",
@@ -377,7 +378,7 @@
    "servico": "Dados externos",
    "entrada": "supabase/functions/external-db-bridge/index.ts",
    "arquivos": 1,
-   "linhas": 320,
+   "linhas": 348,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -389,6 +390,7 @@
    ],
    "rpcs": [],
    "env": [
+    "EXTERNAL_DB_ALLOWED_RPCS",
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL",
     "SUPABASE_ANON_KEY",
@@ -599,7 +601,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-api/index.ts",
    "arquivos": 3,
-   "linhas": 1492,
+   "linhas": 1498,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -633,6 +635,7 @@
     "rest.lalamove.com"
    ],
    "usa_shared": [
+    "auth.ts",
     "contract.ts",
     "logger.ts",
     "schemas.ts",

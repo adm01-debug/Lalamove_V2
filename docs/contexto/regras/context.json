@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "84fad61ea9f8bd1e0bc97d53123da48659af7ef6",
+  "sha": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 20:01 UTC",
-  "files_total": 1071,
-  "code_files": 891,
-  "code_lines": 153855
+  "generated_at": "2026-11-23 20:53 UTC",
+  "files_total": 1073,
+  "code_files": 892,
+  "code_lines": 153998
  },
  "version": "1.3.2",
- "facts_hash": "657b993a3ca77033",
+ "facts_hash": "b3cea4e48c69e63c",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -135,6 +135,10 @@
     "role": "Template de variáveis (.env.example)"
    },
    {
+    "file": "vercel.json",
+    "role": "Vercel"
+   },
+   {
     "file": "supabase/config.toml",
     "role": "Supabase CLI"
    }
@@ -183,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 328,
+   ".ts": 329,
    ".tsx": 239,
    ".sql": 202,
    ".mjs": 109,
@@ -17990,6 +17994,7 @@
      "query_telemetry"
     ],
     "env": [
+     "EXTERNAL_DB_ALLOWED_RPCS",
      "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
      "EXTERNAL_SUPABASE_URL",
      "SUPABASE_ANON_KEY",
@@ -18144,7 +18149,8 @@
      "lalamove_priority_fee_history",
      "lalamove_rate_limits",
      "lalamove_status_history",
-     "lalamove_stops"
+     "lalamove_stops",
+     "user_roles"
     ],
     "env": [
      "ALLOWED_ORIGINS",
@@ -21682,8 +21688,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 94,
-   "lines": 23589,
+   "files": 95,
+   "lines": 23732,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21730,6 +21736,7 @@
     "webhook_events"
    ],
    "exports": [
+    "auth.ts: requireRole, requireAdmin",
     "contract.ts: ContractVersion, SUPPORTED_VERSIONS, DEFAULT_VERSION, RECOMMENDED_VERSION, DEPRECATED_VERSIONS, DEPRECATION_SCHEDULE",
     "cors.ts: corsHeaders",
     "geo-precision.ts: GeoPrecision, ACCURACY_TO_PRECISION, precisionFromAccuracy",
@@ -21779,12 +21786,14 @@
    "deps": [
     "https:",
     "jsr:@std",
+    "jsr:@supabase",
     "npm:@supabase"
    ],
    "imports_modules": [
     "supabase/tests"
    ],
    "file_list": [
+    "supabase/functions/_shared/auth.ts",
     "supabase/functions/_shared/contract.integration.test.ts",
     "supabase/functions/_shared/contract.test.ts",
     "supabase/functions/_shared/contract.ts",
@@ -21863,8 +21872,7 @@
     "supabase/functions/new-device-alert/index.ts",
     "supabase/functions/rotate-tokens/index.ts",
     "supabase/functions/route-analyzer/index.ts",
-    "supabase/functions/seed-fix-rls/index.ts",
-    "supabase/functions/send-notification/index.ts"
+    "supabase/functions/seed-fix-rls/index.ts"
    ]
   },
   {
@@ -22760,6 +22768,7 @@
      "scripts/set-user-admin.ts",
      "src/hooks/usePermissions.ts",
      "src/hooks/useRole.ts",
+     "supabase/functions/_shared/auth.ts",
      "supabase/functions/geo-admin/index.ts",
      "supabase/functions/simulate-driver-movement/index.ts"
     ],
@@ -23348,6 +23357,9 @@
    "EVOLUTION_INSTANCE_NAME": [
     "supabase/functions/send-notification/index.ts"
    ],
+   "EXTERNAL_DB_ALLOWED_RPCS": [
+    "supabase/functions/external-db-bridge/index.ts"
+   ],
    "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY": [
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts"
@@ -23569,6 +23581,7 @@
     "scripts/supabase_snapshot/snapshot.py"
    ],
    "SUPABASE_ANON_KEY": [
+    "supabase/functions/_shared/auth.ts",
     "supabase/functions/external-companies/index.ts",
     "supabase/functions/external-db-bridge/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
@@ -23603,6 +23616,7 @@
     "scripts/set-user-admin.ts",
     "scripts/test-after-fix.ts",
     "scripts/test-user-permissions.ts",
+    "supabase/functions/_shared/auth.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/apply-fixes/index.ts",
     "supabase/functions/bitrix24-process-queue/index.ts",
@@ -23634,6 +23648,7 @@
    "SUPABASE_URL": [
     "scripts/ai-context/cenarios.mjs",
     "scripts/seed-database.ts",
+    "supabase/functions/_shared/auth.ts",
     "supabase/functions/_shared/logger.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/apply-fixes/index.ts",
@@ -26628,12 +26643,20 @@
     "value": "granted"
    },
    {
+    "file": "supabase/functions/_shared/auth.ts",
+    "value": "claimRole"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "value": "driver"
    },
    {
     "file": "supabase/functions/_shared/messaging/router.ts",
     "value": "role"
+   },
+   {
+    "file": "supabase/functions/external-db-bridge/index.ts",
+    "value": "admin"
    },
    {
     "file": "supabase/functions/geo-admin/index.ts",
@@ -27050,6 +27073,14 @@
     "text": "Check if user has interacted with the page (required for audio)"
    },
    {
+    "file": "supabase/functions/_shared/auth.ts",
+    "text": "* Returns a 403 response when the caller lacks the required role. */"
+   },
+   {
+    "file": "supabase/functions/_shared/auth.ts",
+    "text": "* O role é resolvido em duas etapas, para não bloquear quem tem permissão:"
+   },
+   {
     "file": "supabase/functions/_shared/contract.ts",
     "text": "Contract Layer — Validação de schema + formato único de erro para todas as"
    },
@@ -27180,6 +27211,10 @@
    {
     "file": "supabase/functions/external-companies/index.ts",
     "text": "significa que admin, manager e operator passam; apenas viewer é negado."
+   },
+   {
+    "file": "supabase/functions/external-db-bridge/index.ts",
+    "text": "Apenas administradores podem acessar o banco externo."
    },
    {
     "file": "supabase/functions/geo-admin/index.ts",
@@ -39645,6 +39680,14 @@
    },
    {
     "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-uapi] favorite-driver/block-driver exigem driver_action"
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
+    "name": "[lalamove-uapi] ação "
+   },
+   {
+    "file": "supabase/functions/_shared/contract.test.ts",
     "name": "[lalamove-uapi] set-token exige access_token e refresh_token"
    },
    {
@@ -48286,6 +48329,7 @@
    "scripts/supabase_snapshot/snapshot.py",
    "scripts/test-after-fix.ts",
    "scripts/test-user-permissions.ts",
+   "supabase/functions/_shared/auth.ts",
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/apply-fixes/index.ts",
    "supabase/functions/bitrix24-process-queue/index.ts",
@@ -69123,6 +69167,40 @@
     "deve formatar dias horas minutos"
    ]
   },
+  "supabase/functions/_shared/auth.ts": {
+   "path": "supabase/functions/_shared/auth.ts",
+   "lines": 91,
+   "exports": [
+    "function requireRole",
+    "function requireAdmin"
+   ],
+   "tables": [
+    {
+     "table": "user_roles",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "user_roles": [
+     "is_active",
+     "role",
+     "user_id"
+    ]
+   },
+   "env": [
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL"
+   ],
+   "role_checks": [
+    "claimRole"
+   ],
+   "rule_comments": [
+    "* Returns a 403 response when the caller lacks the required role. */",
+    "* O role é resolvido em duas etapas, para não bloquear quem tem permissão:"
+   ],
+   "uses_service_role": true
+  },
   "supabase/functions/_shared/contract.integration.test.ts": {
    "path": "supabase/functions/_shared/contract.integration.test.ts",
    "lines": 271,
@@ -69160,7 +69238,7 @@
   },
   "supabase/functions/_shared/contract.test.ts": {
    "path": "supabase/functions/_shared/contract.test.ts",
-   "lines": 866,
+   "lines": 892,
    "is_test": true,
    "errors": [
     ": {\n    payload: { ...VALID_PAYLOADS[",
@@ -69231,6 +69309,8 @@
     "[job-worker] payload ausente retorna 422 nomeando o campo",
     "[lalamove-uapi] ids da UAPI aceitam string e número",
     "[lalamove-uapi] ação inexistente retorna 422 nomeando action",
+    "[lalamove-uapi] favorite-driver/block-driver exigem driver_action",
+    "[lalamove-uapi] ação ",
     "[lalamove-uapi] set-token exige access_token e refresh_token"
    ]
   },
@@ -69379,7 +69459,7 @@
   },
   "supabase/functions/_shared/schemas.ts": {
    "path": "supabase/functions/_shared/schemas.ts",
-   "lines": 1040,
+   "lines": 1032,
    "exports": [
     "type ContractName",
     "const CONTRACT_REGISTRY",
@@ -70911,7 +70991,7 @@
   },
   "supabase/functions/external-db-bridge/index.ts": {
    "path": "supabase/functions/external-db-bridge/index.ts",
-   "lines": 320,
+   "lines": 348,
    "exports": [
     "function classifySeverity",
     "function buildTelemetry",
@@ -70925,11 +71005,18 @@
    ],
    "dyn_from": 4,
    "env": [
+    "EXTERNAL_DB_ALLOWED_RPCS",
     "EXTERNAL_SUPABASE_SERVICE_ROLE_KEY",
     "EXTERNAL_SUPABASE_URL",
     "SUPABASE_ANON_KEY",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
+   ],
+   "role_checks": [
+    "admin"
+   ],
+   "rule_comments": [
+    "Apenas administradores podem acessar o banco externo."
    ],
    "uses_service_role": true
   },
@@ -72185,7 +72272,7 @@
   },
   "supabase/functions/lalamove-api/index.ts": {
    "path": "supabase/functions/lalamove-api/index.ts",
-   "lines": 1216,
+   "lines": 1222,
    "exports": [
     "const CHANGE_DRIVER_REASONS"
    ],
@@ -74719,10 +74806,34 @@
   }
  },
  "git": {
-  "sha": "84fad61ea9f8bd1e0bc97d53123da48659af7ef6",
+  "sha": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e74d394",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)",
+    "files": [
+     "src/hooks/useLalamoveUapi.ts",
+     "supabase/functions/_shared/auth.ts",
+     "supabase/functions/_shared/contract.test.ts",
+     "supabase/functions/_shared/schemas.ts",
+     "supabase/functions/external-db-bridge/index.ts",
+     "supabase/functions/lalamove-api/index.ts",
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
+   {
+    "sha": "21ba6a5",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)",
+    "files": [
+     "vercel.json"
+    ]
+   },
    {
     "sha": "84fad61",
     "date": "2026-11-23",
@@ -75136,32 +75247,12 @@
      "src/components/auth/ProtectedRoute.tsx",
      "src/hooks/useMFA.ts"
     ]
-   },
-   {
-    "sha": "72dd548",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: instancia cliente Resend no new-device-alert (item 19) (#297)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "supabase/functions/new-device-alert/index.ts"
-    ]
-   },
-   {
-    "sha": "07c862d",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "supabase/functions/external-companies/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    16
+    14
    ],
    [
     "src/App.tsx",
@@ -75186,6 +75277,10 @@
    [
     "src/components/layout/sidebar-config.ts",
     3
+   ],
+   [
+    "src/hooks/useLalamoveUapi.ts",
+    2
    ],
    [
     "src/pages/ProfilePage.tsx",
@@ -75229,10 +75324,6 @@
    ],
    [
     "src/hooks/useSystemHealth.ts",
-    2
-   ],
-   [
-    "supabase/functions/new-device-alert/index.ts",
     2
    ],
    [
