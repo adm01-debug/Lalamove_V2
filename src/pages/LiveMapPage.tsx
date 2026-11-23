@@ -60,6 +60,7 @@ export function LiveMapPage() {
   const [showList, setShowList] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [isSimulating, setIsSimulating] = useState(false);
   const [vehicleFilter, setVehicleFilter] = useState<VehicleFilter>('ALL');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
@@ -84,10 +85,12 @@ export function LiveMapPage() {
       .order('last_updated', { ascending: false });
 
     if (error) {
+      setFetchError('Falha ao atualizar dados. Tentando novamente em 10 s.');
       setIsRefreshing(false);
       return;
     }
 
+    setFetchError(null);
     setDeliveries(data || []);
     setLastRefresh(new Date());
     setIsRefreshing(false);
@@ -193,6 +196,17 @@ export function LiveMapPage() {
 
   return (
     <div className="p-6 h-[calc(100vh-4rem)]">
+      {fetchError && (
+        <div className="mb-3 flex items-center justify-between rounded-md border border-destructive/30 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+          <span>{fetchError}</span>
+          <button
+            className="ml-4 underline hover:no-underline"
+            onClick={() => { setFetchError(null); fetchDeliveries(); }}
+          >
+            Tentar agora
+          </button>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>

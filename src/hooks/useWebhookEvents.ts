@@ -105,6 +105,7 @@ export function useWebhookEvents(filters: WebhookFilters) {
     queryKey: ['webhook-events', filters],
     queryFn: () => fetchWebhookEvents(filters),
     refetchInterval: 30000,
+    refetchIntervalInBackground: false,
   });
 }
 

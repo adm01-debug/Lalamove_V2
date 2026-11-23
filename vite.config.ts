@@ -9,6 +9,23 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    target: 'es2022',
+    sourcemap: 'hidden',
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('jsx-runtime')) return 'react-vendor';
+          if (id.includes('@supabase')) return 'supabase';
+          if (id.includes('mapbox-gl')) return 'mapbox';
+          if (id.includes('recharts')) return 'charts';
+          if (id.includes('framer-motion')) return 'motion';
+          if (id.includes('xlsx') || id.includes('jspdf')) return 'export';
+        },
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,

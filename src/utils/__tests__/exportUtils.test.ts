@@ -224,21 +224,21 @@ describe('exportToExcel', () => {
     mockWriteFile.mockClear();
   });
 
-  it('não deve gerar arquivo quando todas as abas estão vazias', () => {
-    exportToExcel([{ name: 'Vazia', rows: [] }], 'test');
+  it('não deve gerar arquivo quando todas as abas estão vazias', async () => {
+    await exportToExcel([{ name: 'Vazia', rows: [] }], 'test');
     expect(mockWriteFile).not.toHaveBeenCalled();
     expect(mockBookAppendSheet).not.toHaveBeenCalled();
   });
 
-  it('deve gerar workbook com extensão .xlsx', () => {
-    exportToExcel([{ name: 'Dados', rows: [{ a: 1, b: 2 }] }], 'relatorio');
+  it('deve gerar workbook com extensão .xlsx', async () => {
+    await exportToExcel([{ name: 'Dados', rows: [{ a: 1, b: 2 }] }], 'relatorio');
     expect(mockWriteFile).toHaveBeenCalledTimes(1);
     const filename = mockWriteFile.mock.calls[0][1] as string;
     expect(filename).toBe('relatorio.xlsx');
   });
 
-  it('deve pular abas vazias mas incluir as preenchidas', () => {
-    exportToExcel(
+  it('deve pular abas vazias mas incluir as preenchidas', async () => {
+    await exportToExcel(
       [
         { name: 'Cheia', rows: [{ x: 1 }] },
         { name: 'Vazia', rows: [] },
@@ -250,8 +250,8 @@ describe('exportToExcel', () => {
     expect(mockWriteFile).toHaveBeenCalledTimes(1);
   });
 
-  it('deve sanitizar e truncar nomes de aba inválidos/longos (máx 31 chars)', () => {
-    exportToExcel(
+  it('deve sanitizar e truncar nomes de aba inválidos/longos (máx 31 chars)', async () => {
+    await exportToExcel(
       [{ name: 'Aba/Com*Caracteres[Inválidos]:Que?São\\Muito Longos Demais', rows: [{ a: 1 }] }],
       'test',
     );
@@ -260,16 +260,16 @@ describe('exportToExcel', () => {
     expect(sheetName).not.toMatch(/[\\/?*[\]:]/);
   });
 
-  it('deve calcular larguras de coluna (!cols)', () => {
+  it('deve calcular larguras de coluna (!cols)', async () => {
     const worksheet: Record<string, unknown> = {};
     mockJsonToSheet.mockReturnValueOnce(worksheet);
-    exportToExcel([{ name: 'Dados', rows: [{ nome: 'Carlos Eduardo', id: 1 }] }], 'test');
+    await exportToExcel([{ name: 'Dados', rows: [{ nome: 'Carlos Eduardo', id: 1 }] }], 'test');
     expect(worksheet['!cols']).toBeDefined();
     expect(Array.isArray(worksheet['!cols'])).toBe(true);
   });
 
-  it('não deve gerar arquivo quando lista de abas está vazia', () => {
-    exportToExcel([], 'test');
+  it('não deve gerar arquivo quando lista de abas está vazia', async () => {
+    await exportToExcel([], 'test');
     expect(mockWriteFile).not.toHaveBeenCalled();
   });
 });

@@ -387,7 +387,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** logar com usuário B após A não mostra pedidos de A (teste e2e).
 
 ### 69 — [F] Estado de erro no mapa ao vivo
-- [ ] `LiveMapPage.tsx:86-89`, `useTrackingData.ts:71-74`, `useTrackingTrails.ts:44-47`: expor `error` e renderizar banner "falha ao atualizar, tentando de novo em 10 s" com botão.
+- [x] `LiveMapPage.tsx:86-89`, `useTrackingData.ts:71-74`, `useTrackingTrails.ts:44-47`: expor `error` e renderizar banner "falha ao atualizar, tentando de novo em 10 s" com botão.
 - **Evidência:** desligar rede → banner aparece; religar → some.
 
 ### 70 — [F] Paradas do pedido tratam erro
@@ -443,7 +443,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** 10 eventos em 1 s = 1 refetch.
 
 ### 83 — [F] Polling com pausa em segundo plano
-- [ ] Todos os `refetchInterval` (`useJobQueue.ts:110, 218`, `useSLAMetrics.ts:191`, `useLalamove.ts:80, 90`, `usePendingApprovals.ts:136` e ~15 hooks a 30 s): `refetchIntervalInBackground: false` e `refetchOnWindowFocus: true`; mínimo 15 s fora do mapa.
+- [x] Todos os `refetchInterval` (`useJobQueue.ts:110, 218`, `useSLAMetrics.ts:191`, `useLalamove.ts:80, 90`, `usePendingApprovals.ts:136` e ~15 hooks a 30 s): `refetchIntervalInBackground: false` e `refetchOnWindowFocus: true`; mínimo 15 s fora do mapa.
 - **Evidência:** aba em segundo plano por 2 min → 0 requests.
 
 ### 84 — [F] Mapa ao vivo: uma fonte de atualização
@@ -457,7 +457,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 ## Bloco 4 — Performance e bundle (86–110)
 
 ### 86 — [C] `vite.config.ts` com `build` explícito
-- [ ] `build.target 'es2022'`, `sourcemap: 'hidden'`, `chunkSizeWarningLimit: 600`, `rollupOptions.output.manualChunks` (`react-vendor`, `supabase`, `mapbox`, `charts`, `motion`, `export`); remover o bloco `test:` duplicado (`vite.config.ts:12-15`).
+- [x] `build.target 'es2022'`, `sourcemap: 'hidden'`, `chunkSizeWarningLimit: 600`, `rollupOptions.output.manualChunks` (`react-vendor`, `supabase`, `mapbox`, `charts`, `motion`, `export`); remover o bloco `test:` duplicado (`vite.config.ts:12-15`).
 - **Evidência:** `npm run build` lista chunks nomeados; maior chunk inicial < 300 kB gz.
 
 ### 87 — [F] `framer-motion` fora do bundle inicial
@@ -465,7 +465,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** `npx vite-bundle-visualizer`: `framer-motion` ausente do chunk `index`.
 
 ### 88 — [F] `xlsx` e `jspdf` dinâmicos
-- [ ] `exportUtils.ts:5` e `MapHistoryPanel.tsx:4`: `const XLSX = await import('xlsx')` no clique (padrão de `AdminTelemetriaPage.tsx:146`).
+- [x] `exportUtils.ts:5` e `MapHistoryPanel.tsx:4`: `const XLSX = await import('xlsx')` no clique (padrão de `AdminTelemetriaPage.tsx:146`).
 - **Evidência:** chunks `xlsx-*.js`/`jspdf-*.js` carregados só ao exportar.
 
 ### 89 — [F] `AchievementsProvider` fora da raiz
@@ -505,7 +505,7 @@ string → 422. Chamadores do front já tratam qualquer não-2xx igual (`if (err
 - **Evidência:** navegação para `/orders` após hover não mostra o `Suspense` fallback.
 
 ### 98 — [F] `staleTime` padrão e por recurso
-- [ ] `QueryClient` global com `staleTime: 30_000`, `gcTime: 5 min`, `retry: 1`; `staleTime` menor só no mapa e na fila de jobs.
+- [x] `QueryClient` global com `staleTime: 30_000`, `gcTime: 5 min`, `retry: 1`; `staleTime` menor só no mapa e na fila de jobs.
 - **Evidência:** voltar a uma página em < 30 s não refaz as queries.
 
 ### 99 — [F] Mapa: `mapbox-gl` só na rota do mapa

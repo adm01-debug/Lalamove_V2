@@ -2,8 +2,6 @@
  * Export utilities for CSV, JSON, Excel (.xlsx), and PDF text download
  */
 
-import * as XLSX from 'xlsx';
-
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
@@ -54,10 +52,11 @@ export function exportToJSON(data: unknown, filenameBase: string) {
  * Export one or more sheets to a native Excel (.xlsx) workbook.
  * Each sheet is an array of flat objects; keys of the first row define columns.
  */
-export function exportToExcel(
+export async function exportToExcel(
   sheets: { name: string; rows: Record<string, unknown>[] }[],
   filenameBase: string,
 ) {
+  const XLSX = await import('xlsx');
   const workbook = XLSX.utils.book_new();
   let added = 0;
   sheets.forEach((sheet) => {

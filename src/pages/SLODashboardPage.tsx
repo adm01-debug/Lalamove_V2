@@ -113,7 +113,7 @@ export default function SLODashboardPage() {
     [data],
   );
 
-  const handleExport = (fmt: 'csv' | 'excel' | 'json') => {
+  const handleExport = async (fmt: 'csv' | 'excel' | 'json') => {
     if (!data) return;
     const base = `slo_${window}`;
     const indicatorRows = [
@@ -124,7 +124,7 @@ export default function SLODashboardPage() {
     const timelineRows = chartData;
     if (fmt === 'csv') { exportToCSV(indicatorRows, base); toast.success('CSV exportado!'); }
     else if (fmt === 'excel') {
-      exportToExcel([
+      await exportToExcel([
         { name: 'Indicadores', rows: indicatorRows },
         { name: 'Série temporal', rows: timelineRows },
         { name: 'Latência', rows: [{ P50: data.latency.p50, P90: data.latency.p90, P95: data.latency.p95, P99: data.latency.p99, Média: data.latency.avg, Máx: data.latency.max }] },

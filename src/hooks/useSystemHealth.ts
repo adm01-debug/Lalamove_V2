@@ -44,6 +44,7 @@ export const useSystemHealth = () => {
         realtimeConnections: channels.length
       };
     },
-    refetchInterval: 30000
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false,
   });
 };

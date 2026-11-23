@@ -89,6 +89,7 @@ export function useNotificationHistory(filters: NotificationFilters) {
     queryKey: ['notification-history', filters],
     queryFn: () => fetchNotificationHistory(filters),
     refetchInterval: 30000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -97,6 +98,7 @@ export function useNotificationStats() {
     queryKey: ['notification-stats'],
     queryFn: fetchNotificationStats,
     refetchInterval: 60000,
+    refetchIntervalInBackground: false,
   });
 }
 
@@ -145,5 +147,6 @@ export function usePendingGeoEvents(orderId?: string) {
     queryKey: ['pending-geo-events', orderId ?? 'all'],
     queryFn: () => fetchPendingGeoEvents(orderId),
     refetchInterval: 30000,
+    refetchIntervalInBackground: false,
   });
 }

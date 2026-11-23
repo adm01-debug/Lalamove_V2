@@ -189,6 +189,7 @@ export function useSLAMetrics() {
     queryKey: ['sla-metrics'],
     queryFn: fetchSLAMetrics,
     refetchInterval: 10000,
+    refetchIntervalInBackground: false,
     staleTime: 5000,
   });
 
