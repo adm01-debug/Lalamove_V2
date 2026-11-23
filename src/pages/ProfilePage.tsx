@@ -1,4 +1,5 @@
 import { useState, useEffect, useId } from 'react';
+import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -92,7 +93,7 @@ function ProfilePage() {
     } catch (err) {
       const error = err as Error;
       toast.error(`Erro ao atualizar nome: ${error.message}`);
-      console.error('Erro ao atualizar nome:', error);
+      logger.error('Erro ao atualizar nome:', error);
     } finally {
       setIsSaving(false);
     }

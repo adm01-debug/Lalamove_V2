@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, createContext, useContext, ReactNode, forwardRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext, ReactNode, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lightbulb, ChevronRight, Sparkles, Info, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -111,8 +111,13 @@ export function HintProvider({ children }: { children: ReactNode }) {
     return dismissedHints.has(id);
   }, [dismissedHints]);
 
+  const contextValue = useMemo(
+    () => ({ showHint, dismissHint, dismissAllHints, isHintDismissed, activeHints }),
+    [showHint, dismissHint, dismissAllHints, isHintDismissed, activeHints]
+  );
+
   return (
-    <HintContext.Provider value={{ showHint, dismissHint, dismissAllHints, isHintDismissed, activeHints }}>
+    <HintContext.Provider value={contextValue}>
       {children}
       <HintContainer hints={activeHints} onDismiss={dismissHint} />
     </HintContext.Provider>

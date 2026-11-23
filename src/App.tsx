@@ -14,7 +14,6 @@ import { OfflineIndicator, InstallPrompt } from "@/components/pwa/OfflineIndicat
 import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 import { HintProvider } from "@/components/ui/contextual-hints";
 import { PageLoader } from "@/components/ui/page-loader";
-import { AchievementsProvider } from "@/hooks/useAchievementsSystem";
 
 // Lazy loaded pages - Auth
 const AuthPage = lazyWithRetry(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
@@ -132,7 +131,6 @@ const AppContent = () => {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <AchievementsProvider>
             <TooltipProvider>
               <HintProvider>
                 <Toaster />
@@ -216,7 +214,6 @@ const AppContent = () => {
                   </Routes>
               </HintProvider>
             </TooltipProvider>
-          </AchievementsProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
