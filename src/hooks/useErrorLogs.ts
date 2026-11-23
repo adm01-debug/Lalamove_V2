@@ -70,6 +70,7 @@ export function useErrorLogs(filters: ErrorLogFilters = {}) {
       return body as RuntimeErrorLog[];
     },
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
   });
 
   useEffect(() => {
@@ -153,5 +154,6 @@ export function useErrorStats() {
       };
     },
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
   });
 }

@@ -9,6 +9,7 @@ export function useLalamoveStatus() {
     queryKey: ['llm', 'status'],
     queryFn: () => lalamove.status() as Promise<LalamoveStatusResponse>,
     refetchInterval: 60_000,
+    refetchIntervalInBackground: false,
     enabled: isLalamoveConfigured(),
     retry: false,
   });
@@ -29,6 +30,7 @@ export function useWallet() {
     queryKey: ['llm', 'wallet'],
     queryFn: lalamove.wallet,
     refetchInterval: 30_000,
+    refetchIntervalInBackground: false,
     enabled: isLalamoveConfigured(),
     retry: false,
     select: (d: LalamoveApiResponse) => ({
@@ -77,7 +79,8 @@ export function useOrderGet(orderId: string | null) {
     queryKey: ['llm', 'order', orderId],
     queryFn: () => lalamove.orderGet(orderId!),
     enabled: !!orderId && isLalamoveConfigured(),
-    refetchInterval: 10_000,
+    refetchInterval: 15_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }
@@ -87,7 +90,8 @@ export function useDriverLocation(orderId: string | null, driverId: string | nul
     queryKey: ['llm', 'driver-location', orderId, driverId],
     queryFn: () => lalamove.driverLocation(orderId!, driverId!),
     enabled: !!orderId && !!driverId && isLalamoveConfigured(),
-    refetchInterval: 10_000,
+    refetchInterval: 15_000,
+    refetchIntervalInBackground: false,
     retry: false,
   });
 }

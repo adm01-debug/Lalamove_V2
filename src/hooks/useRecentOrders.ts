@@ -86,6 +86,7 @@ export function useRecentOrders(page = 1, status?: OrderStatusFilter, query?: st
     queryFn: () => fetchOrders(page, status, query),
     placeholderData: keepPreviousData,
     refetchInterval: 30000,
+    refetchIntervalInBackground: false,
     staleTime: 10000,
   });
 }

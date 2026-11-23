@@ -45,5 +45,6 @@ export const useSystemHealth = () => {
       };
     },
     refetchInterval: 30000
+    refetchIntervalInBackground: false,
   });
 };

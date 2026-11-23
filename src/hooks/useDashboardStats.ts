@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, subDays } from 'date-fns';
+import { toast } from 'sonner';
 
 export interface DashboardStats {
   totalOrders: number;
@@ -73,6 +74,28 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
       .limit(100),
   ]);
 
+  // Toast individual errors; KPI returns null for failed queries
+  const errorLabels: Record<string, string> = {
+    orders: 'pedidos',
+    activeDeliveries: 'entregas ativas',
+    completedToday: 'concluídos hoje',
+    pendingApprovals: 'aprovações pendentes',
+    alerts: 'alertas',
+    activeDrivers: 'motoristas ativos',
+  };
+
+  const checkResult = (r: { error: unknown }, key: string) => {
+    if (r.error) toast.error(`Não foi possível carregar ${errorLabels[key] ?? key}`);
+    return !r.error;
+  };
+
+  checkResult(ordersResult, 'orders');
+  checkResult(activeDeliveriesResult, 'activeDeliveries');
+  checkResult(completedTodayResult, 'completedToday');
+  checkResult(pendingApprovalsResult, 'pendingApprovals');
+  checkResult(alertsResult, 'alerts');
+  checkResult(activeDriversResult, 'activeDrivers');
+
   // Calculate average delivery time and on-time rate
   let avgDeliveryTime = 0;
   let onTimeRate = 0;
@@ -81,15 +104,17 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
     const deliveries = deliveryTimesResult.data;
     let totalMinutes = 0;
     let onTimeCount = 0;
+    let completePairCount = 0;
 
     deliveries.forEach((order) => {
       if (order.scheduled_at && order.actual_delivery) {
+        completePairCount++;
         const scheduled = new Date(order.scheduled_at).getTime();
         const actual = new Date(order.actual_delivery).getTime();
         const diffMinutes = Math.round((actual - scheduled) / (1000 * 60));
         totalMinutes += Math.max(0, diffMinutes);
 
-        // Consider on-time if delivered within estimated time or within 15 min of scheduled
+        // Consider on-time if delivered within estimated time or within 60 min of scheduled
         if (order.estimated_delivery) {
           const estimated = new Date(order.estimated_delivery).getTime();
           if (actual <= estimated) onTimeCount++;
@@ -99,8 +124,8 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
       }
     });
 
-    avgDeliveryTime = deliveries.length > 0 ? Math.round(totalMinutes / deliveries.length) : 0;
-    onTimeRate = deliveries.length > 0 ? Math.round((onTimeCount / deliveries.length) * 100) : 0;
+    avgDeliveryTime = completePairCount > 0 ? Math.round(totalMinutes / completePairCount) : 0;
+    onTimeRate = completePairCount > 0 ? Math.round((onTimeCount / completePairCount) * 100) : 0;
   }
 
   return {
@@ -109,8 +134,8 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
     completedToday: completedTodayResult.count ?? 0,
     pendingApprovals: pendingApprovalsResult.count ?? 0,
     alertsCount: alertsResult.count ?? 0,
-    avgDeliveryTime, // real computed average (0 when there are no deliveries)
-    onTimeRate, // real on-time percentage (0 when there are no deliveries)
+    avgDeliveryTime,
+    onTimeRate,
     activeDrivers: activeDriversResult.count ?? 0,
   };
 }
@@ -120,6 +145,7 @@ export function useDashboardStats() {
     queryKey: ['dashboard-stats'],
     queryFn: fetchDashboardStats,
     refetchInterval: 30000, // Refresh every 30 seconds
+    refetchIntervalInBackground: false,
     staleTime: 10000,
   });
 }

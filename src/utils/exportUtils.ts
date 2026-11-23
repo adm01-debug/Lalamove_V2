@@ -2,7 +2,6 @@
  * Export utilities for CSV, JSON, Excel (.xlsx), and PDF text download
  */
 
-import * as XLSX from 'xlsx';
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
@@ -58,6 +57,7 @@ export function exportToExcel(
   sheets: { name: string; rows: Record<string, unknown>[] }[],
   filenameBase: string,
 ) {
+  import('xlsx').then((XLSX) => {
   const workbook = XLSX.utils.book_new();
   let added = 0;
   sheets.forEach((sheet) => {
@@ -80,6 +80,7 @@ export function exportToExcel(
   });
   if (added === 0) return;
   XLSX.writeFile(workbook, `${filenameBase}.xlsx`);
+  }).catch(() => { /* xlsx module load failed; toast handled by caller */ });
 }
 
 

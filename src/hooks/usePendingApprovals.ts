@@ -134,6 +134,7 @@ async function fetchApprovalStats() {
 
 export function usePendingApprovals() {
   return useQuery({ queryKey: ['pending-approvals'], queryFn: fetchPendingApprovals, refetchInterval: 15000, staleTime: 5000 });
+  refetchIntervalInBackground: false,
 }
 
 export function useApprovalHistory() {
@@ -142,4 +143,5 @@ export function useApprovalHistory() {
 
 export function useApprovalStats() {
   return useQuery({ queryKey: ['approval-stats'], queryFn: fetchApprovalStats, refetchInterval: 30000, staleTime: 10000 });
+  refetchIntervalInBackground: false,
 }
