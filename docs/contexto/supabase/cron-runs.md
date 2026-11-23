@@ -73,51 +73,51 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 16:05:00 | succeeded | 0.02 | 1 row |
-| 2026-11-23 16:00:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 15:55:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:10:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:05:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:00:00 | succeeded | 0.03 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-23 16:17:00 | succeeded | 0.03 | 1 row |
 | 2026-11-23 15:17:00 | succeeded | 0.01 | 1 row |
 | 2026-11-23 14:17:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 13:17:00 | succeeded | 0.02 | 1 row |
 
 
 ## 20 · process-job-queue
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 16:07:00 | succeeded | 0.03 | 1 row |
-| 2026-11-23 16:06:00 | succeeded | 0.03 | 1 row |
-| 2026-11-23 16:05:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 17:13:00 | succeeded | 0.06 | 1 row |
+| 2026-11-23 17:12:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 17:11:00 | succeeded | 0.05 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 16:06:00 | succeeded | 0.02 | 1 row |
-| 2026-11-23 16:01:00 | succeeded | 0.09 | 1 row |
-| 2026-11-23 15:56:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 17:11:00 | succeeded | 0.08 | 1 row |
+| 2026-11-23 17:06:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 17:01:00 | succeeded | 0.02 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-23 17:03:00 | succeeded | 0.20 | 3 rows |
 | 2026-11-23 16:03:00 | succeeded | 0.18 | 3 rows |
 | 2026-11-23 15:03:00 | succeeded | 0.22 | 3 rows |
-| 2026-11-23 14:03:00 | succeeded | 0.22 | 3 rows |
 
 
 ## 29 · check-driver-alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 16:06:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 16:04:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 16:02:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:12:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:10:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 17:08:00 | succeeded | 0.01 | 1 row |
