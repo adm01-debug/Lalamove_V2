@@ -36,11 +36,6 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
-
     const version = resolveContractVersion(req);
     trackContractUsage("new-device-alert", version);
     const parsedBody = await parseJsonBody(req, version);
@@ -56,6 +51,11 @@ const handler = async (req: Request): Promise<Response> => {
     if (!validation.ok) {
       return errorResponse(validation, corsHeaders);
     }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 
     const {
       userId,
