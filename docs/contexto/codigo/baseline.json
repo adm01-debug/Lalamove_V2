@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "9c1ef6e55a436a5f16879ce1c7505f53996d9512",
+  "commit": "f20a3ea033da470c8cc963cf99f3d14856e49b39",
   "branch": "main",
-  "data_commit": "2026-11-23T16:21:37-03:00",
+  "data_commit": "2026-11-23T16:30:41-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f20a3ea",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)"
+   },
    {
     "sha": "9c1ef6e",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "ca2061f",
     "data": "2026-11-22",
     "assunto": "feat: campos de token como password e sem autofill (#294)"
-   },
-   {
-    "sha": "a388d1d",
-    "data": "2026-11-22",
-    "assunto": "fix: validar origem do postMessage do Bitrix24 (#293)"
    }
   ],
   "arquivos_mudados_7d": 417,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 219
+    "commits": 220
    },
    {
     "autor": "dependabot[bot]",
