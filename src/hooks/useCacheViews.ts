@@ -56,7 +56,7 @@ export function useCacheStats() {
         throw error;
       }
 
-      return (data || []).map((row: any) => ({
+      return (data || []).map((row) => ({
         view_name: row.view_name,
         last_refresh: row.last_refresh,
         refresh_duration_ms: row.refresh_duration_ms,
@@ -141,7 +141,7 @@ export function useRefreshCache() {
         throw error;
       }
 
-      return (data || []).map((r: any) => ({
+      return (data || []).map((r) => ({
         view_refreshed: r.view_refreshed,
         duration_ms: r.duration_ms,
         row_count: r.row_count,

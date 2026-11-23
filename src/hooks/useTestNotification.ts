@@ -2,8 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+export type TestNotificationChannel = 'whatsapp' | 'email' | 'slack' | 'bitrix24' | 'n8n';
+
 interface TestNotificationParams {
-  channel: 'whatsapp' | 'email' | 'slack' | 'bitrix24' | 'n8n';
+  channel: TestNotificationChannel;
   alertType: string;
   recipients?: string[];
   webhookUrl?: string;

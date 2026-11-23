@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Bell, Mail, MessageCircle, Hash, Briefcase, Webhook, Edit, Save, X, Power, PowerOff, Send, Loader2, Sparkles, Settings2, Zap, Trash2, Navigation, MapPin, Clock, FileWarning, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUpdateAlertConfiguration, useDeleteAlertConfiguration, AlertConfiguration } from '@/hooks/useAlertConfigurations';
-import { useTestNotification } from '@/hooks/useTestNotification';
+import { useTestNotification, TestNotificationChannel } from '@/hooks/useTestNotification';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -104,13 +104,13 @@ export function AlertConfigCard({ config, index }: { config: AlertConfiguration;
     updateMutation.mutate({ id: config.id, updates: { [fieldMap[channel]]: !currentValue } });
   };
   const handleSaveEdit = () => { updateMutation.mutate({ id: config.id, updates: { message_template: editedTemplate, whatsapp_numbers: editedWhatsapp ? editedWhatsapp.split(',').map(s => s.trim()) : null, email_addresses: editedEmails ? editedEmails.split(',').map(s => s.trim()) : null, slack_channels: editedSlack ? editedSlack.split(',').map(s => s.trim()) : null, n8n_webhook_url: editedN8nUrl || null } }); setIsEditing(false); };
-  const handleTestChannel = (channelKey: string) => {
+  const handleTestChannel = (channelKey: TestNotificationChannel) => {
     let recipients: string[] | undefined; let webhookUrl: string | undefined;
     if (channelKey === 'whatsapp') recipients = config.whatsapp_numbers || [];
     else if (channelKey === 'email') recipients = config.email_addresses || [];
     else if (channelKey === 'slack') recipients = config.slack_channels || [];
     else if (channelKey === 'n8n') webhookUrl = config.n8n_webhook_url || undefined;
-    testMutation.mutate({ channel: channelKey as any, alertType: config.alert_type, recipients, webhookUrl });
+    testMutation.mutate({ channel: channelKey, alertType: config.alert_type, recipients, webhookUrl });
   };
 
   const channels = [
