@@ -1292,7 +1292,7 @@
     "logger"
    ],
    "export_default": null,
-   "linhas": 31,
+   "linhas": 35,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -1303,7 +1303,7 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 45,
+   "usado_por": 47,
    "usado_por_modulos": [
     "components",
     "components/debug",

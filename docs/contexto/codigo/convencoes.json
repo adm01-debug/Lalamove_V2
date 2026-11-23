@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)",
    "feat: lote 14 - remover as any e tipar canal de teste (#327)",
    "feat: lote 9 - EmptyState component + vitest script (#321)",
    "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)",
-   "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)",
-   "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)"
+   "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 235,
+   "linhas": 232,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -1429,7 +1429,7 @@
     "InlineHint"
    ],
    "export_default": null,
-   "linhas": 468,
+   "linhas": 473,
    "dominio": "components/ui",
    "hooks_locais": [
     "useHints"
@@ -2241,7 +2241,7 @@
    ],
    "tabelas": [],
    "edges": [],
-   "usado_por": 2,
+   "usado_por": 1,
    "orfao": false
   },
   {
@@ -3286,7 +3286,7 @@
     "ProfilePage"
    ],
    "export_default": "ProfilePage",
-   "linhas": 409,
+   "linhas": 410,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",

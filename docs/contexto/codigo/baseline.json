@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "60a68d0e3039624670270a3529da31710dcdb1dd",
+  "commit": "84fad61ea9f8bd1e0bc97d53123da48659af7ef6",
   "branch": "main",
-  "data_commit": "2026-11-23T16:46:03-03:00",
+  "data_commit": "2026-11-23T17:01:26-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "84fad61",
+    "data": "2026-11-23",
+    "assunto": "feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)"
+   },
    {
     "sha": "60a68d0",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "6487163",
     "data": "2026-11-22",
     "assunto": "feat: desligar auto-cadastro no front (item 9) (#300)"
-   },
-   {
-    "sha": "97b9d2e",
-    "data": "2026-11-22",
-    "assunto": "feat: cliente do front entende o formato único de erro (item 42) (#301)"
    }
   ],
-  "arquivos_mudados_7d": 426,
+  "arquivos_mudados_7d": 428,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -258,19 +258,19 @@
     "mudancas": 10
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 9
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 9
+   },
+   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 9
    },
    {
-    "arquivo": "src/App.tsx",
-    "mudancas": 8
-   },
-   {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 226
+    "commits": 227
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1077,
   "arquivos_codigo": 680,
-  "linhas_codigo": 132670,
+  "linhas_codigo": 132678,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 235
+   "linhas": 232
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 163,
-   "linhas": 29590
+   "linhas": 29595
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19054
+   "linhas": 19055
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19816
+   "linhas": 19817
   },
   "src/services": {
    "arquivos": 1,
@@ -560,7 +560,7 @@
   },
   "src/utils": {
    "arquivos": 8,
-   "linhas": 1087
+   "linhas": 1091
   },
   "supabase/functions": {
    "arquivos": 94,

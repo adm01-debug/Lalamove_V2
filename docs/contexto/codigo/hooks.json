@@ -220,7 +220,7 @@
    "hooks_exportados": [
     "useHints"
    ],
-   "linhas": 468,
+   "linhas": 473,
    "dominio": "components/ui",
    "tabelas": [],
    "rpcs": [],
@@ -229,6 +229,7 @@
     "useCallback",
     "useContext",
     "useEffect",
+    "useMemo",
     "useState"
    ],
    "canais_realtime": [],
@@ -415,9 +416,8 @@
     "useState"
    ],
    "canais_realtime": [],
-   "usado_por": 2,
+   "usado_por": 1,
    "usado_por_arquivos": [
-    "src/App.tsx",
     "src/hooks/useApprovalActionsEnhanced.ts"
    ],
    "coberto_por_testes": 0
@@ -1687,7 +1687,7 @@
    "hooks_exportados": [
     "useMapSettings"
    ],
-   "linhas": 130,
+   "linhas": 131,
    "dominio": "hooks",
    "tabelas": [
     "map_settings_overrides"

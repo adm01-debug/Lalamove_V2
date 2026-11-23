@@ -63,7 +63,6 @@
    "src/components/ui/page-loader.tsx",
    "src/components/ui/sonner.tsx",
    "src/components/ui/tooltip.tsx",
-   "src/hooks/useAchievementsSystem.tsx",
    "src/hooks/useAuth.tsx",
    "src/lib/lazyWithRetry.ts",
    "src/pages/AdminTelemetriaPage.tsx",
@@ -1159,7 +1158,8 @@
    "src/integrations/supabase/client.ts"
   ],
   "src/hooks/useMapSettings.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/utils/logger.ts"
   ],
   "src/hooks/useMapbox.ts": [
    "src/lib/geo-gateway.ts"
@@ -1816,7 +1816,8 @@
    "src/hooks/usePermissions.ts",
    "src/hooks/useUserDevices.ts",
    "src/integrations/supabase/client.ts",
-   "src/lib/user-display.ts"
+   "src/lib/user-display.ts",
+   "src/utils/logger.ts"
   ],
   "src/pages/RateLimitDashboardPage.tsx": [
    "src/components/auth/PermissionGate.tsx",

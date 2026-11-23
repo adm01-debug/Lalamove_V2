@@ -1061,7 +1061,6 @@
  "providers": {
   "entrada": "src/main.tsx",
   "providers": [
-   "AchievementsProvider",
    "AuthProvider",
    "BrowserRouter",
    "ErrorBoundary",
