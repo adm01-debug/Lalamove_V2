@@ -73,51 +73,51 @@ _nenhum_
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 12:40:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 12:35:00 | succeeded | 0.07 | 1 row |
-| 2026-11-23 12:30:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 14:15:00 | succeeded | 0.02 | 1 row |
+| 2026-11-23 14:10:00 | succeeded | 0.01 | 1 row |
+| 2026-11-23 14:05:00 | succeeded | 0.02 | 1 row |
 
 
 ## 19 · lalamove_uapi_token_refresh_hourly
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-23 14:17:00 | succeeded | 0.01 | 1 row |
+| 2026-11-23 13:17:00 | succeeded | 0.02 | 1 row |
 | 2026-11-23 12:17:00 | succeeded | 0.02 | 1 row |
-| 2026-11-23 11:17:00 | succeeded | 0.02 | 1 row |
-| 2026-11-23 10:17:00 | succeeded | 0.02 | 1 row |
 
 
 ## 20 · process-job-queue
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 12:43:00 | succeeded | 0.03 | 1 row |
-| 2026-11-23 12:42:00 | succeeded | 0.02 | 1 row |
-| 2026-11-23 12:41:00 | succeeded | 0.08 | 1 row |
+| 2026-11-23 14:18:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 14:17:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 14:16:00 | succeeded | 0.02 | 1 row |
 
 
 ## 25 · geo-jobs-refresh
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 12:41:00 | succeeded | 0.05 | 1 row |
-| 2026-11-23 12:36:00 | succeeded | 0.04 | 1 row |
-| 2026-11-23 12:31:00 | succeeded | 0.06 | 1 row |
+| 2026-11-23 14:16:00 | succeeded | 0.09 | 1 row |
+| 2026-11-23 14:11:00 | succeeded | 0.03 | 1 row |
+| 2026-11-23 14:06:00 | succeeded | 0.01 | 1 row |
 
 
 ## 26 · refresh-cache-views
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
+| 2026-11-23 14:03:00 | succeeded | 0.22 | 3 rows |
+| 2026-11-23 13:03:00 | succeeded | 0.22 | 3 rows |
 | 2026-11-23 12:03:00 | succeeded | 0.21 | 3 rows |
-| 2026-11-23 11:03:00 | succeeded | 0.21 | 3 rows |
-| 2026-11-23 10:03:00 | succeeded | 0.21 | 3 rows |
 
 
 ## 29 · check-driver-alerts
 
 | início (UTC) | status | duração (s) | mensagem |
 |---|---|---|---|
-| 2026-11-23 12:42:00 | succeeded | 0.03 | 1 row |
-| 2026-11-23 12:40:00 | succeeded | 0.01 | 1 row |
-| 2026-11-23 12:38:00 | succeeded | 0.01 | 1 row |
+| 2026-11-23 14:18:00 | succeeded | 0.01 | 1 row |
+| 2026-11-23 14:16:00 | succeeded | 0.01 | 1 row |
+| 2026-11-23 14:14:00 | succeeded | 0.01 | 1 row |
