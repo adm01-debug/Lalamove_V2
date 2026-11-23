@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e74d394990` · branch `main` · 2026-11-23 20:53 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `874a336af2` · branch `main` · 2026-11-23 20:55 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -64,6 +64,7 @@
 | `mcp_diagnostics_grants` | Grants de acesso a diagnosticos via MCP (query_telemetry). | 7 colunas | migration |
 | `mfa_sessions` | Sessoes MFA (TOTP) registradas por usuario. | 10 colunas | migration |
 | `new_device_alerts` | Alertas de novo dispositivo detectado no login. | 8 colunas | migration |
+| `notification_messages` | Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela. | 32 colunas | migration |
 | `notification_optouts` | Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar. | 4 colunas | migration |
 | `order_geo_events` | Eventos geograficos por pedido (aproximando/chegou coleta e entrega, atraso) — 1 por (pedido, evento, parada). | 14 colunas | migration |
 | `orders_operator_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 36 colunas | types.ts |
@@ -189,6 +190,9 @@
 | `CHANGE_DRIVER_REASONS` (TS) | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', |  | `supabase/functions/lalamove-api/index.ts` |
 | `GatewayTarget` (TS) | unified \| uapi |  | `supabase/functions/lalamove-gateway/route.ts` |
 | `RecipientRole` (TS) | pickup_contact \| delivery_contact \| internal |  | `supabase/functions/send-notification/recipients.ts` |
+| `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/zapp-callback/payload.ts` |
+| `CALLBACK_EVENTS` (TS) | "message.status", "message.inbound", "message.outbound_manual", |  | `supabase/functions/zapp-callback/payload.ts` |
+| `PROVIDER_STATUSES` (TS) | "queued", "sent", "delivered", "read", "failed", "uncertain", |  | `supabase/functions/zapp-callback/payload.ts` |
 
 ## Dados de referência (seed — planos, categorias, perfis fixos)
 
@@ -233,7 +237,7 @@ _nenhum item encontrado_
 | status | valor `geocoded` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/job-worker/index.ts` |
 | status | valor `not_found` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/job-worker/index.ts` |
 | status | valor `DRIVER_CHANGED` para `status` usado no código não existe em nenhum enum do banco/TS | `escreve:supabase/functions/lalamove-api/index.ts` |
-| status | valor `string` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/lalamove-api/index.ts` |
+| status | valor `string` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/functions/lalamove-api/index.ts`<br>`compara:supabase/functions/zapp-callback/ledger.ts` |
 | status | valor `DELETED` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:supabase/migrations/20251226020000_create_materialized_views_cache.sql` |
 | status | valor `succeeded` para `last_status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/health/CronJobsHealthPanel.tsx` |
 | status | valor `installed` para `state` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useServiceWorker.ts` |
@@ -329,6 +333,7 @@ _nenhum item encontrado_
 - `bitrix24_spa_sync.last_stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `bitrix24_spa_sync.sync_status` tem valores ['error', 'pending', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `order_geo_events.notification_status` tem valores ['cancelled', 'deferred', 'failed', 'no_recipient', 'queued', 'sent', 'skipped'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
+- `notification_messages.status` tem valores ['delivered', 'expired', 'failed', 'queued', 'read', 'sent', 'suppressed', 'uncertain'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `driver_stats_cache.driver_status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
@@ -336,7 +341,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 20/90 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
+- 20/91 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

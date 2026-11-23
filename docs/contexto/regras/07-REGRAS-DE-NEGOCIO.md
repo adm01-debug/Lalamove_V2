@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e74d394990` · branch `main` · 2026-11-23 20:53 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `874a336af2` · branch `main` · 2026-11-23 20:55 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -230,6 +230,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `geo_usage` | geo_usage_read_manager | SELECT | public | permissive | `public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_permission(auth.uid(), 'maps.usage.read')` |  |
 | `notification_optouts` | admin gerencia opt-outs | ALL | authenticated | permissive | `public.has_role(auth.uid(), 'admin'::public.app_role)` | `public.has_role(auth.uid(), 'admin'::public.app_role)` |
 | `notification_optouts` | service role escreve opt-outs | ALL | service_role | permissive | `true` | `true` |
+| `notification_messages` | operator le ledger de mensagens | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `notification_messages` | service role escreve ledger de mensagens | ALL | service_role | permissive | `true` | `true` |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -535,7 +537,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `created_at` | default now() |
 | `login_attempts` | `id` | PK; default gen_random_uuid() |
 | `login_attempts` | `email` | obrigatório |
-| … +266 linhas — lista completa em `context.json` | | |
+| … +278 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -576,6 +578,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | trg_geo_budget_audit | AFTER INSERT OR UPDATE OR DELETE | `geo_budget` | `geo_audit_config` |  |
 | trg_geo_defaults_audit | AFTER UPDATE | `geo_defaults` | `geo_audit_config` |  |
 | trg_close_tracking_on_order_end | AFTER INSERT OR UPDATE OF STATUS | `lalamove_orders` | `trg_close_tracking_on_order_end` |  |
+| notification_messages_touch_trg | BEFORE UPDATE | `notification_messages` | `notification_messages_touch` |  |
 
 Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banco):
 
@@ -621,6 +624,7 @@ Erros lançados por funções SQL (`RAISE EXCEPTION` = regra de negócio no banc
 | `bitrix24_spa_sync` | `last_stage` | **livre (sem enum/CHECK)** |  |
 | `bitrix24_spa_sync` | `sync_status` | `error`, `pending`, `success` | `pending` |
 | `order_geo_events` | `notification_status` | `cancelled`, `deferred`, `failed`, `no_recipient`, `queued`, `sent`, `skipped` | `queued` |
+| `notification_messages` | `status` | `delivered`, `expired`, `failed`, `queued`, `read`, `sent`, `suppressed`, `uncertain` | `queued` |
 | `cache_status` | `status` | **livre (sem enum/CHECK)** |  |
 | `driver_stats_cache` | `driver_status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
 | `drivers_safe_view` | `status` | `APPROVED`, `PENDING_APPROVAL`, `BLOCKED`, `WHITELIST`, `BLACKLIST` |  |
@@ -763,7 +767,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `breached` | compara | `src/pages/SLODashboardPage.tsx` |
 | `status` | `completed` | compara | `src/components/ui/timeline-item.tsx` |
 | `status` | `degraded` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/SystemHealthExpandedPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
-| `status` | `delivered` | compara | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts` |
+| `status` | `delivered` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `status` | `down` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/SystemHealthExpandedPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `entregue` | compara | `supabase/functions/_shared/channels/sms.ts` |
 | `status` | `enviado` | compara | `supabase/functions/_shared/channels/sms.ts` |
@@ -780,10 +784,10 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `planned` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `refreshed` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `rejected` | compara, escreve | `src/hooks/useDashboardStats.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
-| `status` | `sent` | compara | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts` |
+| `status` | `sent` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts`<br>`supabase/functions/zapp-callback/payload.ts` |
 | `status` | `skipped` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `stale` | compara | `src/pages/CacheMonitoringPage.tsx` |
-| `status` | `string` | compara | `supabase/functions/lalamove-api/index.ts` |
+| `status` | `string` | compara | `supabase/functions/lalamove-api/index.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `status` | `success` | compara, escreve | `src/hooks/useCacheViews.ts`<br>`src/pages/CacheMonitoringPage.tsx`<br>`src/pages/CacheStatusPage.tsx` |
 | `status` | `synced` | escreve | `src/components/ui/data-refresh-indicator.tsx` |
 | `status` | `syncing` | compara, escreve | `src/components/ui/data-refresh-indicator.tsx`<br>`src/hooks/useOfflineStorage.ts` |
@@ -794,7 +798,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `role` | `admin` | compara, filtra | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx`<br>`src/pages/ProfilePage.tsx`<br>`supabase/functions/geo-admin/index.ts`<br>`supabase/functions/lalamove-uapi/index.ts`<br>… +1 |
 | `role` | `assistant` | compara, escreve | `src/components/dashboard/AIRouteChatbot.tsx` |
 | `role` | `delivery_contact` | compara, escreve | `supabase/functions/job-worker/index.ts`<br>`supabase/functions/send-notification/index.ts` |
-| `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts` |
+| `role` | `driver` | compara, escreve | `supabase/functions/_shared/messaging/router.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `role` | `manager` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `operator` | compara | `src/lib/roles.ts`<br>`src/pages/PermissionsPage.tsx` |
 | `role` | `option` | compara | `src/components/ui/accessible-card.tsx` |
@@ -920,6 +924,9 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | CHANGE_DRIVER_REASONS | 'DRIVER_UNRESPONSIVE', 'DRIVER_LATE', 'DRIVER_ASKED_CHANGE', 'DRIVER_RUDE', 'DRIVER_ASKED_FOR_MORE_MONEY', | `supabase/functions/lalamove-api/index.ts` |
 | GatewayTarget | unified \| uapi | `supabase/functions/lalamove-gateway/route.ts` |
 | RecipientRole | pickup_contact \| delivery_contact \| internal | `supabase/functions/send-notification/recipients.ts` |
+| ErrorAction | fallback \| retry \| give_up \| alert | `supabase/functions/zapp-callback/payload.ts` |
+| CALLBACK_EVENTS | "message.status", "message.inbound", "message.outbound_manual", | `supabase/functions/zapp-callback/payload.ts` |
+| PROVIDER_STATUSES | "queued", "sent", "delivered", "read", "failed", "uncertain", | `supabase/functions/zapp-callback/payload.ts` |
 
 ## F. Validações de entrada
 
@@ -1352,6 +1359,14 @@ _nenhum item encontrado_
   ```
   return MEDIA_ALERT_TYPES.has(type);
   ```
+- **applyCallback(options: ApplyOptions)** — `supabase/functions/zapp-callback/ledger.ts`
+  ```
+  const { client, write } = options; if (write.ignore) return { outcome: "ignored", reason: write.ignoreReason }; const existing = await findMessage(client, write); if (write.kind === "status") { if (!existing) { // Etapa 16: status sem linha conhecida = envio feito por outro caminho // (operator mandou pelo Zapp, ou a linha ainda nao foi criada). Grava a // referencia minima para nao perder o rastro de entrega. return { outcome: "not_found", reason: "mensagem_desconhecida" }; } const current = ty …
+  ```
+- **computeSignature(timestamp: number, rawBody: string, secret: string,)** — `supabase/functions/zapp-callback/security.ts`
+  ```
+  const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( "raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"], ); const buf = await crypto.subtle.sign("HMAC", key, encoder.encode(timestamp + "." + rawBody)); return new TextDecoder().decode(encode(new Uint8Array(buf))).toLowerCase();
+  ```
 
 ### G.4 Percentuais e multiplicadores no código
 
@@ -1482,6 +1497,8 @@ _nenhum item encontrado_
 | `WEBHOOK_MAX_AGE_MS` | `5` | `supabase/functions/lalamove-webhook/index.ts` |
 | `SLOW_MS` | `3000` | `supabase/functions/mcp-query/index.ts` |
 | `VERY_SLOW_MS` | `8000` | `supabase/functions/mcp-query/index.ts` |
+| `PREVIEW_MAX` | `280` | `supabase/functions/zapp-callback/payload.ts` |
+| `REPLAY_WINDOW_SECONDS` | `5` | `supabase/functions/zapp-callback/security.ts` |
 
 ### H.2 Prazos, expirações e janelas de tempo
 
@@ -1638,6 +1655,7 @@ _nenhum item encontrado_
 | 20 | `supabase/functions/route-analyzer/index.ts` |
 | 1 | `supabase/functions/send-notification/index.ts` |
 | 1 | `supabase/functions/test-notification/index.ts` |
+| 50 | `supabase/functions/zapp-callback/index.ts` |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -1943,7 +1961,7 @@ _nenhum item encontrado_
 | Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
 | Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
 | Erro ao atualizar token | `src/pages/UAPISettingsPage.tsx` |
-| … +109 linhas — lista completa em `context.json` | |
+| … +113 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -1986,7 +2004,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1351 testes em 116 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1393 testes em 119 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2008,6 +2026,7 @@ _nenhum item encontrado_
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
 | `src/lib/__tests__/lalamoveCanonical.test.ts` | 18 | lalamoveCatalog · cobre os 14 serviceTypes oficiais · valida type guards · respeita disponibilidade por cidade … |
+| `supabase/functions/zapp-callback/payload.test.ts` | 18 | unwrapPayload desembrulha data e aceita raiz plana · message.status valido vira escrita de status · message.status com status desconhecido e ignorado sem perder id · status em maiuscula e normalizado … |
 | `supabase/functions/_shared/phone.test.ts` | 17 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
 | `supabase/functions/lalamove-webhook/security.test.ts` | 17 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |
@@ -2028,6 +2047,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/job-worker/eta-delay.test.ts` | 13 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
+| `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 12 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
 | `supabase/functions/lalamove-gateway/route.test.ts` | 12 | nenhuma ação do cliente cai em 400 por ser desconhecida · uapi.getOrders ( · uapi.call ( · uapi.updateToken ( … |
@@ -2037,6 +2057,7 @@ _nenhum item encontrado_
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
 | `supabase/functions/_shared/channels/sms.test.ts` | 11 | toGsm7 remove acento para nao pagar 2 segmentos · smsSegments conta 160 no primeiro e 153 nos seguintes · composeSmsText corta no espaco e sinaliza truncamento · composeSmsText nao trunca mensagem curta … |
 | `supabase/functions/geo-admin/rotation.test.ts` | 11 | tokenKind separa segredo, publico e temporario · kindOfListedToken usa  · tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho · tokenFingerprint aguenta valor curto e vazio sem estourar … |
+| `supabase/functions/zapp-callback/ledger.test.ts` | 11 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
@@ -2434,6 +2455,11 @@ _nenhum item encontrado_
 | fazer quando o orçamento bloqueia — o alerta não pode morrer por causa da | `supabase/functions/send-notification/static-map.ts` |
 | imagem não deve/não pode ser enviada. Nunca lança: falhar a imagem não pode | `supabase/functions/send-notification/static-map.ts` |
 | sem `fixture` agora falha na validação, não no meio do laço. | `supabase/functions/simulate-driver-movement/index.ts` |
+| de banco nao pode virar uma fila de retentativas identicas. | `supabase/functions/zapp-callback/index.ts` |
+| 200 de proposito: evento que nao sabemos tratar nao pode ser reenviado | `supabase/functions/zapp-callback/index.ts` |
+| para que os testes injetem um fake e exercitem a regra sem banco: e aqui que | `supabase/functions/zapp-callback/ledger.ts` |
+| * Igual ao webhook da Lalamove, a validacao e fail-closed: sem | `supabase/functions/zapp-callback/security.ts` |
+| Zapp adiantado em segundos nao pode virar 401 intermitente. | `supabase/functions/zapp-callback/security.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql` |
 | ) > 1 LIMIT 50) t; | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |

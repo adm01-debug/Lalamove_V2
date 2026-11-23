@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 191,
+ "migrations": 192,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -190,6 +190,9 @@
   "mcp_introspect",
   "monitor_queue_health",
   "normalize_br_phone",
+  "notification_messages_scrub_bodies",
+  "notification_messages_touch",
+  "notification_status_transition_allowed",
   "notify_lalamove_quota_low",
   "notify_webhook_security_event",
   "pause_cron_job",
@@ -394,6 +397,13 @@
    "funcao": "update_updated_at_column"
   },
   {
+   "nome": "notification_messages_touch_trg",
+   "quando": "before",
+   "evento": "update",
+   "tabela": "notification_messages",
+   "funcao": "notification_messages_touch"
+  },
+  {
    "nome": "trg_invalidate_old_tokens",
    "quando": "after",
    "evento": "insert",
@@ -531,6 +541,11 @@
    "agenda": "17 * * * *",
    "migration": "20261122140000_fix_crons_dispatcher.sql",
    "chama_edge": "lalamove-token-refresh"
+  },
+  {
+   "nome": "notification_messages_scrub_bodies",
+   "agenda": "25 4 * * *",
+   "migration": "20261125120000_notification_ledger.sql"
   },
   {
    "nome": "process-job-queue",
@@ -8341,6 +8356,295 @@
     "new-device-alert"
    ],
    "triggers": [],
+   "sem_rls": false,
+   "nao_usada": false
+  },
+  "notification_messages": {
+   "colunas": {
+    "alert_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "alerts"
+    },
+    "attempt": {
+     "tipo": "int",
+     "nn": true,
+     "pk": false,
+     "default": "1",
+     "ref": null
+    },
+    "body_preview": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "channel": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "client_message_id": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "cost_cents": {
+     "tipo": "int",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "created_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "delivered_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "direction": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'outbound'",
+     "ref": null
+    },
+    "driver_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "error_code": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "event": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "expires_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "failed_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "fallback_of": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": "notification_messages"
+    },
+    "id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": true,
+     "default": "gen_random_uuid()",
+     "ref": null
+    },
+    "metadata": {
+     "tipo": "jsonb",
+     "nn": true,
+     "pk": false,
+     "default": "'{}'::jsonb",
+     "ref": null
+    },
+    "occurred_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "order_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "provider": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "provider_message_id": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "provider_sequence": {
+     "tipo": "bigint",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "read_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "recipient_phone": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "role": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "segments": {
+     "tipo": "int",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "sent_at": {
+     "tipo": "timestamptz",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "status": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'queued'",
+     "ref": null
+    },
+    "stop_id": {
+     "tipo": "uuid",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "template_key": {
+     "tipo": "text",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "template_version": {
+     "tipo": "int",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "operator le ledger de mensagens",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role escreve ledger de mensagens",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "notification_messages_client_message_id_key",
+     "colunas": "client_message_id",
+     "unico": true
+    },
+    {
+     "nome": "notification_messages_driver_created_idx",
+     "colunas": "driver_id, created_at DESC",
+     "unico": false
+    },
+    {
+     "nome": "notification_messages_order_created_idx",
+     "colunas": "order_id, created_at DESC",
+     "unico": false
+    },
+    {
+     "nome": "notification_messages_pending_idx",
+     "colunas": "status",
+     "unico": false
+    },
+    {
+     "nome": "notification_messages_provider_message_id_key",
+     "colunas": "provider, provider_message_id",
+     "unico": true
+    },
+    {
+     "nome": "notification_messages_recipient_created_idx",
+     "colunas": "recipient_phone, created_at DESC",
+     "unico": false
+    }
+   ],
+   "fks": [
+    "alert_id->alerts",
+    "fallback_of->notification_messages"
+   ],
+   "criada_em": "20261125120000_notification_ledger.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [
+    "zapp-callback"
+   ],
+   "triggers": [
+    "notification_messages_touch_trg"
+   ],
    "sem_rls": false,
    "nao_usada": false
   },

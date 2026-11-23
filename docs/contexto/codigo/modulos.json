@@ -1459,9 +1459,9 @@
   },
   {
    "modulo": "functions",
-   "arquivos": 61,
-   "testes": 34,
-   "linhas": 18155,
+   "arquivos": 65,
+   "testes": 37,
+   "linhas": 18810,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -1512,6 +1512,7 @@
     "lalamove_stops",
     "lalamove_uapi_sessions",
     "new_device_alerts",
+    "notification_messages",
     "order_geo_events",
     "query_telemetry",
     "risk_rules",
@@ -1571,7 +1572,8 @@
     "SUPABASE_ANON_KEY",
     "SUPABASE_PROJECT_REF",
     "SUPABASE_SERVICE_ROLE_KEY",
-    "SUPABASE_URL"
+    "SUPABASE_URL",
+    "ZAPP_CALLBACK_SECRET"
    ],
    "flags": [],
    "papeis": [
@@ -1630,6 +1632,7 @@
      "lalamove_stops",
      "lalamove_uapi_sessions",
      "new_device_alerts",
+     "notification_messages",
      "order_geo_events",
      "query_telemetry",
      "risk_rules",

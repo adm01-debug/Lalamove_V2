@@ -2481,6 +2481,16 @@
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
+  ],
+  "supabase/functions/zapp-callback/index.ts": [
+   "supabase/functions/_shared/cors.ts",
+   "supabase/functions/_shared/logger.ts",
+   "supabase/functions/zapp-callback/ledger.ts",
+   "supabase/functions/zapp-callback/payload.ts",
+   "supabase/functions/zapp-callback/security.ts"
+  ],
+  "supabase/functions/zapp-callback/ledger.ts": [
+   "supabase/functions/zapp-callback/payload.ts"
   ]
  }
 }

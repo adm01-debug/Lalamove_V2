@@ -3,8 +3,8 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (568)",
-   "SQL (202)",
+   "TypeScript (575)",
+   "SQL (203)",
    "JavaScript (114)",
    "Markdown (114)",
    "JSON (31)",
@@ -622,7 +622,8 @@
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
-   "VITE_SUPABASE_URL"
+   "VITE_SUPABASE_URL",
+   "ZAPP_CALLBACK_SECRET"
   ],
   "usadas_mas_nao_declaradas": [
    "DEV",
@@ -1018,7 +1019,8 @@
    "SUPABASE_SERVICE_ROLE_KEY",
    "SUPABASE_URL",
    "VITE_SUPABASE_PUBLISHABLE_KEY",
-   "VITE_SUPABASE_URL"
+   "VITE_SUPABASE_URL",
+   "ZAPP_CALLBACK_SECRET"
   ],
   "webhooks_recebidos": [
    "lalamove-webhook",

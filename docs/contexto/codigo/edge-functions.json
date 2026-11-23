@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "pasta": "supabase/functions",
- "total": 27,
+ "total": 28,
  "verify_jwt_false": [
   "lalamove-webhook",
   "llm-wh",
@@ -1216,6 +1216,42 @@
    "chamada_por_sql_ou_cron": false,
    "orfa": false,
    "testes": 0
+  },
+  {
+   "nome": "zapp-callback",
+   "servico": null,
+   "entrada": "supabase/functions/zapp-callback/index.ts",
+   "arquivos": 4,
+   "linhas": 655,
+   "verify_jwt": true,
+   "metodos": [
+    "GET",
+    "OPTIONS",
+    "POST"
+   ],
+   "assina_hmac": true,
+   "usa_service_role": true,
+   "tabelas": [
+    "notification_messages"
+   ],
+   "rpcs": [],
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "ZAPP_CALLBACK_SECRET"
+   ],
+   "buckets": [],
+   "chama_edges": [],
+   "hosts_externos": [],
+   "usa_shared": [
+    "cors.ts",
+    "logger.ts"
+   ],
+   "chamada_pelo_front": [],
+   "chamada_por_edges": [],
+   "chamada_por_sql_ou_cron": false,
+   "orfa": true,
+   "testes": 3
   }
  ],
  "chamadas_sem_pasta": []

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
+  "commit": "874a336af2a91f92b03e41d12dc292884283e9ee",
   "branch": "main",
-  "data_commit": "2026-11-23T17:52:44-03:00",
+  "data_commit": "2026-11-23T17:55:22-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "874a336",
+    "data": "2026-11-23",
+    "assunto": "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)"
+   },
    {
     "sha": "e74d394",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "a7e7d11",
     "data": "2026-11-22",
     "assunto": "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)"
-   },
-   {
-    "sha": "62a5161",
-    "data": "2026-11-22",
-    "assunto": "feat: hierarquia de papeis numa unica fonte (item 48) (#303)"
    }
   ],
-  "arquivos_mudados_7d": 430,
+  "arquivos_mudados_7d": 438,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -172,12 +172,12 @@
     "mudancas": 17
    },
    {
-    "pasta": "package-lock.json",
+    "pasta": ".github/workflows/ci.yml",
     "mudancas": 15
    },
    {
-    "pasta": ".github/workflows/ci.yml",
-    "mudancas": 14
+    "pasta": "package-lock.json",
+    "mudancas": 15
    },
    {
     "pasta": "src/components/layout",
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 18
+    "mudancas": 19
    },
    {
     "arquivo": "supabase/config.toml",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 229
+    "commits": 230
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1079,
-  "arquivos_codigo": 681,
-  "linhas_codigo": 132821,
+  "arquivos_total": 1087,
+  "arquivos_codigo": 688,
+  "linhas_codigo": 134001,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -320,11 +320,11 @@
   "modulos": 43,
   "componentes": 220,
   "hooks": 101,
-  "edge_functions": 27,
-  "tabelas": 88,
-  "migrations": 191,
-  "cron_jobs": 23,
-  "testes": 166,
+  "edge_functions": 28,
+  "tabelas": 89,
+  "migrations": 192,
+  "cron_jobs": 24,
+  "testes": 169,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 95,
-   "linhas": 23732
+   "arquivos": 102,
+   "linhas": 24912
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -736,7 +736,8 @@
    "external-db-bridge",
    "geo-admin",
    "rotate-tokens",
-   "seed-fix-rls"
+   "seed-fix-rls",
+   "zapp-callback"
   ],
   "edges_chamadas_sem_pasta": [],
   "edges_sem_verify_jwt": [

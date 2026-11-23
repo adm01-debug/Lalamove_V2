@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
+  "sha": "874a336af2a91f92b03e41d12dc292884283e9ee",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 20:53 UTC",
-  "files_total": 1073,
-  "code_files": 892,
-  "code_lines": 153998
+  "generated_at": "2026-11-23 20:55 UTC",
+  "files_total": 1081,
+  "code_files": 900,
+  "code_lines": 155362
  },
  "version": "1.3.2",
- "facts_hash": "b3cea4e48c69e63c",
+ "facts_hash": "5980f30459d6c244",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,9 +187,9 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 329,
+   ".ts": 336,
    ".tsx": 239,
-   ".sql": 202,
+   ".sql": 203,
    ".mjs": 109,
    ".py": 8,
    ".js": 4,
@@ -6350,6 +6350,238 @@
     "comment": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
     "origin": "migration"
    },
+   "notification_messages": {
+    "columns": [
+     {
+      "name": "id",
+      "type": "uuid PRIMARY KEY DEFAULT gen_random_uuid()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "alert_id",
+      "type": "uuid REFERENCES public.alerts(id) ON DELETE SET NULL",
+      "fk": "alerts.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "order_id",
+      "type": "uuid",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "driver_id",
+      "type": "uuid",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "stop_id",
+      "type": "uuid",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "event",
+      "type": "text NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "role",
+      "type": "text NOT NULL CHECK (role IN ('driver','pickup_contact','delivery_contact','internal'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "direction",
+      "type": "text NOT NULL DEFAULT 'outbound' CHECK (direction IN ('outbound','inbound'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "channel",
+      "type": "text NOT NULL CHECK (channel IN ('whatsapp','sms','email','slack','n8n'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "provider",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "recipient_phone",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "client_message_id",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "provider_message_id",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "template_key",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "template_version",
+      "type": "int",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "body_preview",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "status",
+      "type": "text NOT NULL DEFAULT 'queued' CHECK (status IN ('queued','sent','delivered','read','failed','uncertain','expired','suppressed'))",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "error_code",
+      "type": "text",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "attempt",
+      "type": "int NOT NULL DEFAULT 1",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "fallback_of",
+      "type": "uuid REFERENCES public.notification_messages(id) ON DELETE SET NULL",
+      "fk": "notification_messages.id ON DELETE SET NULL",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "cost_cents",
+      "type": "int",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "segments",
+      "type": "int",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "provider_sequence",
+      "type": "bigint",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "occurred_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "sent_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "delivered_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "read_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "failed_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "expires_at",
+      "type": "timestamptz",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "metadata",
+      "type": "jsonb NOT NULL DEFAULT '{}'::jsonb",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "created_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "comment": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela.",
+    "origin": "migration"
+   },
    "fixture_route_curitiba": {
     "columns": [
      {
@@ -10550,6 +10782,26 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "operator le ledger de mensagens",
+    "table": "notification_messages",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "service role escreve ledger de mensagens",
+    "table": "notification_messages",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "triggers": [
@@ -10867,6 +11119,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "notification_messages_touch_trg",
+    "when": "BEFORE UPDATE",
+    "table": "notification_messages",
+    "function": "notification_messages_touch",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "functions": {
@@ -12193,6 +12454,43 @@
     "raises": [],
     "tables": [
      "NEW"
+    ]
+   },
+   "notification_status_transition_allowed": {
+    "args": "p_from text, p_to text",
+    "returns": "boolean",
+    "lang": "sql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "SELECT p_from = p_to OR CASE p_from WHEN 'queued' THEN p_to IN ('sent','failed','uncertain','expired','suppressed') WHEN 'sent' THEN p_to IN ('delivered','read','failed','uncertain','expired') WHEN 'delivered' THEN p_to IN ('read','failed') ELSE false END;",
+    "raises": [],
+    "tables": []
+   },
+   "notification_messages_touch": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN NEW.updated_at := now(); RETURN NEW; END;",
+    "raises": [],
+    "tables": []
+   },
+   "notification_messages_scrub_bodies": {
+    "args": "p_keep_days int DEFAULT 90",
+    "returns": "int",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count int; BEGIN WITH alvo AS ( UPDATE notification_messages SET body_preview = NULL, metadata = metadata - 'media_url' WHERE created_at < now() - make_interval(days => p_keep_days) AND (body_preview IS NOT NULL OR metadata ? 'media_url') RETURNING 1 ) SELECT count(*) INTO v_count FROM alvo; RETURN v_count; END;",
+    "raises": [],
+    "tables": [
+     "alvo",
+     "notification_messages",
+     "v_count"
     ]
    },
    "uid": {
@@ -14239,6 +14537,54 @@
     "src": "supabase/migrations/20261123170000_indices_fk_faltantes.sql"
    },
    {
+    "name": "notification_messages_client_message_id_key",
+    "table": "notification_messages",
+    "columns": "client_message_id",
+    "unique": true,
+    "where": "WHERE client_message_id IS NOT NULL",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "notification_messages_provider_message_id_key",
+    "table": "notification_messages",
+    "columns": "provider, provider_message_id",
+    "unique": true,
+    "where": "WHERE provider_message_id IS NOT NULL",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "notification_messages_order_created_idx",
+    "table": "notification_messages",
+    "columns": "order_id, created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "notification_messages_pending_idx",
+    "table": "notification_messages",
+    "columns": "status",
+    "unique": false,
+    "where": "WHERE status IN ('queued','sent')",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "notification_messages_driver_created_idx",
+    "table": "notification_messages",
+    "columns": "driver_id, created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "notification_messages_recipient_created_idx",
+    "table": "notification_messages",
+    "columns": "recipient_phone, created_at DESC",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
     "name": "uq_job_queue_dedup_open",
     "table": "job_queue",
     "columns": "dedup_key",
@@ -14531,6 +14877,7 @@
    "supabase/migrations/20261123190002_geo_maps_permissions.sql",
    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
    "supabase/migrations/20261124120000_internal_alert_channels.sql",
+   "supabase/migrations/20261125120000_notification_ledger.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -14613,7 +14960,8 @@
    "order_geo_events": "enabled",
    "cache_refresh_log": "enabled",
    "job_queue_processing_log": "enabled",
-   "notification_optouts": "enabled"
+   "notification_optouts": "enabled",
+   "notification_messages": "enabled"
   },
   "grants": [
    {
@@ -16839,6 +17187,22 @@
     "objkind": "function",
     "roles": "service_role, authenticated",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "raises": [
@@ -17011,7 +17375,8 @@
    "column:lalamove_orders.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode (Mapbox match_code.confidence / Google location_type / LALAMOVE). Complementa geocode_precision (escala normalizada).",
    "column:lalamove_stops.geocode_match_confidence": "Etapa 13: confiança bruta do provedor de geocode da parada.",
    "column:permissions.module": "Modulo funcional; maps cobre provedores de mapa e custo (etapa 92).",
-   "table:notification_optouts": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar."
+   "table:notification_optouts": "Telefones que pediram para nao receber avisos geo (etapa 60). send-notification consulta antes de enviar.",
+   "table:notification_messages": "Etapa 73: ledger de mensagens (outbound e inbound) ao motorista e aos contatos. Substitui alerts_sent como fonte de timeline; alerts_sent continua sendo escrito ate a etapa 138 migrar a tela."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -18555,6 +18920,30 @@
      "https://${token.domain}/rest/…",
      "https://api.resend.com/emails"
     ],
+    "invokes": [],
+    "doc": "",
+    "errors": [],
+    "side_effects": [],
+    "webhook_events": [],
+    "idempotency": false
+   },
+   {
+    "name": "zapp-callback",
+    "file": "supabase/functions/zapp-callback/index.ts",
+    "methods": [
+     "GET",
+     "OPTIONS"
+    ],
+    "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
+    "tables": [
+     "notification_messages"
+    ],
+    "env": [
+     "SUPABASE_SERVICE_ROLE_KEY",
+     "SUPABASE_URL",
+     "ZAPP_CALLBACK_SECRET"
+    ],
+    "external": [],
     "invokes": [],
     "doc": "",
     "errors": [],
@@ -21688,8 +22077,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 95,
-   "lines": 23732,
+   "files": 102,
+   "lines": 24912,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -21726,6 +22115,7 @@
     "lalamove_stops",
     "lalamove_uapi_sessions",
     "new_device_alerts",
+    "notification_messages",
     "order_geo_events",
     "query_telemetry",
     "risk_rules",
@@ -21773,7 +22163,9 @@
     "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole",
     "sms-dispatch.ts: SmsDispatchInput, SmsDispatchResult, buildSmsBody, dispatchSms",
     "static-map.ts: GeoPointLatLng, StaticMapMarker, StaticMapRequestOptions, shouldAttachStaticMap, isNonRetryableGeoError, parseRoute",
-    "replay.ts: ReplayPoint, ReplayFixture, ReplayStep, bearingDeg, remainingM, replaySteps"
+    "replay.ts: ReplayPoint, ReplayFixture, ReplayStep, bearingDeg, remainingM, replaySteps",
+    "ledger.ts: QueryResult, LedgerQuery, LedgerClient, ApplyResult, ApplyOptions, applyCallback",
+    "payload.ts: CALLBACK_EVENTS, CallbackEvent, PROVIDER_STATUSES, ProviderStatus, ErrorAction, ERROR_CODE_ACTIONS"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -21877,8 +22269,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 191,
-   "lines": 13193,
+   "files": 192,
+   "lines": 13377,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -22571,6 +22963,18 @@
      "supabase/functions/new-device-alert/index.ts"
     ]
    },
+   "notification_messages": {
+    "select": [
+     "supabase/functions/zapp-callback/index.ts",
+     "supabase/functions/zapp-callback/ledger.ts"
+    ],
+    "insert": [
+     "supabase/functions/zapp-callback/ledger.ts"
+    ],
+    "update": [
+     "supabase/functions/zapp-callback/ledger.ts"
+    ]
+   },
    "order_geo_events": {
     "select": [
      "src/components/orders/OrderGeoEvents.tsx",
@@ -23141,6 +23545,20 @@
    "new_device_alerts": [
     "device_id"
    ],
+   "notification_messages": [
+    "body_preview",
+    "channel",
+    "client_message_id",
+    "created_at",
+    "direction",
+    "event",
+    "id",
+    "metadata",
+    "order_id",
+    "provider_message_id",
+    "role",
+    "status"
+   ],
    "order_geo_events": [
     "distance_m",
     "eta_min",
@@ -23640,7 +24058,8 @@
     "supabase/functions/seed-fix-rls/index.ts",
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
-    "supabase/functions/test-notification/index.ts"
+    "supabase/functions/test-notification/index.ts",
+    "supabase/functions/zapp-callback/index.ts"
    ],
    "SUPABASE_SNAPSHOT_PUBLICACAO": [
     "scripts/supabase_snapshot/snapshot.py"
@@ -23675,7 +24094,8 @@
     "supabase/functions/seed-fix-rls/index.ts",
     "supabase/functions/send-notification/index.ts",
     "supabase/functions/simulate-driver-movement/index.ts",
-    "supabase/functions/test-notification/index.ts"
+    "supabase/functions/test-notification/index.ts",
+    "supabase/functions/zapp-callback/index.ts"
    ],
    "VERCEL_AUTOMATION_BYPASS_SECRET": [
     "scripts/vercel/verify-production.mjs",
@@ -23731,6 +24151,9 @@
     "supabase/functions/_shared/contract.integration.test.ts",
     "supabase/functions/external-db-bridge/index.test.ts",
     "vitest.config.ts"
+   ],
+   "ZAPP_CALLBACK_SECRET": [
+    "supabase/functions/zapp-callback/index.ts"
    ]
   },
   "rpc": {
@@ -24909,6 +25332,21 @@
     "file": "supabase/functions/send-notification/recipients.ts",
     "name": "RecipientRole",
     "values": "pickup_contact | delivery_contact | internal"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "name": "ErrorAction",
+    "values": "fallback | retry | give_up | alert"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "name": "CALLBACK_EVENTS",
+    "values": "\"message.status\", \"message.inbound\", \"message.outbound_manual\","
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "name": "PROVIDER_STATUSES",
+    "values": "\"queued\", \"sent\", \"delivered\", \"read\", \"failed\", \"uncertain\","
    }
   ],
   "error_messages": [
@@ -26397,6 +26835,22 @@
     "msg": "Unauthorized"
    },
    {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "msg": " = avisar a operacao (numero invalido/opt-out precisa de outro meio).\n */\nexport type ErrorAction = "
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "msg": ",\n  expired: "
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "msg": ",\n  provider_rejected: "
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "msg": ";\n\nexport const ERROR_CODE_ACTIONS: Record<string, ErrorAction> = {\n  invalid_number: "
+   },
+   {
     "file": "src/i18n/locales/en.json#common.error",
     "msg": "Error"
    },
@@ -27519,6 +27973,26 @@
    {
     "file": "supabase/functions/simulate-driver-movement/index.ts",
     "text": "sem `fixture` agora falha na validação, não no meio do laço."
+   },
+   {
+    "file": "supabase/functions/zapp-callback/index.ts",
+    "text": "de banco nao pode virar uma fila de retentativas identicas."
+   },
+   {
+    "file": "supabase/functions/zapp-callback/index.ts",
+    "text": "200 de proposito: evento que nao sabemos tratar nao pode ser reenviado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "text": "para que os testes injetem um fake e exercitem a regra sem banco: e aqui que"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.ts",
+    "text": "* Igual ao webhook da Lalamove, a validacao e fail-closed: sem"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.ts",
+    "text": "Zapp adiantado em segundos nao pode virar 401 intermitente."
    },
    {
     "file": "supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql",
@@ -30124,6 +30598,66 @@
     "rule": "default now()"
    },
    {
+    "table": "notification_messages",
+    "column": "id",
+    "rule": "PK; default gen_random_uuid()"
+   },
+   {
+    "table": "notification_messages",
+    "column": "alert_id",
+    "rule": "FK → alerts.id ON DELETE SET NULL"
+   },
+   {
+    "table": "notification_messages",
+    "column": "event",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "notification_messages",
+    "column": "role",
+    "rule": "obrigatório; CHECK role IN ('driver','pickup_contact','delivery_contact','internal')"
+   },
+   {
+    "table": "notification_messages",
+    "column": "direction",
+    "rule": "default 'outbound'; CHECK direction IN ('outbound','inbound')"
+   },
+   {
+    "table": "notification_messages",
+    "column": "channel",
+    "rule": "obrigatório; CHECK channel IN ('whatsapp','sms','email','slack','n8n')"
+   },
+   {
+    "table": "notification_messages",
+    "column": "status",
+    "rule": "default 'queued'; CHECK status IN ('queued','sent','delivered','read','failed','uncertain','expired','suppressed')"
+   },
+   {
+    "table": "notification_messages",
+    "column": "attempt",
+    "rule": "default 1"
+   },
+   {
+    "table": "notification_messages",
+    "column": "fallback_of",
+    "rule": "FK → notification_messages.id ON DELETE SET NULL"
+   },
+   {
+    "table": "notification_messages",
+    "column": "metadata",
+    "rule": "default '{}'::jsonb"
+   },
+   {
+    "table": "notification_messages",
+    "column": "created_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "notification_messages",
+    "column": "updated_at",
+    "rule": "default now()"
+   },
+   {
     "table": "fixture_route_curitiba",
     "column": "rota",
     "rule": "obrigatório"
@@ -30774,6 +31308,16 @@
     "file": "supabase/functions/mcp-query/index.ts",
     "name": "VERY_SLOW_MS",
     "value": "8000"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "name": "PREVIEW_MAX",
+    "value": "280"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.ts",
+    "name": "REPLAY_WINDOW_SECONDS",
+    "value": "5"
    }
   ],
   "transition_maps": [],
@@ -34829,6 +35373,30 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "field": "role",
+    "value": "driver",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "field": "status",
+    "value": "delivered",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "field": "status",
+    "value": "string",
+    "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.ts",
+    "field": "status",
+    "value": "sent",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/migrations/20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql",
     "field": "pod_status",
     "value": "NOT_REQUIRED",
@@ -35219,6 +35787,18 @@
     "name": "shouldAttachStaticMap",
     "params": "type: string",
     "body": "return MEDIA_ALERT_TYPES.has(type);"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "name": "applyCallback",
+    "params": "options: ApplyOptions",
+    "body": "const { client, write } = options; if (write.ignore) return { outcome: \"ignored\", reason: write.ignoreReason }; const existing = await findMessage(client, write); if (write.kind === \"status\") { if (!existing) { // Etapa 16: status sem linha conhecida = envio feito por outro caminho // (operator mandou pelo Zapp, ou a linha ainda nao foi criada). Grava a // referencia minima para nao perder o rastro de entrega. return { outcome: \"not_found\", reason: \"mensagem_desconhecida\" }; } const current = ty …"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.ts",
+    "name": "computeSignature",
+    "params": "timestamp: number, rawBody: string, secret: string,",
+    "body": "const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( \"raw\", encoder.encode(secret), { name: \"HMAC\", hash: \"SHA-256\" }, false, [\"sign\"], ); const buf = await crypto.subtle.sign(\"HMAC\", key, encoder.encode(timestamp + \".\" + rawBody)); return new TextDecoder().decode(encode(new Uint8Array(buf))).toLowerCase();"
    }
   ],
   "temporal": [
@@ -41189,6 +41769,174 @@
    {
     "file": "supabase/functions/simulate-driver-movement/replay.test.ts",
     "name": "replay: heading sempre finito e entre 0 e 360"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "status delivered atualiza a linha e grava delivered_at"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "status atrasado nao regride o ledger"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "status de mensagem desconhecida nao inventa linha"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "status failed grava failed_at e o codigo do erro"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "inbound conhecido grava linha nova com in_reply_to"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "inbound repetido (unique violation) vira duplicate"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "inbound sem mensagem original ainda e gravado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "outbound_manual atualiza quando a conversa existe"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "outbound_manual sem conversa e not_found"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "escrita ignorada nao toca o banco"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "erro do update e reportado, nao engolido"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "unwrapPayload desembrulha data e aceita raiz plana"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "message.status valido vira escrita de status"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "message.status com status desconhecido e ignorado sem perder id"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "status em maiuscula e normalizado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "payload sem identificador e ignorado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "evento desconhecido e ignorado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "payload invalido e ignorado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "message.inbound com texto, opcao, midia e localizacao"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "inbound aceita latitude/longitude alternativos"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "inbound sem coordenada completa nao vira localizacao"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "message.outbound_manual registra resposta do operador"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "truncatePreview corta em 280 e preserva null"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "timestampColumnFor mapeia status para coluna"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "nextStatus avanca e nunca regride"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "nextStatus nao ressuscita mensagem falhada"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "nextStatus permite ir de queued para failed"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "nextStatus com status igual nao reescreve"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/payload.test.ts",
+    "name": "actionForErrorCode mapeia a tabela da etapa 14"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "parseSignatureHeader le t e v1"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "parseSignatureHeader aceita espacos e ordem invertida"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "parseSignatureHeader rejeita header ausente ou malformado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "timingSafeEqual compara conteudo e tamanho"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "assinatura valida passa"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "corpo alterado invalida a assinatura"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "segredo diferente invalida a assinatura"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "sem segredo configurado rejeita (fail-closed)"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "sem header rejeita"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "carimbo velho alem da janela e replay"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "carimbo no limite da janela ainda passa"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "carimbo no futuro alem da janela e rejeitado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/security.test.ts",
+    "name": "janela customizada e respeitada"
    }
   ],
   "webhook_events": [
@@ -43813,6 +44561,26 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "operator le ledger de mensagens",
+    "table": "notification_messages",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "name": "service role escreve ledger de mensagens",
+    "table": "notification_messages",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "db_triggers": [
@@ -44130,6 +44898,15 @@
     "condition": "",
     "each": "row",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "name": "notification_messages_touch_trg",
+    "when": "BEFORE UPDATE",
+    "table": "notification_messages",
+    "function": "notification_messages_touch",
+    "condition": "",
+    "each": "row",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "db_functions": {
@@ -45458,6 +46235,43 @@
      "NEW"
     ]
    },
+   "notification_status_transition_allowed": {
+    "args": "p_from text, p_to text",
+    "returns": "boolean",
+    "lang": "sql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "SELECT p_from = p_to OR CASE p_from WHEN 'queued' THEN p_to IN ('sent','failed','uncertain','expired','suppressed') WHEN 'sent' THEN p_to IN ('delivered','read','failed','uncertain','expired') WHEN 'delivered' THEN p_to IN ('read','failed') ELSE false END;",
+    "raises": [],
+    "tables": []
+   },
+   "notification_messages_touch": {
+    "args": "",
+    "returns": "trigger",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": false,
+    "search_path": false,
+    "body": "BEGIN NEW.updated_at := now(); RETURN NEW; END;",
+    "raises": [],
+    "tables": []
+   },
+   "notification_messages_scrub_bodies": {
+    "args": "p_keep_days int DEFAULT 90",
+    "returns": "int",
+    "lang": "plpgsql",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql",
+    "security_definer": true,
+    "search_path": true,
+    "body": "DECLARE v_count int; BEGIN WITH alvo AS ( UPDATE notification_messages SET body_preview = NULL, metadata = metadata - 'media_url' WHERE created_at < now() - make_interval(days => p_keep_days) AND (body_preview IS NOT NULL OR metadata ? 'media_url') RETURNING 1 ) SELECT count(*) INTO v_count FROM alvo; RETURN v_count; END;",
+    "raises": [],
+    "tables": [
+     "alvo",
+     "notification_messages",
+     "v_count"
+    ]
+   },
    "uid": {
     "args": "",
     "returns": "uuid",
@@ -45903,6 +46717,10 @@
    {
     "file": "supabase/functions/test-notification/index.ts",
     "limit": "1"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/index.ts",
+    "limit": "50"
    }
   ],
   "state_machines": {
@@ -46148,6 +46966,23 @@
      ],
      "default": "queued",
      "type": "text NOT NULL DEFAULT 'queued' CHECK (notification_status IN ('queued','deferred','sent','failed','no_recipient','skipped','cancelled'))"
+    },
+    {
+     "table": "notification_messages",
+     "column": "status",
+     "enum": "",
+     "allowed": [
+      "delivered",
+      "expired",
+      "failed",
+      "queued",
+      "read",
+      "sent",
+      "suppressed",
+      "uncertain"
+     ],
+     "default": "queued",
+     "type": "text NOT NULL DEFAULT 'queued' CHECK (status IN ('queued','sent','delivered','read','failed','uncertain','expired','suppressed'))"
     },
     {
      "table": "cache_status",
@@ -46817,11 +47652,13 @@
      ],
      "sent": [
       "compara:src/hooks/useNotificationHistory.ts",
-      "compara:supabase/functions/_shared/channels/sms.ts"
+      "compara:supabase/functions/_shared/channels/sms.ts",
+      "escreve:supabase/functions/zapp-callback/payload.ts"
      ],
      "delivered": [
       "compara:src/hooks/useNotificationHistory.ts",
-      "compara:supabase/functions/_shared/channels/sms.ts"
+      "compara:supabase/functions/_shared/channels/sms.ts",
+      "escreve:supabase/functions/zapp-callback/ledger.ts"
      ],
      "approved": [
       "compara:src/pages/PasswordResetApprovalsPage.tsx",
@@ -46909,7 +47746,8 @@
       "escreve:supabase/functions/lalamove-api/index.ts"
      ],
      "string": [
-      "compara:supabase/functions/lalamove-api/index.ts"
+      "compara:supabase/functions/lalamove-api/index.ts",
+      "compara:supabase/functions/zapp-callback/ledger.ts"
      ],
      "MATCHED": [
       "escreve:supabase/functions/lalamove-webhook/index.ts"
@@ -46953,7 +47791,8 @@
      ],
      "driver": [
       "compara:supabase/functions/_shared/messaging/router.ts",
-      "escreve:supabase/functions/_shared/messaging/router.ts"
+      "escreve:supabase/functions/_shared/messaging/router.ts",
+      "escreve:supabase/functions/zapp-callback/ledger.ts"
      ],
      "pickup_contact": [
       "escreve:supabase/functions/_shared/messaging/router.ts",
@@ -47095,6 +47934,11 @@
     "role_permissions",
     "role",
     "app_role NOT NULL"
+   ],
+   [
+    "notification_messages",
+    "role",
+    "text NOT NULL CHECK (role IN ('driver','pickup_contact','delivery_contact','internal'))"
    ]
   ],
   "jwt_claims": [
@@ -47817,6 +48661,22 @@
      "authenticated: auth.uid() = user_id OR public.has_role(auth.uid(), 'admin')"
     ]
    },
+   "notification_messages": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "service_role: true"
+    ],
+    "DELETE": [
+     "service_role: true"
+    ]
+   },
    "notification_optouts": {
     "rls": "enabled",
     "SELECT": [
@@ -48359,6 +49219,7 @@
    "supabase/functions/send-notification/index.ts",
    "supabase/functions/simulate-driver-movement/index.ts",
    "supabase/functions/test-notification/index.ts",
+   "supabase/functions/zapp-callback/index.ts",
    "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
    "supabase/migrations/20251226000003_create_job_queue.sql",
    "supabase/migrations/20251226010000_create_job_queue_system.sql",
@@ -48419,7 +49280,8 @@
    "supabase/migrations/20261123120000_geo_budget_cron.sql",
    "supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql",
    "supabase/migrations/20261123160000_job_queue_processing_log.sql",
-   "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
+   "supabase/migrations/20261125120000_notification_ledger.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -48466,6 +49328,7 @@
    "is_token_valid",
    "log_mfa_session",
    "mcp_introspect",
+   "notification_messages_scrub_bodies",
    "notify_lalamove_quota_low",
    "notify_webhook_security_event",
    "pause_cron_job",
@@ -50718,6 +51581,22 @@
     "objkind": "function",
     "roles": "service_role, authenticated",
     "src": "supabase/migrations/20261123200000_optout_and_tracking_end.sql"
+   },
+   {
+    "kind": "revoke",
+    "privs": "all",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "PUBLIC",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
+   },
+   {
+    "kind": "grant",
+    "privs": "execute",
+    "object": "notification_messages_scrub_bodies",
+    "objkind": "function",
+    "roles": "service_role",
+    "src": "supabase/migrations/20261125120000_notification_ledger.sql"
    }
   ],
   "guards": [
@@ -51754,6 +52633,10 @@
     "created_at",
     "created_by"
    ],
+   "notification_messages": [
+    "created_at",
+    "updated_at"
+   ],
    "fixture_route_curitiba": [],
    "auth.users": [],
    "geo_blocks": [
@@ -52026,6 +52909,11 @@
     "driver_evaluations",
     "total_deliveries",
     "integer"
+   ],
+   [
+    "notification_messages",
+    "cost_cents",
+    "int"
    ],
    [
     "delivery_metrics_cache",
@@ -52351,7 +53239,8 @@
     "kind": "status",
     "msg": "valor `string` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
-     "compara:supabase/functions/lalamove-api/index.ts"
+     "compara:supabase/functions/lalamove-api/index.ts",
+     "compara:supabase/functions/zapp-callback/ledger.ts"
     ]
    },
    {
@@ -52843,6 +53732,7 @@
    "`bitrix24_spa_sync.last_stage` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`bitrix24_spa_sync.sync_status` tem valores ['error', 'pending', 'success'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`order_geo_events.notification_status` tem valores ['cancelled', 'deferred', 'failed', 'no_recipient', 'queued', 'sent', 'skipped'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
+   "`notification_messages.status` tem valores ['delivered', 'expired', 'failed', 'queued', 'read', 'sent', 'suppressed', 'uncertain'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`cache_status.status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`driver_stats_cache.driver_status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`drivers_safe_view.status` tem valores ['APPROVED', 'PENDING_APPROVAL', 'BLOCKED', 'WHITELIST', 'BLACKLIST'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
@@ -52850,7 +53740,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "20/90 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
+   "20/91 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -73789,6 +74679,265 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/zapp-callback/index.ts": {
+   "path": "supabase/functions/zapp-callback/index.ts",
+   "lines": 104,
+   "tables": [
+    {
+     "table": "notification_messages",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "notification_messages": [
+     "body_preview",
+     "channel",
+     "created_at",
+     "direction",
+     "event",
+     "id",
+     "metadata",
+     "order_id",
+     "role",
+     "status"
+    ]
+   },
+   "env": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "ZAPP_CALLBACK_SECRET"
+   ],
+   "rule_comments": [
+    "de banco nao pode virar uma fila de retentativas identicas.",
+    "200 de proposito: evento que nao sabemos tratar nao pode ser reenviado"
+   ],
+   "pagination": [
+    "50"
+   ],
+   "uses_service_role": true
+  },
+  "supabase/functions/zapp-callback/ledger.test.ts": {
+   "path": "supabase/functions/zapp-callback/ledger.test.ts",
+   "lines": 225,
+   "is_test": true,
+   "tests": [
+    "status delivered atualiza a linha e grava delivered_at",
+    "status atrasado nao regride o ledger",
+    "status de mensagem desconhecida nao inventa linha",
+    "status failed grava failed_at e o codigo do erro",
+    "inbound conhecido grava linha nova com in_reply_to",
+    "inbound repetido (unique violation) vira duplicate",
+    "inbound sem mensagem original ainda e gravado",
+    "outbound_manual atualiza quando a conversa existe",
+    "outbound_manual sem conversa e not_found",
+    "escrita ignorada nao toca o banco",
+    "erro do update e reportado, nao engolido"
+   ]
+  },
+  "supabase/functions/zapp-callback/ledger.ts": {
+   "path": "supabase/functions/zapp-callback/ledger.ts",
+   "lines": 181,
+   "exports": [
+    "interface QueryResult",
+    "interface LedgerQuery",
+    "interface LedgerClient",
+    "interface ApplyResult",
+    "interface ApplyOptions",
+    "function applyCallback"
+   ],
+   "tables": [
+    {
+     "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "insert,select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "update"
+    },
+    {
+     "table": "notification_messages",
+     "op": "update"
+    }
+   ],
+   "table_cols": {
+    "notification_messages": [
+     "client_message_id",
+     "id",
+     "provider_message_id",
+     "status"
+    ]
+   },
+   "status_values": [
+    {
+     "field": "role",
+     "value": "driver",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "delivered",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "string",
+     "kind": "compara"
+    }
+   ],
+   "rule_comments": [
+    "para que os testes injetem um fake e exercitem a regra sem banco: e aqui que"
+   ],
+   "doc": "Etapa 96: escrita no ledger `notification_messages` a partir do callback. O client do Supabase entra por interface minima (so o subconjunto que usamos) para que os testes injetem um fake e exercitem a regra sem banco: e aqui que ficam as decisoes que erram caro - achar a linha certa, nao regredir es …",
+   "calc_fns": [
+    {
+     "name": "applyCallback",
+     "params": "options: ApplyOptions",
+     "body": "const { client, write } = options; if (write.ignore) return { outcome: \"ignored\", reason: write.ignoreReason }; const existing = await findMessage(client, write); if (write.kind === \"status\") { if (!existing) { // Etapa 16: status sem linha conhecida = envio feito por outro caminho // (operator mandou pelo Zapp, ou a linha ainda nao foi criada). Grava a // referencia minima para nao perder o rastro de entrega. return { outcome: \"not_found\", reason: \"mensagem_desconhecida\" }; } const current = ty …"
+    }
+   ]
+  },
+  "supabase/functions/zapp-callback/payload.test.ts": {
+   "path": "supabase/functions/zapp-callback/payload.test.ts",
+   "lines": 168,
+   "is_test": true,
+   "errors": [
+    ");\n  assertEquals(actionForErrorCode(null), null);\n  // codigo novo que o Zapp ainda nao documentou: alerta, nao chute\n  assertEquals(actionForErrorCode("
+   ],
+   "tests": [
+    "unwrapPayload desembrulha data e aceita raiz plana",
+    "message.status valido vira escrita de status",
+    "message.status com status desconhecido e ignorado sem perder id",
+    "status em maiuscula e normalizado",
+    "payload sem identificador e ignorado",
+    "evento desconhecido e ignorado",
+    "payload invalido e ignorado",
+    "message.inbound com texto, opcao, midia e localizacao",
+    "inbound aceita latitude/longitude alternativos",
+    "inbound sem coordenada completa nao vira localizacao",
+    "message.outbound_manual registra resposta do operador",
+    "truncatePreview corta em 280 e preserva null",
+    "timestampColumnFor mapeia status para coluna",
+    "nextStatus avanca e nunca regride",
+    "nextStatus nao ressuscita mensagem falhada",
+    "nextStatus permite ir de queued para failed",
+    "nextStatus com status igual nao reescreve",
+    "actionForErrorCode mapeia a tabela da etapa 14"
+   ]
+  },
+  "supabase/functions/zapp-callback/payload.ts": {
+   "path": "supabase/functions/zapp-callback/payload.ts",
+   "lines": 257,
+   "exports": [
+    "const CALLBACK_EVENTS",
+    "type CallbackEvent",
+    "const PROVIDER_STATUSES",
+    "type ProviderStatus",
+    "type ErrorAction",
+    "const ERROR_CODE_ACTIONS",
+    "function actionForErrorCode",
+    "interface InboundContent",
+    "interface LedgerWrite",
+    "function unwrapPayload",
+    "function truncatePreview",
+    "function parseCallback",
+    "function timestampColumnFor",
+    "function nextStatus"
+   ],
+   "errors": [
+    " = avisar a operacao (numero invalido/opt-out precisa de outro meio).\n */\nexport type ErrorAction = ",
+    ",\n  expired: ",
+    ",\n  provider_rejected: ",
+    ";\n\nexport const ERROR_CODE_ACTIONS: Record<string, ErrorAction> = {\n  invalid_number: "
+   ],
+   "enums": [
+    {
+     "name": "ErrorAction",
+     "values": "fallback | retry | give_up | alert"
+    },
+    {
+     "name": "CALLBACK_EVENTS",
+     "values": "\"message.status\", \"message.inbound\", \"message.outbound_manual\","
+    },
+    {
+     "name": "PROVIDER_STATUSES",
+     "values": "\"queued\", \"sent\", \"delivered\", \"read\", \"failed\", \"uncertain\","
+    }
+   ],
+   "params": [
+    {
+     "name": "PREVIEW_MAX",
+     "value": "280"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "sent",
+     "kind": "escreve"
+    }
+   ],
+   "doc": "Normalizacao do payload de callback do Zapp (etapas 15, 16 e 96). Funcoes puras: recebem o JSON ja validado pela assinatura e devolvem a instrucao de escrita no ledger. Toda a decisao (qual status gravar, qual coluna de data preencher, se o evento e ignorado) fica testavel sem banco."
+  },
+  "supabase/functions/zapp-callback/security.test.ts": {
+   "path": "supabase/functions/zapp-callback/security.test.ts",
+   "lines": 132,
+   "is_test": true,
+   "tests": [
+    "parseSignatureHeader le t e v1",
+    "parseSignatureHeader aceita espacos e ordem invertida",
+    "parseSignatureHeader rejeita header ausente ou malformado",
+    "timingSafeEqual compara conteudo e tamanho",
+    "assinatura valida passa",
+    "corpo alterado invalida a assinatura",
+    "segredo diferente invalida a assinatura",
+    "sem segredo configurado rejeita (fail-closed)",
+    "sem header rejeita",
+    "carimbo velho alem da janela e replay",
+    "carimbo no limite da janela ainda passa",
+    "carimbo no futuro alem da janela e rejeitado",
+    "janela customizada e respeitada"
+   ]
+  },
+  "supabase/functions/zapp-callback/security.ts": {
+   "path": "supabase/functions/zapp-callback/security.ts",
+   "lines": 113,
+   "exports": [
+    "const REPLAY_WINDOW_SECONDS",
+    "function timingSafeEqual",
+    "interface ParsedSignature",
+    "function parseSignatureHeader",
+    "function computeSignature",
+    "interface VerifyOptions",
+    "interface VerifyResult",
+    "function verifyCallbackSignature"
+   ],
+   "params": [
+    {
+     "name": "REPLAY_WINDOW_SECONDS",
+     "value": "5"
+    }
+   ],
+   "rule_comments": [
+    "* Igual ao webhook da Lalamove, a validacao e fail-closed: sem",
+    "Zapp adiantado em segundos nao pode virar 401 intermitente."
+   ],
+   "doc": "Etapa 96 do plano de mensageria: assinatura e janela anti-replay do callback do Zapp. Formato do header (etapa 15): X-Zapp-Signature: t=<unix_ts>,v1=<hmac_sha256> onde o HMAC cobre `${t}.${corpoCru}`. O corpo precisa ser o texto literal da requisicao - reasserializar o JSON muda espacos e quebra a a …",
+   "calc_fns": [
+    {
+     "name": "computeSignature",
+     "params": "timestamp: number, rawBody: string, secret: string,",
+     "body": "const encoder = new TextEncoder(); const key = await crypto.subtle.importKey( \"raw\", encoder.encode(secret), { name: \"HMAC\", hash: \"SHA-256\" }, false, [\"sign\"], ); const buf = await crypto.subtle.sign(\"HMAC\", key, encoder.encode(timestamp + \".\" + rawBody)); return new TextDecoder().decode(encode(new Uint8Array(buf))).toLowerCase();"
+    }
+   ]
+  },
   "supabase/migrations/20241231000000_saved_filters.sql": {
    "path": "supabase/migrations/20241231000000_saved_filters.sql",
    "lines": 108
@@ -74752,6 +75901,11 @@
     "notify_whatsapp"
    ]
   },
+  "supabase/migrations/20261125120000_notification_ledger.sql": {
+   "path": "supabase/migrations/20261125120000_notification_ledger.sql",
+   "lines": 184,
+   "uses_service_role": true
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -74806,10 +75960,28 @@
   }
  },
  "git": {
-  "sha": "e74d3949901f8b25d0d0e3cb123110009114d9ad",
+  "sha": "874a336af2a91f92b03e41d12dc292884283e9ee",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "874a336",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)",
+    "files": [
+     ".github/workflows/ci.yml",
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/zapp-callback/index.ts",
+     "supabase/functions/zapp-callback/ledger.test.ts",
+     "supabase/functions/zapp-callback/ledger.ts",
+     "supabase/functions/zapp-callback/payload.test.ts",
+     "supabase/functions/zapp-callback/payload.ts",
+     "supabase/functions/zapp-callback/security.test.ts",
+     "supabase/functions/zapp-callback/security.ts",
+     "supabase/migrations/20261125120000_notification_ledger.sql"
+    ]
+   },
    {
     "sha": "e74d394",
     "date": "2026-11-23",
@@ -75235,24 +76407,12 @@
      "src/hooks/useMFA.ts",
      "src/pages/MFAEnrollPage.tsx"
     ]
-   },
-   {
-    "sha": "1f97a5b",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/components/auth/ProtectedRoute.test.tsx",
-     "src/components/auth/ProtectedRoute.tsx",
-     "src/hooks/useMFA.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    14
+    13
    ],
    [
     "src/App.tsx",
@@ -75263,20 +76423,28 @@
     4
    ],
    [
-    "src/components/auth/ProtectedRoute.tsx",
+    "src/components/layout/MobileSidebar.tsx",
     4
    ],
    [
-    "src/components/layout/MobileSidebar.tsx",
-    4
+    ".github/workflows/ci.yml",
+    3
    ],
    [
     "src/pages/AuthPage.tsx",
     3
    ],
    [
+    "src/components/auth/ProtectedRoute.tsx",
+    3
+   ],
+   [
     "src/components/layout/sidebar-config.ts",
     3
+   ],
+   [
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    2
    ],
    [
     "src/hooks/useLalamoveUapi.ts",
@@ -75320,14 +76488,6 @@
    ],
    [
     "src/hooks/useCommandPaletteSearch.ts",
-    2
-   ],
-   [
-    "src/hooks/useSystemHealth.ts",
-    2
-   ],
-   [
-    "src/components/lalamove/UapiStatementPanel.tsx",
     2
    ]
   ]
