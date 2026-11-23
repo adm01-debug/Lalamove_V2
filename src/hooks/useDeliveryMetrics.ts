@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { TZDate } from '@date-fns/tz';
+import { format, subDays } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface DeliveryMetrics {
@@ -14,6 +16,8 @@ export interface DeliveryMetrics {
   todayCancelled: number;
   byStatus: Record<string, number>;
   byVehicleType: Record<string, number>;
+  /** Total de pedidos no período (antes da paginação). Útil para "mostrando X de N". */
+  totalInPeriod: number;
 }
 
 export interface DriverDeliveryStats {
@@ -35,12 +39,38 @@ export interface DeliveryTrend {
   total: number;
 }
 
-async function fetchDeliveryMetrics(): Promise<DeliveryMetrics> {
-  const { data: orders, error } = await supabase
-    .from('lalamove_orders')
-    .select('status, vehicle_type, scheduled_at, actual_delivery, estimated_delivery, created_at');
+async function fetchDeliveryMetrics(daysBack: number = 90): Promise<DeliveryMetrics> {
+  const periodoISO = subDays(new Date(), daysBack).toISOString();
+  const PAGE_SIZE = 1000;
 
-  if (error) throw error;
+  // Primeira página com count exact para saber o total
+  const { data: firstPage, error: firstError, count: totalCount } = await supabase
+    .from('lalamove_orders')
+    .select('status, vehicle_type, scheduled_at, actual_delivery, estimated_delivery, created_at', { count: 'exact' })
+    .gte('created_at', periodoISO)
+    .range(0, PAGE_SIZE - 1);
+
+  if (firstError) throw firstError;
+
+  let orders = firstPage ?? [];
+
+  // Paginação automática se houver mais de PAGE_SIZE registros
+  if (totalCount && totalCount > PAGE_SIZE) {
+    const extraPages = Math.ceil((totalCount - PAGE_SIZE) / PAGE_SIZE);
+    const extraRequests = Array.from({ length: extraPages }, (_, i) => {
+      const from = PAGE_SIZE + i * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+      return supabase
+        .from('lalamove_orders')
+        .select('status, vehicle_type, scheduled_at, actual_delivery, estimated_delivery, created_at')
+        .gte('created_at', periodoISO)
+        .range(from, to);
+    });
+    const pages = await Promise.all(extraRequests);
+    for (const page of pages) {
+      if (page.data) orders = orders.concat(page.data);
+    }
+  }
 
   const byStatus: Record<string, number> = {};
   const byVehicleType: Record<string, number> = {};
@@ -109,6 +139,7 @@ async function fetchDeliveryMetrics(): Promise<DeliveryMetrics> {
     todayCancelled,
     byStatus,
     byVehicleType,
+    totalInPeriod: totalCount ?? total,
   };
 }
 
@@ -200,6 +231,14 @@ async function fetchDeliveryTrends(days: number = 7): Promise<DeliveryTrend[]> {
 
   if (error) throw error;
 
+  // Agrupa por dia no fuso de São Paulo (America/Sao_Paulo).
+  const spDate = (value: Date | string): string => {
+    const tzDate = typeof value === 'string'
+      ? TZDate.tz('America/Sao_Paulo', value)
+      : TZDate.tz('America/Sao_Paulo', value);
+    return format(tzDate, 'yyyy-MM-dd');
+  };
+
   // Group by date
   const byDate: Record<string, { completed: number; cancelled: number; total: number }> = {};
   
@@ -207,13 +246,13 @@ async function fetchDeliveryTrends(days: number = 7): Promise<DeliveryTrend[]> {
   for (let i = 0; i <= days; i++) {
     const date = new Date();
     date.setDate(date.getDate() - (days - i));
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = spDate(date);
     byDate[dateStr] = { completed: 0, cancelled: 0, total: 0 };
   }
 
   for (const order of (orders || [])) {
     if (order.created_at) {
-      const dateStr = order.created_at.split('T')[0];
+      const dateStr = spDate(order.created_at);
       if (byDate[dateStr]) {
         byDate[dateStr].total++;
         if (order.status === 'COMPLETED') {
@@ -230,10 +269,10 @@ async function fetchDeliveryTrends(days: number = 7): Promise<DeliveryTrend[]> {
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-export function useDeliveryMetrics() {
+export function useDeliveryMetrics(daysBack: number = 90) {
   return useQuery({
-    queryKey: ['metrics', 'deliveries'],
-    queryFn: fetchDeliveryMetrics,
+    queryKey: ['metrics', 'deliveries', daysBack],
+    queryFn: () => fetchDeliveryMetrics(daysBack),
     staleTime: 60000,
   });
 }

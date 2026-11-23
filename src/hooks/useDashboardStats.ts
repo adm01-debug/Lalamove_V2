@@ -1,31 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { startOfDay, subDays } from 'date-fns';
+import { DashboardStats } from '@/types';
 
-export interface DashboardStats {
-  totalOrders: number;
-  activeDeliveries: number;
-  completedToday: number;
-  pendingApprovals: number;
-  alertsCount: number;
-  avgDeliveryTime: number;
-  onTimeRate: number;
-  activeDrivers: number;
+export type { DashboardStats } from '@/types';
+
+interface QueryError {
+  name: string;
+  error: unknown;
 }
 
-async function fetchDashboardStats(): Promise<DashboardStats> {
+export type DashboardStatsResult = DashboardStats & { errors: QueryError[] };
+
+async function fetchDashboardStats(): Promise<DashboardStatsResult> {
   const today = startOfDay(new Date()).toISOString();
   const thirtyDaysAgo = subDays(new Date(), 30).toISOString();
 
-  const [
-    ordersResult,
-    activeDeliveriesResult,
-    completedTodayResult,
-    pendingApprovalsResult,
-    alertsResult,
-    activeDriversResult,
-    deliveryTimesResult,
-  ] = await Promise.all([
+  const results = await Promise.allSettled([
     // Total orders in last 30 days
     supabase
       .from('lalamove_orders')
@@ -73,34 +64,53 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
       .limit(100),
   ]);
 
-  // Calculate average delivery time and on-time rate
+  const errors: QueryError[] = [];
+  results.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      errors.push({ name: QUERY_NAMES[index], error: result.reason });
+    }
+  });
+
+  const ok = (index: number) => (results[index] as PromiseFulfilledResult<{ count: number | null } | { data: unknown[] | null }>).value;
+
+  const ordersResult = ok(0) as { count: number | null };
+  const activeDeliveriesResult = ok(1) as { count: number | null };
+  const completedTodayResult = ok(2) as { count: number | null };
+  const pendingApprovalsResult = ok(3) as { count: number | null };
+  const alertsResult = ok(4) as { count: number | null };
+  const activeDriversResult = ok(5) as { count: number | null };
+  const deliveryTimesResult = ok(6) as { data: { scheduled_at: string | null; actual_delivery: string | null; estimated_delivery: string | null }[] | null };
+
+  // Calculate average delivery time and on-time rate (só pares completos)
   let avgDeliveryTime = 0;
   let onTimeRate = 0;
   
   if (deliveryTimesResult.data && deliveryTimesResult.data.length > 0) {
-    const deliveries = deliveryTimesResult.data;
+    const complete = deliveryTimesResult.data.filter(
+      (order) => order.scheduled_at && order.actual_delivery,
+    );
     let totalMinutes = 0;
     let onTimeCount = 0;
 
-    deliveries.forEach((order) => {
-      if (order.scheduled_at && order.actual_delivery) {
-        const scheduled = new Date(order.scheduled_at).getTime();
-        const actual = new Date(order.actual_delivery).getTime();
-        const diffMinutes = Math.round((actual - scheduled) / (1000 * 60));
-        totalMinutes += Math.max(0, diffMinutes);
+    complete.forEach((order) => {
+      const scheduled = new Date(order.scheduled_at!).getTime();
+      const actual = new Date(order.actual_delivery!).getTime();
+      const diffMinutes = Math.round((actual - scheduled) / (1000 * 60));
+      totalMinutes += Math.max(0, diffMinutes);
 
-        // Consider on-time if delivered within estimated time or within 15 min of scheduled
-        if (order.estimated_delivery) {
-          const estimated = new Date(order.estimated_delivery).getTime();
-          if (actual <= estimated) onTimeCount++;
-        } else {
-          if (diffMinutes <= 60) onTimeCount++;
-        }
+      // Consider on-time if delivered within estimated time or within 15 min of scheduled
+      if (order.estimated_delivery) {
+        const estimated = new Date(order.estimated_delivery).getTime();
+        if (actual <= estimated) onTimeCount++;
+      } else {
+        if (diffMinutes <= 60) onTimeCount++;
       }
     });
 
-    avgDeliveryTime = deliveries.length > 0 ? Math.round(totalMinutes / deliveries.length) : 0;
-    onTimeRate = deliveries.length > 0 ? Math.round((onTimeCount / deliveries.length) * 100) : 0;
+    if (complete.length > 0) {
+      avgDeliveryTime = Math.round(totalMinutes / complete.length);
+      onTimeRate = Math.round((onTimeCount / complete.length) * 100);
+    }
   }
 
   return {
@@ -109,11 +119,22 @@ async function fetchDashboardStats(): Promise<DashboardStats> {
     completedToday: completedTodayResult.count ?? 0,
     pendingApprovals: pendingApprovalsResult.count ?? 0,
     alertsCount: alertsResult.count ?? 0,
-    avgDeliveryTime, // real computed average (0 when there are no deliveries)
-    onTimeRate, // real on-time percentage (0 when there are no deliveries)
+    avgDeliveryTime, // real computed average (0 when there are no complete deliveries)
+    onTimeRate, // real on-time percentage (0 when there are no complete deliveries)
     activeDrivers: activeDriversResult.count ?? 0,
+    errors,
   };
 }
+
+const QUERY_NAMES = [
+  'totalOrders',
+  'activeDeliveries',
+  'completedToday',
+  'pendingApprovals',
+  'alertsCount',
+  'activeDrivers',
+  'deliveryTimes',
+] as const;
 
 export function useDashboardStats() {
   return useQuery({

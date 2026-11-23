@@ -1,5 +1,7 @@
 ﻿import { logger } from '@/utils/logger';
 import { useQuery } from '@tanstack/react-query';
+import { TZDate } from '@date-fns/tz';
+import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 
 // ============================================================================
@@ -136,7 +138,8 @@ export function useDeliveryMetricsCache(daysBack: number = 30) {
       // Filtra os últimos `daysBack` dias por delivery_date.
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysBack);
-      const startDateISO = startDate.toISOString().split('T')[0];
+      // Agrupa/limita por dia no fuso de São Paulo (America/Sao_Paulo).
+      const startDateISO = format(new TZDate(startDate, 'America/Sao_Paulo'), 'yyyy-MM-dd');
 
       const { data, error } = await supabase
         .from('delivery_metrics_cache')
