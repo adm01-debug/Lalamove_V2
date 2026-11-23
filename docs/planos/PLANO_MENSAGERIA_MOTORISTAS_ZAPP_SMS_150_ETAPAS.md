@@ -489,9 +489,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [ ] `ZAPP_API_URL`, `ZAPP_API_KEY` (chave `zik_` da etapa 22), `ZAPP_CALLBACK_SECRET` nas edges
 - **Evidência:** `list_secrets` mostra os 3 nomes
 
-### 88 — [~] Roteador evento × papel
-- [~] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
-- **Evidência:** `_shared/messaging/router.ts` (`RouteRule`, `DEFAULT_ROUTES`, `resolveChannels`, `findRoute`), 19 testes cobrindo `ORDER_CANCELLED/driver` → `["whatsapp","sms"]`, rota inexistente → `[]`, rota desabilitada → `[]`. **Falta:** ler da tabela `notification_routes` (DDL do Bloco 6) e usar a lista no despacho — hoje o despacho escolhe canal por `alert_configurations`, não pela rota.
+### 88 — [x] Roteador evento → papel
+- [x] Lê `notification_routes`, monta a lista ordenada de canais e o template por canal
+- **Evidência:** `_shared/messaging/registry.ts` (`loadRoutes`/`loadTemplates`, fallback para `DEFAULT_ROUTES` quando a tabela falta) e `dispatch.ts` (`planDriverMessage` decide pela rota do banco, pelo template por canal e pela preferência do motorista). `deno test supabase/functions/_shared/messaging/` → 86 testes, 0 falhas. Em produção o motor lê `messaging_settings` (zapp / sms `none` / `shadow_mode=true`) e as 14 rotas ativas.
 
 ### 89 — [L] Idempotência
 - [x] `client_message_id = uuidv5(order_id|event|role|telefone|seq)`; reprocessar o mesmo evento não duplica mensagem
@@ -511,9 +511,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** número em opt-out → `suppressed` no ledger
 - **Estado:** consulta aplicada aos **dois** caminhos de destinatário em `send-notification/index.ts` (ad-hoc e `alert_configurations`, canais WhatsApp/SMS) — antes só o ad-hoc consultava. Falta o alerta interno à operação e a linha `suppressed` no ledger (depende da migration `20261125120000`, PR #283).
 
-### 93 — [L] Horário de silêncio por papel (Z9)
-- [ ] Motorista com pedido ativo isento; fornecedor/cliente seguem `geo_defaults`
-- **Evidência:** teste às 22 h: motorista recebe, fornecedor é adiado
+### 93 — [x] Horário de silêncio por papel (Z9)
+- [x] Motorista com pedido ativo isento; fornecedor/cliente seguem `geo_defaults`
+- **Evidência:** `dispatch.ts` (`quietWindowFor` + exceção `hasActiveOrder`) com `notify-driver.ts` contando pedidos em `PENDING/MATCHED/ON_GOING/PICKED_UP`; testes "Z9: madrugada silencia o motorista parado" e "Z9: madrugada nao cala o motorista com pedido em andamento". Em produção `quiet_hours_by_role = {}` → nenhuma janela ativa até o operador configurar.
 
 ### 94 — [L] Deduplicação
 - [x] `claim_alert_notification` com chave `event:order:role` para os eventos M*
@@ -538,47 +538,46 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 
 ## Bloco 8 — Lalamove: eventos ao motorista (99–112)
 
-### 99 — [L] Telefone do motorista confiável
-- [x] Em `DRIVER_ASSIGNED`: buscar dados do motorista na API v3, gravar `lalamove_orders.driver_phone` e `drivers.phone` normalizados; UAPI como reserva
-- **Evidência:** `lalamove-webhook/index.ts` (`normalizePhone(driverData.driverPhone)`; `drivers.phone` na criação e atualizado quando o v3 manda outro número — antes o motorista antigo ficava com o telefone do primeiro cadastro; `lalamove_orders.driver_phone` gravado no vínculo do pedido; telefone com máscara (`****`) é descartado com log em vez de virar 400 no provedor); 17 testes do webhook verdes
-- **Evidência:** pedido novo com `driver_phone` em E.164 (consulta)
+### 99 — [x] Telefone do motorista confiável
+- [x] Normaliza para E.164 antes de gravar e completa o telefone de quem já existia
+- **Evidência:** `lalamove-webhook/index.ts` no `DRIVER_ASSIGNED` (`normalizePhone`, `UPDATE drivers.phone` só quando muda, descarte logado de número inutilizável) e `notify-driver.ts` recusando motorista sem telefone (`sem_telefone`).
 
 ### 100 — [L] Troca de motorista
 - [ ] `ORDER_REPLACED`/`lalamove_order_replacements`: M8 ao motorista antigo e M1 ao novo
 - **Evidência:** simulação de troca gera as 2 mensagens
 - **Estado:** o lado do dado está pronto — `lalamove-webhook/index.ts:791-864` grava a trilha idempotente em `lalamove_order_replacements`, atualiza `lalamove_id` só quando ainda está no antigo e registra `ORDER_REPLACED` em `lalamove_status_history`. Faltam os dois disparos, que dependem dos templates M1/M8 (etapas 101–112 + `message_templates`, DDL do Bloco 6): hoje não existe evento de alerta para "motorista trocado".
 
-### 101 — [L] M1 Briefing de atribuição
-- [ ] Variáveis: pedido interno, endereço/janela da coleta, responsável, instruções, link de rota (`share_link`)
-- **Evidência:** mensagem real no piloto
+### 101 — [~] M1 Briefing de atribuição
+- [~] Variáveis: pedido interno, endereço/janela da coleta, responsável, instruções, link de rota (`share_link`)
+- **Evidência:** motor pronto e ligado no webhook (`DRIVER_ASSIGNED` → `notifyDriverEvent`); variáveis montadas de `lalamove_orders` por `loadOrderVariables` (`order_number`, `pickup_address`, `pickup_window` em BRT, `pickup_contact`, `pickup_notes`, `share_link`, `pickup_location_link`). **Falta:** `shadow_mode=true` em produção e secrets do Zapp (etapa 87) — hoje o aviso é decidido e gravado como `suppressed` (`modo_sombra`), sem envio.
 
 ### 102 — [L] M2 Confirmação com prazo
 - [ ] Sem resposta em `reply_timeout_min` → alerta interno `DRIVER_NO_CONFIRMATION` (tipo novo com linha em `alert_configurations`)
 - **Evidência:** teste sem resposta gera o alerta
 
-### 103 — [L] M3 Localização e contato
-- [ ] `send-location` da coleta + `send-contact` do responsável
-- **Evidência:** recebidos no aparelho
+### 103 — [~] M3 Localização e contato
+- [~] `send-location` da coleta + `send-contact` do responsável
+- **Evidência:** template `M3_LOCALIZACAO_CONTATO` e rota `DRIVER_ASSIGNED` existem em produção; `loadOrderVariables` monta `pickup_location_link` (link de mapa sem chave) e `pickup_contact`. **Limite conhecido:** o motor dispara um template por evento/canal e vence o de menor `key` (`M1_BRIEFING`), determinístico desde esta PR. O M3 como segunda mensagem exige disparo próprio com `seq` diferente — próximo passo.
 
 ### 104 — [L] M4 Chegada na coleta
 - [ ] Gatilho `DRIVER_ARRIVED_PICKUP` (geofence do plano Google)
 - **Evidência:** simulação com `simulate-driver-movement`
 
-### 105 — [L] M5 Pós-coleta
-- [ ] Gatilho `PICKED_UP`; inclui exigência de comprovante quando `requires_pod`
-- **Evidência:** mensagem no piloto
+### 105 — [~] M5 Pós-coleta
+- [~] Gatilho `PICKED_UP`; inclui exigência de comprovante quando `requires_pod`
+- **Evidência:** `lalamove-webhook` `ORDER_PICKED_UP` → `notifyDriverEvent`; `loadOrderVariables` fornece `delivery_address`, `delivery_contact`, `delivery_window` e `pod_requirement` só quando `requires_pod`. **Falta:** envio real (ver M1).
 
 ### 106 — [L] M6 Multi-paradas
 - [ ] Ao concluir parada (`lalamove_stops.completed_at`), envia a próxima
 - **Evidência:** pedido com 3 paradas gera 2 mensagens M6
 
-### 107 — [L] M7 Pedido editado
-- [ ] `ORDER_EDITED`: diferença antes → depois (endereço, contato, horário)
-- **Evidência:** teste com edição de endereço
+### 107 — [~] M7 Pedido editado
+- [~] `ORDER_EDITED`: diferença antes → depois (endereço, contato, horário)
+- **Evidência:** `lalamove-webhook` `ORDER_EDITED` → `notifyDriverEvent` com `change_summary` gerado por `describeOrderChanges` (paradas atualizadas e novo valor); sem resumo descritível o aviso não é disparado (texto com placeholder não resolvido é pior que silêncio). **Falta:** envio real e o diff completo de endereço/contato/horário (hoje o payload só traz `stops` e `priceBreakdown`).
 
-### 108 — [L] M8 Cancelamento
-- [ ] SMS + WhatsApp em paralelo, ignora teto de custo
-- **Evidência:** cancelamento no piloto chega pelos 2 canais
+### 108 — [~] M8 Cancelamento
+- [~] SMS + WhatsApp em paralelo, ignora teto de custo
+- **Evidência:** `lalamove-webhook` `ORDER_CANCELLED` → `notifyDriverEvent`; rota de produção `ORDER_CANCELLED = sms,whatsapp` (Z3). **Limite conhecido:** `sms_provider = none` em produção filtra o SMS e o aviso sai só por WhatsApp quando o Zapp tiver token; e o teto mensal (Z5) ainda corta o SMS — "ignora teto" para o M8 não está implementado.
 
 ### 109 — [L] M9 Lembrete de comprovante
 - [ ] Gatilho `MISSING_POD`; foto recebida (etapa 116) encerra o lembrete
@@ -592,9 +591,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [ ] `job_queue` agenda o lembrete para `scheduled_at − 30 min`; cancela se o pedido mudar
 - **Evidência:** job criado e executado no horário
 
-### 112 — [L] M12 Encerramento
-- [ ] `COMPLETED`: agradecimento; fecha a correlação para respostas posteriores irem só à fila humana
-- **Evidência:** resposta após M12 não altera o pedido
+### 112 — [~] M12 Encerramento
+- [~] `COMPLETED`: agradecimento; fecha a correlação para respostas posteriores irem só à fila humana
+- **Evidência:** `lalamove-webhook` `ORDER_COMPLETED` → `notifyDriverEvent` com `order_number` e `driver_name` do pedido/cadastro. **Falta:** envio real e encerrar a correlação no inbound (etapa 116).
 
 ## Bloco 9 — Lalamove: respostas do motorista (113–118)
 
