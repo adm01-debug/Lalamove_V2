@@ -10,6 +10,7 @@ import { trackContractUsage } from "../_shared/telemetry.ts";
 import { validateHmacSignature, validateLalamoveV3Signature } from "./security.ts";
 import { normalizeLalamoveV3Payload } from "./normalize.ts";
 import { normalizePhone } from "../_shared/phone.ts";
+import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -41,6 +42,25 @@ const TRUSTED_IP_PATTERNS = [
 function ipToNumber(ip: string): number {
   const parts = ip.split('.').map(Number);
   return (parts[0] << 24) + (parts[1] << 16) + (parts[2] << 8) + parts[3];
+}
+
+/**
+ * M7 (etapa 96): resumo legivel da edicao para o aviso ao motorista. O payload
+ * so traz o que mudou; devolve null quando nao ha nada que valha avisar, para o
+ * aviso nao sair com `{{change_summary}}` no lugar do texto.
+ */
+function describeOrderChanges(data: Record<string, unknown>): string | null {
+  const partes: string[] = [];
+  const stops = data.stops;
+  if (Array.isArray(stops) && stops.length > 0) {
+    partes.push(`${stops.length} parada(s) atualizada(s)`);
+  }
+  const breakdown = data.priceBreakdown as Record<string, unknown> | undefined;
+  const total = breakdown?.total;
+  if (total !== undefined && !Number.isNaN(Number(total))) {
+    partes.push(`valor agora R$ ${Number(total).toFixed(2).replace('.', ',')}`);
+  }
+  return partes.length > 0 ? `${partes.join('. ')}.` : null;
 }
 
 function isIpInCidr(ip: string, cidr: string): boolean {
@@ -342,6 +362,32 @@ serve(async (req) => {
       logger.log(`[Webhook] Order ${orderUuid} status: ${oldStatus} -> ${newStatus}`);
     }
     
+    /**
+     * Etapa 96 do plano de mensageria: aviso ao motorista pelo motor do Bloco 7.
+     * `notifyDriver` devolve resultado em vez de lancar; o try/catch cobre o
+     * resto para que uma falha de mensagem nunca derrube o processamento do
+     * pedido.
+     */
+    async function notifyDriverEvent(
+      event: string,
+      driverId?: string | null,
+      orderId?: string | null,
+      variables?: Record<string, string | number | null | undefined>,
+    ) {
+      if (!driverId) return;
+      try {
+        const result = await notifyDriver(supabase, {
+          event,
+          driverId,
+          orderId: orderId ?? null,
+          variables,
+        });
+        logger.log(`[Webhook] Aviso ${event} ao motorista: ${result.outcome}${result.reason ? ` (${result.reason})` : ''}${result.channel ? ` via ${result.channel}` : ''}`);
+      } catch (error) {
+        logger.error(`[Webhook] Aviso ${event} ao motorista falhou:`, error);
+      }
+    }
+
     async function sendNotification(
       type: string, title: string, message: string, severity: string, driverId?: string, orderId?: string,
       recipients?: Array<{ role: string; channel: string; to: string }>,
@@ -518,6 +564,11 @@ serve(async (req) => {
           } catch (evalError) {
             logger.error(`[Webhook] Evaluation request failed: ${evalError}`);
           }
+
+          // M1/M3 (etapas 96 do plano de mensageria): briefing da atribuicao sai
+          // sem operador. A rota e o texto vem de `notification_routes` /
+          // `message_templates`; as variaveis, do pedido.
+          await notifyDriverEvent('DRIVER_ASSIGNED', driverId, orderUuid);
         }
         break;
       }
@@ -543,6 +594,11 @@ serve(async (req) => {
             await updateOrderStatus(orderUuid, 'PICKED_UP', { picked_up_at: payload.timestamp || new Date().toISOString() });
             const stopIndex = payload.data?.stopIndex || 0;
             await supabase.from('lalamove_stops').update({ completed_at: new Date().toISOString() }).eq('order_id', orderUuid).eq('stop_index', stopIndex);
+
+            // M5 (etapa 96): pos-coleta com endereco/recebedor/janela de entrega.
+            const { data: pickedOrder } = await supabase.from('lalamove_orders')
+              .select('driver_id').eq('id', orderUuid).maybeSingle();
+            await notifyDriverEvent('ORDER_PICKED_UP', (pickedOrder as OrderDriverRecord | null)?.driver_id, orderUuid);
           }
         }
         break;
@@ -570,6 +626,9 @@ serve(async (req) => {
               }
             }
             logger.log(`[Webhook] Order ${lalamoveOrderId} completed`);
+            // M12 (etapa 96): encerramento com agradecimento — fecha o ciclo do
+            // aviso automatico.
+            await notifyDriverEvent('ORDER_COMPLETED', orderData?.driver_id, orderUuid);
           }
         }
         break;
@@ -589,6 +648,10 @@ serve(async (req) => {
             await sendNotification('ORDER_CANCELLED', 'Pedido Cancelado',
               `Pedido ${lalamoveOrderId} para ${orderData?.customer_name || 'cliente'} cancelado. Motivo: ${reason}`,
               'WARNING', orderData?.driver_id || undefined, orderUuid);
+
+            // M8 (etapas 96 e Z3): o aviso que impede o motorista de seguir para
+            // uma coleta cancelada. A rota do banco manda SMS primeiro.
+            await notifyDriverEvent('ORDER_CANCELLED', orderData?.driver_id, orderUuid);
             
             logger.log(`[Webhook] Order ${lalamoveOrderId} cancelled: ${reason}`);
           }
@@ -884,6 +947,15 @@ serve(async (req) => {
               change_reason: 'ORDER_EDITED',
               metadata: { priceBreakdown, stops: (editData as Record<string, unknown>).stops },
             });
+            // M7 (etapa 96): o motorista precisa confirmar que viu a mudanca.
+            const changeSummary = describeOrderChanges(editData);
+            if (changeSummary) {
+              const { data: editedOrder } = await supabase.from('lalamove_orders')
+                .select('driver_id').eq('id', orderUuid).maybeSingle();
+              await notifyDriverEvent('ORDER_EDITED', (editedOrder as OrderDriverRecord | null)?.driver_id, orderUuid, {
+                change_summary: changeSummary,
+              });
+            }
             logger.log(`[Webhook] Order ${lalamoveOrderId} edited`);
           }
         }
