@@ -112,13 +112,26 @@ Deno.test("ETA_DELAY: tolerancia customizada em minutos muda a decisao", async (
 });
 
 Deno.test("ETA_DELAY: atraso exatamente igual a tolerancia nao dispara (comparacao estrita)", async () => {
-  // plano exige `now + eta > scheduled_at + threshold`; igualdade nao e atraso
+  // plano exige `now + eta > scheduled_at + threshold`; igualdade nao e atraso.
+  // O relogio e injetado: com dois Date.now() distintos a igualdade exata seria
+  // inalcancavel e o teste falhava por milissegundos no runner da CI.
+  const agora = Date.now();
   const { client, rpcCalls } = fakeSupabase({
-    order: { scheduled_at: isoIn(40), status: "ON_GOING" },
+    order: { scheduled_at: new Date(agora + 40 * 60_000).toISOString(), status: "ON_GOING" },
     cfg: { min_interval_seconds: 300, is_enabled: true },
   });
-  assertEquals(await maybeEmitEtaDelay(client, baseArgs), false);
+  assertEquals(await maybeEmitEtaDelay(client, { ...baseArgs, nowMs: agora }), false);
   assertEquals(rpcCalls.length, 0);
+});
+
+Deno.test("ETA_DELAY: um minuto acima da tolerancia dispara (fronteira oposta)", async () => {
+  const agora = Date.now();
+  const { client, rpcCalls } = fakeSupabase({
+    order: { scheduled_at: new Date(agora + 40 * 60_000).toISOString(), status: "ON_GOING" },
+    cfg: { min_interval_seconds: 300, is_enabled: true },
+  });
+  assertEquals(await maybeEmitEtaDelay(client, { ...baseArgs, nowMs: agora + 60_000 }), true);
+  assertEquals(rpcCalls.length, 1);
 });
 
 Deno.test("ETA_DELAY: dedup do geo_emit_event (NULL) nao reporta disparo", async () => {
