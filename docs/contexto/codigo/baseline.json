@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
+  "commit": "d3f974b04f8e22e082ca45139e7e6815bacd8340",
   "branch": "main",
-  "data_commit": "2026-11-22T19:42:48-03:00",
+  "data_commit": "2026-11-22T21:56:59-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d3f974b",
+    "data": "2026-11-22",
+    "assunto": "docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)"
+   },
    {
     "sha": "281cd07",
     "data": "2026-11-22",
@@ -126,14 +131,9 @@
     "sha": "65322a8",
     "data": "2026-11-22",
     "assunto": "chore: marca item XSS do plano front-end como feito (#288)"
-   },
-   {
-    "sha": "6e6c62b",
-    "data": "2026-11-22",
-    "assunto": "fix: escapa dados do usuario nos marcadores do mapa (XSS) (#287)"
    }
   ],
-  "arquivos_mudados_7d": 383,
+  "arquivos_mudados_7d": 389,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 213
+    "commits": 214
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1078,
+  "arquivos_total": 1084,
   "arquivos_codigo": 676,
   "linhas_codigo": 132230,
   "rotas": 56,
@@ -327,7 +327,7 @@
   "testes": 166,
   "workflows": 5,
   "scripts": 107,
-  "docs_md": 110
+  "docs_md": 116
  },
  "por_pasta": {
   "e2e/autocomplete.e2e.ts": {

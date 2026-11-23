@@ -1,10 +1,10 @@
 {
  "meta": {
-  "sha": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
+  "sha": "d3f974b04f8e22e082ca45139e7e6815bacd8340",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-22 22:44 UTC",
-  "files_total": 1072,
+  "generated_at": "2026-11-23 01:14 UTC",
+  "files_total": 1078,
   "code_files": 887,
   "code_lines": 153407
  },
@@ -74628,10 +74628,24 @@
   }
  },
  "git": {
-  "sha": "281cd076ce6f408951d3442fc4e94c1ec6855e7c",
+  "sha": "d3f974b04f8e22e082ca45139e7e6815bacd8340",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d3f974b",
+    "date": "2026-11-22",
+    "author": "adm01-debug",
+    "subject": "docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)",
+    "files": [
+     "docs/qa/00-RESUMO.md",
+     "docs/qa/01-INVENTARIO.md",
+     "docs/qa/02-CENARIOS.md",
+     "docs/qa/03-ACHADOS.md",
+     "docs/qa/04-PLANO.md",
+     "docs/qa/05-PROGRESSO.md"
+    ]
+   },
    {
     "sha": "281cd07",
     "date": "2026-11-22",
@@ -75022,17 +75036,6 @@
      "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
      "docs/planos/README.md"
     ]
-   },
-   {
-    "sha": "d6f59de",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: motor de roteamento evento x papel da comunicacao (etapas 88-95) (#282)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "supabase/functions/_shared/messaging/router.test.ts",
-     "supabase/functions/_shared/messaging/router.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -75053,10 +75056,6 @@
     4
    ],
    [
-    ".github/workflows/ci.yml",
-    3
-   ],
-   [
     "src/components/layout/sidebar-config.ts",
     3
    ],
@@ -75065,11 +75064,7 @@
     3
    ],
    [
-    "supabase/functions/_shared/messaging/router.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/router.ts",
+    ".github/workflows/ci.yml",
     2
    ],
    [
@@ -75114,6 +75109,14 @@
    ],
    [
     "src/hooks/useMFA.ts",
+    2
+   ],
+   [
+    "supabase/functions/external-companies/index.ts",
+    2
+   ],
+   [
+    "src/lib/__tests__/html.test.ts",
     2
    ]
   ]

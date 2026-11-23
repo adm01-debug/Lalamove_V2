@@ -5,8 +5,8 @@
   "linguagens": [
    "TypeScript (563)",
    "SQL (202)",
+   "Markdown (116)",
    "JavaScript (114)",
-   "Markdown (110)",
    "JSON (36)",
    "Shell (10)",
    "Python (8)",
@@ -538,6 +538,10 @@
   {
    "pasta": "docs/planos",
    "arquivos_md": 7
+  },
+  {
+   "pasta": "docs/qa",
+   "arquivos_md": 6
   },
   {
    "pasta": "docs/adr",
