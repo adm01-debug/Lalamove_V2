@@ -204,7 +204,7 @@ export default function AdminTelemetriaPage() {
       toast.success("PDF exportado com sucesso");
     } catch (err) {
       toast.error("Erro ao gerar PDF");
-      logger.error(err);
+      logger.error('Erro ao gerar PDF', err);
     }
   };
 
