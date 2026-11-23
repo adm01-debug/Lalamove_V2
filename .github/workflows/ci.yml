@@ -137,6 +137,11 @@ jobs:
       # motorista esperando a mensagem.
       - name: Run messaging channel tests (zapp, sms)
         run: deno test supabase/functions/_shared/channels/
+
+      # Etapa 96: assinatura HMAC do callback do Zapp, janela anti-replay, maquina
+      # de estados do ledger e escrita de inbound. Tudo com fetch/cliente fake.
+      - name: Run zapp-callback tests
+        run: deno test --allow-env supabase/functions/zapp-callback/
       # job-worker, send-notification e lalamove-api tinham testes no repo que
       # nenhum workflow executava: ETA, cadencia, replay de trajeto, opt-out e
       # fallback de geocode podiam quebrar sem o CI ficar vermelho.
