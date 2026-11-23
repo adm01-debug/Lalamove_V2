@@ -810,7 +810,7 @@
    "hooks_exportados": [
     "useCommandPaletteSearch"
    ],
-   "linhas": 238,
+   "linhas": 239,
    "dominio": "hooks",
    "tabelas": [
     "alerts",
@@ -2362,7 +2362,7 @@
    "hooks_exportados": [
     "useSystemHealth"
    ],
-   "linhas": 51,
+   "linhas": 61,
    "dominio": "hooks",
    "tabelas": [
     "drivers"

@@ -1,16 +1,16 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 519,
- "arestas": 1701,
+ "nos": 520,
+ "arestas": 1704,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 129
+   "importado_por": 130
   },
   {
    "arquivo": "src/lib/utils.ts",
-   "importado_por": 115
+   "importado_por": 116
   },
   {
    "arquivo": "src/components/ui/badge.tsx",
@@ -81,15 +81,15 @@
    "importado_por": 15
   },
   {
+   "arquivo": "src/components/ui/tooltip.tsx",
+   "importado_por": 14
+  },
+  {
    "arquivo": "src/lib/geo-gateway.ts",
    "importado_por": 14
   },
   {
    "arquivo": "src/components/ui/tabs.tsx",
-   "importado_por": 13
-  },
-  {
-   "arquivo": "src/components/ui/tooltip.tsx",
    "importado_por": 13
   },
   {
@@ -183,6 +183,7 @@
   "src/components/debug/AuditReportGenerator.tsx",
   "src/components/ui/chart.tsx",
   "src/components/ui/hero-metric.tsx",
+  "src/components/ui/icon-button.tsx",
   "src/hooks/useApprovalActionsEnhanced.ts",
   "src/hooks/useDriverEvaluations.ts",
   "src/hooks/useGeo.ts",

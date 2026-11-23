@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f20a3ea033` · branch `main` · 2026-11-23 19:33 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `ced043f289` · branch `main` · 2026-11-23 19:36 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1774,7 +1774,7 @@ _nenhum item encontrado_
 | : return Bell;     case  | `src/components/CommandPaletteEnhanced.tsx` |
 |                  className= | `src/components/admin/telemetry/ContractVersionUsagePanel.tsx` |
 | Nenhum pedido selecionado possui contato de fornecedor/cliente. | `src/components/dashboard/BatchActionsToolbar.tsx` |
-| Não foi possível copiar os links. | `src/components/dashboard/BatchActionsToolbar.tsx` |
+| Não foi possível copiar: permissão de clipboard negada. | `src/components/dashboard/BatchActionsToolbar.tsx` |
 | Telefone inválido para o pedido ${order.internalOrderId \|\| order.lalamoveId}. | `src/components/dashboard/BatchActionsToolbar.tsx` |
 | PDF generation triggered. In a CI environment, this would use a tool like  | `src/components/debug/AuditReportGenerator.tsx` |
 | Falha ao resgatar o cupom. | `src/components/lalamove/UapiCouponsPanel.tsx` |
@@ -2145,7 +2145,6 @@ _nenhum item encontrado_
 | `invoke(` | `src/hooks/useRegionResolver.ts` |
 | `.add('dark'` | `src/hooks/useScheduledTheme.ts` |
 | `.add('theme-transition'` | `src/hooks/useScheduledTheme.ts` |
-| `invoke(` | `src/hooks/useSystemHealth.ts` |
 | `invoke(` | `src/hooks/useTestNotification.ts` |
 | `.add('dark'` | `src/hooks/useTheme.ts` |
 | `.add('theme-transition'` | `src/hooks/useTheme.ts` |
@@ -2253,6 +2252,8 @@ _nenhum item encontrado_
 | silencioso: não deve bloquear o fluxo do pedido */}); | `src/components/orders/NewOrderDialog.tsx` |
 | Item Information (Lalamove v3) — apenas serviços que aceitam `item` */} | `src/components/orders/NewOrderDialog.tsx` |
 | 22c55e">No prazo</span>'; | `src/components/reports/GeoHeatmap.tsx` |
+| * Visible label used for aria-label and tooltip. Required for accessibility. */ | `src/components/ui/icon-button.tsx` |
+| * Accessible icon-only button with required label for aria-label and tooltip. | `src/components/ui/icon-button.tsx` |
 | * Custo mínimo (string vazia = sem filtro). */ | `src/hooks/useAdvancedReports.ts` |
 | * Custo máximo (string vazia = sem filtro). */ | `src/hooks/useAdvancedReports.ts` |
 | Falha na janela anterior não deve quebrar o relatório principal. | `src/hooks/useAdvancedReports.ts` |

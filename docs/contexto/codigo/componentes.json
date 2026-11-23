@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 218,
- "orfaos": 4,
+ "total": 219,
+ "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
    "src/components/ui/fab-variants.tsx",
@@ -381,7 +381,7 @@
     "BatchActionsToolbar"
    ],
    "export_default": null,
-   "linhas": 126,
+   "linhas": 125,
    "dominio": "components/dashboard",
    "hooks_locais": [],
    "tabelas": [],
@@ -713,7 +713,7 @@
     "Header"
    ],
    "export_default": null,
-   "linhas": 438,
+   "linhas": 439,
    "dominio": "components/layout",
    "hooks_locais": [
     "useActiveAlerts",
@@ -732,7 +732,7 @@
     "MobileBottomNav"
    ],
    "export_default": null,
-   "linhas": 323,
+   "linhas": 324,
    "dominio": "components/layout",
    "hooks_locais": [
     "useActiveAlerts",
@@ -1087,7 +1087,7 @@
     "NewOrderDialog"
    ],
    "export_default": null,
-   "linhas": 1179,
+   "linhas": 1186,
    "dominio": "components/orders",
    "hooks_locais": [
     "useContacts",
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 128,
+   "usado_por": 129,
    "orfao": false
   },
   {
@@ -1610,6 +1610,21 @@
    "edges": [],
    "usado_por": 1,
    "orfao": false
+  },
+  {
+   "arquivo": "src/components/ui/icon-button.tsx",
+   "exports": [
+    "IconButton",
+    "IconButtonProps"
+   ],
+   "export_default": null,
+   "linhas": 47,
+   "dominio": "components/ui",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 0,
+   "orfao": true
   },
   {
    "arquivo": "src/components/ui/input.tsx",
@@ -2150,7 +2165,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 13,
+   "usado_por": 14,
    "orfao": false
   },
   {
@@ -2889,7 +2904,7 @@
     "LiveMapPage"
    ],
    "export_default": null,
-   "linhas": 468,
+   "linhas": 479,
    "dominio": "pages",
    "hooks_locais": [
     "useFeatureFlag"
@@ -3170,7 +3185,7 @@
     "OrdersPage"
    ],
    "export_default": null,
-   "linhas": 269,
+   "linhas": 277,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",
@@ -3255,7 +3270,7 @@
     "ProfilePage"
    ],
    "export_default": "ProfilePage",
-   "linhas": 407,
+   "linhas": 409,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",

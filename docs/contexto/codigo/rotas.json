@@ -6,7 +6,7 @@
   "urls": 56,
   "layouts": 1,
   "itens_menu": 50,
-  "lazy": 54
+  "lazy": 56
  },
  "urls": [
   {
@@ -2339,6 +2339,7 @@
     "useCallback",
     "useContext",
     "useEffect",
+    "useId",
     "useMutation",
     "usePermissions",
     "useQuery",
@@ -4461,8 +4462,10 @@
   "MapToolsPage": "src/pages/MapToolsPage.tsx",
   "MapsSettingsPage": "src/pages/MapsSettingsPage.tsx",
   "MetricsPage": "src/pages/MetricsPage.tsx",
+  "NewOrderDialog": "src/components/orders/NewOrderDialog.tsx",
   "NotFound": "src/pages/NotFound.tsx",
   "NotificationHistoryPage": "src/pages/NotificationHistoryPage.tsx",
+  "OrderDetailModal": "src/components/orders/OrderDetailModal.tsx",
   "OrdersPage": "src/pages/OrdersPage.tsx",
   "PasswordResetApprovalsPage": "src/pages/PasswordResetApprovalsPage.tsx",
   "PerformanceDashboardPage": "src/pages/PerformanceDashboardPage.tsx",

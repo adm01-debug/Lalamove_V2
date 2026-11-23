@@ -6,7 +6,7 @@
    "src/pages (54)"
   ],
   "componentes": [
-   "src/components (127)",
+   "src/components (128)",
    "src/pages (87)",
    "src/hooks (3)"
   ],
@@ -54,7 +54,7 @@
  },
  "barrels_index": 4,
  "extensao_componentes": [
-  ".tsx (218)"
+  ".tsx (219)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
-   "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)",
-   "feat: lote 10 - build es2022 + manualChunks + logger producao (#322)",
-   "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)",
-   "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)",
-   "feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)"
+   "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)",
+   "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)",
+   "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)",
+   "fix: validar contrato antes de criar cliente no new-device-alert (#328)",
+   "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

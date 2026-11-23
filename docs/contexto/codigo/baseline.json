@@ -2,11 +2,31 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "f20a3ea033da470c8cc963cf99f3d14856e49b39",
+  "commit": "ced043f289e90d7760a8c5920f75e645ac24256d",
   "branch": "main",
-  "data_commit": "2026-11-23T16:30:41-03:00",
+  "data_commit": "2026-11-23T16:34:34-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "ced043f",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)"
+   },
+   {
+    "sha": "3e994e3",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)"
+   },
+   {
+    "sha": "680e653",
+    "data": "2026-11-23",
+    "assunto": "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)"
+   },
+   {
+    "sha": "ee920ac",
+    "data": "2026-11-23",
+    "assunto": "fix: validar contrato antes de criar cliente no new-device-alert (#328)"
+   },
    {
     "sha": "f20a3ea",
     "data": "2026-11-23",
@@ -111,29 +131,9 @@
     "sha": "1f97a5b",
     "data": "2026-11-22",
     "assunto": "fix: fechar janela de bypass de MFA no ProtectedRoute (#298)"
-   },
-   {
-    "sha": "72dd548",
-    "data": "2026-11-22",
-    "assunto": "fix: instancia cliente Resend no new-device-alert (item 19) (#297)"
-   },
-   {
-    "sha": "07c862d",
-    "data": "2026-11-22",
-    "assunto": "fix: external-companies exige papel >= operator e escapa busca (item 17) (#296)"
-   },
-   {
-    "sha": "b05e2b0",
-    "data": "2026-11-22",
-    "assunto": "feat: telemetria admin sem fallback p/ chave pública e com confirmação (item 14) (#295)"
-   },
-   {
-    "sha": "ca2061f",
-    "data": "2026-11-22",
-    "assunto": "feat: campos de token como password e sem autofill (#294)"
    }
   ],
-  "arquivos_mudados_7d": 417,
+  "arquivos_mudados_7d": 423,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -153,7 +153,7 @@
    },
    {
     "pasta": "src/components/orders",
-    "mudancas": 27
+    "mudancas": 28
    },
    {
     "pasta": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -180,16 +180,16 @@
     "mudancas": 14
    },
    {
+    "pasta": "src/components/layout",
+    "mudancas": 14
+   },
+   {
     "pasta": "docs/MAPBOX.md",
     "mudancas": 13
    },
    {
     "pasta": "supabase/functions/job-worker",
     "mudancas": 13
-   },
-   {
-    "pasta": "src/components/layout",
-    "mudancas": 12
    },
    {
     "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
@@ -234,6 +234,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 11
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
     "mudancas": 11
    },
@@ -243,10 +247,6 @@
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 10
    },
    {
@@ -282,6 +282,10 @@
     "mudancas": 7
    },
    {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
    },
@@ -292,16 +296,12 @@
    {
     "arquivo": "src/components/map/MapHUD.tsx",
     "mudancas": 6
-   },
-   {
-    "arquivo": "src/components/orders/OrderDetailModal.tsx",
-    "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 220
+    "commits": 224
    },
    {
     "autor": "dependabot[bot]",
@@ -310,15 +310,15 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1075,
-  "arquivos_codigo": 678,
-  "linhas_codigo": 132528,
+  "arquivos_total": 1076,
+  "arquivos_codigo": 679,
+  "linhas_codigo": 132615,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
   "itens_menu": 50,
   "modulos": 43,
-  "componentes": 218,
+  "componentes": 219,
   "hooks": 101,
   "edge_functions": 27,
   "tabelas": 88,
@@ -519,12 +519,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 161,
-   "linhas": 29485
+   "arquivos": 162,
+   "linhas": 29540
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19041
+   "linhas": 19052
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 90,
-   "linhas": 19792
+   "linhas": 19813
   },
   "src/services": {
    "arquivos": 1,
@@ -598,7 +598,7 @@
   },
   {
    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-   "linhas": 1179
+   "linhas": 1186
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",
@@ -764,7 +764,8 @@
    "src/components/approvals/SwipeableApprovalCard.tsx",
    "src/components/debug/AuditReportGenerator.tsx",
    "src/components/ui/chart.tsx",
-   "src/components/ui/hero-metric.tsx"
+   "src/components/ui/hero-metric.tsx",
+   "src/components/ui/icon-button.tsx"
   ],
   "componentes_com_nome_duplicado": [
    "ExtendedFAB",
