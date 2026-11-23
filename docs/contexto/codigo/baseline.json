@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e918dd612682cdba61c8cbf3c17785983e98c042",
+  "commit": "f5779da5d8916923d8b9ff1da0b859a30174c540",
   "branch": "main",
-  "data_commit": "2026-11-23T18:16:32-03:00",
+  "data_commit": "2026-11-23T18:43:13-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f5779da",
+    "data": "2026-11-23",
+    "assunto": "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)"
+   },
    {
     "sha": "e918dd6",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "5672ef0",
     "data": "2026-11-22",
     "assunto": "feat: menu alinhado às rotas (item 49) (#306)"
-   },
-   {
-    "sha": "945a0a5",
-    "data": "2026-11-22",
-    "assunto": "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)"
    }
   ],
   "arquivos_mudados_7d": 439,
@@ -180,15 +180,15 @@
     "mudancas": 15
    },
    {
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 15
+   },
+   {
     "pasta": "src/components/layout",
     "mudancas": 14
    },
    {
     "pasta": "docs/MAPBOX.md",
-    "mudancas": 13
-   },
-   {
-    "pasta": "supabase/functions/job-worker",
     "mudancas": 13
    },
    {
@@ -246,15 +246,15 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 231
+    "commits": 232
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1087,
   "arquivos_codigo": 688,
-  "linhas_codigo": 134054,
+  "linhas_codigo": 134069,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 102,
-   "linhas": 24912
+   "linhas": 24927
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1246
+   "linhas": 1248
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",

@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e918dd612682cdba61c8cbf3c17785983e98c042",
+  "sha": "f5779da5d8916923d8b9ff1da0b859a30174c540",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 21:17 UTC",
+  "generated_at": "2026-11-23 21:43 UTC",
   "files_total": 1081,
   "code_files": 900,
-  "code_lines": 155415
+  "code_lines": 155430
  },
  "version": "1.3.2",
- "facts_hash": "3e6b9d3853d7dd71",
+ "facts_hash": "e750becdc31a60a0",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22078,7 +22078,7 @@
   {
    "module": "supabase/functions",
    "files": 102,
-   "lines": 24912,
+   "lines": 24927,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -41283,6 +41283,10 @@
    {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
     "name": "ETA_DELAY: atraso exatamente igual a tolerancia nao dispara (comparacao estrita)"
+   },
+   {
+    "file": "supabase/functions/job-worker/eta-delay.test.ts",
+    "name": "ETA_DELAY: um minuto acima da tolerancia dispara (fronteira oposta)"
    },
    {
     "file": "supabase/functions/job-worker/eta-delay.test.ts",
@@ -72680,7 +72684,7 @@
   },
   "supabase/functions/job-worker/eta-delay.test.ts": {
    "path": "supabase/functions/job-worker/eta-delay.test.ts",
-   "lines": 172,
+   "lines": 185,
    "is_test": true,
    "errors": [
     "tabela inesperada: ${table}"
@@ -72702,6 +72706,7 @@
     "ETA_DELAY: alert_configurations desligada impede o disparo",
     "ETA_DELAY: tolerancia customizada em minutos muda a decisao",
     "ETA_DELAY: atraso exatamente igual a tolerancia nao dispara (comparacao estrita)",
+    "ETA_DELAY: um minuto acima da tolerancia dispara (fronteira oposta)",
     "ETA_DELAY: dedup do geo_emit_event (NULL) nao reporta disparo",
     "ETA_DELAY: erro no RPC nao propaga (alerta e efeito colateral)",
     "ETA_DELAY: entrega usa destinatario de entrega no metadata",
@@ -72734,7 +72739,7 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1246,
+   "lines": 1248,
    "exports": [
     "function processGeoBackfillOrders",
     "function maybeEmitEtaDelay",
@@ -75991,10 +75996,20 @@
   }
  },
  "git": {
-  "sha": "e918dd612682cdba61c8cbf3c17785983e98c042",
+  "sha": "f5779da5d8916923d8b9ff1da0b859a30174c540",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "f5779da",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)",
+    "files": [
+     "supabase/functions/job-worker/eta-delay.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "e918dd6",
     "date": "2026-11-23",
@@ -76420,27 +76435,12 @@
      "src/hooks/useAuth.tsx",
      "src/pages/AuthPage.tsx"
     ]
-   },
-   {
-    "sha": "97b9d2e",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: cliente do front entende o formato único de erro (item 42) (#301)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/hooks/useBitrix24.ts",
-     "src/hooks/useExternalData.ts",
-     "src/hooks/useLalamoveUapi.ts",
-     "src/lib/edge-error.test.ts",
-     "src/lib/edge-error.ts",
-     "src/lib/lalamove-api.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    12
+    11
    ],
    [
     "src/App.tsx",
@@ -76479,10 +76479,6 @@
     2
    ],
    [
-    "src/hooks/useLalamoveUapi.ts",
-    2
-   ],
-   [
     "src/pages/ProfilePage.tsx",
     2
    ],
@@ -76516,6 +76512,10 @@
    ],
    [
     "src/components/orders/NewOrderDialog.tsx",
+    2
+   ],
+   [
+    "src/hooks/useCommandPaletteSearch.ts",
     2
    ]
   ]

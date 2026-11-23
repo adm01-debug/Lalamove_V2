@@ -1377,11 +1377,11 @@
   {
    "arquivo": "supabase/functions/job-worker/eta-delay.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 172,
+   "linhas": 185,
    "testa": [
     "supabase/functions/job-worker/index.ts"
    ],
-   "casos": 13
+   "casos": 14
   },
   {
    "arquivo": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
