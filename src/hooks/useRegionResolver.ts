@@ -198,7 +198,7 @@ export function useRegionResolution(coords: Coord[]): RegionResolution {
                 freshlyGeocoded[key] = region;
               }
             } catch (err) {
-              logger.error('Reverse geocode falhou para', key, err);
+              logger.error('Reverse geocode falhou para', err, { key });
             } finally {
               inFlightSet.delete(key);
             }
