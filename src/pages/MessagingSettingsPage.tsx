@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import {
   AlertTriangle,
+  ArrowDown,
+  ArrowUp,
   BellRing,
   CheckCircle2,
   Coins,
@@ -12,6 +14,7 @@ import {
   SendHorizonal,
   ShieldOff,
   Trash2,
+  X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -579,7 +582,7 @@ function RoutesTab() {
         <QueryState isEmpty={list.length === 0} emptyText="Nenhuma rota configurada.">
           <div className="space-y-3">
             {list.map((route) => (
-              <RouteRow key={route.event} route={route} />
+              <RouteRow key={`${route.event}-${route.role}`} route={route} />
             ))}
           </div>
         </QueryState>
@@ -588,29 +591,65 @@ function RoutesTab() {
   );
 }
 
+const ROUTE_CHANNELS = ['whatsapp', 'sms', 'email', 'slack', 'n8n'] as const;
+
 function RouteRow({ route }: { route: NotificationRouteRow }) {
   const update = useUpdateNotificationRoute();
-  const [draft, setDraft] = useState<{ fallback: string; timeout: string } | null>(null);
+  const [draft, setDraft] = useState<{
+    fallback: string;
+    timeout: string;
+    channels: string[];
+    requiresReply: boolean;
+  } | null>(null);
   const fallback = draft?.fallback ?? String(route.fallback_after_min ?? 0);
-  const timeoutMin = draft?.timeout ?? String(route.reply_timeout_min ?? 0);
+  const timeoutMin =
+    draft?.timeout ?? (route.reply_timeout_min ? String(route.reply_timeout_min) : '');
+  const channels = draft?.channels ?? route.channels ?? [];
+  const requiresReply = draft?.requiresReply ?? route.requires_reply === true;
+  const rowId = `${route.event}-${route.role}`;
 
   const dirty =
     Number(fallback) !== (route.fallback_after_min ?? 0) ||
-    Number(timeoutMin) !== (route.reply_timeout_min ?? 0);
+    Number(timeoutMin) !== (route.reply_timeout_min ?? 0) ||
+    requiresReply !== (route.requires_reply === true) ||
+    channels.join(',') !== (route.channels ?? []).join(',');
+
+  const base = { fallback, timeout: timeoutMin, channels, requiresReply };
+  const edit = (patch: Partial<typeof base>) => setDraft({ ...base, ...patch });
+
+  const move = (index: number, delta: number) => {
+    const next = [...channels];
+    const target = index + delta;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    edit({ channels: next });
+  };
 
   const save = () => {
+    const timeoutValue = Math.round(Number(timeoutMin) || 0);
+    if (channels.length === 0) {
+      toast.error('Escolha ao menos um canal para a rota');
+      return;
+    }
+    if (requiresReply && timeoutValue <= 0) {
+      toast.error('Rota que exige resposta precisa de prazo em minutos');
+      return;
+    }
     update.mutate(
       {
         event: route.event,
+        role: route.role,
         patch: {
+          channels,
+          requires_reply: requiresReply,
           fallback_after_min: Math.max(0, Math.round(Number(fallback) || 0)),
-          reply_timeout_min: Math.max(0, Math.round(Number(timeoutMin) || 0)),
+          reply_timeout_min: timeoutValue > 0 ? timeoutValue : null,
         },
       },
       {
         onSuccess: () => {
           setDraft(null);
-          toast.success(`Rota ${route.event} atualizada`);
+          toast.success(`Rota ${route.event} (${route.role}) atualizada`);
         },
         onError: (error) => toast.error(`Falha: ${(error as Error).message}`),
       },
@@ -619,52 +658,115 @@ function RouteRow({ route }: { route: NotificationRouteRow }) {
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-lg border p-3">
-      <div className="min-w-[220px] flex-1">
-        <p className="text-sm font-medium">{route.event}</p>
-        <div className="mt-1 flex flex-wrap gap-1">
-          {(route.channels ?? []).map((channel) => (
-            <Badge key={channel} variant="secondary">
-              {channel}
-            </Badge>
+      <div className="min-w-[280px] flex-1 space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-medium">{route.event}</p>
+          <Badge variant="outline">{route.role}</Badge>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1">
+          {channels.map((channel, index) => (
+            <span
+              key={channel}
+              className="flex items-center gap-1 rounded-md border bg-muted/40 px-2 py-1 text-xs"
+            >
+              <span className="font-medium">{channel}</span>
+              <button
+                type="button"
+                aria-label={`mover ${channel} para cima`}
+                disabled={index === 0}
+                onClick={() => move(index, -1)}
+                className="text-muted-foreground disabled:opacity-30"
+              >
+                <ArrowUp className="h-3 w-3" />
+              </button>
+              <button
+                type="button"
+                aria-label={`mover ${channel} para baixo`}
+                disabled={index === channels.length - 1}
+                onClick={() => move(index, 1)}
+                className="text-muted-foreground disabled:opacity-30"
+              >
+                <ArrowDown className="h-3 w-3" />
+              </button>
+              <button
+                type="button"
+                aria-label={`remover ${channel}`}
+                onClick={() => edit({ channels: channels.filter((item) => item !== channel) })}
+                className="text-destructive"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </span>
           ))}
-          {route.requires_reply ? <Badge variant="outline">exige resposta</Badge> : null}
+
+          <Select
+            value=""
+            onValueChange={(channel) => {
+              if (channels.includes(channel)) return;
+              edit({ channels: [...channels, channel] });
+            }}
+          >
+            <SelectTrigger className="h-8 w-40" aria-label={`adicionar canal em ${rowId}`}>
+              <SelectValue placeholder="adicionar canal" />
+            </SelectTrigger>
+            <SelectContent>
+              {ROUTE_CHANNELS.filter((channel) => !channels.includes(channel)).map((channel) => (
+                <SelectItem key={channel} value={channel}>
+                  {channel}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Switch
+            id={`reply-${rowId}`}
+            checked={requiresReply}
+            onCheckedChange={(checked) => edit({ requiresReply: checked })}
+          />
+          <Label className="text-xs text-muted-foreground" htmlFor={`reply-${rowId}`}>
+            exige resposta
+          </Label>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <Label className="text-xs text-muted-foreground" htmlFor={`fallback-${route.event}`}>
+        <Label className="text-xs text-muted-foreground" htmlFor={`fallback-${rowId}`}>
           fallback (min)
         </Label>
         <Input
-          id={`fallback-${route.event}`}
+          id={`fallback-${rowId}`}
           type="number"
           min={0}
           className="w-20"
           value={fallback}
-          onChange={(event) => setDraft({ fallback: event.target.value, timeout: timeoutMin })}
+          onChange={(event) => edit({ fallback: event.target.value })}
         />
       </div>
 
       <div className="flex items-center gap-2">
-        <Label className="text-xs text-muted-foreground" htmlFor={`timeout-${route.event}`}>
+        <Label className="text-xs text-muted-foreground" htmlFor={`timeout-${rowId}`}>
           resposta (min)
         </Label>
         <Input
-          id={`timeout-${route.event}`}
+          id={`timeout-${rowId}`}
           type="number"
           min={0}
           className="w-20"
           value={timeoutMin}
-          onChange={(event) => setDraft({ fallback, timeout: event.target.value })}
+          onChange={(event) => edit({ timeout: event.target.value })}
         />
       </div>
 
       <div className="flex items-center gap-2">
         <Switch
+          id={`enabled-${rowId}`}
           checked={route.is_enabled !== false}
           onCheckedChange={(checked) =>
             update.mutate(
-              { event: route.event, patch: { is_enabled: checked } },
+              { event: route.event, role: route.role, patch: { is_enabled: checked } },
               {
                 onSuccess: () =>
                   toast.success(`${route.event}: ${checked ? 'ligada' : 'desligada'}`),
@@ -673,9 +775,9 @@ function RouteRow({ route }: { route: NotificationRouteRow }) {
             )
           }
         />
-        <span className="text-xs text-muted-foreground">
+        <Label className="text-xs text-muted-foreground" htmlFor={`enabled-${rowId}`}>
           {route.is_enabled !== false ? 'ligada' : 'desligada'}
-        </span>
+        </Label>
       </div>
 
       <Button
@@ -689,6 +791,7 @@ function RouteRow({ route }: { route: NotificationRouteRow }) {
     </div>
   );
 }
+
 function TemplatesTab() {
   const templates = useMessageTemplates();
   const [editing, setEditing] = useState<MessageTemplateRow | null>(null);

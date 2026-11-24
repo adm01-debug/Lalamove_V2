@@ -722,9 +722,9 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
   **Estado real:** aba **Templates** versiona de verdade (`useSaveTemplateVersion` insere `version+1` ativa e desativa as anteriores), com variaveis disponiveis, contador de segmentos SMS (160 caracteres) e previa `{{var}}`. **Falta:** previa com dados de um pedido real — hoje usa valores de exemplo (`PREVIEW_VALUES`).
 
 ### 135 — [L] Matriz evento × papel
-- [~] Ligar/desligar, ordem de canais, prazo de fallback, exige resposta
+- [x] Ligar/desligar, ordem de canais, prazo de fallback, exige resposta
 - **Evidência:** desligar M10 para o motorista → nenhuma mensagem M10
-  **Estado real:** aba **Rotas** liga/desliga cada evento, edita `fallback_after_min` e `reply_timeout_min`, e mostra os canais da rota e se exige resposta (`notification_routes`, 14 eventos em producao). **Falta:** editar a ordem dos canais e o campo `requires_reply`.
+  **Estado real:** aba **Rotas** liga/desliga cada evento, edita `fallback_after_min` e `reply_timeout_min`, e agora tambem edita a **ordem dos canais** (mover cima/baixo, remover, adicionar entre `whatsapp`, `sms`, `email`, `slack`, `n8n`) e o campo `requires_reply` - `RouteRow` em `src/pages/MessagingSettingsPage.tsx` + `useUpdateNotificationRoute`, que passou a filtrar por `(event, role)`, a chave real de `notification_routes` (14 eventos em producao). Corrigido tambem o `Salvar` que mandava `reply_timeout_min = 0` e era recusado pelo CHECK `reply_timeout_min IS NULL OR > 0`: o campo vazio agora vai como `null`. Validacao na UI: rota nao salva sem canal e rota que exige resposta exige prazo maior que zero.
 
 ### 136 — [L] Opt-outs
 - [x] Listar, adicionar, remover com motivo (admin)
