@@ -318,7 +318,7 @@ serve(async (req) => {
       await supabase.from('alerts').insert(alertsToCreate);
     }
 
-    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent, confirmations: nudges.sent }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error: unknown) {
     logger.error('Guardian check error:', error);
