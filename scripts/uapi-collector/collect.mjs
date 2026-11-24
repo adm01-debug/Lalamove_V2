@@ -35,6 +35,10 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TTL_HOURS = Number(process.env.SNAPSHOT_TTL_HOURS || 6);
 const CHROMIUM_PATH = process.env.CHROMIUM_PATH || undefined;
+// Lista de pedidos: o painel avanca por cursor, entao cada pagina coletada vira
+// uma chave propria. Recibos sao buscados para os pedidos mais recentes.
+const ORDER_PAGES = Number(process.env.UAPI_ORDER_PAGES || 3);
+const RECEIPTS = Number(process.env.UAPI_RECEIPTS || 5);
 
 if (!SUPABASE_URL || !SERVICE_KEY) {
   console.error('ERRO: defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY');
@@ -46,13 +50,26 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
 // a chave primaria da tabela e o proprio nome do recurso.
 const TARGETS = [
   { resource: 'wallet_balance', method: 'wallet_balance', args: (city) => ({ city_id: city }) },
-  { resource: 'wallet_flow_list', method: 'wallet_flow_list', args: (city) => ({ city_id: city, page: 1, page_size: 20 }) },
-  { resource: 'coupon_list_web', method: 'coupon_list_web', args: (city) => ({ city_id: city, page: 1, page_size: 20 }) },
-  { resource: 'get_fleet:1', method: 'get_fleet', args: () => ({ fleet_type_code: 1 }) },
-  { resource: 'get_fleet:2', method: 'get_fleet', args: () => ({ fleet_type_code: 2 }) },
+  { resource: 'wallet_flow_list', method: 'wallet_flow_list', args: (city) => ({ city_id: city, trans_type: 1, page_no: 1, page_size: 20 }) },
+  { resource: 'wallet_flow_list:p2', method: 'wallet_flow_list', args: (city) => ({ city_id: city, trans_type: 1, page_no: 2, page_size: 20 }) },
+  { resource: 'coupon_list_web', method: 'coupon_list_web', args: (city) => ({ city_id: city, page_no: 1, page_size: 20 }) },
+  { resource: 'coupon_list_web:p2', method: 'coupon_list_web', args: (city) => ({ city_id: city, page_no: 2, page_size: 20 }) },
+  { resource: 'get_fleet:1', method: 'get_fleet', args: () => ({ fleet_type_code: 1, page_no: 1, page_size: 50 }) },
+  { resource: 'get_fleet:2', method: 'get_fleet', args: () => ({ fleet_type_code: 2, page_no: 1, page_size: 50 }) },
   { resource: 'get_user_info', method: 'get_user_info', args: () => ({}) },
   { resource: 'get_corporate', method: 'get_corporate', args: () => ({}) },
-  { resource: 'order_list_new', method: 'order_list_new', args: () => ({ limit: 20, last_id: '' }) },
+  {
+    resource: 'city_info',
+    method: 'city_info',
+    args: (city) => ({
+      city_id: city,
+      fetch_spec_req: 1,
+      fetch_vehicle_std: 1,
+      fetch_vehicle_price: 1,
+      revision: 57901,
+    }),
+  },
+  { resource: 'get_laster_order', method: 'get_laster_order', args: () => ({}) },
 ];
 
 async function loadChromium() {
@@ -144,12 +161,8 @@ async function main() {
       .goto('https://web.lalamove.com/login', { waitUntil: 'networkidle', timeout: 90000 })
       .catch(() => {});
 
-    for (const target of TARGETS) {
-      const url = buildUrl(target.method, target.args(city), {
-        token: session.access_token,
-        deviceId,
-        su,
-      });
+    const collectResource = async (resource, method, args, token) => {
+      const url = buildUrl(method, args, { token, deviceId, su });
       let payload;
       try {
         const raw = await page.evaluate(
@@ -161,13 +174,13 @@ async function main() {
         );
         payload = JSON.parse(raw);
       } catch (err) {
-        failed.push(`${target.resource}: ${err instanceof Error ? err.message : String(err)}`);
-        continue;
+        failed.push(`${resource}: ${err instanceof Error ? err.message : String(err)}`);
+        return null;
       }
 
       if (payload?.ret !== 0) {
-        failed.push(`${target.resource}: ret ${payload?.ret} ${payload?.msg ?? ''}`.trim());
-        continue;
+        failed.push(`${resource}: ret ${payload?.ret} ${payload?.msg ?? ''}`.trim());
+        return null;
       }
 
       const now = new Date();
@@ -176,7 +189,7 @@ async function main() {
         headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
         body: JSON.stringify([
           {
-            resource: target.resource,
+            resource,
             payload,
             city_id: city,
             collected_at: now.toISOString(),
@@ -186,7 +199,48 @@ async function main() {
           },
         ]),
       });
-      collected.push(target.resource);
+      collected.push(resource);
+      return payload;
+    };
+
+    for (const target of TARGETS) {
+      await collectResource(target.resource, target.method, target.args(city), session.access_token);
+    }
+
+    // Pedidos: primeira pagina, paginas seguintes pelo cursor devolvido, e os
+    // recibos dos pedidos mais recentes (a acao `download-receipt` usa o uuid).
+    const orders = await collectResource(
+      'order_list_new',
+      'order_list_new',
+      { limit: 20, last_id: '' },
+      session.access_token,
+    );
+
+    if (orders) {
+      let cursor = orders?.data?.last_id;
+      for (let page = 2; page <= ORDER_PAGES && cursor; page++) {
+        const next = await collectResource(
+          `order_list_new:${cursor}`,
+          'order_list_new',
+          { limit: 20, last_id: cursor },
+          session.access_token,
+        );
+        if (!next || String(next?.data?.is_end) === '1') break;
+        cursor = next?.data?.last_id;
+      }
+
+      const uuids = (orders?.data?.order_base_info ?? [])
+        .slice(0, RECEIPTS)
+        .map((order) => order?.order_uuid)
+        .filter(Boolean);
+      for (const orderUuid of uuids) {
+        await collectResource(
+          `download_pdf_receipt:${orderUuid}`,
+          'download_pdf_receipt',
+          { order_uuid: orderUuid, type: 'order' },
+          session.access_token,
+        );
+      }
     }
   } finally {
     await browser.close().catch(() => {});

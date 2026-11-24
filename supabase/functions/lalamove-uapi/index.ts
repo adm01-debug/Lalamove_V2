@@ -233,15 +233,27 @@ async function uapiRequest(
 // Ações cujo resultado pode ser servido do snapshot coletado por navegador
 // quando o gateway assinado recusa a chamada direta (ret 10010, 24/11/2026).
 // A chave é a ação da edge; o valor resolve o `resource` que o coletor grava.
+// Listas paginadas guardam uma chave por página (`recurso:pN`) e as que usam
+// cursor (`last_id`) guardam a chave do próprio cursor, porque o painel reenvia
+// o mesmo valor ao avançar.
+const pageKey = (body: Record<string, unknown>, resource: string) => {
+  const page = Number(body?.page_no ?? 1);
+  return page > 1 ? `${resource}:p${page}` : resource;
+};
+
 const SNAPSHOT_ACTIONS: Record<string, (body: Record<string, unknown>) => string> = {
   'wallet-balance': () => 'wallet_balance',
-  'wallet-transactions': () => 'wallet_flow_list',
-  'coupons': () => 'coupon_list_web',
-  'fleet-favorites': () => 'get_fleet:1',
-  'fleet-blocked': () => 'get_fleet:2',
+  'wallet-transactions': (body) => pageKey(body, 'wallet_flow_list'),
+  'coupons': (body) => pageKey(body, 'coupon_list_web'),
+  'fleet-favorites': (body) => pageKey(body, 'get_fleet:1'),
+  'fleet-blocked': (body) => pageKey(body, 'get_fleet:2'),
   'user-info': () => 'get_user_info',
   'corporate-info': () => 'get_corporate',
-  'list-orders': () => 'order_list_new',
+  'list-orders': (body) =>
+    typeof body?.last_id === 'string' && body.last_id ? `order_list_new:${body.last_id}` : 'order_list_new',
+  'last-order': () => 'get_laster_order',
+  'city-info': () => 'city_info',
+  'download-receipt': (body) => `download_pdf_receipt:${String(body?.order_uuid ?? '')}`,
 };
 
 // Lê o último snapshot válido. Devolve null quando não há coleta fresca — nesse
@@ -844,13 +856,13 @@ serve(async (req) => {
     }
 
     // Gateway assinado nao aceita chamada de servidor (ret 10010): serve o
-    // ultimo snapshot do navegador, se houver coleta fresca. Paginas > 1 nao
-    // tem snapshot (o coletor so captura a primeira).
+    // ultimo snapshot do navegador, se houver coleta fresca. Cada recurso tem
+    // chave propria (pagina, cursor ou pedido do recibo); pedido sem coleta
+    // correspondente continua recebendo o erro real do gateway.
     let snapshotCollectedAt: string | null = null;
     if (result.ret !== 0 && action) {
       const resource = SNAPSHOT_ACTIONS[action]?.(body);
-      const offFirstPage = typeof body?.page_no === 'number' && body.page_no > 1;
-      if (resource && !offFirstPage) {
+      if (resource) {
         const snapshot = await loadSnapshot(supabase, resource);
         if (snapshot) {
           result = snapshot.payload as { ret: number; data?: unknown; msg?: string };
