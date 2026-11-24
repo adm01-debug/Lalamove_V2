@@ -31,6 +31,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import {
   Select,
   SelectContent,
@@ -345,9 +346,16 @@ const geoStatusConfig: Record<string, { label: string; icon: React.ElementType; 
  * tela mostrava tudo entregue enquanto o cliente não recebia nada.
  */
 function PendingGeoEventsCard({ orderId }: { orderId?: string }) {
-  const { data: events, isLoading } = usePendingGeoEvents(orderId);
+  const { data: events, isLoading, isError, refetch } = usePendingGeoEvents(orderId);
 
   if (isLoading) return <Skeleton className="h-24 w-full" />;
+  if (isError)
+    return (
+      <DataErrorBanner
+        message="Não foi possível carregar os eventos pendentes de geolocalização."
+        onRetry={() => refetch()}
+      />
+    );
   if (!events || events.length === 0) return null;
 
   return (

@@ -71,7 +71,7 @@ export function usePermissions() {
   });
 
   // Buscar todas as permissões do sistema
-  const { data: allPermissions } = useQuery({
+  const { data: allPermissions, isError: allPermissionsError, refetch: refetchAllPermissions } = useQuery({
     queryKey: ['all-permissions'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -85,7 +85,7 @@ export function usePermissions() {
   });
 
   // Buscar permissões por role
-  const { data: rolePermissions } = useQuery({
+  const { data: rolePermissions, isError: rolePermissionsError, refetch: refetchRolePermissions } = useQuery({
     queryKey: ['role-permissions'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -177,6 +177,11 @@ export function usePermissions() {
     allPermissions,
     rolePermissions,
     isLoading: rolesLoading || permissionsLoading,
+    // Sem isso a matriz de permissoes renderiza vazia quando a leitura falha.
+    isError: Boolean(allPermissionsError || rolePermissionsError),
+    refetch: async () => {
+      await Promise.all([refetchAllPermissions(), refetchRolePermissions()]);
+    },
     hasRole,
     hasPermission,
     canAccess,

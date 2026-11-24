@@ -16,8 +16,33 @@ vi.mock('@/components/health/CronJobsHealthPanel', () => ({
   CronJobsHealthPanel: () => null,
 }));
 
+const mockPermissions = vi.fn();
+vi.mock('@/hooks/usePermissions', () => ({
+  usePermissions: () => mockPermissions(),
+}));
+vi.mock('@/hooks/useFuseSearch', () => ({
+  useFuseSearchWithMatches: () => ({ results: [], matches: {} }),
+}));
+vi.mock('@/components/auth/PermissionGate', () => ({
+  PermissionGate: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+vi.mock('@/pages/permissions/PermissionModuleList', () => ({
+  PermissionModuleList: () => null,
+}));
+
+const mockExternalStats = vi.fn();
+const mockExternalList = vi.fn();
+vi.mock('@/hooks/useExternalData', () => ({
+  useExternalStats: () => mockExternalStats(),
+  useExternalList: () => mockExternalList(),
+  TABLE_LABELS: { companies: 'Empresas', customers: 'Clientes' },
+  EXTERNAL_TABLE_LABELS: { companies: 'Empresas', customers: 'Clientes' },
+}));
+
 import { SystemHealthPage } from './SystemHealthPage';
 import ContactsPage from './ContactsPage';
+import PermissionsPage from './PermissionsPage';
+import ExternalDataPage from './ExternalDataPage';
 
 function renderPage(node: React.ReactNode) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -76,5 +101,47 @@ describe('estado de erro em paginas de dados (item 421)', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
     expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('PermissionsPage: falha ao ler permissoes mostra aviso e botao de tentar novamente', () => {
+    const refetch = vi.fn().mockResolvedValue(undefined);
+    mockPermissions.mockReturnValue({
+      allPermissions: [],
+      rolePermissions: [],
+      isLoading: false,
+      isError: true,
+      refetch,
+    });
+
+    renderPage(<PermissionsPage />);
+
+    expect(screen.getByText(/poss.vel carregar/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
+    expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('ExternalDataPage: falha nas contagens mostra aviso em vez de totais vazios silenciosos', () => {
+    const refetchStats = vi.fn();
+    mockExternalStats.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+      refetch: refetchStats,
+    });
+    mockExternalList.mockReturnValue({
+      data: { data: [], count: 0 },
+      isLoading: false,
+      isError: false,
+      error: null,
+      refetch: vi.fn(),
+    });
+
+    renderPage(<ExternalDataPage />);
+
+    expect(screen.getByText(/carregar as contagens da base/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
+    expect(refetchStats).toHaveBeenCalledTimes(1);
   });
 });

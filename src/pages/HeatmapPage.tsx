@@ -9,6 +9,7 @@ import { countMapLoad } from '@/lib/geo-gateway';
 import { useDeliveryHeatmapData, HeatmapPoint } from '@/hooks/useDeliveryHeatmapData';
 import { HeatmapFiltersPanel, HeatmapLegendPanel, HeatmapActionButtons } from './heatmap/HeatmapControls';
 import { HeatmapStatsPanel } from './heatmap/HeatmapStatsPanel';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 type HeatmapType = 'pickup' | 'delivery' | 'both';
 
@@ -21,7 +22,7 @@ export function HeatmapPage() {
   const [heatmapType, setHeatmapType] = useState<HeatmapType>('both');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showStats, setShowStats] = useState(true);
-  const { data, isLoading: dataLoading, refetch } = useDeliveryHeatmapData(days);
+  const { data, isLoading: dataLoading, isError: dataError, refetch } = useDeliveryHeatmapData(days);
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
@@ -100,6 +101,7 @@ export function HeatmapPage() {
         </motion.div>
         <HeatmapActionButtons onRefresh={() => refetch()} onResetView={resetView} onToggleFullscreen={toggleFullscreen} isRefreshing={dataLoading} />
         {data && <HeatmapStatsPanel stats={data.stats} showStats={showStats} setShowStats={setShowStats} />}
+        {dataError && <div className="absolute inset-0 z-30 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4"><div className="w-full max-w-sm"><DataErrorBanner message="Não foi possível carregar os pontos do mapa de calor." details="O mapa aparece sem as coletas e entregas do período." onRetry={() => refetch()} /></div></div>}
         {(loading || dataLoading) && <div className="absolute inset-0 z-30 flex items-center justify-center bg-background/60 backdrop-blur-sm"><motion.div className="flex flex-col items-center gap-3" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}><div className="relative"><div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-xl opacity-50 animate-pulse" /><Loader2 className="w-10 h-10 text-primary animate-spin relative" /></div><p className="text-sm text-muted-foreground font-medium">Carregando mapa de calor...</p></motion.div></div>}
         <div ref={mapContainer} className="absolute inset-0" style={{ borderRadius: 'inherit' }} />
       </motion.div>

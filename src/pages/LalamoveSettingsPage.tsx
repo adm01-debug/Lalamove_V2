@@ -52,9 +52,9 @@ export default function LalamoveSettingsPage() {
   const [showNewToken, setShowNewToken] = useState(false);
   const [showV3Secret, setShowV3Secret] = useState(false);
   const [walletPage, setWalletPage] = useState(1);
-  const { data: walletHistory, isLoading: historyLoading } = useWalletHistory(walletPage);
-  const { data: vehiclesData, isLoading: vehiclesLoading } = useVehicles();
-  const { data: serviceAreasData, isLoading: areasLoading } = useServiceAreas();
+  const { data: walletHistory, isLoading: historyLoading, isError: historyError, error: historyErrorObj, refetch: refetchHistory } = useWalletHistory(walletPage);
+  const { data: vehiclesData, isLoading: vehiclesLoading, isError: vehiclesError, refetch: refetchVehicles } = useVehicles();
+  const { data: serviceAreasData, isLoading: areasLoading, isError: areasError, refetch: refetchAreas } = useServiceAreas();
 
   const userData = user as Record<string, unknown> | undefined;
 
@@ -338,7 +338,9 @@ export default function LalamoveSettingsPage() {
           <CardDescription>Extrato da carteira Lalamove (UAPI)</CardDescription>
         </CardHeader>
         <CardContent>
-          {historyLoading ? (
+          {historyError ? (
+            <QueryState isError error={historyErrorObj} onRetry={refetchHistory} errorText="Não foi possível carregar o extrato da carteira." />
+          ) : historyLoading ? (
             <div className="space-y-2">
               {[...Array(5)].map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />
@@ -414,7 +416,9 @@ export default function LalamoveSettingsPage() {
           <CardDescription>Tipos de veículos disponíveis na plataforma Lalamove</CardDescription>
         </CardHeader>
         <CardContent>
-          {vehiclesLoading ? (
+          {vehiclesError ? (
+            <QueryState isError onRetry={refetchVehicles} errorText="Não foi possível carregar os veículos." />
+          ) : vehiclesLoading ? (
             <div className="space-y-2">
               {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
             </div>
@@ -451,7 +455,9 @@ export default function LalamoveSettingsPage() {
           <CardDescription>Regiões atendidas pela Lalamove</CardDescription>
         </CardHeader>
         <CardContent>
-          {areasLoading ? (
+          {areasError ? (
+            <QueryState isError onRetry={refetchAreas} errorText="Não foi possível carregar as áreas de atendimento." />
+          ) : areasLoading ? (
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
             </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useId } from 'react';
 import { logger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,7 +35,7 @@ function ProfilePage() {
 
   const { userRoles, userPermissions, isLoading: permissionsLoading } = usePermissions();
   const { stats: authStats } = useAuthLogs({ limit: 100 });
-  const { devices, isLoading: devicesLoading, trustDevice, removeDevice, renameDevice, isRemoving } = useUserDevices();
+  const { devices, isLoading: devicesLoading, isError: devicesError, refetch: refetchDevices, trustDevice, removeDevice, renameDevice, isRemoving } = useUserDevices();
 
   // Nome de exibição vem de user_metadata (full_name ou name) ou fallback do email
   const initialName = getDisplayName(user) ?? userEmail.split('@')[0];
@@ -330,6 +331,11 @@ function ProfilePage() {
               <Loader2 className="w-4 h-4 animate-spin" />
               Carregando dispositivos...
             </div>
+          ) : devicesError ? (
+            <DataErrorBanner
+              message="Não foi possível carregar seus dispositivos."
+              onRetry={() => refetchDevices()}
+            />
           ) : devices.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               Nenhum dispositivo registrado até agora.

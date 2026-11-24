@@ -26,6 +26,7 @@ import { DashboardHeroSection, WelcomeBanner } from '@/components/dashboard/Dash
 import { UAPIStatusCards } from '@/components/dashboard/UAPIStatusCards';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { LiveRegion } from '@/components/ui/accessible-card';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { useRecentOrders } from '@/hooks/useRecentOrders';
@@ -64,9 +65,9 @@ export function DashboardRedesigned() {
   const [liveMessage, setLiveMessage] = useState('');
   
   const { data: stats, isLoading: statsLoading, isError: statsError, refetch: refetchStats } = useDashboardStats();
-  const { data: ordersData, isLoading: ordersLoading, refetch: refetchOrders } = useRecentOrders();
-  const { data: approvals, isLoading: approvalsLoading, refetch: refetchApprovals } = usePendingApprovals();
-  const { data: alerts, isLoading: alertsLoading, refetch: refetchAlerts } = useActiveAlerts();
+  const { data: ordersData, isLoading: ordersLoading, isError: ordersError, refetch: refetchOrders } = useRecentOrders();
+  const { data: approvals, isLoading: approvalsLoading, isError: approvalsError, refetch: refetchApprovals } = usePendingApprovals();
+  const { data: alerts, isLoading: alertsLoading, isError: alertsError, refetch: refetchAlerts } = useActiveAlerts();
   
   const { approveMutation, rejectMutation } = useApprovalActions();
   const { dismissMutation } = useAlertActions();
@@ -248,10 +249,26 @@ export function DashboardRedesigned() {
 
   const displayStats = stats ?? defaultStats;
 
+  // Cada consulta pode falhar sozinha: o aviso diz quais areas ficaram sem
+  // dado e oferece uma nova tentativa, em vez de mostrar cartao vazio.
+  const areasComFalha = [
+    { nome: 'pedidos recentes', falhou: ordersError, retry: () => { void refetchOrders(); } },
+    { nome: 'aprovações pendentes', falhou: approvalsError, retry: () => { void refetchApprovals(); } },
+    { nome: 'alertas ativos', falhou: alertsError, retry: () => { void refetchAlerts(); } },
+  ].filter((area) => area.falhou);
+
   const dashboardContent = (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
       {/* Live region for screen reader announcements */}
       <LiveRegion>{liveMessage}</LiveRegion>
+
+      {areasComFalha.length > 0 && (
+        <DataErrorBanner
+          message={`Não foi possível carregar: ${areasComFalha.map((area) => area.nome).join(', ')}.`}
+          details="Os cartões dessas áreas podem aparecer vazios até a leitura voltar."
+          onRetry={() => areasComFalha.forEach((area) => area.retry())}
+        />
+      )}
       
       {/* Welcome Banner */}
       <motion.div
