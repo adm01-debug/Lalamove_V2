@@ -45,6 +45,7 @@ const Bitrix24Page = lazyWithRetry(() => import('./pages/Bitrix24Page'));
 const UAPISettingsPage = lazyWithRetry(() => import('./pages/UAPISettingsPage'));
 const LalamoveSettingsPage = lazyWithRetry(() => import('./pages/LalamoveSettingsPage'));
 const MapsSettingsPage = lazyWithRetry(() => import('./pages/MapsSettingsPage'));
+const MessagingSettingsPage = lazyWithRetry(() => import('./pages/MessagingSettingsPage'));
 const AlertConfigurationsPage = lazyWithRetry(() => import('./pages/AlertConfigurationsPage').then(m => ({ default: m.AlertConfigurationsPage })));
 const NotificationHistoryPage = lazyWithRetry(() => import('./pages/NotificationHistoryPage').then(m => ({ default: m.NotificationHistoryPage })));
 const DeliveryMetricsPage = lazyWithRetry(() => import('./pages/DeliveryMetricsPage').then(m => ({ default: m.DeliveryMetricsPage })));
@@ -197,6 +198,7 @@ const AppContent = () => {
                       <Route path="/settings/uapi" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><UAPISettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings/lalamove" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><LalamoveSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings/maps" element={<ProtectedRoute requiredRole="manager" requireMFA><SuspenseWrapper><MapsSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
+                      <Route path="/settings/messaging" element={<ProtectedRoute requiredRole="admin" requireMFA><SuspenseWrapper><MessagingSettingsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><ReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/reports/advanced" element={<ProtectedRoute requiredRole="viewer"><SuspenseWrapper><AdvancedReportsPage /></SuspenseWrapper></ProtectedRoute>} />
                       <Route path="/settings" element={<ProtectedRoute requiredRole="manager"><SuspenseWrapper><SettingsPage /></SuspenseWrapper></ProtectedRoute>} />
