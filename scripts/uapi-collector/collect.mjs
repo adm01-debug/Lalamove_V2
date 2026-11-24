@@ -34,7 +34,9 @@
  *                           rodar fora da raiz do projeto
  *
  * Saida: uma linha por recurso coletado; codigo de saida 1 se nenhum recurso
- * foi gravado (token morto, gateway mudou de novo ou rede fora).
+ * foi gravado (token morto, gateway mudou de novo ou rede fora). Quando nada e
+ * gravado o script tambem abre um alerta CRITICAL em `public.alerts` (dedup de
+ * 6 h): snapshot parado nao avisa ninguem sozinho.
  */
 
 import { randomUUID } from 'node:crypto';
@@ -219,8 +221,49 @@ async function resolveSiteToken(page, context, capturedTokens, { deviceId, su })
     await new Promise((resolve) => setTimeout(resolve, 3000));
   }
 
-  if (seen) console.error(`nenhum dos ${seen} candidato(s) de token respondeu ret 0`);
+  // Sem token novo no perfil a coleta segue com o token do banco (normal no
+  // modo automatico); o aviso so interessa quando o humano esta logando.
+  if (seen && LOGIN_MODE) console.error(`nenhum dos ${seen} candidato(s) de token respondeu ret 0`);
   return null;
+}
+
+const ALERT_DEDUP_MS = 6 * 60 * 60 * 1000;
+
+/**
+ * Coleta que nao grava nada e silenciosa: o snapshot simplesmente para de
+ * atualizar ate vencer. O worker `lalamove-token-refresh` avisa quando ele
+ * envelhece; este alerta chega antes e com o erro cru do gateway.
+ */
+async function notifyCollectorFailure(tokenOrigin, failures) {
+  const title = 'Coleta UAPI falhou';
+  try {
+    const since = new Date(Date.now() - ALERT_DEDUP_MS).toISOString();
+    const open = await sbFetch(
+      `/rest/v1/alerts?select=id&type=eq.INTEGRATION_FAILURE&title=eq.${encodeURIComponent(title)}` +
+        `&is_dismissed=eq.false&created_at=gte.${since}&limit=1`,
+    );
+    if (open && open.length) {
+      console.log('alerta de falha da coleta ja aberto nas ultimas 6h: sem novo alerta');
+      return;
+    }
+    await sbFetch('/rest/v1/alerts', {
+      method: 'POST',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({
+        type: 'INTEGRATION_FAILURE',
+        severity: 'CRITICAL',
+        title,
+        message:
+          'O coletor rodou e nao gravou nenhum recurso: carteira, extrato, cupons e frota ' +
+          `param de atualizar e passam a dar erro quando o snapshot vencer. Token usado: ${tokenOrigin}. ` +
+          `Falhas: ${failures.slice(0, 5).join(' | ') || 'nenhuma falha reportada'}`,
+        metadata: { subtype: 'UAPI_COLLECTOR', token_origin: tokenOrigin, failures: failures.slice(0, 10) },
+      }),
+    });
+    console.log('alerta de falha da coleta registrado');
+  } catch (err) {
+    console.error(`aviso: nao foi possivel registrar o alerta (${String(err).slice(0, 200)})`);
+  }
 }
 
 async function main() {
@@ -270,6 +313,7 @@ async function main() {
   const page = context.pages()[0] ?? (await context.newPage());
   const collected = [];
   const failed = [];
+  let tokenOrigin = 'banco';
 
   try {
     // A pagina e o que injeta `x-sign-js`/`x-javascript-fingerprinting` no fetch.
@@ -298,9 +342,7 @@ async function main() {
     if (siteToken && siteToken !== session.access_token) {
       await saveSessionToken(session, siteToken);
       activeToken = siteToken;
-      console.log(`token renovado pelo site (${siteToken.slice(0, 8)}...)`);
-    } else if (!siteToken) {
-      console.log('sem token novo no perfil: usando o token do banco');
+      tokenOrigin = 'site';
     }
 
     const collectResource = async (resource, method, args, token) => {
@@ -389,7 +431,9 @@ async function main() {
   }
 
   console.log(`gravados (${collected.length}): ${collected.join(', ') || '-'}`);
+  console.log(`token: ${tokenOrigin}`);
   if (failed.length) console.log(`falhas (${failed.length}): ${failed.join(' | ')}`);
+  if (!collected.length) await notifyCollectorFailure(tokenOrigin, failed);
   process.exit(collected.length ? 0 : 1);
 }
 
