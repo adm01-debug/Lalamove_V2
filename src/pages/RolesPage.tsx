@@ -39,6 +39,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useRole } from '@/hooks/useRole';
 import { usePermissions, type AppRole } from '@/hooks/usePermissions';
 import { PermissionGate } from '@/components/auth/PermissionGate';
+import { QueryState } from '@/components/ui/query-state';
 
 const roleConfig: Record<AppRole, { icon: React.ElementType; color: string; label: string; description: string }> = {
   admin: {
@@ -68,7 +69,7 @@ const roleConfig: Record<AppRole, { icon: React.ElementType; color: string; labe
 };
 
 export default function RolesPage() {
-  const { rolesSummary, roleStats, updateUserRole, isUpdating, isLoading } = useRole();
+  const { rolesSummary, roleStats, updateUserRole, isUpdating, isLoading, isError, error, refetch } = useRole();
   const { allPermissions } = usePermissions();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState<AppRole>('admin');
@@ -117,6 +118,10 @@ export default function RolesPage() {
     acc[perm.module].push(perm);
     return acc;
   }, {} as Record<string, typeof rolePermissions>);
+
+  if (isError) {
+    return <QueryState isError error={error} onRetry={refetch} />;
+  }
 
   if (isLoading) {
     return (

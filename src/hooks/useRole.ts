@@ -20,7 +20,7 @@ export function useRole() {
   const queryClient = useQueryClient();
 
   // Buscar todos os usuários com roles
-  const { data: allUserRoles, isLoading } = useQuery({
+  const { data: allUserRoles, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['all-user-roles'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -144,6 +144,9 @@ export function useRole() {
     rolesSummary,
     roleStats,
     isLoading,
+    isError,
+    error,
+    refetch,
     getUserRoles,
     updateUserRole: updateUserRoleMutation.mutate,
     isUpdating: updateUserRoleMutation.isPending,

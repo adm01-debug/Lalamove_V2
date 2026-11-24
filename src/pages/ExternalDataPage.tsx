@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { QueryState } from '@/components/ui/query-state';
 import {
   Table,
   TableBody,
@@ -53,7 +54,7 @@ export default function ExternalDataPage() {
   const debouncedSearch = useDebouncedValue(search, 400);
 
   const { data: stats, isLoading: statsLoading } = useExternalStats();
-  const { data: listData, isLoading: listLoading } = useExternalList(
+  const { data: listData, isLoading: listLoading, isError: listFailed, error: listError, refetch: refetchList } = useExternalList(
     activeTable,
     debouncedSearch || undefined,
     page,
@@ -137,7 +138,9 @@ export default function ExternalDataPage() {
           </div>
         </CardHeader>
         <CardContent>
-          {listLoading ? (
+          {listFailed ? (
+            <QueryState isError error={listError} onRetry={refetchList} />
+          ) : listLoading ? (
             <div className="space-y-2">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />

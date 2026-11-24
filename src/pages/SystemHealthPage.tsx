@@ -1,12 +1,17 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { QueryState } from '@/components/ui/query-state';
 import { Activity, Database, Zap, Wifi, Clock } from 'lucide-react';
 import { useSystemHealth } from '@/hooks/useSystemHealth';
 import { CronJobsHealthPanel } from '@/components/health/CronJobsHealthPanel';
 
 export const SystemHealthPage = () => {
-  const { data: health, isLoading } = useSystemHealth();
+  const { data: health, isLoading, isError, error, refetch } = useSystemHealth();
   
+  if (isError) {
+    return <QueryState isError error={error} onRetry={refetch} />;
+  }
+
   if (isLoading) return <div>Carregando...</div>;
   
   return (
