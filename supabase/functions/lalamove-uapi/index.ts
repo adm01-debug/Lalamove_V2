@@ -80,11 +80,15 @@ async function requireAdmin(req: Request): Promise<{ error: Response | null }> {
   const anonClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     global: { headers: { Authorization: authHeader } },
   });
-  const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims(token);
-  if (claimsError || !claimsData?.claims) {
+  // `auth.getClaims()` só existe em supabase-js >= 2.7x; esta função importa
+  // 2.49.1, onde a chamada lança TypeError e o handler responde 500 em vez de
+  // 401/403 — `set-token` e `token-status` ficam inutilizáveis. `getUser` existe
+  // em toda a série 2.x e devolve os mesmos metadados.
+  const { data: userData, error: userError } = await anonClient.auth.getUser(token);
+  if (userError || !userData?.user) {
     return { error: new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
   }
-  const role = claimsData.claims.app_metadata?.role ?? claimsData.claims.user_metadata?.role;
+  const role = userData.user.app_metadata?.role ?? userData.user.user_metadata?.role;
   if (role !== 'admin') {
     return { error: new Response(JSON.stringify({ error: 'Forbidden: admin role required' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }) };
   }
@@ -224,6 +228,43 @@ async function uapiRequest(
   }
 
   return result;
+}
+
+// Ações cujo resultado pode ser servido do snapshot coletado por navegador
+// quando o gateway assinado recusa a chamada direta (ret 10010, 24/11/2026).
+// A chave é a ação da edge; o valor resolve o `resource` que o coletor grava.
+const SNAPSHOT_ACTIONS: Record<string, (body: Record<string, unknown>) => string> = {
+  'wallet-balance': () => 'wallet_balance',
+  'wallet-transactions': () => 'wallet_flow_list',
+  'coupons': () => 'coupon_list_web',
+  'fleet-favorites': () => 'get_fleet:1',
+  'fleet-blocked': () => 'get_fleet:2',
+  'user-info': () => 'get_user_info',
+  'corporate-info': () => 'get_corporate',
+  'list-orders': () => 'order_list_new',
+};
+
+// Lê o último snapshot válido. Devolve null quando não há coleta fresca — nesse
+// caso o painel recebe o erro real do gateway, nunca dado velho se passando por
+// atual.
+async function loadSnapshot(
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
+  resource: string,
+): Promise<{ payload: unknown; collectedAt: string } | null> {
+  const { data, error } = await supabase
+    .from('lalamove_uapi_snapshot')
+    .select('payload, collected_at')
+    .eq('resource', resource)
+    .gt('expires_at', new Date().toISOString())
+    .maybeSingle();
+
+  if (error) {
+    logger.error(`Snapshot ${resource} indisponível:`, error);
+    return null;
+  }
+  if (!data) return null;
+  return { payload: data.payload, collectedAt: data.collected_at as string };
 }
 
 // ========== UAPI Actions ==========
@@ -802,8 +843,31 @@ serve(async (req) => {
         );
     }
 
+    // Gateway assinado nao aceita chamada de servidor (ret 10010): serve o
+    // ultimo snapshot do navegador, se houver coleta fresca. Paginas > 1 nao
+    // tem snapshot (o coletor so captura a primeira).
+    let snapshotCollectedAt: string | null = null;
+    if (result.ret !== 0 && action) {
+      const resource = SNAPSHOT_ACTIONS[action]?.(body);
+      const offFirstPage = typeof body?.page_no === 'number' && body.page_no > 1;
+      if (resource && !offFirstPage) {
+        const snapshot = await loadSnapshot(supabase, resource);
+        if (snapshot) {
+          result = snapshot.payload as { ret: number; data?: unknown; msg?: string };
+          snapshotCollectedAt = snapshot.collectedAt;
+        }
+      }
+    }
+
     return new Response(
-      JSON.stringify({ ...result, _meta: { tokenRefreshed: wasRefreshed } }),
+      JSON.stringify({
+        ...result,
+        _meta: {
+          tokenRefreshed: wasRefreshed,
+          servedFromSnapshot: snapshotCollectedAt !== null,
+          ...(snapshotCollectedAt && { snapshotCollectedAt }),
+        },
+      }),
       { status: result.ret === 0 ? 200 : 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
