@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 15:15 UTC
+
+- **functions** alterado (2): `public.add_job(p_type text, p_payload jsonb, p_priority integer, p_max_attempts integer, p_dedup_key text, p_metadata jsonb)`, `public.refresh_geo_jobs()`
+
 ## 2026-11-24 02:20 UTC
 
 - **functions** alterado (1): `public.messaging_month_cost_cents(p_month date)`

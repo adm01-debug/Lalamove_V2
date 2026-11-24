@@ -30,13 +30,14 @@ BEGIN
     END IF;
   END LOOP;
 
-  -- Rota: tracking ativo sem rota, com rota velha, ou com desvio repetido
+  -- Rota: tracking ativo com posicao recente, sem rota, com rota velha, ou com desvio repetido
   FOR r IN
     SELECT t.id
       FROM active_tracking t
      WHERE t.tracking_status = 'ACTIVE'
        AND t.current_latitude IS NOT NULL
        AND t.current_longitude IS NOT NULL
+       AND t.last_updated > now() - interval '2 hours'
        AND (
              t.expected_route IS NULL
           OR t.route_computed_at IS NULL

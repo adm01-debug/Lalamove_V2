@@ -19634,9 +19634,13 @@
             {
               "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
               "hits": 3
+            },
+            {
+              "file": "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
+              "hits": 2
             }
           ],
-          "code_total_files": 5,
+          "code_total_files": 6,
           "cron": [],
           "db": [
             "public.geo_emit_event",
@@ -22330,9 +22334,13 @@
             {
               "file": "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
               "hits": 2
+            },
+            {
+              "file": "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [
             "25:geo-jobs-refresh"
           ],
@@ -22340,12 +22348,12 @@
           "triggers": [],
           "views": []
         },
-        "comment": "Enfileira eta_refresh (slot 5 min) e route_plan (rota velha/desvio) para trackings ativos",
+        "comment": "Enfileira eta_refresh e route_plan (rota velha/desvio) apenas para tracking ativo com GPS nas ultimas 2 h",
         "config": [
           "search_path=public"
         ],
         "definition": null,
-        "definition_sha": "dc7c0548c9db9d1d",
+        "definition_sha": "233d33dbf515b154",
         "execute_api_roles": "anon, authenticated, service_role",
         "execute_public": false,
         "is_trigger_fn": false,
