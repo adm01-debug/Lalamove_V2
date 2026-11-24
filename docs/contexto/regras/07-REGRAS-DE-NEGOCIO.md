@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d882d051a4` · branch `main` · 2026-11-24 03:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5ae5aff52e` · branch `main` · 2026-11-24 04:08 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2049,7 +2049,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1470 testes em 128 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1475 testes em 129 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2163,6 +2163,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
 | `supabase/functions/_shared/channels/whatsapp-test.test.ts` | 5 | teste whatsapp: usa Zapp quando ZAPP_API_URL/KEY existem · teste whatsapp: cai no Evolution quando so ele tem secrets · teste whatsapp: sem secrets devolve null e mensagem de configuracao · teste whatsapp: 401 do Evolution vira provider_rejected/give_up … |
+| `supabase/functions/job-worker/notification-bridge.test.ts` | 5 | M4: chegada na coleta avisa o motorista · M4: sem motorista nao ha aviso · M4: sem pedido nao ha aviso · M4: evento que fala com o contato da coleta nao vira aviso ao motorista … |
 | `src/hooks/useNotificationHistory.test.ts` | 4 | historico de notificacoes lendo o ledger (etapa 138) · mapeia a linha de notification_messages para a timeline · linha sem telefone, alerta ou tentativa continua renderizavel · soma ledger e legado no mesmo criterio dos cards |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |

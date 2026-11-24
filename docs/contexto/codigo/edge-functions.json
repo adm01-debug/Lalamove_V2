@@ -564,7 +564,7 @@
    "servico": "Fila de jobs",
    "entrada": "supabase/functions/job-worker/index.ts",
    "arquivos": 1,
-   "linhas": 1291,
+   "linhas": 1320,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -607,7 +607,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": true,
    "orfa": false,
-   "testes": 4
+   "testes": 5
   },
   {
    "nome": "lalamove-api",

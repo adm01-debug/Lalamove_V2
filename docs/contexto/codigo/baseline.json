@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d882d051a4556762f042a3f744369411a80e2224",
+  "commit": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
   "branch": "main",
-  "data_commit": "2026-11-24T00:50:11-03:00",
+  "data_commit": "2026-11-24T01:07:58-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5ae5aff",
+    "data": "2026-11-24",
+    "assunto": "feat: aviso de chegada na coleta ao motorista (M4) (#345)"
+   },
    {
     "sha": "d882d05",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "680e653",
     "data": "2026-11-23",
     "assunto": "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)"
-   },
-   {
-    "sha": "ee920ac",
-    "data": "2026-11-23",
-    "assunto": "fix: validar contrato antes de criar cliente no new-device-alert (#328)"
    }
   ],
-  "arquivos_mudados_7d": 475,
+  "arquivos_mudados_7d": 476,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -168,11 +168,11 @@
     "mudancas": 21
    },
    {
-    "pasta": "package.json",
-    "mudancas": 17
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 19
    },
    {
-    "pasta": "supabase/functions/job-worker",
+    "pasta": "package.json",
     "mudancas": 17
    },
    {
@@ -227,7 +227,7 @@
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
@@ -254,6 +254,10 @@
     "mudancas": 10
    },
    {
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/App.tsx",
     "mudancas": 10
    },
@@ -268,10 +272,6 @@
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    "mudancas": 9
    },
    {
     "arquivo": "src/pages/LiveMapPage.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 245
+    "commits": 246
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1104,
-  "arquivos_codigo": 704,
-  "linhas_codigo": 139343,
+  "arquivos_total": 1105,
+  "arquivos_codigo": 705,
+  "linhas_codigo": 139418,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 178,
+  "testes": 179,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 112,
-   "linhas": 27426
+   "arquivos": 113,
+   "linhas": 27501
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1291
+   "linhas": 1320
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",

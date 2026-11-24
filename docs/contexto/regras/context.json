@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d882d051a4556762f042a3f744369411a80e2224",
+  "sha": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 03:50 UTC",
-  "files_total": 1098,
-  "code_files": 917,
-  "code_lines": 161014
+  "generated_at": "2026-11-24 04:08 UTC",
+  "files_total": 1099,
+  "code_files": 918,
+  "code_lines": 161089
  },
  "version": "1.3.2",
- "facts_hash": "3ba117cc99b4b107",
+ "facts_hash": "1b35afe5ab392727",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 349,
+   ".ts": 350,
    ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
@@ -22779,8 +22779,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 112,
-   "lines": 27426,
+   "files": 113,
+   "lines": 27501,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22861,7 +22861,7 @@
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoValidation, GeoSuggestion",
-    "index.ts: processGeoBackfillOrders, DriverAvisoFn, avisarMotorista, maybeEmitEtaDelay, haversineM, avgSpeedMps",
+    "index.ts: geoAlertDriverEvent, processGeoBackfillOrders, DriverAvisoFn, avisarMotorista, maybeEmitEtaDelay, haversineM",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -22959,6 +22959,7 @@
     "supabase/functions/job-worker/eta-delay.test.ts",
     "supabase/functions/job-worker/geo-backfill-orders.test.ts",
     "supabase/functions/job-worker/index.ts",
+    "supabase/functions/job-worker/notification-bridge.test.ts",
     "supabase/functions/job-worker/route-fixture-replay.test.ts",
     "supabase/functions/lalamove-api/coordinates.test.ts",
     "supabase/functions/lalamove-api/coordinates.ts",
@@ -22968,8 +22969,7 @@
     "supabase/functions/lalamove-gateway/index.ts",
     "supabase/functions/lalamove-gateway/route.test.ts",
     "supabase/functions/lalamove-gateway/route.ts",
-    "supabase/functions/lalamove-token-refresh/index.ts",
-    "supabase/functions/lalamove-uapi/index.ts"
+    "supabase/functions/lalamove-token-refresh/index.ts"
    ]
   },
   {
@@ -42886,6 +42886,26 @@
    {
     "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
     "name": "limit é limitado entre 1 e 500"
+   },
+   {
+    "file": "supabase/functions/job-worker/notification-bridge.test.ts",
+    "name": "M4: chegada na coleta avisa o motorista"
+   },
+   {
+    "file": "supabase/functions/job-worker/notification-bridge.test.ts",
+    "name": "M4: sem motorista nao ha aviso"
+   },
+   {
+    "file": "supabase/functions/job-worker/notification-bridge.test.ts",
+    "name": "M4: sem pedido nao ha aviso"
+   },
+   {
+    "file": "supabase/functions/job-worker/notification-bridge.test.ts",
+    "name": "M4: evento que fala com o contato da coleta nao vira aviso ao motorista"
+   },
+   {
+    "file": "supabase/functions/job-worker/notification-bridge.test.ts",
+    "name": "M4: payload sem type ou nulo nao quebra"
    },
    {
     "file": "supabase/functions/job-worker/route-fixture-replay.test.ts",
@@ -75424,8 +75444,9 @@
   },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1291,
+   "lines": 1320,
    "exports": [
+    "function geoAlertDriverEvent",
     "function processGeoBackfillOrders",
     "type DriverAvisoFn",
     "function avisarMotorista",
@@ -75778,6 +75799,28 @@
     "9"
    ],
    "uses_service_role": true
+  },
+  "supabase/functions/job-worker/notification-bridge.test.ts": {
+   "path": "supabase/functions/job-worker/notification-bridge.test.ts",
+   "lines": 46,
+   "is_test": true,
+   "params": [
+    {
+     "name": "ORDER",
+     "value": "\"608ae635-f86b-4aff-abfd-0fc89e1e71b3\""
+    },
+    {
+     "name": "DRIVER",
+     "value": "\"0e0f111c-a609-4101-8162-9e84f1a44639\""
+    }
+   ],
+   "tests": [
+    "M4: chegada na coleta avisa o motorista",
+    "M4: sem motorista nao ha aviso",
+    "M4: sem pedido nao ha aviso",
+    "M4: evento que fala com o contato da coleta nao vira aviso ao motorista",
+    "M4: payload sem type ou nulo nao quebra"
+   ]
   },
   "supabase/functions/job-worker/route-fixture-replay.test.ts": {
    "path": "supabase/functions/job-worker/route-fixture-replay.test.ts",
@@ -78702,10 +78745,21 @@
   }
  },
  "git": {
-  "sha": "d882d051a4556762f042a3f744369411a80e2224",
+  "sha": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "5ae5aff",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: aviso de chegada na coleta ao motorista (M4) (#345)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/job-worker/index.ts",
+     "supabase/functions/job-worker/notification-bridge.test.ts"
+    ]
+   },
    {
     "sha": "d882d05",
     "date": "2026-11-24",
@@ -79102,30 +79156,20 @@
      "src/pages/AuthPage.tsx",
      "src/pages/DashboardRedesigned.tsx"
     ]
-   },
-   {
-    "sha": "3967849",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)",
-    "files": [
-     "src/components/ui/query-state.tsx",
-     "src/lib/queryKeys.ts",
-     "src/pages/AlertsPage.tsx",
-     "src/pages/DeliveryMetricsPage.tsx",
-     "src/pages/JobQueuePage.tsx",
-     "supabase/functions/_shared/messaging/router.test.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    7
+    8
    ],
    [
     "src/pages/LiveMapPage.tsx",
     4
+   ],
+   [
+    "supabase/functions/job-worker/index.ts",
+    3
    ],
    [
     "src/hooks/useMessaging.ts",
@@ -79157,10 +79201,6 @@
    ],
    [
     "supabase/functions/job-worker/eta-delay.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/job-worker/index.ts",
     2
    ],
    [
