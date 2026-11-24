@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a1e08931178c0f44e226562332d48b9bcef789ea` (2026-11-23T21:02:16-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `5adbf84ad1370d08ce8969f0a942c7a06a4fc239` (2026-11-23T22:02:24-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (582), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (583), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1095 |
-| arquivos_codigo | 695 |
-| linhas_codigo | 136149 |
+| arquivos_total | 1096 |
+| arquivos_codigo | 696 |
+| linhas_codigo | 136259 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 173 |
+| testes | 174 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (129), src/pages (87), src/hooks (3)
 - hooks: src/hooks (85), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (29), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (57), guards em scripts/ (47), supabase/functions/<edge> (40)
+- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (40)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -290,8 +290,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9728 nós · 20061 arestas · 694 comunidades · grafo do commit `a1e08931`
-- comunidades maiores: cn (297), ref_https (148), button.tsx (134), client.ts (128), ref_node_path (114), badge.tsx (98), RateLimitDashboardPage.tsx (98), geo-gateway/index.ts (91), Bloco 6 — Fluxos complexos: wizard, rascunho e guarda de saída (117–144) (88), 4. Componentes, hooks, libs e estado — **revisado** (85), send-notification/index.ts (82), dependencies (81)
+- 9732 nós · 20074 arestas · 704 comunidades · grafo do commit `5adbf84a`
+- comunidades maiores: cn (153), client.ts (131), react (125), NotificationHistoryPage.tsx (114), snapshot.py (104), 4. Componentes, hooks, libs e estado — **revisado** (100), lucide-react (99), ref_node_path (96), ref_https (91), AdvancedReportsPage.tsx (84), button.tsx (83), send-notification/index.ts (82)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -393,6 +393,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `5adbf84` fix: topic unico por montagem nos canais realtime (#336)
+- 2026-11-23 `4040276` chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)
 - 2026-11-23 `a1e0893` fix: estado de erro e retry nas paginas que ficavam em branco (#334)
 - 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
 - 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
@@ -406,8 +408,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `c4fdb69` feat: lote 9 - EmptyState component + vitest script (#321)
 - 2026-11-23 `ced043f` feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)
 - 2026-11-23 `3e994e3` feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)
-- 2026-11-23 `680e653` feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)
-- 2026-11-23 `ee920ac` fix: validar contrato antes de criar cliente no new-device-alert (#328)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

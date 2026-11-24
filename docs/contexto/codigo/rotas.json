@@ -202,13 +202,7 @@
     "route-analyzer"
    ],
    "canais_realtime": [
-    "active-tracking-changes",
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
+    "active-tracking-changes-${++trackingChannelSequence}"
    ],
    "flags": [
     "ai_route_optimization"
@@ -379,14 +373,7 @@
     "acknowledge_alert"
    ],
    "edges": [],
-   "canais_realtime": [
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [
     "img",
@@ -504,14 +491,7 @@
    ],
    "rpcs": [],
    "edges": [],
-   "canais_realtime": [
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [
     "status"
@@ -964,13 +944,7 @@
     "route-analyzer"
    ],
    "canais_realtime": [
-    "active-tracking-changes",
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
+    "active-tracking-changes-${++trackingChannelSequence}"
    ],
    "flags": [
     "ai_route_optimization"
@@ -1718,7 +1692,7 @@
     "simulate-driver-movement"
    ],
    "canais_realtime": [
-    "active-tracking-changes",
+    "active-tracking-changes-${++trackingChannelSequence}",
     "live-map-tracking"
    ],
    "flags": [
@@ -2128,7 +2102,7 @@
     "send-notification"
    ],
    "canais_realtime": [
-    "active-tracking-changes"
+    "active-tracking-changes-${++trackingChannelSequence}"
    ],
    "flags": [],
    "papeis": [
@@ -3032,14 +3006,7 @@
    ],
    "rpcs": [],
    "edges": [],
-   "canais_realtime": [
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [],
    "arquivos_puxados": 27
@@ -3736,19 +3703,13 @@
     "test-notification"
    ],
    "canais_realtime": [
-    "active-tracking-changes",
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
+    "active-tracking-changes-${++trackingChannelSequence}",
     "live-map-tracking",
     "password-reset-changes",
     "security-auth-logs",
     "security-blocked-ips",
     "security-device-alerts",
-    "security-mfa-sessions",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
+    "security-mfa-sessions"
    ],
    "flags": [
     "ai_route_optimization",

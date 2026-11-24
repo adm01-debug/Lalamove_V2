@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "a1e08931178c0f44e226562332d48b9bcef789ea",
+  "commit": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
   "branch": "main",
-  "data_commit": "2026-11-23T21:02:16-03:00",
+  "data_commit": "2026-11-23T22:02:24-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5adbf84",
+    "data": "2026-11-23",
+    "assunto": "fix: topic unico por montagem nos canais realtime (#336)"
+   },
+   {
+    "sha": "4040276",
+    "data": "2026-11-23",
+    "assunto": "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)"
+   },
    {
     "sha": "a1e0893",
     "data": "2026-11-23",
@@ -121,19 +131,9 @@
     "sha": "281cd07",
     "data": "2026-11-22",
     "assunto": "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)"
-   },
-   {
-    "sha": "7f6a42b",
-    "data": "2026-11-22",
-    "assunto": "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)"
-   },
-   {
-    "sha": "d899883",
-    "data": "2026-11-22",
-    "assunto": "feat: hardening de dados, erros e estados (itens 67/68/70/73/74/75/76) (#310)"
    }
   ],
-  "arquivos_mudados_7d": 460,
+  "arquivos_mudados_7d": 462,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 46
+    "mudancas": 47
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 235
+    "commits": 237
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1095,
-  "arquivos_codigo": 695,
-  "linhas_codigo": 136149,
+  "arquivos_total": 1096,
+  "arquivos_codigo": 696,
+  "linhas_codigo": 136259,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 173,
+  "testes": 174,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 163,
-   "linhas": 29595
+   "linhas": 29597
   },
   "src/hooks": {
-   "arquivos": 111,
-   "linhas": 19102
+   "arquivos": 112,
+   "linhas": 19210
   },
   "src/i18n": {
    "arquivos": 1,

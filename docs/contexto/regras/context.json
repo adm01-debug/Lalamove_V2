@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "a1e08931178c0f44e226562332d48b9bcef789ea",
+  "sha": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 00:04 UTC",
-  "files_total": 1089,
-  "code_files": 908,
-  "code_lines": 157820
+  "generated_at": "2026-11-24 01:03 UTC",
+  "files_total": 1090,
+  "code_files": 909,
+  "code_lines": 157930
  },
  "version": "1.3.2",
- "facts_hash": "fd586f8c78f249e5",
+ "facts_hash": "295c25a7543c7323",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 342,
+   ".ts": 343,
    ".tsx": 240,
    ".sql": 204,
    ".mjs": 109,
@@ -21816,7 +21816,7 @@
   {
    "module": "src/components",
    "files": 163,
-   "lines": 29595,
+   "lines": 29597,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -21993,8 +21993,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 111,
-   "lines": 19102,
+   "files": 112,
+   "lines": 19210,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -24957,20 +24957,8 @@
    ]
   },
   "realtime": {
-   "active-tracking-changes": [
+   "active-tracking-changes-${++trackingChannelSequence}": [
     "src/components/map/hooks/useTrackingData.ts"
-   ],
-   "alerts-consolidated": [
-    "src/hooks/useRealtimeSubscriptions.ts"
-   ],
-   "approvals-consolidated": [
-    "src/hooks/useRealtimeSubscriptions.ts"
-   ],
-   "consolidated-realtime": [
-    "src/hooks/useRealtimeSubscriptions.ts"
-   ],
-   "live-map-consolidated": [
-    "src/hooks/useRealtimeSubscriptions.ts"
    ],
    "live-map-tracking": [
     "src/pages/LiveMapPage.tsx"
@@ -24998,12 +24986,6 @@
    ],
    "security-mfa-sessions": [
     "src/hooks/useSecurityPushNotifications.ts"
-   ],
-   "sidebar-counts-consolidated": [
-    "src/hooks/useRealtimeSubscriptions.ts"
-   ],
-   "sla-metrics-consolidated": [
-    "src/hooks/useRealtimeSubscriptions.ts"
    ]
   },
   "external": {
@@ -39091,6 +39073,14 @@
    {
     "file": "src/hooks/useGeoSearch.test.tsx",
     "name": "useCustomerSearchBias devolve null sem telefone, sem forçar request"
+   },
+   {
+    "file": "src/hooks/__tests__/realtimeChannels.test.ts",
+    "name": "canais realtime"
+   },
+   {
+    "file": "src/hooks/__tests__/realtimeChannels.test.ts",
+    "name": "dois consumidores do mesmo hook nao reutilizam o canal ja subscrito"
    },
    {
     "file": "src/hooks/__tests__/useActiveAlerts.test.ts",
@@ -61497,7 +61487,7 @@
   },
   "src/components/map/hooks/useTrackingData.ts": {
    "path": "src/components/map/hooks/useTrackingData.ts",
-   "lines": 113,
+   "lines": 115,
    "exports": [
     "interface TrackingData",
     "function useTrackingData"
@@ -61509,7 +61499,7 @@
     }
    ],
    "channels": [
-    "active-tracking-changes"
+    "active-tracking-changes-${++trackingChannelSequence}"
    ],
    "hooks": [
     "useTrackingData"
@@ -66740,7 +66730,7 @@
   },
   "src/hooks/useRealtimeSubscriptions.ts": {
    "path": "src/hooks/useRealtimeSubscriptions.ts",
-   "lines": 465,
+   "lines": 478,
    "exports": [
     "function useRealtimeManager",
     "function useAlertsRealtime",
@@ -66748,14 +66738,6 @@
     "function useSidebarCountsRealtime",
     "function useSLAMetricsRealtime",
     "function useLiveMapRealtime"
-   ],
-   "channels": [
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
    ],
    "env": [
     "DEV"
@@ -67796,6 +67778,18 @@
    ],
    "pagination": [
     "5000"
+   ]
+  },
+  "src/hooks/__tests__/realtimeChannels.test.ts": {
+   "path": "src/hooks/__tests__/realtimeChannels.test.ts",
+   "lines": 95,
+   "is_test": true,
+   "errors": [
+    "cannot add "
+   ],
+   "tests": [
+    "canais realtime",
+    "dois consumidores do mesmo hook nao reutilizam o canal ja subscrito"
    ]
   },
   "src/hooks/__tests__/useActiveAlerts.test.ts": {
@@ -77773,10 +77767,30 @@
   }
  },
  "git": {
-  "sha": "a1e08931178c0f44e226562332d48b9bcef789ea",
+  "sha": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "5adbf84",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: topic unico por montagem nos canais realtime (#336)",
+    "files": [
+     "src/components/map/hooks/useTrackingData.ts",
+     "src/hooks/__tests__/realtimeChannels.test.ts",
+     "src/hooks/useRealtimeSubscriptions.ts"
+    ]
+   },
+   {
+    "sha": "4040276",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md"
+    ]
+   },
    {
     "sha": "a1e0893",
     "date": "2026-11-23",
@@ -78202,38 +78216,15 @@
      "src/components/layout/sidebar-config.ts",
      "src/lib/__tests__/sidebarRoutes.test.ts"
     ]
-   },
-   {
-    "sha": "945a0a5",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: uma única busca global (Ctrl+K) via CommandPaletteEnhanced (item 47) (#305)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/components/GlobalSearchAdvanced.tsx",
-     "src/components/layout/AppLayout.tsx",
-     "src/hooks/useGlobalSearch.ts"
-    ]
-   },
-   {
-    "sha": "a7e7d11",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: parar de remontar o AppLayout a cada navegação (item 46) (#304)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/App.tsx",
-     "src/components/layout/AppLayout.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    8
+    6
    ],
    [
-    "src/App.tsx",
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     4
    ],
    [
@@ -78241,15 +78232,15 @@
     4
    ],
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    3
-   ],
-   [
     "src/hooks/useDashboardStats.ts",
     3
    ],
    [
     ".github/workflows/ci.yml",
+    3
+   ],
+   [
+    "src/App.tsx",
     3
    ],
    [

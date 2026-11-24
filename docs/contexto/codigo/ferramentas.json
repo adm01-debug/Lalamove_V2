@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (582)",
+   "TypeScript (583)",
    "SQL (204)",
    "JavaScript (114)",
    "Markdown (114)",
@@ -1028,11 +1028,7 @@
    "mcp-query"
   ],
   "realtime": [
-   "active-tracking-changes",
-   "alerts-consolidated",
-   "approvals-consolidated",
-   "consolidated-realtime",
-   "live-map-consolidated",
+   "active-tracking-changes-${++trackingChannelSequence}",
    "live-map-tracking",
    "password-reset-changes",
    "report_presets:${auth.user.id}",
@@ -1040,9 +1036,7 @@
    "security-auth-logs",
    "security-blocked-ips",
    "security-device-alerts",
-   "security-mfa-sessions",
-   "sidebar-counts-consolidated",
-   "sla-metrics-consolidated"
+   "security-mfa-sessions"
   ]
  },
  "feature_flags": {

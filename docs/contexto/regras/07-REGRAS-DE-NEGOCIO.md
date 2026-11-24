@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a1e0893117` · branch `main` · 2026-11-24 00:04 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5adbf84ad1` · branch `main` · 2026-11-24 01:03 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2027,7 +2027,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1436 testes em 123 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1438 testes em 124 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2154,6 +2154,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/geo-precision.test.ts` | 3 | precisionFromAccuracy: mapeia o vocabulário do Geocoding v6 · precisionFromAccuracy: ausente ou fora do vocabulário nunca vira exact · ACCURACY_TO_PRECISION: cobre exatamente as 7 chaves do provedor |
 | `supabase/functions/geo-gateway/budget-error.test.ts` | 3 | orçamento bloqueado sem fallback lança ResolveError 429 · o código do erro de orçamento é GEO_BUDGET_EXCEEDED, não RATE_LIMITED · job-worker trata GEO_BUDGET_EXCEEDED como skip, não como falha retentável |
 | `supabase/functions/geo-gateway/polyline.test.ts` | 3 | polyline: exemplo oficial do Google (precisão 5) · polyline6: ida e volta preserva 6 casas · simplify: remove pontos colineares, mantém extremos e curvas |
+| `src/hooks/__tests__/realtimeChannels.test.ts` | 2 | canais realtime · dois consumidores do mesmo hook nao reutilizam o canal ja subscrito |
 
 ## L. Eventos de webhook tratados (contratos com sistemas externos)
 

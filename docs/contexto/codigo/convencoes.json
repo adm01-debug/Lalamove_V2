@@ -21,7 +21,7 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (57)",
+   "co-localizado (__tests__) (58)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (40)"
   ],
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: topic unico por montagem nos canais realtime (#336)",
+   "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)",
    "fix: estado de erro e retry nas paginas que ficavam em branco (#334)",
    "feat: motor de mensageria ao motorista (bloco 7) (#333)",
-   "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
-   "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)",
-   "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)"
+   "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

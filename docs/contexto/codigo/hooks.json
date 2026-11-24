@@ -167,7 +167,7 @@
    "hooks_exportados": [
     "useTrackingData"
    ],
-   "linhas": 113,
+   "linhas": 115,
    "dominio": "components/map",
    "tabelas": [
     "active_tracking"
@@ -178,7 +178,7 @@
     "useEffect"
    ],
    "canais_realtime": [
-    "active-tracking-changes"
+    "active-tracking-changes-${++trackingChannelSequence}"
    ],
    "usado_por": 8,
    "usado_por_arquivos": [
@@ -2026,7 +2026,7 @@
     "useSLAMetricsRealtime",
     "useSidebarCountsRealtime"
    ],
-   "linhas": 465,
+   "linhas": 478,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2036,14 +2036,7 @@
     "useEffect",
     "useQueryClient"
    ],
-   "canais_realtime": [
-    "alerts-consolidated",
-    "approvals-consolidated",
-    "consolidated-realtime",
-    "live-map-consolidated",
-    "sidebar-counts-consolidated",
-    "sla-metrics-consolidated"
-   ],
+   "canais_realtime": [],
    "usado_por": 5,
    "usado_por_arquivos": [
     "src/components/layout/MobileSidebar.tsx",
@@ -2052,7 +2045,7 @@
     "src/hooks/useApprovalRealtime.ts",
     "src/hooks/useSLAMetrics.ts"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useRecentOrders.ts",
