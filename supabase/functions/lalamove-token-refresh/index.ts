@@ -1,4 +1,4 @@
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import {
   errorResponse,
@@ -24,6 +24,7 @@ import { trackContractUsage } from "../_shared/telemetry.ts";
 const REFRESH_AFTER_HOURS = 20;
 const EXPIRY_HOURS = 24;
 const CLAIM_WINDOW_SECONDS = 1_800; // 30 min entre tentativas
+const ALERT_DEDUP_WINDOW_SECONDS = 86_400; // 1 aviso/dia por condicao (repeticao vira contador)
 const TIMEOUT_MS = 25_000;
 
 interface ActiveToken {
@@ -34,13 +35,42 @@ interface ActiveToken {
   needs_refresh: boolean;
 }
 
-type Admin = ReturnType<typeof createClient>;
+type Admin = SupabaseClient;
 
 function json(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
     status,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
+}
+
+// Repeticao de uma condicao ja avisada nao abre alerta novo: incrementa o
+// contador do aviso em aberto para o painel mostrar "1 alerta, N repeticoes".
+async function bumpOpenAlert(admin: Admin, title: string, occurrenceCount: number): Promise<void> {
+  const { data: open } = await admin
+    .from('alerts')
+    .select('id, metadata')
+    .eq('type', 'INTEGRATION_FAILURE')
+    .eq('title', title)
+    .eq('is_dismissed', false)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!open) return;
+
+  const meta = (open.metadata ?? {}) as Record<string, unknown>;
+  await admin
+    .from('alerts')
+    .update({
+      metadata: {
+        ...meta,
+        repeats: Number(meta.repeats ?? 0) + 1,
+        occurrence_count: occurrenceCount || Number(meta.occurrence_count ?? 0) + 1,
+        last_seen_at: new Date().toISOString(),
+      },
+    })
+    .eq('id', open.id);
 }
 
 async function raiseAlert(
@@ -50,15 +80,20 @@ async function raiseAlert(
   message: string,
   metadata: Record<string, unknown>,
 ): Promise<void> {
-  const dedupKey = `uapi_token_refresh:${severity}`;
+  const dedupKey = `uapi_token_refresh:${severity}:${title}`;
   const { data: claim } = await admin.rpc('claim_alert_notification', {
     p_dedup_key: dedupKey,
     p_alert_type: 'INTEGRATION_FAILURE',
-    p_window_seconds: 3600,
+    p_window_seconds: ALERT_DEDUP_WINDOW_SECONDS,
   });
 
-  const shouldSend = Array.isArray(claim) ? claim[0]?.should_send : claim?.should_send;
-  if (shouldSend === false) return;
+  const row = Array.isArray(claim) ? claim[0] : claim;
+  const shouldSend = row?.should_send;
+
+  if (shouldSend === false) {
+    await bumpOpenAlert(admin, title, Number(row?.occurrence_count ?? 0));
+    return;
+  }
 
   await admin.from('alerts').insert({
     type: 'INTEGRATION_FAILURE',

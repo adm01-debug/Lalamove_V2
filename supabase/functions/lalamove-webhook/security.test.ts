@@ -2,7 +2,7 @@
 // Rodam in-memory (só WebCrypto local, sem rede). Executados no job contract-tests do CI.
 import { assertEquals } from "https://deno.land/std@0.190.0/testing/asserts.ts";
 import { encode } from "https://deno.land/std@0.190.0/encoding/hex.ts";
-import { timingSafeEqual, validateHmacSignature } from "./security.ts";
+import { timingSafeEqual, validateHmacSignature, classifySignatureFailure } from "./security.ts";
 
 const SECRET = "test-secret-abc123";
 
@@ -175,4 +175,29 @@ Deno.test("[v3 normalize] timestamp epoch em segundos vira ISO quando nao ha upd
   const raw = JSON.stringify({ timestamp: 1775027436, signature: "s", eventType: "ORDER_STATUS_CHANGED", data: { order: { orderId: "1" } } });
   const out = JSON.parse(normalizeLalamoveV3Payload(JSON.parse(raw), raw));
   assertEquals(out.timestamp, new Date(1775027436 * 1000).toISOString());
+});
+
+// ── Classificacao de rejeicao: probe sem assinatura x falha real ──
+// Sem essa separacao, toda varredura externa que bate no endpoint virava
+// alerta CRITICAL INTEGRATION_FAILURE (1.331 alertas abertos em producao).
+Deno.test("[classify] request sem nenhuma assinatura vira SIGNATURE_MISSING (nao alerta)", () => {
+  assertEquals(classifySignatureFailure(false), "SIGNATURE_MISSING");
+});
+
+Deno.test("[classify] assinatura presente e invalida continua SIGNATURE_INVALID (alerta)", () => {
+  assertEquals(classifySignatureFailure(true), "SIGNATURE_INVALID");
+});
+
+Deno.test("[classify] corpo vazio e sem header: probe real de producao", async () => {
+  const res = await validateHmacSignature("{}", null, SECRET);
+  assertEquals(res.valid, false);
+  assertEquals(res.reason, "Missing signature header");
+  const hasAnySignature = Boolean(null);
+  assertEquals(classifySignatureFailure(hasAnySignature), "SIGNATURE_MISSING");
+});
+
+Deno.test("[classify] assinatura errada no header permanece falha real", async () => {
+  const res = await validateHmacSignature('{"a":1}', "deadbeef", SECRET);
+  assertEquals(res.valid, false);
+  assertEquals(classifySignatureFailure(Boolean("deadbeef")), "SIGNATURE_INVALID");
 });
