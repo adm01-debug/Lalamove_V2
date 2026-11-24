@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d134764a6be9aed8f549f09d762ea8bee1e3b30c",
+  "commit": "d766382edbda2d05103e075bf0cc5e4d8b11db45",
   "branch": "main",
-  "data_commit": "2026-11-24T12:12:22-03:00",
+  "data_commit": "2026-11-24T12:23:04-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d766382",
+    "data": "2026-11-24",
+    "assunto": "feat: renovacao do token uapi sem proxy externo (#362)"
+   },
    {
     "sha": "d134764",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "7c71244",
     "data": "2026-11-23",
     "assunto": "fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)"
-   },
-   {
-    "sha": "562d0de",
-    "data": "2026-11-23",
-    "assunto": "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)"
    }
   ],
-  "arquivos_mudados_7d": 494,
+  "arquivos_mudados_7d": 496,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 262
+    "commits": 263
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1117,
-  "arquivos_codigo": 716,
-  "linhas_codigo": 141411,
+  "arquivos_total": 1119,
+  "arquivos_codigo": 718,
+  "linhas_codigo": 141631,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 194,
   "cron_jobs": 24,
-  "testes": 185,
+  "testes": 186,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 120,
-   "linhas": 29214
+   "arquivos": 122,
+   "linhas": 29434
   },
   "tailwind.config.ts": {
    "arquivos": 1,

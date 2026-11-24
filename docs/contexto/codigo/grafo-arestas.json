@@ -2483,7 +2483,8 @@
   "supabase/functions/lalamove-token-refresh/index.ts": [
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
-   "supabase/functions/_shared/telemetry.ts"
+   "supabase/functions/_shared/telemetry.ts",
+   "supabase/functions/lalamove-token-refresh/uapi-direct.ts"
   ],
   "supabase/functions/lalamove-uapi/index.ts": [
    "supabase/functions/_shared/contract.ts",

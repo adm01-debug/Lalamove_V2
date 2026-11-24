@@ -716,8 +716,8 @@
    "nome": "lalamove-token-refresh",
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
-   "arquivos": 1,
-   "linhas": 249,
+   "arquivos": 2,
+   "linhas": 401,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -739,7 +739,10 @@
    ],
    "buckets": [],
    "chama_edges": [],
-   "hosts_externos": [],
+   "hosts_externos": [
+    "br-uapi.lalamove.com",
+    "web.lalamove.com"
+   ],
    "usa_shared": [
     "contract.ts",
     "schemas.ts",
@@ -749,7 +752,7 @@
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": true,
    "orfa": false,
-   "testes": 0
+   "testes": 1
   },
   {
    "nome": "lalamove-uapi",

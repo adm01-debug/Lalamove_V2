@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (603)",
+   "TypeScript (605)",
    "SQL (205)",
    "JavaScript (114)",
    "Markdown (114)",
@@ -840,6 +840,10 @@
     "arquivos": 5
    },
    {
+    "host": "br-uapi.lalamove.com",
+    "arquivos": 3
+   },
+   {
     "host": "maps.googleapis.com",
     "arquivos": 3
    },
@@ -861,6 +865,10 @@
    },
    {
     "host": "routes.googleapis.com",
+    "arquivos": 2
+   },
+   {
+    "host": "web.lalamove.com",
     "arquivos": 2
    },
    {
@@ -901,10 +909,6 @@
    },
    {
     "host": "b.tile.openstreetmap.org",
-    "arquivos": 1
-   },
-   {
-    "host": "br-uapi.lalamove.com",
     "arquivos": 1
    },
    {
@@ -977,10 +981,6 @@
    },
    {
     "host": "wa.me",
-    "arquivos": 1
-   },
-   {
-    "host": "web.lalamove.com",
     "arquivos": 1
    },
    {

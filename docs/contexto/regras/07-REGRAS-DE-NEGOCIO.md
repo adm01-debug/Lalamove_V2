@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d134764a6b` · branch `main` · 2026-11-24 15:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d766382edb` · branch `main` · 2026-11-24 15:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1543,6 +1543,10 @@ _nenhum item encontrado_
 | `CLAIM_WINDOW_SECONDS` | `1` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `ALERT_DEDUP_WINDOW_SECONDS` | `86` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-token-refresh/index.ts` |
+| `HCOUNTRY` | `'20000'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
+| `HLANG` | `'pt_BR'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
+| `APP_VERSION` | `'5.37.0'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
+| `APP_REVISION` | `'53700'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
 | `HCOUNTRY` | `'20000'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `HLANG` | `'pt_BR'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `APP_VERSION` | `'5.37.0'` | `supabase/functions/lalamove-uapi/index.ts` |
@@ -1627,6 +1631,7 @@ _nenhum item encontrado_
 | `ORDER_TIMEOUT: 5,` | `src/types/lalamove.ts` |
 | `const local = new Date(date.getTime() - 3 * 60 * 60_000);` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `export const REVOKE_AFTER_MS = 10 * 60 * 1000;` | `supabase/functions/geo-admin/rotation.ts` |
+| `patch.token_expires_at = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000).toISOString();` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `token_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),` | `supabase/functions/lalamove-uapi/index.ts` |
 | `const WEBHOOK_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes` | `supabase/functions/lalamove-webhook/index.ts` |
 | `expires_at TIMESTAMP WITH TIME ZONE DEFAULT (now() + interval '24 hours'),` | `supabase/migrations/20251231131206_017e19aa-c6cc-438f-a6ac-b3ec6f486172.sql` |
@@ -2031,7 +2036,7 @@ _nenhum item encontrado_
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha no teste: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| … +126 linhas — lista completa em `context.json` | |
+| … +125 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2075,7 +2080,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1534 testes em 135 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1540 testes em 136 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2183,6 +2188,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
+| `supabase/functions/lalamove-token-refresh/uapi-direct.test.ts` | 6 | [uapi-direct] URL pede refresh_token com cara de portal · [uapi-direct] corpo leva token e refresh_token em args · [uapi-direct] ret=0 devolve o novo par · [uapi-direct] sem refresh_token novo, mantem o atual … |
 | `supabase/functions/send-notification/sms-dispatch.test.ts` | 6 | buildSmsBody junta titulo, mensagem e pedido sem partes vazias · sem provedor configurado devolve erro explicito e nao envia · dispatchSms repassa o texto montado e a referencia do pedido · dispatchSms propaga a falha do provedor com o texto que tentou … |
 | `src/components/auth/ProtectedRoute.test.tsx` | 5 | ProtectedRoute · não renderiza o filho enquanto o AAL está carregando (loadingAAL true) · renderiza o filho quando tudo carrega e não exige verificação MFA · redireciona para /mfa-verify quando requireMFA e needsMFAVerification … |
 | `src/components/map/__tests__/OrderTrackingMap.test.tsx` | 5 | OrderTrackingMap (etapa 58) · mostra aviso quando o token do Mapbox não está disponível · expõe a região com rótulo acessível quando há token · não quebra sem coordenadas nem rota … |

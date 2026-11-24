@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "d134764a6be9aed8f549f09d762ea8bee1e3b30c",
+  "sha": "d766382edbda2d05103e075bf0cc5e4d8b11db45",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 15:13 UTC",
-  "files_total": 1111,
-  "code_files": 930,
-  "code_lines": 163171
+  "generated_at": "2026-11-24 15:23 UTC",
+  "files_total": 1113,
+  "code_files": 932,
+  "code_lines": 163391
  },
  "version": "1.3.2",
- "facts_hash": "90de92d2ffe821e5",
+ "facts_hash": "a2669ca5aad17f74",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 360,
+   ".ts": 362,
    ".tsx": 243,
    ".sql": 205,
    ".mjs": 109,
@@ -19236,9 +19236,7 @@
     "external": [],
     "invokes": [],
     "doc": "",
-    "errors": [
-     "Configuração do proxy Lalamove ausente"
-    ],
+    "errors": [],
     "side_effects": [],
     "webhook_events": [],
     "idempotency": true
@@ -22815,8 +22813,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 120,
-   "lines": 29214,
+   "files": 122,
+   "lines": 29434,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22905,9 +22903,9 @@
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
+    "uapi-direct.ts: UAPI_HEADERS, UapiRefreshRequest, buildUapiRefreshRequest, UapiRefreshResult, parseUapiRefreshResponse",
     "normalize.ts: normalizeLalamoveV3Payload",
-    "security.ts: timingSafeEqual, validateHmacSignature, classifySignatureFailure, validateLalamoveV3Signature",
-    "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation"
+    "security.ts: timingSafeEqual, validateHmacSignature, classifySignatureFailure, validateLalamoveV3Signature"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -24356,9 +24354,11 @@
     "stop_index"
    ],
    "lalamove_uapi_sessions": [
+    "access_token",
     "id",
     "is_active",
     "last_refreshed_at",
+    "refresh_token",
     "token_obtained_at"
    ],
    "map_settings_overrides": [
@@ -27668,10 +27668,6 @@
    {
     "file": "supabase/functions/lalamove-api/index.ts",
     "msg": "Telefone inválido em ${label}: esperado formato E.164 (+5511...)"
-   },
-   {
-    "file": "supabase/functions/lalamove-token-refresh/index.ts",
-    "msg": "Configuração do proxy Lalamove ausente"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -32506,6 +32502,26 @@
     "file": "supabase/functions/lalamove-token-refresh/index.ts",
     "name": "TIMEOUT_MS",
     "value": "25"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.ts",
+    "name": "HCOUNTRY",
+    "value": "'20000'"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.ts",
+    "name": "HLANG",
+    "value": "'pt_BR'"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.ts",
+    "name": "APP_VERSION",
+    "value": "'5.37.0'"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.ts",
+    "name": "APP_REVISION",
+    "value": "'53700'"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -37492,6 +37508,10 @@
    {
     "file": "supabase/functions/geo-admin/rotation.ts",
     "line": "export const REVOKE_AFTER_MS = 10 * 60 * 1000;"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/index.ts",
+    "line": "patch.token_expires_at = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000).toISOString();"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -43460,6 +43480,30 @@
    {
     "file": "supabase/functions/lalamove-gateway/route.test.ts",
     "name": "target uapi também resolve as ações v3 (o front manda tudo como unified)"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] URL pede refresh_token com cara de portal"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] corpo leva token e refresh_token em args"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] ret=0 devolve o novo par"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] sem refresh_token novo, mantem o atual"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] ret!=0 nao e sucesso e preserva o motivo"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+    "name": "[uapi-direct] resposta sem data.token falha"
    },
    {
     "file": "supabase/functions/lalamove-webhook/security.test.ts",
@@ -76967,7 +77011,7 @@
   },
   "supabase/functions/lalamove-token-refresh/index.ts": {
    "path": "supabase/functions/lalamove-token-refresh/index.ts",
-   "lines": 249,
+   "lines": 300,
    "tables": [
     {
      "table": "alerts",
@@ -76999,9 +77043,11 @@
      "type"
     ],
     "lalamove_uapi_sessions": [
+     "access_token",
      "id",
      "is_active",
      "last_refreshed_at",
+     "refresh_token",
      "token_obtained_at"
     ]
    },
@@ -77013,9 +77059,6 @@
     "LALAMOVE_UNIFIED_PROXY_URL",
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL"
-   ],
-   "errors": [
-    "Configuração do proxy Lalamove ausente"
    ],
    "params": [
     {
@@ -77051,10 +77094,59 @@
      "kind": "filtra"
     }
    ],
+   "temporal": [
+    "patch.token_expires_at = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000).toISOString();"
+   ],
    "pagination": [
     "1"
    ],
    "uses_service_role": true
+  },
+  "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts": {
+   "path": "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+   "lines": 68,
+   "is_test": true,
+   "errors": [
+    "${msg} — esperado ${JSON.stringify(expected)}, veio ${JSON.stringify(actual)}"
+   ],
+   "tests": [
+    "[uapi-direct] URL pede refresh_token com cara de portal",
+    "[uapi-direct] corpo leva token e refresh_token em args",
+    "[uapi-direct] ret=0 devolve o novo par",
+    "[uapi-direct] sem refresh_token novo, mantem o atual",
+    "[uapi-direct] ret!=0 nao e sucesso e preserva o motivo",
+    "[uapi-direct] resposta sem data.token falha"
+   ]
+  },
+  "supabase/functions/lalamove-token-refresh/uapi-direct.ts": {
+   "path": "supabase/functions/lalamove-token-refresh/uapi-direct.ts",
+   "lines": 101,
+   "exports": [
+    "const UAPI_HEADERS",
+    "interface UapiRefreshRequest",
+    "function buildUapiRefreshRequest",
+    "interface UapiRefreshResult",
+    "function parseUapiRefreshResponse"
+   ],
+   "params": [
+    {
+     "name": "HCOUNTRY",
+     "value": "'20000'"
+    },
+    {
+     "name": "HLANG",
+     "value": "'pt_BR'"
+    },
+    {
+     "name": "APP_VERSION",
+     "value": "'5.37.0'"
+    },
+    {
+     "name": "APP_REVISION",
+     "value": "'53700'"
+    }
+   ],
+   "doc": "Renovação do token UAPI sem o proxy externo. `LALAMOVE_UNIFIED_PROXY_URL`/`_KEY` nunca existiram na produção, então a renovação automática sempre morria em \"Configuração do proxy Lalamove ausente\". Este módulo monta a chamada `refresh_token` direto na UAPI, com o mesmo formato usado por `lalamove-ua …"
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
@@ -79654,10 +79746,21 @@
   }
  },
  "git": {
-  "sha": "d134764a6be9aed8f549f09d762ea8bee1e3b30c",
+  "sha": "d766382edbda2d05103e075bf0cc5e4d8b11db45",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d766382",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: renovacao do token uapi sem proxy externo (#362)",
+    "files": [
+     "supabase/functions/lalamove-token-refresh/index.ts",
+     "supabase/functions/lalamove-token-refresh/uapi-direct.test.ts",
+     "supabase/functions/lalamove-token-refresh/uapi-direct.ts"
+    ]
+   },
    {
     "sha": "d134764",
     "date": "2026-11-24",
@@ -80026,15 +80129,6 @@
      "supabase/functions/_shared/messaging/registry.ts",
      "supabase/functions/lalamove-webhook/index.ts"
     ]
-   },
-   {
-    "sha": "ac2a2af",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
-    "files": [
-     "supabase/migrations/20261126120000_messaging_foundation.sql"
-    ]
    }
   ],
   "hot_files": [
@@ -80083,6 +80177,10 @@
     3
    ],
    [
+    "supabase/functions/lalamove-token-refresh/index.ts",
+    2
+   ],
+   [
     "src/pages/LiveMapPage.tsx",
     2
    ],
@@ -80112,10 +80210,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/notify-driver.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/notify-driver.ts",
     2
    ]
   ]
