@@ -515,7 +515,7 @@
     "useAlertGrouping",
     "useAlertSelection"
    ],
-   "linhas": 98,
+   "linhas": 109,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -529,7 +529,7 @@
    "usado_por_arquivos": [
     "src/components/alerts/AlertsAdvanced.tsx"
    ],
-   "coberto_por_testes": 0
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useAlertSettings.ts",

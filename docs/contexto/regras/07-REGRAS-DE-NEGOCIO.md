@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65473caf4e` · branch `main` · 2026-11-24 12:45 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `71cf6b0687` · branch `main` · 2026-11-24 12:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -920,7 +920,6 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | DriverStatus | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST | `src/types/index.ts` |
 | IncidentType | ROUTE_DEVIATION \| LONG_STOP \| LATE_DELIVERY \| CUSTOMER_COMPLAINT \| DAMAGE \| OTHER | `src/types/index.ts` |
 | ApprovalPriority | LOW \| MEDIUM \| HIGH \| URGENT \| CRITICAL | `src/types/index.ts` |
-| AlertType | DRIVER_BLOCKED \| ROUTE_DEVIATION \| DRIVER_STOPPED \| LATE_DELIVERY \| APPROVAL_REQUIRED \| ORDER_CANCELLED \| INTEGRATION_FAILURE | `src/types/index.ts` |
 | SERVICE_TYPES | 'LALAGO', 'LALAPRO', 'LALAGOFOUR', 'CAR', 'CARFOURH', 'HATCHBACK', 'HATCHFOURH', 'UV_FIORINO', 'UV_4H', 'VAN', 'VANFOURH', 'TRUCK330', 'TRUCK3_5T', 'TRUCK_6H', | `src/types/lalamove.ts` |
 | CITY_CODES | 'BR AJU', 'BR BEL', 'BR BHZ', 'BR BSB', 'BR CWB', 'BR FLN', 'BR FOR', 'BR GYN', 'BR MAO', 'BR POA', 'BR RAO', 'BR REC', 'BR RIO', 'BR SAO', 'BR SLZ', 'BR SSA', | `src/types/lalamove.ts` |
 | ORDER_STATUSES | 'ASSIGNING_DRIVER', 'ON_GOING', 'PICKED_UP', 'DELIVERING', 'COMPLETED', 'CANCELED', 'REJECTED', 'EXPIRED', | `src/types/lalamove.ts` |
@@ -2069,7 +2068,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1511 testes em 132 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1514 testes em 133 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2197,6 +2196,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/__tests__/mapLoadBilling.test.tsx` | 3 | GoogleMapsCanvas — contagem de map load (etapa 80) · cobra o load no provedor google, não no mapbox · não cobra load quando o mapa não chega a ser instanciado |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |
+| `src/hooks/__tests__/useAlertGrouping.test.ts` | 3 | mapas de alerta · todo tipo do banco tem rótulo e ícone · cobre os tipos que já existem em produção |
 | `src/hooks/__tests__/useCronJobsHealth.test.ts` | 3 | useCronJobsHealth · deve retornar a saúde dos jobs de cron · deve propagar erro quando a RPC falha (ex.: sem permissão de admin) |
 | `src/hooks/__tests__/useDrivers.test.ts` | 3 | useDrivers · deve buscar e mapear motoristas corretamente · deve lidar com erro do supabase |
 | `src/lib/__tests__/sidebarRoutes.test.ts` | 3 | menu do sidebar × rotas do App (etapa 49) · todo item de menu aponta para uma rota existente no App · itens de menu não exibem link para rota que exige papel maior (sem /unauthorized) |

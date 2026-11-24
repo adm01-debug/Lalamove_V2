@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "65473caf4ed843b61a35eae4bf50c59122ac08db",
+  "commit": "71cf6b0687f8d44400c153b2952d011e977373b7",
   "branch": "main",
-  "data_commit": "2026-11-24T09:44:48-03:00",
+  "data_commit": "2026-11-24T09:56:51-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "71cf6b0",
+    "data": "2026-11-24",
+    "assunto": "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)"
+   },
    {
     "sha": "65473ca",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "874a336",
     "data": "2026-11-23",
     "assunto": "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)"
-   },
-   {
-    "sha": "e74d394",
-    "data": "2026-11-23",
-    "assunto": "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)"
    }
   ],
-  "arquivos_mudados_7d": 484,
+  "arquivos_mudados_7d": 485,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 253
+    "commits": 254
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1111,
-  "arquivos_codigo": 711,
-  "linhas_codigo": 140863,
+  "arquivos_total": 1112,
+  "arquivos_codigo": 712,
+  "linhas_codigo": 140927,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 182,
+  "testes": 183,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -523,8 +523,8 @@
    "linhas": 29597
   },
   "src/hooks": {
-   "arquivos": 114,
-   "linhas": 19799
+   "arquivos": 115,
+   "linhas": 19852
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21466
+   "linhas": 21479
   },
   "src/services": {
    "arquivos": 1,
@@ -556,7 +556,7 @@
   },
   "src/types": {
    "arquivos": 5,
-   "linhas": 1071
+   "linhas": 1069
   },
   "src/utils": {
    "arquivos": 8,
@@ -650,7 +650,7 @@
   },
   {
    "arquivo": "src/pages/AlertsPage.tsx",
-   "linhas": 606
+   "linhas": 619
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",

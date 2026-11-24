@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "65473caf4ed843b61a35eae4bf50c59122ac08db",
+  "sha": "71cf6b0687f8d44400c153b2952d011e977373b7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 12:45 UTC",
-  "files_total": 1105,
-  "code_files": 924,
-  "code_lines": 162534
+  "generated_at": "2026-11-24 12:58 UTC",
+  "files_total": 1106,
+  "code_files": 925,
+  "code_lines": 162598
  },
  "version": "1.3.2",
- "facts_hash": "51a7f2e50404dca1",
+ "facts_hash": "cc7151e1d571235d",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 356,
+   ".ts": 357,
    ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
@@ -22145,8 +22145,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 114,
-   "lines": 19799,
+   "files": 115,
+   "lines": 19852,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22521,7 +22521,7 @@
   {
    "module": "src/pages",
    "files": 93,
-   "lines": 21466,
+   "lines": 21479,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -22723,7 +22723,7 @@
   {
    "module": "src/types",
    "files": 5,
-   "lines": 1071,
+   "lines": 1069,
    "tables": [],
    "exports": [
     "driver.ts: DriverStatus, RiskLevel, DeliveryOutcome, ApprovalPriority, IncidentType, IncidentSeverity",
@@ -22739,7 +22739,9 @@
    "deps": [
     "vitest"
    ],
-   "imports_modules": [],
+   "imports_modules": [
+    "src/integrations"
+   ],
    "file_list": [
     "src/types/driver.ts",
     "src/types/geo.ts",
@@ -26006,11 +26008,6 @@
     "file": "src/types/index.ts",
     "name": "ApprovalPriority",
     "values": "LOW | MEDIUM | HIGH | URGENT | CRITICAL"
-   },
-   {
-    "file": "src/types/index.ts",
-    "name": "AlertType",
-    "values": "DRIVER_BLOCKED | ROUTE_DEVIATION | DRIVER_STOPPED | LATE_DELIVERY | APPROVAL_REQUIRED | ORDER_CANCELLED | INTEGRATION_FAILURE"
    },
    {
     "file": "src/types/lalamove.ts",
@@ -39555,6 +39552,18 @@
    {
     "file": "src/hooks/__tests__/useActiveAlerts.test.ts",
     "name": "deve mapear todos os tipos de alerta"
+   },
+   {
+    "file": "src/hooks/__tests__/useAlertGrouping.test.ts",
+    "name": "mapas de alerta"
+   },
+   {
+    "file": "src/hooks/__tests__/useAlertGrouping.test.ts",
+    "name": "todo tipo do banco tem rótulo e ícone"
+   },
+   {
+    "file": "src/hooks/__tests__/useAlertGrouping.test.ts",
+    "name": "cobre os tipos que já existem em produção"
    },
    {
     "file": "src/hooks/__tests__/useContractVersionUsage.trend.test.ts",
@@ -64248,7 +64257,7 @@
   },
   "src/hooks/useAlertGrouping.ts": {
    "path": "src/hooks/useAlertGrouping.ts",
-   "lines": 98,
+   "lines": 109,
    "exports": [
     "type GroupBy",
     "type SortBy",
@@ -68820,6 +68829,16 @@
     "deve mapear todos os tipos de alerta"
    ]
   },
+  "src/hooks/__tests__/useAlertGrouping.test.ts": {
+   "path": "src/hooks/__tests__/useAlertGrouping.test.ts",
+   "lines": 42,
+   "is_test": true,
+   "tests": [
+    "mapas de alerta",
+    "todo tipo do banco tem rótulo e ícone",
+    "cobre os tipos que já existem em produção"
+   ]
+  },
   "src/hooks/__tests__/useContractVersionUsage.trend.test.ts": {
    "path": "src/hooks/__tests__/useContractVersionUsage.trend.test.ts",
    "lines": 102,
@@ -70290,7 +70309,7 @@
   },
   "src/pages/AlertsPage.tsx": {
    "path": "src/pages/AlertsPage.tsx",
-   "lines": 606,
+   "lines": 619,
    "exports": [
     "function AlertsPage"
    ],
@@ -72226,7 +72245,7 @@
   },
   "src/types/index.ts": {
    "path": "src/types/index.ts",
-   "lines": 153,
+   "lines": 151,
    "exports": [
     "interface Order",
     "type OrderStatus",
@@ -72262,10 +72281,6 @@
     {
      "name": "ApprovalPriority",
      "values": "LOW | MEDIUM | HIGH | URGENT | CRITICAL"
-    },
-    {
-     "name": "AlertType",
-     "values": "DRIVER_BLOCKED | ROUTE_DEVIATION | DRIVER_STOPPED | LATE_DELIVERY | APPROVAL_REQUIRED | ORDER_CANCELLED | INTEGRATION_FAILURE"
     }
    ],
    "status_values": [
@@ -79248,10 +79263,23 @@
   }
  },
  "git": {
-  "sha": "65473caf4ed843b61a35eae4bf50c59122ac08db",
+  "sha": "71cf6b0687f8d44400c153b2952d011e977373b7",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "71cf6b0",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)",
+    "files": [
+     "src/components/alerts/AlertsAdvanced.tsx",
+     "src/hooks/__tests__/useAlertGrouping.test.ts",
+     "src/hooks/useAlertGrouping.ts",
+     "src/pages/AlertsPage.tsx",
+     "src/types/index.ts"
+    ]
+   },
    {
     "sha": "65473ca",
     "date": "2026-11-24",
@@ -79626,18 +79654,6 @@
      "src/pages/DriversPage.tsx",
      "src/pages/OrdersPage.tsx"
     ]
-   },
-   {
-    "sha": "ced043f",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)",
-    "files": [
-     "src/components/dashboard/BatchActionsToolbar.tsx",
-     "src/components/orders/NewOrderDialog.tsx",
-     "src/hooks/useCommandPaletteSearch.ts",
-     "src/pages/LiveMapPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -79650,15 +79666,15 @@
     5
    ],
    [
-    "src/pages/LiveMapPage.tsx",
-    4
-   ],
-   [
     "supabase/functions/_shared/messaging/auto-notices.test.ts",
     3
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
+    3
+   ],
+   [
+    "src/pages/LiveMapPage.tsx",
     3
    ],
    [
@@ -79676,6 +79692,10 @@
    [
     "src/pages/MessagingSettingsPage.tsx",
     3
+   ],
+   [
+    "src/pages/AlertsPage.tsx",
+    2
    ],
    [
     "docs/agentes/mensageria.md",
@@ -79715,10 +79735,6 @@
    ],
    [
     "supabase/functions/lalamove-webhook/index.ts",
-    2
-   ],
-   [
-    "supabase/functions/job-worker/eta-delay.test.ts",
     2
    ]
   ]

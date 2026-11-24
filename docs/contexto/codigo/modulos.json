@@ -1660,7 +1660,7 @@
    "modulo": "hooks",
    "arquivos": 87,
    "testes": 2,
-   "linhas": 16155,
+   "linhas": 16166,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2495,7 +2495,8 @@
     "pages",
     "pages/drivers",
     "pages/reports",
-    "services"
+    "services",
+    "types"
    ],
    "depende_de_modulos": [],
    "pacotes_externos": [
@@ -2588,7 +2589,7 @@
    "modulo": "pages",
    "arquivos": 57,
    "testes": 3,
-   "linhas": 17637,
+   "linhas": 17650,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",
@@ -3845,7 +3846,7 @@
    "modulo": "types",
    "arquivos": 4,
    "testes": 0,
-   "linhas": 865,
+   "linhas": 863,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -3877,7 +3878,9 @@
     "pages/evaluations",
     "pages/orders"
    ],
-   "depende_de_modulos": [],
+   "depende_de_modulos": [
+    "integrations/supabase"
+   ],
    "pacotes_externos": []
   },
   {

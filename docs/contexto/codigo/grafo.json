@@ -2,7 +2,7 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "nos": 536,
- "arestas": 1783,
+ "arestas": 1784,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -62,7 +62,7 @@
   },
   {
    "arquivo": "src/types/index.ts",
-   "importado_por": 24
+   "importado_por": 25
   },
   {
    "arquivo": "src/components/ui/switch.tsx",
@@ -105,6 +105,10 @@
    "importado_por": 13
   },
   {
+   "arquivo": "src/integrations/supabase/types.ts",
+   "importado_por": 13
+  },
+  {
    "arquivo": "src/components/map/hooks/useTrackingData.ts",
    "importado_por": 12
   },
@@ -114,10 +118,6 @@
   },
   {
    "arquivo": "src/components/ui/textarea.tsx",
-   "importado_por": 12
-  },
-  {
-   "arquivo": "src/integrations/supabase/types.ts",
    "importado_por": 12
   },
   {
@@ -234,11 +234,11 @@
   {
    "modulo": "integrations/supabase",
    "depende_de": 0,
-   "importado_por": 12
+   "importado_por": 13
   },
   {
    "modulo": "types",
-   "depende_de": 0,
+   "depende_de": 1,
    "importado_por": 10
   },
   {

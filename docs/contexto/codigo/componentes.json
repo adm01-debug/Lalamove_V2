@@ -2332,7 +2332,7 @@
     "AlertsPage"
    ],
    "export_default": null,
-   "linhas": 606,
+   "linhas": 619,
    "dominio": "pages",
    "hooks_locais": [
     "useActiveAlerts",

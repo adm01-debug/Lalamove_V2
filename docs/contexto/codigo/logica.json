@@ -149,13 +149,14 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 12,
+   "usado_por": 13,
    "usado_por_modulos": [
     "components/drivers",
     "hooks",
     "integrations/supabase",
     "pages",
-    "pages/drivers"
+    "pages/drivers",
+    "types"
    ],
    "coberto_por_testes": 0,
    "orfao": false
@@ -1139,7 +1140,7 @@
     "VehicleType"
    ],
    "export_default": null,
-   "linhas": 153,
+   "linhas": 151,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -1159,7 +1160,7 @@
     "pages/approvals",
     "pages/orders"
    ],
-   "coberto_por_testes": 1,
+   "coberto_por_testes": 2,
    "orfao": false
   },
   {

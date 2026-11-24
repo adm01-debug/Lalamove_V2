@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65473caf4e` · branch `main` · 2026-11-24 12:45 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `71cf6b0687` · branch `main` · 2026-11-24 12:58 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -170,7 +170,6 @@
 | `DriverStatus` (TS) | APPROVED \| PENDING_APPROVAL \| BLOCKED \| WHITELIST \| BLACKLIST |  | `src/types/index.ts` |
 | `IncidentType` (TS) | ROUTE_DEVIATION \| LONG_STOP \| LATE_DELIVERY \| CUSTOMER_COMPLAINT \| DAMAGE \| OTHER |  | `src/types/index.ts` |
 | `ApprovalPriority` (TS) | LOW \| MEDIUM \| HIGH \| URGENT \| CRITICAL |  | `src/types/index.ts` |
-| `AlertType` (TS) | DRIVER_BLOCKED \| ROUTE_DEVIATION \| DRIVER_STOPPED \| LATE_DELIVERY \| APPROVAL_REQUIRED \| ORDER_CANCELLED \| INTEGRATION_FAILURE |  | `src/types/index.ts` |
 | `SERVICE_TYPES` (TS) | 'LALAGO', 'LALAPRO', 'LALAGOFOUR', 'CAR', 'CARFOURH', 'HATCHBACK', 'HATCHFOURH', 'UV_FIORINO', 'UV_4H', 'VAN', 'VANFOURH', 'TRUCK330', 'TRUCK3_5T', 'TRUCK_6H', |  | `src/types/lalamove.ts` |
 | `CITY_CODES` (TS) | 'BR AJU', 'BR BEL', 'BR BHZ', 'BR BSB', 'BR CWB', 'BR FLN', 'BR FOR', 'BR GYN', 'BR MAO', 'BR POA', 'BR RAO', 'BR REC', 'BR RIO', 'BR SAO', 'BR SLZ', 'BR SSA', |  | `src/types/lalamove.ts` |
 | `ORDER_STATUSES` (TS) | 'ASSIGNING_DRIVER', 'ON_GOING', 'PICKED_UP', 'DELIVERING', 'COMPLETED', 'CANCELED', 'REJECTED', 'EXPIRED', |  | `src/types/lalamove.ts` |

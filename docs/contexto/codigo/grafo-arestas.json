@@ -2288,6 +2288,9 @@
    "src/integrations/supabase/client.ts",
    "src/utils/logger.ts"
   ],
+  "src/types/index.ts": [
+   "src/integrations/supabase/types.ts"
+  ],
   "src/utils/alertSounds.ts": [
    "src/hooks/useSoundSettings.ts"
   ],
