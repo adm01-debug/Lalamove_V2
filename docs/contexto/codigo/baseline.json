@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "1e34334a10eb9d555035c32d8f4becb21bbfecb7",
+  "commit": "d4f8bc7a2a44f6b30a13d8829a2f95beed82deff",
   "branch": "main",
-  "data_commit": "2026-11-24T10:49:33-03:00",
+  "data_commit": "2026-11-24T11:01:29-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "d4f8bc7",
+    "data": "2026-11-24",
+    "assunto": "fix: rota/ETA so recalcula com posicao viva do motorista (#357)"
+   },
    {
     "sha": "1e34334",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "63cda83",
     "data": "2026-11-23",
     "assunto": "feat: motor de mensageria ao motorista (bloco 7) (#333)"
-   },
-   {
-    "sha": "ac2a2af",
-    "data": "2026-11-23",
-    "assunto": "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)"
    }
   ],
-  "arquivos_mudados_7d": 491,
+  "arquivos_mudados_7d": 492,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -164,12 +164,12 @@
     "mudancas": 23
    },
    {
-    "pasta": "supabase/functions/send-notification",
+    "pasta": "supabase/functions/job-worker",
     "mudancas": 21
    },
    {
-    "pasta": "supabase/functions/job-worker",
-    "mudancas": 19
+    "pasta": "supabase/functions/send-notification",
+    "mudancas": 21
    },
    {
     "pasta": "package.json",
@@ -222,15 +222,15 @@
     "mudancas": 17
    },
    {
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 14
+   },
+   {
     "arquivo": "docs/MAPBOX.md",
     "mudancas": 13
    },
    {
     "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/job-worker/index.ts",
     "mudancas": 13
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 257
+    "commits": 258
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1115,
-  "arquivos_codigo": 715,
-  "linhas_codigo": 141233,
+  "arquivos_total": 1116,
+  "arquivos_codigo": 716,
+  "linhas_codigo": 141311,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 184,
+  "testes": 185,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 119,
-   "linhas": 29056
+   "arquivos": 120,
+   "linhas": 29134
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -590,7 +590,7 @@
   },
   {
    "arquivo": "supabase/functions/job-worker/index.ts",
-   "linhas": 1320
+   "linhas": 1362
   },
   {
    "arquivo": "supabase/functions/lalamove-api/index.ts",

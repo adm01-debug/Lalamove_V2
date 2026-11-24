@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1e34334a10` · branch `main` · 2026-11-24 13:51 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d4f8bc7a2a` · branch `main` · 2026-11-24 14:06 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1535,6 +1535,7 @@ _nenhum item encontrado_
 | `ETA_TRAFFIC_THRESHOLD_MIN` | `15` | `supabase/functions/job-worker/index.ts` |
 | `ETA_MIN_INTERVAL_MS` | `60` | `supabase/functions/job-worker/index.ts` |
 | `ETA_MIN_MOVED_M` | `300` | `supabase/functions/job-worker/index.ts` |
+| `GEO_POSITION_MAX_AGE_MIN` | `120` | `supabase/functions/job-worker/index.ts` |
 | `LALAMOVE_MARKET` | `'BR'` | `supabase/functions/lalamove-api/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-gateway/index.ts` |
 | `REFRESH_AFTER_HOURS` | `20` | `supabase/functions/lalamove-token-refresh/index.ts` |
@@ -2070,7 +2071,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1526 testes em 134 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1530 testes em 135 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2196,6 +2197,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
 | `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
+| `supabase/functions/job-worker/geo-freshness.test.ts` | 4 | posicao dentro da janela nao bloqueia rota/ETA · posicao velha e barrada com o motivo e a idade · tracking orfao (GPS de meses atras) nunca recalcula · sem data de atualizacao tambem bloqueia |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/__tests__/mapLoadBilling.test.tsx` | 3 | GoogleMapsCanvas — contagem de map load (etapa 80) · cobra o load no provedor google, não no mapbox · não cobra load quando o mapa não chega a ser instanciado |
 | `src/components/map/hooks/__tests__/parseExpectedRoute.test.ts` | 3 | parseExpectedRoute · aceita array de {lat,lng} com 2+ pontos · devolve null para valores que não são polyline válida |

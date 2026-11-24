@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "1e34334a10eb9d555035c32d8f4becb21bbfecb7",
+  "sha": "d4f8bc7a2a44f6b30a13d8829a2f95beed82deff",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 13:51 UTC",
-  "files_total": 1109,
-  "code_files": 928,
-  "code_lines": 162904
+  "generated_at": "2026-11-24 14:06 UTC",
+  "files_total": 1110,
+  "code_files": 929,
+  "code_lines": 162982
  },
  "version": "1.3.2",
- "facts_hash": "03cfa779218b2fc2",
+ "facts_hash": "6cae261019d6f19a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 359,
+   ".ts": 360,
    ".tsx": 243,
    ".sql": 204,
    ".mjs": 109,
@@ -22797,8 +22797,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 119,
-   "lines": 29056,
+   "files": 120,
+   "lines": 29134,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22882,7 +22882,7 @@
     "google.ts: GoogleOptions, GoogleProvider",
     "mapbox.ts: MAPBOX_RATE_LIMITS, MapboxOptions, MapboxProvider",
     "types.ts: ProviderName, ProviderSetting, GeoFunction, GeoPoint, GeoValidation, GeoSuggestion",
-    "index.ts: geoAlertDriverEvent, processGeoBackfillOrders, DriverAvisoFn, avisarMotorista, maybeEmitEtaDelay, haversineM",
+    "index.ts: geoAlertDriverEvent, processGeoBackfillOrders, DriverAvisoFn, avisarMotorista, maybeEmitEtaDelay, GEO_POSITION_MAX_AGE_MIN",
     "coordinates.ts: stopsCoords, persistOrderCoordinates",
     "geocode-fallback.ts: GeocodeFallbackResult, GeocodeFallbackDeps, geocodeAddress, geocodeOrderFallback",
     "index.ts: CHANGE_DRIVER_REASONS",
@@ -22981,14 +22981,14 @@
     "supabase/functions/job-worker/eta-cadence.test.ts",
     "supabase/functions/job-worker/eta-delay.test.ts",
     "supabase/functions/job-worker/geo-backfill-orders.test.ts",
+    "supabase/functions/job-worker/geo-freshness.test.ts",
     "supabase/functions/job-worker/index.ts",
     "supabase/functions/job-worker/notification-bridge.test.ts",
     "supabase/functions/job-worker/route-fixture-replay.test.ts",
     "supabase/functions/lalamove-api/coordinates.test.ts",
     "supabase/functions/lalamove-api/coordinates.ts",
     "supabase/functions/lalamove-api/geocode-fallback.test.ts",
-    "supabase/functions/lalamove-api/geocode-fallback.ts",
-    "supabase/functions/lalamove-api/index.ts"
+    "supabase/functions/lalamove-api/geocode-fallback.ts"
    ]
   },
   {
@@ -32444,6 +32444,11 @@
     "value": "300"
    },
    {
+    "file": "supabase/functions/job-worker/index.ts",
+    "name": "GEO_POSITION_MAX_AGE_MIN",
+    "value": "120"
+   },
+   {
     "file": "supabase/functions/lalamove-api/index.ts",
     "name": "LALAMOVE_MARKET",
     "value": "'BR'"
@@ -36354,6 +36359,12 @@
    {
     "file": "supabase/functions/job-worker/index.ts",
     "field": "status",
+    "value": "skipped",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
     "value": "planned",
     "kind": "escreve"
    },
@@ -36367,6 +36378,12 @@
     "file": "supabase/functions/job-worker/index.ts",
     "field": "role",
     "value": "delivery_contact",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/job-worker/index.ts",
+    "field": "status",
+    "value": "skipped",
     "kind": "escreve"
    },
    {
@@ -43160,6 +43177,22 @@
    {
     "file": "supabase/functions/job-worker/geo-backfill-orders.test.ts",
     "name": "limit é limitado entre 1 e 500"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-freshness.test.ts",
+    "name": "posicao dentro da janela nao bloqueia rota/ETA"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-freshness.test.ts",
+    "name": "posicao velha e barrada com o motivo e a idade"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-freshness.test.ts",
+    "name": "tracking orfao (GPS de meses atras) nunca recalcula"
+   },
+   {
+    "file": "supabase/functions/job-worker/geo-freshness.test.ts",
+    "name": "sem data de atualizacao tambem bloqueia"
    },
    {
     "file": "supabase/functions/job-worker/notification-bridge.test.ts",
@@ -75982,15 +76015,28 @@
     "limit é limitado entre 1 e 500"
    ]
   },
+  "supabase/functions/job-worker/geo-freshness.test.ts": {
+   "path": "supabase/functions/job-worker/geo-freshness.test.ts",
+   "lines": 36,
+   "is_test": true,
+   "tests": [
+    "posicao dentro da janela nao bloqueia rota/ETA",
+    "posicao velha e barrada com o motivo e a idade",
+    "tracking orfao (GPS de meses atras) nunca recalcula",
+    "sem data de atualizacao tambem bloqueia"
+   ]
+  },
   "supabase/functions/job-worker/index.ts": {
    "path": "supabase/functions/job-worker/index.ts",
-   "lines": 1320,
+   "lines": 1362,
    "exports": [
     "function geoAlertDriverEvent",
     "function processGeoBackfillOrders",
     "type DriverAvisoFn",
     "function avisarMotorista",
     "function maybeEmitEtaDelay",
+    "const GEO_POSITION_MAX_AGE_MIN",
+    "function staleGpsReason",
     "function haversineM",
     "function avgSpeedMps",
     "function localEtaMinutes",
@@ -76163,6 +76209,10 @@
     {
      "name": "ETA_MIN_MOVED_M",
      "value": "300"
+    },
+    {
+     "name": "GEO_POSITION_MAX_AGE_MIN",
+     "value": "120"
     }
    ],
    "status_values": [
@@ -76198,6 +76248,11 @@
     },
     {
      "field": "status",
+     "value": "skipped",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
      "value": "planned",
      "kind": "escreve"
     },
@@ -76209,6 +76264,11 @@
     {
      "field": "role",
      "value": "delivery_contact",
+     "kind": "escreve"
+    },
+    {
+     "field": "status",
+     "value": "skipped",
      "kind": "escreve"
     },
     {
@@ -79400,10 +79460,20 @@
   }
  },
  "git": {
-  "sha": "1e34334a10eb9d555035c32d8f4becb21bbfecb7",
+  "sha": "d4f8bc7a2a44f6b30a13d8829a2f95beed82deff",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "d4f8bc7",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: rota/ETA so recalcula com posicao viva do motorista (#357)",
+    "files": [
+     "supabase/functions/job-worker/geo-freshness.test.ts",
+     "supabase/functions/job-worker/index.ts"
+    ]
+   },
    {
     "sha": "1e34334",
     "date": "2026-11-24",
@@ -79783,15 +79853,6 @@
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-uapi/index.ts"
     ]
-   },
-   {
-    "sha": "21ba6a5",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)",
-    "files": [
-     "vercel.json"
-    ]
    }
   ],
   "hot_files": [
@@ -79804,6 +79865,10 @@
     6
    ],
    [
+    "supabase/functions/job-worker/index.ts",
+    4
+   ],
+   [
     "src/pages/NotificationHistoryPage.tsx",
     4
    ],
@@ -79813,10 +79878,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
-    3
-   ],
-   [
-    "supabase/functions/job-worker/index.ts",
     3
    ],
    [
