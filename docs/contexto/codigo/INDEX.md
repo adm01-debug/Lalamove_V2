@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `d4f8bc7a2a44f6b30a13d8829a2f95beed82deff` (2026-11-24T11:01:29-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `524a6f48e4e93b74de95c9e3940ddf95e93bd660` (2026-11-24T11:35:51-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (603), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (603), SQL (205), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,7 +35,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1116 |
+| arquivos_total | 1117 |
 | arquivos_codigo | 716 |
 | linhas_codigo | 141311 |
 | rotas | 57 |
@@ -47,7 +47,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | hooks | 102 |
 | edge_functions | 28 |
 | tabelas | 93 |
-| migrations | 193 |
+| migrations | 194 |
 | cron_jobs | 24 |
 | testes | 185 |
 | workflows | 5 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9903 nós · 20548 arestas · 684 comunidades · grafo do commit `d4f8bc7a`
-- comunidades maiores: cn (208), button.tsx (174), client.ts (160), react (140), snapshot.py (106), badge.tsx (99), ref_https (91), ref_node_path (85), App.tsx (84), send-notification/index.ts (82), dependencies (81), gerar.mjs (76)
+- 9905 nós · 20549 arestas · 698 comunidades · grafo do commit `524a6f48`
+- comunidades maiores: cn (299), lucide-react (198), ref_https (139), client.ts (136), notify-driver.ts (125), NewOrderDialog.tsx (123), AppLayout (95), job-worker/index.ts (86), providers/types.ts (84), dependencies (81), send-notification/index.ts (80), gerar.mjs (76)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
 - 2026-11-24 `d4f8bc7` fix: rota/ETA so recalcula com posicao viva do motorista (#357)
 - 2026-11-24 `1e34334` fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)
 - 2026-11-24 `49c9a83` fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 - 2026-11-24 `5ae5aff` feat: aviso de chegada na coleta ao motorista (M4) (#345)
 - 2026-11-24 `d882d05` feat: lembrete de pedido agendado e aviso de proxima parada (#344)
-- 2026-11-24 `b77ccd9` feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

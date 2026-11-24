@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d4f8bc7a2a` · branch `main` · 2026-11-24 14:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `524a6f48e4` · branch `main` · 2026-11-24 14:36 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1665,6 +1665,9 @@ _nenhum item encontrado_
 | `WHEN lr.refresh_completed_at < now() - interval '1 hour' THEN 'stale'` | `supabase/migrations/20261123150000_cache_refresh_log_restaurado.sql` |
 | `AND started_at < now() - interval '10 minutes'` | `supabase/migrations/20261123160000_job_queue_processing_log.sql` |
 | `AND day < (date_trunc('month', COALESCE(p_month, (now() AT TIME ZONE 'America/Sao_Paulo')::date)) + interval '1 month')::date;` | `supabase/migrations/20261126120000_messaging_foundation.sql` |
+| `AND (t.route_computed_at IS NULL OR t.route_computed_at < now() - interval '5 minutes')` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
+| `AND t.last_updated > now() - interval '2 hours'` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
+| `OR t.route_computed_at < now() - interval '30 minutes'` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
 
 ### H.3 Limites de paginação
 

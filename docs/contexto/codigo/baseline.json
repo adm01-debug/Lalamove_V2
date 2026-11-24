@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d4f8bc7a2a44f6b30a13d8829a2f95beed82deff",
+  "commit": "524a6f48e4e93b74de95c9e3940ddf95e93bd660",
   "branch": "main",
-  "data_commit": "2026-11-24T11:01:29-03:00",
+  "data_commit": "2026-11-24T11:35:51-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "524a6f4",
+    "data": "2026-11-24",
+    "assunto": "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)"
+   },
    {
     "sha": "d4f8bc7",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "a1e0893",
     "data": "2026-11-23",
     "assunto": "fix: estado de erro e retry nas paginas que ficavam em branco (#334)"
-   },
-   {
-    "sha": "63cda83",
-    "data": "2026-11-23",
-    "assunto": "feat: motor de mensageria ao motorista (bloco 7) (#333)"
    }
   ],
-  "arquivos_mudados_7d": 492,
+  "arquivos_mudados_7d": 493,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 258
+    "commits": 259
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1116,
+  "arquivos_total": 1117,
   "arquivos_codigo": 716,
   "linhas_codigo": 141311,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 93,
-  "migrations": 193,
+  "migrations": 194,
   "cron_jobs": 24,
   "testes": 185,
   "workflows": 5,

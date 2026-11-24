@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)",
    "fix: rota/ETA so recalcula com posicao viva do motorista (#357)",
    "fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)",
    "fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)",
-   "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)",
-   "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)"
+   "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

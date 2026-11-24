@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `d4f8bc7a2a` · branch `main` · 2026-11-24 14:06 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `524a6f48e4` · branch `main` · 2026-11-24 14:36 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -114,7 +114,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 127 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 128 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -243,6 +243,7 @@
 - `supabase/migrations/20261123200000_optout_and_tracking_end.sql`
 - `supabase/migrations/20261125120000_notification_ledger.sql`
 - `supabase/migrations/20261126120000_messaging_foundation.sql`
+- `supabase/migrations/20261126130000_geo_jobs_freshness.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -407,9 +408,9 @@ Middleware matcher (Next.js): nenhum
 | grant | authenticated, service_role | execute | `get_driver_stats`, `get_top_drivers`, `get_hourly_stats`, `get_risk_distribution`, `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `create_audit_log`, `refresh_cache_view` … +5 |
 | grant | authenticated, service_role | select | `driver_stats_cache`, `delivery_hourly_stats_cache`, `risk_level_distribution_cache`, `cache_status` |
 | grant | service_role | all | `security_test_logs`, `contract_version_usage`, `contract_version_usage_monthly`, `alert_dedup`, `report_presets`, `region_cache`, `lalamove_stop_proofs`, `lalamove_order_replacements`, `lalamove_rate_limits`, `lalamove_priority_fee_history`, `contacts`, `lalamove_rate_limits`, `mcp_diagnostics_grants`, `cache_refresh_log`, `job_queue_processing_log` |
-| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +33 |
+| grant | service_role | execute | `process_job_queue`, `get_cron_jobs_status`, `monitor_queue_health`, `refresh_all_caches`, `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `is_country_blocked`, `is_ip_blocked`, `is_ip_whitelisted` … +34 |
 | grant | service_role, authenticated | execute | `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `messaging_month_cost_cents` |
-| revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies`, `record_messaging_usage`, `messaging_month_cost_cents` |
+| revoke | PUBLIC | all | `mcp_introspect`, `can_run_db_diagnostics`, `create_audit_log`, `refresh_geo_jobs`, `geo_budget_notify_if_needed`, `normalize_br_phone`, `is_phone_opted_out`, `end_order_tracking`, `notification_messages_scrub_bodies`, `record_messaging_usage`, `messaging_month_cost_cents`, `refresh_geo_jobs` |
 | revoke | PUBLIC | execute | `is_aal2`, `log_mfa_session`, `get_contract_v1_sunset_readiness`, `rollup_contract_version_usage`, `rollup_contract_version_usage`, `clear_login_attempts`, `get_user_permissions`, `get_user_roles`, `has_role`, `has_permission`, `has_role`, `check_login_lockout_v2`, `record_failed_login_v2`, `refresh_cache_view`, `refresh_cache_view` |
 | revoke | PUBLIC, anon | all | `get_user_permissions`, `get_user_roles`, `has_permission`, `is_aal2`, `get_cron_jobs_health` |
 | revoke | PUBLIC, anon, authenticated | all | `cleanup_expired_tokens`, `cleanup_old_cron_logs`, `cleanup_old_login_attempts`, `run_daily_cleanup`, `run_daily_cleanup_with_logging`, `run_rls_security_audit`, `get_active_uapi_token`, `is_known_device`, `invalidate_old_tokens`, `sanitize_auth_log_metadata`, `set_token_expiration`, `trigger_bitrix24_sync`, `log_mfa_session`, `is_country_blocked`, `is_ip_blocked` … +10 |
