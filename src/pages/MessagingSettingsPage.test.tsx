@@ -8,6 +8,7 @@ const mockRoutes = vi.fn();
 const mockTemplates = vi.fn();
 const mockOptouts = vi.fn();
 const mockLedger = vi.fn();
+const mockSendTest = vi.fn();
 
 vi.mock('@/hooks/useMessaging', async () => {
   const actual = await vi.importActual<typeof import('@/hooks/useMessaging')>('@/hooks/useMessaging');
@@ -24,6 +25,7 @@ vi.mock('@/hooks/useMessaging', async () => {
     useAddNotificationOptout: () => ({ mutate: vi.fn(), isPending: false }),
     useRemoveNotificationOptout: () => ({ mutate: vi.fn(), isPending: false }),
     useNotificationLedger: () => mockLedger(),
+    useSendTestWhatsApp: () => ({ mutate: mockSendTest, isPending: false, data: undefined }),
   };
 });
 
@@ -131,5 +133,25 @@ describe('MessagingSettingsPage (etapas 141-151 do plano de mensageria)', () => 
     expect(screen.getAllByText(/R\$\s*12,34/).length).toBeGreaterThan(0);
     expect(screen.getByText(/Teto n.o definido/)).toBeTruthy();
     expect(screen.getByText(/Somat.rio de messaging_usage/)).toBeTruthy();
+
+  });
+
+  it('teste de envio so libera com telefone valido e manda o numero normalizado', () => {
+    mockSettings.mockReturnValue({ ...IDLE, data: SETTINGS_ROW });
+
+    renderPage();
+
+    const button = screen.getByRole('button', { name: /Enviar teste/ }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+
+    fireEvent.change(screen.getByLabelText('Telefone de teste'), {
+      target: { value: '(41) 99999-8888' },
+    });
+    expect(button.disabled).toBe(false);
+
+    fireEvent.click(button);
+
+    expect(mockSendTest).toHaveBeenCalledTimes(1);
+    expect(mockSendTest.mock.calls[0][0]).toEqual({ phone: '41999998888' });
   });
 });

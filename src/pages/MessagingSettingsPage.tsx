@@ -9,6 +9,7 @@ import {
   RefreshCw,
   Route as RouteIcon,
   Save,
+  SendHorizonal,
   ShieldOff,
   Trash2,
 } from 'lucide-react';
@@ -52,6 +53,7 @@ import {
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QueryState } from '@/components/ui/query-state';
+import { cn } from '@/lib/utils';
 import {
   SMS_PROVIDERS,
   WHATSAPP_PROVIDERS,
@@ -63,6 +65,7 @@ import {
   useMessagingUsage,
   useNotificationLedger,
   useNotificationOptouts,
+  useSendTestWhatsApp,
   useNotificationRoutes,
   useRemoveNotificationOptout,
   useSaveTemplateVersion,
@@ -171,7 +174,9 @@ function toForm(row: MessagingSettingsRow): SettingsForm {
 function ProvidersTab() {
   const settings = useMessagingSettings();
   const update = useUpdateMessagingSettings();
+  const send = useSendTestWhatsApp();
   const [draft, setDraft] = useState<SettingsForm | null>(null);
+  const [testPhone, setTestPhone] = useState('');
 
   if (settings.isLoading) return <QueryState isLoading />;
   if (settings.isError) {
@@ -223,6 +228,24 @@ function ProvidersTab() {
           toast.success('Configuração salva');
         },
         onError: (error) => toast.error(`Falha ao salvar: ${(error as Error).message}`),
+      },
+    );
+  };
+
+  const sendTest = () => {
+    const phone = testPhone.replace(/\D/g, '');
+    if (phone.length < 10) {
+      toast.error('Informe o telefone com DDD');
+      return;
+    }
+    send.mutate(
+      { phone },
+      {
+        onSuccess: (result) => {
+          if (result.success) toast.success('Mensagem de teste enviada');
+          else toast.error(result.message);
+        },
+        onError: (error) => toast.error(`Falha no teste: ${(error as Error).message}`),
       },
     );
   };
@@ -374,6 +397,52 @@ function ProvidersTab() {
             </li>
           </ul>
         </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <SendHorizonal className="h-5 w-5" /> Teste de envio
+          </CardTitle>
+          <CardDescription>
+            Manda uma mensagem real pelo mesmo canal que o motor usa (Zapp quando configurado,
+            senão Evolution). Teste com o seu número antes de liberar o envio automático.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1 space-y-2">
+            <Label htmlFor="test-phone">Telefone de teste</Label>
+            <Input
+              id="test-phone"
+              placeholder="(41) 99999-8888"
+              value={testPhone}
+              onChange={(event) => setTestPhone(event.target.value)}
+            />
+          </div>
+          <Button
+            onClick={sendTest}
+            disabled={send.isPending || testPhone.replace(/\D/g, '').length < 10}
+          >
+            <SendHorizonal className="mr-2 h-4 w-4" />
+            {send.isPending ? 'Enviando...' : 'Enviar teste'}
+          </Button>
+        </CardContent>
+        {send.data && (
+          <CardContent className="pt-0">
+            <p
+              className={cn(
+                'flex items-start gap-2 text-sm',
+                send.data.success ? 'text-emerald-700' : 'text-destructive',
+              )}
+            >
+              {send.data.success ? (
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+              ) : (
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              )}
+              <span>{send.data.message}</span>
+            </p>
+          </CardContent>
+        )}
       </Card>
     </div>
   );

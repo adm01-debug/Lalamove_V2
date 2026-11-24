@@ -7,6 +7,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { whatsAppTestSender, WHATSAPP_TEST_MISSING_CONFIG } from "../_shared/channels/whatsapp-test.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -86,42 +87,27 @@ serve(async (req) => {
 });
 
 async function testWhatsApp(message: string, recipients?: string[]): Promise<{ success: boolean; message: string }> {
-  const evolutionApiKey = Deno.env.get("EVOLUTION_API_KEY");
-  const evolutionApiUrl = Deno.env.get("EVOLUTION_API_URL");
+  // O teste usa o mesmo remetente do despacho real (Zapp -> Evolution), senao
+  // validar a entrega pelo painel nao prova nada sobre o canal que o motor usa.
+  const sender = whatsAppTestSender();
 
-  if (!evolutionApiKey || !evolutionApiUrl) {
-    return { 
-      success: false, 
-      message: "EVOLUTION_API_KEY ou EVOLUTION_API_URL não configurado. Configure nas secrets do projeto." 
-    };
+  if (!sender) {
+    return { success: false, message: WHATSAPP_TEST_MISSING_CONFIG };
   }
 
   if (!recipients || recipients.length === 0) {
-    return { success: false, message: "Nenhum número de WhatsApp configurado" };
+    return { success: false, message: "Nenhum numero de WhatsApp configurado" };
   }
 
-  try {
-    const response = await fetch(`${evolutionApiUrl}/message/sendText/test`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": evolutionApiKey,
-      },
-      body: JSON.stringify({
-        number: recipients[0],
-        text: message,
-      }),
-    });
+  const result = await sender.send(recipients[0], message);
 
-    if (response.ok) {
-      return { success: true, message: `Mensagem de teste enviada para ${recipients[0]}` };
-    } else {
-      const errorText = await response.text();
-      return { success: false, message: `Erro da API Evolution: ${errorText}` };
-    }
-  } catch (error: any) {
-    return { success: false, message: `Erro ao conectar: ${error.message}` };
+  if (result.success) {
+    const id = result.providerMessageId ? ` (id ${result.providerMessageId})` : "";
+    return { success: true, message: `Mensagem de teste enviada via ${sender.name} para ${recipients[0]}${id}` };
   }
+
+  const detail = [result.errorCode, result.action, result.error].filter(Boolean).join(" / ");
+  return { success: false, message: `Erro no ${sender.name}: ${detail || "falha sem detalhe"}` };
 }
 
 async function testEmail(message: string, alertType: string, recipients?: string[]): Promise<{ success: boolean; message: string }> {
