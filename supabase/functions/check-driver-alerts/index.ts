@@ -105,7 +105,10 @@ serve(async (req) => {
     const POD_ALERT_ENABLED = podConfig.is_enabled !== false;
     const POD_DEADLINE = podConfig.config?.pod_deadline_minutes || DEFAULT_POD_DEADLINE_MINUTES;
 
-    // Fetch all active tracking records with driver and order details
+    // Fetch all active tracking records with driver and order details.
+    // Só tracking ACTIVE: end_order_tracking() marca 'ended' e atualiza
+    // last_updated, então sem este filtro um tracking encerrado voltava a
+    // parecer fresco e recriava "Motorista parado há N minutos".
     const { data: trackingData, error: trackingError } = await supabase
       .from('active_tracking')
       .select(`
@@ -127,7 +130,8 @@ serve(async (req) => {
           auto_notify_supplier,
           supplier_contact
         )
-      `);
+      `)
+      .eq('tracking_status', 'ACTIVE');
 
     if (trackingError) {
       logger.error('Error fetching tracking data:', trackingError);
