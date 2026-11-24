@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "49e4bc35515874d2fe0dff51a5385e46995ad3e7",
+  "sha": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 10:31 UTC",
+  "generated_at": "2026-11-24 11:12 UTC",
   "files_total": 1105,
   "code_files": 924,
   "code_lines": 161915
@@ -79037,10 +79037,19 @@
   }
  },
  "git": {
-  "sha": "49e4bc35515874d2fe0dff51a5385e46995ad3e7",
+  "sha": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "520a9a2",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)",
+    "files": [
+     "docs/agentes/mensageria.md"
+    ]
+   },
    {
     "sha": "49e4bc3",
     "date": "2026-11-24",
@@ -79416,15 +79425,6 @@
     "subject": "fix: validar contrato antes de criar cliente no new-device-alert (#328)",
     "files": [
      "supabase/functions/new-device-alert/index.ts"
-    ]
-   },
-   {
-    "sha": "f20a3ea",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)",
-    "files": [
-     "src/components/lalamove/UapiStatementPanel.tsx"
     ]
    }
   ],

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "49e4bc35515874d2fe0dff51a5385e46995ad3e7",
+  "commit": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
   "branch": "main",
-  "data_commit": "2026-11-24T07:31:13-03:00",
+  "data_commit": "2026-11-24T07:45:24-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "520a9a2",
+    "data": "2026-11-24",
+    "assunto": "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)"
+   },
    {
     "sha": "49e4bc3",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "60a68d0",
     "data": "2026-11-23",
     "assunto": "feat: lote 14 - remover as any e tipar canal de teste (#327)"
-   },
-   {
-    "sha": "c4fdb69",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 9 - EmptyState component + vitest script (#321)"
    }
   ],
   "arquivos_mudados_7d": 484,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 249
+    "commits": 250
    },
    {
     "autor": "dependabot[bot]",
