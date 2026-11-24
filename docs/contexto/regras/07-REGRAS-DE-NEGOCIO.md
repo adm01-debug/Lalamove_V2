@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `8d7ec0f0e3` · branch `main` · 2026-11-24 12:30 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `65473caf4e` · branch `main` · 2026-11-24 12:45 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -660,7 +660,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `Carro` | compara | `src/pages/reports/ReportDistributionTab.tsx` |
 | `type` | `DAMAGE` | compara | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | `type` | `DRIVER_BLOCKED` | escreve | `supabase/functions/evaluate-driver/index.ts` |
-| `type` | `DRIVER_NO_CONFIRMATION` | escreve | `supabase/functions/zapp-callback/inbound-exec.ts` |
+| `type` | `DRIVER_NO_CONFIRMATION` | escreve, filtra | `supabase/functions/_shared/messaging/auto-notices.ts`<br>`supabase/functions/zapp-callback/inbound-exec.ts` |
 | `type` | `DRIVER_STOPPED` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `Feature` | escreve | `src/components/map/LiveMap.tsx`<br>`src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/hooks/useMapMarkers.ts`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>… +2 |
 | `type` | `FeatureCollection` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
@@ -1514,6 +1514,8 @@ _nenhum item encontrado_
 | `SCHEDULED_REMINDER_WINDOW_MIN` | `30` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `CONFIRMATION_DUE_MIN` | `2` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `CONFIRMATION_LOOKBACK_HOURS` | `6` | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| `CONFIRMATION_TIMEOUT_DEFAULT_MIN` | `5` | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| `ESCALATION_LOOKBACK_HOURS` | `6` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `RATE_WINDOW_MS` | `10` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `DEFAULT_STOPPED_WARNING_MINUTES` | `5` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -1702,6 +1704,7 @@ _nenhum item encontrado_
 | 5000 | `src/hooks/useWebhookSecurityMetrics.ts` |
 | 500 | `src/pages/EvaluationsPage.tsx` |
 | 1 | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| 20 | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | 50 | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | 1 | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | 1 | `supabase/functions/bitrix24-process-queue/index.ts` |
@@ -2066,7 +2069,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1505 testes em 132 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1511 testes em 132 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2085,6 +2088,7 @@ _nenhum item encontrado_
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
 | `supabase/functions/_shared/messaging/dispatch.test.ts` | 20 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
 | `src/components/map/__tests__/googleLayers.test.ts` | 19 | toGooglePath (etapa 77) · converte expected_route em path do Google · devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada) · buildTrailPath (etapa 77) … |
+| `supabase/functions/_shared/messaging/auto-notices.test.ts` | 19 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/_shared/messaging/router.test.ts` | 19 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
@@ -2109,7 +2113,6 @@ _nenhum item encontrado_
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
-| `supabase/functions/_shared/messaging/auto-notices.test.ts` | 13 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `supabase/functions/zapp-callback/ledger.test.ts` | 13 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
@@ -2452,6 +2455,9 @@ _nenhum item encontrado_
 | é o mesmo do WhatsApp, então reusar a regra evita divergência entre canais. | `supabase/functions/_shared/channels/zapp.ts` |
 | Sem prazo explícito vale o TTL padrão: alerta de pedido entregue meia | `supabase/functions/_shared/channels/zapp.ts` |
 | Nunca lança: falta de secret não pode derrubar o despacho de alerta. | `supabase/functions/_shared/channels/zapp.ts` |
+| quando o prazo de resposta vence sem nenhuma resposta. | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| * Prazo de resposta quando a rota do evento nao define `reply_timeout_min`. */ | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| * M2 (etapa 102): vencido o prazo de resposta da cobranca de confirmacao, o | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | hora. Erro que pode passar (rate limit, timeout) espera o fallback | `supabase/functions/_shared/messaging/dispatch.ts` |
 | sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato — | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | frase volta para o mesmo classificador de texto, entao a regra de negocio | `supabase/functions/_shared/messaging/inbound-event.ts` |
@@ -2465,6 +2471,7 @@ _nenhum item encontrado_
 | * Etapa 90: quando o fallback temporizado deve disparar. Sem `sentAt` nao ha o | `supabase/functions/_shared/messaging/router.ts` |
 | * Evento que nunca e bloqueado pelo limite (M8 = motorista chegou). */ | `supabase/functions/_shared/messaging/router.ts` |
 | If order is COMPLETED but no POD received after deadline | `supabase/functions/check-driver-alerts/index.ts` |
+| M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe | `supabase/functions/check-driver-alerts/index.ts` |
 | Geocoda um endereço fixo e devolve latência, SKU e o saldo de rate limit do | `supabase/functions/check-external-api/index.ts` |
 | ============= RULE EVALUATOR ============= | `supabase/functions/evaluate-driver/index.ts` |
 | Add rule bonus to score | `supabase/functions/evaluate-driver/index.ts` |

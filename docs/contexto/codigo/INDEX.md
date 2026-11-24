@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `8d7ec0f0e3b90f83f141f933ca7c714804682503` (2026-11-24T09:30:15-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `65473caf4ed843b61a35eae4bf50c59122ac08db` (2026-11-24T09:44:48-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1111 |
 | arquivos_codigo | 711 |
-| linhas_codigo | 140501 |
+| linhas_codigo | 140863 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9871 nós · 20455 arestas · 691 comunidades · grafo do commit `8d7ec0f0`
-- comunidades maiores: cn (196), lucide-react (131), App.tsx (123), react (117), NotificationHistoryPage.tsx (113), snapshot.py (104), badge.tsx (102), ref_https (100), EvaluationsPage.tsx (97), ref_node_path (96), AlertsPage.tsx (92), geo-gateway/index.ts (86)
+- 9881 nós · 20470 arestas · 694 comunidades · grafo do commit `65473caf`
+- comunidades maiores: card.tsx (211), cn (184), ref_node_path (113), snapshot.py (106), @tanstack/react-query (90), ref_https (89), 4. Componentes, hooks, libs e estado — **revisado** (82), client.ts (81), dependencies (81), RateLimitDashboardPage.tsx (80), button.tsx (79), useRealtimeSubscriptions.ts (78)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -304,8 +304,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - .github/workflows/ci.yml (19)
 - supabase/config.toml (17)
 - docs/MAPBOX.md (13)
+- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
 - supabase/functions/job-worker/index.ts (13)
-- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (12)
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
 - src/components/orders/NewOrderDialog.tsx (11)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `65473ca` feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)
 - 2026-11-24 `8d7ec0f` fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)
 - 2026-11-24 `a741f0d` feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)
 - 2026-11-24 `520a9a2` docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `e01dfaa` feat: historico de notificacoes passa a ler o ledger do motor (#340)
 - 2026-11-23 `3153586` feat: rotas editaveis com ordem de canais e exige resposta (#339)
 - 2026-11-23 `7c71244` fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)
-- 2026-11-23 `562d0de` feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

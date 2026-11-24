@@ -175,7 +175,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/check-driver-alerts/index.ts",
    "arquivos": 1,
-   "linhas": 328,
+   "linhas": 339,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"

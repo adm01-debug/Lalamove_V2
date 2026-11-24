@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
+  "sha": "65473caf4ed843b61a35eae4bf50c59122ac08db",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 12:30 UTC",
+  "generated_at": "2026-11-24 12:45 UTC",
   "files_total": 1105,
   "code_files": 924,
-  "code_lines": 162172
+  "code_lines": 162534
  },
  "version": "1.3.2",
- "facts_hash": "5019b73af9f40540",
+ "facts_hash": "51a7f2e50404dca1",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22790,7 +22790,7 @@
   {
    "module": "supabase/functions",
    "files": 117,
-   "lines": 28565,
+   "lines": 28927,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22854,7 +22854,7 @@
     "sms.ts: TextChannelResult, DeliveryStatus, SmsSendResult, SmsInbound, SmsChannel, toGsm7",
     "whatsapp-test.ts: WhatsAppTestSender, EnvReader, WHATSAPP_TEST_MISSING_CONFIG, whatsAppTestSender",
     "zapp.ts: ErrorAction, ERROR_CODE_ACTIONS, actionForErrorCode, SendOptions, TextChannelResult, TextChannel",
-    "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, CONFIRMATION_DUE_MIN, CONFIRMATION_LOOKBACK_HOURS, shouldSendNextStop, ScheduledReminderResult",
+    "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, CONFIRMATION_DUE_MIN, CONFIRMATION_LOOKBACK_HOURS, CONFIRMATION_TIMEOUT_DEFAULT_MIN, ESCALATION_LOOKBACK_HOURS",
     "dispatch.ts: DriverSnapshot, PlanAction, DriverMessageReason, MessagePlan, PlanInput, planDriverMessage",
     "inbound-actions.ts: InboundContext, IncidentType, InboundEffect, InboundPlan, planInboundAction",
     "inbound-event.ts: EVENT_CHOICES, choicesForEvent, classifyReply",
@@ -23150,6 +23150,7 @@
    "alerts": {
     "insert": [
      "scripts/seed-database.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/evaluate-driver/index.ts",
      "supabase/functions/geo-gateway/error-monitor.ts",
@@ -23169,6 +23170,7 @@
      "src/hooks/useDashboardStats.ts",
      "src/hooks/useSLAMetrics.ts",
      "src/hooks/useSidebarCounts.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/check-driver-alerts/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/route-analyzer/index.ts"
@@ -23751,6 +23753,7 @@
    "notification_routes": {
     "select": [
      "src/hooks/useMessaging.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/_shared/messaging/registry.ts"
     ],
     "update": [
@@ -28492,6 +28495,18 @@
     "text": "Nunca lança: falta de secret não pode derrubar o despacho de alerta."
    },
    {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "text": "quando o prazo de resposta vence sem nenhuma resposta."
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "text": "* Prazo de resposta quando a rota do evento nao define `reply_timeout_min`. */"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "text": "* M2 (etapa 102): vencido o prazo de resposta da cobranca de confirmacao, o"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/dispatch.ts",
     "text": "hora. Erro que pode passar (rate limit, timeout) espera o fallback"
    },
@@ -28542,6 +28557,10 @@
    {
     "file": "supabase/functions/check-driver-alerts/index.ts",
     "text": "If order is COMPLETED but no POD received after deadline"
+   },
+   {
+    "file": "supabase/functions/check-driver-alerts/index.ts",
+    "text": "M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe"
    },
    {
     "file": "supabase/functions/check-external-api/index.ts",
@@ -32296,6 +32315,16 @@
     "value": "6"
    },
    {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "CONFIRMATION_TIMEOUT_DEFAULT_MIN",
+    "value": "5"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "ESCALATION_LOOKBACK_HOURS",
+    "value": "6"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/notify-driver.ts",
     "name": "RATE_WINDOW_MS",
     "value": "10"
@@ -35818,6 +35847,18 @@
     "field": "status",
     "value": "enviado",
     "kind": "compara"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "field": "type",
+    "value": "DRIVER_NO_CONFIRMATION",
+    "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "field": "type",
+    "value": "DRIVER_NO_CONFIRMATION",
+    "kind": "filtra"
    },
    {
     "file": "supabase/functions/_shared/messaging/dispatch.ts",
@@ -41978,6 +42019,30 @@
    {
     "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
     "name": "M2: janela = aviso entre now-6h e now-2min"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: cobranca vencida sem resposta vira alerta interno"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: resposta do motorista depois da cobranca nao vira alerta"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: alerta aberto nao duplica, alerta arquivado nao bloqueia"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: coletado, confirmado, cancelado e sem motorista nao alertam"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: prazo vem da rota e a janela vai de now-6h a now-prazo"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: sem linha de rota o prazo cai no padrao de 5 min"
    },
    {
     "file": "supabase/functions/_shared/messaging/dispatch.test.ts",
@@ -48615,6 +48680,10 @@
    },
    {
     "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "limit": "20"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
     "limit": "50"
    },
    {
@@ -49318,6 +49387,11 @@
      "text": [
       "escreve:supabase/functions/_shared/channels/sms.ts"
      ],
+     "DRIVER_NO_CONFIRMATION": [
+      "escreve:supabase/functions/_shared/messaging/auto-notices.ts",
+      "escreve:supabase/functions/zapp-callback/inbound-exec.ts",
+      "filtra:supabase/functions/_shared/messaging/auto-notices.ts"
+     ],
      "DAMAGE": [
       "compara:supabase/functions/_shared/messaging/inbound-actions.ts"
      ],
@@ -49381,9 +49455,6 @@
      ],
      "TEST": [
       "escreve:supabase/functions/test-notification/index.ts"
-     ],
-     "DRIVER_NO_CONFIRMATION": [
-      "escreve:supabase/functions/zapp-callback/inbound-exec.ts"
      ]
     },
     "step": {
@@ -73322,10 +73393,13 @@
   },
   "supabase/functions/_shared/messaging/auto-notices.test.ts": {
    "path": "supabase/functions/_shared/messaging/auto-notices.test.ts",
-   "lines": 293,
+   "lines": 521,
    "is_test": true,
    "errors": [
     "tabela inesperada: ${table}"
+   ],
+   "rule_comments": [
+    "M2 (etapa 102) — prazo vencido sem resposta vira alerta interno.    */"
    ],
    "tests": [
     "M6: pedido de 2 paradas nao gera aviso de proxima parada",
@@ -73340,22 +73414,32 @@
     "M2: cobranca ja registrada no ledger nao vira segunda mensagem",
     "M2: pedido coletado, cancelado, concluido ou sem motorista nao cobra",
     "M2: aviso sem pedido associado e ignorado e pedido sumido nao quebra",
-    "M2: janela = aviso entre now-6h e now-2min"
+    "M2: janela = aviso entre now-6h e now-2min",
+    "M2: cobranca vencida sem resposta vira alerta interno",
+    "M2: resposta do motorista depois da cobranca nao vira alerta",
+    "M2: alerta aberto nao duplica, alerta arquivado nao bloqueia",
+    "M2: coletado, confirmado, cancelado e sem motorista nao alertam",
+    "M2: prazo vem da rota e a janela vai de now-6h a now-prazo",
+    "M2: sem linha de rota o prazo cai no padrao de 5 min"
    ]
   },
   "supabase/functions/_shared/messaging/auto-notices.ts": {
    "path": "supabase/functions/_shared/messaging/auto-notices.ts",
-   "lines": 185,
+   "lines": 308,
    "exports": [
     "const MULTI_STOP_MIN",
     "const SCHEDULED_REMINDER_WINDOW_MIN",
     "const CONFIRMATION_DUE_MIN",
     "const CONFIRMATION_LOOKBACK_HOURS",
+    "const CONFIRMATION_TIMEOUT_DEFAULT_MIN",
+    "const ESCALATION_LOOKBACK_HOURS",
     "function shouldSendNextStop",
     "interface ScheduledReminderResult",
     "function sendScheduledReminders",
     "interface ConfirmationNudgeResult",
-    "function sendConfirmationNudges"
+    "function sendConfirmationNudges",
+    "interface ConfirmationEscalationResult",
+    "function sendConfirmationEscalations"
    ],
    "tables": [
     {
@@ -73385,6 +73469,30 @@
     {
      "table": "notification_messages",
      "op": "select"
+    },
+    {
+     "table": "notification_routes",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "alerts",
+     "op": "select"
+    },
+    {
+     "table": "alerts",
+     "op": "insert"
     }
    ],
    "table_cols": {
@@ -73396,6 +73504,7 @@
     "lalamove_orders": [
      "driver_id",
      "id",
+     "internal_order_id",
      "metadata",
      "scheduled_at",
      "status"
@@ -73406,6 +73515,16 @@
      "event",
      "id",
      "order_id"
+    ],
+    "notification_routes": [
+     "event",
+     "reply_timeout_min"
+    ],
+    "alerts": [
+     "id",
+     "is_dismissed",
+     "order_id",
+     "type"
     ]
    },
    "params": [
@@ -73424,7 +73543,32 @@
     {
      "name": "CONFIRMATION_LOOKBACK_HOURS",
      "value": "6"
+    },
+    {
+     "name": "CONFIRMATION_TIMEOUT_DEFAULT_MIN",
+     "value": "5"
+    },
+    {
+     "name": "ESCALATION_LOOKBACK_HOURS",
+     "value": "6"
     }
+   ],
+   "status_values": [
+    {
+     "field": "type",
+     "value": "DRIVER_NO_CONFIRMATION",
+     "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "DRIVER_NO_CONFIRMATION",
+     "kind": "filtra"
+    }
+   ],
+   "rule_comments": [
+    "quando o prazo de resposta vence sem nenhuma resposta.",
+    "* Prazo de resposta quando a rota do evento nao define `reply_timeout_min`. */",
+    "* M2 (etapa 102): vencido o prazo de resposta da cobranca de confirmacao, o"
    ],
    "calc_fns": [
     {
@@ -73435,6 +73579,7 @@
    ],
    "pagination": [
     "1",
+    "20",
     "50"
    ]
   },
@@ -74250,7 +74395,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 328,
+   "lines": 339,
    "tables": [
     {
      "table": "alert_configurations",
@@ -74389,7 +74534,8 @@
     }
    ],
    "rule_comments": [
-    "If order is COMPLETED but no POD received after deadline"
+    "If order is COMPLETED but no POD received after deadline",
+    "M2 (etapa 102): vencido o prazo de resposta da cobranca, a operacao recebe"
    ],
    "side_effects": [
     "invoke(",
@@ -79102,10 +79248,23 @@
   }
  },
  "git": {
-  "sha": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
+  "sha": "65473caf4ed843b61a35eae4bf50c59122ac08db",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "65473ca",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)",
+    "files": [
+     "docs/agentes/mensageria.md",
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/_shared/messaging/auto-notices.test.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
+     "supabase/functions/check-driver-alerts/index.ts"
+    ]
+   },
    {
     "sha": "8d7ec0f",
     "date": "2026-11-24",
@@ -79479,34 +79638,28 @@
      "src/hooks/useCommandPaletteSearch.ts",
      "src/pages/LiveMapPage.tsx"
     ]
-   },
-   {
-    "sha": "3e994e3",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)",
-    "files": [
-     "src/components/layout/Header.tsx",
-     "src/components/layout/MobileBottomNav.tsx",
-     "src/components/ui/icon-button.tsx",
-     "src/pages/DriversPage.tsx",
-     "src/pages/ProfilePage.tsx",
-     "src/pages/drivers/DriverCard.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    10
+    11
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
-    4
+    5
    ],
    [
     "src/pages/LiveMapPage.tsx",
     4
+   ],
+   [
+    "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    3
+   ],
+   [
+    "supabase/functions/_shared/messaging/auto-notices.ts",
+    3
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -79525,11 +79678,7 @@
     3
    ],
    [
-    "supabase/functions/_shared/messaging/auto-notices.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/auto-notices.ts",
+    "docs/agentes/mensageria.md",
     2
    ],
    [
@@ -79570,10 +79719,6 @@
    ],
    [
     "supabase/functions/job-worker/eta-delay.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/dispatch.test.ts",
     2
    ]
   ]

@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "8d7ec0f0e3b90f83f141f933ca7c714804682503",
+  "commit": "65473caf4ed843b61a35eae4bf50c59122ac08db",
   "branch": "main",
-  "data_commit": "2026-11-24T09:30:15-03:00",
+  "data_commit": "2026-11-24T09:44:48-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "65473ca",
+    "data": "2026-11-24",
+    "assunto": "feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)"
+   },
    {
     "sha": "8d7ec0f",
     "data": "2026-11-24",
@@ -126,18 +131,13 @@
     "sha": "e74d394",
     "data": "2026-11-23",
     "assunto": "fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)"
-   },
-   {
-    "sha": "21ba6a5",
-    "data": "2026-11-23",
-    "assunto": "fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)"
    }
   ],
   "arquivos_mudados_7d": 484,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 63
+    "mudancas": 65
    },
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -193,7 +193,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    "mudancas": 12
+    "mudancas": 13
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -226,12 +226,12 @@
     "mudancas": 13
    },
    {
-    "arquivo": "supabase/functions/job-worker/index.ts",
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 13
    },
    {
-    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    "mudancas": 12
+    "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
@@ -278,11 +278,11 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 8
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 9
    },
    {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 252
+    "commits": 253
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1111,
   "arquivos_codigo": 711,
-  "linhas_codigo": 140501,
+  "linhas_codigo": 140863,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 117,
-   "linhas": 28565
+   "linhas": 28927
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -682,7 +682,7 @@
   }
  ],
  "qualidade": {
-  "any": 136,
+  "any": 137,
   "console_log": 415,
   "ts_ignore": 0,
   "eslint_disable": 1,

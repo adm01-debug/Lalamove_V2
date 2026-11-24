@@ -1618,6 +1618,7 @@
     "lalamove-gateway",
     "lalamove-token-refresh",
     "lalamove-webhook",
+    "messaging",
     "rotate-tokens",
     "route-analyzer",
     "send-notification",
