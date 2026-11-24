@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5adbf84ad1` · branch `main` · 2026-11-24 01:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `562d0de7de` · branch `main` · 2026-11-24 01:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -373,6 +373,7 @@
 | /settings | ProtectedRoute | manager | `src/App.tsx` |
 | /settings/lalamove | ProtectedRoute | manager | `src/App.tsx` |
 | /settings/maps | ProtectedRoute | manager | `src/App.tsx` |
+| /settings/messaging | ProtectedRoute | admin | `src/App.tsx` |
 | /settings/uapi | ProtectedRoute | manager | `src/App.tsx` |
 | /sla | ProtectedRoute | viewer | `src/App.tsx` |
 | /slo | ProtectedRoute | manager | `src/App.tsx` |

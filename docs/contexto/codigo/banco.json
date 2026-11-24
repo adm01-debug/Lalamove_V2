@@ -2819,6 +2819,21 @@
    ],
    "fks": [],
    "criada_em": "20250102000002_cache_system_complete.sql",
+   "colunas_types": {
+    "error_message": "string | null",
+    "id": "string",
+    "refresh_completed_at": "string | null",
+    "refresh_duration_ms": "number | null",
+    "refresh_started_at": "string",
+    "row_count": "number | null",
+    "status": "string",
+    "triggered_by": "string",
+    "view_name": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -4517,10 +4532,12 @@
     "last_active_at": "string | null",
     "last_delivery_at": "string | null",
     "last_evaluated_at": "string | null",
+    "last_reply_at": "string | null",
     "name": "string",
     "notes": "string | null",
     "phone": "string | null",
     "photo_url": "string | null",
+    "preferred_channel": "string",
     "rating": "number | null",
     "risk_level": "string | null",
     "risk_reasons": "Json | null",
@@ -4531,15 +4548,12 @@
     "updated_at": "string",
     "vehicle_plate": "string | null",
     "vehicle_type": "Database[\"public\"][\"Enums\"][\"vehicle_type\"]",
+    "whatsapp_checked_at": "string | null",
+    "whatsapp_status": "string",
     "whitelisted": "boolean | null"
    },
    "drift": {
-    "so_na_migration": [
-     "whatsapp_status",
-     "whatsapp_checked_at",
-     "preferred_channel",
-     "last_reply_at"
-    ],
+    "so_na_migration": [],
     "so_no_types": []
    },
    "usada_no_front": 14,
@@ -5064,6 +5078,7 @@
     "approach_radius_m": "number",
     "arrived_radius_m": "number",
     "id": "boolean",
+    "late_tolerance_min": "number",
     "notify_delivery_contact": "boolean",
     "off_route_threshold_m": "number",
     "quiet_hours_end": "string",
@@ -5073,9 +5088,7 @@
     "updated_by": "string | null"
    },
    "drift": {
-    "so_na_migration": [
-     "late_tolerance_min"
-    ],
+    "so_na_migration": [],
     "so_no_types": []
    },
    "usada_no_front": 1,
@@ -5782,6 +5795,20 @@
    ],
    "fks": [],
    "criada_em": "20251226010001_configure_pg_cron.sql",
+   "colunas_types": {
+    "duration_ms": "number | null",
+    "failed": "number",
+    "id": "string",
+    "metadata": "Json",
+    "processed": "number",
+    "run_at": "string",
+    "skipped": "number",
+    "succeeded": "number"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
    "usada_no_front": 0,
    "usada_em_edges": [],
    "triggers": [],
@@ -8191,7 +8218,28 @@
     "updated_by->auth"
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "body": "string",
+    "channel": "string",
+    "created_at": "string",
+    "event": "string",
+    "id": "string",
+    "is_active": "boolean",
+    "key": "string",
+    "max_length": "number | null",
+    "role": "string",
+    "updated_at": "string",
+    "updated_by": "string | null",
+    "variables": "string[]",
+    "version": "number"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": [
+     "key"
+    ]
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "messaging"
    ],
@@ -8298,7 +8346,23 @@
     "updated_by->auth"
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "id": "boolean",
+    "monthly_budget_cents": "number",
+    "pilot_mode": "boolean",
+    "quiet_hours_by_role": "Json",
+    "shadow_mode": "boolean",
+    "sms_fallback_after_min": "number",
+    "sms_provider": "string",
+    "updated_at": "string",
+    "updated_by": "string | null",
+    "whatsapp_provider": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "messaging"
    ],
@@ -8382,11 +8446,24 @@
    ],
    "fks": [],
    "criada_em": "20261126120000_messaging_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "channel": "string",
+    "cost_cents": "number",
+    "day": "string",
+    "messages": "number",
+    "provider": "string",
+    "segments": "number",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "mfa_sessions": {
    "colunas": {
@@ -8998,7 +9075,45 @@
     "fallback_of->notification_messages"
    ],
    "criada_em": "20261125120000_notification_ledger.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "alert_id": "string | null",
+    "attempt": "number",
+    "body_preview": "string | null",
+    "channel": "string",
+    "client_message_id": "string | null",
+    "cost_cents": "number | null",
+    "created_at": "string",
+    "delivered_at": "string | null",
+    "direction": "string",
+    "driver_id": "string | null",
+    "error_code": "string | null",
+    "event": "string",
+    "expires_at": "string | null",
+    "failed_at": "string | null",
+    "fallback_of": "string | null",
+    "id": "string",
+    "metadata": "Json",
+    "occurred_at": "string | null",
+    "order_id": "string | null",
+    "provider": "string | null",
+    "provider_message_id": "string | null",
+    "provider_sequence": "number | null",
+    "read_at": "string | null",
+    "recipient_phone": "string | null",
+    "role": "string",
+    "segments": "number | null",
+    "sent_at": "string | null",
+    "status": "string",
+    "stop_id": "string | null",
+    "template_key": "string | null",
+    "template_version": "number | null",
+    "updated_at": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "messaging",
     "zapp-callback"
@@ -9060,11 +9175,21 @@
     "created_by->auth"
    ],
    "criada_em": "20261123200000_optout_and_tracking_end.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "created_at": "string",
+    "created_by": "string | null",
+    "phone": "string",
+    "reason": "string"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [],
    "triggers": [],
    "sem_rls": false,
-   "nao_usada": true
+   "nao_usada": false
   },
   "notification_routes": {
    "colunas": {
@@ -9164,7 +9289,22 @@
     "updated_by->auth"
    ],
    "criada_em": "20261126120000_messaging_foundation.sql",
-   "usada_no_front": 0,
+   "colunas_types": {
+    "channels": "string[]",
+    "event": "string",
+    "fallback_after_min": "number",
+    "is_enabled": "boolean",
+    "reply_timeout_min": "number | null",
+    "requires_reply": "boolean",
+    "role": "string",
+    "updated_at": "string",
+    "updated_by": "string | null"
+   },
+   "drift": {
+    "so_na_migration": [],
+    "so_no_types": []
+   },
+   "usada_no_front": 1,
    "usada_em_edges": [
     "messaging"
    ],
@@ -12196,7 +12336,7 @@
   {
    "nome": "messaging_month_cost_cents",
    "definida": true,
-   "usada_em": 1
+   "usada_em": 2
   },
   {
    "nome": "record_failed_login_v2",

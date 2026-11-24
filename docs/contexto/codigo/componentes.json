@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 220,
+ "total": 221,
  "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -32,7 +32,7 @@
     "App"
    ],
    "export_default": "App",
-   "linhas": 232,
+   "linhas": 234,
    "dominio": null,
    "hooks_locais": [],
    "tabelas": [],
@@ -1327,7 +1327,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 106,
+   "usado_por": 107,
    "orfao": false
   },
   {
@@ -1342,7 +1342,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 130,
+   "usado_por": 131,
    "orfao": false
   },
   {
@@ -1362,7 +1362,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 97,
+   "usado_por": 98,
    "orfao": false
   },
   {
@@ -1475,7 +1475,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 25,
+   "usado_por": 26,
    "orfao": false
   },
   {
@@ -1653,7 +1653,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 42,
+   "usado_por": 43,
    "orfao": false
   },
   {
@@ -1699,7 +1699,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 30,
+   "usado_por": 31,
    "orfao": false
   },
   {
@@ -1826,7 +1826,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 10,
+   "usado_por": 11,
    "orfao": false
   },
   {
@@ -1856,7 +1856,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 17,
+   "usado_por": 18,
    "orfao": false
   },
   {
@@ -1924,7 +1924,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 32,
+   "usado_por": 33,
    "orfao": false
   },
   {
@@ -2067,7 +2067,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 18,
+   "usado_por": 19,
    "orfao": false
   },
   {
@@ -2088,7 +2088,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 12,
+   "usado_por": 13,
    "orfao": false
   },
   {
@@ -2105,7 +2105,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 12,
+   "usado_por": 13,
    "orfao": false
   },
   {
@@ -2120,7 +2120,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 11,
+   "usado_por": 12,
    "orfao": false
   },
   {
@@ -3081,6 +3081,32 @@
    "linhas": 41,
    "dominio": "pages",
    "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 1,
+   "orfao": false
+  },
+  {
+   "arquivo": "src/pages/MessagingSettingsPage.tsx",
+   "exports": [
+    "MessagingSettingsPage"
+   ],
+   "export_default": "MessagingSettingsPage",
+   "linhas": 958,
+   "dominio": "pages",
+   "hooks_locais": [
+    "useAddNotificationOptout",
+    "useMessageTemplates",
+    "useMessagingSettings",
+    "useMessagingUsage",
+    "useNotificationLedger",
+    "useNotificationOptouts",
+    "useNotificationRoutes",
+    "useRemoveNotificationOptout",
+    "useSaveTemplateVersion",
+    "useUpdateMessagingSettings",
+    "useUpdateNotificationRoute"
+   ],
    "tabelas": [],
    "edges": [],
    "usado_por": 1,

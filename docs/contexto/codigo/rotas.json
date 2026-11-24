@@ -3,10 +3,10 @@
  "format_version": 1,
  "descricao": "Rotas React Router de src/App.tsx: url → componente → arquivo → hooks/tabelas/edges (fecho transitivo dos imports). papel_requerido/requer_mfa/permissao_requerida vêm do ProtectedRoute e são herdados do Route pai.",
  "resumo": {
-  "urls": 56,
+  "urls": 57,
   "layouts": 1,
-  "itens_menu": 50,
-  "lazy": 56
+  "itens_menu": 51,
+  "lazy": 57
  },
  "urls": [
   {
@@ -2905,6 +2905,72 @@
    "arquivos_puxados": 19
   },
   {
+   "caminho": "/settings/messaging",
+   "componente": "MessagingSettingsPage",
+   "arquivo": "src/pages/MessagingSettingsPage.tsx",
+   "tipo": "tela",
+   "protegida": true,
+   "papel_requerido": "admin",
+   "requer_mfa": true,
+   "permissao_requerida": null,
+   "wrappers": [
+    "ProtectedRoute",
+    "SuspenseWrapper"
+   ],
+   "pai": null,
+   "indice": false,
+   "lazy": true,
+   "definida_em": "src/App.tsx",
+   "redireciona": null,
+   "hooks": [
+    "useAddNotificationOptout",
+    "useMemo",
+    "useMessageTemplates",
+    "useMessagingSettings",
+    "useMessagingUsage",
+    "useMutation",
+    "useNotificationLedger",
+    "useNotificationOptouts",
+    "useNotificationRoutes",
+    "useQuery",
+    "useQueryClient",
+    "useRemoveNotificationOptout",
+    "useSaveTemplateVersion",
+    "useState",
+    "useUpdateMessagingSettings",
+    "useUpdateNotificationRoute"
+   ],
+   "hooks_locais": [
+    "useAddNotificationOptout",
+    "useMessageTemplates",
+    "useMessagingSettings",
+    "useMessagingUsage",
+    "useNotificationLedger",
+    "useNotificationOptouts",
+    "useNotificationRoutes",
+    "useRemoveNotificationOptout",
+    "useSaveTemplateVersion",
+    "useUpdateMessagingSettings",
+    "useUpdateNotificationRoute"
+   ],
+   "tabelas": [
+    "message_templates",
+    "messaging_settings",
+    "messaging_usage",
+    "notification_messages",
+    "notification_optouts",
+    "notification_routes"
+   ],
+   "rpcs": [
+    "messaging_month_cost_cents"
+   ],
+   "edges": [],
+   "canais_realtime": [],
+   "flags": [],
+   "papeis": [],
+   "arquivos_puxados": 18
+  },
+  {
    "caminho": "/settings/uapi",
    "componente": "UAPISettingsPage",
    "arquivo": "src/pages/UAPISettingsPage.tsx",
@@ -3893,6 +3959,20 @@
    "resolve_para": "src/pages/LalamoveSettingsPage.tsx"
   },
   {
+   "rotulo": "Mensageria",
+   "destino": "/settings/messaging",
+   "grupo": "Integrações",
+   "papel_do_grupo": null,
+   "papeis": [
+    "admin"
+   ],
+   "papeis_nao_resolvidos": null,
+   "badge": null,
+   "definido_em": "src/components/layout/sidebar-config.ts",
+   "papel_efetivo": "admin",
+   "resolve_para": "src/pages/MessagingSettingsPage.tsx"
+  },
+  {
    "rotulo": "Provedores de Mapa",
    "destino": "/settings/maps",
    "grupo": "Integrações",
@@ -4425,6 +4505,7 @@
   "MFAVerifyPage": "src/pages/MFAVerifyPage.tsx",
   "MapToolsPage": "src/pages/MapToolsPage.tsx",
   "MapsSettingsPage": "src/pages/MapsSettingsPage.tsx",
+  "MessagingSettingsPage": "src/pages/MessagingSettingsPage.tsx",
   "MetricsPage": "src/pages/MetricsPage.tsx",
   "NewOrderDialog": "src/components/orders/NewOrderDialog.tsx",
   "NotFound": "src/pages/NotFound.tsx",

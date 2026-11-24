@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 101,
+ "total": 102,
  "hooks": [
   {
    "arquivo": "scripts/ai-context/cenarios.mjs",
@@ -1704,6 +1704,47 @@
     "src/hooks/useMapProviderPolicy.ts"
    ],
    "coberto_por_testes": 2
+  },
+  {
+   "arquivo": "src/hooks/useMessaging.ts",
+   "hooks_exportados": [
+    "useAddNotificationOptout",
+    "useMessageTemplates",
+    "useMessagingSettings",
+    "useMessagingUsage",
+    "useNotificationLedger",
+    "useNotificationOptouts",
+    "useNotificationRoutes",
+    "useRemoveNotificationOptout",
+    "useSaveTemplateVersion",
+    "useUpdateMessagingSettings",
+    "useUpdateNotificationRoute"
+   ],
+   "linhas": 327,
+   "dominio": "hooks",
+   "tabelas": [
+    "message_templates",
+    "messaging_settings",
+    "messaging_usage",
+    "notification_messages",
+    "notification_optouts",
+    "notification_routes"
+   ],
+   "rpcs": [
+    "messaging_month_cost_cents"
+   ],
+   "edges": [],
+   "hooks_internos": [
+    "useMutation",
+    "useQuery",
+    "useQueryClient"
+   ],
+   "canais_realtime": [],
+   "usado_por": 1,
+   "usado_por_arquivos": [
+    "src/pages/MessagingSettingsPage.tsx"
+   ],
+   "coberto_por_testes": 1
   },
   {
    "arquivo": "src/hooks/useMetrics.ts",

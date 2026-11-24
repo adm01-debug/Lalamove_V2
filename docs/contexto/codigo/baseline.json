@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
+  "commit": "562d0de7de167ec835112a5a33a016c90d6da638",
   "branch": "main",
-  "data_commit": "2026-11-23T22:02:24-03:00",
+  "data_commit": "2026-11-23T22:21:21-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "562d0de",
+    "data": "2026-11-23",
+    "assunto": "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)"
+   },
    {
     "sha": "5adbf84",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "d3f974b",
     "data": "2026-11-22",
     "assunto": "docs(qa): auditoria de QA completa e plano de correção em 300 etapas (#311)"
-   },
-   {
-    "sha": "281cd07",
-    "data": "2026-11-22",
-    "assunto": "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)"
    }
   ],
-  "arquivos_mudados_7d": 462,
+  "arquivos_mudados_7d": 465,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -180,12 +180,12 @@
     "mudancas": 15
    },
    {
-    "pasta": "supabase/functions/job-worker",
+    "pasta": "src/components/layout",
     "mudancas": 15
    },
    {
-    "pasta": "src/components/layout",
-    "mudancas": 14
+    "pasta": "supabase/functions/job-worker",
+    "mudancas": 15
    },
    {
     "pasta": "docs/MAPBOX.md",
@@ -254,16 +254,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "src/App.tsx",
+    "mudancas": 10
+   },
+   {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
     "mudancas": 10
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "src/App.tsx",
-    "mudancas": 9
    },
    {
     "arquivo": "src/pages/LiveMapPage.tsx",
@@ -286,22 +286,22 @@
     "mudancas": 7
    },
    {
+    "arquivo": "src/integrations/supabase/types.ts",
+    "mudancas": 7
+   },
+   {
     "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
     "mudancas": 7
    },
    {
-    "arquivo": "src/components/layout/MobileSidebar.tsx",
-    "mudancas": 6
-   },
-   {
-    "arquivo": "src/components/map/MapHUD.tsx",
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 6
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 237
+    "commits": 238
    },
    {
     "autor": "dependabot[bot]",
@@ -310,21 +310,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1096,
-  "arquivos_codigo": 696,
-  "linhas_codigo": 136259,
-  "rotas": 56,
-  "rotas_protegidas": 48,
-  "rotas_com_mfa": 7,
-  "itens_menu": 50,
+  "arquivos_total": 1099,
+  "arquivos_codigo": 699,
+  "linhas_codigo": 138105,
+  "rotas": 57,
+  "rotas_protegidas": 49,
+  "rotas_com_mfa": 8,
+  "itens_menu": 51,
   "modulos": 43,
-  "componentes": 220,
-  "hooks": 101,
+  "componentes": 221,
+  "hooks": 102,
   "edge_functions": 28,
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 174,
+  "testes": 175,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -512,7 +512,7 @@
   },
   "src/App.tsx": {
    "arquivos": 1,
-   "linhas": 232
+   "linhas": 234
   },
   "src/__tests__": {
    "arquivos": 1,
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 163,
-   "linhas": 29597
+   "linhas": 29598
   },
   "src/hooks": {
-   "arquivos": 112,
-   "linhas": 19210
+   "arquivos": 113,
+   "linhas": 19537
   },
   "src/i18n": {
    "arquivos": 1,
@@ -532,7 +532,7 @@
   },
   "src/integrations": {
    "arquivos": 4,
-   "linhas": 4956
+   "linhas": 5379
   },
   "src/lib": {
    "arquivos": 49,
@@ -543,8 +543,8 @@
    "linhas": 28
   },
   "src/pages": {
-   "arquivos": 91,
-   "linhas": 20009
+   "arquivos": 93,
+   "linhas": 21102
   },
   "src/services": {
    "arquivos": 1,
@@ -582,7 +582,7 @@
  "maiores_arquivos": [
   {
    "arquivo": "src/integrations/supabase/types.ts",
-   "linhas": 4811
+   "linhas": 5234
   },
   {
    "arquivo": "supabase/functions/send-notification/index.ts",
@@ -619,6 +619,10 @@
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",
    "linhas": 994
+  },
+  {
+   "arquivo": "src/pages/MessagingSettingsPage.tsx",
+   "linhas": 958
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -675,10 +679,6 @@
   {
    "arquivo": "src/hooks/useMapbox.ts",
    "linhas": 494
-  },
-  {
-   "arquivo": "src/pages/LalamoveSettingsPage.tsx",
-   "linhas": 486
   }
  ],
  "qualidade": {
@@ -687,7 +687,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,
-  "arquivos_acima_500_linhas": 22
+  "arquivos_acima_500_linhas": 23
  },
  "todos": [
   {
@@ -753,10 +753,9 @@
    "suppliers"
   ],
   "tabelas_com_drift_migration_vs_types": [
-   "drivers",
    "geo_budget",
    "geo_cache",
-   "geo_defaults",
+   "message_templates",
    "mfa_sessions"
   ],
   "rpcs_sem_definicao": [

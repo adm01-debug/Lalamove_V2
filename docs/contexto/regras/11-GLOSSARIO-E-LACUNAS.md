@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5adbf84ad1` · branch `main` · 2026-11-24 01:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `562d0de7de` · branch `main` · 2026-11-24 01:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -33,7 +33,7 @@
 | `driver_incidents` | Incidentes registrados por motorista (desvio de rota, parada longa, atraso, dano). | 13 colunas | migration |
 | `driver_locations` | Historico detalhado de posicoes GPS dos motoristas. | 9 colunas | migration |
 | `driver_stats_cache` | _(sem COMMENT ON TABLE — significado não documentado)_ | 19 colunas | types.ts |
-| `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 33 colunas | migration |
+| `drivers` | Cadastro de motoristas com metricas de performance e score de risco. | 36 colunas | migration |
 | `drivers_safe_view` | _(sem COMMENT ON TABLE — significado não documentado)_ | 32 colunas | types.ts |
 | `email_verifications` | Tokens de verificacao de email com expiracao. | 7 colunas | migration |
 | `feature_flags` | Flags de feature para ativacao/desativacao de funcionalidades. | 7 colunas | migration |
@@ -41,7 +41,7 @@
 | `geo_blocks` | Bloqueios geograficos por pais (permanente ou temporario). | 10 colunas | types.ts |
 | `geo_budget` | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. | 8 colunas | migration |
 | `geo_cache` | Cache de respostas de geocode/rota/static por hash de request (TTL por funcao). | 6 colunas | migration |
-| `geo_defaults` | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). | 11 colunas | migration |
+| `geo_defaults` | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). | 12 colunas | migration |
 | `geo_price_list` | _(sem COMMENT ON TABLE — significado não documentado)_ | 6 colunas | migration |
 | `geo_settings` | Provedor de mapas por funcao (google\|mapbox\|off) com fallback. Admin edita em /settings/maps. | 6 colunas | migration |
 | `geo_usage` | Uso diario de APIs de mapa por provedor/funcao/sku com custo estimado (USD). | 7 colunas | migration |
@@ -133,6 +133,10 @@
 | `TilesProvider` (TS) | mapbox \| google \| off |  | `src/hooks/useMapProviderPolicy.ts` |
 | `MarkerDensity` (TS) | comfortable \| compact |  | `src/hooks/useMapSettings.ts` |
 | `MapProvider` (TS) | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d |  | `src/hooks/useMapSettings.ts` |
+| `WHATSAPP_PROVIDERS` (TS) | 'zapp', 'evolution', 'off' |  | `src/hooks/useMessaging.ts` |
+| `SMS_PROVIDERS` (TS) | 'none', 'zenvia', 'comtele', 'twilio' |  | `src/hooks/useMessaging.ts` |
+| `MESSAGING_ROLES` (TS) | 'driver', 'operator', 'manager', 'admin', 'customer', 'guardian', |  | `src/hooks/useMessaging.ts` |
+| `LEDGER_STATUSES` (TS) | 'queued', 'sent', 'delivered', 'read', 'failed', 'suppressed', 'expired', |  | `src/hooks/useMessaging.ts` |
 | `AppRole` (TS) | admin \| manager \| operator \| viewer |  | `src/hooks/usePermissions.ts` |
 | `NotificationPermission` (TS) | default \| granted \| denied |  | `src/hooks/usePushNotifications.ts` |
 | `AlertSeverity` (TS) | CRITICAL \| WARNING \| INFO |  | `src/hooks/usePushNotifications.ts` |
@@ -223,7 +227,7 @@ _nenhum item encontrado_
 | status | valor `Disponível` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/hover-preview.tsx` |
 | status | valor `completed` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
 | status | valor `in_progress` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/components/ui/timeline-item.tsx` |
-| status | valor `all` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useAdvancedReports.ts`<br>`compara:src/pages/AdvancedReportsPage.tsx`<br>`escreve:src/hooks/useAdvancedReports.ts` |
+| status | valor `all` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useAdvancedReports.ts`<br>`compara:src/hooks/useMessaging.ts`<br>`compara:src/pages/AdvancedReportsPage.tsx`<br>`escreve:src/hooks/useAdvancedReports.ts` |
 | status | valor `fulfilled` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/hooks/useDashboardStats.ts` |
 | status | valor `number` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/lib/geo-gateway.ts` |
 | status | valor `stale` para `status` usado no código não existe em nenhum enum do banco/TS | `compara:src/pages/CacheMonitoringPage.tsx` |
@@ -259,7 +263,6 @@ _nenhum item encontrado_
 | coluna | coluna `state` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `zip_code` usada no código não existe no schema de `contacts` |  |
 | coluna | coluna `count` usada no código não existe no schema de `drivers` |  |
-| coluna | coluna `preferred_channel` usada no código não existe no schema de `drivers` |  |
 | coluna | coluna `delivery_contact_name` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `delivery_contact_phone` usada no código não existe no schema de `lalamove_orders` |  |
 | coluna | coluna `driver_id` usada no código não existe no schema de `driver_locations` |  |

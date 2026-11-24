@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
+  "sha": "562d0de7de167ec835112a5a33a016c90d6da638",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 01:03 UTC",
-  "files_total": 1090,
-  "code_files": 909,
-  "code_lines": 157930
+  "generated_at": "2026-11-24 01:23 UTC",
+  "files_total": 1093,
+  "code_files": 912,
+  "code_lines": 159776
  },
  "version": "1.3.2",
- "facts_hash": "295c25a7543c7323",
+ "facts_hash": "1f8b90cd825f8aaf",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,8 +187,8 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 343,
-   ".tsx": 240,
+   ".ts": 344,
+   ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
    ".py": 8,
@@ -546,8 +546,22 @@
       "src": "src/integrations/supabase/types.ts"
      },
      {
+      "name": "last_reply_at",
+      "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
       "name": "notes",
       "type": "string | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "preferred_channel",
+      "type": "string not null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -569,6 +583,13 @@
      {
       "name": "success_rate",
       "type": "number | null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
+     },
+     {
+      "name": "whatsapp_checked_at",
+      "type": "string | null",
       "fk": "",
       "generated": "",
       "src": "src/integrations/supabase/types.ts"
@@ -5946,6 +5967,13 @@
       "fk": "",
       "generated": "",
       "src": "supabase/tests/fixtures/geo_trigger_schema.sql"
+     },
+     {
+      "name": "late_tolerance_min",
+      "type": "number not null",
+      "fk": "",
+      "generated": "",
+      "src": "src/integrations/supabase/types.ts"
      },
      {
       "name": "quiet_hours_end",
@@ -18324,6 +18352,42 @@
    },
    {
     "path": "",
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "component": "MessagingSettingsPage.test",
+    "tables_transitive": [
+     "message_templates",
+     "messaging_settings",
+     "messaging_usage",
+     "notification_messages",
+     "notification_optouts",
+     "notification_routes"
+    ],
+    "invokes_transitive": [],
+    "rpc_transitive": [
+     "messaging_month_cost_cents"
+    ],
+    "deps_count": 19
+   },
+   {
+    "path": "",
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "component": "MessagingSettingsPage",
+    "tables_transitive": [
+     "message_templates",
+     "messaging_settings",
+     "messaging_usage",
+     "notification_messages",
+     "notification_optouts",
+     "notification_routes"
+    ],
+    "invokes_transitive": [],
+    "rpc_transitive": [
+     "messaging_month_cost_cents"
+    ],
+    "deps_count": 18
+   },
+   {
+    "path": "",
     "file": "src/pages/MetricsPage.panels.tsx",
     "component": "MetricsPage.panels",
     "tables_transitive": [],
@@ -20123,6 +20187,15 @@
     "file": "src/App.tsx"
    },
    {
+    "path": "/settings/messaging",
+    "component": "SuspenseWrapper",
+    "guard": "ProtectedRoute",
+    "roles": [
+     "admin"
+    ],
+    "file": "src/App.tsx"
+   },
+   {
     "path": "/settings/uapi",
     "component": "SuspenseWrapper",
     "guard": "ProtectedRoute",
@@ -20959,6 +21032,50 @@
     "file": "src/hooks/useMapbox.ts"
    },
    {
+    "name": "useMessagingSettings",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useUpdateMessagingSettings",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useMessagingUsage",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useNotificationRoutes",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useUpdateNotificationRoute",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useMessageTemplates",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useSaveTemplateVersion",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useNotificationOptouts",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useAddNotificationOptout",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useRemoveNotificationOptout",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
+    "name": "useNotificationLedger",
+    "file": "src/hooks/useMessaging.ts"
+   },
+   {
     "name": "useDriverMetrics",
     "file": "src/hooks/useMetrics.ts"
    },
@@ -21471,6 +21588,10 @@
    },
    {
     "guard": "ProtectedRoute",
+    "file": "src/App.tsx"
+   },
+   {
+    "guard": "ProtectedRoute",
     "file": "src/components/auth/ProtectedRoute.test.tsx"
    },
    {
@@ -21766,7 +21887,7 @@
   {
    "module": "src",
    "files": 3,
-   "lines": 262,
+   "lines": 264,
    "tables": [],
    "exports": [
     "App.tsx: App"
@@ -21816,7 +21937,7 @@
   {
    "module": "src/components",
    "files": 163,
-   "lines": 29597,
+   "lines": 29598,
    "tables": [
     "active_tracking",
     "lalamove_orders",
@@ -21993,8 +22114,8 @@
   },
   {
    "module": "src/hooks",
-   "files": 112,
-   "lines": 19210,
+   "files": 113,
+   "lines": 19537,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22025,6 +22146,12 @@
     "lalamove_orders",
     "lalamove_rate_limits",
     "map_settings_overrides",
+    "message_templates",
+    "messaging_settings",
+    "messaging_usage",
+    "notification_messages",
+    "notification_optouts",
+    "notification_routes",
     "order_geo_events",
     "password_reset_requests",
     "permissions",
@@ -22089,6 +22216,7 @@
     "useContacts.ts: Hook para busca e persistência de contatos reutilizáveis. Dedup por (owner_id, phone_e164) — insert-or-update via upsert.",
     "useGeo.ts: Implementação única dos hooks de mapa. `useMapbox.ts` é o módulo que fala com o geo-gateway (camada única de provedores: cache, orçamento e `geo_settings`), e este arquivo existe para que consumidores novos importem de `@/hooks/useGeo`. Ver docs/planos/PLANO_MAPBOX_100_ETAPAS.md, etapas 60 e 83.",
     "useJobQueue.ts: Job Queue Hook - Simula fila de jobs usando dados reais das tabelas existentes Usa webhook_events como proxy para jobs de webhook Usa driver_evaluations como proxy para jobs de avaliação Usa bitrix24_sync como proxy para jobs de sincronização",
+    "useMessaging.ts: Hook do painel de mensageria ao motorista (plano M1-M12). Le e escreve as tabelas do motor (`messaging_settings`, `notification_routes`, `message_templates`, `notification_optouts`) e le o ledger (`notification_messages`) + consumo (`messaging_usage`).",
     "useRealtimeSubscriptions.ts: Centralized Realtime Subscriptions Manager This hook consolidates all Supabase Realtime subscriptions into a single manageable system, preventing duplicate channels and optimizing performance."
    ],
    "deps": [
@@ -22168,6 +22296,7 @@
     "src/hooks/useMapProviderPolicy.ts",
     "src/hooks/useMapSettings.ts",
     "src/hooks/useMapbox.ts",
+    "src/hooks/useMessaging.ts",
     "src/hooks/useMetrics.ts",
     "src/hooks/useNotificationHistory.ts",
     "src/hooks/useOfflineStorage.ts",
@@ -22193,8 +22322,7 @@
     "src/hooks/useSidebarCounts.ts",
     "src/hooks/useSoundSettings.ts",
     "src/hooks/useSystemHealth.ts",
-    "src/hooks/useSystemHealthExpanded.ts",
-    "src/hooks/useTestNotification.ts"
+    "src/hooks/useSystemHealthExpanded.ts"
    ]
   },
   {
@@ -22219,7 +22347,7 @@
   {
    "module": "src/integrations",
    "files": 4,
-   "lines": 4956,
+   "lines": 5379,
    "tables": [],
    "exports": [
     "index.ts: lovable",
@@ -22358,8 +22486,8 @@
   },
   {
    "module": "src/pages",
-   "files": 91,
-   "lines": 20009,
+   "files": 93,
+   "lines": 21102,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -22403,6 +22531,7 @@
     "MFAVerifyPage.tsx: MFAVerifyPage",
     "MapToolsPage.tsx: MapToolsPage",
     "MapsSettingsPage.tsx: MapsSettingsPage",
+    "MessagingSettingsPage.tsx: MessagingSettingsPage",
     "MetricsPage.panels.tsx: ApprovalStatsPanel, IncidentSeverityPanel, IncidentTypePanel, WhitelistBlacklistSummary",
     "MetricsPage.tsx: MetricsPage",
     "NotFound.tsx: NotFound",
@@ -22410,8 +22539,7 @@
     "OrdersPage.tsx: OrdersPage",
     "PasswordResetApprovalsPage.tsx: PasswordResetApprovalsPage",
     "PerformanceDashboardPage.tsx: PerformanceDashboardPage",
-    "PermissionsPage.tsx: PermissionsPage",
-    "ProfilePage.tsx: ProfilePage"
+    "PermissionsPage.tsx: PermissionsPage"
    ],
    "docs": [
     "ContactsPage.tsx: Gerenciamento de contatos reutilizáveis. Lista, busca, edita (nome/endereço/tipo) e exclui contatos salvos."
@@ -22474,6 +22602,8 @@
     "src/pages/MFAVerifyPage.tsx",
     "src/pages/MapToolsPage.tsx",
     "src/pages/MapsSettingsPage.tsx",
+    "src/pages/MessagingSettingsPage.test.tsx",
+    "src/pages/MessagingSettingsPage.tsx",
     "src/pages/MetricsPage.panels.tsx",
     "src/pages/MetricsPage.tsx",
     "src/pages/NotFound.tsx",
@@ -22520,9 +22650,7 @@
     "src/pages/map-tools/MatrixTab.tsx",
     "src/pages/map-tools/OptimizationTab.tsx",
     "src/pages/map-tools/StaticImageTab.tsx",
-    "src/pages/map-tools/TilequeryTab.tsx",
-    "src/pages/orders/OrderCard.tsx",
-    "src/pages/permissions/PermissionModuleList.tsx"
+    "src/pages/map-tools/TilequeryTab.tsx"
    ]
   },
   {
@@ -23513,12 +23641,28 @@
    },
    "message_templates": {
     "select": [
+     "src/hooks/useMessaging.ts",
      "supabase/functions/_shared/messaging/registry.ts"
+    ],
+    "insert": [
+     "src/hooks/useMessaging.ts"
+    ],
+    "update": [
+     "src/hooks/useMessaging.ts"
     ]
    },
    "messaging_settings": {
     "select": [
+     "src/hooks/useMessaging.ts",
      "supabase/functions/_shared/messaging/registry.ts"
+    ],
+    "update": [
+     "src/hooks/useMessaging.ts"
+    ]
+   },
+   "messaging_usage": {
+    "select": [
+     "src/hooks/useMessaging.ts"
     ]
    },
    "new_device_alerts": {
@@ -23531,6 +23675,7 @@
    },
    "notification_messages": {
     "select": [
+     "src/hooks/useMessaging.ts",
      "supabase/functions/_shared/messaging/notify-driver.ts",
      "supabase/functions/zapp-callback/index.ts",
      "supabase/functions/zapp-callback/ledger.ts"
@@ -23544,9 +23689,24 @@
      "supabase/functions/zapp-callback/ledger.ts"
     ]
    },
+   "notification_optouts": {
+    "select": [
+     "src/hooks/useMessaging.ts"
+    ],
+    "upsert": [
+     "src/hooks/useMessaging.ts"
+    ],
+    "delete": [
+     "src/hooks/useMessaging.ts"
+    ]
+   },
    "notification_routes": {
     "select": [
+     "src/hooks/useMessaging.ts",
      "supabase/functions/_shared/messaging/registry.ts"
+    ],
+    "update": [
+     "src/hooks/useMessaging.ts"
     ]
    },
    "order_geo_events": {
@@ -24126,6 +24286,7 @@
     "body",
     "channel",
     "event",
+    "id",
     "is_active",
     "key",
     "max_length",
@@ -24153,6 +24314,9 @@
     "provider_message_id",
     "role",
     "status"
+   ],
+   "notification_optouts": [
+    "phone"
    ],
    "notification_routes": [
     "channels",
@@ -24849,6 +25013,7 @@
     "supabase/functions/mcp-query/index.ts"
    ],
    "messaging_month_cost_cents": [
+    "src/hooks/useMessaging.ts",
     "supabase/functions/_shared/messaging/notify-driver.ts"
    ],
    "nome": [
@@ -25139,9 +25304,7 @@
    "lalamove_webhook_config",
    "login_attempts",
    "mcp_diagnostics_grants",
-   "messaging_usage",
    "mfa_sessions",
-   "notification_optouts",
    "orders_operator_view",
    "orders_safe_view",
    "password_reset_tokens",
@@ -25184,10 +25347,6 @@
    {
     "table": "drivers",
     "column": "count"
-   },
-   {
-    "table": "drivers",
-    "column": "preferred_channel"
    },
    {
     "table": "lalamove_orders",
@@ -25520,6 +25679,16 @@
     "rules": "type=number, min=0"
    },
    {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "field": "sms-fallback",
+    "rules": "type=number, min=0"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "field": "budget",
+    "rules": "type=number, min=0, step=0.01"
+   },
+   {
     "file": "src/pages/RiskRulesPage.dialogs.tsx",
     "field": "score_impact",
     "rules": "type=number"
@@ -25625,6 +25794,26 @@
     "file": "src/hooks/useMapSettings.ts",
     "name": "MapProvider",
     "values": "mapbox-dark | mapbox-sat | osm | esri-sat | google-roadmap | google-hybrid | google-3d"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "name": "WHATSAPP_PROVIDERS",
+    "values": "'zapp', 'evolution', 'off'"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "name": "SMS_PROVIDERS",
+    "values": "'none', 'zenvia', 'comtele', 'twilio'"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "name": "MESSAGING_ROLES",
+    "values": "'driver', 'operator', 'manager', 'admin', 'customer', 'guardian',"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "name": "LEDGER_STATUSES",
+    "values": "'queued', 'sent', 'delivered', 'read', 'failed', 'suppressed', 'expired',"
    },
    {
     "file": "src/hooks/usePermissions.ts",
@@ -26791,6 +26980,10 @@
     "msg": "Rota precisa de pelo menos 2 coordenadas"
    },
    {
+    "file": "src/hooks/useMessaging.ts",
+    "msg": "Telefone incompleto"
+   },
+   {
     "file": "src/hooks/usePasswordResetActions.ts",
     "msg": "Erro ao aprovar: "
    },
@@ -27125,6 +27318,22 @@
    {
     "file": "src/pages/MapsSettingsPage.tsx",
     "msg": "Falha no teste: ${(err as Error).message}"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "msg": "Falha ao salvar: ${(error as Error).message}"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "msg": "Falha: ${(error as Error).message}"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "msg": "Teto mensal inválido"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "msg": "Texto vazio"
    },
    {
     "file": "src/pages/PermissionsPage.tsx",
@@ -28782,6 +28991,11 @@
     "table": "drivers",
     "column": "whatsapp_status",
     "rule": "default 'unknown'"
+   },
+   {
+    "table": "drivers",
+    "column": "preferred_channel",
+    "rule": "obrigatório"
    },
    {
     "table": "lalamove_orders",
@@ -31022,6 +31236,11 @@
     "table": "geo_defaults",
     "column": "notify_delivery_contact",
     "rule": "default false"
+   },
+   {
+    "table": "geo_defaults",
+    "column": "late_tolerance_min",
+    "rule": "obrigatório"
    },
    {
     "table": "geo_defaults",
@@ -34073,6 +34292,12 @@
     "field": "type",
     "value": "FeatureCollection",
     "kind": "escreve"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "field": "status",
+    "value": "all",
+    "kind": "compara"
    },
    {
     "file": "src/hooks/useMetrics.ts",
@@ -37207,6 +37432,10 @@
    {
     "file": "src/hooks/useSLOMetrics.ts",
     "line": "const availBudget = 100 - SLO_TARGETS.availability; // ex.: 0.1%"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.tsx",
+    "line": "80% avisa, 100% bloqueia o envio (exceto cancelamento)."
    },
    {
     "file": "src/pages/MetricsPage.panels.tsx",
@@ -40617,6 +40846,26 @@
    {
     "file": "src/lib/__tests__/uapiErrors.test.ts",
     "name": "sucesso é ret 0"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "name": "MessagingSettingsPage (etapas 141-151 do plano de mensageria)"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "name": "mostra carregamento enquanto a configuracao nao chegou"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "name": "erro de leitura mostra o motivo e o botao de tentar novamente"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "name": "config salva lista os bloqueios que impedem o envio real"
+   },
+   {
+    "file": "src/pages/MessagingSettingsPage.test.tsx",
+    "name": "aba de uso mostra o gasto do mes e o total de mensagens"
    },
    {
     "file": "src/pages/NotificationHistoryPage.geo.test.tsx",
@@ -47885,6 +48134,18 @@
     "limit": "2000"
    },
    {
+    "file": "src/hooks/useMessaging.ts",
+    "limit": "1"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "limit": "200"
+   },
+   {
+    "file": "src/hooks/useMessaging.ts",
+    "limit": "60"
+   },
+   {
     "file": "src/hooks/useNotificationHistory.ts",
     "limit": "100"
    },
@@ -48856,6 +49117,7 @@
      ],
      "all": [
       "compara:src/hooks/useAdvancedReports.ts",
+      "compara:src/hooks/useMessaging.ts",
       "compara:src/pages/AdvancedReportsPage.tsx",
       "escreve:src/hooks/useAdvancedReports.ts"
      ],
@@ -53265,6 +53527,10 @@
    },
    {
     "guard": "ProtectedRoute",
+    "file": "src/App.tsx"
+   },
+   {
+    "guard": "ProtectedRoute",
     "file": "src/components/auth/ProtectedRoute.test.tsx"
    },
    {
@@ -53694,6 +53960,15 @@
     "guard": "ProtectedRoute",
     "roles": [
      "manager"
+    ],
+    "file": "src/App.tsx"
+   },
+   {
+    "path": "/settings/messaging",
+    "component": "SuspenseWrapper",
+    "guard": "ProtectedRoute",
+    "roles": [
+     "admin"
     ],
     "file": "src/App.tsx"
    },
@@ -54526,6 +54801,7 @@
     "msg": "valor `all` para `status` usado no código não existe em nenhum enum do banco/TS",
     "where": [
      "compara:src/hooks/useAdvancedReports.ts",
+     "compara:src/hooks/useMessaging.ts",
      "compara:src/pages/AdvancedReportsPage.tsx",
      "escreve:src/hooks/useAdvancedReports.ts"
     ]
@@ -54764,11 +55040,6 @@
    {
     "kind": "coluna",
     "msg": "coluna `count` usada no código não existe no schema de `drivers`",
-    "where": []
-   },
-   {
-    "kind": "coluna",
-    "msg": "coluna `preferred_channel` usada no código não existe no schema de `drivers`",
     "where": []
    },
    {
@@ -59301,7 +59572,7 @@
   },
   "src/App.tsx": {
    "path": "src/App.tsx",
-   "lines": 232,
+   "lines": 234,
    "exports": [
     "default App"
    ],
@@ -59653,6 +59924,14 @@
      ]
     },
     {
+     "path": "/settings/messaging",
+     "component": "SuspenseWrapper",
+     "guard": "ProtectedRoute",
+     "roles": [
+      "admin"
+     ]
+    },
+    {
      "path": "/reports",
      "component": "SuspenseWrapper",
      "guard": "ProtectedRoute",
@@ -59740,6 +60019,7 @@
     }
    ],
    "guards": [
+    "ProtectedRoute",
     "ProtectedRoute",
     "ProtectedRoute",
     "ProtectedRoute",
@@ -60763,7 +61043,7 @@
   },
   "src/components/layout/sidebar-config.ts": {
    "path": "src/components/layout/sidebar-config.ts",
-   "lines": 124,
+   "lines": 125,
    "exports": [
     "interface MenuItem",
     "interface MenuCategory",
@@ -65976,6 +66256,160 @@
     "useMapboxTilequery"
    ]
   },
+  "src/hooks/useMessaging.ts": {
+   "path": "src/hooks/useMessaging.ts",
+   "lines": 327,
+   "exports": [
+    "type MessagingSettingsRow",
+    "type NotificationRouteRow",
+    "type MessageTemplateRow",
+    "type NotificationMessageRow",
+    "type MessagingUsageRow",
+    "type NotificationOptoutRow",
+    "const WHATSAPP_PROVIDERS",
+    "const SMS_PROVIDERS",
+    "type WhatsappProvider",
+    "type SmsProvider",
+    "const MESSAGING_ROLES",
+    "type MessagingRole",
+    "function useMessagingSettings",
+    "function useUpdateMessagingSettings",
+    "function useMessagingUsage",
+    "function useNotificationRoutes",
+    "function useUpdateNotificationRoute",
+    "function useMessageTemplates",
+    "function useSaveTemplateVersion",
+    "function useNotificationOptouts",
+    "function normalizeOptoutPhone",
+    "function useAddNotificationOptout",
+    "function useRemoveNotificationOptout",
+    "const LEDGER_STATUSES",
+    "function useNotificationLedger",
+    "function smsSegments",
+    "function renderPreview"
+   ],
+   "tables": [
+    {
+     "table": "messaging_settings",
+     "op": "select"
+    },
+    {
+     "table": "messaging_settings",
+     "op": "select,update"
+    },
+    {
+     "table": "messaging_usage",
+     "op": "select"
+    },
+    {
+     "table": "notification_routes",
+     "op": "select"
+    },
+    {
+     "table": "notification_routes",
+     "op": "select,update"
+    },
+    {
+     "table": "message_templates",
+     "op": "select"
+    },
+    {
+     "table": "message_templates",
+     "op": "select"
+    },
+    {
+     "table": "message_templates",
+     "op": "insert,select"
+    },
+    {
+     "table": "message_templates",
+     "op": "update"
+    },
+    {
+     "table": "notification_optouts",
+     "op": "select"
+    },
+    {
+     "table": "notification_optouts",
+     "op": "select,upsert"
+    },
+    {
+     "table": "notification_optouts",
+     "op": "delete"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    }
+   ],
+   "table_cols": {
+    "messaging_settings": [
+     "id"
+    ],
+    "notification_routes": [
+     "event"
+    ],
+    "message_templates": [
+     "channel",
+     "id",
+     "key",
+     "version"
+    ],
+    "notification_optouts": [
+     "phone"
+    ]
+   },
+   "rpc": [
+    "messaging_month_cost_cents"
+   ],
+   "errors": [
+    "Telefone incompleto"
+   ],
+   "enums": [
+    {
+     "name": "WHATSAPP_PROVIDERS",
+     "values": "'zapp', 'evolution', 'off'"
+    },
+    {
+     "name": "SMS_PROVIDERS",
+     "values": "'none', 'zenvia', 'comtele', 'twilio'"
+    },
+    {
+     "name": "MESSAGING_ROLES",
+     "values": "'driver', 'operator', 'manager', 'admin', 'customer', 'guardian',"
+    },
+    {
+     "name": "LEDGER_STATUSES",
+     "values": "'queued', 'sent', 'delivered', 'read', 'failed', 'suppressed', 'expired',"
+    }
+   ],
+   "status_values": [
+    {
+     "field": "status",
+     "value": "all",
+     "kind": "compara"
+    }
+   ],
+   "doc": "Hook do painel de mensageria ao motorista (plano M1-M12). Le e escreve as tabelas do motor (`messaging_settings`, `notification_routes`, `message_templates`, `notification_optouts`) e le o ledger (`notification_messages`) + consumo (`messaging_usage`).",
+   "hooks": [
+    "useMessagingSettings",
+    "useUpdateMessagingSettings",
+    "useMessagingUsage",
+    "useNotificationRoutes",
+    "useUpdateNotificationRoute",
+    "useMessageTemplates",
+    "useSaveTemplateVersion",
+    "useNotificationOptouts",
+    "useAddNotificationOptout",
+    "useRemoveNotificationOptout",
+    "useNotificationLedger"
+   ],
+   "pagination": [
+    "1",
+    "200",
+    "60"
+   ]
+  },
   "src/hooks/useMetrics.ts": {
    "path": "src/hooks/useMetrics.ts",
    "lines": 214,
@@ -68205,7 +68639,7 @@
   },
   "src/integrations/supabase/types.ts": {
    "path": "src/integrations/supabase/types.ts",
-   "lines": 4811,
+   "lines": 5234,
    "exports": [
     "type Json",
     "type Database",
@@ -69988,6 +70422,44 @@
    "side_effects": [
     "notify",
     "notify_delivery_contact"
+   ]
+  },
+  "src/pages/MessagingSettingsPage.test.tsx": {
+   "path": "src/pages/MessagingSettingsPage.test.tsx",
+   "lines": 135,
+   "is_test": true,
+   "tests": [
+    "MessagingSettingsPage (etapas 141-151 do plano de mensageria)",
+    "mostra carregamento enquanto a configuracao nao chegou",
+    "erro de leitura mostra o motivo e o botao de tentar novamente",
+    "config salva lista os bloqueios que impedem o envio real",
+    "aba de uso mostra o gasto do mes e o total de mensagens"
+   ]
+  },
+  "src/pages/MessagingSettingsPage.tsx": {
+   "path": "src/pages/MessagingSettingsPage.tsx",
+   "lines": 958,
+   "exports": [
+    "function MessagingSettingsPage"
+   ],
+   "errors": [
+    "Falha ao salvar: ${(error as Error).message}",
+    "Falha: ${(error as Error).message}",
+    "Teto mensal inválido",
+    "Texto vazio"
+   ],
+   "html_constraints": [
+    {
+     "field": "sms-fallback",
+     "rules": "type=number, min=0"
+    },
+    {
+     "field": "budget",
+     "rules": "type=number, min=0, step=0.01"
+    }
+   ],
+   "percents": [
+    "80% avisa, 100% bloqueia o envio (exceto cancelamento)."
    ]
   },
   "src/pages/MetricsPage.panels.tsx": {
@@ -77767,10 +78239,25 @@
   }
  },
  "git": {
-  "sha": "5adbf84ad1370d08ce8969f0a942c7a06a4fc239",
+  "sha": "562d0de7de167ec835112a5a33a016c90d6da638",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "562d0de",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "src/App.tsx",
+     "src/components/layout/sidebar-config.ts",
+     "src/hooks/useMessaging.ts",
+     "src/integrations/supabase/types.ts",
+     "src/pages/MessagingSettingsPage.test.tsx",
+     "src/pages/MessagingSettingsPage.tsx"
+    ]
+   },
    {
     "sha": "5adbf84",
     "date": "2026-11-23",
@@ -78204,27 +78691,19 @@
      "src/hooks/useSidebarCounts.ts",
      "src/lib/roles.ts"
     ]
-   },
-   {
-    "sha": "5672ef0",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: menu alinhado às rotas (item 49) (#306)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/sidebar-config.ts",
-     "src/lib/__tests__/sidebarRoutes.test.ts"
-    ]
    }
   ],
   "hot_files": [
    [
-    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    6
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    5
    ],
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
+    5
+   ],
+   [
+    "src/App.tsx",
     4
    ],
    [
@@ -78240,12 +78719,8 @@
     3
    ],
    [
-    "src/App.tsx",
-    3
-   ],
-   [
-    "src/components/layout/MobileSidebar.tsx",
-    3
+    "src/components/layout/sidebar-config.ts",
+    2
    ],
    [
     "src/pages/AnalyticsDashboardPage.tsx",

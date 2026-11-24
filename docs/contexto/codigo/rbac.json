@@ -30,6 +30,7 @@
    "/rate-limiting",
    "/roles",
    "/security",
+   "/settings/messaging",
    "/telemetria"
   ],
   "manager": [
@@ -84,6 +85,7 @@
   "/risk-rules",
   "/settings/lalamove",
   "/settings/maps",
+  "/settings/messaging",
   "/settings/uapi",
   "/webhooks"
  ],
@@ -246,6 +248,17 @@
    "rota_protegida": true,
    "rota_requer_mfa": true,
    "arquivo": "src/pages/LalamoveSettingsPage.tsx"
+  },
+  {
+   "rotulo": "Mensageria",
+   "grupo": "Integrações",
+   "destino": "/settings/messaging",
+   "papel_no_menu": "admin",
+   "papel_na_rota": "admin",
+   "rota_existe": true,
+   "rota_protegida": true,
+   "rota_requer_mfa": true,
+   "arquivo": "src/pages/MessagingSettingsPage.tsx"
   },
   {
    "rotulo": "Provedores de Mapa",

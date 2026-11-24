@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5adbf84ad1` · branch `main` · 2026-11-24 01:03 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `562d0de7de` · branch `main` · 2026-11-24 01:23 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -275,6 +275,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `drivers` | `updated_at` | default now() |
 | `drivers` | `failed_deliveries` | default 0 |
 | `drivers` | `whatsapp_status` | default 'unknown' |
+| `drivers` | `preferred_channel` | obrigatório |
 | `lalamove_orders` | `id` | PK; default gen_random_uuid() |
 | `lalamove_orders` | `lalamove_id` | obrigatório; único |
 | `lalamove_orders` | `status` | default 'PENDING' |
@@ -547,8 +548,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `reviewed_by` | FK → users.id |
 | `password_reset_requests` | `expires_at` | default (now() |
 | `password_reset_requests` | `created_at` | default now() |
-| `login_attempts` | `id` | PK; default gen_random_uuid() |
-| … +321 linhas — lista completa em `context.json` | | |
+| … +323 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -773,7 +773,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `REQUEST_DENIED` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
 | `status` | `WHITELIST` | compara, escreve | `src/components/drivers/DriverProfileModal.tsx`<br>`src/hooks/useApprovalActions.ts`<br>`src/hooks/useDrivers.ts`<br>`src/hooks/useMetrics.ts`<br>`src/pages/DriversPage.tsx`<br>… +2 |
 | `status` | `ZERO_RESULTS` | compara | `supabase/functions/geo-gateway/providers/google.ts` |
-| `status` | `all` | compara, escreve | `src/hooks/useAdvancedReports.ts`<br>`src/pages/AdvancedReportsPage.tsx` |
+| `status` | `all` | compara, escreve | `src/hooks/useAdvancedReports.ts`<br>`src/hooks/useMessaging.ts`<br>`src/pages/AdvancedReportsPage.tsx` |
 | `status` | `approved` | compara, escreve | `src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `at_risk` | compara | `src/pages/SLODashboardPage.tsx` |
 | `status` | `breached` | compara | `src/pages/SLODashboardPage.tsx` |
@@ -879,6 +879,10 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | TilesProvider | mapbox \| google \| off | `src/hooks/useMapProviderPolicy.ts` |
 | MarkerDensity | comfortable \| compact | `src/hooks/useMapSettings.ts` |
 | MapProvider | mapbox-dark \| mapbox-sat \| osm \| esri-sat \| google-roadmap \| google-hybrid \| google-3d | `src/hooks/useMapSettings.ts` |
+| WHATSAPP_PROVIDERS | 'zapp', 'evolution', 'off' | `src/hooks/useMessaging.ts` |
+| SMS_PROVIDERS | 'none', 'zenvia', 'comtele', 'twilio' | `src/hooks/useMessaging.ts` |
+| MESSAGING_ROLES | 'driver', 'operator', 'manager', 'admin', 'customer', 'guardian', | `src/hooks/useMessaging.ts` |
+| LEDGER_STATUSES | 'queued', 'sent', 'delivered', 'read', 'failed', 'suppressed', 'expired', | `src/hooks/useMessaging.ts` |
 | AppRole | admin \| manager \| operator \| viewer | `src/hooks/usePermissions.ts` |
 | NotificationPermission | default \| granted \| denied | `src/hooks/usePushNotifications.ts` |
 | AlertSeverity | CRITICAL \| WARNING \| INFO | `src/hooks/usePushNotifications.ts` |
@@ -1100,6 +1104,8 @@ _nenhum item encontrado_
 | `def-approach-eta` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
 | `def-arrived-radius` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
 | `def-off-route` | type=number, min=0 | `src/pages/MapsSettingsPage.tsx` |
+| `sms-fallback` | type=number, min=0 | `src/pages/MessagingSettingsPage.tsx` |
+| `budget` | type=number, min=0, step=0.01 | `src/pages/MessagingSettingsPage.tsx` |
 | `score_impact` | type=number | `src/pages/RiskRulesPage.dialogs.tsx` |
 
 ## G. Fórmulas e derivações (como valores são calculados)
@@ -1410,6 +1416,7 @@ _nenhum item encontrado_
 | `* - Taxa de falhas: 1% (proporção de requisições com erro)` | `src/hooks/useSLOMetrics.ts` |
 | `// Dentro de 0,1% do alvo ainda é "em risco"` | `src/hooks/useSLOMetrics.ts` |
 | `const availBudget = 100 - SLO_TARGETS.availability; // ex.: 0.1%` | `src/hooks/useSLOMetrics.ts` |
+| `80% avisa, 100% bloqueia o envio (exceto cancelamento).` | `src/pages/MessagingSettingsPage.tsx` |
 | `transition={{ delay: index * 0.05 }}` | `src/pages/MetricsPage.panels.tsx` |
 | `transition={{ delay: 0.2 + index * 0.1 }}` | `src/pages/MetricsPage.tsx` |
 | `transition={{ delay: index * 0.1 }}` | `src/pages/RolesPage.tsx` |
@@ -1654,6 +1661,9 @@ _nenhum item encontrado_
 | 500 | `src/hooks/useGeoSearch.ts` |
 | 1 | `src/hooks/useJobQueue.ts` |
 | 2000 | `src/hooks/useLalamoveQuota.ts` |
+| 1 | `src/hooks/useMessaging.ts` |
+| 200 | `src/hooks/useMessaging.ts` |
+| 60 | `src/hooks/useMessaging.ts` |
 | 100 | `src/hooks/useNotificationHistory.ts` |
 | 200 | `src/hooks/useNotificationHistory.ts` |
 | 50 | `src/hooks/usePendingApprovals.ts` |
@@ -1891,6 +1901,7 @@ _nenhum item encontrado_
 | Nenhum fator MFA verificado | `src/hooks/useMFA.ts` |
 | User not authenticated | `src/hooks/useMapSettings.ts` |
 | Rota precisa de pelo menos 2 coordenadas | `src/hooks/useMapbox.ts` |
+| Telefone incompleto | `src/hooks/useMessaging.ts` |
 | Erro ao aprovar:  | `src/hooks/usePasswordResetActions.ts` |
 | Erro ao rejeitar:  | `src/hooks/usePasswordResetActions.ts` |
 | Esta solicitação expirou e não pode mais ser aprovada. | `src/hooks/usePasswordResetActions.ts` |
@@ -1975,15 +1986,14 @@ _nenhum item encontrado_
 | Falha ao salvar teto: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao trocar provedor: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
+| Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
+| Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
+| Teto mensal inválido | `src/pages/MessagingSettingsPage.tsx` |
+| Texto vazio | `src/pages/MessagingSettingsPage.tsx` |
 | Erro ao salvar: ${error instanceof Error ? error.message :  | `src/pages/PermissionsPage.tsx` |
 | Erro ao atualizar nome: ${error.message} | `src/pages/ProfilePage.tsx` |
 | O nome não pode estar vazio | `src/pages/ProfilePage.tsx` |
-| Erro ao alterar senha. Tente novamente. | `src/pages/ResetPasswordPage.tsx` |
-| Falha ao atualizar regra | `src/pages/RiskRulesPage.tsx` |
-| Falha ao remover regra | `src/pages/RiskRulesPage.tsx` |
-| Falha ao salvar regra | `src/pages/RiskRulesPage.tsx` |
-| Nome é obrigatório | `src/pages/RiskRulesPage.tsx` |
-| … +114 linhas — lista completa em `context.json` | |
+| … +119 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2027,7 +2037,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1438 testes em 124 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1443 testes em 125 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2138,6 +2148,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
+| `src/pages/MessagingSettingsPage.test.tsx` | 5 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
