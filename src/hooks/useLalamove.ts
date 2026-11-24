@@ -79,7 +79,7 @@ export function useOrderGet(orderId: string | null) {
     queryKey: ['llm', 'order', orderId],
     queryFn: () => lalamove.orderGet(orderId!),
     enabled: !!orderId && isLalamoveConfigured(),
-    refetchInterval: 10_000,
+    refetchInterval: 15_000,
     refetchIntervalInBackground: false,
     retry: false,
   });
@@ -90,7 +90,7 @@ export function useDriverLocation(orderId: string | null, driverId: string | nul
     queryKey: ['llm', 'driver-location', orderId, driverId],
     queryFn: () => lalamove.driverLocation(orderId!, driverId!),
     enabled: !!orderId && !!driverId && isLalamoveConfigured(),
-    refetchInterval: 10_000,
+    refetchInterval: 15_000,
     refetchIntervalInBackground: false,
     retry: false,
   });
