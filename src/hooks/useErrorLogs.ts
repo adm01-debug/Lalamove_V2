@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { uniqueTopic } from '@/lib/realtimeTopic';
 
 export interface RuntimeErrorLog {
   id: string;
@@ -75,7 +76,7 @@ export function useErrorLogs(filters: ErrorLogFilters = {}) {
 
   useEffect(() => {
     const channel = supabase
-      .channel('runtime-error-logs-realtime')
+      .channel(uniqueTopic('runtime-error-logs-realtime'))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'runtime_error_logs' }, () => {
         queryClient.invalidateQueries({ queryKey: ['runtime-error-logs'] });
       })

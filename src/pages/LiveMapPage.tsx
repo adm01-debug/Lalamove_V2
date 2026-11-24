@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LiveMap, VehicleFilter, StatusFilter } from '@/components/map/LiveMap';
 import { supabase } from '@/integrations/supabase/client';
+import { uniqueTopic } from '@/lib/realtimeTopic';
 import { toast } from 'sonner';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useFeatureFlag } from '@/hooks/useFeatureFlags';
@@ -165,7 +166,7 @@ export function LiveMapPage() {
     if (flagsLoading || !realtimeEnabled) return;
 
     const channel = supabase
-      .channel('live-map-tracking')
+      .channel(uniqueTopic('live-map-tracking'))
       .on(
         'postgres_changes',
         {

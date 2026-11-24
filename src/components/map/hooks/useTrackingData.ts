@@ -2,8 +2,7 @@ import { logger } from '@/utils/logger';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { VehicleFilter, StatusFilter } from '../types';
-
-let trackingChannelSequence = 0;
+import { uniqueTopic } from '@/lib/realtimeTopic';
 
 export interface TrackingData {
   id: string;
@@ -95,7 +94,7 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
     fetchTrackingData();
 
     const channel = supabase
-      .channel(`active-tracking-changes-${++trackingChannelSequence}`)
+      .channel(uniqueTopic('active-tracking-changes'))
       .on('postgres_changes', { event: '*', schema: 'public', table: 'active_tracking' }, () => {
         fetchTrackingData();
       })
