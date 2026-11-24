@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `562d0de7de167ec835112a5a33a016c90d6da638` (2026-11-23T22:21:21-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `7c71244827ddd82e97aa7ef7e158a9a7d00a15a5` (2026-11-23T22:48:48-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (586), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (588), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1099 |
-| arquivos_codigo | 699 |
-| linhas_codigo | 138105 |
+| arquivos_total | 1101 |
+| arquivos_codigo | 701 |
+| linhas_codigo | 138405 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 175 |
+| testes | 176 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (129), src/pages (88), src/hooks (3)
 - hooks: src/hooks (86), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (29), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (40)
+- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (41)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -78,10 +78,10 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
-| functions | 0 | 0 | 68 | 0 | 6 | 47 |
-| hooks | 0 | 0 | 87 | 231 | 15 | 54 |
+| functions | 0 | 0 | 69 | 0 | 6 | 47 |
+| hooks | 0 | 0 | 87 | 232 | 15 | 54 |
 | lib | 0 | 0 | 29 | 8 | 3 | 0 |
-| pages | 49 | 56 | 57 | 210 | 14 | 54 |
+| pages | 49 | 56 | 57 | 211 | 14 | 54 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
 | pages/settings | 0 | 0 | 5 | 1 | 0 | 1 |
@@ -226,7 +226,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `seed-fix-rls` [Manutenção/DDL] — tabelas: -; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 - `send-notification` [Notificações/Alertas] — tabelas: active_tracking, alert_configurations, alerts, alerts_sent, bitrix24_tokens, drivers, geo_defaults, job_queue, lalamove_orders, order_geo_events; chamada por 1 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
-- `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 1 arquivo(s) do front
+- `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 2 arquivo(s) do front
 - `zapp-callback` — tabelas: notification_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 
 ## Cron jobs (pg_cron)
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9796 nós · 20243 arestas · 704 comunidades · grafo do commit `562d0de7`
-- comunidades maiores: cn (273), react (137), lucide-react (131), MapsSettingsPage.tsx (115), client.ts (109), snapshot.py (104), ref_https (91), App.tsx (89), ref_node_url (87), dependencies (81), gerar.mjs (76), generate.py (75)
+- 9807 nós · 20271 arestas · 705 comunidades · grafo do commit `7c712448`
+- comunidades maiores: cn (298), lucide-react (168), react (164), badge.tsx (160), AppLayout (118), snapshot.py (106), ref_node_path (98), OrderDetailModal.tsx (97), NewOrderDialog.tsx (91), ref_https (90), App.tsx (86), send-notification/index.ts (82)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `7c71244` fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)
 - 2026-11-23 `562d0de` feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)
 - 2026-11-23 `5adbf84` fix: topic unico por montagem nos canais realtime (#336)
 - 2026-11-23 `4040276` chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `84fad61` feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)
 - 2026-11-23 `60a68d0` feat: lote 14 - remover as any e tipar canal de teste (#327)
 - 2026-11-23 `c4fdb69` feat: lote 9 - EmptyState component + vitest script (#321)
-- 2026-11-23 `ced043f` feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -3092,7 +3092,7 @@
     "MessagingSettingsPage"
    ],
    "export_default": "MessagingSettingsPage",
-   "linhas": 958,
+   "linhas": 1027,
    "dominio": "pages",
    "hooks_locais": [
     "useAddNotificationOptout",
@@ -3104,6 +3104,7 @@
     "useNotificationRoutes",
     "useRemoveNotificationOptout",
     "useSaveTemplateVersion",
+    "useSendTestWhatsApp",
     "useUpdateMessagingSettings",
     "useUpdateNotificationRoute"
    ],

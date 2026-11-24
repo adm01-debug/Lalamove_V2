@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 175,
+ "total": 176,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 38,
+  "edge (deno)": 39,
   "guard (node --test)": 34,
   "unit (vitest)": 85
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 40
+   "arquivos": 41
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1156,12 +1156,12 @@
   {
    "arquivo": "src/pages/MessagingSettingsPage.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 135,
+   "linhas": 158,
    "testa": [
     "src/hooks/useMessaging.ts",
     "src/pages/MessagingSettingsPage.tsx"
    ],
-   "casos": 4
+   "casos": 5
   },
   {
    "arquivo": "src/pages/NotificationHistoryPage.geo.test.tsx",
@@ -1215,6 +1215,15 @@
     "supabase/functions/_shared/channels/sms.ts"
    ],
    "casos": 11
+  },
+  {
+   "arquivo": "supabase/functions/_shared/channels/whatsapp-test.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 102,
+   "testa": [
+    "supabase/functions/_shared/channels/whatsapp-test.ts"
+   ],
+   "casos": 5
   },
   {
    "arquivo": "supabase/functions/_shared/channels/zapp.test.ts",
@@ -1712,6 +1721,7 @@
   "src/utils/exportUtils.ts": 1,
   "src/utils/timeUtils.ts": 1,
   "supabase/functions/_shared/channels/sms.ts": 2,
+  "supabase/functions/_shared/channels/whatsapp-test.ts": 1,
   "supabase/functions/_shared/channels/zapp.ts": 1,
   "supabase/functions/_shared/contract.ts": 3,
   "supabase/functions/_shared/geo-precision.ts": 1,

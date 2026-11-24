@@ -1717,10 +1717,11 @@
     "useNotificationRoutes",
     "useRemoveNotificationOptout",
     "useSaveTemplateVersion",
+    "useSendTestWhatsApp",
     "useUpdateMessagingSettings",
     "useUpdateNotificationRoute"
    ],
-   "linhas": 327,
+   "linhas": 359,
    "dominio": "hooks",
    "tabelas": [
     "message_templates",
@@ -1733,7 +1734,9 @@
    "rpcs": [
     "messaging_month_cost_cents"
    ],
-   "edges": [],
+   "edges": [
+    "test-notification"
+   ],
    "hooks_internos": [
     "useMutation",
     "useQuery",

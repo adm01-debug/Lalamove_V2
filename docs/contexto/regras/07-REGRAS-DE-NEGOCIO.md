@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `562d0de7de` · branch `main` · 2026-11-24 01:23 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7c71244827` · branch `main` · 2026-11-24 01:50 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1901,6 +1901,7 @@ _nenhum item encontrado_
 | Nenhum fator MFA verificado | `src/hooks/useMFA.ts` |
 | User not authenticated | `src/hooks/useMapSettings.ts` |
 | Rota precisa de pelo menos 2 coordenadas | `src/hooks/useMapbox.ts` |
+| Resposta invalida de test-notification | `src/hooks/useMessaging.ts` |
 | Telefone incompleto | `src/hooks/useMessaging.ts` |
 | Erro ao aprovar:  | `src/hooks/usePasswordResetActions.ts` |
 | Erro ao rejeitar:  | `src/hooks/usePasswordResetActions.ts` |
@@ -1987,13 +1988,12 @@ _nenhum item encontrado_
 | Falha ao trocar provedor: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
+| Falha no teste: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
+| Informe o telefone com DDD | `src/pages/MessagingSettingsPage.tsx` |
 | Teto mensal inválido | `src/pages/MessagingSettingsPage.tsx` |
 | Texto vazio | `src/pages/MessagingSettingsPage.tsx` |
-| Erro ao salvar: ${error instanceof Error ? error.message :  | `src/pages/PermissionsPage.tsx` |
-| Erro ao atualizar nome: ${error.message} | `src/pages/ProfilePage.tsx` |
-| O nome não pode estar vazio | `src/pages/ProfilePage.tsx` |
-| … +119 linhas — lista completa em `context.json` | |
+| … +122 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2037,7 +2037,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1443 testes em 125 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1449 testes em 126 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2136,6 +2136,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `src/lib/__tests__/postMessage.test.ts` | 6 | isTrustedBitrix24Origin · aceita a origem da própria página · aceita a origem do Supabase (callback da edge function) · rejeita origem desconhecida (XSS por postMessage) … |
 | `src/lib/__tests__/postgrest.test.ts` | 6 | escapeIlike · remove caracteres com significado no DSL do PostgREST · mantém caracteres comuns de busca · buildOrIlike … |
+| `src/pages/MessagingSettingsPage.test.tsx` | 6 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |
@@ -2148,7 +2149,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useSLAMetrics.test.ts` | 5 | useSLAMetrics · deve calcular métricas SLA com pedidos completos · deve retornar onTimeRate 100 sem pedidos completos · deve simular 200 pedidos para stress test de statusBreakdown … |
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
-| `src/pages/MessagingSettingsPage.test.tsx` | 5 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
+| `supabase/functions/_shared/channels/whatsapp-test.test.ts` | 5 | teste whatsapp: usa Zapp quando ZAPP_API_URL/KEY existem · teste whatsapp: cai no Evolution quando so ele tem secrets · teste whatsapp: sem secrets devolve null e mensagem de configuracao · teste whatsapp: 401 do Evolution vira provider_rejected/give_up … |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
@@ -2205,6 +2206,7 @@ _nenhum item encontrado_
 | `notify_delivery_contact` | `src/hooks/useGeoAdmin.ts` |
 | `invoke(` | `src/hooks/useGeoSearch.ts` |
 | `invoke(` | `src/hooks/useLalamoveUapi.ts` |
+| `invoke(` | `src/hooks/useMessaging.ts` |
 | `notify` | `src/hooks/useOfflineStorage.ts` |
 | `invoke(` | `src/hooks/useRegionResolver.ts` |
 | `.add('dark'` | `src/hooks/useScheduledTheme.ts` |

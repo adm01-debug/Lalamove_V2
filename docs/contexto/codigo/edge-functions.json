@@ -12,6 +12,8 @@
   "supabase/functions/_shared/auth.ts",
   "supabase/functions/_shared/channels/sms.test.ts",
   "supabase/functions/_shared/channels/sms.ts",
+  "supabase/functions/_shared/channels/whatsapp-test.test.ts",
+  "supabase/functions/_shared/channels/whatsapp-test.ts",
   "supabase/functions/_shared/channels/zapp.test.ts",
   "supabase/functions/_shared/channels/zapp.ts",
   "supabase/functions/_shared/contract.integration.test.ts",
@@ -1187,7 +1189,7 @@
    "servico": "Notificações/Alertas",
    "entrada": "supabase/functions/test-notification/index.ts",
    "arquivos": 1,
-   "linhas": 285,
+   "linhas": 271,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -1199,8 +1201,6 @@
    ],
    "rpcs": [],
    "env": [
-    "EVOLUTION_API_KEY",
-    "EVOLUTION_API_URL",
     "RESEND_API_KEY",
     "SLACK_WEBHOOK_URL",
     "SUPABASE_SERVICE_ROLE_KEY",
@@ -1214,9 +1214,11 @@
    "usa_shared": [
     "contract.ts",
     "schemas.ts",
-    "telemetry.ts"
+    "telemetry.ts",
+    "whatsapp-test.ts"
    ],
    "chamada_pelo_front": [
+    "src/hooks/useMessaging.ts",
     "src/hooks/useTestNotification.ts"
    ],
    "chamada_por_edges": [],

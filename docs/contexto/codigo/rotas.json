@@ -2936,6 +2936,7 @@
     "useQueryClient",
     "useRemoveNotificationOptout",
     "useSaveTemplateVersion",
+    "useSendTestWhatsApp",
     "useState",
     "useUpdateMessagingSettings",
     "useUpdateNotificationRoute"
@@ -2950,6 +2951,7 @@
     "useNotificationRoutes",
     "useRemoveNotificationOptout",
     "useSaveTemplateVersion",
+    "useSendTestWhatsApp",
     "useUpdateMessagingSettings",
     "useUpdateNotificationRoute"
    ],
@@ -2964,7 +2966,9 @@
    "rpcs": [
     "messaging_month_cost_cents"
    ],
-   "edges": [],
+   "edges": [
+    "test-notification"
+   ],
    "canais_realtime": [],
    "flags": [],
    "papeis": [],

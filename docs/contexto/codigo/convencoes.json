@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (58)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (40)"
+   "supabase/functions/<edge> (41)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)",
    "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)",
    "fix: topic unico por montagem nos canais realtime (#336)",
    "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)",
-   "fix: estado de erro e retry nas paginas que ficavam em branco (#334)",
-   "feat: motor de mensageria ao motorista (bloco 7) (#333)"
+   "fix: estado de erro e retry nas paginas que ficavam em branco (#334)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

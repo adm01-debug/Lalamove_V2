@@ -1749,7 +1749,8 @@
    "src/components/ui/table.tsx",
    "src/components/ui/tabs.tsx",
    "src/components/ui/textarea.tsx",
-   "src/hooks/useMessaging.ts"
+   "src/hooks/useMessaging.ts",
+   "src/lib/utils.ts"
   ],
   "src/pages/MetricsPage.panels.tsx": [
    "src/components/ui/badge.tsx",
@@ -2292,6 +2293,9 @@
   "src/utils/webVitals.ts": [
    "src/utils/logger.ts"
   ],
+  "supabase/functions/_shared/channels/whatsapp-test.ts": [
+   "supabase/functions/_shared/channels/zapp.ts"
+  ],
   "supabase/functions/_shared/messaging/dispatch.ts": [
    "supabase/functions/_shared/channels/sms.ts",
    "supabase/functions/_shared/channels/zapp.ts",
@@ -2532,6 +2536,7 @@
    "supabase/functions/simulate-driver-movement/replay.ts"
   ],
   "supabase/functions/test-notification/index.ts": [
+   "supabase/functions/_shared/channels/whatsapp-test.ts",
    "supabase/functions/_shared/contract.ts",
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
