@@ -1574,12 +1574,12 @@
   {
    "arquivo": "supabase/functions/lalamove-webhook/security.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 179,
+   "linhas": 204,
    "testa": [
     "supabase/functions/lalamove-webhook/normalize.ts",
     "supabase/functions/lalamove-webhook/security.ts"
    ],
-   "casos": 17
+   "casos": 21
   },
   {
    "arquivo": "supabase/functions/send-notification/message-id.test.ts",

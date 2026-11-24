@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `524a6f48e4e93b74de95c9e3940ddf95e93bd660` (2026-11-24T11:35:51-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `aacd178270ca966abb46f2f4a7eb8ce57472dc20` (2026-11-24T11:46:31-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1117 |
 | arquivos_codigo | 716 |
-| linhas_codigo | 141311 |
+| linhas_codigo | 141387 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9905 nós · 20549 arestas · 698 comunidades · grafo do commit `524a6f48`
-- comunidades maiores: cn (299), lucide-react (198), ref_https (139), client.ts (136), notify-driver.ts (125), NewOrderDialog.tsx (123), AppLayout (95), job-worker/index.ts (86), providers/types.ts (84), dependencies (81), send-notification/index.ts (80), gerar.mjs (76)
+- 9907 nós · 20554 arestas · 687 comunidades · grafo do commit `aacd1782`
+- comunidades maiores: cn (265), lucide-react (184), App.tsx (176), react (137), AppLayout (125), ref_https (121), ref_node_path (113), snapshot.py (106), send-notification/index.ts (82), dependencies (81), gerar.mjs (76), 4. Componentes, hooks, libs e estado — **revisado** (74)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -311,7 +311,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - src/components/orders/NewOrderDialog.tsx (11)
 - supabase/functions/_shared/schemas.ts (11)
 - supabase/functions/geo-gateway/index.ts (11)
-- docs/pendencias/_ordem.md (10)
+- supabase/functions/lalamove-webhook/index.ts (11)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `aacd178` fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)
 - 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
 - 2026-11-24 `d4f8bc7` fix: rota/ETA so recalcula com posicao viva do motorista (#357)
 - 2026-11-24 `1e34334` fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `0e04753` fix: ledger reservado antes do envio ao motorista (#347)
 - 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 - 2026-11-24 `5ae5aff` feat: aviso de chegada na coleta ao motorista (M4) (#345)
-- 2026-11-24 `d882d05` feat: lembrete de pedido agendado e aviso de proxima parada (#344)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

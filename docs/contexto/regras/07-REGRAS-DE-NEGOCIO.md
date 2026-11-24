@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `524a6f48e4` · branch `main` · 2026-11-24 14:36 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `aacd178270` · branch `main` · 2026-11-24 14:46 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -666,7 +666,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `FeatureCollection` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
 | `type` | `GEO_BUDGET_WARNING` | escreve | `supabase/functions/geo-gateway/index.ts` |
 | `type` | `GET_VERSION` | compara, escreve | `public/sw.js`<br>`src/hooks/useServiceWorker.ts` |
-| `type` | `INTEGRATION_FAILURE` | escreve | `supabase/functions/geo-gateway/error-monitor.ts`<br>`supabase/functions/lalamove-gateway/index.ts`<br>`supabase/functions/lalamove-token-refresh/index.ts`<br>`supabase/functions/rotate-tokens/index.ts` |
+| `type` | `INTEGRATION_FAILURE` | escreve, filtra | `supabase/functions/geo-gateway/error-monitor.ts`<br>`supabase/functions/lalamove-gateway/index.ts`<br>`supabase/functions/lalamove-token-refresh/index.ts`<br>`supabase/functions/rotate-tokens/index.ts` |
 | `type` | `LineString` | escreve | `src/components/map/hooks/useMapMarkers.ts`<br>`src/components/map/mapLayers.ts`<br>`src/hooks/useMapbox.ts` |
 | `type` | `MISSING_POD` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `MOTORCYCLE` | compara | `src/components/map/MapLegend.tsx` |
@@ -1541,6 +1541,7 @@ _nenhum item encontrado_
 | `REFRESH_AFTER_HOURS` | `20` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `EXPIRY_HOURS` | `24` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `CLAIM_WINDOW_SECONDS` | `1` | `supabase/functions/lalamove-token-refresh/index.ts` |
+| `ALERT_DEDUP_WINDOW_SECONDS` | `86` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `HCOUNTRY` | `'20000'` | `supabase/functions/lalamove-uapi/index.ts` |
 | `HLANG` | `'pt_BR'` | `supabase/functions/lalamove-uapi/index.ts` |
@@ -2074,7 +2075,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1530 testes em 135 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1534 testes em 135 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2089,6 +2090,7 @@ _nenhum item encontrado_
 | `src/utils/__tests__/exportUtils.test.ts` | 23 | exportToCSV · não deve fazer nada com array vazio · deve gerar CSV com headers corretos · deve escapar valores com vírgula … |
 | `supabase/functions/_shared/channels/zapp.test.ts` | 23 | zapp: envia POST com Bearer, número só com dígitos e corpo JSON · zapp: omite instance quando ausente · zapp: destinatário vazio não chama a API · zapp: erro HTTP devolve status e trecho do corpo … |
 | `supabase/functions/geo-gateway/mapbox.test.ts` | 22 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
+| `supabase/functions/lalamove-webhook/security.test.ts` | 21 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
 | `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
 | `supabase/functions/_shared/messaging/dispatch.test.ts` | 20 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
@@ -2101,7 +2103,6 @@ _nenhum item encontrado_
 | `supabase/functions/job-worker/eta-delay.test.ts` | 18 | ETA_DELAY: agendado no passado e ETA de 45 min emite o alerta · ETA_DELAY: chegada dentro da tolerancia de 15 min nao gera alerta · ETA_DELAY: pedido sem scheduled_at nao tem referencia de atraso · ETA_DELAY: pedido encerrado nao atrasa … |
 | `supabase/functions/zapp-callback/payload.test.ts` | 18 | unwrapPayload desembrulha data e aceita raiz plana · message.status valido vira escrita de status · message.status com status desconhecido e ignorado sem perder id · status em maiuscula e normalizado … |
 | `supabase/functions/_shared/phone.test.ts` | 17 | normaliza celular com máscara · normaliza celular já com DDI · normaliza celular cru e remove zero de discagem · normaliza telefone fixo de 10 dígitos … |
-| `supabase/functions/lalamove-webhook/security.test.ts` | 17 | [HMAC] FAIL-CLOSED: secret ausente rejeita mesmo com assinatura válida presente · [HMAC] assinatura correta é aceita · [HMAC] assinatura incorreta é rejeitada · [HMAC] prefixo sha256= e caixa alta são normalizados … |
 | `scripts/db-audit/register-migration.test.mjs` | 16 | splitStatements respects dollar-quoted function bodies (does not split on internal semicolons) · splitStatements strips line comments but preserves them inside dollar-quoted bodies · buildInsertSql picks a dollar-quote tag that does not collide with the statement body · parseMigrationFile rejects a filename that does not match the version_name.sql convention … |
 | `src/lib/__tests__/lalamoveCatalogCities.test.ts` | 16 | matriz servico x cidade (conferida com a API real) · Curitiba oferece exatamente os 6 servicos que a API lista · Sao Paulo oferece os 14 servicos · LALAGOFOUR existe so em RIO e SAO (nao em BHZ/CWB) … |
 | `supabase/functions/_shared/messaging/inbound-actions.test.ts` | 16 | etapa 114: confirmacao carimba o pedido e abre evento de rastreio · etapa 114: chegada carimba driver_arrived_at · etapa 114: problema abre incidente, nao confirmacao · etapa 114: atraso sem avaria e LATE_DELIVERY e severidade MEDIUM … |
@@ -2303,6 +2304,7 @@ _nenhum item encontrado_
 | `notifyDriver` | `supabase/functions/lalamove-webhook/index.ts` |
 | `notifyDriverEvent` | `supabase/functions/lalamove-webhook/index.ts` |
 | `notifyError` | `supabase/functions/lalamove-webhook/index.ts` |
+| `notify_webhook_security_event` | `supabase/functions/lalamove-webhook/index.ts` |
 | `sendNotification` | `supabase/functions/lalamove-webhook/index.ts` |
 | `resend.emails.send` | `supabase/functions/new-device-alert/index.ts` |
 | `invoke(` | `supabase/functions/send-notification/index.ts` |
@@ -2551,6 +2553,7 @@ _nenhum item encontrado_
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |
 | Atualiza lalamove_id somente se ainda estiver no ID antigo (evita sobrescrever migrações posteriores). | `supabase/functions/lalamove-webhook/index.ts` |
 | ── HMAC Validation (FAIL-CLOSED) ── | `supabase/functions/lalamove-webhook/security.ts` |
+| nao pode gerar alerta CRITICAL de integracao. Assinatura presente e invalida | `supabase/functions/lalamove-webhook/security.ts` |
 | ── Lalamove v3 body-signature validation ── | `supabase/functions/lalamove-webhook/security.ts` |
 | 3. NÃO existe SQL cru, NÃO existe leitura de tabelas de negócio e NÃO existe | `supabase/functions/mcp-query/index.ts` |
 | `mcp_introspect`, que aceita apenas operações de uma allowlist fixa. | `supabase/functions/mcp-query/index.ts` |

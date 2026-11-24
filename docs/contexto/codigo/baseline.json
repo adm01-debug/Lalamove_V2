@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "524a6f48e4e93b74de95c9e3940ddf95e93bd660",
+  "commit": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
   "branch": "main",
-  "data_commit": "2026-11-24T11:35:51-03:00",
+  "data_commit": "2026-11-24T11:46:31-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "aacd178",
+    "data": "2026-11-24",
+    "assunto": "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)"
+   },
    {
     "sha": "524a6f4",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "4040276",
     "data": "2026-11-23",
     "assunto": "chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)"
-   },
-   {
-    "sha": "a1e0893",
-    "data": "2026-11-23",
-    "assunto": "fix: estado de erro e retry nas paginas que ficavam em branco (#334)"
    }
   ],
   "arquivos_mudados_7d": 493,
@@ -188,11 +188,11 @@
     "mudancas": 15
    },
    {
-    "pasta": "docs/MAPBOX.md",
-    "mudancas": 13
+    "pasta": "supabase/functions/lalamove-webhook",
+    "mudancas": 14
    },
    {
-    "pasta": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "pasta": "docs/MAPBOX.md",
     "mudancas": 13
    }
   ],
@@ -254,6 +254,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 11
+   },
+   {
     "arquivo": "docs/pendencias/_ordem.md",
     "mudancas": 10
    },
@@ -278,10 +282,6 @@
     "mudancas": 10
    },
    {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 10
-   },
-   {
     "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 8
    },
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 259
+    "commits": 260
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1117,
   "arquivos_codigo": 716,
-  "linhas_codigo": 141311,
+  "linhas_codigo": 141387,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 120,
-   "linhas": 29134
+   "linhas": 29210
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -606,7 +606,7 @@
   },
   {
    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-   "linhas": 1074
+   "linhas": 1079
   },
   {
    "arquivo": "supabase/functions/_shared/schemas.ts",

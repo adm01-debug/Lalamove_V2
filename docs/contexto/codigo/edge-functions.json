@@ -717,7 +717,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
    "arquivos": 1,
-   "linhas": 214,
+   "linhas": 249,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -801,7 +801,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-webhook/index.ts",
    "arquivos": 3,
-   "linhas": 1243,
+   "linhas": 1259,
    "verify_jwt": false,
    "metodos": [
     "OPTIONS"

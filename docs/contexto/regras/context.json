@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "524a6f48e4e93b74de95c9e3940ddf95e93bd660",
+  "sha": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 14:36 UTC",
+  "generated_at": "2026-11-24 14:46 UTC",
   "files_total": 1111,
   "code_files": 930,
-  "code_lines": 163071
+  "code_lines": 163147
  },
  "version": "1.3.2",
- "facts_hash": "0ca82a0cf89a7ba9",
+ "facts_hash": "09babe162e02754f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -19311,6 +19311,7 @@
      "notifyDriver",
      "notifyDriverEvent",
      "notifyError",
+     "notify_webhook_security_event",
      "sendNotification"
     ],
     "webhook_events": [],
@@ -22815,7 +22816,7 @@
   {
    "module": "supabase/functions",
    "files": 120,
-   "lines": 29134,
+   "lines": 29210,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22905,7 +22906,7 @@
     "index.ts: CHANGE_DRIVER_REASONS",
     "route.ts: GatewayTarget, RoutedCall, UnsupportedCall, RouteResult, isUnsupported, translateParams",
     "normalize.ts: normalizeLalamoveV3Payload",
-    "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
+    "security.ts: timingSafeEqual, validateHmacSignature, classifySignatureFailure, validateLalamoveV3Signature",
     "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation"
    ],
    "docs": [
@@ -23197,12 +23198,14 @@
      "src/hooks/useSidebarCounts.ts",
      "supabase/functions/_shared/messaging/auto-notices.ts",
      "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/lalamove-token-refresh/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/route-analyzer/index.ts"
     ],
     "update": [
      "src/hooks/useActiveAlerts.ts",
      "supabase/functions/check-driver-alerts/index.ts",
+     "supabase/functions/lalamove-token-refresh/index.ts",
      "supabase/functions/send-notification/index.ts"
     ],
     "ref": [
@@ -28872,6 +28875,10 @@
    },
    {
     "file": "supabase/functions/lalamove-webhook/security.ts",
+    "text": "nao pode gerar alerta CRITICAL de integracao. Assinatura presente e invalida"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.ts",
     "text": "── Lalamove v3 body-signature validation ──"
    },
    {
@@ -32489,6 +32496,11 @@
     "file": "supabase/functions/lalamove-token-refresh/index.ts",
     "name": "CLAIM_WINDOW_SECONDS",
     "value": "1"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/index.ts",
+    "name": "ALERT_DEDUP_WINDOW_SECONDS",
+    "value": "86"
    },
    {
     "file": "supabase/functions/lalamove-token-refresh/index.ts",
@@ -36582,6 +36594,12 @@
     "field": "type",
     "value": "INTEGRATION_FAILURE",
     "kind": "escreve"
+   },
+   {
+    "file": "supabase/functions/lalamove-token-refresh/index.ts",
+    "field": "type",
+    "value": "INTEGRATION_FAILURE",
+    "kind": "filtra"
    },
    {
     "file": "supabase/functions/lalamove-uapi/index.ts",
@@ -43488,6 +43506,22 @@
     "name": "[v3 normalize] timestamp epoch em segundos vira ISO quando nao ha updatedAt"
    },
    {
+    "file": "supabase/functions/lalamove-webhook/security.test.ts",
+    "name": "[classify] request sem nenhuma assinatura vira SIGNATURE_MISSING (nao alerta)"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.test.ts",
+    "name": "[classify] assinatura presente e invalida continua SIGNATURE_INVALID (alerta)"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.test.ts",
+    "name": "[classify] corpo vazio e sem header: probe real de producao"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/security.test.ts",
+    "name": "[classify] assinatura errada no header permanece falha real"
+   },
+   {
     "file": "supabase/functions/send-notification/message-id.test.ts",
     "name": "etapa 89: mesmo evento devolve o mesmo id (idempotência)"
    },
@@ -44218,6 +44252,10 @@
    {
     "file": "supabase/functions/lalamove-webhook/index.ts",
     "call": "notifyError"
+   },
+   {
+    "file": "supabase/functions/lalamove-webhook/index.ts",
+    "call": "notify_webhook_security_event"
    },
    {
     "file": "supabase/functions/lalamove-webhook/index.ts",
@@ -49572,7 +49610,8 @@
       "escreve:supabase/functions/geo-gateway/error-monitor.ts",
       "escreve:supabase/functions/lalamove-gateway/index.ts",
       "escreve:supabase/functions/lalamove-token-refresh/index.ts",
-      "escreve:supabase/functions/rotate-tokens/index.ts"
+      "escreve:supabase/functions/rotate-tokens/index.ts",
+      "filtra:supabase/functions/lalamove-token-refresh/index.ts"
      ],
      "GEO_BUDGET_WARNING": [
       "escreve:supabase/functions/geo-gateway/index.ts"
@@ -76860,8 +76899,16 @@
   },
   "supabase/functions/lalamove-token-refresh/index.ts": {
    "path": "supabase/functions/lalamove-token-refresh/index.ts",
-   "lines": 214,
+   "lines": 249,
    "tables": [
+    {
+     "table": "alerts",
+     "op": "select"
+    },
+    {
+     "table": "alerts",
+     "op": "update"
+    },
     {
      "table": "alerts",
      "op": "insert"
@@ -76876,6 +76923,13 @@
     }
    ],
    "table_cols": {
+    "alerts": [
+     "id",
+     "is_dismissed",
+     "metadata",
+     "title",
+     "type"
+    ],
     "lalamove_uapi_sessions": [
      "id",
      "is_active",
@@ -76909,6 +76963,10 @@
      "value": "1"
     },
     {
+     "name": "ALERT_DEDUP_WINDOW_SECONDS",
+     "value": "86"
+    },
+    {
      "name": "TIMEOUT_MS",
      "value": "25"
     }
@@ -76918,6 +76976,11 @@
      "field": "type",
      "value": "INTEGRATION_FAILURE",
      "kind": "escreve"
+    },
+    {
+     "field": "type",
+     "value": "INTEGRATION_FAILURE",
+     "kind": "filtra"
     }
    ],
    "pagination": [
@@ -77024,7 +77087,7 @@
   },
   "supabase/functions/lalamove-webhook/index.ts": {
    "path": "supabase/functions/lalamove-webhook/index.ts",
-   "lines": 1074,
+   "lines": 1079,
    "tables": [
     {
      "table": "webhook_events",
@@ -77343,6 +77406,7 @@
     "notifyDriver",
     "notifyDriverEvent",
     "notifyError",
+    "notify_webhook_security_event",
     "sendNotification"
    ],
    "uses_service_role": true
@@ -77357,7 +77421,7 @@
   },
   "supabase/functions/lalamove-webhook/security.test.ts": {
    "path": "supabase/functions/lalamove-webhook/security.test.ts",
-   "lines": 179,
+   "lines": 204,
    "is_test": true,
    "doc": "Testes do gate de assinatura HMAC do webhook (fail-closed). Rodam in-memory (só WebCrypto local, sem rede). Executados no job contract-tests do CI.",
    "tests": [
@@ -77377,19 +77441,25 @@
     "[v3 normalize] WALLET_BALANCE_CHANGED (PDF p.26): balance vira escalar, sem orderId",
     "[v3 normalize] ORDER_AMOUNT_CHANGED (PDF p.24): priceBreakdown e priorityFee",
     "[v3 normalize] corpo legado (formato interno) passa intacto",
-    "[v3 normalize] timestamp epoch em segundos vira ISO quando nao ha updatedAt"
+    "[v3 normalize] timestamp epoch em segundos vira ISO quando nao ha updatedAt",
+    "[classify] request sem nenhuma assinatura vira SIGNATURE_MISSING (nao alerta)",
+    "[classify] assinatura presente e invalida continua SIGNATURE_INVALID (alerta)",
+    "[classify] corpo vazio e sem header: probe real de producao",
+    "[classify] assinatura errada no header permanece falha real"
    ]
   },
   "supabase/functions/lalamove-webhook/security.ts": {
    "path": "supabase/functions/lalamove-webhook/security.ts",
-   "lines": 97,
+   "lines": 108,
    "exports": [
     "function timingSafeEqual",
     "function validateHmacSignature",
+    "function classifySignatureFailure",
     "function validateLalamoveV3Signature"
    ],
    "rule_comments": [
     "── HMAC Validation (FAIL-CLOSED) ──",
+    "nao pode gerar alerta CRITICAL de integracao. Assinatura presente e invalida",
     "── Lalamove v3 body-signature validation ──"
    ],
    "doc": "HMAC signature verification for the Lalamove webhook. Extracted from index.ts so the security-critical logic is unit-testable.",
@@ -79516,10 +79586,22 @@
   }
  },
  "git": {
-  "sha": "524a6f48e4e93b74de95c9e3940ddf95e93bd660",
+  "sha": "aacd178270ca966abb46f2f4a7eb8ce57472dc20",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "aacd178",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)",
+    "files": [
+     "supabase/functions/lalamove-token-refresh/index.ts",
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/lalamove-webhook/security.test.ts",
+     "supabase/functions/lalamove-webhook/security.ts"
+    ]
+   },
    {
     "sha": "524a6f4",
     "date": "2026-11-24",
@@ -79885,30 +79967,12 @@
      "src/hooks/useDashboardStats.ts",
      "src/pages/DashboardRedesigned.tsx"
     ]
-   },
-   {
-    "sha": "874a336",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/zapp-callback/index.ts",
-     "supabase/functions/zapp-callback/ledger.test.ts",
-     "supabase/functions/zapp-callback/ledger.ts",
-     "supabase/functions/zapp-callback/payload.test.ts",
-     "supabase/functions/zapp-callback/payload.ts",
-     "supabase/functions/zapp-callback/security.test.ts",
-     "supabase/functions/zapp-callback/security.ts",
-     "supabase/migrations/20261125120000_notification_ledger.sql"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    11
+    10
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
@@ -79921,6 +79985,10 @@
    [
     "src/pages/NotificationHistoryPage.tsx",
     4
+   ],
+   [
+    "supabase/functions/lalamove-webhook/index.ts",
+    3
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.test.ts",
@@ -79980,10 +80048,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/notify-driver.ts",
-    2
-   ],
-   [
-    "supabase/functions/zapp-callback/index.ts",
     2
    ]
   ]
