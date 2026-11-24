@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0e04753b41` · branch `main` · 2026-11-24 10:25 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `49e4bc3551` · branch `main` · 2026-11-24 10:31 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2064,7 +2064,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1497 testes em 131 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1499 testes em 132 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2199,6 +2199,7 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/budget-error.test.ts` | 3 | orçamento bloqueado sem fallback lança ResolveError 429 · o código do erro de orçamento é GEO_BUDGET_EXCEEDED, não RATE_LIMITED · job-worker trata GEO_BUDGET_EXCEEDED como skip, não como falha retentável |
 | `supabase/functions/geo-gateway/polyline.test.ts` | 3 | polyline: exemplo oficial do Google (precisão 5) · polyline6: ida e volta preserva 6 casas · simplify: remove pontos colineares, mantém extremos e curvas |
 | `src/hooks/__tests__/realtimeChannels.test.ts` | 2 | canais realtime · dois consumidores do mesmo hook nao reutilizam o canal ja subscrito |
+| `src/lib/__tests__/realtimeTopic.test.ts` | 2 | uniqueTopic · nao repete o topic entre duas montagens |
 
 ## L. Eventos de webhook tratados (contratos com sistemas externos)
 

@@ -14,18 +14,18 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 181,
+ "total": 182,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 43,
   "guard (node --test)": 34,
-  "unit (vitest)": 86
+  "unit (vitest)": 87
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 58
+   "arquivos": 59
   },
   {
    "padrao": "guards em scripts/",
@@ -1054,6 +1054,15 @@
    "casos": 5
   },
   {
+   "arquivo": "src/lib/__tests__/realtimeTopic.test.ts",
+   "tipo": "unit (vitest)",
+   "linhas": 12,
+   "testa": [
+    "src/lib/realtimeTopic.ts"
+   ],
+   "casos": 1
+  },
+  {
    "arquivo": "src/lib/__tests__/roles.test.ts",
    "tipo": "unit (vitest)",
    "linhas": 68,
@@ -1753,6 +1762,7 @@
   "src/lib/phone.ts": 1,
   "src/lib/postMessage.ts": 1,
   "src/lib/postgrest.ts": 1,
+  "src/lib/realtimeTopic.ts": 1,
   "src/lib/roles.ts": 1,
   "src/lib/statusPalette.ts": 1,
   "src/lib/uapiErrors.ts": 2,

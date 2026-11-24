@@ -3,7 +3,7 @@
  "format_version": 1,
  "stack": {
   "linguagens": [
-   "TypeScript (596)",
+   "TypeScript (598)",
    "SQL (204)",
    "JavaScript (114)",
    "Markdown (114)",
@@ -1027,17 +1027,7 @@
    "llm-wh",
    "mcp-query"
   ],
-  "realtime": [
-   "active-tracking-changes-${++trackingChannelSequence}",
-   "live-map-tracking",
-   "password-reset-changes",
-   "report_presets:${auth.user.id}",
-   "runtime-error-logs-realtime",
-   "security-auth-logs",
-   "security-blocked-ips",
-   "security-device-alerts",
-   "security-mfa-sessions"
-  ]
+  "realtime": []
  },
  "feature_flags": {
   "total": 4,

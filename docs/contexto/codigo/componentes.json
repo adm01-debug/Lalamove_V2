@@ -2920,7 +2920,7 @@
     "LiveMapPage"
    ],
    "export_default": null,
-   "linhas": 479,
+   "linhas": 480,
    "dominio": "pages",
    "hooks_locais": [
     "useFeatureFlag"
@@ -3245,7 +3245,7 @@
     "PasswordResetApprovalsPage"
    ],
    "export_default": "PasswordResetApprovalsPage",
-   "linhas": 205,
+   "linhas": 206,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",

@@ -588,6 +588,7 @@
   "src/components/map/hooks/useTrackingData.ts": [
    "src/components/map/types.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts",
    "src/utils/logger.ts"
   ],
   "src/components/map/hooks/useTrackingTrails.ts": [
@@ -1097,7 +1098,8 @@
    "src/utils/logger.ts"
   ],
   "src/hooks/useErrorLogs.ts": [
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts"
   ],
   "src/hooks/useEvaluateDriver.ts": [
    "src/integrations/supabase/client.ts"
@@ -1241,6 +1243,7 @@
    "src/components/notifications/NotificationPreferences.tsx",
    "src/hooks/usePushNotifications.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts",
    "src/types/index.ts",
    "src/utils/alertSounds.ts",
    "src/utils/logger.ts"
@@ -1257,6 +1260,7 @@
   "src/hooks/useReportPresets.ts": [
    "src/hooks/useAdvancedReports.ts",
    "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts",
    "src/utils/logger.ts"
   ],
   "src/hooks/useRiskRules.ts": [
@@ -1280,6 +1284,7 @@
   "src/hooks/useSecurityPushNotifications.ts": [
    "src/hooks/useAuth.tsx",
    "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts",
    "src/utils/logger.ts"
   ],
   "src/hooks/useServiceWorker.ts": [
@@ -1704,7 +1709,8 @@
    "src/components/ui/card.tsx",
    "src/components/ui/toggle-group.tsx",
    "src/hooks/useFeatureFlags.ts",
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts"
   ],
   "src/pages/MFAEnrollPage.tsx": [
    "src/components/auth/MFAEnroll.tsx"
@@ -1812,7 +1818,8 @@
    "src/components/ui/textarea.tsx",
    "src/hooks/useFuseSearch.ts",
    "src/hooks/usePasswordResetActions.ts",
-   "src/integrations/supabase/client.ts"
+   "src/integrations/supabase/client.ts",
+   "src/lib/realtimeTopic.ts"
   ],
   "src/pages/PerformanceDashboardPage.tsx": [
    "src/components/ui/badge.tsx",

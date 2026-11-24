@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0e04753b412d270bcc32390e1a1bce7597a19cc4` (2026-11-24T07:25:19-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `49e4bc35515874d2fe0dff51a5385e46995ad3e7` (2026-11-24T07:31:13-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (596), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (598), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1109 |
-| arquivos_codigo | 709 |
-| linhas_codigo | 140225 |
+| arquivos_total | 1111 |
+| arquivos_codigo | 711 |
+| linhas_codigo | 140244 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 181 |
+| testes | 182 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -58,15 +58,15 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - telas: src/pages (55)
 - componentes: src/components (129), src/pages (88), src/hooks (3)
 - hooks: src/hooks (86), src/components (13), scripts/ai-context (1)
-- servicos_logica: src/lib (29), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (45)
+- servicos_logica: src/lib (30), src/utils (6), src/integrations (4)
+- testes: co-localizado (__tests__) (59), guards em scripts/ (47), supabase/functions/<edge> (45)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
 - rotas: src/App.tsx
 - menu: src/components/layout/MobileBottomNav.tsx, src/components/layout/sidebar-config.ts
 - docs: docs (37), (raiz) (7), .github (1)
-- nomenclatura: {"componentes":"PascalCase (71%)","hooks":"use + PascalCase","servicos":"camelCase (84%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (95%)"}
+- nomenclatura: {"componentes":"PascalCase (71%)","hooks":"use + PascalCase","servicos":"camelCase (85%)","edge_functions":"kebab-case (100%)","tabelas":"snake_case (95%)"}
 - instruções para agentes no repo: .hermes.md, AGENTS.md, CLAUDE.md, docs/agentes/banco.md, docs/agentes/deploy.md, docs/agentes/github-ci.md, docs/agentes/lalamove-api.md, docs/agentes/mapa-repo.md, docs/agentes/mensageria.md, docs/agentes/pendencias-dono.md, docs/agentes/regras-dominio.md
 
 ## Módulos (menu → domínio)
@@ -80,7 +80,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
 | functions | 0 | 0 | 72 | 0 | 6 | 48 |
 | hooks | 0 | 0 | 87 | 232 | 15 | 54 |
-| lib | 0 | 0 | 29 | 8 | 3 | 0 |
+| lib | 0 | 0 | 30 | 8 | 3 | 0 |
 | pages | 49 | 56 | 57 | 211 | 14 | 54 |
 | pages/map-tools | 0 | 0 | 7 | 9 | 1 | 0 |
 | pages/reports | 0 | 0 | 5 | 1 | 0 | 3 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9861 nós · 20419 arestas · 694 comunidades · grafo do commit `0e04753b`
-- comunidades maiores: cn (269), App.tsx (157), button.tsx (142), card.tsx (114), snapshot.py (106), ref_node_url (94), ref_https (91), 4. Componentes, hooks, libs e estado — **revisado** (86), send-notification/index.ts (82), client.ts (82), dependencies (81), AdvancedReportsPage.tsx (79)
+- 9863 nós · 20442 arestas · 697 comunidades · grafo do commit `49e4bc35`
+- comunidades maiores: cn (255), lucide-react (156), ref_https (134), client.ts (133), button.tsx (127), ref_node_path (113), DriversPage.tsx (112), geo-gateway/index.ts (111), snapshot.py (106), App.tsx (85), 4. Componentes, hooks, libs e estado — **revisado** (84), NotificationHistoryPage.tsx (83)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `49e4bc3` fix: topic unico em todo canal realtime de nome fixo (#348)
 - 2026-11-24 `0e04753` fix: ledger reservado antes do envio ao motorista (#347)
 - 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 - 2026-11-24 `5ae5aff` feat: aviso de chegada na coleta ao motorista (M4) (#345)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `5adbf84` fix: topic unico por montagem nos canais realtime (#336)
 - 2026-11-23 `4040276` chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)
 - 2026-11-23 `a1e0893` fix: estado de erro e retry nas paginas que ficavam em branco (#334)
-- 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

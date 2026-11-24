@@ -16,12 +16,12 @@
    "scripts/ai-context (1)"
   ],
   "servicos_logica": [
-   "src/lib (29)",
+   "src/lib (30)",
    "src/utils (6)",
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (58)",
+   "co-localizado (__tests__) (59)",
    "guards em scripts/ (47)",
    "supabase/functions/<edge> (45)"
   ],
@@ -48,7 +48,7 @@
  "nomenclatura": {
   "componentes": "PascalCase (71%)",
   "hooks": "use + PascalCase",
-  "servicos": "camelCase (84%)",
+  "servicos": "camelCase (85%)",
   "edge_functions": "kebab-case (100%)",
   "tabelas": "snake_case (95%)"
  },
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: topic unico em todo canal realtime de nome fixo (#348)",
    "fix: ledger reservado antes do envio ao motorista (#347)",
    "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)",
    "feat: aviso de chegada na coleta ao motorista (M4) (#345)",
-   "feat: lembrete de pedido agendado e aviso de proxima parada (#344)",
-   "feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)"
+   "feat: lembrete de pedido agendado e aviso de proxima parada (#344)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

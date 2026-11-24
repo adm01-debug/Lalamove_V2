@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "0e04753b412d270bcc32390e1a1bce7597a19cc4",
+  "commit": "49e4bc35515874d2fe0dff51a5385e46995ad3e7",
   "branch": "main",
-  "data_commit": "2026-11-24T07:25:19-03:00",
+  "data_commit": "2026-11-24T07:31:13-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "49e4bc3",
+    "data": "2026-11-24",
+    "assunto": "fix: topic unico em todo canal realtime de nome fixo (#348)"
+   },
    {
     "sha": "0e04753",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "c4fdb69",
     "data": "2026-11-23",
     "assunto": "feat: lote 9 - EmptyState component + vitest script (#321)"
-   },
-   {
-    "sha": "ced043f",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)"
    }
   ],
-  "arquivos_mudados_7d": 480,
+  "arquivos_mudados_7d": 484,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -145,7 +145,7 @@
    },
    {
     "pasta": "src/components/map",
-    "mudancas": 47
+    "mudancas": 48
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
@@ -266,16 +266,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 10
+   },
+   {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 10
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 10
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 9
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 248
+    "commits": 249
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1109,
-  "arquivos_codigo": 709,
-  "linhas_codigo": 140225,
+  "arquivos_total": 1111,
+  "arquivos_codigo": 711,
+  "linhas_codigo": 140244,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 181,
+  "testes": 182,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -520,11 +520,11 @@
   },
   "src/components": {
    "arquivos": 163,
-   "linhas": 29598
+   "linhas": 29597
   },
   "src/hooks": {
    "arquivos": 114,
-   "linhas": 19808
+   "linhas": 19799
   },
   "src/i18n": {
    "arquivos": 1,
@@ -535,8 +535,8 @@
    "linhas": 5379
   },
   "src/lib": {
-   "arquivos": 49,
-   "linhas": 4235
+   "arquivos": 51,
+   "linhas": 4262
   },
   "src/main.tsx": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21464
+   "linhas": 21466
   },
   "src/services": {
    "arquivos": 1,

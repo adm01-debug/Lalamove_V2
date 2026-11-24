@@ -167,7 +167,7 @@
    "hooks_exportados": [
     "useTrackingData"
    ],
-   "linhas": 115,
+   "linhas": 114,
    "dominio": "components/map",
    "tabelas": [
     "active_tracking"
@@ -177,9 +177,7 @@
    "hooks_internos": [
     "useEffect"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "usado_por": 8,
    "usado_por_arquivos": [
     "src/components/map/Google3DCanvas.tsx",
@@ -1191,7 +1189,7 @@
     "useErrorStats",
     "useResolveError"
    ],
-   "linhas": 160,
+   "linhas": 161,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -1202,9 +1200,7 @@
     "useQuery",
     "useQueryClient"
    ],
-   "canais_realtime": [
-    "runtime-error-logs-realtime"
-   ],
+   "canais_realtime": [],
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/pages/ErrorMonitoringPage.tsx"
@@ -2071,7 +2067,7 @@
     "useSLAMetricsRealtime",
     "useSidebarCountsRealtime"
    ],
-   "linhas": 478,
+   "linhas": 466,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2147,7 +2143,7 @@
    "hooks_exportados": [
     "useReportPresets"
    ],
-   "linhas": 177,
+   "linhas": 178,
    "dominio": "hooks",
    "tabelas": [
     "report_presets"
@@ -2159,9 +2155,7 @@
     "useEffect",
     "useState"
    ],
-   "canais_realtime": [
-    "report_presets:${auth.user.id}"
-   ],
+   "canais_realtime": [],
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/pages/AdvancedReportsPage.tsx"
@@ -2247,7 +2241,7 @@
    "hooks_exportados": [
     "useSecurityPushNotifications"
    ],
-   "linhas": 217,
+   "linhas": 218,
    "dominio": "hooks",
    "tabelas": [],
    "rpcs": [],
@@ -2258,12 +2252,7 @@
     "useEffect",
     "useState"
    ],
-   "canais_realtime": [
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "usado_por": 1,
    "usado_por_arquivos": [
     "src/components/notifications/PushNotificationSettings.tsx"

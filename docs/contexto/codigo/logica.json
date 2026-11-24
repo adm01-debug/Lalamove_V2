@@ -1,11 +1,11 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 45,
+ "total": 46,
  "por_camada": {
   "i18n": 1,
   "integrations": 4,
-  "lib": 29,
+  "lib": 30,
   "services": 1,
   "types": 4,
   "utils": 6
@@ -742,6 +742,31 @@
    "usado_por_modulos": [],
    "coberto_por_testes": 0,
    "orfao": true
+  },
+  {
+   "arquivo": "src/lib/realtimeTopic.ts",
+   "camada": "lib",
+   "exports": [
+    "uniqueTopic"
+   ],
+   "export_default": null,
+   "linhas": 15,
+   "tabelas": [],
+   "rpcs": [],
+   "edges": [],
+   "env": [],
+   "externos": [],
+   "zod_schemas": 0,
+   "flags": [],
+   "papeis": [],
+   "usado_por": 7,
+   "usado_por_modulos": [
+    "components/map",
+    "hooks",
+    "pages"
+   ],
+   "coberto_por_testes": 1,
+   "orfao": false
   },
   {
    "arquivo": "src/lib/roles.ts",

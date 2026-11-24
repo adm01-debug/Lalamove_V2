@@ -343,9 +343,7 @@
    ],
    "rpcs": [],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "VITE_APP_VERSION",
@@ -837,15 +835,7 @@
     "refresh_cache_view"
    ],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}",
-    "live-map-tracking",
-    "password-reset-changes",
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "PROD",
@@ -904,7 +894,7 @@
    "modulo": "components/map",
    "arquivos": 20,
    "testes": 13,
-   "linhas": 4451,
+   "linhas": 4450,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -953,9 +943,7 @@
    ],
    "rpcs": [],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "VITE_APP_VERSION",
@@ -1023,12 +1011,7 @@
    "tabelas": [],
    "rpcs": [],
    "buckets": [],
-   "canais_realtime": [
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "VITE_APP_VERSION",
@@ -1128,9 +1111,7 @@
    ],
    "rpcs": [],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "VITE_APP_VERSION",
@@ -1679,7 +1660,7 @@
    "modulo": "hooks",
    "arquivos": 87,
    "testes": 2,
-   "linhas": 16164,
+   "linhas": 16155,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2236,17 +2217,7 @@
     "refresh_cache_view"
    ],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}",
-    "live-map-tracking",
-    "password-reset-changes",
-    "report_presets:${auth.user.id}",
-    "runtime-error-logs-realtime",
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "PROD",
@@ -2533,9 +2504,9 @@
   },
   {
    "modulo": "lib",
-   "arquivos": 29,
+   "arquivos": 30,
    "testes": 6,
-   "linhas": 2621,
+   "linhas": 2636,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2617,7 +2588,7 @@
    "modulo": "pages",
    "arquivos": 57,
    "testes": 3,
-   "linhas": 17635,
+   "linhas": 17637,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",
@@ -3033,17 +3004,7 @@
     "refresh_cache_view"
    ],
    "buckets": [],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}",
-    "live-map-tracking",
-    "password-reset-changes",
-    "report_presets:${auth.user.id}",
-    "runtime-error-logs-realtime",
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "env": [
     "DEV",
     "PROD",

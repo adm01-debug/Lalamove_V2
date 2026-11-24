@@ -201,9 +201,7 @@
     "lalamove-gateway",
     "route-analyzer"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "flags": [
     "ai_route_optimization"
    ],
@@ -219,7 +217,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 99
+   "arquivos_puxados": 100
   },
   {
    "caminho": "/*",
@@ -379,7 +377,7 @@
     "img",
     "status"
    ],
-   "arquivos_puxados": 41
+   "arquivos_puxados": 42
   },
   {
    "caminho": "/analytics",
@@ -496,7 +494,7 @@
    "papeis": [
     "status"
    ],
-   "arquivos_puxados": 41
+   "arquivos_puxados": 42
   },
   {
    "caminho": "/auth",
@@ -943,9 +941,7 @@
     "lalamove-gateway",
     "route-analyzer"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "flags": [
     "ai_route_optimization"
    ],
@@ -961,7 +957,7 @@
     "status",
     "user"
    ],
-   "arquivos_puxados": 99
+   "arquivos_puxados": 100
   },
   {
    "caminho": "/delivery-metrics",
@@ -1117,12 +1113,10 @@
    "tabelas": [],
    "rpcs": [],
    "edges": [],
-   "canais_realtime": [
-    "runtime-error-logs-realtime"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "caminho": "/evaluations",
@@ -1691,10 +1685,7 @@
     "get-mapbox-token",
     "simulate-driver-movement"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}",
-    "live-map-tracking"
-   ],
+   "canais_realtime": [],
    "flags": [
     "realtime_map_updates"
    ],
@@ -1703,7 +1694,7 @@
     "radio",
     "radiogroup"
    ],
-   "arquivos_puxados": 46
+   "arquivos_puxados": 47
   },
   {
    "caminho": "/map",
@@ -2102,9 +2093,7 @@
     "lalamove-uapi",
     "send-notification"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [
     "alert",
@@ -2114,7 +2103,7 @@
     "option",
     "status"
    ],
-   "arquivos_puxados": 76
+   "arquivos_puxados": 77
   },
   {
    "caminho": "/password-reset-approvals",
@@ -2156,12 +2145,10 @@
    ],
    "rpcs": [],
    "edges": [],
-   "canais_realtime": [
-    "password-reset-changes"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/performance",
@@ -2495,12 +2482,10 @@
     "geo-gateway",
     "get-mapbox-token"
    ],
-   "canais_realtime": [
-    "report_presets:${auth.user.id}"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 20
+   "arquivos_puxados": 21
   },
   {
    "caminho": "/reset-password",
@@ -2696,18 +2681,13 @@
     "get_user_permissions"
    ],
    "edges": [],
-   "canais_realtime": [
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "flags": [],
    "papeis": [
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 24
+   "arquivos_puxados": 25
   },
   {
    "caminho": "/settings",
@@ -3080,7 +3060,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 27
+   "arquivos_puxados": 28
   },
   {
    "caminho": "/slo",
@@ -3774,15 +3754,7 @@
     "simulate-driver-movement",
     "test-notification"
    ],
-   "canais_realtime": [
-    "active-tracking-changes-${++trackingChannelSequence}",
-    "live-map-tracking",
-    "password-reset-changes",
-    "security-auth-logs",
-    "security-blocked-ips",
-    "security-device-alerts",
-    "security-mfa-sessions"
-   ],
+   "canais_realtime": [],
    "flags": [
     "ai_route_optimization",
     "realtime_map_updates"
@@ -3808,7 +3780,7 @@
     "user",
     "viewer"
    ],
-   "arquivos_puxados": 283
+   "arquivos_puxados": 284
   }
  ],
  "menu": [
