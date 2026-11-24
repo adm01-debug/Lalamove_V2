@@ -13,9 +13,19 @@
  *
  * Uso:
  *   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/uapi-collector/collect.mjs
+ *   node scripts/uapi-collector/collect.mjs --login   [janela unica de login]
+ *
+ * Renovacao do token: o script trabalha sobre um perfil Chromium persistente
+ * (`UAPI_PROFILE_DIR`). O site mantem e renova o token dentro dessa sessao; a
+ * cada coleta as requisicoes que o proprio site faz para a UAPI sao observadas,
+ * o token atual e validado contra a UAPI e, se for diferente do que esta em
+ * `lalamove_uapi_sessions`, gravado ali. Assim o painel nao morre quando o token
+ * anterior expira. `--login` abre a janela uma unica vez (SMS/captcha sao
+ * humanos), espera o token aparecer e o grava.
  *
  * Variaveis:
  *   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY  (obrigatorias)
+ *   UAPI_PROFILE_DIR        perfil Chromium persistente (default: ~/.local/share/lalamove-uapi-collector/profile)
  *   UAPI_CITY_ID            cidade das consultas (default: city_id da sessao ativa, senao 21007)
  *   UAPI_DEVICE_ID          device_id enviado na query (default: UUID novo)
  *   SNAPSHOT_TTL_HOURS      validade do snapshot (default 6)
@@ -29,12 +39,18 @@
 
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { homedir } from 'node:os';
 import path from 'node:path';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TTL_HOURS = Number(process.env.SNAPSHOT_TTL_HOURS || 6);
 const CHROMIUM_PATH = process.env.CHROMIUM_PATH || undefined;
+const LOGIN_MODE = process.argv.includes('--login');
+const LOGIN_WAIT_MS = Number(process.env.UAPI_LOGIN_WAIT_MS || 15 * 60_000);
+const PROFILE_DIR =
+  process.env.UAPI_PROFILE_DIR ||
+  path.join(homedir(), '.local/share/lalamove-uapi-collector/profile');
 // Lista de pedidos: o painel avanca por cursor, entao cada pagina coletada vira
 // uma chave propria. Recibos sao buscados para os pedidos mais recentes.
 const ORDER_PAGES = Number(process.env.UAPI_ORDER_PAGES || 3);
@@ -101,9 +117,23 @@ async function sbFetch(pathname, init = {}) {
 
 async function activeSession() {
   const rows = await sbFetch(
-    '/rest/v1/lalamove_uapi_sessions?select=access_token,city_id,user_fid&is_active=eq.true&order=token_obtained_at.desc&limit=1',
+    '/rest/v1/lalamove_uapi_sessions?select=id,access_token,city_id,user_fid&is_active=eq.true&order=token_obtained_at.desc&limit=1',
   );
   return rows?.[0] ?? null;
+}
+
+async function saveSessionToken(session, token) {
+  if (!session?.id) return;
+  await sbFetch(`/rest/v1/lalamove_uapi_sessions?id=eq.${session.id}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify({
+      access_token: token,
+      token_obtained_at: new Date().toISOString(),
+      refresh_method: 'browser_profile',
+      is_active: true,
+    }),
+  });
 }
 
 function buildUrl(method, args, { token, deviceId, su }) {
@@ -125,6 +155,74 @@ function buildUrl(method, args, { token, deviceId, su }) {
   return `https://br-uapi.lalamove.com/index.php/?${params.toString()}`;
 }
 
+const UAPI_TOKEN_RE = /^[0-9a-f]{32}$/;
+
+// Candidatos a token de sessao, na ordem em que o site os usa: URL das
+// requisicoes da UAPI (fonte fiel), storage da pagina, cookies do perfil.
+async function candidateTokens(page, context, capturedTokens) {
+  const out = [...capturedTokens];
+
+  try {
+    const fromStorage = await page.evaluate(() => {
+      const found = [];
+      for (const store of [window.localStorage, window.sessionStorage]) {
+        try {
+          for (let i = 0; i < store.length; i++) {
+            const value = store.getItem(store.key(i)) ?? '';
+            found.push(...(value.match(/[0-9a-f]{32}/g) ?? []));
+          }
+        } catch {
+          // storage bloqueado pela pagina
+        }
+      }
+      return found;
+    });
+    out.push(...fromStorage);
+  } catch {
+    // pagina ainda navegando
+  }
+
+  try {
+    for (const cookie of await context.cookies()) {
+      out.push(...((cookie.name + cookie.value).match(/[0-9a-f]{32}/g) ?? []));
+    }
+  } catch {
+    // contexto fechando
+  }
+
+  return [...new Set(out)].filter((token) => UAPI_TOKEN_RE.test(token));
+}
+
+async function tokenWorks(page, token, deviceId, su) {
+  try {
+    const raw = await page.evaluate(
+      async (url) => (await fetch(url, { credentials: 'include' })).text(),
+      buildUrl('get_user_info', {}, { token, deviceId, su }),
+    );
+    return JSON.parse(raw)?.ret === 0;
+  } catch {
+    return false;
+  }
+}
+
+// Devolve o primeiro candidato que a UAPI aceita (ret 0).
+async function resolveSiteToken(page, context, capturedTokens, { deviceId, su }) {
+  const deadline = Date.now() + (LOGIN_MODE ? LOGIN_WAIT_MS : 20_000);
+  let seen = 0;
+
+  while (Date.now() < deadline) {
+    const candidates = await candidateTokens(page, context, capturedTokens);
+    seen = Math.max(seen, candidates.length);
+    for (const token of candidates) {
+      if (await tokenWorks(page, token, deviceId, su)) return token;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+
+  if (seen) console.error(`nenhum dos ${seen} candidato(s) de token respondeu ret 0`);
+  return null;
+}
+
 async function main() {
   const session = await activeSession();
   if (!session?.access_token) {
@@ -139,27 +237,60 @@ async function main() {
   console.log(`sessao UAPI: user_fid=${session.user_fid ?? '?'} cidade=${city}`);
 
   const chromium = await loadChromium();
-  const browser = await chromium.launch({
-    headless: true,
+  const context = await chromium.launchPersistentContext(PROFILE_DIR, {
+    headless: !LOGIN_MODE,
     executablePath: CHROMIUM_PATH,
     args: ['--no-sandbox', '--disable-dev-shm-usage'],
+    locale: 'pt-BR',
+    timezoneId: 'America/Sao_Paulo',
+    userAgent:
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36',
+    viewport: { width: 1280, height: 900 },
   });
 
+  // O proprio site chama a UAPI o tempo todo; essas requisicoes carregam o token
+  // vivo da sessao e sao observadas aqui.
+  const capturedTokens = new Set();
+  context.on('request', (req) => {
+    const match = /[?&]token=([^&]+)/.exec(req.url());
+    if (match) capturedTokens.add(decodeURIComponent(match[1]));
+  });
+
+  const page = context.pages()[0] ?? (await context.newPage());
   const collected = [];
   const failed = [];
 
   try {
-    const context = await browser.newContext({
-      locale: 'pt-BR',
-      timezoneId: 'America/Sao_Paulo',
-      userAgent:
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36',
-    });
-    const page = await context.newPage();
     // A pagina e o que injeta `x-sign-js`/`x-javascript-fingerprinting` no fetch.
     await page
-      .goto('https://web.lalamove.com/login', { waitUntil: 'networkidle', timeout: 90000 })
+      .goto(LOGIN_MODE ? 'https://web.lalamove.com/' : 'https://web.lalamove.com/login', {
+        waitUntil: 'networkidle',
+        timeout: 90000,
+      })
       .catch(() => {});
+
+    const siteToken = await resolveSiteToken(page, context, capturedTokens, { deviceId, su });
+
+    if (LOGIN_MODE) {
+      if (!siteToken) {
+        console.error('ERRO: login nao detectado — nenhum token valido apareceu na sessao');
+        await context.close().catch(() => {});
+        process.exit(4);
+      }
+      await saveSessionToken(session, siteToken);
+      await context.close().catch(() => {});
+      console.log(`LOGIN OK: token da sessao gravado (${siteToken.slice(0, 8)}...)`);
+      process.exit(0);
+    }
+
+    let activeToken = session.access_token;
+    if (siteToken && siteToken !== session.access_token) {
+      await saveSessionToken(session, siteToken);
+      activeToken = siteToken;
+      console.log(`token renovado pelo site (${siteToken.slice(0, 8)}...)`);
+    } else if (!siteToken) {
+      console.log('sem token novo no perfil: usando o token do banco');
+    }
 
     const collectResource = async (resource, method, args, token) => {
       const url = buildUrl(method, args, { token, deviceId, su });
@@ -204,7 +335,7 @@ async function main() {
     };
 
     for (const target of TARGETS) {
-      await collectResource(target.resource, target.method, target.args(city), session.access_token);
+      await collectResource(target.resource, target.method, target.args(city), activeToken);
     }
 
     // Pedidos: primeira pagina, paginas seguintes pelo cursor devolvido, e os
@@ -213,7 +344,7 @@ async function main() {
       'order_list_new',
       'order_list_new',
       { limit: 20, last_id: '' },
-      session.access_token,
+      activeToken,
     );
 
     if (orders) {
@@ -223,7 +354,7 @@ async function main() {
           `order_list_new:${cursor}`,
           'order_list_new',
           { limit: 20, last_id: cursor },
-          session.access_token,
+          activeToken,
         );
         if (!next || String(next?.data?.is_end) === '1') break;
         cursor = next?.data?.last_id;
@@ -238,12 +369,12 @@ async function main() {
           `download_pdf_receipt:${orderUuid}`,
           'download_pdf_receipt',
           { order_uuid: orderUuid, type: 'order' },
-          session.access_token,
+          activeToken,
         );
       }
     }
   } finally {
-    await browser.close().catch(() => {});
+    await context.close().catch(() => {});
   }
 
   console.log(`gravados (${collected.length}): ${collected.join(', ') || '-'}`);
