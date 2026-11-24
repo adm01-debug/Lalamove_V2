@@ -712,32 +712,38 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** envio manual aparece no aparelho e no ledger
 
 ### 133 — [L] Admin > Mensageria
-- [ ] Estado do Zapp (`/health`), provedor SMS, botão "enviar teste"; `requireMFA`; rota em `src/App.tsx` + `sidebar-config.ts`
+- [~] Estado do Zapp (`/health`), provedor SMS, botão "enviar teste"; `requireMFA`; rota em `src/App.tsx` + `sidebar-config.ts`
 - **Evidência:** tela acessível só a admin com MFA
+  **Estado real:** a tela existe e cobre a maior parte da etapa — `src/pages/MessagingSettingsPage.tsx`, rota `/settings/messaging` com `requireMFA` em `src/App.tsx`, item em `src/components/layout/sidebar-config.ts` (admin). Aba **Provedores**: provedor de WhatsApp, provedor de SMS, fallback em minutos, teto mensal em R$, `shadow_mode` e `pilot_mode`, com a lista de bloqueios que impedem envio real. **Falta:** `/health` do Zapp e o botao "enviar teste" — `supabase/functions/test-notification/index.ts:88` ainda fala Evolution API, incompativel com `whatsapp_provider=zapp`.
 
 ### 134 — [L] Editor de templates
-- [ ] Prévia com dados de um pedido real, variáveis disponíveis, contador SMS, versionamento
+- [~] Prévia com dados de um pedido real, variáveis disponíveis, contador SMS, versionamento
 - **Evidência:** editar M1 muda a próxima mensagem
+  **Estado real:** aba **Templates** versiona de verdade (`useSaveTemplateVersion` insere `version+1` ativa e desativa as anteriores), com variaveis disponiveis, contador de segmentos SMS (160 caracteres) e previa `{{var}}`. **Falta:** previa com dados de um pedido real — hoje usa valores de exemplo (`PREVIEW_VALUES`).
 
 ### 135 — [L] Matriz evento × papel
-- [ ] Ligar/desligar, ordem de canais, prazo de fallback, exige resposta
+- [~] Ligar/desligar, ordem de canais, prazo de fallback, exige resposta
 - **Evidência:** desligar M10 para o motorista → nenhuma mensagem M10
+  **Estado real:** aba **Rotas** liga/desliga cada evento, edita `fallback_after_min` e `reply_timeout_min`, e mostra os canais da rota e se exige resposta (`notification_routes`, 14 eventos em producao). **Falta:** editar a ordem dos canais e o campo `requires_reply`.
 
 ### 136 — [L] Opt-outs
-- [ ] Listar, adicionar, remover com motivo (admin)
+- [x] Listar, adicionar, remover com motivo (admin)
 - **Evidência:** CRUD funcionando com RLS
+  **Estado real:** aba **Opt-outs** lista, adiciona (telefone normalizado pelos digitos, mesma chave de `is_phone_opted_out`) e remove com motivo. Escrita/leitura so para admin — as policies de `notification_optouts` nao tem SELECT para operador, por isso a rota exige `admin`.
 
 ### 137 — [L] Uso e custo
-- [ ] Mensagens e custo por dia/mês/canal, barra do teto
+- [x] Mensagens e custo por dia/mês/canal, barra do teto
 - **Evidência:** números batem com `messaging_usage`
+  **Estado real:** aba **Uso e custo** consome `messaging_month_cost_cents()` e os ultimos 60 registros de `messaging_usage` (mensagens, segmentos, custo por dia/canal) com barra do teto e aviso de teto nao definido.
 
 ### 138 — [L] Histórico de notificações no ledger
 - [ ] `NotificationHistoryPage` passa a ler `notification_messages`; `alerts_sent` fica só como legado
 - **Evidência:** `NotificationHistoryPage.geo.test.tsx` adaptado e verde
 
 ### 139 — [L] Estados e testes das telas
-- [ ] Carregando, erro e vazio em todas as telas novas; vitest + tsc + eslint
+- [x] Carregando, erro e vazio em todas as telas novas; vitest + tsc + eslint
 - **Evidência:** CI verde (`lint-and-typecheck`, `test`, `build`)
+  **Estado real:** a tela nova cobre carregando, erro com "tentar novamente", vazio e ausencia de config; `src/pages/MessagingSettingsPage.test.tsx` com 4 testes. `tsc` sem erros, `eslint` limpo, `vitest run src/pages src/hooks` = 30 arquivos / 167 testes verdes.
 
 ## Bloco 12 — Observabilidade, custo, LGPD e segurança (140–144)
 
