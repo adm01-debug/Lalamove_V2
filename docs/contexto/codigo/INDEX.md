@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `e340ad415dd6dbaa88931def8c46c3520965158f` (2026-11-24T17:56:13-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `1d31dacea484ede899f56442b316448ac6606bd3` (2026-11-24T18:38:17-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1134 |
 | arquivos_codigo | 721 |
-| linhas_codigo | 142583 |
+| linhas_codigo | 142682 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -216,7 +216,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `job-worker` [Fila de jobs] — tabelas: active_tracking, alert_configurations, driver_locations, lalamove_orders, lalamove_stops, tracking_events; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lalamove-api` [Lalamove API v3] — tabelas: alerts, drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history, lalamove_stops; chamada por 4 arquivo(s) do front
 - `lalamove-gateway` [Lalamove API v3] — tabelas: alerts, lalamove_rate_limits, query_telemetry; chamada por 1 arquivo(s) do front
-- `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions; chamada por 0 arquivo(s) do front, por SQL/cron
+- `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 0 arquivo(s) do front, por SQL/cron
 - `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 1 arquivo(s) do front
 - `lalamove-webhook` [Lalamove API v3] (verify_jwt=false) — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
 - `llm-wh` [Dados externos] (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
@@ -293,8 +293,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9968 nós · 20696 arestas · 695 comunidades · grafo do commit `e340ad41`
-- comunidades maiores: cn (212), badge.tsx (164), ref_https (131), react (113), snapshot.py (106), client.ts (100), GeoBlockingPage.tsx (90), ref_node_fs (86), send-notification/index.ts (83), job-worker/index.ts (82), dependencies (81), DriversPage.tsx (78)
+- 9970 nós · 20701 arestas · 702 comunidades · grafo do commit `1d31dace`
+- comunidades maiores: cn (272), ref_https (139), Sidebar.tsx (120), react (116), RateLimitDashboardPage.tsx (110), lucide-react (109), snapshot.py (104), badge.tsx (96), geo-gateway/index.ts (94), ref_node_assert (91), generate.py (90), send-notification/index.ts (83)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -302,17 +302,17 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - package.json (36)
 - package-lock.json (34)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- .github/workflows/ci.yml (20)
+- .github/workflows/ci.yml (21)
 - supabase/config.toml (17)
-- supabase/functions/job-worker/index.ts (16)
-- supabase/functions/send-notification/index.ts (14)
+- supabase/functions/job-worker/index.ts (17)
+- supabase/functions/send-notification/index.ts (15)
+- src/components/orders/NewOrderDialog.tsx (14)
+- src/pages/LiveMapPage.tsx (14)
+- supabase/functions/_shared/schemas.ts (14)
+- supabase/functions/check-driver-alerts/index.ts (14)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
-- src/components/orders/NewOrderDialog.tsx (13)
-- src/pages/LiveMapPage.tsx (13)
-- supabase/functions/_shared/schemas.ts (13)
-- supabase/functions/check-driver-alerts/index.ts (13)
-- src/App.tsx (12)
+- src/App.tsx (13)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `1d31dac` feat: alerta quando o snapshot da UAPI para de atualizar (#373)
 - 2026-11-24 `e340ad4` chore: reconcilia versoes de migration aplicadas direto no banco (#372)
 - 2026-11-24 `b70d145` fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)
 - 2026-11-24 `484eb15` fix: coleta agendada nao falha quando o perfil esta em uso (#370)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `d134764` fix: mapas e SLA so consideram tracking ativo (#361)
 - 2026-11-24 `1b18f65` fix: guardian so avalia tracking ativo (#360)
 - 2026-11-24 `aacd178` fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)
-- 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

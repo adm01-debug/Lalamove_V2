@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e340ad415d` · branch `main` · 2026-11-24 20:56 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `1d31dacea4` · branch `main` · 2026-11-24 21:38 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1546,6 +1546,7 @@ _nenhum item encontrado_
 | `CLAIM_WINDOW_SECONDS` | `1` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `ALERT_DEDUP_WINDOW_SECONDS` | `86` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `TIMEOUT_MS` | `25` | `supabase/functions/lalamove-token-refresh/index.ts` |
+| `SNAPSHOT_STALE_MINUTES` | `120` | `supabase/functions/lalamove-token-refresh/index.ts` |
 | `HCOUNTRY` | `'20000'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
 | `HLANG` | `'pt_BR'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
 | `APP_VERSION` | `'5.37.0'` | `supabase/functions/lalamove-token-refresh/uapi-direct.ts` |
@@ -2560,6 +2561,7 @@ _nenhum item encontrado_
 | ── 4. Chamada com deadline ──────────────────────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | ── 5. Telemetria de rate limit (Etapa 14) ───────────────────────────── | `supabase/functions/lalamove-gateway/index.ts` |
 | * Ação conhecida mas que não pode ser atendida sem o proxy externo. */ | `supabase/functions/lalamove-gateway/route.ts` |
+| Watchdog nao pode derrubar o worker de refresh. | `supabase/functions/lalamove-token-refresh/index.ts` |
 | Anti-WAF headers required for UAPI | `supabase/functions/lalamove-uapi/index.ts` |
 | Rate limit respect | `supabase/functions/lalamove-uapi/index.ts` |
 | HMAC validation. | `supabase/functions/lalamove-webhook/index.ts` |

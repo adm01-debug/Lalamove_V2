@@ -7737,6 +7737,7 @@
    "criada_em": "20261126140000_uapi_snapshot.sql",
    "usada_no_front": 0,
    "usada_em_edges": [
+    "lalamove-token-refresh",
     "lalamove-uapi"
    ],
    "triggers": [],

@@ -717,7 +717,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-token-refresh/index.ts",
    "arquivos": 2,
-   "linhas": 401,
+   "linhas": 456,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -726,7 +726,8 @@
    "usa_service_role": true,
    "tabelas": [
     "alerts",
-    "lalamove_uapi_sessions"
+    "lalamove_uapi_sessions",
+    "lalamove_uapi_snapshot"
    ],
    "rpcs": [
     "claim_alert_notification"

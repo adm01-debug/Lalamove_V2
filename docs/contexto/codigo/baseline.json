@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e340ad415dd6dbaa88931def8c46c3520965158f",
+  "commit": "1d31dacea484ede899f56442b316448ac6606bd3",
   "branch": "main",
-  "data_commit": "2026-11-24T17:56:13-03:00",
+  "data_commit": "2026-11-24T18:38:17-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "1d31dac",
+    "data": "2026-11-24",
+    "assunto": "feat: alerta quando o snapshot da UAPI para de atualizar (#373)"
+   },
    {
     "sha": "e340ad4",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "520a9a2",
     "data": "2026-11-24",
     "assunto": "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)"
-   },
-   {
-    "sha": "49e4bc3",
-    "data": "2026-11-24",
-    "assunto": "fix: topic unico em todo canal realtime de nome fixo (#348)"
    }
   ],
   "arquivos_mudados_7d": 520,
@@ -215,7 +215,7 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 20
+    "mudancas": 21
    },
    {
     "arquivo": "supabase/config.toml",
@@ -223,10 +223,26 @@
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
-    "mudancas": 16
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/send-notification/index.ts",
+    "mudancas": 15
+   },
+   {
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 14
+   },
+   {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 14
    },
    {
@@ -238,39 +254,27 @@
     "mudancas": 13
    },
    {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 13
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/App.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 12
+    "mudancas": 13
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
+    "mudancas": 11
+   },
+   {
+    "arquivo": "src/components/map/LiveMap.tsx",
     "mudancas": 11
    },
    {
@@ -282,26 +286,22 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "src/hooks/useRegionResolver.ts",
-    "mudancas": 9
-   },
-   {
-    "arquivo": "src/integrations/supabase/types.ts",
-    "mudancas": 9
-   },
-   {
     "arquivo": "src/components/layout/MobileSidebar.tsx",
-    "mudancas": 8
+    "mudancas": 9
+   },
+   {
+    "arquivo": "src/components/layout/sidebar-config.ts",
+    "mudancas": 9
+   },
+   {
+    "arquivo": "src/components/map/MapHUD.tsx",
+    "mudancas": 9
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 273
+    "commits": 274
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1134,
   "arquivos_codigo": 721,
-  "linhas_codigo": 142583,
+  "linhas_codigo": 142682,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -504,7 +504,7 @@
   },
   "scripts/uapi-collector": {
    "arquivos": 1,
-   "linhas": 399
+   "linhas": 443
   },
   "scripts/ui-audit": {
    "arquivos": 6,
@@ -568,7 +568,7 @@
   },
   "supabase/functions": {
    "arquivos": 122,
-   "linhas": 29510
+   "linhas": 29565
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -687,7 +687,7 @@
  ],
  "qualidade": {
   "any": 138,
-  "console_log": 422,
+  "console_log": 423,
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 5,
