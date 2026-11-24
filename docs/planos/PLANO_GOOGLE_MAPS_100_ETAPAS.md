@@ -1086,3 +1086,32 @@ Bloco 8 após Bloco 2 · Bloco 9 transversal
 Custo estimado em regime (30 pedidos/dia, Curitiba): autocomplete ~900 sessões/mês (grátis) · geocode ~300 (grátis) · rotas ~1.800 (grátis até 10k) · matrix ~50k elementos/mês (~40k acima do grátis ≈ US$ 200 Essentials) ⇒ **o item que pesa é ETA**; D9 derruba para ~15k elementos (US$ 25). Mapa: Mapbox dentro dos 50k loads.
 
 PRs previstas (uma por etapa agrupável, branch `claude/<tipo>-<slug>-<AAMMDD-HHMM>`): ~25 PRs. 🔒 aguardam o dono: 10 (rotação), 11–20 (DDL), 70 (cron), 15/30 (custo).
+
+---
+
+## Laudo de verificação dos blocos 4, 6 e 8 (24/11/2026)
+
+Auditoria de leitura + produção, sem diff. Objetivo era confirmar se algo desses blocos ainda estava
+faltando antes de abrir PR. **Conclusão: os três blocos já estão implementados e ligados.** Evidências:
+
+- **Bloco 4 (rota/ETA).** `geo_settings` em produção tem 12 funções, **todas** com `provider = mapbox`
+  (apenas `validate` = `off`) ⇒ nenhuma conta Google é necessária para rota/ETA funcionar.
+- **Bloco 6 (horário silencioso).** Implementado em `supabase/functions/send-notification/index.ts`:
+  `loadQuietHours` lê `geo_defaults.quiet_hours_start/end/tz` (l.86-98), o gate fica nas l.217-263 e
+  reenfileira em `job_queue` com `next_retry_at` + `dedup_key deferred:<alert_id>`, respeitando
+  `metadata.always_send` e `is_escalation`. O deferimento é consumido: `processNotification`
+  (`job-worker/index.ts:126-142`) reinvoca a função e o claim respeita `next_retry_at <= now()`
+  (`20261122120200_job_queue_system.sql:99`). Cobertura de bordas em
+  `supabase/functions/send-notification/quiet-hours.test.ts` — `deno test` = **8 passed / 0 failed**
+  (início inclusivo, fim exclusivo, madrugada, rollover de dia, tz America/Sao_Paulo).
+- **Bloco 8 (painel Mapas & Custos).** `geo_budget` = 50 USD/mês para google e mapbox com
+  `hard_stop`; `geo_defaults` = janela 07:00-20:00 America/Sao_Paulo; `order_geo_events` (30 dias) = 1
+  evento, classificado `no_recipient` — que **não** é gap: `geo_emit_event`
+  (`20261122130100_geo_foundation.sql:347-387`) sempre grava a linha em `alerts`, e o
+  `NotificationHistoryPage` (rota em `App.tsx:188`, item "Histórico" na sidebar) exibe esse estado ao
+  operador. `job_queue type=notification` (3 dias) = 1 COMPLETED; `deferred_quiet_status` = null
+  porque o único evento caiu dentro da janela — comportamento esperado, não defeito.
+
+Ressalva: o caminho de deferimento por horário silencioso ainda **não** foi exercitado por dado real
+de produção (só existe 1 evento geo, dentro da janela). A garantia vem dos testes de borda, não de um
+caso real.
