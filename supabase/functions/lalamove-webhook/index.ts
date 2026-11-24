@@ -7,7 +7,7 @@ import { logger } from "../_shared/logger.ts";
 import { resolveContractVersion, parseJsonBody, validateContract, errorResponse } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
-import { validateHmacSignature, validateLalamoveV3Signature } from "./security.ts";
+import { validateHmacSignature, validateLalamoveV3Signature, classifySignatureFailure } from "./security.ts";
 import { normalizeLalamoveV3Payload } from "./normalize.ts";
 import { normalizePhone } from "../_shared/phone.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
@@ -225,8 +225,13 @@ serve(async (req) => {
     
     if (!hmacResult.valid) {
       logger.warn(`[Webhook] HMAC validation failed: ${hmacResult.reason}`);
+      // Probe sem assinatura fica auditado como SIGNATURE_MISSING: o trigger
+      // notify_webhook_security_event() so alerta SIGNATURE_INVALID/REPLAY_REJECTED,
+      // entao varredura externa para de poluir o painel de alertas criticos.
+      const hasAnySignature = Boolean(signature)
+        || Boolean(preParsed && typeof preParsed === 'object' && 'signature' in preParsed);
       await supabase.from('webhook_events').insert({
-        event_type: 'SIGNATURE_INVALID',
+        event_type: classifySignatureFailure(hasAnySignature),
         raw_payload: { body: rawBody.substring(0, 1000), signature, reason: hmacResult.reason },
         processed: true,
         error_message: hmacResult.reason,

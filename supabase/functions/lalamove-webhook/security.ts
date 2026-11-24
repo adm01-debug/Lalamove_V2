@@ -46,6 +46,17 @@ export async function validateHmacSignature(
   }
 }
 
+// ── Classificacao do evento de rejeicao ──
+// Requisicao sem NENHUMA assinatura (nem no corpo v3, nem no header) e probe,
+// scanner ou cliente mal configurado: nao prova que o segredo esta errado, entao
+// nao pode gerar alerta CRITICAL de integracao. Assinatura presente e invalida
+// e falha real (segredo divergente) e continua alertando.
+export function classifySignatureFailure(
+  hasAnySignature: boolean,
+): 'SIGNATURE_INVALID' | 'SIGNATURE_MISSING' {
+  return hasAnySignature ? 'SIGNATURE_INVALID' : 'SIGNATURE_MISSING';
+}
+
 // ── Lalamove v3 body-signature validation ──
 // Formula oficial (v3_Webhook_v1.5.pdf p.8 + sample code da Lalamove):
 //   raw      = `${timestamp}\r\nPOST\r\n${path}\r\n\r\n${JSON.stringify(data)}`
