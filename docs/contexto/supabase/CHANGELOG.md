@@ -2,6 +2,10 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 00:32 UTC
+
+- **realtime** adicionado (3): `supabase_realtime_messages_publication:realtime.messages_2026_11_25`, `supabase_realtime_messages_publication:realtime.messages_2026_11_26`, `supabase_realtime_messages_publication:realtime.messages_2026_11_27`
+
 ## 2026-11-23 23:14 UTC
 
 - **colunas** adicionado (43): `public.drivers.last_reply_at`, `public.drivers.preferred_channel`, `public.drivers.whatsapp_checked_at`, `public.drivers.whatsapp_status`, `public.message_templates.body`, `public.message_templates.channel`, `public.message_templates.created_at`, `public.message_templates.event`, `public.message_templates.id`, `public.message_templates.is_active`, `public.message_templates.key`, `public.message_templates.max_length`, `public.message_templates.role`, `public.message_templates.updated_at`, `public.message_templates.updated_by`, `public.message_templates.variables`, `public.message_templates.version`, `public.messaging_settings.id`, `public.messaging_settings.monthly_budget_cents`, `public.messaging_settings.pilot_mode`, `public.messaging_settings.quiet_hours_by_role`, `public.messaging_settings.shadow_mode`, `public.messaging_settings.sms_fallback_after_min`, `public.messaging_settings.sms_provider`, `public.messaging_settings.updated_at`, `public.messaging_settings.updated_by`, `public.messaging_settings.whatsapp_provider`, `public.messaging_usage.channel`, `public.messaging_usage.cost_cents`, `public.messaging_usage.day`, `public.messaging_usage.messages`, `public.messaging_usage.provider`, `public.messaging_usage.segments`, `public.messaging_usage.updated_at`, `public.notification_routes.channels`, `public.notification_routes.event`, `public.notification_routes.fallback_after_min`, `public.notification_routes.is_enabled`, `public.notification_routes.reply_timeout_min`, `public.notification_routes.requires_reply` … (+3)

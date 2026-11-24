@@ -15,36 +15,36 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | tabela | linhas (~) | total | heap | índices | linhas mortas (~) | seq scans (~) | idx scans (~) | último autovacuum |
 |---|---|---|---|---|---|---|---|---|
 | public.geo_cache | ~700 | 4.8 MB | 472.0 KB | 200.0 KB | 0 | ~10 | ~3.7k | 2026-11-23 |
-| public.job_queue | ~2.4k | 1.8 MB | 1.3 MB | 464.0 KB | ~40 | ~120 | ~16.2k | 2026-11-23 |
-| public.query_telemetry | ~1.7k | 1.0 MB | 288.0 KB | 736.0 KB | 0 | ~110 | ~20 | 2026-11-23 |
-| public.alerts | ~1.3k | 1008.0 KB | 424.0 KB | 544.0 KB | 4 | ~2.8k | ~35.2k | 2026-11-16 |
-| public.job_queue_processing_log | ~2.6k | 640.0 KB | 336.0 KB | 264.0 KB | 0 | 4 | 1 | 2026-11-22 |
-| public.active_tracking | ~20 | 416.0 KB | 112.0 KB | 64.0 KB | ~20 | ~4.3k | ~3.5k | 2026-11-23 |
-| public.lalamove_orders | ~50 | 288.0 KB | 24.0 KB | 232.0 KB | 7 | ~920 | ~41.8k |  |
-| public.contract_version_usage | ~110 | 240.0 KB | 104.0 KB | 96.0 KB | ~70 | ~20 | ~10.4k | 2026-11-23 |
+| public.job_queue | ~2.4k | 1.8 MB | 1.3 MB | 464.0 KB | ~130 | ~120 | ~16.5k | 2026-11-23 |
+| public.query_telemetry | ~1.7k | 1.1 MB | 288.0 KB | 752.0 KB | 0 | ~110 | ~20 | 2026-11-23 |
+| public.alerts | ~1.3k | 1008.0 KB | 424.0 KB | 544.0 KB | 4 | ~2.8k | ~36.5k | 2026-11-16 |
+| public.job_queue_processing_log | ~2.7k | 648.0 KB | 344.0 KB | 264.0 KB | 0 | 4 | 1 | 2026-11-23 |
+| public.active_tracking | ~20 | 416.0 KB | 112.0 KB | 64.0 KB | ~10 | ~4.3k | ~3.6k | 2026-11-23 |
+| public.lalamove_orders | ~50 | 288.0 KB | 24.0 KB | 232.0 KB | 7 | ~940 | ~42.7k |  |
+| public.contract_version_usage | ~120 | 240.0 KB | 104.0 KB | 96.0 KB | ~70 | ~20 | ~10.6k | 2026-11-24 |
 | public.webhook_events | ~160 | 200.0 KB | 40.0 KB | 128.0 KB | 4 | ~30 | ~10 |  |
 | public.lalamove_rate_limits | ~130 | 160.0 KB | 56.0 KB | 72.0 KB | 0 | ~20 | 3 |  |
 | public.tracking_events_y2026m08 | ~200 | 152.0 KB | 40.0 KB | 80.0 KB | 0 | ~40 | 2 |  |
 | public.contacts | ~30 | 144.0 KB | 8.0 KB | 128.0 KB | 2 | ~90 | ~70 |  |
-| public.driver_approval_queue | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~270 | ~3.7k |  |
-| public.cache_refresh_log | ~140 | 128.0 KB | 24.0 KB | 64.0 KB | 3 | ~40 | ~120 | 2026-11-23 |
+| public.driver_approval_queue | 0 | 144.0 KB | 8.0 KB | 128.0 KB | ~10 | ~320 | ~3.7k |  |
+| public.cache_refresh_log | ~140 | 128.0 KB | 24.0 KB | 64.0 KB | 6 | ~40 | ~120 | 2026-11-23 |
 | public.tracking_events_y2026m11 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | ~10 | 2 |  |
 | public.tracking_events_y2026m12 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 8 | 2 |  |
 | public.tracking_events_y2027m01 | 0 | 120.0 KB | 0 B | 112.0 KB | 0 | 8 | 2 |  |
 | public.alert_dedup | 7 | 112.0 KB | 8.0 KB | 64.0 KB | ~40 | ~4.8k | ~110 | 2026-11-23 |
 | public.audit_log | 0 | 112.0 KB | 16.0 KB | 64.0 KB | 5 | 5 | 6 |  |
 | public.driver_evaluations | 0 | 112.0 KB | 8.0 KB | 96.0 KB | 2 | ~30 | 1 |  |
-| public.drivers | ~20 | 112.0 KB | 8.0 KB | 96.0 KB | 2 | ~13.7k | ~18.8k |  |
-| public.driver_incidents | ~20 | 96.0 KB | 8.0 KB | 80.0 KB | 0 | ~620 | ~100 |  |
+| public.drivers | ~20 | 112.0 KB | 8.0 KB | 96.0 KB | 2 | ~14.2k | ~18.9k |  |
+| public.driver_incidents | ~20 | 96.0 KB | 8.0 KB | 80.0 KB | 0 | ~630 | ~100 |  |
 | public.user_devices | 2 | 96.0 KB | 8.0 KB | 48.0 KB | ~10 | ~60 | ~100 | 2026-11-21 |
 | public.alert_configurations | 0 | 88.0 KB | 16.0 KB | 40.0 KB | ~40 | ~27k | ~24.3k |  |
 | public.auth_logs | 1 | 88.0 KB | 8.0 KB | 72.0 KB | 0 | ~100 | ~20 |  |
 | public.lalamove_status_history | ~130 | 88.0 KB | 32.0 KB | 48.0 KB | 1 | ~20 | ~10 |  |
 | public.cron_job_logs | 0 | 80.0 KB | 8.0 KB | 48.0 KB | ~40 | ~110 | ~10 | 2026-10-11 |
-| public.geo_usage | ~30 | 80.0 KB | 8.0 KB | 32.0 KB | ~30 | ~4.4k | ~2.2k | 2026-11-23 |
+| public.geo_usage | ~40 | 80.0 KB | 8.0 KB | 32.0 KB | ~20 | ~4.5k | ~2.2k | 2026-11-23 |
 | public.message_templates | 0 | 80.0 KB | 8.0 KB | 64.0 KB | 0 | 6 | ~20 |  |
 | public.order_geo_events | 1 | 80.0 KB | 8.0 KB | 64.0 KB | 2 | ~20 | 3 |  |
-| public.user_roles | 2 | 80.0 KB | 8.0 KB | 64.0 KB | 3 | ~115.5k | ~197k |  |
+| public.user_roles | 2 | 80.0 KB | 8.0 KB | 64.0 KB | 3 | ~157k | ~197k |  |
 | public.alerts_sent | 0 | 72.0 KB | 8.0 KB | 56.0 KB | 3 | ~30 | ~110 |  |
 | public.tracking_events_default | 0 | 72.0 KB | 0 B | 64.0 KB | 0 | ~50 | 2 |  |
 | public.tracking_events_y2026m05 | 0 | 72.0 KB | 0 B | 64.0 KB | 0 | ~40 | 2 |  |
@@ -56,26 +56,26 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | public.notification_messages | 0 | 64.0 KB | 0 B | 56.0 KB | 0 | 7 | 0 |  |
 | public.runtime_error_logs | 0 | 64.0 KB | 0 B | 56.0 KB | 0 | ~110 | ~20 |  |
 | public.lalamove_stop_proofs | 0 | 56.0 KB | 0 B | 48.0 KB | 0 | ~30 | 0 |  |
-| public.role_permissions | ~60 | 56.0 KB | 8.0 KB | 48.0 KB | 0 | ~230 | ~150 |  |
+| public.role_permissions | ~60 | 56.0 KB | 8.0 KB | 48.0 KB | 0 | ~240 | ~160 |  |
 | public.feature_flags | 3 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~50 | 3 |  |
 | public.lalamove_order_replacements | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~20 | 2 |  |
 | public.lalamove_webhook_config | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | 5 | 2 |  |
 | public.login_attempts | 0 | 48.0 KB | 0 B | 40.0 KB | 0 | ~110 | ~20 |  |
 | public.mcp_diagnostics_grants | 1 | 48.0 KB | 8.0 KB | 32.0 KB | 2 | ~40 | ~20 |  |
-| public.notification_routes | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | 3 | ~20 |  |
-| public.permissions | ~30 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~170 | ~3.3k |  |
+| public.notification_routes | 0 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | 4 | ~20 |  |
+| public.permissions | ~30 | 48.0 KB | 8.0 KB | 32.0 KB | 0 | ~180 | ~3.4k |  |
 | public.contract_version_usage_monthly | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~10 | 2 |  |
 | public.geo_blocks | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~20 | 0 |  |
-| public.lalamove_stops | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~1.9k | 1 |  |
+| public.lalamove_stops | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~2k | 1 |  |
 | public.password_reset_tokens | 0 | 40.0 KB | 0 B | 32.0 KB | 0 | ~200 | 1 |  |
 | public.bitrix24_spa_sync | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | 4 | 1 |  |
 | public.blocked_ips | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~100 | ~10 |  |
 | public.geo_budget | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 1 | ~1.3k | 8 |  |
 | public.geo_defaults | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | 5 | ~20 |  |
-| public.geo_price_list | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 2 | ~1.2k | ~2k |  |
+| public.geo_price_list | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 2 | ~1.3k | ~2.1k |  |
 | public.geo_settings | 0 | 32.0 KB | 8.0 KB | 16.0 KB | ~30 | ~1.3k | ~80 |  |
 | public.lalamove_priority_fee_history | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~20 | 0 |  |
-| public.messaging_settings | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | 3 | 2 |  |
+| public.messaging_settings | 0 | 32.0 KB | 8.0 KB | 16.0 KB | 0 | 4 | 2 |  |
 | public.rate_limit_logs | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~100 | ~10 |  |
 | public.report_presets | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~20 | 5 |  |
 | public.user_passkeys | 0 | 32.0 KB | 0 B | 24.0 KB | 0 | ~20 | 3 |  |
@@ -104,8 +104,8 @@ Valores aproximados de propósito, para não gerar commits a cada coleta. Fora d
 | índice | tabela | tamanho |
 |---|---|---|
 | idx_query_telemetry_operation_created | public.query_telemetry | 152.0 KB |
-| idx_query_telemetry_rpc_created | public.query_telemetry | 120.0 KB |
-| idx_query_telemetry_severity_created | public.query_telemetry | 112.0 KB |
+| idx_query_telemetry_rpc_created | public.query_telemetry | 128.0 KB |
+| idx_query_telemetry_severity_created | public.query_telemetry | 120.0 KB |
 | idx_query_telemetry_table_created | public.query_telemetry | 152.0 KB |
 
 
@@ -130,30 +130,31 @@ _nenhum_
 ## Consultas mais custosas (pg_stat_statements, desde o último reset)
 | role | chamadas (~) | total ms (~) | média ms | query |
 |---|---|---|---|---|
-| postgres | ~60 | ~2.8M | 46598.10 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
-| postgres | ~29.5k | ~346.9k | 11.77 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
-| service_role | ~26.9k | ~219.4k | 8.16 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM "public"."get_pending_escalations"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ` |
+| postgres | ~60 | ~2.9M | 46881.60 | `SELECT table_schema AS schema, table_name AS "table", column_name AS "column", grantee, string_agg(privilege_type, $1 ORDER BY privilege_type) AS privileges FROM information_schema.column_privileges cp WHERE grantee NOT ` |
+| postgres | ~29.5k | ~347.1k | 11.77 | `select net.http_post( url:=$1, headers:=$2::jsonb, body:=concat($3, now(), $4)::jsonb ) as request_id` |
+| service_role | ~26.9k | ~219.5k | 8.16 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM "public"."get_pending_escalations"() pgrst_call) SELECT $3::bigint AS total_result_set, pg_catalog.count(_postgrest_t) AS page_total, coalesce(json_agg(_postgrest_t), $4) ` |
 | postgres | ~220 | ~123k | 558.93 | `SELECT e.name, n.nspname AS schema, e.default_version, x.extversion AS installed_version, e.comment, ev.schema AS default_version_schema FROM pg_available_extensions e LEFT JOIN pg_extension x ON e.name = x.extname LEFT ` |
-| postgres | ~3.2k | ~92.6k | 29.32 | `select public.process_job_queue($1)` |
-| postgres | ~76.4k | ~81.9k | 1.07 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
-| authenticator | ~110 | ~76.3k | 675.19 | `SELECT name FROM pg_timezone_names` |
-| postgres | ~60 | ~74.8k | 1226.86 | `SELECT jobid, runid, status, start_time, end_time, EXTRACT($2 FROM (end_time - start_time))::numeric(10,2) AS seconds, left(return_message, $3) AS return_message FROM (SELECT *, row_number() OVER (PARTITION BY jobid ORDE` |
-| postgres | ~76.4k | ~71.5k | 0.94 | `WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key \|\| ` |
+| postgres | ~3.2k | ~95k | 29.36 | `select public.process_job_queue($1)` |
+| postgres | ~76.6k | ~82.2k | 1.07 | `WITH rows AS ( SELECT ctid FROM net._http_response WHERE created < now() - $1 ORDER BY created LIMIT $2 ) DELETE FROM net._http_response r USING rows WHERE r.ctid = rows.ctid` |
+| authenticator | ~120 | ~79.4k | 690.26 | `SELECT name FROM pg_timezone_names` |
+| postgres | ~60 | ~76.5k | 1233.25 | `SELECT jobid, runid, status, start_time, end_time, EXTRACT($2 FROM (end_time - start_time))::numeric(10,2) AS seconds, left(return_message, $3) AS return_message FROM (SELECT *, row_number() OVER (PARTITION BY jobid ORDE` |
+| postgres | ~76.6k | ~71.8k | 0.94 | `WITH rows AS ( SELECT id FROM net.http_request_queue ORDER BY id LIMIT $1 ) DELETE FROM net.http_request_queue q USING rows WHERE q.id = rows.id RETURNING q.id, q.method, q.url, timeout_milliseconds, array(select key \|\| ` |
 | service_role | ~1.4k | ~39.1k | 27.33 | `WITH pgrst_source AS (INSERT INTO "public"."alerts"("message", "metadata", "severity", "title", "type") SELECT "pgrst_body"."message", "pgrst_body"."metadata", "pgrst_body"."severity", "pgrst_body"."title", "pgrst_body".` |
 | postgres | ~20 | ~37.2k | 2327.66 | `with page as ( select c.oid, c.relname, c.relrowsecurity, c.relforcerowsecurity, c.relreplident, nc.nspname as schema, -- Computed once here so the final select can reference it for both the -- raw byte count and pg_size` |
 | service_role | ~2.3k | ~36.1k | 16.05 | `WITH pgrst_source AS (SELECT "pgrst_call".* FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_dedup_key", "p_alert_type", "p_window_seconds" FROM json_to_record(pgrst_payload.json_data) AS _("p_dedup_key" t` |
 | service_role | ~1.4k | ~34.3k | 24.68 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_job_id", "p_error_message", "p_error_stack" FROM json_to_record(pgrst_payload.json_data) AS _("p_job_id` |
-| service_role | ~10k | ~26.8k | 2.68 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_contract_name", "p_contract_version", "p_deprecated" FROM json_to_record(pgrst_payload.json_data) AS _(` |
-| postgres | ~33.5k | ~23.8k | 0.71 | `insert into net._http_response(id, status_code, content, headers, content_type, timed_out, error_msg) values ($1, $2, $3, $4, $5, $6, $7)` |
+| service_role | ~10.2k | ~27.3k | 2.69 | `WITH pgrst_source AS (SELECT pgrst_call.pgrst_scalar FROM (SELECT $1 AS json_data) pgrst_payload, LATERAL (SELECT "p_contract_name", "p_contract_version", "p_deprecated" FROM json_to_record(pgrst_payload.json_data) AS _(` |
+| postgres | ~640 | ~24.2k | 37.79 | `SELECT public.refresh_geo_jobs()` |
 
 
 ## Conexões
 | usuário | estado | n |
 |---|---|---|
 | authenticator | idle | 11 |
-| pgbouncer | idle | 2 |
+| pgbouncer | idle | 1 |
 | postgres | active | 1 |
 | postgres | idle | 1 |
-| supabase_admin | idle | 2 |
+| supabase_admin | active | 1 |
+| supabase_admin | idle | 8 |
 | supabase_admin |  | 1 |
-| supabase_storage_admin | idle | 1 |
+| supabase_auth_admin | idle | 1 |
