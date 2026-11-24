@@ -18,6 +18,7 @@ import {
 } from "./registry.ts";
 import {
   dispatchDriverMessage,
+  planDriverMessage,
   type ChannelSenders,
   type DispatchOutcome,
   type MessagePlan,
@@ -342,7 +343,7 @@ export async function notifyDriver(
       req.seq ?? 0,
     );
 
-    const outcome: DispatchOutcome = await dispatchDriverMessage({
+    const planInput = {
       event: req.event,
       role,
       settings,
@@ -358,25 +359,26 @@ export async function notifyDriver(
         sendsInWindow: snapshot.sendsInWindow,
         monthCostCents: snapshot.monthCostCents,
       },
-      senders: options.senders ?? defaultSenders(settings),
-      variables,
-      clientMessageId,
-    });
+    };
+
+    // A decisao roda antes do envio: `dispatchDriverMessage` decide igual (mesma
+    // entrada, mesmo `now`), mas quem precisa do canal primeiro e o ledger.
+    const plan = planDriverMessage(planInput);
+    const ledgerChannel = plan.channels[0] ?? null;
 
     // Sem rota para evento x papel nao ha o que registrar: o evento nao e
     // tratado por este caminho.
-    const ledgerChannel = outcome.plan.channels[0] ?? null;
     if (!ledgerChannel) {
       return {
-        outcome: outcome.outcome === "shadow" ? "shadow" : "suppressed",
-        reason: outcome.plan.reason,
+        outcome: plan.action === "shadow" ? "shadow" : "suppressed",
+        reason: plan.reason,
         channel: null,
         ledgerId: null,
-        plan: outcome.plan,
+        plan,
       };
     }
 
-    if (outcome.outcome !== "sent") {
+    if (plan.action !== "send") {
       await supabase.from("notification_messages").insert({
         event: req.event,
         role,
@@ -387,26 +389,24 @@ export async function notifyDriver(
         recipient_phone: phone,
         client_message_id: clientMessageId,
         status: "suppressed",
-        metadata: {
-          source: "notify-driver",
-          reason: outcome.plan.reason,
-          attempts: outcome.attempts,
-        },
+        metadata: { source: "notify-driver", reason: plan.reason, attempts: [] },
       });
       return {
-        outcome: outcome.outcome,
-        reason: outcome.plan.reason ??
-          outcome.attempts.at(-1)?.errorCode ?? "falha_no_envio",
+        outcome: plan.action === "shadow" ? "shadow" : "suppressed",
+        reason: plan.reason ?? "sem_envio",
         channel: ledgerChannel,
         ledgerId: null,
-        plan: outcome.plan,
+        plan,
       };
     }
 
+    // Etapa 97: o claim vai ANTES do envio. Gravar depois abria uma janela em
+    // que dois webhooks do mesmo evento enviavam a mesma mensagem e so o
+    // segundo insert descobria a duplicidade - o motorista recebia duas.
     const claim = await claimLedger(
       supabase,
       req,
-      outcome.sentChannel ?? ledgerChannel,
+      ledgerChannel,
       role,
       clientMessageId,
     );
@@ -414,12 +414,63 @@ export async function notifyDriver(
       return {
         outcome: "duplicate",
         reason: "evento_repetido",
-        channel: outcome.sentChannel,
+        channel: ledgerChannel,
         ledgerId: null,
-        plan: outcome.plan,
+        plan,
       };
     }
     const ledgerId = claim && "id" in claim ? claim.id : null;
+
+    const outcome: DispatchOutcome = await dispatchDriverMessage({
+      ...planInput,
+      senders: options.senders ?? defaultSenders(settings),
+      variables,
+      clientMessageId,
+    });
+
+    // Plano disse "enviar" e o envio nao aconteceu: a linha ja reservada vira
+    // failed/suppressed com o motivo real, em vez de ficar "queued" eterno no
+    // painel. A reserva continua valendo: repetir o mesmo evento+seq e tratado
+    // como duplicidade, igual ao comportamento anterior.
+    if (outcome.outcome !== "sent") {
+      const reason = outcome.plan.reason ??
+        outcome.attempts.at(-1)?.errorCode ?? "falha_no_envio";
+      if (ledgerId) {
+        await supabase.from("notification_messages").update({
+          status: outcome.outcome === "failed" ? "failed" : "suppressed",
+          recipient_phone: phone,
+          metadata: {
+            source: "notify-driver",
+            reason,
+            attempts: outcome.attempts,
+          },
+        }).eq("id", ledgerId);
+      } else {
+        await supabase.from("notification_messages").insert({
+          event: req.event,
+          role,
+          direction: "outbound",
+          channel: ledgerChannel,
+          driver_id: req.driverId,
+          order_id: req.orderId ?? null,
+          recipient_phone: phone,
+          client_message_id: clientMessageId,
+          status: outcome.outcome === "failed" ? "failed" : "suppressed",
+          metadata: {
+            source: "notify-driver",
+            reason,
+            attempts: outcome.attempts,
+          },
+        });
+      }
+      return {
+        outcome: outcome.outcome,
+        reason,
+        channel: outcome.sentChannel ?? ledgerChannel,
+        ledgerId,
+        plan: outcome.plan,
+      };
+    }
     const sentText = outcome.bodies[outcome.sentChannel ?? "" as MessageChannel];
     const template = outcome.sentChannel
       ? templates[outcome.sentChannel] as MessageTemplate | undefined
@@ -429,6 +480,7 @@ export async function notifyDriver(
     if (ledgerId) {
       await supabase.from("notification_messages").update({
         status: "sent",
+        channel: outcome.sentChannel ?? ledgerChannel,
         sent_at: now.toISOString(),
         provider: outcome.sentChannel === "whatsapp"
           ? settings.whatsappProvider
