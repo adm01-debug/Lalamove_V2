@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `71cf6b0687f8d44400c153b2952d011e977373b7` (2026-11-24T09:56:51-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `53d34963d70f8ca12de31ac42a7429934ab4f68f` (2026-11-24T10:09:33-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1112 |
 | arquivos_codigo | 712 |
-| linhas_codigo | 140927 |
+| linhas_codigo | 140929 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9883 nós · 20479 arestas · 707 comunidades · grafo do commit `71cf6b06`
-- comunidades maiores: cn (255), button.tsx (187), App.tsx (120), badge.tsx (107), ref_https (99), geo-gateway/index.ts (96), @tanstack/react-query (92), 4. Componentes, hooks, libs e estado — **revisado** (85), ref_node_path (85), send-notification/index.ts (82), dependencies (81), lucide-react (81)
+- 9883 nós · 20482 arestas · 707 comunidades · grafo do commit `53d34963`
+- comunidades maiores: cn (270), button.tsx (199), App.tsx (120), badge.tsx (107), ref_https (99), geo-gateway/index.ts (96), @tanstack/react-query (92), 4. Componentes, hooks, libs e estado — **revisado** (85), ref_node_path (85), send-notification/index.ts (82), dependencies (81), client.ts (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `53d3496` fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)
 - 2026-11-24 `71cf6b0` fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)
 - 2026-11-24 `65473ca` feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)
 - 2026-11-24 `8d7ec0f` fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `f242d42` fix: rota desligada no painel passa a valer no motor (#342)
 - 2026-11-23 `5bfc969` fix: paginas de dados mostram erro e botao de tentar novamente (#341)
 - 2026-11-23 `e01dfaa` feat: historico de notificacoes passa a ler o ledger do motor (#340)
-- 2026-11-23 `3153586` feat: rotas editaveis com ordem de canais e exige resposta (#339)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

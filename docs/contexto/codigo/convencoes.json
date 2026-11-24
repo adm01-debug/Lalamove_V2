@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)",
    "fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)",
    "feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)",
    "fix: retorno do Guardian expoe quantas confirmacoes (M2) foram pedidas (#351)",
-   "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)",
-   "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)"
+   "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

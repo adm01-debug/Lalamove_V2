@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "71cf6b0687f8d44400c153b2952d011e977373b7",
+  "commit": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
   "branch": "main",
-  "data_commit": "2026-11-24T09:56:51-03:00",
+  "data_commit": "2026-11-24T10:09:33-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "53d3496",
+    "data": "2026-11-24",
+    "assunto": "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)"
+   },
    {
     "sha": "71cf6b0",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "e918dd6",
     "data": "2026-11-23",
     "assunto": "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)"
-   },
-   {
-    "sha": "874a336",
-    "data": "2026-11-23",
-    "assunto": "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)"
    }
   ],
   "arquivos_mudados_7d": 485,
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 254
+    "commits": 255
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1112,
   "arquivos_codigo": 712,
-  "linhas_codigo": 140927,
+  "linhas_codigo": 140929,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21479
+   "linhas": 21481
   },
   "src/services": {
    "arquivos": 1,
@@ -670,7 +670,7 @@
   },
   {
    "arquivo": "src/pages/NotificationHistoryPage.tsx",
-   "linhas": 525
+   "linhas": 521
   },
   {
    "arquivo": "src/components/dashboard/OrdersTable.tsx",

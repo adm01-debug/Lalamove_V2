@@ -2297,7 +2297,7 @@
     "AlertConfigCard"
    ],
    "export_default": null,
-   "linhas": 188,
+   "linhas": 194,
    "dominio": "pages/alert-configurations",
    "hooks_locais": [
     "useDeleteAlertConfiguration",
@@ -3196,7 +3196,7 @@
     "NotificationHistoryPage"
    ],
    "export_default": null,
-   "linhas": 525,
+   "linhas": 521,
    "dominio": "pages",
    "hooks_locais": [
     "useNotificationHistory",

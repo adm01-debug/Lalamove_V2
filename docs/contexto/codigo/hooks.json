@@ -525,9 +525,10 @@
     "useMemo"
    ],
    "canais_realtime": [],
-   "usado_por": 1,
+   "usado_por": 2,
    "usado_por_arquivos": [
-    "src/components/alerts/AlertsAdvanced.tsx"
+    "src/components/alerts/AlertsAdvanced.tsx",
+    "src/pages/NotificationHistoryPage.tsx"
    ],
    "coberto_por_testes": 1
   },

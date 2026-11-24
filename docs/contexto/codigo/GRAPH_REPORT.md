@@ -1,17 +1,17 @@
 # Graph Report - Lalamove_V2  (2026-11-24)
 
 ## Corpus Check
-- 1080 files · ~1,139,588 words
+- 1080 files · ~1,139,663 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 9883 nodes · 20479 edges · 707 communities (503 shown, 204 thin omitted)
+- 9883 nodes · 20482 edges · 707 communities (503 shown, 204 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 1256 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `71cf6b06`
+- Built from commit: `53d34963`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,18 +27,18 @@
 - ref_node_path
 - send-notification/index.ts
 - dependencies
-- lucide-react
 - client.ts
 - gerar.mjs
 - generate.py
 - package.json
 - AlertsPage.tsx
 - seed-database.ts
+- lucide-react
 - lint-ratchet.mjs
 - types/index.ts
-- AdvancedReportsPage.tsx
 - useRealtimeSubscriptions.ts
 - useIncidents.ts
+- AdvancedReportsPage.tsx
 - ApprovalsPage.tsx
 - check-test-inventory.mjs
 - useMapbox.ts
@@ -55,6 +55,7 @@
 - 🔍 Sistema de Screening - Lalamove Guardian
 - Onda 1 — Segurança e risco de perda de dado
 - 🏗️ Arquitetura - Lalamove Guardian
+- react
 - LiveMap.tsx
 - notify-driver.ts
 - 📘 API Reference - Lalamove Guardian
@@ -75,7 +76,6 @@
 - 📝 Logger Aprimorado
 - useWebhookEvents.ts
 - useGeoAdmin.ts
-- react
 - 20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql
 - NotificationPreferences.tsx
 - Promo Supply V2 = só compras · catálogo vive no Promo Gifts V4
@@ -104,7 +104,6 @@
 - 20251231115949_817e6539-79a0-43fd-98e6-e7bb705cf1b2.sql
 - main
 - useLalamove.ts
-- AdminTelemetriaPage.tsx
 - StatusTimeline.tsx
 - Bloco 3 — Dados, erros e estados de tela (61–85)
 - geo-gateway.ts
@@ -239,6 +238,7 @@
 - check-e2e-artifact-secrets.mjs
 - check-migration-drift.test.mjs
 - verify-production.mjs
+- OrderDetailModal.tsx
 - 20251226010001_configure_pg_cron.sql
 - Jobs ativos (`pg_cron`)
 - Lalamove V2 — estado da sessão de 21/11/2026 (continuidade)
@@ -361,7 +361,6 @@
 - scripts/db-audit — auditores de banco
 - mudou-conteudo.mjs
 - regras_negocio — regras de negócio para agentes de IA
-- RiskRulesPage.tsx
 - ProvidersTab
 - 20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql
 - 20251226000002_create_audit_log.sql
@@ -385,6 +384,7 @@
 - os
 - 📊 Diagramas de Fluxo
 - publish.sh
+- TelemetryCharts.tsx
 - DeliveryOutcome
 - public.contacts
 - 20261123150000_cache_refresh_log_restaurado.sql
@@ -638,11 +638,11 @@
 
 ### Community 0 - "cn"
 Cohesion: 0.02
-Nodes (205): 103 — [F] Suspense granular por painel, framer-motion, PerformanceDashboardPage, impactConfig, PredictiveAlerts, PredictiveAlertsProps, typeConfig, calculateTrend() (+197 more)
+Nodes (218): 103 — [F] Suspense granular por painel, framer-motion, PerformanceDashboardPage, impactConfig, PredictiveAlerts, PredictiveAlertsProps, typeConfig, CardInner() (+210 more)
 
 ### Community 1 - "button.tsx"
 Cohesion: 0.06
-Nodes (119): sonner, zod, SettingsPage, MFAEnrollProps, MFAVerifyProps, Message, QUICK_ACTIONS, MapSettingsPanelProps (+111 more)
+Nodes (127): date-fns, sonner, zod, SettingsPage, MFAEnrollProps, MFAVerifyProps, Message, QUICK_ACTIONS (+119 more)
 
 ### Community 2 - "App.tsx"
 Cohesion: 0.03
@@ -680,33 +680,33 @@ Nodes (72): 12.1 Segurança e segredos, 53 — Função `geo_evaluate_events()` 
 Cohesion: 0.02
 Nodes (81): dependencies, class-variance-authority, clsx, cmdk, date-fns, @date-fns/tz, @dnd-kit/core, @dnd-kit/sortable (+73 more)
 
-### Community 11 - "lucide-react"
-Cohesion: 0.04
-Nodes (64): Dashboard, lucide-react, DashboardRedesigned, CardInner(), CompactApprovalCard(), getUrgencyLevel(), PRIORITY_CONFIG, PriorityBadge() (+56 more)
-
-### Community 12 - "client.ts"
+### Community 11 - "client.ts"
 Cohesion: 0.04
 Nodes (51): Resolvidos — PR #125 (squash `53b286b`), Etapa 201 — O logout promete limpar as preferências da sessão anterior mas apaga apenas 2 de ~8 chaves, @lovable.dev/cloud-auth-js, DeviceDetector, EMPTY_TRAILS, TrailPoint, mockedFrom, mockedGetUser (+43 more)
 
-### Community 13 - "gerar.mjs"
+### Community 12 - "gerar.mjs"
 Cohesion: 0.03
 Nodes (64): AGG_KEYS, aliasesByBase, ALL, allDocs, ambiguos, args, banco, bancoOut (+56 more)
 
-### Community 14 - "generate.py"
+### Community 13 - "generate.py"
 Cohesion: 0.08
 Nodes (70): collections, analyze_code_file(), balanced(), build_access(), build_audit(), collect_existing_docs(), collect_rules(), detect_features() (+62 more)
 
-### Community 15 - "package.json"
+### Community 14 - "package.json"
 Cohesion: 0.03
 Nodes (69): name, private, type, version, autoprefixer, @axe-core/playwright, clsx, @dnd-kit/core (+61 more)
 
-### Community 16 - "AlertsPage.tsx"
+### Community 15 - "AlertsPage.tsx"
 Cohesion: 0.04
 Nodes (57): AlertsPage, DriversPage, MetricsPage, AlertGroupHeader(), AlertListItem, AlertsToolbar(), BulkActionsBar(), BulkActionsBarProps (+49 more)
 
-### Community 17 - "seed-database.ts"
+### Community 16 - "seed-database.ts"
 Cohesion: 0.06
 Nodes (48): @supabase/supabase-js, supabase, supabase, supabase, supabase, supabase, ADDRESSES, FIRST_NAMES (+40 more)
+
+### Community 17 - "lucide-react"
+Cohesion: 0.05
+Nodes (51): Dashboard, lucide-react, DashboardRedesigned, AIRouteChatbot(), AlertAction, AlertActionCard(), AlertActionCardProps, severityStyles (+43 more)
 
 ### Community 18 - "lint-ratchet.mjs"
 Cohesion: 0.06
@@ -716,17 +716,17 @@ Nodes (54): anchoredKey(), changedLintableFiles(), changedPaths(), changedRemove
 Cohesion: 0.05
 Nodes (56): Alertas e notificações, M-094 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer, Etapa 189 — Blacklist e Whitelist de motorista executam no primeiro clique, sem confirmação e sem desfazer, Etapa 190 — Decisão de aprovação de motorista não checa o status atual: duas abas sobrescrevem uma à outra, Etapa 222 — Fila de aprovações é cortada em 50 itens sem paginação enquanto o contador mostra o total, AlertGroupHeaderProps, AlertListItemProps, AlertsToolbarProps (+48 more)
 
-### Community 20 - "AdvancedReportsPage.tsx"
-Cohesion: 0.06
-Nodes (49): Etapa 193 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum, AdvancedReportsPage, SLODashboardPage, SystemHealthPage, ContractVersionMonthlyTrend(), formatMonth(), ContractVersionUsagePanel(), formatDate() (+41 more)
-
-### Community 21 - "useRealtimeSubscriptions.ts"
+### Community 20 - "useRealtimeSubscriptions.ts"
 Cohesion: 0.07
 Nodes (52): Etapa 085 — Canal realtime compartilhado por tópico: desmontar uma tela mata o tempo real de todas as outras (alerta crítico para de aparecer), isTypeEnabled(), SoundSettingsPanel(), AlertSeverity, defaultSettings, getNotificationPermission(), getPushSettings(), isNotificationSupported() (+44 more)
 
-### Community 22 - "useIncidents.ts"
+### Community 21 - "useIncidents.ts"
 Cohesion: 0.05
 Nodes (51): [0.8.0] - 2025-06-18, Adicionado, Causa raiz (arquivo:linha), Correção (PR #119), Defeitos secundários que apareceriam no primeiro escalonamento, P-15 · Pipeline de escalonamento de alertas morto desde o início, Pendente do dono, Sintoma (+43 more)
+
+### Community 22 - "AdvancedReportsPage.tsx"
+Cohesion: 0.06
+Nodes (43): Etapa 193 — Botao 'Exportar' da tela de pedidos nao tem handler nenhum, AdvancedReportsPage, SLODashboardPage, SystemHealthPage, ContractVersionMonthlyTrend(), formatMonth(), ContractVersionUsagePanel(), formatDate() (+35 more)
 
 ### Community 23 - "ApprovalsPage.tsx"
 Cohesion: 0.07
@@ -792,89 +792,89 @@ Nodes (45): Etapa 001 — Rotacionar a chave e o segredo HMAC da Lalamove e atua
 Cohesion: 0.05
 Nodes (43): 1.1. Componentes, 1.3. Services (Business Logic), 1.4. Estado Global (React Query), 1. Frontend (React + Vite), 1. Lalamove API, 2.1. evaluate-driver (24.52 KB) ⭐ CORE, 2.2. lalamove-webhook (27.22 KB) ⭐ CORE, 2.3. route-analyzer (6.47 KB) (+35 more)
 
-### Community 39 - "LiveMap.tsx"
+### Community 39 - "react"
+Cohesion: 0.06
+Nodes (32): class-variance-authority, react, react-i18next, CacheStatusPage, LiveMapPage, RiskRulesPage, src_components_map_livemap_statusfilter, src_components_map_livemap_vehiclefilter (+24 more)
+
+### Community 40 - "LiveMap.tsx"
 Cohesion: 0.09
 Nodes (33): 80 — Provedor de tiles vem do servidor ✅, 82 — Acessibilidade e i18n ✅, Interface — mapa e rastreamento, M-092 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece, M-093 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin, Etapa 153 — Zonas de risco do mapa são polígonos fixos escritos no código, apresentados como informação operacional, Etapa 187 — Google Earth 3D falha calado: biblioteca maps3d não é carregada com a chave própria e nenhuma mensagem ou fallback aparece, Etapa 188 — Provedor de mapa decidido por duas regras diferentes: mapa ao vivo segue a preferência do usuário, mini-mapa do pedido segue só a política do admin (+25 more)
 
-### Community 40 - "notify-driver.ts"
+### Community 41 - "notify-driver.ts"
 Cohesion: 0.09
 Nodes (38): 89 — Teste de chave / saúde, 93 — [x] Horário de silêncio por papel (Z9), 3. Rotas e páginas (56) — **revisado**, ChannelSenders, DispatchAttempt, dispatchDriverMessage(), DispatchInput, DispatchOutcome (+30 more)
 
-### Community 41 - "📘 API Reference - Lalamove Guardian"
+### Community 42 - "📘 API Reference - Lalamove Guardian"
 Cohesion: 0.05
 Nodes (40): 1. evaluate-driver, 2. lalamove-webhook, 3. route-analyzer, 4. send-notification, 5. lalamove-api (Proxy), 6. bitrix24-sync, 7. get-mapbox-token, 8. check-driver-alerts (+32 more)
 
-### Community 42 - "📦 Sistema de Filas Assíncronas - Job Queue"
+### Community 43 - "📦 Sistema de Filas Assíncronas - Job Queue"
 Cohesion: 0.05
 Nodes (40): 1. webhook, 2. notification, 3. evaluation, 4. bitrix_sync, 5. email, 6. whatsapp, 7. slack, Adicionar Job à Fila (+32 more)
 
-### Community 43 - "GoogleMapsCanvas.tsx"
+### Community 44 - "GoogleMapsCanvas.tsx"
 Cohesion: 0.09
 Nodes (24): 77 — Polyline da rota + motorista + ETA no Google ✅, buildTrailPath(), DRIVER_ANIM_MS, formatRouteBadge(), haversineM(), interpolatePosition(), LatLngLiteral, toGooglePath() (+16 more)
 
-### Community 44 - "sms.ts"
+### Community 45 - "sms.ts"
 Cohesion: 0.08
 Nodes (30): 119 — [L] Interface `SmsChannel`, 120 — [L] Provedor principal (Z2), 121 — [L] Seletor de provedor, 122 — [L] Secrets SMS 🔒, 123 — [L] Remetente, 124 — [L] Texto SMS econômico, 125 — [L] Link curto no SMS, 126 — [L] Edge `sms-callback` (+22 more)
 
-### Community 45 - "contract.ts"
+### Community 46 - "contract.ts"
 Cohesion: 0.08
 Nodes (36): RFC-7234, RFC-8594, Etapa 107 — Cada uma das cinco funcoes responde erro num formato diferente, e so um deles o front sabe ler, Etapa 262 — Erro cru da Lalamove e mensagem interna de excecao voltam para o cliente, resolverWithBlockedBudget(), buildContractUsageEvent(), buildErrorBody(), ContractErrorBody (+28 more)
 
-### Community 46 - "AppLayout"
+### Community 47 - "AppLayout"
 Cohesion: 0.06
 Nodes (36): 100 — [F] Anúncio da troca de rota em `aria-live`, 101 — [F] Barra de progresso com `role="progressbar"` acessível, 102 — [F] Skip links para as três regiões, 103 — [F] `SkipLink` sem `scrollIntoView` suave forçado, 105 — [F] Ordem de foco segue a ordem visual no mobile, 107 — [F] `aria-expanded` nas categorias colapsáveis, 108 — [F] Badge de contagem lido como texto, não como enfeite, 109 — [F][D] Swipe-back no mobile (U7) (+28 more)
 
-### Community 47 - "check-migration-drift.mjs"
+### Community 48 - "check-migration-drift.mjs"
 Cohesion: 0.10
 Nodes (35): canonicalSql(), canonicalStatements(), collectHashMarkers(), compare(), divergenceLine(), hasExactKeys(), hasSqlCode(), LEDGER_RETRY_DELAYS_MS (+27 more)
 
-### Community 48 - "Plano Mensageria aos Motoristas — Zapp Web V2 (WhatsApp) + SMS × Lalamove V2 — 150 etapas (22/11/2026)"
+### Community 49 - "Plano Mensageria aos Motoristas — Zapp Web V2 (WhatsApp) + SMS × Lalamove V2 — 150 etapas (22/11/2026)"
 Cohesion: 0.05
 Nodes (37): 140 — [L][Z] Métricas, 141 — [L][Z] Alertas operacionais, 142 — [L][Z] LGPD, 143 — [L][Z] Revisão de segurança, 144 — [L][Z] Runbook, 145 — [L] Feature flags e modo sombra, 146 — [L][Z] E2E ponta a ponta, 147 — [L] Piloto interno (+29 more)
 
-### Community 49 - "test_snapshot.py"
+### Community 50 - "test_snapshot.py"
 Cohesion: 0.08
 Nodes (30): contextlib, copy, datetime, importlib_util, io, json, pathlib, entry_file() (+22 more)
 
-### Community 50 - "lalamove-api/index.ts"
+### Community 51 - "lalamove-api/index.ts"
 Cohesion: 0.08
 Nodes (36): A-057 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação, Etapa 066 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe, Etapa 073 — `priority-fee` grava a taxa e o histórico sem checar se a Lalamove aceitou, Etapa 142 — A matriz de special requests da edge divergiu do catálogo oficial: todo extra pago escolhido na tela é descartado em silêncio antes da cotação, Etapa 282 — Cotação, criação e cancelamento de pedido na edge lalamove-api: nenhuma das 15 ações tem teste, nem a assinatura HMAC que autentica todas elas, addPriorityFee(), adminDb, ApiResult (+28 more)
 
-### Community 51 - "driver.ts"
+### Community 52 - "driver.ts"
 Cohesion: 0.07
 Nodes (35): Etapa 207 — Cálculo de risco de motorista duplicado: cópia morta no front com pesos diferentes da que roda de verdade na edge evaluate-driver, calculateRiskLevel(), createEvaluation(), evaluateDriver(), fetchDriverEvaluations(), fetchLatestEvaluation(), useCreateEvaluation(), useLatestDriverEvaluation() (+27 more)
 
-### Community 52 - "🔄 Sistema de Filas Assíncronas"
+### Community 53 - "🔄 Sistema de Filas Assíncronas"
 Cohesion: 0.05
 Nodes (36): 1. Priorização, 1. webhook, 2. Idempotência, 2. notification, 3. evaluation, 3. Payloads Pequenos, 4. Monitoramento Contínuo, 4. sync_bitrix24 (+28 more)
 
-### Community 53 - "workflow-invariants.unit.mjs"
+### Community 54 - "workflow-invariants.unit.mjs"
 Cohesion: 0.10
 Nodes (32): Estrutura, workflows, docs e testes (porte do Zapp Web V2 — grupo 1), Limitações conhecidas, O que NÃO foi portado do Zapp Web V2 (e por quê), Outros guardas desta pasta, Pendências de ligação, `scripts/ci/` — guardas de CI do Lalamove V2, AQUI, blocosDeJob() (+24 more)
 
-### Community 54 - ".metadata"
+### Community 55 - ".metadata"
 Cohesion: 0.16
 Nodes (8): function(), migration(), 24 sequências: seção × histórico/SQL disponível × repetição × recuperação., SnapshotFailureMatrixTests, SnapshotFixture, SnapshotHeartbeatTests, SnapshotSQLRecoveryTests, structural_records()
 
-### Community 55 - "useAdvancedReports.ts"
+### Community 56 - "useAdvancedReports.ts"
 Cohesion: 0.09
 Nodes (32): AdvancedReportFilters, ComparisonMetrics, ComparisonSummary, CostSummary, DailyComparisonPoint, DailyPoint, DEFAULT_FILTERS, extractRegion() (+24 more)
 
-### Community 56 - "📝 Logger Aprimorado"
+### Community 57 - "📝 Logger Aprimorado"
 Cohesion: 0.06
 Nodes (35): Backend Systems, Batch Processing, Características, Componentes Monitorados, Configurar Nível Mínimo, Contexto e Metadata, Core Components, Dashboard (/system-health-expanded) (+27 more)
 
-### Community 57 - "useWebhookEvents.ts"
+### Community 58 - "useWebhookEvents.ts"
 Cohesion: 0.08
 Nodes (30): [0.4.0] - 2025-06-14, Adicionado, ADR 002: Particionamento de `driver_locations` por Range Mensal, Consequências, Contexto, Decisão, Estratégia de Migração, Notas de Implementação (+22 more)
 
-### Community 58 - "useGeoAdmin.ts"
+### Community 59 - "useGeoAdmin.ts"
 Cohesion: 0.08
 Nodes (33): 90 — Parâmetros de geofence globais ✅, 137 — [F] `MapsSettingsPage` sem cabeçalho concorrente e com guarda, aggregateGeoLatency(), fetchProviderStatus(), GeoBudgetRow, GeoBudgetStatusRow, GeoDefaultsRow, GeoFunction (+25 more)
-
-### Community 59 - "react"
-Cohesion: 0.09
-Nodes (24): class-variance-authority, react, react-i18next, CacheStatusPage, LiveMapPage, src_components_map_livemap_statusfilter, src_components_map_livemap_vehiclefilter, MapHistoryPanelProps (+16 more)
 
 ### Community 60 - "20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql"
 Cohesion: 0.11
@@ -988,545 +988,545 @@ Nodes (27): Any, approx(), banner(), callers_status_table(), diff_fingerprints()
 Cohesion: 0.14
 Nodes (25): 12.4 Front (React), Fase 5 — Front consistente, REST API v3, Descartados como cobertos por caminho alternativo, UAPIStatusCards(), useCities(), useDriverLocation(), useLalamoveStatus() (+17 more)
 
-### Community 88 - "AdminTelemetriaPage.tsx"
-Cohesion: 0.18
-Nodes (20): date-fns, formatBucketTime(), getBucketMs(), Props, TelemetryCharts(), TelemetryRow, src_components_ui_alert_dialog_alertdialog, AlertDialogAction (+12 more)
-
-### Community 89 - "StatusTimeline.tsx"
+### Community 88 - "StatusTimeline.tsx"
 Cohesion: 0.12
 Nodes (24): STAGE_STYLE, STATUS_VARIANT, StatusTimeline(), StatusTimelineProps, buildOrderTimeline(), CANONICAL_STAGES, formatDuration(), normalizeOrderStatus() (+16 more)
 
-### Community 90 - "Bloco 3 — Dados, erros e estados de tela (61–85)"
+### Community 89 - "Bloco 3 — Dados, erros e estados de tela (61–85)"
 Cohesion: 0.07
 Nodes (27): 61 — [F] Dashboard checa o `error` das 7 queries, 62 — [F] Métricas com filtro de período e paginação, 63 — [F] Agrupamento diário em `America/Sao_Paulo`, 64 — [F] Tempo médio de entrega só com pares completos, 65 — [F] `datetime-local` em hora local, 66 — [F] Aprovação de motorista atômica com feedback, 67 — [F] `AuthProvider` nunca fica carregando para sempre, 68 — [F] Logout limpa o cache e os canais (+19 more)
 
-### Community 91 - "geo-gateway.ts"
+### Community 90 - "geo-gateway.ts"
 Cohesion: 0.12
 Nodes (22): 33 — Hook `src/hooks/useGeo.ts` ✅, 83 — Remover `mapbox-proxy` e `get-mapbox-token` redundantes, 35 — `AddressAutocomplete` provedor-agnóstico, ADDRESS, geo, Impl, invokeMock, isNotFound() (+14 more)
 
-### Community 92 - "ledger.ts"
+### Community 91 - "ledger.ts"
 Cohesion: 0.14
 Nodes (19): 57 — [Z] Painel de entregas por integração, Etapa 011 — requireAdmin da lalamove-uapi aceita papel escrito pelo proprio usuario (escalonamento) e nunca reconhece o admin de verdade, Etapa 199 — bitrix24-process-queue processa a fila sem reservar a linha e sem serializar o refresh de token, applyCallback(), applyInboundEffects(), ApplyOptions, ApplyResult, asId() (+11 more)
 
-### Community 93 - "useTrackingData.ts"
+### Community 92 - "useTrackingData.ts"
 Cohesion: 0.11
 Nodes (21): Etapa 229 — Mesma tabela active_tracking consultada por 2 a 3 pollings simultâneos e 2 canais realtime, e o kill-switch documentado não desliga o polling, Google3DCanvas(), Google3DCanvasProps, isWebGL2Supported(), GoogleMapsCanvasProps, baseRow, channelMock, onMock (+13 more)
 
-### Community 94 - "20260711185011_e422dc54-64d2-4379-8882-138f7bf9abb4.sql"
+### Community 93 - "20260711185011_e422dc54-64d2-4379-8882-138f7bf9abb4.sql"
 Cohesion: 0.08
 Nodes (26): public.bitrix24_activities, idx_active_tracking_driver_id, idx_alerts_driver_id, idx_alerts_order_id, idx_alerts_sent_alert_id, idx_bitrix24_activities_order_id, idx_driver_approval_queue_order_id, idx_driver_approval_queue_status_reviewed (+18 more)
 
-### Community 95 - "github-settings-guard.mjs"
+### Community 94 - "github-settings-guard.mjs"
 Cohesion: 0.13
 Nodes (20): cabecalhoDaMensagem(), main(), SUBJECT_MIN_LENGTH, TIPOS, CLI, RAIZ, validarMensagem(), BASELINE_PADRAO (+12 more)
 
-### Community 96 - "Lalamove V2 — Análise Exaustiva e Plano de Integração Completo"
+### Community 95 - "Lalamove V2 — Análise Exaustiva e Plano de Integração Completo"
 Cohesion: 0.08
 Nodes (25): 10. Riscos e salvaguardas, 13.1 Por que a UAPI importa (o que a v3 não dá), 13.2 O obstáculo: WAF Argus, 13.2b Medição do Argus (PoC 21/11, pré-login, Chromium+Playwright), 13.4 Fase 4 revisada — entregas, 13.5 Riscos específicos da UAPI, 13. Pilar UAPI — emulação da sessão logada do portal (`br-uapi.lalamove.com`), 14. Checklist de go-live (+17 more)
 
-### Community 97 - "📄 Páginas e Módulos"
+### Community 96 - "📄 Páginas e Módulos"
 Cohesion: 0.08
 Nodes (26): 10. Alertas (`/alerts`), 11. Configuração de Alertas (`/alert-configurations`), 12. Histórico de Notificações (`/notification-history`), 13. Dashboard SLA (`/sla`), 14. Regras de Risco (`/risk-rules`), 15. Avaliações (`/evaluations`), 16. Webhooks (`/webhooks`), 17. Bitrix24 (`/bitrix24`) (+18 more)
 
-### Community 98 - "lalamoveErrors.ts"
+### Community 97 - "lalamoveErrors.ts"
 Cohesion: 0.09
 Nodes (21): A. Autenticação e credenciais, B. Cotação, C. Pedido, Consolidação, D. Rastreio e webhooks, E. Infraestrutura e rede, Simulação exaustiva de cenários de falha — Lalamove (v3 + UAPI), 119 — [F] Validação por passo, não no fim (+13 more)
 
-### Community 99 - "useLalamoveUapi.ts"
+### Community 98 - "useLalamoveUapi.ts"
 Cohesion: 0.11
 Nodes (22): Lacunas remanescentes (conscientes), Scorecard de Conformidade Lalamove — 22 dimensões, FleetListProps, UapiOrderHistoryPanel(), extractOrders(), extractReceiptUrl(), flattenOrderPages(), FleetKind (+14 more)
 
-### Community 100 - "roles.ts"
+### Community 99 - "roles.ts"
 Cohesion: 0.13
 Nodes (23): 48 — [F] Hierarquia de papéis numa única fonte ✅, A-021 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita), M-054 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum, Etapa 036 — UI concede acesso por papel já expirado (front-end ignora expires_at que o banco respeita), Etapa 133 — Negação de papel do ProtectedRoute (o único portão RBAC do app) não tem teste em lugar nenhum, Etapa 256 — Command palette lista todas as rotas de administração sem filtro de papel e fica ativa na tela pública de login, Etapa 258 — Navegação mobile ignora o RBAC por completo: viewer vê e toca em Aprovações, Webhooks, Regras de Risco e Configurações, ProtectedRouteProps (+15 more)
 
-### Community 101 - "Onda 8 — Higiene: código morto, CI, observabilidade"
+### Community 100 - "Onda 8 — Higiene: código morto, CI, observabilidade"
 Cohesion: 0.08
 Nodes (26): Etapa 270 — O guarda que vigia as configurações do GitHub dá "tudo certo" quando o token é recusado, Etapa 271 — A cadeia de migrations não roda do zero: três arquivos referenciam objetos que não existem ou que são criados depois, Etapa 272 — A linha de base anti-regressao, que as regras da pasta mandam rodar antes e depois de cada fatia, esta desatualizada e se contradiz com _ordem.md, Etapa 273 — P-15 e P-16 registram a PR #119 como aberta e a main sem o trabalho dela; migration e tela ja estao na main, Etapa 274 — Ligar na CI os guardas de segredo e de exposição (bundle, artefato de e2e, erro de edge, workflow com secret), Etapa 275 — Ligar na CI os ratchets de qualidade (lint, typecheck, implicit-any, a11y, i18n, bundle), Etapa 276 — Ligar na CI os guardas de perímetro e de workflow (pins de action, invariantes, settings do GitHub, matriz edge×tabela), Etapa 277 — O job security so quebra em vulnerabilidade critica: high passa verde (+18 more)
 
-### Community 102 - "typecheck-ratchet.mjs"
+### Community 101 - "typecheck-ratchet.mjs"
 Cohesion: 0.16
 Nodes (20): assertUsableCompilerResult(), compareBaseline(), contextHashForLine(), createBaseline(), createSourceLineReader(), diffMultisets(), formatIssue(), issueKey() (+12 more)
 
-### Community 103 - "supabase-usage-guard.mjs"
+### Community 102 - "supabase-usage-guard.mjs"
 Cohesion: 0.13
 Nodes (24): enumsCitados(), ler(), main(), objetos(), ROOT, addSignature(), BASELINE, canonTipo() (+16 more)
 
-### Community 104 - "useGeo.ts"
+### Community 103 - "useGeo.ts"
 Cohesion: 0.12
 Nodes (24): GEO_PRECISIONS, GeoPlaceDetailsVars, UseGeoAutocompleteOptions, UseGeoAutocompleteResult, GeoAddress, GeoAddressComponents, GeoAutocompleteRequest, GeoBias (+16 more)
 
-### Community 105 - "Bloco 5 — Acessibilidade (111–135)"
+### Community 104 - "Bloco 5 — Acessibilidade (111–135)"
 Cohesion: 0.08
 Nodes (25): 111 — [C] `eslint-plugin-jsx-a11y` ligado, 112 — [F] Nome acessível nos 44 botões só com ícone, 113 — [F] Componente `IconButton` com `label` obrigatório, 114 — [F] Labels associados nos 72 campos, 115 — [F] Campo de formulário padrão (`FormField`), 116 — [F] Linhas e cards clicáveis acessíveis, 117 — [F] `MotionConfig reducedMotion="user"`, 118 — [F] IDs ARIA estáveis (+17 more)
 
-### Community 106 - "webVitals.ts"
+### Community 105 - "webVitals.ts"
 Cohesion: 0.10
 Nodes (22): 49 — [F] Menu alinhado às rotas, 60 — [F][D] Trocar a animação de rota por CSS (U9), Etapa 255 — Score de Performance mostra 0/100 "Ruim" quando ainda não há métricas e normaliza o resultado pelo que foi coletado, react-dom, web-vitals, App(), src_index, cleanupErrorMonitoring (+14 more)
 
-### Community 107 - "Onda 5 — Robustez: erros, estados, concorrência"
+### Community 106 - "Onda 5 — Robustez: erros, estados, concorrência"
 Cohesion: 0.08
 Nodes (25): Etapa 170 — Os quatro crons que chamam edge functions são disparo cego: nada lê a resposta HTTP e o pg_cron marca 'succeeded' mesmo com 401, Etapa 171 — Rotinas de retenção e rollup existem mas nunca foram agendadas: logs de erro e uso de contrato crescem sem corte, Etapa 172 — lalamove-api e lalamove-uapi chamam a Lalamove sem nenhum timeout, com ate 3 tentativas por chamada, Etapa 176 — Limitar e paginar incidentes, dispositivos e contatos (useIncidents, useUserDevices, useContacts), Etapa 177 — Limitar e paginar os logs de rate limit, webhook e aprovação de senha, Etapa 178 — Rastreamento ao vivo refaz a consulta inteira a cada evento de GPS, além do intervalo de 5 s, Etapa 182 — 24 referencias de GitHub Action por tag mutavel e 2 actions fora da allowlist, Etapa 184 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro (+17 more)
 
-### Community 108 - "Onda 7 — Experiência de uso e consistência"
+### Community 107 - "Onda 7 — Experiência de uso e consistência"
 Cohesion: 0.08
 Nodes (25): Etapa 240 — A cadeia de migrations não aplica do zero: quatro colisões abortam `supabase db reset` / recriação do banco, Etapa 241 — Trigger de geofence lê OLD em INSERT: o primeiro ponto do rastreio pode abortar o upsert e o rastreio nunca começa, Etapa 242 — Prova de entrega sem stopIndex sobrescreve TODAS as paradas do pedido com a mesma imagem e o mesmo status, Etapa 244 — Erro do Bitrix24 chega em corpo HTTP 200 e é contado como sucesso em três pontos, Etapa 245 — Botão de renomear dispositivo não pergunta o nome: grava um rótulo automático, Etapa 246 — Cartões de estatística das aprovações de senha contam apenas a lista já filtrada — 'Aprovadas' e 'Rejeitadas' ficam sempre em zero, Etapa 247 — Filtro de busca sem escape: virgula ou parentese no termo quebram a consulta da lista de pedidos, Etapa 248 — "Motoristas Ativos" conta linhas de rastreamento e de cache, não motoristas distintos (+17 more)
 
-### Community 109 - "cenarios.mjs"
+### Community 108 - "cenarios.mjs"
 Cohesion: 0.09
 Nodes (18): base(), comp(), fails, GERADOR, JS, KEEP, PKG(), scenarios (+10 more)
 
-### Community 110 - "check-bundle-secrets.unit.mjs"
+### Community 109 - "check-bundle-secrets.unit.mjs"
 Cohesion: 0.16
 Nodes (20): avaliar(), decodificarPayload(), ehArquivoVarrido(), EXTENSOES, extrairTokens(), guarda(), listarArquivosVarridos(), main() (+12 more)
 
-### Community 111 - "gerar-banco.mjs"
+### Community 110 - "gerar-banco.mjs"
 Cohesion: 0.13
 Nodes (24): CAMPO_TODO, chamarApi(), compararEdges(), conferirOrigem(), contarStatus(), contarUsoNoCodigo(), edgesNoRepo(), extrairInventario() (+16 more)
 
-### Community 112 - "check-external-api/index.ts"
+### Community 111 - "check-external-api/index.ts"
 Cohesion: 0.13
 Nodes (17): emptyProbe(), GeoProbe, probeGeoProvider(), runProbe(), corsHeaders, JSON_HEADERS, computeSignature(), ParsedSignature (+9 more)
 
-### Community 113 - "useRiskRules.ts"
+### Community 112 - "useRiskRules.ts"
 Cohesion: 0.12
 Nodes (18): [0.7.0] - 2025-06-17, Adicionado, Melhorado, 125 — [F][D] Guarda de saída com `useBlocker` (U5), Configuração, create(), createRiskRule(), deleteRiskRule() (+10 more)
 
-### Community 114 - "useDrivers.ts"
+### Community 113 - "useDrivers.ts"
 Cohesion: 0.13
 Nodes (23): 102 — [F] Debounce nos filtros de tabela, 134 — [F] Importação de CSV como fluxo de 4 passos, addToBlacklist(), addToWhitelist(), approveDriver(), blockDriver(), DriverRow, DriverStatus (+15 more)
 
-### Community 115 - "job-worker/index.ts"
+### Community 114 - "job-worker/index.ts"
 Cohesion: 0.17
 Nodes (22): 104 — [x] M4 Chegada na coleta, Etapa 108 — Jobs de fila dos tipos email/whatsapp/slack nunca entregam e são marcados como concluídos, createSupabaseClient(), DriverAvisoFn, GEO_ALERT_DRIVER_EVENTS, geoAlertDriverEvent(), internalLogger(), invokeEdge() (+14 more)
 
-### Community 116 - "redigir-relatorio.unit.mjs"
+### Community 115 - "redigir-relatorio.unit.mjs"
 Cohesion: 0.24
 Nodes (22): ref_node_zlib, arquivosDeTexto(), arquivosZip(), BINARIOS, contarRestantes(), crc32(), escreverZip(), extensaoDe() (+14 more)
 
-### Community 117 - "useMessaging.ts"
+### Community 116 - "useMessaging.ts"
 Cohesion: 0.08
 Nodes (23): LEDGER_KEY, LEDGER_STATUSES, MessageTemplateRow, MESSAGING_ROLES, MessagingRole, MessagingSettingsRow, MessagingUsageRow, NotificationMessageRow (+15 more)
 
-### Community 118 - "BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)"
+### Community 117 - "BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)"
 Cohesion: 0.12
 Nodes (22): 36 — Teste de cobertura BR do Search Box (decide M1), 37 — Sessões corretas (custo), 38 — CEP primeiro, Mapbox depois, 39 — Gravação conforme M2, 40 — Endereços sem resultado, 41 — Lista de endereços frequentes, 42 — Importação Bitrix24/n8n com Mapbox, 43 — Atribuição (+14 more)
 
-### Community 119 - "static-map.ts"
+### Community 118 - "static-map.ts"
 Cohesion: 0.16
 Nodes (19): Cobertura BR do Search Box (etapa 36) — MEDIDO em 2026-11-22, Etapa 22 (fallback Geocoding v6) — DESCARTADA por medição, Risco adicional não capturado pela métrica de accuracy, 68 — Imagem estática no WhatsApp ✅, buildStaticMapRequest(), buildStaticMapRequestFromRows(), extractDataUrl(), fetchStaticMap() (+11 more)
 
-### Community 120 - "Bloco 6 — Fluxos complexos: wizard, rascunho e guarda de saída (117–144)"
+### Community 119 - "Bloco 6 — Fluxos complexos: wizard, rascunho e guarda de saída (117–144)"
 Cohesion: 0.09
 Nodes (23): 137 — [F] Demais formulários em RHF + zod, 118 — [F] Barra de progresso do wizard com rótulos, 120 — [F][D] Rascunho retomável do pedido (U4) 🔒, 121 — [F] Rascunho não guarda dado além do necessário, 122 — [F] Indicador "rascunho salvo", 123 — [F] Fechar o wizard pede confirmação quando há dado, 124 — [F] Esc no wizard respeita a confirmação, 126 — [F] `beforeunload` para F5 e fechar a aba (+15 more)
 
-### Community 121 - "Onda 4 — Funcionalidades incompletas"
+### Community 120 - "Onda 4 — Funcionalidades incompletas"
 Cohesion: 0.09
 Nodes (23): Etapa 143 — IP Whitelist e Bloqueio Geográfico são telas de segurança que nenhum código aplica, Etapa 144 — Dashboard de Analytics mostra variação percentual inventada (+12%, +8%, -3%, -15%) como "vs período anterior", Etapa 145 — AGENTS.md indica a edge mapbox-proxy como o proxy do Mapbox; ela foi removida do repo na etapa 61, Etapa 146 — pendencias-dono.md apresenta 3 PRs como abertas aguardando decisao do dono; as 3 estao mergeadas na main, Etapa 148 — Falhas de consulta engolidas: contadores da sidebar e contagem de incidentes viram zero sem avisar, Etapa 149 — Painel de saúde do sistema mostra números inventados e mina um token Mapbox a cada 30 segundos, Etapa 150 — Nao existe vercel.json nem fallback de SPA no repositorio, com 58 rotas em BrowserRouter, Etapa 152 — Traçado de rota fica no mapa para sempre depois que o pedido sai do rastreamento (+15 more)
 
-### Community 122 - "ref_node_fs"
+### Community 121 - "ref_node_fs"
 Cohesion: 0.15
 Nodes (15): ref_node_fs, executar(), FERRAMENTAS, main(), maisNova(), piso(), RAIZ, relatorio() (+7 more)
 
-### Community 123 - "has"
+### Community 122 - "has"
 Cohesion: 0.12
 Nodes (23): aggregate(), camadaDe(), cap(), closure(), componentes, dominioDe(), edges, enrich() (+15 more)
 
-### Community 124 - "gerar-rotas.mjs"
+### Community 123 - "gerar-rotas.mjs"
 Cohesion: 0.16
 Nodes (22): componentesDoApp(), ehTeste(), ESTRUTURA, EXTENSOES, extrairChamadas(), extrairImports(), fechoDaPagina(), gerarRotas() (+14 more)
 
-### Community 125 - "layout-guard.mjs"
+### Community 124 - "layout-guard.mjs"
 Cohesion: 0.14
 Nodes (19): ANTI_PATTERNS, APP, blocoDoAppLayout(), carregarPagina(), especificadores(), fimDaTag(), paginasDoShell(), resolverArquivo() (+11 more)
 
-### Community 126 - "lalamove-gateway/index.ts"
+### Community 125 - "lalamove-gateway/index.ts"
 Cohesion: 0.11
 Nodes (15): corsHeaders, GatewayRequest, RateLimitSnapshot, Target, TARGETS, GatewayTarget, isUnsupported(), PARAM_ALIASES (+7 more)
 
-### Community 127 - "BLOCO 3 — Endereço no pedido (etapas 33–42)"
+### Community 126 - "BLOCO 3 — Endereço no pedido (etapas 33–42)"
 Cohesion: 0.10
 Nodes (19): 12.3 Edge functions, 4. Execução em PRs, Fase 0 — Parar de cavar (1 PR, Promo Supply), Fase 1 — Contrato no PIM (2 PRs, `Promo_Gifts_V4`) 🔒, Fase 2 — Ligar a ponte (2 PRs + 1 secret, Promo Supply), Fase 3 — Documentos de compra referenciam o PIM (2 PRs, sendo 1 DDL), Fase 4 — Migração de dados (1 PR de script + 1 🔒 de execução), Fase 5 — Desligar o que ficou órfão (1 PR + 1 🔒) (+11 more)
 
-### Community 128 - ".order"
+### Community 127 - ".order"
 Cohesion: 0.10
 Nodes (21): 4.1 Edge functions ligadas à Lalamove, 4.2 Front (`src/`), 4.3 Tabelas (produção), 4.4 Artefatos n8n/Python na raiz (fora do build), 4.5 Docs internos relevantes, 4. Inventário micro do repositório (`adm01-debug/Lalamove_V2`, `main` @ `18c9d83`), 5.1 REST API v3 (`https://rest.lalamove.com`, sandbox `https://rest.sandbox.lalamove.com`), 5.2 Webhook v3 (Lalamove → nós) (+13 more)
 
-### Community 129 - "Sidebar"
+### Community 128 - "Sidebar"
 Cohesion: 0.13
 Nodes (21): 155 — [F] Textos truncados com `title`/tooltip, 53 — [F] Contadores da sidebar no React Query, em paralelo, 87 — [F] `framer-motion` fora do bundle inicial, 97 — [F] Prefetch de rotas prováveis, 104 — [F] Landmarks corretos e únicos, 180 — [T] Segundo experimento: FAB mobile contextual × ausente, 191 — [T] Testes unitários dos componentes de navegação, 52 — [F] Um único `isActive` compartilhado (+13 more)
 
-### Community 130 - "devDependencies"
+### Community 129 - "devDependencies"
 Cohesion: 0.09
 Nodes (22): devDependencies, autoprefixer, @axe-core/playwright, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+14 more)
 
-### Community 131 - "20241231000000_saved_filters.sql"
+### Community 130 - "20241231000000_saved_filters.sql"
 Cohesion: 0.13
 Nodes (18): ensure_single_default_filter(), idx_saved_filters_default, idx_saved_filters_entity_type, idx_saved_filters_user_entity, idx_saved_filters_user_id, public.saved_filters, auth, auth.users (+10 more)
 
-### Community 132 - "useAchievementsSystem.tsx"
+### Community 131 - "useAchievementsSystem.tsx"
 Cohesion: 0.12
 Nodes (18): 17.8 Sistema de Conquistas (Gamificação), 89 — [F] `AchievementsProvider` fora da raiz, Etapa 164 — Oito arquivos de front (~1.900 linhas) exportados e nunca importados por ninguém, incluindo um componente marcado como placeholder, Achievement, AchievementId, AchievementNotification, AchievementPoints(), AchievementRarity (+10 more)
 
-### Community 133 - "lalamoveGuards.ts"
+### Community 132 - "lalamoveGuards.ts"
 Cohesion: 0.10
 Nodes (19): Backlog P-01..P-13 (situação em `_ordem.md`), Conclusão, Errata de produção (MASTER seção 3) — guardas presentes, Fontes das correções cruzadas com o real, Lacunas conscientes (SCORECARD), Pendências reais após a varredura (não-funcionais, de processo), Riscos conhecidos (MASTER seção 11), Roteiro de 30 etapas (MASTER_ANALYSIS) — verificação (+11 more)
 
-### Community 134 - "useExternalData.ts"
+### Community 133 - "useExternalData.ts"
 Cohesion: 0.16
 Nodes (15): 41 — Lista de endereços frequentes, AddressSearchResult, edgeThrow(), ExternalRecord, ExternalTable, TABLE_LABELS, useAddressSearch(), useExternalList() (+7 more)
 
-### Community 135 - "Bloco 8 — Lalamove: eventos ao motorista (99–112)"
+### Community 134 - "Bloco 8 — Lalamove: eventos ao motorista (99–112)"
 Cohesion: 0.13
 Nodes (21): 100 — [L] Troca de motorista, 101 — [~] M1 Briefing de atribuição, 103 — [~] M3 Localização e contato, 105 — [~] M5 Pós-coleta, 106 — [L] M6 Multi-paradas, 107 — [~] M7 Pedido editado, 108 — [~] M8 Cancelamento, 109 — [L] M9 Lembrete de comprovante (+13 more)
 
-### Community 136 - "inbound.ts"
+### Community 135 - "inbound.ts"
 Cohesion: 0.19
 Nodes (17): 113 — [L] Interpretador de respostas, 117 — [L] Opt-out do motorista, 128 — [L] Opt-out por SMS, classifyInbound(), containsPhrase(), choicesForEvent(), classifyReply(), EVENT_CHOICES (+9 more)
 
-### Community 137 - "payload.ts"
+### Community 136 - "payload.ts"
 Cohesion: 0.16
 Nodes (19): 74 — [L] Máquina de estados, 96 — [L] Edge `zapp-callback`, actionForErrorCode(), asNumber(), asString(), CALLBACK_EVENTS, CallbackEvent, ERROR_CODE_ACTIONS (+11 more)
 
-### Community 138 - "registry.ts"
+### Community 137 - "registry.ts"
 Cohesion: 0.18
 Nodes (18): 88 — [x] Roteador evento → papel, loadMessagingSettings(), loadRoutes(), loadTemplates(), MESSAGE_CHANNELS, MESSAGE_ROLES, oneOf(), parseQuietHours() (+10 more)
 
-### Community 139 - "Causa raiz: Documentos de instrução e backlog congelados em 8 de novembro, descrevendo um repositório que já mudou"
+### Community 138 - "Causa raiz: Documentos de instrução e backlog congelados em 8 de novembro, descrevendo um repositório que já mudou"
 Cohesion: 0.10
 Nodes (21): A-006 — P-04 e P-10 afirmam que as chaves legacy foram rotacionadas e estao 401; banco.md diz o oposto e e a fonte mais recente, A-024 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual, A-025 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main, A-026 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration, B-005 — Três crons de cache documentados como ativos vêm de migration que nunca rodou, e dois apontam para materialized views que não existem em lugar nenhum, B-007 — mapa-repo.md afirma que nenhum doc e gerado por script e que vários scripts tem service_role/PAT no codigo; as duas afirmacoes sao falsas hoje, B-024 — `geo-admin` ficou fora do registro de contratos, mas o doc afirma "26 de 26 Edge Functions com entrada validada", B-039 — Dois pares de crons agendam a mesma rotina com nomes diferentes, e o documento descreve cada par como rotinas distintas (+13 more)
 
-### Community 140 - "message"
+### Community 139 - "message"
 Cohesion: 0.10
 Nodes (21): A-007 — route-analyzer: usuário `viewer` usa o LLM pago sem limite e recebe pedidos completos (nome do cliente) lidos com service_role, A-009 — test-notification envia para destinatário e webhook arbitrários, sem papel e com CORS aberto, C-003 — evaluate-driver: sem nenhuma autenticação em código, e o score de risco é calculado com números enviados pelo próprio chamador — dá para bloquear qualquer motorista, C-004 — external-db-bridge: qualquer usuário autenticado faz CRUD e RPC arbitrários no banco externo com a service_role dele, C-005 — lalamove-api nao tem nenhuma checagem de papel: qualquer usuario logado cria pedido pago, cancela, aumenta taxa e redireciona o webhook da conta, C-011 — Edges sensiveis so exigem login, sem nenhuma checagem de papel: viewer cria frete pago e redireciona o webhook da Lalamove, Causa raiz: Função de servidor que exige login mas nunca confere o papel, M-006 — check-external-api: health check sem autorização alguma que queima credenciais pagas (Mapbox/Google geocoding) por request e fora do orçamento do geo-gateway (+13 more)
 
-### Community 141 - "Onda 6 — Performance"
+### Community 140 - "Onda 6 — Performance"
 Cohesion: 0.10
 Nodes (20): 04 — Plano de correção em 300 etapas, Etapa 215 — Mover os totais dos painéis para contagem no banco (count exact) em vez de somar no navegador, Etapa 216 — Mover as médias e taxas para agregação no banco (RPC) em vez de média do navegador, Etapa 217 — Fazer a exportação (CSV/PDF/XLSX) buscar o conjunto completo, não a página da tela, Etapa 218 — Fila do Bitrix24: o trigger enfileira a cada mudança de status, mas nada drena — só um botão manual na tela, Etapa 219 — refresh_geo_jobs enfileira 1 a 2 jobs por rastreio ativo a cada 5 min contra um dispatcher de 10 jobs por minuto, Etapa 220 — Aviso automático ao fornecedor é reemitido a cada novo alerta de parada, sem teto por pedido, Etapa 224 — useTrackingHistory sem proteção contra resposta atrasada: histórico de um motorista pode sobrescrever o de outro (+12 more)
 
-### Community 142 - "check-realtime-subscriptions.mjs"
+### Community 141 - "check-realtime-subscriptions.mjs"
 Cohesion: 0.22
 Nodes (20): typescript, baselineDaPublicacao(), evaluateRealtimeSubscriptions(), extractRealtimeSubscriptions(), boundOnTarget(), collectBindings(), isKnownWrapperCallee(), isKnownWrapperIdentifier() (+12 more)
 
-### Community 143 - "medir-tipografia.cjs"
+### Community 142 - "medir-tipografia.cjs"
 Cohesion: 0.15
 Nodes (20): BUDGET, CONFIG, DEFAULT_SCALE, fs, INDEX_HTML, isNamedAbove16(), isWeightLoaded(), main() (+12 more)
 
-### Community 144 - "useCommandPaletteSearch.ts"
+### Community 143 - "useCommandPaletteSearch.ts"
 Cohesion: 0.17
 Nodes (15): Toaster(), ToasterProps, getFavorites(), getRecentSearches(), QuickAction, RecentSearch, saveRecentSearch(), useCommandPaletteSearch() (+7 more)
 
-### Community 145 - "compilerOptions"
+### Community 144 - "compilerOptions"
 Cohesion: 0.10
 Nodes (20): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleDetection, moduleResolution (+12 more)
 
-### Community 146 - "notifyDriver"
+### Community 145 - "notifyDriver"
 Cohesion: 0.12
 Nodes (17): Deploy (Vercel + Lovable) — referência para agentes, Edge functions, Front, Lovable, Pendências de Vercel (ação no dashboard, com o dono), Regras de env var no Vercel, avisarMotorista(), claimLedger() (+9 more)
 
-### Community 147 - "Lalamove API v3 — Documentação Técnica Completa (Brasil)"
+### Community 146 - "Lalamove API v3 — Documentação Técnica Completa (Brasil)"
 Cohesion: 0.10
 Nodes (19): 10. Referência de Preços Reais (SP, ~4,5 km), 1. Autenticação HMAC SHA256, 5. Priority Fee, 6. Motorista (Driver), 7. Webhook, 8. Códigos de Erro, 9. Rate Limits, Algoritmo de assinatura (+11 more)
 
-### Community 148 - "useEvaluateDriver.ts"
+### Community 147 - "useEvaluateDriver.ts"
 Cohesion: 0.10
 Nodes (17): Adiados para a V3 (decisão do dono, 2026-11-21), Fila atual, Itens concluídos, Itens obsoletos (2026-11-20), Ordem de execução do backlog, Regras da Fase 2, Adiado por decisao de produto (nao wirear), Metodo (+9 more)
 
-### Community 149 - "Bloco 2 — Rotas, RBAC e navegação (46–60)"
+### Community 148 - "Bloco 2 — Rotas, RBAC e navegação (46–60)"
 Cohesion: 0.11
 Nodes (19): 46 — [F] Parar de remontar o `AppLayout` a cada navegação, 47 — [F] Uma única busca global (Ctrl+K), 50 — [F] Rotas sem entrada no menu, 51 — [F] Dashboard e perfil com papel mínimo, 52 — [F] Role via `usePermissions` (cache) em vez de `.single()` nas sidebars, 54 — [F] Sidebar destaca rotas aninhadas, 55 — [F] Login respeita a rota de origem, 56 — [F] Scroll para o topo no container certo (+11 more)
 
-### Community 150 - "Bloco 0 — Fonte única de verdade das rotas (1–20)"
+### Community 149 - "Bloco 0 — Fonte única de verdade das rotas (1–20)"
 Cohesion: 0.10
 Nodes (19): 10 — [F] Validar a config em tempo de teste, 13 — [F] Persistir o histórico próprio em `sessionStorage`, 14 — [F] `replace: true` em todo redirect de sistema, 15 — [F] Login respeita `state.from` (consome a etapa 55 do PLANO_FRONTEND_190), 16 — [F] MFA preserva o destino também quando falha e volta, 17 — [F] `/unauthorized` sem `history.back()`, 18 — [F] 404 dentro do layout, em pt-BR e com saída, 1 — [F] Criar `src/routes/route-config.ts` como única fonte de verdade (+11 more)
 
-### Community 151 - "Bloco 8 — Métricas, telemetria e iteração (165–182)"
+### Community 150 - "Bloco 8 — Métricas, telemetria e iteração (165–182)"
 Cohesion: 0.11
 Nodes (20): 11 — [F] `useRouteMeta()` — hook único de leitura, 165 — [F][D] Tabela de eventos de navegação (U8) 🔒, 166 — [F] `trackNavigation()` no cliente, 167 — [F] Eventos mínimos instrumentados, 169 — [F] KPI 2 — telas sem saída (dead ends), 170 — [F] KPI 3 — tempo de tarefa, 171 — [F] KPI 4 — abandono do wizard por passo, 173 — [F] KPI 6 — profundidade e largura da navegação (+12 more)
 
-### Community 152 - "lalamoveReasons.ts"
+### Community 151 - "lalamoveReasons.ts"
 Cohesion: 0.17
 Nodes (17): UapiWalletTransaction, CANCEL_ORDER_REASONS, CancelOrderReason, cancelOrderReasonOptions, CHANGE_DRIVER_REASONS, ChangeDriverReason, changeDriverReasonOptions, isCancelOrderReason() (+9 more)
 
-### Community 153 - "lalamove-api.ts"
+### Community 152 - "lalamove-api.ts"
 Cohesion: 0.15
 Nodes (17): parseEdgeError(), api(), apiPost(), callLalamoveGateway(), GatewayPayload, lalamove, LalamoveApiResponse, LalamoveGatewayError (+9 more)
 
-### Community 154 - "lalamoveCatalog.ts"
+### Community 153 - "lalamoveCatalog.ts"
 Cohesion: 0.19
 Nodes (16): CITY_LABELS, filterValidSpecialRequests(), getServiceDimensions(), isCityCode(), isServiceAvailableInCity(), isServiceType(), SERVICE_CATALOG, serviceAcceptsItem() (+8 more)
 
-### Community 155 - "error-monitor.ts"
+### Community 154 - "error-monitor.ts"
 Cohesion: 0.16
 Nodes (16): alertKey(), claimAlertSlot(), Db, ERROR_ALERT_COOLDOWN_MINUTES, ERROR_RATE_MIN_SAMPLES, ERROR_RATE_THRESHOLD, ERROR_RATE_WINDOW_MINUTES, ErrorAlertDecision (+8 more)
 
-### Community 156 - "20251226020000_create_materialized_views_cache.sql"
+### Community 155 - "20251226020000_create_materialized_views_cache.sql"
 Cohesion: 0.16
 Nodes (13): delivery_hourly_stats_cache, risk_level_distribution_cache, cache_status, idx_delivery_hourly_stats_hour, idx_driver_stats_cache_active_incidents, idx_driver_stats_cache_blacklist, idx_driver_stats_cache_driver_id, idx_driver_stats_cache_failure_rate (+5 more)
 
-### Community 157 - "Bloco 1 — Contrato Lalamove ⇄ Zapp (11–20)"
+### Community 156 - "Bloco 1 — Contrato Lalamove ⇄ Zapp (11–20)"
 Cohesion: 0.12
 Nodes (18): Número banido ou instância caída no Zapp, 3. Decisões do dono (D1–D8), 11 — [Z] Especificação OpenAPI da API de mensageria, 12 — [Z][L] Envelope de envio, 13 — [Z] Tipos suportados, 14 — [Z][L] Códigos de erro estáveis, 15 — [Z] Callback de status, 16 — [Z] Callback de resposta (inbound) (+10 more)
 
-### Community 158 - "🚀 Deployment - Lalamove Guardian"
+### Community 157 - "🚀 Deployment - Lalamove Guardian"
 Cohesion: 0.11
 Nodes (18): 1. Commit e Push, 2. Auto-deploy, 3. Verificação, Ambientes, Checklist Pós-Deploy, Configurar, Criar Migration, Deploy Process (+10 more)
 
-### Community 159 - "processRoutePlan"
+### Community 158 - "processRoutePlan"
 Cohesion: 0.11
 Nodes (18): 1.1 `public.active_tracking` — uma linha por pedido, 1.2 `public.lalamove_orders` — somente leitura, 1.3 `public.lalamove_stops` — somente leitura, 1.4 `public.geo_defaults` — somente leitura, 1. O que este repo lê, 2.1 UPSERT a cada ciclo de 10–15 s, 2.2 Triggers: os disparadores reais, 2.3 Ciclo de vida da linha (+10 more)
 
-### Community 160 - "GeoProvider"
+### Community 159 - "GeoProvider"
 Cohesion: 0.11
 Nodes (7): Bloqueios de infraestrutura, Dependências do dono (sem rota MCP), Funções com `provider: 'off'`, O que ficou desligado ou para depois, Provedores, Recursos do Mapbox não usados, GeoProvider
 
-### Community 161 - "inbound-actions.ts"
+### Community 160 - "inbound-actions.ts"
 Cohesion: 0.15
 Nodes (17): 114 — [L] Ações por resposta, 115 — [L] Texto livre, 116 — [L] Mídia recebida, 118 — [L] Registro no Bitrix24, Bloco 9 — Lalamove: respostas do motorista (113–118), canTrack(), COMPLAINT_HINTS, DAMAGE_HINTS (+9 more)
 
-### Community 162 - "Causa raiz: A verificação automática antes de publicar é decorativa: existe no arquivo e não impede nada"
+### Community 161 - "Causa raiz: A verificação automática antes de publicar é decorativa: existe no arquivo e não impede nada"
 Cohesion: 0.11
 Nodes (19): B-011 — A quarentena de E2E não exclui nada: o playwright.config.ts não tem testIgnore e o guard que cobra prazo não roda na CI, B-012 — Limite de cobertura de 70% em vitest.config.ts é decorativo: o pacote de cobertura não está instalado e nenhum workflow pede cobertura, B-020 — Nenhum job do ci.yml tem timeout nem concurrency, B-021 — Os limites de cobertura de 70% do vitest nunca sao aplicados: a CI roda vitest sem --coverage, B-022 — npm run lint nunca pode falhar: todas as regras ruidosas sao warning e o ratchet que conteria a divida esta quebrado, B-038 — O job deploy do ci.yml so imprime uma frase e aparece como deploy bem-sucedido, B-054 — .lintstagedrc configurado sem lint-staged, husky nem prettier instalados, B-055 — A PR automatica do inventario semanal nasce sem CI e, com os required checks ativos, nao tem como ser mergeada (+11 more)
 
-### Community 163 - "manifest.json"
+### Community 162 - "manifest.json"
 Cohesion: 0.11
 Nodes (18): background_color, categories, description, display, handle_links, icons, lang, launch_handler (+10 more)
 
-### Community 164 - "uniq"
+### Community 163 - "uniq"
 Cohesion: 0.14
 Nodes (19): allMatches(), baseOf(), byCount(), envNames(), flags, git(), gitInfo, gitInfoCommit() (+11 more)
 
-### Community 165 - "branch-podaveis.unit.mjs"
+### Community 164 - "branch-podaveis.unit.mjs"
 Cohesion: 0.21
 Nodes (16): argumentos(), DIAS_MINIMOS, executar(), lerEquivalentes(), lerProtegidas(), lerPrsAbertas(), main(), motivoNomeInseguro() (+8 more)
 
-### Community 166 - "simulate-driver-movement/index.ts"
+### Community 165 - "simulate-driver-movement/index.ts"
 Cohesion: 0.16
 Nodes (14): haversineM(), Point, points, pointToPolylineM(), polyline, corsHeaders, bearingDeg(), remainingM() (+6 more)
 
-### Community 167 - "20251226000003_create_job_queue.sql"
+### Community 166 - "20251226000003_create_job_queue.sql"
 Cohesion: 0.15
 Nodes (10): idx_job_queue_created_at, idx_job_queue_pending, idx_job_queue_retry, idx_job_queue_status, idx_job_queue_type, job_queue, job_queue_stats, mark_job_failed() (+2 more)
 
-### Community 168 - "20251226000004_create_cache_views.sql"
+### Community 167 - "20251226000004_create_cache_views.sql"
 Cohesion: 0.18
 Nodes (15): cache_status, get_driver_stats_cached(), idx_delivery_metrics_cache_date, idx_delivery_metrics_cache_failure_rate, idx_driver_stats_cache_blacklisted, idx_driver_stats_cache_driver_id, idx_driver_stats_cache_failure_rate, idx_driver_stats_cache_pending_approvals (+7 more)
 
-### Community 169 - "20251226010000_create_job_queue_system.sql"
+### Community 168 - "20251226010000_create_job_queue_system.sql"
 Cohesion: 0.15
 Nodes (11): get_queue_stats(), idx_job_queue_failed, idx_job_queue_monitoring, idx_job_queue_pending, idx_job_queue_status, idx_job_queue_type, job_queue, mark_job_failed() (+3 more)
 
-### Community 170 - "Fase 1 — As 20 Dimensões"
+### Community 169 - "Fase 1 — As 20 Dimensões"
 Cohesion: 0.11
 Nodes (18): 10. Observabilidade — **6/10**, 11. Lógica de Negócio — **7/10**, 12. Manutenibilidade — **7/10**, 13. Operacionalidade — **6/10**, 14. Performance — **8/10**, 16. Segurança — **5/10** ⚠️ (dimensão crítica ×3), 17. Testes — **7/10**, 18. Tipagem / Type Safety — **9/10** (+10 more)
 
-### Community 171 - "Bloco 0 — Segurança e dado errado (1–20)"
+### Community 170 - "Bloco 0 — Segurança e dado errado (1–20)"
 Cohesion: 0.11
 Nodes (18): 10 — [F] Sanitizar a busca global contra injeção de filtro PostgREST, 12 — [F] `window.open` sempre com `noopener,noreferrer`, 13 — [F] Campos de token como `password` e sem autofill, 14 — [F] Telemetria admin sem fallback para chave pública e com confirmação, 15 — [E][D] Remover `apply-fixes` e `seed-fix-rls` (D1) 🔒, 16 — [E][D] Fechar `external-db-bridge` para admin + allowlist (D2) 🔒, 17 — [E] `external-companies` com papel e busca escapada, 18 — [E][D] Ações destrutivas da `lalamove-api` só para manager/admin (D6) (+10 more)
 
-### Community 172 - "Bloco 6 — UX, formulários e responsividade (136–155)"
+### Community 171 - "Bloco 6 — UX, formulários e responsividade (136–155)"
 Cohesion: 0.11
 Nodes (18): 136 — [F] `NewOrderDialog` com `react-hook-form` + zod, 138 — [F] Máscaras e validação de telefone, CEP e moeda, 139 — [F] Ações destrutivas com `AlertDialog` (sem `confirm()`), 140 — [F] Toasts com causa e ação, 141 — [F] Formatação única de moeda e data, 142 — [F] Dados simulados fora da produção, 144 — [F] Grids com breakpoints, 146 — [F] Alvos de toque ≥ 44 px (+10 more)
 
-### Community 173 - "Bloco 1 — Botão "Voltar" global (21–40)"
+### Community 172 - "Bloco 1 — Botão "Voltar" global (21–40)"
 Cohesion: 0.11
 Nodes (18): 106 — [F] Foco preso corretamente em gaveta e modal, 22 — [F] Rótulo com o nome do destino, 23 — [F] Visibilidade por contexto, 24 — [F] Posição fixa por dispositivo, 26 — [F] Remover o Voltar do `MobileBreadcrumbs` (U2), 27 — [F] Tirar o slot "Voltar" do bottom nav (U2), 28 — [F] Fechar modal antes de voltar, 30 — [F] Fallback sem histórico e sem pai (+10 more)
 
-### Community 174 - "Causa raiz: Número do painel calculado no navegador, sobre uma fatia dos dados e com uma fórmula por tela"
+### Community 173 - "Causa raiz: Número do painel calculado no navegador, sobre uma fatia dos dados e com uma fórmula por tela"
 Cohesion: 0.11
 Nodes (18): A-042 — "Total de motoristas" do Analytics vem de uma consulta com limit(10) e nunca passa de 10, A-052 — Score de risco do motorista: fórmula e faixas divergem do que está documentado, e mais fatores de risco podem BAIXAR o score, A-062 — Totais, médias e exportações são calculados no navegador sobre uma página truncada dos dados, B-008 — Formatadores de moeda e data reescritos à mão em 12 lugares, com a moeda fixada em BRL em uma das cópias, B-010 — Painel de quota da Lalamove subnotifica chamadas sem avisar: a janela de 24 h é cortada em 2000 linhas, B-025 — Cálculo de risco de motorista duplicado: cópia morta no front com pesos diferentes da que roda de verdade na edge evaluate-driver, B-049 — Mesma nota de motorista aparece como 5,0 em uma tela e 0,0 em outra, Causa raiz: Número do painel calculado no navegador, sobre uma fatia dos dados e com uma fórmula por tela (+10 more)
 
-### Community 175 - "ProviderResult"
+### Community 174 - "ProviderResult"
 Cohesion: 0.20
 Nodes (12): Etapa 183 — Nenhuma chamada a terceiro tem timeout: 9 arquivos de integração usam `fetch` sem `AbortController`, callWithFailover(), FailoverDeps, FailoverOutcome, FailoverResolver, isFailoverWorthy(), NON_FAILOVER_CODES, deps() (+4 more)
 
-### Community 176 - "🔒 Security - Lalamove Guardian"
+### Community 175 - "🔒 Security - Lalamove Guardian"
 Cohesion: 0.11
 Nodes (17): API:, Autenticação, Checklist, Desenvolvimento, HMAC (Lalamove):, ❌ NUNCA commitar:, OAuth2 (Bitrix24):, Políticas Obrigatórias: (+9 more)
 
-### Community 177 - "20250102000002_cache_system_complete.sql"
+### Community 176 - "20250102000002_cache_system_complete.sql"
 Cohesion: 0.16
 Nodes (15): mv_delivery_metrics, mv_driver_stats, mv_hourly_metrics, cache_refresh_log, cache_status(), get_delivery_metrics_cached(), get_driver_stats_cached(), get_hourly_metrics_cached() (+7 more)
 
-### Community 178 - "20261122120200_job_queue_system.sql"
+### Community 177 - "20261122120200_job_queue_system.sql"
 Cohesion: 0.16
 Nodes (11): public.update_job_queue_updated_at, idx_job_queue_monitoring, idx_job_queue_pending, idx_job_queue_status, idx_job_queue_type, public.add_job(), public.job_queue, public.mark_job_failed() (+3 more)
 
-### Community 179 - "Security Checklist - Lalamove Guardian"
+### Community 178 - "Security Checklist - Lalamove Guardian"
 Cohesion: 0.11
 Nodes (17): API e Integrações, Autenticação, Backups, Banco de Dados, Compliance, Código, Dependências, Desenvolvimento (+9 more)
 
-### Community 180 - "healthChecks.ts"
+### Community 179 - "healthChecks.ts"
 Cohesion: 0.29
 Nodes (16): checkBitrix24API(), checkCache(), checkDatabase(), checkEdgeFunctions(), checkEvolutionAPI(), checkExternalAPI(), checkLalamoveAPI(), checkMapboxAPI() (+8 more)
 
-### Community 181 - "useSLOMetrics.ts"
+### Community 180 - "useSLOMetrics.ts"
 Cohesion: 0.14
 Nodes (17): bucketConfig(), classify(), ErrorRow, fetchSLOMetrics(), percentile(), SLO_TARGETS, SLOIndicator, SLOMetrics (+9 more)
 
-### Community 182 - "geo-admin/index.ts"
+### Community 181 - "geo-admin/index.ts"
 Cohesion: 0.23
 Nodes (14): corsHeaders, json(), listTokens(), buildCreateTokenBody(), kindOfListedToken(), MapboxToken, pickTokenToRevoke(), REVOKE_AFTER_MS (+6 more)
 
-### Community 183 - "providers/types.ts"
+### Community 182 - "providers/types.ts"
 Cohesion: 0.18
 Nodes (13): componentsFromGeocode(), Fetch, GoogleOptions, LOCATION_TYPE_TO_PRECISION, GeoAddressComponents, GeocodeReq, GeoRouteLeg, GeoValidation (+5 more)
 
-### Community 184 - "components.json"
+### Community 183 - "components.json"
 Cohesion: 0.12
 Nodes (16): aliases, components, hooks, lib, ui, utils, rsc, $schema (+8 more)
 
-### Community 185 - "Causa raiz: A integração foi escrita contra um contrato que a Lalamove e o Bitrix24 não têm"
+### Community 184 - "Causa raiz: A integração foi escrita contra um contrato que a Lalamove e o Bitrix24 não têm"
 Cohesion: 0.12
 Nodes (17): 6. Divergências e bugs encontrados, A-013 — Renovação do token Bitrix24 quebrada em dois pontos: self-call sem Authorization e erro do provedor virando 500 genérico, A-014 — `cancel` devolve HTTP 204 com corpo JSON: o pedido é cancelado na Lalamove e a tela recebe erro, A-028 — Cancelamento de pedido sempre responde erro 500: a resposta e montada com HTTP 204 e corpo JSON, o que o runtime proibe, A-029 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade, A-030 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia, A-034 — Fallback de geocodificação do pedido nunca funciona: lê `json.data[0]` mas o geo-gateway devolve array puro — e os 12 testes do módulo mockam o formato errado, B-023 — Telemetria de quota da Lalamove lê o header sem o sufixo de endpoint: `lalamove_rate_limits` sempre nulo e o alerta de quota crítica nunca dispara (+9 more)
 
-### Community 186 - ".limit"
+### Community 185 - ".limit"
 Cohesion: 0.12
 Nodes (15): Contratos de corpo opcional, Entrada mesclada: query + corpo (`lalamove-api`, `lalamove-uapi`), `job-worker`: contrato de envelope, regras de negócio dentro do worker, Onde o contrato roda em relação à autenticação, Status de integração, 5. Riscos e o que fazer com cada um, 1. Lógica do allowlist (`external-bridge-allowlist.ts`), 2. Execução real dos testes em CI (+7 more)
 
-### Community 187 - "ErrorBoundary"
+### Community 186 - "ErrorBoundary"
 Cohesion: 0.12
 Nodes (9): #89 — diff verbatim, Auditoria das PRs fechadas sem merge — 2026-11-21 (byte a byte), Branches, Resultado: 25/25 fechadas sem perda, Trabalho que estava pela metade e foi concluído em 21/11, 175 — [F] `ErrorBoundary` por rota com relatório, 190 — [T] Teste de performance de navegação no CI, 73 — [F] Loading de rota com limite de tempo e erro navegável (+1 more)
 
-### Community 188 - "🔬 Lalamove — Análise Mestra e Roteiro de Evolução"
+### Community 187 - "🔬 Lalamove — Análise Mestra e Roteiro de Evolução"
 Cohesion: 0.12
 Nodes (17): 11. Riscos conhecidos, 1. Mapa do ecossistema, 3. Errata de produção (obrigatória), 5. Fluxo de status e ciclo de vida do pedido, 6. Enums completos, 7. Códigos de erro, 8. Rate limits, 9. Matriz de cobertura (+9 more)
 
-### Community 189 - "📋 Levantamento Completo e Exaustivo de Funcionalidades"
+### Community 188 - "📋 Levantamento Completo e Exaustivo de Funcionalidades"
 Cohesion: 0.12
 Nodes (16): 15.1 Progressive Web App, 15.2 Offline, 15.3 Mobile, 15. PWA e Experiência Mobile, 18. Edge Functions (Backend), 1. Visão Geral do Sistema, 20. Documentação Existente, 21. Scripts e CI/CD (+8 more)
 
-### Community 190 - "MAPBOX — Inventário e Referência (21/11/2026)"
+### Community 189 - "MAPBOX — Inventário e Referência (21/11/2026)"
 Cohesion: 0.12
 Nodes (16): Conta, Custo estimado em regime (30 pedidos/dia ≈ 900/mês), Custo real × estimativa (30 dias até 2026-11-22, `geo_usage`), Decisões de arquitetura (M1–M10), Estado do código (21/11/2026), Estado real da camada geo (medido em 2026-11-22), Estilo do mapa (etapa 59), MAPBOX — Inventário e Referência (21/11/2026) (+8 more)
 
-### Community 191 - "Google Maps Platform × Mapbox × Lalamove V2 — análise (21/11/2026)"
+### Community 190 - "Google Maps Platform × Mapbox × Lalamove V2 — análise (21/11/2026)"
 Cohesion: 0.12
 Nodes (16): 1. O que o Google Maps Platform oferece que serve ao Lalamove V2, 2. O que a Mapbox oferece (e o que muda em relação ao Google), 3. O que a Lalamove fornece (developers.lalamove.com), 4. Estado real do Lalamove V2 na data da análise (repo @ 18c9d83, arquivo:linha), 5. Arquitetura adotada (detalhada nos planos), 6. Estado real em 22/11/2026 — fechamento (etapa 100), Configuração viva em produção (`geo_settings`), Google Maps Platform × Mapbox × Lalamove V2 — análise (21/11/2026) (+8 more)
 
-### Community 192 - "Bloco 4 — Performance e bundle (86–110)"
+### Community 191 - "Bloco 4 — Performance e bundle (86–110)"
 Cohesion: 0.12
 Nodes (17): 100 — [F] Web Vitals reportados, 104 — [F] `OrderDetailModal` carregado sob demanda, 105 — [F] Service Worker com estratégia explícita, 106 — [F] Evitar `select('*')` nas listas, 107 — [F] Imagens de mapa estático com cache, 108 — [F] Reduzir re-render do `Header`, 109 — [F] `useEffect` com `setInterval` sempre limpos, 88 — [F] `xlsx` e `jspdf` dinâmicos (+9 more)
 
-### Community 193 - "Bloco 4 — Consistência: um cabeçalho, um padrão (79–96)"
+### Community 192 - "Bloco 4 — Consistência: um cabeçalho, um padrão (79–96)"
 Cohesion: 0.12
 Nodes (17): 80 — [F] Migrar as páginas com cabeçalho próprio, 81 — [F] `actions` do cabeçalho via contexto, 82 — [F] FAB mobile contextual (ou removido), 84 — [F] Indicador de item ativo unificado, 85 — [F] Contraste do item ativo e do inativo em WCAG AA, 88 — [F] Hierarquia visual do cabeçalho, 89 — [F] Reduzir o ruído da faixa superior, 90 — [F] Um só gatilho de busca global (consome a etapa 47 do PLANO_FRONTEND_190) (+9 more)
 
-### Community 194 - "Onda 2 — Fluxos principais quebrados"
+### Community 193 - "Onda 2 — Fluxos principais quebrados"
 Cohesion: 0.12
 Nodes (17): Etapa 059 — Cancelamento manual grava 'CANCELED' numa coluna que só aceita 'CANCELLED' — o pedido nunca é marcado como cancelado no banco, Etapa 061 — Job travado volta para PENDING sem incrementar attempts — laço infinito de redispatch, sem limite de tentativas, Etapa 062 — banco.md ensina que "o merge e o apply" de migration e nega a existencia de workflow de migration; existe .github/workflows/apply-migrations.yml, manual, Etapa 063 — deploy.md afirma que nao existe automacao de deploy de edge function; .github/workflows/deploy-edges.yml faz exatamente isso em push para main, Etapa 064 — docs/DEPLOYMENT.md e README.md descrevem a producao na Lovable, e banco.md usa o DEPLOYMENT.md como fonte do fluxo de migration, Etapa 065 — mensageria.md manda o plantao olhar o ledger notification_messages e a edge zapp-callback; nenhum dos dois existe no repo, Etapa 067 — O worker horario de renovacao do token UAPI nunca renova nada: depende de um proxy que nao existe e, no caminho de sucesso, nao grava o token novo — so zera o contador de idade, Etapa 068 — Pedido concluido ou cancelado pela Lalamove nao fecha o ciclo: os handlers que incrementam entregas e avisam o time respondem a eventos que a v3 nao envia (+9 more)
 
-### Community 195 - "🚀 Lalamove Intelligence"
+### Community 194 - "🚀 Lalamove Intelligence"
 Cohesion: 0.12
 Nodes (17): 🏗 Arquitetura, Automáticas (Lovable Cloud), 🤝 Contribuição, 🚀 Deploy, 📁 Estrutura do Projeto, 🚀 Lalamove Intelligence, 📝 Licença, Lovable Cloud (Automático) (+9 more)
 
-### Community 196 - "mapbox.ts"
+### Community 195 - "mapbox.ts"
 Cohesion: 0.17
 Nodes (13): decodePolyline(), Fetch, fmt(), MAPBOX_RATE_LIMITS, MapboxOptions, MATRIX_PROFILES, ROUTE_PROFILES, toComponents() (+5 more)
 
-### Community 197 - "inbound-exec.test.ts"
+### Community 196 - "inbound-exec.test.ts"
 Cohesion: 0.18
 Nodes (13): InboundEffect, InboundPlan, applyEffect(), applyMetadata(), BADGE_ALERT_TYPES, executeInboundPlan(), ExecuteResult, InboundRow (+5 more)
 
-### Community 198 - "20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
+### Community 197 - "20251224181640_86877442-4075-4c58-8fcf-7a698b3af567.sql"
 Cohesion: 0.15
 Nodes (16): idx_approval_priority, idx_drivers_blacklisted, idx_drivers_risk_level, idx_drivers_whitelisted, idx_incidents_resolved, idx_orders_bitrix24, idx_orders_cost_center, idx_orders_urgent (+8 more)
 
-### Community 199 - "BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)"
+### Community 198 - "BLOCO 2 — `providers/mapbox.ts` no `geo-gateway` (etapas 19–34)"
 Cohesion: 0.12
 Nodes (16): 19 — Portar `mapbox-proxy` para a interface `GeoProvider`, 20 — Autocomplete = Search Box `suggest` (M1), 21 — Place details = Search Box `retrieve`, 22 — Fallback de autocomplete: Geocoding v6 `autocomplete=true`, 23 — Geocode forward (temporário e permanente), 24 — Reverse, 25 — Batch geocode (backfill), 26 — Route = Directions v5 `driving-traffic` (+8 more)
 
-### Community 200 - "BLOCO 6 — Notificações (etapas 65–74)"
+### Community 199 - "BLOCO 6 — Notificações (etapas 65–74)"
 Cohesion: 0.15
 Nodes (14): 66 — `send-notification`: destinatários por pedido, 67 — Templates por evento, 70 — Agendar `check-driver-alerts` e `escalate-alerts`, 71 — `alert_configurations` dos novos tipos, 72 — UI de configuração dos novos alertas, 74 — Teste ponta a ponta de notificação, BLOCO 6 — Notificações (etapas 65–74), ref_jsr_std (+6 more)
 
-### Community 201 - "Integração n8n ↔ Lalamove Token Manager"
+### Community 200 - "Integração n8n ↔ Lalamove Token Manager"
 Cohesion: 0.12
 Nodes (15): Arquitetura, Cron job (servidor Linux), Cron no n8n (renovação agendada), Exemplo: Workflow cotação com token automático, Fluxo de renovação em detalhe, Force refresh (quando necessário):, Iniciar o servidor, Integração n8n ↔ Lalamove Token Manager (+7 more)
 
-### Community 202 - "width-regression.mjs"
+### Community 201 - "width-regression.mjs"
 Cohesion: 0.17
 Nodes (10): ref_node_module, ref_playwright, avaliarLargura(), TOLERANCIA_PX, BASE_URL, carregarChromium(), main(), medirLargura() (+2 more)
 
-### Community 203 - "scripts"
+### Community 202 - "scripts"
 Cohesion: 0.12
 Nodes (16): scripts, build, build:dev, dev, graph:setup, graph:update, lint, lint:a11y (+8 more)
 
-### Community 204 - "check-i18n-parity.unit.mjs"
+### Community 203 - "check-i18n-parity.unit.mjs"
 Cohesion: 0.22
 Nodes (14): achatar(), AQUI, carregarLocales(), comparar(), DIR_LOCALES, IDIOMA_REFERENCIA, LOCALES, main() (+6 more)
 
-### Community 205 - "render-workflow-docs.mjs"
+### Community 204 - "render-workflow-docs.mjs"
 Cohesion: 0.20
 Nodes (14): AQUI, CAMPOS, DIR_WF, extrairDocs(), extrairNaoEBug(), KPI_PATH, nomeDe(), principal() (+6 more)
 
-### Community 206 - ".stats"
+### Community 205 - ".stats"
 Cohesion: 0.23
 Nodes (3): OfflineConnection, Catálogo e resultados sintéticos; nenhum driver, socket ou banco real., SnapshotDBStatsTests
 
-### Community 207 - "errorMonitoring.ts"
+### Community 206 - "errorMonitoring.ts"
 Cohesion: 0.18
 Nodes (11): Props, State, captureError(), ErrorPayload, generateErrorId(), generateFingerprint(), initErrorMonitoring(), isDuplicate() (+3 more)
 
-### Community 208 - "mapbox.test.ts"
+### Community 207 - "mapbox.test.ts"
 Cohesion: 0.19
 Nodes (10): Call, RETRIEVE, SUGGEST, encodePolyline(), pointSegDeg(), simplify(), fmtLatLng(), GeoPoint (+2 more)
 
-### Community 209 - "compilerOptions"
+### Community 208 - "compilerOptions"
 Cohesion: 0.12
 Nodes (15): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, module, moduleDetection, moduleResolution, noEmit (+7 more)
 
-### Community 210 - "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian"
+### Community 209 - "🏆 Relatório de Auditoria Enterprise - Lalamove Guardian"
 Cohesion: 0.13
 Nodes (11): 1. Resumo Executivo, 2. Matriz de Riscos, 4. Mapeamento Técnico e Evidências, 5. Checklist Auditável (Implementado vs. Pendente), 6. Checklist Operacional para Auditoria Contínua, 7. Conclusão e Próximos Passos, 🚩 Principais Achados, 💡 Recomendações (+3 more)
 
-### Community 211 - ".build"
+### Community 210 - ".build"
 Cohesion: 0.24
 Nodes (7): 15. Qualidade de Código — **8/10**, 5. CI/CD — **7/10**, 101 — [C] Orçamento de bundle no CI 🔒, 110 — [T] Lighthouse CI na pré-visualização 🔒, 86 — [C] `vite.config.ts` com `build` explícito, Etapa 238 — O job deploy do ci.yml so imprime uma frase e aparece como deploy bem-sucedido, SnapshotCallerFreshnessTests
 
-### Community 212 - "📋 Levantamento Completo de Funcionalidades e Ferramentas"
+### Community 211 - "📋 Levantamento Completo de Funcionalidades e Ferramentas"
 Cohesion: 0.13
 Nodes (14): 🗄️ Banco de Dados, CI/CD, 📚 Documentação, ⚡ Edge Functions (Backend), Enums, Implementações, 🔌 Integrações Externas, Lalamove Guardian - Sistema de Gestão de Entregas (+6 more)
 
-### Community 213 - "Plano Front-End Sênior — Lalamove V2: correções, contratos e melhorias em 190 etapas (22/11/2026)"
+### Community 212 - "Plano Front-End Sênior — Lalamove V2: correções, contratos e melhorias em 190 etapas (22/11/2026)"
 Cohesion: 0.13
 Nodes (14): 156 — [F] Ícones do PWA e assets faltantes, 157 — [F] `manifest.json` completo, 158 — [F] Meta sociais e canonical corretos, 159 — [C] Headers de segurança e cache no Vercel 🔒, 160 — [C] `.env.example` sincronizado, 161 — [C] `package.json` saneado, 162 — [C] `depcheck` sem dependências órfãs, 163 — [C] `tsconfig` estrito de verdade (+6 more)
 
-### Community 214 - "lalamoveOrderEdit.ts"
+### Community 213 - "lalamoveOrderEdit.ts"
 Cohesion: 0.21
 Nodes (13): 167 — [F] Quebrar `OrderDetailModal` (1016 linhas), OrderActions(), evaluateOrderOperation(), isTerminalStatus(), MAX_PRIORITY_FEE_BRL, normalizeOrderStatus(), OperationVerdict, OrderEditContext (+5 more)
 
-### Community 215 - "Bloco 9 — Testes de navegação, documentação e rollout (183–200)"
+### Community 214 - "Bloco 9 — Testes de navegação, documentação e rollout (183–200)"
 Cohesion: 0.13
 Nodes (15): 183 — [T] Suíte e2e `navegacao.e2e.ts` (desktop), 184 — [T] Suíte e2e mobile (390×844), 185 — [T] Suíte e2e tablet (820×1180), 186 — [T] E2E de RBAC × navegação por papel, 187 — [T] E2E do Voltar do navegador em 6 cenários, 188 — [T] E2E de deep-link em aba nova, 189 — [T] Teste de regressão visual do cabeçalho e navegação, 192 — [C] Guard de CI para a fonte única de rotas (+7 more)
 
-### Community 216 - "Bloco 3 — Feedback visual da transição (59–78)"
+### Community 215 - "Bloco 3 — Feedback visual da transição (59–78)"
 Cohesion: 0.13
 Nodes (15): 61 — [F] Duração e curva padronizadas em tokens, 62 — [F] Barra de progresso de navegação, 63 — [F] Suspense por rota com skeleton da própria tela, 64 — [F] Esqueleto não "salta" para o conteúdo, 65 — [F] Reservar a altura do cabeçalho e do breadcrumb, 66 — [F] Scroll ao topo no container correto (consome a etapa 56 do PLANO_FRONTEND_190), 68 — [F] Restauração de posição de scroll no POP, 70 — [F] Prefetch dos dados, não só do código (+7 more)
 
-### Community 217 - "useDeliveryMetrics.ts"
+### Community 216 - "useDeliveryMetrics.ts"
 Cohesion: 0.17
 Nodes (11): @date-fns/tz, DeliveryMetrics, DeliveryTrend, DriverDeliveryStats, fetchDeliveryMetrics(), fetchDeliveryTrends(), fetchDriverDeliveryStats(), useDeliveryTrends() (+3 more)
 
-### Community 218 - "a11y-button-name-ratchet.mjs"
+### Community 217 - "a11y-button-name-ratchet.mjs"
 Cohesion: 0.27
 Nodes (14): DEFAULT_BASELINE, DEFAULT_ROOT, detectButtonIconViolations(), detectSelectTriggerViolations(), detectTabsTriggerViolations(), __dirname, listSourceFiles(), main() (+6 more)
 
-### Community 219 - "bundle-budget.unit.mjs"
+### Community 218 - "bundle-budget.unit.mjs"
 Cohesion: 0.26
 Nodes (13): allAssetFiles(), budgetFromMeasurement(), evaluate(), extractInitialAssets(), gzipKB(), main(), measure(), parseArgs() (+5 more)
 
-### Community 220 - "check-e2e-artifact-secrets.mjs"
+### Community 219 - "check-e2e-artifact-secrets.mjs"
 Cohesion: 0.31
 Nodes (13): antesDe(), avaliarWorkflow(), blocoDoUpload(), CAMINHOS_SENSIVEIS, credenciaisUsadas(), guarda(), REDATOR, redigeAntesDoUpload() (+5 more)
 
-### Community 221 - "check-migration-drift.test.mjs"
+### Community 220 - "check-migration-drift.test.mjs"
 Cohesion: 0.30
 Nodes (12): collisionFixture(), commentOnlyEvidence(), fixtureSqlHash(), ledgerRecord(), nameOnlyEvidence(), pinnedEvidence(), pinnedMarkerEvidence(), registeredTombstoneEvidence() (+4 more)
 
-### Community 222 - "verify-production.mjs"
+### Community 221 - "verify-production.mjs"
 Cohesion: 0.32
 Nodes (14): args, aviso(), BASE_URL, buscar(), checarAsset(), checarDeepLink(), checarRaiz(), checarVersionJson() (+6 more)
+
+### Community 222 - "OrderDetailModal.tsx"
+Cohesion: 0.17
+Nodes (13): formatCurrency(), formatDate(), OrderDetailModal, statusConfig, Stop, StopProof, vehicleIcons, eventLabels (+5 more)
 
 ### Community 223 - "20251226010001_configure_pg_cron.sql"
 Cohesion: 0.14
@@ -2008,101 +2008,101 @@ Nodes (8): CARIMBOS, IGNORADOS, limparHistoricoCron(), mudou(), normalizarGrupos
 Cohesion: 0.22
 Nodes (8): Arquivos, Custo, Fontes SQL, Regras humanas, regras_negocio — regras de negócio para agentes de IA, Rodar local, Secrets, Testes de regressão
 
-### Community 345 - "RiskRulesPage.tsx"
-Cohesion: 0.25
-Nodes (8): RiskRulesPage, RiskRule, RiskRuleInput, defaultFormData, DeleteRuleConfirm(), RiskRuleFormDialogProps, FIELD_OPTIONS, OPERATOR_OPTIONS
-
-### Community 346 - "ProvidersTab"
+### Community 345 - "ProvidersTab"
 Cohesion: 0.25
 Nodes (9): useMessagingSettings(), useMessagingUsage(), useNotificationLedger(), formatCents(), formatDateTime(), LedgerTab(), ProvidersTab(), toForm() (+1 more)
 
-### Community 347 - "20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql"
+### Community 346 - "20251224182758_5a658aa1-838d-4163-b50d-46f996e6fe2a.sql"
 Cohesion: 0.28
 Nodes (8): public.bitrix24_activities, public.bitrix24_stage_mappings, public.bitrix24_sync, public.bitrix24_tokens, public.lalamove_orders, public.update_updated_at_column, update_bitrix24_sync_updated_at, update_bitrix24_tokens_updated_at
 
-### Community 348 - "20251226000002_create_audit_log.sql"
+### Community 347 - "20251226000002_create_audit_log.sql"
 Cohesion: 0.33
 Nodes (7): audit_driver_changes(), audit_drivers_trigger, audit_log_created_at_idx, audit_log_resource_idx, audit_log_user_id_idx, public.audit_log, auth.users
 
-### Community 349 - "20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql"
+### Community 348 - "20260712221144_f9eda2dc-4805-4cce-b99b-e3d2826ca6cb.sql"
 Cohesion: 0.31
 Nodes (7): idx_alert_dedup_last_notified, idx_alerts_pending_escalation, public.alert_dedup, public.claim_alert_notification(), public.get_pending_escalations(), public.alert_configurations, public.alerts
 
-### Community 350 - "20261122090000_cache_system_backend.sql"
+### Community 349 - "20261122090000_cache_system_backend.sql"
 Cohesion: 0.31
 Nodes (7): cache_status, idx_delivery_metrics_cache_date, idx_driver_stats_cache_driver_id, idx_hourly_metrics_cache_hour, delivery_metrics_cache, driver_stats_cache, hourly_metrics_cache
 
-### Community 351 - "Banco de dados — referência para agentes"
+### Community 350 - "Banco de dados — referência para agentes"
 Cohesion: 0.25
 Nodes (7): Armadilhas já pagas, Banco de dados — referência para agentes, Banco OFICIAL, Como o DDL entra em produção, Nenhum MCP desta sessão aponta para este banco, Onde se trabalha, Segredos commitados — código limpo em 2026-11-08; migrate-helper confirmado fora da produção; `service_role`/`anon` provavelmente ainda NÃO rotacionadas
 
-### Community 352 - "Auditoria: ledger de migrations × schema real (2026-11-22)"
+### Community 351 - "Auditoria: ledger de migrations × schema real (2026-11-22)"
 Cohesion: 0.25
 Nodes (7): Auditoria: ledger de migrations × schema real (2026-11-22), Bugs encontrados no caminho, Entradas no ledger, sem arquivo no repo (8), Migrations no repo, ausentes do ledger (9), Resultado, Tabelas ausentes do schema real — decididas, Verificado em producao
 
-### Community 353 - "🎨 Sistema de Design"
+### Community 352 - "🎨 Sistema de Design"
 Cohesion: 0.25
 Nodes (8): Animações Disponíveis, Classes Utilitárias, Cores Estendidas, Cores Semânticas (CSS Variables), Glows, Gradientes, 🎨 Sistema de Design, Sombras
 
-### Community 354 - "🧩 Componentes UI (shadcn/ui + Custom)"
+### Community 353 - "🧩 Componentes UI (shadcn/ui + Custom)"
 Cohesion: 0.25
 Nodes (8): Componentes Base (shadcn/ui), Componentes Customizados, Componentes de Aprovação, Componentes de Dashboard, Componentes de Layout, Componentes de Mapa, Componentes de Notificação, 🧩 Componentes UI (shadcn/ui + Custom)
 
-### Community 355 - "Contrato de dados do motor geo"
+### Community 354 - "Contrato de dados do motor geo"
 Cohesion: 0.25
 Nodes (8): 1. O que o motor lê, 2. O que o motor escreve, 3. Ciclo de vida do rastreio, 4. Divergências conhecidas entre o plano e o código, 5. Como conferir que está vivo, Contrato de dados do motor geo, `public.active_tracking` (1 linha por pedido), `public.lalamove_orders`
 
-### Community 356 - "13. Segurança Avançada"
+### Community 355 - "13. Segurança Avançada"
 Cohesion: 0.25
 Nodes (8): 13.1 Dashboard de Segurança, 13.2 IP Whitelist, 13.3 Geo-Blocking, 13.4 Rate Limiting, 13.5 IPs Bloqueados, 13.6 Verificação de Email, 13.7 Row Level Security (RLS), 13. Segurança Avançada
 
-### Community 357 - "5. Gestão de Motoristas"
+### Community 356 - "5. Gestão de Motoristas"
 Cohesion: 0.25
 Nodes (8): 5.1 CRUD de Motoristas, 5.2 Status de Motoristas, 5.3 Perfil do Motorista, 5.4 Filtros Avançados, 5.5 Ações em Lote, 5.6 Métricas por Motorista, 5. Gestão de Motoristas, Página: `/drivers` → `DriversPage.tsx`
 
-### Community 358 - "P-12-analise-funcionalidades-planejadas.md"
+### Community 357 - "P-12-analise-funcionalidades-planejadas.md"
 Cohesion: 0.25
 Nodes (7): Checklist da auditoria (`docs/audit_report.md` seção 5), Componentes UI do doc 17.5 — todos presentes, Conclusão, Fontes do "planejado" cruzadas com o real, Lacuna não-funcional identificada (vira P-13), Quantitativo — plano vs. real, Scripts e CI (doc 21)
 
-### Community 359 - "BLOCO 9 — Qualidade, deploy, operação (etapas 93–100)"
+### Community 358 - "BLOCO 9 — Qualidade, deploy, operação (etapas 93–100)"
 Cohesion: 0.25
 Nodes (8): 100 — Fechamento, 93 — CI, 94 — Deploy e verificação, 95 — Verificação de cotas e custo real, 97 — Runbook, 98 — Limpeza de legado, 99 — Aceite com pedido real, BLOCO 9 — Qualidade, deploy, operação (etapas 93–100)
 
-### Community 360 - "BLOCO 4 — Rota esperada e ETA (etapas 43–52)"
+### Community 359 - "BLOCO 4 — Rota esperada e ETA (etapas 43–52)"
 Cohesion: 0.29
 Nodes (8): 43 — Edge `geo-route-planner` (ou action interna do `job-worker`) ✅, 45 — Função SQL `geo_update_route_metrics()` ✅, 46 — Avanço de parada ✅, 47 — ETA por Route Matrix ✅, 51 — Snap-to-road (Roads API) — desligado por padrão ✅, 52 — Testes do bloco ✅, BLOCO 4 — Rota esperada e ETA (etapas 43–52), snapDriverPosition()
 
-### Community 361 - "BLOCO 1 — Dados e conformidade (etapas 11–18) 🔒 DDL em produção"
+### Community 360 - "BLOCO 1 — Dados e conformidade (etapas 11–18) 🔒 DDL em produção"
 Cohesion: 0.25
 Nodes (8): 11 — `geo_settings.provider` aceita `auto` (M9), 12 — `geo_price_list` Mapbox completa, 13 — `geocode_precision` com valores Mapbox, 14 — `place_id` com prefixo de provedor (M8), 16 — `region_cache` → Mapbox reverse só com `permanent`, 17 — Coordenada da cotação Lalamove como fonte (M2), 18 — `order_geo_events`/trigger: sem mudança, BLOCO 1 — Dados e conformidade (etapas 11–18) 🔒 DDL em produção
 
-### Community 362 - "BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)"
+### Community 361 - "BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)"
 Cohesion: 0.25
 Nodes (8): 36 — Teste de cobertura BR do Search Box (decide M1), 37 — Sessões corretas (custo), 38 — CEP primeiro, Mapbox depois, 39 — Gravação conforme M2, 40 — Endereços sem resultado, 43 — Atribuição, 44 — Testes E2E, BLOCO 3 — Endereço no pedido com Mapbox (etapas 35–44)
 
-### Community 363 - "vite.config.ts"
+### Community 362 - "vite.config.ts"
 Cohesion: 0.29
 Nodes (6): 193 — [C] Orçamento de bundle para a navegação, lovable-tagger, ref_path, vite, @vitejs/plugin-react-swc, manualChunks()
 
-### Community 364 - "Causa raiz: Teste que passa sem exercitar o que deveria proteger"
+### Community 363 - "Causa raiz: Teste que passa sem exercitar o que deveria proteger"
 Cohesion: 0.25
 Nodes (8): B-061 — O teste que protege a coordenada do pedido se auto-pula justamente quando o geo-gateway falha, Causa raiz: Teste que passa sem exercitar o que deveria proteger, M-055 — Teste e2e obrigatório bate no endpoint real de recuperação de senha, sem interceptar, e só passa no caminho feliz, M-056 — src/__tests__/improvements-validation.test.tsx: 40 testes que não importam uma linha do aplicativo, M-089 — O bloqueio por tentativas de login (anti-força-bruta) não tem nenhum teste da implementação real — o e2e simula o backend inteiro, M-090 — O teste de RBAC autenticado passa tanto se o usuário for barrado quanto se ele entrar, M-091 — Webhook da Lalamove: só o HMAC é testado; mapeamento de status, replay e idempotência não têm teste e o arquivo não exporta nada, M-144 — Cotação, criação e cancelamento de pedido na edge lalamove-api: nenhuma das 15 ações tem teste, nem a assinatura HMAC que autentica todas elas
 
-### Community 365 - "RUNBOOK — Mapbox (operação)"
+### Community 364 - "RUNBOOK — Mapbox (operação)"
 Cohesion: 0.25
 Nodes (7): 1. Token vazado (`sk.` ou `pk.` commitado / exposto), 2. `429` persistente, 3. Mapbox fora do ar (5xx/timeout), 4. Search Box sem cobertura no Brasil, 5. Fatura inesperada, 6. `geo-gateway` responde `GEO_NOT_CONFIGURED`, RUNBOOK — Mapbox (operação)
 
-### Community 366 - "os"
+### Community 365 - "os"
 Cohesion: 0.36
 Nodes (6): os, re, fix_file(), main(), main(), process_file()
 
-### Community 367 - "📊 Diagramas de Fluxo"
+### Community 366 - "📊 Diagramas de Fluxo"
 Cohesion: 0.25
 Nodes (8): Cálculo do Score de Risco, 📊 Diagramas de Fluxo, Fluxo da Fila de Aprovações, Fluxo de Avaliação de Motorista, Fluxo de Incidentes, Integração com Lalamove, Rastreamento em Tempo Real, Sistema de Alertas Multicanal
 
-### Community 368 - "publish.sh"
+### Community 367 - "publish.sh"
 Cohesion: 0.46
 Nodes (7): assert_no_foreign_staged_changes(), discard_generated_output_commit(), generated_commit_is_head(), generated_output_conflict_is_recoverable(), remember_generated_head(), publish.sh script, stage()
+
+### Community 368 - "TelemetryCharts.tsx"
+Cohesion: 0.36
+Nodes (5): formatBucketTime(), getBucketMs(), Props, TelemetryCharts(), TelemetryRow
 
 ### Community 369 - "DeliveryOutcome"
 Cohesion: 0.25
@@ -2649,24 +2649,24 @@ Cohesion: 0.67
 Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
 ## Knowledge Gaps
-- **3816 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+3811 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4734 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **3815 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+3810 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4733 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **204 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `button.tsx`, `Sidebar`, `badge.tsx`, `App.tsx`, `4. Componentes, hooks, libs e estado — **revisado**`, `lucide-react`, `AlertsPage.tsx`, `AdvancedReportsPage.tsx`, `useRealtimeSubscriptions.ts`, `useIncidents.ts`, `Bloco 8 — Métricas, telemetria e iteração (165–182)`, `ApprovalsPage.tsx`, `motion.tsx`, `useCachedStats.ts`, `OrderCard`, `AppLayout`, `useWebhookEvents.ts`, `react`, `NotificationPreferences.tsx`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `CommandPaletteEnhanced.tsx`, `PasswordStrengthIndicator.tsx`, `AddressAutocomplete.tsx`, `Bloco 7 — Integração: URL como estado, modais endereçáveis e multi-aba (145–164)`, `AdminTelemetriaPage.tsx`, `StatusTimeline.tsx`, `ProvidersTab`, `RiskRulesPage.tsx`, `WaitingTimeCounter.tsx`, `useRiskRules.ts`, `useDrivers.ts`, `OfflineIndicator.tsx`, `chart.tsx`, `layout-guard.mjs`, `useMetrics.ts`?**
+- **Why does `cn()` connect `cn` to `Sidebar`, `button.tsx`, `App.tsx`, `badge.tsx`, `4. Componentes, hooks, libs e estado — **revisado**`, `AlertsPage.tsx`, `lucide-react`, `useRealtimeSubscriptions.ts`, `useIncidents.ts`, `AdvancedReportsPage.tsx`, `Bloco 8 — Métricas, telemetria e iteração (165–182)`, `ApprovalsPage.tsx`, `motion.tsx`, `useCachedStats.ts`, `OrderCard`, `react`, `AppLayout`, `useWebhookEvents.ts`, `NotificationPreferences.tsx`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `CommandPaletteEnhanced.tsx`, `PasswordStrengthIndicator.tsx`, `AddressAutocomplete.tsx`, `Bloco 7 — Integração: URL como estado, modais endereçáveis e multi-aba (145–164)`, `StatusTimeline.tsx`, `ProvidersTab`, `OrderDetailModal.tsx`, `WaitingTimeCounter.tsx`, `useRiskRules.ts`, `useDrivers.ts`, `OfflineIndicator.tsx`, `chart.tsx`, `layout-guard.mjs`, `useMetrics.ts`?**
   _High betweenness centrality (0.135) - this node is a cross-community bridge._
-- **Why does `vitest` connect `@tanstack/react-query` to `cn`, `useExternalData.ts`, `lalamoveValidation.ts`, `client.ts`, `package.json`, `useCommandPaletteSearch.ts`, `useMapMarkers.test.ts`, `types/index.ts`, `AdvancedReportsPage.tsx`, `useRealtimeSubscriptions.ts`, `useIncidents.ts`, `check-test-inventory.mjs`, `useMapbox.ts`, `lalamoveCatalog.ts`, `lalamoveReasons.ts`, `AddressAutocomplete.test.tsx`, `NewOrderDialog.tsx`, `useMapMarkers.ts`, `LiveMap.tsx`, `GoogleMapsCanvas.tsx`, `useBitrix24.ts`, `useAdvancedReports.ts`, `useWebhookEvents.ts`, `useGeoAdmin.ts`, `react`, `OrderTrackingMap.test.tsx`, `AddressAutocomplete.tsx`, `lalamoveOrderEdit.ts`, `AdminTelemetriaPage.tsx`, `useDeliveryMetrics.ts`, `StatusTimeline.tsx`, `geo-gateway.ts`, `useTrackingData.ts`, `lalamoveErrors.ts`, `useLalamoveUapi.ts`, `roles.ts`, `MessagingSettingsPage.test.tsx`, `vite.config.ts`, `WaitingTimeCounter.tsx`, `useRiskRules.ts`, `useGoogleMapsLoader.ts`, `ref_node_fs`, `useContractVersionUsage.ts`?**
+- **Why does `vitest` connect `@tanstack/react-query` to `cn`, `useExternalData.ts`, `lalamoveValidation.ts`, `client.ts`, `package.json`, `useCommandPaletteSearch.ts`, `useMapMarkers.test.ts`, `types/index.ts`, `useRealtimeSubscriptions.ts`, `useIncidents.ts`, `AdvancedReportsPage.tsx`, `lalamoveReasons.ts`, `check-test-inventory.mjs`, `useMapbox.ts`, `lalamoveCatalog.ts`, `AddressAutocomplete.test.tsx`, `NewOrderDialog.tsx`, `useMapMarkers.ts`, `react`, `LiveMap.tsx`, `GoogleMapsCanvas.tsx`, `useBitrix24.ts`, `useAdvancedReports.ts`, `useWebhookEvents.ts`, `useGeoAdmin.ts`, `OrderTrackingMap.test.tsx`, `AddressAutocomplete.tsx`, `lalamoveOrderEdit.ts`, `useDeliveryMetrics.ts`, `StatusTimeline.tsx`, `geo-gateway.ts`, `useTrackingData.ts`, `lalamoveErrors.ts`, `useLalamoveUapi.ts`, `roles.ts`, `MessagingSettingsPage.test.tsx`, `vite.config.ts`, `WaitingTimeCounter.tsx`, `TelemetryCharts.tsx`, `useRiskRules.ts`, `useGoogleMapsLoader.ts`, `ref_node_fs`, `useContractVersionUsage.ts`?**
   _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `react` connect `react` to `cn`, `button.tsx`, `App.tsx`, `badge.tsx`, `useAchievementsSystem.tsx`, `Sidebar`, `@tanstack/react-query`, `4. Componentes, hooks, libs e estado — **revisado**`, `useScheduledTheme.ts`, `lucide-react`, `client.ts`, `package.json`, `AlertsPage.tsx`, `useCommandPaletteSearch.ts`, `types/index.ts`, `AdvancedReportsPage.tsx`, `useRealtimeSubscriptions.ts`, `ApprovalsPage.tsx`, `useMapbox.ts`, `motion.tsx`, `AddressAutocomplete.test.tsx`, `useCachedStats.ts`, `NewOrderDialog.tsx`, `useMapMarkers.ts`, `LiveMap.tsx`, `GoogleMapsCanvas.tsx`, `AppLayout`, `useBitrix24.ts`, `useAdvancedReports.ts`, `useWebhookEvents.ts`, `NotificationPreferences.tsx`, `OrderTrackingMap.tsx`, `useErrorLogs.ts`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `CommandPaletteEnhanced.tsx`, `PasswordStrengthIndicator.tsx`, `AddressAutocomplete.tsx`, `errorMonitoring.ts`, `AdminTelemetriaPage.tsx`, `StatusTimeline.tsx`, `useDeliveryMetrics.ts`, `geo-gateway.ts`, `RiskRulesPage.tsx`, `useTrackingData.ts`, `useLalamoveUapi.ts`, `webVitals.ts`, `WaitingTimeCounter.tsx`, `useRiskRules.ts`, `useOfflineStorage.ts`, `useGoogleMapsLoader.ts`, `OfflineIndicator.tsx`, `chart.tsx`?**
+- **Why does `react` connect `react` to `cn`, `button.tsx`, `App.tsx`, `badge.tsx`, `useAchievementsSystem.tsx`, `Sidebar`, `@tanstack/react-query`, `4. Componentes, hooks, libs e estado — **revisado**`, `useScheduledTheme.ts`, `client.ts`, `package.json`, `AlertsPage.tsx`, `useCommandPaletteSearch.ts`, `lucide-react`, `types/index.ts`, `useRealtimeSubscriptions.ts`, `AdvancedReportsPage.tsx`, `ApprovalsPage.tsx`, `useMapbox.ts`, `motion.tsx`, `AddressAutocomplete.test.tsx`, `useCachedStats.ts`, `NewOrderDialog.tsx`, `useMapMarkers.ts`, `LiveMap.tsx`, `GoogleMapsCanvas.tsx`, `AppLayout`, `useBitrix24.ts`, `useAdvancedReports.ts`, `useWebhookEvents.ts`, `NotificationPreferences.tsx`, `OrderTrackingMap.tsx`, `useErrorLogs.ts`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `CommandPaletteEnhanced.tsx`, `PasswordStrengthIndicator.tsx`, `errorMonitoring.ts`, `AddressAutocomplete.tsx`, `StatusTimeline.tsx`, `useDeliveryMetrics.ts`, `geo-gateway.ts`, `useTrackingData.ts`, `OrderDetailModal.tsx`, `useLalamoveUapi.ts`, `webVitals.ts`, `WaitingTimeCounter.tsx`, `useRiskRules.ts`, `useOfflineStorage.ts`, `useGoogleMapsLoader.ts`, `OfflineIndicator.tsx`, `chart.tsx`?**
   _High betweenness centrality (0.049) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**
   _`cn()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `session-start.sh script`, `PATH`, `$schema` to the rest of the system?**
-  _3816 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _3815 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.017538984097576038 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.016659782459038965 - nodes in this community are weakly interconnected._
 - **Should `button.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05652348916106032 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05624079995939293 - nodes in this community are weakly interconnected._

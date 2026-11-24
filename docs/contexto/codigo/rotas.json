@@ -1930,6 +1930,10 @@
    "definida_em": "src/App.tsx",
    "redireciona": null,
    "hooks": [
+    "useAlertGrouping",
+    "useAlertSelection",
+    "useCallback",
+    "useMemo",
     "useNotificationHistory",
     "useNotificationStats",
     "usePendingGeoEvents",
@@ -1937,6 +1941,8 @@
     "useState"
    ],
    "hooks_locais": [
+    "useAlertGrouping",
+    "useAlertSelection",
     "useNotificationHistory",
     "useNotificationStats",
     "usePendingGeoEvents"
@@ -1951,7 +1957,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 13
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/orders",

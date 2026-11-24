@@ -2589,7 +2589,7 @@
    "modulo": "pages",
    "arquivos": 57,
    "testes": 3,
-   "linhas": 17650,
+   "linhas": 17646,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",
@@ -3116,7 +3116,7 @@
    "modulo": "pages/alert-configurations",
    "arquivos": 1,
    "testes": 1,
-   "linhas": 188,
+   "linhas": 194,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

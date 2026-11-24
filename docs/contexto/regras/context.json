@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "71cf6b0687f8d44400c153b2952d011e977373b7",
+  "sha": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 12:58 UTC",
+  "generated_at": "2026-11-24 13:11 UTC",
   "files_total": 1106,
   "code_files": 925,
-  "code_lines": 162598
+  "code_lines": 162600
  },
  "version": "1.3.2",
- "facts_hash": "cc7151e1d571235d",
+ "facts_hash": "43992796503349bd",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -18423,7 +18423,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 16
    },
    {
     "path": "",
@@ -18436,7 +18436,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 13
+    "deps_count": 15
    },
    {
     "path": "",
@@ -22521,7 +22521,7 @@
   {
    "module": "src/pages",
    "files": 93,
-   "lines": 21479,
+   "lines": 21481,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -71143,7 +71143,7 @@
   },
   "src/pages/NotificationHistoryPage.tsx": {
    "path": "src/pages/NotificationHistoryPage.tsx",
-   "lines": 525,
+   "lines": 521,
    "exports": [
     "function NotificationHistoryPage"
    ]
@@ -71583,7 +71583,7 @@
   },
   "src/pages/alert-configurations/AlertConfigCard.tsx": {
    "path": "src/pages/alert-configurations/AlertConfigCard.tsx",
-   "lines": 188,
+   "lines": 194,
    "exports": [
     "function AlertConfigCard"
    ],
@@ -79263,10 +79263,20 @@
   }
  },
  "git": {
-  "sha": "71cf6b0687f8d44400c153b2952d011e977373b7",
+  "sha": "53d34963d70f8ca12de31ac42a7429934ab4f68f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "53d3496",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)",
+    "files": [
+     "src/pages/NotificationHistoryPage.tsx",
+     "src/pages/alert-configurations/AlertConfigCard.tsx"
+    ]
+   },
    {
     "sha": "71cf6b0",
     "date": "2026-11-24",
@@ -79640,20 +79650,6 @@
      "src/pages/LiveMapPage.tsx",
      "src/pages/alert-configurations/AlertConfigCard.tsx"
     ]
-   },
-   {
-    "sha": "c4fdb69",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: lote 9 - EmptyState component + vitest script (#321)",
-    "files": [
-     "package.json",
-     "src/components/ui/empty-state.tsx",
-     "src/pages/AlertsPage.tsx",
-     "src/pages/ApprovalsPage.tsx",
-     "src/pages/DriversPage.tsx",
-     "src/pages/OrdersPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -79664,6 +79660,10 @@
    [
     "supabase/functions/check-driver-alerts/index.ts",
     5
+   ],
+   [
+    "src/pages/NotificationHistoryPage.tsx",
+    3
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.test.ts",
@@ -79694,7 +79694,7 @@
     3
    ],
    [
-    "src/pages/AlertsPage.tsx",
+    "src/pages/alert-configurations/AlertConfigCard.tsx",
     2
    ],
    [
@@ -79731,10 +79731,6 @@
    ],
    [
     "supabase/functions/zapp-callback/ledger.ts",
-    2
-   ],
-   [
-    "supabase/functions/lalamove-webhook/index.ts",
     2
    ]
   ]
