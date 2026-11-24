@@ -16,6 +16,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { notifyDriver } from '../_shared/messaging/notify-driver.ts';
+import { isTrackingFresh, trackingAgeMinutes } from '../_shared/guardian-freshness.ts';
 
 // ============================================================================
 // TIPOS
@@ -564,7 +565,7 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
 
   const trackingQuery = supabase
     .from('active_tracking')
-    .select('id, order_id, driver_id, next_stop_index, current_latitude, current_longitude')
+    .select('id, order_id, driver_id, next_stop_index, current_latitude, current_longitude, last_updated')
     .eq('tracking_status', 'ACTIVE');
 
   if (payload.trackingId) trackingQuery.eq('id', payload.trackingId);
@@ -581,6 +582,12 @@ async function processRoutePlan(supabase: any, payload: any): Promise<any> {
   for (const t of trackings) {
     if (t.current_latitude == null || t.current_longitude == null) {
       results.push({ tracking_id: t.id, status: 'skipped', error: 'sem posição do motorista' });
+      skipped++;
+      continue;
+    }
+    const staleGps = staleGpsReason(t.last_updated);
+    if (staleGps) {
+      results.push({ tracking_id: t.id, status: 'skipped', error: staleGps });
       skipped++;
       continue;
     }
@@ -840,6 +847,35 @@ const ETA_MIN_INTERVAL_MS = 60_000;
 /** Etapa 48 (D9): deslocamento minimo para justificar nova medicao. */
 const ETA_MIN_MOVED_M = 300;
 
+/**
+ * Idade maxima da posicao do motorista para valer um recálculo pago de rota/ETA.
+ * Mesma janela que o agendador usa para o `eta_refresh`
+ * (`refresh_geo_jobs`, etapa 46: "tracking ativo com posicao conhecida nas
+ * ultimas 2 h"). Sem esta guarda, tracking que ficou ACTIVE depois que a
+ * sincronizacao parou continua pagando Directions e reescrevendo
+ * `route_computed_at` — a rota aparece "recem calculada" com posicao de meses
+ * atras.
+ */
+export const GEO_POSITION_MAX_AGE_MIN = 120;
+
+/**
+ * Motivo (texto) para nao recalcular rota/ETA quando a posicao do motorista
+ * esta velha; `null` quando pode seguir.
+ */
+export function staleGpsReason(
+  lastUpdated: unknown,
+  nowMs: number = Date.now(),
+  maxAgeMin: number = GEO_POSITION_MAX_AGE_MIN,
+): string | null {
+  const raw = typeof lastUpdated === 'string' ? lastUpdated : null;
+  const now = new Date(nowMs);
+  if (isTrackingFresh(raw, now, maxAgeMin)) return null;
+  const age = trackingAgeMinutes(raw, now);
+  return age === null
+    ? 'posicao do motorista sem data de atualizacao'
+    : `posicao do motorista com ${Math.round(age)} min (limite ${maxAgeMin} min)`;
+}
+
 /** Distancia (m) entre dois pontos — haversine, mesma formula do SQL. */
 export function haversineM(
   a: { lat: number; lng: number },
@@ -969,6 +1005,12 @@ async function processEtaRefresh(supabase: any, payload: any): Promise<any> {
     if (t.current_latitude == null || t.current_longitude == null) {
       skipped++;
       results.push({ tracking_id: t.id, status: 'skipped', error: 'sem posição do motorista' });
+      continue;
+    }
+    const staleGps = staleGpsReason(t.last_updated);
+    if (staleGps) {
+      skipped++;
+      results.push({ tracking_id: t.id, status: 'skipped', error: staleGps });
       continue;
     }
     const stop = await resolveNextStop(supabase, t);
