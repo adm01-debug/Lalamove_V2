@@ -6,7 +6,7 @@
    "src/pages (55)"
   ],
   "componentes": [
-   "src/components (130)",
+   "src/components (131)",
    "src/pages (88)",
    "src/hooks (3)"
   ],
@@ -21,7 +21,7 @@
    "src/integrations (4)"
   ],
   "testes": [
-   "co-localizado (__tests__) (60)",
+   "co-localizado (__tests__) (61)",
    "supabase/functions/<edge> (48)",
    "guards em scripts/ (47)"
   ],
@@ -54,7 +54,7 @@
  },
  "barrels_index": 4,
  "extensao_componentes": [
-  ".tsx (222)"
+  ".tsx (223)"
  ],
  "alias_imports": {
   "(raiz)": {
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)",
+   "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)",
    "feat: renovacao do token uapi sem proxy externo (#362)",
    "fix: mapas e SLA so consideram tracking ativo (#361)",
-   "fix: guardian so avalia tracking ativo (#360)",
-   "fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)",
-   "fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)"
+   "fix: guardian so avalia tracking ativo (#360)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

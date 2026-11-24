@@ -224,7 +224,7 @@
     "parseEdgeError"
    ],
    "export_default": null,
-   "linhas": 60,
+   "linhas": 74,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -862,12 +862,15 @@
    "camada": "lib",
    "exports": [
     "UAPI_ERROR_MAP",
+    "UAPI_SESSION_MISSING_HINT",
+    "UAPI_SESSION_MISSING_MESSAGE",
     "UapiErrorInfo",
     "isUapiAuthFailure",
+    "isUapiSessionMissing",
     "resolveUapiError"
    ],
    "export_default": null,
-   "linhas": 103,
+   "linhas": 152,
    "tabelas": [],
    "rpcs": [],
    "edges": [],
@@ -876,11 +879,12 @@
    "zod_schemas": 0,
    "flags": [],
    "papeis": [],
-   "usado_por": 1,
+   "usado_por": 6,
    "usado_por_modulos": [
+    "components/lalamove",
     "hooks"
    ],
-   "coberto_por_testes": 2,
+   "coberto_por_testes": 3,
    "orfao": false
   },
   {

@@ -1562,8 +1562,11 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 21
+   "papeis": [
+    "alert",
+    "status"
+   ],
+   "arquivos_puxados": 23
   },
   {
    "caminho": "/lalamove-quota",

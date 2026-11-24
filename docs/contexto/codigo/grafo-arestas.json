@@ -374,35 +374,52 @@
    "src/lib/utils.ts"
   ],
   "src/components/lalamove/UapiCouponsPanel.tsx": [
+   "src/components/lalamove/UapiSessionRequired.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiErrors.ts",
    "src/lib/uapiFormat.ts"
   ],
   "src/components/lalamove/UapiFleetPanel.tsx": [
+   "src/components/lalamove/UapiSessionRequired.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/input.tsx",
    "src/components/ui/skeleton.tsx",
    "src/components/ui/tabs.tsx",
-   "src/hooks/useLalamoveUapi.ts"
+   "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiErrors.ts"
   ],
   "src/components/lalamove/UapiOrderHistoryPanel.tsx": [
+   "src/components/lalamove/UapiSessionRequired.tsx",
    "src/components/ui/badge.tsx",
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiErrors.ts",
    "src/lib/uapiFormat.ts"
   ],
-  "src/components/lalamove/UapiStatementPanel.tsx": [
+  "src/components/lalamove/UapiSessionRequired.tsx": [
    "src/components/ui/button.tsx",
    "src/components/ui/card.tsx",
+   "src/lib/uapiErrors.ts"
+  ],
+  "src/components/lalamove/UapiStatementPanel.tsx": [
+   "src/components/lalamove/UapiSessionRequired.tsx",
+   "src/components/ui/button.tsx",
+   "src/components/ui/card.tsx",
+   "src/components/ui/data-error-banner.tsx",
    "src/components/ui/skeleton.tsx",
    "src/hooks/useLalamoveUapi.ts",
+   "src/lib/uapiErrors.ts",
    "src/lib/uapiFormat.ts",
    "src/lib/uapiStatement.ts",
    "src/utils/exportUtils.ts"

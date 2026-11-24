@@ -14,18 +14,18 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 186,
+ "total": 187,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 46,
   "guard (node --test)": 34,
-  "unit (vitest)": 88
+  "unit (vitest)": 89
  },
  "onde_ficam": [
   {
    "padrao": "co-localizado (__tests__)",
-   "arquivos": 60
+   "arquivos": 61
   },
   {
    "padrao": "supabase/functions/<edge>",
@@ -552,6 +552,18 @@
     "src/components/auth/ProtectedRoute.tsx"
    ],
    "casos": 4
+  },
+  {
+   "arquivo": "src/components/lalamove/__tests__/UapiSessionRequired.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 115,
+   "testa": [
+    "src/components/dashboard/UAPIStatusCards.tsx",
+    "src/components/lalamove/UapiSessionRequired.tsx",
+    "src/components/lalamove/UapiStatementPanel.tsx",
+    "src/lib/uapiErrors.ts"
+   ],
+   "casos": 5
   },
   {
    "arquivo": "src/components/map/__tests__/googleLayers.test.ts",
@@ -1100,20 +1112,20 @@
   {
    "arquivo": "src/lib/__tests__/uapiErrors.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 27,
+   "linhas": 62,
    "testa": [
     "src/lib/uapiErrors.ts"
    ],
-   "casos": 4
+   "casos": 8
   },
   {
    "arquivo": "src/lib/edge-error.test.ts",
    "tipo": "unit (vitest)",
-   "linhas": 70,
+   "linhas": 91,
    "testa": [
     "src/lib/edge-error.ts"
    ],
-   "casos": 6
+   "casos": 8
   },
   {
    "arquivo": "src/lib/geo-gateway.test.ts",
@@ -1737,6 +1749,9 @@
   "scripts/vercel/verify-release-targets.mjs": 1,
   "src/components/admin/telemetry/TelemetryCharts.tsx": 1,
   "src/components/auth/ProtectedRoute.tsx": 1,
+  "src/components/dashboard/UAPIStatusCards.tsx": 1,
+  "src/components/lalamove/UapiSessionRequired.tsx": 1,
+  "src/components/lalamove/UapiStatementPanel.tsx": 1,
   "src/components/map/GoogleMapsCanvas.tsx": 1,
   "src/components/map/MapHUD.tsx": 1,
   "src/components/map/MapHistoryPanel.tsx": 1,
@@ -1805,7 +1820,7 @@
   "src/lib/realtimeTopic.ts": 1,
   "src/lib/roles.ts": 1,
   "src/lib/statusPalette.ts": 1,
-  "src/lib/uapiErrors.ts": 2,
+  "src/lib/uapiErrors.ts": 3,
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,

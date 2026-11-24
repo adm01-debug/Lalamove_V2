@@ -2,11 +2,21 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "d766382edbda2d05103e075bf0cc5e4d8b11db45",
+  "commit": "569b23765254b1cafe0c854fe19298a07b39dc84",
   "branch": "main",
-  "data_commit": "2026-11-24T12:23:04-03:00",
+  "data_commit": "2026-11-24T13:08:28-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "569b237",
+    "data": "2026-11-24",
+    "assunto": "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)"
+   },
+   {
+    "sha": "42b967e",
+    "data": "2026-11-24",
+    "assunto": "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)"
+   },
    {
     "sha": "d766382",
     "data": "2026-11-24",
@@ -121,19 +131,9 @@
     "sha": "e01dfaa",
     "data": "2026-11-23",
     "assunto": "feat: historico de notificacoes passa a ler o ledger do motor (#340)"
-   },
-   {
-    "sha": "3153586",
-    "data": "2026-11-23",
-    "assunto": "feat: rotas editaveis com ordem de canais e exige resposta (#339)"
-   },
-   {
-    "sha": "7c71244",
-    "data": "2026-11-23",
-    "assunto": "fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)"
    }
   ],
-  "arquivos_mudados_7d": 496,
+  "arquivos_mudados_7d": 505,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 263
+    "commits": 265
    },
    {
     "autor": "dependabot[bot]",
@@ -310,21 +310,21 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1119,
-  "arquivos_codigo": 718,
-  "linhas_codigo": 141631,
+  "arquivos_total": 1121,
+  "arquivos_codigo": 720,
+  "linhas_codigo": 141971,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
   "itens_menu": 51,
   "modulos": 43,
-  "componentes": 222,
+  "componentes": 223,
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 93,
   "migrations": 194,
   "cron_jobs": 24,
-  "testes": 186,
+  "testes": 187,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -519,12 +519,12 @@
    "linhas": 520
   },
   "src/components": {
-   "arquivos": 164,
-   "linhas": 29653
+   "arquivos": 166,
+   "linhas": 29865
   },
   "src/hooks": {
    "arquivos": 115,
-   "linhas": 19860
+   "linhas": 19869
   },
   "src/i18n": {
    "arquivos": 1,
@@ -536,7 +536,7 @@
   },
   "src/lib": {
    "arquivos": 51,
-   "linhas": 4262
+   "linhas": 4381
   },
   "src/main.tsx": {
    "arquivos": 1,

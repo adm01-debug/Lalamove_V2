@@ -277,7 +277,7 @@
    "modulo": "components/dashboard",
    "arquivos": 13,
    "testes": 0,
-   "linhas": 2334,
+   "linhas": 2341,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -539,13 +539,13 @@
   },
   {
    "modulo": "components/lalamove",
-   "arquivos": 4,
-   "testes": 0,
-   "linhas": 468,
+   "arquivos": 5,
+   "testes": 1,
+   "linhas": 558,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
-   "componentes": 4,
+   "componentes": 5,
    "hooks_locais": [
     "useDownloadReceipt",
     "useExchangeCoupon",
@@ -569,7 +569,10 @@
     "VITE_SUPABASE_URL"
    ],
    "flags": [],
-   "papeis": [],
+   "papeis": [
+    "alert",
+    "status"
+   ],
    "diretos": {
     "edges": [],
     "tabelas": [],
@@ -586,6 +589,7 @@
    ],
    "pacotes_externos": [
     "lucide-react",
+    "react-router-dom",
     "sonner"
    ]
   },
@@ -1660,7 +1664,7 @@
    "modulo": "hooks",
    "arquivos": 87,
    "testes": 2,
-   "linhas": 16174,
+   "linhas": 16183,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2507,7 +2511,7 @@
    "modulo": "lib",
    "arquivos": 30,
    "testes": 6,
-   "linhas": 2636,
+   "linhas": 2699,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],

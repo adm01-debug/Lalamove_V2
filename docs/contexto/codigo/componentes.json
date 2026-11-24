@@ -1,7 +1,7 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "total": 222,
+ "total": 223,
  "orfaos": 5,
  "nomes_duplicados": {
   "ExtendedFAB": [
@@ -498,7 +498,7 @@
     "UAPIStatusCards"
    ],
    "export_default": null,
-   "linhas": 74,
+   "linhas": 81,
    "dominio": "components/dashboard",
    "hooks_locais": [
     "useLalamoveStatus",
@@ -623,7 +623,7 @@
     "UapiCouponsPanel"
    ],
    "export_default": null,
-   "linhas": 95,
+   "linhas": 105,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useExchangeCoupon",
@@ -640,7 +640,7 @@
     "UapiFleetPanel"
    ],
    "export_default": null,
-   "linhas": 118,
+   "linhas": 130,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useFleetMutation",
@@ -658,7 +658,7 @@
     "UapiOrderHistoryPanel"
    ],
    "export_default": null,
-   "linhas": 116,
+   "linhas": 128,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useDownloadReceipt",
@@ -670,12 +670,26 @@
    "orfao": false
   },
   {
+   "arquivo": "src/components/lalamove/UapiSessionRequired.tsx",
+   "exports": [
+    "UapiSessionRequired"
+   ],
+   "export_default": null,
+   "linhas": 46,
+   "dominio": "components/lalamove",
+   "hooks_locais": [],
+   "tabelas": [],
+   "edges": [],
+   "usado_por": 4,
+   "orfao": false
+  },
+  {
    "arquivo": "src/components/lalamove/UapiStatementPanel.tsx",
    "exports": [
     "UapiStatementPanel"
    ],
    "export_default": null,
-   "linhas": 139,
+   "linhas": 149,
    "dominio": "components/lalamove",
    "hooks_locais": [
     "useUapiWalletStatement"
@@ -1342,7 +1356,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 132,
+   "usado_por": 133,
    "orfao": false
   },
   {
@@ -1362,7 +1376,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 99,
+   "usado_por": 100,
    "orfao": false
   },
   {
@@ -1450,7 +1464,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 7,
+   "usado_por": 11,
    "orfao": false
   },
   {

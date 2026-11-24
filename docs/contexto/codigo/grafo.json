@@ -1,12 +1,12 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 539,
- "arestas": 1797,
+ "nos": 540,
+ "arestas": 1812,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
-   "importado_por": 133
+   "importado_por": 134
   },
   {
    "arquivo": "src/lib/utils.ts",
@@ -22,7 +22,7 @@
   },
   {
    "arquivo": "src/components/ui/card.tsx",
-   "importado_por": 99
+   "importado_por": 100
   },
   {
    "arquivo": "src/utils/logger.ts",
@@ -121,6 +121,10 @@
    "importado_por": 12
   },
   {
+   "arquivo": "src/components/ui/data-error-banner.tsx",
+   "importado_por": 11
+  },
+  {
    "arquivo": "src/components/ui/progress.tsx",
    "importado_por": 11
   },
@@ -145,6 +149,10 @@
    "importado_por": 9
   },
   {
+   "arquivo": "src/lib/uapiErrors.ts",
+   "importado_por": 9
+  },
+  {
    "arquivo": "src/components/map/types.ts",
    "importado_por": 8
   },
@@ -154,14 +162,6 @@
   },
   {
    "arquivo": "src/components/ui/separator.tsx",
-   "importado_por": 8
-  },
-  {
-   "arquivo": "src/hooks/use-mobile.tsx",
-   "importado_por": 8
-  },
-  {
-   "arquivo": "src/hooks/useDrivers.ts",
    "importado_por": 8
   }
  ],
