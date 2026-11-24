@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "484eb15445861858712e6e22a09ab5a9aa02d818",
+  "sha": "b70d14537836943907ba3f07225f5f4e59aae2d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 19:11 UTC",
+  "generated_at": "2026-11-24 20:27 UTC",
   "files_total": 1119,
   "code_files": 936,
   "code_lines": 164407
@@ -80136,10 +80136,21 @@
   }
  },
  "git": {
-  "sha": "484eb15445861858712e6e22a09ab5a9aa02d818",
+  "sha": "b70d14537836943907ba3f07225f5f4e59aae2d6",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "b70d145",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)",
+    "files": [
+     "src/hooks/useJobQueue.ts",
+     "src/hooks/useLalamove.ts",
+     "src/hooks/useSLAMetrics.ts"
+    ]
+   },
    {
     "sha": "484eb15",
     "date": "2026-11-24",
@@ -80484,21 +80495,6 @@
      "supabase/functions/_shared/messaging/dispatch.ts",
      "supabase/functions/_shared/messaging/registry.test.ts"
     ]
-   },
-   {
-    "sha": "5bfc969",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: paginas de dados mostram erro e botao de tentar novamente (#341)",
-    "files": [
-     "src/pages/AdminTelemetriaPage.tsx",
-     "src/pages/ErrorMonitoringPage.tsx",
-     "src/pages/EvaluationsPage.tsx",
-     "src/pages/GeoBlockingPage.tsx",
-     "src/pages/IPWhitelistPage.tsx",
-     "src/pages/NotificationHistoryPage.tsx",
-     "src/pages/PasswordResetApprovalsPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -80519,16 +80515,16 @@
     3
    ],
    [
-    "src/pages/NotificationHistoryPage.tsx",
-    3
-   ],
-   [
     "supabase/functions/_shared/messaging/auto-notices.test.ts",
     3
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
     3
+   ],
+   [
+    "src/hooks/useSLAMetrics.ts",
+    2
    ],
    [
     "supabase/functions/lalamove-uapi/index.ts",
@@ -80555,12 +80551,20 @@
     2
    ],
    [
+    "src/pages/NotificationHistoryPage.tsx",
+    2
+   ],
+   [
     "docs/agentes/mensageria.md",
     2
    ],
    [
-    "src/pages/PasswordResetApprovalsPage.tsx",
-    2
+    "src/hooks/useJobQueue.ts",
+    1
+   ],
+   [
+    "src/hooks/useLalamove.ts",
+    1
    ],
    [
     "scripts/uapi-collector/run.cmd",
@@ -80572,14 +80576,6 @@
    ],
    [
     "supabase/migrations/20261126140000_uapi_snapshot.sql",
-    1
-   ],
-   [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    1
-   ],
-   [
-    "src/hooks/useAdvancedReports.ts",
     1
    ]
   ]

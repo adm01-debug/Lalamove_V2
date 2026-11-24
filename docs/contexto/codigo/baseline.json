@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "484eb15445861858712e6e22a09ab5a9aa02d818",
+  "commit": "b70d14537836943907ba3f07225f5f4e59aae2d6",
   "branch": "main",
-  "data_commit": "2026-11-24T15:31:50-03:00",
+  "data_commit": "2026-11-24T17:26:53-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "b70d145",
+    "data": "2026-11-24",
+    "assunto": "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)"
+   },
    {
     "sha": "484eb15",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "0e04753",
     "data": "2026-11-24",
     "assunto": "fix: ledger reservado antes do envio ao motorista (#347)"
-   },
-   {
-    "sha": "3f160c3",
-    "data": "2026-11-24",
-    "assunto": "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)"
    }
   ],
   "arquivos_mudados_7d": 512,
@@ -203,11 +203,11 @@
    },
    {
     "arquivo": "package.json",
-    "mudancas": 34
+    "mudancas": 36
    },
    {
     "arquivo": "package-lock.json",
-    "mudancas": 32
+    "mudancas": 34
    },
    {
     "arquivo": "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
@@ -215,14 +215,18 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 19
+    "mudancas": 21
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 17
+    "mudancas": 18
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
+    "mudancas": 16
+   },
+   {
+    "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 14
    },
    {
@@ -234,7 +238,35 @@
     "mudancas": 13
    },
    {
-    "arquivo": "supabase/functions/send-notification/index.ts",
+    "arquivo": "src/components/orders/NewOrderDialog.tsx",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "src/pages/LiveMapPage.tsx",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/_shared/schemas.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
+    "mudancas": 13
+   },
+   {
+    "arquivo": "src/App.tsx",
+    "mudancas": 12
+   },
+   {
+    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
+    "mudancas": 12
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-api/index.ts",
     "mudancas": 12
    },
    {
@@ -242,27 +274,7 @@
     "mudancas": 11
    },
    {
-    "arquivo": "src/components/orders/NewOrderDialog.tsx",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "src/pages/LiveMapPage.tsx",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "supabase/functions/_shared/schemas.ts",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
-    "mudancas": 11
-   },
-   {
     "arquivo": "supabase/functions/geo-gateway/index.ts",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 11
    },
    {
@@ -270,38 +282,26 @@
     "mudancas": 10
    },
    {
-    "arquivo": "src/App.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "src/components/orders/AddressAutocomplete.tsx",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "supabase/functions/lalamove-api/index.ts",
-    "mudancas": 10
-   },
-   {
     "arquivo": "src/components/map/LiveMap.tsx",
-    "mudancas": 8
-   },
-   {
-    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
-    "mudancas": 8
+    "mudancas": 10
    },
    {
     "arquivo": "src/hooks/useRegionResolver.ts",
-    "mudancas": 7
+    "mudancas": 9
    },
    {
     "arquivo": "src/integrations/supabase/types.ts",
-    "mudancas": 7
+    "mudancas": 9
+   },
+   {
+    "arquivo": "src/components/layout/MobileSidebar.tsx",
+    "mudancas": 8
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 271
+    "commits": 272
    },
    {
     "autor": "dependabot[bot]",

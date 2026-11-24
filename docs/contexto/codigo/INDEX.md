@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `484eb15445861858712e6e22a09ab5a9aa02d818` (2026-11-24T15:31:50-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `b70d14537836943907ba3f07225f5f4e59aae2d6` (2026-11-24T17:26:53-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -293,26 +293,26 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9959 nós · 20696 arestas · 686 comunidades · grafo do commit `484eb154`
+- 9959 nós · 20696 arestas · 686 comunidades · grafo do commit `b70d1453`
 - comunidades maiores: cn (212), badge.tsx (164), ref_https (131), react (113), snapshot.py (106), client.ts (100), GeoBlockingPage.tsx (90), ref_node_fs (86), send-notification/index.ts (83), job-worker/index.ts (82), dependencies (81), DriversPage.tsx (78)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
 - docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md (40)
-- package.json (34)
-- package-lock.json (32)
+- package.json (36)
+- package-lock.json (34)
 - docs/planos/PLANO_FRONTEND_190_ETAPAS.md (26)
-- .github/workflows/ci.yml (19)
-- supabase/config.toml (17)
-- supabase/functions/job-worker/index.ts (14)
+- .github/workflows/ci.yml (21)
+- supabase/config.toml (18)
+- supabase/functions/job-worker/index.ts (16)
+- supabase/functions/send-notification/index.ts (14)
 - docs/MAPBOX.md (13)
 - docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (13)
-- supabase/functions/send-notification/index.ts (12)
-- docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
-- src/components/orders/NewOrderDialog.tsx (11)
-- src/pages/LiveMapPage.tsx (11)
-- supabase/functions/_shared/schemas.ts (11)
-- supabase/functions/check-driver-alerts/index.ts (11)
+- src/components/orders/NewOrderDialog.tsx (13)
+- src/pages/LiveMapPage.tsx (13)
+- supabase/functions/_shared/schemas.ts (13)
+- supabase/functions/check-driver-alerts/index.ts (13)
+- supabase/functions/lalamove-webhook/index.ts (13)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `b70d145` fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)
 - 2026-11-24 `484eb15` fix: coleta agendada nao falha quando o perfil esta em uso (#370)
 - 2026-11-24 `086c06e` feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)
 - 2026-11-24 `9d7a8c0` feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `aacd178` fix: alertas repetidos viram contador e probe sem assinatura nao alerta (#359)
 - 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
 - 2026-11-24 `d4f8bc7` fix: rota/ETA so recalcula com posicao viva do motorista (#357)
-- 2026-11-24 `1e34334` fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
