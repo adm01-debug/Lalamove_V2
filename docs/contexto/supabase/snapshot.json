@@ -5198,6 +5198,19 @@
         "generated": null,
         "identity": null,
         "is_enum": false,
+        "name": "blocked_warned_month",
+        "nullable": true,
+        "position": 8,
+        "schema": "public",
+        "table": "geo_budget",
+        "type": "date"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
         "name": "key",
         "nullable": false,
         "position": 1,
@@ -8271,6 +8284,97 @@
         "position": 13,
         "schema": "public",
         "table": "lalamove_uapi_sessions",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "resource",
+        "nullable": false,
+        "position": 1,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "payload",
+        "nullable": false,
+        "position": 2,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "jsonb"
+      },
+      {
+        "comment": null,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "city_id",
+        "nullable": true,
+        "position": 3,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "integer"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "collected_at",
+        "nullable": false,
+        "position": 4,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": "Apos esta data a linha nao e servida pela edge; o painel recebe o erro do gateway.",
+        "default": "(now() + '06:00:00'::interval)",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "expires_at",
+        "nullable": false,
+        "position": 5,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "timestamp with time zone"
+      },
+      {
+        "comment": null,
+        "default": "'browser-collector'::text",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "collected_by",
+        "nullable": false,
+        "position": 6,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "text"
+      },
+      {
+        "comment": null,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "is_enum": false,
+        "name": "updated_at",
+        "nullable": false,
+        "position": 7,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
         "type": "timestamp with time zone"
       },
       {
@@ -17209,6 +17313,23 @@
       },
       {
         "columns": [
+          "resource"
+        ],
+        "deferrable": false,
+        "definition": "PRIMARY KEY (resource)",
+        "name": "lalamove_uapi_snapshot_pkey",
+        "on_delete": null,
+        "on_update": null,
+        "ref_columns": [],
+        "ref_schema": null,
+        "ref_table": null,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "type": "PRIMARY KEY",
+        "validated": true
+      },
+      {
+        "columns": [
           "environment"
         ],
         "deferrable": false,
@@ -19521,6 +19642,15 @@
           "jobname": "notification_messages_scrub_bodies",
           "schedule": "25 4 * * *",
           "username": "postgres"
+        },
+        {
+          "active": true,
+          "command": "SELECT public.geo_budget_notify_if_needed();",
+          "database": "postgres",
+          "jobid": 31,
+          "jobname": "geo-budget-notify",
+          "schedule": "0 */6 * * *",
+          "username": "postgres"
         }
       ]
     },
@@ -19643,6 +19773,7 @@
           "code_total_files": 6,
           "cron": [],
           "db": [
+            "public.geo_budget_notify_if_needed",
             "public.geo_emit_event",
             "public.refresh_geo_jobs"
           ],
@@ -20423,6 +20554,43 @@
         "callers": {
           "code": [
             {
+              "file": "supabase/migrations/20261123120000_geo_budget_cron.sql",
+              "hits": 2
+            }
+          ],
+          "code_total_files": 1,
+          "cron": [
+            "31:geo-budget-notify"
+          ],
+          "db": [],
+          "triggers": [],
+          "views": []
+        },
+        "comment": "Roda geo_budget_status() por provedor e emite GEO_BUDGET_WARNING (alerts + job notification) 1x por mes ao cruzar alert_at_pct% (WARNING) e 1x ao cruzar o bloqueio 100% (CRITICAL). Agendada via pg_cron a cada 6h (job geo-budget-notify).",
+        "config": [
+          "search_path=public"
+        ],
+        "definition": null,
+        "definition_sha": "4f710c046fe42172",
+        "execute_api_roles": "anon, authenticated, service_role",
+        "execute_public": false,
+        "is_trigger_fn": false,
+        "kind": "function",
+        "language": "plpgsql",
+        "leakproof": false,
+        "name": "geo_budget_notify_if_needed",
+        "owner": "postgres",
+        "returns": "integer",
+        "schema": "public",
+        "security_definer": true,
+        "strict": false,
+        "volatility": "volatile"
+      },
+      {
+        "args": "",
+        "callers": {
+          "code": [
+            {
               "file": "scripts/inventario/banco.sql",
               "hits": 1
             },
@@ -20449,7 +20617,9 @@
           ],
           "code_total_files": 6,
           "cron": [],
-          "db": [],
+          "db": [
+            "public.geo_budget_notify_if_needed"
+          ],
           "triggers": [],
           "views": []
         },
@@ -21156,7 +21326,7 @@
               "hits": 6
             }
           ],
-          "code_total_files": 53,
+          "code_total_files": 54,
           "cron": [],
           "db": [
             "public.acknowledge_alert",
@@ -23786,6 +23956,18 @@
           "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
           "schema": "public",
           "table": "lalamove_uapi_sessions"
+        },
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "lalamove_uapi_snapshot"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE",
+          "schema": "public",
+          "table": "lalamove_uapi_snapshot"
         },
         {
           "grantee": "authenticated",
@@ -26919,6 +27101,34 @@
       },
       {
         "columns": [
+          "expires_at"
+        ],
+        "definition": "CREATE INDEX lalamove_uapi_snapshot_expires_at_idx ON public.lalamove_uapi_snapshot USING btree (expires_at)",
+        "is_primary": false,
+        "is_unique": false,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_uapi_snapshot_expires_at_idx",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot"
+      },
+      {
+        "columns": [
+          "resource"
+        ],
+        "definition": "CREATE UNIQUE INDEX lalamove_uapi_snapshot_pkey ON public.lalamove_uapi_snapshot USING btree (resource)",
+        "is_primary": true,
+        "is_unique": true,
+        "is_valid": true,
+        "method": "btree",
+        "name": "lalamove_uapi_snapshot_pkey",
+        "predicate": null,
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot"
+      },
+      {
+        "columns": [
           "id"
         ],
         "definition": "CREATE UNIQUE INDEX lalamove_webhook_config_pkey ON public.lalamove_webhook_config USING btree (id)",
@@ -29613,6 +29823,12 @@
       {
         "code": "policy_auth_fn_not_wrapped",
         "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
+        "object": "public.lalamove_uapi_snapshot.equipe le snapshot uapi",
+        "severity": "BAIXA"
+      },
+      {
+        "code": "policy_auth_fn_not_wrapped",
+        "detail": "Policy chama auth.uid()/jwt() sem `(select ...)`: é reavaliada por linha; envolva em subselect.",
         "object": "public.lalamove_webhook_config.Admins manage webhook config",
         "severity": "BAIXA"
       },
@@ -30184,6 +30400,12 @@
         "code": "rpc_anon_executable",
         "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
         "object": "public.end_order_tracking(p_order_id uuid, p_reason text)",
+        "severity": "INFO"
+      },
+      {
+        "code": "rpc_anon_executable",
+        "detail": "SECURITY DEFINER chamável via RPC por anon (sem login): roda com privilégios do owner. Confirme que é intencional (Supabase dá EXECUTE a anon por padrão; revogue se não for API pública).",
+        "object": "public.geo_budget_notify_if_needed()",
         "severity": "INFO"
       },
       {
@@ -31147,6 +31369,12 @@
         "name": "fix_crons_dispatcher",
         "statements": null,
         "version": "20261122140000"
+      },
+      {
+        "name": "geo_budget_cron",
+        "statements": 1,
+        "statements_sha": "fd2da21213386649",
+        "version": "20261123120000"
       },
       {
         "name": "geo_price_list_skus_faltantes",
@@ -32790,6 +33018,30 @@
         "table": "lalamove_uapi_sessions",
         "using": "has_role(auth.uid(), 'admin'::app_role)",
         "with_check": "has_role(auth.uid(), 'admin'::app_role)"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "equipe le snapshot uapi",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "using": "(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))",
+        "with_check": null
+      },
+      {
+        "cmd": "ALL",
+        "name": "service role escreve snapshot uapi",
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "service_role"
+        ],
+        "schema": "public",
+        "table": "lalamove_uapi_snapshot",
+        "using": "true",
+        "with_check": "true"
       },
       {
         "cmd": "ALL",
@@ -35010,6 +35262,21 @@
         "is_partition": false,
         "kind": "table",
         "name": "lalamove_uapi_sessions",
+        "owner": "postgres",
+        "parent": null,
+        "partition_bound": null,
+        "partition_key": null,
+        "replica_identity": "default",
+        "rls_enabled": true,
+        "rls_forced": false,
+        "schema": "public"
+      },
+      {
+        "comment": "Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010).",
+        "from_extension": false,
+        "is_partition": false,
+        "kind": "table",
+        "name": "lalamove_uapi_snapshot",
         "owner": "postgres",
         "parent": null,
         "partition_bound": null,

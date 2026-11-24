@@ -1,0 +1,1 @@
+-- aplicado diretamente no banco (geo_budget_notify_if_needed + cron geo-budget-notify)

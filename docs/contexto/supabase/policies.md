@@ -136,6 +136,8 @@ Visão consolidada (inclui `storage.objects` e `realtime.messages`); detalhes po
 | public.lalamove_stops | Operators can insert stops | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'operator'::app_role))` |
 | public.lalamove_stops | Operators can view stops limited | SELECT | PERMISSIVE | authenticated | `has_role(auth.uid(), 'operator'::app_role)` |  |
 | public.lalamove_uapi_sessions | Admins can manage UAPI sessions | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
+| public.lalamove_uapi_snapshot | equipe le snapshot uapi | SELECT | PERMISSIVE | authenticated | `(has_role(auth.uid(), 'operator'::app_role) OR has_role(auth.uid(), 'manager'::app_role) OR has_role(auth.uid(), 'admin'::app_role))` |  |
+| public.lalamove_uapi_snapshot | service role escreve snapshot uapi | ALL | PERMISSIVE | service_role | `true` | `true` |
 | public.lalamove_webhook_config | Admins manage webhook config | ALL | PERMISSIVE | authenticated | `has_role(auth.uid(), 'admin'::app_role)` | `has_role(auth.uid(), 'admin'::app_role)` |
 | public.login_attempts | Admins can delete login attempts | DELETE | PERMISSIVE | public | `has_role(auth.uid(), 'admin'::app_role)` |  |
 | public.login_attempts | Admins can insert login attempts | INSERT | PERMISSIVE | authenticated |  | `(has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role))` |

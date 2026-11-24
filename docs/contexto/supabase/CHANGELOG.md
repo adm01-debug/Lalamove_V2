@@ -2,6 +2,20 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 18:17 UTC
+
+- **colunas** adicionado (8): `public.geo_budget.blocked_warned_month`, `public.lalamove_uapi_snapshot.city_id`, `public.lalamove_uapi_snapshot.collected_at`, `public.lalamove_uapi_snapshot.collected_by`, `public.lalamove_uapi_snapshot.expires_at`, `public.lalamove_uapi_snapshot.payload`, `public.lalamove_uapi_snapshot.resource`, `public.lalamove_uapi_snapshot.updated_at`
+- **constraints** adicionado (1): `public.lalamove_uapi_snapshot.lalamove_uapi_snapshot_pkey`
+- **cron jobs** adicionado (1): `31:geo-budget-notify`
+- **functions** adicionado (1): `public.geo_budget_notify_if_needed()`
+- **functions** alterado (3): `public.add_job(p_type text, p_payload jsonb, p_priority integer, p_max_attempts integer, p_dedup_key text, p_metadata jsonb)`, `public.geo_budget_status()`, `public.has_role(_user_id uuid, _role app_role)`
+- **grants** adicionado (2): `public.lalamove_uapi_snapshot:authenticated`, `public.lalamove_uapi_snapshot:service_role`
+- **indexes** adicionado (2): `public.lalamove_uapi_snapshot_expires_at_idx`, `public.lalamove_uapi_snapshot_pkey`
+- **lints** adicionado (2): `policy_auth_fn_not_wrapped:public.lalamove_uapi_snapshot.equipe le snapshot uapi`, `rpc_anon_executable:public.geo_budget_notify_if_needed()`
+- **migrations** adicionado (1): `20261123120000_geo_budget_cron`
+- **policies (RLS)** adicionado (2): `public.lalamove_uapi_snapshot.equipe le snapshot uapi`, `public.lalamove_uapi_snapshot.service role escreve snapshot uapi`
+- **tabelas** adicionado (1): `public.lalamove_uapi_snapshot`
+
 ## 2026-11-24 15:15 UTC
 
 - **functions** alterado (2): `public.add_job(p_type text, p_payload jsonb, p_priority integer, p_max_attempts integer, p_dedup_key text, p_metadata jsonb)`, `public.refresh_geo_jobs()`

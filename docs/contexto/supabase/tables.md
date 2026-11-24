@@ -30,7 +30,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.email_verifications](tables/public/email_verifications.md) | table | sim | 4 | 7 | não | Tokens de verificacao de email com expiracao. |
 | [public.feature_flags](tables/public/feature_flags.md) | table | sim | 2 | 7 | não | Flags de feature para ativacao/desativacao de funcionalidades. |
 | [public.geo_blocks](tables/public/geo_blocks.md) | table | sim | 5 | 10 | não | Bloqueios geograficos por pais (permanente ou temporario). |
-| [public.geo_budget](tables/public/geo_budget.md) | table | sim | 2 | 7 | não | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. |
+| [public.geo_budget](tables/public/geo_budget.md) | table | sim | 2 | 8 | não | Orcamento mensal por provedor; geo_budget_status() informa bloqueio/aviso. |
 | [public.geo_cache](tables/public/geo_cache.md) | table | sim | 0 | 6 | não | Cache de respostas de geocode/rota/static por hash de request (TTL por funcao). |
 | [public.geo_defaults](tables/public/geo_defaults.md) | table | sim | 2 | 12 | não | Parametros globais de geofence/notificacao (raio, ETA, horario silencioso). |
 | [public.geo_price_list](tables/public/geo_price_list.md) | table | sim | 2 | 6 | não |  |
@@ -47,6 +47,7 @@ Um arquivo por tabela em `tables/<schema>/<tabela>.md` (colunas, constraints, í
 | [public.lalamove_stop_proofs](tables/public/lalamove_stop_proofs.md) | table | sim | 5 | 14 | sim | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. |
 | [public.lalamove_stops](tables/public/lalamove_stops.md) | table | sim | 5 | 20 | não | Paradas/stops dos pedidos Lalamove com endereco e horarios. |
 | [public.lalamove_uapi_sessions](tables/public/lalamove_uapi_sessions.md) | table | sim | 1 | 13 | não | Sessoes da Unified API da Lalamove (token e expiracao). |
+| [public.lalamove_uapi_snapshot](tables/public/lalamove_uapi_snapshot.md) | table | sim | 2 | 7 | não | Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010). |
 | [public.lalamove_webhook_config](tables/public/lalamove_webhook_config.md) | table | sim | 1 | 9 | não | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). |
 | [public.login_attempts](tables/public/login_attempts.md) | table | sim | 4 | 11 | não | Tentativas de login com IP e resultado para lockout de conta. |
 | [public.map_settings_overrides](tables/public/map_settings_overrides.md) | table | sim | 1 | 8 | não | Overrides de configuracao de mapa por usuario/contexto. |

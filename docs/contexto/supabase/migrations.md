@@ -185,6 +185,7 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122130200 | [alert_type_driver_assigned](migrations/20261122130200_alert_type_driver_assigned.sql) | 0 |
 | 20261122131000 | [geo_eta_delay](migrations/20261122131000_geo_eta_delay.sql) | 0 |
 | 20261122140000 | [fix_crons_dispatcher](migrations/20261122140000_fix_crons_dispatcher.sql) | 0 |
+| 20261123120000 | [geo_budget_cron](migrations/20261123120000_geo_budget_cron.sql) | 1 |
 | 20261123130000 | [geo_price_list_skus_faltantes](migrations/20261123130000_geo_price_list_skus_faltantes.sql) | 0 |
 | 20261123140000 | [geo_place_id_prefix_check](migrations/20261123140000_geo_place_id_prefix_check.sql) | 0 |
 | 20261123150000 | [cache_refresh_log_restaurado](migrations/20261123150000_cache_refresh_log_restaurado.sql) | 17 |

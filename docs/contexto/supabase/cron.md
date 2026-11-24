@@ -20,3 +20,4 @@ Horários em UTC. Execuções recentes em `cron-runs.md`.
 | 26 | refresh-cache-views | `3 * * * *` | sim | postgres | postgres | `SELECT public.refresh_cache_view();` |
 | 29 | check-driver-alerts | `*/2 * * * *` | sim | postgres | postgres | `       select net.http_post(         url := 'https://iecgydonctmabiijadsf.supabase.co/functions/v1/check-driver-alerts',         headers := jsonb_build_object(           'Content-Type','application/json',           'apikey', '[REDACTED_KEY]',           'Authorization','Bearer ' \|\| '[REDACTED_KEY]'         ),         body := jsonb_build_object('time', now()),         timeout_milliseconds := 25000       ) as request_id;       ` |
 | 30 | notification_messages_scrub_bodies | `25 4 * * *` | sim | postgres | postgres | `SELECT public.notification_messages_scrub_bodies(90)` |
+| 31 | geo-budget-notify | `0 */6 * * *` | sim | postgres | postgres | `SELECT public.geo_budget_notify_if_needed();` |

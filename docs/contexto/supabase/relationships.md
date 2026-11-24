@@ -416,6 +416,7 @@ erDiagram
         date warned_month
         uuid updated_by FK
         timestamp_with_time_zone updated_at
+        date blocked_warned_month
     }
     public_geo_cache {
         text key PK
@@ -627,6 +628,15 @@ erDiagram
         text refresh_method
         boolean is_active
         timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
+    }
+    public_lalamove_uapi_snapshot {
+        text resource PK
+        jsonb payload
+        integer city_id
+        timestamp_with_time_zone collected_at
+        timestamp_with_time_zone expires_at
+        text collected_by
         timestamp_with_time_zone updated_at
     }
     public_lalamove_webhook_config {

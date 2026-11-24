@@ -178,6 +178,8 @@ Uso e tamanho em `stats.md`.
 | public.lalamove_stops | uq_lalamove_stops_order_stop_index | btree | order_id, stop_index | sim | sim |  |
 | public.lalamove_uapi_sessions | idx_uapi_sessions_active | btree | is_active | sim | sim | `(is_active = true)` |
 | public.lalamove_uapi_sessions | lalamove_uapi_sessions_pkey | btree | id | sim | sim |  |
+| public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_expires_at_idx | btree | expires_at | não | sim |  |
+| public.lalamove_uapi_snapshot | lalamove_uapi_snapshot_pkey | btree | resource | sim | sim |  |
 | public.lalamove_webhook_config | lalamove_webhook_config_pkey | btree | id | sim | sim |  |
 | public.lalamove_webhook_config | uq_webhook_config_active_env | btree | environment | sim | sim | `is_active` |
 | public.login_attempts | idx_login_attempts_email | btree | email | não | sim |  |

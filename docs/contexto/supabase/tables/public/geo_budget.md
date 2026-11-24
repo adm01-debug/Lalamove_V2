@@ -25,6 +25,7 @@
 | 5 | `warned_month` | `date` | sim |  |  |  |
 | 6 | `updated_by` | `uuid` | sim |  |  |  |
 | 7 | `updated_at` | `timestamp with time zone` | não | `now()` |  |  |
+| 8 | `blocked_warned_month` | `date` | sim |  |  |  |
 
 
 ## Constraints
