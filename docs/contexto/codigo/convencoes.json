@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: paginas de dados mostram erro e botao de tentar novamente (#341)",
    "feat: historico de notificacoes passa a ler o ledger do motor (#340)",
    "feat: rotas editaveis com ordem de canais e exige resposta (#339)",
    "fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)",
-   "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)",
-   "fix: topic unico por montagem nos canais realtime (#336)"
+   "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

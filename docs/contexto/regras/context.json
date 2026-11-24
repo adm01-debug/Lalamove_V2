@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "e01dfaa26986f18cc7f402f54bd0fb1d06a65f72",
+  "sha": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 02:31 UTC",
+  "generated_at": "2026-11-24 02:48 UTC",
   "files_total": 1096,
   "code_files": 915,
-  "code_lines": 160515
+  "code_lines": 160585
  },
  "version": "1.3.2",
- "facts_hash": "2adebadec75ba519",
+ "facts_hash": "7572dfe192362587",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22495,7 +22495,7 @@
   {
    "module": "src/pages",
    "files": 93,
-   "lines": 21394,
+   "lines": 21464,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -69858,7 +69858,7 @@
   },
   "src/pages/AdminTelemetriaPage.tsx": {
    "path": "src/pages/AdminTelemetriaPage.tsx",
-   "lines": 540,
+   "lines": 547,
    "exports": [
     "function AdminTelemetriaPage"
    ],
@@ -70230,14 +70230,14 @@
   },
   "src/pages/ErrorMonitoringPage.tsx": {
    "path": "src/pages/ErrorMonitoringPage.tsx",
-   "lines": 308,
+   "lines": 323,
    "exports": [
     "function ErrorMonitoringPage"
    ]
   },
   "src/pages/EvaluationsPage.tsx": {
    "path": "src/pages/EvaluationsPage.tsx",
-   "lines": 417,
+   "lines": 424,
    "exports": [
     "function EvaluationsPage"
    ],
@@ -70308,7 +70308,7 @@
   },
   "src/pages/GeoBlockingPage.tsx": {
    "path": "src/pages/GeoBlockingPage.tsx",
-   "lines": 441,
+   "lines": 450,
    "exports": [
     "function GeoBlockingPage"
    ],
@@ -70402,7 +70402,7 @@
   },
   "src/pages/IPWhitelistPage.tsx": {
    "path": "src/pages/IPWhitelistPage.tsx",
-   "lines": 197,
+   "lines": 212,
    "exports": [
     "function IPWhitelistPage"
    ],
@@ -70753,7 +70753,7 @@
   },
   "src/pages/NotificationHistoryPage.tsx": {
    "path": "src/pages/NotificationHistoryPage.tsx",
-   "lines": 515,
+   "lines": 525,
    "exports": [
     "function NotificationHistoryPage"
    ]
@@ -70784,7 +70784,7 @@
   },
   "src/pages/PasswordResetApprovalsPage.tsx": {
    "path": "src/pages/PasswordResetApprovalsPage.tsx",
-   "lines": 198,
+   "lines": 205,
    "exports": [
     "function PasswordResetApprovalsPage"
    ],
@@ -78489,10 +78489,25 @@
   }
  },
  "git": {
-  "sha": "e01dfaa26986f18cc7f402f54bd0fb1d06a65f72",
+  "sha": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "5bfc969",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: paginas de dados mostram erro e botao de tentar novamente (#341)",
+    "files": [
+     "src/pages/AdminTelemetriaPage.tsx",
+     "src/pages/ErrorMonitoringPage.tsx",
+     "src/pages/EvaluationsPage.tsx",
+     "src/pages/GeoBlockingPage.tsx",
+     "src/pages/IPWhitelistPage.tsx",
+     "src/pages/NotificationHistoryPage.tsx",
+     "src/pages/PasswordResetApprovalsPage.tsx"
+    ]
+   },
    {
     "sha": "e01dfaa",
     "date": "2026-11-23",
@@ -78905,42 +78920,12 @@
      "supabase/functions/geo-admin/rotation.test.ts",
      "supabase/functions/geo-admin/rotation.ts"
     ]
-   },
-   {
-    "sha": "7f6a42b",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: canal SMS de contingencia, Zapp completo e opt-out em todos os canais (etapas 86/89/92/119-124) (#281)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "AGENTS.md",
-     "docs/agentes/mensageria.md",
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "supabase/functions/_shared/channels/sms.test.ts",
-     "supabase/functions/_shared/channels/sms.ts",
-     "supabase/functions/_shared/channels/zapp.test.ts",
-     "supabase/functions/_shared/channels/zapp.ts",
-     "supabase/functions/_shared/messaging/inbound-actions.test.ts",
-     "supabase/functions/_shared/messaging/inbound-actions.ts",
-     "supabase/functions/_shared/messaging/inbound.test.ts",
-     "supabase/functions/_shared/messaging/inbound.ts",
-     "supabase/functions/_shared/messaging/router.test.ts",
-     "supabase/functions/_shared/messaging/router.ts",
-     "supabase/functions/_shared/phone.test.ts",
-     "supabase/functions/_shared/phone.ts",
-     "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/send-notification/index.ts",
-     "supabase/functions/send-notification/message-id.test.ts",
-     "supabase/functions/send-notification/message-id.ts",
-     "supabase/functions/send-notification/sms-dispatch.test.ts",
-     "supabase/functions/send-notification/sms-dispatch.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    8
+    7
    ],
    [
     "src/pages/LiveMapPage.tsx",
@@ -78967,8 +78952,12 @@
     3
    ],
    [
-    ".github/workflows/ci.yml",
-    3
+    "src/pages/AdminTelemetriaPage.tsx",
+    2
+   ],
+   [
+    "src/pages/NotificationHistoryPage.tsx",
+    2
    ],
    [
     "src/hooks/useNotificationHistory.ts",
@@ -78979,11 +78968,11 @@
     2
    ],
    [
-    "supabase/functions/lalamove-webhook/index.ts",
+    "src/pages/DashboardRedesigned.tsx",
     2
    ],
    [
-    "src/pages/DashboardRedesigned.tsx",
+    ".github/workflows/ci.yml",
     2
    ],
    [
@@ -79012,10 +79001,6 @@
    ],
    [
     "src/pages/OrdersPage.tsx",
-    2
-   ],
-   [
-    "src/components/orders/NewOrderDialog.tsx",
     2
    ]
   ]

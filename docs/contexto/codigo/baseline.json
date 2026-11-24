@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "e01dfaa26986f18cc7f402f54bd0fb1d06a65f72",
+  "commit": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
   "branch": "main",
-  "data_commit": "2026-11-23T23:31:07-03:00",
+  "data_commit": "2026-11-23T23:48:28-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "5bfc969",
+    "data": "2026-11-23",
+    "assunto": "fix: paginas de dados mostram erro e botao de tentar novamente (#341)"
+   },
    {
     "sha": "e01dfaa",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "add648e",
     "data": "2026-11-23",
     "assunto": "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)"
-   },
-   {
-    "sha": "79b206d",
-    "data": "2026-11-23",
-    "assunto": "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)"
    }
   ],
-  "arquivos_mudados_7d": 469,
+  "arquivos_mudados_7d": 473,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 241
+    "commits": 242
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1102,
   "arquivos_codigo": 702,
-  "linhas_codigo": 138844,
+  "linhas_codigo": 138914,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21394
+   "linhas": 21464
   },
   "src/services": {
    "arquivos": 1,
@@ -654,7 +654,7 @@
   },
   {
    "arquivo": "src/pages/AdminTelemetriaPage.tsx",
-   "linhas": 540
+   "linhas": 547
   },
   {
    "arquivo": "src/hooks/useAdvancedReports.ts",
@@ -666,7 +666,7 @@
   },
   {
    "arquivo": "src/pages/NotificationHistoryPage.tsx",
-   "linhas": 515
+   "linhas": 525
   },
   {
    "arquivo": "src/components/dashboard/OrdersTable.tsx",

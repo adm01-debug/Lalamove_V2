@@ -2266,7 +2266,7 @@
     "AdminTelemetriaPage"
    ],
    "export_default": "AdminTelemetriaPage",
-   "linhas": 540,
+   "linhas": 547,
    "dominio": "pages",
    "hooks_locais": [],
    "tabelas": [],
@@ -2612,7 +2612,7 @@
     "ErrorMonitoringPage"
    ],
    "export_default": "ErrorMonitoringPage",
-   "linhas": 308,
+   "linhas": 323,
    "dominio": "pages",
    "hooks_locais": [
     "useErrorLogs",
@@ -2644,7 +2644,7 @@
     "EvaluationsPage"
    ],
    "export_default": null,
-   "linhas": 417,
+   "linhas": 424,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches"
@@ -2695,7 +2695,7 @@
     "GeoBlockingPage"
    ],
    "export_default": "GeoBlockingPage",
-   "linhas": 441,
+   "linhas": 450,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches"
@@ -2811,7 +2811,7 @@
     "IPWhitelistPage"
    ],
    "export_default": "IPWhitelistPage",
-   "linhas": 197,
+   "linhas": 212,
    "dominio": "pages",
    "hooks_locais": [
     "useAuth",
@@ -3196,7 +3196,7 @@
     "NotificationHistoryPage"
    ],
    "export_default": null,
-   "linhas": 515,
+   "linhas": 525,
    "dominio": "pages",
    "hooks_locais": [
     "useNotificationHistory",
@@ -3245,7 +3245,7 @@
     "PasswordResetApprovalsPage"
    ],
    "export_default": "PasswordResetApprovalsPage",
-   "linhas": 198,
+   "linhas": 205,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",
