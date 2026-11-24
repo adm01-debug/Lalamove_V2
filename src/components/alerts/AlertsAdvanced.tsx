@@ -49,7 +49,7 @@ interface AlertGroupHeaderProps {
 }
 
 export function AlertGroupHeader({ group, isOpen, onToggle, selectedCount }: AlertGroupHeaderProps) {
-  const Icon = group.icon;
+  const Icon = group.icon || AlertCircle;
   const hasUnread = group.alerts.some(a => !a.isRead);
   return (
     <CollapsibleTrigger asChild>
