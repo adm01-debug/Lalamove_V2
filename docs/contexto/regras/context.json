@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c",
+  "sha": "484eb15445861858712e6e22a09ab5a9aa02d818",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 18:20 UTC",
+  "generated_at": "2026-11-24 19:11 UTC",
   "files_total": 1119,
   "code_files": 936,
-  "code_lines": 164265
+  "code_lines": 164407
  },
  "version": "1.3.2",
- "facts_hash": "bffdd521637c108f",
+ "facts_hash": "87a9a6fd9e9da2c4",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21839,7 +21839,7 @@
   {
    "module": "scripts",
    "files": 147,
-   "lines": 33086,
+   "lines": 33228,
    "tables": [
     "a",
     "active_tracking",
@@ -25075,7 +25075,13 @@
    "UAPI_DEVICE_ID": [
     "scripts/uapi-collector/collect.mjs"
    ],
+   "UAPI_LOGIN_WAIT_MS": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
    "UAPI_ORDER_PAGES": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
+   "UAPI_PROFILE_DIR": [
     "scripts/uapi-collector/collect.mjs"
    ],
    "UAPI_RECEIPTS": [
@@ -60463,7 +60469,7 @@
   },
   "scripts/uapi-collector/collect.mjs": {
    "path": "scripts/uapi-collector/collect.mjs",
-   "lines": 257,
+   "lines": 399,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -60472,16 +60478,22 @@
     "SUPABASE_URL",
     "UAPI_CITY_ID",
     "UAPI_DEVICE_ID",
+    "UAPI_LOGIN_WAIT_MS",
     "UAPI_ORDER_PAGES",
+    "UAPI_PROFILE_DIR",
     "UAPI_RECEIPTS"
    ],
    "errors": [
     "${pathname} -> ${res.status} ${text.slice(0, 300)}",
     "playwright nao encontrado; defina PLAYWRIGHT_ROOT"
    ],
+   "rule_comments": [
+    "anterior expira. `--login` abre a janela uma unica vez (SMS/captcha sao"
+   ],
    "doc": "!/usr/bin/env node",
    "temporal": [
-    ".goto('https://web.lalamove.com/login', { waitUntil: 'networkidle', timeout: 90000 })"
+    "await new Promise((resolve) => setTimeout(resolve, 3000));",
+    "timeout: 90000,"
    ],
    "uses_service_role": true
   },
@@ -80124,10 +80136,28 @@
   }
  },
  "git": {
-  "sha": "9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c",
+  "sha": "484eb15445861858712e6e22a09ab5a9aa02d818",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "484eb15",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: coleta agendada nao falha quando o perfil esta em uso (#370)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs"
+    ]
+   },
+   {
+    "sha": "086c06e",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs"
+    ]
+   },
    {
     "sha": "9d7a8c0",
     "date": "2026-11-24",
@@ -80469,30 +80499,6 @@
      "src/pages/NotificationHistoryPage.tsx",
      "src/pages/PasswordResetApprovalsPage.tsx"
     ]
-   },
-   {
-    "sha": "e01dfaa",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: historico de notificacoes passa a ler o ledger do motor (#340)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "src/hooks/useNotificationHistory.test.ts",
-     "src/hooks/useNotificationHistory.ts",
-     "src/pages/NotificationHistoryPage.tsx"
-    ]
-   },
-   {
-    "sha": "3153586",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: rotas editaveis com ordem de canais e exige resposta (#339)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "src/hooks/useMessaging.ts",
-     "src/pages/MessagingSettingsPage.test.tsx",
-     "src/pages/MessagingSettingsPage.tsx"
-    ]
    }
   ],
   "hot_files": [
@@ -80501,15 +80507,19 @@
     7
    ],
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    6
+    "scripts/uapi-collector/collect.mjs",
+    4
    ],
    [
-    "src/pages/NotificationHistoryPage.tsx",
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     4
    ],
    [
     "supabase/functions/job-worker/index.ts",
+    3
+   ],
+   [
+    "src/pages/NotificationHistoryPage.tsx",
     3
    ],
    [
@@ -80519,10 +80529,6 @@
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
     3
-   ],
-   [
-    "scripts/uapi-collector/collect.mjs",
-    2
    ],
    [
     "supabase/functions/lalamove-uapi/index.ts",

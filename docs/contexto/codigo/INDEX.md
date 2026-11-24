@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c` (2026-11-24T15:19:44-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `484eb15445861858712e6e22a09ab5a9aa02d818` (2026-11-24T15:31:50-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1125 |
 | arquivos_codigo | 721 |
-| linhas_codigo | 142441 |
+| linhas_codigo | 142583 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -293,8 +293,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9953 nós · 20683 arestas · 691 comunidades · grafo do commit `9d7a8c04`
-- comunidades maiores: cn (209), client.ts (165), react (152), lucide-react (126), ref_https (113), Sidebar.tsx (110), ref_node_path (98), DashboardRedesigned.tsx (89), 4. Componentes, hooks, libs e estado — **revisado** (86), lalamove-api/index.ts (85), App.tsx (83), dependencies (81)
+- 9959 nós · 20696 arestas · 686 comunidades · grafo do commit `484eb154`
+- comunidades maiores: cn (212), badge.tsx (164), ref_https (131), react (113), snapshot.py (106), client.ts (100), GeoBlockingPage.tsx (90), ref_node_fs (86), send-notification/index.ts (83), job-worker/index.ts (82), dependencies (81), DriversPage.tsx (78)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -396,6 +396,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `484eb15` fix: coleta agendada nao falha quando o perfil esta em uso (#370)
+- 2026-11-24 `086c06e` feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)
 - 2026-11-24 `9d7a8c0` feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)
 - 2026-11-24 `99d3b77` feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)
 - 2026-11-24 `c804662` chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)
@@ -409,8 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `524a6f4` fix: agendador geo nao enfileira rota para posicao de GPS velha (#358)
 - 2026-11-24 `d4f8bc7` fix: rota/ETA so recalcula com posicao viva do motorista (#357)
 - 2026-11-24 `1e34334` fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)
-- 2026-11-24 `49c9a83` fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)
-- 2026-11-24 `53d3496` fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

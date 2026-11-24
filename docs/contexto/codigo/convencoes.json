@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: coleta agendada nao falha quando o perfil esta em uso (#370)",
+   "feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)",
    "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)",
    "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)",
-   "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)",
-   "fix: falha de dados mostra erro e retry em 6 páginas (#365)",
-   "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)"
+   "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",
