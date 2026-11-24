@@ -9,6 +9,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -31,6 +32,22 @@ interface AlertConfig {
     threshold_minutes?: number;
     pod_deadline_minutes?: number;
   };
+}
+
+/**
+ * Aviso ao motorista pelo motor do Bloco 7 (M9 e M10 do plano de mensageria).
+ * Rota desligada, modo sombra, horario silencioso e dedup por
+ * `client_message_id` ficam dentro de `notifyDriver`; aqui so garantimos que
+ * uma falha de mensagem nao derrube a checagem do Guardian.
+ */
+// deno-lint-ignore no-explicit-any
+async function avisarMotorista(supabase: any, event: string, driverId: string, orderId: string): Promise<void> {
+  try {
+    const result = await notifyDriver(supabase, { event, driverId, orderId });
+    logger.log(`[Guardian] Aviso ${event} ao motorista: ${result.outcome}${result.reason ? ` (${result.reason})` : ''}${result.channel ? ` via ${result.channel}` : ''}`);
+  } catch (error) {
+    logger.error(`[Guardian] Aviso ${event} ao motorista falhou:`, error);
+  }
 }
 
 serve(async (req) => {
@@ -227,7 +244,10 @@ serve(async (req) => {
       }
 
       // 3. Check for Missing POD (Guardian requires_pod)
-      if (POD_ALERT_ENABLED && order.requires_pod && !order.pod_received) {
+      // O aviso ao motorista (M9, motor do Bloco 7) nao depende de
+      // `POD_ALERT_ENABLED`: quem decide e a rota MISSING_POD do painel de
+      // mensageria. O alerta legado continua respeitando a configuracao.
+      if (order.requires_pod && !order.pod_received) {
         // If order is COMPLETED but no POD received after deadline
         if (order.status === 'COMPLETED' && order.actual_delivery) {
           const deliveredAt = new Date(order.actual_delivery);
@@ -243,15 +263,19 @@ serve(async (req) => {
               .limit(1);
 
             if (!existingAlerts || existingAlerts.length === 0) {
-              alertsToCreate.push({
-                type: 'MISSING_POD',
-                severity: 'CRITICAL',
-                title: `Falta Prova de Entrega (POD)`,
-                message: `Pedido ${orderIdDisplay} finalizado há ${minutesSinceDelivery} min sem foto de comprovação.`,
-                driver_id: driver.id,
-                order_id: order.id,
-                metadata: { minutes_late: minutesSinceDelivery }
-              });
+              if (POD_ALERT_ENABLED) {
+                alertsToCreate.push({
+                  type: 'MISSING_POD',
+                  severity: 'CRITICAL',
+                  title: `Falta Prova de Entrega (POD)`,
+                  message: `Pedido ${orderIdDisplay} finalizado há ${minutesSinceDelivery} min sem foto de comprovação.`,
+                  driver_id: driver.id,
+                  order_id: order.id,
+                  metadata: { minutes_late: minutesSinceDelivery }
+                });
+              }
+              // Lembrete do comprovante para o motorista, sem operador no meio.
+              await avisarMotorista(supabase, 'MISSING_POD', driver.id, order.id);
             }
           }
         }

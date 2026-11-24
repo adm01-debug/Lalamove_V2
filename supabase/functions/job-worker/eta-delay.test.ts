@@ -159,6 +159,70 @@ Deno.test("ETA_DELAY: entrega usa destinatario de entrega no metadata", async ()
   assertEquals(rpcCalls[0].p_stop_index, 2);
 });
 
+Deno.test("M10: ETA_DELAY avisa o motorista pelo motor novo uma vez", async () => {
+  const { client, rpcCalls } = fakeSupabase({
+    order: { scheduled_at: isoIn(-120), status: "ON_GOING" },
+  });
+  const avisos: Array<{ event: string; driverId: string; orderId: string }> = [];
+  const emitted = await maybeEmitEtaDelay(client, {
+    ...baseArgs,
+    notifyDriver: (event, driverId, orderId) => {
+      avisos.push({ event, driverId, orderId });
+      return Promise.resolve();
+    },
+  });
+  assertEquals(emitted, true);
+  assertEquals(rpcCalls.length, 1);
+  assertEquals(avisos, [{ event: "ETA_DELAY", driverId: "d-1", orderId: "o-1" }]);
+});
+
+Deno.test("M10: pedido sem motorista nao tenta avisar", async () => {
+  const { client } = fakeSupabase({
+    order: { scheduled_at: isoIn(-120), status: "ON_GOING" },
+  });
+  let avisou = 0;
+  const emitted = await maybeEmitEtaDelay(client, {
+    ...baseArgs,
+    driverId: null,
+    notifyDriver: () => {
+      avisou++;
+      return Promise.resolve();
+    },
+  });
+  assertEquals(emitted, true);
+  assertEquals(avisou, 0);
+});
+
+Deno.test("M10: alerta ja emitido (dedup do geo_emit_event) nao repete o aviso", async () => {
+  const { client } = fakeSupabase({
+    order: { scheduled_at: isoIn(-120), status: "ON_GOING" },
+    rpcReturns: null,
+    rpcReturnsSet: true,
+  });
+  let avisou = 0;
+  const emitted = await maybeEmitEtaDelay(client, {
+    ...baseArgs,
+    notifyDriver: () => {
+      avisou++;
+      return Promise.resolve();
+    },
+  });
+  assertEquals(emitted, false);
+  assertEquals(avisou, 0);
+});
+
+Deno.test("M10: falha no aviso nao derruba o refresh do ETA", async () => {
+  // Sem `notifyDriver` injetado cai no caminho real (`avisarMotorista` →
+  // `notifyDriver`), e o fake nao tem as tabelas do motor: o erro precisa ser
+  // engolido, porque o alerta legado ja saiu.
+  const { client, rpcCalls } = fakeSupabase({
+    order: { scheduled_at: isoIn(-120), status: "ON_GOING" },
+  });
+  const emitted = await maybeEmitEtaDelay(client, baseArgs);
+  assertEquals(emitted, true);
+  assertEquals(rpcCalls.length, 1);
+});
+
 // ── Etapa 49: transito condicional ──────────────────────────────────────────
 // A decisao e derivada do ETA conhecido pelo mesmo limiar que a janela de
 // aproximacao usa (15 min). Testada aqui porque `processEtaRefresh` depende do
