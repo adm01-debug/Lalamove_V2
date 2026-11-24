@@ -10,6 +10,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
+import { sendScheduledReminders } from "../_shared/messaging/auto-notices.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -290,12 +291,20 @@ serve(async (req) => {
       }
     }
 
+    // M11 (etapa 111): lembrete do pedido agendado 30 min antes da coleta.
+    // O cron roda a cada 2 min; o ledger de mensagens garante um por pedido.
+    const reminders = await sendScheduledReminders(
+      supabase,
+      now,
+      (event, driverId, orderId) => avisarMotorista(supabase, event, driverId, orderId),
+    );
+
     // Insert remaining new alerts (not handled individually above)
     if (alertsToCreate.length > 0) {
       await supabase.from('alerts').insert(alertsToCreate);
     }
 
-    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ success: true, created: alertsToCreate.length, reminders: reminders.sent }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
   } catch (error: unknown) {
     logger.error('Guardian check error:', error);

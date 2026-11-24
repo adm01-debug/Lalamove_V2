@@ -11,6 +11,7 @@ import { validateHmacSignature, validateLalamoveV3Signature } from "./security.t
 import { normalizeLalamoveV3Payload } from "./normalize.ts";
 import { normalizePhone } from "../_shared/phone.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
+import { shouldSendNextStop } from "../_shared/messaging/auto-notices.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -373,6 +374,7 @@ serve(async (req) => {
       driverId?: string | null,
       orderId?: string | null,
       variables?: Record<string, string | number | null | undefined>,
+      seq?: number,
     ) {
       if (!driverId) return;
       try {
@@ -381,6 +383,7 @@ serve(async (req) => {
           driverId,
           orderId: orderId ?? null,
           variables,
+          ...(seq === undefined ? {} : { seq }),
         });
         logger.log(`[Webhook] Aviso ${event} ao motorista: ${result.outcome}${result.reason ? ` (${result.reason})` : ''}${result.channel ? ` via ${result.channel}` : ''}`);
       } catch (error) {
@@ -598,7 +601,16 @@ serve(async (req) => {
             // M5 (etapa 96): pos-coleta com endereco/recebedor/janela de entrega.
             const { data: pickedOrder } = await supabase.from('lalamove_orders')
               .select('driver_id').eq('id', orderUuid).maybeSingle();
-            await notifyDriverEvent('ORDER_PICKED_UP', (pickedOrder as OrderDriverRecord | null)?.driver_id, orderUuid);
+            const pickedDriverId = (pickedOrder as OrderDriverRecord | null)?.driver_id;
+            await notifyDriverEvent('ORDER_PICKED_UP', pickedDriverId, orderUuid);
+
+            // M6 (etapa 106): multi-parada — concluiu uma parada e sobra outra,
+            // o motorista recebe o endereco/contato da proxima. `seq` guarda o
+            // indice da parada concluida para o ledger nao tratar a segunda
+            // mensagem como repeticao da primeira.
+            if (pickedDriverId && await shouldSendNextStop(supabase, orderUuid)) {
+              await notifyDriverEvent('DRIVER_STOP_COMPLETED', pickedDriverId, orderUuid, undefined, stopIndex + 1);
+            }
           }
         }
         break;
