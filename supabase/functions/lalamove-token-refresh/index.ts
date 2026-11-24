@@ -8,6 +8,7 @@ import {
 } from "../_shared/contract.ts";
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
+import { buildUapiRefreshRequest, parseUapiRefreshResponse } from "./uapi-direct.ts";
 
 /**
  * Etapa 24 — Auto-refresh do token UAPI com fallback.
@@ -131,14 +132,20 @@ Deno.serve(async (req) => {
     // ── 1. Sessão ativa ────────────────────────────────────────────────────
     const { data: sessions, error: sessionError } = await admin
       .from('lalamove_uapi_sessions')
-      .select('id, token_obtained_at, last_refreshed_at, is_active')
+      .select('id, token_obtained_at, last_refreshed_at, is_active, access_token, refresh_token')
       .eq('is_active', true)
       .limit(1);
 
     if (sessionError) throw new Error(sessionError.message);
 
     const session = sessions?.[0] as
-      | { id: string; token_obtained_at: string; last_refreshed_at: string | null }
+      | {
+        id: string;
+        token_obtained_at: string;
+        last_refreshed_at: string | null;
+        access_token: string;
+        refresh_token: string;
+      }
       | undefined;
 
     if (!session) {
@@ -183,29 +190,59 @@ Deno.serve(async (req) => {
       return json({ ok: true, refreshed: false, reason: 'already_claimed' });
     }
 
-    // ── 5. Renovação via proxy ─────────────────────────────────────────────
+    // ── 5. Renovação: proxy externo quando configurado, UAPI direta caso ────
+    // Os secrets do proxy nunca existiram em produção; sem a via direta a
+    // renovação sempre falhava e a sessão morria em 24 h.
     const baseUrl = Deno.env.get('LALAMOVE_UNIFIED_PROXY_URL');
     const proxyKey = Deno.env.get('LALAMOVE_UNIFIED_PROXY_KEY');
-    if (!baseUrl || !proxyKey) throw new Error('Configuração do proxy Lalamove ausente');
+    const useProxy = Boolean(baseUrl && proxyKey);
 
-    const url = new URL(baseUrl);
-    url.searchParams.set('key', proxyKey);
-    url.searchParams.set('action', 'refresh_token');
+    const url = useProxy ? new URL(baseUrl!) : null;
+    if (url && proxyKey) {
+      url.searchParams.set('key', proxyKey);
+      url.searchParams.set('action', 'refresh_token');
+    }
+    const direct = useProxy
+      ? null
+      : buildUapiRefreshRequest(session.access_token, session.refresh_token);
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
     let ok = false;
     let detail = '';
+    let renewedTokens: { accessToken: string; refreshToken: string } | null = null;
 
     try {
-      const resp = await fetch(url.toString(), {
-        headers: { 'x-request-id': crypto.randomUUID() },
-        signal: controller.signal,
-      });
+      const resp = direct
+        ? await fetch(direct.url, {
+          method: 'POST',
+          headers: direct.headers,
+          body: direct.body,
+          signal: controller.signal,
+        })
+        : await fetch(url!.toString(), {
+          headers: { 'x-request-id': crypto.randomUUID() },
+          signal: controller.signal,
+        });
       const text = await resp.text();
       ok = resp.ok;
       detail = text.slice(0, 500);
-      if (ok) {
+      if (direct) {
+        let parsed: unknown = null;
+        try {
+          parsed = JSON.parse(text);
+        } catch {
+          ok = false;
+        }
+        if (ok) {
+          const result = parseUapiRefreshResponse(parsed, session.refresh_token);
+          ok = result.ok;
+          detail = result.detail;
+          if (ok && result.accessToken && result.refreshToken) {
+            renewedTokens = { accessToken: result.accessToken, refreshToken: result.refreshToken };
+          }
+        }
+      } else if (ok) {
         try {
           const parsed = JSON.parse(text) as { ok?: boolean; error?: string };
           if (parsed.ok === false) {
@@ -229,17 +266,31 @@ Deno.serve(async (req) => {
         'CRITICAL',
         'Falha ao renovar token UAPI',
         `A renovação automática falhou com ${ageHours.toFixed(1)} h de idade. Restam ~${(EXPIRY_HOURS - ageHours).toFixed(1)} h antes da expiração. Detalhe: ${detail}`,
-        { session_id: session.id, age_hours: Number(ageHours.toFixed(2)), detail },
+        { session_id: session.id, age_hours: Number(ageHours.toFixed(2)), detail, via: useProxy ? 'proxy' : 'uapi_direta' },
       );
       return json({ ok: false, reason: 'refresh_failed', detail }, 200);
     }
 
-    await admin
-      .from('lalamove_uapi_sessions')
-      .update({ last_refreshed_at: new Date().toISOString(), refresh_method: 'auto' })
-      .eq('id', session.id);
+    // O proxy grava a sessão por conta própria; na via direta somos nós.
+    const patch: Record<string, unknown> = {
+      last_refreshed_at: new Date().toISOString(),
+      refresh_method: 'auto',
+    };
+    if (renewedTokens) {
+      patch.access_token = renewedTokens.accessToken;
+      patch.refresh_token = renewedTokens.refreshToken;
+      patch.token_obtained_at = new Date().toISOString();
+      patch.token_expires_at = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000).toISOString();
+    }
 
-    return json({ ok: true, refreshed: true, age_hours: Number(ageHours.toFixed(2)) });
+    await admin.from('lalamove_uapi_sessions').update(patch).eq('id', session.id);
+
+    return json({
+      ok: true,
+      refreshed: true,
+      age_hours: Number(ageHours.toFixed(2)),
+      via: useProxy ? 'proxy' : 'uapi_direta',
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erro desconhecido';
     await raiseAlert(admin, 'CRITICAL', 'Erro no worker de refresh UAPI', message, {});
