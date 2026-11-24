@@ -432,7 +432,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/approvals",
@@ -660,7 +660,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/cache-status",
@@ -729,7 +729,7 @@
    "papeis": [
     "alert"
    ],
-   "arquivos_puxados": 13
+   "arquivos_puxados": 14
   },
   {
    "caminho": "/contacts",
@@ -769,7 +769,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 14
+   "arquivos_puxados": 15
   },
   {
    "caminho": "/dashboard",
@@ -1234,7 +1234,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/forgot-password",
@@ -1431,7 +1431,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 26
+   "arquivos_puxados": 27
   },
   {
    "caminho": "/ip-whitelist",
@@ -1860,7 +1860,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/mfa-enroll",
@@ -2434,7 +2434,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 25
+   "arquivos_puxados": 26
   },
   {
    "caminho": "/reports",
@@ -2659,7 +2659,7 @@
     "manager",
     "viewer"
    ],
-   "arquivos_puxados": 22
+   "arquivos_puxados": 23
   },
   {
    "caminho": "/security",
@@ -2845,7 +2845,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 15
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/settings/maps",
@@ -2928,7 +2928,7 @@
     "admin",
     "manager"
    ],
-   "arquivos_puxados": 18
+   "arquivos_puxados": 19
   },
   {
    "caminho": "/settings/uapi",
@@ -2976,7 +2976,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 12
+   "arquivos_puxados": 13
   },
   {
    "caminho": "/sla",
@@ -3121,7 +3121,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 10
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/system-health-expanded",
@@ -3162,7 +3162,7 @@
    "canais_realtime": [],
    "flags": [],
    "papeis": [],
-   "arquivos_puxados": 11
+   "arquivos_puxados": 12
   },
   {
    "caminho": "/telemetria",

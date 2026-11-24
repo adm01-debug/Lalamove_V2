@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `63cda83b22` · branch `main` · 2026-11-23 23:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a1e0893117` · branch `main` · 2026-11-24 00:04 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2027,7 +2027,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1432 testes em 122 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1436 testes em 123 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2143,6 +2143,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |
 | `src/hooks/__tests__/useRateLimiting.test.ts` | 4 | useRateLimiting · deve calcular estatísticas básicas corretamente · deve simular stress com 780 cenários agregados sem quebrar · deve executar blockIP com sucesso |
 | `src/pages/NotificationHistoryPage.geo.test.tsx` | 4 | NotificationHistoryPage — avisos geo pendentes (etapa 73) · mostra evento deferred com rótulo em PT-BR, distância e ETA · mostra no_recipient e failed como casos que exigem ação · não renderiza o card quando não há evento pendente |
+| `src/pages/error-state.test.tsx` | 4 | estado de erro em paginas de dados (item 421) · SystemHealthPage: falha mostra aviso e botao de tentar novamente em vez de tela vazia · SystemHealthPage: enquanto carrega mostra o indicador de carregamento · ContactsPage: falha na listagem mostra aviso e botao de tentar novamente |
 | `src/pages/alert-configurations/AlertConfigCard.test.tsx` | 4 | AlertConfigCard — eventos geo (etapa 72) · mostra rótulo em PT-BR para os 8 tipos geo, não o alert_type cru · renderiza o preview com os valores de exemplo, sem deixar {{ }} no texto · preserva variável desconhecida no preview em vez de apagar |
 | `scripts/db-audit/diff.test.mjs` | 3 | aceita estruturas identicas de bancos com identidades diferentes · retorna 1 e identifica objeto divergente · retorna 2 para manifesto invalido |
 | `src/components/map/__tests__/mapLoadBilling.test.tsx` | 3 | GoogleMapsCanvas — contagem de map load (etapa 80) · cobra o load no provedor google, não no mapbox · não cobra load quando o mapa não chega a ser instanciado |

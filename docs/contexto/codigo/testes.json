@@ -14,13 +14,13 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 172,
+ "total": 173,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
   "edge (deno)": 38,
   "guard (node --test)": 34,
-  "unit (vitest)": 82
+  "unit (vitest)": 83
  },
  "onde_ficam": [
   {
@@ -37,7 +37,7 @@
   },
   {
    "padrao": "co-localizado (*.test)",
-   "arquivos": 12
+   "arquivos": 13
   },
   {
    "padrao": "e2e/",
@@ -1135,6 +1135,16 @@
    "casos": 3
   },
   {
+   "arquivo": "src/pages/error-state.test.tsx",
+   "tipo": "unit (vitest)",
+   "linhas": 80,
+   "testa": [
+    "src/pages/ContactsPage.tsx",
+    "src/pages/SystemHealthPage.tsx"
+   ],
+   "casos": 3
+  },
+  {
    "arquivo": "src/pages/NotificationHistoryPage.geo.test.tsx",
    "tipo": "unit (vitest)",
    "linhas": 60,
@@ -1671,7 +1681,9 @@
   "src/lib/uapiStatement.ts": 1,
   "src/lib/utils.ts": 1,
   "src/pages/AdminTelemetriaPage.tsx": 1,
+  "src/pages/ContactsPage.tsx": 1,
   "src/pages/NotificationHistoryPage.tsx": 1,
+  "src/pages/SystemHealthPage.tsx": 1,
   "src/pages/alert-configurations/AlertConfigCard.tsx": 1,
   "src/types/index.ts": 1,
   "src/types/lalamove.ts": 3,
@@ -1727,7 +1739,6 @@
    "src/pages/Bitrix24Page.tsx",
    "src/pages/CacheMonitoringPage.tsx",
    "src/pages/CacheStatusPage.tsx",
-   "src/pages/ContactsPage.tsx",
    "src/pages/DashboardRedesigned.tsx",
    "src/pages/DeliveryMetricsPage.tsx",
    "src/pages/DriversPage.tsx",
@@ -1765,7 +1776,6 @@
    "src/pages/SecurityDashboardPage.tsx",
    "src/pages/SettingsPage.tsx",
    "src/pages/SystemHealthExpandedPage.tsx",
-   "src/pages/SystemHealthPage.tsx",
    "src/pages/UAPISettingsPage.tsx",
    "src/pages/UnauthorizedPage.tsx",
    "src/pages/UserPreferencesPage.tsx",

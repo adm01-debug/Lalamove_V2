@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "fix: estado de erro e retry nas paginas que ficavam em branco (#334)",
    "feat: motor de mensageria ao motorista (bloco 7) (#333)",
    "feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)",
    "fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)",
-   "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)",
-   "feat: edge zapp-callback com HMAC, anti-replay e ledger de mensagens (etapas 73/74/96) (#283)"
+   "fix: isola falha de KPI no dashboard (item 61 pela metade) (#330)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

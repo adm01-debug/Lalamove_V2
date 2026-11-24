@@ -1856,7 +1856,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 3,
+   "usado_por": 17,
    "orfao": false
   },
   {
@@ -2351,7 +2351,7 @@
     "AnalyticsDashboardPage"
    ],
    "export_default": "AnalyticsDashboardPage",
-   "linhas": 124,
+   "linhas": 127,
    "dominio": "pages",
    "hooks_locais": [
     "useAnalyticsData"
@@ -2452,7 +2452,7 @@
     "CacheMonitoringPage"
    ],
    "export_default": "CacheMonitoringPage",
-   "linhas": 215,
+   "linhas": 218,
    "dominio": "pages",
    "hooks_locais": [
     "useCacheStats",
@@ -2470,7 +2470,7 @@
     "CacheStatusPage"
    ],
    "export_default": "CacheStatusPage",
-   "linhas": 231,
+   "linhas": 240,
    "dominio": "pages",
    "hooks_locais": [
     "useCacheStats",
@@ -2489,7 +2489,7 @@
     "ContactsPage"
    ],
    "export_default": "ContactsPage",
-   "linhas": 323,
+   "linhas": 326,
    "dominio": "pages",
    "hooks_locais": [
     "useContacts"
@@ -2663,7 +2663,7 @@
     "ExternalDataPage"
    ],
    "export_default": "ExternalDataPage",
-   "linhas": 234,
+   "linhas": 237,
    "dominio": "pages",
    "hooks_locais": [
     "useDebouncedValue",
@@ -2775,7 +2775,7 @@
     "IncidentsPage"
    ],
    "export_default": null,
-   "linhas": 233,
+   "linhas": 238,
    "dominio": "pages",
    "hooks_locais": [
     "useCreateIncident",
@@ -2896,7 +2896,7 @@
     "LalamoveSettingsPage"
    ],
    "export_default": "LalamoveSettingsPage",
-   "linhas": 483,
+   "linhas": 486,
    "dominio": "pages",
    "hooks_locais": [
     "useLalamoveStatus",
@@ -3051,7 +3051,7 @@
     "MapsSettingsPage"
    ],
    "export_default": "MapsSettingsPage",
-   "linhas": 964,
+   "linhas": 994,
    "dominio": "pages",
    "hooks_locais": [
     "useGeoBudgetStatus",
@@ -3109,7 +3109,7 @@
     "MetricsPage"
    ],
    "export_default": null,
-   "linhas": 370,
+   "linhas": 382,
    "dominio": "pages",
    "hooks_locais": [
     "useApprovalMetrics",
@@ -3320,7 +3320,7 @@
     "RateLimitDashboardPage"
    ],
    "export_default": "RateLimitDashboardPage",
-   "linhas": 478,
+   "linhas": 486,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",
@@ -3459,7 +3459,7 @@
     "RolesPage"
    ],
    "export_default": "RolesPage",
-   "linhas": 398,
+   "linhas": 403,
    "dominio": "pages",
    "hooks_locais": [
     "useFuseSearchWithMatches",
@@ -3618,7 +3618,7 @@
     "SystemHealthExpandedPage"
    ],
    "export_default": "SystemHealthExpandedPage",
-   "linhas": 318,
+   "linhas": 323,
    "dominio": "pages",
    "hooks_locais": [
     "useSystemHealthExpanded"
@@ -3634,7 +3634,7 @@
     "SystemHealthPage"
    ],
    "export_default": null,
-   "linhas": 84,
+   "linhas": 89,
    "dominio": "pages",
    "hooks_locais": [
     "useSystemHealth"
@@ -3650,7 +3650,7 @@
     "UAPISettingsPage"
    ],
    "export_default": "UAPISettingsPage",
-   "linhas": 176,
+   "linhas": 179,
    "dominio": "pages",
    "hooks_locais": [
     "useUAPIStatus",

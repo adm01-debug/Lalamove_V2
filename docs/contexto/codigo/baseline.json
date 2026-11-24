@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "63cda83b22cffa43573c4a8a57014031b659a260",
+  "commit": "a1e08931178c0f44e226562332d48b9bcef789ea",
   "branch": "main",
-  "data_commit": "2026-11-23T20:09:26-03:00",
+  "data_commit": "2026-11-23T21:02:16-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a1e0893",
+    "data": "2026-11-23",
+    "assunto": "fix: estado de erro e retry nas paginas que ficavam em branco (#334)"
+   },
    {
     "sha": "63cda83",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "d899883",
     "data": "2026-11-22",
     "assunto": "feat: hardening de dados, erros e estados (itens 67/68/70/73/74/75/76) (#310)"
-   },
-   {
-    "sha": "c2585b1",
-    "data": "2026-11-22",
-    "assunto": "feat: polish de rotas e retry de chunk (itens 50/51/57/58/59) (#308)"
    }
   ],
-  "arquivos_mudados_7d": 446,
+  "arquivos_mudados_7d": 460,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 234
+    "commits": 235
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1094,
-  "arquivos_codigo": 694,
-  "linhas_codigo": 135963,
+  "arquivos_total": 1095,
+  "arquivos_codigo": 695,
+  "linhas_codigo": 136149,
   "rotas": 56,
   "rotas_protegidas": 48,
   "rotas_com_mfa": 7,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 172,
+  "testes": 173,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -524,7 +524,7 @@
   },
   "src/hooks": {
    "arquivos": 111,
-   "linhas": 19093
+   "linhas": 19102
   },
   "src/i18n": {
    "arquivos": 1,
@@ -543,8 +543,8 @@
    "linhas": 28
   },
   "src/pages": {
-   "arquivos": 90,
-   "linhas": 19832
+   "arquivos": 91,
+   "linhas": 20009
   },
   "src/services": {
    "arquivos": 1,
@@ -618,7 +618,7 @@
   },
   {
    "arquivo": "src/pages/MapsSettingsPage.tsx",
-   "linhas": 964
+   "linhas": 994
   },
   {
    "arquivo": "scripts/ai-context/gerar.mjs",
@@ -678,7 +678,7 @@
   },
   {
    "arquivo": "src/pages/LalamoveSettingsPage.tsx",
-   "linhas": 483
+   "linhas": 486
   }
  ],
  "qualidade": {

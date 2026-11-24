@@ -844,7 +844,7 @@
    "hooks_exportados": [
     "useContacts"
    ],
-   "linhas": 169,
+   "linhas": 172,
    "dominio": "hooks",
    "tabelas": [
     "contacts"
@@ -1994,7 +1994,7 @@
    "hooks_exportados": [
     "useRateLimiting"
    ],
-   "linhas": 242,
+   "linhas": 245,
    "dominio": "hooks",
    "tabelas": [
     "blocked_ips",
@@ -2163,7 +2163,7 @@
    "hooks_exportados": [
     "useRole"
    ],
-   "linhas": 152,
+   "linhas": 155,
    "dominio": "hooks",
    "tabelas": [
     "user_roles"

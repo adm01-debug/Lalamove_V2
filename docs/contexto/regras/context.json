@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "63cda83b22cffa43573c4a8a57014031b659a260",
+  "sha": "a1e08931178c0f44e226562332d48b9bcef789ea",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-23 23:09 UTC",
-  "files_total": 1088,
-  "code_files": 907,
-  "code_lines": 157634
+  "generated_at": "2026-11-24 00:04 UTC",
+  "files_total": 1089,
+  "code_files": 908,
+  "code_lines": 157820
  },
  "version": "1.3.2",
- "facts_hash": "cef4ae5094c051dc",
+ "facts_hash": "fd586f8c78f249e5",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -188,7 +188,7 @@
   "package_manager": "npm",
   "languages": {
    ".ts": 342,
-   ".tsx": 239,
+   ".tsx": 240,
    ".sql": 204,
    ".mjs": 109,
    ".py": 8,
@@ -17980,7 +17980,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -18037,7 +18037,7 @@
     "rpc_transitive": [
      "refresh_cache_view"
     ],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -18053,7 +18053,7 @@
     "rpc_transitive": [
      "refresh_cache_view"
     ],
-    "deps_count": 13
+    "deps_count": 14
    },
    {
     "path": "",
@@ -18064,7 +18064,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 14
+    "deps_count": 15
    },
    {
     "path": "",
@@ -18144,7 +18144,7 @@
      "external-companies"
     ],
     "rpc_transitive": [],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -18203,7 +18203,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 26
+    "deps_count": 27
    },
    {
     "path": "",
@@ -18249,7 +18249,7 @@
      "lalamove-gateway"
     ],
     "rpc_transitive": [],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -18320,7 +18320,7 @@
      "geo_budget_status",
      "get_user_permissions"
     ],
-    "deps_count": 18
+    "deps_count": 19
    },
    {
     "path": "",
@@ -18342,7 +18342,7 @@
     ],
     "invokes_transitive": [],
     "rpc_transitive": [],
-    "deps_count": 15
+    "deps_count": 16
    },
    {
     "path": "",
@@ -18446,7 +18446,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 24
+    "deps_count": 25
    },
    {
     "path": "",
@@ -18505,7 +18505,7 @@
     "rpc_transitive": [
      "get_user_permissions"
     ],
-    "deps_count": 22
+    "deps_count": 23
    },
    {
     "path": "",
@@ -18582,7 +18582,7 @@
      "get-mapbox-token"
     ],
     "rpc_transitive": [],
-    "deps_count": 11
+    "deps_count": 12
    },
    {
     "path": "",
@@ -18595,7 +18595,7 @@
     "rpc_transitive": [
      "get_cron_jobs_health"
     ],
-    "deps_count": 10
+    "deps_count": 12
    },
    {
     "path": "",
@@ -18606,7 +18606,7 @@
      "lalamove-gateway"
     ],
     "rpc_transitive": [],
-    "deps_count": 10
+    "deps_count": 11
    },
    {
     "path": "",
@@ -18636,6 +18636,20 @@
     "invokes_transitive": [],
     "rpc_transitive": [],
     "deps_count": 17
+   },
+   {
+    "path": "",
+    "file": "src/pages/error-state.test.tsx",
+    "component": "error-state.test",
+    "tables_transitive": [
+     "contacts",
+     "drivers"
+    ],
+    "invokes_transitive": [],
+    "rpc_transitive": [
+     "get_cron_jobs_health"
+    ],
+    "deps_count": 21
    },
    {
     "path": "*",
@@ -21980,7 +21994,7 @@
   {
    "module": "src/hooks",
    "files": 111,
-   "lines": 19093,
+   "lines": 19102,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22344,8 +22358,8 @@
   },
   {
    "module": "src/pages",
-   "files": 90,
-   "lines": 19832,
+   "files": 91,
+   "lines": 20009,
    "tables": [
     "active_tracking",
     "driver_evaluations",
@@ -22486,6 +22500,7 @@
     "src/pages/UnauthorizedPage.tsx",
     "src/pages/UserPreferencesPage.tsx",
     "src/pages/WebhooksPage.tsx",
+    "src/pages/error-state.test.tsx",
     "src/pages/alert-configurations/AlertConfigCard.test.tsx",
     "src/pages/alert-configurations/AlertConfigCard.tsx",
     "src/pages/approvals/ApprovalCard.tsx",
@@ -22507,8 +22522,7 @@
     "src/pages/map-tools/StaticImageTab.tsx",
     "src/pages/map-tools/TilequeryTab.tsx",
     "src/pages/orders/OrderCard.tsx",
-    "src/pages/permissions/PermissionModuleList.tsx",
-    "src/pages/ratelimit/RateLimitDialogs.tsx"
+    "src/pages/permissions/PermissionModuleList.tsx"
    ]
   },
   {
@@ -40629,6 +40643,22 @@
    {
     "file": "src/pages/NotificationHistoryPage.geo.test.tsx",
     "name": "não renderiza o card quando não há evento pendente"
+   },
+   {
+    "file": "src/pages/error-state.test.tsx",
+    "name": "estado de erro em paginas de dados (item 421)"
+   },
+   {
+    "file": "src/pages/error-state.test.tsx",
+    "name": "SystemHealthPage: falha mostra aviso e botao de tentar novamente em vez de tela vazia"
+   },
+   {
+    "file": "src/pages/error-state.test.tsx",
+    "name": "SystemHealthPage: enquanto carrega mostra o indicador de carregamento"
+   },
+   {
+    "file": "src/pages/error-state.test.tsx",
+    "name": "ContactsPage: falha na listagem mostra aviso e botao de tentar novamente"
    },
    {
     "file": "src/pages/alert-configurations/AlertConfigCard.test.tsx",
@@ -64212,7 +64242,7 @@
   },
   "src/hooks/useContacts.ts": {
    "path": "src/hooks/useContacts.ts",
-   "lines": 169,
+   "lines": 172,
    "exports": [
     "interface Contact",
     "type ContactKind",
@@ -66644,7 +66674,7 @@
   },
   "src/hooks/useRateLimiting.ts": {
    "path": "src/hooks/useRateLimiting.ts",
-   "lines": 242,
+   "lines": 245,
    "exports": [
     "interface RateLimitLog",
     "interface BlockedIP",
@@ -66938,7 +66968,7 @@
   },
   "src/hooks/useRole.ts": {
    "path": "src/hooks/useRole.ts",
-   "lines": 152,
+   "lines": 155,
    "exports": [
     "interface RoleWithUsers",
     "function useRole"
@@ -69248,7 +69278,7 @@
   },
   "src/pages/AnalyticsDashboardPage.tsx": {
    "path": "src/pages/AnalyticsDashboardPage.tsx",
-   "lines": 124,
+   "lines": 127,
    "exports": [
     "function AnalyticsDashboardPage"
    ]
@@ -69339,7 +69369,7 @@
   },
   "src/pages/CacheMonitoringPage.tsx": {
    "path": "src/pages/CacheMonitoringPage.tsx",
-   "lines": 215,
+   "lines": 218,
    "exports": [
     "function CacheMonitoringPage"
    ],
@@ -69388,7 +69418,7 @@
   },
   "src/pages/CacheStatusPage.tsx": {
    "path": "src/pages/CacheStatusPage.tsx",
-   "lines": 231,
+   "lines": 240,
    "exports": [
     "function CacheStatusPage"
    ],
@@ -69420,7 +69450,7 @@
   },
   "src/pages/ContactsPage.tsx": {
    "path": "src/pages/ContactsPage.tsx",
-   "lines": 323,
+   "lines": 326,
    "exports": [
     "function ContactsPage"
    ],
@@ -69585,7 +69615,7 @@
   },
   "src/pages/ExternalDataPage.tsx": {
    "path": "src/pages/ExternalDataPage.tsx",
-   "lines": 234,
+   "lines": 237,
    "exports": [
     "function ExternalDataPage"
    ],
@@ -69766,7 +69796,7 @@
   },
   "src/pages/IncidentsPage.tsx": {
    "path": "src/pages/IncidentsPage.tsx",
-   "lines": 233,
+   "lines": 238,
    "exports": [
     "function IncidentsPage"
    ],
@@ -69846,7 +69876,7 @@
   },
   "src/pages/LalamoveSettingsPage.tsx": {
    "path": "src/pages/LalamoveSettingsPage.tsx",
-   "lines": 483,
+   "lines": 486,
    "exports": [
     "function LalamoveSettingsPage"
    ],
@@ -69912,7 +69942,7 @@
   },
   "src/pages/MapsSettingsPage.tsx": {
    "path": "src/pages/MapsSettingsPage.tsx",
-   "lines": 964,
+   "lines": 994,
    "exports": [
     "function MapsSettingsPage"
    ],
@@ -69993,7 +70023,7 @@
   },
   "src/pages/MetricsPage.tsx": {
    "path": "src/pages/MetricsPage.tsx",
-   "lines": 370,
+   "lines": 382,
    "exports": [
     "function MetricsPage"
    ],
@@ -70178,7 +70208,7 @@
   },
   "src/pages/RateLimitDashboardPage.tsx": {
    "path": "src/pages/RateLimitDashboardPage.tsx",
-   "lines": 478,
+   "lines": 486,
    "exports": [
     "function RateLimitDashboardPage"
    ]
@@ -70275,7 +70305,7 @@
   },
   "src/pages/RolesPage.tsx": {
    "path": "src/pages/RolesPage.tsx",
-   "lines": 398,
+   "lines": 403,
    "exports": [
     "function RolesPage"
    ],
@@ -70363,7 +70393,7 @@
   },
   "src/pages/SystemHealthExpandedPage.tsx": {
    "path": "src/pages/SystemHealthExpandedPage.tsx",
-   "lines": 318,
+   "lines": 323,
    "exports": [
     "function SystemHealthExpandedPage"
    ],
@@ -70387,14 +70417,14 @@
   },
   "src/pages/SystemHealthPage.tsx": {
    "path": "src/pages/SystemHealthPage.tsx",
-   "lines": 84,
+   "lines": 89,
    "exports": [
     "const SystemHealthPage"
    ]
   },
   "src/pages/UAPISettingsPage.tsx": {
    "path": "src/pages/UAPISettingsPage.tsx",
-   "lines": 176,
+   "lines": 179,
    "exports": [
     "function UAPISettingsPage"
    ],
@@ -70438,6 +70468,17 @@
     "Falha ao marcar webhook",
     "Falha ao remover webhook",
     "Falha ao reprocessar webhook"
+   ]
+  },
+  "src/pages/error-state.test.tsx": {
+   "path": "src/pages/error-state.test.tsx",
+   "lines": 80,
+   "is_test": true,
+   "tests": [
+    "estado de erro em paginas de dados (item 421)",
+    "SystemHealthPage: falha mostra aviso e botao de tentar novamente em vez de tela vazia",
+    "SystemHealthPage: enquanto carrega mostra o indicador de carregamento",
+    "ContactsPage: falha na listagem mostra aviso e botao de tentar novamente"
    ]
   },
   "src/pages/alert-configurations/AlertConfigCard.test.tsx": {
@@ -77732,10 +77773,36 @@
   }
  },
  "git": {
-  "sha": "63cda83b22cffa43573c4a8a57014031b659a260",
+  "sha": "a1e08931178c0f44e226562332d48b9bcef789ea",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a1e0893",
+    "date": "2026-11-23",
+    "author": "adm01-debug",
+    "subject": "fix: estado de erro e retry nas paginas que ficavam em branco (#334)",
+    "files": [
+     "src/hooks/useContacts.ts",
+     "src/hooks/useRateLimiting.ts",
+     "src/hooks/useRole.ts",
+     "src/pages/AnalyticsDashboardPage.tsx",
+     "src/pages/CacheMonitoringPage.tsx",
+     "src/pages/CacheStatusPage.tsx",
+     "src/pages/ContactsPage.tsx",
+     "src/pages/ExternalDataPage.tsx",
+     "src/pages/IncidentsPage.tsx",
+     "src/pages/LalamoveSettingsPage.tsx",
+     "src/pages/MapsSettingsPage.tsx",
+     "src/pages/MetricsPage.tsx",
+     "src/pages/RateLimitDashboardPage.tsx",
+     "src/pages/RolesPage.tsx",
+     "src/pages/SystemHealthExpandedPage.tsx",
+     "src/pages/SystemHealthPage.tsx",
+     "src/pages/UAPISettingsPage.tsx",
+     "src/pages/error-state.test.tsx"
+    ]
+   },
    {
     "sha": "63cda83",
     "date": "2026-11-23",
@@ -78158,27 +78225,12 @@
      "src/App.tsx",
      "src/components/layout/AppLayout.tsx"
     ]
-   },
-   {
-    "sha": "62a5161",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: hierarquia de papeis numa unica fonte (item 48) (#303)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/components/auth/ProtectedRoute.tsx",
-     "src/components/layout/MobileSidebar.tsx",
-     "src/components/layout/Sidebar.tsx",
-     "src/components/layout/sidebar-config.ts",
-     "src/lib/__tests__/roles.test.ts",
-     "src/lib/roles.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-    9
+    8
    ],
    [
     "src/App.tsx",
@@ -78186,10 +78238,6 @@
    ],
    [
     "src/pages/LiveMapPage.tsx",
-    4
-   ],
-   [
-    "src/components/layout/MobileSidebar.tsx",
     4
    ],
    [
@@ -78205,8 +78253,12 @@
     3
    ],
    [
-    "src/components/layout/sidebar-config.ts",
+    "src/components/layout/MobileSidebar.tsx",
     3
+   ],
+   [
+    "src/pages/AnalyticsDashboardPage.tsx",
+    2
    ],
    [
     "supabase/functions/lalamove-webhook/index.ts",

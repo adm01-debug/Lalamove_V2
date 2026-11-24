@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `63cda83b22cffa43573c4a8a57014031b659a260` (2026-11-23T20:09:26-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a1e08931178c0f44e226562332d48b9bcef789ea` (2026-11-23T21:02:16-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (581), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (582), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1094 |
-| arquivos_codigo | 694 |
-| linhas_codigo | 135963 |
+| arquivos_total | 1095 |
+| arquivos_codigo | 695 |
+| linhas_codigo | 136149 |
 | rotas | 56 |
 | rotas_protegidas | 48 |
 | rotas_com_mfa | 7 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 172 |
+| testes | 173 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -290,8 +290,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9724 nós · 20023 arestas · 687 comunidades · grafo do commit `63cda83b`
-- comunidades maiores: cn (253), lucide-react (146), ref_https (136), client.ts (123), App.tsx (121), geo-gateway/index.ts (109), react (108), snapshot.py (106), AlertsPage.tsx (98), ref_node_assert (88), button.tsx (88), send-notification/index.ts (82)
+- 9728 nós · 20061 arestas · 694 comunidades · grafo do commit `a1e08931`
+- comunidades maiores: cn (297), ref_https (148), button.tsx (134), client.ts (128), ref_node_path (114), badge.tsx (98), RateLimitDashboardPage.tsx (98), geo-gateway/index.ts (91), Bloco 6 — Fluxos complexos: wizard, rascunho e guarda de saída (117–144) (88), 4. Componentes, hooks, libs e estado — **revisado** (85), send-notification/index.ts (82), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -393,6 +393,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `a1e0893` fix: estado de erro e retry nas paginas que ficavam em branco (#334)
 - 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
 - 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
 - 2026-11-23 `f5779da` fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)
@@ -407,7 +408,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `3e994e3` feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)
 - 2026-11-23 `680e653` feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)
 - 2026-11-23 `ee920ac` fix: validar contrato antes de criar cliente no new-device-alert (#328)
-- 2026-11-23 `f20a3ea` feat: lote 13 - lazy import de xlsx e jspdf no clique (#325)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
