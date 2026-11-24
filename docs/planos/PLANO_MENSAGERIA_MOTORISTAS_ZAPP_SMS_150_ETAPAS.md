@@ -566,9 +566,10 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [~] `send-location` da coleta + `send-contact` do responsável
 - **Evidência:** template `M3_LOCALIZACAO_CONTATO` e rota `DRIVER_ASSIGNED` existem em produção; `loadOrderVariables` monta `pickup_location_link` (link de mapa sem chave) e `pickup_contact`. **Limite conhecido:** o motor dispara um template por evento/canal e vence o de menor `key` (`M1_BRIEFING`), determinístico desde esta PR. O M3 como segunda mensagem exige disparo próprio com `seq` diferente — próximo passo.
 
-### 104 — [L] M4 Chegada na coleta
-- [ ] Gatilho `DRIVER_ARRIVED_PICKUP` (geofence do plano Google)
-- **Evidência:** simulação com `simulate-driver-movement`
+### 104 — [x] M4 Chegada na coleta
+- [x] Gatilho `DRIVER_ARRIVED_PICKUP` (geofence do plano Google) → ponte no `job-worker`: o job `notification` do evento geo passa também pelo motor do Bloco 7 (`geoAlertDriverEvent` + `avisarMotorista`)
+- **Evidência:** `job-worker/notification-bridge.test.ts` (5 testes, `deno test` verde, `deno check` limpo) e simulação com payload real de produção (`job_queue` do evento geo do pedido `608ae635`/motorista `0e0f111c`): plano `shadow [whatsapp]`, template `M4_CHEGADA_COLETA v1`, rota ligada em produção; rota desligada no painel → `suppress evento_desligado`; `APPROACHING_PICKUP` (destinatário é o contato da coleta) não gera aviso ao motorista
+- **Limite conhecido:** `simulate-driver-movement` é bloqueada em produção (403 por ambiente); a evidência veio do payload real do trigger. Falta a ação sobre a resposta "1 = coletado" (etapa 102)
 
 ### 105 — [~] M5 Pós-coleta
 - [~] Gatilho `PICKED_UP`; inclui exigência de comprovante quando `requires_pod`
