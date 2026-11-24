@@ -24,7 +24,7 @@ export function PasswordResetApprovalsPage() {
 
   const { approveMutation, rejectMutation } = usePasswordResetActions();
 
-  const { data: requests = [], isLoading, refetch } = useQuery({
+  const { data: requests = [], isLoading, refetch, error } = useQuery({
     queryKey: ["password-reset-requests", statusFilter],
     queryFn: async () => {
       let query = supabase.from("password_reset_requests").select("*").order("requested_at", { ascending: false });
@@ -132,6 +132,13 @@ export function PasswordResetApprovalsPage() {
         <CardContent>
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground">Carregando...</div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+              <h3 className="font-semibold text-lg">Não foi possível carregar as solicitações</h3>
+              <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}><RefreshCw className="h-4 w-4 mr-2" />Tentar novamente</Button>
+            </div>
           ) : filteredRequests.length === 0 ? (
             <div className="text-center py-12"><KeyRound className="h-12 w-12 text-muted-foreground mx-auto mb-4" /><h3 className="font-semibold text-lg">Nenhuma solicitação</h3></div>
           ) : (

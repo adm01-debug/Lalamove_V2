@@ -20,7 +20,9 @@ import {
   ShieldX,
   MapPin,
   CheckCircle2,
-  XCircle
+  XCircle,
+  AlertTriangle,
+  RefreshCw
 } from "lucide-react";
 import {
   Dialog,
@@ -90,7 +92,7 @@ export function GeoBlockingPage() {
   const queryClient = useQueryClient();
 
   // Buscar países na whitelist (is_blocked = false significa que está permitido)
-  const { data: allowedCountries = [], isLoading } = useQuery({
+  const { data: allowedCountries = [], isLoading, error, refetch } = useQuery({
     queryKey: ["geo-whitelist"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -328,6 +330,13 @@ export function GeoBlockingPage() {
           {isLoading ? (
             <div className="text-center py-8 text-muted-foreground">
               Carregando...
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+              <h3 className="font-semibold text-lg">Não foi possível carregar a whitelist de países</h3>
+              <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}><RefreshCw className="h-4 w-4 mr-2" />Tentar novamente</Button>
             </div>
           ) : filteredCountries.length === 0 ? (
             <div className="text-center py-12">

@@ -100,7 +100,7 @@ export function EvaluationsPage() {
   const [resultFilter, setResultFilter] = useState<string>('all');
   const [selectedEvaluation, setSelectedEvaluation] = useState<DriverEvaluation | null>(null);
 
-  const { data: evaluations = [], isLoading, refetch } = useQuery({
+  const { data: evaluations = [], isLoading, refetch, error } = useQuery({
     queryKey: ['driver-evaluations'],
     queryFn: fetchEvaluations,
     refetchInterval: 30000
@@ -314,6 +314,13 @@ export function EvaluationsPage() {
               {[...Array(5)].map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />
               ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-destructive" />
+              <p className="font-medium text-foreground">Não foi possível carregar as avaliações</p>
+              <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>Tentar novamente</Button>
             </div>
           ) : filteredEvaluations.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">

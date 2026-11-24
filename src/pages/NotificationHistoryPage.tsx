@@ -22,6 +22,7 @@ import {
   Ban,
   Eye,
   MessageSquare,
+  AlertCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNotificationHistory, useNotificationStats, usePendingGeoEvents, NotificationSent } from '@/hooks/useNotificationHistory';
@@ -107,7 +108,7 @@ const alertTypeLabels: Record<string, string> = {
 };
 
 function StatsCards() {
-  const { data: stats, isLoading } = useNotificationStats();
+  const { data: stats, isLoading, error: statsError, refetch: refetchStats } = useNotificationStats();
 
   if (isLoading) {
     return (
@@ -133,7 +134,15 @@ function StatsCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="space-y-3">
+      {statsError && (
+        <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>Não foi possível carregar os totais, os números abaixo podem estar zerados. {statsError.message}</span>
+          <Button variant="outline" size="sm" className="ml-auto" onClick={() => refetchStats()}>Tentar novamente</Button>
+        </div>
+      )}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
       {cards.map((card) => (
         <Card key={card.label}>
           <CardContent className="pt-6">
@@ -147,6 +156,7 @@ function StatsCards() {
           </CardContent>
         </Card>
       ))}
+      </div>
     </div>
   );
 }

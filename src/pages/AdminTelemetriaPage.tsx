@@ -66,7 +66,7 @@ export default function AdminTelemetriaPage() {
     return { from: new Date(now.getTime() - (msMap[timeFilter] || msMap["24h"])).toISOString(), to };
   };
 
-  const { data: rows = [], isLoading, refetch, isRefetching } = useQuery<TelemetryRow[]>({
+  const { data: rows = [], isLoading, refetch, isRefetching, error } = useQuery<TelemetryRow[]>({
     queryKey: ["query-telemetry", severityFilter, timeFilter, customDateFrom?.toISOString(), customDateTo?.toISOString()],
     queryFn: async () => {
       const { from, to } = getTimeThreshold();
@@ -447,6 +447,13 @@ export default function AdminTelemetriaPage() {
               {Array.from({ length: 8 }).map((_, i) => (
                 <Skeleton key={i} className="h-12 w-full" />
               ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-16">
+              <AlertTriangle className="h-10 w-10 mx-auto mb-3 text-destructive" />
+              <p className="font-medium text-foreground">Não foi possível carregar a telemetria</p>
+              <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>Tentar novamente</Button>
             </div>
           ) : rows.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground">
