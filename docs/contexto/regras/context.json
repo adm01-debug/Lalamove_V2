@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
+  "sha": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 02:48 UTC",
+  "generated_at": "2026-11-24 03:16 UTC",
   "files_total": 1096,
   "code_files": 915,
-  "code_lines": 160585
+  "code_lines": 160627
  },
  "version": "1.3.2",
- "facts_hash": "7572dfe192362587",
+ "facts_hash": "b42cc00fba93e8d9",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22764,7 +22764,7 @@
   {
    "module": "supabase/functions",
    "files": 110,
-   "lines": 26997,
+   "lines": 27039,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -26061,7 +26061,7 @@
    {
     "file": "supabase/functions/_shared/messaging/dispatch.ts",
     "name": "DriverMessageReason",
-    "values": "sem_telefone | opt_out | sem_rota | sem_template | horario_silencio | limite_motorista | sem_canal_disponivel | orcamento_estourado | modo_sombra"
+    "values": "sem_telefone | opt_out | sem_rota | evento_desligado | sem_template | horario_silencio | limite_motorista | sem_canal_disponivel | orcamento_estourado | modo_sombra"
    },
    {
     "file": "supabase/functions/_shared/messaging/inbound-actions.ts",
@@ -41902,6 +41902,10 @@
    },
    {
     "file": "supabase/functions/_shared/messaging/dispatch.test.ts",
+    "name": "etapa 145: rota desligada no painel nao envia nada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/dispatch.test.ts",
     "name": "etapa 91: numero invalido no WhatsApp cai no SMS na hora"
    },
    {
@@ -42083,6 +42087,10 @@
    {
     "file": "supabase/functions/_shared/messaging/registry.test.ts",
     "name": "etapa 88: rota do banco e lida e canal desconhecido e descartado"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/registry.test.ts",
+    "name": "etapa 145: rota desligada continua vindo do banco com is_enabled falso"
    },
    {
     "file": "supabase/functions/_shared/messaging/registry.test.ts",
@@ -73025,7 +73033,7 @@
   },
   "supabase/functions/_shared/messaging/dispatch.test.ts": {
    "path": "supabase/functions/_shared/messaging/dispatch.test.ts",
-   "lines": 322,
+   "lines": 331,
    "is_test": true,
    "doc": "Etapas 88-95: cada teste aqui e um caso que custa dinheiro ou credibilidade — mensagem em numero sem WhatsApp, rajada, madrugada, orcamento do mes, texto com placeholder nao resolvido, fallback que nao dispara.",
    "tests": [
@@ -73044,6 +73052,7 @@
     "Z5: sem canal gratuito o envio para no teto",
     "etapa 77: evento sem template ativo nao inventa texto",
     "etapa 88: evento sem rota nao sai por canal nenhum",
+    "etapa 145: rota desligada no painel nao envia nada",
     "etapa 91: numero invalido no WhatsApp cai no SMS na hora",
     "etapa 90: erro que pode passar espera o fallback temporizado",
     "placeholder nao resolvido nao vira mensagem quebrada",
@@ -73052,7 +73061,7 @@
   },
   "supabase/functions/_shared/messaging/dispatch.ts": {
    "path": "supabase/functions/_shared/messaging/dispatch.ts",
-   "lines": 311,
+   "lines": 313,
    "exports": [
     "interface DriverSnapshot",
     "type PlanAction",
@@ -73074,7 +73083,7 @@
     },
     {
      "name": "DriverMessageReason",
-     "values": "sem_telefone | opt_out | sem_rota | sem_template | horario_silencio | limite_motorista | sem_canal_disponivel | orcamento_estourado | modo_sombra"
+     "values": "sem_telefone | opt_out | sem_rota | evento_desligado | sem_template | horario_silencio | limite_motorista | sem_canal_disponivel | orcamento_estourado | modo_sombra"
     }
    ],
    "status_values": [
@@ -73374,7 +73383,7 @@
   },
   "supabase/functions/_shared/messaging/registry.test.ts": {
    "path": "supabase/functions/_shared/messaging/registry.test.ts",
-   "lines": 163,
+   "lines": 194,
    "is_test": true,
    "rule_comments": [
     "nao pode mudar o comportamento do sistema — o fallback e o catalogo do codigo"
@@ -73384,6 +73393,7 @@
     "etapa 88: tabela ausente devolve o catalogo do codigo",
     "etapa 88: tabela vazia tambem cai no catalogo do codigo",
     "etapa 88: rota do banco e lida e canal desconhecido e descartado",
+    "etapa 145: rota desligada continua vindo do banco com is_enabled falso",
     "etapa 75: erro na leitura da configuracao nao liga nenhum provedor",
     "etapa 75: configuracao real e lida com a janela de silencio por papel",
     "etapa 75: provedor desconhecido cai no default seguro",
@@ -78489,10 +78499,21 @@
   }
  },
  "git": {
-  "sha": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
+  "sha": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "f242d42",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: rota desligada no painel passa a valer no motor (#342)",
+    "files": [
+     "supabase/functions/_shared/messaging/dispatch.test.ts",
+     "supabase/functions/_shared/messaging/dispatch.ts",
+     "supabase/functions/_shared/messaging/registry.test.ts"
+    ]
+   },
    {
     "sha": "5bfc969",
     "date": "2026-11-23",
@@ -78905,21 +78926,6 @@
      "docs/qa/04-PLANO.md",
      "docs/qa/05-PROGRESSO.md"
     ]
-   },
-   {
-    "sha": "281cd07",
-    "date": "2026-11-22",
-    "author": "adm01-debug",
-    "subject": "feat: edge geo-admin para rotacionar o token Mapbox (etapa 9) (#279)",
-    "files": [
-     ".github/workflows/ci.yml",
-     "docs/MAPBOX.md",
-     "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-     "supabase/config.toml",
-     "supabase/functions/geo-admin/index.ts",
-     "supabase/functions/geo-admin/rotation.test.ts",
-     "supabase/functions/geo-admin/rotation.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -78952,6 +78958,18 @@
     3
    ],
    [
+    "supabase/functions/_shared/messaging/dispatch.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/dispatch.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/registry.test.ts",
+    2
+   ],
+   [
     "src/pages/AdminTelemetriaPage.tsx",
     2
    ],
@@ -78972,10 +78990,6 @@
     2
    ],
    [
-    ".github/workflows/ci.yml",
-    2
-   ],
-   [
     "src/pages/ProfilePage.tsx",
     2
    ],
@@ -78993,14 +79007,6 @@
    ],
    [
     "src/pages/AlertsPage.tsx",
-    2
-   ],
-   [
-    "src/pages/DriversPage.tsx",
-    2
-   ],
-   [
-    "src/pages/OrdersPage.tsx",
     2
    ]
   ]

@@ -1275,13 +1275,13 @@
   {
    "arquivo": "supabase/functions/_shared/messaging/dispatch.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 322,
+   "linhas": 331,
    "testa": [
     "supabase/functions/_shared/messaging/dispatch.ts",
     "supabase/functions/_shared/messaging/registry.ts",
     "supabase/functions/_shared/messaging/router.ts"
    ],
-   "casos": 19
+   "casos": 20
   },
   {
    "arquivo": "supabase/functions/_shared/messaging/inbound-actions.test.ts",
@@ -1314,12 +1314,12 @@
   {
    "arquivo": "supabase/functions/_shared/messaging/registry.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 163,
+   "linhas": 194,
    "testa": [
     "supabase/functions/_shared/messaging/registry.ts",
     "supabase/functions/_shared/messaging/router.ts"
    ],
-   "casos": 9
+   "casos": 10
   },
   {
    "arquivo": "supabase/functions/_shared/messaging/router.test.ts",

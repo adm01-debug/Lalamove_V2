@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5bfc96990e9d2a7721737d3173627ed1c0282f50",
+  "commit": "f242d426c0d5ffe7c252e2121d9bc5cd54058eed",
   "branch": "main",
-  "data_commit": "2026-11-23T23:48:28-03:00",
+  "data_commit": "2026-11-24T00:02:56-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "f242d42",
+    "data": "2026-11-24",
+    "assunto": "fix: rota desligada no painel passa a valer no motor (#342)"
+   },
    {
     "sha": "5bfc969",
     "data": "2026-11-23",
@@ -126,11 +131,6 @@
     "sha": "9c1ef6e",
     "data": "2026-11-23",
     "assunto": "feat: lote 10 - build es2022 + manualChunks + logger producao (#322)"
-   },
-   {
-    "sha": "add648e",
-    "data": "2026-11-23",
-    "assunto": "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)"
    }
   ],
   "arquivos_mudados_7d": 473,
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 51
+    "mudancas": 54
    },
    {
     "pasta": "src/components/map",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 242
+    "commits": 243
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1102,
   "arquivos_codigo": 702,
-  "linhas_codigo": 138914,
+  "linhas_codigo": 138956,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 110,
-   "linhas": 26997
+   "linhas": 27039
   },
   "tailwind.config.ts": {
    "arquivos": 1,

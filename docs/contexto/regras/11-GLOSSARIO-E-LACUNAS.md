@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5bfc96990e` · branch `main` · 2026-11-24 02:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f242d426c0` · branch `main` · 2026-11-24 03:16 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -184,7 +184,7 @@
 | `DeliveryStatus` (TS) | sent \| delivered \| failed \| unknown |  | `supabase/functions/_shared/channels/sms.ts` |
 | `ErrorAction` (TS) | fallback \| retry \| give_up \| alert |  | `supabase/functions/_shared/channels/zapp.ts` |
 | `PlanAction` (TS) | send \| shadow \| suppress |  | `supabase/functions/_shared/messaging/dispatch.ts` |
-| `DriverMessageReason` (TS) | sem_telefone \| opt_out \| sem_rota \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra |  | `supabase/functions/_shared/messaging/dispatch.ts` |
+| `DriverMessageReason` (TS) | sem_telefone \| opt_out \| sem_rota \| evento_desligado \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra |  | `supabase/functions/_shared/messaging/dispatch.ts` |
 | `IncidentType` (TS) | LATE_DELIVERY \| DAMAGE \| CUSTOMER_COMPLAINT \| OTHER |  | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | `InboundIntent` (TS) | optout \| problem \| arrived \| collected \| on_the_way \| decline \| confirm |  | `supabase/functions/_shared/messaging/inbound.ts` |
 | `InboundMediaKind` (TS) | proof \| damage \| other |  | `supabase/functions/_shared/messaging/inbound.ts` |

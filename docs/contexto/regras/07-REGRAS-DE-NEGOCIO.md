@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5bfc96990e` · branch `main` · 2026-11-24 02:48 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `f242d426c0` · branch `main` · 2026-11-24 03:16 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -933,7 +933,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | DeliveryStatus | sent \| delivered \| failed \| unknown | `supabase/functions/_shared/channels/sms.ts` |
 | ErrorAction | fallback \| retry \| give_up \| alert | `supabase/functions/_shared/channels/zapp.ts` |
 | PlanAction | send \| shadow \| suppress | `supabase/functions/_shared/messaging/dispatch.ts` |
-| DriverMessageReason | sem_telefone \| opt_out \| sem_rota \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra | `supabase/functions/_shared/messaging/dispatch.ts` |
+| DriverMessageReason | sem_telefone \| opt_out \| sem_rota \| evento_desligado \| sem_template \| horario_silencio \| limite_motorista \| sem_canal_disponivel \| orcamento_estourado \| modo_sombra | `supabase/functions/_shared/messaging/dispatch.ts` |
 | IncidentType | LATE_DELIVERY \| DAMAGE \| CUSTOMER_COMPLAINT \| OTHER | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | InboundIntent | optout \| problem \| arrived \| collected \| on_the_way \| decline \| confirm | `supabase/functions/_shared/messaging/inbound.ts` |
 | InboundMediaKind | proof \| damage \| other | `supabase/functions/_shared/messaging/inbound.ts` |
@@ -2041,7 +2041,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1457 testes em 127 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1459 testes em 127 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2058,8 +2058,8 @@ _nenhum item encontrado_
 | `supabase/functions/geo-gateway/mapbox.test.ts` | 22 | autocomplete: Search Box suggest normalizado, sessão exigida, units=0 (sessão conta no gateway) · placeDetails: retrieve → endereço com componentes, precisão exact, routable_point, não retível · geocode: temporário vs permanent decide sku e retainable; structured input vira parâmetros v6 · route: Directions driving-traffic, polyline6 decodificada, legs … |
 | `src/hooks/useGeoSearch.test.tsx` | 20 | useAddressSearchBox · busca sugestÃµes com action autocomplete e session_token · isError fica true quando a busca de sugestÃµes falha (ex.: 429) · retrieve manda o mesmo session_token do autocomplete e depois renova para a prÃ³xima sessÃ£o … |
 | `src/utils/__tests__/timeUtils.test.ts` | 20 | getElapsedTime · deve calcular segundos corretamente · deve calcular minutos corretamente · deve calcular horas corretamente … |
+| `supabase/functions/_shared/messaging/dispatch.test.ts` | 20 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
 | `src/components/map/__tests__/googleLayers.test.ts` | 19 | toGooglePath (etapa 77) · converte expected_route em path do Google · devolve path vazio para rota ausente ou corrompida (nunca Polyline quebrada) · buildTrailPath (etapa 77) … |
-| `supabase/functions/_shared/messaging/dispatch.test.ts` | 19 | etapa 145: modo sombra decide o canal e nao envia nada · etapa 88: a rota do banco define a ordem (cancelamento sai por SMS) · etapa 88: whatsapp desligado no kill switch sobra o SMS · etapa 79: numero sem whatsapp nao insiste no whatsapp … |
 | `supabase/functions/_shared/messaging/router.test.ts` | 19 | etapa 88: ORDER_CANCELLED para o motorista sai por whatsapp e cai para sms · etapa 88: evento ou papel sem rota nao envia nada · etapa 88: rota desabilitada devolve lista vazia (desligado e desligado) · etapa 88: resolveChannels nao devolve a referencia interna do catalogo … |
 | `src/components/admin/telemetry/__tests__/TelemetryCharts.test.tsx` | 18 | TelemetryCharts · renders nothing when rows are empty · renders charts when rows have data · groups by table correctly … |
 | `src/lib/lalamoveValidation.test.ts` | 18 | validateScheduleAt · aceita string vazia como imediato · rejeita data inválida · rejeita %s minutos à frente (< 30) … |
@@ -2101,6 +2101,7 @@ _nenhum item encontrado_
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
 | `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
+| `supabase/functions/_shared/messaging/registry.test.ts` | 10 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 145: rota desligada continua vindo do banco com is_enabled falso … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
@@ -2114,7 +2115,6 @@ _nenhum item encontrado_
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
 | `supabase/functions/_shared/messaging/notify-driver.test.ts` | 9 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
-| `supabase/functions/_shared/messaging/registry.test.ts` | 9 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 75: erro na leitura da configuracao nao liga nenhum provedor … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `supabase/functions/send-notification/message-id.test.ts` | 9 | etapa 89: mesmo evento devolve o mesmo id (idempotência) · etapa 89: telefone com máscara não muda o id · etapa 89: eventos diferentes geram ids diferentes · etapa 89: papéis diferentes no mesmo telefone geram ids diferentes … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
