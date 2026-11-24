@@ -98,9 +98,38 @@ async function processWebhook(supabase: any, payload: any): Promise<any> {
   return data;
 }
 
+/**
+ * Eventos de geo que tambem falam com o motorista. So M4 por enquanto: o
+ * "aproximando" e destinado ao contato da coleta, e nao ha template para o
+ * motorista nesse evento.
+ */
+const GEO_ALERT_DRIVER_EVENTS = new Set(["DRIVER_ARRIVED_PICKUP"]);
+
+/**
+ * M4: o aviso de chegada na coleta nasce no trigger `geo_evaluate_tracking`, que
+ * grava em `alerts` e enfileira um job `notification` com `type` = evento. Aqui
+ * o motorista passa a ser avisado pelo motor do Bloco 7 tambem — o caminho
+ * legado (`send-notification`) continua avisando o contato da coleta, que e
+ * outro destinatario.
+ */
+export function geoAlertDriverEvent(
+  payload: { type?: string; driver_id?: string | null; order_id?: string | null } | null | undefined,
+): { event: string; driverId: string; orderId: string } | null {
+  const type = String(payload?.type ?? "");
+  const driverId = payload?.driver_id ? String(payload.driver_id) : "";
+  const orderId = payload?.order_id ? String(payload.order_id) : "";
+  if (!driverId || !orderId || !GEO_ALERT_DRIVER_EVENTS.has(type)) return null;
+  return { event: type, driverId, orderId };
+}
+
 async function processNotification(supabase: any, payload: any): Promise<any> {
   internalLogger('info', 'Processing notification job', { payload });
-  
+
+  const driverEvent = geoAlertDriverEvent(payload);
+  if (driverEvent) {
+    await avisarMotorista(supabase, driverEvent.event, driverEvent.driverId, driverEvent.orderId);
+  }
+
   // Chamar Edge Function send-notification
   const { data, error } = await supabase.functions.invoke('send-notification', {
     body: payload
