@@ -783,6 +783,42 @@ export type Database = {
         }
         Relationships: []
       }
+      cache_refresh_log: {
+        Row: {
+          error_message: string | null
+          id: string
+          refresh_completed_at: string | null
+          refresh_duration_ms: number | null
+          refresh_started_at: string
+          row_count: number | null
+          status: string
+          triggered_by: string
+          view_name: string
+        }
+        Insert: {
+          error_message?: string | null
+          id?: string
+          refresh_completed_at?: string | null
+          refresh_duration_ms?: number | null
+          refresh_started_at?: string
+          row_count?: number | null
+          status?: string
+          triggered_by?: string
+          view_name: string
+        }
+        Update: {
+          error_message?: string | null
+          id?: string
+          refresh_completed_at?: string | null
+          refresh_duration_ms?: number | null
+          refresh_started_at?: string
+          row_count?: number | null
+          status?: string
+          triggered_by?: string
+          view_name?: string
+        }
+        Relationships: []
+      }
       contacts: {
         Row: {
           address: string | null
@@ -1290,10 +1326,12 @@ export type Database = {
           last_active_at: string | null
           last_delivery_at: string | null
           last_evaluated_at: string | null
+          last_reply_at: string | null
           name: string
           notes: string | null
           phone: string | null
           photo_url: string | null
+          preferred_channel: string
           rating: number | null
           risk_level: string | null
           risk_reasons: Json | null
@@ -1304,6 +1342,8 @@ export type Database = {
           updated_at: string
           vehicle_plate: string | null
           vehicle_type: Database["public"]["Enums"]["vehicle_type"]
+          whatsapp_checked_at: string | null
+          whatsapp_status: string
           whitelisted: boolean | null
         }
         Insert: {
@@ -1324,10 +1364,12 @@ export type Database = {
           last_active_at?: string | null
           last_delivery_at?: string | null
           last_evaluated_at?: string | null
+          last_reply_at?: string | null
           name: string
           notes?: string | null
           phone?: string | null
           photo_url?: string | null
+          preferred_channel?: string
           rating?: number | null
           risk_level?: string | null
           risk_reasons?: Json | null
@@ -1338,6 +1380,8 @@ export type Database = {
           updated_at?: string
           vehicle_plate?: string | null
           vehicle_type?: Database["public"]["Enums"]["vehicle_type"]
+          whatsapp_checked_at?: string | null
+          whatsapp_status?: string
           whitelisted?: boolean | null
         }
         Update: {
@@ -1358,10 +1402,12 @@ export type Database = {
           last_active_at?: string | null
           last_delivery_at?: string | null
           last_evaluated_at?: string | null
+          last_reply_at?: string | null
           name?: string
           notes?: string | null
           phone?: string | null
           photo_url?: string | null
+          preferred_channel?: string
           rating?: number | null
           risk_level?: string | null
           risk_reasons?: Json | null
@@ -1372,6 +1418,8 @@ export type Database = {
           updated_at?: string
           vehicle_plate?: string | null
           vehicle_type?: Database["public"]["Enums"]["vehicle_type"]
+          whatsapp_checked_at?: string | null
+          whatsapp_status?: string
           whitelisted?: boolean | null
         }
         Relationships: []
@@ -1538,6 +1586,7 @@ export type Database = {
           approach_radius_m: number
           arrived_radius_m: number
           id: boolean
+          late_tolerance_min: number
           notify_delivery_contact: boolean
           off_route_threshold_m: number
           quiet_hours_end: string
@@ -1551,6 +1600,7 @@ export type Database = {
           approach_radius_m?: number
           arrived_radius_m?: number
           id?: boolean
+          late_tolerance_min?: number
           notify_delivery_contact?: boolean
           off_route_threshold_m?: number
           quiet_hours_end?: string
@@ -1564,6 +1614,7 @@ export type Database = {
           approach_radius_m?: number
           arrived_radius_m?: number
           id?: boolean
+          late_tolerance_min?: number
           notify_delivery_contact?: boolean
           off_route_threshold_m?: number
           quiet_hours_end?: string
@@ -1748,6 +1799,39 @@ export type Database = {
           status?: string
           type?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      job_queue_processing_log: {
+        Row: {
+          duration_ms: number | null
+          failed: number
+          id: string
+          metadata: Json
+          processed: number
+          run_at: string
+          skipped: number
+          succeeded: number
+        }
+        Insert: {
+          duration_ms?: number | null
+          failed: number
+          id?: string
+          metadata?: Json
+          processed: number
+          run_at?: string
+          skipped: number
+          succeeded: number
+        }
+        Update: {
+          duration_ms?: number | null
+          failed?: number
+          id?: string
+          metadata?: Json
+          processed?: number
+          run_at?: string
+          skipped?: number
+          succeeded?: number
         }
         Relationships: []
       }
@@ -2571,6 +2655,123 @@ export type Database = {
         }
         Relationships: []
       }
+      message_templates: {
+        Row: {
+          body: string
+          channel: string
+          created_at: string
+          event: string
+          id: string
+          is_active: boolean
+          key: string
+          max_length: number | null
+          role: string
+          updated_at: string
+          updated_by: string | null
+          variables: string[]
+          version: number
+        }
+        Insert: {
+          body: string
+          channel: string
+          created_at?: string
+          event: string
+          id?: string
+          is_active?: boolean
+          key: string
+          max_length?: number | null
+          role?: string
+          updated_at?: string
+          updated_by?: string | null
+          variables?: string[]
+          version?: number
+        }
+        Update: {
+          body?: string
+          channel?: string
+          created_at?: string
+          event?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          max_length?: number | null
+          role?: string
+          updated_at?: string
+          updated_by?: string | null
+          variables?: string[]
+          version?: number
+        }
+        Relationships: []
+      }
+      messaging_settings: {
+        Row: {
+          id: boolean
+          monthly_budget_cents: number
+          pilot_mode: boolean
+          quiet_hours_by_role: Json
+          shadow_mode: boolean
+          sms_fallback_after_min: number
+          sms_provider: string
+          updated_at: string
+          updated_by: string | null
+          whatsapp_provider: string
+        }
+        Insert: {
+          id?: boolean
+          monthly_budget_cents?: number
+          pilot_mode?: boolean
+          quiet_hours_by_role?: Json
+          shadow_mode?: boolean
+          sms_fallback_after_min?: number
+          sms_provider?: string
+          updated_at?: string
+          updated_by?: string | null
+          whatsapp_provider?: string
+        }
+        Update: {
+          id?: boolean
+          monthly_budget_cents?: number
+          pilot_mode?: boolean
+          quiet_hours_by_role?: Json
+          shadow_mode?: boolean
+          sms_fallback_after_min?: number
+          sms_provider?: string
+          updated_at?: string
+          updated_by?: string | null
+          whatsapp_provider?: string
+        }
+        Relationships: []
+      }
+      messaging_usage: {
+        Row: {
+          channel: string
+          cost_cents: number
+          day: string
+          messages: number
+          provider: string
+          segments: number
+          updated_at: string
+        }
+        Insert: {
+          channel: string
+          cost_cents?: number
+          day: string
+          messages?: number
+          provider: string
+          segments?: number
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          cost_cents?: number
+          day?: string
+          messages?: number
+          provider?: string
+          segments?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mfa_sessions: {
         Row: {
           created_at: string | null
@@ -2647,6 +2848,183 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_messages: {
+        Row: {
+          alert_id: string | null
+          attempt: number
+          body_preview: string | null
+          channel: string
+          client_message_id: string | null
+          cost_cents: number | null
+          created_at: string
+          delivered_at: string | null
+          direction: string
+          driver_id: string | null
+          error_code: string | null
+          event: string
+          expires_at: string | null
+          failed_at: string | null
+          fallback_of: string | null
+          id: string
+          metadata: Json
+          occurred_at: string | null
+          order_id: string | null
+          provider: string | null
+          provider_message_id: string | null
+          provider_sequence: number | null
+          read_at: string | null
+          recipient_phone: string | null
+          role: string
+          segments: number | null
+          sent_at: string | null
+          status: string
+          stop_id: string | null
+          template_key: string | null
+          template_version: number | null
+          updated_at: string
+        }
+        Insert: {
+          alert_id?: string | null
+          attempt?: number
+          body_preview?: string | null
+          channel: string
+          client_message_id?: string | null
+          cost_cents?: number | null
+          created_at?: string
+          delivered_at?: string | null
+          direction?: string
+          driver_id?: string | null
+          error_code?: string | null
+          event: string
+          expires_at?: string | null
+          failed_at?: string | null
+          fallback_of?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string | null
+          order_id?: string | null
+          provider?: string | null
+          provider_message_id?: string | null
+          provider_sequence?: number | null
+          read_at?: string | null
+          recipient_phone?: string | null
+          role: string
+          segments?: number | null
+          sent_at?: string | null
+          status?: string
+          stop_id?: string | null
+          template_key?: string | null
+          template_version?: number | null
+          updated_at?: string
+        }
+        Update: {
+          alert_id?: string | null
+          attempt?: number
+          body_preview?: string | null
+          channel?: string
+          client_message_id?: string | null
+          cost_cents?: number | null
+          created_at?: string
+          delivered_at?: string | null
+          direction?: string
+          driver_id?: string | null
+          error_code?: string | null
+          event?: string
+          expires_at?: string | null
+          failed_at?: string | null
+          fallback_of?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string | null
+          order_id?: string | null
+          provider?: string | null
+          provider_message_id?: string | null
+          provider_sequence?: number | null
+          read_at?: string | null
+          recipient_phone?: string | null
+          role?: string
+          segments?: number | null
+          sent_at?: string | null
+          status?: string
+          stop_id?: string | null
+          template_key?: string | null
+          template_version?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_messages_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_messages_fallback_of_fkey"
+            columns: ["fallback_of"]
+            isOneToOne: false
+            referencedRelation: "notification_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_optouts: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          phone: string
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          phone: string
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          phone?: string
+          reason?: string
+        }
+        Relationships: []
+      }
+      notification_routes: {
+        Row: {
+          channels: string[]
+          event: string
+          fallback_after_min: number
+          is_enabled: boolean
+          reply_timeout_min: number | null
+          requires_reply: boolean
+          role: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          channels?: string[]
+          event: string
+          fallback_after_min?: number
+          is_enabled?: boolean
+          reply_timeout_min?: number | null
+          requires_reply?: boolean
+          role: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          channels?: string[]
+          event?: string
+          fallback_after_min?: number
+          is_enabled?: boolean
+          reply_timeout_min?: number | null
+          requires_reply?: boolean
+          role?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       order_geo_events: {
         Row: {
@@ -4227,6 +4605,7 @@ export type Database = {
         }
         Returns: string
       }
+      cache_view_count: { Args: { p_view: string }; Returns: number }
       can_run_db_diagnostics: { Args: { _user_id: string }; Returns: boolean }
       cancel_job: { Args: { p_job_id: string }; Returns: boolean }
       check_login_lockout: {
@@ -4281,6 +4660,7 @@ export type Database = {
         Args: { p_retention_days?: number }
         Returns: number
       }
+      cleanup_processing_logs: { Args: never; Returns: number }
       clear_login_attempts: { Args: { p_email: string }; Returns: undefined }
       create_audit_log: {
         Args: {
@@ -4290,6 +4670,10 @@ export type Database = {
           p_resource_type: string
         }
         Returns: undefined
+      }
+      end_order_tracking: {
+        Args: { p_order_id: string; p_reason?: string }
+        Returns: number
       }
       ensure_tracking_events_partition: {
         Args: { p_month: string }
@@ -4470,6 +4854,7 @@ export type Database = {
         Args: { _fingerprint: string; _user_id: string }
         Returns: boolean
       }
+      is_phone_opted_out: { Args: { p_phone: string }; Returns: boolean }
       is_token_valid: {
         Args: { p_token_hash: string }
         Returns: {
@@ -4500,6 +4885,19 @@ export type Database = {
         Args: { p_operation: string; p_params?: Json }
         Returns: Json
       }
+      messaging_month_cost_cents: {
+        Args: { p_month?: string }
+        Returns: number
+      }
+      normalize_br_phone: { Args: { p_phone: string }; Returns: string }
+      notification_messages_scrub_bodies: {
+        Args: { p_keep_days?: number }
+        Returns: number
+      }
+      notification_status_transition_allowed: {
+        Args: { p_from: string; p_to: string }
+        Returns: boolean
+      }
       process_job_queue: {
         Args: { p_limit?: number }
         Returns: {
@@ -4529,18 +4927,39 @@ export type Database = {
           lockout_seconds: number
         }[]
       }
+      record_messaging_usage: {
+        Args: {
+          p_channel: string
+          p_cost_cents?: number
+          p_day?: string
+          p_messages?: number
+          p_provider: string
+          p_segments?: number
+        }
+        Returns: {
+          channel: string
+          cost_cents: number
+          day: string
+          messages: number
+          provider: string
+          segments: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "messaging_usage"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       refresh_cache_view: {
-        Args: { p_view_name?: string; p_triggered_by?: string }
+        Args: { p_triggered_by?: string; p_view_name?: string }
         Returns: {
           duration_ms: number
           row_count: number
           status: string
           view_refreshed: string
         }[]
-      }
-      cache_view_count: {
-        Args: { p_view: string }
-        Returns: number
       }
       refresh_geo_jobs: {
         Args: never
@@ -4580,6 +4999,8 @@ export type Database = {
         | "SUPPLIER_DELAY_NOTICE"
         | "MISSING_POD"
         | "GEO_BUDGET_WARNING"
+        | "DRIVER_ASSIGNED"
+        | "DRIVER_NO_CONFIRMATION"
       app_role: "admin" | "manager" | "operator" | "viewer"
       approval_priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT" | "CRITICAL"
       approval_status: "PENDING" | "APPROVED" | "REJECTED"
@@ -4762,6 +5183,8 @@ export const Constants = {
         "SUPPLIER_DELAY_NOTICE",
         "MISSING_POD",
         "GEO_BUDGET_WARNING",
+        "DRIVER_ASSIGNED",
+        "DRIVER_NO_CONFIRMATION",
       ],
       app_role: ["admin", "manager", "operator", "viewer"],
       approval_priority: ["LOW", "MEDIUM", "HIGH", "URGENT", "CRITICAL"],

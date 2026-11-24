@@ -3,7 +3,7 @@ import {
   Shield, BarChart3, Truck, Flame, Activity,
   Scale, Webhook, Briefcase, AlertTriangle, History,
   ClipboardCheck, HardDrive, Globe, KeyRound,
-  Gauge, Database, Lock, Zap, Bug, FileBarChart, Contact
+  Gauge, Database, Lock, Zap, Bug, FileBarChart, Contact, MessageSquare
 } from 'lucide-react';
 
 export interface MenuItem {
@@ -74,6 +74,7 @@ export const menuCategories: MenuCategory[] = [
       { id: 'webhooks', path: '/webhooks', label: 'Webhooks', icon: Webhook, requiredRole: 'manager' },
       { id: 'bitrix24', path: '/bitrix24', label: 'Bitrix24', icon: Briefcase, requiredRole: 'manager' },
       { id: 'lalamove', path: '/settings/lalamove', label: 'Lalamove API', icon: Zap, requiredRole: 'manager' },
+      { id: 'messaging', path: '/settings/messaging', label: 'Mensageria', icon: MessageSquare, requiredRole: 'admin' },
       { id: 'maps-providers', path: '/settings/maps', label: 'Provedores de Mapa', icon: Map, requiredRole: 'manager' },
       { id: 'uapi', path: '/settings/uapi', label: 'UAPI Settings', icon: Zap, requiredRole: 'manager' },
       { id: 'external-data', path: '/external-data', label: 'Base CRM', icon: Database, requiredRole: 'manager' },
