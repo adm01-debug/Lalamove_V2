@@ -64,7 +64,8 @@ export function useTrackingData(vehicleFilter: VehicleFilter, statusFilter: Stat
             pickup_address, delivery_address, pickup_latitude,
             pickup_longitude, delivery_latitude, delivery_longitude
           )
-        `);
+        `)
+        .eq('tracking_status', 'ACTIVE');
 
       // Descarta respostas de requisições obsoletas (troca de filtro / unmount).
       if (cancelled) return;

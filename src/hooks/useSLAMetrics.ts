@@ -53,7 +53,8 @@ async function fetchSLAMetrics(): Promise<SLAMetrics> {
       .gte('created_at', todayStart.toISOString()),
     supabase
       .from('active_tracking')
-      .select('*, driver:drivers(name, vehicle_type)'),
+      .select('*, driver:drivers(name, vehicle_type)')
+      .eq('tracking_status', 'ACTIVE'),
     supabase
       .from('alerts')
       .select('*')
