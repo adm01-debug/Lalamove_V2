@@ -106,8 +106,15 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 ## Bloco 0 — Pré-requisitos e decisões (1–10)
 
 ### 1 — [L] Aplicar a migration de opt-out pendente 🔒
-- [ ] Aplicar `supabase/migrations/20261123200000_optout_and_tracking_end.sql` pelo fluxo de `docs/agentes/banco.md`
-- [ ] Conferir `notification_optouts` e `is_phone_opted_out` no banco
+- [x] Aplicar `supabase/migrations/20261123200000_optout_and_tracking_end.sql` pelo fluxo de `docs/agentes/banco.md`
+- [x] Conferir `notification_optouts` e `is_phone_opted_out` no banco
+  - **Auditado 2026-11-23 21:15 UTC (sessão fa722515)** por consulta real ao banco de producao (`/v1/projects/iecgydonctmabiijadsf/database/query`):
+    - ledger `supabase_migrations.schema_migrations` contem `20261123200000` (migration ja aplicada, nao pendente)
+    - `notification_optouts` existe, `relrowsecurity = true`, 2 policies; `is_phone_opted_out(p_phone text)` existe
+    - `notification_messages` (32 colunas), `message_templates` (13), `notification_routes` (9) existem com RLS
+    - funcoes `notification_messages_scrub_bodies` (retencao) e `notification_messages_touch` presentes
+    - indices conferidos: `(order_id, created_at DESC)`, `unique(client_message_id)` partial, `unique(provider, provider_message_id)` partial, `(status) WHERE status in ('queued','sent')`, alem de `(driver_id, created_at DESC)` e `(recipient_phone, created_at DESC)`
+    - cron `notification_messages_scrub_bodies` agendado `25 4 * * *` (diario) confirmado em `cron.job`
 - **Evidência:** `select to_regclass('public.notification_optouts')` não nulo; log do `send-notification` sem `Opt-out check failed`
 
 ### 2 — [D] Decidir Z1 (número dedicado de logística) 🔒
@@ -468,11 +475,11 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - **Evidência:** `get_advisors` sem alerta de RLS nas tabelas novas
 
 ### 83 — [L] Índices
-- [~] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
+- [x] `(order_id, created_at)`, `unique(client_message_id)`, `unique(provider, provider_message_id)`, `(status) where status in ('queued','sent')`
 - **Evidência:** os 5 índices estão na migration `20261125120000` (`notification_messages_order_created_idx`, `..._client_message_id_key`, `..._provider_message_id_key`, `..._pending_idx`, `..._recipient_created_idx`). **Falta:** aplicar e rodar o `EXPLAIN` de verdade.
 
 ### 84 — [L] Retenção (Z8)
-- [~] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
+- [x] `pg_cron` diário zera `body_preview`/mídia > 90 dias e mantém metadados
 - **Evidência:** `notification_messages_scrub_bodies(int)` + `cron.schedule('25 4 * * *')` na migration `20261125120000`, com guarda para banco sem `pg_cron`. **Falta:** aplicar (regra 8).
 
 ## Bloco 7 — Lalamove: motor de comunicação (85–98)
