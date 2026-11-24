@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3153586dea` · branch `main` · 2026-11-24 02:12 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `e01dfaa269` · branch `main` · 2026-11-24 02:31 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -783,6 +783,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `down` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/SystemHealthExpandedPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `entregue` | compara | `supabase/functions/_shared/channels/sms.ts` |
 | `status` | `enviado` | compara | `supabase/functions/_shared/channels/sms.ts` |
+| `status` | `expired` | compara | `src/hooks/useNotificationHistory.ts` |
 | `status` | `failed` | compara | `src/components/ui/timeline-item.tsx`<br>`src/hooks/useCacheViews.ts`<br>`src/hooks/useNotificationHistory.ts`<br>`src/pages/CacheMonitoringPage.tsx`<br>`src/pages/CacheStatusPage.tsx`<br>… +1 |
 | `status` | `falha` | compara | `supabase/functions/_shared/channels/sms.ts` |
 | `status` | `fulfilled` | compara | `src/hooks/useDashboardStats.ts` |
@@ -795,7 +796,8 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `ok` | compara, escreve | `src/hooks/useGeoAdmin.ts`<br>`src/hooks/useSystemHealthExpanded.ts`<br>`src/pages/MapsSettingsPage.tsx`<br>`src/pages/SystemHealthExpandedPage.tsx`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `pending` | compara, filtra | `src/components/ui/timeline-item.tsx`<br>`src/hooks/useNotificationHistory.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `planned` | escreve | `supabase/functions/job-worker/index.ts` |
-| `status` | `queued` | escreve | `supabase/functions/_shared/messaging/notify-driver.ts` |
+| `status` | `queued` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/messaging/notify-driver.ts` |
+| `status` | `read` | compara | `src/hooks/useNotificationHistory.ts` |
 | `status` | `refreshed` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `rejected` | compara, escreve | `src/hooks/useDashboardStats.ts`<br>`src/hooks/usePasswordResetActions.ts`<br>`src/pages/PasswordResetApprovalsPage.tsx` |
 | `status` | `sent` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/channels/sms.ts`<br>`supabase/functions/_shared/messaging/notify-driver.ts`<br>`supabase/functions/zapp-callback/payload.ts` |
@@ -803,9 +805,10 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `status` | `stale` | compara | `src/pages/CacheMonitoringPage.tsx` |
 | `status` | `string` | compara | `supabase/functions/lalamove-api/index.ts`<br>`supabase/functions/zapp-callback/ledger.ts` |
 | `status` | `success` | compara, escreve | `src/hooks/useCacheViews.ts`<br>`src/pages/CacheMonitoringPage.tsx`<br>`src/pages/CacheStatusPage.tsx` |
-| `status` | `suppressed` | escreve | `supabase/functions/_shared/messaging/notify-driver.ts` |
+| `status` | `suppressed` | compara, escreve | `src/hooks/useNotificationHistory.ts`<br>`supabase/functions/_shared/messaging/notify-driver.ts` |
 | `status` | `synced` | escreve | `src/components/ui/data-refresh-indicator.tsx` |
 | `status` | `syncing` | compara, escreve | `src/components/ui/data-refresh-indicator.tsx`<br>`src/hooks/useOfflineStorage.ts` |
+| `status` | `uncertain` | compara | `src/hooks/useNotificationHistory.ts` |
 | `status` | `unknown` | compara, escreve | `src/hooks/healthChecks.ts`<br>`src/pages/MapsSettingsPage.tsx`<br>`supabase/functions/_shared/messaging/notify-driver.ts`<br>`supabase/functions/check-external-api/index.ts` |
 | `status` | `update_error` | escreve | `supabase/functions/job-worker/index.ts` |
 | `status` | `updated` | escreve | `supabase/functions/job-worker/index.ts` |
@@ -1468,6 +1471,7 @@ _nenhum item encontrado_
 | `HOURS_LOOKBACK` | `24` | `src/hooks/useLalamoveQuota.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useLalamoveUapi.ts` |
 | `ATTRIBUTION` | `'© Mapbox © OpenStreetMap'` | `src/hooks/useMapbox.ts` |
+| `HISTORY_LIMIT` | `200` | `src/hooks/useNotificationHistory.ts` |
 | `DB_VERSION` | `1` | `src/hooks/useOfflineStorage.ts` |
 | `PAGE_SIZE` | `20` | `src/hooks/useRecentOrders.ts` |
 | `PRECISION` | `3` | `src/hooks/useRegionResolver.ts` |
@@ -1665,7 +1669,7 @@ _nenhum item encontrado_
 | 200 | `src/hooks/useMessaging.ts` |
 | 60 | `src/hooks/useMessaging.ts` |
 | 100 | `src/hooks/useNotificationHistory.ts` |
-| 200 | `src/hooks/useNotificationHistory.ts` |
+| 5000 | `src/hooks/useNotificationHistory.ts` |
 | 50 | `src/hooks/usePendingApprovals.ts` |
 | 100 | `src/hooks/usePredictiveAnalysis.ts` |
 | 50 | `src/hooks/usePredictiveAnalysis.ts` |
@@ -1903,6 +1907,7 @@ _nenhum item encontrado_
 | Rota precisa de pelo menos 2 coordenadas | `src/hooks/useMapbox.ts` |
 | Resposta invalida de test-notification | `src/hooks/useMessaging.ts` |
 | Telefone incompleto | `src/hooks/useMessaging.ts` |
+| ] \| null; }  /**  * Etapa 138 do plano de mensageria: a timeline passa a ler o ledger  * ( | `src/hooks/useNotificationHistory.ts` |
 | Erro ao aprovar:  | `src/hooks/usePasswordResetActions.ts` |
 | Erro ao rejeitar:  | `src/hooks/usePasswordResetActions.ts` |
 | Esta solicitação expirou e não pode mais ser aprovada. | `src/hooks/usePasswordResetActions.ts` |
@@ -1992,8 +1997,7 @@ _nenhum item encontrado_
 | Falha no teste: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Informe o telefone com DDD | `src/pages/MessagingSettingsPage.tsx` |
-| Rota que exige resposta precisa de prazo em minutos | `src/pages/MessagingSettingsPage.tsx` |
-| … +124 linhas — lista completa em `context.json` | |
+| … +125 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2037,7 +2041,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1453 testes em 126 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1457 testes em 127 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2150,6 +2154,7 @@ _nenhum item encontrado_
 | `src/lib/__tests__/statusPalette.test.ts` | 5 | statusColorCss · emite hsl legado com vírgulas para o Mapbox · não emite var() — o Mapbox não resolve variáveis CSS · aplica alfa com hsla … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 5 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
 | `supabase/functions/_shared/channels/whatsapp-test.test.ts` | 5 | teste whatsapp: usa Zapp quando ZAPP_API_URL/KEY existem · teste whatsapp: cai no Evolution quando so ele tem secrets · teste whatsapp: sem secrets devolve null e mensagem de configuracao · teste whatsapp: 401 do Evolution vira provider_rejected/give_up … |
+| `src/hooks/useNotificationHistory.test.ts` | 4 | historico de notificacoes lendo o ledger (etapa 138) · mapeia a linha de notification_messages para a timeline · linha sem telefone, alerta ou tentativa continua renderizavel · soma ledger e legado no mesmo criterio dos cards |
 | `src/hooks/__tests__/useFeatureFlags.test.ts` | 4 | useFeatureFlag · expõe isEnabled=true quando a flag existe e está habilitada · expõe isEnabled=false quando a flag existe mas está desligada · cai para false quando a flag não existe (kill-switch seguro) |
 | `src/hooks/__tests__/useIncidents.test.ts` | 4 | useIncidents · deve buscar e mapear incidentes corretamente · deve lidar com erro na busca · deve retornar lista vazia quando sem dados |
 | `src/hooks/__tests__/useMapProviderPolicy.test.ts` | 4 | allowedProvidersFor · libera tudo quando a política é off (fail-open) · restrito a mapbox mantém raster gratuito e tira Google · restrito a google mantém raster gratuito e tira Mapbox |

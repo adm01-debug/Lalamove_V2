@@ -817,6 +817,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "notification_messages",
     "order_geo_events",
     "password_reset_requests",
     "permissions",
@@ -1675,8 +1676,8 @@
   {
    "modulo": "hooks",
    "arquivos": 87,
-   "testes": 1,
-   "linhas": 16014,
+   "testes": 2,
+   "linhas": 16164,
    "itens_menu": [],
    "telas": [],
    "papeis_das_telas": [],
@@ -2614,7 +2615,7 @@
    "modulo": "pages",
    "arquivos": 57,
    "testes": 3,
-   "linhas": 17533,
+   "linhas": 17565,
    "itens_menu": [
     "Dashboard Analytics",
     "Dashboard SLA",

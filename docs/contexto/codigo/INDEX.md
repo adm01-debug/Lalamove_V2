@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3153586deaeb0d4b09d8264235a9daea01fc10a8` (2026-11-23T23:11:50-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `e01dfaa26986f18cc7f402f54bd0fb1d06a65f72` (2026-11-23T23:31:07-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (588), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (589), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1101 |
-| arquivos_codigo | 701 |
-| linhas_codigo | 138575 |
+| arquivos_total | 1102 |
+| arquivos_codigo | 702 |
+| linhas_codigo | 138844 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 176 |
+| testes | 177 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -74,7 +74,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|---|---|---|---|---|
 | components/auth | 0 | 0 | 9 | 5 | 1 | 6 |
 | components/dashboard | 0 | 0 | 13 | 43 | 4 | 5 |
-| components/layout | 0 | 0 | 6 | 172 | 14 | 36 |
+| components/layout | 0 | 0 | 6 | 172 | 14 | 37 |
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9810 nós · 20276 arestas · 699 comunidades · grafo do commit `3153586d`
-- comunidades maiores: cn (254), button.tsx (178), card.tsx (134), react (121), ref_node_path (107), client.ts (106), snapshot.py (104), badge.tsx (94), ref_https (89), DashboardRedesigned.tsx (87), send-notification/index.ts (82), dependencies (81)
+- 9817 nós · 20295 arestas · 701 comunidades · grafo do commit `e01dfaa2`
+- comunidades maiores: cn (296), button.tsx (160), lucide-react (145), App.tsx (137), client.ts (135), ref_node_path (107), 4. Componentes, hooks, libs e estado — **revisado** (95), ref_https (92), AlertsPage.tsx (84), dependencies (81), gerar.mjs (76), generate.py (75)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-23 `e01dfaa` feat: historico de notificacoes passa a ler o ledger do motor (#340)
 - 2026-11-23 `3153586` feat: rotas editaveis com ordem de canais e exige resposta (#339)
 - 2026-11-23 `7c71244` fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)
 - 2026-11-23 `562d0de` feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `e74d394` fix: security hardening lote 6 - guards de role, driver_action da frota e lockout (#318)
 - 2026-11-23 `21ba6a5` fix: rewrite SPA no Vercel — rotas do React Router retornavam 404 (pagina em branco) (#329)
 - 2026-11-23 `84fad61` feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)
-- 2026-11-23 `60a68d0` feat: lote 14 - remover as any e tipar canal de teste (#327)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

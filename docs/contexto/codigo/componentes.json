@@ -3196,7 +3196,7 @@
     "NotificationHistoryPage"
    ],
    "export_default": null,
-   "linhas": 483,
+   "linhas": 515,
    "dominio": "pages",
    "hooks_locais": [
     "useNotificationHistory",

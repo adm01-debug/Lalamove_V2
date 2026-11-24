@@ -1952,6 +1952,7 @@
    ],
    "tabelas": [
     "alerts_sent",
+    "notification_messages",
     "order_geo_events"
    ],
    "rpcs": [],
@@ -3738,6 +3739,7 @@
     "lalamove_status_history",
     "lalamove_stops",
     "map_settings_overrides",
+    "notification_messages",
     "order_geo_events",
     "password_reset_requests",
     "permissions",

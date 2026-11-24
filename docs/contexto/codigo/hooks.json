@@ -1809,10 +1809,11 @@
     "useNotificationStats",
     "usePendingGeoEvents"
    ],
-   "linhas": 153,
+   "linhas": 303,
    "dominio": "hooks",
    "tabelas": [
     "alerts_sent",
+    "notification_messages",
     "order_geo_events"
    ],
    "rpcs": [],
@@ -1825,7 +1826,7 @@
    "usado_por_arquivos": [
     "src/pages/NotificationHistoryPage.tsx"
    ],
-   "coberto_por_testes": 1
+   "coberto_por_testes": 2
   },
   {
    "arquivo": "src/hooks/useOfflineStorage.ts",

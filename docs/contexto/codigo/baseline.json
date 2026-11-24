@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3153586deaeb0d4b09d8264235a9daea01fc10a8",
+  "commit": "e01dfaa26986f18cc7f402f54bd0fb1d06a65f72",
   "branch": "main",
-  "data_commit": "2026-11-23T23:11:50-03:00",
+  "data_commit": "2026-11-23T23:31:07-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e01dfaa",
+    "data": "2026-11-23",
+    "assunto": "feat: historico de notificacoes passa a ler o ledger do motor (#340)"
+   },
    {
     "sha": "3153586",
     "data": "2026-11-23",
@@ -126,14 +131,9 @@
     "sha": "79b206d",
     "data": "2026-11-23",
     "assunto": "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)"
-   },
-   {
-    "sha": "3967849",
-    "data": "2026-11-23",
-    "assunto": "feat: QueryState component + queryKeys factory + error states em 3 páginas (itens 77/78) (#315)"
    }
   ],
-  "arquivos_mudados_7d": 468,
+  "arquivos_mudados_7d": 469,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -266,16 +266,16 @@
     "mudancas": 10
    },
    {
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "mudancas": 9
+   },
+   {
     "arquivo": "src/pages/LiveMapPage.tsx",
     "mudancas": 9
    },
    {
     "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 9
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    "mudancas": 8
    },
    {
     "arquivo": "src/components/map/LiveMap.tsx",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 240
+    "commits": 241
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1101,
-  "arquivos_codigo": 701,
-  "linhas_codigo": 138575,
+  "arquivos_total": 1102,
+  "arquivos_codigo": 702,
+  "linhas_codigo": 138844,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 176,
+  "testes": 177,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -523,8 +523,8 @@
    "linhas": 29598
   },
   "src/hooks": {
-   "arquivos": 113,
-   "linhas": 19571
+   "arquivos": 114,
+   "linhas": 19808
   },
   "src/i18n": {
    "arquivos": 1,
@@ -544,7 +544,7 @@
   },
   "src/pages": {
    "arquivos": 93,
-   "linhas": 21362
+   "linhas": 21394
   },
   "src/services": {
    "arquivos": 1,
@@ -665,6 +665,10 @@
    "linhas": 535
   },
   {
+   "arquivo": "src/pages/NotificationHistoryPage.tsx",
+   "linhas": 515
+  },
+  {
    "arquivo": "src/components/dashboard/OrdersTable.tsx",
    "linhas": 511
   },
@@ -675,10 +679,6 @@
   {
    "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
    "linhas": 500
-  },
-  {
-   "arquivo": "src/hooks/useMapbox.ts",
-   "linhas": 494
   }
  ],
  "qualidade": {
@@ -687,7 +687,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,
-  "arquivos_acima_500_linhas": 23
+  "arquivos_acima_500_linhas": 24
  },
  "todos": [
   {
