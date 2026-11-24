@@ -8,11 +8,14 @@ import { Ticket, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useUapiCoupons, useExchangeCoupon, UapiError } from '@/hooks/useLalamoveUapi';
 import { formatFen, formatUapiTime } from '@/lib/uapiFormat';
+import { isUapiSessionMissing } from '@/lib/uapiErrors';
+import { UapiSessionRequired } from '@/components/lalamove/UapiSessionRequired';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 /** Etapa 22 — resgate e listagem de cupons com erros `qp` traduzidos. */
 export function UapiCouponsPanel() {
   const [code, setCode] = useState('');
-  const { data, isLoading, isError, error } = useUapiCoupons();
+  const { data, isLoading, isError, error, isFetching, refetch } = useUapiCoupons();
   const exchange = useExchangeCoupon();
 
   const coupons = data ?? [];
@@ -62,10 +65,17 @@ export function UapiCouponsPanel() {
 
         {isLoading && <Skeleton className="h-20 w-full" />}
 
-        {isError && (
-          <p className="text-sm text-destructive">
-            {error instanceof UapiError ? error.message : 'Falha ao carregar os cupons.'}
-          </p>
+        {isError && isUapiSessionMissing(error) && (
+          <UapiSessionRequired onRetry={() => void refetch()} retrying={isFetching} />
+        )}
+
+        {isError && !isUapiSessionMissing(error) && (
+          <DataErrorBanner
+            message={error instanceof UapiError ? error.message : 'Falha ao carregar os cupons.'}
+            details={error instanceof UapiError ? error.hint : undefined}
+            onRetry={() => void refetch()}
+            retrying={isFetching}
+          />
         )}
 
         {!isLoading && !isError && coupons.length === 0 && (
