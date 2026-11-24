@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "99d3b77a25e9f8720754dd9599a34dc548da50c8",
+  "sha": "9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 18:07 UTC",
+  "generated_at": "2026-11-24 18:20 UTC",
   "files_total": 1119,
   "code_files": 936,
-  "code_lines": 164199
+  "code_lines": 164265
  },
  "version": "1.3.2",
- "facts_hash": "2851802f8313065a",
+ "facts_hash": "bffdd521637c108f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -21839,7 +21839,7 @@
   {
    "module": "scripts",
    "files": 147,
-   "lines": 33032,
+   "lines": 33086,
    "tables": [
     "a",
     "active_tracking",
@@ -22916,7 +22916,7 @@
   {
    "module": "supabase/functions",
    "files": 122,
-   "lines": 29498,
+   "lines": 29510,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -25073,6 +25073,12 @@
     "scripts/uapi-collector/collect.mjs"
    ],
    "UAPI_DEVICE_ID": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
+   "UAPI_ORDER_PAGES": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
+   "UAPI_RECEIPTS": [
     "scripts/uapi-collector/collect.mjs"
    ],
    "VERCEL_AUTOMATION_BYPASS_SECRET": [
@@ -60457,7 +60463,7 @@
   },
   "scripts/uapi-collector/collect.mjs": {
    "path": "scripts/uapi-collector/collect.mjs",
-   "lines": 203,
+   "lines": 257,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -60465,7 +60471,9 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "UAPI_CITY_ID",
-    "UAPI_DEVICE_ID"
+    "UAPI_DEVICE_ID",
+    "UAPI_ORDER_PAGES",
+    "UAPI_RECEIPTS"
    ],
    "errors": [
     "${pathname} -> ${res.status} ${text.slice(0, 300)}",
@@ -77502,7 +77510,7 @@
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
-   "lines": 882,
+   "lines": 894,
    "tables": [
     {
      "table": "lalamove_uapi_sessions",
@@ -80116,10 +80124,20 @@
   }
  },
  "git": {
-  "sha": "99d3b77a25e9f8720754dd9599a34dc548da50c8",
+  "sha": "9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "9d7a8c0",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs",
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
    {
     "sha": "99d3b77",
     "date": "2026-11-24",
@@ -80475,21 +80493,6 @@
      "src/pages/MessagingSettingsPage.test.tsx",
      "src/pages/MessagingSettingsPage.tsx"
     ]
-   },
-   {
-    "sha": "7c71244",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "src/hooks/useMessaging.ts",
-     "src/pages/MessagingSettingsPage.test.tsx",
-     "src/pages/MessagingSettingsPage.tsx",
-     "supabase/functions/_shared/channels/whatsapp-test.test.ts",
-     "supabase/functions/_shared/channels/whatsapp-test.ts",
-     "supabase/functions/test-notification/index.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80499,7 +80502,7 @@
    ],
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    7
+    6
    ],
    [
     "src/pages/NotificationHistoryPage.tsx",
@@ -80516,6 +80519,14 @@
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
     3
+   ],
+   [
+    "scripts/uapi-collector/collect.mjs",
+    2
+   ],
+   [
+    "supabase/functions/lalamove-uapi/index.ts",
+    2
    ],
    [
     "src/pages/error-state.test.tsx",
@@ -80546,22 +80557,6 @@
     2
    ],
    [
-    "src/hooks/useMessaging.ts",
-    2
-   ],
-   [
-    "src/pages/MessagingSettingsPage.test.tsx",
-    2
-   ],
-   [
-    "src/pages/MessagingSettingsPage.tsx",
-    2
-   ],
-   [
-    "scripts/uapi-collector/collect.mjs",
-    1
-   ],
-   [
     "scripts/uapi-collector/run.cmd",
     1
    ],
@@ -80570,7 +80565,15 @@
     1
    ],
    [
-    "supabase/functions/lalamove-uapi/index.ts",
+    "supabase/migrations/20261126140000_uapi_snapshot.sql",
+    1
+   ],
+   [
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    1
+   ],
+   [
+    "src/hooks/useAdvancedReports.ts",
     1
    ]
   ]

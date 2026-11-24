@@ -1262,7 +1262,7 @@
    "arquivo": "scripts/uapi-collector/collect.mjs",
    "pasta": "scripts/uapi-collector",
    "descricao": "* Coletor das respostas da UAPI do Lalamove (carteira, extrato, cupons, frota).",
-   "linhas": 203,
+   "linhas": 257,
    "env": [
     "CHROMIUM_PATH",
     "PLAYWRIGHT_ROOT",
@@ -1270,7 +1270,9 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_URL",
     "UAPI_CITY_ID",
-    "UAPI_DEVICE_ID"
+    "UAPI_DEVICE_ID",
+    "UAPI_ORDER_PAGES",
+    "UAPI_RECEIPTS"
    ],
    "npm_scripts": [],
    "workflows": [],

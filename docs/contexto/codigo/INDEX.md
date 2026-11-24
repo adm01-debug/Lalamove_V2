@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `99d3b77a25e9f8720754dd9599a34dc548da50c8` (2026-11-24T15:07:22-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `9d7a8c04d1f95d18b1d25afb8f0bc2c57816e04c` (2026-11-24T15:19:44-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1125 |
 | arquivos_codigo | 721 |
-| linhas_codigo | 142375 |
+| linhas_codigo | 142441 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -293,8 +293,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9950 nós · 20680 arestas · 688 comunidades · grafo do commit `99d3b77a`
-- comunidades maiores: cn (223), AppLayout.tsx (148), badge.tsx (122), utils.ts (116), button.tsx (116), ref_https (86), @tanstack/react-query (86), client.ts (85), ref_node_assert (85), AlertsPage.tsx (85), send-notification/index.ts (81), dependencies (81)
+- 9953 nós · 20683 arestas · 691 comunidades · grafo do commit `9d7a8c04`
+- comunidades maiores: cn (209), client.ts (165), react (152), lucide-react (126), ref_https (113), Sidebar.tsx (110), ref_node_path (98), DashboardRedesigned.tsx (89), 4. Componentes, hooks, libs e estado — **revisado** (86), lalamove-api/index.ts (85), App.tsx (83), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `9d7a8c0` feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)
 - 2026-11-24 `99d3b77` feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)
 - 2026-11-24 `c804662` chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)
 - 2026-11-24 `4bbb1fc` fix: falha de dados mostra erro e retry em 6 páginas (#365)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `1e34334` fix: falha de leitura nao deixa mais a tela silenciosa em 8 telas de dados (#356)
 - 2026-11-24 `49c9a83` fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)
 - 2026-11-24 `53d3496` fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)
-- 2026-11-24 `71cf6b0` fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`
