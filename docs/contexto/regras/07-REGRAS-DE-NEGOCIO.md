@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `520a9a2aa4` · branch `main` · 2026-11-24 11:12 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `a741f0d69b` · branch `main` · 2026-11-24 11:29 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1512,6 +1512,8 @@ _nenhum item encontrado_
 | `DEFAULT_TTL_MINUTES` | `30` | `supabase/functions/_shared/channels/zapp.ts` |
 | `MULTI_STOP_MIN` | `3` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `SCHEDULED_REMINDER_WINDOW_MIN` | `30` | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| `CONFIRMATION_DUE_MIN` | `2` | `supabase/functions/_shared/messaging/auto-notices.ts` |
+| `CONFIRMATION_LOOKBACK_HOURS` | `6` | `supabase/functions/_shared/messaging/auto-notices.ts` |
 | `RATE_WINDOW_MS` | `10` | `supabase/functions/_shared/messaging/notify-driver.ts` |
 | `DEFAULT_STOPPED_WARNING_MINUTES` | `5` | `supabase/functions/check-driver-alerts/index.ts` |
 | `DEFAULT_STOPPED_CRITICAL_MINUTES` | `10` | `supabase/functions/check-driver-alerts/index.ts` |
@@ -2064,7 +2066,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1499 testes em 132 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1505 testes em 132 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2107,6 +2109,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/check-realtime-subscriptions.test.mjs` | 13 | extracts direct channel and shared-hook subscriptions from TypeScript · fails closed for dynamic schemas and object spreads · resolves const event aliases and bracket/bound on calls · resolves imported wrapper aliases and namespaces … |
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
+| `supabase/functions/_shared/messaging/auto-notices.test.ts` | 13 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
 | `supabase/functions/zapp-callback/ledger.test.ts` | 13 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
@@ -2156,7 +2159,6 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useContractVersionUsageMonthly.test.ts` | 7 | aggregateMonthly — consolidação da série mensal de versões · retorna vazio para entrada vazia · soma múltiplos contratos por mês e versão · ordena os meses cronologicamente (ascendente) … |
 | `src/hooks/__tests__/useRiskRules.test.ts` | 7 | useRiskRules · deve buscar e mapear regras de risco · deve retornar lista vazia sem regras · deve propagar erro … |
 | `src/lib/__tests__/html.test.ts` | 7 | escapeHtml · escapa as 5 entidades de HTML · escapa cada símbolo individualmente · não altera strings sem caracteres especiais … |
-| `supabase/functions/_shared/messaging/auto-notices.test.ts` | 7 | M6: pedido de 2 paradas nao gera aviso de proxima parada · M6: multi-parada com parada em aberto gera aviso · M6: multi-parada sem parada em aberto nao gera aviso · M11: avisa uma vez o pedido agendado dentro de 30 min … |
 | `supabase/functions/job-worker/route-fixture-replay.test.ts` | 7 | fixture: 40 pontos com sequencia e tempo crescentes · fixture: distancia total declarada bate com a soma dos segmentos · replay: todo ponto do trajeto esta sobre a propria rota (is_on_route=true) · replay: posicao a 600 m do trajeto conta como fora da rota … |
 | `supabase/functions/send-notification/recipients.test.ts` | 7 | normaliza o formato do trigger e descarta o que não tem canal ou destino · entrada que não é array devolve lista vazia, sem lançar · une pedido + configuração preservando os dois · mesmo destino no pedido e na configuração sai uma vez só … |
 | `supabase/functions/simulate-driver-movement/replay.test.ts` | 7 | replay: primeiro passo pula o ponto 0 (posicao inicial) e chega ao 1 · replay: e deterministico — mesma entrada, mesma saida · replay: percorre a fixture inteira e para no ultimo ponto · replay: ETA decresce ao longo do trajeto … |

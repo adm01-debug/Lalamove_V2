@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
+  "commit": "a741f0d69b45a9459681259b68b5ba1302bf458a",
   "branch": "main",
-  "data_commit": "2026-11-24T07:45:24-03:00",
+  "data_commit": "2026-11-24T08:29:11-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "a741f0d",
+    "data": "2026-11-24",
+    "assunto": "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)"
+   },
    {
     "sha": "520a9a2",
     "data": "2026-11-24",
@@ -126,22 +131,17 @@
     "sha": "84fad61",
     "data": "2026-11-23",
     "assunto": "feat: itens 68/75/80/81/89/92 frontend hardening lote4 (#316)"
-   },
-   {
-    "sha": "60a68d0",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 14 - remover as any e tipar canal de teste (#327)"
    }
   ],
   "arquivos_mudados_7d": 484,
   "pastas_mais_mudadas_30d": [
    {
-    "pasta": "supabase/functions/geo-gateway",
-    "mudancas": 62
+    "pasta": "supabase/functions/_shared",
+    "mudancas": 63
    },
    {
-    "pasta": "supabase/functions/_shared",
-    "mudancas": 61
+    "pasta": "supabase/functions/geo-gateway",
+    "mudancas": 62
    },
    {
     "pasta": "src/components/map",
@@ -192,7 +192,7 @@
     "mudancas": 13
    },
    {
-    "pasta": "supabase/functions/zapp-callback",
+    "pasta": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 12
    }
   ],
@@ -230,15 +230,15 @@
     "mudancas": 13
    },
    {
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "mudancas": 12
+   },
+   {
     "arquivo": "supabase/functions/send-notification/index.ts",
     "mudancas": 12
    },
    {
     "arquivo": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 11
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 11
    },
    {
@@ -294,14 +294,14 @@
     "mudancas": 7
    },
    {
-    "arquivo": "supabase/functions/geo-gateway/providers/types.ts",
+    "arquivo": "supabase/functions/check-driver-alerts/index.ts",
     "mudancas": 7
    }
   ],
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 250
+    "commits": 251
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1111,
   "arquivos_codigo": 711,
-  "linhas_codigo": 140244,
+  "linhas_codigo": 140501,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 117,
-   "linhas": 28308
+   "linhas": 28565
   },
   "tailwind.config.ts": {
    "arquivos": 1,

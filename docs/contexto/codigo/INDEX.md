@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `520a9a2aa4a9af2db831b9cd75f45e5491fa888b` (2026-11-24T07:45:24-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `a741f0d69b45a9459681259b68b5ba1302bf458a` (2026-11-24T08:29:11-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1111 |
 | arquivos_codigo | 711 |
-| linhas_codigo | 140244 |
+| linhas_codigo | 140501 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,8 +292,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9863 nós · 20442 arestas · 697 comunidades · grafo do commit `520a9a2a`
-- comunidades maiores: cn (255), lucide-react (156), ref_https (134), client.ts (133), button.tsx (127), ref_node_path (113), DriversPage.tsx (112), geo-gateway/index.ts (111), snapshot.py (106), App.tsx (85), 4. Componentes, hooks, libs e estado — **revisado** (84), NotificationHistoryPage.tsx (83)
+- 9871 nós · 20455 arestas · 691 comunidades · grafo do commit `a741f0d6`
+- comunidades maiores: cn (196), lucide-react (131), App.tsx (123), react (117), NotificationHistoryPage.tsx (113), snapshot.py (104), badge.tsx (102), ref_https (100), EvaluationsPage.tsx (97), ref_node_path (96), AlertsPage.tsx (92), geo-gateway/index.ts (86)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -305,9 +305,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/config.toml (17)
 - docs/MAPBOX.md (13)
 - supabase/functions/job-worker/index.ts (13)
+- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (12)
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
-- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (11)
 - src/components/orders/NewOrderDialog.tsx (11)
 - supabase/functions/_shared/schemas.ts (11)
 - supabase/functions/geo-gateway/index.ts (11)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `a741f0d` feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)
 - 2026-11-24 `520a9a2` docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)
 - 2026-11-24 `49e4bc3` fix: topic unico em todo canal realtime de nome fixo (#348)
 - 2026-11-24 `0e04753` fix: ledger reservado antes do envio ao motorista (#347)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `7c71244` fix: teste de envio de WhatsApp usa o canal real do motor (Zapp) (#338)
 - 2026-11-23 `562d0de` feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)
 - 2026-11-23 `5adbf84` fix: topic unico por montagem nos canais realtime (#336)
-- 2026-11-23 `4040276` chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

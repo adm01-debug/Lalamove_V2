@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)",
    "docs: runbook de mensageria aponta o emissor real dos efeitos da resposta (#349)",
    "fix: topic unico em todo canal realtime de nome fixo (#348)",
    "fix: ledger reservado antes do envio ao motorista (#347)",
-   "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)",
-   "feat: aviso de chegada na coleta ao motorista (M4) (#345)"
+   "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

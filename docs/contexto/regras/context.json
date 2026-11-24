@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
+  "sha": "a741f0d69b45a9459681259b68b5ba1302bf458a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 11:12 UTC",
+  "generated_at": "2026-11-24 11:29 UTC",
   "files_total": 1105,
   "code_files": 924,
-  "code_lines": 161915
+  "code_lines": 162172
  },
  "version": "1.3.2",
- "facts_hash": "4e194a7abc69088a",
+ "facts_hash": "5019b73af9f40540",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22790,7 +22790,7 @@
   {
    "module": "supabase/functions",
    "files": 117,
-   "lines": 28308,
+   "lines": 28565,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22854,7 +22854,7 @@
     "sms.ts: TextChannelResult, DeliveryStatus, SmsSendResult, SmsInbound, SmsChannel, toGsm7",
     "whatsapp-test.ts: WhatsAppTestSender, EnvReader, WHATSAPP_TEST_MISSING_CONFIG, whatsAppTestSender",
     "zapp.ts: ErrorAction, ERROR_CODE_ACTIONS, actionForErrorCode, SendOptions, TextChannelResult, TextChannel",
-    "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, shouldSendNextStop, ScheduledReminderResult, sendScheduledReminders",
+    "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, CONFIRMATION_DUE_MIN, CONFIRMATION_LOOKBACK_HOURS, shouldSendNextStop, ScheduledReminderResult",
     "dispatch.ts: DriverSnapshot, PlanAction, DriverMessageReason, MessagePlan, PlanInput, planDriverMessage",
     "inbound-actions.ts: InboundContext, IncidentType, InboundEffect, InboundPlan, planInboundAction",
     "inbound-event.ts: EVENT_CHOICES, choicesForEvent, classifyReply",
@@ -32284,6 +32284,16 @@
     "file": "supabase/functions/_shared/messaging/auto-notices.ts",
     "name": "SCHEDULED_REMINDER_WINDOW_MIN",
     "value": "30"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "CONFIRMATION_DUE_MIN",
+    "value": "2"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.ts",
+    "name": "CONFIRMATION_LOOKBACK_HOURS",
+    "value": "6"
    },
    {
     "file": "supabase/functions/_shared/messaging/notify-driver.ts",
@@ -41944,6 +41954,30 @@
    {
     "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
     "name": "M11: janela de busca e now até now+30min"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: aviso de atribuicao entregue ha mais de 2 min pede confirmacao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: motorista ja confirmou a coleta — nao cobra de novo"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: cobranca ja registrada no ledger nao vira segunda mensagem"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: pedido coletado, cancelado, concluido ou sem motorista nao cobra"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: aviso sem pedido associado e ignorado e pedido sumido nao quebra"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    "name": "M2: janela = aviso entre now-6h e now-2min"
    },
    {
     "file": "supabase/functions/_shared/messaging/dispatch.test.ts",
@@ -73288,7 +73322,7 @@
   },
   "supabase/functions/_shared/messaging/auto-notices.test.ts": {
    "path": "supabase/functions/_shared/messaging/auto-notices.test.ts",
-   "lines": 139,
+   "lines": 293,
    "is_test": true,
    "errors": [
     "tabela inesperada: ${table}"
@@ -73300,18 +73334,28 @@
     "M11: avisa uma vez o pedido agendado dentro de 30 min",
     "M11: segunda passada do cron nao repete o lembrete",
     "M11: pedido cancelado, concluido, coletado ou sem motorista nao avisa",
-    "M11: janela de busca e now até now+30min"
+    "M11: janela de busca e now até now+30min",
+    "M2: aviso de atribuicao entregue ha mais de 2 min pede confirmacao",
+    "M2: motorista ja confirmou a coleta — nao cobra de novo",
+    "M2: cobranca ja registrada no ledger nao vira segunda mensagem",
+    "M2: pedido coletado, cancelado, concluido ou sem motorista nao cobra",
+    "M2: aviso sem pedido associado e ignorado e pedido sumido nao quebra",
+    "M2: janela = aviso entre now-6h e now-2min"
    ]
   },
   "supabase/functions/_shared/messaging/auto-notices.ts": {
    "path": "supabase/functions/_shared/messaging/auto-notices.ts",
-   "lines": 96,
+   "lines": 185,
    "exports": [
     "const MULTI_STOP_MIN",
     "const SCHEDULED_REMINDER_WINDOW_MIN",
+    "const CONFIRMATION_DUE_MIN",
+    "const CONFIRMATION_LOOKBACK_HOURS",
     "function shouldSendNextStop",
     "interface ScheduledReminderResult",
-    "function sendScheduledReminders"
+    "function sendScheduledReminders",
+    "interface ConfirmationNudgeResult",
+    "function sendConfirmationNudges"
    ],
    "tables": [
     {
@@ -73320,6 +73364,18 @@
     },
     {
      "table": "lalamove_stops",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
      "op": "select"
     },
     {
@@ -73340,10 +73396,12 @@
     "lalamove_orders": [
      "driver_id",
      "id",
+     "metadata",
      "scheduled_at",
      "status"
     ],
     "notification_messages": [
+     "created_at",
      "direction",
      "event",
      "id",
@@ -73358,9 +73416,16 @@
     {
      "name": "SCHEDULED_REMINDER_WINDOW_MIN",
      "value": "30"
+    },
+    {
+     "name": "CONFIRMATION_DUE_MIN",
+     "value": "2"
+    },
+    {
+     "name": "CONFIRMATION_LOOKBACK_HOURS",
+     "value": "6"
     }
    ],
-   "doc": "Avisos automaticos que nao nascem de um webhook da Lalamove: - M6 (etapa 106 do plano de mensageria): proxima parada depois de concluir uma parada num pedido multi-parada (3+ paradas). No fluxo de 2 paradas o M5 (pos-coleta) ja entrega o endereco da entrega, entao o M6 nao entra. - M11 (etapa 111): …",
    "calc_fns": [
     {
      "name": "shouldSendNextStop",
@@ -74185,7 +74250,7 @@
   },
   "supabase/functions/check-driver-alerts/index.ts": {
    "path": "supabase/functions/check-driver-alerts/index.ts",
-   "lines": 314,
+   "lines": 328,
    "tables": [
     {
      "table": "alert_configurations",
@@ -79037,10 +79102,22 @@
   }
  },
  "git": {
-  "sha": "520a9a2aa4a9af2db831b9cd75f45e5491fa888b",
+  "sha": "a741f0d69b45a9459681259b68b5ba1302bf458a",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "a741f0d",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: M2 — o motor pede confirmacao ao motorista 2 min apos o aviso (#350)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/_shared/messaging/auto-notices.test.ts",
+     "supabase/functions/_shared/messaging/auto-notices.ts",
+     "supabase/functions/check-driver-alerts/index.ts"
+    ]
+   },
    {
     "sha": "520a9a2",
     "date": "2026-11-24",
@@ -79417,25 +79494,20 @@
      "src/hooks/useSystemHealth.ts",
      "src/pages/OrdersPage.tsx"
     ]
-   },
-   {
-    "sha": "ee920ac",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: validar contrato antes de criar cliente no new-device-alert (#328)",
-    "files": [
-     "supabase/functions/new-device-alert/index.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    9
+    10
    ],
    [
     "src/pages/LiveMapPage.tsx",
     4
+   ],
+   [
+    "supabase/functions/check-driver-alerts/index.ts",
+    3
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -79452,6 +79524,14 @@
    [
     "src/pages/MessagingSettingsPage.tsx",
     3
+   ],
+   [
+    "supabase/functions/_shared/messaging/auto-notices.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/auto-notices.ts",
+    2
    ],
    [
     "src/components/map/hooks/useTrackingData.ts",
@@ -79486,10 +79566,6 @@
     2
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
-    2
-   ],
-   [
     "supabase/functions/lalamove-webhook/index.ts",
     2
    ],
@@ -79499,14 +79575,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/dispatch.test.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/dispatch.ts",
-    2
-   ],
-   [
-    "supabase/functions/_shared/messaging/registry.test.ts",
     2
    ]
   ]
