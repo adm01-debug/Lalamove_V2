@@ -28,6 +28,9 @@ const alertTypeLabels: Record<string, string> = {
   'SUPPLIER_DELAY_NOTICE': 'Aviso de atraso ao fornecedor',
   'MISSING_POD': 'POD não anexado',
   'GEO_BUDGET_WARNING': 'Orçamento geo próximo do limite',
+  // Tipos que faltavam aqui: sem entrada o card mostrava o enum cru ao operador.
+  'DRIVER_ASSIGNED': 'Motorista atribuído ao pedido',
+  'DRIVER_NO_CONFIRMATION': 'Motorista não confirmou a coleta',
 };
 const alertTypeDescriptions: Record<string, string> = {
   'DRIVER_BLOCKED': 'Notifica quando um motorista na blocklist é atribuído a um pedido',
@@ -45,6 +48,8 @@ const alertTypeDescriptions: Record<string, string> = {
   'SUPPLIER_DELAY_NOTICE': 'Avisa o fornecedor que a coleta vai atrasar',
   'MISSING_POD': 'Dispara quando o pedido é concluído sem comprovante de entrega',
   'GEO_BUDGET_WARNING': 'Avisa quando o gasto geo cruza o percentual de alerta do orçamento',
+  'DRIVER_ASSIGNED': 'Avisa quando um motorista é atribuído a um pedido',
+  'DRIVER_NO_CONFIRMATION': 'Dispara quando o motorista não responde ao pedido de confirmação da coleta no prazo',
 };
 const alertTypeIcons: Record<string, typeof Bell> = {
   'DRIVER_BLOCKED': Zap, 'ROUTE_DEVIATION': Settings2, 'DRIVER_STOPPED': Bell, 'LATE_DELIVERY': Bell,
@@ -53,6 +58,7 @@ const alertTypeIcons: Record<string, typeof Bell> = {
   'DRIVER_APPROACHING_PICKUP': Navigation, 'DRIVER_ARRIVED_PICKUP': MapPin,
   'DRIVER_APPROACHING_DELIVERY': Navigation, 'DRIVER_ARRIVED_DELIVERY': MapPin,
   'ETA_DELAY': Clock, 'SUPPLIER_DELAY_NOTICE': Clock, 'MISSING_POD': FileWarning, 'GEO_BUDGET_WARNING': Wallet,
+  'DRIVER_ASSIGNED': Bell, 'DRIVER_NO_CONFIRMATION': Clock,
 };
 const channelIcons = { whatsapp: MessageCircle, email: Mail, slack: Hash, bitrix24: Briefcase, n8n: Webhook };
 const channelLabels = { whatsapp: 'WhatsApp', email: 'Email', slack: 'Slack', bitrix24: 'Bitrix24', n8n: 'N8N Webhook' };

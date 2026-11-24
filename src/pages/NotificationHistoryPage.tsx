@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNotificationHistory, useNotificationStats, usePendingGeoEvents, NotificationSent } from '@/hooks/useNotificationHistory';
+import { alertTypeLabels } from '@/hooks/useAlertGrouping';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -98,14 +99,9 @@ const statusConfig: Record<string, { icon: React.ElementType; color: string; lab
   suppressed: { icon: Ban, color: 'text-muted-foreground', label: 'Suprimida' },
 };
 
-const alertTypeLabels: Record<string, string> = {
-  'DRIVER_BLOCKED': 'Motorista Bloqueado',
-  'ROUTE_DEVIATION': 'Desvio de Rota',
-  'DRIVER_STOPPED': 'Motorista Parado',
-  'LATE_DELIVERY': 'Entrega Atrasada',
-  'APPROVAL_REQUIRED': 'Aprovação Necessária',
-  'ORDER_CANCELLED': 'Pedido Cancelado',
-};
+// Rótulos vêm do mapa único de useAlertGrouping: antes era uma lista local com 6 tipos
+// e o operador via o enum cru ("MISSING_POD") para todo o resto.
+const alertTypeLabel = (tipo: string) => alertTypeLabels[tipo as keyof typeof alertTypeLabels] || tipo;
 
 function StatsCards() {
   const { data: stats, isLoading, error: statsError, refetch: refetchStats } = useNotificationStats();
@@ -209,7 +205,7 @@ function NotificationRow({ notification }: { notification: NotificationSent }) {
         <TableCell>
           {notification.alert ? (
             <Badge variant="outline" className="text-xs">
-              {alertTypeLabels[notification.alert.type] || notification.alert.type}
+              {alertTypeLabel(notification.alert.type)}
             </Badge>
           ) : (
             <span className="text-muted-foreground text-sm">-</span>
