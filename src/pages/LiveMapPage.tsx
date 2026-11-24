@@ -83,6 +83,7 @@ export function LiveMapPage() {
         driver:drivers(name, phone, vehicle_type),
         order:lalamove_orders(lalamove_id, internal_order_id, customer_name, pickup_address, delivery_address, status)
       `)
+      .eq('tracking_status', 'ACTIVE')
       .order('last_updated', { ascending: false });
 
     if (error) {

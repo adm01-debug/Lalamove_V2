@@ -3,6 +3,20 @@ import { renderHook, waitFor, act } from '@testing-library/react';
 import { useTrackingData } from '../useTrackingData';
 
 const selectMock = vi.fn();
+const eqMock = vi.fn();
+/** Reproduz a cadeia real do supabase-js: `select()` → `.eq()` → await. */
+const selectChainable = () => {
+  const promise = selectMock() as Promise<{ data: unknown; error: unknown }>;
+  return {
+    eq: (...args: unknown[]) => {
+      eqMock(...args);
+      return promise;
+    },
+    then: promise.then.bind(promise),
+    catch: promise.catch.bind(promise),
+    finally: promise.finally.bind(promise),
+  };
+};
 const removeChannelMock = vi.fn();
 const onMock = vi.fn().mockReturnThis();
 const subscribeMock = vi.fn().mockReturnValue({ unsubscribe: vi.fn() });
@@ -10,7 +24,8 @@ const channelMock = vi.fn(() => ({ on: onMock, subscribe: subscribeMock }));
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
-    from: vi.fn(() => ({ select: selectMock })),
+    // `select()` encadeia `.eq('tracking_status','ACTIVE')` antes do await.
+    from: vi.fn(() => ({ select: selectChainable })),
     channel: (...args: unknown[]) => channelMock(...(args as [])),
     removeChannel: (...args: unknown[]) => removeChannelMock(...args),
   },
@@ -50,6 +65,8 @@ describe('useTrackingData', () => {
     const { result } = renderHook(() => useTrackingData('ALL', 'ALL'));
     await waitFor(() => expect(result.current.trackingData).toHaveLength(1));
     expect(result.current.allTrackingData).toHaveLength(1);
+    // Só entrega viva entra no mapa: tracking encerrado não pinta motorista fantasma.
+    expect(eqMock).toHaveBeenCalledWith('tracking_status', 'ACTIVE');
   });
 
   it('filtra por tipo de veículo', async () => {
