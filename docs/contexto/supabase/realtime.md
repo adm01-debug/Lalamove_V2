@@ -18,7 +18,6 @@
 | supabase_realtime | public.mfa_sessions | full |
 | supabase_realtime | public.new_device_alerts | full |
 | supabase_realtime | public.report_presets | full |
-| supabase_realtime_messages_publication | realtime.messages_2026_11_20 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_21 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_22 |  |
 | supabase_realtime_messages_publication | realtime.messages_2026_11_23 |  |
