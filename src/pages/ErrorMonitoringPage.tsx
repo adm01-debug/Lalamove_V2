@@ -33,7 +33,7 @@ const sourceLabels: Record<string, string> = {
 };
 
 function StatsCards() {
-  const { data: stats, isLoading } = useErrorStats();
+  const { data: stats, isLoading, error: statsError } = useErrorStats();
 
   if (isLoading) {
     return (
@@ -53,7 +53,14 @@ function StatsCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="space-y-3">
+      {statsError && (
+        <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>Não foi possível carregar os números do topo, os valores abaixo podem estar zerados. {statsError.message}</span>
+        </div>
+      )}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {cards.map((card) => (
         <Card key={card.label} className="border-border/50">
           <CardContent className="pt-4 pb-3 px-4">
@@ -67,6 +74,7 @@ function StatsCards() {
           </CardContent>
         </Card>
       ))}
+      </div>
     </div>
   );
 }
@@ -185,7 +193,7 @@ export default function ErrorMonitoringPage() {
   const [source, setSource] = useState<string>('all');
   const [showResolved, setShowResolved] = useState(false);
 
-  const { data: errors, isLoading, refetch } = useErrorLogs({
+  const { data: errors, isLoading, refetch, error: logsError } = useErrorLogs({
     severity: severity !== 'all' ? severity : undefined,
     source: source !== 'all' ? source : undefined,
     resolved: showResolved ? undefined : false,
@@ -282,6 +290,13 @@ export default function ErrorMonitoringPage() {
               {Array.from({ length: 5 }).map((_, i) => (
                 <Skeleton key={i} className="h-20" />
               ))}
+            </div>
+          ) : logsError ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <AlertTriangle className="h-12 w-12 mb-3 text-destructive" />
+              <p className="text-lg font-medium">Não foi possível carregar os erros</p>
+              <p className="text-sm text-muted-foreground mt-1">{logsError.message}</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>Tentar novamente</Button>
             </div>
           ) : errors?.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">

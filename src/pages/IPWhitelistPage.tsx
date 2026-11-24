@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { SearchInputWithHelp } from '@/components/ui/search-help-tooltip';
-import { Shield, Plus, Trash2, Globe, Check, X, Network, RefreshCw, Edit2 } from 'lucide-react';
+import { Shield, Plus, Trash2, Globe, Check, X, Network, RefreshCw, Edit2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PermissionGate } from '@/components/auth/PermissionGate';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -38,7 +38,7 @@ export default function IPWhitelistPage() {
   const [formData, setFormData] = useState({ ip_address: '', description: '', cidr_range: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { data: entries, isLoading, refetch } = useQuery({
+  const { data: entries, isLoading, refetch, error } = useQuery({
     queryKey: ['ip-whitelist'],
     queryFn: async () => {
       const { data, error } = await supabase.from('ip_whitelist').select('*').order('created_at', { ascending: false });
@@ -108,6 +108,21 @@ export default function IPWhitelistPage() {
         <Skeleton className="h-10 w-64" />
         <div className="grid grid-cols-3 gap-4">{[1, 2, 3].map(i => <Skeleton key={i} className="h-24" />)}</div>
         <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <Card>
+          <CardContent className="p-12 text-center">
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-destructive" />
+            <h3 className="font-semibold text-lg">Não foi possível carregar a whitelist de IPs</h3>
+            <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+            <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}><RefreshCw className="h-4 w-4 mr-2" />Tentar novamente</Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
