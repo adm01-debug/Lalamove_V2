@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3f160c344558c7eeed28ab8cbb9f92ae00aeaa39` (2026-11-24T07:01:55-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `0e04753b412d270bcc32390e1a1bce7597a19cc4` (2026-11-24T07:25:19-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -37,7 +37,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 |---|---|
 | arquivos_total | 1109 |
 | arquivos_codigo | 709 |
-| linhas_codigo | 140156 |
+| linhas_codigo | 140225 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -292,7 +292,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9861 nós · 20417 arestas · 696 comunidades · grafo do commit `3f160c34`
+- 9861 nós · 20419 arestas · 694 comunidades · grafo do commit `0e04753b`
 - comunidades maiores: cn (269), App.tsx (157), button.tsx (142), card.tsx (114), snapshot.py (106), ref_node_url (94), ref_https (91), 4. Componentes, hooks, libs e estado — **revisado** (86), send-notification/index.ts (82), client.ts (82), dependencies (81), AdvancedReportsPage.tsx (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `0e04753` fix: ledger reservado antes do envio ao motorista (#347)
 - 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 - 2026-11-24 `5ae5aff` feat: aviso de chegada na coleta ao motorista (M4) (#345)
 - 2026-11-24 `d882d05` feat: lembrete de pedido agendado e aviso de proxima parada (#344)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `4040276` chore: auditar banco da mensageria e fechar etapas 109/110/471/475 do plano (#335)
 - 2026-11-23 `a1e0893` fix: estado de erro e retry nas paginas que ficavam em branco (#334)
 - 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
-- 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3f160c3445` · branch `main` · 2026-11-24 10:02 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `0e04753b41` · branch `main` · 2026-11-24 10:25 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2064,7 +2064,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1496 testes em 131 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1497 testes em 131 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2125,6 +2125,7 @@ _nenhum item encontrado_
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
 | `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
 | `supabase/functions/_shared/messaging/inbound-event.test.ts` | 10 | M4: responder 1 e coleta confirmada · M4: responder 2 e problema · M2: responder 1 e confirmacao de que esta a caminho · M10: 1 e transito, 2 e problema no veiculo … |
+| `supabase/functions/_shared/messaging/notify-driver.test.ts` | 10 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
 | `supabase/functions/_shared/messaging/registry.test.ts` | 10 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 145: rota desligada continua vindo do banco com is_enabled falso … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
@@ -2138,7 +2139,6 @@ _nenhum item encontrado_
 | `src/lib/orderErrors.test.ts` | 9 | parseOrderError · identifica telefone do remetente (guard server) · identifica telefone do destinatário e captura o índice · mapeia INVALID_PHONE_NUMBER da API Lalamove … |
 | `src/lib/__tests__/lalamoveContract.test.ts` | 9 | contrato Lalamove — fixtures reais · parseia a resposta de cotação preservando o TTL de 5 minutos · trata driverId vazio na criação como  · normaliza o status do webhook para o enum canônico … |
 | `supabase/functions/_shared/template.test.ts` | 9 | renderTemplate: substitui as variaveis do template PT-BR de coleta · renderTemplate: placeholder sem valor e preservado, nunca vira undefined · renderTemplate: null e string vazia tambem preservam o placeholder · renderTemplate: aceita espacos dentro das chaves … |
-| `supabase/functions/_shared/messaging/notify-driver.test.ts` | 9 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `supabase/functions/send-notification/message-id.test.ts` | 9 | etapa 89: mesmo evento devolve o mesmo id (idempotência) · etapa 89: telefone com máscara não muda o id · etapa 89: eventos diferentes geram ids diferentes · etapa 89: papéis diferentes no mesmo telefone geram ids diferentes … |
 | `supabase/functions/zapp-callback/inbound-exec.test.ts` | 9 | etapa 114: coleta carimba o pedido e grava evento de rastreio · etapa 114: carimbo nao sobrescreve o que ja aconteceu · etapa 114: problema vira incidente do motorista · etapa 114: sem posicao conhecida nao inventa evento de rastreio … |

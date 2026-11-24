@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
+  "commit": "0e04753b412d270bcc32390e1a1bce7597a19cc4",
   "branch": "main",
-  "data_commit": "2026-11-24T07:01:55-03:00",
+  "data_commit": "2026-11-24T07:25:19-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "0e04753",
+    "data": "2026-11-24",
+    "assunto": "fix: ledger reservado antes do envio ao motorista (#347)"
+   },
    {
     "sha": "3f160c3",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "ced043f",
     "data": "2026-11-23",
     "assunto": "feat: lote 12 - error banner mapa, clipboard try/catch, min/max tz, busca paralela (#324)"
-   },
-   {
-    "sha": "3e994e3",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)"
    }
   ],
   "arquivos_mudados_7d": 480,
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 59
+    "mudancas": 61
    },
    {
     "pasta": "src/components/map",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 247
+    "commits": 248
    },
    {
     "autor": "dependabot[bot]",
@@ -312,7 +312,7 @@
  "contagens": {
   "arquivos_total": 1109,
   "arquivos_codigo": 709,
-  "linhas_codigo": 140156,
+  "linhas_codigo": 140225,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -564,7 +564,7 @@
   },
   "supabase/functions": {
    "arquivos": 117,
-   "linhas": 28239
+   "linhas": 28308
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -665,6 +665,10 @@
    "linhas": 535
   },
   {
+   "arquivo": "supabase/functions/_shared/messaging/notify-driver.ts",
+   "linhas": 532
+  },
+  {
    "arquivo": "src/pages/NotificationHistoryPage.tsx",
    "linhas": 525
   },
@@ -675,10 +679,6 @@
   {
    "arquivo": "src/components/approvals/SwipeableApprovalCard.tsx",
    "linhas": 501
-  },
-  {
-   "arquivo": "supabase/functions/geo-gateway/providers/mapbox.ts",
-   "linhas": 500
   }
  ],
  "qualidade": {
@@ -687,7 +687,7 @@
   "ts_ignore": 0,
   "eslint_disable": 1,
   "todos": 4,
-  "arquivos_acima_500_linhas": 24
+  "arquivos_acima_500_linhas": 25
  },
  "todos": [
   {

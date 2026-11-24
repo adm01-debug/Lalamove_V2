@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
+  "sha": "0e04753b412d270bcc32390e1a1bce7597a19cc4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 10:02 UTC",
+  "generated_at": "2026-11-24 10:25 UTC",
   "files_total": 1103,
   "code_files": 922,
-  "code_lines": 161827
+  "code_lines": 161896
  },
  "version": "1.3.2",
- "facts_hash": "4e30f5839e3b194f",
+ "facts_hash": "9df4e57f9c78f145",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -22787,7 +22787,7 @@
   {
    "module": "supabase/functions",
    "files": 117,
-   "lines": 28239,
+   "lines": 28308,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -42228,6 +42228,10 @@
    {
     "file": "supabase/functions/_shared/messaging/notify-driver.test.ts",
     "name": "etapa 89: evento repetido nao vira segunda mensagem"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/notify-driver.test.ts",
+    "name": "falha de envio fecha a reserva como failed (nao fica queued)"
    },
    {
     "file": "supabase/functions/_shared/messaging/notify-driver.test.ts",
@@ -73614,8 +73618,11 @@
   },
   "supabase/functions/_shared/messaging/notify-driver.test.ts": {
    "path": "supabase/functions/_shared/messaging/notify-driver.test.ts",
-   "lines": 289,
+   "lines": 306,
    "is_test": true,
+   "rule_comments": [
+    "nao pode nem ser chamado, senao o motorista recebe a mesma mensagem duas vezes."
+   ],
    "doc": "Etapas 89/97/100: o caminho completo do aviso ao motorista com o banco dublado. O que este arquivo protege: nao enviar quando o motorista e desconhecido, nao enviar duas vezes o mesmo evento e registrar no ledger mesmo quando a mensagem nao sai (modo sombra/suprimida).",
    "tests": [
     "etapa 86: pedido vira variaveis do catalogo",
@@ -73625,6 +73632,7 @@
     "etapa 145: modo sombra registra suppressed e nao envia",
     "etapa 97: envio grava sent no ledger e o consumo",
     "etapa 89: evento repetido nao vira segunda mensagem",
+    "falha de envio fecha a reserva como failed (nao fica queued)",
     "opt-out registra a supressao sem chamar o provedor",
     "erro de leitura do motorista nao derruba o chamador"
    ],
@@ -73635,7 +73643,7 @@
   },
   "supabase/functions/_shared/messaging/notify-driver.ts": {
    "path": "supabase/functions/_shared/messaging/notify-driver.ts",
-   "lines": 480,
+   "lines": 532,
    "exports": [
     "interface MessagingClient",
     "interface NotifyDriverRequest",
@@ -73676,6 +73684,14 @@
     {
      "table": "drivers",
      "op": "select"
+    },
+    {
+     "table": "notification_messages",
+     "op": "insert"
+    },
+    {
+     "table": "notification_messages",
+     "op": "update"
     },
     {
      "table": "notification_messages",
@@ -79042,10 +79058,20 @@
   }
  },
  "git": {
-  "sha": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
+  "sha": "0e04753b412d270bcc32390e1a1bce7597a19cc4",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "0e04753",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "fix: ledger reservado antes do envio ao motorista (#347)",
+    "files": [
+     "supabase/functions/_shared/messaging/notify-driver.test.ts",
+     "supabase/functions/_shared/messaging/notify-driver.ts"
+    ]
+   },
    {
     "sha": "3f160c3",
     "date": "2026-11-24",
@@ -79415,52 +79441,12 @@
      "src/pages/AdminTelemetriaPage.tsx",
      "src/utils/logger.ts"
     ]
-   },
-   {
-    "sha": "add648e",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: erro mapa ao vivo, polling bg, build config, imports dinâmicos, staleTime (itens 69/83/86/88/98) (#314)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "src/App.tsx",
-     "src/components/lalamove/UapiStatementPanel.tsx",
-     "src/components/map/MapHistoryPanel.tsx",
-     "src/hooks/useActiveAlerts.ts",
-     "src/hooks/useCacheViews.ts",
-     "src/hooks/useCachedStats.ts",
-     "src/hooks/useDashboardStats.ts",
-     "src/hooks/useErrorLogs.ts",
-     "src/hooks/useGeoAdmin.ts",
-     "src/hooks/useJobQueue.ts",
-     "src/hooks/useLalamove.ts",
-     "src/hooks/useLalamoveQuota.ts",
-     "src/hooks/useNotificationHistory.ts",
-     "src/hooks/usePendingApprovals.ts",
-     "src/hooks/useRecentOrders.ts",
-     "src/hooks/useSLAMetrics.ts",
-     "src/hooks/useSystemHealth.ts",
-     "src/hooks/useUAPI.ts",
-     "src/hooks/useWebhookEvents.ts",
-     "src/hooks/useWebhookSecurityMetrics.ts",
-     "src/pages/AdvancedReportsPage.tsx",
-     "src/pages/AnalyticsDashboardPage.tsx",
-     "src/pages/LiveMapPage.tsx",
-     "src/pages/SLODashboardPage.tsx",
-     "src/utils/__tests__/exportUtils.test.ts",
-     "src/utils/exportUtils.ts",
-     "vite.config.ts"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     9
-   ],
-   [
-    "src/pages/LiveMapPage.tsx",
-    4
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -79479,8 +79465,16 @@
     3
    ],
    [
-    "src/App.tsx",
+    "src/pages/LiveMapPage.tsx",
     3
+   ],
+   [
+    "supabase/functions/_shared/messaging/notify-driver.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/_shared/messaging/notify-driver.ts",
+    2
    ],
    [
     "supabase/functions/zapp-callback/index.ts",
@@ -79527,11 +79521,7 @@
     2
    ],
    [
-    "src/hooks/useNotificationHistory.ts",
-    2
-   ],
-   [
-    "src/pages/AnalyticsDashboardPage.tsx",
+    "src/App.tsx",
     2
    ]
   ]
