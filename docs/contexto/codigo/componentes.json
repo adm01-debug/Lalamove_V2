@@ -1464,7 +1464,7 @@
    "hooks_locais": [],
    "tabelas": [],
    "edges": [],
-   "usado_por": 11,
+   "usado_por": 13,
    "orfao": false
   },
   {
@@ -2308,7 +2308,7 @@
     "AdvancedReportsPage"
    ],
    "export_default": "AdvancedReportsPage",
-   "linhas": 750,
+   "linhas": 764,
    "dominio": "pages",
    "hooks_locais": [
     "useAdvancedReports",
@@ -2462,7 +2462,7 @@
     "Bitrix24Page"
    ],
    "export_default": "Bitrix24Page",
-   "linhas": 95,
+   "linhas": 97,
    "dominio": "pages",
    "hooks_locais": [
     "useBitrix24"
@@ -2617,7 +2617,7 @@
     "DriversPage"
    ],
    "export_default": null,
-   "linhas": 248,
+   "linhas": 249,
    "dominio": "pages",
    "hooks_locais": [
     "useAddToBlacklist",
@@ -3495,7 +3495,7 @@
     "RiskRulesPage"
    ],
    "export_default": null,
-   "linhas": 347,
+   "linhas": 348,
    "dominio": "pages",
    "hooks_locais": [
     "useCreateRiskRule",
@@ -3657,7 +3657,7 @@
     "SLODashboardPage"
    ],
    "export_default": "SLODashboardPage",
-   "linhas": 352,
+   "linhas": 357,
    "dominio": "pages",
    "hooks_locais": [
     "useSLOMetrics"

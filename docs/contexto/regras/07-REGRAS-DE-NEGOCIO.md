@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `569b237652` · branch `main` · 2026-11-24 16:09 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `4bbb1fca7d` · branch `main` · 2026-11-24 16:30 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -2081,7 +2081,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1553 testes em 137 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1557 testes em 137 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2144,6 +2144,7 @@ _nenhum item encontrado_
 | `src/lib/edge-error.test.ts` | 10 | parseEdgeError · lê o formato único de erro do body do FunctionsHttpError · retorna null para erro que não é FunctionsHttpError · retorna null quando o body não traz nem  … |
 | `src/lib/__tests__/uapiErrors.test.ts` | 10 | uapiErrors · traduz os códigos da família de cupons (qp) · marca 10007 e 10001 como falhas críticas de autenticação · faz fallback seguro para códigos desconhecidos … |
 | `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
+| `src/pages/error-state.test.tsx` | 10 | estado de erro em paginas de dados (item 421) · SystemHealthPage: falha mostra aviso e botao de tentar novamente em vez de tela vazia · SystemHealthPage: enquanto carrega mostra o indicador de carregamento · ContactsPage: falha na listagem mostra aviso e botao de tentar novamente … |
 | `supabase/functions/_shared/guardian-freshness.test.ts` | 10 | tracking atualizado agora conta como fresco · tracking dentro da janela conta como fresco (limite inclusive) · tracking orfao de meses e recusado · um minuto alem da janela recusa … |
 | `supabase/functions/_shared/messaging/inbound-event.test.ts` | 10 | M4: responder 1 e coleta confirmada · M4: responder 2 e problema · M2: responder 1 e confirmacao de que esta a caminho · M10: 1 e transito, 2 e problema no veiculo … |
 | `supabase/functions/_shared/messaging/notify-driver.test.ts` | 10 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
@@ -2187,7 +2188,6 @@ _nenhum item encontrado_
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `src/lib/__tests__/postMessage.test.ts` | 6 | isTrustedBitrix24Origin · aceita a origem da própria página · aceita a origem do Supabase (callback da edge function) · rejeita origem desconhecida (XSS por postMessage) … |
 | `src/lib/__tests__/postgrest.test.ts` | 6 | escapeIlike · remove caracteres com significado no DSL do PostgREST · mantém caracteres comuns de busca · buildOrIlike … |
-| `src/pages/error-state.test.tsx` | 6 | estado de erro em paginas de dados (item 421) · SystemHealthPage: falha mostra aviso e botao de tentar novamente em vez de tela vazia · SystemHealthPage: enquanto carrega mostra o indicador de carregamento · ContactsPage: falha na listagem mostra aviso e botao de tentar novamente … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |

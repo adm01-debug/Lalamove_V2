@@ -589,8 +589,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 15
+   "papeis": [
+    "alert"
+   ],
+   "arquivos_puxados": 16
   },
   {
    "caminho": "/cache-monitoring",
@@ -2504,8 +2506,10 @@
    ],
    "canais_realtime": [],
    "flags": [],
-   "papeis": [],
-   "arquivos_puxados": 21
+   "papeis": [
+    "alert"
+   ],
+   "arquivos_puxados": 22
   },
   {
    "caminho": "/reset-password",
