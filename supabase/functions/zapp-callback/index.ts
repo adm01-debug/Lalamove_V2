@@ -100,5 +100,14 @@ serve(async (req: Request): Promise<Response> => {
 
   const result = await applyCallback({ client: ledger, write, senderPhone });
   logger.log("[zapp-callback]", result.outcome, result.reason ?? "");
+  // Etapa 114: o efeito da resposta fica no log mesmo quando nao ha tabela para
+  // gravar (o motivo importa para nao parecer que a resposta sumiu).
+  if (result.effects?.length) logger.log("[zapp-callback] efeitos:", result.effects.join(","));
+  for (const skip of result.skipped ?? []) {
+    logger.log("[zapp-callback] efeito ignorado:", skip.effect, skip.reason);
+  }
+  for (const fail of result.failed ?? []) {
+    logger.error("[zapp-callback] efeito falhou:", fail.effect, fail.reason);
+  }
   return json({ ok: true, outcome: result.outcome, message_id: result.messageId });
 });

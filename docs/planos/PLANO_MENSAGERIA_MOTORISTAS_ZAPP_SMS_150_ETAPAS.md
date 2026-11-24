@@ -607,20 +607,23 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 
 ### 113 — [L] Interpretador de respostas
 - [x] Ordem: id de opção → número "1/2/3" → palavras-chave ("cheguei", "a caminho", "problema", "coletado") → texto livre
-- **Evidência:** `_shared/messaging/inbound.ts` (`classifyInbound`, `normalizeInboundText`); 10 testes em `inbound.test.ts` com a tabela de frases reais — id de opção vence dígito, dígito vence palavra, "não consigo chegar" é `problem` e não `arrived`/`decline`, acento e caixa alta não mudam nada, e "assim" não vira "sim". **Falta:** ligar no consumo do inbound, que é a etapa 80/96 (migration `20261125120000`, PR #283).
+- **Evidência:** `_shared/messaging/inbound.ts` (`classifyInbound`, `normalizeInboundText`); 10 testes em `inbound.test.ts` com a tabela de frases reais — id de opção vence dígito, dígito vence palavra, "não consigo chegar" é `problem` e não `arrived`/`decline`, acento e caixa alta não mudam nada, e "assim" não vira "sim". Ligado no consumo do inbound (`zapp-callback/ledger.ts` → `classifyReply`). O dígito só é interpretado com o mapa do evento que originou a mensagem (`inbound-event.ts`, `EVENT_CHOICES`), porque "1" não significa nada fora do template que perguntou.
 
 ### 114 — [L] Ações por resposta
-- [~] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
-- **Estado real:** a decisão está pronta e testada em `_shared/messaging/inbound-actions.ts`
-  (`planInboundAction`): confirmação → `driver_confirmed_at` + `tracking_event DRIVER_CONFIRMED`;
-  chegada → `driver_arrived_at` + `DRIVER_ARRIVED`; coletado/a caminho → evento;
-  recusa → `driver_declined_at` + badge (não vira incidente); problema → `driver_incidents`
-  com `DAMAGE` (batida/pneu) ou `LATE_DELIVERY` + badge. Respeita os NOT NULL do schema:
+- [x] Confirmação → `tracking_events` + `metadata.driver_confirmed_at`; problema → `driver_incidents` + alerta interno
+- **Estado real:** decisão pura em `_shared/messaging/inbound-actions.ts` (`planInboundAction`) e
+  execução em `zapp-callback/inbound-exec.ts` (`executeInboundPlan`), chamada por
+  `applyCallback` logo depois de gravar a linha inbound. Respeita os NOT NULL do schema:
   `tracking_events` só sai com motorista **e** posição, `driver_incidents` só com
-  `driver_id` — sem eles o efeito é convertido em badge e o motivo fica em `skipped`.
-  **Falta:** o executor que grava os efeitos, dentro do `zapp-callback` (PR #283), que
-  ainda não chama `classifyInbound`/`planInboundAction`.
-- **Evidência:** 12 testes em `_shared/messaging/inbound-actions.test.ts` (PR #281)
+  `driver_id` — sem eles o efeito é convertido em badge e o motivo vai para `skipped`.
+  Carimbos no pedido são "primeira vez" (não reescrevem) e nunca tocam `status`, que é
+  o que dispara sincronia Bitrix24. Recusa abre alerta `DRIVER_NO_CONFIRMATION`;
+  problema não duplica alerta porque já nasce em `driver_incidents`. Foto de
+  comprovante fica no inbox: `lalamove_stop_proofs` separa POP de POD e
+  `lalamove_stops` não diz o tipo da parada.
+- **Evidência:** 12 testes em `inbound-actions.test.ts` + 9 em `inbound-exec.test.ts` +
+  2 de integração em `zapp-callback/ledger.test.ts` (resposta "1" ao M4 carimba
+  `metadata.driver_pickup_confirmed_at` e a linha inbound nasce com `order_id`/`driver_id`).
 
 ### 115 — [L] Texto livre
 - [ ] Vai para a timeline e sinaliza "aguardando operador" (a conversa já está na fila do Zapp)
