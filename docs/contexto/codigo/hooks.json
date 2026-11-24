@@ -1721,7 +1721,7 @@
     "useUpdateMessagingSettings",
     "useUpdateNotificationRoute"
    ],
-   "linhas": 359,
+   "linhas": 361,
    "dominio": "hooks",
    "tabelas": [
     "message_templates",

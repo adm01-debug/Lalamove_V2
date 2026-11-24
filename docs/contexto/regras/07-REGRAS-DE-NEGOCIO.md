@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `7c71244827` · branch `main` · 2026-11-24 01:50 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3153586dea` · branch `main` · 2026-11-24 02:12 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -1987,13 +1987,13 @@ _nenhum item encontrado_
 | Falha ao salvar teto: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha ao trocar provedor: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
+| Escolha ao menos um canal para a rota | `src/pages/MessagingSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha no teste: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
 | Informe o telefone com DDD | `src/pages/MessagingSettingsPage.tsx` |
-| Teto mensal inválido | `src/pages/MessagingSettingsPage.tsx` |
-| Texto vazio | `src/pages/MessagingSettingsPage.tsx` |
-| … +122 linhas — lista completa em `context.json` | |
+| Rota que exige resposta precisa de prazo em minutos | `src/pages/MessagingSettingsPage.tsx` |
+| … +124 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 
@@ -2037,7 +2037,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1449 testes em 126 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1453 testes em 126 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2096,6 +2096,7 @@ _nenhum item encontrado_
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
+| `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
 | `src/hooks/__tests__/useActiveAlerts.test.ts` | 9 | useActiveAlerts · deve buscar alertas ativos corretamente · deve mapear null order_id/driver_id para undefined · deve lidar com is_read null defaulting para false … |
@@ -2136,7 +2137,6 @@ _nenhum item encontrado_
 | `src/lib/__tests__/filterValidSpecialRequests.test.ts` | 6 | filterValidSpecialRequests · remove special request restrito a outra cidade quando o serviço continua válido na nova praça · mantém o special request quando a cidade nova ainda está na lista de restrição · mantém special requests sem restrição de cidade … |
 | `src/lib/__tests__/postMessage.test.ts` | 6 | isTrustedBitrix24Origin · aceita a origem da própria página · aceita a origem do Supabase (callback da edge function) · rejeita origem desconhecida (XSS por postMessage) … |
 | `src/lib/__tests__/postgrest.test.ts` | 6 | escapeIlike · remove caracteres com significado no DSL do PostgREST · mantém caracteres comuns de busca · buildOrIlike … |
-| `src/pages/MessagingSettingsPage.test.tsx` | 6 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
 | `supabase/functions/_shared/contract.integration.test.ts` | 6 | [I/O][${c.fn}] campo ausente → 422 formato único · [I/O][${c.fn}] tipo incorreto → 422 no campo ${c.wrongTypeField} · [I/O][${c.fn}] compat: v1 e v2 rejeitam o inválido identicamente · [I/O][${c.fn}] compat: payload v1 válido é aceito sob header v2 (não-422) … |
 | `supabase/functions/geo-gateway/failover.test.ts` | 6 | primário OK: nenhum fallback é consultado e o provedor é o primário · primário 5xx → fallback responde em UMA chamada e o header aponta o fallback · primário 5xx sem alternativo usável → erro ORIGINAL sobe · entrada inválida NÃO troca de provedor (a falha se repetiria no outro) … |
 | `supabase/functions/geo-gateway/metering.test.ts` | 6 | resolveTtl sem config usa o TTL de codigo · geocode Mapbox temporario nunca cacheia (termos Mapbox) · config.retention reduz o TTL de codigo · config.retention nao aumenta o TTL acima do padrao … |

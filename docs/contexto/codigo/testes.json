@@ -1156,12 +1156,12 @@
   {
    "arquivo": "src/pages/MessagingSettingsPage.test.tsx",
    "tipo": "unit (vitest)",
-   "linhas": 158,
+   "linhas": 223,
    "testa": [
     "src/hooks/useMessaging.ts",
     "src/pages/MessagingSettingsPage.tsx"
    ],
-   "casos": 5
+   "casos": 8
   },
   {
    "arquivo": "src/pages/NotificationHistoryPage.geo.test.tsx",

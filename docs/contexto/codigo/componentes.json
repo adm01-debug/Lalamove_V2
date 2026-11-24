@@ -3092,7 +3092,7 @@
     "MessagingSettingsPage"
    ],
    "export_default": "MessagingSettingsPage",
-   "linhas": 1027,
+   "linhas": 1130,
    "dominio": "pages",
    "hooks_locais": [
     "useAddNotificationOptout",
