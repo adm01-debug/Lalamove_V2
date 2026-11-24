@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { PermissionGate } from '@/components/auth/PermissionGate';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -37,7 +38,7 @@ const roleConfig: Record<AppRole, { icon: React.ElementType; color: string; labe
 interface RolePermissionMatrix { [role: string]: { [permissionId: string]: boolean }; }
 
 export default function PermissionsPage() {
-  const { allPermissions, rolePermissions, isLoading } = usePermissions();
+  const { allPermissions, rolePermissions, isLoading, isError, refetch } = usePermissions();
   const [selectedRole, setSelectedRole] = useState<AppRole>('admin');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedModules, setExpandedModules] = useState<string[]>([]);
@@ -129,6 +130,18 @@ export default function PermissionsPage() {
         <Skeleton className="h-10 w-64" />
         <div className="grid grid-cols-4 gap-4">{[1,2,3,4].map(i => <Skeleton key={i} className="h-32" />)}</div>
         <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="container mx-auto p-6 space-y-6">
+        <DataErrorBanner
+          message="Não foi possível carregar as permissões."
+          details="A matriz de permissões fica vazia até a leitura voltar."
+          onRetry={() => { void refetch(); }}
+        />
       </div>
     );
   }

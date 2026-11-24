@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Shield, AlertTriangle, CheckCircle2, XCircle, Clock, History, Loader2, RefreshCw, Zap, TrendingUp, Sparkles } from 'lucide-react';
 import { usePendingApprovals, useApprovalHistory, useApprovalStats, useApprovalActions } from '@/hooks/usePendingApprovals';
@@ -22,7 +23,7 @@ export function ApprovalsPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const queryClient = useQueryClient();
   const { data: pendingApprovals = [], isLoading, error, refetch, isFetching } = usePendingApprovals();
-  const { data: historyApprovals = [], isLoading: historyLoading } = useApprovalHistory();
+  const { data: historyApprovals = [], isLoading: historyLoading, isError: historyError, refetch: refetchHistory } = useApprovalHistory();
   const { data: stats } = useApprovalStats();
   const { approveMutation, rejectMutation, whitelistMutation, blacklistMutation } = useApprovalActions();
   useApprovalRealtime();
@@ -124,6 +125,8 @@ export function ApprovalsPage() {
             <TabsContent value="history" className="flex-1 space-y-4 mt-4 overflow-y-auto">
               {historyLoading ? (
                 <div className="flex-1 flex items-center justify-center py-12"><motion.div className="text-center" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}><Loader2 className="w-12 h-12 text-primary animate-spin mx-auto" /><p className="text-muted-foreground mt-4">Carregando histórico...</p></motion.div></div>
+              ) : historyError ? (
+                <DataErrorBanner message="Não foi possível carregar o histórico de aprovações." onRetry={() => refetchHistory()} />
               ) : historyApprovals.length === 0 ? (
                 <EmptyState
                   icon={<History className="w-6 h-6" />}

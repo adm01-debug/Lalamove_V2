@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { QueryState } from '@/components/ui/query-state';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 import {
   Table,
   TableBody,
@@ -53,7 +54,7 @@ export default function ExternalDataPage() {
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebouncedValue(search, 400);
 
-  const { data: stats, isLoading: statsLoading } = useExternalStats();
+  const { data: stats, isLoading: statsLoading, isError: statsFailed, refetch: refetchStats } = useExternalStats();
   const { data: listData, isLoading: listLoading, isError: listFailed, error: listError, refetch: refetchList } = useExternalList(
     activeTable,
     debouncedSearch || undefined,
@@ -80,6 +81,13 @@ export default function ExternalDataPage() {
           Consulte empresas, clientes, fornecedores, transportadoras e contatos
         </p>
       </div>
+
+      {statsFailed && (
+        <DataErrorBanner
+          message="Não foi possível carregar as contagens da base. Os totais abaixo podem aparecer vazios."
+          onRetry={() => refetchStats()}
+        />
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
