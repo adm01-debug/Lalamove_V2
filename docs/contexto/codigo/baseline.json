@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
+  "commit": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
   "branch": "main",
-  "data_commit": "2026-11-24T01:07:58-03:00",
+  "data_commit": "2026-11-24T07:01:55-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "3f160c3",
+    "data": "2026-11-24",
+    "assunto": "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)"
+   },
    {
     "sha": "5ae5aff",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "3e994e3",
     "data": "2026-11-23",
     "assunto": "feat: lote 8 - a11y básica (icon-button, aria-labels, useId+htmlFor) (#320)"
-   },
-   {
-    "sha": "680e653",
-    "data": "2026-11-23",
-    "assunto": "feat: lote 7 - staleTime 30s, lazy dialogs, timer AuthPage, HEAD health check (#319)"
    }
   ],
-  "arquivos_mudados_7d": 476,
+  "arquivos_mudados_7d": 480,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/geo-gateway",
@@ -141,7 +141,7 @@
    },
    {
     "pasta": "supabase/functions/_shared",
-    "mudancas": 56
+    "mudancas": 59
    },
    {
     "pasta": "src/components/map",
@@ -192,8 +192,8 @@
     "mudancas": 13
    },
    {
-    "pasta": "docs/planos/PLANO_MAPBOX_100_ETAPAS.md",
-    "mudancas": 11
+    "pasta": "supabase/functions/zapp-callback",
+    "mudancas": 12
    }
   ],
   "arquivos_mais_mudados_90d": [
@@ -238,6 +238,10 @@
     "mudancas": 11
    },
    {
+    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+    "mudancas": 11
+   },
+   {
     "arquivo": "src/components/orders/NewOrderDialog.tsx",
     "mudancas": 11
    },
@@ -251,10 +255,6 @@
    },
    {
     "arquivo": "docs/pendencias/_ordem.md",
-    "mudancas": 10
-   },
-   {
-    "arquivo": "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     "mudancas": 10
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 246
+    "commits": 247
    },
    {
     "autor": "dependabot[bot]",
@@ -310,9 +310,9 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1105,
-  "arquivos_codigo": 705,
-  "linhas_codigo": 139418,
+  "arquivos_total": 1109,
+  "arquivos_codigo": 709,
+  "linhas_codigo": 140156,
   "rotas": 57,
   "rotas_protegidas": 49,
   "rotas_com_mfa": 8,
@@ -324,7 +324,7 @@
   "tabelas": 93,
   "migrations": 193,
   "cron_jobs": 24,
-  "testes": 179,
+  "testes": 181,
   "workflows": 5,
   "scripts": 107,
   "docs_md": 114
@@ -563,8 +563,8 @@
    "linhas": 1091
   },
   "supabase/functions": {
-   "arquivos": 113,
-   "linhas": 27501
+   "arquivos": 117,
+   "linhas": 28239
   },
   "tailwind.config.ts": {
    "arquivos": 1,
@@ -818,7 +818,7 @@
    "VITE_GOOGLE_MAPS_BROWSER_KEY",
    "VITE_GOOGLE_MAPS_MAP_ID"
   ],
-  "ciclos_de_import": 1,
+  "ciclos_de_import": 2,
   "possiveis_segredos_no_codigo": [
    "supabase/functions/geo-admin/rotation.test.ts:32"
   ]

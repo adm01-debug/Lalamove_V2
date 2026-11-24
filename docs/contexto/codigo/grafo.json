@@ -1,8 +1,8 @@
 {
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
- "nos": 533,
- "arestas": 1769,
+ "nos": 535,
+ "arestas": 1776,
  "hubs": [
   {
    "arquivo": "src/components/ui/button.tsx",
@@ -166,13 +166,20 @@
   }
  ],
  "ciclos": {
-  "total": 1,
+  "total": 2,
   "maiores": [
    {
     "tamanho": 2,
     "arquivos": [
      "src/services/errorMonitoring.ts",
      "src/utils/logger.ts"
+    ]
+   },
+   {
+    "tamanho": 2,
+    "arquivos": [
+     "supabase/functions/zapp-callback/inbound-exec.ts",
+     "supabase/functions/zapp-callback/ledger.ts"
     ]
    }
   ]

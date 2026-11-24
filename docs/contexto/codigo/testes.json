@@ -14,11 +14,11 @@
   "edges": "deno test --allow-net --allow-env supabase/functions/_shared/contract.test.ts supabase/functions/lalamove-webhook/security.test.ts",
   "guards": "node --test scripts/ci/*.unit.mjs"
  },
- "total": 179,
+ "total": 181,
  "por_tipo": {
   "contrato (deno)": 3,
   "e2e (playwright)": 8,
-  "edge (deno)": 41,
+  "edge (deno)": 43,
   "guard (node --test)": 34,
   "unit (vitest)": 86
  },
@@ -33,7 +33,7 @@
   },
   {
    "padrao": "supabase/functions/<edge>",
-   "arquivos": 43
+   "arquivos": 45
   },
   {
    "padrao": "co-localizado (*.test)",
@@ -1303,6 +1303,15 @@
    "casos": 16
   },
   {
+   "arquivo": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 66,
+   "testa": [
+    "supabase/functions/_shared/messaging/inbound-event.ts"
+   ],
+   "casos": 10
+  },
+  {
    "arquivo": "supabase/functions/_shared/messaging/inbound.test.ts",
    "tipo": "edge (deno)",
    "linhas": 129,
@@ -1590,14 +1599,26 @@
    "casos": 7
   },
   {
+   "arquivo": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+   "tipo": "edge (deno)",
+   "linhas": 171,
+   "testa": [
+    "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "supabase/functions/_shared/messaging/inbound-event.ts",
+    "supabase/functions/zapp-callback/inbound-exec.ts",
+    "supabase/functions/zapp-callback/ledger.ts"
+   ],
+   "casos": 9
+  },
+  {
    "arquivo": "supabase/functions/zapp-callback/ledger.test.ts",
    "tipo": "edge (deno)",
-   "linhas": 225,
+   "linhas": 269,
    "testa": [
     "supabase/functions/zapp-callback/ledger.ts",
     "supabase/functions/zapp-callback/payload.ts"
    ],
-   "casos": 11
+   "casos": 13
   },
   {
    "arquivo": "supabase/functions/zapp-callback/payload.test.ts",
@@ -1754,7 +1775,8 @@
   "supabase/functions/_shared/geo-precision.ts": 1,
   "supabase/functions/_shared/messaging/auto-notices.ts": 1,
   "supabase/functions/_shared/messaging/dispatch.ts": 1,
-  "supabase/functions/_shared/messaging/inbound-actions.ts": 1,
+  "supabase/functions/_shared/messaging/inbound-actions.ts": 2,
+  "supabase/functions/_shared/messaging/inbound-event.ts": 2,
   "supabase/functions/_shared/messaging/inbound.ts": 2,
   "supabase/functions/_shared/messaging/notify-driver.ts": 1,
   "supabase/functions/_shared/messaging/registry.ts": 2,
@@ -1783,7 +1805,8 @@
   "supabase/functions/send-notification/sms-dispatch.ts": 1,
   "supabase/functions/send-notification/static-map.ts": 1,
   "supabase/functions/simulate-driver-movement/replay.ts": 1,
-  "supabase/functions/zapp-callback/ledger.ts": 1,
+  "supabase/functions/zapp-callback/inbound-exec.ts": 1,
+  "supabase/functions/zapp-callback/ledger.ts": 2,
   "supabase/functions/zapp-callback/payload.ts": 2,
   "supabase/functions/zapp-callback/security.ts": 1,
   "supabase/tests/fixtures/route_curitiba.json": 2

@@ -2306,6 +2306,9 @@
   "supabase/functions/_shared/messaging/inbound-actions.ts": [
    "supabase/functions/_shared/messaging/inbound.ts"
   ],
+  "supabase/functions/_shared/messaging/inbound-event.ts": [
+   "supabase/functions/_shared/messaging/inbound.ts"
+  ],
   "supabase/functions/_shared/messaging/notify-driver.ts": [
    "supabase/functions/_shared/channels/sms.ts",
    "supabase/functions/_shared/channels/zapp.ts",
@@ -2545,6 +2548,10 @@
    "supabase/functions/_shared/schemas.ts",
    "supabase/functions/_shared/telemetry.ts"
   ],
+  "supabase/functions/zapp-callback/inbound-exec.ts": [
+   "supabase/functions/_shared/messaging/inbound-actions.ts",
+   "supabase/functions/zapp-callback/ledger.ts"
+  ],
   "supabase/functions/zapp-callback/index.ts": [
    "supabase/functions/_shared/cors.ts",
    "supabase/functions/_shared/logger.ts",
@@ -2553,6 +2560,10 @@
    "supabase/functions/zapp-callback/security.ts"
   ],
   "supabase/functions/zapp-callback/ledger.ts": [
+   "supabase/functions/_shared/messaging/inbound-actions.ts",
+   "supabase/functions/_shared/messaging/inbound-event.ts",
+   "supabase/functions/_shared/messaging/inbound.ts",
+   "supabase/functions/zapp-callback/inbound-exec.ts",
    "supabase/functions/zapp-callback/payload.ts"
   ]
  }

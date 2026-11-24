@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
+  "sha": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 04:08 UTC",
-  "files_total": 1099,
-  "code_files": 918,
-  "code_lines": 161089
+  "generated_at": "2026-11-24 10:02 UTC",
+  "files_total": 1103,
+  "code_files": 922,
+  "code_lines": 161827
  },
  "version": "1.3.2",
- "facts_hash": "1b35afe5ab392727",
+ "facts_hash": "4e30f5839e3b194f",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -187,7 +187,7 @@
   ],
   "package_manager": "npm",
   "languages": {
-   ".ts": 350,
+   ".ts": 354,
    ".tsx": 242,
    ".sql": 204,
    ".mjs": 109,
@@ -19570,7 +19570,14 @@
     ],
     "auth": "service_role (ignora RLS) — NÃO valida usuário no código",
     "tables": [
-     "notification_messages"
+     "active_tracking",
+     "alerts",
+     "driver_incidents",
+     "drivers",
+     "lalamove_orders",
+     "notification_messages",
+     "notification_optouts",
+     "tracking_events"
     ],
     "env": [
      "SUPABASE_SERVICE_ROLE_KEY",
@@ -22779,8 +22786,8 @@
   },
   {
    "module": "supabase/functions",
-   "files": 113,
-   "lines": 27501,
+   "files": 117,
+   "lines": 28239,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22820,6 +22827,7 @@
     "messaging_settings",
     "new_device_alerts",
     "notification_messages",
+    "notification_optouts",
     "notification_routes",
     "order_geo_events",
     "query_telemetry",
@@ -22846,6 +22854,7 @@
     "auto-notices.ts: MULTI_STOP_MIN, SCHEDULED_REMINDER_WINDOW_MIN, shouldSendNextStop, ScheduledReminderResult, sendScheduledReminders",
     "dispatch.ts: DriverSnapshot, PlanAction, DriverMessageReason, MessagePlan, PlanInput, planDriverMessage",
     "inbound-actions.ts: InboundContext, IncidentType, InboundEffect, InboundPlan, planInboundAction",
+    "inbound-event.ts: EVENT_CHOICES, choicesForEvent, classifyReply",
     "inbound.ts: InboundChoice, InboundIntent, InboundResult, OPTOUT_KEYWORDS, isOptOutKeyword, InboundMediaKind",
     "notify-driver.ts: MessagingClient, NotifyDriverRequest, NotifyDriverResult, NotifyDriverOptions, loadOrderVariables, notifyDriver",
     "registry.ts: ReadClient, MESSAGE_CHANNELS, MESSAGE_ROLES, QuietWindow, MessagingSettings, SAFE_SETTINGS",
@@ -22869,8 +22878,7 @@
     "normalize.ts: normalizeLalamoveV3Payload",
     "security.ts: timingSafeEqual, validateHmacSignature, validateLalamoveV3Signature",
     "message-id.ts: MessageIdParts, buildClientMessageId, buildCorrelation",
-    "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime",
-    "recipients.ts: RecipientRole, NotificationRecipient, recipientKey, normalizeRecipients, unionRecipients, firstByRole"
+    "quiet-hours.ts: QUIET_HOURS_ALERT_TYPES, QuietHours, isWithinQuietHours, nextAllowedTime"
    ],
    "docs": [
     "contract.integration.test.ts: ============================================================================ Testes de INTEGRAÇÃO I/O REAIS — chamam as Edge Functions IMPLANTADAS via HTTP e validam, contra o runtime real: 1. 422 → payload sem campo obrigatório retorna o formato único de erro. 2. Tipos → payload com tipo/enum incor …",
@@ -22916,6 +22924,8 @@
     "supabase/functions/_shared/messaging/dispatch.ts",
     "supabase/functions/_shared/messaging/inbound-actions.test.ts",
     "supabase/functions/_shared/messaging/inbound-actions.ts",
+    "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "supabase/functions/_shared/messaging/inbound-event.ts",
     "supabase/functions/_shared/messaging/inbound.test.ts",
     "supabase/functions/_shared/messaging/inbound.ts",
     "supabase/functions/_shared/messaging/notify-driver.test.ts",
@@ -22967,9 +22977,7 @@
     "supabase/functions/lalamove-api/geocode-fallback.ts",
     "supabase/functions/lalamove-api/index.ts",
     "supabase/functions/lalamove-gateway/index.ts",
-    "supabase/functions/lalamove-gateway/route.test.ts",
-    "supabase/functions/lalamove-gateway/route.ts",
-    "supabase/functions/lalamove-token-refresh/index.ts"
+    "supabase/functions/lalamove-gateway/route.test.ts"
    ]
   },
   {
@@ -23105,7 +23113,8 @@
      "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/send-notification/index.ts",
-     "supabase/functions/simulate-driver-movement/index.ts"
+     "supabase/functions/simulate-driver-movement/index.ts",
+     "supabase/functions/zapp-callback/ledger.ts"
     ],
     "update": [
      "supabase/functions/job-worker/index.ts",
@@ -23146,7 +23155,8 @@
      "supabase/functions/lalamove-gateway/index.ts",
      "supabase/functions/lalamove-token-refresh/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/rotate-tokens/index.ts"
+     "supabase/functions/rotate-tokens/index.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "select": [
      "scripts/seed-database.ts",
@@ -23349,7 +23359,8 @@
    "driver_incidents": {
     "insert": [
      "scripts/seed-database.ts",
-     "src/hooks/useIncidents.ts"
+     "src/hooks/useIncidents.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "select": [
      "scripts/seed-database.ts",
@@ -23414,7 +23425,8 @@
      "src/hooks/useDrivers.ts",
      "src/hooks/useIncidents.ts",
      "supabase/functions/evaluate-driver/index.ts",
-     "supabase/functions/lalamove-webhook/index.ts"
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "upsert": [
      "supabase/functions/lalamove-api/index.ts"
@@ -23579,14 +23591,16 @@
      "supabase/functions/lalamove-api/index.ts",
      "supabase/functions/lalamove-webhook/index.ts",
      "supabase/functions/route-analyzer/index.ts",
-     "supabase/functions/send-notification/index.ts"
+     "supabase/functions/send-notification/index.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "update": [
      "src/hooks/useBitrix24.ts",
      "supabase/functions/job-worker/index.ts",
      "supabase/functions/lalamove-api/coordinates.ts",
      "supabase/functions/lalamove-api/index.ts",
-     "supabase/functions/lalamove-webhook/index.ts"
+     "supabase/functions/lalamove-webhook/index.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "ref": [
      "src/hooks/useGeoSearch.ts"
@@ -23726,6 +23740,9 @@
     ],
     "delete": [
      "src/hooks/useMessaging.ts"
+    ],
+    "insert": [
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ]
    },
    "notification_routes": {
@@ -23882,7 +23899,8 @@
     "insert": [
      "scripts/seed-database.ts",
      "supabase/functions/lalamove-webhook/index.ts",
-     "supabase/functions/simulate-driver-movement/index.ts"
+     "supabase/functions/simulate-driver-movement/index.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts"
     ],
     "select": [
      "scripts/seed-database.ts",
@@ -24008,6 +24026,7 @@
     "next_stop_index",
     "order_id",
     "route_provider",
+    "tracking_ended_at",
     "tracking_status"
    ],
    "alert_configurations": [
@@ -24260,6 +24279,7 @@
     "internal_order_id",
     "lalamove_id",
     "lalamove_status",
+    "metadata",
     "pickup_address",
     "pickup_contact_name",
     "pickup_contact_phone",
@@ -24340,6 +24360,7 @@
     "metadata",
     "order_id",
     "provider_message_id",
+    "recipient_phone",
     "role",
     "status"
    ],
@@ -28503,6 +28524,10 @@
     "text": "sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato —"
    },
    {
+    "file": "supabase/functions/_shared/messaging/inbound-event.ts",
+    "text": "frase volta para o mesmo classificador de texto, entao a regra de negocio"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/inbound.ts",
     "text": "* A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave"
    },
@@ -28881,6 +28906,10 @@
    {
     "file": "supabase/functions/zapp-callback/ledger.ts",
     "text": "para que os testes injetem um fake e exercitem a regra sem banco: e aqui que"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "text": "\"1\" nao pode virar dois carimbos."
    },
    {
     "file": "supabase/functions/zapp-callback/security.ts",
@@ -32449,6 +32478,11 @@
     "file": "supabase/functions/mcp-query/index.ts",
     "name": "VERY_SLOW_MS",
     "value": "8000"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "name": "REPLY_COLUMNS",
+    "value": "\"id,status,order_id,driver_id,stop_id,event,metadata\""
    },
    {
     "file": "supabase/functions/zapp-callback/payload.ts",
@@ -36604,6 +36638,12 @@
     "kind": "escreve"
    },
    {
+    "file": "supabase/functions/zapp-callback/inbound-exec.ts",
+    "field": "type",
+    "value": "DRIVER_NO_CONFIRMATION",
+    "kind": "escreve"
+   },
+   {
     "file": "supabase/functions/zapp-callback/ledger.ts",
     "field": "role",
     "value": "driver",
@@ -37024,6 +37064,24 @@
     "name": "shouldAttachStaticMap",
     "params": "type: string",
     "body": "return MEDIA_ALERT_TYPES.has(type);"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.ts",
+    "name": "applyMetadata",
+    "params": "client: LedgerClient, row: InboundRow, effect: Extract<InboundEffect, { kind: \"order_metadata\" }>, now: string,",
+    "body": "ok: boolean; reason?: string"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.ts",
+    "name": "applyEffect",
+    "params": "client: LedgerClient, row: InboundRow, effect: InboundEffect, now: string,",
+    "body": "applied?: string; skipped?: { reason: string; effect: string }; failed?: { reason: string; effect: string }"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "name": "applyInboundEffects",
+    "params": "client: LedgerClient, write: LedgerWrite, replied: Record<string, unknown> | null, ids: ReplyIds, inserted: ApplyResult,",
+    "body": "const inbound = write.inbound!; const event = typeof replied?.event === \"string\" ? replied.event : null; try { const reply = classifyReply(event, inbound.text ?? \"\", choicesFromMetadata(replied?.metadata)); const position = inbound.location ?? await lookupPosition(client, ids.driverId); const plan = planInboundAction(reply, { orderId: ids.orderId, driverId: ids.driverId, hasDriverPosition: !!position, stopId: ids.stopId, mediaUrl: inbound.mediaUrl, }); const executed = await executeInboundPlan(c …"
    },
    {
     "file": "supabase/functions/zapp-callback/ledger.ts",
@@ -42048,6 +42106,46 @@
     "name": "etapa 116: texto com foto ainda classifica o texto, e a foto vira comprovante"
    },
    {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "M4: responder 1 e coleta confirmada"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "M4: responder 2 e problema"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "M2: responder 1 e confirmacao de que esta a caminho"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "M10: 1 e transito, 2 e problema no veiculo"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "M11 e M7: responder 1 confirma"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "evento sem mapa de opcoes segue palavra-chave"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "digito fora do mapa nao vira opcao"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "SAIR vence qualquer digito"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "sem evento, as opcoes do envio resolvem o digito"
+   },
+   {
+    "file": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+    "name": "choicesForEvent devolve lista vazia para evento desconhecido"
+   },
+   {
     "file": "supabase/functions/_shared/messaging/inbound.test.ts",
     "name": "etapa 113: id da opcao tem prioridade sobre qualquer palavra"
    },
@@ -43348,6 +43446,42 @@
     "name": "replay: heading sempre finito e entre 0 e 360"
    },
    {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: coleta carimba o pedido e grava evento de rastreio"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: carimbo nao sobrescreve o que ja aconteceu"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: problema vira incidente do motorista"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: sem posicao conhecida nao inventa evento de rastreio"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: SAIR grava opt-out e tolera telefone ja cadastrado"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: recusa abre alerta para a operacao"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: recusa pura vira alerta DRIVER_NO_CONFIRMATION"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: foto sem parada fica no inbox, nao inventa comprovante"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+    "name": "etapa 114: ultima resposta do motorista e carimbada"
+   },
+   {
     "file": "supabase/functions/zapp-callback/ledger.test.ts",
     "name": "status delivered atualiza a linha e grava delivered_at"
    },
@@ -43390,6 +43524,14 @@
    {
     "file": "supabase/functions/zapp-callback/ledger.test.ts",
     "name": "erro do update e reportado, nao engolido"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "etapa 114: responder 1 ao M4 carimba a coleta no pedido"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.test.ts",
+    "name": "etapa 114: texto livre nao vira incidente nem alerta"
    },
    {
     "file": "supabase/functions/zapp-callback/payload.test.ts",
@@ -48504,6 +48646,10 @@
    {
     "file": "supabase/functions/zapp-callback/index.ts",
     "limit": "50"
+   },
+   {
+    "file": "supabase/functions/zapp-callback/ledger.ts",
+    "limit": "1"
    }
   ],
   "state_machines": {
@@ -49213,6 +49359,9 @@
      ],
      "TEST": [
       "escreve:supabase/functions/test-notification/index.ts"
+     ],
+     "DRIVER_NO_CONFIRMATION": [
+      "escreve:supabase/functions/zapp-callback/inbound-exec.ts"
      ]
     },
     "step": {
@@ -73339,7 +73488,7 @@
   },
   "supabase/functions/_shared/messaging/inbound-actions.ts": {
    "path": "supabase/functions/_shared/messaging/inbound-actions.ts",
-   "lines": 257,
+   "lines": 264,
    "exports": [
     "interface InboundContext",
     "type IncidentType",
@@ -73370,6 +73519,39 @@
      "body": "return Boolean(ctx.driverId) && ctx.hasDriverPosition;"
     }
    ]
+  },
+  "supabase/functions/_shared/messaging/inbound-event.test.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound-event.test.ts",
+   "lines": 66,
+   "is_test": true,
+   "rule_comments": [
+    "ORDER_EDITED so oferece 1: um \"2\" solto nao pode ser lido como recusa."
+   ],
+   "tests": [
+    "M4: responder 1 e coleta confirmada",
+    "M4: responder 2 e problema",
+    "M2: responder 1 e confirmacao de que esta a caminho",
+    "M10: 1 e transito, 2 e problema no veiculo",
+    "M11 e M7: responder 1 confirma",
+    "evento sem mapa de opcoes segue palavra-chave",
+    "digito fora do mapa nao vira opcao",
+    "SAIR vence qualquer digito",
+    "sem evento, as opcoes do envio resolvem o digito",
+    "choicesForEvent devolve lista vazia para evento desconhecido"
+   ]
+  },
+  "supabase/functions/_shared/messaging/inbound-event.ts": {
+   "path": "supabase/functions/_shared/messaging/inbound-event.ts",
+   "lines": 71,
+   "exports": [
+    "const EVENT_CHOICES",
+    "function choicesForEvent",
+    "function classifyReply"
+   ],
+   "rule_comments": [
+    "frase volta para o mesmo classificador de texto, entao a regra de negocio"
+   ],
+   "doc": "Etapa 113: o que fazer com a resposta quando o template perguntou por numero. O motorista responde \"1\" ou \"2\", nao \"coletado\" nem \"problema\". Sem o mapa do evento que originou a mensagem, um digito solto nao casa com nenhuma palavra- chave e a resposta vira texto livre para um humano ler — foi exata …"
   },
   "supabase/functions/_shared/messaging/inbound.test.ts": {
    "path": "supabase/functions/_shared/messaging/inbound.test.ts",
@@ -77456,9 +77638,92 @@
    ],
    "uses_service_role": true
   },
+  "supabase/functions/zapp-callback/inbound-exec.test.ts": {
+   "path": "supabase/functions/zapp-callback/inbound-exec.test.ts",
+   "lines": 171,
+   "is_test": true,
+   "tests": [
+    "etapa 114: coleta carimba o pedido e grava evento de rastreio",
+    "etapa 114: carimbo nao sobrescreve o que ja aconteceu",
+    "etapa 114: problema vira incidente do motorista",
+    "etapa 114: sem posicao conhecida nao inventa evento de rastreio",
+    "etapa 114: SAIR grava opt-out e tolera telefone ja cadastrado",
+    "etapa 114: recusa abre alerta para a operacao",
+    "etapa 114: recusa pura vira alerta DRIVER_NO_CONFIRMATION",
+    "etapa 114: foto sem parada fica no inbox, nao inventa comprovante",
+    "etapa 114: ultima resposta do motorista e carimbada"
+   ]
+  },
+  "supabase/functions/zapp-callback/inbound-exec.ts": {
+   "path": "supabase/functions/zapp-callback/inbound-exec.ts",
+   "lines": 214,
+   "exports": [
+    "interface InboundRow",
+    "interface ExecuteResult",
+    "function executeInboundPlan"
+   ],
+   "tables": [
+    {
+     "table": "lalamove_orders",
+     "op": "select"
+    },
+    {
+     "table": "lalamove_orders",
+     "op": "update"
+    },
+    {
+     "table": "notification_optouts",
+     "op": "insert"
+    },
+    {
+     "table": "driver_incidents",
+     "op": "insert"
+    },
+    {
+     "table": "tracking_events",
+     "op": "insert"
+    },
+    {
+     "table": "alerts",
+     "op": "insert"
+    },
+    {
+     "table": "drivers",
+     "op": "update"
+    }
+   ],
+   "table_cols": {
+    "lalamove_orders": [
+     "id",
+     "metadata"
+    ],
+    "drivers": [
+     "id"
+    ]
+   },
+   "status_values": [
+    {
+     "field": "type",
+     "value": "DRIVER_NO_CONFIRMATION",
+     "kind": "escreve"
+    }
+   ],
+   "calc_fns": [
+    {
+     "name": "applyMetadata",
+     "params": "client: LedgerClient, row: InboundRow, effect: Extract<InboundEffect, { kind: \"order_metadata\" }>, now: string,",
+     "body": "ok: boolean; reason?: string"
+    },
+    {
+     "name": "applyEffect",
+     "params": "client: LedgerClient, row: InboundRow, effect: InboundEffect, now: string,",
+     "body": "applied?: string; skipped?: { reason: string; effect: string }; failed?: { reason: string; effect: string }"
+    }
+   ]
+  },
   "supabase/functions/zapp-callback/index.ts": {
    "path": "supabase/functions/zapp-callback/index.ts",
-   "lines": 104,
+   "lines": 113,
    "tables": [
     {
      "table": "notification_messages",
@@ -77495,7 +77760,7 @@
   },
   "supabase/functions/zapp-callback/ledger.test.ts": {
    "path": "supabase/functions/zapp-callback/ledger.test.ts",
-   "lines": 225,
+   "lines": 269,
    "is_test": true,
    "tests": [
     "status delivered atualiza a linha e grava delivered_at",
@@ -77508,12 +77773,14 @@
     "outbound_manual atualiza quando a conversa existe",
     "outbound_manual sem conversa e not_found",
     "escrita ignorada nao toca o banco",
-    "erro do update e reportado, nao engolido"
+    "erro do update e reportado, nao engolido",
+    "etapa 114: responder 1 ao M4 carimba a coleta no pedido",
+    "etapa 114: texto livre nao vira incidente nem alerta"
    ]
   },
   "supabase/functions/zapp-callback/ledger.ts": {
    "path": "supabase/functions/zapp-callback/ledger.ts",
-   "lines": 181,
+   "lines": 337,
    "exports": [
     "interface QueryResult",
     "interface LedgerQuery",
@@ -77533,6 +77800,14 @@
     },
     {
      "table": "notification_messages",
+     "op": "select"
+    },
+    {
+     "table": "active_tracking",
+     "op": "select"
+    },
+    {
+     "table": "notification_messages",
      "op": "insert,select"
     },
     {
@@ -77547,11 +77822,24 @@
    "table_cols": {
     "notification_messages": [
      "client_message_id",
+     "direction",
      "id",
      "provider_message_id",
-     "status"
+     "recipient_phone"
+    ],
+    "active_tracking": [
+     "current_latitude",
+     "current_longitude",
+     "driver_id",
+     "tracking_ended_at"
     ]
    },
+   "params": [
+    {
+     "name": "REPLY_COLUMNS",
+     "value": "\"id,status,order_id,driver_id,stop_id,event,metadata\""
+    }
+   ],
    "status_values": [
     {
      "field": "role",
@@ -77570,15 +77858,24 @@
     }
    ],
    "rule_comments": [
-    "para que os testes injetem um fake e exercitem a regra sem banco: e aqui que"
+    "para que os testes injetem um fake e exercitem a regra sem banco: e aqui que",
+    "\"1\" nao pode virar dois carimbos."
    ],
    "doc": "Etapa 96: escrita no ledger `notification_messages` a partir do callback. O client do Supabase entra por interface minima (so o subconjunto que usamos) para que os testes injetem um fake e exercitem a regra sem banco: e aqui que ficam as decisoes que erram caro - achar a linha certa, nao regredir es …",
    "calc_fns": [
+    {
+     "name": "applyInboundEffects",
+     "params": "client: LedgerClient, write: LedgerWrite, replied: Record<string, unknown> | null, ids: ReplyIds, inserted: ApplyResult,",
+     "body": "const inbound = write.inbound!; const event = typeof replied?.event === \"string\" ? replied.event : null; try { const reply = classifyReply(event, inbound.text ?? \"\", choicesFromMetadata(replied?.metadata)); const position = inbound.location ?? await lookupPosition(client, ids.driverId); const plan = planInboundAction(reply, { orderId: ids.orderId, driverId: ids.driverId, hasDriverPosition: !!position, stopId: ids.stopId, mediaUrl: inbound.mediaUrl, }); const executed = await executeInboundPlan(c …"
+    },
     {
      "name": "applyCallback",
      "params": "options: ApplyOptions",
      "body": "const { client, write } = options; if (write.ignore) return { outcome: \"ignored\", reason: write.ignoreReason }; const existing = await findMessage(client, write); if (write.kind === \"status\") { if (!existing) { // Etapa 16: status sem linha conhecida = envio feito por outro caminho // (operator mandou pelo Zapp, ou a linha ainda nao foi criada). Grava a // referencia minima para nao perder o rastro de entrega. return { outcome: \"not_found\", reason: \"mensagem_desconhecida\" }; } const current = ty …"
     }
+   ],
+   "pagination": [
+    "1"
    ]
   },
   "supabase/functions/zapp-callback/payload.test.ts": {
@@ -78745,10 +79042,27 @@
   }
  },
  "git": {
-  "sha": "5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64",
+  "sha": "3f160c344558c7eeed28ab8cbb9f92ae00aeaa39",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "3f160c3",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)",
+    "files": [
+     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
+     "supabase/functions/_shared/messaging/inbound-actions.ts",
+     "supabase/functions/_shared/messaging/inbound-event.test.ts",
+     "supabase/functions/_shared/messaging/inbound-event.ts",
+     "supabase/functions/zapp-callback/inbound-exec.test.ts",
+     "supabase/functions/zapp-callback/inbound-exec.ts",
+     "supabase/functions/zapp-callback/index.ts",
+     "supabase/functions/zapp-callback/ledger.test.ts",
+     "supabase/functions/zapp-callback/ledger.ts"
+    ]
+   },
    {
     "sha": "5ae5aff",
     "date": "2026-11-24",
@@ -79137,31 +79451,12 @@
      "src/utils/exportUtils.ts",
      "vite.config.ts"
     ]
-   },
-   {
-    "sha": "79b206d",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: hardening de dados, timezone, paginação e UX (itens 61/62/63/64/65/68/71/72/75) (#313)",
-    "files": [
-     "docs/planos/PLANO_FRONTEND_190_ETAPAS.md",
-     "package-lock.json",
-     "package.json",
-     "src/components/orders/NewOrderDialog.tsx",
-     "src/hooks/__tests__/useDeliveryMetrics.test.ts",
-     "src/hooks/useCachedStats.ts",
-     "src/hooks/useCommandPaletteSearch.ts",
-     "src/hooks/useDashboardStats.ts",
-     "src/hooks/useDeliveryMetrics.ts",
-     "src/pages/AuthPage.tsx",
-     "src/pages/DashboardRedesigned.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    8
+    9
    ],
    [
     "src/pages/LiveMapPage.tsx",
@@ -79188,8 +79483,16 @@
     3
    ],
    [
-    "src/hooks/useDashboardStats.ts",
-    3
+    "supabase/functions/zapp-callback/index.ts",
+    2
+   ],
+   [
+    "supabase/functions/zapp-callback/ledger.test.ts",
+    2
+   ],
+   [
+    "supabase/functions/zapp-callback/ledger.ts",
+    2
    ],
    [
     "supabase/functions/check-driver-alerts/index.ts",
@@ -79229,14 +79532,6 @@
    ],
    [
     "src/pages/AnalyticsDashboardPage.tsx",
-    2
-   ],
-   [
-    "src/pages/DashboardRedesigned.tsx",
-    2
-   ],
-   [
-    "src/pages/ProfilePage.tsx",
     2
    ]
   ]

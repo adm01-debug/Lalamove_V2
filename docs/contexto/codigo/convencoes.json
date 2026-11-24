@@ -23,7 +23,7 @@
   "testes": [
    "co-localizado (__tests__) (58)",
    "guards em scripts/ (47)",
-   "supabase/functions/<edge> (43)"
+   "supabase/functions/<edge> (45)"
   ],
   "edge_functions": "supabase/functions",
   "migrations": "supabase/migrations",
@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)",
    "feat: aviso de chegada na coleta ao motorista (M4) (#345)",
    "feat: lembrete de pedido agendado e aviso de proxima parada (#344)",
    "feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)",
-   "fix: rota desligada no painel passa a valer no motor (#342)",
-   "fix: paginas de dados mostram erro e botao de tentar novamente (#341)"
+   "fix: rota desligada no painel passa a valer no motor (#342)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

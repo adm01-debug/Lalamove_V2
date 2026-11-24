@@ -947,7 +947,8 @@
     "job-worker",
     "lalamove-webhook",
     "send-notification",
-    "simulate-driver-movement"
+    "simulate-driver-movement",
+    "zapp-callback"
    ],
    "triggers": [],
    "sem_rls": false,
@@ -1619,7 +1620,8 @@
     "lalamove-webhook",
     "rotate-tokens",
     "route-analyzer",
-    "send-notification"
+    "send-notification",
+    "zapp-callback"
    ],
    "triggers": [],
    "sem_rls": false,
@@ -3971,7 +3973,8 @@
    },
    "usada_no_front": 6,
    "usada_em_edges": [
-    "evaluate-driver"
+    "evaluate-driver",
+    "zapp-callback"
    ],
    "triggers": [],
    "sem_rls": false,
@@ -4563,7 +4566,8 @@
     "lalamove-webhook",
     "messaging",
     "route-analyzer",
-    "send-notification"
+    "send-notification",
+    "zapp-callback"
    ],
    "triggers": [
     "audit_drivers_trigger",
@@ -6651,7 +6655,8 @@
     "lalamove-webhook",
     "messaging",
     "route-analyzer",
-    "send-notification"
+    "send-notification",
+    "zapp-callback"
    ],
    "triggers": [
     "on_order_status_change_sync_bitrix24",
@@ -9186,7 +9191,9 @@
     "so_no_types": []
    },
    "usada_no_front": 1,
-   "usada_em_edges": [],
+   "usada_em_edges": [
+    "zapp-callback"
+   ],
    "triggers": [],
    "sem_rls": false,
    "nao_usada": false
@@ -11201,7 +11208,8 @@
    "usada_em_edges": [
     "job-worker",
     "lalamove-webhook",
-    "simulate-driver-movement"
+    "simulate-driver-movement",
+    "zapp-callback"
    ],
    "triggers": [],
    "sem_rls": false,

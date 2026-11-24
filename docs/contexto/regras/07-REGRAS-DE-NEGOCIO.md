@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `5ae5aff52e` · branch `main` · 2026-11-24 04:08 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `3f160c3445` · branch `main` · 2026-11-24 10:02 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -660,6 +660,7 @@ _nenhum mapa explícito encontrado — transições só existem implicitamente n
 | `type` | `Carro` | compara | `src/pages/reports/ReportDistributionTab.tsx` |
 | `type` | `DAMAGE` | compara | `supabase/functions/_shared/messaging/inbound-actions.ts` |
 | `type` | `DRIVER_BLOCKED` | escreve | `supabase/functions/evaluate-driver/index.ts` |
+| `type` | `DRIVER_NO_CONFIRMATION` | escreve | `supabase/functions/zapp-callback/inbound-exec.ts` |
 | `type` | `DRIVER_STOPPED` | escreve, filtra | `supabase/functions/check-driver-alerts/index.ts` |
 | `type` | `Feature` | escreve | `src/components/map/LiveMap.tsx`<br>`src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/hooks/useMapMarkers.ts`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>… +2 |
 | `type` | `FeatureCollection` | escreve | `src/components/map/OrderTrackingMap.tsx`<br>`src/components/map/mapLayers.ts`<br>`src/components/reports/GeoHeatmap.tsx`<br>`src/hooks/useMapbox.ts`<br>`src/pages/HeatmapPage.tsx` |
@@ -1390,6 +1391,18 @@ _nenhum item encontrado_
   ```
   return MEDIA_ALERT_TYPES.has(type);
   ```
+- **applyMetadata(client: LedgerClient, row: InboundRow, effect: Extract<InboundEffect, { kind: "order_metadata" }>, now: string,)** — `supabase/functions/zapp-callback/inbound-exec.ts`
+  ```
+  ok: boolean; reason?: string
+  ```
+- **applyEffect(client: LedgerClient, row: InboundRow, effect: InboundEffect, now: string,)** — `supabase/functions/zapp-callback/inbound-exec.ts`
+  ```
+  applied?: string; skipped?: { reason: string; effect: string }; failed?: { reason: string; effect: string }
+  ```
+- **applyInboundEffects(client: LedgerClient, write: LedgerWrite, replied: Record<string, unknown> | null, ids: ReplyIds, inserted: ApplyResult,)** — `supabase/functions/zapp-callback/ledger.ts`
+  ```
+  const inbound = write.inbound!; const event = typeof replied?.event === "string" ? replied.event : null; try { const reply = classifyReply(event, inbound.text ?? "", choicesFromMetadata(replied?.metadata)); const position = inbound.location ?? await lookupPosition(client, ids.driverId); const plan = planInboundAction(reply, { orderId: ids.orderId, driverId: ids.driverId, hasDriverPosition: !!position, stopId: ids.stopId, mediaUrl: inbound.mediaUrl, }); const executed = await executeInboundPlan(c …
+  ```
 - **applyCallback(options: ApplyOptions)** — `supabase/functions/zapp-callback/ledger.ts`
   ```
   const { client, write } = options; if (write.ignore) return { outcome: "ignored", reason: write.ignoreReason }; const existing = await findMessage(client, write); if (write.kind === "status") { if (!existing) { // Etapa 16: status sem linha conhecida = envio feito por outro caminho // (operator mandou pelo Zapp, ou a linha ainda nao foi criada). Grava a // referencia minima para nao perder o rastro de entrega. return { outcome: "not_found", reason: "mensagem_desconhecida" }; } const current = ty …
@@ -1533,6 +1546,7 @@ _nenhum item encontrado_
 | `WEBHOOK_MAX_AGE_MS` | `5` | `supabase/functions/lalamove-webhook/index.ts` |
 | `SLOW_MS` | `3000` | `supabase/functions/mcp-query/index.ts` |
 | `VERY_SLOW_MS` | `8000` | `supabase/functions/mcp-query/index.ts` |
+| `REPLY_COLUMNS` | `"id,status,order_id,driver_id,stop_id,event,metadata"` | `supabase/functions/zapp-callback/ledger.ts` |
 | `PREVIEW_MAX` | `280` | `supabase/functions/zapp-callback/payload.ts` |
 | `REPLAY_WINDOW_SECONDS` | `5` | `supabase/functions/zapp-callback/security.ts` |
 
@@ -1700,6 +1714,7 @@ _nenhum item encontrado_
 | 1 | `supabase/functions/send-notification/index.ts` |
 | 1 | `supabase/functions/test-notification/index.ts` |
 | 50 | `supabase/functions/zapp-callback/index.ts` |
+| 1 | `supabase/functions/zapp-callback/ledger.ts` |
 
 ## I. Regras implícitas em mensagens de erro/validação
 
@@ -2049,7 +2064,7 @@ _nenhum item encontrado_
 | `service_role` | `supabase/functions/simulate-driver-movement/index.ts` |
 | `admin` | `supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql` |
 
-## K. Testes como especificação (1475 testes em 129 arquivos — nomes completos em `context.json`)
+## K. Testes como especificação (1496 testes em 131 arquivos — nomes completos em `context.json`)
 
 | Arquivo | Testes | Exemplos do que o sistema DEVE fazer |
 |---|---|---|
@@ -2093,6 +2108,7 @@ _nenhum item encontrado_
 | `scripts/db-audit/database-identity.test.mjs` | 13 | fingerprint versionado corresponde ao projeto oficial documentado · extrai project-ref do host direto sem depender de senha · extrai project-ref do usuario do pooler · rejeita host parecido que nao e Supabase Cloud … |
 | `src/lib/__tests__/lalamoveReasons.test.ts` | 13 | motivos canônicos Lalamove · todo motivo tem rótulo PT-BR (nenhum fallback para o código) · não há códigos duplicados dentro de cada lista · as opções de UI espelham exatamente o contrato … |
 | `supabase/functions/lalamove-api/coordinates.test.ts` | 13 | stopsCoords converte as coordenadas string da Lalamove em numero · stopsCoords preserva a ordem das paradas (indice = stop_index) · stopsCoords anula 0,0 — placeholder que a Lalamove rejeita · stopsCoords anula coordenada invalida em vez de gravar NaN … |
+| `supabase/functions/zapp-callback/ledger.test.ts` | 13 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `supabase/functions/zapp-callback/security.test.ts` | 13 | parseSignatureHeader le t e v1 · parseSignatureHeader aceita espacos e ordem invertida · parseSignatureHeader rejeita header ausente ou malformado · timingSafeEqual compara conteudo e tamanho … |
 | `supabase/functions/job-worker/eta-cadence.test.ts` | 12 | nunca medido: nao pula (primeira medicao sempre acontece) · ETA na janela de aproximacao sempre mede, mesmo recem-medido e parado · ETA 15 (fronteira) ainda mede; 16 ja entra na regra de custo · motorista andou mais de 300 m: mede mesmo com ETA alto … |
 | `supabase/functions/lalamove-api/geocode-fallback.test.ts` | 12 | geocodeAddress devolve coordenada e place_id do gateway · geocodeAddress marca revisao quando o endereco nao tem numero · geocodeAddress marca revisao com precisao baixa · geocodeAddress nao marca revisao com precisao exact e numero … |
@@ -2103,12 +2119,12 @@ _nenhum item encontrado_
 | `src/lib/geo-gateway.test.ts` | 11 | countMapLoad · chama geo-gateway com a action count-map-load e o provider informado · nunca lança quando invoke retorna error (telemetria best-effort) · nunca lança quando invoke rejeita (ex.: rede fora) … |
 | `supabase/functions/_shared/channels/sms.test.ts` | 11 | toGsm7 remove acento para nao pagar 2 segmentos · smsSegments conta 160 no primeiro e 153 nos seguintes · composeSmsText corta no espaco e sinaliza truncamento · composeSmsText nao trunca mensagem curta … |
 | `supabase/functions/geo-admin/rotation.test.ts` | 11 | tokenKind separa segredo, publico e temporario · kindOfListedToken usa  · tokenFingerprint nao expoe o valor: prefixo, sufixo e tamanho · tokenFingerprint aguenta valor curto e vazio sem estourar … |
-| `supabase/functions/zapp-callback/ledger.test.ts` | 11 | status delivered atualiza a linha e grava delivered_at · status atrasado nao regride o ledger · status de mensagem desconhecida nao inventa linha · status failed grava failed_at e o codigo do erro … |
 | `scripts/db-audit/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `scripts/lib/seguranca-processo.test.mjs` | 10 | resolverExecutavel devolve caminho absoluto existente igual ao do shell · resolverExecutavel lanca para comando inexistente · estaDentro aceita a raiz e subpastas · estaDentro recusa  … |
 | `src/components/map/__tests__/mapLayers.test.ts` | 10 | setupMapLayers · adiciona sources e layers de zonas de risco, heatmap e geofence · adiciona a camada de tráfego somente quando showTraffic=true · é idempotente: não recria sources já existentes … |
 | `src/hooks/__tests__/useRegionResolver.test.ts` | 10 | coordKey · arredonda para 3 casas decimais (~110m) · agrupa coordenadas muito próximas na mesma chave · gera chaves distintas para pontos distantes … |
 | `src/pages/MessagingSettingsPage.test.tsx` | 10 | MessagingSettingsPage (etapas 141-151 do plano de mensageria) · mostra carregamento enquanto a configuracao nao chegou · erro de leitura mostra o motivo e o botao de tentar novamente · config salva lista os bloqueios que impedem o envio real … |
+| `supabase/functions/_shared/messaging/inbound-event.test.ts` | 10 | M4: responder 1 e coleta confirmada · M4: responder 2 e problema · M2: responder 1 e confirmacao de que esta a caminho · M10: 1 e transito, 2 e problema no veiculo … |
 | `supabase/functions/_shared/messaging/registry.test.ts` | 10 | etapa 88: tabela ausente devolve o catalogo do codigo · etapa 88: tabela vazia tambem cai no catalogo do codigo · etapa 88: rota do banco e lida e canal desconhecido e descartado · etapa 145: rota desligada continua vindo do banco com is_enabled falso … |
 | `scripts/db-audit/check-screen-permission-db-guards.test.mjs` | 9 | cruza permissao e papel da tela com a trava no banco e marca TRAVADA / SEM TRAVA · ignora papel ARIA, papel de mensagem e permissao que so aparece em teste da tela · declara o vocabulario de papeis lido do enum app_role · resume a contagem e lista a trava do banco que a tela ainda nao usa … |
 | `src/components/map/__tests__/MapSettingsPanel.test.tsx` | 9 | MapSettingsPanel Integration · renders correctly when shown · updates sliders correctly · handles save action with loading state … |
@@ -2125,6 +2141,7 @@ _nenhum item encontrado_
 | `supabase/functions/_shared/messaging/notify-driver.test.ts` | 9 | etapa 86: pedido vira variaveis do catalogo · etapa 86: pedido incompleto nao inventa valor nem placeholder vazio · etapa 86: pedido sem uuid nao consulta nada · motorista desconhecido nao gera mensagem … |
 | `supabase/functions/job-worker/geo-backfill-orders.test.ts` | 9 | grava coordenada de coleta e entrega e marca provedor/precisão · endereço sem número liga requires_address_review · precisão low liga requires_address_review · lado que já tem coordenada não é recotado nem sobrescrito … |
 | `supabase/functions/send-notification/message-id.test.ts` | 9 | etapa 89: mesmo evento devolve o mesmo id (idempotência) · etapa 89: telefone com máscara não muda o id · etapa 89: eventos diferentes geram ids diferentes · etapa 89: papéis diferentes no mesmo telefone geram ids diferentes … |
+| `supabase/functions/zapp-callback/inbound-exec.test.ts` | 9 | etapa 114: coleta carimba o pedido e grava evento de rastreio · etapa 114: carimbo nao sobrescreve o que ja aconteceu · etapa 114: problema vira incidente do motorista · etapa 114: sem posicao conhecida nao inventa evento de rastreio … |
 | `src/components/map/hooks/__tests__/useGoogleMapsLoader.test.ts` | 8 | useGoogleMapsLoader · reporta não configurado quando falta a chave do conector · respeita a chave injetada via env do conector · resolve imediatamente quando window.google já existe … |
 | `src/components/map/hooks/__tests__/useMapMarkers.test.ts` | 8 | useMapMarkers · cria um marker por veículo quando o mapa está vivo · não cria markers enquanto o loading do mapa é true · não toca em mapa destruído (regressão do appendChild no StrictMode) … |
 | `src/hooks/__tests__/useDeliveryMetrics.test.ts` | 8 | useDeliveryMetrics · deve calcular métricas de entrega corretamente · deve retornar zeros sem dados · deve propagar erro do supabase … |
@@ -2434,6 +2451,7 @@ _nenhum item encontrado_
 | Nunca lança: falta de secret não pode derrubar o despacho de alerta. | `supabase/functions/_shared/channels/zapp.ts` |
 | hora. Erro que pode passar (rate limit, timeout) espera o fallback | `supabase/functions/_shared/messaging/dispatch.ts` |
 | sai daqui. Manter a regra fora do I/O e o que permite testar o caso chato — | `supabase/functions/_shared/messaging/inbound-actions.ts` |
+| frase volta para o mesmo classificador de texto, entao a regra de negocio | `supabase/functions/_shared/messaging/inbound-event.ts` |
 | * A ordem importa e e a regra de negocio: id de opcao -> numero -> palavra-chave | `supabase/functions/_shared/messaging/inbound.ts` |
 | não deve virar confirmação de chegada. Quem decide onde gravar (stop_proofs ou | `supabase/functions/_shared/messaging/inbound.ts` |
 | de um pedido e uma falha de mensagem nao pode derrubar o pedido. | `supabase/functions/_shared/messaging/notify-driver.ts` |
@@ -2529,6 +2547,7 @@ _nenhum item encontrado_
 | de banco nao pode virar uma fila de retentativas identicas. | `supabase/functions/zapp-callback/index.ts` |
 | 200 de proposito: evento que nao sabemos tratar nao pode ser reenviado | `supabase/functions/zapp-callback/index.ts` |
 | para que os testes injetem um fake e exercitem a regra sem banco: e aqui que | `supabase/functions/zapp-callback/ledger.ts` |
+| "1" nao pode virar dois carimbos. | `supabase/functions/zapp-callback/ledger.ts` |
 | * Igual ao webhook da Lalamove, a validacao e fail-closed: sem | `supabase/functions/zapp-callback/security.ts` |
 | Zapp adiantado em segundos nao pode virar 401 intermitente. | `supabase/functions/zapp-callback/security.ts` |
 | INTO sync_record FROM bitrix24_sync WHERE order_id = NEW.id LIMIT 1; | `supabase/migrations/20251224183135_7bee6f7f-f6a0-4c50-8a8e-e08a57ff2b25.sql` |

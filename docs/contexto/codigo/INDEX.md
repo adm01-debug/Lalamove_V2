@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `5ae5aff52ec4815a41eee7aeece6c7a6f65f7e64` (2026-11-24T01:07:58-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `3f160c344558c7eeed28ab8cbb9f92ae00aeaa39` (2026-11-24T07:01:55-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (592), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (596), SQL (204), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1105 |
-| arquivos_codigo | 705 |
-| linhas_codigo | 139418 |
+| arquivos_total | 1109 |
+| arquivos_codigo | 709 |
+| linhas_codigo | 140156 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -49,7 +49,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | tabelas | 93 |
 | migrations | 193 |
 | cron_jobs | 24 |
-| testes | 179 |
+| testes | 181 |
 | workflows | 5 |
 | scripts | 107 |
 | docs_md | 114 |
@@ -59,7 +59,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - componentes: src/components (129), src/pages (88), src/hooks (3)
 - hooks: src/hooks (86), src/components (13), scripts/ai-context (1)
 - servicos_logica: src/lib (29), src/utils (6), src/integrations (4)
-- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (43)
+- testes: co-localizado (__tests__) (58), guards em scripts/ (47), supabase/functions/<edge> (45)
 - edge_functions: supabase/functions
 - migrations: supabase/migrations
 - scripts: scripts/ci (29), scripts/db-audit (20), scripts/inventario (5)
@@ -78,7 +78,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 62 | 8 | 0 | 0 |
-| functions | 0 | 0 | 70 | 0 | 6 | 47 |
+| functions | 0 | 0 | 72 | 0 | 6 | 48 |
 | hooks | 0 | 0 | 87 | 232 | 15 | 54 |
 | lib | 0 | 0 | 29 | 8 | 3 | 0 |
 | pages | 49 | 56 | 57 | 211 | 14 | 54 |
@@ -227,7 +227,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `send-notification` [Notificações/Alertas] — tabelas: active_tracking, alert_configurations, alerts, alerts_sent, bitrix24_tokens, drivers, geo_defaults, job_queue, lalamove_orders, order_geo_events; chamada por 1 arquivo(s) do front
 - `simulate-driver-movement` [Motoristas] — tabelas: active_tracking, tracking_events, user_roles; chamada por 1 arquivo(s) do front
 - `test-notification` [Notificações/Alertas] — tabelas: bitrix24_tokens; chamada por 2 arquivo(s) do front
-- `zapp-callback` — tabelas: notification_messages; chamada por 0 arquivo(s) do front — **ÓRFÃ**
+- `zapp-callback` — tabelas: active_tracking, alerts, driver_incidents, drivers, lalamove_orders, notification_messages, notification_optouts, tracking_events; chamada por 0 arquivo(s) do front — **ÓRFÃ**
 
 ## Cron jobs (pg_cron)
 - `check-driver-alerts` */2 * * * * (20261123190000_cron_check_driver_alerts.sql)
@@ -288,12 +288,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - scripts_orfaos: 3 — ex.: scripts/deploy-gateway.ps1, scripts/fix_corrupted_imports.py, scripts/fix_logs.py
 - scripts_soltos_na_raiz: 29 — ex.: scripts/add-security-manage.ts, scripts/apply-dashboard-fixes.ts, scripts/apply-final-sql.ts
 - env_usadas_nao_declaradas: 5 — ex.: DEV, PROD, VITE_APP_VERSION
-- ciclos_de_import: 1
+- ciclos_de_import: 2
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9837 nós · 20334 arestas · 698 comunidades · grafo do commit `5ae5aff5`
-- comunidades maiores: cn (265), button.tsx (149), client.ts (137), MessagingSettingsPage.tsx (107), snapshot.py (104), ref_https (97), lucide-react (95), ref_node_path (95), 4. Componentes, hooks, libs e estado — **revisado** (88), App.tsx (86), send-notification/index.ts (82), dependencies (81)
+- 9861 nós · 20417 arestas · 696 comunidades · grafo do commit `3f160c34`
+- comunidades maiores: cn (269), App.tsx (157), button.tsx (142), card.tsx (114), snapshot.py (106), ref_node_url (94), ref_https (91), 4. Componentes, hooks, libs e estado — **revisado** (86), send-notification/index.ts (82), client.ts (82), dependencies (81), AdvancedReportsPage.tsx (79)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -307,11 +307,11 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - supabase/functions/job-worker/index.ts (13)
 - supabase/functions/send-notification/index.ts (12)
 - docs/planos/PLANO_MAPBOX_100_ETAPAS.md (11)
+- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (11)
 - src/components/orders/NewOrderDialog.tsx (11)
 - supabase/functions/_shared/schemas.ts (11)
 - supabase/functions/geo-gateway/index.ts (11)
 - docs/pendencias/_ordem.md (10)
-- docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md (10)
 
 ## Workflows
 - `apply-migrations.yml` — Apply Migrations (manual) (workflow_dispatch)
@@ -395,6 +395,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `3f160c3` feat: resposta do motorista vira acao no pedido (etapas 113 e 114) (#346)
 - 2026-11-24 `5ae5aff` feat: aviso de chegada na coleta ao motorista (M4) (#345)
 - 2026-11-24 `d882d05` feat: lembrete de pedido agendado e aviso de proxima parada (#344)
 - 2026-11-24 `b77ccd9` feat: motor avisa o motorista em atraso de ETA e falta de comprovante (#343)
@@ -409,7 +410,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-23 `a1e0893` fix: estado de erro e retry nas paginas que ficavam em branco (#334)
 - 2026-11-23 `63cda83` feat: motor de mensageria ao motorista (bloco 7) (#333)
 - 2026-11-23 `ac2a2af` feat: fundacao do banco de mensageria ao motorista (bloco 6) (#332)
-- 2026-11-23 `f5779da` fix: torna deterministico o teste de fronteira do ETA_DELAY (#331)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

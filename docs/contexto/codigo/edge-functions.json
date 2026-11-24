@@ -29,6 +29,8 @@
   "supabase/functions/_shared/messaging/dispatch.ts",
   "supabase/functions/_shared/messaging/inbound-actions.test.ts",
   "supabase/functions/_shared/messaging/inbound-actions.ts",
+  "supabase/functions/_shared/messaging/inbound-event.test.ts",
+  "supabase/functions/_shared/messaging/inbound-event.ts",
   "supabase/functions/_shared/messaging/inbound.test.ts",
   "supabase/functions/_shared/messaging/inbound.ts",
   "supabase/functions/_shared/messaging/notify-driver.test.ts",
@@ -1236,8 +1238,8 @@
    "nome": "zapp-callback",
    "servico": null,
    "entrada": "supabase/functions/zapp-callback/index.ts",
-   "arquivos": 4,
-   "linhas": 655,
+   "arquivos": 5,
+   "linhas": 1034,
    "verify_jwt": true,
    "metodos": [
     "GET",
@@ -1247,7 +1249,14 @@
    "assina_hmac": true,
    "usa_service_role": true,
    "tabelas": [
-    "notification_messages"
+    "active_tracking",
+    "alerts",
+    "driver_incidents",
+    "drivers",
+    "lalamove_orders",
+    "notification_messages",
+    "notification_optouts",
+    "tracking_events"
    ],
    "rpcs": [],
    "env": [
@@ -1260,13 +1269,16 @@
    "hosts_externos": [],
    "usa_shared": [
     "cors.ts",
+    "inbound-actions.ts",
+    "inbound-event.ts",
+    "inbound.ts",
     "logger.ts"
    ],
    "chamada_pelo_front": [],
    "chamada_por_edges": [],
    "chamada_por_sql_ou_cron": false,
    "orfa": true,
-   "testes": 3
+   "testes": 4
   }
  ],
  "chamadas_sem_pasta": []
