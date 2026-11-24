@@ -315,6 +315,38 @@ export function useNotificationLedger(status: string, limit = 100) {
   });
 }
 
+/** Resultado do botao "enviar teste" (edge test-notification). */
+export interface TestMessageResult {
+  success: boolean;
+  message: string;
+}
+
+/**
+ * Dispara o teste de WhatsApp pelo mesmo caminho do motor (Zapp -> Evolution,
+ * ver `_shared/channels/whatsapp-test.ts`). A edge devolve 200 mesmo quando o
+ * provedor recusa, para o operador ler o motivo; so falha de transporte vira
+ * erro de mutation.
+ */
+export function useSendTestWhatsApp() {
+  return useMutation({
+    mutationFn: async (input: { phone: string; alertType?: string }): Promise<TestMessageResult> => {
+      const { data, error } = await supabase.functions.invoke('test-notification', {
+        body: {
+          channel: 'whatsapp',
+          alertType: input.alertType ?? 'TESTE_PAINEL',
+          recipients: [input.phone],
+        },
+      });
+      if (error) throw new Error(error.message || 'Falha ao chamar test-notification');
+      const result = data as TestMessageResult | null;
+      if (!result || typeof result.success !== 'boolean') {
+        throw new Error('Resposta invalida de test-notification');
+      }
+      return result;
+    },
+  });
+}
+
 /** Segmentos SMS: 160 caracteres por segmento (etapa dos templates SMS). */
 export function smsSegments(text: string): number {
   if (!text.trim()) return 0;
