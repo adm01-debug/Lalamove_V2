@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "b70d14537836943907ba3f07225f5f4e59aae2d6",
+  "commit": "e340ad415dd6dbaa88931def8c46c3520965158f",
   "branch": "main",
-  "data_commit": "2026-11-24T17:26:53-03:00",
+  "data_commit": "2026-11-24T17:56:13-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "e340ad4",
+    "data": "2026-11-24",
+    "assunto": "chore: reconcilia versoes de migration aplicadas direto no banco (#372)"
+   },
    {
     "sha": "b70d145",
     "data": "2026-11-24",
@@ -126,14 +131,9 @@
     "sha": "49e4bc3",
     "data": "2026-11-24",
     "assunto": "fix: topic unico em todo canal realtime de nome fixo (#348)"
-   },
-   {
-    "sha": "0e04753",
-    "data": "2026-11-24",
-    "assunto": "fix: ledger reservado antes do envio ao motorista (#347)"
    }
   ],
-  "arquivos_mudados_7d": 512,
+  "arquivos_mudados_7d": 520,
   "pastas_mais_mudadas_30d": [
    {
     "pasta": "supabase/functions/_shared",
@@ -215,11 +215,11 @@
    },
    {
     "arquivo": ".github/workflows/ci.yml",
-    "mudancas": 21
+    "mudancas": 20
    },
    {
     "arquivo": "supabase/config.toml",
-    "mudancas": 18
+    "mudancas": 17
    },
    {
     "arquivo": "supabase/functions/job-worker/index.ts",
@@ -254,10 +254,6 @@
     "mudancas": 13
    },
    {
-    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
-    "mudancas": 13
-   },
-   {
     "arquivo": "src/App.tsx",
     "mudancas": 12
    },
@@ -267,6 +263,10 @@
    },
    {
     "arquivo": "supabase/functions/lalamove-api/index.ts",
+    "mudancas": 12
+   },
+   {
+    "arquivo": "supabase/functions/lalamove-webhook/index.ts",
     "mudancas": 12
    },
    {
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 272
+    "commits": 273
    },
    {
     "autor": "dependabot[bot]",
@@ -310,7 +310,7 @@
   ]
  },
  "contagens": {
-  "arquivos_total": 1125,
+  "arquivos_total": 1134,
   "arquivos_codigo": 721,
   "linhas_codigo": 142583,
   "rotas": 57,
@@ -322,7 +322,7 @@
   "hooks": 102,
   "edge_functions": 28,
   "tabelas": 94,
-  "migrations": 195,
+  "migrations": 204,
   "cron_jobs": 24,
   "testes": 187,
   "workflows": 5,

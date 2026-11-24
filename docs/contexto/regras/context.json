@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "b70d14537836943907ba3f07225f5f4e59aae2d6",
+  "sha": "e340ad415dd6dbaa88931def8c46c3520965158f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 20:27 UTC",
-  "files_total": 1119,
-  "code_files": 936,
-  "code_lines": 164407
+  "generated_at": "2026-11-24 20:56 UTC",
+  "files_total": 1128,
+  "code_files": 945,
+  "code_lines": 164488
  },
  "version": "1.3.2",
- "facts_hash": "87a9a6fd9e9da2c4",
+ "facts_hash": "70f6714058fe37d6",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -189,7 +189,7 @@
   "languages": {
    ".ts": 362,
    ".tsx": 245,
-   ".sql": 206,
+   ".sql": 215,
    ".mjs": 110,
    ".py": 8,
    ".js": 4,
@@ -15288,6 +15288,7 @@
   },
   "sources": [
    "supabase/migrations/20241231000000_saved_filters.sql",
+   "supabase/migrations/20241231000001_entity_versions.sql",
    "supabase/migrations/20250102000001_saved_filters.sql",
    "supabase/migrations/20250102000002_cache_system_complete.sql",
    "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
@@ -15369,6 +15370,7 @@
    "supabase/migrations/20260712194831_1bd67c8e-482f-4a15-abfc-6f3986b33611.sql",
    "supabase/migrations/20260712194900_44309c44-9b9e-4254-bcce-4ebe25dee988.sql",
    "supabase/migrations/20260712195158_5036362f-ae4c-47ea-9ce7-bdd73c191965.sql",
+   "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql",
    "supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql",
    "supabase/migrations/20260712195426_4e8118ed-6c2f-468d-b9c8-97fe03b68699.sql",
    "supabase/migrations/20260712200027_6900097d-9856-4269-be08-62c31400f688.sql",
@@ -15431,27 +15433,34 @@
    "supabase/migrations/20260723174458_e560333f-b0f9-4563-96a8-8303780ef30f.sql",
    "supabase/migrations/20260723174521_e57bfc01-fd6e-45e2-b2bb-a4464a64c800.sql",
    "supabase/migrations/20260723174659_4789ffba-0e7e-48df-a9ab-79b502e49d1e.sql",
+   "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql",
    "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql",
    "supabase/migrations/20260726162225_ee473b1b-27ac-43c6-9548-ad89eede55d5.sql",
    "supabase/migrations/20260726183530_dba04ac0-388f-4e70-972f-15110f056791.sql",
    "supabase/migrations/20260813124905_c5b09dca-c763-4783-a303-91433b536b1c.sql",
    "supabase/migrations/20260813125422_795480be-987b-45ae-8e7f-e81ab020ce23.sql",
    "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql",
+   "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql",
    "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
    "supabase/migrations/20260828000004_populate_permissions.sql",
+   "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
    "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
    "supabase/migrations/20261109004100_add_security_tables_to_realtime.sql",
    "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
    "supabase/migrations/20261121100000_add_table_comments.sql",
+   "supabase/migrations/20261121190000_validate_service_type_constraint.sql",
    "supabase/migrations/20261121192500_restore_audit_log.sql",
    "supabase/migrations/20261121193000_fix_escalation_pipeline.sql",
    "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
    "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
+   "supabase/migrations/20261122005314_fix_alert_configs_anon_insert.sql",
+   "supabase/migrations/20261122005320_fix_public_rls_bypass.sql",
    "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql",
    "supabase/migrations/20261122090000_cache_system_backend.sql",
    "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
+   "supabase/migrations/20261122111505_revoke_anon_geo_rpcs_v2_ledger_parity.sql",
    "supabase/migrations/20261122120000_baseline_order_status_values.sql",
    "supabase/migrations/20261122120100_lalamove_integration_columns.sql",
    "supabase/migrations/20261122120200_job_queue_system.sql",
@@ -23112,8 +23121,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 195,
-   "lines": 13840,
+   "files": 204,
+   "lines": 13921,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -23121,6 +23130,7 @@
    "imports_modules": [],
    "file_list": [
     "supabase/migrations/20241231000000_saved_filters.sql",
+    "supabase/migrations/20241231000001_entity_versions.sql",
     "supabase/migrations/20250102000001_saved_filters.sql",
     "supabase/migrations/20250102000002_cache_system_complete.sql",
     "supabase/migrations/20251224143803_3b1f0374-1b95-4fba-a31b-f44a9fd14494.sql",
@@ -23198,8 +23208,7 @@
     "supabase/migrations/20260712115352_f2e122a3-0fb1-45e2-878c-d5b1c726e753.sql",
     "supabase/migrations/20260712115419_13f7b360-c360-415a-8e19-fd5a59d701eb.sql",
     "supabase/migrations/20260712115647_ca94455a-fb7b-4bf3-b990-14efd298a5b1.sql",
-    "supabase/migrations/20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql",
-    "supabase/migrations/20260712194831_1bd67c8e-482f-4a15-abfc-6f3986b33611.sql"
+    "supabase/migrations/20260712191718_936be1d2-95d1-4a12-95c0-77802fd64e45.sql"
    ]
   },
   {
@@ -51976,6 +51985,7 @@
    "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "supabase/migrations/20260828000002_dashboard_fixes.sql",
    "supabase/migrations/20260828000003_comprehensive_rls_fix.sql",
+   "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
    "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
    "supabase/migrations/20261121192500_restore_audit_log.sql",
    "supabase/migrations/20261121194500_geo_jobs_scheduler.sql",
@@ -79092,6 +79102,10 @@
    "path": "supabase/migrations/20241231000000_saved_filters.sql",
    "lines": 108
   },
+  "supabase/migrations/20241231000001_entity_versions.sql": {
+   "path": "supabase/migrations/20241231000001_entity_versions.sql",
+   "lines": 9
+  },
   "supabase/migrations/20250102000001_saved_filters.sql": {
    "path": "supabase/migrations/20250102000001_saved_filters.sql",
    "lines": 67
@@ -79493,6 +79507,10 @@
    "path": "supabase/migrations/20260712195158_5036362f-ae4c-47ea-9ce7-bdd73c191965.sql",
    "lines": 8
   },
+  "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql": {
+   "path": "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql",
+   "lines": 9
+  },
   "supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql": {
    "path": "supabase/migrations/20260712195355_29d8addb-637f-453a-a340-408fab3d621b.sql",
    "lines": 96,
@@ -79788,6 +79806,10 @@
    "path": "supabase/migrations/20260723174659_4789ffba-0e7e-48df-a9ab-79b502e49d1e.sql",
    "lines": 3
   },
+  "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql": {
+   "path": "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql",
+   "lines": 9
+  },
   "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql": {
    "path": "supabase/migrations/20260723174804_fdc57530-908c-4784-9758-01d59f616f3b.sql",
    "lines": 48,
@@ -79825,6 +79847,10 @@
    "path": "supabase/migrations/20260813143344_cc47eddb-ab94-4fd2-88c4-c1b0c4e9c1c0.sql",
    "lines": 22
   },
+  "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql": {
+   "path": "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql",
+   "lines": 9
+  },
   "supabase/migrations/20260828000001_seed_fix_rls.sql": {
    "path": "supabase/migrations/20260828000001_seed_fix_rls.sql",
    "lines": 114,
@@ -79844,6 +79870,11 @@
    "path": "supabase/migrations/20260828000004_populate_permissions.sql",
    "lines": 102
   },
+  "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql": {
+   "path": "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
+   "lines": 9,
+   "uses_service_role": true
+  },
   "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql": {
    "path": "supabase/migrations/20260902000000_harden_revoke_anon_grants.sql",
    "lines": 28,
@@ -79860,6 +79891,10 @@
   "supabase/migrations/20261121100000_add_table_comments.sql": {
    "path": "supabase/migrations/20261121100000_add_table_comments.sql",
    "lines": 62
+  },
+  "supabase/migrations/20261121190000_validate_service_type_constraint.sql": {
+   "path": "supabase/migrations/20261121190000_validate_service_type_constraint.sql",
+   "lines": 9
   },
   "supabase/migrations/20261121192500_restore_audit_log.sql": {
    "path": "supabase/migrations/20261121192500_restore_audit_log.sql",
@@ -79894,6 +79929,14 @@
    "path": "supabase/migrations/20261121201800_indices_alert_id_created_by.sql",
    "lines": 13
   },
+  "supabase/migrations/20261122005314_fix_alert_configs_anon_insert.sql": {
+   "path": "supabase/migrations/20261122005314_fix_alert_configs_anon_insert.sql",
+   "lines": 9
+  },
+  "supabase/migrations/20261122005320_fix_public_rls_bypass.sql": {
+   "path": "supabase/migrations/20261122005320_fix_public_rls_bypass.sql",
+   "lines": 9
+  },
   "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql": {
    "path": "supabase/migrations/20261122013022_geo_place_id_provider_prefix.sql",
    "lines": 39,
@@ -79909,6 +79952,10 @@
   "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql": {
    "path": "supabase/migrations/20261122110913_revoke_anon_geo_rpcs.sql",
    "lines": 8
+  },
+  "supabase/migrations/20261122111505_revoke_anon_geo_rpcs_v2_ledger_parity.sql": {
+   "path": "supabase/migrations/20261122111505_revoke_anon_geo_rpcs_v2_ledger_parity.sql",
+   "lines": 9
   },
   "supabase/migrations/20261122120000_baseline_order_status_values.sql": {
    "path": "supabase/migrations/20261122120000_baseline_order_status_values.sql",
@@ -80136,10 +80183,27 @@
   }
  },
  "git": {
-  "sha": "b70d14537836943907ba3f07225f5f4e59aae2d6",
+  "sha": "e340ad415dd6dbaa88931def8c46c3520965158f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "e340ad4",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "chore: reconcilia versoes de migration aplicadas direto no banco (#372)",
+    "files": [
+     "supabase/migrations/20241231000001_entity_versions.sql",
+     "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql",
+     "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql",
+     "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql",
+     "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
+     "supabase/migrations/20261121190000_validate_service_type_constraint.sql",
+     "supabase/migrations/20261122005314_fix_alert_configs_anon_insert.sql",
+     "supabase/migrations/20261122005320_fix_public_rls_bypass.sql",
+     "supabase/migrations/20261122111505_revoke_anon_geo_rpcs_v2_ledger_parity.sql"
+    ]
+   },
    {
     "sha": "b70d145",
     "date": "2026-11-24",
@@ -80484,17 +80548,6 @@
      "supabase/functions/job-worker/eta-delay.test.ts",
      "supabase/functions/job-worker/index.ts"
     ]
-   },
-   {
-    "sha": "f242d42",
-    "date": "2026-11-24",
-    "author": "adm01-debug",
-    "subject": "fix: rota desligada no painel passa a valer no motor (#342)",
-    "files": [
-     "supabase/functions/_shared/messaging/dispatch.test.ts",
-     "supabase/functions/_shared/messaging/dispatch.ts",
-     "supabase/functions/_shared/messaging/registry.test.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80559,23 +80612,23 @@
     2
    ],
    [
-    "src/hooks/useJobQueue.ts",
+    "supabase/migrations/20241231000001_entity_versions.sql",
     1
    ],
    [
-    "src/hooks/useLalamove.ts",
+    "supabase/migrations/20260712195203_stub_aplicado_diretamente_no_banco.sql",
     1
    ],
    [
-    "scripts/uapi-collector/run.cmd",
+    "supabase/migrations/20260723174708_stub_aplicado_diretamente_no_banco_2.sql",
     1
    ],
    [
-    "scripts/uapi-collector/run.sh",
+    "supabase/migrations/20260821130000_baseline_migracao_lovable_iecgydon.sql",
     1
    ],
    [
-    "supabase/migrations/20261126140000_uapi_snapshot.sql",
+    "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
     1
    ]
   ]

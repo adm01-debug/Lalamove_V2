@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "chore: reconcilia versoes de migration aplicadas direto no banco (#372)",
    "fix: polling de fila, pedido e SLA respeita o minimo de 15s do plano (#371)",
    "fix: coleta agendada nao falha quando o perfil esta em uso (#370)",
    "feat: renovacao automatica do token UAPI pelo perfil do navegador (#369)",
-   "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)",
-   "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)"
+   "feat: snapshot cobre recibos, cidade, ultimo pedido e paginas seguintes (#368)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

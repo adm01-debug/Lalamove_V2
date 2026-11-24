@@ -1,17 +1,17 @@
 # Graph Report - Lalamove_V2  (2026-11-24)
 
 ## Corpus Check
-- 1092 files · ~1,147,984 words
+- 1101 files · ~1,148,533 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 16 file(s) not represented in the graph (top: .toml 5, (none) 5, .css 2)
 
 ## Summary
-- 9959 nodes · 20696 edges · 686 communities (482 shown, 204 thin omitted)
+- 9968 nodes · 20696 edges · 695 communities (482 shown, 213 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 1260 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b70d1453`
+- Built from commit: `e340ad41`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -612,7 +612,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (686 total, 204 thin omitted)
+## Communities (695 total, 213 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
@@ -2544,8 +2544,8 @@ Nodes (3): auth.users, public.geo_blocks, public.password_reset_requests
 
 ## Knowledge Gaps
 - **3839 isolated node(s):** `session-start.sh script`, `PATH`, `$schema`, `style`, `rsc` (+3834 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4764 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **204 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 4773 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **213 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -2553,9 +2553,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `cn()` connect `cn` to `badge.tsx`, `react`, `GeoBlockingPage.tsx`, `layout-guard.mjs`, `DriversPage.tsx`, `DashboardRedesigned.tsx`, `StatusTimeline.tsx`, `floating-action-button.tsx`, `4. Componentes, hooks, libs e estado — **revisado**`, `AlertsPage.tsx`, `useCommandPaletteSearch.ts`, `framer-motion`, `WaitingTimeCounter.tsx`, `useRealtimeSubscriptions.ts`, `Sidebar`, `motion.tsx`, `ReportsPage.tsx`, `UrgencyIndicator.tsx`, `Bloco 1 — Botão "Voltar" global (21–40)`, `Bloco 4 — Performance e bundle (86–110)`, `Bloco 4 — Consistência: um cabeçalho, um padrão (79–96)`, `supabase/types.ts`, `PasswordStrengthIndicator.tsx`, `useWebhookEvents.ts`, `ProvidersTab`, `useCachedStats.ts`, `MobileBottomNav.tsx`, `Changelog`, `AddressAutocomplete.tsx`, `AdminTelemetriaPage`, `LiveMapPage.tsx`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `OfflineIndicator.tsx`, `chart.tsx`, `useRiskRules.ts`, `useIncidents.ts`, `OrderGeoEvents.tsx`, `useMetrics.ts`, `CommandPaletteEnhanced.tsx`, `Bloco 9 — Testes de navegação, documentação e rollout (183–200)`?**
   _High betweenness centrality (0.126) - this node is a cross-community bridge._
 - **Why does `react` connect `react` to `cn`, `badge.tsx`, `client.ts`, `GeoBlockingPage.tsx`, `DriversPage.tsx`, `webVitals.ts`, `DashboardRedesigned.tsx`, `package.json`, `App.tsx`, `StatusTimeline.tsx`, `floating-action-button.tsx`, `vitest`, `AlertsPage.tsx`, `useCommandPaletteSearch.ts`, `framer-motion`, `WaitingTimeCounter.tsx`, `4. Componentes, hooks, libs e estado — **revisado**`, `useRealtimeSubscriptions.ts`, `useMapbox.ts`, `Sidebar`, `motion.tsx`, `ReportsPage.tsx`, `NewOrderDialog.tsx`, `UrgencyIndicator.tsx`, `useGeo.ts`, `useMapMarkers.ts`, `LiveMap.tsx`, `types/index.ts`, `useBitrix24.ts`, `GoogleMapsCanvas.tsx`, `useAchievementsSystem.tsx`, `useLalamoveUapi.ts`, `PasswordStrengthIndicator.tsx`, `useAdvancedReports.ts`, `errorMonitoring.ts`, `useCachedStats.ts`, `MobileBottomNav.tsx`, `AddressAutocomplete.tsx`, `GeoHeatmap.tsx`, `LiveMapPage.tsx`, `useDeliveryMetrics.ts`, `Bloco 2 — Breadcrumbs e hierarquia (41–58)`, `OrderTrackingMap.tsx`, `Bloco 3 — Feedback visual da transição (59–78)`, `Header.tsx`, `useOfflineStorage.ts`, `MapProviderSelector.tsx`, `useQuotationExpiry`, `OfflineIndicator.tsx`, `chart.tsx`, `useRiskRules.ts`, `useIncidents.ts`, `CommandPaletteEnhanced.tsx`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
-- **Why does `code()` connect `snapshot.py` to `LedgerQuery`, `ref_https`, `Bloco 1 — Contratos únicos para as 18 Edge Functions restantes (21–45)`, `Bloco 1 — Contrato Lalamove ⇄ Zapp (11–20)`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `message()` connect `message` to `Lalamove API v3 — Documentação Técnica Completa (Brasil)`, `send-notification/index.ts`, `📑 Contratos de API — Webhooks & Edge Functions`, `useJobQueue.ts`, `lint-ratchet.mjs`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `cn()` (e.g. with `Adicionado` and `layout-guard.mjs`) actually correct?**
   _`cn()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `session-start.sh script`, `PATH`, `$schema` to the rest of the system?**
