@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { DataErrorBanner } from "@/components/ui/data-error-banner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +18,7 @@ import { StageMappingRow, LinkOrderRow } from "./bitrix24/Bitrix24SubComponents"
 export default function Bitrix24Page() {
   const [domain, setDomain] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const { connection, isLoadingConnection, stageMappings, syncHistory, unlinkedOrders, isLoadingUnlinkedOrders, isConnecting, connect, disconnect, updateStageMapping, linkOrder, isLinking } = useBitrix24();
+  const { connection, isLoadingConnection, connectionError, refetchConnection, stageMappings, syncHistory, unlinkedOrders, isLoadingUnlinkedOrders, unlinkedOrdersError, refetchUnlinkedOrders, isConnecting, connect, disconnect, updateStageMapping, linkOrder, isLinking } = useBitrix24();
 
   const handleProcessQueue = async () => {
     setIsProcessing(true);
@@ -37,6 +38,7 @@ export default function Bitrix24Page() {
         <CardHeader><CardTitle className="flex items-center gap-2"><Link2 className="h-5 w-5" />Status da Conexão</CardTitle></CardHeader>
         <CardContent>
           {isLoadingConnection ? <div className="flex items-center gap-2 text-muted-foreground"><RefreshCw className="h-4 w-4 animate-spin" />Verificando conexão...</div>
+          : connectionError ? <DataErrorBanner message="Não foi possível verificar a conexão com o Bitrix24." details={connectionError.message} onRetry={() => void refetchConnection()} />
           : connection?.connected ? (
             <div className="space-y-4">
               <div className="flex items-center gap-2"><Badge variant="default" className="bg-success text-success-foreground"><CheckCircle2 className="h-3 w-3 mr-1" />Conectado</Badge><span className="text-muted-foreground">{connection.domain}</span></div>
@@ -63,7 +65,7 @@ export default function Bitrix24Page() {
 
         <TabsContent value="link">
           <Card><CardHeader><CardTitle>Vincular Pedidos a Deals</CardTitle><CardDescription>Vincule pedidos Lalamove existentes a deals do Bitrix24 para sincronização</CardDescription></CardHeader>
-            <CardContent>{isLoadingUnlinkedOrders ? <div className="flex items-center justify-center py-8"><RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" /></div> : <Table><TableHeader><TableRow><TableHead>Pedido</TableHead><TableHead>Cliente</TableHead><TableHead>Status</TableHead><TableHead>Data</TableHead><TableHead>Deal ID</TableHead><TableHead className="w-[100px]">Ação</TableHead></TableRow></TableHeader><TableBody>{unlinkedOrders?.map((order) => <LinkOrderRow key={order.id} order={order} onLink={linkOrder} isLinking={isLinking} isConnected={connection?.connected || false} />)}{!unlinkedOrders?.length && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Todos os pedidos já estão vinculados ou não há pedidos</TableCell></TableRow>}</TableBody></Table>}</CardContent>
+            <CardContent>{isLoadingUnlinkedOrders ? <div className="flex items-center justify-center py-8"><RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" /></div> : unlinkedOrdersError ? <DataErrorBanner message="Não foi possível carregar os pedidos para vincular." details={unlinkedOrdersError.message} onRetry={() => void refetchUnlinkedOrders()} /> : <Table><TableHeader><TableRow><TableHead>Pedido</TableHead><TableHead>Cliente</TableHead><TableHead>Status</TableHead><TableHead>Data</TableHead><TableHead>Deal ID</TableHead><TableHead className="w-[100px]">Ação</TableHead></TableRow></TableHeader><TableBody>{unlinkedOrders?.map((order) => <LinkOrderRow key={order.id} order={order} onLink={linkOrder} isLinking={isLinking} isConnected={connection?.connected || false} />)}{!unlinkedOrders?.length && <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-8">Todos os pedidos já estão vinculados ou não há pedidos</TableCell></TableRow>}</TableBody></Table>}</CardContent>
           </Card>
         </TabsContent>
 

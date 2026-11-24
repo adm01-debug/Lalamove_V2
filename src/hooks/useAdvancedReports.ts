@@ -171,9 +171,11 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
   const [refreshing, setRefreshing] = useState(false);
   const [rows, setRows] = useState<OrderRow[]>([]);
   const [prevRows, setPrevRows] = useState<OrderRow[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchData = useCallback(async () => {
     setRefreshing(true);
+    setError(null);
     const days = parseInt(filters.period, 10) || 30;
     const now = new Date();
     const startDate = startOfDay(subDays(now, days));
@@ -202,6 +204,7 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
       setPrevRows(previous.error ? [] : ((previous.data as unknown as OrderRow[]) ?? []));
     } catch (err) {
       logger.error('Erro ao carregar relatórios avançados:', err);
+      setError(err instanceof Error ? err : new Error(String(err)));
       setRows([]);
       setPrevRows([]);
     } finally {
@@ -523,6 +526,7 @@ export function useAdvancedReports(filters: AdvancedReportFilters) {
   return {
     loading,
     refreshing,
+    error,
     fetchData,
     filterOptions,
     filteredRows: filtered,

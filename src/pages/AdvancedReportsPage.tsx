@@ -26,6 +26,7 @@ import { GeoHeatmap } from '@/components/reports/GeoHeatmap';
 import { useReportPresets } from '@/hooks/useReportPresets';
 import { exportToCSV, exportToJSON, exportToExcel, exportToPDFText } from '@/utils/exportUtils';
 import { cn } from '@/lib/utils';
+import { DataErrorBanner } from '@/components/ui/data-error-banner';
 
 const VEHICLE_LABELS: Record<string, string> = {
   MOTORCYCLE: 'Moto', CAR: 'Carro', VAN: 'Van', TRUCK: 'Caminhão', SEDAN: 'Sedan',
@@ -104,7 +105,7 @@ export default function AdvancedReportsPage() {
   const [heatMetric, setHeatMetric] = useState<'volume' | 'cost' | 'delay'>('volume');
   const { presets, savePreset, deletePreset } = useReportPresets();
   const {
-    loading, refreshing, fetchData, filterOptions, filteredRows,
+    loading, refreshing, error, fetchData, filterOptions, filteredRows,
     cost, performance, geography, daily, dailyComparison, comparison, geoResolution, geoPoints,
   } = useAdvancedReports(filters);
 
@@ -234,6 +235,19 @@ export default function AdvancedReportsPage() {
           <Loader2 className="w-12 h-12 animate-spin text-primary" />
           <p className="text-muted-foreground animate-pulse">Carregando relatórios avançados...</p>
         </motion.div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-[calc(100vh-4rem)] p-6">
+        <DataErrorBanner
+          message="Não foi possível carregar os relatórios avançados."
+          details={error.message}
+          onRetry={() => void fetchData()}
+          retrying={refreshing}
+        />
       </div>
     );
   }

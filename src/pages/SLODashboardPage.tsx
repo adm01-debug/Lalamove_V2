@@ -179,14 +179,19 @@ export default function SLODashboardPage() {
           <CardContent className="flex items-center gap-3 py-4 text-destructive">
             <AlertTriangle className="w-5 h-5" />
             <span className="text-sm">Não foi possível carregar as métricas de SLO. Tente atualizar.</span>
+            <Button size="sm" variant="outline" className="ml-auto" onClick={() => void refetch()} disabled={isFetching}>
+              Tentar novamente
+            </Button>
           </CardContent>
         </Card>
       )}
 
       {/* SLO Cards */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4" aria-label="Indicadores de SLO">
-        {isLoading || !data ? (
-          Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)
+        {!data ? (
+          !isLoading && error
+            ? null
+            : Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)
         ) : (
           <>
             <SLOCard
