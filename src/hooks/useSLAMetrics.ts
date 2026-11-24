@@ -189,7 +189,7 @@ export function useSLAMetrics() {
   const query = useQuery({
     queryKey: ['sla-metrics'],
     queryFn: fetchSLAMetrics,
-    refetchInterval: 10000,
+    refetchInterval: 15000,
     refetchIntervalInBackground: false,
     staleTime: 5000,
   });

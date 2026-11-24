@@ -107,7 +107,7 @@ export const useQueueStatistics = () => {
         oldestPendingMinutes
       };
     },
-    refetchInterval: 10000,
+    refetchInterval: 15000,
     refetchIntervalInBackground: false,
     staleTime: 5000,
   });
@@ -216,7 +216,7 @@ export const useJobQueue = (status?: string, limit = 50) => {
 
       return jobs.slice(0, limit);
     },
-    refetchInterval: 5000,
+    refetchInterval: 15000,
     refetchIntervalInBackground: false,
     staleTime: 2000,
   });
