@@ -19850,11 +19850,15 @@
               "hits": 1
             },
             {
+              "file": "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
+              "hits": 1
+            },
+            {
               "file": "supabase/migrations/20261120180500_fix_telemetria_grant_only.sql",
               "hits": 3
             }
           ],
-          "code_total_files": 3,
+          "code_total_files": 4,
           "cron": [],
           "db": [
             "public.mcp_introspect"
@@ -21928,9 +21932,13 @@
             {
               "file": "supabase/functions/mcp-query/index.ts",
               "hits": 1
+            },
+            {
+              "file": "supabase/migrations/20260831204251_add_mcp_exec_helpers.sql",
+              "hits": 1
             }
           ],
-          "code_total_files": 1,
+          "code_total_files": 2,
           "cron": [],
           "db": [],
           "triggers": [],
@@ -31294,6 +31302,11 @@
         "version": "20261121194500"
       },
       {
+        "name": "indices_alert_id_created_by",
+        "statements": null,
+        "version": "20261121201800"
+      },
+      {
         "name": "fix_alert_configs_anon_insert",
         "statements": 1,
         "statements_sha": "23f3a7cfe3823b36",
@@ -31304,6 +31317,11 @@
         "statements": 1,
         "statements_sha": "fa368a65c6c46ff8",
         "version": "20261122005320"
+      },
+      {
+        "name": "geo_place_id_provider_prefix",
+        "statements": null,
+        "version": "20261122013022"
       },
       {
         "name": "cache_system_backend",
@@ -31369,6 +31387,31 @@
         "name": "fix_crons_dispatcher",
         "statements": null,
         "version": "20261122140000"
+      },
+      {
+        "name": "fix_alert_configs_anon_insert",
+        "statements": null,
+        "version": "20261122150000"
+      },
+      {
+        "name": "fix_public_rls_bypass",
+        "statements": null,
+        "version": "20261122150100"
+      },
+      {
+        "name": "fix_supplier_notify_disabled",
+        "statements": null,
+        "version": "20261122160000"
+      },
+      {
+        "name": "geo_settings_auto_and_mapbox_only",
+        "statements": null,
+        "version": "20261123100000"
+      },
+      {
+        "name": "cron_refresh_cache_views",
+        "statements": null,
+        "version": "20261123110000"
       },
       {
         "name": "geo_budget_cron",
@@ -31444,6 +31487,16 @@
         "name": "messaging_foundation",
         "statements": null,
         "version": "20261126120000"
+      },
+      {
+        "name": "geo_jobs_freshness",
+        "statements": null,
+        "version": "20261126130000"
+      },
+      {
+        "name": "uapi_snapshot",
+        "statements": null,
+        "version": "20261126140000"
       }
     ],
     "policies": [

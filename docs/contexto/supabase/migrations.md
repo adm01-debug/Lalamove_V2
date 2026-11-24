@@ -171,8 +171,10 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261121192500 | [restore_audit_log](migrations/20261121192500_restore_audit_log.sql) | 0 |
 | 20261121193000 | [fix_escalation_pipeline](migrations/20261121193000_fix_escalation_pipeline.sql) | 0 |
 | 20261121194500 | [geo_jobs_scheduler](migrations/20261121194500_geo_jobs_scheduler.sql) | 0 |
+| 20261121201800 | [indices_alert_id_created_by](migrations/20261121201800_indices_alert_id_created_by.sql) | 0 |
 | 20261122005314 | [fix_alert_configs_anon_insert](migrations/20261122005314_fix_alert_configs_anon_insert.sql) | 1 |
 | 20261122005320 | [fix_public_rls_bypass](migrations/20261122005320_fix_public_rls_bypass.sql) | 1 |
+| 20261122013022 | [geo_place_id_provider_prefix](migrations/20261122013022_geo_place_id_provider_prefix.sql) | 0 |
 | 20261122090000 | [cache_system_backend](migrations/20261122090000_cache_system_backend.sql) | 0 |
 | 20261122110913 | [revoke_anon_geo_rpcs](migrations/20261122110913_revoke_anon_geo_rpcs.sql) | 1 |
 | 20261122111505 | [revoke_anon_geo_rpcs_v2_ledger_parity](migrations/20261122111505_revoke_anon_geo_rpcs_v2_ledger_parity.sql) | 1 |
@@ -185,6 +187,11 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261122130200 | [alert_type_driver_assigned](migrations/20261122130200_alert_type_driver_assigned.sql) | 0 |
 | 20261122131000 | [geo_eta_delay](migrations/20261122131000_geo_eta_delay.sql) | 0 |
 | 20261122140000 | [fix_crons_dispatcher](migrations/20261122140000_fix_crons_dispatcher.sql) | 0 |
+| 20261122150000 | [fix_alert_configs_anon_insert](migrations/20261122150000_fix_alert_configs_anon_insert.sql) | 0 |
+| 20261122150100 | [fix_public_rls_bypass](migrations/20261122150100_fix_public_rls_bypass.sql) | 0 |
+| 20261122160000 | [fix_supplier_notify_disabled](migrations/20261122160000_fix_supplier_notify_disabled.sql) | 0 |
+| 20261123100000 | [geo_settings_auto_and_mapbox_only](migrations/20261123100000_geo_settings_auto_and_mapbox_only.sql) | 0 |
+| 20261123110000 | [cron_refresh_cache_views](migrations/20261123110000_cron_refresh_cache_views.sql) | 0 |
 | 20261123120000 | [geo_budget_cron](migrations/20261123120000_geo_budget_cron.sql) | 1 |
 | 20261123130000 | [geo_price_list_skus_faltantes](migrations/20261123130000_geo_price_list_skus_faltantes.sql) | 0 |
 | 20261123140000 | [geo_place_id_prefix_check](migrations/20261123140000_geo_place_id_prefix_check.sql) | 0 |
@@ -199,3 +206,5 @@ SQL em `migrations/<versao>_<nome>.sql`. Mudanças feitas pelo Dashboard/SQL Edi
 | 20261124120000 | [internal_alert_channels](migrations/20261124120000_internal_alert_channels.sql) | 0 |
 | 20261125120000 | [notification_ledger](migrations/20261125120000_notification_ledger.sql) | 0 |
 | 20261126120000 | [messaging_foundation](migrations/20261126120000_messaging_foundation.sql) | 0 |
+| 20261126130000 | [geo_jobs_freshness](migrations/20261126130000_geo_jobs_freshness.sql) | 0 |
+| 20261126140000 | [uapi_snapshot](migrations/20261126140000_uapi_snapshot.sql) | 0 |

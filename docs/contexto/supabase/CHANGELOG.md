@@ -2,6 +2,11 @@
 
 Diff semântico gerado a cada coleta em que algo mudou.
 
+## 2026-11-24 21:13 UTC
+
+- **functions** alterado (2): `public.can_run_db_diagnostics(_user_id uuid)`, `public.mcp_introspect(p_operation text, p_params jsonb)`
+- **migrations** adicionado (9): `20261121201800_indices_alert_id_created_by`, `20261122013022_geo_place_id_provider_prefix`, `20261122150000_fix_alert_configs_anon_insert`, `20261122150100_fix_public_rls_bypass`, `20261122160000_fix_supplier_notify_disabled`, `20261123100000_geo_settings_auto_and_mapbox_only`, `20261123110000_cron_refresh_cache_views`, `20261126130000_geo_jobs_freshness`, `20261126140000_uapi_snapshot`
+
 ## 2026-11-24 18:17 UTC
 
 - **colunas** adicionado (8): `public.geo_budget.blocked_warned_month`, `public.lalamove_uapi_snapshot.city_id`, `public.lalamove_uapi_snapshot.collected_at`, `public.lalamove_uapi_snapshot.collected_by`, `public.lalamove_uapi_snapshot.expires_at`, `public.lalamove_uapi_snapshot.payload`, `public.lalamove_uapi_snapshot.resource`, `public.lalamove_uapi_snapshot.updated_at`
