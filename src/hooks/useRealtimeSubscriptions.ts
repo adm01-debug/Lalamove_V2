@@ -13,6 +13,7 @@ import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supab
 import { Alert, ApprovalPriority } from '@/types';
 import { toast } from 'sonner';
 import { playAlertSound, enableAudioOnInteraction } from '@/utils/alertSounds';
+import { uniqueTopic } from '@/lib/realtimeTopic';
 import { showNotification, showCriticalAlertNotification, getNotificationPermission, getPushSettings } from '@/hooks/usePushNotifications';
 import { isInQuietHours, isTypeEnabled } from '@/components/notifications/NotificationPreferences';
 
@@ -28,19 +29,6 @@ interface SubscriptionCallback {
 }
 
 // No singleton logic here currently used
-
-let channelSequence = 0;
-
-/**
- * `RealtimeClient.channel()` devolve o canal existente quando o topic repete
- * (realtime-js 2.x), e `RealtimeChannel.on()` lanca apos o `subscribe()`.
- * Como varios componentes montam os mesmos hooks, um topic por montagem evita
- * o erro "cannot add `postgres_changes` callbacks ... after `subscribe()`".
- */
-function uniqueTopic(base: string): string {
-  channelSequence += 1;
-  return `${base}-${channelSequence}`;
-}
 
 /**
  * Core Realtime Manager Hook

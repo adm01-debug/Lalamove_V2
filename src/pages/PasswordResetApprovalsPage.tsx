@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useFuseSearchWithMatches } from '@/hooks/useFuseSearch';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { uniqueTopic } from '@/lib/realtimeTopic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SearchInputWithHelp } from '@/components/ui/search-help-tooltip';
@@ -37,7 +38,7 @@ export function PasswordResetApprovalsPage() {
 
   useEffect(() => {
     const channel = supabase
-      .channel("password-reset-changes")
+      .channel(uniqueTopic("password-reset-changes"))
       .on("postgres_changes", { event: "*", schema: "public", table: "password_reset_requests" }, () => refetch())
       .subscribe();
     return () => { supabase.removeChannel(channel); };

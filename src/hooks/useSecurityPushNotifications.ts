@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { uniqueTopic } from '@/lib/realtimeTopic';
 
 
 interface SecurityNotification {
@@ -106,7 +107,7 @@ export function useSecurityPushNotifications() {
 
     // Listen for new device alerts
     const deviceAlertsChannel = supabase
-      .channel('security-device-alerts')
+      .channel(uniqueTopic('security-device-alerts'))
       .on(
         'postgres_changes',
         {
@@ -129,7 +130,7 @@ export function useSecurityPushNotifications() {
 
     // Listen for blocked IPs (admin only)
     const blockedIPsChannel = supabase
-      .channel('security-blocked-ips')
+      .channel(uniqueTopic('security-blocked-ips'))
       .on(
         'postgres_changes',
         {
@@ -151,7 +152,7 @@ export function useSecurityPushNotifications() {
 
     // Listen for failed login attempts
     const authLogsChannel = supabase
-      .channel('security-auth-logs')
+      .channel(uniqueTopic('security-auth-logs'))
       .on(
         'postgres_changes',
         {
@@ -176,7 +177,7 @@ export function useSecurityPushNotifications() {
 
     // Listen for MFA changes
     const mfaChannel = supabase
-      .channel('security-mfa-sessions')
+      .channel(uniqueTopic('security-mfa-sessions'))
       .on(
         'postgres_changes',
         {

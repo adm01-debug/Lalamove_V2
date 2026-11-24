@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { AdvancedReportFilters } from '@/hooks/useAdvancedReports';
 import { logger } from '@/utils/logger';
+import { uniqueTopic } from '@/lib/realtimeTopic';
 
 /** Preset de filtros salvo pelo usuário. */
 export interface ReportPreset {
@@ -97,7 +98,7 @@ export function useReportPresets() {
       if (cancelled || !auth.user) return;
 
       channel = supabase
-        .channel(`report_presets:${auth.user.id}`)
+        .channel(uniqueTopic(`report_presets:${auth.user.id}`))
         .on(
           'postgres_changes',
           {
