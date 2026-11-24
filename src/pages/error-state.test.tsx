@@ -44,6 +44,30 @@ import ContactsPage from './ContactsPage';
 import PermissionsPage from './PermissionsPage';
 import ExternalDataPage from './ExternalDataPage';
 
+const mockAdvanced = vi.fn();
+vi.mock('@/hooks/useAdvancedReports', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/hooks/useAdvancedReports')>()),
+  useAdvancedReports: () => mockAdvanced(),
+}));
+vi.mock('@/hooks/useReportPresets', () => ({
+  useReportPresets: () => ({ presets: [], savePreset: vi.fn(), deletePreset: vi.fn() }),
+}));
+
+const mockBitrix = vi.fn();
+vi.mock('@/hooks/useBitrix24', () => ({
+  useBitrix24: () => mockBitrix(),
+}));
+
+const mockSlo = vi.fn();
+vi.mock('@/hooks/useSLOMetrics', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/hooks/useSLOMetrics')>()),
+  useSLOMetrics: () => mockSlo(),
+}));
+
+import AdvancedReportsPage from './AdvancedReportsPage';
+import Bitrix24Page from './Bitrix24Page';
+import SLODashboardPage from './SLODashboardPage';
+
 function renderPage(node: React.ReactNode) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(<QueryClientProvider client={qc}>{node}</QueryClientProvider>);
@@ -143,5 +167,88 @@ describe('estado de erro em paginas de dados (item 421)', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
     expect(refetchStats).toHaveBeenCalledTimes(1);
+  });
+});
+describe('estado de erro em paginas de dados (item 421, rodada 2)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('AdvancedReportsPage: falha mostra aviso com retry em vez de relatorio zerado', () => {
+    const fetchData = vi.fn();
+    mockAdvanced.mockReturnValue({
+      loading: false,
+      refreshing: false,
+      error: new Error('relatorios indisponiveis'),
+      fetchData,
+      filterOptions: {},
+      filteredRows: [],
+      cost: {},
+      performance: {},
+      geography: [],
+      daily: [],
+      dailyComparison: [],
+      comparison: [],
+      geoResolution: [],
+      geoPoints: [],
+    });
+
+    renderPage(<AdvancedReportsPage />);
+
+    expect(screen.getByText(/poss.vel carregar os relat.rios avan.ados/)).toBeTruthy();
+    expect(screen.getByText('relatorios indisponiveis')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
+    expect(fetchData).toHaveBeenCalled();
+  });
+
+  it('Bitrix24Page: falha na conexao e nos pedidos mostra aviso com retry', () => {
+    const refetchConnection = vi.fn();
+    const refetchUnlinkedOrders = vi.fn();
+    mockBitrix.mockReturnValue({
+      connection: undefined,
+      isLoadingConnection: false,
+      connectionError: new Error('bitrix fora do ar'),
+      refetchConnection,
+      stageMappings: undefined,
+      syncHistory: undefined,
+      unlinkedOrders: undefined,
+      isLoadingUnlinkedOrders: false,
+      unlinkedOrdersError: new Error('pedidos indisponiveis'),
+      refetchUnlinkedOrders,
+      isConnecting: false,
+      connect: vi.fn(),
+      disconnect: vi.fn(),
+      updateStageMapping: vi.fn(),
+      linkOrder: vi.fn(),
+      isLinking: false,
+    });
+
+    renderPage(<Bitrix24Page />);
+
+    expect(screen.getByText(/verificar a conex.o com o Bitrix24/)).toBeTruthy();
+    expect(screen.getByText(/carregar os pedidos para vincular/)).toBeTruthy();
+
+    const buttons = screen.getAllByRole('button', { name: /Tentar novamente/ });
+    fireEvent.click(buttons[buttons.length - 1]);
+    expect(refetchUnlinkedOrders).toHaveBeenCalledTimes(1);
+  });
+
+  it('SLODashboardPage: falha mostra aviso com retry e nao deixa skeleton eterno', () => {
+    const refetch = vi.fn();
+    mockSlo.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      refetch,
+      error: new Error('slo offline'),
+    });
+
+    renderPage(<SLODashboardPage />);
+
+    expect(screen.getByText(/m.tricas de SLO/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: /Tentar novamente/ }));
+    expect(refetch).toHaveBeenCalledTimes(1);
   });
 });

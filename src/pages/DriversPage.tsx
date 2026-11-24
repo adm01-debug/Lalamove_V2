@@ -56,7 +56,7 @@ export function DriversPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const queryClient = useQueryClient();
-  const { data: drivers, isLoading, error, isFetching } = useDrivers();
+  const { data: drivers, isLoading, error, isFetching, refetch } = useDrivers();
   const approveMutation = useApproveDriver();
   const blockMutation = useBlockDriver();
   const addWhitelistMutation = useAddToWhitelist();
@@ -152,6 +152,7 @@ export function DriversPage() {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-destructive/20 to-rose/20 flex items-center justify-center mx-auto mb-4"><AlertTriangle className="w-8 h-8 text-destructive" /></div>
             <h3 className="text-lg font-semibold text-foreground mb-2">Erro ao Carregar</h3>
             <p className="text-muted-foreground">Não foi possível carregar os motoristas</p>
+            <Button variant="outline" className="mt-4" onClick={() => void refetch()} disabled={isFetching}>Tentar novamente</Button>
           </CardContent>
         </Card>
       </div>

@@ -60,7 +60,7 @@ const defaultFormData: RiskRuleInput = {
 };
 
 export function RiskRulesPage() {
-  const { data: rules, isLoading, error } = useRiskRules();
+  const { data: rules, isLoading, error, refetch } = useRiskRules();
   const createMutation = useCreateRiskRule();
   const updateMutation = useUpdateRiskRule();
   const deleteMutation = useDeleteRiskRule();
@@ -161,6 +161,7 @@ export function RiskRulesPage() {
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
           <p className="text-destructive">Erro ao carregar regras</p>
+          <Button variant="outline" className="mt-4" onClick={() => void refetch()}>Tentar novamente</Button>
         </div>
       </div>
     );

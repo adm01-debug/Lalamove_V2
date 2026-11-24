@@ -52,7 +52,7 @@ function LoadingSkeleton() {
 }
 
 export function AlertConfigurationsPage() {
-  const { data: configs, isLoading, error } = useAlertConfigurations();
+  const { data: configs, isLoading, error, refetch } = useAlertConfigurations();
   const createMutation = useCreateAlertConfiguration();
   const [isCreating, setIsCreating] = useState(false);
   const [newType, setNewType] = useState('');
@@ -128,7 +128,7 @@ export function AlertConfigurationsPage() {
       </Card>
 
       {isLoading ? <LoadingSkeleton /> : error ? (
-        <Card variant="glass" className="border-destructive/40"><CardContent className="py-8 text-center"><div className="p-4 rounded-full bg-destructive/10 w-fit mx-auto mb-4"><X className="w-8 h-8 text-destructive" /></div><p className="text-destructive font-medium">Erro ao carregar configurações</p><p className="text-sm text-muted-foreground mt-1">{error.message}</p></CardContent></Card>
+        <Card variant="glass" className="border-destructive/40"><CardContent className="py-8 text-center"><div className="p-4 rounded-full bg-destructive/10 w-fit mx-auto mb-4"><X className="w-8 h-8 text-destructive" /></div><p className="text-destructive font-medium">Erro ao carregar configurações</p><p className="text-sm text-muted-foreground mt-1">{error.message}</p><Button variant="outline" size="sm" className="mt-4" onClick={() => void refetch()}>Tentar novamente</Button></CardContent></Card>
       ) : configs?.length === 0 ? (
         <Card variant="gradient" className="border-dashed"><CardContent className="py-16 text-center"><div className="p-4 rounded-2xl bg-primary/10 w-fit mx-auto mb-4"><Bell className="w-12 h-12 text-primary" /></div><p className="text-lg font-medium text-foreground">Nenhuma configuração encontrada</p><p className="text-muted-foreground mt-1">As configurações de alerta aparecerão aqui</p><Button variant="gradient" className="mt-5 gap-1.5" onClick={() => setIsCreating(true)} disabled={availableTypes.length === 0}><Plus className="w-4 h-4" />Criar primeira config.</Button></CardContent></Card>
       ) : (

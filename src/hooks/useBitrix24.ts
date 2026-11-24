@@ -241,6 +241,9 @@ export function useBitrix24() {
   return {
     connection: connectionQuery.data,
     isLoadingConnection: connectionQuery.isLoading,
+    connectionError: (connectionQuery.error as Error | null) ?? null,
+    refetchConnection: connectionQuery.refetch,
+    unlinkedOrdersError: (unlinkedOrdersQuery.error as Error | null) ?? null,
     stageMappings: stageMappingsQuery.data,
     syncHistory: syncHistoryQuery.data,
     unlinkedOrders: unlinkedOrdersQuery.data,
