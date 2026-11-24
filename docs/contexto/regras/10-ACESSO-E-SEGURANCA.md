@@ -1,6 +1,6 @@
 # 10 · ACESSO E SEGURANÇA — quem pode o quê
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c804662b88` · branch `main` · 2026-11-24 17:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `99d3b77a25` · branch `main` · 2026-11-24 18:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Perfis / roles identificados
@@ -67,6 +67,7 @@
 | `lalamove_stop_proofs` | enabled | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager')<br>authenticated: has_role(auth.uid(),'operator') | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager') OR has_role(auth.uid(),'operator') | authenticated: has_role(auth.uid(),'admin') OR has_role(auth.uid(),'manager') | authenticated: has_role(auth.uid(),'admin') |
 | `lalamove_stops` | enabled | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role)<br>authenticated: has_role(auth.uid(), 'operator'::app_role) | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') OR public.has_role(auth.uid(), 'operator') | authenticated: public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'manager') | authenticated: public.has_role(auth.uid(), 'admin') |
 | `lalamove_uapi_sessions` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
+| `lalamove_uapi_snapshot` | enabled | authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public<br>service_role: true | service_role: true | service_role: true | service_role: true |
 | `lalamove_webhook_config` | enabled | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) | authenticated: public.has_role(auth.uid(), 'admin'::app_role) |
 | `login_attempts` | enabled | public: has_role(auth.uid(), 'admin'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'manager'::app_role) | authenticated: has_role(auth.uid(), 'admin'::app_role) | public: has_role(auth.uid(), 'admin'::app_role) |
 | `map_settings_overrides` | enabled | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id | public: auth.uid() = user_id |
@@ -114,7 +115,7 @@
 
 > `—` com RLS ligado = ninguém além de service_role. `sem RLS` = qualquer chave anon lê/escreve tudo.
 
-## Onde o RLS é IGNORADO (service_role) — 128 arquivo(s)
+## Onde o RLS é IGNORADO (service_role) — 130 arquivo(s)
 
 - `scripts/ai-context/cenarios.mjs`
 - `scripts/ai-context/gerar.mjs`
@@ -149,6 +150,7 @@
 - `scripts/supabase_snapshot/snapshot.py`
 - `scripts/test-after-fix.ts`
 - `scripts/test-user-permissions.ts`
+- `scripts/uapi-collector/collect.mjs`
 - `supabase/functions/_shared/auth.ts`
 - `supabase/functions/_shared/telemetry.ts`
 - `supabase/functions/apply-fixes/index.ts`
@@ -244,6 +246,7 @@
 - `supabase/migrations/20261125120000_notification_ledger.sql`
 - `supabase/migrations/20261126120000_messaging_foundation.sql`
 - `supabase/migrations/20261126130000_geo_jobs_freshness.sql`
+- `supabase/migrations/20261126140000_uapi_snapshot.sql`
 
 ## Funções SQL `SECURITY DEFINER` (rodam com privilégio do dono, ignoram RLS)
 
@@ -531,6 +534,7 @@ _nenhuma coluna de tenant identificada — sistema single-tenant ou isolamento p
 | `message_templates` | `created_at`, `updated_at`, `updated_by` |
 | `notification_routes` | `updated_at`, `updated_by` |
 | `messaging_usage` | `updated_at` |
+| `lalamove_uapi_snapshot` | `updated_at` |
 | `geo_blocks` | `created_at`, `updated_at` |
 | `tracking_events_default` | `created_at` |
 | `tracking_events_y2026m05` | `created_at` |

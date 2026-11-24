@@ -1,6 +1,6 @@
 # 11 · GLOSSÁRIO, DADOS DE REFERÊNCIA E LACUNAS
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c804662b88` · branch `main` · 2026-11-24 17:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `99d3b77a25` · branch `main` · 2026-11-24 18:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## Glossário do domínio (entidades do sistema)
@@ -58,6 +58,7 @@
 | `lalamove_stop_proofs` | Comprovantes (foto/assinatura) das paradas dos pedidos Lalamove. | 14 colunas | migration |
 | `lalamove_stops` | Paradas/stops dos pedidos Lalamove com endereco e horarios. | 20 colunas | migration |
 | `lalamove_uapi_sessions` | Sessoes da Unified API da Lalamove (token e expiracao). | 13 colunas | migration |
+| `lalamove_uapi_snapshot` | Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010). | 7 colunas | migration |
 | `lalamove_webhook_config` | URL de webhook registrada na Lalamove por ambiente (GET /v3/webhook retorna 405, mantemos o registro). | 9 colunas | migration |
 | `login_attempts` | Tentativas de login com IP e resultado para lockout de conta. | 11 colunas | migration |
 | `map_settings_overrides` | Overrides de configuracao de mapa por usuario/contexto. | 8 colunas | migration |
@@ -353,7 +354,7 @@ _nenhum item encontrado_
 - `orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
 - `orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.
 - `orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.
-- 20/95 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
+- 20/96 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …
 - Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel.
 
 ## Regras manuais presentes

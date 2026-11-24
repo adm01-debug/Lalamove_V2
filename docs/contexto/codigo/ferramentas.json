@@ -4,11 +4,11 @@
  "stack": {
   "linguagens": [
    "TypeScript (607)",
-   "SQL (205)",
-   "JavaScript (114)",
+   "SQL (206)",
+   "JavaScript (115)",
    "Markdown (114)",
    "JSON (31)",
-   "Shell (10)",
+   "Shell (11)",
    "Python (8)",
    "YAML (8)"
   ],
@@ -841,7 +841,7 @@
    },
    {
     "host": "br-uapi.lalamove.com",
-    "arquivos": 3
+    "arquivos": 4
    },
    {
     "host": "maps.googleapis.com",
@@ -849,6 +849,10 @@
    },
    {
     "host": "supabase.com",
+    "arquivos": 3
+   },
+   {
+    "host": "web.lalamove.com",
     "arquivos": 3
    },
    {
@@ -865,10 +869,6 @@
    },
    {
     "host": "routes.googleapis.com",
-    "arquivos": 2
-   },
-   {
-    "host": "web.lalamove.com",
     "arquivos": 2
    },
    {

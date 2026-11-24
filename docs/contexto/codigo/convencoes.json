@@ -78,11 +78,11 @@
    "test"
   ],
   "exemplos": [
+   "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)",
    "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)",
    "fix: falha de dados mostra erro e retry em 6 páginas (#365)",
    "fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)",
-   "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)",
-   "feat: renovacao do token uapi sem proxy externo (#362)"
+   "chore: docs do gateway e do refresh uapi sem proxy inexistente (#363)"
   ]
  },
  "pr_template": ".github/PULL_REQUEST_TEMPLATE.md",

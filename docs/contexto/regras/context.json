@@ -1,15 +1,15 @@
 {
  "meta": {
-  "sha": "c804662b8831cc3e2bef720a69af78a24ad9575f",
+  "sha": "99d3b77a25e9f8720754dd9599a34dc548da50c8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 17:13 UTC",
-  "files_total": 1115,
-  "code_files": 934,
-  "code_lines": 163868
+  "generated_at": "2026-11-24 18:07 UTC",
+  "files_total": 1119,
+  "code_files": 936,
+  "code_lines": 164199
  },
  "version": "1.3.2",
- "facts_hash": "a864b316d889284a",
+ "facts_hash": "2851802f8313065a",
  "stack": {
   "frameworks": [
    "React + Vite",
@@ -189,8 +189,8 @@
   "languages": {
    ".ts": 362,
    ".tsx": 245,
-   ".sql": 205,
-   ".mjs": 109,
+   ".sql": 206,
+   ".mjs": 110,
    ".py": 8,
    ".js": 4,
    ".cjs": 1
@@ -6928,6 +6928,63 @@
     "comment": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5).",
     "origin": "migration"
    },
+   "lalamove_uapi_snapshot": {
+    "columns": [
+     {
+      "name": "resource",
+      "type": "text PRIMARY KEY",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "payload",
+      "type": "jsonb NOT NULL",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "city_id",
+      "type": "integer",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "collected_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "expires_at",
+      "type": "timestamptz NOT NULL DEFAULT now() + interval '6 hours'",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "collected_by",
+      "type": "text NOT NULL DEFAULT 'browser-collector'",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     },
+     {
+      "name": "updated_at",
+      "type": "timestamptz NOT NULL DEFAULT now()",
+      "fk": "",
+      "generated": "",
+      "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+     }
+    ],
+    "constraints": [],
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql",
+    "comment": "Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010).",
+    "origin": "migration"
+   },
    "fixture_route_curitiba": {
     "columns": [
      {
@@ -11258,6 +11315,26 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le snapshot uapi",
+    "table": "lalamove_uapi_snapshot",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+   },
+   {
+    "name": "service role escreve snapshot uapi",
+    "table": "lalamove_uapi_snapshot",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
    }
   ],
   "triggers": [
@@ -15101,6 +15178,14 @@
     "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
    },
    {
+    "name": "lalamove_uapi_snapshot_expires_at_idx",
+    "table": "lalamove_uapi_snapshot",
+    "columns": "expires_at",
+    "unique": false,
+    "where": "",
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+   },
+   {
     "name": "uq_job_queue_dedup_open",
     "table": "job_queue",
     "columns": "dedup_key",
@@ -15396,6 +15481,7 @@
    "supabase/migrations/20261125120000_notification_ledger.sql",
    "supabase/migrations/20261126120000_messaging_foundation.sql",
    "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
+   "supabase/migrations/20261126140000_uapi_snapshot.sql",
    "supabase/tests/00_stubs.sql",
    "supabase/tests/01_functions.sql",
    "supabase/tests/02_scenarios.sql",
@@ -15483,7 +15569,8 @@
    "messaging_settings": "enabled",
    "message_templates": "enabled",
    "notification_routes": "enabled",
-   "messaging_usage": "enabled"
+   "messaging_usage": "enabled",
+   "lalamove_uapi_snapshot": "enabled"
   },
   "grants": [
    {
@@ -17951,7 +18038,9 @@
    "column:messaging_settings.quiet_hours_by_role": "Horario de silencio por papel. Motorista com pedido ativo e isento (Z9).",
    "table:message_templates": "Textos aprovados por evento x canal (etapas 76/77). O SMS tem linha propria por causa do limite de 160 caracteres.",
    "table:notification_routes": "Rota evento x papel (etapa 78): canais em ordem, espera antes do fallback e se exige resposta.",
-   "table:messaging_usage": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5)."
+   "table:messaging_usage": "Consumo diario de mensageria por canal e provedor (etapa 81). Alimenta o teto mensal (Z5).",
+   "table:lalamove_uapi_snapshot": "Ultimo estado conhecido das respostas UAPI capturadas por navegador; fallback da edge lalamove-uapi quando o gateway assinado recusa a chamada direta (ret 10010).",
+   "column:lalamove_uapi_snapshot.expires_at": "Apos esta data a linha nao e servida pela edge; o painel recebe o erro do gateway."
   },
   "types_file": "src/integrations/supabase/types.ts"
  },
@@ -19262,7 +19351,8 @@
     "auth": "PÚBLICA (verify_jwt=false em config.toml)",
     "tables": [
      "lalamove_orders",
-     "lalamove_uapi_sessions"
+     "lalamove_uapi_sessions",
+     "lalamove_uapi_snapshot"
     ],
     "env": [
      "ALLOWED_ORIGINS",
@@ -21748,8 +21838,8 @@
   },
   {
    "module": "scripts",
-   "files": 146,
-   "lines": 32829,
+   "files": 147,
+   "lines": 33032,
    "tables": [
     "a",
     "active_tracking",
@@ -22826,7 +22916,7 @@
   {
    "module": "supabase/functions",
    "files": 122,
-   "lines": 29434,
+   "lines": 29498,
    "tables": [
     "active_tracking",
     "alert_configurations",
@@ -22862,6 +22952,7 @@
     "lalamove_stop_proofs",
     "lalamove_stops",
     "lalamove_uapi_sessions",
+    "lalamove_uapi_snapshot",
     "message_templates",
     "messaging_settings",
     "new_device_alerts",
@@ -23021,8 +23112,8 @@
   },
   {
    "module": "supabase/migrations",
-   "files": 194,
-   "lines": 13776,
+   "files": 195,
+   "lines": 13840,
    "tables": [],
    "exports": [],
    "docs": [],
@@ -23714,6 +23805,11 @@
      "supabase/functions/lalamove-uapi/index.ts"
     ]
    },
+   "lalamove_uapi_snapshot": {
+    "select": [
+     "supabase/functions/lalamove-uapi/index.ts"
+    ]
+   },
    "map_settings_overrides": {
     "upsert": [
      "src/hooks/useMapSettings.ts"
@@ -24373,6 +24469,12 @@
     "refresh_token",
     "token_obtained_at"
    ],
+   "lalamove_uapi_snapshot": [
+    "collected_at",
+    "expires_at",
+    "payload",
+    "resource"
+   ],
    "map_settings_overrides": [
     "context_key"
    ],
@@ -24582,6 +24684,7 @@
     "scripts/db-audit/check-manifest-fresh.mjs"
    ],
    "CHROMIUM_PATH": [
+    "scripts/uapi-collector/collect.mjs",
     "scripts/ui-audit/width-regression.mjs"
    ],
    "CI": [
@@ -24800,6 +24903,9 @@
    "PGDUMP_SCHEMAS": [
     "scripts/supabase_snapshot/snapshot.py"
    ],
+   "PLAYWRIGHT_ROOT": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
    "PROD": [
     "src/hooks/useServiceWorker.ts",
     "src/main.tsx",
@@ -24839,6 +24945,9 @@
    ],
    "SNAPSHOT_INCLUDE_SCHEMAS": [
     "scripts/supabase_snapshot/snapshot.py"
+   ],
+   "SNAPSHOT_TTL_HOURS": [
+    "scripts/uapi-collector/collect.mjs"
    ],
    "SRK": [
     "scripts/ai-context/cenarios.mjs"
@@ -24895,6 +25004,7 @@
     "scripts/set-user-admin.ts",
     "scripts/test-after-fix.ts",
     "scripts/test-user-permissions.ts",
+    "scripts/uapi-collector/collect.mjs",
     "supabase/functions/_shared/auth.ts",
     "supabase/functions/_shared/telemetry.ts",
     "supabase/functions/apply-fixes/index.ts",
@@ -24928,6 +25038,7 @@
    "SUPABASE_URL": [
     "scripts/ai-context/cenarios.mjs",
     "scripts/seed-database.ts",
+    "scripts/uapi-collector/collect.mjs",
     "supabase/functions/_shared/auth.ts",
     "supabase/functions/_shared/logger.ts",
     "supabase/functions/_shared/telemetry.ts",
@@ -24957,6 +25068,12 @@
     "supabase/functions/simulate-driver-movement/index.ts",
     "supabase/functions/test-notification/index.ts",
     "supabase/functions/zapp-callback/index.ts"
+   ],
+   "UAPI_CITY_ID": [
+    "scripts/uapi-collector/collect.mjs"
+   ],
+   "UAPI_DEVICE_ID": [
+    "scripts/uapi-collector/collect.mjs"
    ],
    "VERCEL_AUTOMATION_BYPASS_SECRET": [
     "scripts/vercel/verify-production.mjs",
@@ -26644,6 +26761,14 @@
    {
     "file": "scripts/supabase_snapshot/test_snapshot.py",
     "msg": "view sem permissão na fixture"
+   },
+   {
+    "file": "scripts/uapi-collector/collect.mjs",
+    "msg": "${pathname} -> ${res.status} ${text.slice(0, 300)}"
+   },
+   {
+    "file": "scripts/uapi-collector/collect.mjs",
+    "msg": "playwright nao encontrado; defina PLAYWRIGHT_ROOT"
    },
    {
     "file": "scripts/ui-audit/layout-guard.mjs",
@@ -31856,6 +31981,36 @@
     "table": "messaging_usage",
     "column": "(tabela)",
     "rule": "PRIMARY KEY (day, channel, provider)"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "resource",
+    "rule": "PK"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "payload",
+    "rule": "obrigatório"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "collected_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "expires_at",
+    "rule": "default now()"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "collected_by",
+    "rule": "default 'browser-collector'"
+   },
+   {
+    "table": "lalamove_uapi_snapshot",
+    "column": "updated_at",
+    "rule": "default now()"
    },
    {
     "table": "fixture_route_curitiba",
@@ -37701,6 +37856,10 @@
    {
     "file": "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
     "line": "OR t.route_computed_at < now() - interval '30 minutes'"
+   },
+   {
+    "file": "supabase/migrations/20261126140000_uapi_snapshot.sql",
+    "line": "expires_at timestamptz NOT NULL DEFAULT now() + interval '6 hours',"
    }
   ],
   "percents": [
@@ -46887,6 +47046,26 @@
     "using": "true",
     "check": "true",
     "src": "supabase/migrations/20261126120000_messaging_foundation.sql"
+   },
+   {
+    "name": "equipe le snapshot uapi",
+    "table": "lalamove_uapi_snapshot",
+    "cmd": "SELECT",
+    "roles": "authenticated",
+    "mode": "permissive",
+    "using": "public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)",
+    "check": "",
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
+   },
+   {
+    "name": "service role escreve snapshot uapi",
+    "table": "lalamove_uapi_snapshot",
+    "cmd": "ALL",
+    "roles": "service_role",
+    "mode": "permissive",
+    "using": "true",
+    "check": "true",
+    "src": "supabase/migrations/20261126140000_uapi_snapshot.sql"
    }
   ],
   "db_triggers": [
@@ -50989,6 +51168,22 @@
      "authenticated: public.has_role(auth.uid(), 'admin'::app_role)"
     ]
    },
+   "lalamove_uapi_snapshot": {
+    "rls": "enabled",
+    "SELECT": [
+     "authenticated: public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public",
+     "service_role: true"
+    ],
+    "INSERT": [
+     "service_role: true"
+    ],
+    "UPDATE": [
+     "service_role: true"
+    ],
+    "DELETE": [
+     "service_role: true"
+    ]
+   },
    "lalamove_webhook_config": {
     "rls": "enabled",
     "SELECT": [
@@ -51687,6 +51882,7 @@
    "scripts/supabase_snapshot/snapshot.py",
    "scripts/test-after-fix.ts",
    "scripts/test-user-permissions.ts",
+   "scripts/uapi-collector/collect.mjs",
    "supabase/functions/_shared/auth.ts",
    "supabase/functions/_shared/telemetry.ts",
    "supabase/functions/apply-fixes/index.ts",
@@ -51781,7 +51977,8 @@
    "supabase/migrations/20261123200000_optout_and_tracking_end.sql",
    "supabase/migrations/20261125120000_notification_ledger.sql",
    "supabase/migrations/20261126120000_messaging_foundation.sql",
-   "supabase/migrations/20261126130000_geo_jobs_freshness.sql"
+   "supabase/migrations/20261126130000_geo_jobs_freshness.sql",
+   "supabase/migrations/20261126140000_uapi_snapshot.sql"
   ],
   "security_definer_fns": [
    "acknowledge_alert",
@@ -55220,6 +55417,9 @@
    "messaging_usage": [
     "updated_at"
    ],
+   "lalamove_uapi_snapshot": [
+    "updated_at"
+   ],
    "fixture_route_curitiba": [],
    "auth.users": [],
    "geo_blocks": [
@@ -56345,7 +56545,7 @@
    "`orders_operator_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
    "`orders_safe_view.internal_status` é uma coluna de status sem enum/CHECK — os valores válidos e as transições permitidas não estão no banco.",
    "`orders_safe_view.status` tem valores ['PENDING', 'MATCHED', 'ON_GOING', 'PICKED_UP', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED'] mas nenhum mapa de transições foi encontrado no código — a ordem permitida (ex.: pago → cancelado?) não está declarada.",
-   "20/95 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
+   "20/96 tabelas sem `COMMENT ON TABLE` — o significado de negócio não está no schema: `geo_price_list`, `fixture_route_curitiba`, `auth.users`, `tracking_events_y2026m05`, `tracking_events_y2026m06`, `tracking_events_y2026m07`, `tracking_events_y2026m08`, `tracking_events_y2026m09`, `tracking_events_y2026m10`, `tracking_events_y2026m11`, `tracking_events_y2026m12`, `tracking_events_y2027m01` …",
    "Há tabelas usadas no código sem migration no repo — o schema real pode ter sido alterado pelo painel."
   ]
  },
@@ -60254,6 +60454,28 @@
     "Aceita somente um identificador SQL delimitado, não texto cru."
    ],
    "doc": "!/usr/bin/env python3"
+  },
+  "scripts/uapi-collector/collect.mjs": {
+   "path": "scripts/uapi-collector/collect.mjs",
+   "lines": 203,
+   "env": [
+    "CHROMIUM_PATH",
+    "PLAYWRIGHT_ROOT",
+    "SNAPSHOT_TTL_HOURS",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "UAPI_CITY_ID",
+    "UAPI_DEVICE_ID"
+   ],
+   "errors": [
+    "${pathname} -> ${res.status} ${text.slice(0, 300)}",
+    "playwright nao encontrado; defina PLAYWRIGHT_ROOT"
+   ],
+   "doc": "!/usr/bin/env node",
+   "temporal": [
+    ".goto('https://web.lalamove.com/login', { waitUntil: 'networkidle', timeout: 90000 })"
+   ],
+   "uses_service_role": true
   },
   "scripts/ui-audit/layout-guard.mjs": {
    "path": "scripts/ui-audit/layout-guard.mjs",
@@ -77280,11 +77502,15 @@
   },
   "supabase/functions/lalamove-uapi/index.ts": {
    "path": "supabase/functions/lalamove-uapi/index.ts",
-   "lines": 818,
+   "lines": 882,
    "tables": [
     {
      "table": "lalamove_uapi_sessions",
      "op": "ref"
+    },
+    {
+     "table": "lalamove_uapi_snapshot",
+     "op": "select"
     },
     {
      "table": "lalamove_orders",
@@ -77304,6 +77530,12 @@
     }
    ],
    "table_cols": {
+    "lalamove_uapi_snapshot": [
+     "collected_at",
+     "expires_at",
+     "payload",
+     "resource"
+    ],
     "lalamove_uapi_sessions": [
      "is_active"
     ]
@@ -79822,6 +80054,14 @@
    ],
    "uses_service_role": true
   },
+  "supabase/migrations/20261126140000_uapi_snapshot.sql": {
+   "path": "supabase/migrations/20261126140000_uapi_snapshot.sql",
+   "lines": 64,
+   "temporal": [
+    "expires_at timestamptz NOT NULL DEFAULT now() + interval '6 hours',"
+   ],
+   "uses_service_role": true
+  },
   "supabase/tests/00_stubs.sql": {
    "path": "supabase/tests/00_stubs.sql",
    "lines": 146,
@@ -79876,10 +80116,23 @@
   }
  },
  "git": {
-  "sha": "c804662b8831cc3e2bef720a69af78a24ad9575f",
+  "sha": "99d3b77a25e9f8720754dd9599a34dc548da50c8",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "99d3b77",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)",
+    "files": [
+     "scripts/uapi-collector/collect.mjs",
+     "scripts/uapi-collector/run.cmd",
+     "scripts/uapi-collector/run.sh",
+     "supabase/functions/lalamove-uapi/index.ts",
+     "supabase/migrations/20261126140000_uapi_snapshot.sql"
+    ]
+   },
    {
     "sha": "c804662",
     "date": "2026-11-24",
@@ -80237,30 +80490,15 @@
      "supabase/functions/_shared/channels/whatsapp-test.ts",
      "supabase/functions/test-notification/index.ts"
     ]
-   },
-   {
-    "sha": "562d0de",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "feat: painel admin de mensageria ao motorista (etapas 141-151) (#337)",
-    "files": [
-     "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-     "src/App.tsx",
-     "src/components/layout/sidebar-config.ts",
-     "src/hooks/useMessaging.ts",
-     "src/integrations/supabase/types.ts",
-     "src/pages/MessagingSettingsPage.test.tsx",
-     "src/pages/MessagingSettingsPage.tsx"
-    ]
    }
   ],
   "hot_files": [
    [
-    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
-    8
+    "supabase/functions/check-driver-alerts/index.ts",
+    7
    ],
    [
-    "supabase/functions/check-driver-alerts/index.ts",
+    "docs/planos/PLANO_MENSAGERIA_MOTORISTAS_ZAPP_SMS_150_ETAPAS.md",
     7
    ],
    [
@@ -80277,18 +80515,6 @@
    ],
    [
     "supabase/functions/_shared/messaging/auto-notices.ts",
-    3
-   ],
-   [
-    "src/hooks/useMessaging.ts",
-    3
-   ],
-   [
-    "src/pages/MessagingSettingsPage.test.tsx",
-    3
-   ],
-   [
-    "src/pages/MessagingSettingsPage.tsx",
     3
    ],
    [
@@ -80320,19 +80546,31 @@
     2
    ],
    [
-    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    "src/hooks/useMessaging.ts",
+    2
+   ],
+   [
+    "src/pages/MessagingSettingsPage.test.tsx",
+    2
+   ],
+   [
+    "src/pages/MessagingSettingsPage.tsx",
+    2
+   ],
+   [
+    "scripts/uapi-collector/collect.mjs",
     1
    ],
    [
-    "src/hooks/useAdvancedReports.ts",
+    "scripts/uapi-collector/run.cmd",
     1
    ],
    [
-    "src/hooks/useBitrix24.ts",
+    "scripts/uapi-collector/run.sh",
     1
    ],
    [
-    "src/pages/AdvancedReportsPage.tsx",
+    "supabase/functions/lalamove-uapi/index.ts",
     1
    ]
   ]

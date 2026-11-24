@@ -1,7 +1,7 @@
 # Contexto de código do Lalamove V2 para agentes de IA
 
 GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.
-Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `c804662b8831cc3e2bef720a69af78a24ad9575f` (2026-11-24T13:37:20-03:00).
+Gerado sob demanda (não há workflow de contexto neste repo); rode o comando abaixo e commite a saída junto do fix. Gere com `node scripts/ai-context/gerar.mjs`. Commit-base: `99d3b77a25e9f8720754dd9599a34dc548da50c8` (2026-11-24T15:07:22-03:00).
 
 As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é só o mapa do código.
 
@@ -17,7 +17,7 @@ As regras do dono estão em `AGENTS.md` e `docs/agentes/` — este diretório é
 Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua tarefa; não carregue tudo.
 
 ## Stack
-- linguagens: TypeScript (607), SQL (205), JavaScript (114), Markdown (114), JSON (31), Shell (10), Python (8), YAML (8)
+- linguagens: TypeScript (607), SQL (206), JavaScript (115), Markdown (114), JSON (31), Shell (11), Python (8), YAML (8)
 - linguagem_principal: TypeScript
 - framework: React
 - bundler: Vite
@@ -35,9 +35,9 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Números
 | item | qtd |
 |---|---|
-| arquivos_total | 1121 |
-| arquivos_codigo | 720 |
-| linhas_codigo | 142108 |
+| arquivos_total | 1125 |
+| arquivos_codigo | 721 |
+| linhas_codigo | 142375 |
 | rotas | 57 |
 | rotas_protegidas | 49 |
 | rotas_com_mfa | 8 |
@@ -46,12 +46,12 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | componentes | 223 |
 | hooks | 102 |
 | edge_functions | 28 |
-| tabelas | 93 |
-| migrations | 194 |
+| tabelas | 94 |
+| migrations | 195 |
 | cron_jobs | 24 |
 | testes | 187 |
 | workflows | 5 |
-| scripts | 107 |
+| scripts | 109 |
 | docs_md | 114 |
 
 ## Onde ficam as coisas
@@ -79,7 +79,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 | components/map | 0 | 0 | 20 | 22 | 2 | 4 |
 | components/orders | 0 | 0 | 9 | 37 | 7 | 8 |
 | components/ui | 0 | 0 | 63 | 8 | 0 | 0 |
-| functions | 0 | 0 | 74 | 0 | 6 | 48 |
+| functions | 0 | 0 | 74 | 0 | 6 | 49 |
 | hooks | 0 | 0 | 87 | 232 | 15 | 54 |
 | lib | 0 | 0 | 30 | 8 | 3 | 0 |
 | pages | 49 | 56 | 57 | 211 | 14 | 54 |
@@ -217,7 +217,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - `lalamove-api` [Lalamove API v3] — tabelas: alerts, drivers, lalamove_orders, lalamove_priority_fee_history, lalamove_rate_limits, lalamove_status_history, lalamove_stops; chamada por 4 arquivo(s) do front
 - `lalamove-gateway` [Lalamove API v3] — tabelas: alerts, lalamove_rate_limits, query_telemetry; chamada por 1 arquivo(s) do front
 - `lalamove-token-refresh` [Lalamove API v3] — tabelas: alerts, lalamove_uapi_sessions; chamada por 0 arquivo(s) do front, por SQL/cron
-- `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions; chamada por 1 arquivo(s) do front
+- `lalamove-uapi` [Lalamove API v3] — tabelas: lalamove_orders, lalamove_uapi_sessions, lalamove_uapi_snapshot; chamada por 1 arquivo(s) do front
 - `lalamove-webhook` [Lalamove API v3] (verify_jwt=false) — tabelas: active_tracking, alerts, driver_locations, drivers, lalamove_order_replacements, lalamove_orders, lalamove_status_history, lalamove_stop_proofs, lalamove_stops, tracking_events, webhook_events; chamada por 0 arquivo(s) do front
 - `llm-wh` [Dados externos] (verify_jwt=false) — tabelas: -; chamada por 0 arquivo(s) do front
 - `mcp-query` (verify_jwt=false) — tabelas: query_telemetry; chamada por 0 arquivo(s) do front
@@ -259,7 +259,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 ## Integrações externas
 - SDKs: CSV (papaparse), IndexedDB (idb), Lovable Cloud, Mapbox GL, Postgres (pg, scripts), Recharts, Supabase, Web Vitals, XLSX (export), i18next, jsPDF (export), react-query, zod, zustand
 - serviços por edge: Lalamove API v3 (5), Notificações/Alertas (5), Dados externos (3), Bitrix24 (2), Manutenção/DDL (2), Motoristas (2), Fila de jobs (1), Lovable AI (custo por token) (1), Mapbox (1), Segredos/token (1)
-- hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, api.mapbox.com, www.google.com, br-uapi.lalamove.com, maps.googleapis.com, supabase.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, routes.googleapis.com, web.lalamove.com, x.supabase.co, a.tile.openstreetmap.org, abc.supabase.co
+- hosts mais citados: iecgydonctmabiijadsf.supabase.co, api.supabase.com, api.mapbox.com, www.google.com, br-uapi.lalamove.com, maps.googleapis.com, supabase.com, web.lalamove.com, api.resend.com, lalamove-v2.vercel.app, rest.lalamove.com, routes.googleapis.com, x.supabase.co, a.tile.openstreetmap.org, abc.supabase.co
 - webhooks recebidos (verify_jwt=false): lalamove-webhook, llm-wh, mcp-query
 - env de integração (só NOMES, nunca valores): BITRIX24_CLIENT_ID, BITRIX24_CLIENT_SECRET, BITRIX24_WEBHOOK_URL, EVOLUTION_API_KEY, EXTERNAL_SUPABASE_SERVICE_ROLE_KEY, EXTERNAL_SUPABASE_URL, GOOGLE_MAPS_API_KEY, LALAMOVE_API_KEY, LALAMOVE_API_SECRET, LALAMOVE_API_URL, LALAMOVE_BASE_URL, LALAMOVE_TRUSTED_IPS, LALAMOVE_UNIFIED_PROXY_KEY, LALAMOVE_UNIFIED_PROXY_URL, LOVABLE_API_KEY, MAPBOX_ACCESS_TOKEN, MAPBOX_SERVER_TOKEN, MAPBOX_TOKENS_API_TOKEN, MAPBOX_USERNAME, RESEND_API_KEY, SLACK_WEBHOOK_URL, SUPABASE_ANON_KEY, SUPABASE_PROJECT_REF, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_SUPABASE_URL, ZAPP_CALLBACK_SECRET
 
@@ -293,8 +293,8 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - possiveis_segredos_no_codigo: 1 — ex.: supabase/functions/geo-admin/rotation.test.ts:32
 
 ## Grafo de código (graphify)
-- 9935 nós · 20657 arestas · 702 comunidades · grafo do commit `c804662b`
-- comunidades maiores: cn (224), lucide-react (189), react (142), badge.tsx (133), ref_node_path (107), App.tsx (103), DashboardRedesigned.tsx (101), ref_https (98), send-notification/index.ts (83), dependencies (81), gerar.mjs (76), package.json (73)
+- 9950 nós · 20680 arestas · 688 comunidades · grafo do commit `99d3b77a`
+- comunidades maiores: cn (223), AppLayout.tsx (148), badge.tsx (122), utils.ts (116), button.tsx (116), ref_https (86), @tanstack/react-query (86), client.ts (85), ref_node_assert (85), AlertsPage.tsx (85), send-notification/index.ts (81), dependencies (81)
 - símbolos mais chamados: cn() (src/lib/utils.ts), q() (scripts/supabase_snapshot/snapshot.py), GeoProviderError (supabase/functions/geo-gateway/providers/types.ts), uapiRequest() (supabase/functions/lalamove-uapi/index.ts), useAuth() (src/hooks/useAuth.tsx), .collect() (scripts/supabase_snapshot/test_snapshot.py), excluded_sql() (scripts/supabase_snapshot/snapshot.py), isLalamoveConfigured() (src/lib/lalamove-config.ts), .metadata() (scripts/supabase_snapshot/test_snapshot.py), header() (scripts/regras_negocio/generate.py), internalLogger() (supabase/functions/job-worker/index.ts), useFuseSearchWithMatches() (src/hooks/useFuseSearch.ts)
 
 ## Hotspots (arquivos mais alterados, 90 dias)
@@ -396,6 +396,7 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - CHANGELOG topo: [1.6.0] - 2026-11-22
 
 ## Últimos commits
+- 2026-11-24 `99d3b77` feat: devolve carteira/extrato/cupons/frota via snapshot do navegador (#367)
 - 2026-11-24 `c804662` chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)
 - 2026-11-24 `4bbb1fc` fix: falha de dados mostra erro e retry em 6 páginas (#365)
 - 2026-11-24 `569b237` fix: sessão UAPI ausente vira caminho de configuração, não erro genérico (#364)
@@ -410,7 +411,6 @@ Os JSONs são grandes: filtre com `rg`/`jq` pelo caminho/arquivo/tabela da sua t
 - 2026-11-24 `49c9a83` fix: Guardian nao alerta sobre tracking e POD sem atualizacao (#355)
 - 2026-11-24 `53d3496` fix: historico de notificacoes mostra o mesmo rotulo de alerta da tela de Alertas (#354)
 - 2026-11-24 `71cf6b0` fix: alerta de tipo novo nao quebra mais a tela de Alertas (#353)
-- 2026-11-24 `65473ca` feat: M2 — cobranca sem resposta no prazo vira alerta interno ao operador (#352)
 
 ## Arquivos deste diretório
 - `docs/contexto/codigo/rotas.json`

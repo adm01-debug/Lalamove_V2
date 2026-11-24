@@ -759,7 +759,7 @@
    "servico": "Lalamove API v3",
    "entrada": "supabase/functions/lalamove-uapi/index.ts",
    "arquivos": 1,
-   "linhas": 818,
+   "linhas": 882,
    "verify_jwt": true,
    "metodos": [
     "OPTIONS"
@@ -768,7 +768,8 @@
    "usa_service_role": true,
    "tabelas": [
     "lalamove_orders",
-    "lalamove_uapi_sessions"
+    "lalamove_uapi_sessions",
+    "lalamove_uapi_snapshot"
    ],
    "rpcs": [
     "get_active_uapi_token"

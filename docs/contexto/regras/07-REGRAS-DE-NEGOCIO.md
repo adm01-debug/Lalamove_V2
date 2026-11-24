@@ -1,6 +1,6 @@
 # 07 · REGRAS DE NEGÓCIO
 
-> Gerado automaticamente por AI Context Sync v1.3.2 · commit `c804662b88` · branch `main` · 2026-11-24 17:13 UTC
+> Gerado automaticamente por AI Context Sync v1.3.2 · commit `99d3b77a25` · branch `main` · 2026-11-24 18:07 UTC
 > Não edite à mão — regras humanas vão em `manual/`.
 
 ## A. Regras escritas por humanos (`manual/` — prioridade máxima, nunca sobrescrito)
@@ -243,6 +243,8 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `notification_routes` | service role gerencia rotas de notificacao | ALL | service_role | permissive | `true` | `true` |
 | `messaging_usage` | equipe le uso de mensageria | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
 | `messaging_usage` | service role escreve uso de mensageria | ALL | service_role | permissive | `true` | `true` |
+| `lalamove_uapi_snapshot` | equipe le snapshot uapi | SELECT | authenticated | permissive | `public.has_role(auth.uid(), 'operator'::public.app_role) OR public.has_role(auth.uid(), 'manager'::public.app_role) OR public.has_role(auth.uid(), 'admin'::public.app_role)` |  |
+| `lalamove_uapi_snapshot` | service role escreve snapshot uapi | ALL | service_role | permissive | `true` | `true` |
 
 ## C. Restrições de dados (obrigatório / único / default / CHECK / FK / calculada)
 
@@ -548,7 +550,7 @@ _Nenhum arquivo em `manual/`. Copie `manual/TEMPLATE-regras-de-negocio.md` para 
 | `password_reset_requests` | `reviewed_by` | FK → users.id |
 | `password_reset_requests` | `expires_at` | default (now() |
 | `password_reset_requests` | `created_at` | default now() |
-| … +323 linhas — lista completa em `context.json` | | |
+| … +329 linhas — lista completa em `context.json` | | |
 
 ## D. Automações no banco (triggers e funções — regras que rodam sozinhas)
 
@@ -1675,6 +1677,7 @@ _nenhum item encontrado_
 | `AND (t.route_computed_at IS NULL OR t.route_computed_at < now() - interval '5 minutes')` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
 | `AND t.last_updated > now() - interval '2 hours'` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
 | `OR t.route_computed_at < now() - interval '30 minutes'` | `supabase/migrations/20261126130000_geo_jobs_freshness.sql` |
+| `expires_at timestamptz NOT NULL DEFAULT now() + interval '6 hours',` | `supabase/migrations/20261126140000_uapi_snapshot.sql` |
 
 ### H.3 Limites de paginação
 
@@ -1846,6 +1849,8 @@ _nenhum item encontrado_
 | statement timeout simulado | `scripts/supabase_snapshot/test_snapshot.py` |
 | view removida depois da consulta ao catálogo | `scripts/supabase_snapshot/test_snapshot.py` |
 | view sem permissão na fixture | `scripts/supabase_snapshot/test_snapshot.py` |
+| ${pathname} -> ${res.status} ${text.slice(0, 300)} | `scripts/uapi-collector/collect.mjs` |
+| playwright nao encontrado; defina PLAYWRIGHT_ROOT | `scripts/uapi-collector/collect.mjs` |
 | bloco <Route element={<AppLayout />}> nao encontrado em src/App.tsx | `scripts/ui-audit/layout-guard.mjs` |
 | nenhuma pagina do AppLayout resolvida — auditoria incompleta | `scripts/ui-audit/layout-guard.mjs` |
 | redirecionado para /auth — STORAGE_STATE expirado ou invalido | `scripts/ui-audit/width-regression.mjs` |
@@ -2035,9 +2040,7 @@ _nenhum item encontrado_
 | Falha no teste: ${(err as Error).message} | `src/pages/MapsSettingsPage.tsx` |
 | Escolha ao menos um canal para a rota | `src/pages/MessagingSettingsPage.tsx` |
 | Falha ao salvar: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| Falha no teste: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| Falha: ${(error as Error).message} | `src/pages/MessagingSettingsPage.tsx` |
-| … +125 linhas — lista completa em `context.json` | |
+| … +127 linhas — lista completa em `context.json` | |
 
 ## J. Controle de acesso no código (checagens de perfil/permissão)
 

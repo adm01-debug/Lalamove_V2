@@ -6,7 +6,7 @@
   "src/integrations/supabase/types.ts",
   "supabase/migrations"
  ],
- "migrations": 194,
+ "migrations": 195,
  "seeds": [],
  "avisos": [
   "16 bloco(s) com DDL dinâmico (EXECUTE format/...) não modelado — policies/colunas criadas dinamicamente podem faltar; confira no banco vivo"
@@ -7653,6 +7653,90 @@
    "usada_no_front": 0,
    "usada_em_edges": [
     "lalamove-token-refresh",
+    "lalamove-uapi"
+   ],
+   "triggers": [],
+   "sem_rls": false,
+   "nao_usada": false
+  },
+  "lalamove_uapi_snapshot": {
+   "colunas": {
+    "city_id": {
+     "tipo": "integer",
+     "nn": false,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "collected_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    },
+    "collected_by": {
+     "tipo": "text",
+     "nn": true,
+     "pk": false,
+     "default": "'browser-collector'",
+     "ref": null
+    },
+    "expires_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now() + interval '6 hours'",
+     "ref": null
+    },
+    "payload": {
+     "tipo": "jsonb",
+     "nn": true,
+     "pk": false,
+     "default": null,
+     "ref": null
+    },
+    "resource": {
+     "tipo": "text",
+     "nn": false,
+     "pk": true,
+     "default": null,
+     "ref": null
+    },
+    "updated_at": {
+     "tipo": "timestamptz",
+     "nn": true,
+     "pk": false,
+     "default": "now()",
+     "ref": null
+    }
+   },
+   "rls": true,
+   "policies": [
+    {
+     "nome": "equipe le snapshot uapi",
+     "comando": "select",
+     "para": "authenticated",
+     "tipo": "permissive"
+    },
+    {
+     "nome": "service role escreve snapshot uapi",
+     "comando": "all",
+     "para": "service_role",
+     "tipo": "permissive"
+    }
+   ],
+   "indices": [
+    {
+     "nome": "lalamove_uapi_snapshot_expires_at_idx",
+     "colunas": "expires_at",
+     "unico": false
+    }
+   ],
+   "fks": [],
+   "criada_em": "20261126140000_uapi_snapshot.sql",
+   "usada_no_front": 0,
+   "usada_em_edges": [
     "lalamove-uapi"
    ],
    "triggers": [],
