@@ -10,7 +10,7 @@ import {
 import { getSchema } from "../_shared/schemas.ts";
 import { trackContractUsage } from "../_shared/telemetry.ts";
 import { notifyDriver } from "../_shared/messaging/notify-driver.ts";
-import { sendScheduledReminders } from "../_shared/messaging/auto-notices.ts";
+import { sendConfirmationNudges, sendScheduledReminders } from "../_shared/messaging/auto-notices.ts";
 
 const allowedOrigins = Deno.env.get('ALLOWED_ORIGINS')?.split(',').map(o => o.trim()) || ['*'];
 
@@ -298,6 +298,20 @@ serve(async (req) => {
       now,
       (event, driverId, orderId) => avisarMotorista(supabase, event, driverId, orderId),
     );
+    if (reminders.sent > 0) {
+      logger.log(`[Guardian] Lembretes agendados: ${reminders.sent} de ${reminders.checked}`);
+    }
+
+    // M2 (etapa 102): 2 min depois de avisar a atribuicao, pede confirmacao ao
+    // motorista. Sem resposta, a cobranca de timeout fica com a etapa 102.
+    const nudges = await sendConfirmationNudges(
+      supabase,
+      now,
+      (event, driverId, orderId) => avisarMotorista(supabase, event, driverId, orderId),
+    );
+    if (nudges.checked > 0) {
+      logger.log(`[Guardian] Confirmacao (M2): avisados ${nudges.sent} de ${nudges.checked} pedido(s) com aviso de atribuicao`);
+    }
 
     // Insert remaining new alerts (not handled individually above)
     if (alertsToCreate.length > 0) {

@@ -558,9 +558,11 @@ fallback para SMS automático, nunca silêncio; (6) motorista com pedido ativo *
 - [~] Variáveis: pedido interno, endereço/janela da coleta, responsável, instruções, link de rota (`share_link`)
 - **Evidência:** motor pronto e ligado no webhook (`DRIVER_ASSIGNED` → `notifyDriverEvent`); variáveis montadas de `lalamove_orders` por `loadOrderVariables` (`order_number`, `pickup_address`, `pickup_window` em BRT, `pickup_contact`, `pickup_notes`, `share_link`, `pickup_location_link`). **Falta:** `shadow_mode=true` em produção e secrets do Zapp (etapa 87) — hoje o aviso é decidido e gravado como `suppressed` (`modo_sombra`), sem envio.
 
-### 102 — [L] M2 Confirmação com prazo
+### 102 — [~] M2 Confirmação com prazo
+- [x] Pedido de confirmação ao motorista 2 min depois do M1, quando o pedido ainda não tem `driver_pickup_confirmed_at`
 - [ ] Sem resposta em `reply_timeout_min` → alerta interno `DRIVER_NO_CONFIRMATION` (tipo novo com linha em `alert_configurations`)
-- **Evidência:** teste sem resposta gera o alerta
+- **Evidência (emissor):** `sendConfirmationNudges` (`_shared/messaging/auto-notices.ts`) roda no cron de 2 min do `check-driver-alerts`; a base é a linha outbound de `DRIVER_ASSIGNED` no ledger (não o pedido com motorista) e a janela é `now-6h .. now-2min`. Ledger e `client_message_id` determinístico são a trava de duplicidade. Testes em `auto-notices.test.ts` (janelas, já-confirmado, já-cobrado, status bloqueados, pedido ausente).
+- **Falta:** o alerta de timeout (item acima) e o `DRIVER_NO_CONFIRMATION` ainda só nasce da resposta "2 = problema" (`zapp-callback/inbound-exec.ts:57`), não da ausência de resposta.
 
 ### 103 — [~] M3 Localização e contato
 - [~] `send-location` da coleta + `send-contact` do responsável
