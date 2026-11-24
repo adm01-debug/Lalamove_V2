@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Bell, Clock, AlertCircle, AlertTriangle, Info, Shield, MapPin, PlugZap, X } from 'lucide-react';
+import { Bell, Clock, AlertCircle, AlertTriangle, Info, Shield, MapPin, PlugZap, X, Navigation, FileWarning, Wallet } from 'lucide-react';
 import { Alert, AlertType } from '@/types';
 
 export type GroupBy = 'none' | 'severity' | 'type' | 'time';
@@ -20,6 +20,12 @@ export const alertIcons: Record<AlertType, typeof AlertTriangle> = {
   DRIVER_BLOCKED: Shield, ROUTE_DEVIATION: MapPin, DRIVER_STOPPED: Clock,
   LATE_DELIVERY: AlertCircle, APPROVAL_REQUIRED: AlertTriangle, ORDER_CANCELLED: X,
   INTEGRATION_FAILURE: PlugZap,
+  // Tipos geo/operacionais que já existem em produção. Sem entrada aqui o agrupamento
+  // por tipo ficava com ícone indefinido e o header quebrava a tela.
+  DRIVER_APPROACHING_PICKUP: Navigation, DRIVER_ARRIVED_PICKUP: MapPin,
+  DRIVER_APPROACHING_DELIVERY: Navigation, DRIVER_ARRIVED_DELIVERY: MapPin,
+  ETA_DELAY: Clock, SUPPLIER_DELAY_NOTICE: Clock, MISSING_POD: FileWarning,
+  GEO_BUDGET_WARNING: Wallet, DRIVER_ASSIGNED: Bell, DRIVER_NO_CONFIRMATION: Clock,
 };
 
 export const severityConfig = {
@@ -32,6 +38,11 @@ export const alertTypeLabels: Record<AlertType, string> = {
   DRIVER_BLOCKED: 'Motorista Bloqueado', ROUTE_DEVIATION: 'Desvio de Rota', DRIVER_STOPPED: 'Motorista Parado',
   LATE_DELIVERY: 'Atraso na Entrega', APPROVAL_REQUIRED: 'Aprovação Necessária', ORDER_CANCELLED: 'Pedido Cancelado',
   INTEGRATION_FAILURE: 'Falha de Integração',
+  DRIVER_APPROACHING_PICKUP: 'Aproximando da Coleta', DRIVER_ARRIVED_PICKUP: 'Chegou na Coleta',
+  DRIVER_APPROACHING_DELIVERY: 'Aproximando da Entrega', DRIVER_ARRIVED_DELIVERY: 'Chegou na Entrega',
+  ETA_DELAY: 'Atraso Previsto', SUPPLIER_DELAY_NOTICE: 'Aviso de Atraso ao Fornecedor',
+  MISSING_POD: 'POD não Anexado', GEO_BUDGET_WARNING: 'Orçamento de Mapas',
+  DRIVER_ASSIGNED: 'Motorista Atribuído', DRIVER_NO_CONFIRMATION: 'Sem Confirmação do Motorista',
 };
 
 export function formatTimeAgo(date: Date): string {
@@ -75,7 +86,7 @@ export function useAlertGrouping(alerts: Alert[], groupBy: GroupBy, sortBy: Sort
     if (groupBy === 'type') {
       const groups: Record<string, Alert[]> = {};
       sortedAlerts.forEach(a => { if (!groups[a.type]) groups[a.type] = []; groups[a.type].push(a); });
-      return Object.entries(groups).map(([type, alerts]) => ({ key: type, label: alertTypeLabels[type as AlertType], icon: alertIcons[type as AlertType], color: 'text-foreground', bgColor: 'bg-secondary/50', alerts, count: alerts.length }));
+      return Object.entries(groups).map(([type, alerts]) => ({ key: type, label: alertTypeLabels[type as AlertType] ?? type, icon: alertIcons[type as AlertType] ?? AlertCircle, color: 'text-foreground', bgColor: 'bg-secondary/50', alerts, count: alerts.length }));
     }
 
     // time

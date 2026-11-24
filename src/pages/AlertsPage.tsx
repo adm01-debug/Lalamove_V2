@@ -24,7 +24,10 @@ import {
   ChevronRight,
   PlugZap,
   BadgeCheck,
-  Loader2
+  Loader2,
+  Navigation,
+  FileWarning,
+  Wallet
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useActiveAlerts, useAlertActions } from '@/hooks/useActiveAlerts';
@@ -51,6 +54,16 @@ const alertIcons: Record<AlertType, typeof AlertTriangle> = {
   APPROVAL_REQUIRED: AlertTriangle,
   ORDER_CANCELLED: X,
   INTEGRATION_FAILURE: PlugZap,
+  DRIVER_APPROACHING_PICKUP: Navigation,
+  DRIVER_ARRIVED_PICKUP: MapPin,
+  DRIVER_APPROACHING_DELIVERY: Navigation,
+  DRIVER_ARRIVED_DELIVERY: MapPin,
+  ETA_DELAY: Clock,
+  SUPPLIER_DELAY_NOTICE: Clock,
+  MISSING_POD: FileWarning,
+  GEO_BUDGET_WARNING: Wallet,
+  DRIVER_ASSIGNED: Bell,
+  DRIVER_NO_CONFIRMATION: Clock,
 };
 
 const severityStyles = {

@@ -1,3 +1,5 @@
+import type { Database } from '@/integrations/supabase/types';
+
 export interface Order {
   id: string;
   lalamoveId: string;
@@ -121,14 +123,10 @@ export interface Alert {
   acknowledgedAt?: Date;
 }
 
-export type AlertType = 
-  | 'DRIVER_BLOCKED'
-  | 'ROUTE_DEVIATION'
-  | 'DRIVER_STOPPED'
-  | 'LATE_DELIVERY'
-  | 'APPROVAL_REQUIRED'
-  | 'ORDER_CANCELLED'
-  | 'INTEGRATION_FAILURE';
+// Espelha o enum `alert_type` do banco (src/integrations/supabase/types.ts). Antes era uma
+// lista local de 7 valores e ficou defasado: alertas reais de produção (MISSING_POD,
+// DRIVER_APPROACHING_PICKUP, DRIVER_NO_CONFIRMATION...) chegavam sem rótulo e sem ícone.
+export type AlertType = Database['public']['Enums']['alert_type'];
 
 export interface TrackingPoint {
   orderId: string;
