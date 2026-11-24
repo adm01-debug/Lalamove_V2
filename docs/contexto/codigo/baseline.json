@@ -2,11 +2,16 @@
  "aviso": "GERADO AUTOMATICAMENTE por scripts/ai-context/gerar.mjs — não editar à mão; será sobrescrito.",
  "format_version": 1,
  "git": {
-  "commit": "4bbb1fca7d35c31b568b411ddc9cc767dbcddd89",
+  "commit": "c804662b8831cc3e2bef720a69af78a24ad9575f",
   "branch": "main",
-  "data_commit": "2026-11-24T13:30:02-03:00",
+  "data_commit": "2026-11-24T13:37:20-03:00",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "ultimos_commits": [
+   {
+    "sha": "c804662",
+    "data": "2026-11-24",
+    "assunto": "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)"
+   },
    {
     "sha": "4bbb1fc",
     "data": "2026-11-24",
@@ -126,11 +131,6 @@
     "sha": "f242d42",
     "data": "2026-11-24",
     "assunto": "fix: rota desligada no painel passa a valer no motor (#342)"
-   },
-   {
-    "sha": "5bfc969",
-    "data": "2026-11-23",
-    "assunto": "fix: paginas de dados mostram erro e botao de tentar novamente (#341)"
    }
   ],
   "arquivos_mudados_7d": 508,
@@ -149,7 +149,7 @@
    },
    {
     "pasta": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 39
+    "mudancas": 40
    },
    {
     "pasta": "src/components/orders",
@@ -199,7 +199,7 @@
   "arquivos_mais_mudados_90d": [
    {
     "arquivo": "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
-    "mudancas": 39
+    "mudancas": 40
    },
    {
     "arquivo": "package.json",
@@ -301,7 +301,7 @@
   "autores_30d": [
    {
     "autor": "adm01-debug",
-    "commits": 266
+    "commits": 267
    },
    {
     "autor": "dependabot[bot]",

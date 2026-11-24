@@ -1,9 +1,9 @@
 {
  "meta": {
-  "sha": "4bbb1fca7d35c31b568b411ddc9cc767dbcddd89",
+  "sha": "c804662b8831cc3e2bef720a69af78a24ad9575f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
-  "generated_at": "2026-11-24 16:30 UTC",
+  "generated_at": "2026-11-24 17:13 UTC",
   "files_total": 1115,
   "code_files": 934,
   "code_lines": 163868
@@ -79876,10 +79876,19 @@
   }
  },
  "git": {
-  "sha": "4bbb1fca7d35c31b568b411ddc9cc767dbcddd89",
+  "sha": "c804662b8831cc3e2bef720a69af78a24ad9575f",
   "branch": "main",
   "remote": "https://github.com/adm01-debug/Lalamove_V2",
   "commits": [
+   {
+    "sha": "c804662",
+    "date": "2026-11-24",
+    "author": "adm01-debug",
+    "subject": "chore: laudo de verificação dos blocos 4, 6 e 8 do plano de mapas (#366)",
+    "files": [
+     "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md"
+    ]
+   },
    {
     "sha": "4bbb1fc",
     "date": "2026-11-24",
@@ -80243,17 +80252,6 @@
      "src/pages/MessagingSettingsPage.test.tsx",
      "src/pages/MessagingSettingsPage.tsx"
     ]
-   },
-   {
-    "sha": "5adbf84",
-    "date": "2026-11-23",
-    "author": "adm01-debug",
-    "subject": "fix: topic unico por montagem nos canais realtime (#336)",
-    "files": [
-     "src/components/map/hooks/useTrackingData.ts",
-     "src/hooks/__tests__/realtimeChannels.test.ts",
-     "src/hooks/useRealtimeSubscriptions.ts"
-    ]
    }
   ],
   "hot_files": [
@@ -80268,10 +80266,6 @@
    [
     "src/pages/NotificationHistoryPage.tsx",
     4
-   ],
-   [
-    "src/components/map/hooks/useTrackingData.ts",
-    3
    ],
    [
     "supabase/functions/job-worker/index.ts",
@@ -80306,6 +80300,10 @@
     2
    ],
    [
+    "src/components/map/hooks/useTrackingData.ts",
+    2
+   ],
+   [
     "src/pages/LiveMapPage.tsx",
     2
    ],
@@ -80318,12 +80316,12 @@
     2
    ],
    [
-    "src/hooks/useRealtimeSubscriptions.ts",
+    "src/pages/PasswordResetApprovalsPage.tsx",
     2
    ],
    [
-    "src/pages/PasswordResetApprovalsPage.tsx",
-    2
+    "docs/planos/PLANO_GOOGLE_MAPS_100_ETAPAS.md",
+    1
    ],
    [
     "src/hooks/useAdvancedReports.ts",
