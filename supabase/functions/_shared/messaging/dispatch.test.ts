@@ -250,6 +250,15 @@ Deno.test("etapa 88: evento sem rota nao sai por canal nenhum", () => {
   assertEquals(plan.reason, "sem_rota");
 });
 
+Deno.test("etapa 145: rota desligada no painel nao envia nada", () => {
+  const plan = planDriverMessage(
+    input({ routes: [{ ...CANCEL_ROUTE, is_enabled: false }] }),
+  );
+  assertEquals(plan.action, "suppress");
+  assertEquals(plan.reason, "evento_desligado");
+  assertEquals(plan.channels.length, 0);
+});
+
 Deno.test("etapa 91: numero invalido no WhatsApp cai no SMS na hora", async () => {
   const log: string[] = [];
   const result = await dispatchDriverMessage({

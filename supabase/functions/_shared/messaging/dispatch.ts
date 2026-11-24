@@ -47,6 +47,7 @@ export type DriverMessageReason =
   | "sem_telefone"
   | "opt_out"
   | "sem_rota"
+  | "evento_desligado"
   | "sem_template"
   | "horario_silencio"
   | "limite_motorista"
@@ -116,6 +117,7 @@ export function planDriverMessage(input: PlanInput): MessagePlan {
 
   const route = findRoute(event, role, routes);
   if (!route || route.channels.length === 0) return suppress("sem_rota");
+  if (route.is_enabled === false) return suppress("evento_desligado");
 
   const quiet = quietWindowFor(settings, role);
   const exemptFromQuiet = role === "driver" && driver.hasActiveOrder;
